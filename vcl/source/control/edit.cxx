@@ -491,7 +491,7 @@ long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle, bool bLayout)
+void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle)
 {
     if (!IsReallyVisible())
         return;
@@ -518,17 +518,6 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
     long nTH = GetTextHeight();
     Point aPos(mnXOffset, ImplGetTextYPosition());
-
-    if (bLayout)
-    {
-        aPos.X() = mnXOffset + ImplGetExtraXOffset();
-
-        MetricVector* pVector = &mpControlData->mpLayoutData->m_aUnicodeBoundRects;
-        OUString* pDisplayText = &mpControlData->mpLayoutData->m_aDisplayText;
-
-        rRenderContext.DrawText(aPos, aText, 0, nLen, pVector, pDisplayText);
-        return;
-    }
 
     vcl::Cursor* pCursor = GetCursor();
     bool bVisCursor = pCursor && pCursor->IsVisible();

@@ -1092,7 +1092,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
     mpOutDev->Pop();
 }
 
-void DecorationView::DrawHandle(const Rectangle& rRect, bool bVertical)
+void DecorationView::DrawHandle(const Rectangle& rRect)
 {
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
 
@@ -1104,31 +1104,20 @@ void DecorationView::DrawHandle(const Rectangle& rRect, bool bVertical)
     const sal_Int32 nNumberOfPoints = 3;
 
     long nHalfWidth = aOutputSize.Width() / 2.0f;
-    long nHalfHeight = aOutputSize.Height() / 2.0f;
 
-    float fDistance = bVertical ? aOutputSize.Height() : aOutputSize.Width();
+    float fDistance = aOutputSize.Height();
     fDistance /= (nNumberOfPoints + 1);
 
-    long nRadius = bVertical ? aOutputSize.Width() : aOutputSize.Height();
+    long nRadius = aOutputSize.Width();
     nRadius /= (nNumberOfPoints + 2);
 
     for (long i = 1; i <= nNumberOfPoints; i++)
     {
         Rectangle aLocation;
-        if (bVertical)
-        {
-            aLocation = Rectangle(nHalfWidth - nRadius,
-                                  round(fDistance * i) - nRadius,
-                                  nHalfWidth + nRadius,
-                                  round(fDistance * i) + nRadius);
-        }
-        else
-        {
-            aLocation = Rectangle(round(fDistance * i) - nRadius,
-                                  nHalfHeight - nRadius,
-                                  round(fDistance * i) + nRadius,
-                                  nHalfHeight + nRadius);
-        }
+        aLocation = Rectangle(nHalfWidth - nRadius,
+                              round(fDistance * i) - nRadius,
+                              nHalfWidth + nRadius,
+                              round(fDistance * i) + nRadius);
         mpOutDev->DrawEllipse(aLocation);
     }
 }

@@ -513,7 +513,7 @@ const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
     return _rStyle.GetGroupTextColor();
 }
 
-void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
+void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
 {
     // we need to measure according to the window, not according to the
     // RenderContext we paint to
@@ -521,24 +521,19 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 
     OUString aText = GetText();
     WinBits nWinStyle = GetStyle();
-    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
-    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
 
     DecorationView aDecoView(&rRenderContext);
     if (aText.isEmpty())
     {
-        if (!pVector)
+        if (nWinStyle & WB_VERT)
         {
-            if (nWinStyle & WB_VERT)
-            {
-                long nX = (aOutSize.Width() - 1) / 2;
-                aDecoView.DrawSeparator(Point(nX, 0), Point(nX, aOutSize.Height() - 1));
-            }
-            else
-            {
-                long nY = (aOutSize.Height() - 1) / 2;
-                aDecoView.DrawSeparator(Point(0, nY), Point(aOutSize.Width() - 1, nY), false);
-            }
+            long nX = (aOutSize.Width() - 1) / 2;
+            aDecoView.DrawSeparator(Point(nX, 0), Point(nX, aOutSize.Height() - 1));
+        }
+        else
+        {
+            long nY = (aOutSize.Height() - 1) / 2;
+            aDecoView.DrawSeparator(Point(0, nY), Point(aOutSize.Width() - 1, nY), false);
         }
     }
     else if (nWinStyle & WB_VERT)
@@ -553,7 +548,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             aStartPt.Y() -= (aOutSize.Height() - nWidth) / 2;
         Point aTextPt(aStartPt);
         aTextPt.X() -= GetTextHeight() / 2;
-        rRenderContext.DrawText(aTextPt, aText, 0, aText.getLength(), pVector, pDisplayText);
+        rRenderContext.DrawText(aTextPt, aText, 0, aText.getLength());
         rRenderContext.Pop();
         if (aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER)
             aDecoView.DrawSeparator(Point(aStartPt.X(), aOutSize.Height() - 1),
@@ -577,15 +572,12 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
         if (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono)
             nStyle |= DrawTextFlags::Mono;
 
-        DrawControlText(*this, aRect, aText, nStyle, pVector, pDisplayText);
+        DrawControlText(*this, aRect, aText, nStyle, nullptr, nullptr);
 
-        if (!pVector)
-        {
-            long nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
-            aDecoView.DrawSeparator(Point(aRect.Right() + FIXEDLINE_TEXT_BORDER, nTop), Point(aOutSize.Width() - 1, nTop), false);
-            if (aRect.Left() > FIXEDLINE_TEXT_BORDER)
-                aDecoView.DrawSeparator(Point(0, nTop), Point(aRect.Left() - FIXEDLINE_TEXT_BORDER, nTop), false);
-        }
+        long nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
+        aDecoView.DrawSeparator(Point(aRect.Right() + FIXEDLINE_TEXT_BORDER, nTop), Point(aOutSize.Width() - 1, nTop), false);
+        if (aRect.Left() > FIXEDLINE_TEXT_BORDER)
+            aDecoView.DrawSeparator(Point(0, nTop), Point(aRect.Left() - FIXEDLINE_TEXT_BORDER, nTop), false);
     }
 }
 

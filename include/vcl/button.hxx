@@ -91,7 +91,7 @@ public:
 
     void                SetFocusRect( const Rectangle& rFocusRect );
     bool                IsSmallSymbol() const;
-    void                SetSmallSymbol(bool bSmall = true);
+    void                SetSmallSymbol();
     virtual bool        set_property(const OString &rKey, const OString &rValue) override;
 
     /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
@@ -127,7 +127,7 @@ protected:
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
                                                              const Rectangle& rRect, bool bLayout, bool bMenuBtnSep);
-    SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout = false);
+    SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext);
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
@@ -195,7 +195,7 @@ public:
     void            SaveValue() { meSaveValue = GetState(); }
     bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
-    Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
+    Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;
 
     virtual bool    set_property(const OString &rKey, const OString &rValue) override;
@@ -298,7 +298,7 @@ private:
                               const Point& rPos, const Size& rSize,
                               const Size& rImageSize, Rectangle& rStateRect,
                               Rectangle& rMouseRect, bool bLayout = false );
-    SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext, bool bLayout = false );
+    SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext );
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
     SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
@@ -369,7 +369,7 @@ public:
 
     static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
-    Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
+    Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;
 
     void            SetToggleHdl( const Link<RadioButton&,void>& rLink ) { maToggleHdl = rLink; }
@@ -420,7 +420,7 @@ private:
                                     const Point& rPos, const Size& rSize,
                                     const Size& rImageSize, Rectangle& rStateRect,
                                     Rectangle& rMouseRect, bool bLayout );
-    SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext, bool bLayout = false );
+    SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext );
     SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
