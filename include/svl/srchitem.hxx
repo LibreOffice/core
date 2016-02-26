@@ -249,9 +249,9 @@ bool SvxSearchItem::GetWildcard() const
 {
     // Ensure old and new algorithm types are in sync, in this case old is not
     // REGEXP or APPROXIMATE.
-    assert( (m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::WILDCARD) ?
+    assert( m_aSearchOpt.AlgorithmType2 != css::util::SearchAlgorithms2::WILDCARD ||
             (m_aSearchOpt.algorithmType != css::util::SearchAlgorithms_REGEXP &&
-             m_aSearchOpt.algorithmType != css::util::SearchAlgorithms_APPROXIMATE) : true );
+             m_aSearchOpt.algorithmType != css::util::SearchAlgorithms_APPROXIMATE) );
     return m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::WILDCARD ;
 }
 
