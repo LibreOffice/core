@@ -827,6 +827,15 @@ bool OpenGLContext::ImplInit()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+    // This VAO will host the various global state for which none is already
+    // set, on the same model as the implicit VAO 0 while also working on core
+    // contexts.
+    // It will get teared down alongside the context, so no need to keep a
+    // reference to it.
+    GLuint vao = 0u;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
     registerAsCurrent();
 
     return bRet;

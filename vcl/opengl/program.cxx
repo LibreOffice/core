@@ -19,10 +19,15 @@ OpenGLProgram::OpenGLProgram() :
     mnId( 0 ),
     mnEnabledAttribs( 0 ),
     mnPositionAttrib( SAL_MAX_UINT32 ),
+    mnPositionBuffer( SAL_MAX_UINT32 ),
     mnTexCoordAttrib( SAL_MAX_UINT32 ),
+    mnTexCoordBuffer( SAL_MAX_UINT32 ),
     mnAlphaCoordAttrib( SAL_MAX_UINT32 ),
+    mnAlphaCoordBuffer( SAL_MAX_UINT32 ),
     mnMaskCoordAttrib( SAL_MAX_UINT32 ),
+    mnMaskCoordBuffer( SAL_MAX_UINT32 ),
     mnNormalAttrib( SAL_MAX_UINT32 ),
+    mnNormalBuffer( SAL_MAX_UINT32 ),
     mbBlending( false ),
     mfLastWidth(0.0),
     mfLastHeight(0.0),
@@ -101,7 +106,20 @@ bool OpenGLProgram::Clean()
     return true;
 }
 
-void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize )
+void OpenGLProgram::SetVertexBuffer( GLuint& rBuffer, const GLvoid* pData, GLint nSize )
+{
+    if( rBuffer == SAL_MAX_UINT32 )
+    {
+        glGenBuffers( 1, &rBuffer );
+        CHECK_GL_ERROR();
+    }
+    glBindBuffer( GL_ARRAY_BUFFER, rBuffer );
+    CHECK_GL_ERROR();
+    glBufferData( GL_ARRAY_BUFFER, nSize * sizeof(GL_FLOAT), pData, GL_STREAM_DRAW );
+    CHECK_GL_ERROR();
+}
+
+void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, GLint nSize )
 {
     if( rAttrib == SAL_MAX_UINT32 )
     {
@@ -114,33 +132,38 @@ void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, cons
         CHECK_GL_ERROR();
         mnEnabledAttribs |= ( 1 << rAttrib );
     }
-    glVertexAttribPointer( rAttrib, nSize, GL_FLOAT, GL_FALSE, 0, pData );
+    glVertexAttribPointer( rAttrib, nSize, GL_FLOAT, GL_FALSE, 0, nullptr );
     CHECK_GL_ERROR();
 }
 
 void OpenGLProgram::SetVertices( const GLvoid* pData )
 {
-    SetVertexAttrib( mnPositionAttrib, "position", pData );
+    SetVertexBuffer( mnPositionBuffer, pData );
+    SetVertexAttrib( mnPositionAttrib, "position" );
 }
 
 void OpenGLProgram::SetTextureCoord( const GLvoid* pData )
 {
-    SetVertexAttrib( mnTexCoordAttrib, "tex_coord_in", pData );
+    SetVertexBuffer( mnTexCoordBuffer, pData );
+    SetVertexAttrib( mnTexCoordAttrib, "tex_coord_in" );
 }
 
 void OpenGLProgram::SetAlphaCoord( const GLvoid* pData )
 {
-    SetVertexAttrib( mnAlphaCoordAttrib, "alpha_coord_in", pData );
+    SetVertexBuffer( mnAlphaCoordBuffer, pData );
+    SetVertexAttrib( mnAlphaCoordAttrib, "alpha_coord_in" );
 }
 
 void OpenGLProgram::SetMaskCoord(const GLvoid* pData)
 {
-    SetVertexAttrib(mnMaskCoordAttrib, "mask_coord_in", pData);
+    SetVertexBuffer( mnMaskCoordBuffer, pData );
+    SetVertexAttrib( mnMaskCoordAttrib, "mask_coord_in" );
 }
 
 void OpenGLProgram::SetExtrusionVectors(const GLvoid* pData)
 {
-    SetVertexAttrib(mnNormalAttrib, "extrusion_vectors", pData, 3);
+    SetVertexBuffer( mnNormalBuffer, pData, 3 );
+    SetVertexAttrib( mnNormalAttrib, "extrusion_vectors", 3 );
 }
 
 GLuint OpenGLProgram::GetUniformLocation( const OString& rName )

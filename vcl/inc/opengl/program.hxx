@@ -34,10 +34,15 @@ private:
     UniformCache    maUniformLocations;
     sal_uInt32      mnEnabledAttribs;
     GLuint          mnPositionAttrib;
+    GLuint          mnPositionBuffer;
     GLuint          mnTexCoordAttrib;
+    GLuint          mnTexCoordBuffer;
     GLuint          mnAlphaCoordAttrib;
+    GLuint          mnAlphaCoordBuffer;
     GLuint          mnMaskCoordAttrib;
+    GLuint          mnMaskCoordBuffer;
     GLuint          mnNormalAttrib;
+    GLuint          mnNormalBuffer;
     TextureList     maTextures;
     bool            mbBlending;
 
@@ -82,7 +87,8 @@ public:
     bool DrawTexture( const OpenGLTexture& rTexture );
 
 protected:
-    void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize = 2 );
+    void SetVertexBuffer( GLuint& rAttrib, const GLvoid* pData, GLint nSize = 2 );
+    void SetVertexAttrib( GLuint& rAttrib, const OString& rName, GLint nSize = 2 );
     GLuint GetUniformLocation( const OString& rName );
 };
 
