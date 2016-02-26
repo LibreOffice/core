@@ -120,7 +120,7 @@ aNULL()
     return aNULLL;
 }
 
-void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCall)
+void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot)
 {
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
@@ -130,7 +130,7 @@ void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCa
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
         if( pDispatcher )
         {
-            pDispatcher->Execute( nSlot , nCall );
+            pDispatcher->Execute( nSlot , SfxCallMode::SYNCHRON );
         }
     }
 }
@@ -554,15 +554,13 @@ bool NeedEsc(sal_Unicode cCode)
     return OUString(".^$+\\|{}()").indexOf(cCode) != -1;
 }
 
-OUString VBAToRegexp(const OUString &rIn, bool bForLike )
+OUString VBAToRegexp(const OUString &rIn)
 {
     OUStringBuffer sResult;
     const sal_Unicode *start = rIn.getStr();
     const sal_Unicode *end = start + rIn.getLength();
 
     int seenright = 0;
-    if ( bForLike )
-        sResult.append('^');
 
     while (start < end)
     {
@@ -625,9 +623,6 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                 sResult.append(*start++);
         }
     }
-
-    if ( bForLike )
-        sResult.append('$');
 
     return sResult.makeStringAndClear( );
 }
