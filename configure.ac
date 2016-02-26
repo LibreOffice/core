@@ -6043,6 +6043,30 @@ if test "$GCC" = "yes"; then
         ], [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
+    AC_MSG_CHECKING([whether $CXX defines __base_class_type_info in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cstddef>
+            #include <cxxabi.h>
+            std::size_t f() { return sizeof(__cxxabiv1::__base_class_type_info); }
+        ])], [
+            AC_DEFINE([HAVE_CXXABI_H_BASE_CLASS_TYPE_INFO],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether $CXX defines __class_type_info in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cstddef>
+            #include <cxxabi.h>
+            std::size_t f() { return sizeof(__cxxabiv1::__class_type_info); }
+        ])], [
+            AC_DEFINE([HAVE_CXXABI_H_CLASS_TYPE_INFO],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
     AC_MSG_CHECKING([whether $CXX declares __cxa_allocate_exception in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
@@ -6096,6 +6120,30 @@ if test "$GCC" = "yes"; then
             void f() { __cxxabiv1::__cxa_throw(0, 0, 0); }
         ])], [
             AC_DEFINE([HAVE_CXXABI_H_CXA_THROW],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether $CXX defines __si_class_type_info in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cstddef>
+            #include <cxxabi.h>
+            std::size_t f() { return sizeof(__cxxabiv1::__si_class_type_info); }
+        ])], [
+            AC_DEFINE([HAVE_CXXABI_H_SI_CLASS_TYPE_INFO],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether $CXX defines __vmi_class_type_info in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cstddef>
+            #include <cxxabi.h>
+            std::size_t f() { return sizeof(__cxxabiv1::__vmi_class_type_info); }
+        ])], [
+            AC_DEFINE([HAVE_CXXABI_H_VMI_CLASS_TYPE_INFO],[1])
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])

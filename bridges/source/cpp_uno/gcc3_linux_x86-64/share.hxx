@@ -33,25 +33,72 @@
 #include "uno/any2.h"
 #include "uno/mapping.h"
 
-#ifdef _LIBCPP_VERSION
-
-namespace __cxxabiv1
-{
-    struct __class_type_info : public std::type_info
-    {
-        explicit __class_type_info( const char *__n ) : type_info( __n ) { }
-        virtual ~__class_type_info();
-    };
-
-    struct __si_class_type_info : public __class_type_info
-    {
-        explicit __si_class_type_info( const char *__n, const __class_type_info *__b ) :
-            __class_type_info( __n ), __base_type( __b ) { }
-        virtual ~__si_class_type_info();
-        const __class_type_info *__base_type;
-    };
+#if !HAVE_CXXABI_H_CLASS_TYPE_INFO
+// <https://mentorembedded.github.io/cxx-abi/abi.html>,
+// libstdc++-v3/libsupc++/cxxabi.h:
+namespace __cxxabiv1 {
+class __class_type_info: public std::type_info {
+public:
+    explicit __class_type_info(char const * n): type_info(n) {}
+    ~__class_type_info() override;
+};
 }
+#endif
 
+#if !HAVE_CXXABI_H_SI_CLASS_TYPE_INFO
+// <https://mentorembedded.github.io/cxx-abi/abi.html>,
+// libstdc++-v3/libsupc++/cxxabi.h:
+namespace __cxxabiv1 {
+class __si_class_type_info: public __class_type_info {
+public:
+    __class_type_info const * __base_type;
+    explicit __si_class_type_info(
+        char const * n, __class_type_info const *base):
+        __class_type_info(n), __base_type(base) {}
+    ~__si_class_type_info() override;
+};
+}
+#endif
+
+#if !HAVE_CXXABI_H_BASE_CLASS_TYPE_INFO
+// <https://mentorembedded.github.io/cxx-abi/abi.html>,
+// libstdc++-v3/libsupc++/cxxabi.h:
+namespace __cxxabiv1 {
+struct __base_class_type_info {
+    __class_type_info const * __base_type;
+#if defined _GLIBCXX_LLP64
+    long long __offset_flags;
+#else
+    long __offset_flags;
+#endif
+    enum __offset_flags_masks {
+        __virtual_mask = 0x1,
+        __public_mask = 0x2,
+        __offset_shift = 8
+    };
+};
+}
+#endif
+
+#if !HAVE_CXXABI_H_VMI_CLASS_TYPE_INFO
+// <https://mentorembedded.github.io/cxx-abi/abi.html>,
+// libstdc++-v3/libsupc++/cxxabi.h:
+namespace __cxxabiv1 {
+class __vmi_class_type_info: public __class_type_info {
+public:
+    unsigned int __flags;
+    unsigned int __base_count;
+    __base_class_type_info __base_info[1];
+    enum __flags_masks {
+        __non_diamond_repeat_mask = 0x1,
+        __diamond_shaped_mask = 0x2,
+        __flags_unknown_mask = 0x10
+    };
+    explicit __vmi_class_type_info(char const * n, int flags):
+        __class_type_info(n), __flags(flags), __base_count(0) {}
+    ~__vmi_class_type_info() override;
+};
+}
 #endif
 
 #if !HAVE_CXXABI_H_CXA_EH_GLOBALS
