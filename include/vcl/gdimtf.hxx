@@ -138,17 +138,17 @@ public:
 
     void            Convert( MtfConversion eConversion );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
-                                   sal_uLong nColorCount, sal_uLong* pTols = nullptr );
+                                   sal_uLong nColorCount );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
     bool            IsRecord() const { return bRecord; }
 
-    void            Play( GDIMetaFile& rMtf, size_t nPos = GDI_METAFILE_END );
+    void            Play( GDIMetaFile& rMtf );
     void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize, size_t nPos = GDI_METAFILE_END );
+                          const Size& rSize );
 
     void            Pause( bool bPause );
     bool            IsPause() const { return bPause; }

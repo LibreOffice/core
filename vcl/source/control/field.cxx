@@ -1560,11 +1560,11 @@ void MetricFormatter::SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit )
                                              eInUnit, meUnit );
 }
 
-sal_Int64 MetricFormatter::GetBaseValue( FieldUnit eOutUnit ) const
+sal_Int64 MetricFormatter::GetBaseValue() const
 {
     // convert to requested units
     return MetricField::ConvertValue( mnBaseValue, mnBaseValue, GetDecimalDigits(),
-                                      meUnit, eOutUnit );
+                                      meUnit, FUNIT_NONE );
 }
 
 void MetricFormatter::Reformat()
@@ -1889,7 +1889,7 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
 
-sal_Int64 MetricBox::GetValue( sal_Int32 nPos, FieldUnit eOutUnit ) const
+sal_Int64 MetricBox::GetValue( sal_Int32 nPos ) const
 {
     double nValue = 0;
     ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
@@ -1897,7 +1897,7 @@ sal_Int64 MetricBox::GetValue( sal_Int32 nPos, FieldUnit eOutUnit ) const
 
     // convert to previously configured units
     sal_Int64 nRetValue = MetricField::ConvertValue( (sal_Int64)nValue, mnBaseValue, GetDecimalDigits(),
-                                                     meUnit, eOutUnit );
+                                                     meUnit, FUNIT_NONE );
 
     return nRetValue;
 }

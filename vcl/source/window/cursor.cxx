@@ -222,9 +222,9 @@ bool vcl::Cursor::ImplDoHide( bool bSuspend )
     return bWasCurVisible;
 }
 
-void vcl::Cursor::ImplShow( bool bDrawDirect )
+void vcl::Cursor::ImplShow()
 {
-    ImplDoShow( bDrawDirect, false );
+    ImplDoShow( true/*bDrawDirect*/, false );
 }
 
 void vcl::Cursor::ImplHide( bool i_bStopTimer )

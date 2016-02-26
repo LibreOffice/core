@@ -115,7 +115,7 @@ public:
     Rectangle           DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle = DrawFrameStyle::Out, DrawFrameFlags nFlags = DrawFrameFlags::NONE );
     Rectangle           DrawButton( const Rectangle& rRect, DrawButtonFlags nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );
-    void                DrawHandle(const Rectangle& rRectangle, bool bVertical = true);
+    void                DrawHandle(const Rectangle& rRectangle);
 };
 
 #endif // INCLUDED_VCL_DECOVIEW_HXX

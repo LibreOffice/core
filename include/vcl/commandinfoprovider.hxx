@@ -72,16 +72,13 @@ public:
             The command name is expected to start with .uno:
         @param rxFrame
             The frame is used to identify the module and document.
-        @param bIncludeShortcut
-            Whether the shortcut should be appended in brackets
         @return
             The returned label contains the keyboard accelerator, if
             one is defined and bIncludeShortcut is true.
     */
     OUString GetTooltipForCommand (
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        bool bIncludeShortcut = true);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Returns the shortcut for a command in human-readable form */
     OUString GetCommandShortcut (const OUString& rCommandName,

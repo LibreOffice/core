@@ -238,7 +238,7 @@ public:
     using NumericFormatter::GetMin;
     sal_Int64               GetMin( FieldUnit eOutUnit ) const;
     void                    SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit = FUNIT_NONE );
-    sal_Int64               GetBaseValue( FieldUnit eOutUnit = FUNIT_NONE ) const;
+    sal_Int64               GetBaseValue() const;
 
     virtual void            SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual void            SetValue( sal_Int64 nValue ) override;
@@ -679,7 +679,7 @@ public:
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
                                          sal_Int32  nPos = COMBOBOX_APPEND );
-    sal_Int64               GetValue( sal_Int32  nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
+    sal_Int64               GetValue( sal_Int32  nPos ) const;
     sal_Int32               GetValuePos( sal_Int64 nValue,
                                          FieldUnit eInUnit = FUNIT_NONE ) const;
 
