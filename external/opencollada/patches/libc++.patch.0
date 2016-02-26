@@ -1,0 +1,21 @@
+--- COLLADABaseUtils/include/COLLADABUhash_map.h
++++ COLLADABaseUtils/include/COLLADABUhash_map.h
+@@ -60,7 +60,7 @@
+         #define COLLADABU_HASH_NAMESPACE_CLOSE }
+         #define COLLADABU_HASH_FUN hash
+     #endif
+-#elif (defined(__APPLE__) || defined(__FreeBSD__)) && defined(_LIBCPP_VERSION)
++#elif defined(_LIBCPP_VERSION)
+     #include <unordered_map>
+     #include <unordered_set>
+     #define COLLADABU_HASH_MAP std::unordered_map
+--- GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
++++ GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
+@@ -10,6 +10,7 @@
+ 
+ #include "GeneratedSaxParserUtils.h"
+ #include <math.h>
++#include <cmath>
+ #include <memory>
+ #include <string.h>
+ #include <limits>
