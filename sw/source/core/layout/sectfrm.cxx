@@ -738,7 +738,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     if( !mbValidPos && ToMaximize( false ) )
         mbValidSize = false;
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     const SwFormatCol &rCol = GetFormat()->GetCol();
     (void)rCol;
 #endif

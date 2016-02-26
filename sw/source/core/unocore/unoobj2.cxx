@@ -1203,7 +1203,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 const SwTextFootnote* pTextFootnote = rDoc.GetFootnoteIdxs()[ n ];
                 const SwFormatFootnote& rFootnote = pTextFootnote->GetFootnote();
                 pTextFootnote = rFootnote.GetTextFootnote();
-#if OSL_DEBUG_LEVEL > 1
+#if 0
                 const SwStartNode* pTmpSttNode =
                         pTextFootnote->GetStartNode()->GetNode().
                                 FindSttNodeByType(SwFootnoteStartNode);

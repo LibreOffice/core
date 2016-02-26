@@ -4110,9 +4110,8 @@ void DocxAttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
 void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 {
     // are these the values of enum ww::sti (see ../inc/wwstyles.hxx)?
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )- %d", nStyle );
-#else
+    SAL_INFO( "sw.ww8", "TODO DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )- "<<  nStyle );
+#if OSL_DEBUG_LEVEL < 1
     (void) nStyle; // to quiet the warning
 #endif
 }
@@ -5977,11 +5976,10 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
             FSNS( XML_w, XML_val ), aId.getStr(),
             FSEND );
 
-#if OSL_DEBUG_LEVEL > 1
     // TODO ww8 version writes this, anything to do about it here?
     if ( rRule.IsContinusNum() )
-        OSL_TRACE( "TODO DocxAttributeOutput::NumberingDefinition()" );
-#else
+        SAL_INFO( "sw.ww8", "TODO DocxAttributeOutput::NumberingDefinition()" );
+#if OSL_DEBUG_LEVEL < 1
     (void) rRule; // to quiet the warning...
 #endif
 
