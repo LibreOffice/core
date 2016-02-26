@@ -46,6 +46,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -372,6 +373,18 @@ namespace cppcanvas
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::setRenderStateTransform(aLocalState, aTransform);
+
+                if(aLocalState.Clip.is())
+                {
+                    // tdf#95709
+                    // As mentioned above, clip (if set) depends on scale, too. The only
+                    // correct solution is to adapt it to the newly set RenderState (which
+                    // has scale removed) by applying scale to the clip polyPolygon.
+                    // Unfortunately this includes conversions to/from UNO API object here
+                    ::basegfx::B2DPolyPolygon aClip = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(aLocalState.Clip);
+                    aClip.transform(basegfx::tools::createScaleB2DHomMatrix(aScale));
+                    aLocalState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mpCanvas->getUNOCanvas()->getDevice(), aClip);
+                }
 
 #if OSL_DEBUG_LEVEL > 2
                 aLocalState.Clip.clear();
