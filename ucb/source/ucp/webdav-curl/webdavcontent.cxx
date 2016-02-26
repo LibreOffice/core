@@ -1395,8 +1395,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 std::vector< OUString > aHeaderNames;
                 ContentProperties::UCBNamesToHTTPNames(
                     rProperties,
-                    aHeaderNames,
-                    true /* bIncludeUnmatched */ );
+                    aHeaderNames );
 
                 if ( !aHeaderNames.empty() )
                 {
