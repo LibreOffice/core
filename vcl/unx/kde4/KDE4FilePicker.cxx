@@ -272,7 +272,7 @@ void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT setMultiSelectionModeSignal( multiSelect );
     }
 
@@ -296,7 +296,7 @@ void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT setDefaultNameSignal( name );
     }
 
@@ -308,7 +308,7 @@ void SAL_CALL KDE4FilePicker::setDisplayDirectory( const OUString &dir )
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT setDisplayDirectorySignal( dir );
     }
 
@@ -320,7 +320,7 @@ OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT getDisplayDirectorySignal();
     }
 
@@ -332,7 +332,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT getFilesSignal();
     }
     uno::Sequence< OUString > seq = getSelectedFiles();
@@ -345,7 +345,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT getSelectedFilesSignal();
     }
     KUrl::List urls = _dialog->selectedUrls();
@@ -360,7 +360,7 @@ void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUStrin
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT appendFilterSignal( title, filter );
     }
 
@@ -387,7 +387,7 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT setCurrentFilterSignal( title );
     }
 
@@ -398,7 +398,7 @@ OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT getCurrentFilterSignal();
     }
 
@@ -419,7 +419,7 @@ void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& rGroupTitle, co
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT appendFilterGroupSignal( rGroupTitle, filters );
     }
 
@@ -435,7 +435,7 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16 nControlA
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT setValueSignal( controlId, nControlAction, value );
     }
 
@@ -460,7 +460,7 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
         return uno::Any( false );
 
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT getValueSignal( controlId, nControlAction );
     }
 
@@ -480,7 +480,7 @@ void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enabl
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT enableControlSignal( controlId, enable );
     }
 
@@ -494,7 +494,7 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &lab
     throw( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT setLabelSignal( controlId, label );
     }
 
@@ -511,7 +511,7 @@ OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     throw ( uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT getLabelSignal( controlId );
     }
 
@@ -633,7 +633,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     throw( uno::Exception, uno::RuntimeException, std::exception )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT initializeSignal( args );
     }
 
@@ -789,7 +789,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
 void KDE4FilePicker::checkProtocol()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser release;
+        SalYieldMutexReleaser rel;
         return Q_EMIT checkProtocolSignal();
     }
 
