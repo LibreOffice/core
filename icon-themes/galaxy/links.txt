@@ -29,6 +29,14 @@ cmd/sc_templatemenu.png cmd/sc_newdoc.png
 cmd/lc_pagesetup.png cmd/lc_setdocumentproperties.png
 cmd/sc_pagesetup.png cmd/sc_setdocumentproperties.png
 
+# sidebar icons
+sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
+sfx2/res/symphony/sidebar-style-large.png cmd/lc_designerdialog.png
+sfx2/res/symphony/sidebar-functions-large.png cmd/lc_insertformula.png
+sfx2/res/symphony/sidebar-gallery-large.png cmd/lc_gallery.png
+sfx2/res/symphony/sidebar-transition-large.png cmd/lc_dia.png
+sfx2/res/symphony/sidebar-animation-large.png cmd/lc_customanimation.png
+
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
