@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_daafd992",
+        "filename": "vcl/source/bitmap/BitmapTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-26T08:43:59Z",
+      "side": 1,
+      "message": "If the default (and only ever used) value for aSize was an empty size, wasn\u0027t bIsSizeEmpty then always false? But I probably miss something.",
+      "revId": "86298ba42d0a060b9a390cfc453b90a6c7aefa87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
