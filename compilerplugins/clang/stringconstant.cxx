@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <limits>
 #include <stack>
 #include <string>
@@ -805,6 +806,8 @@ std::string StringConstant::describeChangeKind(ChangeKind kind) {
         return "string constant and matching length arguments";
     case ChangeKind::SingleChar:
         return "ASCII sal_Unicode argument";
+    default:
+        std::abort();
     }
 }
 
