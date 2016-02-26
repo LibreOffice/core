@@ -241,7 +241,11 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             // of type styleName = NCName which is non-empty.
             // tdf#89802: for Writer frames there would be no exception here but
             // it will fail later on attach() and take out the entire frame
-            if (sStyleName.isEmpty())
+            if (sStyleName.isEmpty() &&
+                (   CTF_FILLGRADIENTNAME == aContextIDs[i].nContextID
+                 || CTF_FILLTRANSNAME    == aContextIDs[i].nContextID
+                 || CTF_FILLHATCHNAME    == aContextIDs[i].nContextID
+                 || CTF_FILLBITMAPNAME   == aContextIDs[i].nContextID))
             {
                 Sequence<OUString> const seq{ sStyleName };
                 GetImport().SetError(
