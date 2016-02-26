@@ -58,6 +58,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 
 #include <stlpool.hxx>
@@ -74,6 +75,7 @@ public:
     void testN778859();
     void testMasterPageStyleParent();
     void testGradientAngle();
+    void testTdf97808();
     void testFdo64512();
     void testFdo71075();
     void testN828390_2();
@@ -115,6 +117,7 @@ public:
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testMasterPageStyleParent);
     CPPUNIT_TEST(testGradientAngle);
+    CPPUNIT_TEST(testTdf97808);
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390_2);
@@ -586,6 +589,41 @@ void SdImportTest::testFdo77027()
     }
 
     xDocShRef->DoClose();
+}
+
+template<class T>
+std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
+{
+    rStrm << xRef.get();
+    return rStrm;
+}
+
+void SdImportTest::testTdf97808()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/tdf97808.fodp"), FODP);
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(
+        xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("objectwithoutfill"), uno::UNO_QUERY);
+    OUString lineend;
+    CPPUNIT_ASSERT(xStyle->getPropertyValue("LineEndName") >>= lineend);
+    CPPUNIT_ASSERT_EQUAL(OUString("Arrow"), lineend);
+
+    // the draw:marker-end="" did not override the style
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xLine(
+        xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    //uno::Reference<style::XStyle> xParent;
+    uno::Reference<beans::XPropertySet> xParent;
+    CPPUNIT_ASSERT(xLine->getPropertyValue("Style") >>= xParent);
+    CPPUNIT_ASSERT_EQUAL(xStyle, xParent);
+    CPPUNIT_ASSERT(xLine->getPropertyValue("LineEndName") >>= lineend);
+    CPPUNIT_ASSERT_EQUAL(OUString(), lineend);
 }
 
 void SdImportTest::testFdo64512()
