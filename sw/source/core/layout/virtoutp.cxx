@@ -21,7 +21,7 @@
 #include "viewopt.hxx"
 #include "rootfrm.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_VIRTOUTP
 
 class DbgRect
 {

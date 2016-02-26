@@ -1609,7 +1609,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         case KS_CheckKey:
             eKeyState = KS_KeyToView;       // default forward to View
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_DOCVW
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // for switching cursor behaviour in ReadOnly regions
             if( 0x7210 == rKeyCode.GetFullCode() )

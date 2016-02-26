@@ -330,7 +330,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
 // The passed pointer nlang is itself the value
 void SwView::SpellError(LanguageType eLang)
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool bFocus = GetEditWin().HasFocus();
 #endif
     int nPend = 0;
@@ -349,7 +349,7 @@ void SwView::SpellError(LanguageType eLang)
     OUString aErr(SvtLanguageTable::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     bFocus = rEditWin.HasFocus();
 #endif
     int nWaitCnt = 0;
@@ -368,7 +368,7 @@ void SwView::SpellError(LanguageType eLang)
         rEditWin.EnterWait();
         --nWaitCnt;
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     bFocus = GetEditWin().HasFocus();
 #endif
 
@@ -378,7 +378,7 @@ void SwView::SpellError(LanguageType eLang)
             m_pWrtShell->StartAction();
         m_pWrtShell->Combine();
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( !bFocus )
         GetEditWin().GrabFocus();
 #endif

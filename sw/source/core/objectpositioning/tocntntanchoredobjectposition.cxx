@@ -680,9 +680,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                     }
                                     else
                                     {
-#if OSL_DEBUG_LEVEL > 1
-                                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - !bInSct" );
-#endif
+                                        SAL_WARN("sw.objectpositioning", "<SwToContentAnchoredObjectPosition::CalcPosition()> - !bInScr");
                                         nRelDiff = nRelPosY;
                                         nRelPosY = 0;
                                     }

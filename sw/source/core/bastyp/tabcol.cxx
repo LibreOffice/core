@@ -75,13 +75,6 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
     aEntry.bHidden = bValue;
     aData.insert( aData.begin() + nPos, aEntry );
 
-#if OSL_DEBUG_LEVEL > 1
-    SwTabColsEntries::iterator aPos = aData.begin();
-    for ( ; aPos != aData.end(); ++aPos )
-    {
-        aEntry =(*aPos);
-    }
-#endif
 }
 
 void SwTabCols::Remove( size_t nPos, size_t nCount )

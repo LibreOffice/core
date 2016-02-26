@@ -465,6 +465,11 @@ certain functionality.
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8
 @li @c sw.html - Writer HTML import/export
+@li @c sw.layout
+@li @c sw.looping.louie
+@li @c sw.objectpositioning
+@li @c sw.text
+@li @c sw.xml
 
 @section writerfilter
 

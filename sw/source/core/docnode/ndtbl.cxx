@@ -1363,7 +1363,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     //!! Thus no real problem here...
     new SwEndNode( aInsertIndex, *pTableNd );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     const SwNodeRange& rStartRange = *rTableNodes.begin()->begin();
     const SwNodeRange& rEndRange = *rTableNodes.rbegin()->rbegin();
     (void) rStartRange;
