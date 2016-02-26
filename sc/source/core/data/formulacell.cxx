@@ -1365,6 +1365,8 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 bSubTotal = pPreviousCell->bSubTotal;
                 bChanged = true;
                 bCompile = false;
+                // tdf97879
+                StartListeningTo( pDocument );
 
                 if (bSubTotal)
                     pDocument->AddSubTotalCell(this);
