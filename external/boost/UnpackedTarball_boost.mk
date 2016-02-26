@@ -74,8 +74,7 @@ boost_patches += boost_1_59_0.multi_array.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11501
 boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
 
-# TODO(davido): port the patch if needed to 1.60
-#boost_patches += clang-cl.patch.0
+boost_patches += clang-cl.patch.0
 boost_patches += gcc6-warnings.patch.0
 
 # This patch was already applied upstream

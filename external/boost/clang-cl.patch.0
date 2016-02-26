@@ -40,18 +40,6 @@
  
      template <class T>
      struct numeric_limits : chrono_numeric_limits<typename remove_cv<T>::type>
---- boost/config/compiler/clang.hpp
-+++ boost/config/compiler/clang.hpp
-@@ -260,9 +260,7 @@
- 
- 
- // Unused attribute:
--#if defined(__GNUC__) && (__GNUC__ >= 4)
- #  define BOOST_ATTRIBUTE_UNUSED __attribute__((unused))
--#endif
- 
- #ifndef BOOST_COMPILER
- #  define BOOST_COMPILER "Clang version " __clang_version__
 --- boost/date_time/filetime_functions.hpp
 +++ boost/date_time/filetime_functions.hpp
 @@ -27,6 +27,16 @@
@@ -91,35 +79,6 @@
  #else
          system_time st;
          GetSystemTime(&st);
---- boost/detail/winapi/timers.hpp
-+++ boost/detail/winapi/timers.hpp
-@@ -15,6 +15,11 @@
- #pragma once
- #endif
- 
-+#if !defined(BOOST_USE_WINDOWS_H)
-+extern "C" {
-+    union _LARGE_INTEGER; // Windows Kits/8.1/Include/um/winnt.h
-+}
-+#endif
- namespace boost
- {
- namespace detail
-@@ -28,12 +33,12 @@
- extern "C" { 
-     __declspec(dllimport) BOOL_ WINAPI
-         QueryPerformanceCounter(
--            LARGE_INTEGER_ *lpPerformanceCount
-+            ::_LARGE_INTEGER *lpPerformanceCount
-         );
- 
-     __declspec(dllimport) BOOL_ WINAPI
-         QueryPerformanceFrequency(
--            LARGE_INTEGER_ *lpFrequency
-+            ::_LARGE_INTEGER *lpFrequency
-         );
- }
- #endif
 --- boost/multi_array/base.hpp
 +++ boost/multi_array/base.hpp
 @@ -222,7 +222,7 @@
@@ -152,21 +111,6 @@
  
    typedef iterator_facade<
 
-# workdir/UnpackedTarball/boost\boost/smart_ptr/detail/sp_counted_base_clang.hpp(29,1) :  error: cannot mangle this C11 atomic type yet
-# inline void atomic_increment( atomic_int_least32_t * pw )
-# ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---- boost/smart_ptr/detail/sp_counted_base.hpp
-+++ boost/smart_ptr/detail/sp_counted_base.hpp
-@@ -21,7 +21,7 @@
- #include <boost/smart_ptr/detail/sp_has_sync.hpp>
- 
- #if defined( __clang__ ) && defined( __has_extension )
--# if __has_extension( __c_atomic__ )
-+# if __has_extension( __c_atomic__ ) && !defined _MSC_VER
- #   define BOOST_SP_HAS_CLANG_C11_ATOMICS
- # endif
- #endif
-
 # workdir/UnpackedTarball/boost\boost/smart_ptr/detail/yield_k.hpp(63,29) :  error: 'Sleep' redeclared without 'dllimport' attribute: previous 'dll# import' ignored [-Werror,-Winconsistent-dllimport]
 #   extern "C" void __stdcall Sleep( unsigned long ms );
 #                             ^
@@ -175,15 +119,15 @@
 # ^
 --- boost/smart_ptr/detail/yield_k.hpp
 +++ boost/smart_ptr/detail/yield_k.hpp
-@@ -60,7 +60,7 @@
- {
+@@ -61,7 +61,7 @@
  
  #if !defined( BOOST_USE_WINDOWS_H ) && !BOOST_PLAT_WINDOWS_RUNTIME
+ #if !BOOST_COMP_CLANG || !defined __MINGW32__
 -  extern "C" void __stdcall Sleep( unsigned long ms );
 +  extern "C" __declspec(dllimport) void __stdcall Sleep( unsigned long ms );
- #endif
- 
- inline void yield( unsigned k )
+ #else
+ #include <_mingw.h>
+ #if !defined __MINGW64_VERSION_MAJOR
 
 # workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
 #     BOOST_THREAD_DECL void __cdecl on_process_enter()
@@ -199,6 +143,39 @@
        //For compilers supporting auto-tss cleanup
              //with Boost.Threads lib, use Boost.Threads lib
  #           define BOOST_THREAD_USE_LIB
+--- boost/type_traits/has_nothrow_assign.hpp
++++ boost/type_traits/has_nothrow_assign.hpp
+@@ -24,7 +24,7 @@
+ #include <boost/type_traits/remove_reference.hpp>
+ #endif
+ #endif
+-#if defined(__GNUC__) || defined(__SUNPRO_CC)
++#if defined(__GNUC__) || defined(__SUNPRO_CC) || defined __clang__
+ #include <boost/type_traits/is_const.hpp>
+ #include <boost/type_traits/is_volatile.hpp>
+ #include <boost/type_traits/is_assignable.hpp>
+--- boost/type_traits/has_nothrow_constructor.hpp
++++ boost/type_traits/has_nothrow_constructor.hpp
+@@ -17,7 +17,7 @@
+ #if defined(BOOST_MSVC) || defined(BOOST_INTEL)
+ #include <boost/type_traits/has_trivial_constructor.hpp>
+ #endif
+-#if defined(__GNUC__ ) || defined(__SUNPRO_CC)
++#if defined(__GNUC__ ) || defined(__SUNPRO_CC) || defined __clang__
+ #include <boost/type_traits/is_default_constructible.hpp>
+ #endif
+ 
+--- boost/type_traits/has_trivial_destructor.hpp
++++ boost/type_traits/has_trivial_destructor.hpp
+@@ -21,7 +21,7 @@
+ #include <boost/type_traits/is_same.hpp>
+ #endif
+ 
+-#if defined(__GNUC__) || defined(__clang) || defined(__SUNPRO_CC)
++#if defined(__GNUC__) || defined(__clang__) || defined(__SUNPRO_CC)
+ #include <boost/type_traits/is_destructible.hpp>
+ #endif
+ 
 --- boost/typeof/typeof.hpp
 +++ boost/typeof/typeof.hpp
 @@ -49,7 +49,7 @@
@@ -210,14 +187,3 @@
  #   ifndef BOOST_TYPEOF_EMULATION
  #       ifndef BOOST_TYPEOF_NATIVE
  #           define BOOST_TYPEOF_NATIVE
---- boost/uuid/seed_rng.hpp
-+++ boost/uuid/seed_rng.hpp
-@@ -175,7 +175,7 @@
- 
-             boost::detail::winapi::LARGE_INTEGER_ ts;
-             ts.QuadPart = 0;
--            boost::detail::winapi::QueryPerformanceCounter( &ts );
-+            boost::detail::winapi::QueryPerformanceCounter( reinterpret_cast<::_LARGE_INTEGER *>(&ts) );
-             sha.process_bytes( (unsigned char const*)&ts, sizeof( ts ) );
- 
-             std::time_t tm = std::time( 0 );
