@@ -66,6 +66,8 @@ public:
     CPPUNIT_TEST(testLcm);
     CPPUNIT_TEST(testGcd);
     CPPUNIT_TEST(testPearson);
+    CPPUNIT_TEST(testFixedSum);
+    CPPUNIT_TEST(testVariableSum);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,7 +87,8 @@ private:
     void testLcm();
     void testGcd();
     void testPearson();
-
+    void testFixedSum();
+    void testVariableSum();
 };
 
 sal_Int32 ScPerfObj::nTest = 0;
@@ -471,6 +474,67 @@ void ScPerfObj::testPearson()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong Pearson result" , 0.01255, xCell->getValue(), 10e-4);
 }
 
+void ScPerfObj::testFixedSum()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions3.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName("FixedSumSheet");
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+
+    // query for the XCellRange interface
+    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
+    // query the cell range
+    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName("B1:B1000");
+
+    uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
+
+    callgrindStart();
+    xArrayFormulaRange->setArrayFormula("=SUM(A$1:A$1000)");
+    xCalculatable->calculate();
+    callgrindDump("sc:sum_with_fixed_array_formula");
+
+    for( sal_Int32 i = 0; i < 1000; ++i )
+    {
+        uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(1, i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong Sum" , 50206.0, xCell->getValue());
+    }
+}
+
+void ScPerfObj::testVariableSum()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions3.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName("VariableSumSheet");
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+
+    // query for the XCellRange interface
+    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
+    // query the cell range
+    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName("B1:B9000");
+
+    uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
+
+    callgrindStart();
+    xArrayFormulaRange->setArrayFormula("=SUM(A1:A1000)");
+    xCalculatable->calculate();
+    callgrindDump("sc:sum_with_variable_array_formula");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
 
