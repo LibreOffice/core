@@ -703,7 +703,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
         eOpenMode = E_OPEN_NORMAL;
     }
 
-    ::std::vector< ::std::pair< OUString ,Reference< XModel > > > aCompoments;
+    ::std::vector< ::std::pair< OUString ,Reference< XModel > > > aComponents;
     ::std::vector< OUString>::iterator aEnd = aList.end();
     for (::std::vector< OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
     {
@@ -712,7 +712,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
         else
         {
             Reference< XModel > xModel( openElementWithArguments( *aIter, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
-            aCompoments.push_back( ::std::pair< OUString, Reference< XModel > >( *aIter, xModel ) );
+            aComponents.push_back( ::std::pair< OUString, Reference< XModel > >( *aIter, xModel ) );
         }
     }
 
@@ -720,8 +720,8 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
 
-        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
-        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
+        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentIter = aComponents.begin();
+        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentEnd = aComponents.end();
         OUString aDocTypeString;
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
