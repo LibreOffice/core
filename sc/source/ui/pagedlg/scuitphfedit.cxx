@@ -132,8 +132,13 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     // Set size request of 1 widget, the other two will follow as they are
     // in the same grid
     Size aSize = LogicToPixel(Size(80, 120), MAP_APPFONT);
-    m_pWndLeft->set_width_request(aSize.Width());
-    m_pWndLeft->set_height_request(aSize.Height());
+    VclPtr<ScEditWindow> aEditWindows[] = {m_pWndLeft, m_pWndCenter, m_pWndRight};
+
+    for (auto &pEditWindow : aEditWindows)
+    {
+        pEditWindow->set_width_request(aSize.Width());
+        pEditWindow->set_height_request(aSize.Height());
+    }
 
     m_pWndLeft->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     m_pWndCenter->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
