@@ -3443,8 +3443,6 @@ endif # DESKTOP
 
 ifeq ($(ENABLE_BREAKPAD),TRUE)
 
-# ifneq ($(SYSTEM_LIBBREAKPAD),TRUE)
-
 define gb_LinkTarget__use_breakpad
 $(call gb_LinkTarget_set_include,$(1),\
     -I$(call gb_UnpackedTarball_get_dir,breakpad)/src \
@@ -3467,21 +3465,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	breakpad \
 ))
 
-
 endef
 
-# else # SYSTEM_LIBBREAKPAD
-# 
-# define gb_LinkTarget__use_libgltf
-# $(call gb_LinkTarget_set_include,$(1),\
-# 	$$(INCLUDE) \
-# 	$(LIBBREAKPAD_CFLAGS) \
-# )
-# $(call gb_LinkTarget_add_libs,$(1),$(LIBBREAKPAD_LIBS))
-#
-# endef
-
-endif # SYSTEN_LIBBREAKPAD
+endif # ENABLE_BREAKPAD
 
 ifeq ($(ENABLE_GLTF),TRUE)
 
