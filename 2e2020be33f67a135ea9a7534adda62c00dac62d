@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_45966e95",
+        "filename": "sc/qa/perf/scperfobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-27T11:53:55Z",
+      "side": 1,
+      "message": "This should be CPPUNIT_ASSERT_DOUBLES_EQUAL",
+      "revId": "2e2020be33f67a135ea9a7534adda62c00dac62d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
