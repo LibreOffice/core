@@ -571,7 +571,7 @@ static void ReturnFocus(GtkMenuShell *, gpointer pWidget)
 
     fevent->focus_change.type = GDK_FOCUS_CHANGE;
     fevent->focus_change.window = GDK_WINDOW(g_object_ref(window));
-    fevent->focus_change.in = TRUE;
+    fevent->focus_change.in = static_cast<gint16>(TRUE);
     gtk_widget_send_focus_change(pTopLevel, fevent);
     gdk_event_free(fevent);
 }
