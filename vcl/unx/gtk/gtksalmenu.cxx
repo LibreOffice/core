@@ -556,6 +556,8 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     gtk_widget_show_all(mpCloseButton);
 #else
     (void)bShow;
+    (void)mpMenuBarWidget;
+    (void)mpCloseButton;
 #endif
 }
 
@@ -592,6 +594,8 @@ void GtkSalMenu::CreateMenuBarWidget()
     g_signal_connect(G_OBJECT(pMenuBarWidget), "deactivate", G_CALLBACK(ReturnFocus), mpFrame->getWindow());
 
     gtk_widget_show_all(mpMenuBarWidget);
+#else
+    (void)mpMenuBarWidget;
 #endif
 }
 
@@ -603,6 +607,8 @@ void GtkSalMenu::DestroyMenuBarWidget()
         gtk_widget_destroy(mpMenuBarWidget);
         mpMenuBarWidget = nullptr;
     }
+#else
+    (void)mpMenuBarWidget;
 #endif
 }
 
@@ -653,6 +659,8 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
         DestroyMenuBarWidget();
         CreateMenuBarWidget();
     }
+#else
+    (void)mbUnityMode;
 #endif
 }
 
