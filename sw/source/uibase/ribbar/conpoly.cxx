@@ -57,7 +57,8 @@ bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     if (m_pSh->IsDrawCreate())
     {
         if (rMEvt.IsLeft() && rMEvt.GetClicks() == 1 &&
-                                        m_pWin->GetSdrDrawMode() != OBJ_FREELINE)
+                                        m_pWin->GetSdrDrawMode() != OBJ_FREELINE &&
+                                        m_pWin->GetSdrDrawMode() != OBJ_FREEFILL)
         {
             if (!m_pSh->EndCreate(SDRCREATE_NEXTPOINT))
             {
@@ -86,15 +87,29 @@ void ConstPolygon::Activate(const sal_uInt16 nSlotId)
     switch (nSlotId)
     {
         case SID_DRAW_POLYGON_NOFILL:
+        case SID_DRAW_XPOLYGON_NOFILL:
             m_pWin->SetSdrDrawMode(OBJ_PLIN);
+            break;
+
+        case SID_DRAW_POLYGON:
+        case SID_DRAW_XPOLYGON:
+            m_pWin->SetSdrDrawMode(OBJ_POLY);
             break;
 
         case SID_DRAW_BEZIER_NOFILL:
             m_pWin->SetSdrDrawMode(OBJ_PATHLINE);
             break;
 
+        case SID_DRAW_BEZIER_FILL:
+            m_pWin->SetSdrDrawMode(OBJ_PATHFILL);
+            break;
+
         case SID_DRAW_FREELINE_NOFILL:
             m_pWin->SetSdrDrawMode(OBJ_FREELINE);
+            break;
+
+        case SID_DRAW_FREELINE:
+            m_pWin->SetSdrDrawMode(OBJ_FREEFILL);
             break;
 
         default:
