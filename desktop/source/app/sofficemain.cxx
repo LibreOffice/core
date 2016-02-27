@@ -83,6 +83,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #if HAVE_FEATURE_BREAKPAD
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    // TODO: we need a better location for this
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
     google_breakpad::ExceptionHandler eh(descriptor, nullptr, dumpCallback, nullptr, true, -1);
 #else
