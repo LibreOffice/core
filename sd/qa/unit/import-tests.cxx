@@ -8,7 +8,7 @@
  */
 
 #include <config_poppler.h>
-#include <iostream>
+#include <ostream>
 
 #include "sdmodeltestbase.hxx"
 
