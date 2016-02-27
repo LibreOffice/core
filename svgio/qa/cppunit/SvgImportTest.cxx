@@ -42,7 +42,6 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf87309();
     void testFontsizeKeywords();
     void testFontsizePercentage();
-    void testFontsizeRelative();
     void testTdf45771();
     void testTdf97941();
     void testTdf85770();
@@ -64,7 +63,6 @@ public:
     CPPUNIT_TEST(testTdf87309);
     CPPUNIT_TEST(testFontsizeKeywords);
     CPPUNIT_TEST(testFontsizePercentage);
-    CPPUNIT_TEST(testFontsizeRelative);
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf97941);
     CPPUNIT_TEST(testTdf85770);
@@ -199,7 +197,6 @@ void Test::testFontsizeKeywords()
 
 void Test::testFontsizePercentage()
 {
-    //Check when font-size uses percentage and defined globally
     Primitive2DSequence aSequenceFontsizePercentage = parseSvg("/svgio/qa/cppunit/data/FontsizePercentage.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceFontsizePercentage.getLength());
 
@@ -209,20 +206,6 @@ void Test::testFontsizePercentage()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "16");
-}
-
-void Test::testFontsizeRelative()
-{
-    //Check when font-size uses relative units (em,ex) and it's based on its parent's font-size
-    Primitive2DSequence aSequenceFontsizeRelative = parseSvg("/svgio/qa/cppunit/data/FontsizeRelative.svg");
-    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceFontsizeRelative.getLength());
-
-    Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizeRelative));
-
-    CPPUNIT_ASSERT (pDocument);
-
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "50");
 }
 
 void Test::testTdf45771()

@@ -2402,20 +2402,6 @@ namespace svgio
                     return SvgNumber(
                         maFontSizeNumber.getNumber() * aDefaultSize / 100.0, Unit_px, true);
                 }
-                else if((Unit_em == maFontSizeNumber.getUnit()) || (Unit_ex == maFontSizeNumber.getUnit()))
-                {
-                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                    if(pSvgStyleAttributes)
-                    {
-                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
-
-                        return SvgNumber(
-                            aParentNumber.getNumber() * maFontSizeNumber.getNumber(),
-                            aParentNumber.getUnit(),
-                            true);
-                    }
-                }
 
                 return maFontSizeNumber;
             }
