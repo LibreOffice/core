@@ -1313,9 +1313,6 @@ bool OResultSet::OpenImpl()
 
                     if (nMaxRow)
                     {
-    #if OSL_DEBUG_LEVEL > 1
-                        sal_Int32 nFound=0;
-    #endif
                         sal_Int32 nPos;
                         sal_Int32 nKey;
 
@@ -1349,10 +1346,6 @@ bool OResultSet::OpenImpl()
 
                             if(loopInRow == m_aSelectRow->get().end())
                                 (m_pFileSet->get())[j] = 0; // Rows match -- Mark for deletion by setting key to 0
-    #if OSL_DEBUG_LEVEL > 1
-                            else
-                                nFound++;
-    #endif
                         }
 
                         m_pFileSet->get().erase(::std::remove_if(m_pFileSet->get().begin(),m_pFileSet->get().end(),

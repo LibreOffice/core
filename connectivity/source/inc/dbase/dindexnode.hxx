@@ -195,9 +195,6 @@ namespace connectivity
             bool Find(const ONDXKey&);  // Descend recursively
             sal_uInt16 FindPos(const ONDXKey& rKey) const;
 
-#if OSL_DEBUG_LEVEL > 1
-            void PrintPage();
-#endif
         };
 
         inline ONDXPagePtr::~ONDXPagePtr() { if (mpPage != nullptr) mpPage->ReleaseRef(); }
