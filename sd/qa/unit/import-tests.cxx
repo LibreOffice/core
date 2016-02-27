@@ -591,12 +591,16 @@ void SdImportTest::testFdo77027()
     xDocShRef->DoClose();
 }
 
+namespace com { namespace sun { namespace star { namespace uno {
+
 template<class T>
 std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
 {
     rStrm << xRef.get();
     return rStrm;
 }
+
+} } } }
 
 void SdImportTest::testTdf97808()
 {
