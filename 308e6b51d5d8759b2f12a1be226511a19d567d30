@@ -16,6 +16,24 @@
       "revId": "308e6b51d5d8759b2f12a1be226511a19d567d30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_45d14efb",
+        "filename": "extensions/source/activex/SODispatchInterceptor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-27T21:36:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aa78d24_5fee3bed",
+      "revId": "308e6b51d5d8759b2f12a1be226511a19d567d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
