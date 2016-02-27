@@ -107,6 +107,11 @@ interface TextEditView : BaseTextEditView
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]
+    SID_DRAW_FREELINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
     SID_DRAW_ARC
     [
         ExecMethod = ExecDraw ;
