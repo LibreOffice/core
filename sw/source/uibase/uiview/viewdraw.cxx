@@ -256,8 +256,11 @@ void SwView::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_POLYGON_NOFILL:
+        case SID_DRAW_POLYGON:
         case SID_DRAW_BEZIER_NOFILL:
+        case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE_NOFILL:
+        case SID_DRAW_FREELINE:
             pFuncPtr = new ConstPolygon(m_pWrtShell, m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();

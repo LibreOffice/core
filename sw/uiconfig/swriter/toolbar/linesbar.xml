@@ -21,4 +21,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled"/>
  <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierFill"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon"/>
 </toolbar:toolbar>

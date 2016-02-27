@@ -481,8 +481,11 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_POLYGON_NOFILL:
+        case SID_DRAW_POLYGON:
         case SID_DRAW_BEZIER_NOFILL:
+        case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE_NOFILL:
+        case SID_DRAW_FREELINE:
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
