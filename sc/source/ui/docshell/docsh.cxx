@@ -2976,7 +2976,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
         return;
 
     vector<const awt::KeyEvent*> aKeys;
-    aKeys.reserve(4);
+    aKeys.reserve(7);
 
     // Backspace key
     awt::KeyEvent aBackspace;
@@ -3002,6 +3002,24 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     aAltDown.Modifiers = awt::KeyModifier::MOD2;
     aKeys.push_back(&aAltDown);
 
+    // F4
+    awt::KeyEvent aF4;
+    aF4.KeyCode = awt::Key::F4;
+    aF4.Modifiers = 0;
+    aKeys.push_back(&aF4);
+
+    // CTRL+SHIFT+F4
+    awt::KeyEvent aCtrlShiftF4;
+    aCtrlShiftF4.KeyCode = awt::Key::F4;
+    aCtrlShiftF4.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
+    aKeys.push_back(&aCtrlShiftF4);
+
+    // CTRL+SHIFT+F4 Mac
+    awt::KeyEvent aCtrlShiftF4Mac;
+    aCtrlShiftF4Mac.KeyCode = awt::Key::F4;
+    aCtrlShiftF4Mac.Modifiers = awt::KeyModifier::MOD3 | awt::KeyModifier::SHIFT;
+    aKeys.push_back(&aCtrlShiftF4Mac);
+
     // Remove all involved keys first, because swapping commands don't work
     // well without doing this.
     removeKeysIfExists(xScAccel, aKeys);
@@ -3014,11 +3032,15 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aBackspace, ".uno:Delete");
             xScAccel->setKeyEvent(aCtrlD, ".uno:FillDown");
             xScAccel->setKeyEvent(aAltDown, ".uno:DataSelect");
+            xScAccel->setKeyEvent(aF4, ".uno:ToggleRelative");
+            xScAccel->setKeyEvent(aCtrlShiftF4, ".uno:ViewDataSourceBrowser");
+            xScAccel->setKeyEvent(aCtrlShiftF4Mac, ".uno:ViewDataSourceBrowser");
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
             xScAccel->setKeyEvent(aDelete, ".uno:Delete");
             xScAccel->setKeyEvent(aBackspace, ".uno:ClearContents");
             xScAccel->setKeyEvent(aCtrlD, ".uno:DataSelect");
+            xScAccel->setKeyEvent(aF4, ".uno:ViewDataSourceBrowser");
         break;
         default:
             ;
