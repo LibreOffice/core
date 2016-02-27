@@ -166,11 +166,11 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     bool bNameTooLong = false;
     oslPipe  pPipe;
 
-    if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
+    if (access(PIPEDEFAULTPATH, W_OK) == 0)
     {
         strncpy(name, PIPEDEFAULTPATH, sizeof(name));
     }
-    else if (access(PIPEALTERNATEPATH, R_OK|W_OK) == 0)
+    else if (access(PIPEALTERNATEPATH, W_OK) == 0)
     {
         strncpy(name, PIPEALTERNATEPATH, sizeof(name));
     }
