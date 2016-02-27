@@ -323,10 +323,15 @@ get_pipe_path( rtl_uString *pAppPath )
     if ( !pMd5hash )
         rtl_uString_new( &pMd5hash );
 
-    if ( access( PIPEDEFAULTPATH, R_OK|W_OK ) == 0 )
+    if ( access( PIPEDEFAULTPATH, W_OK ) == 0 )
         rtl_uString_newFromAscii( &pResult, PIPEDEFAULTPATH );
-    else
+    else if ( access( PIPEALTERNATEPATH, W_OK ) == 0 )
         rtl_uString_newFromAscii( &pResult, PIPEALTERNATEPATH );
+    else
+    {
+        fprintf( stderr, "ERROR: no valid pipe path found.\n" );
+        exit( 1 );
+    }
 
     rtl_uString_newFromAscii( &pTmp, "/OSL_PIPE_" );
     rtl_uString_newConcat( &pResult, pResult, pTmp );
