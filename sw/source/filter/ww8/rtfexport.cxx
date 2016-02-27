@@ -41,7 +41,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
 #include <iostream>
 #endif
 #include <svx/xflclit.hxx>

@@ -108,11 +108,6 @@ SwImplProtocol* SwProtocol::pImpl = nullptr;
 
 static sal_uLong lcl_GetFrameId( const SwFrame* pFrame )
 {
-#if OSL_DEBUG_LEVEL > 1
-    static bool bFrameId = false;
-    if( bFrameId )
-        return pFrame->GetFrameId();
-#endif
     if( pFrame && pFrame->IsTextFrame() )
         return static_cast<const SwTextFrame*>(pFrame)->GetTextNode()->GetIndex();
     return 0;

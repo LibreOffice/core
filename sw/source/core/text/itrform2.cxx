@@ -62,7 +62,7 @@
 
 #include <config_graphite.h>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_TEXT
 #include <ndtxt.hxx>
 #endif
 
@@ -1824,10 +1824,6 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                 }
         }
-#if OSL_DEBUG_LEVEL > 1
-        sal_uInt16 nDummy = nLineHeight + 1;
-        (void)nDummy;
-#endif
 
         if( IsRegisterOn() )
         {

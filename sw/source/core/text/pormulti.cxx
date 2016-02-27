@@ -1289,7 +1289,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         nThisDir = static_cast<SwBidiPortion&>(rMulti).GetLevel() % 2;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // only paint first level bidi portions
     if( rMulti.Width() > 1 && ! pEnvPor )
         GetInfo().DrawViewOpt( rMulti, POR_FLD );
