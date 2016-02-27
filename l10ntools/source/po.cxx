@@ -596,6 +596,7 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
         }
         else
         {
+            SAL_WARN("l10ntools", "Parse problem with entry: " << aGenPo.getMsgStr());
             throw PoIfstream::Exception();
         }
     }
