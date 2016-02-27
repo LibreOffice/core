@@ -92,7 +92,22 @@ interface TextEditView : BaseTextEditView
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]
+    SID_DRAW_XPOLYGON_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_XPOLYGON
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
     SID_DRAW_POLYGON_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_POLYGON
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
@@ -102,7 +117,17 @@ interface TextEditView : BaseTextEditView
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]
+    SID_DRAW_BEZIER_FILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
     SID_DRAW_FREELINE_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_FREELINE
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
