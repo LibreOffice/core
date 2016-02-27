@@ -155,6 +155,7 @@ certain functionality.
 @li @c sdremote
 @li @c sdremote.bluetooth
 @li @c sdremote.wifi
+@li @c sd.eppt
 
 @section editeng
 
