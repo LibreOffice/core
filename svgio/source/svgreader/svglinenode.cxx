@@ -134,21 +134,21 @@ namespace svgio
                     getX2().isSet() ? getX2().solve(*this, xcoordinate) : 0.0,
                     getY2().isSet() ? getY2().solve(*this, ycoordinate) : 0.0);
 
-                if(!X.equal(Y))
+                // X and Y may be equal, do not drop them. Markers or linecaps 'round' and 'square'
+                // need to be drawn for zero-length lines too.
+
+                basegfx::B2DPolygon aPath;
+
+                aPath.append(X);
+                aPath.append(Y);
+
+                drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+
+                pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
+
+                if(!aNewTarget.empty())
                 {
-                    basegfx::B2DPolygon aPath;
-
-                    aPath.append(X);
-                    aPath.append(Y);
-
-                    drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-
-                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
-
-                    if(!aNewTarget.empty())
-                    {
-                        pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
-                    }
+                    pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
                 }
             }
         }
