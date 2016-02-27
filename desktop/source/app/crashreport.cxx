@@ -8,8 +8,11 @@
  */
 
 #include <desktop/crashreport.hxx>
+#include <rtl/bootstrap.hxx>
+#include <osl/file.hxx>
 
 #include <config_version.h>
+#include <config_folders.h>
 
 #include <string>
 #include <fstream>
@@ -42,8 +45,13 @@ void CrashReporter::writeCommonInfo()
 
 std::string CrashReporter::getIniFileName()
 {
-    // TODO: we need a generic solution for the location
-    return "/tmp/dump.ini";
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/crash/");
+    rtl::Bootstrap::expandMacros(url);
+    osl::Directory::create(url);
+
+    OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+    std::string aRet(aUrl.getStr());
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
