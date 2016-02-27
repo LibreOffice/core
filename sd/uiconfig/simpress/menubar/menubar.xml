@@ -139,6 +139,9 @@
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
+            <menu:menuitem menu:id=".uno:ModifyPage"/>
+            <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
+            <menu:menuitem menu:id=".uno:CustomAnimation"/>
             <menu:menuitem menu:id=".uno:DesignerDialog"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
@@ -406,6 +409,9 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:FillShadow"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CustomAnimation"/>
+            <menu:menuitem menu:id=".uno:AnimationEffects"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:NameGroup"/>
             <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
             <menu:menuseparator/>
@@ -498,9 +504,10 @@
             <menu:menuitem menu:id=".uno:SelectBackground"/>
             <menu:menuitem menu:id=".uno:SaveBackground"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:PresentationLayout"/>
+            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
             <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
-            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:ShowSlide"/>
@@ -508,11 +515,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SummaryPage"/>
             <menu:menuitem menu:id=".uno:ExpandPage"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ModifyPage"/>
-            <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
-            <menu:menuitem menu:id=".uno:CustomAnimation"/>
-            <menu:menuitem menu:id=".uno:AnimationEffects"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:SlideNavigateMenu">
               <menu:menupopup>
@@ -522,6 +524,7 @@
                 <menu:menuitem menu:id=".uno:LastPage"/>
               </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:RestoreEditingView"/>
             <menu:menu menu:id=".uno:SlideMoveMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:MovePageFirst"/>
@@ -531,19 +534,19 @@
               </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PresentationLayout"/>
+            <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:SlideShowMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:Presentation"/>
             <menu:menuitem menu:id=".uno:PresentationCurrentSlide"/>
-            <menu:menuitem menu:id=".uno:PresentationDialog"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:RehearseTimings"/>
-            <menu:menuitem menu:id=".uno:RestoreEditingView"/>
+            <menu:menuitem menu:id=".uno:CustomShowDialog"/>
             <menu:menuitem menu:id=".uno:Remote"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:CustomShowDialog"/>
+            <menu:menuitem menu:id=".uno:PresentationDialog"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
