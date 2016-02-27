@@ -1427,9 +1427,7 @@ bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDont
                         continue;
                     }
 
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_FAIL( "LoopControl in SwContentFrame::CalcLowers" );
-#endif
+                    SAL_WARN("sw.layout", "LoopControl in SwContentFrame::CalcLowers");
                 }
             }
             pCnt->GetUpper()->Calc(pRenderContext);
@@ -1505,11 +1503,7 @@ static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
         {
             if ( ++nLoopControlRuns_2 > nLoopControlMax )
             {
-#if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( 0 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 1!" );
-                OSL_ENSURE( 1 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 2!!" );
-                OSL_ENSURE( 2 >  nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 3!!!" );
-#endif
+                SAL_WARN_IF(nLoopControlStage_2 > 0, "sw.layout", "LoopControl_2 in lcl_RecalcRow : " << nLoopControlStage_2);
                 rRow.ValidateThisAndAllLowers( nLoopControlStage_2++ );
                 nLoopControlRuns_2 = 0;
                 if( nLoopControlStage_2 > 2 )
@@ -1553,11 +1547,7 @@ static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
             {
                 if ( ++nLoopControlRuns_1 > nLoopControlMax )
                 {
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE( 0 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 1!" );
-                    OSL_ENSURE( 1 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 2!!" );
-                    OSL_ENSURE( 2 >  nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 3!!!" );
-#endif
+                    SAL_WARN_IF(nLoopControlStage_1 > 0, "sw.layout", "LoopControl_1 in lcl_RecalcRow : " << nLoopControlStage_1);
                     rRow.ValidateThisAndAllLowers( nLoopControlStage_1++ );
                     nLoopControlRuns_1 = 0;
                     if( nLoopControlStage_1 > 2 )

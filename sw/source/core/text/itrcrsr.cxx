@@ -344,14 +344,6 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     // #i91133#
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
 
-#if OSL_DEBUG_LEVEL > 1
-    static bool bOne = false;
-    static bool bLast = false;
-    static bool bCenter = false;
-    bOneBlock |= bOne;
-    bLastBlock |= bLast;
-    bLastCenter |= bCenter;
-#endif
     DropInit();
 }
 

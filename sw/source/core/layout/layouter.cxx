@@ -27,6 +27,7 @@
 
 #include <movedfwdfrmsbyobjpos.hxx>
 #include <objstmpconsiderwrapinfl.hxx>
+#include <cassert>
 
 #define LOOP_DETECT 250
 
@@ -180,17 +181,12 @@ void SwLooping::Control( SwPageFrame* pPage )
     }
     else if( ++nCount > LOOP_DETECT )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         static bool bNoLouie = false;
         if( bNoLouie )
             return;
-
-        // FME 2007-08-30 #i81146# new loop control
-        OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
-        OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
-        OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
 #endif
-
+        SAL_WARN_IF(mnLoopControlStage > 0, "sw.looping.louie", "Looping Louie: " << mnLoopControlStage);
         Drastic( pPage->Lower() );
         if( nNew > nMinPage && pPage->GetPrev() )
             Drastic( static_cast<SwPageFrame*>(pPage->GetPrev())->Lower() );
@@ -258,9 +254,7 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame
 {
     if ( mpLooping && mpLooping->IsLoopingLouieLight() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
-#endif
+        SAL_WARN("sw.layout", "Looping Louie (Light): Fixating fractious frame");
         SwLayouter::InsertMovedFwdFrame( rDoc, rFrame, rFrame.FindPageFrame()->GetPhyPageNum() );
     }
 }

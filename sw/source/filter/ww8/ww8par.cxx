@@ -119,7 +119,7 @@
 
 #include <breakit.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
 #include <iostream>
 #include <dbgoutsw.hxx>
 #endif
@@ -457,7 +457,7 @@ public:
     Sttb();
     virtual ~Sttb();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
     virtual void Print( FILE* fp ) override;
 #endif
     OUString getStringAtIndex( sal_uInt32 );
@@ -496,7 +496,7 @@ bool Sttb::Read( SvStream& rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
 void Sttb::Print( FILE* fp )
 {
     fprintf( fp, "[ 0x%" SAL_PRIxUINT32 " ] Sttb - dump\n", nOffSet);
@@ -3374,7 +3374,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
     if (rAddString.isEmpty())
         return;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
         {
             OString sText(OUStringToOString(rAddString, RTL_TEXTENCODING_UTF8));
             SAL_INFO("sw.ww8", "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>");
@@ -4765,7 +4765,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 if (!aSttb.Read( *m_pTableStream ) )
                     OSL_TRACE("** Read of SttbAssoc data failed!!!! ");
                 m_pTableStream->Seek( nCur ); // return to previous position, is that necessary?
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
                 aSttb.Print( stderr );
 #endif
                 OUString sPath = aSttb.getStringAtIndex( 0x1 );
@@ -4845,7 +4845,7 @@ void WW8Customizations::Import( SwDocShell* pShell )
             SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! ");
             return;
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_WW8
         aTCG.Print( stderr );
 #endif
         aTCG.ImportCustomToolBar( *pShell );

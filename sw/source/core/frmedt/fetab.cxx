@@ -580,7 +580,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrame *pBox ) const
         g_pColumnCacheLastCellFrame= pBox;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SwTabColsEntry aEntry;
     for ( sal_uInt16 i = 0; i < rToFill.Count(); ++i )
     {

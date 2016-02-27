@@ -611,10 +611,6 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if (nPos < 0 || nPos > nMaxPos)
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "nextCharBlock not implemented?" );
-#if OSL_DEBUG_LEVEL > 1
-        if( !nPos )
-            nPos = nMaxPos;
-#endif
         // The upper ones...
         if( nOldPos != nPos )
         {
@@ -728,10 +724,6 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if (nPos < 0 || nPos > nMaxPos)
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "endOfCharBlock not implemented?" );
-#if OSL_DEBUG_LEVEL > 1
-        if( !nPos )
-            nPos = nMaxPos;
-#endif
     }
 
     // Aufraeumen:
