@@ -40,6 +40,7 @@
 #include <osl/conditn.h>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <desktop/crashreport.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #include "opengl/x11/X11DeviceInfo.hxx"
@@ -945,12 +946,14 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 
         bRet = bEnable;
     }
+
     if (bRet)
     {
         if (!getenv("SAL_DISABLE_GL_WATCHDOG"))
             OpenGLWatchdogThread::start();
         ImplGetSVData()->maWinData.mbNoSaveBackground = true;
     }
+    CrashReporter::AddKeyValue("UseOpenGL", OUString::boolean(bRet));
 
     return bRet;
 }
