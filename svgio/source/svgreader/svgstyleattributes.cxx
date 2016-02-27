@@ -2659,23 +2659,6 @@ namespace svgio
             return nullptr;
         }
 
-        OUString SvgStyleAttributes::getClipPathXLink() const
-        {
-            if(!maClipPathXLink.isEmpty())
-            {
-                return maClipPathXLink;
-            }
-
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-            if(pSvgStyleAttributes)
-            {
-                return pSvgStyleAttributes->getClipPathXLink();
-            }
-
-            return OUString();
-        }
-
         OUString SvgStyleAttributes::getMarkerStartXLink() const
         {
             if(!maMarkerStartXLink.isEmpty())
