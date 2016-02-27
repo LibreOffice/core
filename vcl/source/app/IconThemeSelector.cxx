@@ -66,7 +66,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
         r = "breeze";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
-        r = "human";
+        r = "breeze";
     }
     else {
         r = FALLBACK_ICON_THEME_ID;
