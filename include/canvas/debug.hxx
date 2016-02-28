@@ -31,11 +31,6 @@
 
 ::std::size_t find_unreachable_objects( bool );
 
-# if OSL_DEBUG_LEVEL > 2
-#  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
-                                            OSL_THIS_FUNC, a, \
-                                            find_unreachable_objects(true) )
-# else
 /** This macro shows how much memory is still used by shared_ptrs
 
     Use this macro at places in the code where normally all shared_ptr
@@ -43,10 +38,14 @@
     still contained in those objects, which quite possibly are prevented
     from deletion by circular references.
  */
+#if OSL_DEBUG_LEVEL > 0
+#  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
+                                            OSL_THIS_FUNC, a, \
+                                            find_unreachable_objects(true) )
+#else
 #  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
                                             OSL_THIS_FUNC, a, \
                                             find_unreachable_objects(false) )
-# endif
 
 #else
 

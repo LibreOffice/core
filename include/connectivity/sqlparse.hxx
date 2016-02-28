@@ -196,11 +196,6 @@ namespace connectivity
         // TokenIDToStr: token name belonging to a token number.
         static OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = nullptr);
 
-#if OSL_DEBUG_LEVEL > 1
-        // (empty string if not found)
-        static OUString RuleIDToStr(sal_uInt32 nRuleID);
-#endif
-
         // StrToRuleID calculates the RuleID for a OUString (that is, css::sdbcx::Index in yytname)
         // (0 if not found). The search for an ID based on a String is
         // extremely inefficient (sequential search for OUString)!
