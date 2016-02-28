@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_a51c7278",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-28T15:06:16Z",
+      "side": 1,
+      "message": "Not, not really. || would be appropiate, but looking at this line again, I can leave the \u0027mnCount \u003c 2\u0027 out as mnSmplInPrd cannot be less than 1.\nA leftover from previous stages. I reduces the comment, which currently doesn\u0027t make much sense either too (we just need at least 2 periods).",
+      "parentUuid": "1aa78d24_1a2201ba",
+      "range": {
+        "startLine": 415,
+        "startChar": 25,
+        "endLine": 415,
+        "endChar": 27
+      },
+      "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_fa3a95e6",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 14
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_0512a662",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-28T15:06:16Z",
+      "side": 1,
+      "message": "Yes, it _is_ odd. I replaced the rand() function (which needed the RAND_MAX) with uniform_real_distribution() as you suggested, but without properly checking the function itself.\nI need a result between 0.5 and 1.0 as I use it in gaussinv, which uses a (Symmetrical) standard distribution from 0 to 1 with the top at 0.5.\n\nYour assumption is correct.",
+      "parentUuid": "1aa78d24_fa3a95e6",
+      "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_9a1c3179",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 14
@@ -53,6 +95,24 @@
       "writtenOn": "2016-02-26T18:08:29Z",
       "side": 1,
       "message": "It might be better to assign these pointers to std::unique_ptr instances, so they don\u0027t have to be cleaned up manually at the end. Like this\n\n std::unique_ptr\u003cdouble[]\u003e xScenRange( pScenRange \u003d new double[nSize]);\n\nThen you don\u0027t have to care about deleting the allocated memory if the variable goes out of scope for any reason, i.e. some premature return. Which isn\u0027t the case here, but just as a general advice.",
+      "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_e00dc838",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-28T15:06:16Z",
+      "side": 1,
+      "message": "I changed the code here because the Windows compiler couldn\u0027t cope with double pScenRange[ nSize ] and switched to new plus delete. The std::unique_ptr C++11 looks great to me.",
+      "parentUuid": "1aa78d24_9a1c3179",
       "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
