@@ -152,7 +152,7 @@
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertFootnoteDialog"/>
-      <menu:menuitem menu:id=".uno:InsertBookmark"/>
+      <menu:menuitem menu:id=".uno:InsertAnchor"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertScript"/>
       <menu:menuseparator/>
