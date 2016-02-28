@@ -723,37 +723,28 @@ struct LinearScaleContext
         const long nSrcWidth = aBitmapRect.GetWidth();
         const long nSrcHeight = aBitmapRect.GetHeight();
 
-        const bool bHMirr = aOutSize.Width() < 0;
-        const bool bVMirr = aOutSize.Height() < 0;
-
         generateSimpleMap(
             nSrcWidth,  aDstRect.GetWidth(), aBitmapRect.Left(),
-            aOutSize.Width(),  nOffX, bHMirr, mpMapX.get(), mpMapXOffset.get());
+            aOutSize.Width(),  nOffX, mpMapX.get(), mpMapXOffset.get());
 
         generateSimpleMap(
             nSrcHeight, aDstRect.GetHeight(), aBitmapRect.Top(),
-            aOutSize.Height(), nOffY, bVMirr, mpMapY.get(), mpMapYOffset.get());
+            aOutSize.Height(), nOffY, mpMapY.get(), mpMapYOffset.get());
     }
 
 private:
 
     static void generateSimpleMap(long nSrcDimension, long nDstDimension, long nDstLocation,
-                                  long nOutDimention, long nOffset, bool bMirror, long* pMap, long* pMapOffset)
+                                  long nOutDimention, long nOffset, long* pMap, long* pMapOffset)
     {
-        long nMirrorOffset = 0;
 
-        if (bMirror)
-            nMirrorOffset = (nDstLocation << 1) + nSrcDimension - 1L;
-
-        const double fReverseScale = (nOutDimention > 1L) ? (nSrcDimension - 1L) / double(nOutDimention - 1L) : 0.0;
+        const double fReverseScale = (nSrcDimension - 1L) / double(labs(nOutDimention) - 1L);
 
         long nSampleRange = std::max(0L, nSrcDimension - 2L);
 
         for (long i = 0L; i < nDstDimension; i++)
         {
-            double fTemp = ((nOffset + i) * fReverseScale);
-            if (bMirror)
-                fTemp = nMirrorOffset - fTemp - 1L;
+            double fTemp = labs((nOffset + i) * fReverseScale);
 
             pMap[i] = MinMax(nDstLocation + long(fTemp), 0, nSampleRange);
             pMapOffset[i] = (long) ((fTemp - pMap[i]) * 128.0);
