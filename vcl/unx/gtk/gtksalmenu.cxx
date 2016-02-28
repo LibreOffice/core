@@ -80,7 +80,11 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
 
 bool GtkSalMenu::PrepUpdate()
 {
+#if GTK_CHECK_VERSION(3,0,0)
     return mpMenuModel && mpActionGroup;
+#else
+    return bUnityMode && mpMenuModel && mpActionGroup;
+#endif
 }
 
 /*
@@ -461,7 +465,11 @@ GtkSalMenu::~GtkSalMenu()
 
 bool GtkSalMenu::VisibleMenuBar()
 {
+#if GTK_CHECK_VERSION(3,0,0)
     return mbMenuBar;
+#else
+    return mbMenuBar && bUnityMode;
+#endif
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
