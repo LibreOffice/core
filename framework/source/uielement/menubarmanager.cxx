@@ -869,22 +869,20 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                             bool bPopupMenu( false );
-                            if(xMenuItemDispatch != nullptr)
+                            if ( !pMenuItemHandler->xPopupMenuController.is() &&
+                                 m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
                             {
-                                if ( !pMenuItemHandler->xPopupMenuController.is() &&
-                                     m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
-                                {
-                                    bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
-                                }
-                                else if ( pMenuItemHandler->xPopupMenuController.is() )
-                                {
-                                    // Force update of popup menu
-                                    pMenuItemHandler->xPopupMenuController->updatePopupMenu();
-                                    bPopupMenu = true;
-                                    if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( pMenuItemHandler->nItemId ))
-                                        pMenu->EnableItem( pMenuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
-                                }
+                                bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
                             }
+                            else if ( pMenuItemHandler->xPopupMenuController.is() )
+                            {
+                                // Force update of popup menu
+                                pMenuItemHandler->xPopupMenuController->updatePopupMenu();
+                                bPopupMenu = true;
+                                if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( pMenuItemHandler->nItemId ))
+                                    pMenu->EnableItem( pMenuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
+                            }
+
                             lcl_CheckForChildren(pMenu, pMenuItemHandler->nItemId);
 
                             if ( xMenuItemDispatch.is() )
