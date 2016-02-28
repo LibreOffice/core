@@ -428,7 +428,6 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rR
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
-    mbUnityMode ( false ),
     mpMenuBarWidget( nullptr ),
     mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
@@ -654,13 +653,11 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     g_lo_menu_insert_section( pMenuModel, 0, nullptr, mpMenuModel );
 
 #if GTK_CHECK_VERSION(3,0,0)
-    if (!mbUnityMode)
+    if (!bUnityMode)
     {
         DestroyMenuBarWidget();
         CreateMenuBarWidget();
     }
-#else
-    (void)mbUnityMode;
 #endif
 }
 

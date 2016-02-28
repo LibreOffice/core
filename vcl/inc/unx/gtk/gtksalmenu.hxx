@@ -44,7 +44,6 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
 
     bool                            mbMenuBar;
-    bool                            mbUnityMode;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
     Menu*                           mpVCLMenu;
