@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_80904497",
+        "filename": "cppu/source/threadpool/thread.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-28T22:35:49Z",
+      "side": 1,
+      "message": "The cast is not needed. In the printf it was needed because printf is not type-safe, to be sure that the type of the parameter matches that expected by the %lu. But the \u003c\u003c operator knows what type the operand is.",
+      "revId": "0703def77f50317405e382673f7b4601f477b902",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_608d587b",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-28T22:35:49Z",
+      "side": 1,
+      "message": "The ### has no function, no documented meaning.",
+      "revId": "0703def77f50317405e382673f7b4601f477b902",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c0e88c19",
+        "filename": "cppu/source/uno/data.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-28T22:35:49Z",
+      "side": 1,
+      "message": "Please make sure that you have test compiled with DEBUG_CPPU_UNO defined.",
+      "revId": "0703def77f50317405e382673f7b4601f477b902",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
