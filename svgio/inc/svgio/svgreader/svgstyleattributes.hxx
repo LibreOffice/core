@@ -228,7 +228,7 @@ namespace svgio
             /// fill rule
             FillRule                    maFillRule;
 
-            // ClipRule setting (only valid wne mbIsClipPathContent == true, default is FillRule_nonzero)
+            // ClipRule setting (only valid when mbIsClipPathContent == true, default is FillRule_nonzero)
             FillRule                    maClipRule;
 
             // BaselineShift: Type and number (in case of BaselineShift_Percentage or BaselineShift_Length)
