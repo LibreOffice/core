@@ -319,42 +319,25 @@ bool SlideSorterController::Command (
         case CommandEventId::ContextMenu:
         {
             SdPage* pPage = nullptr;
-            sal_uInt16 nPopupId;
+            OUString aPopupId;
 
             model::PageEnumeration aSelectedPages (
                 PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
             if (aSelectedPages.HasMoreElements())
                 pPage = aSelectedPages.GetNextElement()->GetPage();
 
-            // Choose the popup menu depending on a) the type of the main
-            // view shell, b) the edit mode, and c) on whether the selection
-            // is empty or not.
-            ViewShell::ShellType eMainViewShellType (ViewShell::ST_NONE);
-            std::shared_ptr<ViewShell> pMainViewShell (
-                pViewShell->GetViewShellBase().GetMainViewShell());
-            if (pMainViewShell.get() != nullptr)
-                eMainViewShellType = pMainViewShell->GetShellType();
-            switch (eMainViewShellType)
+            if (mrModel.GetEditMode() == EM_PAGE)
             {
-                case ViewShell::ST_DRAW:
-                    if (pPage != nullptr)
-                        nPopupId = RID_SLIDE_SORTER_DRAW_SEL_POPUP;
-                    else
-                        nPopupId = RID_SLIDE_SORTER_DRAW_NOSEL_POPUP;
-                    break;
-
-                default:
-                    if (mrModel.GetEditMode() == EM_PAGE)
-                        if (pPage != nullptr)
-                            nPopupId = RID_SLIDE_SORTER_IMPRESS_SEL_POPUP;
-                        else
-                            nPopupId = RID_SLIDE_SORTER_IMPRESS_NOSEL_POPUP;
-                    else
-                        if (pPage != nullptr)
-                            nPopupId = RID_SLIDE_SORTER_MASTER_SEL_POPUP;
-                        else
-                            nPopupId = RID_SLIDE_SORTER_MASTER_NOSEL_POPUP;
+                if (pPage != nullptr)
+                    aPopupId = "pagepane";
+                else
+                    aPopupId = "pagepanenosel";
             }
+            else if (pPage != nullptr)
+                aPopupId = "pagepanemaster";
+            else
+                aPopupId = "pagepagenoselmaster";
+
             std::unique_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
             if (pPage == nullptr)
             {
@@ -404,10 +387,7 @@ bool SlideSorterController::Command (
                 SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
                 if (pDispatcher != nullptr)
                 {
-                    pDispatcher->ExecutePopup(
-                        SdResId(nPopupId),
-                        pWindow,
-                        &aMenuLocation);
+                    pDispatcher->ExecutePopup( aPopupId, pWindow, &aMenuLocation );
                     mrSlideSorter.GetView().UpdatePageUnderMouse();
                     ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
                     if (pFunction.is())

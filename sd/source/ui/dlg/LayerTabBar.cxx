@@ -154,7 +154,7 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->ExecutePopup(SdResId(RID_LAYERTAB_POPUP));
+        pDispatcher->ExecutePopup("layertab");
     }
 }
 

@@ -110,7 +110,7 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell)
 
 void OutlineViewShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SdResId(RID_OUTLINE_POPUP));
+    GetStaticInterface()->RegisterPopupMenu("outline");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                             RID_OUTLINE_TOOLBOX);
@@ -1377,7 +1377,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
         }
         else
         {
-           GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(RID_OUTLINE_POPUP));
+           GetViewFrame()->GetDispatcher()->ExecutePopup("outline");
         }
     }
     else

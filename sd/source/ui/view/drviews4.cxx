@@ -509,8 +509,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else if( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bNativeShow &&
                  pWin != nullptr && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
-            sal_uInt16 nSdResId = 0;          // ResourceID for popup menu
-            bool bGraphicShell = dynamic_cast< const GraphicViewShell *>( this ) !=  nullptr;
+            OUString aPopupId; // Resource name for popup menu
 
             // is there a snap object under the cursor?
             SdrPageView* pPV;
@@ -530,7 +529,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             // helper line
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
-                nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
                 ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
                 return;
             }
@@ -538,7 +536,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
                      mpDrawView->IsGluePointMarked( pObj, nPickId ) )
             {
-                nSdResId = RID_DRAW_GLUEPOINT_POPUP;
+                aPopupId = "gluepoint";
             }
             // field command?
             else if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
@@ -597,7 +595,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                     if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != nullptr ) )
                     {
-                        nSdResId = RID_BEZIER_POPUP;
+                        aPopupId = "bezier";
                     }
                     else
                     {
@@ -633,11 +631,11 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 {
                                     if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
                                     {
-                                        nSdResId = RID_DRAW_TABLEOBJ_INSIDE_POPUP;
+                                        aPopupId = "tabletext";
                                     }
                                     else
                                     {
-                                        nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                        aPopupId = "drawtext";
                                     }
                                 }
                             }
@@ -652,37 +650,31 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 switch ( nId )
                                 {
                                     case OBJ_OUTLINETEXT:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_OUTLINETEXTOBJ_POPUP :
-                                                                    RID_DRAW_OUTLINETEXTOBJ_POPUP;
+                                        aPopupId = "outlinetext";
                                         break;
 
                                     case OBJ_CAPTION:
                                     case OBJ_TITLETEXT:
                                     case OBJ_TEXT:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_TEXTOBJ_POPUP :
-                                                                    RID_DRAW_TEXTOBJ_POPUP;
+                                        aPopupId = "textbox";
                                         break;
 
                                     case OBJ_PATHLINE:
                                     case OBJ_PLIN:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_POLYLINEOBJ_POPUP :
-                                                                    RID_DRAW_POLYLINEOBJ_POPUP;
+                                        aPopupId = "curve";
                                         break;
 
                                     case OBJ_FREELINE:
-                                    case OBJ_EDGE:      // Connector
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_EDGEOBJ_POPUP :
-                                                                    RID_DRAW_EDGEOBJ_POPUP;
+                                    case OBJ_EDGE:
+                                        aPopupId = "connector";
                                         break;
 
                                     case OBJ_LINE:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_LINEOBJ_POPUP :
-                                                                    RID_DRAW_LINEOBJ_POPUP;
+                                        aPopupId = "line";
                                         break;
 
                                     case OBJ_MEASURE:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_MEASUREOBJ_POPUP :
-                                                                    RID_DRAW_MEASUREOBJ_POPUP;
+                                        aPopupId = "measure";
                                         break;
 
                                     case OBJ_RECT:
@@ -693,36 +685,26 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     case OBJ_SECT:
                                     case OBJ_CARC:
                                     case OBJ_CCUT:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_GEOMOBJ_POPUP :
-                                                                    RID_DRAW_GEOMOBJ_POPUP;
-                                        break;
-
                                     case OBJ_CUSTOMSHAPE:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_CUSTOMSHAPE_POPUP :
-                                                                    RID_DRAW_CUSTOMSHAPE_POPUP;
+                                        aPopupId = "draw";
                                         break;
 
                                     case OBJ_GRUP:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_GROUPOBJ_POPUP :
-                                                                    RID_DRAW_GROUPOBJ_POPUP;
+                                        aPopupId = "group";
                                         break;
 
                                     case OBJ_GRAF:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_GRAPHIC_POPUP :
-                                                                    RID_DRAW_GRAPHIC_POPUP;
+                                        aPopupId = "graphic";
                                         break;
 
                                     case OBJ_OLE2:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_OLE2_POPUP :
-                                                                    RID_DRAW_OLE2_POPUP;
+                                        aPopupId = "oleobject";
                                         break;
                                     case OBJ_MEDIA:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_MEDIA_POPUP :
-                                                                    RID_DRAW_MEDIA_POPUP;
+                                        aPopupId = "media";
                                         break;
                                     case OBJ_TABLE:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_TABLE_POPUP :
-                                                                    RID_DRAW_TABLE_POPUP;
+                                        aPopupId = "table";
                                         break;
                                 }
                             }
@@ -731,19 +713,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
                                 {
                                     if( !mpDrawView->IsGroupEntered() )
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_3DSCENE_POPUP :
-                                                                RID_DRAW_3DSCENE_POPUP;
+                                        aPopupId = "3dscene";
                                     else
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_3DSCENE2_POPUP :
-                                                                RID_DRAW_3DSCENE2_POPUP;
+                                        aPopupId = "3dscene2";
                                 }
                                 else
-                                    nSdResId = bGraphicShell ? RID_GRAPHIC_3DOBJ_POPUP :
-                                                                RID_DRAW_3DOBJ_POPUP;
+                                    aPopupId = "3dobject";
                             }
                             else if( nInv == FmFormInventor )
                             {
-                                nSdResId = RID_FORM_CONTROL_POPUP;
+                                aPopupId = "form";
                             }
                         }
                     }
@@ -753,24 +732,22 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 else if (mpDrawView->AreObjectsMarked() &&
                     mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
                 {
-                    nSdResId = bGraphicShell ? RID_GRAPHIC_MULTISELECTION_POPUP :
-                                                RID_DRAW_MULTISELECTION_POPUP;
+                    aPopupId = "multiselect";
                 }
 
                 // nothing selected
                 else
                 {
-                    nSdResId = bGraphicShell ? RID_GRAPHIC_NOSEL_POPUP :
-                                                RID_DRAW_NOSEL_POPUP;
+                    aPopupId = "page";
                 }
             }
             // show Popup-Menu
-            if (nSdResId)
+            if (!aPopupId.isEmpty())
             {
                 GetActiveWindow()->ReleaseMouse();
 
                 if(rCEvt.IsMouseEvent())
-                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
+                    GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId );
                 else
                 {
                     //don't open contextmenu at mouse position if not opened via mouse
@@ -798,7 +775,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     }
 
                     //open context menu at that point
-                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aMenuPos);
+                    GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId, GetActiveWindow(), &aMenuPos );
                 }
                 mbMousePosFreezed = false;
             }

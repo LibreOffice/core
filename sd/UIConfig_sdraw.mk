@@ -14,7 +14,33 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/sdraw,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sdraw,\
+	sd/uiconfig/sdraw/popupmenu/3dobject \
+	sd/uiconfig/sdraw/popupmenu/3dscene2 \
+	sd/uiconfig/sdraw/popupmenu/3dscene \
+	sd/uiconfig/sdraw/popupmenu/bezier \
+	sd/uiconfig/sdraw/popupmenu/connector \
+	sd/uiconfig/sdraw/popupmenu/curve \
+	sd/uiconfig/sdraw/popupmenu/drawtext \
+	sd/uiconfig/sdraw/popupmenu/draw \
+	sd/uiconfig/sdraw/popupmenu/form \
 	sd/uiconfig/sdraw/popupmenu/formrichtext \
+	sd/uiconfig/sdraw/popupmenu/gluepoint \
+	sd/uiconfig/sdraw/popupmenu/graphic \
+	sd/uiconfig/sdraw/popupmenu/group \
+	sd/uiconfig/sdraw/popupmenu/layertab \
+	sd/uiconfig/sdraw/popupmenu/line \
+	sd/uiconfig/sdraw/popupmenu/measure \
+	sd/uiconfig/sdraw/popupmenu/media \
+	sd/uiconfig/sdraw/popupmenu/multiselect \
+	sd/uiconfig/sdraw/popupmenu/oleobject \
+	sd/uiconfig/sdraw/popupmenu/outlinetext \
+	sd/uiconfig/sdraw/popupmenu/pagepanenosel \
+	sd/uiconfig/sdraw/popupmenu/pagepane \
+	sd/uiconfig/sdraw/popupmenu/pagetab \
+	sd/uiconfig/sdraw/popupmenu/page \
+	sd/uiconfig/sdraw/popupmenu/tabletext \
+	sd/uiconfig/sdraw/popupmenu/table \
+	sd/uiconfig/sdraw/popupmenu/textbox \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/sdraw,\
