@@ -87,4 +87,8 @@ $(eval $(call gb_SrsTarget_add_nonlocalizable_files,svx/res,\
     svx/source/unodraw/unodraw.src \
 ))
 
+$(eval $(call gb_SrsTarget_add_templates,svx/res,\
+	svx/inc/globlmn_tmpl.hrc \
+))
+
 # vim: set noet sw=4 ts=4:
