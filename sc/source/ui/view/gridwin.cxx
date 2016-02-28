@@ -142,6 +142,9 @@
 #include <memory>
 #include <vector>
 
+/*remove this include below as soon as you move the dumpCellProperties() out of here*/
+ #include <svl/poolitem.hxx>
+ #include <libxml/xmlwriter.h>
 using namespace css;
 using namespace css::uno;
 
@@ -3497,7 +3500,32 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         }
 
     }
+//void dumpCellProperties()   <-- Just the function call should remain
+//{                               This function is already present in gridwin_dbgutils.cxx
+    ScDocument* pDoc= pViewData->GetDocument();
 
+    SCTAB nTab =pViewData->GetTabNo();
+    SCCOL nCol=pViewData->GetCurY();
+    SCROW nRow=pViewData->GetCurY();
+    const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol,nRow,nTab);
+
+    OStringBuffer aBuffer("dump.xml");
+    xmlTextWriterPtr writer;
+
+    /*Function below first converts the Buffer passed into string
+     *and then this string becomes the name for the file. This 
+     *method is used instead of directly passing a string for the 
+     *convinience of anyone working on this code in future.        
+     */
+    writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );  
+
+    xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+
+    pPatternAttr->GetItemSet().dumpAsXml(writer);
+
+    xmlTextWriterEndDocument( writer );
+    xmlFreeTextWriter (writer);
+//}
 #ifdef DBG_UTIL
 
     if (rKeyCode.IsMod1() && rKeyCode.IsShift())

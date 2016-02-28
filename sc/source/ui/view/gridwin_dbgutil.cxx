@@ -11,7 +11,11 @@
 
 #include "gridwin.hxx"
 #include <svx/svdpage.hxx>
-
+#include <libxml/xmlwriter.h>
+#include <viewdata.hxx>
+#include "document.hxx"
+#include "patattr.hxx"
+#include <svl/poolitem.hxx>
 #include "userdat.hxx"
 
 namespace {
@@ -58,6 +62,29 @@ void ScGridWindow::dumpColumnInformationHmm()
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "hmm" << std::endl;
     }
 }
+
+/*void dumpCellProperties()         <--Uncomment this Once you move it into DBG_UTIL
+{ 
+    ScDocument* pDoc= pViewData->GetDocument();
+
+    SCTAB nTab =pViewData->GetTabNo();
+    SCCOL nCol=pViewData->GetCurY();
+    SCROW nRow=pViewData->GetCurY();
+    const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol,nRow,nTab);
+
+    OStringBuffer aBuffer("dump.xml");
+    xmlTextWriterPtr writer;
+
+    
+    writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );  
+
+    xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+
+    pPatternAttr->GetItemSet().dumpAsXml(writer);
+
+    xmlTextWriterEndDocument( writer );
+    xmlFreeTextWriter (writer);
+}*/
 
 void ScGridWindow::dumpGraphicInformation()
 {
