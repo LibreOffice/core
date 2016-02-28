@@ -336,7 +336,7 @@ bool SlideSorterController::Command (
             else if (pPage != nullptr)
                 aPopupId = "pagepanemaster";
             else
-                aPopupId = "pagepagenoselmaster";
+                aPopupId = "pagepanenoselmaster";
 
             std::unique_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
             if (pPage == nullptr)
