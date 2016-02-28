@@ -3489,7 +3489,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         }
 
     }
-
+dumpCellProperties();
 #ifdef DBG_UTIL
 
     if (rKeyCode.IsMod1() && rKeyCode.IsShift())
