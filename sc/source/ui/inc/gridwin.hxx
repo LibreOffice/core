@@ -439,7 +439,7 @@ protected:
     void ImpDestroyOverlayObjects();
 
 private:
-
+void dumpCellProperties();
 #ifdef DBG_UTIL
     void dumpColumnInformationPixel();
     void dumpColumnInformationHmm();

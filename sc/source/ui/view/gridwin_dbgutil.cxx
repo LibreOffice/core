@@ -12,6 +12,10 @@
 #include "gridwin.hxx"
 #include <svx/svdpage.hxx>
 
+#include <viewdata.hxx>
+#include "document.hxx"
+#include "patattr.hxx"
+#include <svl/poolitem.hxx>
 #include "userdat.hxx"
 
 namespace {
@@ -57,6 +61,31 @@ void ScGridWindow::dumpColumnInformationHmm()
         long nPixel = LogicToLogic(Point(nWidth, 0), MAP_TWIP, MAP_100TH_MM).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "hmm" << std::endl;
     }
+}
+
+void ScGridWindow::dumpCellProperties ()
+{
+    SCTAB nTab = pViewData->GetTabNo();
+    SCCOL nCol=GetCurY;
+    SCROW nRow=GetCurY;
+    ScPatternAttr* pPatternAttr = ScGetPattern(nCol,nRow,nTab);
+
+    OStringBuffer aBuffer("dump.xml");
+    xmlTextWriterPtr writer;
+
+    /*Function below first converts the Buffer passed into string
+     *and then this string becomes the name for the file. This 
+     *method is used instead of directly passing a string for the 
+     *convinience of anyone working on this code in future.        
+     */
+    writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );  
+
+    xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+
+    pPatternAttr.GetItemSet().dumpAsXml();
+
+    xmlTextWriterEndDocument( writer );
+    xmlFreeTextWriter (writer);
 }
 
 void ScGridWindow::dumpGraphicInformation()
