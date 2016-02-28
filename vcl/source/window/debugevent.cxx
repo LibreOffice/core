@@ -19,7 +19,7 @@
 #include "window.h"
 #include "salwtype.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DEBUG_VCL_DEBUGEVENT
 
 DebugEventInjector::DebugEventInjector( sal_uInt32 nMaxEvents) :
     mnEventsLeft( nMaxEvents )

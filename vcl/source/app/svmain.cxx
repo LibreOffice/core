@@ -303,7 +303,7 @@ bool InitVCL()
 
     DBGGUI_INIT_SOLARMUTEXCHECK();
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DEBUG_VCL_DEBUGEVENT
     DebugEventInjector::getCreate();
 #endif
 
