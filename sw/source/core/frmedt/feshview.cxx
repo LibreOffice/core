@@ -2747,6 +2747,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
             switch(eSdrObjectKind)
             {
                 case OBJ_PATHLINE:
+                case OBJ_PATHFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
 
@@ -2769,6 +2770,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                 }
                 break;
                 case OBJ_FREELINE:
+                case OBJ_FREEFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
 
