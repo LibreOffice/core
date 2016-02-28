@@ -49,9 +49,4 @@ $(eval $(call gb_SrsTarget_add_nonlocalizable_files,sd/res,\
     sd/source/ui/slidesorter/view/SlsResource.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_templates,sd/res,\
-    sd/source/ui/app/tbxids_tmpl.src \
-    sd/source/ui/app/toolbox2_tmpl.src \
-))
-
 # vim: set noet sw=4 ts=4:
