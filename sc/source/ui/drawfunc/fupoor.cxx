@@ -289,18 +289,17 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
 bool FuPoor::doConstructOrthogonal() const
 {
     // Detect whether we're moving an object or resizing.
-    bool bIsMoveMode = false;
     if (pView->IsDragObj())
     {
         const SdrHdl* pHdl = pView->GetDragStat().GetHdl();
         if (!pHdl || (!pHdl->IsCornerHdl() && !pHdl->IsVertexHdl()))
         {
-            bIsMoveMode = true;
+            return false;
         }
     }
 
     // Detect image and resize proportionally, but don't constrain movement by default
-    if (!bIsMoveMode && pView->AreObjectsMarked())
+    if (pView->AreObjectsMarked())
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
@@ -311,6 +310,9 @@ bool FuPoor::doConstructOrthogonal() const
             }
         }
     }
+    else if (aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON || aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON_NOFILL)
+        return true;
+
     return false;
 }
 

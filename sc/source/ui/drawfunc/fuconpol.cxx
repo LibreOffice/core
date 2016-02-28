@@ -231,9 +231,13 @@ void FuConstPolygon::Deactivate()
 // Create default drawing objects via keyboard
 SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
+    // case SID_DRAW_XPOLYGON:
+    // case SID_DRAW_XPOLYGON_NOFILL:
     // case SID_DRAW_POLYGON:
     // case SID_DRAW_POLYGON_NOFILL:
+    // case SID_DRAW_BEZIER_FILL:
     // case SID_DRAW_BEZIER_NOFILL:
+    // case SID_DRAW_FREELINE:
     // case SID_DRAW_FREELINE_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
@@ -248,6 +252,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
 
             switch(nID)
             {
+                case SID_DRAW_BEZIER_FILL:
                 case SID_DRAW_BEZIER_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
@@ -269,6 +274,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                     aPoly.append(aInnerPoly);
                     break;
                 }
+                case SID_DRAW_FREELINE:
                 case SID_DRAW_FREELINE_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
@@ -288,6 +294,8 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                     aPoly.append(aInnerPoly);
                     break;
                 }
+                case SID_DRAW_XPOLYGON:
+                case SID_DRAW_XPOLYGON_NOFILL:
                 case SID_DRAW_POLYGON:
                 case SID_DRAW_POLYGON_NOFILL:
                 {
