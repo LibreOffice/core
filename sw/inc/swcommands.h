@@ -19,25 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWCOMMANDS_H
 #define INCLUDED_SW_INC_SWCOMMANDS_H
 
-#define CMD_SID_CREATE_SW_DRAWVIEW                  ".uno:CreateSWDrawView"
-#define CMD_SID_TABLE_VERT_BOTTOM                   ".uno:CellVertBottom"
-#define CMD_SID_TABLE_VERT_CENTER                   ".uno:CellVertCenter"
-#define CMD_SID_TABLE_VERT_NONE                     ".uno:CellVertTop"
-#define CMD_FN_TABLE_SELECT_COL                     ".uno:EntireColumn"
-#define CMD_FN_TABLE_SELECT_ROW                     ".uno:EntireRow"
-#define CMD_FN_TABLE_MERGE_TABLE                    ".uno:MergeTable"
-#define CMD_FN_FRAME_DOWN                           ".uno:ObjectBackOne"
-#define CMD_FN_TABLE_SET_READ_ONLY_CELLS            ".uno:Protect"
-#define CMD_FN_FORMAT_RESET                         ".uno:ResetAttributes"
-#define CMD_FN_TOOL_ANCHOR_PAGE                     ".uno:SetAnchorToPage"
-#define CMD_FN_TOOL_ANCHOR_PARAGRAPH                ".uno:SetAnchorToPara"
-#define CMD_FN_TABLE_SPLIT_CELLS                    ".uno:SplitCell"
-#define CMD_FN_TABLE_SPLIT_TABLE                    ".uno:SplitTable"
-#define CMD_FN_SET_SUB_SCRIPT                       ".uno:SubScript"
-#define CMD_FN_SET_SUPER_SCRIPT                     ".uno:SuperScript"
-#define CMD_FN_TOOL_ANCHOR                          ".uno:ToggleAnchorType"
 #define CMD_FN_READONLY_SELECTION_MODE              ".uno:SelectTextMode"
-#define CMD_FN_TABLE_ROW_SPLIT                      ".uno:RowSplit"
 #define CMD_FN_REPLY                                ".uno:ReplyNote"
 #define CMD_FN_DELETE_COMMENT                       ".uno:DeleteComment"
 #define CMD_FN_DELETE_NOTE_AUTHOR                   ".uno:DeleteAuthor"
@@ -55,7 +37,6 @@
 #define CMD_FN_HEADERFOOTER_BORDERBACK              ".uno:HeaderFooterBorderBackground"
 #define CMD_FN_PAGEBREAK_EDIT                       ".uno:PageBreakEdit"
 #define CMD_FN_PAGEBREAK_DELETE                     ".uno:PageBreakDelete"
-#define CMD_SID_JUMP_TO_SPECIFIC_PAGE                ".uno:JumpToSpecificPage"
 
 #endif
 
