@@ -70,6 +70,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/graphicobjectbar \
 	sc/uiconfig/scalc/toolbar/insertbar \
 	sc/uiconfig/scalc/toolbar/insertcellsbar \
+	sc/uiconfig/scalc/toolbar/linesbar \
 	sc/uiconfig/scalc/toolbar/mediaobjectbar \
 	sc/uiconfig/scalc/toolbar/moreformcontrols \
 	sc/uiconfig/scalc/toolbar/previewbar \

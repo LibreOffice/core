@@ -230,9 +230,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
 
+        case SID_DRAW_XPOLYGON:
+        case SID_DRAW_XPOLYGON_NOFILL:
         case SID_DRAW_POLYGON:
         case SID_DRAW_POLYGON_NOFILL:
         case SID_DRAW_BEZIER_NOFILL:
+        case SID_DRAW_BEZIER_FILL:
+        case SID_DRAW_FREELINE:
         case SID_DRAW_FREELINE_NOFILL:
             pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, pDoc, rReq));
             break;
@@ -359,8 +363,13 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
             case SID_DRAW_LINE:
             case SID_DRAW_RECT:
             case SID_DRAW_ELLIPSE:
+            case SID_DRAW_POLYGON:
             case SID_DRAW_POLYGON_NOFILL:
+            case SID_DRAW_XPOLYGON:
+            case SID_DRAW_XPOLYGON_NOFILL:
+            case SID_DRAW_BEZIER_FILL:
             case SID_DRAW_BEZIER_NOFILL:
+            case SID_DRAW_FREELINE:
             case SID_DRAW_FREELINE_NOFILL:
             case SID_DRAW_ARC:
             case SID_DRAW_PIE:
