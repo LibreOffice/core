@@ -63,20 +63,17 @@ void ScGridWindow::dumpColumnInformationHmm()
     }
 }
 
-/*void dumpCellProperties()         <--Uncomment this Once you move it into DBG_UTIL
-{ 
-    ScDocument* pDoc= pViewData->GetDocument();
+void ScGridWindow::dumpCellProperties()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
 
-    SCTAB nTab =pViewData->GetTabNo();
-    SCCOL nCol=pViewData->GetCurY();
-    SCROW nRow=pViewData->GetCurY();
+    SCTAB nTab = pViewData->GetTabNo();
+    SCCOL nCol = pViewData->GetCurY();
+    SCROW nRow = pViewData->GetCurY();
     const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol,nRow,nTab);
 
-    OStringBuffer aBuffer("dump.xml");
-    xmlTextWriterPtr writer;
-
-    
-    writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );  
+    OString aOutputFile("dump.xml");
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename( aOutputFile.getStr(), 0 );
 
     xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
 
@@ -84,7 +81,7 @@ void ScGridWindow::dumpColumnInformationHmm()
 
     xmlTextWriterEndDocument( writer );
     xmlFreeTextWriter (writer);
-}*/
+}
 
 void ScGridWindow::dumpGraphicInformation()
 {

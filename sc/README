@@ -9,3 +9,8 @@ Dumps the column width of the first 20 columns.
 === CTRL+SHIFT+F11 ===
 
 Dumps the graphic objects and their position and size in pixel.
+
+=== CTRL+SHIFT+F9 ===
+
+Dumps the SfxItemSet representing the cell properties of the
+current cell as a xml file.
