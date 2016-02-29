@@ -141,7 +141,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
     else if (nResId == SV_ICON_ID_FORMULA)
         appicon = g_strdup ("libreoffice-math");
     else
-        appicon = g_strdup ("libreoffice-main");
+        appicon = g_strdup ("libreoffice-startcenter");
 
     GtkWidget *pImage = gtk_image_new_from_icon_name (appicon, GTK_ICON_SIZE_MENU);
     GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label( aLabel.getStr() );
@@ -340,7 +340,7 @@ void plugin_init_sys_tray()
 
     pVCLResMgr = ResMgr::CreateResMgr("vcl");
 
-    pTrayIcon = gtk_status_icon_new_from_icon_name ("libreoffice-main");
+    pTrayIcon = gtk_status_icon_new_from_icon_name ("libreoffice-startcenter");
 
     g_object_set (pTrayIcon, "title", aLabel.getStr(),
                   "tooltip_text", aLabel.getStr(), nullptr);

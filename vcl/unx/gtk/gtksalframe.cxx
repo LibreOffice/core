@@ -1472,7 +1472,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
     else if (nIcon == SV_ICON_ID_FORMULA)
         appicon = g_strdup ("libreoffice-math");
     else
-        appicon = g_strdup ("libreoffice-main");
+        appicon = g_strdup ("libreoffice-startcenter");
 
     gtk_window_set_icon_name (GTK_WINDOW (m_pWindow), appicon);
 }
