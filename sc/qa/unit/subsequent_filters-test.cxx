@@ -1825,7 +1825,7 @@ void ScFiltersTest::testPivotTableNamedRangeSourceODS()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     ScDPCollection* pDPs = rDoc.GetDPCollection();
-    CPPUNIT_ASSERT(pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
 
     ScDPObject* pDP = &(*pDPs)[0];
     CPPUNIT_ASSERT(pDP);
@@ -1837,7 +1837,7 @@ void ScFiltersTest::testPivotTableNamedRangeSourceODS()
 
     sal_uInt16 nOrient;
     long nDim = pDP->GetHeaderDim(ScAddress(0,1,1), nOrient);
-    CPPUNIT_ASSERT_MESSAGE("Failed to detect header dimension.", nDim == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to detect header dimension.", long(0), nDim);
     CPPUNIT_ASSERT_MESSAGE("This dimension should be a page dimension.",
                            nOrient == sheet::DataPilotFieldOrientation_PAGE);
 
