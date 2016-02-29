@@ -41,8 +41,6 @@ public:
     virtual SdrPage* AllocPage(bool bMasterPage) override;
 
     virtual css::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
-    /// Get the callback and callback data, previously given to registerLibreOfficeKitCallback().
-    void getLibreOfficeKitCallback(LibreOfficeKitCallback& rCallback, void*& rLibreOfficeKitData);
 
 protected:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.

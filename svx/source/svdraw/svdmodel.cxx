@@ -842,11 +842,6 @@ bool SdrModel::isTiledSearching() const
     return mbTiledSearching;
 }
 
-LibreOfficeKitCallback SdrModel::getLibreOfficeKitCallback() const
-{
-    return mpLibreOfficeKitCallback;
-}
-
 void* SdrModel::getLibreOfficeKitData() const
 {
     return mpLibreOfficeKitData;
