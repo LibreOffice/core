@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: László Németh <nemeth@numbertext.org>
+Code-Review+2: Tor Lillqvist <tml@collabora.com>
+Verified+1: Tor Lillqvist <tml@collabora.com>
+Submitted-by: Miklos Vajna <vmiklos@collabora.co.uk>
+Submitted-at: Mon, 29 Feb 2016 09:41:17 +0000
+Reviewed-on: https://gerrit.libreoffice.org/22706
+Project: core
+Branch: refs/heads/libreoffice-5-1
