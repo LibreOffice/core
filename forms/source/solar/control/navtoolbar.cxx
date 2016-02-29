@@ -374,7 +374,7 @@ namespace frm
         }
 
         // retrieve the images for the command URLs
-        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
+        /*CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
 
         // and set them at the toolbar
         CommandImages::const_iterator commandImage = aCommandImages.begin();
@@ -384,7 +384,7 @@ namespace frm
             )
         {
             m_pToolbar->SetItemImage( *formFeature, *commandImage );
-        }
+        }*/
 
         // parts of our layout is dependent on the size of our icons
         Resize();
