@@ -2046,6 +2046,7 @@ void MessageDialog::dispose()
     for (VclPtr<PushButton> & pOwnedButton : m_aOwnedButtons)
         pOwnedButton.disposeAndClear();
     m_aOwnedButtons.clear();
+    m_aButtonLabels.clear();
 
     m_pPrimaryMessage.disposeAndClear();
     m_pSecondaryMessage.disposeAndClear();
@@ -2252,6 +2253,12 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn] = RET_CANCEL;
                 break;
         }
+        auto aFind = m_aButtonLabels.find(m_eButtonsType);
+        if (pBtn && aFind != m_aButtonLabels.end())
+            pBtn->SetText(aFind->second);
+
+        /*if (m_aButtonLabels.find(m_eButtonsType) != m_aButtonLabels.end())
+            pBtn->SetText(m_aButtonLabels.at(m_eButtonsType));*/
         setButtonHandlers(pButtonBox);
         pButtonBox->sort_native_button_order();
         m_pGrid->Show();
@@ -2340,6 +2347,11 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
         m_pSecondaryMessage->SetText("\n" + m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
     }
+}
+
+void MessageDialog::set_button_text(VclButtonsType eButtonType, OUString rButtonText)
+{
+    m_aButtonLabels[eButtonType] = rButtonText;
 }
 
 Size getLegacyBestSizeForChildren(const vcl::Window &rWindow)

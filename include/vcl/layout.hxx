@@ -611,14 +611,16 @@ public:
     bool set_property(const OString &rKey, const OString &rValue);
 };
 
-enum VclButtonsType
+enum VclButtonsType // legacy/convenience button types
 {
-    VCL_BUTTONS_NONE,
-    VCL_BUTTONS_OK,
-    VCL_BUTTONS_CLOSE,
-    VCL_BUTTONS_CANCEL,
-    VCL_BUTTONS_YES_NO,
-    VCL_BUTTONS_OK_CANCEL
+    VCL_BUTTONS_NONE = 0x001,
+    VCL_BUTTONS_OK = 0x002,
+    VCL_BUTTONS_CLOSE = 0x004,
+    VCL_BUTTONS_CANCEL = 0x008,
+    VCL_BUTTONS_YES = 0x010,
+    VCL_BUTTONS_NO = 0x020,
+    VCL_BUTTONS_YES_NO = VCL_BUTTONS_YES | VCL_BUTTONS_NO,
+    VCL_BUTTONS_OK_CANCEL = VCL_BUTTONS_OK | VCL_BUTTONS_CANCEL
 };
 
 enum VclMessageType
@@ -641,7 +643,9 @@ private:
     VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
     VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
     std::vector<VclPtr<PushButton> > m_aOwnedButtons;
-    std::map< VclPtr<const vcl::Window>, short> m_aResponses;
+    // Stores user-defined labels for default buttons
+    std::map<VclButtonsType, OUString> m_aButtonLabels;
+    std::map<VclPtr<const vcl::Window>, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
     DECL_DLLPRIVATE_LINK_TYPED(ButtonHdl, Button *, void);
@@ -667,6 +671,7 @@ public:
     OUString get_secondary_text() const;
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
+    void set_button_text(VclButtonsType eButtonType, OUString rButtonText);
     virtual ~MessageDialog();
     virtual void dispose() override;
 
