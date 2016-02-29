@@ -103,6 +103,8 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     {
         m_pCategories = VclPtr<ListBox>::Create(pToolbar, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
         m_pCategories->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
+        // Same as SvxFontNameBox_Impl.
+        m_pCategories->SetSizePixel(m_pCategories->LogicToPixel(Size(60, 160), MAP_APPFONT));
     }
 
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCategories));
