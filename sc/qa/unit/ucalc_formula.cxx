@@ -7059,9 +7059,10 @@ void Test::testTdf97587()
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
-    std::set<SCROW> emptyCells = {0, 50, 100};
+    std::set<SCROW> emptyCells = {0, 100};
     for( SCROW i = 0; i < ROW_RANGE; ++i )
     {
+        emptyCells.insert(i + TOTAL_ROWS / 3);
         emptyCells.insert(i + TOTAL_ROWS);
     }
 
@@ -7070,7 +7071,7 @@ void Test::testTdf97587()
     {
         if( emptyCells.find(i) != emptyCells.end() )
             continue;
-        m_pDoc->SetValue(ScAddress(0, i, 0), 1);
+        m_pDoc->SetValue(ScAddress(0, i, 0), 1.0);
     }
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -7098,7 +7099,6 @@ void Test::testTdf97587()
         double fExpected = ROW_RANGE - k;
         ASSERT_DOUBLES_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(1,i,0)));
     }
-
     m_pDoc->DeleteTab(0);
 }
 

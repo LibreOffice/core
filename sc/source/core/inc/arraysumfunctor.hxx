@@ -51,12 +51,15 @@ public:
 
         if (hasSSE2)
         {
-            while (!isAligned<double, 16>(pCurrent))
+            while ( i < mnSize && !isAligned<double, 16>(pCurrent))
             {
                 fSum += *pCurrent++;
                 i++;
             }
-            fSum += executeSSE2(i, pCurrent);
+            if( i < mnSize )
+            {
+                fSum += executeSSE2(i, pCurrent);
+            }
         }
         else
             fSum += executeUnrolled(i, pCurrent);
