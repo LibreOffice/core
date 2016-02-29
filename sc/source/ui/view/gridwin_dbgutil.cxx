@@ -68,7 +68,7 @@ void ScGridWindow::dumpCellProperties()
     ScDocument* pDoc = pViewData->GetDocument();
 
     SCTAB nTab = pViewData->GetTabNo();
-    SCCOL nCol = pViewData->GetCurY();
+    SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
     const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol,nRow,nTab);
 
