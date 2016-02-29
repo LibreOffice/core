@@ -79,6 +79,11 @@ namespace sdr
             return nullptr;
         }
 
+        void PageProperties::SetStyleSheet(SfxStyleSheet* /*pStyleSheet*/, bool /*bDontRemoveHardAttr*/)
+        {
+            // override to legally ignore the StyleSheet here
+        }
+
         void PageProperties::PostItemChange(const sal_uInt16 nWhich )
         {
             if( (nWhich == XATTR_FILLSTYLE) && (mpEmptyItemSet != nullptr) )
