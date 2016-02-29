@@ -56,7 +56,7 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
                 break;
             case libwps::WPS_RESERVED_0: // MS Write
                 title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWRITE);
-                encoding = "CP1251";
+                encoding = "CP1252";
                 break;
             case libwps::WPS_RESERVED_1: // DosWord
                 title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_DOSWORD);
