@@ -1033,7 +1033,7 @@ bool crashReportInfoExists()
 #if HAVE_FEATURE_BREAKPAD
     std::string path = CrashReporter::getIniFileName();
     std::ifstream aFile(path);
-    while (!aFile.eof())
+    while (aFile.good())
     {
         std::string line;
         std::getline(aFile, line);
