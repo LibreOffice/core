@@ -1252,7 +1252,7 @@ endif # ANDROID
 endif # SYSTEM_REDLAND
 
 
-ifneq ($(USING_X11)$(ENABLE_CAIRO_CANVAS),) # or
+ifneq ($(USING_X11)$(ENABLE_CAIRO_CANVAS)$(ENABLE_HEADLESS),) # or
 
 ifneq ($(SYSTEM_CAIRO),)
 
