@@ -40,6 +40,7 @@ namespace
 class SfxClassificationCategory
 {
 public:
+    OUString m_aName;
     std::map<OUString, OUString> m_aLabels;
 };
 
@@ -47,7 +48,7 @@ public:
 class SfxClassificationParser : public cppu::WeakImplHelper<xml::sax::XDocumentHandler>
 {
 public:
-    std::map<OUString, SfxClassificationCategory> m_aCategories;
+    std::vector<SfxClassificationCategory> m_aCategories;
 
     OUString m_aPolicyAuthorityName;
     bool m_bInPolicyAuthorityName;
@@ -138,7 +139,9 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             OUString aIdentifier = xAttribs->getValueByName("Identifier");
 
             // Create a new category and initialize it with the data that's true for all categories.
-            SfxClassificationCategory& rCategory = m_aCategories[aName];
+            m_aCategories.push_back(SfxClassificationCategory());
+            SfxClassificationCategory& rCategory = m_aCategories.back();
+            rCategory.m_aName = aName;
             rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Name"] = m_aPolicyAuthorityName;
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Name"] = m_aPolicyName;
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Identifier"] = m_aProgramID;
@@ -281,9 +284,9 @@ void SAL_CALL SfxClassificationParser::setDocumentLocator(const uno::Reference<x
 class SfxClassificationHelper::Impl
 {
 public:
-    std::map<OUString, OUString> m_aLabels;
+    SfxClassificationCategory m_aCategory;
     /// Possible categories of a policy to choose from.
-    std::map<OUString, SfxClassificationCategory> m_aCategories;
+    std::vector<SfxClassificationCategory> m_aCategories;
     SfxObjectShell& m_rObjectShell;
 
     Impl(SfxObjectShell& rObjectShell);
@@ -335,7 +338,7 @@ void SfxClassificationHelper::Impl::pushToObjectShell()
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
-    for (const std::pair<OUString, OUString>& rLabel : m_aLabels)
+    for (const std::pair<OUString, OUString>& rLabel : m_aCategory.m_aLabels)
     {
         try
         {
@@ -387,7 +390,7 @@ SfxClassificationHelper::SfxClassificationHelper(SfxObjectShell& rObjectShell)
         uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
         OUString aValue;
         if (aAny >>= aValue)
-            m_pImpl->m_aLabels[rProperty.Name] = aValue;
+            m_pImpl->m_aCategory.m_aLabels[rProperty.Name] = aValue;
     }
 }
 
@@ -397,8 +400,8 @@ SfxClassificationHelper::~SfxClassificationHelper()
 
 OUString SfxClassificationHelper::GetBACName()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
-    if (it != m_pImpl->m_aLabels.end())
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
+    if (it != m_pImpl->m_aCategory.m_aLabels.end())
         return it->second;
 
     return OUString();
@@ -406,12 +409,12 @@ OUString SfxClassificationHelper::GetBACName()
 
 bool SfxClassificationHelper::HasImpactLevel()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
-    if (it == m_pImpl->m_aLabels.end())
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
+    if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return false;
 
-    it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
-    if (it == m_pImpl->m_aLabels.end())
+    it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return false;
 
     return true;
@@ -419,8 +422,8 @@ bool SfxClassificationHelper::HasImpactLevel()
 
 bool SfxClassificationHelper::HasDocumentHeader()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find(SfxClassificationHelper::PROP_DOCHEADER());
-    if (it == m_pImpl->m_aLabels.end() || it->second.isEmpty())
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(SfxClassificationHelper::PROP_DOCHEADER());
+    if (it == m_pImpl->m_aCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
     return true;
@@ -428,8 +431,8 @@ bool SfxClassificationHelper::HasDocumentHeader()
 
 bool SfxClassificationHelper::HasDocumentFooter()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find(SfxClassificationHelper::PROP_DOCFOOTER());
-    if (it == m_pImpl->m_aLabels.end() || it->second.isEmpty())
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(SfxClassificationHelper::PROP_DOCFOOTER());
+    if (it == m_pImpl->m_aCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
     return true;
@@ -439,13 +442,13 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 {
     basegfx::BColor aRet;
 
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
-    if (it == m_pImpl->m_aLabels.end())
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
+    if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return aRet;
     OUString aScale = it->second;
 
-    it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
-    if (it == m_pImpl->m_aLabels.end())
+    it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return aRet;
     OUString aLevel = it->second;
 
@@ -487,8 +490,8 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 
 OUString SfxClassificationHelper::GetDocumentWatermark()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find(SfxClassificationHelper::PROP_DOCWATERMARK());
-    if (it != m_pImpl->m_aLabels.end())
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(SfxClassificationHelper::PROP_DOCWATERMARK());
+    if (it != m_pImpl->m_aCategory.m_aLabels.end())
         return it->second;
 
     return OUString();
@@ -500,9 +503,9 @@ std::vector<OUString> SfxClassificationHelper::GetBACNames()
         m_pImpl->parsePolicy();
 
     std::vector<OUString> aRet;
-    std::transform(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), std::back_inserter(aRet), [](const std::pair<OUString, SfxClassificationCategory>& rPair)
+    std::transform(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), std::back_inserter(aRet), [](const SfxClassificationCategory& rCategory)
     {
-        return rPair.first;
+        return rCategory.m_aName;
     });
     return aRet;
 }
@@ -512,14 +515,17 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
     if (m_pImpl->m_aCategories.empty())
         m_pImpl->parsePolicy();
 
-    std::map<OUString, SfxClassificationCategory>::iterator it = m_pImpl->m_aCategories.find(rName);
+    std::vector<SfxClassificationCategory>::iterator it = std::find_if(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), [&](const SfxClassificationCategory& rCategory)
+    {
+        return rCategory.m_aName == rName;
+    });
     if (it == m_pImpl->m_aCategories.end())
     {
         SAL_WARN("sfx.view", "'" << rName << "' is not a recognized category name");
         return;
     }
 
-    m_pImpl->m_aLabels = it->second.m_aLabels;
+    m_pImpl->m_aCategory.m_aLabels = it->m_aLabels;
     m_pImpl->pushToObjectShell();
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if (!pViewFrame)
