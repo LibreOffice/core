@@ -82,7 +82,7 @@ inline bool forallBases(
     void* callbackParam,
     bool AllowShortCircuit)
 {
-#if CLANG_VERSION >= 30700
+#if CLANG_VERSION >= 30800
     (void) callbackParam;
     return decl.forallBases(BaseMatches, AllowShortCircuit);
 #else
@@ -157,7 +157,7 @@ inline clang::QualType getParamType(
 inline clang::Stmt::const_child_iterator begin(
     clang::Stmt::const_child_range const & range)
 {
-#if CLANG_VERSION >= 30700
+#if CLANG_VERSION >= 30800
     return range.begin();
 #else
     return range.first;
@@ -167,7 +167,7 @@ inline clang::Stmt::const_child_iterator begin(
 inline clang::Stmt::const_child_iterator end(
     clang::Stmt::const_child_range const & range)
 {
-#if CLANG_VERSION >= 30700
+#if CLANG_VERSION >= 30800
     return range.end();
 #else
     return range.second;
