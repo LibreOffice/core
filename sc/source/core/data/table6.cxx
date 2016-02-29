@@ -727,8 +727,9 @@ bool ScTable::SearchAndReplace(
             //  SearchParam no longer needed - SearchOptions contains all settings
             css::util::SearchOptions2 aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
+            OUString sSearchText = rSearchItem.GetSearchString();
 
-            if (aSearchOptions.searchString.isEmpty())
+            if (aSearchOptions.searchString.isEmpty() || ( rSearchItem.GetRegExp() && sSearchText.equals("^$") ) )
             {
                 // Search for empty cells.
                 return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
