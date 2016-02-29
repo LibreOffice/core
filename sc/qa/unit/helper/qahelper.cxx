@@ -285,11 +285,11 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
 
     pCondFormat = pDoc->GetCondFormat(0,1,2);
     const ScRangeList& rRange2 = pCondFormat->GetRange();
-    CPPUNIT_ASSERT(rRange2 == ScRange(0,1,2,0,1,2));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,1,2,0,1,2), rRange2);
 
     pCondFormat = pDoc->GetCondFormat(1,1,2);
     const ScRangeList& rRange3 = pCondFormat->GetRange();
-    CPPUNIT_ASSERT(rRange3 == ScRange(1,1,2,3,1,2));
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,1,2,3,1,2), rRange3);
 }
 
 const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)

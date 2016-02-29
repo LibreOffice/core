@@ -599,10 +599,10 @@ void ScExportTest::testNamedRangeBugfdo62729()
 
     ScRangeName* pNames = rDoc.GetRangeName();
     //should be just a single named range
-    CPPUNIT_ASSERT(pNames->size() == 1 );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
     rDoc.DeleteTab(0);
     //should be still a single named range
-    CPPUNIT_ASSERT(pNames->size() == 1 );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
     ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_ODS);
     xShell->DoClose();
 
@@ -611,7 +611,7 @@ void ScExportTest::testNamedRangeBugfdo62729()
 
     pNames = rDoc2.GetRangeName();
     //after reload should still have a named range
-    CPPUNIT_ASSERT(pNames->size() == 1 );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
 
     xDocSh->DoClose();
 }
@@ -1227,7 +1227,7 @@ void ScExportTest::testCellNoteExportXLS()
     ScDocShellRef xOrigDocSh = loadDoc("notes-on-3-sheets.", FORMAT_ODS);
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
-        CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", rDoc.GetTableCount() == 3);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("This document should have 3 sheets.", SCTAB(3), rDoc.GetTableCount());
 
         // Check note's presence.
         CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,0,0)));
@@ -1248,7 +1248,7 @@ void ScExportTest::testCellNoteExportXLS()
         xOrigDocSh->DoClose();
         CPPUNIT_ASSERT(xNewDocSh.Is());
         ScDocument& rDoc = xNewDocSh->GetDocument();
-        CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", rDoc.GetTableCount() == 3);
+        CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", SCTAB(3), rDoc.GetTableCount());
 
         // Check note's presence again.
         CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,0,0)));
@@ -1280,13 +1280,13 @@ void checkMatrixRange(ScDocument& rDoc, const ScRange& rRange)
             ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
             bool bIsMatrix = rDoc.GetMatrixFormulaRange(aPos, aMatRange);
             CPPUNIT_ASSERT_MESSAGE("Matrix expected, but not found.", bIsMatrix);
-            CPPUNIT_ASSERT_MESSAGE("Wrong matrix range.", rRange == aMatRange);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong matrix range.", rRange, aMatRange);
             const ScFormulaCell* pCell = rDoc.GetFormulaCell(aPos);
             CPPUNIT_ASSERT_MESSAGE("This must be a formula cell.", pCell);
 
             bIsMatrix = pCell->GetMatrixOrigin(aMatOrigin);
             CPPUNIT_ASSERT_MESSAGE("Not a part of matrix formula.", bIsMatrix);
-            CPPUNIT_ASSERT_MESSAGE("Wrong matrix origin.", aMatOrigin == aMatRange.aStart);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong matrix origin.", aMatRange.aStart, aMatOrigin);
         }
     }
 }
@@ -1398,8 +1398,8 @@ void ScExportTest::testSheetProtectionXLSX()
         // check has
         if (aHash.getLength() >= 2)
         {
-            CPPUNIT_ASSERT( (sal_uInt8)aHash[0] == 204 );
-            CPPUNIT_ASSERT( (sal_uInt8)aHash[1] == 61 );
+            CPPUNIT_ASSERT(sal_uInt8(204), (sal_uInt8)aHash[0]);
+            CPPUNIT_ASSERT(sal_uInt8(61), (sal_uInt8)aHash[1]);
         }
         // we could flesh out this check I guess
         CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
