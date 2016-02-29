@@ -1208,6 +1208,13 @@ void ScDocShell::DoRecalc( bool bApi )
     if ( pSh )
     {
         ScInputHandler* pHdl = SC_MOD()->GetInputHdl(pSh);
+        if ( pHdl )
+        {
+            // tdf97897 set current cell to Dirty to force recalculation of cell
+            ScAddress aCellAddress = pHdl->GetCursorPos();
+            ScRange aRange( aCellAddress, aCellAddress );
+            aDocument.SetDirty( aRange, false );
+        }
         if ( pHdl && pHdl->IsInputMode() && pHdl->IsFormulaMode() && !bApi )
         {
             pHdl->FormulaPreview();     // Teilergebnis als QuickHelp
