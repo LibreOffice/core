@@ -108,7 +108,9 @@ public:
     void                AppendTrailingFormat( sal_uInt16 nFontIdx );
     /** Removes formatting runs at the end, if the string contains too much. */
     void                LimitFormatCount( sal_uInt16 nMaxCount );
-    /** Removes and returns the font index for the first char from the formatting runs, otherwise EXC_FONT_NOTFOUND. */
+    /** Returns the font index of the first char in the formatting run, or EXC_FONT_NOTFOUND. */
+    sal_uInt16          GetLeadingFont();
+    /** The same as above + additionally remove the given font from the formatting run*/
     sal_uInt16          RemoveLeadingFont();
 
     // get data ---------------------------------------------------------------
