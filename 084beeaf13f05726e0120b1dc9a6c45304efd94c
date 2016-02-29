@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_203cf02e",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3385,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-29T11:52:56Z",
+      "side": 1,
+      "message": "Eh well, German is not the only language where AltGr is significant ...",
+      "revId": "084beeaf13f05726e0120b1dc9a6c45304efd94c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
