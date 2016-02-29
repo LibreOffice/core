@@ -13,7 +13,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/vclptr.hxx>
 #include <vcl/lstbox.hxx>
@@ -22,6 +21,9 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/dispatchcommand.hxx>
 
 using namespace com::sun::star;
 
@@ -34,6 +36,8 @@ using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::
 class ClassificationCategoriesController : public ClassificationCategoriesControllerBase
 {
     VclPtr<ListBox> m_pCategories;
+
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
     ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
@@ -96,9 +100,22 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     vcl::Window* pParent = VCLUnoHelper::GetWindow(rParent);
     ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent);
     if (pToolbar)
+    {
         m_pCategories = VclPtr<ListBox>::Create(pToolbar, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
+        m_pCategories->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
+    }
 
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCategories));
+}
+
+IMPL_LINK_NOARG_TYPED(ClassificationCategoriesController, SelectHdl, ListBox&, void)
+{
+    OUString aEntry = m_pCategories->GetSelectEntry();
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"Name", uno::makeAny(aEntry)},
+    }));
+    comphelper::dispatchCommand(".uno:ClassificationApply", aPropertyValues);
 }
 
 void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
