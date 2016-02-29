@@ -40,6 +40,7 @@ namespace
 class SfxClassificationCategory
 {
 public:
+    /// PROP_BACNAME() is stored separately for easier lookup.
     OUString m_aName;
     std::map<OUString, OUString> m_aLabels;
 };
@@ -147,7 +148,6 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Name"] = m_aPolicyName;
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Identifier"] = m_aProgramID;
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"] = aIdentifier;
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name"] = aName;
 
             // Also initialize defaults.
             rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Identifier"] = "None";
@@ -279,6 +279,12 @@ void SAL_CALL SfxClassificationParser::setDocumentLocator(const uno::Reference<x
 {
 }
 
+const OUString& PROP_BACNAME()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
+    return sProp;
+}
+
 } // anonymous namespace
 
 /// Implementation details of SfxClassificationHelper.
@@ -339,7 +345,9 @@ void SfxClassificationHelper::Impl::pushToObjectShell()
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
-    for (const std::pair<OUString, OUString>& rLabel : m_aCategory.m_aLabels)
+    std::map<OUString, OUString> aLabels = m_aCategory.m_aLabels;
+    aLabels[PROP_BACNAME()] = m_aCategory.m_aName;
+    for (const std::pair<OUString, OUString>& rLabel : aLabels)
     {
         try
         {
@@ -391,7 +399,12 @@ SfxClassificationHelper::SfxClassificationHelper(SfxObjectShell& rObjectShell)
         uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
         OUString aValue;
         if (aAny >>= aValue)
-            m_pImpl->m_aCategory.m_aLabels[rProperty.Name] = aValue;
+        {
+            if (rProperty.Name == PROP_BACNAME())
+                m_pImpl->m_aCategory.m_aName = aValue;
+            else
+                m_pImpl->m_aCategory.m_aLabels[rProperty.Name] = aValue;
+        }
     }
 }
 
@@ -399,13 +412,9 @@ SfxClassificationHelper::~SfxClassificationHelper()
 {
 }
 
-OUString SfxClassificationHelper::GetBACName()
+const OUString& SfxClassificationHelper::GetBACName()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
-    if (it != m_pImpl->m_aCategory.m_aLabels.end())
-        return it->second;
-
-    return OUString();
+    return m_pImpl->m_aCategory.m_aName;
 }
 
 bool SfxClassificationHelper::HasImpactLevel()
@@ -526,7 +535,7 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
         return;
     }
 
-    m_pImpl->m_aCategory.m_aLabels = it->m_aLabels;
+    m_pImpl->m_aCategory = *it;
     m_pImpl->pushToObjectShell();
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if (!pViewFrame)
