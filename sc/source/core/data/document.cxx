@@ -1818,6 +1818,24 @@ void ScDocument::DeleteArea(
         // Re-start listeners on those top bottom groups that have been split.
         SetNeedsListeningGroups(aGroupPos);
         StartNeededListeners();
+
+        // If formula groups were split their listeners were destroyed and may
+        // need to be notified now that they're restored, ScTable::DeleteArea()
+        // couldn't do that.
+        if (!aGroupPos.empty())
+        {
+            ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+            for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
+            {
+                if (rMark.GetTableSelect(i))
+                {
+                    aRange.aStart.SetTab(i);
+                    aRange.aEnd.SetTab(i);
+
+                    SetDirty( aRange, true);
+                }
+            }
+        }
     }
 }
 
