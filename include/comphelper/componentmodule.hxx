@@ -202,44 +202,6 @@ namespace comphelper
         );
     }
 
-
-    //= OSingletonRegistration
-
-    template <class TYPE>
-    class OSingletonRegistration
-    {
-    public:
-        /** automatically provides all component information to an OModule instance,
-            for a singleton component
-
-            <p>Assumed that the template argument has the three methods
-                <ul>
-                    <li><code>static OUString getImplementationName_static()</code><li/>
-                    <li><code>static css::uno::Sequence< OUString > getSupportedServiceNames_static()</code><li/>
-                    <li><code>static OUString getSingletonName_static()</code></li>
-                    <li><code>static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code>
-                        </li>
-                <ul/>
-            the instantiation of this object will automatically register the class via <member>OModule::registerImplementation</member>.
-            </p>
-        */
-        OSingletonRegistration( OModule& _rModule );
-    };
-
-    template <class TYPE>
-
-    OSingletonRegistration<TYPE>::OSingletonRegistration( OModule& _rModule )
-    {
-        _rModule.registerImplementation( ComponentDescription(
-            TYPE::getImplementationName_static(),
-            TYPE::getSupportedServiceNames_static(),
-            &TYPE::Create,
-            &::cppu::createSingleComponentFactory
-        ) );
-    }
-
-
 } // namespace comphelper
 
 

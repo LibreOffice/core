@@ -121,19 +121,6 @@ namespace utl
         OAutoRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    template < class TYPE > \
-    class OSingletonRegistration : public ::comphelper::OSingletonRegistration< TYPE > \
-    { \
-    private: \
-        typedef ::comphelper::OSingletonRegistration< TYPE >    BaseClass; \
-    \
-    public: \
-        OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
     };
 
     //= implementing a concrete module
