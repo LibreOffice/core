@@ -47,15 +47,6 @@
 
 #include <vcl/svapp.hxx>
 
-#if GTK_CHECK_VERSION(3,0,0)
-# ifdef GDK_WINDOWING_X11
-#  include <gdk/gdkx.h>
-# endif
-#else
-# define GDK_WINDOWING_X11
-# define GDK_IS_X11_DISPLAY(foo) (true)
-#endif
-
 using namespace vcl_sal;
 
 /***************************************************************
@@ -72,19 +63,15 @@ GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
 }
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
-#if !GTK_CHECK_VERSION(3,0,0)
             SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ) ),
-#endif
             m_pSys( GtkSalSystem::GetSingleton() ),
             m_pGdkDisplay( pDisplay ),
             m_bStartupCompleted( false )
 {
     for(GdkCursor* & rpCsr : m_aCursors)
         rpCsr = nullptr;
-#if !GTK_CHECK_VERSION(3,0,0)
     m_bUseRandRWrapper = false; // use gdk signal instead
     Init ();
-#endif
 
     // FIXME: unify this with SalInst's filter too ?
     gdk_window_add_filter( nullptr, call_filterGdkEvent, this );
@@ -92,23 +79,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericData()->ErrorTrapPush(); // and leak the trap
 
-#if GTK_CHECK_VERSION(3,0,0)
-    m_bX11Display = GDK_IS_X11_DISPLAY( m_pGdkDisplay );
-#else
     m_bX11Display = true;
-#endif
-
-#if GTK_CHECK_VERSION(3,10,0)
-#ifdef GDK_WINDOWING_X11
-    if (m_bX11Display)
-    {
-        if (!getenv("GDK_SCALE"))
-        {
-            gdk_x11_display_set_window_scale(m_pGdkDisplay, 1);
-        }
-    }
-#endif
-#endif
 
     gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 }
@@ -120,10 +91,8 @@ GtkSalDisplay::~GtkSalDisplay()
     if( !m_bStartupCompleted )
         gdk_notify_startup_complete();
 
-#if !GTK_CHECK_VERSION(3,0,0)
     doDestruct();
     pDisp_ = nullptr;
-#endif
 
     for(GdkCursor* & rpCsr : m_aCursors)
         if( rpCsr )
@@ -149,7 +118,6 @@ void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
                                                GdkEvent* )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     GdkFilterReturn aFilterReturn = GDK_FILTER_CONTINUE;
     XEvent *pEvent = static_cast<XEvent *>(sys_event);
 
@@ -192,12 +160,6 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
     }
 
     return aFilterReturn;
-#else
-    (void) this; // loplugin:staticmethods
-    (void) sys_event;
-    //FIXME: implement filterGdkEvent ...
-    return GDK_FILTER_CONTINUE;
-#endif
 }
 
 void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
@@ -214,7 +176,6 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
         emitDisplayChanged();
 }
 
-#if !GTK_CHECK_VERSION(3,0,0)
 SalDisplay::ScreenData *
 GtkSalDisplay::initScreen( SalX11Screen nXScreen ) const
 {
@@ -262,73 +223,12 @@ bool GtkSalDisplay::Dispatch( XEvent* pEvent )
 
     return false;
 }
-#endif
-
-#if GTK_CHECK_VERSION(3,0,0)
-namespace
-{
-    //cairo annoyingly won't take raw xbm data unless it fits
-    //the required cairo stride
-    unsigned char* ensurePaddedForCairo(const unsigned char *pXBM,
-        int nWidth, int nHeight, int nStride)
-    {
-        unsigned char *pPaddedXBM = const_cast<unsigned char*>(pXBM);
-
-        int bytes_per_row = (nWidth + 7) / 8;
-
-        if (nStride != bytes_per_row)
-        {
-            pPaddedXBM = new unsigned char[nStride * nHeight];
-            for (int row = 0; row < nHeight; ++row)
-            {
-                memcpy(pPaddedXBM + (nStride * row),
-                    pXBM + (bytes_per_row * row), bytes_per_row);
-                memset(pPaddedXBM + (nStride * row) + bytes_per_row,
-                    0, nStride - bytes_per_row);
-            }
-        }
-
-        return pPaddedXBM;
-    }
-}
-#endif
 
 GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
                                       const unsigned char *pMask,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_A1, nWidth);
-
-    unsigned char *pPaddedXBM = ensurePaddedForCairo(pBitmap, nWidth, nHeight, cairo_stride);
-    cairo_surface_t *s = cairo_image_surface_create_for_data(
-        pPaddedXBM,
-        CAIRO_FORMAT_A1, nWidth, nHeight,
-        cairo_stride);
-
-    cairo_t *cr = cairo_create(s);
-    unsigned char *pPaddedMaskXBM = ensurePaddedForCairo(pMask, nWidth, nHeight, cairo_stride);
-    cairo_surface_t *mask = cairo_image_surface_create_for_data(
-        pPaddedMaskXBM,
-        CAIRO_FORMAT_A1, nWidth, nHeight,
-        cairo_stride);
-    cairo_mask_surface(cr, mask, 0, 0);
-    cairo_destroy(cr);
-    cairo_surface_destroy(mask);
-    if (pPaddedMaskXBM != pMask)
-        delete [] pPaddedMaskXBM;
-
-    GdkPixbuf *pixbuf = gdk_pixbuf_get_from_surface(s, 0, 0, nWidth, nHeight);
-    cairo_surface_destroy(s);
-    if (pPaddedXBM != pBitmap)
-        delete [] pPaddedXBM;
-
-    GdkCursor *cursor = gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pixbuf, nXHot, nYHot);
-    g_object_unref(pixbuf);
-
-    return cursor;
-#else
     GdkScreen *pScreen = gdk_display_get_default_screen( m_pGdkDisplay );
     GdkDrawable *pDrawable = GDK_DRAWABLE( gdk_screen_get_root_window (pScreen) );
     GdkBitmap *pBitmapPix = gdk_bitmap_create_from_data
@@ -346,7 +246,6 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
     return gdk_cursor_new_from_pixmap
             ( pBitmapPix, pMaskPix,
               &aBlack, &aWhite, nXHot, nYHot);
-#endif
 }
 
 #define MAKE_CURSOR( vcl_name, name ) \
@@ -521,11 +420,7 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
  **********************************************************************/
 
 GtkData::GtkData( SalInstance *pInstance )
-#if GTK_CHECK_VERSION(3,0,0)
-    : SalGenericData( SAL_DATA_GTK3, pInstance )
-#else
     : SalGenericData( SAL_DATA_GTK, pInstance )
-#endif
     , m_aDispatchMutex()
     , blockIdleTimeout( false )
 {
@@ -533,7 +428,6 @@ GtkData::GtkData( SalInstance *pInstance )
     m_aDispatchCondition = osl_createCondition();
 }
 
-#if defined(GDK_WINDOWING_X11)
 XIOErrorHandler aOrigXIOErrorHandler = nullptr;
 
 extern "C" {
@@ -547,7 +441,6 @@ static int XIOErrorHdl(Display *)
 }
 
 }
-#endif
 
 GtkData::~GtkData()
 {
@@ -566,10 +459,7 @@ GtkData::~GtkData()
         m_pUserEvent = nullptr;
     }
     osl_destroyCondition( m_aDispatchCondition );
-#if defined(GDK_WINDOWING_X11)
-    if (GDK_IS_X11_DISPLAY(gdk_display_get_default()))
-        XSetIOErrorHandler(aOrigXIOErrorHandler);
-#endif
+    XSetIOErrorHandler(aOrigXIOErrorHandler);
 }
 
 void GtkData::Dispose()
@@ -642,9 +532,7 @@ void GtkData::Init()
     SAL_INFO( "vcl.gtk", "GtkMainloop::Init()" );
     XrmInitialize();
 
-#if !GTK_CHECK_VERSION(3,0,0)
     gtk_set_locale();
-#endif
 
     /*
      * open connection to X11 Display
@@ -724,12 +612,8 @@ void GtkData::Init()
         exit(0);
     }
 
-#if defined(GDK_WINDOWING_X11)
-    if (GDK_IS_X11_DISPLAY(pGdkDisp))
-        aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
-#endif
+    aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 
-#if !GTK_CHECK_VERSION(3,0,0)
     /*
      * if a -display switch was used, we need
      * to set the environment accordingly since
@@ -740,12 +624,10 @@ void GtkData::Init()
     const gchar *name = gdk_display_get_name( pGdkDisp );
     OUString envValue(name, strlen(name), aEnc);
     osl_setEnvironment(envVar.pData, envValue.pData);
-#endif
 
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
     SetDisplay( pDisplay );
 
-#if !GTK_CHECK_VERSION(3,0,0)
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
     gdk_error_trap_push();
@@ -755,9 +637,6 @@ void GtkData::Init()
     pKbdExtension->UseExtension( bErrorOccured );
     gdk_error_trap_pop();
     GetGtkDisplay()->SetKbdExtension( pKbdExtension );
-#else
-    //FIXME: unwind keyboard extension bits
-#endif
 
     // add signal handler to notify screen size changes
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
@@ -783,15 +662,7 @@ void GtkData::ErrorTrapPush()
 
 bool GtkData::ErrorTrapPop( bool bIgnoreError )
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    if( bIgnoreError )
-    {
-        gdk_error_trap_pop_ignored (); // faster
-        return false;
-    }
-#else
     (void) bIgnoreError;
-#endif
     return gdk_error_trap_pop () != 0;
 }
 
