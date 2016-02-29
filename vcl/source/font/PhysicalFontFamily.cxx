@@ -263,7 +263,6 @@ void PhysicalFontFamily::GetFontHeights( std::set<int>& rHeights ) const
 void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontCollection,
                                               bool bScalable, bool bEmbeddable ) const
 {
-    // This is rather expensive to do per face.
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
     PhysicalFontFamily* pFamily = rFontCollection.FindOrCreateFontFamily( aFamilyName );
 
@@ -278,8 +277,11 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
 
         PhysicalFontFace* pClonedFace = pFoundFontFace->Clone();
 
-        assert( pClonedFace->GetFamilyName().replaceAll("-", "").trim() == GetFamilyName().replaceAll("-", "").trim() );
-        assert( rFontCollection.FindOrCreateFontFamily( GetEnglishSearchFontName( pClonedFace->GetFamilyName() ) ) == pFamily );
+      #ifndef NDEBUG
+        OUString aClonedFamilyName = GetEnglishSearchFontName( pClonedFace->GetFamilyName() );
+        assert( aClonedFamilyName == aFamilyName );
+        assert( rFontCollection.FindOrCreateFontFamily( aClonedFamilyName ) == pFamily );
+      #endif
 
         if (! pFamily->AddFontFace( pClonedFace ) )
             delete pClonedFace;
