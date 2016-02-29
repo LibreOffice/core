@@ -75,7 +75,7 @@ void ScGridWindow::dumpCellProperties()
     OString aOutputFile("dump.xml");
     xmlTextWriterPtr writer = xmlNewTextWriterFilename( aOutputFile.getStr(), 0 );
 
-    xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+    xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 
     pPatternAttr->GetItemSet().dumpAsXml(writer);
 
