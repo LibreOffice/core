@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_20c7d046",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 0,
+      "message": "best use a SAL_WARN here too for consistency",
+      "revId": "f3f533f0c60d90fb723ecf417ce3a20bc38fa6c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_60c1d82e",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 0,
+      "message": "best use a SAL_WARN here too for consistency",
+      "revId": "f3f533f0c60d90fb723ecf417ce3a20bc38fa6c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

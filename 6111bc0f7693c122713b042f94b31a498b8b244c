@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "1aa78d24_e0b4a8d2",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 1,
+      "message": "this OUStringToOString(..) is all obsolete these days, just use\n\n\u003e ... \u003c\u003c aMsg \u003c\u003c ...",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_40cadc50",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 1,
+      "message": "Accidental whitespace change?",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_80c4c440",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 1,
+      "message": "Accidental whitespace change?",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_a0e100d3",
+        "filename": "desktop/source/splash/unxsplash.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 1,
+      "message": "the whole OUStringToOString(aNum, RTL_TEXTENCODING_UTF8).getStr() is obsolete these days a simple::\n ... \u003c\u003c aNum \u003c\u003c ...\nshould do",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_38925e58",
         "filename": "desktop/unx/source/start.c",
         "patchSetId": 1
@@ -13,6 +81,24 @@
       "writtenOn": "2016-02-16T07:59:09Z",
       "side": 1,
       "message": "Wat is the point of #if 0, it means you produce dead code ?\nIf the code is dead it should be removed",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_60ef18b1",
+        "filename": "desktop/unx/source/start.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-29T11:38:36Z",
+      "side": 1,
+      "message": "none the messages in this file seem like real warnings or errors to me. So I\u0027d rather have them as SAL_INFOs -- and since those are already conditional, Id rather not have additional conditionals (on OSL_DEBUG_LEVEL or otherwise) at all here.",
+      "parentUuid": "3aaa91ec_38925e58",
       "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
