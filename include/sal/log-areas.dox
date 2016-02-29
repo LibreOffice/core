@@ -93,6 +93,8 @@ certain functionality.
 @li @c cppu.log
 @li @c cppu.threadpool
 @li @c cppu.unsafebridge
+@li @c cppu.typelib
+@li @c cppu.uno
 
 @section cppuhelper
 
