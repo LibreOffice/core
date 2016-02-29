@@ -64,20 +64,6 @@ namespace comphelper { namespace module
         }
     };
 
-    /* -------------------------------------------------------------------- */
-    template < class TYPE >
-    class OSingletonRegistration : public ::comphelper::OSingletonRegistration< TYPE >
-    {
-    private:
-        typedef ::comphelper::OSingletonRegistration< TYPE > BaseClass;
-
-    public:
-        OSingletonRegistration() : BaseClass( ComphelperModule::getInstance() )
-        {
-        }
-    };
-
-
 } } // namespace comphelper::module
 
 
