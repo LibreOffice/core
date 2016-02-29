@@ -75,36 +75,42 @@ bool SmIsMathAlpha(const OUString &rText)
 
 SmRect::SmRect()
     // constructs empty rectangle at (0, 0) with width and height 0.
+    : aTopLeft(0, 0)
+    , aSize(0, 0)
+    , nBaseline(0)
+    , nAlignT(0)
+    , nAlignM(0)
+    , nAlignB(0)
+    , nGlyphTop(0)
+    , nGlyphBottom(0)
+    , nItalicLeftSpace(0)
+    , nItalicRightSpace(0)
+    , nLoAttrFence(0)
+    , nHiAttrFence(0)
+    , nBorderWidth(0)
+    , bHasBaseline(false)
+    , bHasAlignInfo(false)
 {
-    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
-    OSL_ENSURE(aSize == Size(0, 0), "Sm: ooops...");
-
-    bHasBaseline = bHasAlignInfo = false;
-    nBaseline = nAlignT = nAlignM = nAlignB =
-    nGlyphTop = nGlyphBottom =
-    nItalicLeftSpace = nItalicRightSpace =
-    nLoAttrFence = nHiAttrFence = 0;
-    nBorderWidth = 0;
 }
 
 
 SmRect::SmRect(const SmRect &rRect)
-:   aTopLeft(rRect.aTopLeft),
-    aSize(rRect.aSize)
+    : aTopLeft(rRect.aTopLeft)
+    , aSize(rRect.aSize)
+    , nBaseline(rRect.nBaseline)
+    , nAlignT(rRect.nAlignT)
+    , nAlignM(rRect.nAlignM)
+    , nAlignB(rRect.nAlignB)
+    , nGlyphTop(rRect.nGlyphTop)
+    , nGlyphBottom(rRect.nGlyphBottom)
+    , nItalicLeftSpace(rRect.nItalicLeftSpace)
+    , nItalicRightSpace(rRect.nItalicRightSpace)
+    , nLoAttrFence(rRect.nLoAttrFence)
+    , nHiAttrFence(rRect.nHiAttrFence)
+    , nBorderWidth(rRect.nBorderWidth)
+    , bHasBaseline(rRect.bHasBaseline)
+    , bHasAlignInfo(rRect.bHasAlignInfo)
 {
-    bHasBaseline  = rRect.bHasBaseline;
-    nBaseline     = rRect.nBaseline;
-    nAlignT       = rRect.nAlignT;
-    nAlignM       = rRect.nAlignM;
-    nAlignB       = rRect.nAlignB;
-    nGlyphTop     = rRect.nGlyphTop;
-    nGlyphBottom  = rRect.nGlyphBottom;
-    nHiAttrFence  = rRect.nHiAttrFence;
-    nLoAttrFence  = rRect.nLoAttrFence;
-    bHasAlignInfo = rRect.bHasAlignInfo;
-    nItalicLeftSpace  = rRect.nItalicLeftSpace;
-    nItalicRightSpace = rRect.nItalicRightSpace;
-    nBorderWidth  = rRect.nBorderWidth;
 }
 
 
@@ -232,20 +238,18 @@ SmRect::SmRect(long nWidth, long nHeight)
     // it will not provide useful values for baseline, AlignT and AlignB!
     // It's purpose is to get a 'SmRect' for the horizontal line in fractions
     // as used in 'SmBinVerNode'.
-:   aSize(nWidth, nHeight)
+    : aTopLeft(0, 0)
+    , aSize(nWidth, nHeight)
+    , nBaseline(0)
+    , nItalicLeftSpace(0)
+    , nItalicRightSpace(0)
+    , nBorderWidth(0)
+    , bHasBaseline(false)
+    , bHasAlignInfo(true)
 {
-    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
-
-    bHasBaseline  = false;
-    bHasAlignInfo = true;
-    nBaseline     = 0;
-    nAlignT       = GetTop();
-    nAlignB       = GetBottom();
-    nAlignM       = (nAlignT + nAlignB) / 2;        // this is the default
-    nItalicLeftSpace = nItalicRightSpace = 0;
-    nGlyphTop    = nHiAttrFence  = GetTop();
-    nGlyphBottom = nLoAttrFence  = GetBottom();
-    nBorderWidth  = 0;
+    nAlignT = nGlyphTop    = nHiAttrFence = GetTop();
+    nAlignB = nGlyphBottom = nLoAttrFence = GetBottom();
+    nAlignM = (nAlignT + nAlignB) / 2;        // this is the default
 }
 
 
