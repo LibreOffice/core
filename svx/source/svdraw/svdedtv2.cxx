@@ -1715,7 +1715,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
 // Group
 
 
-void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
+void SdrEditView::GroupMarked()
 {
     if (AreObjectsMarked())
     {
@@ -1763,8 +1763,6 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
                 {
                     if (pGrp==nullptr)
                     {
-                        if (pUserGrp!=nullptr)
-                            pGrp=pUserGrp->Clone();
                         if (pGrp==nullptr)
                             pGrp=new SdrObjGroup;
                         pDstLst=pGrp->GetSubList();

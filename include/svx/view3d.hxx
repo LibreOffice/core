@@ -126,8 +126,8 @@ public:
     bool IsBreak3DObjPossible() const;
     void Break3DObj();
 
-    SfxItemSet Get3DAttributes(E3dScene* pInScene = nullptr, bool bOnly3DAttr=false) const;
-    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = nullptr, bool bOnly3DAttr=false);
+    SfxItemSet Get3DAttributes(E3dScene* pInScene = nullptr) const;
+    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = nullptr);
 };
 
 #endif // INCLUDED_SVX_VIEW3D_HXX

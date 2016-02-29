@@ -550,7 +550,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    static void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 n=0, bool bRepeat = false);
+    static void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 n=0);
 };
 
 /**

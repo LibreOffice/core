@@ -1894,10 +1894,10 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 }
 
 
-bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
+bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt)
 {
     Rectangle aNeuRect(maLogicRect);
-    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt);
     if (bRet)
     {
         Rectangle aBoundRect0;

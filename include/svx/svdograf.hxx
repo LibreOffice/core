@@ -155,7 +155,7 @@ public:
     const OUString& GetFileName() const { return aFileName;}
     const OUString& GetFilterName() const { return aFilterName;}
 
-    void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
+    void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize);
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16          GetObjIdentifier() const override;

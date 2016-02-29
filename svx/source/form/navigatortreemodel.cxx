@@ -219,12 +219,12 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::SetModified( bool bMod )
+    void NavigatorTreeModel::SetModified()
     {
         if( !m_pFormShell ) return;
         SfxObjectShell* pObjShell = m_pFormShell->GetFormModel()->GetObjectShell();
         if( !pObjShell ) return;
-        pObjShell->SetModified( bMod );
+        pObjShell->SetModified();
     }
 
 

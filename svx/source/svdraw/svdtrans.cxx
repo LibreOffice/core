@@ -32,7 +32,7 @@ void MoveXPoly(XPolygon& rPoly, const Size& S)
     rPoly.Move(S.Width(),S.Height());
 }
 
-void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact, bool bNoJustify)
+void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact)
 {
     Fraction xFact(rxFact);
     Fraction yFact(ryFact);
@@ -55,7 +55,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
     rRect.Top()    = rRef.Y() + svx::Round( (rRect.Top()    - rRef.Y()) * double(yFact) );
     rRect.Bottom() = rRef.Y() + svx::Round( (rRect.Bottom() - rRef.Y()) * double(yFact) );
 
-    if (!bNoJustify) rRect.Justify();
+    rRect.Justify();
 }
 
 
@@ -141,11 +141,11 @@ void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
     }
 }
 
-void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
+void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn)
 {
     sal_uInt16 nCount=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nCount; i++) {
-        ShearPoint(rPoly[i],rRef,tn,bVShear);
+        ShearPoint(rPoly[i],rRef,tn);
     }
 }
 

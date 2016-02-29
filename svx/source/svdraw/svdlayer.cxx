@@ -97,12 +97,10 @@ SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
 {
 }
 
-void SdrLayer::SetStandardLayer(bool bStd)
+void SdrLayer::SetStandardLayer()
 {
-    nType=(sal_uInt16)bStd;
-    if (bStd) {
-        maName = ImpGetResStr(STR_StandardLayerName);
-    }
+    nType=(sal_uInt16)true;
+    maName = ImpGetResStr(STR_StandardLayerName);
     if (pModel!=nullptr) {
         SdrHint aHint(HINT_LAYERCHG);
         pModel->Broadcast(aHint);

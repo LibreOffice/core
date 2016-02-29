@@ -80,8 +80,9 @@ void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sa
     }
 }
 
-void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix, sal_uInt32 nStartIndex)
+void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix)
 {
+    sal_uInt32 nStartIndex = 1;
     if(rNamePrefix.getLength() != 0)
     {
         for(std::set<Color>::const_iterator it = rColorSet.begin();

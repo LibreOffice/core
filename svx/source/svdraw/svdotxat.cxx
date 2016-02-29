@@ -274,10 +274,10 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     return bRet;
 }
 
-bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
+bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt)
 {
     Rectangle aNeuRect(maRect);
-    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt);
     if (bRet) {
         Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         maRect = aNeuRect;

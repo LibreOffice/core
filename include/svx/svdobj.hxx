@@ -375,12 +375,12 @@ protected:
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const;
 
     void ImpForcePlusData();
 
-    OUString GetAngleStr(long nAngle, bool bNoDegChar = false) const;
-    OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
+    OUString GetAngleStr(long nAngle) const;
+    OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM) const;
 
     /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
     ///

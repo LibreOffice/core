@@ -1018,7 +1018,7 @@ OUString SdrObject::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralNONE);
 }
 
-void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal) const
+void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
@@ -1032,8 +1032,7 @@ void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sa
     nPos = rStr.indexOf("%2");
     if (nPos >= 0)
         // Replace '%2' with the passed value.
-        rStr = rStr.replaceAt(
-            nPos, 2, OUString::number(nVal));
+        rStr = rStr.replaceAt(nPos, 2, "0");
 }
 
 void SdrObject::ImpForcePlusData()
@@ -1042,20 +1041,20 @@ void SdrObject::ImpForcePlusData()
         pPlusData = NewPlusData();
 }
 
-OUString SdrObject::GetAngleStr(long nAngle, bool bNoDegChar) const
+OUString SdrObject::GetAngleStr(long nAngle) const
 {
     OUString aStr;
     if (pModel!=nullptr) {
-        SdrModel::TakeAngleStr(nAngle,aStr,bNoDegChar);
+        SdrModel::TakeAngleStr(nAngle,aStr);
     }
     return aStr;
 }
 
-OUString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, bool bNoUnitChars) const
+OUString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/) const
 {
     OUString aStr;
     if (pModel!=nullptr) {
-        pModel->TakeMetricStr(nVal,aStr,bNoUnitChars);
+        pModel->TakeMetricStr(nVal,aStr);
     }
     return aStr;
 }

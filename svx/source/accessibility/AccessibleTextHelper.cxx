@@ -187,7 +187,7 @@ namespace accessibility
         // lock solar mutex before
         SvxViewForwarder& GetViewForwarder() const;
         // lock solar mutex before
-        SvxEditViewForwarder& GetEditViewForwarder( bool bCreate = false ) const;
+        SvxEditViewForwarder& GetEditViewForwarder() const;
 
         // are we in edit mode?
         bool IsActive() const;
@@ -306,29 +306,23 @@ namespace accessibility
             throw uno::RuntimeException("View forwarder is invalid, model might be dead", mxFrontEnd);
     }
 
-    SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( bool bCreate ) const
+    SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder() const
     {
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
 
-        SvxEditViewForwarder* pViewForwarder = maEditSource.GetEditViewForwarder( bCreate );
+        SvxEditViewForwarder* pViewForwarder = maEditSource.GetEditViewForwarder();
 
         if( !pViewForwarder )
         {
-            if( bCreate )
-                throw uno::RuntimeException("Unable to fetch edit view forwarder, model might be dead", mxFrontEnd);
-            else
-                throw uno::RuntimeException("No edit view forwarder, object not in edit mode", mxFrontEnd);
+            throw uno::RuntimeException("No edit view forwarder, object not in edit mode", mxFrontEnd);
         }
 
         if( pViewForwarder->IsValid() )
             return *pViewForwarder;
         else
         {
-            if( bCreate )
-                throw uno::RuntimeException("View forwarder is invalid, model might be dead", mxFrontEnd);
-            else
-                throw uno::RuntimeException("View forwarder is invalid, object not in edit mode", mxFrontEnd);
+            throw uno::RuntimeException("View forwarder is invalid, object not in edit mode", mxFrontEnd);
         }
     }
 

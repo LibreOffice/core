@@ -1752,7 +1752,7 @@ bool SdrEditView::IsAlignPossible() const
     return bOneOrMoreMovable;          // otherwise: MarkCount>=2
 }
 
-void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool bBoundRects)
+void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
 {
     if (eHor==SDRHALIGN_NONE && eVert==SDRVALIGN_NONE)
         return;
@@ -1807,7 +1807,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
         pObj->TakeObjInfo(aInfo);
         if (!aInfo.bMoveAllowed || pObj->IsMoveProtect())
         {
-            Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());
+            Rectangle aObjRect(pObj->GetSnapRect());
             aBound.Union(aObjRect);
             bHasFixed=true;
         }
@@ -1838,10 +1838,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
         }
         else
         {
-            if (bBoundRects)
-                aBound=GetMarkedObjBoundRect();
-            else
-                aBound=GetMarkedObjRect();
+            aBound=GetMarkedObjRect();
         }
     }
     Point aCenter(aBound.Center());
@@ -1855,7 +1852,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
         {
             long nXMov=0;
             long nYMov=0;
-            Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());
+            Rectangle aObjRect(pObj->GetSnapRect());
             switch (eVert)
             {
                 case SDRVALIGN_TOP   : nYMov=aBound.Top()   -aObjRect.Top()       ; break;

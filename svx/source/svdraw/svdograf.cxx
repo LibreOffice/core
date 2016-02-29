@@ -1003,7 +1003,7 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
         ImpLinkAnmeldung();
 }
 
-void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoint*/, const Size& /*rSize*/, long /*nExtraData*/)
+void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoint*/, const Size& /*rSize*/)
 {
     SetGrafAnimationAllowed(true);
 }

@@ -1413,7 +1413,7 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 /*n*/, bool /*bRepeat*/)
+void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 /*n*/)
 {
     rStr = ImpGetResStr(nStrCacheID);
 }

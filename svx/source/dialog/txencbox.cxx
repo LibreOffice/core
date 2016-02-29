@@ -201,11 +201,11 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
 }
 
 
-void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_Int32 nPos )
+void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
 {
     const OUString& rEntry = m_pEncTable->GetTextString( nEnc );
     if ( !rEntry.isEmpty() )
-        InsertTextEncoding( nEnc, rEntry, nPos );
+        InsertTextEncoding( nEnc, rEntry );
     else
         SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
@@ -222,12 +222,12 @@ rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 }
 
 
-void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, bool bSelect )
+void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
 {
     sal_Int32 nAt = EncodingToPos_Impl( nEnc );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        SelectEntryPos( nAt, bSelect );
+        SelectEntryPos( nAt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

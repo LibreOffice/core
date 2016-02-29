@@ -84,15 +84,13 @@ public:
      */
     void                FillWithMimeAndSelectBest();
 
-    void                InsertTextEncoding( const rtl_TextEncoding nEnc,
-                            sal_Int32  nPos = LISTBOX_APPEND );
+    void                InsertTextEncoding( const rtl_TextEncoding nEnc );
 
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             const OUString& rEntry,
                             sal_Int32  nPos = LISTBOX_APPEND );
 
-    void                SelectTextEncoding( const rtl_TextEncoding nEnc,
-                            bool bSelect = true );
+    void                SelectTextEncoding( const rtl_TextEncoding nEnc );
 
     rtl_TextEncoding    GetSelectTextEncoding() const;
 };

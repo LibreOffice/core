@@ -96,7 +96,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
     }
 }
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) const
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene) const
 {
     // Creating itemset with corresponding field
     SfxItemSet aSet(
@@ -151,13 +151,13 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
     return aSet;
 }
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool bReplaceAll)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene)
 {
     sal_uInt32 nSelectedItems(0L);
 
     if(pInScene)
     {
-        pInScene->SetMergedItemSetAndBroadcast(rAttr, bReplaceAll);
+        pInScene->SetMergedItemSetAndBroadcast(rAttr);
     }
     else
     {
@@ -165,7 +165,7 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool
         // They are not needed here, they are already handled in SetAttrToMarked
 
         // set at selected objects
-        SetAttrToMarked(rAttr, bReplaceAll);
+        SetAttrToMarked(rAttr, false/*bReplaceAll*/);
 
         // old run
         const SdrMarkList& rMarkList = GetMarkedObjectList();

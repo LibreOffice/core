@@ -111,12 +111,6 @@ public:
 
     bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=nullptr, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
     bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=nullptr, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
-
-    static bool     Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
-
-    static bool     Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
-
-    static bool     Paste( vcl::Window* pWin = nullptr, sal_uIntPtr nFormat = SDR_ANYFORMAT );
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX

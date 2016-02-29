@@ -769,24 +769,4 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 }
 
 
-bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
-{
-    OSL_FAIL( "SdrExchangeView::Cut: Not supported any more." );
-    return false;
-}
-
-
-bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
-{
-    OSL_FAIL( "SdrExchangeView::Yank: Not supported any more." );
-    return false;
-}
-
-
-bool SdrExchangeView::Paste(vcl::Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
-{
-    OSL_FAIL( "SdrExchangeView::Paste: Not supported any more." );
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

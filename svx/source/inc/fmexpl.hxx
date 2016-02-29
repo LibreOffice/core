@@ -371,7 +371,7 @@ namespace svxform
         static bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
 
         void Clear();
-        void SetModified( bool bMod=true );
+        void SetModified();
 
         css::uno::Reference< css::form::XForms >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }

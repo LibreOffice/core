@@ -320,9 +320,9 @@ SdrModel::~SdrModel()
     delete mpImpl;
 }
 
-void SdrModel::SetSwapGraphics( bool bSwap )
+void SdrModel::SetSwapGraphics()
 {
-    bSwapGraphics = bSwap;
+    bSwapGraphics = true;
 }
 
 bool SdrModel::IsReadOnly() const
@@ -1372,7 +1372,7 @@ void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar)
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar)
+void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr)
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
@@ -1396,8 +1396,7 @@ void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPerc
     if(bNeg)
         rStr = "-" + rStr;
 
-    if(!bNoPercentChar)
-        rStr += "%";
+    rStr += "%";
 }
 
 void SdrModel::SetChanged(bool bFlg)

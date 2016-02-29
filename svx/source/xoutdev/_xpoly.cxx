@@ -926,22 +926,15 @@ void XPolyPolygon::CheckReference()
     }
 }
 
-void XPolyPolygon::Insert( const XPolygon& rXPoly, sal_uInt16 nPos )
+void XPolyPolygon::Insert( const XPolygon& rXPoly )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
-    if ( nPos < pImpXPolyPolygon->aXPolyList.size() )
-    {
-        XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
-        ::std::advance( it, nPos );
-        pImpXPolyPolygon->aXPolyList.insert( it, pXPoly );
-    }
-    else
-        pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
+    pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
 }
 
 /// insert all XPolygons of a XPolyPolygon
-void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, sal_uInt16 nPos )
+void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 {
     CheckReference();
 
@@ -949,15 +942,7 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, sal_uInt16 nPos )
     {
         XPolygon* pXPoly = new XPolygon( rXPolyPoly[i] );
 
-        if ( nPos < pImpXPolyPolygon->aXPolyList.size() )
-        {
-            XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
-            ::std::advance( it, nPos );
-            pImpXPolyPolygon->aXPolyList.insert( it, pXPoly );
-            nPos++;
-        }
-        else
-            pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
+        pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
     }
 }
 
