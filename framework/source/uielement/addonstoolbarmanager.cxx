@@ -257,6 +257,10 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
+                OUString aShortcut(vcl::CommandInfoProvider::Instance().GetCommandShortcut(aURL, m_xFrame));
+                if (!aShortcut.isEmpty())
+                    m_pToolBar->SetQuickHelpText(nId, aTitle + " (" + aShortcut + ")");
+
                 // don't setup images yet, AddonsToolbarWrapper::populateImages does that.
 
                 // Create TbRuntimeItemData to hold additional information we will need in the future
