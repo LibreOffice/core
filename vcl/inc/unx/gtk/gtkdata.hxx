@@ -97,7 +97,7 @@ public:
 
 class GtkData : public SalGenericData
 {
-    GSource *    m_pUserEvent;
+    GSource*     m_pUserEvent;
     osl::Mutex   m_aDispatchMutex;
     oslCondition m_aDispatchCondition;
     bool         blockIdleTimeout;

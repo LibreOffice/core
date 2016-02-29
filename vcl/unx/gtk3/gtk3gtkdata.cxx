@@ -494,9 +494,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 void GtkData::Init()
 {
-    int i;
     SAL_INFO( "vcl.gtk", "GtkMainloop::Init()" );
-    XrmInitialize();
 
     /*
      * open connection to X11 Display
@@ -517,7 +515,7 @@ void GtkData::Init()
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
     pCmdLineAry[0] = g_strdup( OUStringToOString( aBin, aEnc ).getStr() );
-    for (i=0; i<nParams; i++)
+    for (int i = 0; i < nParams; ++i)
     {
         osl_getCommandArg(i, &aParam.pData );
         OString aBParam( OUStringToOString( aParam, aEnc ) );
@@ -548,7 +546,7 @@ void GtkData::Init()
     gtk_init_check( &nParams, &pCmdLineAry );
     gdk_error_trap_push();
 
-    for (i = 0; i < nParams; i++ )
+    for (int i = 0; i < nParams; ++i)
         g_free( pCmdLineAry[i] );
     delete [] pCmdLineAry;
 
