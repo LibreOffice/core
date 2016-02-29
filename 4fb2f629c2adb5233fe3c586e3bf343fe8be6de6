@@ -22,6 +22,23 @@
       "revId": "4fb2f629c2adb5233fe3c586e3bf343fe8be6de6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_000f34e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-29T07:20:55Z",
+      "side": 1,
+      "message": "OK, snprintf/vsnprintf discovery seems to be broken. There is \n\n  AC_CHECK_FUNCS(snprintf vsnprintf)\n\nmacro in configure.in, that gets expanded to: [1]. Apparently one include or something is missing there. So that in the end the autoconfig.h tries to erroneously redefine already defined snprintf function: [2].\n\n* [1] http://paste.openstack.org/show/488502\n* [2] http://paste.openstack.org/show/488503",
+      "revId": "4fb2f629c2adb5233fe3c586e3bf343fe8be6de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
