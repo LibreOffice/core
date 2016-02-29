@@ -173,10 +173,10 @@
       </node>
       <node oor:name="private:resource/toolbar/classificationbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,0</value>
+          <value>0,2</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
+          <value>0</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
