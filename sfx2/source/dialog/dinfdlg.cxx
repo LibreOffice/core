@@ -2314,7 +2314,6 @@ CmisPropertyLine::CmisPropertyLine(vcl::Window* pParent)
     , m_bRequired(false)
     , m_bMultiValued(false)
     , m_bOpenChoice(false)
-    , m_nNumValue(1)
 {
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_pFrame, "CmisFrame" );
@@ -2364,7 +2363,6 @@ long CmisPropertyLine::getItemHeight() const
 CmisPropertiesWindow::CmisPropertiesWindow(SfxTabPage* pParent):
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
-
 {
     pParent->get(m_pBox, "CmisWindow");
     CmisPropertyLine aTemp( m_pBox );
@@ -2388,16 +2386,6 @@ void CmisPropertiesWindow::ClearAllLines()
     m_aCmisPropertiesLines.clear();
 }
 
-sal_uInt16 CmisPropertiesWindow::GetLineCount() const
-{
-    sal_uInt16 nCount = 0;
-    std::vector< CmisPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCmisPropertiesLines.begin();
-          pIter != m_aCmisPropertiesLines.end(); ++pIter )
-        nCount += ( (*pIter)->m_nNumValue + 1 );
-    return nCount;
-}
-
 void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
                                     const OUString& sType, const bool bUpdatable,
                                     const bool bRequired, const bool bMultiValued,
@@ -2417,8 +2405,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         Sequence< sal_Int64 > seqValue;
         rAny >>= seqValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        sal_Int32 m_nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+        sal_Int32 nNumValue = seqValue.getLength( );
+        for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
@@ -2432,8 +2420,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         Sequence< double > seqValue;
         rAny >>= seqValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        sal_Int32 m_nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+        sal_Int32 nNumValue = seqValue.getLength( );
+        for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
@@ -2447,8 +2435,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence<sal_Bool> seqValue;
         rAny >>= seqValue;
-        sal_Int32 m_nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+        sal_Int32 nNumValue = seqValue.getLength( );
+        for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
             CmisYesNo* pYesNo = new CmisYesNo( m_pBox, seqValue[i] );
             pYesNo->m_aYesButton->Enable( bUpdatable );
@@ -2460,8 +2448,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence< OUString > seqValue;
         rAny >>= seqValue;
-        sal_Int32 m_nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+        sal_Int32 nNumValue = seqValue.getLength( );
+        for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
             CmisValue* pValue = new CmisValue( m_pBox, seqValue[i] );
             pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
@@ -2472,15 +2460,14 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence< util::DateTime > seqValue;
         rAny >>= seqValue;
-        sal_Int32 m_nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+        sal_Int32 nNumValue = seqValue.getLength( );
+        for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
             CmisDateTime* pDateTime = new CmisDateTime( m_pBox, seqValue[i]);
             pDateTime->m_aDateField->SetReadOnly( !bUpdatable );
             pDateTime->m_aTimeField->SetReadOnly( !bUpdatable );
             pNewLine->m_aDateTimes.push_back( pDateTime );
         }
-
     }
     pNewLine->m_aName->SetText( sName );
     pNewLine->m_aName->Show();
@@ -2657,10 +2644,13 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
                                      const bool bOpenChoice, Any& aChoices, Any& rAny
                                      )
 {
-    m_rVertScroll.SetRangeMax( m_pPropertiesWin.GetLineCount() + 1 );
-    m_rVertScroll.DoScroll( m_pPropertiesWin.GetLineCount() + 1 );
     m_pPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
                                bOpenChoice, aChoices, rAny );
+    //compute logical elements
+    sal_Int32 nLogicElements = ( m_pPropertiesWin.getBoxHeight()
+                                 + m_pPropertiesWin.GetItemHeight() ) / m_pPropertiesWin.GetItemHeight();
+    m_rVertScroll.SetRangeMax( nLogicElements );
+    m_rVertScroll.DoScroll( nLogicElements );
     checkAutoVScroll();
 }
 
@@ -2780,5 +2770,24 @@ VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( vcl::Window* pParent, const Sf
 {
     return VclPtr<SfxCmisPropertiesPage>::Create( pParent, *rItemSet );
 }
+
+void SfxCmisPropertiesPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+{
+    SfxTabPage::SetPosSizePixel(rAllocPos, rAllocation);
+    m_pPropertiesCtrl.setScrollRange();
+}
+
+void SfxCmisPropertiesPage::SetSizePixel(const Size& rAllocation)
+{
+    SfxTabPage::SetSizePixel(rAllocation);
+    m_pPropertiesCtrl.setScrollRange();
+}
+
+void SfxCmisPropertiesPage::SetPosPixel(const Point& rAllocPos)
+{
+    SfxTabPage::SetPosPixel(rAllocPos);
+    m_pPropertiesCtrl.setScrollRange();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -557,7 +557,6 @@ struct CmisPropertyLine : public VclBuilderContainer
     std::vector< CmisValue* >     m_aValues;
     std::vector< CmisDateTime* >  m_aDateTimes;
     std::vector< CmisYesNo* >     m_aYesNos;
-    sal_Int32                     m_nNumValue;
     long getItemHeight() const;
     CmisPropertyLine( vcl::Window* pParent );
     virtual ~CmisPropertyLine();
@@ -576,8 +575,8 @@ public:
     CmisPropertiesWindow(SfxTabPage* pParent);
     ~CmisPropertiesWindow();
 
-    sal_uInt16 GetLineCount() const;
     inline sal_Int32 GetItemHeight() const { return m_nItemHeight; }
+    inline long getBoxHeight() const { return VclContainer::getLayoutRequisition(*m_pBox).Height(); };
     void AddLine( const OUString& sId, const OUString& sName,
                   const OUString& sType, const bool bUpdatable,
                   const bool bRequired, const bool bMultiValued,
@@ -639,6 +638,9 @@ public:
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
+    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) override;
+    virtual void SetSizePixel(const Size& rAllocation) override;
+    virtual void SetPosPixel(const Point& rAllocPos) override;
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX
