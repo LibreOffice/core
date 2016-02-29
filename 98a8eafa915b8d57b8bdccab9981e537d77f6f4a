@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_80f20499",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 0,
+      "message": "why drop this completely, instead of changing it into a SAL_INFO, say?",
+      "revId": "98a8eafa915b8d57b8bdccab9981e537d77f6f4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -2,6 +2,91 @@
   "comments": [
     {
       "key": {
+        "uuid": "1aa78d24_e0394843",
+        "filename": "cppu/source/threadpool/thread.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "This #include fits better into the below block of\n\n  #include \u003cosl/diagnose.h\u003e\n  #include \u003cuno/threadpool.h\u003e\n\n(which in turn is sorted lexicographically).  Inclusion of sal/config.h generally forms a block of its own that should come first in every file.",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_00357445",
+        "filename": "cppu/source/threadpool/thread.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "use SAL_WARN_IF",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_20ceb05a",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "* There is no area \"cppu.typelib\" in include/sal/log-areas.dox.\n\n* No need for .getStr() here.",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_00fe146b",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "replace this with a SAL_INFO too and wrap the whole loop in #if defined SAL_LOG_INFO?",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_e002e86e",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "the pCallbacks check can be moved out of the #if",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_8055e4c7",
         "filename": "cppu/source/typelib/typelib.cxx",
         "patchSetId": 6
@@ -13,6 +98,24 @@
       "writtenOn": "2016-02-29T05:55:44Z",
       "side": 1,
       "message": "Also here drop the ###. Please try to follow advice given for one part of a change also when it applies to others.",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_40f81c7d",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "and get rid of aStr",
+      "parentUuid": "1aa78d24_8055e4c7",
       "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -47,6 +150,74 @@
       "writtenOn": "2016-02-29T05:55:44Z",
       "side": 1,
       "message": "Maybe it would be more in line with what we usually do to use DBG_UTIL here, not OSL_DEBUG_LEVEL. (Please make sure you test build with --enable-dbgutil in case you add code affected by DBG_UTIL.)",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_40d13cfb",
+        "filename": "cppu/source/uno/data.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "you should try to make all those runtime BINTEST_VERIFY* calls into build-time static_asserts instead",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_00e734e5",
+        "filename": "cppu/source/uno/lbenv.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "better just remove this completely than introduce a rotting DEBUG_CPPU_UNO",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_e0eb08af",
+        "filename": "cppu/source/uno/lbenv.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "There is no area \"cppu.uno\" in include/sal/log-areas.dox.",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c0dc0c1b",
+        "filename": "cppu/source/uno/prim.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-29T11:41:23Z",
+      "side": 1,
+      "message": "these includes are apparently unused in this include file and can be removed (if any other file including this file would need those includes for OSL_DEBUG_LEVEL\u003e1, add them there instead)",
       "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
