@@ -373,7 +373,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = nullptr );
+void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 

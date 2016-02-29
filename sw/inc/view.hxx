@@ -261,9 +261,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // methods for searching
     // set search context
-    SAL_DLLPRIVATE bool              SearchAndWrap(bool bApi = false);
-    SAL_DLLPRIVATE bool          SearchAll(sal_uInt16* pFound = nullptr);
-    SAL_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
+    SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi = false);
+    SAL_DLLPRIVATE bool          SearchAll();
+    SAL_DLLPRIVATE sal_uLong     FUNC_Search( const SwSearchOptions& rOptions );
     SAL_DLLPRIVATE void          Replace();
 
     bool                        IsDocumentBorder();
@@ -598,7 +598,7 @@ public:
     bool IsPasteSpecialAllowed();
 
     // Enable mail merge - mail merge field dialog enabled
-    void EnableMailMerge(bool bEnable = true);
+    void EnableMailMerge();
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 

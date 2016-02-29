@@ -42,7 +42,7 @@ public:
     void Invert();
 
     // Combine adjacent rectangles.
-    void Compress( bool bFuzzy = true );
+    void Compress();
 
     inline const SwRect &GetOrigin() const { return m_aOrigin; }
     inline void ChangeOrigin( const SwRect &rRect ) { m_aOrigin = rRect; }

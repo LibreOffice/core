@@ -666,7 +666,7 @@ bool SwView::SearchAndWrap(bool bApi)
     return m_bFound;
 }
 
-bool SwView::SearchAll(sal_uInt16* pFound)
+bool SwView::SearchAll()
 {
     SwWait aWait( *GetDocShell(), true );
     m_pWrtShell->StartAllAction();
@@ -685,8 +685,6 @@ bool SwView::SearchAll(sal_uInt16* pFound)
     }
     m_bExtra = false;
     sal_uInt16 nFound = (sal_uInt16)FUNC_Search( aOpts );
-    if(pFound)
-        *pFound = nFound;
     m_bFound = 0 != nFound;
 
     m_pWrtShell->EndAllAction();

@@ -626,8 +626,7 @@ SwTextAnnotationField::~SwTextAnnotationField()
 {
 }
 
-::sw::mark::IMark* SwTextAnnotationField::GetAnnotationMark(
-    SwDoc* pDoc ) const
+::sw::mark::IMark* SwTextAnnotationField::GetAnnotationMark() const
 {
     const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(GetFormatField().GetField());
     OSL_ENSURE( pPostItField != nullptr, "<SwTextAnnotationField::GetAnnotationMark()> - field missing" );
@@ -636,10 +635,7 @@ SwTextAnnotationField::~SwTextAnnotationField()
         return nullptr;
     }
 
-    if ( pDoc == nullptr )
-    {
-        pDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
-    }
+    SwDoc* pDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
     OSL_ENSURE( pDoc != nullptr, "<SwTextAnnotationField::GetAnnotationMark()> - missing document" );
     if ( pDoc == nullptr )
     {

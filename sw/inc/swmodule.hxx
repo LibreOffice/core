@@ -177,7 +177,7 @@ public:
     bool IsEmbeddedLoadSave() const         { return m_bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( bool bFlag )  { m_bEmbeddedLoadSave = bFlag; }
 
-    static void ShowDBObj( SwView& rView, const SwDBData& rData, bool bOnlyIfAvailable = false);
+    static void ShowDBObj( SwView& rView, const SwDBData& rData);
 
     // Table modi.
     bool            IsInsTableFormatNum(bool bHTML) const;

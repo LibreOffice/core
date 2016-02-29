@@ -1167,9 +1167,9 @@ bool SwHistory::TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool bToFirst )
     return true;
 }
 
-void SwHistory::Delete( sal_uInt16 nStart )
+void SwHistory::Delete()
 {
-    for ( sal_uInt16 n = Count(); n > nStart; )
+    for ( sal_uInt16 n = Count(); n > 0; )
     {
         delete m_SwpHstry[ --n ];
         m_SwpHstry.erase( m_SwpHstry.begin() + n );

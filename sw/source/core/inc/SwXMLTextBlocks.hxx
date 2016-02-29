@@ -77,11 +77,9 @@ public:
     bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
     void SetIsTextOnly( const OUString& rShort, bool bNewValue );
 
-    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTable,
-                                 bool bFileAlreadyOpen = false ) override;
+    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTable ) override;
     virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
-                                 const SvxMacroTableDtor& rMacroTable,
-                                 bool bFileAlreadyOpen = false ) override;
+                                 const SvxMacroTableDtor& rMacroTable ) override;
     virtual bool PutMuchEntries( bool bOn ) override;
 
 public:

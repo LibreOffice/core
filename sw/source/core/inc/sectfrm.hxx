@@ -81,7 +81,7 @@ public:
     SwSectionFrame* FindMaster() const;
 
                  SwContentFrame *FindLastContent( sal_uInt8 nMode = 0 );
-    inline const SwContentFrame *FindLastContent( sal_uInt8 nMode = 0 ) const;
+    inline const SwContentFrame *FindLastContent() const;
     inline SwSection* GetSection() { return m_pSection; }
     inline const SwSection* GetSection() const { return m_pSection; }
     inline void ColLock()       { mbColLocked = true; }
@@ -121,16 +121,12 @@ public:
      * Returns the size delta that the section would like to be
      * greater if it has undersized TextFrames in it.
      *
-     * If we don't pass a @param bOverSize or false, the return value
-     * is > 0 for undersized Frames, or 0 otherwise.
-     * If @param bOverSize == true, we can also get a negative return value,
-     * if the SectionFrame is not completely filled, which happens often for
-     * e.g. SectionFrames with Follows.
+     * The return value is > 0 for undersized Frames, or 0 otherwise.
      *
      * If necessary the undersized-flag is corrected.
      * We need this in the FormatWidthCols to "deflate" columns there.
      */
-    SwTwips Undersize(bool bOverSize = false);
+    SwTwips Undersize();
     SwTwips CalcUndersize() const;
 
     /// Adapt size to surroundings
@@ -174,9 +170,9 @@ inline SwSectionFrame *SwSectionFrame::GetFollow()
 {
     return static_cast<SwSectionFrame*>(SwFlowFrame::GetFollow());
 }
-inline const SwContentFrame *SwSectionFrame::FindLastContent( sal_uInt8 nMode ) const
+inline const SwContentFrame *SwSectionFrame::FindLastContent() const
 {
-    return const_cast<SwSectionFrame*>(this)->FindLastContent( nMode );
+    return const_cast<SwSectionFrame*>(this)->FindLastContent();
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX

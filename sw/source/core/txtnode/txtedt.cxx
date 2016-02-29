@@ -145,8 +145,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
 static bool
 lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
                                       sal_Int32 nStt, sal_Int32 nEnd,
-                                      const sal_Unicode cChar = CH_TXTATR_INWORD,
-                                      bool bCheckShowHiddenChar = true )
+                                      const sal_Unicode cChar = CH_TXTATR_INWORD )
 {
     sal_Int32 nRedlinesMasked = 0;
     sal_Int32 nHiddenCharsMasked = 0;
@@ -165,7 +164,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
 
     // If called from word count, we want to mask the hidden ranges even
     // if they are visible:
-    if ( !bCheckShowHiddenChar || bHideHidden )
+    if ( bHideHidden )
     {
         nHiddenCharsMasked =
             SwScriptInfo::MaskHiddenRanges( rNode, rText, nStt, nEnd, cChar );

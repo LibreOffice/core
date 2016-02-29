@@ -128,8 +128,7 @@ public:
 
     ~CSS1Expression();
 
-    inline void Set( CSS1Token eTyp, const OUString &rVal, double nVal,
-                     sal_Unicode cO = 0 );
+    inline void Set( CSS1Token eTyp, const OUString &rVal, double nVal );
 
     CSS1Token GetType() const { return eType; }
     const OUString& GetString() const { return aValue; }
@@ -146,9 +145,9 @@ public:
 };
 
 inline void CSS1Expression::Set( CSS1Token eTyp, const OUString &rVal,
-                                 double nVal, sal_Unicode cO )
+                                 double nVal )
 {
-    cOp = cO; eType = eTyp; aValue = rVal; nValue = nVal; pNext = nullptr;
+    cOp = 0; eType = eTyp; aValue = rVal; nValue = nVal; pNext = nullptr;
 }
 
 inline sal_uInt32 CSS1Expression::GetULength() const

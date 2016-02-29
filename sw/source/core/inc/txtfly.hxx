@@ -214,7 +214,7 @@ public:
 
     void SetTopRule();
 
-    SwRect GetFrame( const SwRect &rPortion, bool bTop = true ) const;
+    SwRect GetFrame( const SwRect &rPortion ) const;
     bool IsOn() const;
 
     /**
@@ -354,9 +354,9 @@ inline void SwTextFly::SetNextTop( long nNew ) const
     const_cast<SwTextFly*>(this)->nNextTop = nNew;
 }
 
-inline SwRect SwTextFly::GetFrame( const SwRect &rRect, bool bTop ) const
+inline SwRect SwTextFly::GetFrame( const SwRect &rRect ) const
 {
-    return bOn ? _GetFrame( rRect, bTop ) : SwRect();
+    return bOn ? _GetFrame( rRect, true/*bTop*/ ) : SwRect();
 }
 
 inline void SwTextFly::SetIgnoreCurrentFrame( bool bNew )

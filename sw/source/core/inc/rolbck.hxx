@@ -341,8 +341,8 @@ public:
     SwHistory( sal_uInt16 nInitSz = 0 );
     ~SwHistory();
 
-    // delete History from nStart to array end
-    void Delete( sal_uInt16 nStart = 0 );
+    // delete History
+    void Delete();
     // call and delete all objects between nStart and array end
     bool Rollback( SwDoc* pDoc, sal_uInt16 nStart = 0 );
     // call all objects between nStart and TmpEnd; store nStart as TmpEnd

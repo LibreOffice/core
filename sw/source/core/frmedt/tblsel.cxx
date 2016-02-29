@@ -2138,9 +2138,7 @@ inline void UnsetFollow( SwFlowFrame *pTab )
     pTab->m_pPrecede = nullptr;
 }
 
-//When bAccTableDispose is FALSE,the acc table should not be disposed.
-//void _FndBox::DelFrames( SwTable &rTable )
-void _FndBox::DelFrames( SwTable &rTable, bool bAccTableDispose )
+void _FndBox::DelFrames( SwTable &rTable )
 {
     // All lines between pLineBefore and pLineBehind should be cut
     // from the layout and erased.
@@ -2258,7 +2256,7 @@ void _FndBox::DelFrames( SwTable &rTable, bool bAccTableDispose )
                             static_cast<SwTabFrame*>(pTabFrame)->SetFollowFlowLine( false );
                         }
                         //Set acc table dispose state
-                        pFrame->SetAccTableDispose( bAccTableDispose );
+                        pFrame->SetAccTableDispose( false/*bAccTableDispose*/ );
                         pFrame->Cut();
                         //Set acc table dispose state to default value.
                         pFrame->SetAccTableDispose( true );

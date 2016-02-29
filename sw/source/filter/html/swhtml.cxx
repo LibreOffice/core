@@ -3371,8 +3371,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
     }
 }
 
-void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
-                                   bool bSetNewStart )
+void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab )
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
@@ -3388,10 +3387,6 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
     {
         OSL_ENSURE(!*pHTMLAttributes, "Die Attribut-Tabelle ist nicht leer!");
 
-        const SwPosition *pPos = m_pPam->GetPoint();
-        const SwNodeIndex& rSttPara = pPos->nNode;
-        const sal_Int32 nSttCnt = pPos->nContent.GetIndex();
-
         *pHTMLAttributes = *pSaveAttributes;
 
         _HTMLAttr *pAttr = *pHTMLAttributes;
@@ -3400,13 +3395,6 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
             OSL_ENSURE( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
                     "Previous-Attribut hat noch einen Header" );
             pAttr->SetHead(pHTMLAttributes);
-            if( bSetNewStart )
-            {
-                pAttr->nSttPara = rSttPara;
-                pAttr->nEndPara = rSttPara;
-                pAttr->nSttContent = nSttCnt;
-                pAttr->nEndContent = nSttCnt;
-            }
             pAttr = pAttr->GetNext();
         }
 

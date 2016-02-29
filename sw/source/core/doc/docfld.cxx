@@ -345,10 +345,9 @@ _HashStr::_HashStr( const OUString& rName, const OUString& rText,
 }
 
 /// Look up the Name, if it is present, return its String, otherwise return an empty String
-OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName,
-                     sal_uInt16* pPos )
+OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName )
 {
-    SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTable, nSize, pPos );
+    SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTable, nSize );
     if( pFnd )
         return static_cast<_HashStr*>(pFnd)->aSetStr;
 

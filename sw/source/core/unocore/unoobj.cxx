@@ -1769,7 +1769,7 @@ void SwUnoCursorHelper::SetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName,
     const uno::Any& rValue,
-    const SetAttrMode nAttrMode, const bool bTableMode)
+    const SetAttrMode nAttrMode)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -1777,7 +1777,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     uno::Sequence< beans::PropertyValue > aValues(1);
     aValues[0].Name = rPropertyName;
     aValues[0].Value = rValue;
-    SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode, bTableMode);
+    SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode);
 }
 
 // FN_UNO_PARA_STYLE is known to set attributes for nodes, inside

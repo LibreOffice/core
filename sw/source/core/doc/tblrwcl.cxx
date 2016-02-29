@@ -1332,13 +1332,11 @@ static void lcl_CpyLines( sal_uInt16 nStt, sal_uInt16 nEnd,
 
 static void lcl_CpyBoxes( sal_uInt16 nStt, sal_uInt16 nEnd,
                                 SwTableBoxes& rBoxes,
-                                SwTableLine* pInsLine,
-                                sal_uInt16 nPos = USHRT_MAX )
+                                SwTableLine* pInsLine )
 {
     for( sal_uInt16 n = nStt; n < nEnd; ++n )
         rBoxes[n]->SetUpper( pInsLine );
-    if( USHRT_MAX == nPos )
-        nPos = pInsLine->GetTabBoxes().size();
+    sal_uInt16 nPos = pInsLine->GetTabBoxes().size();
     pInsLine->GetTabBoxes().insert( pInsLine->GetTabBoxes().begin() + nPos,
                               rBoxes.begin() + nStt, rBoxes.begin() + nEnd );
     rBoxes.erase( rBoxes.begin() + nStt, rBoxes.begin() + nEnd );

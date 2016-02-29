@@ -725,9 +725,9 @@ bool SwNumberTreeNode::IsValid(const SwNumberTreeNode * pChild) const
 }
 
 
-void SwNumberTreeNode::SetPhantom(bool _bPhantom)
+void SwNumberTreeNode::SetPhantom()
 {
-    mbPhantom = _bPhantom;
+    mbPhantom = true;
 }
 
 bool SwNumberTreeNode::HasOnlyPhantoms() const

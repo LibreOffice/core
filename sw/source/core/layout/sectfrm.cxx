@@ -2498,11 +2498,11 @@ SwTwips SwSectionFrame::CalcUndersize() const
     return InnerHeight() - (Prt().*fnRect->fnGetHeight)();
 }
 
-SwTwips SwSectionFrame::Undersize(bool bOverSize)
+SwTwips SwSectionFrame::Undersize()
 {
     const auto nRet = CalcUndersize();
     m_bUndersized = (nRet > 0);
-    return (nRet <= 0 && !bOverSize) ? 0 : nRet;
+    return nRet <= 0 ? 0 : nRet;
 }
 
 void SwSectionFrame::CalcFootnoteContent()

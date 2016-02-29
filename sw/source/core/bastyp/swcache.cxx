@@ -123,7 +123,7 @@ SwCache::~SwCache()
         delete *it;
 }
 
-void SwCache::Flush( const sal_uInt8 )
+void SwCache::Flush()
 {
     INCREMENT( m_nFlushCnt );
     SwCacheObj *pObj = pRealFirst;

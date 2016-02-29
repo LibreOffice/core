@@ -123,7 +123,7 @@ public:
     inline bool HasContent() const { return m_bContent; }
     inline void SetRedline( const bool bNew = true ) { m_bRedline = bNew; }
     inline bool HasRedline() const { return m_bRedline; }
-    inline void SetForcedLeftMargin( const bool bNew = true ) { m_bForcedLeftMargin = bNew; }
+    inline void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }
     inline bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
     inline void SetHanging( const bool bNew = true ) { m_bHanging = bNew; }
     inline void SetUnderscore( const bool bNew = true ) { m_bUnderscore = bNew; }
@@ -277,21 +277,21 @@ public:
     bool UpdateQuoVadis( const OUString &rQuo );
 
     // Flags
-    inline void SetFly( const bool bNew = true ) { m_bFlys = bNew; }
+    inline void SetFly() { m_bFlys = true; }
     inline bool HasFly() const { return m_bFlys; }
 
     // Preps
-    inline void SetPrep( const bool bNew = true ) { m_bPrep = bNew; }
+    inline void SetPrep() { m_bPrep = true; }
     inline bool IsPrep() const { return m_bPrep; }
-    inline void SetPrepWidows( const bool bNew = true ) { m_bPrepWidows = bNew; }
+    inline void SetPrepWidows() { m_bPrepWidows = true; }
     inline bool IsPrepWidows() const { return m_bPrepWidows; }
     inline void SetPrepMustFit( const bool bNew = true ) { m_bPrepMustFit = bNew; }
     inline bool IsPrepMustFit() const { return m_bPrepMustFit; }
-    inline void SetPrepAdjust( const bool bNew = true ) { m_bPrepAdjust = bNew; }
+    inline void SetPrepAdjust() { m_bPrepAdjust = true; }
     inline bool IsPrepAdjust() const { return m_bPrepAdjust; }
     inline void SetFollowField( const bool bNew = true ) { m_bFollowField = bNew; }
     inline bool IsFollowField() const { return m_bFollowField; }
-    inline void SetFixLineHeight( const bool bNew = true ) { m_bFixLineHeight = bNew; }
+    inline void SetFixLineHeight() { m_bFixLineHeight = true; }
     inline bool IsFixLineHeight() const { return m_bFixLineHeight; }
 
     inline void SetFootnoteNum( const bool bNew = true ) { m_bFootnoteNum = bNew; }

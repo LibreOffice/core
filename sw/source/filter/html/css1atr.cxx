@@ -535,7 +535,7 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
     }
 }
 
-void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
+void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
 {
     m_bFirstCSS1Rule = true;
 
@@ -604,7 +604,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
     {
         const SwTextFormatColl* pColl = (*pDoc->GetTextFormatColls())[i];
         sal_uInt16 nPoolId = pColl->GetPoolFormatId();
-        if( !bUsed || nPoolId == RES_POOLCOLL_TEXT ||
+        if( nPoolId == RES_POOLCOLL_TEXT ||
             pDoc->IsUsed( *pColl ) )
             OutCSS1_SwFormat( *this, *pColl, &pDoc->getIDocumentStylePoolAccess(), m_pTemplate );
     }
@@ -615,7 +615,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
     {
         const SwCharFormat *pCFormat = (*pDoc->GetCharFormats())[i];
         sal_uInt16 nPoolId = pCFormat->GetPoolFormatId();
-        if( !bUsed || nPoolId == RES_POOLCHR_INET_NORMAL ||
+        if( nPoolId == RES_POOLCHR_INET_NORMAL ||
             nPoolId == RES_POOLCHR_INET_VISIT ||
             pDoc->IsUsed( *pCFormat ) )
             OutCSS1_SwFormat( *this, *pCFormat, &pDoc->getIDocumentStylePoolAccess(), m_pTemplate );

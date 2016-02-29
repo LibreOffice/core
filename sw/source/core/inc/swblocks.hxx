@@ -115,11 +115,9 @@ public:
 
     virtual bool IsOnlyTextBlock( const OUString& rShort ) const;
 
-    virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable,
-                                 bool bFileAlreadyOpen = false );
+    virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable );
     virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
-                                 const SvxMacroTableDtor& rMacroTable,
-                                 bool bFileAlreadyOpen = false );
+                                 const SvxMacroTableDtor& rMacroTable );
     virtual bool PutMuchEntries( bool bOn );
 };
 

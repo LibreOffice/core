@@ -126,8 +126,7 @@ struct SwCalcFieldType : public SwHash
 };
 
 // search for the string that was saved under rName in the hash table
-OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName,
-                     sal_uInt16* pPos = nullptr );
+OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;

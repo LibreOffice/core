@@ -3123,7 +3123,7 @@ void SwUndoMergeTable::SaveFormula( SwHistory& rHistory )
     pHistory->Move( 0, &rHistory );
 }
 
-void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
+void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx )
 {
     size_t nO = rArr.size();
     size_t nU = 0;
@@ -3147,8 +3147,6 @@ void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pIn
         }
     }
     rArr.insert( rArr.begin() + nU, nIdx );
-    if( pInsPos )
-        *pInsPos = nU;
 }
 
 #if OSL_DEBUG_LEVEL > 0

@@ -364,7 +364,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     return m_pChapterNumRules;
 }
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, bool /*bOnlyIfAvailable*/)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);

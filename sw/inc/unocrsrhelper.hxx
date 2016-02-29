@@ -157,8 +157,7 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName,
             const css::uno::Any & rValue,
-            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
-            const bool bTableMode = false)
+            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT)
         throw (css::beans::UnknownPropertyException,
                 css::beans::PropertyVetoException,
                 css::lang::IllegalArgumentException,

@@ -75,8 +75,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      sal_Int16 eVertOri,
                                      sal_Int16 eHoriOri,
                                      SfxItemSet& rCSS1ItemSet,
-                                     SvxCSS1PropertyInfo& rCSS1PropInfo,
-                                     bool bHidden )
+                                     SvxCSS1PropertyInfo& rCSS1PropInfo )
 {
     // always on top of text.
     // but in invisible layer. <ConnectToLayout> will move the object
@@ -180,8 +179,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
              text::HoriOrientation::LEFT == eHoriOri )
     {
         aAnchor.SetType( FLY_AT_PARA );
-        aFrameSet.Put( SwFormatSurround(bHidden ? SURROUND_THROUGHT
-                                             : SURROUND_RIGHT) );
+        aFrameSet.Put( SwFormatSurround(SURROUND_RIGHT) );
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }

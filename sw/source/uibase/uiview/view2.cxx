@@ -2280,9 +2280,9 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
     return nFound;
 }
 
-void SwView::EnableMailMerge(bool bEnable )
+void SwView::EnableMailMerge()
 {
-    m_bInMailMerge = bEnable;
+    m_bInMailMerge = true;
     SfxBindings& rBind = GetViewFrame()->GetBindings();
     rBind.Invalidate(FN_INSERT_FIELD_DATA_ONLY);
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);

@@ -434,7 +434,7 @@ public:
 
     void OutAndSetDefList( sal_uInt16 nNewLvl );
 
-    void OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed=true );
+    void OutStyleSheet( const SwPageDesc& rPageDesc );
 
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const sal_Char *pVal );

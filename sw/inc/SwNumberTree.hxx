@@ -579,25 +579,16 @@ protected:
 
     /**
        Set if this node is a phantom.
-
-       @param bPhantom   - true this node is a phantom
-                         - false this node is a phantom
      */
-    void SetPhantom(bool bPhantom = true);
+    void SetPhantom();
 
     /**
        Return if phantoms are counted.
-
-       @retval true phantoms are counted
-       @retval false else
      */
     virtual bool IsCountPhantoms() const = 0;
 
     /**
        Return if all descendants of this node are phantoms.
-
-       @retval true   all descendants are phantoms
-       @retval false  else
      */
     bool HasOnlyPhantoms() const;
 

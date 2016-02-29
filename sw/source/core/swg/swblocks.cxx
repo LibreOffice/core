@@ -217,12 +217,12 @@ bool SwImpBlocks::IsOnlyTextBlock( const OUString& ) const
     return false;
 }
 
-sal_uLong SwImpBlocks::GetMacroTable( sal_uInt16, SvxMacroTableDtor&, bool )
+sal_uLong SwImpBlocks::GetMacroTable( sal_uInt16, SvxMacroTableDtor& )
 {
     return 0;
 }
 
-sal_uLong SwImpBlocks::SetMacroTable( sal_uInt16 , const SvxMacroTableDtor& , bool )
+sal_uLong SwImpBlocks::SetMacroTable( sal_uInt16 , const SvxMacroTableDtor& )
 {
     return 0;
 }

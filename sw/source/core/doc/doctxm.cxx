@@ -719,26 +719,15 @@ SwTOXBaseSection::~SwTOXBaseSection()
         delete *it;
 }
 
-bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
+bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos ) const
 {
     bool bRet = false;
     const SwSectionNode* pSectNd = GetFormat()->GetSectionNode();
     if( pSectNd )
     {
-        SwContentNode* pCNd;
-        sal_Int32 nC = 0;
-        if( bAtStart )
-        {
-            rPos.nNode = *pSectNd;
-            pCNd = pSectNd->GetDoc()->GetNodes().GoNext( &rPos.nNode );
-        }
-        else
-        {
-            rPos.nNode = *pSectNd->EndOfSectionNode();
-            pCNd = SwNodes::GoPrevious( &rPos.nNode );
-            if( pCNd ) nC = pCNd->Len();
-        }
-        rPos.nContent.Assign( pCNd, nC );
+        rPos.nNode = *pSectNd;
+        SwContentNode* pCNd = pSectNd->GetDoc()->GetNodes().GoNext( &rPos.nNode );
+        rPos.nContent.Assign( pCNd, 0 );
         bRet = true;
     }
     return bRet;

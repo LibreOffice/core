@@ -111,7 +111,7 @@ public:
     sal_Int32 GetEndCnt() const { return nEndContent; }
 
     bool IsLikePara() const { return bLikePara; }
-    void SetLikePara( bool bPara=true ) { bLikePara = bPara; }
+    void SetLikePara() { bLikePara = true; }
 
           SfxPoolItem& GetItem()        { return *pItem; }
     const SfxPoolItem& GetItem() const  { return *pItem; }
@@ -510,12 +510,11 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                   bool bChkEmpty=true );
     void DeleteAttr( _HTMLAttr* pAttr );
 
-    void EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove=false );
+    void EndContextAttrs( _HTMLAttrContext *pContext );
     void SaveAttrTab( _HTMLAttrTable& rNewAttrTab );
     void SplitAttrTab( const SwPosition& rNewPos );
     void SplitAttrTab( _HTMLAttrTable& rNewAttrTab, bool bMoveEndBack = true );
-    void RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
-                         bool bSetNewStart = false );
+    void RestoreAttrTab( _HTMLAttrTable& rNewAttrTab );
     void InsertAttr( const SfxPoolItem& rItem, bool bLikePara = false,
                      bool bInsAtStart=false );
     void InsertAttrs( _HTMLAttrs& rAttrs );
@@ -767,9 +766,8 @@ private:
                            sal_Int16 eVertOri,
                            sal_Int16 eHoriOri,
                            SfxItemSet& rCSS1ItemSet,
-                           SvxCSS1PropertyInfo& rCSS1PropInfo,
-                           bool bHidden=false );
-     css::uno::Reference< css::drawing::XShape >  InsertControl(
+                           SvxCSS1PropertyInfo& rCSS1PropInfo );
+    css::uno::Reference< css::drawing::XShape >  InsertControl(
                         const css::uno::Reference< css::form::XFormComponent > & rFormComp,
                         const css::uno::Reference< css::beans::XPropertySet > & rFCompPropSet,
                         const Size& rSize,

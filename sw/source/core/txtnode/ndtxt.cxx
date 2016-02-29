@@ -2918,8 +2918,7 @@ static void Replace0xFF(
     OUStringBuffer & rText,
     sal_Int32 & rTextStt,
     sal_Int32 nEndPos,
-    bool const bExpandFields,
-    bool const bExpandFootnote = true )
+    bool const bExpandFields )
 {
     if (rNode.GetpSwpHints())
     {
@@ -2952,7 +2951,7 @@ static void Replace0xFF(
 
                     case RES_TXTATR_FTN:
                         rText.remove(nPos, 1);
-                        if( bExpandFields && bExpandFootnote )
+                        if( bExpandFields )
                         {
                             const SwFormatFootnote& rFootnote = pAttr->GetFootnote();
                             OUString sExpand;

@@ -80,7 +80,7 @@ public:
 
     const SwTOXSortTabBases& GetTOXSortTabBases() const { return aSortArr; }
 
-    bool SetPosAtStartEnd( SwPosition& rPos, bool bAtStart = true ) const;
+    bool SetPosAtStartEnd( SwPosition& rPos ) const;
 };
 
 struct SwDefTOXBase_Impl

@@ -2238,7 +2238,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     nLower = rULSpace.GetLower();
 }
 
-void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove )
+void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
     for( auto pAttr : rAttrs )
@@ -2258,9 +2258,6 @@ void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove )
 
         EndAttr( pAttr );
     }
-
-    if( bRemove && !rAttrs.empty() )
-        rAttrs.clear();
 }
 
 void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )

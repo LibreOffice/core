@@ -181,7 +181,7 @@ public:
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
     //Add an input param to identify if acc table should be disposed
-    void DelFrames ( SwTable &rTable, bool bAccTableDispose = false );
+    void DelFrames ( SwTable &rTable );
     void MakeFrames( SwTable &rTable );
     void MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
                                        const bool bBehind );

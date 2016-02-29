@@ -93,7 +93,7 @@ public:
     /// The dtor will free all objects still in the vector
     ~SwCache();
 
-    void Flush( const sal_uInt8 nPercent = 100 );
+    void Flush();
 
     //bToTop == false -> No LRU resorting!
     SwCacheObj *Get( const void *pOwner, const bool bToTop = true );
