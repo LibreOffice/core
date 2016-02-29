@@ -2401,7 +2401,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
 
                     WriteCR( pTextNodeInfoInner );
 
-                    if ( bIsEndOfCell )
+                    if ( (0 != nEnd) && bIsEndOfCell )
                     {
                         AttrOutput().OutputFKP(true);
                     }
