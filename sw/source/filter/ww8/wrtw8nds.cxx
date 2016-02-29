@@ -2333,8 +2333,8 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     }
 
                     WriteCR( pTextNodeInfoInner );
-
-                    if ( bIsEndOfCell )
+SAL_WARN_IF(bIsEndOfCell,"JCL","EndOfCell: nEnd["<<nEnd<<"] next["<<nNextAttr<<"] akt["<<nAktPos<<"]");
+                    if ( (0 != nEnd) && bIsEndOfCell )
                     {
                         AttrOutput().OutputFKP(true);
                     }
