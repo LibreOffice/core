@@ -35,7 +35,7 @@ public:
 
     SfxClassificationHelper(SfxObjectShell& rObjectShell);
     ~SfxClassificationHelper();
-    OUString GetBACName();
+    const OUString& GetBACName();
     /// Return all possible valid category names, based on the policy.
     std::vector<OUString> GetBACNames();
     /// Setting this sets all the other properties, based on the policy.
