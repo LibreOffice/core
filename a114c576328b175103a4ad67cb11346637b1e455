@@ -22,6 +22,30 @@
       "revId": "a114c576328b175103a4ad67cb11346637b1e455",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_94bec5fd",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-29T21:31:05Z",
+      "side": 1,
+      "message": "hmm... in prinicple yes... although it doesn\u0027t disable gui as such (all those dialogs are still compiled), it just makes it impossible to use gui :)",
+      "parentUuid": "1aa78d24_d4732db3",
+      "range": {
+        "startLine": 1269,
+        "startChar": 18,
+        "endLine": 1269,
+        "endChar": 22
+      },
+      "revId": "a114c576328b175103a4ad67cb11346637b1e455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
