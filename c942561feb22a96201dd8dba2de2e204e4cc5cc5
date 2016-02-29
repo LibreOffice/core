@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_8055e4c7",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-29T05:55:44Z",
+      "side": 1,
+      "message": "Also here drop the ###. Please try to follow advice given for one part of a change also when it applies to others.",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_605278df",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-29T05:55:44Z",
+      "side": 1,
+      "message": "Here the initial newline should also be dropped in addition to the ###.",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c05d2cee",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-29T05:55:44Z",
+      "side": 1,
+      "message": "Maybe it would be more in line with what we usually do to use DBG_UTIL here, not OSL_DEBUG_LEVEL. (Please make sure you test build with --enable-dbgutil in case you add code affected by DBG_UTIL.)",
+      "revId": "c942561feb22a96201dd8dba2de2e204e4cc5cc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
