@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_00129462",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-29T18:28:22Z",
+      "side": 1,
+      "message": "What is this supposed to solve in the context of the bug mentioned?",
+      "revId": "824aeb432cf0ca03ece6a7c894b931bef33542b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
