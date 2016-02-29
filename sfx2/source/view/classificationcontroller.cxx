@@ -96,10 +96,7 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     vcl::Window* pParent = VCLUnoHelper::GetWindow(rParent);
     ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent);
     if (pToolbar)
-    {
         m_pCategories = VclPtr<ListBox>::Create(pToolbar, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
-        m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
-    }
 
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCategories));
 }
@@ -119,6 +116,7 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
         m_pCategories->InsertEntry(rName);
     // Normally VclBuilder::makeObject() does this.
     m_pCategories->EnableAutoSize(true);
+    m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
 }
 
 } // namespace sfx2
