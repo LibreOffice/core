@@ -1265,6 +1265,13 @@ AC_ARG_ENABLE(kde4,
          KDE4 are available.]),
 ,)
 
+AC_ARG_ENABLE(gui,
+    AS_HELP_STRING([--disable-gui],
+        [Disable X11/Wayland support to reduce dependencies. Maybe useful for
+         headless servers, but soffice --headless works just fine without it.
+         Work in progress, use only if you are hacking on it.]),
+,enable_gui=yes)
+
 AC_ARG_ENABLE(randr,
     AS_HELP_STRING([--disable-randr],
         [Disable RandR support in the vcl project.]),
@@ -4541,8 +4548,12 @@ solaris*)
 esac
 
 if test "$with_x" = "no"; then
+    AC_MSG_ERROR([Use --disable-gui instead. How can we get rid of this option? No idea where it comes from.])
+fi
+
+if test "$enable_gui" = "no"; then
     if test "$USING_X11" != TRUE; then
-        AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --without-x])
+        AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --disable-gui.])
     fi
     USING_X11=
 fi
