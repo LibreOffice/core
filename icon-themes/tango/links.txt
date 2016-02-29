@@ -336,7 +336,7 @@ cmd/sc_datefield.png sc/res/date.png
 cmd/lc_timefield.png sc/res/time.png
 sc/res/page.png sd/res/page.png
 sc/res/text.png cmd/sc_text.png
-sfx2/res/deleterow.png cmd/sc_deleterows.png
+sfx2/res/deleterow.png cmd/sc_cancel.png
 reportdesign/res/sc30768.png cmd/sc_upsearch.png
 reportdesign/res/sc30769.png cmd/sc_downsearch.png
 reportdesign/res/sx12594.png cmd/sc_insertformula.png
