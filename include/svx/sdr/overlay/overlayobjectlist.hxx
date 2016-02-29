@@ -58,8 +58,8 @@ namespace sdr
             // Hittest with logical coordinates
             bool isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance = 0.0) const;
 
-            // Hittest with pixel coordinates and pixel tolerance
-            bool isHitPixel(const Point& rDiscretePosition, sal_uInt32 fDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL) const;
+            // Hittest with pixel coordinates
+            bool isHitPixel(const Point& rDiscretePosition) const;
 
             // calculate BaseRange of all included OverlayObjects and return
             basegfx::B2DRange getBaseRange() const;

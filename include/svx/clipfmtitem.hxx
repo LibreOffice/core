@@ -43,7 +43,7 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos = USHRT_MAX );
+    void AddClipbrdFormat( SotClipboardFormatId nId );
     void AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
                             sal_uInt16 nPos = USHRT_MAX );
     sal_uInt16 Count() const;

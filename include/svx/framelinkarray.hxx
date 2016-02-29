@@ -120,40 +120,32 @@ public:
     void                SetRowStyleBottom( size_t nRow, const Style& rStyle );
 
     /** Returns the left frame style of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges and neighbor cells;
-            false = Returns thicker of own left style or right style of the cell to the left.
-                Returns the style only if visible (i.e. at left border of a merged range).
+        Returns thicker of own left style or right style of the cell to the left.
+        Returns the style only if visible (i.e. at left border of a merged range).
         @return
             The left frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleLeft( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    const Style&        GetCellStyleLeft( size_t nCol, size_t nRow ) const;
 
     /** Returns the right frame style of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges and neighbor cells;
-            false = Returns thicker of own right style or left style of the cell to the right.
-                Returns the style only if visible (i.e. at right border of a merged range).
+        Returns thicker of own right style or left style of the cell to the right.
+        Returns the style only if visible (i.e. at right border of a merged range).
         @return
             The left frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleRight( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    const Style&        GetCellStyleRight( size_t nCol, size_t nRow ) const;
 
     /** Returns the top frame style of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges and neighbor cells;
-            false = Returns thicker of own top style or bottom style of the cell above.
-                Returns the style only if visible (i.e. at top border of a merged range).
+        Returns thicker of own top style or bottom style of the cell above.
+        Returns the style only if visible (i.e. at top border of a merged range).
         @return
             The top frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleTop( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    const Style&        GetCellStyleTop( size_t nCol, size_t nRow ) const;
 
     /** Returns the top frame style of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges and neighbor cells;
-            false = Returns thicker of own top style or bottom style of the cell above.
-                Returns the style only if visible (i.e. at top border of a merged range).
+        Returns thicker of own top style or bottom style of the cell above.
+        Returns the style only if visible (i.e. at top border of a merged range).
         @return
             The top frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleBottom( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    const Style&        GetCellStyleBottom( size_t nCol, size_t nRow ) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
         @param bSimple
@@ -316,24 +308,18 @@ public:
     Size                GetCellSize( size_t nCol, size_t nRow, bool bSimple = false ) const;
 
     /** Returns the output rectangle of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns total output rectangle of merged ranges. */
-    Rectangle           GetCellRect( size_t nCol, size_t nRow, bool bSimple = false ) const;
+        Returns total output rectangle of merged ranges. */
+    Rectangle           GetCellRect( size_t nCol, size_t nRow ) const;
 
     // diagonal frame borders -------------------------------------------------
 
     /** Returns the angle between horizontal and diagonal border of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns the horizontal angle of merged ranges. */
-    double              GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
+        Returns the horizontal angle of merged ranges. */
+    double              GetHorDiagAngle( size_t nCol, size_t nRow ) const;
 
     /** Returns the angle between vertical and diagonal border of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns the vertical angle of merged ranges. */
-    double              GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
+        Returns the vertical angle of merged ranges. */
+    double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
 
     /** Specifies whether to use polygon clipping to draw diagonal frame borders.
         @descr
@@ -370,10 +356,8 @@ public:
                             size_t nLastCol, size_t nLastRow,
                             const Color* pForceColor = nullptr ) const;
 
-    /** Draws the part of the array, that is inside the clipping range.
-        @param pForceColor
-            If not NULL, only this color will be used to draw all frame borders. */
-    void                DrawArray( OutputDevice& rDev, const Color* pForceColor = nullptr ) const;
+    /** Draws the part of the array, that is inside the clipping range. */
+    void                DrawArray( OutputDevice& rDev ) const;
 
 
 private:

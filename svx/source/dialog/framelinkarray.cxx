@@ -496,11 +496,8 @@ void Array::SetRowStyleBottom( size_t nRow, const Style& rStyle )
         SetCellStyleBottom( nCol, nRow, rStyle );
 }
 
-const Style& Array::GetCellStyleLeft( size_t nCol, size_t nRow, bool bSimple ) const
+const Style& Array::GetCellStyleLeft( size_t nCol, size_t nRow ) const
 {
-    // simple: always return own left style
-    if( bSimple )
-        return CELL( nCol, nRow ).maLeft;
     // outside clipping rows or overlapped in merged cells: invisible
     if( !mxImpl->IsRowInClipRange( nRow ) || mxImpl->IsMergedOverlappedLeft( nCol, nRow ) )
         return OBJ_STYLE_NONE;
@@ -517,11 +514,8 @@ const Style& Array::GetCellStyleLeft( size_t nCol, size_t nRow, bool bSimple ) c
     return std::max( ORIGCELL( nCol, nRow ).maLeft, ORIGCELL( nCol - 1, nRow ).maRight );
 }
 
-const Style& Array::GetCellStyleRight( size_t nCol, size_t nRow, bool bSimple ) const
+const Style& Array::GetCellStyleRight( size_t nCol, size_t nRow ) const
 {
-    // simple: always return own right style
-    if( bSimple )
-        return CELL( nCol, nRow ).maRight;
     // outside clipping rows or overlapped in merged cells: invisible
     if( !mxImpl->IsRowInClipRange( nRow ) || mxImpl->IsMergedOverlappedRight( nCol, nRow ) )
         return OBJ_STYLE_NONE;
@@ -538,11 +532,8 @@ const Style& Array::GetCellStyleRight( size_t nCol, size_t nRow, bool bSimple ) 
     return std::max( ORIGCELL( nCol, nRow ).maRight, ORIGCELL( nCol + 1, nRow ).maLeft );
 }
 
-const Style& Array::GetCellStyleTop( size_t nCol, size_t nRow, bool bSimple ) const
+const Style& Array::GetCellStyleTop( size_t nCol, size_t nRow ) const
 {
-    // simple: always return own top style
-    if( bSimple )
-        return CELL( nCol, nRow ).maTop;
     // outside clipping columns or overlapped in merged cells: invisible
     if( !mxImpl->IsColInClipRange( nCol ) || mxImpl->IsMergedOverlappedTop( nCol, nRow ) )
         return OBJ_STYLE_NONE;
@@ -559,11 +550,8 @@ const Style& Array::GetCellStyleTop( size_t nCol, size_t nRow, bool bSimple ) co
     return std::max( ORIGCELL( nCol, nRow ).maTop, ORIGCELL( nCol, nRow - 1 ).maBottom );
 }
 
-const Style& Array::GetCellStyleBottom( size_t nCol, size_t nRow, bool bSimple ) const
+const Style& Array::GetCellStyleBottom( size_t nCol, size_t nRow ) const
 {
-    // simple: always return own bottom style
-    if( bSimple )
-        return CELL( nCol, nRow ).maBottom;
     // outside clipping columns or overlapped in merged cells: invisible
     if( !mxImpl->IsColInClipRange( nCol ) || mxImpl->IsMergedOverlappedBottom( nCol, nRow ) )
         return OBJ_STYLE_NONE;
@@ -834,13 +822,13 @@ Size Array::GetCellSize( size_t nCol, size_t nRow, bool bSimple ) const
     return Size( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
 }
 
-Rectangle Array::GetCellRect( size_t nCol, size_t nRow, bool bSimple ) const
+Rectangle Array::GetCellRect( size_t nCol, size_t nRow ) const
 {
-    Rectangle aRect( GetCellPosition( nCol, nRow, bSimple ), GetCellSize( nCol, nRow, bSimple ) );
+    Rectangle aRect( GetCellPosition( nCol, nRow ), GetCellSize( nCol, nRow ) );
 
     // adjust rectangle for partly visible merged cells
     const Cell& rCell = CELL( nCol, nRow );
-    if( !bSimple && rCell.IsMerged() )
+    if( rCell.IsMerged() )
     {
         aRect.Left() -= rCell.mnAddLeft;
         aRect.Right() += rCell.mnAddRight;
@@ -851,16 +839,16 @@ Rectangle Array::GetCellRect( size_t nCol, size_t nRow, bool bSimple ) const
 }
 
 // diagonal frame borders
-double Array::GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple ) const
+double Array::GetHorDiagAngle( size_t nCol, size_t nRow ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetHorDiagAngle" );
-    return mxImpl->GetHorDiagAngle( nCol, nRow, bSimple );
+    return mxImpl->GetHorDiagAngle( nCol, nRow );
 }
 
-double Array::GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple ) const
+double Array::GetVerDiagAngle( size_t nCol, size_t nRow ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetVerDiagAngle" );
-    return mxImpl->GetVerDiagAngle( nCol, nRow, bSimple );
+    return mxImpl->GetVerDiagAngle( nCol, nRow );
 }
 
 void Array::SetUseDiagDoubleClipping( bool bSet )
@@ -1312,10 +1300,10 @@ void Array::DrawRange( OutputDevice& rDev,
     }
 }
 
-void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
+void Array::DrawArray( OutputDevice& rDev ) const
 {
     if( mxImpl->mnWidth && mxImpl->mnHeight )
-        DrawRange( rDev, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1, pForceColor );
+        DrawRange( rDev, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1 );
 }
 
 

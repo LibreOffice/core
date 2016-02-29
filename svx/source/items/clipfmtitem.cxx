@@ -119,13 +119,12 @@ SfxPoolItem* SvxClipboardFormatItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SvxClipboardFormatItem( *this );
 }
 
-void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos )
+void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId )
 {
-    if( nPos > pImpl->aFmtNms.size() )
-        nPos = pImpl->aFmtNms.size();
+    sal_uInt16 nPos = pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, OUString());
-    pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
+    pImpl->aFmtNms.insert( pImpl->aFmtNms.begin() + nPos, OUString());
+    pImpl->aFmtIds.insert( pImpl->aFmtIds.begin() + nPos, nId );
 }
 
 void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,

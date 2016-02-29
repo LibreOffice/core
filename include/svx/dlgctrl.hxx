@@ -99,7 +99,7 @@ protected:
 
     RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
     Point               GetPointFromRP( RECT_POINT ) const;
-    void                SetFocusRect( const Rectangle* pRect = nullptr );      // pRect == NULL -> calculate rectangle in method
+    void                SetFocusRect();
     Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
 
     virtual void        GetFocus() override;
@@ -272,7 +272,7 @@ public:
     void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
     void    Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
     void    SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
-                               const XGradient& rXGradient, sal_uInt16 nDist = 0 );
+                               const XGradient& rXGradient );
 };
 
 /************************************************************************/
@@ -351,8 +351,8 @@ public:
 
     void Fill( const XLineEndListRef &pList, bool bStart = true );
 
-    void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart = true );
-    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart = true );
+    void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap );
+    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
 };
 
 

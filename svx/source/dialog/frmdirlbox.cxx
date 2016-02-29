@@ -50,9 +50,9 @@ VCL_BUILDER_DECL_FACTORY(FrameDirectionListBox)
     rRet = pListBox;
 }
 
-void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection, sal_Int32 nPos )
+void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection )
 {
-    sal_Int32 nRealPos = InsertEntry( rString, nPos );
+    sal_Int32 nRealPos = InsertEntry( rString );
     SetEntryData( nRealPos, lclEnumToVoid( eDirection ) );
 }
 

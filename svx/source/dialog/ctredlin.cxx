@@ -161,17 +161,10 @@ sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRi
 
     return nCompare;
 }
-void SvxRedlinTable::SetCalcView(bool bFlag)
+void SvxRedlinTable::SetCalcView()
 {
-    bIsCalc=bFlag;
-    if(bFlag)
-    {
-        nDatePos=CALC_DATE;
-    }
-    else
-    {
-        nDatePos=WRITER_DATE;
-    }
+    bIsCalc=true;
+    nDatePos=CALC_DATE;
 }
 
 void SvxRedlinTable::UpdateFilterTest()
@@ -497,9 +490,9 @@ void SvxTPView::EnableRejectAll(bool bFlag)
     m_pRejectAll->Enable(bFlag);
 }
 
-void SvxTPView::ShowUndo(bool bFlag)
+void SvxTPView::ShowUndo()
 {
-    m_pUndo->Show(bFlag);
+    m_pUndo->Show();
 }
 
 void SvxTPView::EnableUndo(bool bFlag)
@@ -768,9 +761,9 @@ void SvxTPFilter::ClearAuthors()
     m_pLbAuthor->Clear();
 }
 
-void SvxTPFilter::InsertAuthor( const OUString& rString, sal_Int32 nPos)
+void SvxTPFilter::InsertAuthor( const OUString& rString)
 {
-    m_pLbAuthor->InsertEntry(rString,nPos);
+    m_pLbAuthor->InsertEntry(rString);
 }
 
 OUString SvxTPFilter::GetSelectedAuthor() const
@@ -1016,9 +1009,9 @@ void SvxTPFilter::Enable( bool bEnable, bool bChild)
         RowEnableHdl(m_pCbComment);
     }
 }
-void SvxTPFilter::Disable( bool bChild)
+void SvxTPFilter::Disable()
 {
-    Enable( false, bChild );
+    Enable( false );
 }
 
 IMPL_LINK_TYPED( SvxTPFilter, ModifyDate, Edit&, rTF, void)

@@ -225,12 +225,12 @@ public:
 
     // copy marked objects and mark them instead of the old ones
     void CopyMarkedObj();
-    void SetAllMarkedRect(const Rectangle& rRect, bool bCopy=false) { SetMarkedObjRect(rRect,bCopy); }
-    void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj   (rSiz,bCopy); }
-    void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
-    void RotateAllMarked(const Point& rRef, long nAngle, bool bCopy=false) { RotateMarkedObj(rRef,nAngle,bCopy); }
-    void MirrorAllMarkedHorizontal(bool bCopy=false) { MirrorMarkedObjHorizontal(bCopy); }
-    void MirrorAllMarkedVertical(bool bCopy=false) { MirrorMarkedObjVertical(bCopy); }
+    void SetAllMarkedRect(const Rectangle& rRect) { SetMarkedObjRect(rRect); }
+    void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj(rSiz,bCopy); }
+    void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact) { ResizeMarkedObj(rRef,xFact,yFact); }
+    void RotateAllMarked(const Point& rRef, long nAngle) { RotateMarkedObj(rRef,nAngle); }
+    void MirrorAllMarkedHorizontal() { MirrorMarkedObjHorizontal(); }
+    void MirrorAllMarkedVertical() { MirrorMarkedObjVertical(); }
     void CopyMarked() { CopyMarkedObj(); }
     bool IsMoveAllowed() const { ForcePossibilities(); return bMoveAllowed && !bMoveProtect; }
     bool IsResizeAllowed(bool bProp=false) const;

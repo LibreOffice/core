@@ -105,12 +105,12 @@ void SvxFontListBox::InsertFontEntry( const OUString& rString, const vcl::Font& 
     mbUseFont = false;
 }
 
-void SvxFontListBox::SelectEntryPos( sal_uLong nPos, bool bSelect )
+void SvxFontListBox::SelectEntryPos( sal_uLong nPos )
 {
     SvTreeListEntry* pEntry = GetEntry( nPos );
     if( pEntry )
     {
-        Select( pEntry, bSelect );
+        Select( pEntry );
         ShowEntry( pEntry );
     }
 }

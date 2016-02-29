@@ -78,10 +78,10 @@ void SvxCheckListBox::RemoveEntry( sal_uLong nPos )
 }
 
 
-void SvxCheckListBox::SelectEntryPos( sal_uLong nPos, bool bSelect )
+void SvxCheckListBox::SelectEntryPos( sal_uLong nPos )
 {
     if ( nPos < GetEntryCount() )
-        Select( GetEntry( nPos ), bSelect );
+        Select( GetEntry( nPos ) );
 }
 
 

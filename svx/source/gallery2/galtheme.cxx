@@ -355,12 +355,12 @@ bool GalleryTheme::UnlockTheme()
     return bRet;
 }
 
-void GalleryTheme::UnlockBroadcaster( sal_uIntPtr nUpdatePos )
+void GalleryTheme::UnlockBroadcaster()
 {
     DBG_ASSERT( mnBroadcasterLockCount, "Broadcaster is not locked" );
 
     if( mnBroadcasterLockCount && !--mnBroadcasterLockCount )
-        ImplBroadcast( nUpdatePos );
+        ImplBroadcast( 0 );
 }
 
 bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
@@ -998,7 +998,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
     return bRet;
 }
 
-bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rxModelStream, bool )
+bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rxModelStream )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -1083,7 +1083,7 @@ bool GalleryTheme::InsertModelStream( const tools::SvRef<SotStorageStream>& rxMo
     return bRet;
 }
 
-bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL, bool )
+bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;

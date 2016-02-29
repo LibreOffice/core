@@ -230,8 +230,9 @@ void SearchAttrItemList::Clear()
 
 
 // Deletes the pointer to the items
-void SearchAttrItemList::Remove(size_t nPos, size_t nLen)
+void SearchAttrItemList::Remove(size_t nPos)
 {
+    size_t nLen = 1;
     if ( nPos + nLen > size() )
         nLen = size() - nPos;
 

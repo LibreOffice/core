@@ -64,7 +64,7 @@ public:
     void                SetColor( const Color& rColor );
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
-    void                UseResourceText( bool bUse = true );
+    void                UseResourceText();
     void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
 
     bool                IsTwoLines() const;

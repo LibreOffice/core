@@ -297,9 +297,9 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
 }
 
 
-sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType, sal_Int32 nPos )
+sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType )
 {
-    return ImplInsertLanguage( nLangType, nPos, css::i18n::ScriptType::WEAK );
+    return ImplInsertLanguage( nLangType, LISTBOX_APPEND, css::i18n::ScriptType::WEAK );
 }
 
 
@@ -358,20 +358,20 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
 }
 
 
-void SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType, sal_Int32 nPos )
+void SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType )
 {
-    ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
+    ImplInsertLanguage( LANGUAGE_SYSTEM, LISTBOX_APPEND, nType );
 }
 
 
-void SvxLanguageBoxBase::InsertSystemLanguage( sal_Int32 nPos )
+void SvxLanguageBoxBase::InsertSystemLanguage()
 {
-    ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, css::i18n::ScriptType::WEAK );
+    ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, LISTBOX_APPEND, css::i18n::ScriptType::WEAK );
 }
 
 
 void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
-        bool bCheckEntry, sal_Int32 nPos )
+        bool bCheckEntry )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
@@ -388,7 +388,7 @@ void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
     if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 
-    sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
+    sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, LISTBOX_APPEND, bCheckEntry );
     ImplSetEntryData( nAt, reinterpret_cast<void*>(nLang) );
 }
 
@@ -413,7 +413,7 @@ LanguageType SvxLanguageBoxBase::GetSelectLanguage() const
 }
 
 
-void SvxLanguageBoxBase::SelectLanguage( const LanguageType eLangType, bool bSelect )
+void SvxLanguageBoxBase::SelectLanguage( const LanguageType eLangType )
 {
     // If the core uses a LangID of an imported MS document and wants to select
     // a language that is replaced, we need to select the replacement instead.
@@ -425,7 +425,7 @@ void SvxLanguageBoxBase::SelectLanguage( const LanguageType eLangType, bool bSel
         nAt = InsertLanguage( nLang );      // on-the-fly-ID
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        ImplSelectEntryPos( nAt, bSelect );
+        ImplSelectEntryPos( nAt, true/*bSelect*/ );
 }
 
 
@@ -469,9 +469,9 @@ void SvxLanguageBoxBase::SaveValueLBB()
     ImplSaveValue();
 }
 
-sal_Int32 SvxLanguageBoxBase::GetSelectEntryPosLBB( sal_Int32 nSelIndex ) const
+sal_Int32 SvxLanguageBoxBase::GetSelectEntryPosLBB() const
 {
-    return ImplGetSelectEntryPos( nSelIndex);
+    return ImplGetSelectEntryPos();
 }
 
 void* SvxLanguageBoxBase::GetEntryDataLBB( sal_Int32  nPos ) const

@@ -53,8 +53,7 @@ public:
     // newly created charts using this method
     static void AdaptDefaultsForChart(
         const css::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj,
-        bool bNoFillStyle = true,
-        bool bNoLineStyle = true);
+        bool bNoFillStyle = true);
 };
 
 #endif // INCLUDED_SVX_CHARTHELPER_HXX

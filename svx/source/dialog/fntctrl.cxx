@@ -623,9 +623,9 @@ void SvxFontPrevWindow::SetBackColor(const Color &rColor)
     Invalidate();
 }
 
-void SvxFontPrevWindow::UseResourceText(bool bUse)
+void SvxFontPrevWindow::UseResourceText()
 {
-    pImpl->mbUseResText = bUse;
+    pImpl->mbUseResText = true;
 }
 
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)

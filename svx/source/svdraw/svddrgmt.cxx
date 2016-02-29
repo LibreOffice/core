@@ -553,7 +553,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
     }
 }
 
-void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal) const
+void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const
 {
     ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE;
     if (IsDraggingPoints()) {
@@ -561,7 +561,7 @@ void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr
     } else if (IsDraggingGluePoints()) {
         nOpt=ImpTakeDescriptionOptions::GLUEPOINTS;
     }
-    getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,nVal,nOpt);
+    getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,0,nOpt);
 }
 
 SdrObject* SdrDragMethod::GetDragObj() const

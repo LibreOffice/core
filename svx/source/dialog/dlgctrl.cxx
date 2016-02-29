@@ -533,14 +533,11 @@ Point SvxRectCtl::GetPointFromRP( RECT_POINT _eRP) const
 }
 
 
-void SvxRectCtl::SetFocusRect( const Rectangle* pRect )
+void SvxRectCtl::SetFocusRect()
 {
     HideFocus();
 
-    if( pRect )
-        ShowFocus( *pRect );
-    else
-        ShowFocus( CalculateFocusRectangle() );
+    ShowFocus( CalculateFocusRectangle() );
 }
 
 Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
@@ -1347,7 +1344,7 @@ void GradientLB::Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bit
 }
 
 void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
-                                    const XGradient& rGradient, sal_uInt16 nDist )
+                                    const XGradient& rGradient )
 {
     long nCount = pList.get() ? pList->Count() : 0;
     XGradientEntry* pEntry;
@@ -1365,7 +1362,7 @@ void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUStrin
             bFound = true;
     }
     if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 + nDist ) );
+        SelectEntryPos( (sal_uInt16) ( i - 1 ) );
 }
 
 // Fills the listbox (provisional) with strings
@@ -1712,7 +1709,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     SetUpdateMode( true );
 }
 
-void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart )
+void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
@@ -1724,7 +1721,7 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
         InsertEntry(
             rEntry.GetName(),
             Image(pVD->GetBitmap(
-                (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
+                Point(),
                 Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
     }
     else
@@ -1735,7 +1732,7 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
     AdaptDropDownLineCountToMaximum();
 }
 
-void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart )
+void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
@@ -1749,7 +1746,7 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
         InsertEntry(
             rEntry.GetName(),
             Image(pVD->GetBitmap(
-                    (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
+                    Point(),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))),
             nPos);
     }

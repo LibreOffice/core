@@ -72,7 +72,7 @@ public:
     void Insert( const SearchAttrItem& rItem )
         { SrchAttrItemList::push_back( rItem ); }
     // deletes the pointer to the items
-    void Remove(size_t nPos, size_t nLen = 1);
+    void Remove(size_t nPos);
 };
 
 
