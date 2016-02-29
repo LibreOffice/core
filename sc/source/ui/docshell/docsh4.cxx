@@ -1205,9 +1205,9 @@ void ScDocShell::DoRecalc( bool bApi )
 {
     bool bDone = false;
     ScTabViewShell* pSh = GetBestViewShell();
+    ScInputHandler* pHdl = ( pSh ? SC_MOD()->GetInputHdl( pSh ) : nullptr );
     if ( pSh )
     {
-        ScInputHandler* pHdl = SC_MOD()->GetInputHdl(pSh);
         if ( pHdl && pHdl->IsInputMode() && pHdl->IsFormulaMode() && !bApi )
         {
             pHdl->FormulaPreview();     // Teilergebnis als QuickHelp
@@ -1222,6 +1222,16 @@ void ScDocShell::DoRecalc( bool bApi )
     if (!bDone)                         // sonst Dokument neu berechnen
     {
         WaitObject aWaitObj( GetActiveDialogParent() );
+        if ( pHdl )
+        {
+            // tdf97897 set current cell to Dirty to force recalculation of cell
+            ScAddress aCellAddress = pHdl->GetCursorPos();
+            if ( aDocument.GetCellType( aCellAddress ) == CELLTYPE_FORMULA )
+            {
+                ScRange aRange( aCellAddress, aCellAddress );
+                aDocument.SetDirty( aRange, false );
+            }
+        }
         aDocument.CalcFormulaTree();
         if ( pSh )
             pSh->UpdateCharts(true);
