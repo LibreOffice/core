@@ -39,6 +39,24 @@
       "revId": "4fb2f629c2adb5233fe3c586e3bf343fe8be6de6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_40f93cc8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-29T07:39:51Z",
+      "side": 1,
+      "message": "Filed a issue upstream: [3]. And updated the status page on the Wiki: [4].\n\n* [3] http://tracker.firebirdsql.org/browse/CORE-5120\n* [4] https://wiki.documentfoundation.org/Development/msvc-x86_64#Status",
+      "parentUuid": "1aa78d24_000f34e2",
+      "revId": "4fb2f629c2adb5233fe3c586e3bf343fe8be6de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
