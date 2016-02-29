@@ -475,6 +475,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             s = s.replaceAll("$NEW", getVersion(verExc.NewVersion));
             s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
             box->set_primary_text(s);
+            box->set_button_text(VCL_BUTTONS_OK, "blabla");
             approve = box->Execute() == RET_OK;
             abort = !approve;
         }
