@@ -115,17 +115,8 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <xmloff/dllapi.h>
-#include <xmlsec/base64.h>
-#include <xmlsec/bn.h>
-#include <xmlsec/errors.h>
-#include <xmlsec/io.h>
-#include <xmlsec/keysmngr.h>
-#include <xmlsec/strings.h>
-#include <xmlsec/xmldsig.h>
-#include <xmlsec/xmlenc.h>
-#include <xmlsec/xmlsec.h>
-#include <xmlsec/xmltree.h>
 #include <xmlsecurity/biginteger.hxx>
+#include <xmlsecurity/xmlsec-wrapper.h>
 
 // Cleanup windows header macro pollution.
 #if defined(_WIN32) && defined(WINAPI)
