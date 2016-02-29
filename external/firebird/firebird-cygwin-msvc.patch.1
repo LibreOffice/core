@@ -1,7 +1,19 @@
+diff -ur firebird.orig/src/jrd/os/win32/mod_loader.cpp firebird/src/jrd/os/win32/mod_loader.cpp
+--- firebird.orig/src/jrd/os/win32/mod_loader.cpp	2015-11-16 12:39:38.000000000 +0100
++++ firebird/src/jrd/os/win32/mod_loader.cpp	2016-03-01 08:48:27.826182400 +0100
+@@ -99,6 +99,8 @@
+                     "msvcr110.dll",
+ #elif _MSC_VER == 1800
+ 		    "mscvr120.dll",
++#elif _MSC_VER == 1900
++		    "vcruntime140.dll",
+ #else
+                     #error Specify CRT DLL name here !
+ #endif
 diff -ur firebird.org/builds/make.new/config/config.h.in firebird/builds/make.new/config/config.h.in
---- firebird.org/builds/make.new/config/config.h.in	2015-07-30 18:57:00.826593100 +0200
-+++ firebird/builds/make.new/config/config.h.in	2015-07-30 19:27:52.139226300 +0200
-@@ -668,3 +668,37 @@
+--- firebird.orig/builds/make.new/config/config.h.in	2016-03-01 08:30:05.009762600 +0100
++++ firebird/builds/make.new/config/config.h.in	2016-03-01 08:35:33.299894300 +0100
+@@ -668,3 +668,39 @@
  #ifndef HAVE_SOCKLEN_T
  typedef int socklen_t;
  #endif
@@ -38,7 +50,9 @@ diff -ur firebird.org/builds/make.new/config/config.h.in firebird/builds/make.ne
 +#endif
 +#define isnan _isnan
 +#endif
++#if _MSC_VER < 1900
 +#define snprintf _snprintf
++#endif
 diff -ur firebird.org/builds/posix/make.defaults firebird/builds/posix/make.defaults
 --- firebird.org/builds/posix/make.defaults	2015-07-30 18:56:58.936120900 +0200
 +++ firebird/builds/posix/make.defaults	2015-07-30 19:29:23.420338600 +0200

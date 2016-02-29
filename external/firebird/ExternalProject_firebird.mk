@@ -37,6 +37,8 @@ MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.5)
 
 # do not set LDFLAGS - it is mysteriously not used by firebird on MacOSX
+# TODO(davido): Don't mix CPPFLAGS with CXXFLAGS for MSVC 14.0 and higher.
+# Consider to expose CPPFLAGS in configure.ac on its own
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
@@ -45,12 +47,14 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& export CPPFLAGS=" \
 			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_CFLAGS), \
 				-I$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
+				$(if $(filter MSC-140,$(COM)-$(VCVER)),$(CXXFLAGS)) \
 			) \
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS), \
 				-I$(call gb_UnpackedTarball_get_dir,boost) \
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib \
+				$(CXXFLAGS) \
 			) \
 			$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
@@ -58,6 +62,9 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			) \
+			" \
+		&& export CCFLAGS=" \
+			$(CFLAGS) \
 			" \
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
