@@ -203,7 +203,7 @@ void SigningTest::testOOXMLPartial()
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(
-            static_cast<std::underlying_type<SignatureState>::type>(nActual))
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
          .getStr()),
         (nActual == SignatureState::NOTVALIDATED
          || nActual == SignatureState::PARTIAL_OK));
