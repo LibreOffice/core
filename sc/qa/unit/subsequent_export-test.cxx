@@ -101,6 +101,7 @@ public:
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
+    void testRichTextCellStyle();
     void testFormulaRefSheetNameODS();
 
     void testCellValuesExportODS();
@@ -177,6 +178,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
+    CPPUNIT_TEST(testRichTextCellStyle);
     CPPUNIT_TEST(testFormulaRefSheetNameODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
@@ -1091,6 +1093,35 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
 
     xNewDocSh3->DoClose();
+}
+
+void ScExportTest::testRichTextCellStyle()
+{
+    ScDocShellRef xDocSh = loadDoc("cellformat.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pSheet = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pSheet);
+
+    // the only cell in this doc is assigned formatting record no.1
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "s", "1");
+
+    xDocSh->DoClose();
+    //FIXME: this shouldn't be necessary, but for some reason 2nd and every consecutive call
+    //to parseExport() (different stream name within the same doc, of course) doesn't find
+    //the stream anymore. I have neither knowledge nor time to debug it
+    ScDocShellRef xNewDocSh = loadDoc("cellformat.", FORMAT_XLS);
+
+    xmlDocPtr pStyles = XPathHelper::parseExport(&(*xNewDocSh), m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pStyles);
+
+    // formatting record no. 1 is set to wrap text
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "wrapText", "true");
+    // it references a font no 4
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]", "fontId", "4");
+    // which is bold
+    assertXPath(pStyles, "/x:styleSheet/x:fonts/x:font[5]/x:b", "val", "true");
+
 }
 
 void ScExportTest::testFormulaRefSheetNameODS()
