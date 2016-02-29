@@ -151,8 +151,7 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
 
 void ChartHelper::AdaptDefaultsForChart(
     const uno::Reference < embed::XEmbeddedObject > & xEmbObj,
-    bool /* bNoFillStyle */,
-    bool /* bNoLineStyle */)
+    bool /* bNoFillStyle */)
 {
     if( xEmbObj.is())
     {

@@ -143,7 +143,7 @@ public:
     bool                IsTmpCurrencyFormat( const OUString& rFmtString );
     bool                FindEntry( const OUString& rFmtString, sal_uInt32* pAt = nullptr );
 
-    void                ValidateNewEntries( bool bValidate = true ) { bUndoAddList = !bValidate; }
+    void                ValidateNewEntries() { bUndoAddList = false; }
     size_t              GetUpdateDataCount() const;
     void                GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize );
 

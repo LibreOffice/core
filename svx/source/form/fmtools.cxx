@@ -154,9 +154,9 @@ void displayException(const css::sdb::SQLContext& _rExcept, vcl::Window* _pParen
 }
 
 
-void displayException(const css::sdb::SQLErrorEvent& _rEvent, vcl::Window* _pParent)
+void displayException(const css::sdb::SQLErrorEvent& _rEvent)
 {
-    displayException(_rEvent.Reason, _pParent);
+    displayException(_rEvent.Reason);
 }
 
 

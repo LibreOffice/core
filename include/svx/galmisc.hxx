@@ -183,8 +183,7 @@ protected:
 
     void                            CopyToClipboard( vcl::Window* pWindow );
     void                            StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                               sal_Int32 nDragPointer = DND_POINTER_NONE,
-                                               sal_Int32 nDragImage = DND_IMAGE_NONE );
+                                               sal_Int32 nDragPointer = DND_POINTER_NONE );
 };
 
 enum class GalleryHintType

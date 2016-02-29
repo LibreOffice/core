@@ -150,7 +150,7 @@ public:
     SAL_DLLPRIVATE bool         UnlockTheme();
 
     SAL_DLLPRIVATE void         LockBroadcaster() { mnBroadcasterLockCount++; }
-    void                        UnlockBroadcaster( sal_uIntPtr nUpdatePos = 0 );
+    void                        UnlockBroadcaster();
     SAL_DLLPRIVATE bool         IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
 
     SAL_DLLPRIVATE void         SetDragPos( sal_uIntPtr nPos ) { nDragPos = nPos; }
@@ -191,10 +191,10 @@ public:
     bool                        GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool bProgress = false );
     bool                        InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rModelStreamRef, bool bProgress = false );
+    SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rModelStreamRef );
     SAL_DLLPRIVATE bool         InsertModelStream( const tools::SvRef<SotStorageStream>& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    SAL_DLLPRIVATE bool         GetURL( sal_uIntPtr nPos, INetURLObject& rURL, bool bProgress = false );
+    SAL_DLLPRIVATE bool         GetURL( sal_uIntPtr nPos, INetURLObject& rURL );
     bool                        InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
     SAL_DLLPRIVATE bool         InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 

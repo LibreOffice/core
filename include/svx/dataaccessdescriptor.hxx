@@ -87,12 +87,11 @@ namespace svx
                     createPropertyValueSequence();
 
         /** initialized the descriptor from the property values given
-            <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all its current settings before
-            initializing with the new ones.</p>
+            The descriptor will clear all its current settings before
+            initializing with the new ones.
         */
         void        initializeFrom(
-                        const css::uno::Sequence< css::beans::PropertyValue >& _rValues,
-                        bool _bClear = true);
+                        const css::uno::Sequence< css::beans::PropertyValue >& _rValues);
 
         /// checks whether or not a given property is present in the descriptor
         bool        has(DataAccessDescriptorProperty _eWhich) const;

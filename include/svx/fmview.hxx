@@ -111,10 +111,8 @@ public:
     virtual bool MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin ) override;
 
     /** grab the focus to the first form control on the view
-        @param _bForceSync
-            <TRUE/> if the handling should be done synchronously.
     */
-    SVX_DLLPRIVATE void GrabFirstControlFocus( bool _bForceSync = false );
+    SVX_DLLPRIVATE void GrabFirstControlFocus();
 
     /** returns the form controller for a given form and a given device
     */

@@ -307,10 +307,10 @@ void FmFormView::ChangeDesignMode(bool bDesign)
 }
 
 
-void FmFormView::GrabFirstControlFocus( bool _bForceSync )
+void FmFormView::GrabFirstControlFocus()
 {
     if ( !IsDesignMode() )
-        pImpl->AutoFocus( _bForceSync );
+        pImpl->AutoFocus();
 }
 
 

@@ -119,8 +119,9 @@ namespace sdr
             return false;
         }
 
-        bool OverlayObjectList::isHitPixel(const Point& rDiscretePosition, sal_uInt32 nDiscreteTolerance) const
+        bool OverlayObjectList::isHitPixel(const Point& rDiscretePosition) const
         {
+            sal_uInt32 nDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL;
             if(!maVector.empty())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
@@ -132,15 +133,8 @@ namespace sdr
                     const Point aPosLogic(pManager->getOutputDevice().PixelToLogic(rDiscretePosition));
                     const basegfx::B2DPoint aPosition(aPosLogic.X(), aPosLogic.Y());
 
-                    if(nDiscreteTolerance)
-                    {
-                        const Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(Size(nDiscreteTolerance, nDiscreteTolerance)));
-                        return isHitLogic(aPosition, (double)aSizeLogic.Width());
-                    }
-                    else
-                    {
-                        return isHitLogic(aPosition);
-                    }
+                    const Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(Size(nDiscreteTolerance, nDiscreteTolerance)));
+                    return isHitLogic(aPosition, (double)aSizeLogic.Width());
                 }
             }
 

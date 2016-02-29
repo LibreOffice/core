@@ -587,7 +587,7 @@ void GalleryTransferable::CopyToClipboard( vcl::Window* pWindow )
 }
 
 void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                     sal_Int32 nDragPointer, sal_Int32 nDragImage )
+                                     sal_Int32 nDragPointer )
 {
     INetURLObject aURL;
 
@@ -595,7 +595,7 @@ void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceA
     {
         mpTheme->SetDragging( true );
         mpTheme->SetDragPos( mnObjectPos );
-        TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
+        TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer );
     }
 }
 

@@ -141,7 +141,7 @@ public:
     static Point KorregPos(const Point& rNow, const Point& rPrev);
     void  Reset(const Point& rPnt);
     void  NextMove(const Point& rPnt);
-    void  NextPoint(bool bSaveReal=false);
+    void  NextPoint();
     void  PrevPoint();
     bool CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }

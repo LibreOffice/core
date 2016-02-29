@@ -68,13 +68,13 @@ public:
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
 
-    sal_Int32       InsertLanguage( const LanguageType eLangType, sal_Int32  nPos = LISTBOX_APPEND );
-    void            InsertDefaultLanguage( sal_Int16 nType, sal_Int32  nPos = LISTBOX_APPEND );
-    void            InsertSystemLanguage( sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32       InsertLanguage( const LanguageType eLangType );
+    void            InsertDefaultLanguage( sal_Int16 nType );
+    void            InsertSystemLanguage();
     void            InsertLanguage( const LanguageType eLangType,
-                                    bool bCheckEntry, sal_Int32  nPos = LISTBOX_APPEND );
+                                    bool bCheckEntry );
     void            RemoveLanguage( const LanguageType eLangType );
-    void            SelectLanguage( const LanguageType eLangType, bool bSelect = true );
+    void            SelectLanguage( const LanguageType eLangType );
     LanguageType    GetSelectLanguage() const;
     bool            IsLanguageSelected( const LanguageType eLangType ) const;
 
@@ -82,7 +82,7 @@ public:
     void                HideLBB();
     void                DisableLBB();
     void                SaveValueLBB();
-    sal_Int32           GetSelectEntryPosLBB( sal_Int32 nSelIndex = 0 ) const;
+    sal_Int32           GetSelectEntryPosLBB() const;
     void*               GetEntryDataLBB( sal_Int32  nPos ) const;
     sal_Int32           GetSavedValueLBB() const;
 

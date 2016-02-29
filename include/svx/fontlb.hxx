@@ -74,8 +74,8 @@ public:
     void                        InsertFontEntry(
                                     const OUString& rString, const vcl::Font& rFont, const Color* pColor = nullptr );
 
-    /** Selects/deselects an entry specified by its position in the list box. */
-    void                        SelectEntryPos( sal_uLong nPos, bool bSelect = true );
+    /** Selects an entry specified by its position in the list box. */
+    void                        SelectEntryPos( sal_uLong nPos );
     /** Removes a selection. */
     void                        SetNoSelection();
 

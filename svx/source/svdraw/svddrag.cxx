@@ -71,10 +71,9 @@ void SdrDragStat::NextMove(const Point& rPnt)
     Now()=aBla;
 }
 
-void SdrDragStat::NextPoint(bool bSaveReal)
+void SdrDragStat::NextPoint()
 {
     Point aPnt(GetNow());
-    if (bSaveReal) aPnt=aRealNow;
     aPnts.push_back(new Point(KorregPos(GetRealNow(),aPnt)));
     Prev()=aPnt;
 }

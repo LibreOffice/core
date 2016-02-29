@@ -55,7 +55,7 @@ public:
                                               SvLBoxButtonKind_enabledCheckbox );
     void            RemoveEntry         ( sal_uLong  nPos );
 
-    void            SelectEntryPos      ( sal_uLong  nPos, bool bSelect = true );
+    void            SelectEntryPos      ( sal_uLong  nPos );
     sal_uLong       GetSelectEntryPos   () const;
     void*           GetSelectEntryData  () const { return GetEntryData(GetSelectEntryPos()); }
 

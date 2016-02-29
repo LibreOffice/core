@@ -46,7 +46,7 @@ public:
 
     void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
-    void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
+    void            SelectCharacter( sal_uInt32 cNew );
     sal_UCS4        GetSelectCharacter() const;
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
