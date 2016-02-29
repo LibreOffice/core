@@ -4,6 +4,8 @@
   <block-list:block block-list:abbreviated-name="CVanna"/>
   <block-list:block block-list:abbreviated-name="DVDanna"/>
   <block-list:block block-list:abbreviated-name="EGTeo"/>
+  <block-list:block block-list:abbreviated-name="KHz"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
   <block-list:block block-list:abbreviated-name="GHz"/>
   <block-list:block block-list:abbreviated-name="HEANet"/>
   <block-list:block block-list:abbreviated-name="LEDanna"/>

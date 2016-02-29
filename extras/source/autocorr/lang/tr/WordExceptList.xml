@@ -3,6 +3,7 @@
   <block-list:block block-list:abbreviated-name="CDs"/>
   <block-list:block block-list:abbreviated-name="GHz"/>
   <block-list:block block-list:abbreviated-name="ICs"/>
+  <block-list:block block-list:abbreviated-name="KHz"/>
   <block-list:block block-list:abbreviated-name="LPs"/>
   <block-list:block block-list:abbreviated-name="MCs"/>
   <block-list:block block-list:abbreviated-name="MHz"/>
