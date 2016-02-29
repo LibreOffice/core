@@ -1666,10 +1666,12 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
     return pFieldP;
 }
 
+#include <iostream>
 void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     const OUString& rFieldCmd, sal_uInt8 nMode )
 {
     OUString sFieldCmd(rFieldCmd);
+    std::cout << "***** sFieldCmd: " << sFieldCmd << std::endl;
     switch (eFieldType)
     {
         // map fields that are not supported in WW8 as of Word 2003
@@ -1687,6 +1689,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         default:
             break;
     }
+    std::cout << "***** sFieldCmd2: " << sFieldCmd << std::endl;
 
     assert(eFieldType <= 0x5F); // 95 is the highest documented one
 

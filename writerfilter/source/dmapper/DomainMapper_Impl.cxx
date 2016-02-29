@@ -84,6 +84,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 
+#include <iostream>
+
 using namespace ::com::sun::star;
 using namespace oox;
 namespace writerfilter {
@@ -4132,8 +4134,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             propertyVal.Name = "Identifier";
                             propertyVal.Value = uno::makeAny(sCmd);
                             aValues[0] = propertyVal;
-                                    xTC->setPropertyValue("Fields",
-                                            uno::makeAny(aValues));
+                            xTC->setPropertyValue("Fields", uno::makeAny(aValues));
                         }
                         uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
 
@@ -4312,38 +4313,27 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         bool bIsSetbiblio = xServiceInfo->supportsService("com.sun.star.text.TextField.Bibliography");
                         if( bIsSetbiblio )
                         {
+                            std::cout << "result: " << rResult << std::endl;
                             uno::Any aProperty  = xFieldProperties->getPropertyValue("Fields");
                             uno::Sequence<beans::PropertyValue> aValues ;
                             aProperty >>= aValues;
                             beans::PropertyValue propertyVal;
-                            bool bTitleFound = false;
-                            int i=0;
-                            for (; i < aValues.getLength(); i++)
+                            for (int i = 0; i < aValues.getLength(); i++)
                             {
                                 propertyVal = aValues[i];
                                 if(propertyVal.Name == "Title")
                                 {
-                                    bTitleFound = true;
-                                    break;
+                                   OUString titleStr;
+                                   uno::Any aValue(propertyVal.Value);
+                                   aValue >>= titleStr;
+                                   titleStr = titleStr + rResult;
+                                   propertyVal.Value = uno::makeAny(titleStr);
+                                } else if (propertyVal.Name == "Identifier") {
+                                   propertyVal.Value = uno::makeAny(rResult);
                                 }
-                            }
-                            if(bTitleFound)
-                            {
-                                OUString titleStr;
-                                uno::Any aValue(propertyVal.Value);
-                                aValue >>= titleStr;
-                                titleStr = titleStr + rResult;
-                                propertyVal.Value = uno::makeAny(titleStr);
                                 aValues[i] = propertyVal;
                             }
-                            else
-                            {
-                                propertyVal.Name = "Title";
-                                propertyVal.Value = uno::makeAny(rResult);
-                                aValues[i] = propertyVal;
-                            }
-                            xFieldProperties->setPropertyValue("Fields",
-                                    uno::makeAny(aValues));
+                            xFieldProperties->setPropertyValue("Fields", uno::makeAny(aValues));
                         }
                     }
                     else if ( m_bSetDateValue )
