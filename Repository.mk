@@ -824,6 +824,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		Pyuno/web \
 		Pyuno/mailmerge \
 	)) \
+	sfx2_classification \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\

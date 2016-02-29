@@ -93,7 +93,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
 		scp2/source/ooo/mingw_dlls \
 	) \
     scp2/source/ooo/module_filter \
-    scp2/source/ooo/module_classification \
     $(if $(filter-out MACOSX WNT,$(OS)), \
 		scp2/source/ooo/module_libreofficekit \
 	) \
