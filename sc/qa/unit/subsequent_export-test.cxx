@@ -100,6 +100,7 @@ public:
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
+    void testRichTextCellFormat();
     void testFormulaRefSheetNameODS();
 
     void testCellValuesExportODS();
@@ -166,6 +167,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
+    CPPUNIT_TEST(testRichTextCellFormat);
     CPPUNIT_TEST(testFormulaRefSheetNameODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
@@ -994,6 +996,21 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
 
     xNewDocSh3->DoClose();
+}
+
+void ScExportTest::testRichTextCellFormat()
+{
+    ScDocShellRef xDocSh = loadDoc("cellformat.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pSheet = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", XLSX);
+    CPPUNIT_ASSERT(pSheet);
+
+    // make sure the only cell in this doc is assigned some formatting record
+    OUString aCellFormat = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "s");
+    CPPUNIT_ASSERT_MESSAGE("Cell format is missing", !aCellFormat.isEmpty());
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testFormulaRefSheetNameODS()
