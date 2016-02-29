@@ -137,7 +137,7 @@ public class PlainSourceView extends JScrollPane implements
         ta.setColumns(40);
         ta.setLineWrap(false);
         ta.insert(model.getText(), 0);
-        ta.setFont(new Font(Font.MONOSPACED, ta.getFont().getStyle(), ta.getFont().getSize()));
+        ta.setFont(new Font("Monospaced", ta.getFont().getStyle(), ta.getFont().getSize()));
         undoManager = new UndoManager();
         undoManager.setLimit(noLimit);
         ta.getDocument().addUndoableEditListener(new UndoableEditListener(){
