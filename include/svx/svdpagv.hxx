@@ -227,7 +227,7 @@ public:
     //void SetHelpLinePos(sal_uInt16 nNum, const Point& rNewPos);
     void SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine);
     void DeleteHelpLine(sal_uInt16 nNum);
-    void InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum=0xFFFF);
+    void InsertHelpLine(const SdrHelpLine& rHL);
 
     /// At least one member must be visible for the Group object and
     /// it must not be locked

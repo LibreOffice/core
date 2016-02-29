@@ -269,15 +269,12 @@ unsigned SdrLinkList::FindEntry(const Link<SdrObjFactory*,void>& rLink) const
     return 0xFFFF;
 }
 
-void SdrLinkList::InsertLink(const Link<SdrObjFactory*,void>& rLink, unsigned nPos)
+void SdrLinkList::InsertLink(const Link<SdrObjFactory*,void>& rLink)
 {
     unsigned nFnd=FindEntry(rLink);
     if (nFnd==0xFFFF) {
         if (rLink.IsSet()) {
-            if(nPos==0xFFFF)
-                aList.push_back(rLink);
-            else
-                aList.insert(aList.begin() + nPos, rLink);
+            aList.push_back(rLink);
         } else {
             OSL_FAIL("SdrLinkList::InsertLink(): Tried to insert a link that was not set already.");
         }

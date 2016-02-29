@@ -183,7 +183,7 @@ public:
     unsigned GetLinkCount() const            { return (unsigned)aList.size(); }
     Link<SdrObjFactory*,void>& GetLink(unsigned nNum)           { return aList[nNum]; }
     const Link<SdrObjFactory*,void>& GetLink(unsigned nNum) const { return aList[nNum]; }
-    void InsertLink(const Link<SdrObjFactory*,void>& rLink, unsigned nPos=0xFFFF);
+    void InsertLink(const Link<SdrObjFactory*,void>& rLink);
     void RemoveLink(const Link<SdrObjFactory*,void>& rLink);
 };
 

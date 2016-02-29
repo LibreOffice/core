@@ -767,10 +767,9 @@ void SdrPageView::DeleteHelpLine(sal_uInt16 nNum)
     }
 }
 
-void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum)
+void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL)
 {
-    if (nNum > aHelpLines.GetCount())
-        nNum = aHelpLines.GetCount();
+    sal_uInt16 nNum = aHelpLines.GetCount();
     aHelpLines.Insert(rHL,nNum);
     if (GetView().IsHlplVisible())
         ImpInvalidateHelpLineArea(nNum);

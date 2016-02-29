@@ -342,7 +342,7 @@ class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl, SvxObjectNameDialog)
     virtual void GetName(OUString& rName) override ;
-    virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately = false) override;
+    virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
 
 private:
     Link<AbstractSvxObjectNameDialog&,bool> aCheckNameHdl;
@@ -507,8 +507,7 @@ public:
                                             const OUString *pUserButtonText=nullptr ) override;
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            SdrView* pView,
-                                            SdrModel* pModel=nullptr ) override;
+                                            SdrView* pView ) override;
     virtual SfxAbstractTabDialog*       CreateTabItemDialog(vcl::Window* pParent,
                                             const SfxItemSet& rSet) override;
     virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( vcl::Window* pParent,
@@ -516,8 +515,7 @@ public:
                                             sal_uInt16 nAnchorTypes = 0 ) override;
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
                                             const SfxItemSet& rAttr,
-                                            SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
-                                            SvxDistributeVertical eVer = SvxDistributeVerticalNone) override;
+                                            SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone) override;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = nullptr ) override;

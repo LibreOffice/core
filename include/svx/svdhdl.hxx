@@ -465,7 +465,7 @@ public:
 
     // AddHdl takes ownership of the handle. It should be on the Heap
     // as Clear() deletes it.
-    void    AddHdl(SdrHdl* pHdl, bool bAtBegin=false);
+    void    AddHdl(SdrHdl* pHdl);
     SdrHdl* RemoveHdl(size_t nNum);
     void RemoveAllByKind(SdrHdlKind eKind);
 

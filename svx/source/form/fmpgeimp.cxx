@@ -253,7 +253,7 @@ namespace
         _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
     }
 
-    static void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map, bool i_ignoreNonExistence = false )
+    static void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
@@ -263,10 +263,9 @@ namespace
             return;
         }
 
-        Any aOldAssignment =
-            _map->remove( makeAny( xControlModel ) );
-        OSL_ENSURE( !i_ignoreNonExistence ||
-            ( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ) ),
+        Any aOldAssignment = _map->remove( makeAny( xControlModel ) );
+        OSL_ENSURE(
+            aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
                 "lcl_removeFormObject: map was inconsistent!" );
     }
 }

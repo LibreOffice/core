@@ -169,7 +169,7 @@ class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
 public:
     virtual void GetName(OUString& rName) = 0;
-    virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately = false) = 0;
+    virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) = 0;
 };
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog
@@ -277,8 +277,7 @@ public:
 
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            SdrView* pView,
-                                            SdrModel* pModel=nullptr ) = 0 ;
+                                            SdrView* pView ) = 0 ;
 
     virtual AbstractSvxCaptionDialog* CreateCaptionDialog( vcl::Window* pParent,
                                         const SdrView* pView,
@@ -286,8 +285,7 @@ public:
 
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
                                             const SfxItemSet& rAttr,
-                                            SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
-                                            SvxDistributeVertical eVer = SvxDistributeVerticalNone)= 0;
+                                            SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone)= 0;
 
     virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( vcl::Window* pParent ) = 0;
 

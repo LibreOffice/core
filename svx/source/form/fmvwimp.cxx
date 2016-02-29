@@ -1769,40 +1769,37 @@ void FmXFormView::startMarkListWatching()
 }
 
 
-void FmXFormView::saveMarkList( bool _bSmartUnmark )
+void FmXFormView::saveMarkList()
 {
     if ( m_pView )
     {
         m_aMark = m_pView->GetMarkedObjectList();
-        if ( _bSmartUnmark )
+        const size_t nCount = m_aMark.GetMarkCount( );
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            const size_t nCount = m_aMark.GetMarkCount( );
-            for ( size_t i = 0; i < nCount; ++i )
+            SdrMark*   pMark = m_aMark.GetMark(i);
+            SdrObject* pObj  = pMark->GetMarkedSdrObj();
+
+            if ( m_pView->IsObjMarked( pObj ) )
             {
-                SdrMark*   pMark = m_aMark.GetMark(i);
-                SdrObject* pObj  = pMark->GetMarkedSdrObj();
-
-                if ( m_pView->IsObjMarked( pObj ) )
+                if ( pObj->IsGroupObject() )
                 {
-                    if ( pObj->IsGroupObject() )
-                    {
-                        SdrObjListIter aIter( *pObj->GetSubList() );
-                        bool bMixed = false;
-                        while ( aIter.IsMore() && !bMixed )
-                            bMixed = ( aIter.Next()->GetObjInventor() != FmFormInventor );
+                    SdrObjListIter aIter( *pObj->GetSubList() );
+                    bool bMixed = false;
+                    while ( aIter.IsMore() && !bMixed )
+                        bMixed = ( aIter.Next()->GetObjInventor() != FmFormInventor );
 
-                        if ( !bMixed )
-                        {
-                            // all objects in the group are form objects
-                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
-                        }
-                    }
-                    else
+                    if ( !bMixed )
                     {
-                        if ( pObj->GetObjInventor() == FmFormInventor )
-                        {   // this is a form layer object
-                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
-                        }
+                        // all objects in the group are form objects
+                        m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
+                    }
+                }
+                else
+                {
+                    if ( pObj->GetObjInventor() == FmFormInventor )
+                    {   // this is a form layer object
+                        m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
                     }
                 }
             }

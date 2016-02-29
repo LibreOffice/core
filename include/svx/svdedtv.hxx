@@ -323,10 +323,8 @@ public:
     // Subsequently mark the new group . If the group spawns multiple
     // pages a group is created per page.
     // All groups created are subsequently marked.
-    // Using pUserGrp an own group object can be set.
-    // This is not used immediately, but via Clone copied.
-    // The method creates SdrObjGroup-instancess if NULL is passed,
-    void GroupMarked(const SdrObject* pUserGrp=nullptr);
+    // The method creates SdrObjGroup-instances.
+    void GroupMarked();
 
     // All marked object groups are dissolved (1 level).
     // Now all previously marked member objects are marked.
@@ -348,8 +346,7 @@ public:
     void ConvertMarkedToPolyObj(bool bLineToArea);
 
     // Align all marked objects vertically. Normally the SnapRect of an object is used.
-    // If bBoundRects=sal_True then BoundRects is used instead of SnapRect.
-    void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool bBoundRects=false);
+    void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert);
     bool IsAlignPossible() const;
 
     // move marked objects "up"

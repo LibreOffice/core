@@ -2171,18 +2171,11 @@ size_t SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
     return it - aList.begin();
 }
 
-void SdrHdlList::AddHdl(SdrHdl* pHdl, bool bAtBegin)
+void SdrHdlList::AddHdl(SdrHdl* pHdl)
 {
     if (pHdl!=nullptr)
     {
-        if (bAtBegin)
-        {
-            aList.push_front(pHdl);
-        }
-        else
-        {
-            aList.push_back(pHdl);
-        }
+        aList.push_back(pHdl);
         pHdl->SetHdlList(this);
     }
 }

@@ -132,10 +132,8 @@ public:
 
                     ~XPolyPolygon();
 
-    void            Insert( const XPolygon& rXPoly,
-                            sal_uInt16 nPos = XPOLYPOLY_APPEND );
-    void            Insert( const XPolyPolygon& rXPoly,
-                            sal_uInt16 nPos=XPOLYPOLY_APPEND );
+    void            Insert( const XPolygon& rXPoly );
+    void            Insert( const XPolyPolygon& rXPoly );
     XPolygon        Remove( sal_uInt16 nPos );
     const XPolygon& GetObject( sal_uInt16 nPos ) const;
 

@@ -630,10 +630,10 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew, bool bFireFocus )
     }
 }
 
-void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton, bool bFireFocus )
+void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton )
 {
     // no guard -> is done in next selectChild
-    selectChild(PointToIndex( eButton, mbAngleMode ), bFireFocus);
+    selectChild(PointToIndex( eButton, mbAngleMode ));
 }
 
 void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )

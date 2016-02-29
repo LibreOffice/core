@@ -355,7 +355,7 @@ public:
     SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
 
     // Used when the region passed to BeginDrawLayers needs to be changed
-    void UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
+    void UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg);
     void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
@@ -425,7 +425,7 @@ public:
     const Size& GetGridFine() const { return maGridFin; }
 
     void InvalidateAllWin();
-    void InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix=false);
+    void InvalidateAllWin(const Rectangle& rRect);
 
     /// If the View should not call Invalidate() on the windows, override
     /// the following 2 methods and do something else.

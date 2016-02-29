@@ -614,17 +614,17 @@ void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
     pDlg->GetName(rName);
 }
 
-void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately)
+void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink)
 {
     aCheckNameHdl = rLink;
 
     if(rLink.IsSet())
     {
-        pDlg->SetCheckNameHdl(LINK(this, AbstractSvxObjectNameDialog_Impl, CheckNameHdl), bCheckImmediately);
+        pDlg->SetCheckNameHdl(LINK(this, AbstractSvxObjectNameDialog_Impl, CheckNameHdl));
     }
     else
     {
-        pDlg->SetCheckNameHdl(Link<SvxObjectNameDialog&,bool>(), bCheckImmediately);
+        pDlg->SetCheckNameHdl(Link<SvxObjectNameDialog&,bool>());
     }
 }
 
@@ -933,8 +933,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
 // TabDialog that use functionality of the drawing layer
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            SdrView* pView,
-                                            SdrModel* )
+                                            SdrView* pView )
 {
     VclPtrInstance<SvxTextTabDialog> pDlg( pParent, pAttrSet, pView );
     return new CuiAbstractTabDialog_Impl( pDlg );
@@ -951,10 +950,9 @@ AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog(
 
 AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(vcl::Window* pParent,
                                             const SfxItemSet& rAttr,
-                                            SvxDistributeHorizontal eHor ,
-                                            SvxDistributeVertical eVer)
+                                            SvxDistributeHorizontal eHor)
 {
-    VclPtrInstance<SvxDistributeDialog> pDlg( pParent, rAttr, eHor, eVer);
+    VclPtrInstance<SvxDistributeDialog> pDlg( pParent, rAttr, eHor, SvxDistributeVerticalNone);
     return new AbstractSvxDistributeDialog_Impl( pDlg );
 }
 

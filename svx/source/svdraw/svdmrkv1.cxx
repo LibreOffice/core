@@ -466,33 +466,25 @@ bool SdrMarkView::MarkGluePoints(const Rectangle* pRect, bool bUnmark)
     return bChgd;
 }
 
-bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, SdrSearchOptions nOptions) const
+bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV) const
 {
-    SdrObject* pObj0=rpObj;
     sal_uInt16 nId0=rnId;
     rpObj=nullptr; rpPV=nullptr; rnId=0;
     if (!IsGluePointEditMode()) return false;
-    bool bBack(nOptions & SdrSearchOptions::BACKWARD);
-    bool bNext(nOptions & SdrSearchOptions::NEXT);
     OutputDevice* pOut=mpActualOutDev.get();
     if (pOut==nullptr) pOut=GetFirstOutputDevice();
     if (pOut==nullptr) return false;
     SortMarkedObjects();
     const size_t nMarkCount=GetMarkedObjectCount();
-    size_t nMarkNum=bBack ? 0 : nMarkCount;
-    if (bNext) {
-        nMarkNum=TryToFindMarkedObject(pObj0);
-        if (nMarkNum==SAL_MAX_SIZE) return false;
-        if (!bBack) nMarkNum++;
-    }
-    while (bBack ? nMarkNum<nMarkCount : nMarkNum>0) {
-        if (!bBack) nMarkNum--;
+    size_t nMarkNum=nMarkCount;
+    while (nMarkNum>0) {
+        nMarkNum--;
         const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
         const SdrGluePointList* pGPL=pObj->GetGluePointList();
         if (pGPL!=nullptr) {
-            sal_uInt16 nNum=pGPL->HitTest(rPnt,*pOut,pObj,bBack,bNext,nId0);
+            sal_uInt16 nNum=pGPL->HitTest(rPnt,*pOut,pObj,false/*bBack*/,false/*bNext*/,nId0);
             if (nNum!=SDRGLUEPOINT_NOTFOUND)
             {
                 // #i38892#
@@ -507,8 +499,6 @@ bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16
                 }
             }
         }
-        bNext=false; // HitNextGluePoint only for the first Obj
-        if (bBack) nMarkNum++;
     }
     return false;
 }

@@ -52,7 +52,7 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 
-    const Color&    GetColorValue(const XColorList* pTable = nullptr) const;
+    const Color&    GetColorValue() const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }
 };
 

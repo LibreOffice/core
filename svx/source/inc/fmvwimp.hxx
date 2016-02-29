@@ -183,7 +183,7 @@ protected:
     FmXFormView( FmFormView* _pView );
     virtual ~FmXFormView();
 
-    void    saveMarkList( bool _bSmartUnmark = true );
+    void    saveMarkList();
     void    restoreMarkList( SdrMarkList& _rRestoredMarkList );
     void    stopMarkListWatching();
     void    startMarkListWatching();

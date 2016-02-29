@@ -85,7 +85,7 @@ public:
     // A SdrLayer should be considered the standard Layer. It shall then set the
     // appropriate country-specific name. SetName() sets the "StandardLayer" flag
     // and if necessary returns "Userdefined".
-    void          SetStandardLayer(bool bStd = true);
+    void          SetStandardLayer();
 };
 
 // When Changing the layer data you currently have to set the Modify flag manually

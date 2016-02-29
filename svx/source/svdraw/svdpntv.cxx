@@ -795,7 +795,7 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
     }
 }
 
-void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
+void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg)
 {
     SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
     OSL_ENSURE(pPaintWindow, "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
@@ -806,7 +806,7 @@ void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region&
 
         if(pKnownTarget)
         {
-            vcl::Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
+            vcl::Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, false/*bDisableIntersect*/ );
             pKnownTarget->GetPaintWindow().SetRedrawRegion(aOptimizedRepaintRegion);
             mpPageView->setPreparedPageWindow(pKnownTarget); // already set actually
         }
@@ -911,7 +911,7 @@ void SdrPaintView::InvalidateAllWin()
     }
 }
 
-void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
+void SdrPaintView::InvalidateAllWin(const Rectangle& rRect)
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
@@ -923,16 +923,6 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
             Rectangle aRect(rRect);
-
-            if(bPlus1Pix)
-            {
-                Size aPixSiz(1,1);
-                Size aSiz(rOutDev.PixelToLogic(aPixSiz));
-                aRect.Left  ()-=aSiz.Width();
-                aRect.Top   ()-=aSiz.Height();
-                aRect.Right ()+=aSiz.Width();
-                aRect.Bottom()+=aSiz.Height();
-            }
 
             Point aOrg(rOutDev.GetMapMode().GetOrigin());
             aOrg.X()=-aOrg.X(); aOrg.Y()=-aOrg.Y();
