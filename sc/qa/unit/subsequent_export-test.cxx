@@ -101,6 +101,7 @@ public:
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
+    void testRichTextCellFormat();
     void testFormulaRefSheetNameODS();
 
     void testCellValuesExportODS();
@@ -177,6 +178,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
+    CPPUNIT_TEST(testRichTextCellFormat);
     CPPUNIT_TEST(testFormulaRefSheetNameODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
@@ -1091,6 +1093,43 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
 
     xNewDocSh3->DoClose();
+}
+
+void ScExportTest::testRichTextCellFormat()
+{
+    ScDocShellRef xDocSh = loadDoc("cellformat.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pSheet = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pSheet);
+
+    // make sure the only cell in this doc is assigned some formatting record
+    OUString aCellFormat = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "s");
+    CPPUNIT_ASSERT_MESSAGE("Cell format is missing", !aCellFormat.isEmpty());
+
+    xDocSh->DoClose();
+    //FIXME: this shouldn't be necessary, but for some reason 2nd and every consecutive call
+    //to parseExport() (different stream name within the same doc, of course) doesn't find
+    //the stream anymore. I have neither knowledge nor time to debug it
+    ScDocShellRef xNewDocSh = loadDoc("cellformat.", FORMAT_XLS);
+
+    xmlDocPtr pStyles = XPathHelper::parseExport(&(*xNewDocSh), m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pStyles);
+
+    OString nFormatIdx = OString::number( aCellFormat.toInt32() + 1 );
+    const OString xPath1( "/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx + "]/x:alignment" );
+    // formatting record is set to wrap text
+    assertXPath(pStyles, xPath1, "wrapText", "true");
+
+    // see what font it references
+    const OString xPath2( "/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx +"]" );
+    OUString aFontId = getXPath(pStyles, xPath2, "fontId");
+    OString nFontIdx = OString::number( aFontId.toInt32() + 1 );
+
+    // that font should be bold
+    const OString xPath3("/x:styleSheet/x:fonts/x:font[" + nFontIdx + "]/x:b");
+    assertXPath(pStyles, xPath3, "val", "true");
+
 }
 
 void ScExportTest::testFormulaRefSheetNameODS()
