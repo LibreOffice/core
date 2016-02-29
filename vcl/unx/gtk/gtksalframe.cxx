@@ -1234,10 +1234,12 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", const_cast<char *>(LIBO_VERSION_DOTTED));
 
     // force wm class hint
-    m_nExtStyle = ~0;
-    if (m_pParent)
-        m_sWMClass = m_pParent->m_sWMClass;
-    SetExtendedFrameStyle( 0 );
+    if (!isChild())
+    {
+        if (m_pParent)
+            m_sWMClass = m_pParent->m_sWMClass;
+        updateWMClass();
+    }
 
     if( m_pParent && m_pParent->m_pWindow && ! isChild() )
         gtk_window_set_screen( GTK_WINDOW(m_pWindow), gtk_window_get_screen( GTK_WINDOW(m_pParent->m_pWindow) ) );
