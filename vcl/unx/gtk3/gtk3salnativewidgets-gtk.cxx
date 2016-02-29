@@ -2313,7 +2313,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
         return;
 
     style_loaded = true;
-    gtk_init(nullptr, nullptr);
     /* Load the GtkStyleContexts, it might be a bit slow, but usually,
      * gtk apps create a lot of widgets at startup, so, it shouldn't be
      * too slow */
