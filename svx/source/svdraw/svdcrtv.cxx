@@ -357,7 +357,8 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
     {
         nAktInvent=nInvent;
         nAktIdent=nIdent;
-        SdrObject* pObj = SdrObjFactory::MakeNewObject(nInvent,nIdent,nullptr);
+        SdrObject * pObj = (nIdent == OBJ_NONE) ? nullptr :
+            SdrObjFactory::MakeNewObject(nInvent, nIdent, nullptr);
 
         if(pObj)
         {
