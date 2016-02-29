@@ -5,4 +5,8 @@
   <block-list:block block-list:abbreviated-name="КД-үүд"/>
   <block-list:block block-list:abbreviated-name="КД-ний"/>
   <block-list:block block-list:abbreviated-name="ПК-ууд"/>
+  <block-list:block block-list:abbreviated-name="KHz"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
 </block-list:block-list>

@@ -3,4 +3,8 @@
   <block-list:block block-list:abbreviated-name="ЕУнет"/>
   <block-list:block block-list:abbreviated-name="ИПв4"/>
   <block-list:block block-list:abbreviated-name="ФБиХ"/>
+  <block-list:block block-list:abbreviated-name="KHz"/>
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
 </block-list:block-list>

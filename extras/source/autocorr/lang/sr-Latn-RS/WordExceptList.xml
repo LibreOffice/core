@@ -6,4 +6,5 @@
   <block-list:block block-list:abbreviated-name="IPv4"/>
   <block-list:block block-list:abbreviated-name="KHz"/>
   <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
 </block-list:block-list>

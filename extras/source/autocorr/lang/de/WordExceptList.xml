@@ -20,4 +20,8 @@
   <block-list:block block-list:abbreviated-name="UStG"/>
   <block-list:block block-list:abbreviated-name="VSt"/>
   <block-list:block block-list:abbreviated-name="WGs"/>
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="KHz"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
 </block-list:block-list>
