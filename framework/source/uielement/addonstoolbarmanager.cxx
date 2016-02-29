@@ -56,6 +56,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 //  namespaces
 
@@ -256,6 +257,10 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 bAppendSeparator = false;
 
                 m_pToolBar->InsertItem( nId, aTitle );
+
+                OUString aShortcut(vcl::CommandInfoProvider::Instance().GetCommandShortcut(aURL, m_xFrame));
+                if (!aShortcut.isEmpty())
+                    m_pToolBar->SetQuickHelpText(nId, aTitle + " (" + aShortcut + ")");
 
                 // don't setup images yet, AddonsToolbarWrapper::populateImages does that.
 
