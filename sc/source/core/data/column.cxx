@@ -2843,7 +2843,7 @@ public:
             // Non-default number format is set.
             pCell->SetNeedNumberFormat(false);
         else if (pCell->NeedsNumberFormat())
-            pCell->SetDirtyVar();
+            pCell->SetDirty( true );
 
         if (pCell->GetMatrixFlag())
             pCell->SetDirtyVar();
