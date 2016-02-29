@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_206fd093",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-29T07:11:05Z",
+      "side": 1,
+      "message": "Oh, annoying old gerrit version. The newer one would linkify tat guy to this change: [1].\n\n* [1] https://gerrit.libreoffice.org/16677",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "4fb2f629c2adb5233fe3c586e3bf343fe8be6de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
