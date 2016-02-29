@@ -260,6 +260,11 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
+                OUString aShortcut;
+                GetPropsForCommand(aURL); // Need to call this method to identify the Module so that we can use RetrieveShortcut()
+                if (RetrieveShortcut(aURL, aShortcut))
+                    m_pToolBar->SetQuickHelpText( nId, aTitle + " (" + aShortcut + ")" );
+
                 // don't setup images yet, AddonsToolbarWrapper::populateImages does that.
 
                 // Create TbRuntimeItemData to hold additional information we will need in the future
