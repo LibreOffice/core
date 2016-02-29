@@ -43,7 +43,7 @@ public:
     bool IsNewDoc() const override;
     void SetNewDoc(bool b) override;
     void SetUpdateExpFieldStat(bool b) override;
-    void SetLoaded(bool b) override;
+    void SetLoaded() override;
 
 private:
     SwDoc& m_rDoc;

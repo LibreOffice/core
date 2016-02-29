@@ -312,7 +312,7 @@ public:
                     SwTextFormatter::NewFieldPortion() sets things up properly.
         @return     the generated text (suitable for display)
       */
-    OUString            ExpandField(bool const bCached, ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
+    OUString            ExpandField(bool const bCached) const;
 
     /// @return name or content.
     virtual OUString    GetFieldName() const;

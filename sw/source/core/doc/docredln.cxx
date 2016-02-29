@@ -291,7 +291,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
     return bChg;
 }
 
-bool SwRedlineTable::Insert( SwRangeRedline* p, bool bIns )
+bool SwRedlineTable::Insert( SwRangeRedline* p )
 {
     if( p->HasValidRange() )
     {
@@ -300,14 +300,10 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, bool bIns )
         p->CallDisplayFunc(0, nP);
         return rv.second;
     }
-    if( bIns )
-        return InsertWithValidRanges( p );
-
-    OSL_ENSURE( false, "Redline: wrong range" );
-    return false;
+    return InsertWithValidRanges( p );
 }
 
-bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
+bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP )
 {
     if( p->HasValidRange() )
     {
@@ -316,11 +312,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
         p->CallDisplayFunc(0, rP);
         return rv.second;
     }
-    if( bIns )
-        return InsertWithValidRanges( p, &rP );
-
-    OSL_ENSURE( false, "Redline: wrong range" );
-    return false;
+    return InsertWithValidRanges( p, &rP );
 }
 
 bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos )
@@ -512,20 +504,17 @@ sal_uInt16 SwRedlineTable::FindPrevOfSeqNo( sal_uInt16 nSttPos ) const
 
 /// Find the next or preceding Redline with the same seq.no.
 /// We can limit the search using look ahead (0 searches the whole array).
-sal_uInt16 SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
-                                    sal_uInt16 nLookahead ) const
+sal_uInt16 SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const
 {
+    sal_uInt16 nLookahead = 20;
     sal_uInt16 nRet = USHRT_MAX;
     if( nSeqNo && nSttPos < size() )
     {
         size_t nEnd = size();
-        if( nLookahead )
+        const size_t nTmp = static_cast<size_t>(nSttPos)+ static_cast<size_t>(nLookahead);
+        if (nTmp < nEnd)
         {
-            const size_t nTmp = static_cast<size_t>(nSttPos)+ static_cast<size_t>(nLookahead);
-            if (nTmp < nEnd)
-            {
-                nEnd = nTmp;
-            }
+            nEnd = nTmp;
         }
 
         for( ; nSttPos < nEnd; ++nSttPos )
@@ -538,14 +527,14 @@ sal_uInt16 SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     return nRet;
 }
 
-sal_uInt16 SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
-                                    sal_uInt16 nLookahead ) const
+sal_uInt16 SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const
 {
+    sal_uInt16 nLookahead = 20;
     sal_uInt16 nRet = USHRT_MAX;
     if( nSeqNo && nSttPos < size() )
     {
         size_t nEnd = 0;
-        if( nLookahead && nSttPos > nLookahead )
+        if( nSttPos > nLookahead )
             nEnd = nSttPos - nLookahead;
 
         ++nSttPos;
@@ -1581,10 +1570,10 @@ const SwRedlineData & SwRangeRedline::GetRedlineData(sal_uInt16 nPos) const
     return *pCur;
 }
 
-OUString SwRangeRedline::GetDescr(sal_uInt16 nPos)
+OUString SwRangeRedline::GetDescr()
 {
     // get description of redline data (e.g.: "insert $1")
-    OUString aResult = GetRedlineData(nPos).GetDescr();
+    OUString aResult = GetRedlineData().GetDescr();
 
     SwPaM * pPaM = nullptr;
     bool bDeletePaM = false;

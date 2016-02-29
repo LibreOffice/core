@@ -118,24 +118,9 @@ SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nResId, const OUString& rName)
 }
 
 /// delete field type
-void SwEditShell::RemoveFieldType(size_t nField, sal_uInt16 nResId)
+void SwEditShell::RemoveFieldType(size_t nField)
 {
-    if( USHRT_MAX == nResId )
-    {
-        GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nField);
-        return;
-    }
-
-    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-    size_t nIdx = 0;
-    const SwFieldTypes::size_type nSize = pFieldTypes->size();
-    for( SwFieldTypes::size_type i = 0; i < nSize; ++i )
-        // Gleiche ResId -> Index erhoehen
-        if( (*pFieldTypes)[i]->Which() == nResId && nIdx++ == nField )
-        {
-            GetDoc()->getIDocumentFieldsAccess().RemoveFieldType( i );
-            return;
-        }
+    GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nField);
 }
 
 /// delete field type based on its name

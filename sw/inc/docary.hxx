@@ -197,8 +197,8 @@ public:
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline* const>(p)) != maVector.end(); }
     sal_uInt16 GetPos(const SwRangeRedline* p) const;
 
-    bool Insert( SwRangeRedline* p, bool bIns = true );
-    bool Insert( SwRangeRedline* p, sal_uInt16& rInsPos, bool bIns = true );
+    bool Insert( SwRangeRedline* p );
+    bool Insert( SwRangeRedline* p, sal_uInt16& rInsPos );
     bool InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos = nullptr );
 
     void Remove( sal_uInt16 nPos );
@@ -213,10 +213,8 @@ public:
     /** Search next or previous Redline with the same Seq. No.
        Search can be restricted via Lookahead.
        Using 0 makes search the whole array. */
-    sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
-                            sal_uInt16 nLookahead = 20 ) const;
-    sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
-                            sal_uInt16 nLookahead = 20 ) const;
+    sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const;
+    sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const;
 
     /**
      Find the redline at the given position.

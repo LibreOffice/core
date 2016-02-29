@@ -106,19 +106,19 @@ class AbstractFieldInputDlg : public VclAbstractTerminatedDialog
 public:
     //from class SalFrame
     virtual void         SetWindowState( const OString & rStr ) = 0;
-    virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
+    virtual OString      GetWindowState() const = 0;
     virtual void         EndDialog(long ) override = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog
 {
 public:
-    virtual OUString        GetFontName() = 0;
+    virtual OUString    GetFontName() = 0;
     virtual bool        IsEndNote() = 0;
-    virtual OUString        GetStr() = 0;
+    virtual OUString    GetStr() = 0;
     //from class Window
-    virtual void    SetHelpId( const OString& sHelpId ) = 0;
-    virtual void    SetText( const OUString& rStr ) = 0;
+    virtual void        SetHelpId( const OString& sHelpId ) = 0;
+    virtual void        SetText( const OUString& rStr ) = 0;
 };
 
 class AbstractInsTableDlg : public VclAbstractDialog
@@ -241,8 +241,8 @@ public:
 class AbstractDropDownFieldDialog : public VclAbstractDialog
 {
 public:
-     virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
-     virtual void         SetWindowState( const OString & rStr ) =0;//this method inherit from SystemWindow
+     virtual OString GetWindowState() const = 0; //this method inherit from SystemWindow
+     virtual void    SetWindowState( const OString & rStr ) = 0; //this method inherit from SystemWindow
 };
 
 class AbstractSwLabDlg  : public SfxAbstractTabDialog
@@ -269,7 +269,7 @@ public:
 class AbstractSwFieldDlg : public SfxAbstractTabDialog
 {
 public:
-    virtual void                Start( bool bShow = true ) = 0;  //this method from sfxtabdialog
+    virtual void                Start() = 0;  //this method from sfxtabdialog
     virtual void                Initialize(SfxChildWinInfo *pInfo) = 0;
     virtual void                ReInitDlg() = 0;
     virtual void                ActivateDatabasePage() = 0;
@@ -442,14 +442,12 @@ public:
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        vcl::Window *pParent,
-                                                       SfxChildWinInfo* pInfo,
-                                                       bool bNew=true) = 0;
+                                                       SfxChildWinInfo* pInfo) = 0;
     virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        vcl::Window *pParent,
-                                                       SfxChildWinInfo* pInfo,
-                                                       bool bNew=true) = 0;
+                                                       SfxChildWinInfo* pInfo) = 0;
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg(
                                                 vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) = 0;
 

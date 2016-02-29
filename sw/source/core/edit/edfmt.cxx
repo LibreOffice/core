@@ -52,13 +52,8 @@ SwCharFormat* SwEditShell::GetCurCharFormat() const
     return pFormat;
 }
 
-void SwEditShell::FillByEx(SwCharFormat* pCharFormat, bool bReset)
+void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
 {
-    if ( bReset )
-    {
-        pCharFormat->ResetAllFormatAttr();
-    }
-
     SwPaM* pPam = GetCursor();
     const SwContentNode* pCNd = pPam->GetContentNode();
     if( pCNd->IsTextNode() )
@@ -120,11 +115,9 @@ OUString SwEditShell::GetUniqueTableName() const
     return GetDoc()->GetUniqueTableName();
 }
 
-SwCharFormat* SwEditShell::MakeCharFormat( const OUString& rName,
-                                    SwCharFormat* pDerivedFrom )
+SwCharFormat* SwEditShell::MakeCharFormat( const OUString& rName )
 {
-    if( !pDerivedFrom )
-        pDerivedFrom = GetDoc()->GetDfltCharFormat();
+    SwCharFormat* pDerivedFrom = GetDoc()->GetDfltCharFormat();
 
     return GetDoc()->MakeCharFormat( rName, pDerivedFrom );
 }
@@ -150,9 +143,9 @@ bool SwEditShell::IsUsed( const SwModify& rModify ) const
     return mpDoc->IsUsed( rModify );
 }
 
-const SwFlyFrameFormat* SwEditShell::FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp ) const
+const SwFlyFrameFormat* SwEditShell::FindFlyByName( const OUString& rName ) const
 {
-    return mpDoc->FindFlyByName(rName, nNdTyp);
+    return mpDoc->FindFlyByName(rName);
 }
 
 SwCharFormat* SwEditShell::FindCharFormatByName( const OUString& rName ) const

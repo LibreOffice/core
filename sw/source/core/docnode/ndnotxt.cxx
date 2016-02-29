@@ -260,7 +260,7 @@ Graphic SwNoTextNode::GetGraphic() const
 }
 
 // #i73249#
-void SwNoTextNode::SetTitle( const OUString& rTitle, bool bBroadcast )
+void SwNoTextNode::SetTitle( const OUString& rTitle )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute
     SwFlyFrameFormat* pFlyFormat = dynamic_cast<SwFlyFrameFormat*>(GetFlyFormat());
@@ -270,7 +270,7 @@ void SwNoTextNode::SetTitle( const OUString& rTitle, bool bBroadcast )
         return;
     }
 
-    pFlyFormat->SetObjTitle( rTitle, bBroadcast );
+    pFlyFormat->SetObjTitle( rTitle );
 }
 
 OUString SwNoTextNode::GetTitle() const
@@ -285,7 +285,7 @@ OUString SwNoTextNode::GetTitle() const
     return pFlyFormat->GetObjTitle();
 }
 
-void SwNoTextNode::SetDescription( const OUString& rDescription, bool bBroadcast )
+void SwNoTextNode::SetDescription( const OUString& rDescription )
 {
     SwFlyFrameFormat* pFlyFormat = dynamic_cast<SwFlyFrameFormat*>(GetFlyFormat());
     OSL_ENSURE( pFlyFormat, "<SwNoTextNode::SetDescription(..)> - missing <SwFlyFrameFormat> instance" );
@@ -294,7 +294,7 @@ void SwNoTextNode::SetDescription( const OUString& rDescription, bool bBroadcast
         return;
     }
 
-    pFlyFormat->SetObjDescription( rDescription, bBroadcast );
+    pFlyFormat->SetObjDescription( rDescription );
 }
 
 OUString SwNoTextNode::GetDescription() const

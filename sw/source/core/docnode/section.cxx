@@ -581,17 +581,13 @@ OUString SwSection::GetLinkFileName() const
     return m_Data.GetLinkFileName();
 }
 
-void SwSection::SetLinkFileName(const OUString& rNew, OUString const*const pPassWd)
+void SwSection::SetLinkFileName(const OUString& rNew)
 {
     if (m_RefLink.Is())
     {
         m_RefLink->SetLinkSourceName( rNew );
     }
     m_Data.SetLinkFileName(rNew);
-    if( pPassWd )
-    {
-        SetLinkFilePassword( *pPassWd );
-    }
 }
 
 // If it was a Linked Section, we need to make all Child Links visible

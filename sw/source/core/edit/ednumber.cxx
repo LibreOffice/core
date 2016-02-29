@@ -775,9 +775,9 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     EndAllAction();
 }
 
-OUString SwEditShell::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) const
+OUString SwEditShell::GetUniqueNumRuleName( const OUString* pChkStr ) const
 {
-    return GetDoc()->GetUniqueNumRuleName( pChkStr, bAutoNum );
+    return GetDoc()->GetUniqueNumRuleName( pChkStr );
 }
 
 void SwEditShell::ChgNumRuleFormats( const SwNumRule& rRule )
@@ -821,11 +821,11 @@ bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
     return pTextNd && pTextNd->IsListRestart();
 }
 
-void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
+void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
 {
     StartAllAction();
 
-    SwPaM* pCursor = pPaM ? pPaM : GetCursor();
+    SwPaM* pCursor = GetCursor();
     if( pCursor->IsMultiSelection() )         // multiple selection ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );

@@ -327,7 +327,7 @@ public:
     bool StartsWithTable();
 
     SwPaM* GetCursor( bool bMakeTableCursor = true ) const;
-    inline SwCursor* GetSwCursor( bool bMakeTableCursor = true ) const;
+    inline SwCursor* GetSwCursor() const;
     // return only the current cursor
           SwShellCursor* _GetCursor()                       { return m_pCurrentCursor; }
     const SwShellCursor* _GetCursor() const                 { return m_pCurrentCursor; }
@@ -573,9 +573,9 @@ public:
     OUString GetText() const;
 
     // Check of SPoint or Mark of current cursor are placed within a table.
-    inline const SwTableNode* IsCursorInTable( bool bIsPtInTable = true ) const;
+    inline const SwTableNode* IsCursorInTable() const;
 
-    inline Point& GetCursorDocPos( bool bPoint = true ) const;
+    inline Point& GetCursorDocPos() const;
     inline bool IsCursorPtAtEnd() const;
 
     inline const  SwPaM* GetTableCrs() const;
@@ -807,7 +807,7 @@ public:
     // is cursor or the point in/over a vertical formatted text?
     bool IsInVerticalText( const Point* pPt = nullptr ) const;
     // is cursor or the point in/over a right to left formatted text?
-    bool IsInRightToLeftText( const Point* pPt = nullptr ) const;
+    bool IsInRightToLeftText() const;
 
     static void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     bool   bColumnChange();
@@ -852,9 +852,9 @@ inline SwMoveFnCollection* SwCursorShell::MakeFindRange(
     return m_pCurrentCursor->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
 }
 
-inline SwCursor* SwCursorShell::GetSwCursor( bool bMakeTableCursor ) const
+inline SwCursor* SwCursorShell::GetSwCursor() const
 {
-    return static_cast<SwCursor*>(GetCursor( bMakeTableCursor ));
+    return static_cast<SwCursor*>(GetCursor());
 }
 
 inline SwPaM* SwCursorShell::GetStackCursor() const { return m_pCursorStack; }
@@ -879,9 +879,9 @@ inline bool SwCursorShell::IsSelOnePara() const
            m_pCurrentCursor->GetPoint()->nNode == m_pCurrentCursor->GetMark()->nNode;
 }
 
-inline const SwTableNode* SwCursorShell::IsCursorInTable( bool bIsPtInTable ) const
+inline const SwTableNode* SwCursorShell::IsCursorInTable() const
 {
-    return m_pCurrentCursor->GetNode( bIsPtInTable ).FindTableNode();
+    return m_pCurrentCursor->GetNode().FindTableNode();
 }
 
 inline bool SwCursorShell::IsCursorPtAtEnd() const
@@ -889,9 +889,9 @@ inline bool SwCursorShell::IsCursorPtAtEnd() const
     return m_pCurrentCursor->End() == m_pCurrentCursor->GetPoint();
 }
 
-inline Point& SwCursorShell::GetCursorDocPos( bool bPoint ) const
+inline Point& SwCursorShell::GetCursorDocPos() const
 {
-    return bPoint ? m_pCurrentCursor->GetPtPos() : m_pCurrentCursor->GetMkPos();
+    return m_pCurrentCursor->GetPtPos();
 }
 
 inline const SwPaM* SwCursorShell::GetTableCrs() const

@@ -156,8 +156,8 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
 {
     DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog)
-    virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const override; //this method inherit from SystemWindow
-    virtual void         SetWindowState( const OString& rStr ) override;//this method inherit from SystemWindow
+    virtual OString GetWindowState() const override; //this method inherit from SystemWindow
+    virtual void    SetWindowState( const OString& rStr ) override; //this method inherit from SystemWindow
 };
 
 class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
@@ -200,7 +200,7 @@ class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
         //From class Window.
     virtual void                SetText( const OUString& rStr ) override;
     virtual OUString            GetText() const override;
-    virtual void                Start( bool bShow = true ) override;  //this method from SfxTabDialog
+    virtual void                Start() override;  //this method from SfxTabDialog
     virtual void                ShowReferencePage() override;
     virtual void                Initialize(SfxChildWinInfo *pInfo) override;
     virtual void                ReInitDlg() override;
@@ -236,9 +236,9 @@ class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
 {
     DECL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl,SwFieldInputDlg)
     //from class SalFrame
-    virtual void         SetWindowState( const OString & rStr ) override ;
-    virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const override ;
-    virtual void EndDialog(long) override;
+    virtual void     SetWindowState( const OString & rStr ) override;
+    virtual OString  GetWindowState() const override;
+    virtual void     EndDialog(long) override;
 };
 
 class SwInsFootNoteDlg;
@@ -480,14 +480,12 @@ public:
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        vcl::Window *pParent,
-                                                       SfxChildWinInfo* pInfo,
-                                                       bool bNew=true) override;
+                                                       SfxChildWinInfo* pInfo) override;
     virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        vcl::Window *pParent,
-                                                       SfxChildWinInfo* pInfo,
-                                                       bool bNew=true) override;
+                                                       SfxChildWinInfo* pInfo) override;
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg(
                                                 vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) override;
 

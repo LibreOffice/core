@@ -74,9 +74,7 @@ protected:
     void        UpdIndex( sal_uInt16 );         ///< recalculate indices
 
     // fill all blocks
-    // the short parameter specifies in percent, how full the blocks should be
-    // made
-    sal_uInt16 Compress( short = COMPRESSLVL );
+    sal_uInt16 Compress();
 
 public:
     BigPtrArray();

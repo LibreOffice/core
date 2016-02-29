@@ -1124,12 +1124,11 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
     return aRet;
 }
 
-SwRect SwContentNode::FindPageFrameRect( const bool bPrtArea, const Point* pPoint,
-                                    const bool bCalcFrame ) const
+SwRect SwContentNode::FindPageFrameRect( const bool bPrtArea, const Point* pPoint ) const
 {
     SwRect aRet;
     SwFrame* pFrame = ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
-                                            FRM_CNTNT, pPoint, nullptr, bCalcFrame );
+                                            FRM_CNTNT, pPoint );
     if( pFrame && nullptr != ( pFrame = pFrame->FindPageFrame() ))
         aRet = bPrtArea ? pFrame->Prt() : pFrame->Frame();
     return aRet;
@@ -1658,17 +1657,13 @@ sal_uInt16 SwContentNode::ResetAllAttr()
     return aNew.Count();
 }
 
-bool SwContentNode::GetAttr( SfxItemSet& rSet, bool bInParent ) const
+bool SwContentNode::GetAttr( SfxItemSet& rSet ) const
 {
     if( rSet.Count() )
         rSet.ClearItem();
 
     const SwAttrSet& rAttrSet = GetSwAttrSet();
-    if( bInParent )
-        return rSet.Set( rAttrSet );
-
-    rSet.Put( rAttrSet );
-    return rSet.Count() != 0;
+    return rSet.Set( rAttrSet );
 }
 
 sal_uInt16 SwContentNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds )

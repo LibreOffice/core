@@ -555,16 +555,14 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
  * Changing this method very likely requires changing of GetScalingOfSelectedText
  */
 void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
-                               sal_uLong& rAbsMin, OutputDevice* pOut ) const
+                               sal_uLong& rAbsMin ) const
 {
     SwViewShell const * pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    OutputDevice* pOut = nullptr;
+    if( pSh )
+        pOut = pSh->GetWin();
     if( !pOut )
-    {
-        if( pSh )
-            pOut = pSh->GetWin();
-        if( !pOut )
-            pOut = Application::GetDefaultDevice();
-    }
+        pOut = Application::GetDefaultDevice();
 
     MapMode aOldMap( pOut->GetMapMode() );
     pOut->SetMapMode( MapMode( MAP_TWIP ) );

@@ -715,10 +715,9 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 
 // fill Listbox with column names of a database
 void SwDBManager::GetColumnNames(ListBox* pListBox,
-                             const OUString& rDBName, const OUString& rTableName, bool bAppend)
+                             const OUString& rDBName, const OUString& rTableName)
 {
-    if (!bAppend)
-        pListBox->Clear();
+    pListBox->Clear();
     SwDBData aData;
     aData.sDataSource = rDBName;
     aData.sCommand = rTableName;
@@ -733,7 +732,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
         xConnection = RegisterConnection( sDBName );
     }
 
-    GetColumnNames(pListBox, xConnection, rTableName, bAppend);
+    GetColumnNames(pListBox, xConnection, rTableName);
 }
 
 void SwDBManager::GetColumnNames(ListBox* pListBox,
@@ -2250,7 +2249,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
 }
 
 bool SwDBManager::ToNextRecord(
-    const OUString& rDataSource, const OUString& rCommand, sal_Int32 /*nCommandType*/)
+    const OUString& rDataSource, const OUString& rCommand)
 {
     SwDSParam* pFound = nullptr;
     if(pImpl->pMergeData &&
@@ -2370,7 +2369,7 @@ bool SwDBManager::ToRecordId(sal_Int32 nSet)
 }
 
 bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
-            sal_Int32 nCommandType, bool bCreate)
+            sal_Int32 nCommandType)
 {
     SwDBData aData;
     aData.sDataSource = rDataSource;
@@ -2385,11 +2384,6 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
     uno::Reference< sdbc::XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
-    else if(bCreate)
-    {
-        OUString sDataSource(rDataSource);
-        pFound->xConnection = RegisterConnection( sDataSource );
-    }
     if(pFound->xConnection.is())
     {
         try

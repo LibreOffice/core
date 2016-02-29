@@ -214,8 +214,7 @@ bool SwEditShell::IsTextToTableAvailable() const
 
 void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
                                   SwDDEFieldType* pDDEType,
-                                  sal_uInt16 nRows, sal_uInt16 nCols,
-                                  sal_Int16 eAdj )
+                                  sal_uInt16 nRows, sal_uInt16 nCols )
 {
     SwPosition* pPos = GetCursor()->GetPoint();
 
@@ -231,7 +230,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
     const SwInsertTableOptions aInsTableOpts( rInsTableOpts.mnInsMode | tabopts::DEFAULT_BORDER,
                                             rInsTableOpts.mnRowsToRepeat );
     SwTable* pTable = const_cast<SwTable*>(GetDoc()->InsertTable( aInsTableOpts, *pPos,
-                                                     nRows, nCols, eAdj ));
+                                                     nRows, nCols, css::text::HoriOrientation::FULL ));
 
     SwTableNode* pTableNode = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[ 0 ]->
                                                 GetSttNd()->FindTableNode());

@@ -255,9 +255,9 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     EndAllAction();
 }
 
-void SwEditShell::SetNewDoc(bool bNew)
+void SwEditShell::SetNewDoc()
 {
-    GetDoc()->getIDocumentState().SetNewDoc(bNew);
+    GetDoc()->getIDocumentState().SetNewDoc(true);
 }
 
 bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )

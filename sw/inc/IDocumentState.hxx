@@ -47,7 +47,7 @@ public:
 
     virtual void SetUpdateExpFieldStat(bool b) = 0;
 
-    virtual void SetLoaded(bool b = true) = 0;
+    virtual void SetLoaded() = 0;
 
 protected:
     virtual ~IDocumentState() {};

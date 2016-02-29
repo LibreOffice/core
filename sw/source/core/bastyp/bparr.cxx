@@ -397,7 +397,7 @@ void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
 }
 
 /** Compress the array */
-sal_uInt16 BigPtrArray::Compress( short nMax )
+sal_uInt16 BigPtrArray::Compress()
 {
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
@@ -412,7 +412,7 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
     sal_uInt16 nFirstChgPos = USHRT_MAX; // at which position was the 1st change?
 
     // convert fill percentage into number of remaining elements
-    nMax = MAXENTRY - (long) MAXENTRY * nMax / 100;
+    short nMax = MAXENTRY - (long) MAXENTRY * COMPRESSLVL / 100;
 
     for( sal_uInt16 cur = 0; cur < nBlock; ++cur )
     {

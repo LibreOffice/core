@@ -396,23 +396,13 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
     return nResult;
 }
 
-//TODO: provide documentation
-/** ???
-
-  @param rVal ???
-  @param bRound In previous times <bRound> had a default value of <true>.
-                There it should be only changed when calculating table cells,
-                so that no rounding errors would occur while composing a formula.
-                Now this parameter is ignored.
-  @return ???
-*/
-OUString SwCalc::GetStrResult( const SwSbxValue& rVal, bool bRound )
+OUString SwCalc::GetStrResult( const SwSbxValue& rVal )
 {
     if( !rVal.IsDouble() )
     {
         return rVal.GetOUString();
     }
-    return GetStrResult( rVal.GetDouble(), bRound );
+    return GetStrResult( rVal.GetDouble() );
 }
 
 OUString SwCalc::GetStrResult( double nValue, bool )
@@ -1534,11 +1524,10 @@ namespace
 }
 
 bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
-                         double& rVal, const LocaleDataWrapper* const pLclData )
+                         double& rVal )
 {
     const SvtSysLocale aSysLocale;
-    return lcl_Str2Double( rCommand, rCommandPos, rVal,
-            pLclData ? pLclData : aSysLocale.GetLocaleDataPtr() );
+    return lcl_Str2Double( rCommand, rCommandPos, rVal, aSysLocale.GetLocaleDataPtr() );
 }
 
 bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,

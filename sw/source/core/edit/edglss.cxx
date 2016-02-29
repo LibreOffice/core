@@ -150,7 +150,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 }
 
 /// copy all selections to the doc
-bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
+bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc )
 {
     OSL_ENSURE( pInsDoc, "no Ins.Document"  );
 
@@ -160,13 +160,6 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     SwContentNode *const pContentNode = aIdx.GetNode().GetContentNode();
     SwPosition aPos( aIdx,
         SwIndex(pContentNode, (pContentNode) ? pContentNode->Len() : 0));
-
-    // Should the index be reset to start?
-    if( pSttNd )
-    {
-        *pSttNd = aPos.nNode;
-        --(*pSttNd);
-    }
 
     bool bRet = false;
     SET_CURR_SHELL( this );
@@ -249,10 +242,6 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
     if( !pInsDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
         pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
-
-    // set the saved Node position back to the correct Node
-    if( bRet && pSttNd )
-        ++(*pSttNd);
 
     return bRet;
 }

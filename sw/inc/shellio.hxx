@@ -374,7 +374,7 @@ protected:
     bool CopyNextPam( SwPaM ** );
 
     void PutNumFormatFontsInAttrPool();
-    void PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL = true );
+    void PutEditEngFontsInAttrPool();
 
     virtual sal_uLong WriteStream() = 0;
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }

@@ -204,8 +204,7 @@ class SwPostItMgr: public SfxListener
         void LayoutPostIts();
         bool CalcRects();
 
-        void MakeVisible( const sw::sidebarwindows::SwSidebarWin* pPostIt,
-                          long aPage = -1);
+        void MakeVisible( const sw::sidebarwindows::SwSidebarWin* pPostIt);
 
         bool ShowScrollbar(const unsigned long aPage) const;
         bool HasNotes() const ;

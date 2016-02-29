@@ -307,9 +307,9 @@ sal_uInt16 SwFEShell::GetPhyPageNum()
     return 0;
 }
 
-sal_uInt16 SwFEShell::GetVirtPageNum( const bool bCalcFrame )
+sal_uInt16 SwFEShell::GetVirtPageNum()
 {
-    SwFrame *pFrame = GetCurrFrame( bCalcFrame );
+    SwFrame *pFrame = GetCurrFrame();
     if ( pFrame )
         return pFrame->GetVirtPageNum();
     return 0;
@@ -641,7 +641,7 @@ sal_uInt16 SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
     return _GetCurColNum( GetCurrFrame(), pPara );
 }
 
-sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
+sal_uInt16 SwFEShell::GetCurOutColNum() const
 {
     sal_uInt16 nRet = 0;
     SwFrame* pFrame = GetCurrFrame();
@@ -652,7 +652,7 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
                                : static_cast<SwFrame*>(pFrame->FindSctFrame());
         OSL_ENSURE( pFrame, "No Tab, no Sect" );
         if( pFrame )
-            nRet = _GetCurColNum( pFrame, pPara );
+            nRet = _GetCurColNum( pFrame, nullptr );
     }
     return nRet;
 }

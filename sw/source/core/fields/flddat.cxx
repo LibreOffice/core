@@ -133,29 +133,24 @@ double SwDateTimeField::GetValue() const
         return GetDateTime(GetDoc(), DateTime( DateTime::SYSTEM ));
 }
 
-Date SwDateTimeField::GetDate(bool bUseOffset) const
+Date SwDateTimeField::GetDate() const
 {
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
 
     long nVal = static_cast<long>( GetValue() );
 
-    if (bUseOffset && nOffset)
-        nVal += nOffset / 60 / 24;
-
     Date aDate = *pNullDate + nVal;
 
     return aDate;
 }
 
-tools::Time SwDateTimeField::GetTime(bool bUseOffset) const
+tools::Time SwDateTimeField::GetTime() const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);
     DateTime aDT((long)fDummy, 0);
     aDT += fFract;
-    if (bUseOffset)
-         aDT += tools::Time(0, nOffset);
     return static_cast<tools::Time>(aDT);
 }
 

@@ -233,8 +233,7 @@ public:
     virtual sal_Int32 Len() const override;
 
     /// Is in itratr.
-    void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs,
-                        OutputDevice* pOut = nullptr ) const;
+    void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs ) const;
 
     /// overriding to handle change of certain paragraph attributes
     virtual bool SetAttr( const SfxPoolItem& ) override;
@@ -388,8 +387,7 @@ public:
      */
     ::std::vector<SwTextAttr *> GetTextAttrsAt(
         sal_Int32 const nIndex,
-        RES_TXTATR const nWhich,
-        enum GetTextAttrMode const eMode = DEFAULT ) const;
+        RES_TXTATR const nWhich ) const;
 
     /** get the text attribute at position nIndex which owns
         the dummy character CH_TXTATR_* at that position, if one exists.
@@ -697,8 +695,7 @@ public:
 
     OUString GetRedlineText( sal_Int32 nIdx = 0,
                           sal_Int32 nLen = SAL_MAX_INT32,
-                          bool bExpandFields = false,
-                          bool bWithNum = false ) const;
+                          bool bExpandFields = false ) const;
 
     /** @return actual count of initial chars for initial-function.
        If nWishLen == 0 that of first word. */
@@ -799,7 +796,7 @@ public:
     sal_uInt32 GetParRsid() const;
 
     bool CompareRsid( const SwTextNode &rTextNode, sal_Int32 nStt1, sal_Int32 nStt2,
-            sal_Int32 nEnd1 = 0,  sal_Int32 nEnd2 = 0 ) const;
+            sal_Int32 nEnd1 = 0 ) const;
     bool CompareParRsid( const SwTextNode &rTextNode ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextNode)

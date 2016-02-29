@@ -1632,9 +1632,9 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
     return nRet;
 }
 
-bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
+bool SwDoc::IsInVerticalText( const SwPosition& rPos ) const
 {
-    const short nDir = GetTextDirection( rPos, pPt );
+    const short nDir = GetTextDirection( rPos );
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 

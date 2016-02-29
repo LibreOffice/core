@@ -399,7 +399,7 @@ bool SwField::IsFixed() const
     return bRet;
 }
 
-OUString SwField::ExpandField(bool const bCached, ToxAuthorityField eField) const
+OUString SwField::ExpandField(bool const bCached) const
 {
     if ( m_bUseFieldValueCache )
     {
@@ -408,7 +408,7 @@ OUString SwField::ExpandField(bool const bCached, ToxAuthorityField eField) cons
             if (GetTypeId() == TYP_AUTHORITY)
             {
                 const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
-                m_Cache = pAuthorityField->ConditionalExpand(eField);
+                m_Cache = pAuthorityField->ConditionalExpand(AUTH_FIELD_IDENTIFIER);
             }
             else
                 m_Cache = Expand();

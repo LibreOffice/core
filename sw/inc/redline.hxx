@@ -278,17 +278,15 @@ public:
     bool PopData();
 
     /**
-       Returns textual description of this a redline data element of
+       Returns textual description of a redline data element of
        this redline.
-
-       @param nPos index of the redline data element to describe
 
        The textual description of the selected element contains the
        kind of redline and the possibly shortened text of the redline.
 
        @return textual description of the selected redline data element
      */
-    OUString GetDescr(sal_uInt16 nPos = 0);
+    OUString GetDescr();
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;

@@ -3127,9 +3127,9 @@ bool SwCursorShell::IsInVerticalText( const Point* pPt ) const
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-bool SwCursorShell::IsInRightToLeftText( const Point* pPt ) const
+bool SwCursorShell::IsInRightToLeftText() const
 {
-    const short nDir = GetTextDirection( pPt );
+    const short nDir = GetTextDirection();
     // GetTextDirection uses FRMDIR_VERT_TOP_LEFT to indicate RTL in
     // vertical environment
     return FRMDIR_VERT_TOP_LEFT == nDir || FRMDIR_HORI_RIGHT_TOP == nDir;

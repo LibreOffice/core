@@ -206,7 +206,7 @@ public:
        If table is copied into table, move all cursors away from it.
        Copy and Paste must be in FEShell because of FlyFrames!
        Copy all selections to the document. */
-    bool _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = nullptr );
+    bool _CopySelToDoc( SwDoc* pInsDoc );
 
     long SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
     bool AppendTextNode();
@@ -294,8 +294,8 @@ public:
     sal_uInt16 GetCharFormatCount() const;
     SwCharFormat& GetCharFormat(sal_uInt16 nFormat) const;
     SwCharFormat* GetCurCharFormat() const;
-    void FillByEx(SwCharFormat*, bool bReset = false);
-    SwCharFormat* MakeCharFormat( const OUString& rName, SwCharFormat* pDerivedFrom = nullptr );
+    void FillByEx(SwCharFormat*);
+    SwCharFormat* MakeCharFormat( const OUString& rName );
     SwCharFormat* FindCharFormatByName( const OUString& rName ) const;
 
     /* FormatCollections (new) - Explaining the general naming pattern:
@@ -338,7 +338,7 @@ public:
     void SetTextFormatColl(SwTextFormatColl*, const bool bResetListAttrs = false);
     SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
         SwTextFormatColl *pDerivedFrom = nullptr);
-    void FillByEx(SwTextFormatColl*, bool bReset = false);
+    void FillByEx(SwTextFormatColl*);
     SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const;
 
     /// @return "Auto-Collection" with given Id. If it does not exist create it.
@@ -369,7 +369,7 @@ public:
     SwFieldType* GetFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
     SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
 
-    void RemoveFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX);
+    void RemoveFieldType(size_t nField);
     void RemoveFieldType(sal_uInt16 nResId, const OUString& rName);
 
     void FieldToText( SwFieldType* pType );
@@ -523,13 +523,13 @@ public:
     bool SelectionHasNumber() const;
     bool SelectionHasBullet() const;
 
-    OUString GetUniqueNumRuleName( const OUString* pChkStr = nullptr, bool bAutoNum = true ) const;
+    OUString GetUniqueNumRuleName( const OUString* pChkStr = nullptr ) const;
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
     void SetNumRuleStart( bool bFlag = true, SwPaM* pCursor = nullptr );
     bool IsNumRuleStart( SwPaM* pPaM = nullptr ) const;
-    void SetNodeNumStart( sal_uInt16 nStt, SwPaM* = nullptr );
+    void SetNodeNumStart( sal_uInt16 nStt );
 
     sal_uInt16 GetNodeNumStart( SwPaM* pPaM = nullptr ) const;
 
@@ -632,7 +632,7 @@ public:
     // #i73788#
     /// Remove default parameter, because method always called this default value.
     Graphic GetIMapGraphic() const; ///< @return a graphic for all Flys!
-    const SwFlyFrameFormat* FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp = 0 ) const;
+    const SwFlyFrameFormat* FindFlyByName( const OUString& rName ) const;
 
     /** @return a ClientObject, if CurrentCursor->Point() points to a SwOLENode
      (and mark is neither set not pointint to same ClientObject)
@@ -687,8 +687,7 @@ public:
 
     void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
-                         sal_uInt16 nRows, sal_uInt16 nCols,
-                         sal_Int16 eAdj = css::text::HoriOrientation::FULL );
+                         sal_uInt16 nRows, sal_uInt16 nCols  );
 
     void UpdateTable();
     void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
@@ -831,8 +830,7 @@ public:
     void UpdateSection( size_t const nSect, SwSectionData &,
             SfxItemSet const*const  = nullptr);
     bool IsAnySectionInDoc( bool bChkReadOnly = false,
-                            bool bChkHidden = false,
-                            bool BChkTOX = false ) const;
+                            bool bChkHidden = false ) const;
 
     OUString GetUniqueSectionName( const OUString* pChkStr = nullptr ) const;
 
@@ -853,7 +851,7 @@ public:
     bool CanSpecialInsert() const;
 
     /// Optimizing UI.
-    void SetNewDoc(bool bNew = true);
+    void SetNewDoc();
 
     sfx2::LinkManager& GetLinkManager();
     inline const sfx2::LinkManager& GetLinkManager() const;

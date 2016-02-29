@@ -100,9 +100,9 @@ void DocumentStateManager::SetUpdateExpFieldStat(bool b)
     mbUpdateExpField = b;
 }
 
-void DocumentStateManager::SetLoaded(bool b)
+void DocumentStateManager::SetLoaded()
 {
-    mbLoaded = b;
+    mbLoaded = true;
 }
 
 }

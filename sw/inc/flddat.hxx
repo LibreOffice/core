@@ -114,8 +114,8 @@ public:
         inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
         inline long             GetOffset() const           { return nOffset; }
 
-        Date                    GetDate(bool bUseOffset = false) const;
-        tools::Time             GetTime(bool bUseOffset = false) const;
+        Date                    GetDate() const;
+        tools::Time             GetTime() const;
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 

@@ -237,9 +237,9 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 }
 
-OString AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
+OString AbstractDropDownFieldDialog_Impl::GetWindowState() const
 {
-    return pDlg->GetWindowState(nMask);
+    return pDlg->GetWindowState();
 }
 
 void AbstractDropDownFieldDialog_Impl::SetWindowState( const OString& rStr )
@@ -347,9 +347,9 @@ OUString AbstractSwFieldDlg_Impl::GetText() const
     return pDlg->GetText();
 }
 
-void AbstractSwFieldDlg_Impl::Start( bool bShowl )
+void AbstractSwFieldDlg_Impl::Start()
 {
-    pDlg->Start( bShowl );
+    pDlg->Start();
 }
 
 void AbstractSwFieldDlg_Impl::Initialize(SfxChildWinInfo *pInfo)
@@ -409,9 +409,9 @@ void AbstractFieldInputDlg_Impl::SetWindowState( const OString& rStr )
     pDlg->SetWindowState( rStr );
 }
 
-OString AbstractFieldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
+OString AbstractFieldInputDlg_Impl::GetWindowState() const
 {
-    return pDlg->GetWindowState( nMask );
+    return pDlg->GetWindowState();
 }
 
 void AbstractFieldInputDlg_Impl::EndDialog(long n)
@@ -1085,10 +1085,9 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        vcl::Window *pParent,
-                                                       SfxChildWinInfo* pInfo,
-                                                       bool bNew )
+                                                       SfxChildWinInfo* pInfo )
 {
-    VclPtr<SwIndexMarkFloatDlg> pDlg = VclPtr<SwIndexMarkFloatDlg>::Create(pBindings, pChild, pParent, pInfo, bNew);
+    VclPtr<SwIndexMarkFloatDlg> pDlg = VclPtr<SwIndexMarkFloatDlg>::Create(pBindings, pChild, pParent, pInfo, true/*bNew*/);
     return new AbstractIndexMarkFloatDlg_Impl(pDlg);
 }
 
@@ -1096,10 +1095,9 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        vcl::Window *pParent,
-                                                       SfxChildWinInfo* pInfo,
-                                                       bool bNew)
+                                                       SfxChildWinInfo* pInfo)
 {
-    VclPtr<SwAuthMarkFloatDlg> pDlg = VclPtr<SwAuthMarkFloatDlg>::Create( pBindings, pChild, pParent, pInfo, bNew );
+    VclPtr<SwAuthMarkFloatDlg> pDlg = VclPtr<SwAuthMarkFloatDlg>::Create( pBindings, pChild, pParent, pInfo, true/*bNew*/ );
     return new AbstractAuthMarkFloatDlg_Impl( pDlg );
 }
 

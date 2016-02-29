@@ -115,10 +115,9 @@ public:
     void SetCondition(OUString const& rNew) { m_sCondition = rNew; }
 
     OUString GetLinkFileName() const        { return m_sLinkFileName; }
-    void SetLinkFileName(OUString const& rNew, OUString const* pPassWd = nullptr)
+    void SetLinkFileName(OUString const& rNew)
     {
         m_sLinkFileName = rNew;
-        if (pPassWd) { SetLinkFilePassword(*pPassWd); }
     }
 
     OUString GetLinkFilePassword() const        { return m_sLinkFilePassword; }
@@ -201,7 +200,7 @@ public:
     void SetCondition(OUString const& rNew) { m_Data.SetCondition(rNew); }
 
     OUString GetLinkFileName() const;
-    void SetLinkFileName(OUString const& rNew, OUString const*const pPassWd = nullptr);
+    void SetLinkFileName(OUString const& rNew);
     // Password of linked file (only valid during runtime!)
     OUString GetLinkFilePassword() const
         { return m_Data.GetLinkFilePassword(); }
@@ -316,9 +315,9 @@ public:
     bool IsInNodesArr() const;
 
           SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
-    const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const
+    const SwSectionNode* GetSectionNode() const
         { return const_cast<SwSectionFormat *>(this)
-                ->GetSectionNode(bEvenIfInUndo); }
+                ->GetSectionNode(); }
 
     // Is section a valid one for global document?
     const SwSection* GetGlobalDocSection() const;

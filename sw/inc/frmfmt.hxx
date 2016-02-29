@@ -176,8 +176,7 @@ public:
     SwFlyFrame* GetFrame( const Point* pDocPos = nullptr,
                       const bool bCalcFrame = false ) const;
 
-    SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = nullptr,
-                                      const bool bCalcFrame = false ) const;
+    SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = nullptr ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = nullptr ) override;
 

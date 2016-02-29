@@ -370,13 +370,12 @@ bool SwOLENode::SavePersistentData()
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
                     const svt::EmbeddedObjectRef& xObj,
-                                    SwGrfFormatColl* pGrfColl,
-                                    SwAttrSet* pAutoAttr )
+                                    SwGrfFormatColl* pGrfColl )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
 
     SwOLENode *pNode =
-        new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
+        new SwOLENode( rWhere, xObj, pGrfColl, nullptr );
 
     // set parent if XChild is supported
     //!! needed to supply Math objects with a valid reference device

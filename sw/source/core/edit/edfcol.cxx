@@ -421,13 +421,8 @@ SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollNam
 
 }
 
-void SwEditShell::FillByEx(SwTextFormatColl* pColl, bool bReset)
+void SwEditShell::FillByEx(SwTextFormatColl* pColl)
 {
-    if( bReset )
-    {
-        pColl->ResetAllFormatAttr();
-    }
-
     SwPaM * pCursor = GetCursor();
     SwContentNode * pCnt = pCursor->GetContentNode();
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();

@@ -2034,10 +2034,9 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     }
 }
 
-sal_uInt16 SwFEShell::GetCurMouseColNum( const Point &rPt,
-                                    SwGetCurColNumPara* pPara ) const
+sal_uInt16 SwFEShell::GetCurMouseColNum( const Point &rPt ) const
 {
-    return _GetCurColNum( GetBox( rPt ), pPara );
+    return _GetCurColNum( GetBox( rPt ), nullptr );
 }
 
 size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const

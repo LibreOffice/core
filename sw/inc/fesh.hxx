@@ -254,7 +254,7 @@ public:
 
     /// Copy and Paste methods for internal clipboard.
     bool Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
-    bool Paste( SwDoc* pClpDoc, bool bIncludingPageFrames = false);
+    bool Paste( SwDoc* pClpDoc );
 
     /// Paste some pages into another doc - used in mailmerge.
     bool PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
@@ -314,7 +314,7 @@ public:
     bool IsSelContainsControl() const;
 
     ObjCntType GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const;
-    ObjCntType GetObjCntTypeOfSelection( SdrObject** ppObj = nullptr ) const;
+    ObjCntType GetObjCntTypeOfSelection() const;
 
     /// For adjustment of PosAttr when anchor changes.
     SwRect  GetObjRect() const;
@@ -351,7 +351,7 @@ public:
 
     /// SS for envelopes: get all page-bound objects and set them to new page.
     void GetPageObjs( std::vector<SwFrameFormat*>& rFillArr );
-    void SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr, int nOffset = 1 );
+    void SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr );
 
     /// Show current selection (frame / draw object as required).
     virtual void MakeSelVisible() override;
@@ -401,7 +401,7 @@ public:
     SwFlyFrame* GetCurrFlyFrame(const bool bCalcFrame = true) const;
 
     // Get selected fly, but if none Get current fly in which the cursor is positioned
-    SwFlyFrame* GetSelectedOrCurrFlyFrame(const bool bCalcFrame = true) const;
+    SwFlyFrame* GetSelectedOrCurrFlyFrame() const;
 
     /// Find/delete fly containing the cursor.
     SwFrameFormat* WizardGetFly();
@@ -579,7 +579,7 @@ public:
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
      changing the previous vertical orientation */
-    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, SwFlyFrame * pFly = nullptr );
+    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj );
 
     /// aligns all formulas with anchor 'as char' to baseline
     void AlignAllFormulasToBaseline();
@@ -702,7 +702,7 @@ public:
 
     sal_uInt16 GetRowsToRepeat() const;
     void SetRowsToRepeat( sal_uInt16 nNumOfRows );
-    sal_uInt16 GetVirtPageNum( const bool bCalcFrame = true );
+    sal_uInt16 GetVirtPageNum();
 
     /** @return the number of table rows currently selected
     if the selection start at the top of the table. */
@@ -749,11 +749,10 @@ public:
 
     /// The ruler needs some information too.
     sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = nullptr ) const; //0 == not in any column.
-    sal_uInt16 GetCurMouseColNum( const Point &rPt,
-                            SwGetCurColNumPara* pPara = nullptr ) const;
+    sal_uInt16 GetCurMouseColNum( const Point &rPt ) const;
     size_t GetCurTabColNum() const;     //0 == not in any table.
     size_t GetCurMouseTabColNum( const Point &rPt ) const;
-    sal_uInt16 GetCurOutColNum( SwGetCurColNumPara* pPara = nullptr ) const;  ///< Current outer column.
+    sal_uInt16 GetCurOutColNum() const;  ///< Current outer column.
 
     bool IsColRightToLeft() const;
     bool IsTableRightToLeft() const;

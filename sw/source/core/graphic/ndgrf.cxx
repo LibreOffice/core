@@ -434,11 +434,10 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 
 SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const GraphicObject& rGrfObj,
-                                SwGrfFormatColl* pGrfColl,
-                                SwAttrSet* pAutoAttr )
+                                SwGrfFormatColl* pGrfColl )
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
-    return new SwGrfNode( rWhere, rGrfObj, pGrfColl, pAutoAttr );
+    return new SwGrfNode( rWhere, rGrfObj, pGrfColl, nullptr );
 }
 
 Size SwGrfNode::GetTwipSize() const

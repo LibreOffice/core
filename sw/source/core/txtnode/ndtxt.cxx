@@ -1340,11 +1340,10 @@ lcl_GetTextAttrs(
 }
 
 ::std::vector<SwTextAttr *>
-SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, RES_TXTATR const nWhich,
-                        enum GetTextAttrMode const eMode) const
+SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, RES_TXTATR const nWhich) const
 {
     ::std::vector<SwTextAttr *> ret;
-    lcl_GetTextAttrs(& ret, nullptr, m_pSwpHints, nIndex, nWhich, eMode);
+    lcl_GetTextAttrs(& ret, nullptr, m_pSwpHints, nIndex, nWhich, DEFAULT);
     return ret;
 }
 
@@ -3214,7 +3213,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
 }
 
 OUString SwTextNode::GetRedlineText( sal_Int32 nIdx, sal_Int32 nLen,
-                                   bool bExpandFields, bool bWithNum ) const
+                                   bool bExpandFields ) const
 {
     std::vector<sal_Int32> aRedlArr;
     const SwDoc* pDoc = GetDoc();
@@ -3284,8 +3283,6 @@ OUString SwTextNode::GetRedlineText( sal_Int32 nIdx, sal_Int32 nLen,
     }
     Replace0xFF(*this, aText, nTextStt, aText.getLength(), bExpandFields);
 
-    if( bWithNum )
-        aText.insert(0, GetNumString());
     return aText.makeStringAndClear();
 }
 
@@ -4896,11 +4893,11 @@ bool SwTextNode::CompareParRsid( const SwTextNode &rTextNode ) const
 }
 
 bool SwTextNode::CompareRsid( const SwTextNode &rTextNode, sal_Int32 nStt1, sal_Int32 nStt2,
-                            sal_Int32 nEnd1, sal_Int32 nEnd2 ) const
+                            sal_Int32 nEnd1 ) const
 
 {
     sal_uInt32 nThisRsid = GetRsid( nStt1, nEnd1 ? nEnd1 : nStt1 );
-    sal_uInt32 nRsid = rTextNode.GetRsid( nStt2, nEnd2 ? nEnd2 : nStt2 );
+    sal_uInt32 nRsid = rTextNode.GetRsid( nStt2, nStt2 );
 
     return nThisRsid == nRsid;
 }

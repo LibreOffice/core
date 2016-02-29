@@ -332,7 +332,7 @@ public:
 
     /// Fill listbox with all column names of a database table.
     void            GetColumnNames(ListBox* pListBox,
-                            const OUString& rDBName, const OUString& rTableName, bool bAppend = false);
+                            const OUString& rDBName, const OUString& rTableName);
     static void GetColumnNames(ListBox* pListBox,
                             css::uno::Reference< css::sdbc::XConnection> xConnection,
                             const OUString& rTableName, bool bAppend = false);
@@ -367,7 +367,7 @@ public:
 
     /// open the source while fields are updated - for the calculator only!
     bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
-                        sal_Int32 nCommandType = -1, bool bCreate = false);
+                        sal_Int32 nCommandType = -1);
     sal_uInt32      GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
     bool            GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
                             const OUString& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
@@ -389,7 +389,7 @@ public:
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
                                           sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
     bool            ToNextMergeRecord();
-    bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
+    bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 
     bool            ExistsNextRecord()const;
     sal_uInt32      GetSelectedRecordId();

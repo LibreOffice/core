@@ -410,8 +410,7 @@ public:
                             const Point* pPoint = nullptr,
                             const bool bCalcFrame = false  ) const;
     SwRect FindPageFrameRect( const bool bPrtArea = false,
-                            const Point* pPoint = nullptr,
-                            const bool bCalcFrame = false  ) const;
+                            const Point* pPoint = nullptr  ) const;
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
@@ -437,7 +436,7 @@ public:
 
     /// If bInParent is FALSE search for attribute only in this node.
     const SfxPoolItem& GetAttr( sal_uInt16 nWhich, bool bInParent=true ) const;
-    bool GetAttr( SfxItemSet& rSet, bool bInParent=true ) const;
+    bool GetAttr( SfxItemSet& rSet ) const;
     /// made virtual
     virtual bool SetAttr( const SfxPoolItem& );
     virtual bool SetAttr( const SfxItemSet& rSet );

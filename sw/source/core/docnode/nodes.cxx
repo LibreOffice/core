@@ -1906,12 +1906,11 @@ SwStartNode* SwNodes::MakeEmptySection( const SwNodeIndex& rIdx,
 
 SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
                                         SwStartNodeType eSttNdTyp,
-                                        SwTextFormatColl *pColl,
-                                        SwAttrSet* pAutoAttr )
+                                        SwTextFormatColl *pColl )
 {
     SwStartNode* pSttNd = new SwStartNode( rWhere, ND_STARTNODE, eSttNdTyp );
     new SwEndNode( rWhere, *pSttNd );
-    MakeTextNode( SwNodeIndex( rWhere, - 1 ), pColl, pAutoAttr );
+    MakeTextNode( SwNodeIndex( rWhere, - 1 ), pColl );
     return pSttNd;
 }
 

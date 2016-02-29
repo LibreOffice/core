@@ -702,8 +702,7 @@ public:
     bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt = nullptr ) const;
-    bool IsInVerticalText( const SwPosition& rPos,
-                               const Point* pPt = nullptr ) const;
+    bool IsInVerticalText( const SwPosition& rPos ) const;
 
     // Database  and DB-Manager
     void SetDBManager( SwDBManager* pNewMgr )     { mpDBManager = pNewMgr; }
