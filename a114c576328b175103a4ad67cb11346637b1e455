@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_d4732db3",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2016-02-29T21:05:22Z",
+      "side": 1,
+      "message": "--disable-gui would be acceptable too?",
+      "range": {
+        "startLine": 1269,
+        "startChar": 18,
+        "endLine": 1269,
+        "endChar": 22
+      },
+      "revId": "a114c576328b175103a4ad67cb11346637b1e455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
