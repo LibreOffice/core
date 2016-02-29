@@ -134,6 +134,11 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     // Normally VclBuilder::makeObject() does this.
     m_pCategories->EnableAutoSize(true);
     m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
+
+    // Restore state based on the doc. model.
+    const OUString& rCategoryName = aHelper.GetBACName();
+    if (!rCategoryName.isEmpty())
+        m_pCategories->SelectEntry(rCategoryName);
 }
 
 } // namespace sfx2
