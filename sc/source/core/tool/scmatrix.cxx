@@ -3401,7 +3401,7 @@ ScMatrix::IterateResult ScVectorRefMatrix::Sum(bool bTextAsZero) const
     {
         return ScMatrix::IterateResult(0.0, 0.0, 0);
     }
-    else if (nDataSize > mpToken->GetArrayLength() + mnRowStart)
+    else if (nDataSize > mpToken->GetArrayLength() - mnRowStart)
     {
         nDataSize = mpToken->GetArrayLength() - mnRowStart;
     }
