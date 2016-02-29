@@ -258,6 +258,9 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 }
                 bAppendSeparator = false;
 
+                OUString aShortcut(vcl::CommandInfoProvider::Instance().GetCommandShortcut(aURL, m_xFrame));
+                if (!aShortcut.isEmpty())
+                    aTitle += " (" + aShortcut + ")";
                 m_pToolBar->InsertItem( nId, aTitle );
 
                 // don't setup images yet, AddonsToolbarWrapper::populateImages does that.
