@@ -28,7 +28,12 @@
  *      * AdapterDeviceId
  *
  */
-class CRASHREPORT_DLLPUBLIC CrashReporter
+class
+#if HAVE_FEATURE_BREAKPAD
+// MSVC 2013 has undefined symbols for inline functions if it's exported
+CRASHREPORT_DLLPUBLIC
+#endif
+/*class*/ CrashReporter
 {
 public:
     static void AddKeyValue(const OUString& rKey, const OUString& rValue);
