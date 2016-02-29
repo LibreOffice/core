@@ -110,6 +110,7 @@ public:
     void                LimitFormatCount( sal_uInt16 nMaxCount );
     /** Removes and returns the font index for the first char from the formatting runs, otherwise EXC_FONT_NOTFOUND. */
     sal_uInt16          RemoveLeadingFont();
+    sal_uInt16          GetLeadingFont();
 
     // get data ---------------------------------------------------------------
 
