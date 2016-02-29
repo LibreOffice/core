@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_140f75e2",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-29T21:53:02Z",
+      "side": 1,
+      "message": "Either don\u0027t initialize this variable at all, or initialize it to some different value -",
+      "revId": "a838596564fc6197be817ae435761feae61fa84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_54f9fdc7",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-29T21:53:02Z",
+      "side": 1,
+      "message": "as when getPropertyValue call fails for whatever reason, your test will still pass because aFillStyle has been initialized with the very value you want to test ;)",
+      "revId": "a838596564fc6197be817ae435761feae61fa84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
