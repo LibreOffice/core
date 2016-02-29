@@ -724,18 +724,21 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     mnSstIndex = 0;
 
     const XclFormatRunVec& rFormats = mxText->GetFormats();
-    // Create the cell format and remove formatting of the leading run
-    // if the entire string is equally formatted
+    // remove formatting of the leading run if the entire string
+    // is equally formatted
+    sal_uInt16 nXclFont = EXC_FONT_NOTFOUND;
     if( rFormats.size() == 1 )
-    {
-        sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
-        if( GetXFId() == EXC_XFID_NOTFOUND )
-        {
-            OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
-            bool bForceLineBreak = mxText->IsWrapped();
-            SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
-        }
-    }
+        nXclFont = mxText->RemoveLeadingFont();
+    else
+        nXclFont = mxText->GetLeadingFont();
+
+   // create cell format
+   if( GetXFId() == EXC_XFID_NOTFOUND )
+   {
+       OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
+       bool bForceLineBreak = mxText->IsWrapped();
+       SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
+   }
 
     // get auto-wrap attribute from cell format
     const XclExpXF* pXF = rRoot.GetXFBuffer().GetXFById( GetXFId() );
