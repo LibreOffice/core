@@ -1060,7 +1060,7 @@ SfxObjectShell* SfxObjectShell::CreateObject( const OUString& rServiceName, SfxO
     return nullptr;
 }
 
-Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame )
+Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet )
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
@@ -1074,12 +1074,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
         aTarget = pTargetItem->GetValue();
 
     uno::Reference < frame::XComponentLoader > xLoader;
-    if ( pFrame )
-    {
-        xLoader.set( pFrame->GetFrameInterface(), uno::UNO_QUERY );
-    }
-    else
-        xLoader.set( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY );
+    xLoader.set( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY );
 
     Reference <lang::XComponent> xComp;
     try

@@ -74,7 +74,7 @@ struct SfxObjectFactory_Impl
 };
 
 
-SfxFilterContainer* SfxObjectFactory::GetFilterContainer( bool /*bForceLoad*/ ) const
+SfxFilterContainer* SfxObjectFactory::GetFilterContainer() const
 {
     return pImpl->pFilterContainer;
 }

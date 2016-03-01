@@ -1011,22 +1011,13 @@ IMPL_LINK_TYPED( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
 }
 
 
-bool SfxSplitWindow::CursorIsOverRect( bool bForceAdding ) const
+bool SfxSplitWindow::CursorIsOverRect() const
 {
     bool bVisible = IsVisible();
 
     // Also, take the collapsed SplitWindow into account
     Point aPos = pEmptyWin->GetParent()->OutputToScreenPixel( pEmptyWin->GetPosPixel() );
     Size aSize = pEmptyWin->GetSizePixel();
-
-    if ( bForceAdding )
-    {
-        // Extend with +/- a few pixels, otherwise it is too nervous
-        aPos.X() -= nPixel;
-        aPos.Y() -= nPixel;
-        aSize.Width() += 2 * nPixel;
-        aSize.Height() += 2 * nPixel;
-    }
 
     Rectangle aRect( aPos, aSize );
 

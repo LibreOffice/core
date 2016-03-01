@@ -874,9 +874,10 @@ void SfxBindings::Invalidate
 }
 
 
-bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
+bool SfxBindings::IsBound( sal_uInt16 nSlotId )
 {
     DBG_ASSERT( pImp->pCaches != nullptr, "SfxBindings not initialized" );
+    sal_uInt16 nStartSearchAt = 0;
     return GetStateCache(nSlotId, &nStartSearchAt ) != nullptr;
 }
 
@@ -1963,16 +1964,9 @@ void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
     }
 }
 
-SfxBindings* SfxBindings::GetSubBindings_Impl( bool bTop ) const
+SfxBindings* SfxBindings::GetSubBindings_Impl() const
 {
-    SfxBindings *pRet = pImp->pSubBindings;
-    if ( bTop )
-    {
-        while ( pRet->pImp->pSubBindings )
-            pRet = pRet->pImp->pSubBindings;
-    }
-
-    return pRet;
+    return pImp->pSubBindings;
 }
 
 void SfxBindings::SetWorkWindow_Impl( SfxWorkWindow* pWork )

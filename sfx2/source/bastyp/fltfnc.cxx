@@ -375,8 +375,7 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
 sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxMedium& rMedium,
     const SfxFilter**ppFilter,
-    SfxFilterFlags nMust,
-    SfxFilterFlags nDont ) const
+    SfxFilterFlags nMust ) const
 {
     uno::Reference<document::XTypeDetection> xDetection(
         comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
@@ -395,7 +394,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     {
         // make sure filter list is initialized
         m_rImpl.InitForIterating();
-        *ppFilter = GetFilter4EA( sTypeName, nMust, nDont );
+        *ppFilter = GetFilter4EA( sTypeName, nMust );
     }
 
     return *ppFilter ? ERRCODE_NONE : ERRCODE_ABORT;
@@ -535,7 +534,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 }
 
 
-sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, bool /*bPlugIn*/, bool bAPI ) const
+sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter ) const
 /*  [Description]
 
     Here the Filter selection box is pulled up. Otherwise GuessFilter
@@ -606,7 +605,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     }
     *ppFilter = pFilter;
 
-    if ( bHidden || (bAPI && nErr == ERRCODE_SFX_CONSULTUSER) )
+    if ( bHidden )
         nErr = pFilter ? ERRCODE_NONE : ERRCODE_ABORT;
     return nErr;
 }

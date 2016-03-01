@@ -397,13 +397,11 @@ void SvLinkSource::RemoveConnectAdvise( SvBaseLink * pLink )
         }
 }
 
-bool SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
+bool SvLinkSource::HasDataLinks() const
 {
     bool bRet = false;
-    const SvLinkSource_Entry_Impl* p;
     for( sal_uInt16 n = 0, nEnd = pImpl->aArr.size(); n < nEnd; ++n )
-        if( ( p = pImpl->aArr[ n ] )->bIsDataSink &&
-            ( !pLink || &p->xSink == pLink ) )
+        if( pImpl->aArr[ n ]->bIsDataSink )
         {
             bRet = true;
             break;

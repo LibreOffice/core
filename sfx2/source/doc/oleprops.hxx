@@ -301,7 +301,7 @@ public:
     void                SetBoolValue( sal_Int32 nPropId, bool bValue );
     /** Inserts a string property with the passed value.
         @return  true = Property inserted; false = String was empty, property not inserted. */
-    bool                SetStringValue( sal_Int32 nPropId, const OUString& rValue, bool bSkipEmpty = false );
+    bool                SetStringValue( sal_Int32 nPropId, const OUString& rValue );
     /** Inserts a time stamp property with the passed value. */
     void                SetFileTimeValue( sal_Int32 nPropId, const css::util::DateTime& rValue );
     /** Inserts a date property with the passed value. */

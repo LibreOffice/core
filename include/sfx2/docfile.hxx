@@ -113,10 +113,10 @@ public:
     void                SetLoadTargetFrame(SfxFrame* pFrame );
     SfxFrame*           GetLoadTargetFrame() const;
 
-    void                SetFilter(const SfxFilter *pFlt, bool bResetOrig = false);
-    const SfxFilter* GetFilter() const;
-    const SfxFilter *   GetOrigFilter( bool bNotCurrent = false ) const;
-    const OUString& GetOrigURL() const;
+    void                SetFilter(const SfxFilter *pFlt);
+    const SfxFilter*    GetFilter() const;
+    const SfxFilter*    GetOrigFilter() const;
+    const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
     void                Close();

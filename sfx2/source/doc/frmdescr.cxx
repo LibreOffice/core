@@ -95,7 +95,7 @@ bool SfxFrameDescriptor::IsEditable() const
     return pImp->bEditable;
 }
 
-SfxFrameDescriptor* SfxFrameDescriptor::Clone( bool bWithIds ) const
+SfxFrameDescriptor* SfxFrameDescriptor::Clone() const
 {
     SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
 
@@ -122,10 +122,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( bool bWithIds ) const
         pFrame->pImp->pArgs->Put(*pImp->pArgs);
     }
 
-    if ( bWithIds )
-        pFrame->nItemId = nItemId;
-    else
-        pFrame->nItemId = 0;
+    pFrame->nItemId = nItemId;
 
     return pFrame;
 }

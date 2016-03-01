@@ -817,9 +817,9 @@ void SfxOleSection::SetBoolValue( sal_Int32 nPropId, bool bValue )
     SetProperty( SfxOlePropertyRef( new SfxOleBoolProperty( nPropId, bValue ) ) );
 }
 
-bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const OUString& rValue, bool bSkipEmpty )
+bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const OUString& rValue )
 {
-    bool bInserted = !bSkipEmpty || !rValue.isEmpty();
+    bool bInserted = !rValue.isEmpty();
     if( bInserted )
         SetProperty( SfxOlePropertyRef( new SfxOleString8Property( nPropId, maCodePageProp, rValue ) ) );
     return bInserted;

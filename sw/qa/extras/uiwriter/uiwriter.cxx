@@ -1702,7 +1702,7 @@ void SwUiWriterTest::testTdf78742()
     SfxMedium aMedium(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher(OUString("com.sun.star.text.TextDocument"));
     const SfxFilter* pFilter = nullptr;
-    sal_uInt32 filter = aMatcher.DetectFilter(aMedium, &pFilter, true);
+    sal_uInt32 filter = aMatcher.DetectFilter(aMedium, &pFilter);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_IO_ABORT, filter);
     //it should not return any Filter
     CPPUNIT_ASSERT(!pFilter);
@@ -1710,7 +1710,7 @@ void SwUiWriterTest::testTdf78742()
     SfxMedium aMedium2(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher2;
     const SfxFilter* pFilter2 = nullptr;
-    sal_uInt32 filter2 = aMatcher2.DetectFilter(aMedium2, &pFilter2, true);
+    sal_uInt32 filter2 = aMatcher2.DetectFilter(aMedium2, &pFilter2);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter2);
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("calc8"), pFilter2->GetFilterName());
@@ -1719,7 +1719,7 @@ void SwUiWriterTest::testTdf78742()
     SfxMedium aMedium3(path2, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher3(OUString("com.sun.star.text.TextDocument"));
     const SfxFilter* pFilter3 = nullptr;
-    sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, &pFilter3, true);
+    sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, &pFilter3);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter3);
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("writer8"), pFilter3->GetFilterName());

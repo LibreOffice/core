@@ -108,7 +108,7 @@ public:
     void                Ignore();
     void                Cancel();
     bool                IsCancelled() const;
-    void                Done(const SfxItemSet &, bool bKeep = true );
+    void                Done(const SfxItemSet &);
 
     void                ForgetAllArgs();
 

@@ -179,17 +179,11 @@ OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 }
 
 OUString SfxFilter::GetTypeFromStorage(
-    const uno::Reference<embed::XStorage>& xStorage, bool bTemplate, OUString* pFilterName )
+    const uno::Reference<embed::XStorage>& xStorage, bool bTemplate )
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
     SfxFilterMatcher aMatcher;
-    OUString aName;
-    if ( pFilterName )
-    {
-        aName = *pFilterName;
-        pFilterName->clear();
-    }
 
     css::uno::Reference< css::beans::XPropertySet > xProps( xStorage, css::uno::UNO_QUERY );
     if ( xProps.is() )
@@ -211,25 +205,15 @@ OUString SfxFilter::GetTypeFromStorage(
                     // template filters shouldn't be detected if not explicitly asked for
                     nDont |= SfxFilterFlags::TEMPLATEPATH;
 
-                const SfxFilter* pFilter = nullptr;
-                if (!aName.isEmpty())
-                    // get preselected Filter if it matches the desired filter flags
-                    pFilter = aMatcher.GetFilter4FilterName( aName, nMust, nDont );
-
-                if ( !pFilter || pFilter->GetFormat() != nClipId )
-                {
-                    // get filter from storage MediaType
-                    pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
-                    if ( !pFilter )
-                        // template filter is asked for , but there isn't one; so at least the "normal" format should be detected
-                        // or storage *is* a template, but bTemplate is not set
-                        pFilter = aMatcher.GetFilter4ClipBoardId( nClipId );
-                }
+                // get filter from storage MediaType
+                const SfxFilter* pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
+                if ( !pFilter )
+                    // template filter is asked for , but there isn't one; so at least the "normal" format should be detected
+                    // or storage *is* a template, but bTemplate is not set
+                    pFilter = aMatcher.GetFilter4ClipBoardId( nClipId );
 
                 if ( pFilter )
                 {
-                    if ( pFilterName )
-                        *pFilterName = pFilter->GetName();
                     return pFilter->GetTypeName();
                 }
             }

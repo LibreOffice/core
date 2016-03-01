@@ -132,7 +132,7 @@ public:
                             { bHasBorder = false; bHasBorderSet = false; }
 
                             // Copy for example for Views
-    SfxFrameDescriptor*     Clone( bool bWithIds = true ) const;
+    SfxFrameDescriptor*     Clone() const;
 };
 
 // No block to implement a =operator

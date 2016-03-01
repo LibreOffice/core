@@ -60,7 +60,7 @@ private:
                             bool bNewLine=false );
 
     DECL_LINK_TYPED(    TimerHdl, Timer*, void );
-    bool                CursorIsOverRect( bool bForceAdding = false ) const;
+    bool                CursorIsOverRect() const;
     void                SetPinned_Impl( bool );
     void                SetFadeIn_Impl( bool );
     void                SaveConfig_Impl();

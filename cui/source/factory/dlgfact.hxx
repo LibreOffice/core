@@ -433,8 +433,7 @@ public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) override;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) override;
     virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper,
-                        const DataFlavorExVector* pFormats=nullptr,
-                        const TransferableObjectDescriptor* pDesc=nullptr ) override;
+                        const DataFlavorExVector* pFormats=nullptr ) override;
 };
 
 class AbstractLinksDialog_Impl : public SfxAbstractLinksDialog
@@ -497,14 +496,12 @@ public:
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SfxViewFrame* pViewFrame,
-                                            bool bEditFmt=false,
-                                            const OUString *pUserButtonText=nullptr ) override;
+                                            bool bEditFmt=false ) override;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame,
-                                            bool bEditFmt=false,
-                                            const OUString *pUserButtonText=nullptr ) override;
+                                            bool bEditFmt=false ) override;
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) override;

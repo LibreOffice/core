@@ -840,7 +840,7 @@ extern "C" rtl_uString* basicide_choose_macro(void*, sal_Bool, rtl_uString*);
 
 #endif
 
-OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChooseOnly, const OUString& rMacroDesc = OUString() )
+OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChooseOnly )
 {
 #ifndef DISABLE_DYNLOADING
     osl::Module aMod;
@@ -859,6 +859,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
 #endif
 
     // call basicide_choose_macro in basctl
+    OUString rMacroDesc;
     rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), bChooseOnly, rMacroDesc.pData );
     OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );

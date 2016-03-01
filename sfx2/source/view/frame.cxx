@@ -278,7 +278,7 @@ sal_uInt16 SfxFrame::GetChildFrameCount() const
     return pChildArr ? pChildArr->size() : 0;
 }
 
-void SfxFrame::CancelTransfers( bool /*bCancelLoadEnv*/ )
+void SfxFrame::CancelTransfers()
 {
     if( !pImp->bInCancelTransfers )
     {

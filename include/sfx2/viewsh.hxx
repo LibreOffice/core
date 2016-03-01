@@ -247,7 +247,7 @@ public:
     // Working set
     virtual void                WriteUserData( OUString&, bool bBrowse = false );
     virtual void                ReadUserData( const OUString&, bool bBrowse = false );
-    virtual void                WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void                WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& );
     virtual void                ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 

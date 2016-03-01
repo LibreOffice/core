@@ -120,9 +120,9 @@ public:
     {
         mnExtras = nExtras;
     }
-    void AllowAsciiOnly(bool i_bAsciiOnly = true)
+    void AllowAsciiOnly()
     {
-        mbAsciiOnly = i_bAsciiOnly;
+        mbAsciiOnly = true;
     }
 
     void ShowMinLengthText(bool bShow);

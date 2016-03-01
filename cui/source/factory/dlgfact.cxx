@@ -370,10 +370,9 @@ void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const OU
 }
 
 SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper,
-                        const DataFlavorExVector* pFormats,
-                        const TransferableObjectDescriptor* pDesc )
+                        const DataFlavorExVector* pFormats )
 {
-    return pDlg->GetFormat( aHelper, pFormats, pDesc );
+    return pDlg->GetFormat( aHelper, pFormats );
 }
 
 void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::container::XIndexContainer>& xCols)
@@ -880,8 +879,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
                                                 vcl::Window* pParent,
                                                 const SfxItemSet* pAttrSet,
                                                 SfxViewFrame* ,
-                                                bool /*bEditFmt*/,
-                                                const OUString * )
+                                                bool /*bEditFmt*/ )
 {
     SfxTabDialog* pDlg=nullptr;
     switch ( nResId )
@@ -905,8 +903,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
                                                 vcl::Window* pParent,
                                                 const SfxItemSet* pAttrSet,
                                                 const Reference< frame::XFrame >& xViewFrame,
-                                                bool /*bEditFmt*/,
-                                                const OUString * )
+                                                bool /*bEditFmt*/ )
 {
     VclPtr<SfxTabDialog> pDlg;
     switch ( nResId )

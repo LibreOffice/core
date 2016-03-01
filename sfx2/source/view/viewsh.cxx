@@ -1403,7 +1403,7 @@ void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyV
 {
 }
 
-void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >&, bool )
+void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& )
 {
 }
 

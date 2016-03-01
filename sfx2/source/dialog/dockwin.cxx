@@ -1807,14 +1807,11 @@ bool SfxDockingWindow::IsAutoHide_Impl() const
         return false;
 }
 
-void SfxDockingWindow::AutoShow_Impl( bool bShow )
+void SfxDockingWindow::AutoShow_Impl()
 {
     if ( pImp->pSplitWin )
     {
-        if ( bShow )
-            pImp->pSplitWin->FadeIn();
-        else
-            pImp->pSplitWin->FadeOut();
+        pImp->pSplitWin->FadeIn();
     }
 }
 

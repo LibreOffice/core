@@ -934,7 +934,7 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
     }
 }
 
-void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, bool /* bBrowse */)
+void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq)
 {
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();

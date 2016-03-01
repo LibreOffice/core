@@ -580,8 +580,7 @@ bool SfxChildWinInfo::GetExtraData_Impl
     SfxChildAlignment   *pAlign,
     SfxChildAlignment   *pLastAlign,
     Size                *pSize,
-    sal_uInt16          *pLine,
-    sal_uInt16          *pPos
+    sal_uInt16          *pLine
 )   const
 {
     // invalid?
@@ -634,8 +633,6 @@ bool SfxChildWinInfo::GetExtraData_Impl
             *pSize = aChildSize;
         if ( pLine )
             *pLine = (sal_uInt16) aChildPos.X();
-        if ( pPos )
-            *pPos = (sal_uInt16) aChildPos.Y();
         return true;
     }
     return false;

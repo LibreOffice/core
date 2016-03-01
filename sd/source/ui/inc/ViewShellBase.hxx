@@ -140,8 +140,7 @@ public:
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
-        css::uno::Sequence< css::beans::PropertyValue >&,
-        bool bBrowse = false) override;
+        css::uno::Sequence< css::beans::PropertyValue >&) override;
 
     /** Pass the given properties to the main view shell.  After that we
         ensure that the right view shell type is displayed in the center

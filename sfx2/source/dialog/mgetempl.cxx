@@ -376,7 +376,7 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, 
 // Internal: Perform functions through the Dispatcher
 bool SfxManageStyleSheetPage::Execute_Impl(
     sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily,
-    sal_uInt16 nMask, const sal_uInt16* pModifier)
+    sal_uInt16 nMask)
 {
 
     SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
@@ -397,10 +397,9 @@ bool SfxManageStyleSheetPage::Execute_Impl(
 
     pItems[ nCount++ ] = nullptr;
 
-    sal_uInt16 nModi = pModifier ? *pModifier : 0;
     const SfxPoolItem* mpItem = rDispatcher.Execute(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
-        pItems, nModi );
+        pItems );
 
     if ( !mpItem )
         return false;

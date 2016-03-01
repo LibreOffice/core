@@ -117,8 +117,8 @@ public:
                         CreateBlankFrame();
     static SfxFrame*    Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden );
 
-    vcl::Window&             GetWindow() const { return *pWindow;}
-    void                CancelTransfers( bool bCancelLoadEnv = true );
+    vcl::Window&        GetWindow() const { return *pWindow;}
+    void                CancelTransfers();
     bool                DoClose();
     sal_uInt16          GetChildFrameCount() const;
     SfxFrame*           GetChildFrame( sal_uInt16 nPos ) const;

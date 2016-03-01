@@ -98,8 +98,8 @@ public:
     static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId = 0 );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem, const sal_uInt16 i_nViewId = 0 );
-    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId = 0 );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
+    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest );
 
     static SfxViewFrame*    Current();
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
@@ -107,7 +107,7 @@ public:
 
     static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = nullptr );
 
-            void            DoActivate(bool bMDI, SfxViewFrame *pOld=nullptr);
+            void            DoActivate(bool bMDI);
             void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=nullptr);
 
     SfxViewFrame*           GetParentViewFrame() const;
@@ -201,7 +201,7 @@ public:
     SAL_DLLPRIVATE bool IsResizeInToOut_Impl() const;
     SAL_DLLPRIVATE void UpdateDocument_Impl();
 
-    SAL_DLLPRIVATE void LockObjectShell_Impl(bool bLock=true);
+    SAL_DLLPRIVATE void LockObjectShell_Impl();
 
     SAL_DLLPRIVATE void MakeActive_Impl( bool bActivate );
     SAL_DLLPRIVATE void SetQuietMode_Impl( bool );

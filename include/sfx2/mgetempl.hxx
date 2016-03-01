@@ -89,8 +89,7 @@ protected:
     virtual void        Reset(const SfxItemSet *) override;
 
     static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
-                          sal_uInt16 nFamily, sal_uInt16 nMask = 0,
-                          const sal_uInt16* pModifier = nullptr );
+                          sal_uInt16 nFamily, sal_uInt16 nMask = 0 );
     using TabPage::ActivatePage;
         virtual void        ActivatePage(const SfxItemSet &) override;
         using TabPage::DeactivatePage;

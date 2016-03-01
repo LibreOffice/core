@@ -472,9 +472,9 @@ void ScTabViewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
     GetViewData().WriteUserData(rData);
 }
 
-void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings, bool /* bBrowse */ )
+void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings )
 {
-    GetViewData().WriteUserDataSequence (rSettings);
+    GetViewData().WriteUserDataSequence(rSettings);
 }
 
 void ScTabViewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)

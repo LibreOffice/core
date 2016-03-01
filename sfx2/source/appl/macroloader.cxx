@@ -247,7 +247,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
             if ( pDoc )
             {
                 // security check for macros from document basic if an SFX doc is given
-                if ( !pDoc->AdjustMacroMode( OUString() ) )
+                if ( !pDoc->AdjustMacroMode() )
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;
             }

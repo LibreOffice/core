@@ -687,13 +687,12 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
 }
 
 void ViewShellBase::WriteUserDataSequence (
-    css::uno::Sequence< css::beans::PropertyValue >& rSequence,
-    bool bBrowse)
+    css::uno::Sequence< css::beans::PropertyValue >& rSequence)
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
-        pShell->WriteUserDataSequence (rSequence, bBrowse);
+        pShell->WriteUserDataSequence (rSequence);
 }
 
 void ViewShellBase::ReadUserDataSequence (

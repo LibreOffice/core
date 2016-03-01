@@ -2350,7 +2350,7 @@ sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell )
-        return m_pData->m_pObjectShell->AdjustMacroMode( OUString() );
+        return m_pData->m_pObjectShell->AdjustMacroMode();
     return sal_False;
 }
 

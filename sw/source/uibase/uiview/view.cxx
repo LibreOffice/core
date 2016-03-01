@@ -1452,7 +1452,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     }
 }
 
-void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, bool bBrowse )
+void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence )
 {
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
@@ -1472,9 +1472,9 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
     aVector.push_back(comphelper::makePropertyValue("VisibleTop", convertTwipToMm100 ( rVis.Top() )));
 
-    aVector.push_back(comphelper::makePropertyValue("VisibleRight", convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Right() )));
+    aVector.push_back(comphelper::makePropertyValue("VisibleRight", convertTwipToMm100 ( rVis.Right() )));
 
-    aVector.push_back(comphelper::makePropertyValue("VisibleBottom", convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Bottom() )));
+    aVector.push_back(comphelper::makePropertyValue("VisibleBottom", convertTwipToMm100 ( rVis.Bottom() )));
 
     const sal_Int16 nZoomType = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetZoomType());
     aVector.push_back(comphelper::makePropertyValue("ZoomType", nZoomType));

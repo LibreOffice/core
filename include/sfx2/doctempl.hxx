@@ -108,16 +108,8 @@ public:
         configuration. This means that just by copying files into OOo's template directories, this
         change is not reflected in the SfxDocumentTemplates - 'cause the configuration is not synchronous with
         the file system. This can be enforced with this method.</p>
-
-    @param _bSmart
-        The update of the configuration is rather expensive - nothing you want to do regulary if you don't really
-        need it. So you have the possibility to do a smart update - it first checks if the update if necessary.
-        In case the update is needed, the additional check made it somewhat more expensive. In case it's not
-        necessary (which should be the usual case), the check alone is (much) less expensive than the real update.
-        <br/>
-        So set <arg>_bSmart</arg> to <TRUE/> to do a check for necessity first.
     */
-    void            Update( bool _bSmart = true );
+    void            Update();
 };
 
 #endif // INCLUDED_SFX2_DOCTEMPL_HXX

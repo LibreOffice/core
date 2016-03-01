@@ -111,7 +111,7 @@ public:
     static OUString GetTypeFromStorage( const SotStorage& rStg );
     static OUString GetTypeFromStorage(
         const css::uno::Reference<css::embed::XStorage>& xStorage,
-        bool bTemplate = false, OUString* pName = nullptr )
+        bool bTemplate = false )
             throw ( css::beans::UnknownPropertyException,
                     css::lang::WrappedTargetException,
                     css::uno::RuntimeException,

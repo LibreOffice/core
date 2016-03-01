@@ -424,16 +424,10 @@ const SfxPoolItem* SfxRequest::GetReturnValue() const
 
 void SfxRequest::Done
 (
-    const SfxItemSet&   rSet,   /* parameters passed on by the application,
+    const SfxItemSet&   rSet    /* parameters passed on by the application,
                                    that for example were asked for by the user
                                    in a dialogue, 0 if no parameters have been
                                    set */
-
-    bool                bKeep   /*  true (default)
-                                   'rSet' is saved and GetArgs() queryable.
-
-                                    false
-                                   'rSet' is not copied (faster) */
 )
 
 /*  [Description]
@@ -460,23 +454,20 @@ void SfxRequest::Done
     Done_Impl( &rSet );
 
     // Keep items if possible, so they can be queried by StarDraw.
-    if ( bKeep )
+    if ( !pArgs )
     {
-        if ( !pArgs )
+        pArgs = new SfxAllItemSet( rSet );
+        pImp->SetPool( pArgs->GetPool() );
+    }
+    else
+    {
+        SfxItemIter aIter(rSet);
+        const SfxPoolItem* pItem = aIter.FirstItem();
+        while(pItem)
         {
-            pArgs = new SfxAllItemSet( rSet );
-            pImp->SetPool( pArgs->GetPool() );
-        }
-        else
-        {
-            SfxItemIter aIter(rSet);
-            const SfxPoolItem* pItem = aIter.FirstItem();
-            while(pItem)
-            {
-                if(!IsInvalidItem(pItem))
-                    pArgs->Put(*pItem,pItem->Which());
-                pItem = aIter.NextItem();
-            }
+            if(!IsInvalidItem(pItem))
+                pArgs->Put(*pItem,pItem->Which());
+            pItem = aIter.NextItem();
         }
     }
 }

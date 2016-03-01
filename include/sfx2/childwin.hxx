@@ -79,8 +79,7 @@ struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
     bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
                                            SfxChildAlignment    *pLastAlign = nullptr,
                                            Size                 *pSize = nullptr,
-                                           sal_uInt16               *pLine = nullptr,
-                                           sal_uInt16               *pPos = nullptr ) const;
+                                           sal_uInt16           *pLine = nullptr ) const;
 };
 
 // ChildWindow factory methods

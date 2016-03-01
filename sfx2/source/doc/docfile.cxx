@@ -2666,7 +2666,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
 }
 
 
-void SfxMedium::SetFilter( const SfxFilter* pFilterP, bool /*bResetOrig*/ )
+void SfxMedium::SetFilter( const SfxFilter* pFilterP )
 {
     pImp->m_pFilter = pFilterP;
 }
@@ -2677,9 +2677,9 @@ const SfxFilter* SfxMedium::GetFilter() const
 }
 
 
-const SfxFilter* SfxMedium::GetOrigFilter( bool bNotCurrent ) const
+const SfxFilter* SfxMedium::GetOrigFilter() const
 {
-    return ( pImp->pOrigFilter || bNotCurrent ) ? pImp->pOrigFilter : pImp->m_pFilter;
+    return pImp->pOrigFilter ? pImp->pOrigFilter : pImp->m_pFilter;
 }
 
 

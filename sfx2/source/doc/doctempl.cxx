@@ -1218,11 +1218,9 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
     pImp = nullptr;
 }
 
-void SfxDocumentTemplates::Update( bool _bSmart )
+void SfxDocumentTemplates::Update( )
 {
-    if  (   !_bSmart                                                // don't be smart
-        ||  ::svt::TemplateFolderCache( true ).needsUpdate()    // update is really necessary
-        )
+    if ( ::svt::TemplateFolderCache( true ).needsUpdate() )   // update is really necessary
     {
         if ( pImp->Construct() )
             pImp->Rescan();
