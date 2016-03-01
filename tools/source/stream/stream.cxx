@@ -1937,7 +1937,7 @@ void SvMemoryStream::FreeMemory()
     delete[] pBuf;
 }
 
-void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize, sal_Size nResizeOffset)
+void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize)
 {
     Flush();
     if( !bOwnsData )
@@ -1947,7 +1947,7 @@ void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize, sal_Size nResizeOffset)
     void* pRetVal = pBuf;
     pBuf          = nullptr;
     nEndOfData    = 0L;
-    nResize       = nResizeOffset;
+    nResize       = 64;
     nPos          = 0;
 
     if( nResize != 0 && nResize < 16 )

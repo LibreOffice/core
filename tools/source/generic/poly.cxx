@@ -1319,7 +1319,7 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
     }
 }
 
-void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
+void Polygon::Clip( const Rectangle& rRect )
 {
     // #105251# Justify rect before edge filtering
     Rectangle               aJustifiedRect( rRect );
@@ -1334,7 +1334,7 @@ void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
 
     for ( sal_uInt16 i = 0; i < nSourceSize; i++ )
         aVertFilter.Input( mpImplPolygon->mpPointAry[i] );
-    if ( bPolygon || aVertFilter.IsPolygon() )
+    if ( aVertFilter.IsPolygon() )
         aVertFilter.LastPoint();
     else
         aPolygon.LastPoint();
@@ -1468,7 +1468,7 @@ bool Polygon::IsRightOrientated() const
     return GetSignedArea() >= 0.0;
 }
 
-void Polygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
+void Polygon::Insert( sal_uInt16 nPos, const Point& rPt )
 {
     ImplMakeUnique();
 
@@ -1477,12 +1477,6 @@ void Polygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
 
     mpImplPolygon->ImplSplit( nPos, 1 );
     mpImplPolygon->mpPointAry[ nPos ] = rPt;
-
-    if( POLY_NORMAL != eFlags )
-    {
-        mpImplPolygon->ImplCreateFlagArray();
-        mpImplPolygon->mpFlagAry[ nPos ] = (sal_uInt8) eFlags;
-    }
 }
 
 void Polygon::Insert( sal_uInt16 nPos, const tools::Polygon& rPoly )

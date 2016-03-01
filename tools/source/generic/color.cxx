@@ -212,23 +212,15 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
     return RGB_COLORDATA( cR, cG, cB );
 }
 
-SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
+SvStream& Color::Read( SvStream& rIStm )
 {
-    if ( bNewFormat )
-        rIStm.ReadUInt32( mnColor );
-    else
-        ReadColor( rIStm, *this );
-
+    rIStm.ReadUInt32( mnColor );
     return rIStm;
 }
 
-SvStream& Color::Write( SvStream& rOStm, bool bNewFormat ) const
+SvStream& Color::Write( SvStream& rOStm ) const
 {
-    if ( bNewFormat )
-        rOStm.WriteUInt32( mnColor );
-    else
-        WriteColor( rOStm, *this );
-
+    rOStm.WriteUInt32( mnColor );
     return rOStm;
 }
 

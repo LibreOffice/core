@@ -281,7 +281,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
     }
 }
 
-void PolyPolygon::AdaptiveSubdivide( tools::PolyPolygon& rResult, const double d ) const
+void PolyPolygon::AdaptiveSubdivide( tools::PolyPolygon& rResult ) const
 {
     rResult.Clear();
 
@@ -289,7 +289,7 @@ void PolyPolygon::AdaptiveSubdivide( tools::PolyPolygon& rResult, const double d
 
     for( sal_uInt16 i = 0; i < mpImplPolyPolygon->mnCount; i++ )
     {
-        mpImplPolyPolygon->mpPolyAry[ i ]->AdaptiveSubdivide( aPolygon, d );
+        mpImplPolyPolygon->mpPolyAry[ i ]->AdaptiveSubdivide( aPolygon, 1.0 );
         rResult.Insert( aPolygon );
     }
 }
