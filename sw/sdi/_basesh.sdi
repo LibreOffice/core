@@ -364,6 +364,7 @@ interface BaseTextSelection
     SID_CLASSIFICATION_APPLY
     [
         ExecMethod = Execute ;
+        StateMethod = StateStyle ;
     ]
 
      //OS: Selection.Escape gibt es zusaetzlich zu Window.Escape

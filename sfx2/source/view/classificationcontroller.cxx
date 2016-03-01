@@ -122,7 +122,7 @@ IMPL_LINK_NOARG_TYPED(ClassificationCategoriesController, SelectHdl, ListBox&, v
 
 void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
 {
-    if (!m_pCategories || m_pCategories->GetEntryCount() > 0)
+    if (!m_pCategories)
         return;
 
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();
@@ -130,12 +130,15 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
         return;
 
     SfxClassificationHelper aHelper(*pObjectShell);
-    std::vector<OUString> aNames = aHelper.GetBACNames();
-    for (const OUString& rName : aNames)
-        m_pCategories->InsertEntry(rName);
-    // Normally VclBuilder::makeObject() does this.
-    m_pCategories->EnableAutoSize(true);
-    m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
+    if (m_pCategories->GetEntryCount() == 0)
+    {
+        std::vector<OUString> aNames = aHelper.GetBACNames();
+        for (const OUString& rName : aNames)
+            m_pCategories->InsertEntry(rName);
+        // Normally VclBuilder::makeObject() does this.
+        m_pCategories->EnableAutoSize(true);
+        m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
+    }
 
     // Restore state based on the doc. model.
     const OUString& rCategoryName = aHelper.GetBACName();
