@@ -378,11 +378,6 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
     return pResult;
 }
 
-void SmNode::GetAccessibleText( OUStringBuffer &/*rText*/ ) const
-{
-    SAL_WARN("starmath", "SmNode: GetAccessibleText not overridden");
-}
-
 const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
 {
     const SmNode *pResult = nullptr;
@@ -420,51 +415,9 @@ long SmNode::GetFormulaBaseline() const
 }
 
 
-SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
-    SmNode( rNode.GetType(), rNode.GetToken() )
-{
-    size_t i;
-    for (i = 0;  i < aSubNodes.size();  i++)
-        delete aSubNodes[i];
-    aSubNodes.resize(0);
-
-    auto nSize = rNode.aSubNodes.size();
-    aSubNodes.resize( nSize );
-    for (i = 0;  i < nSize;  ++i)
-    {
-        SmNode *pNode = rNode.aSubNodes[i];
-        aSubNodes[i] = pNode ? new SmNode( *pNode ) : nullptr;
-    }
-    ClaimPaternity();
-}
-
-
 SmStructureNode::~SmStructureNode()
 {
     ForEachNonNull(this, boost::checked_deleter<SmNode>());
-}
-
-
-SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
-{
-    SmNode::operator = ( rNode );
-
-    size_t i;
-    for (i = 0;  i < aSubNodes.size();  i++)
-        delete aSubNodes[i];
-    aSubNodes.resize(0);
-
-    auto nSize = rNode.aSubNodes.size();
-    aSubNodes.resize( nSize );
-    for (i = 0;  i < nSize;  ++i)
-    {
-        SmNode *pNode = rNode.aSubNodes[i];
-        aSubNodes[i] = pNode ? new SmNode( *pNode ) : nullptr;
-    }
-
-    ClaimPaternity();
-
-    return *this;
 }
 
 
@@ -2928,14 +2881,6 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 /**************************************************************************/
 //Implementation of all accept methods for SmVisitor
-
-void SmNode::Accept(SmVisitor*){
-    //This method is only implemented to avoid making SmNode abstract because an
-    //obscure copy constructor is used... I can't find it's implementation, and
-    //don't want to figure out how to fix it... If you want to, just delete this
-    //method, making SmNode abstract, and see where you can an problem with that.
-    SAL_WARN("starmath", "SmNode should not be visitable!");
-}
 
 void SmTableNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
