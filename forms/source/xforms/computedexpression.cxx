@@ -153,9 +153,9 @@ void ComputedExpression::clear()
 }
 
 
-OUString ComputedExpression::getString( const OUString& rDefault ) const
+OUString ComputedExpression::getString() const
 {
-    return mxResult.is() ? mxResult->getString() : rDefault;
+    return mxResult.is() ? mxResult->getString() : OUString();
 }
 
 bool ComputedExpression::getBool( bool bDefault ) const

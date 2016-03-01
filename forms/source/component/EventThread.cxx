@@ -110,10 +110,10 @@ void OComponentEventThread::disposing( const EventObject& evt ) throw ( css::uno
     }
 }
 
-void OComponentEventThread::addEvent( const EventObject* _pEvt, bool bFlag )
+void OComponentEventThread::addEvent( const EventObject* _pEvt )
 {
     Reference<XControl>  xTmp;
-    addEvent( _pEvt, xTmp, bFlag );
+    addEvent( _pEvt, xTmp );
 }
 
 void OComponentEventThread::addEvent( const EventObject* _pEvt,

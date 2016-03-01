@@ -116,9 +116,9 @@ namespace frm
         }
 
 
-        static WinBits getWinBits( const Reference< XControlModel >& _rxModel, WinBits nBaseBits = 0 )
+        static WinBits getWinBits( const Reference< XControlModel >& _rxModel )
         {
-            WinBits nBits = nBaseBits;
+            WinBits nBits = 0;
             try
             {
                 Reference< XPropertySet > xProps( _rxModel, UNO_QUERY );

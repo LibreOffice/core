@@ -232,7 +232,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 // Date and Time Functions
 
-static OString makeDateTimeString (const DateTime& aDateTime, bool bUTC = true)
+static OString makeDateTimeString (const DateTime& aDateTime)
 {
     OStringBuffer aDateTimeString;
     aDateTimeString.append((sal_Int32)aDateTime.GetYear());
@@ -251,7 +251,7 @@ static OString makeDateTimeString (const DateTime& aDateTime, bool bUTC = true)
     aDateTimeString.append(":");
     if (aDateTime.GetSec()<10) aDateTimeString.append("0");
     aDateTimeString.append((sal_Int32)aDateTime.GetSec());
-    if (bUTC) aDateTimeString.append("Z");
+    aDateTimeString.append("Z");
 
     return aDateTimeString.makeStringAndClear();
 }

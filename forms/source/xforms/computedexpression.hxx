@@ -113,7 +113,7 @@ public:
     // must call evaluate to ensure current results.)
     css::uno::Reference<css::xml::xpath::XXPathObject> getXPath() const { return mxResult;}
     bool getBool( bool bDefault = false ) const;
-    OUString getString( const OUString& rDefault = OUString() ) const;
+    OUString getString() const;
 
 };
 
