@@ -60,11 +60,6 @@ public:
     /** tries to find a template in the chart-type manager that matches the
         given diagram.
 
-        @param rPreferredTemplateName
-            Check this template first.  This may speed up searching, if the
-            caller assumes a certain template as most likely to be the one that
-            matches.
-
         @return
             A pair containing a template with the correct properties set as
             first entry and the service name of the templateas second entry.  If
@@ -75,8 +70,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory > & xChartTypeManager,
-            const OUString & rPreferredTemplateName = OUString());
+                ::com::sun::star::lang::XMultiServiceFactory > & xChartTypeManager);
 
     /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
         given diagram.
@@ -102,18 +96,16 @@ public:
         bool& rbFound, bool& rbAmbiguous
         );
 
-    /** @param bOnlyAtFirstChartType
-            If </sal_True>, the stacking mode is only set at the series found inside
-            the first chart type.  This is the standard for all current
-            templates (the only template that has more than one chart-type and
-            allows stacking is bar/line combi, and for this the stacking only
-            applies to the first chart type/the bars)
+    /** The stacking mode is only set at the series found inside
+        the first chart type.  This is the standard for all current
+        templates (the only template that has more than one chart-type and
+        allows stacking is bar/line combi, and for this the stacking only
+        applies to the first chart type/the bars)
      */
     static void setStackMode(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
-        StackMode eStackMode,
-        bool bOnlyAtFirstChartType = true
+        StackMode eStackMode
         );
 
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack

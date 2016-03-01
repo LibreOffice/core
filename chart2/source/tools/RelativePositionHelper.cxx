@@ -244,8 +244,7 @@ awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
 bool RelativePositionHelper::centerGrow(
     chart2::RelativePosition & rInOutPosition,
     chart2::RelativeSize & rInOutSize,
-    double fAmountX, double fAmountY,
-    bool bCheck /* = true */ )
+    double fAmountX, double fAmountY )
 {
     chart2::RelativePosition aPos( rInOutPosition );
     chart2::RelativeSize     aSize( rInOutSize );
@@ -312,39 +311,35 @@ bool RelativePositionHelper::centerGrow(
         rInOutSize.Secondary == aSize.Secondary )
         return false;
 
-    // check
-    if( bCheck )
-    {
-        // Note: this somewhat complicated check allows the output being
-        // out-of-bounds if the input was also out-of-bounds, and the change is
-        // for "advantage".  E.g., you have a chart that laps out on the left
-        // side. If you shrink it, this should be possible, also if it still
-        // laps out on the left side afterwards. But you shouldn't be able to
-        // grow it then.
+    // Note: this somewhat complicated check allows the output being
+    // out-of-bounds if the input was also out-of-bounds, and the change is
+    // for "advantage".  E.g., you have a chart that laps out on the left
+    // side. If you shrink it, this should be possible, also if it still
+    // laps out on the left side afterwards. But you shouldn't be able to
+    // grow it then.
 
-        chart2::RelativePosition aUpperLeft(
-            RelativePositionHelper::getReanchoredPosition( aPos, aSize, drawing::Alignment_TOP_LEFT ));
-        chart2::RelativePosition aLowerRight(
-            RelativePositionHelper::getReanchoredPosition( aPos, aSize, drawing::Alignment_BOTTOM_RIGHT ));
+    chart2::RelativePosition aUpperLeft(
+        RelativePositionHelper::getReanchoredPosition( aPos, aSize, drawing::Alignment_TOP_LEFT ));
+    chart2::RelativePosition aLowerRight(
+        RelativePositionHelper::getReanchoredPosition( aPos, aSize, drawing::Alignment_BOTTOM_RIGHT ));
 
-        // Do not grow, if this leads to corners being off-screen
-        if( fAmountX > 0.0 &&
-            ( (aUpperLeft.Primary < fPosCheckThreshold) ||
-              (aLowerRight.Primary > (1.0 - fPosCheckThreshold)) ))
-            return false;
-        if( fAmountY > 0.0 &&
-            ( (aUpperLeft.Secondary < fPosCheckThreshold) ||
-              (aLowerRight.Secondary > (1.0 - fPosCheckThreshold)) ))
-            return false;
+    // Do not grow, if this leads to corners being off-screen
+    if( fAmountX > 0.0 &&
+        ( (aUpperLeft.Primary < fPosCheckThreshold) ||
+          (aLowerRight.Primary > (1.0 - fPosCheckThreshold)) ))
+        return false;
+    if( fAmountY > 0.0 &&
+        ( (aUpperLeft.Secondary < fPosCheckThreshold) ||
+          (aLowerRight.Secondary > (1.0 - fPosCheckThreshold)) ))
+        return false;
 
-        // Do not shrink, if this leads to a size too small
-        if( fAmountX < 0.0 &&
-            ( aSize.Primary < fSizeCheckThreshold ))
-            return false;
-        if( fAmountY < 0.0 &&
-            ( aSize.Secondary < fSizeCheckThreshold ))
-            return false;
-    }
+    // Do not shrink, if this leads to a size too small
+    if( fAmountX < 0.0 &&
+        ( aSize.Primary < fSizeCheckThreshold ))
+        return false;
+    if( fAmountY < 0.0 &&
+        ( aSize.Secondary < fSizeCheckThreshold ))
+        return false;
 
     rInOutPosition = aPos;
     rInOutSize = aSize;
@@ -354,29 +349,25 @@ bool RelativePositionHelper::centerGrow(
 bool RelativePositionHelper::moveObject(
     chart2::RelativePosition & rInOutPosition,
     const chart2::RelativeSize & rObjectSize,
-    double fAmountX, double fAmountY,
-    bool bCheck /* = true */ )
+    double fAmountX, double fAmountY )
 {
     chart2::RelativePosition aPos( rInOutPosition );
     aPos.Primary += fAmountX;
     aPos.Secondary += fAmountY;
     const double fPosCheckThreshold = 0.02;
 
-    if( bCheck )
-    {
-        chart2::RelativePosition aUpperLeft(
-            RelativePositionHelper::getReanchoredPosition( aPos, rObjectSize, drawing::Alignment_TOP_LEFT ));
-        chart2::RelativePosition aLowerRight( aUpperLeft );
-        aLowerRight.Primary += rObjectSize.Primary;
-        aLowerRight.Secondary += rObjectSize.Secondary;
+    chart2::RelativePosition aUpperLeft(
+        RelativePositionHelper::getReanchoredPosition( aPos, rObjectSize, drawing::Alignment_TOP_LEFT ));
+    chart2::RelativePosition aLowerRight( aUpperLeft );
+    aLowerRight.Primary += rObjectSize.Primary;
+    aLowerRight.Secondary += rObjectSize.Secondary;
 
-        const double fFarEdgeThreshold = 1.0 - fPosCheckThreshold;
-        if( ( fAmountX > 0.0 && (aLowerRight.Primary > fFarEdgeThreshold)) ||
-            ( fAmountX < 0.0 && (aUpperLeft.Primary < fPosCheckThreshold)) ||
-            ( fAmountY > 0.0 && (aLowerRight.Secondary > fFarEdgeThreshold)) ||
-            ( fAmountY < 0.0 && (aUpperLeft.Secondary < fPosCheckThreshold)) )
-            return false;
-    }
+    const double fFarEdgeThreshold = 1.0 - fPosCheckThreshold;
+    if( ( fAmountX > 0.0 && (aLowerRight.Primary > fFarEdgeThreshold)) ||
+        ( fAmountX < 0.0 && (aUpperLeft.Primary < fPosCheckThreshold)) ||
+        ( fAmountY > 0.0 && (aLowerRight.Secondary > fFarEdgeThreshold)) ||
+        ( fAmountY < 0.0 && (aUpperLeft.Secondary < fPosCheckThreshold)) )
+        return false;
 
     rInOutPosition = aPos;
     return true;

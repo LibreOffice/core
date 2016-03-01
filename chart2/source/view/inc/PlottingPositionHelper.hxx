@@ -60,12 +60,12 @@ public:
     inline bool   isStrongLowerRequested( sal_Int32 nDimensionIndex ) const;
     inline bool   isLogicVisible( double fX, double fY, double fZ ) const;
     inline void   doLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
-    inline void   doUnshiftedLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
+    inline void   doUnshiftedLogicScaling( double* pX, double* pY, double* pZ ) const;
     inline void   clipLogicValues( double* pX, double* pY, double* pZ ) const;
            void   clipScaledLogicValues( double* pX, double* pY, double* pZ ) const;
     inline bool   clipYRange( double& rMin, double& rMax ) const;
 
-    inline void   doLogicScaling( ::com::sun::star::drawing::Position3D& rPos, bool bClip=false ) const;
+    inline void   doLogicScaling( ::com::sun::star::drawing::Position3D& rPos ) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const;
@@ -323,11 +323,8 @@ void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ,
     }
 }
 
-void PlottingPositionHelper::doUnshiftedLogicScaling( double* pX, double* pY, double* pZ, bool bClip ) const
+void PlottingPositionHelper::doUnshiftedLogicScaling( double* pX, double* pY, double* pZ ) const
 {
-    if(bClip)
-        this->clipLogicValues( pX,pY,pZ );
-
     if(pX && m_aScales[0].Scaling.is())
         *pX = m_aScales[0].Scaling->doScaling(*pX);
     if(pY && m_aScales[1].Scaling.is())
@@ -336,9 +333,9 @@ void PlottingPositionHelper::doUnshiftedLogicScaling( double* pX, double* pY, do
         *pZ = m_aScales[2].Scaling->doScaling(*pZ);
 }
 
-void PlottingPositionHelper::doLogicScaling( ::com::sun::star::drawing::Position3D& rPos, bool bClip ) const
+void PlottingPositionHelper::doLogicScaling( ::com::sun::star::drawing::Position3D& rPos ) const
 {
-    doLogicScaling( &rPos.PositionX, &rPos.PositionY, &rPos.PositionZ, bClip );
+    doLogicScaling( &rPos.PositionX, &rPos.PositionY, &rPos.PositionZ );
 }
 
 void PlottingPositionHelper::clipLogicValues( double* pX, double* pY, double* pZ ) const

@@ -167,11 +167,10 @@ namespace chart
 {
 
 double StatisticsHelper::getVariance(
-    const Sequence< double > & rData,
-    bool bUnbiasedEstimator /* = false */ )
+    const Sequence< double > & rData )
 {
     sal_Int32 nValCount;
-    return lcl_getVariance( rData, nValCount, bUnbiasedEstimator );
+    return lcl_getVariance( rData, nValCount, false/*bUnbiasedEstimator*/ );
 }
 
 double StatisticsHelper::getStandardDeviation( const Sequence< double > & rData )

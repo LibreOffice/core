@@ -226,19 +226,16 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoRectangularFormat(
-        const uno::Reference< chart2::XChartDocument >& xChartDoc, bool bWithCategories )
+        const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
 
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
 
-    if( bWithCategories )
-    {
-        Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
-        if( xCategories.is() )
-            aResultVector.push_back( xCategories );
-    }
+    Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+    if( xCategories.is() )
+        aResultVector.push_back( xCategories );
 
     ::std::vector< Reference< chart2::XDataSeries > > xSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     uno::Reference< chart2::data::XDataSource > xSeriesSource(

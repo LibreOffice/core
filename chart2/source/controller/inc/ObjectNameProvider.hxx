@@ -62,7 +62,7 @@ public:
         The parameter rObjectCID has to be a ClassifiedIdentifier - see class ObjectIdentifier.
      */
     static OUString getHelpText( const OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel, bool bVerbose=false );
-    static OUString getHelpText( const OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument, bool bVerbose=false );
+    static OUString getHelpText( const OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument );
 
     /** This is used for showing the currently selected object in the status bar
         (command "Context")

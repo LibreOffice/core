@@ -82,8 +82,7 @@ public:
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >
             pressUsedDataIntoRectangularFormat( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument >& xChartDoc,
-                bool bWithCategories = true );
+                ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
         SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
             const ::com::sun::star::uno::Reference<

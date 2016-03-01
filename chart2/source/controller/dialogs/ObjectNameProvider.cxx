@@ -456,9 +456,9 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
     return aRet;
 }
 
-OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< chart2::XChartDocument >& xChartDocument, bool bVerbose )
+OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< chart2::XChartDocument >& xChartDocument )
 {
-    return getHelpText( rObjectCID, Reference< frame::XModel >( xChartDocument, uno::UNO_QUERY ), bVerbose );
+    return getHelpText( rObjectCID, Reference< frame::XModel >( xChartDocument, uno::UNO_QUERY ) );
 }
 
 OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel, bool bVerbose )

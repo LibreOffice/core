@@ -35,23 +35,11 @@ VLineProperties::VLineProperties()
     this->Width = uno::makeAny( sal_Int32(0) );//type sal_Int32 for property UNO_NAME_LINEWIDTH
 }
 
-void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp, bool bUseSeriesPropertyNames )
+void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     if(xProp.is())
     {
-        if( bUseSeriesPropertyNames ) try
-        {
-            this->Color = xProp->getPropertyValue( "BorderColor" );
-            this->LineStyle = xProp->getPropertyValue( "BorderStyle" );
-            this->Transparence = xProp->getPropertyValue( "BorderTransparency" );
-            this->Width = xProp->getPropertyValue( "BorderWidth" );
-            this->DashName = xProp->getPropertyValue( "BorderDashName" );
-        }
-        catch( const uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-        else try
+        try
         {
             this->Color = xProp->getPropertyValue( "LineColor" );
             this->LineStyle = xProp->getPropertyValue( "LineStyle" );

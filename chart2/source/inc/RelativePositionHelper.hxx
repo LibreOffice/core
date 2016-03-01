@@ -73,8 +73,8 @@ public:
         position such that the resize is relative to the former rectangle's
         center.
 
-        @param bCheck If </sal_True>, the resize is only done, if after
-               transformation, the position and size are within the bounds [0,1].
+        The resize is only done, if after
+        transformation, the position and size are within the bounds [0,1].
 
         @return </sal_True>, if changes were applied.
 
@@ -84,23 +84,21 @@ public:
     static bool centerGrow(
         ::com::sun::star::chart2::RelativePosition & rInOutPosition,
         ::com::sun::star::chart2::RelativeSize & rInOutSize,
-        double fAmountX, double fAmountY,
-        bool bCheck = true );
+        double fAmountX, double fAmountY );
 
     /** shifts a relative position about the given amount
 
-        @param bCheck If </sal_True>, the shift is only done, if after
-               transformation, the object represented by the position
-               rInOutPosition and its size rObjectSize the position and size are
-               within the bounds [0,1].
+        The shift is only done, if after
+        transformation, the object represented by the position
+        rInOutPosition and its size rObjectSize the position and size are
+        within the bounds [0,1].
 
         @return </sal_True>, if changes were applied.
      */
     static bool moveObject(
         ::com::sun::star::chart2::RelativePosition & rInOutPosition,
         const ::com::sun::star::chart2::RelativeSize & rObjectSize,
-        double fAmountX, double fAmountY,
-        bool bCheck = true );
+        double fAmountX, double fAmountY );
 };
 
 } //namespace chart

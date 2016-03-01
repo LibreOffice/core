@@ -948,7 +948,7 @@ void ThreeDHelper::getRotationAngleFromDiagram(
     }
 }
 
-void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >& xSceneProperties, bool bRightAngledAxes, bool bRotateLights )
+void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >& xSceneProperties, bool bRightAngledAxes )
 {
     try
     {
@@ -959,18 +959,15 @@ void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >
             if( bOldRightAngledAxes!=bRightAngledAxes)
             {
                 xSceneProperties->setPropertyValue( "RightAngledAxes", uno::makeAny( bRightAngledAxes ));
-                if( bRotateLights )
+                if(bRightAngledAxes)
                 {
-                    if(bRightAngledAxes)
-                    {
-                        ::basegfx::B3DHomMatrix aInverseRotation( lcl_getInverseRotationMatrix( xSceneProperties ) );
-                        lcl_rotateLights( aInverseRotation, xSceneProperties );
-                    }
-                    else
-                    {
-                        ::basegfx::B3DHomMatrix aCompleteRotation( lcl_getCompleteRotationMatrix( xSceneProperties ) );
-                        lcl_rotateLights( aCompleteRotation, xSceneProperties );
-                    }
+                    ::basegfx::B3DHomMatrix aInverseRotation( lcl_getInverseRotationMatrix( xSceneProperties ) );
+                    lcl_rotateLights( aInverseRotation, xSceneProperties );
+                }
+                else
+                {
+                    ::basegfx::B3DHomMatrix aCompleteRotation( lcl_getCompleteRotationMatrix( xSceneProperties ) );
+                    lcl_rotateLights( aCompleteRotation, xSceneProperties );
                 }
             }
         }

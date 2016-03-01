@@ -34,12 +34,8 @@ namespace StatisticsHelper
     /** Calculates 1/n * sum (x_i - x_mean)^2.
 
         @see http://mathworld.wolfram.com/Variance.html
-
-        @param bUnbiasedEstimator
-            If true, 1/(n-1) * sum (x_i - x_mean)^2 is returned.
      */
-    OOO_DLLPUBLIC_CHARTTOOLS double getVariance( const ::com::sun::star::uno::Sequence< double > & rData,
-        bool bUnbiasedEstimator = false );
+    OOO_DLLPUBLIC_CHARTTOOLS double getVariance( const ::com::sun::star::uno::Sequence< double > & rData );
 
     // square root of the variance
     OOO_DLLPUBLIC_CHARTTOOLS double getStandardDeviation( const ::com::sun::star::uno::Sequence< double > & rData );

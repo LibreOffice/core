@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 struct VLineProperties
 {
     com::sun::star::uno::Any Color; //type sal_Int32 UNO_NAME_LINECOLOR
@@ -38,8 +35,7 @@ struct VLineProperties
 
     VLineProperties();
     void initFromPropertySet( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet >& xProp
-                              , bool bUseSeriesPropertyNames=false );
+                                    ::com::sun::star::beans::XPropertySet >& xProp );
 
     bool isLineVisible() const;
 };

@@ -382,8 +382,7 @@ protected:
     void createErrorBar_X( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-        , double* pfScaledLogicX=nullptr );
+                ::com::sun::star::drawing::XShapes >& xTarget );
 
     void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex

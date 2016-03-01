@@ -1025,8 +1025,7 @@ void VSeriesPlotter::createErrorBar(
 
 void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-                            , const uno::Reference< drawing::XShapes >& xTarget
-                            , double* pfScaledLogicX )
+                            , const uno::Reference< drawing::XShapes >& xTarget )
 {
     if(m_nDimension!=2)
         return;
@@ -1041,7 +1040,7 @@ void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogic
             , rUnscaledLogicPosition, xErrorBarProp
             , rVDataSeries, nPointIndex
             , false /* bYError */
-            , pfScaledLogicX );
+            , nullptr );
     }
 }
 

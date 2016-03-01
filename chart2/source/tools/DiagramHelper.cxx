@@ -75,8 +75,7 @@ namespace chart
 DiagramHelper::tTemplateWithServiceName
     DiagramHelper::getTemplateForDiagram(
         const Reference< XDiagram > & xDiagram,
-        const Reference< lang::XMultiServiceFactory > & xChartTypeManager,
-        const OUString & rPreferredTemplateName )
+        const Reference< lang::XMultiServiceFactory > & xChartTypeManager )
 {
     DiagramHelper::tTemplateWithServiceName aResult;
 
@@ -86,39 +85,20 @@ DiagramHelper::tTemplateWithServiceName
     Sequence< OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
     const sal_Int32 nLength = aServiceNames.getLength();
 
-    bool bHasPreferredTemplate = !rPreferredTemplateName.isEmpty();
     bool bTemplateFound = false;
-
-    if( bHasPreferredTemplate )
-    {
-        Reference< XChartTypeTemplate > xTempl(
-            xChartTypeManager->createInstance( rPreferredTemplateName ), uno::UNO_QUERY );
-
-        if( xTempl.is() &&
-            xTempl->matchesTemplate( xDiagram, sal_True ))
-        {
-            aResult.first = xTempl;
-            aResult.second = rPreferredTemplateName;
-            bTemplateFound = true;
-        }
-    }
 
     for( sal_Int32 i = 0; ! bTemplateFound && i < nLength; ++i )
     {
         try
         {
-            if( ! bHasPreferredTemplate ||
-                ! rPreferredTemplateName.equals( aServiceNames[ i ] ))
-            {
-                Reference< XChartTypeTemplate > xTempl(
-                    xChartTypeManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
+            Reference< XChartTypeTemplate > xTempl(
+                xChartTypeManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
 
-                if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
-                {
-                    aResult.first = xTempl;
-                    aResult.second = aServiceNames[ i ];
-                    bTemplateFound = true;
-                }
+            if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
+            {
+                aResult.first = xTempl;
+                aResult.second = aServiceNames[ i ];
+                bTemplateFound = true;
             }
         }
         catch( const uno::Exception & ex )
@@ -247,8 +227,7 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
 
 void DiagramHelper::setStackMode(
     const Reference< XDiagram > & xDiagram,
-    StackMode eStackMode,
-    bool bOnlyAtFirstChartType /* = true */
+    StackMode eStackMode
 )
 {
     try
@@ -307,8 +286,7 @@ void DiagramHelper::setStackMode(
                 continue;
             uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
             sal_Int32 nMax = aChartTypeList.getLength();
-            if( bOnlyAtFirstChartType
-                && nMax >= 1 )
+            if( nMax >= 1 )
                 nMax = 1;
             for( sal_Int32 nT = 0; nT < nMax; ++nT )
             {

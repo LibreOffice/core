@@ -160,15 +160,8 @@ bool ImplOPropertySet::GetPropertyValueByHandle(
 }
 
 void ImplOPropertySet::SetPropertyValueByHandle(
-    sal_Int32 nHandle, const Any & rValue, Any * pOldValue )
+    sal_Int32 nHandle, const Any & rValue )
 {
-    if( pOldValue != nullptr )
-    {
-        tPropertyMap::const_iterator aFoundIter( m_aProperties.find( nHandle ) );
-        if( m_aProperties.end() != aFoundIter )
-            (*pOldValue) = (*aFoundIter).second;
-    }
-
     m_aProperties[ nHandle ] = rValue;
 }
 
