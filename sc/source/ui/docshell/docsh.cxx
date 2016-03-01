@@ -2970,7 +2970,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
         return;
 
     vector<const awt::KeyEvent*> aKeys;
-    aKeys.reserve(7);
+    aKeys.reserve(9);
 
     // Backspace key
     awt::KeyEvent aBackspace;
@@ -2995,6 +2995,18 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     aAltDown.KeyCode = awt::Key::DOWN;
     aAltDown.Modifiers = awt::KeyModifier::MOD2;
     aKeys.push_back(&aAltDown);
+
+    // Ctrl-Space
+    awt::KeyEvent aCtrlSpace;
+    aCtrlSpace.KeyCode = awt::Key::SPACE;
+    aCtrlSpace.Modifiers = awt::KeyModifier::MOD1;
+    aKeys.push_back(&aCtrlSpace);
+
+    // Ctrl-Shift-Space
+    awt::KeyEvent aCtrlShiftSpace;
+    aCtrlShiftSpace.KeyCode = awt::Key::SPACE;
+    aCtrlShiftSpace.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
+    aKeys.push_back(&aCtrlShiftSpace);
 
     // F4
     awt::KeyEvent aF4;
@@ -3026,6 +3038,8 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aBackspace, ".uno:Delete");
             xScAccel->setKeyEvent(aCtrlD, ".uno:FillDown");
             xScAccel->setKeyEvent(aAltDown, ".uno:DataSelect");
+            xScAccel->setKeyEvent(aCtrlSpace, ".uno:SelectColumn");
+            xScAccel->setKeyEvent(aCtrlShiftSpace, ".uno:SelectAll");
             xScAccel->setKeyEvent(aF4, ".uno:ToggleRelative");
             xScAccel->setKeyEvent(aCtrlShiftF4, ".uno:ViewDataSourceBrowser");
         break;
@@ -3033,6 +3047,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aDelete, ".uno:Delete");
             xScAccel->setKeyEvent(aBackspace, ".uno:ClearContents");
             xScAccel->setKeyEvent(aCtrlD, ".uno:DataSelect");
+            xScAccel->setKeyEvent(aCtrlShiftSpace, ".uno:SelectColumn");
             xScAccel->setKeyEvent(aF4, ".uno:ViewDataSourceBrowser");
             xScAccel->setKeyEvent(aShiftF4, ".uno:ToggleRelative");
         break;
