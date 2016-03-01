@@ -1682,7 +1682,7 @@ namespace svgio
             return rCandidate;
         }
 
-        ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider, NumberType aNumberType)
+        ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider)
         {
             ::std::vector< double > aRetval;
 
@@ -1693,7 +1693,7 @@ namespace svgio
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    aRetval.push_back(rInput[a].solve(rInfoProvider, aNumberType));
+                    aRetval.push_back(rInput[a].solve(rInfoProvider));
                 }
             }
 

@@ -105,7 +105,7 @@ namespace svgio
 
             /// OrientAuto content, set if found in current context
             bool getOrientAuto() const { return mbOrientAuto; }
-            void setOrientAuto(bool bOrientAuto = true) { mbOrientAuto = bOrientAuto; }
+            void setOrientAuto() { mbOrientAuto = true; }
 
         };
     } // end of namespace svgreader

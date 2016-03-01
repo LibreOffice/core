@@ -206,7 +206,7 @@ namespace svgio
         bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL, bool bCaseIndependent, SvgNumber& rOpacity);
 
         bool readSvgNumberVector(const OUString& rCandidate, SvgNumberVector& rSvgNumberVector);
-        ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider, NumberType aNumberType = length);
+        ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider);
 
         SvgAspectRatio readSvgAspectRatio(const OUString& rCandidate);
 
