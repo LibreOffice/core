@@ -324,18 +324,10 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
     m_aNodes_localize.insert( TagMap::value_type(OString("link") , sal_True) );
 }
 
-void XMLFile::Extract( XMLFile *pCur )
+void XMLFile::Extract()
 {
     m_pXMLStrings.reset( new XMLHashMap() );
-    if ( !pCur )
-        SearchL10NElements( this );
-    else
-    {
-        if( pCur->GetNodeType() == XML_NODE_TYPE_FILE )
-        {
-            SearchL10NElements(pCur);
-        }
-    }
+    SearchL10NElements( this );
 }
 
 void XMLFile::InsertL10NElement( XMLElement* pElement )

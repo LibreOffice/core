@@ -156,7 +156,7 @@ public:
 
     void Print( XMLNode *pCur = nullptr, sal_uInt16 nLevel = 0 );
     void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
-    void Extract( XMLFile *pCur = nullptr );
+    void Extract();
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings.get(); }
     void Write( OString const &rFilename );

@@ -63,7 +63,7 @@ public:
 
     void Execute( int nToken, char * pToken );
 
-    void SetError( bool bErr = true ) { bError = bErr; }
+    void SetError() { bError = true; }
     bool GetError() { return bError; }
 };
 
