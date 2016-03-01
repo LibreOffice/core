@@ -16,6 +16,24 @@
       "revId": "824aeb432cf0ca03ece6a7c894b931bef33542b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7473594e",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-03-01T06:40:11Z",
+      "side": 1,
+      "message": "This makes F9 recalculate at least the current cell.\nIn the context of the bug: after opening the document (which has autocalc off and was saved when not recalculated afer a change), the user can press F9 when the formulacell is selected and the cell gets recalculated.\n\nI have the strong impression that users believe that F9 means recalculate current cell and Ctrl_shift-F9 means forec recalculation of the whole document.\nThe current behaviour of F9 is -if I\u0027m not mistaken- that all dirty cells are recalculated.\n\nMy proposed \u0027fix\u0027 expands the current behaviour by setting the current cell to dirty, which without this \u0027fix\u0027 does not happen (despite pCell-\u003eSetDirtyVar()), and makes the behaviour more intuitive (again).",
+      "parentUuid": "1aa78d24_00129462",
+      "revId": "824aeb432cf0ca03ece6a7c894b931bef33542b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
