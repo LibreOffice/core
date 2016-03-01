@@ -6015,6 +6015,11 @@
           <value xml:lang="en-US">3D Model...</value>
         </prop>
       </node>
+      <node oor:name=".uno:ClassificationApply" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Apply Document Classification</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
