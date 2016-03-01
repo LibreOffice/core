@@ -587,7 +587,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterScript, pScriptLine);
 }
 
-bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
+bool SmCursor::InsertLimit(SmSubSup eSubSup) {
     //Find a subject to set limits on
     SmOperNode *pSubject = nullptr;
     //Check if pSelectedNode might be a subject
@@ -629,7 +629,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
         pSubSup->SetSubSup(eSubSup, pLine);
         PosAfterLimit = SmCaretPos(pLine, 1);
     //If it's already there... let's move the caret
-    } else if(bMoveCaret){
+    } else {
         pLine = pSubSup->GetSubSup(eSubSup);
         SmNodeList* pLineList = NodeToList(pLine);
         if(pLineList->size() > 0)
@@ -644,9 +644,8 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     AnnotateSelection();
 
     //Set caret position
-    if(bMoveCaret)
-        if(!SetCaretPosition(PosAfterLimit, true))
-            SetCaretPosition(SmCaretPos(pLine, 0), true);
+    if(!SetCaretPosition(PosAfterLimit, true))
+        SetCaretPosition(SmCaretPos(pLine, 0), true);
 
     EndEdit();
 
@@ -1539,33 +1538,29 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
     return true;
 }
 
-void SmCursor::MoveAfterBracket(SmBraceNode* pBraceNode, bool bMoveAnchor)
+void SmCursor::MoveAfterBracket(SmBraceNode* pBraceNode)
 {
     mpPosition->CaretPos.pSelectedNode = pBraceNode;
     mpPosition->CaretPos.Index = 1;
-    if (bMoveAnchor) {
-        mpAnchor->CaretPos.pSelectedNode = pBraceNode;
-        mpAnchor->CaretPos.Index = 1;
-    }
+    mpAnchor->CaretPos.pSelectedNode = pBraceNode;
+    mpAnchor->CaretPos.Index = 1;
     RequestRepaint();
 }
 
 
 /////////////////////////////////////// SmNodeListParser
 
-SmNode* SmNodeListParser::Parse(SmNodeList* list, bool bDeleteErrorNodes){
+SmNode* SmNodeListParser::Parse(SmNodeList* list){
     pList = list;
-    if(bDeleteErrorNodes){
-        //Delete error nodes
-        SmNodeList::iterator it = pList->begin();
-        while(it != pList->end()) {
-            if((*it)->GetType() == NERROR){
-                //Delete and erase
-                delete *it;
-                it = pList->erase(it);
-            }else
-                ++it;
-        }
+    //Delete error nodes
+    SmNodeList::iterator it = pList->begin();
+    while(it != pList->end()) {
+        if((*it)->GetType() == NERROR){
+            //Delete and erase
+            delete *it;
+            it = pList->erase(it);
+        }else
+            ++it;
     }
     SmNode* retval = Expression();
     pList = nullptr;

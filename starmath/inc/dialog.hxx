@@ -371,7 +371,7 @@ class SmSymbolDialog : public ModalDialog
     DECL_LINK_TYPED(GetClickHdl, Button*, void);
     void SymbolDblClickHdl();
 
-    void            FillSymbolSets(bool bDeleteText = true);
+    void            FillSymbolSets();
     const SmSym    *GetSymbol() const;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -444,8 +444,8 @@ class SmSymDefineDialog : public ModalDialog
 
     void    FillSymbols(ComboBox &rComboBox, bool bDeleteText = true);
     void    FillSymbolSets(ComboBox &rComboBox, bool bDeleteText = true);
-    void    FillFonts(bool bDeleteText = true);
-    void    FillStyles(bool bDeleteText = true);
+    void    FillFonts();
+    void    FillStyles();
 
     void    SetSymbolSetManager(const SmSymbolManager &rMgr);
     void    SetFont(const OUString &rFontName, const OUString &rStyleName);

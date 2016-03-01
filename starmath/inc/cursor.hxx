@@ -164,11 +164,11 @@ public:
      * This method only work if the caret is inside an SmOperNode, or to the right of one.
      * Notice also that this method ignores any selection made.
      *
-     * @param bMoveCaret If true that caret will be moved into the limit.
+     * The caret will be moved into the limit.
      *
      * @returns True, if the caret was in a context where this operation was possible.
      */
-    bool InsertLimit(SmSubSup eSubSup, bool bMoveCaret = true);
+    bool InsertLimit(SmSubSup eSubSup);
 
     /** Insert a new row or newline
      *
@@ -217,7 +217,7 @@ public:
     void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
     bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode = nullptr) const;
-    void MoveAfterBracket(SmBraceNode* pBraceNode, bool bMoveAnchor = true);
+    void MoveAfterBracket(SmBraceNode* pBraceNode);
 
 private:
     friend class SmDocShell;
@@ -414,11 +414,11 @@ public:
     SmNodeListParser(){
         pList = nullptr;
     }
-    /** Parse a list of nodes to an expression
+    /** Parse a list of nodes to an expression.
      *
-     * If bDeleteErrorNodes is true, old error nodes will be deleted.
+     * Old error nodes will be deleted.
      */
-    SmNode* Parse(SmNodeList* list, bool bDeleteErrorNodes = true);
+    SmNode* Parse(SmNodeList* list);
     /** True, if the token is an operator */
     static bool IsOperator(const SmToken &token);
     /** True, if the token is a relation operator */
