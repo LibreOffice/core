@@ -48,12 +48,11 @@ class  SbiDllMgr;
 class  SvNumberFormatter;           // time/date functions
 enum class SbiImageFlags;
 
-enum ForType
-{
-    FOR_TO,
-    FOR_EACH_ARRAY,
-    FOR_EACH_COLLECTION,
-    FOR_EACH_XENUMERATION
+enum class ForType {
+    To,
+    EachArray,
+    EachCollection,
+    EachXEnumeration
 };
 
 struct SbiForStack {                // for/next stack:
@@ -63,7 +62,7 @@ struct SbiForStack {                // for/next stack:
     SbxVariableRef  refInc;         // increment expression
 
     // For each support
-    ForType         eForType;
+    ForType             eForType;
     sal_Int32           nCurCollectionIndex;
     sal_Int32*          pArrayCurIndices;
     sal_Int32*          pArrayLowerBounds;
@@ -72,12 +71,13 @@ struct SbiForStack {                // for/next stack:
 
     SbiForStack()
         : pNext(nullptr)
-        , eForType(FOR_TO)
+        , eForType(ForType::To)
         , nCurCollectionIndex(0)
         , pArrayCurIndices(nullptr)
         , pArrayLowerBounds(nullptr)
         , pArrayUpperBounds(nullptr)
     {}
+
     ~SbiForStack()
     {
         delete[] pArrayCurIndices;
@@ -86,13 +86,14 @@ struct SbiForStack {                // for/next stack:
     }
 };
 
+#define MAXRECURSION 500
+
 struct SbiGosubStack {              // GOSUB-Stack:
     SbiGosubStack* pNext;           // Chain
     const sal_uInt8* pCode;             // Return-Pointer
     sal_uInt16 nStartForLvl;            // #118235: For Level in moment of gosub
 };
 
-#define MAXRECURSION 500
 
 #define Sb_ATTR_READONLY    0x0001
 #define Sb_ATTR_HIDDEN      0x0002
