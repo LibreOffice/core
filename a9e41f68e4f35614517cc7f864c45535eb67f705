@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_d7cfafb1",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T19:27:37Z",
+      "side": 1,
+      "message": "It is unnecessary to obtain a copy of the search string, the SvxSearchItem::GetSearchString() is identical to the SearchOptions2::searchString. So in the following condition you can directly use\n\n (rSearchItem.GetRegExp() \u0026\u0026 aSearchOptions.searchString.equals(\"^$\"))",
+      "revId": "a9e41f68e4f35614517cc7f864c45535eb67f705",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
