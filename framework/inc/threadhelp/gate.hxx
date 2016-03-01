@@ -107,10 +107,8 @@ class Gate : private boost::noncopyable
             @seealso    method wait()
             @seealso    method open()
 
-            @param      "pTimeOut", optional parameter to wait a certain time
-
         *//*-*****************************************************************************************************/
-        void wait(const TimeValue* pTimeOut = nullptr)
+        void wait()
         {
             // We must safe access to our internal member!
             ::osl::ClearableMutexGuard aLock( m_aAccessLock );
@@ -122,7 +120,7 @@ class Gate : private boost::noncopyable
                 // and if we hold the access lock nobody else can use this object without a deadlock!
                 aLock.clear();
                 // Wait for opening gate...
-                m_aPassage.wait( pTimeOut );
+                m_aPassage.wait();
             }
         }
 

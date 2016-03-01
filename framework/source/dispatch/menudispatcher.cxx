@@ -209,7 +209,7 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
     }
 }
 
-bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource )
+bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar )
 {
     uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
     if ( xFrame.is() )
@@ -261,14 +261,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
                 }
 
                 // set new menu on our system window and create new menu manager
-                if ( bMenuFromResource )
-                {
-                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, true, false );
-                }
-                else
-                {
-                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, true, true );
-                }
+                m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, true, true );
 
                 pSysWindow->SetMenuBar( pMenuBar );
             }
