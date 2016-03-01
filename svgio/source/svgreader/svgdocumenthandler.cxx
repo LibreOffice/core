@@ -21,6 +21,7 @@
 #include <svgio/svgreader/svgtoken.hxx>
 #include <svgio/svgreader/svgsvgnode.hxx>
 #include <svgio/svgreader/svggnode.hxx>
+#include <svgio/svgreader/svganode.hxx>
 #include <svgio/svgreader/svgnode.hxx>
 #include <svgio/svgreader/svgpathnode.hxx>
 #include <svgio/svgreader/svgrectnode.hxx>
@@ -203,6 +204,13 @@ namespace svgio
                     {
                         /// new node for Use
                         mpTarget = new SvgUseNode(maDocument, mpTarget);
+                        mpTarget->parseAttributes(xAttribs);
+                        break;
+                    }
+                    case SVGTokenA:
+                    {
+                        /// new node for A
+                        mpTarget = new SvgANode(maDocument, mpTarget);
                         mpTarget->parseAttributes(xAttribs);
                         break;
                     }
@@ -427,6 +435,7 @@ namespace svgio
                     case SVGTokenSvg:
                     case SVGTokenSymbol:
                     case SVGTokenUse:
+                    case SVGTokenA:
 
                     /// shape elements
                     case SVGTokenCircle:
