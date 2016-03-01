@@ -265,24 +265,22 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
 
 
 sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
-        FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
+        FrameSelector& rFrameSel, FrameBorderType eBorder )
 {
-    return new sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper >( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
+    return new sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper >( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), sfx::ITEMCONN_DEFAULT );
 }
 
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
         MetricField& rMfLeft, MetricField& rMfRight,
-        MetricField& rMfTop, MetricField& rMfBottom,
-        sfx::ItemConnFlags nFlags )
+        MetricField& rMfTop, MetricField& rMfBottom )
 {
-    return new MarginConnection( rItemSet, rMfLeft, rMfRight, rMfTop, rMfBottom, nFlags );
+    return new MarginConnection( rItemSet, rMfLeft, rMfRight, rMfTop, rMfBottom, sfx::ITEMCONN_DEFAULT );
 }
 
 sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
-        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor,
-        sfx::ItemConnFlags nFlags )
+        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor )
 {
-    return new ShadowConnection( rItemSet, rVsPos, rMfSize, rLbColor, nFlags );
+    return new ShadowConnection( rItemSet, rVsPos, rMfSize, rLbColor, sfx::ITEMCONN_DEFAULT );
 }
 
 

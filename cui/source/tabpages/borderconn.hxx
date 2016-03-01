@@ -36,21 +36,18 @@ class FrameSelector;
 /** Creates an item connection object that connects an SvxLineItem with an
     svx::FrameSelector control. */
 sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
-        FrameSelector& rFrameSel, FrameBorderType eBorder,
-        sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
+        FrameSelector& rFrameSel, FrameBorderType eBorder );
 
 /** Creates an item connection object that connects an SvxMarginItem with the
     controls of the SvxBorderTabPage. */
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
         MetricField& rMfLeft, MetricField& rMfRight,
-        MetricField& rMfTop, MetricField& rMfBottom,
-        sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
+        MetricField& rMfTop, MetricField& rMfBottom );
 
 /** Creates an item connection object that connects an SvxShadowItem with the
     controls of the SvxBorderTabPage. */
 sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
-        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor,
-        sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
+        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor );
 
 
 }

@@ -3664,14 +3664,11 @@ IMPL_LINK_NOARG_TYPED(SvxNumPositionTabPage, StandardHdl_Impl, Button*, void)
     SetModified();
 }
 
-void SvxNumPositionTabPage::SetModified(bool bRepaint)
+void SvxNumPositionTabPage::SetModified()
 {
     bModified = true;
-    if(bRepaint)
-    {
-        m_pPreviewWIN->SetLevel(nActNumLvl);
-        m_pPreviewWIN->Invalidate();
-    }
+    m_pPreviewWIN->SetLevel(nActNumLvl);
+    m_pPreviewWIN->Invalidate();
 }
 
 void SvxNumOptionsTabPage::SetModified(bool bRepaint)

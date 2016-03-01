@@ -1979,10 +1979,10 @@ void SentenceEditWindow_Impl::ResetUndo()
 }
 
 
-void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, bool bTryMerg )
+void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction )
 {
     ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
-    rUndoMgr.AddUndoAction(pAction, bTryMerg);
+    rUndoMgr.AddUndoAction(pAction);
     GetSpellDialog()->m_pUndoPB->Enable();
 }
 

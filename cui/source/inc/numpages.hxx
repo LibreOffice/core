@@ -457,7 +457,7 @@ public:
                                 const SfxItemSet* rAttrSet);
 
     void                SetMetric(FieldUnit eSet);
-    void                SetModified(bool bRepaint = true);
+    void                SetModified();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 

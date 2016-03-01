@@ -52,8 +52,8 @@ public:
 
     void                        ConnectElements();/**< should be called after all manipulations on elements are done
                                                              calcs real sizes depending on sizes of this */
-    void                        Show( bool bVisible = true, ShowFlags nFlags = ShowFlags::NONE );    ///< same meaning as Windows::Show()
-    void                        Enable( bool bEnable = true, bool bChild = true );  ///< same meaning as Windows::Enable()
+    void                        Show( bool bVisible = true );    ///< same meaning as Windows::Show()
+    void                        Enable( bool bEnable = true );  ///< same meaning as Windows::Enable()
 };
 
 #endif

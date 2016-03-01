@@ -176,10 +176,8 @@ private:
     static MenuSaveInData* GetDefaultData() { return pDefaultData; }
 
     void        Apply(
-        SvxConfigEntry* pRootEntry,
         css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
-        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvTreeListEntry *pParent = nullptr );
+        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory );
 
 public:
 
@@ -290,7 +288,7 @@ public:
     SvxEntries* GetEntries() const { return mpEntries; }
     void    SetEntries( SvxEntries* entries ) { mpEntries = entries; }
 
-    void    SetMain( bool bValue = true ) { bIsMain = bValue; }
+    void    SetMain() { bIsMain = true; }
     bool    IsMain() { return bIsMain; }
 
     void    SetParentData( bool bValue = true ) { bIsParentData = bValue; }

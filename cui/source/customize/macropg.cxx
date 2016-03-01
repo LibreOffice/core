@@ -195,16 +195,16 @@ void MacroEventListBox::ConnectElements()
     maListBox->InitHeaderBar( maHeaderBar.get() );
 }
 
-void MacroEventListBox::Show( bool bVisible, ShowFlags nFlags )
+void MacroEventListBox::Show( bool bVisible )
 {
-    maListBox->Show( bVisible, nFlags );
-    maHeaderBar->Show( bVisible, nFlags );
+    maListBox->Show( bVisible );
+    maHeaderBar->Show( bVisible );
 }
 
-void MacroEventListBox::Enable( bool bEnable, bool bChild )
+void MacroEventListBox::Enable( bool bEnable )
 {
-    maListBox->Enable( bEnable, bChild );
-    maHeaderBar->Enable( bEnable, bChild );
+    maListBox->Enable( bEnable );
+    maHeaderBar->Enable( bEnable );
 }
 
 // assign button ("Add Command") is enabled only if it is not read only

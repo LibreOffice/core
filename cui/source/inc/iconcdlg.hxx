@@ -91,8 +91,8 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) = 0;
     virtual void        Reset( const SfxItemSet& ) = 0;
 
-    bool                HasExchangeSupport() const              { return bHasExchangeSupport; }
-    void                SetExchangeSupport( bool bNew = true )  { bHasExchangeSupport = bNew; }
+    bool                HasExchangeSupport() const { return bHasExchangeSupport; }
+    void                SetExchangeSupport()       { bHasExchangeSupport = true; }
 
     enum {
         KEEP_PAGE = 0x0000, ///< error handling
@@ -181,7 +181,7 @@ public:
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = nullptr /* NULL allowed*/,
-        bool bItemsOnDemand = false, sal_uLong nPos = TREELIST_APPEND );
+        bool bItemsOnDemand = false );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16          GetCurPageId() const       { return mnCurrentPageId; }

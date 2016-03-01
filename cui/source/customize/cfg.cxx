@@ -1200,7 +1200,7 @@ bool MenuSaveInData::Apply()
         uno::Reference< lang::XSingleComponentFactory > xFactory (
             m_xMenuSettings, uno::UNO_QUERY );
 
-        Apply( pRootEntry, xIndexContainer, xFactory );
+        Apply( xIndexContainer, xFactory );
 
         try
         {
@@ -1237,14 +1237,9 @@ bool MenuSaveInData::Apply()
 }
 
 void MenuSaveInData::Apply(
-    SvxConfigEntry* pRootEntry_,
     uno::Reference< container::XIndexContainer >& rMenuBar,
-    uno::Reference< lang::XSingleComponentFactory >& rFactory,
-    SvTreeListEntry *pParentEntry )
+    uno::Reference< lang::XSingleComponentFactory >& rFactory )
 {
-    (void)pRootEntry_;
-    (void)pParentEntry;
-
     SvxEntries::const_iterator iter = GetEntries()->begin();
     SvxEntries::const_iterator end = GetEntries()->end();
 

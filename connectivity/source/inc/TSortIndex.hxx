@@ -112,8 +112,8 @@ namespace connectivity
             : ORefVector<sal_Int32>(_nSize)
             , m_bFrozen(false){}
 
-        bool    isFrozen() const                        { return m_bFrozen; }
-        void        setFrozen(bool _bFrozen=true)   { m_bFrozen = _bFrozen; }
+        bool    isFrozen() const   { return m_bFrozen; }
+        void    setFrozen()        { m_bFrozen = true; }
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TSORTINDEX_HXX

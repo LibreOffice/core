@@ -279,8 +279,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     const Image&    rChoiceIcon,
     CreatePage      pCreateFunc /* != 0 */,
     GetPageRanges   pRangesFunc /* darf 0 sein */,
-    bool            bItemsOnDemand,
-    sal_uLong           /*nPos*/
+    bool            bItemsOnDemand
 )
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
