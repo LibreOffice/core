@@ -943,7 +943,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             default :
                                 aLineInfo.SetStyle( LINE_SOLID );
                         }
-                        switch( nStyle & 0xF00 )
+                        switch( nStyle & PS_ENDCAP_STYLE_MASK )
                         {
                             case PS_ENDCAP_ROUND :
                                 if ( aSize.Width() )
@@ -961,7 +961,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             default :
                                 aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_BUTT );
                         }
-                        switch( nStyle & 0xF000 )
+                        switch( nStyle & PS_JOIN_STYLE_MASK )
                         {
                             case PS_JOIN_ROUND :
                                 aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_ROUND );
@@ -1040,6 +1040,38 @@ bool EnhWMFReader::ReadEnhWMF()
                             case PS_SOLID :
                             default :
                                 aLineInfo.SetStyle( LINE_SOLID );
+                        }
+                        switch( nStyle & PS_ENDCAP_STYLE_MASK )
+                        {
+                            case PS_ENDCAP_ROUND :
+                                if ( aLineInfo.GetWidth() )
+                                {
+                                    aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_ROUND );
+                                    break;
+                                }
+                            case PS_ENDCAP_SQUARE :
+                                if ( aLineInfo.GetWidth() )
+                                {
+                                    aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_SQUARE );
+                                    break;
+                                }
+                            case PS_ENDCAP_FLAT :
+                            default :
+                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_BUTT );
+                        }
+                        switch( nStyle & PS_JOIN_STYLE_MASK )
+                        {
+                            case PS_JOIN_ROUND :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_ROUND );
+                            break;
+                            case PS_JOIN_MITER :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_MITER );
+                            break;
+                            case PS_JOIN_BEVEL :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_BEVEL );
+                            break;
+                            default :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_NONE );
                         }
                         pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
                     }
