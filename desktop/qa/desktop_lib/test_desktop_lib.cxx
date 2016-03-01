@@ -80,6 +80,7 @@ public:
     void testPasteWriter();
     void testPasteWriterJPEG();
     void testRowColumnHeaders();
+    void testHiddenRowHeaders();
     void testCellCursor();
     void testCommandResult();
     void testWriterComments();
@@ -101,6 +102,7 @@ public:
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
     CPPUNIT_TEST(testRowColumnHeaders);
+    CPPUNIT_TEST(testHiddenRowHeaders);
     CPPUNIT_TEST(testCellCursor);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
@@ -544,6 +546,39 @@ void DesktopLOKTest::testRowColumnHeaders()
             CPPUNIT_ASSERT(nPrevious < nSize);
             break;
         }
+        nPrevious = nSize;
+    }
+}
+
+void DesktopLOKTest::testHiddenRowHeaders()
+{
+    LibLODocument_Impl* pDocument = loadDoc("hidden-row.ods");
+
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
+    std::stringstream aStream(pJSON);
+    free(pJSON);
+    CPPUNIT_ASSERT(!aStream.str().empty());
+
+    boost::property_tree::read_json(aStream, aTree);
+    sal_Int32 nPrevious = 0;
+    bool bFirst = true;
+    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
+    {
+        sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
+        CPPUNIT_ASSERT(nSize > 0);
+
+        if (bFirst)
+            bFirst = false;
+        else
+        {
+            // nSize was 509, nPrevious was 254, i.e. hidden row wasn't reported as 0 height.
+            CPPUNIT_ASSERT_EQUAL(nPrevious, nSize);
+            break;
+        }
+
         nPrevious = nSize;
     }
 }

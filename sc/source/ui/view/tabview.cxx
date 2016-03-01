@@ -2326,7 +2326,8 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     long nTotalPixels = 0;
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
-        sal_uInt16 nSize = pDoc->GetOriginalHeight(nRow, aViewData.GetTabNo());
+        // nSize will be 0 for hidden rows.
+        sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
         long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTY());
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
 
