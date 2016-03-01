@@ -124,6 +124,29 @@ OUString convertLineStyleToString(LineStyle eAlign)
     return OUString();
 }
 
+OUString convertLineJoinToString(basegfx::B2DLineJoin eJoin)
+{
+    switch (eJoin)
+    {
+        default:
+        case basegfx::B2DLINEJOIN_NONE:    return OUString("none");
+        case basegfx::B2DLINEJOIN_BEVEL:   return OUString("bevel");
+        case basegfx::B2DLINEJOIN_MITER:   return OUString("miter");
+        case basegfx::B2DLINEJOIN_ROUND:   return OUString("round");
+    }
+}
+
+OUString convertLineCapToString(css::drawing::LineCap eCap)
+{
+    switch (eCap)
+    {
+        default:
+        case css::drawing::LineCap_BUTT:   return OUString("butt");
+        case css::drawing::LineCap_ROUND:  return OUString("round");
+        case css::drawing::LineCap_SQUARE: return OUString("square");
+    }
+}
+
 OUString convertFontWeigthToString(FontWeight eFontWeight)
 {
     enum FontWeight { WEIGHT_DONTKNOW, WEIGHT_THIN, WEIGHT_ULTRALIGHT,
@@ -282,9 +305,12 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 rWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
                 rWriter.attribute("width", aLineInfo.GetWidth());
                 rWriter.attribute("dashlen", aLineInfo.GetDashLen());
+                rWriter.attribute("dashcount", aLineInfo.GetDashCount());
                 rWriter.attribute("dotlen", aLineInfo.GetDotLen());
+                rWriter.attribute("dotcount", aLineInfo.GetDotCount());
                 rWriter.attribute("distance", aLineInfo.GetDistance());
-
+                rWriter.attribute("join", convertLineJoinToString(aLineInfo.GetLineJoin()));
+                rWriter.attribute("cap", convertLineCapToString(aLineInfo.GetLineCap()));
                 rWriter.endElement();
             }
             break;
