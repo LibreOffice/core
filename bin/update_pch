@@ -422,7 +422,7 @@ def filter_ignore(line, module):
             ]
     if module == 'xmlsecurity':
         ignore_list += [
-            'xmlsec/crypto.h',
+            'xmlsec/*',
             'xmlsecurity/xmlsec-wrapper.h',
             ]
 
