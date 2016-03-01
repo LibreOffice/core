@@ -236,14 +236,13 @@ void BrowseBox::EndScroll()
 }
 
 
-void BrowseBox::ToggleSelection( bool bForce )
+void BrowseBox::ToggleSelection()
 {
 
     // selection highlight-toggling allowed?
     if ( bHideSelect )
         return;
-    if ( !bForce &&
-         ( bNotToggleSel || !IsUpdateMode() || !bSelectionIsVisible ) )
+    if ( bNotToggleSel || !IsUpdateMode() || !bSelectionIsVisible )
         return;
 
     // only highlight painted areas!

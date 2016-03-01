@@ -304,8 +304,9 @@ sal_Unicode SvRTFParser::GetHexValue()
     return nHexVal;
 }
 
-void SvRTFParser::ScanText( const sal_Unicode cBreak )
+void SvRTFParser::ScanText()
 {
+     const sal_Unicode cBreak = 0;
     OUStringBuffer aStrBuffer;
     bool bContinue = true;
     while( bContinue && IsParserWorking() && aStrBuffer.getLength() < MAX_STRING_LEN)

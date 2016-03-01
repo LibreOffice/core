@@ -295,11 +295,10 @@ RoadmapItem* ORoadmap::InsertHyperLabel(ItemIndex _Index, const OUString& _sLabe
     return pItem;
 }
 
-void ORoadmap::SetRoadmapBitmap(const BitmapEx& _rBmp, bool _bInvalidate)
+void ORoadmap::SetRoadmapBitmap(const BitmapEx& _rBmp)
 {
     m_pImpl->setPicture( _rBmp );
-    if ( _bInvalidate )
-        Invalidate( );
+    Invalidate( );
 }
 
 void ORoadmap::SetRoadmapInteractive(bool _bInteractive)
@@ -406,22 +405,22 @@ bool ORoadmap::IsRoadmapComplete() const
     return m_pImpl->isComplete();
 }
 
-void ORoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex )
+void ORoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable )
 {
-    RoadmapItem* pItem = GetByID( _nItemId, _nStartIndex );
+    RoadmapItem* pItem = GetByID( _nItemId );
     if ( pItem != nullptr )
         pItem->Enable( _bEnable );
 }
 
-void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel, ItemIndex _nStartIndex )
+void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel )
 {
-    RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
+    RoadmapItem* pItem = GetByID( _nID );
     if ( pItem != nullptr )
     {
         pItem->Update( pItem->GetIndex(), _sLabel );
 
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
-        for (   HL_Vector::const_iterator i = rItems.begin() + _nStartIndex;
+        for (   HL_Vector::const_iterator i = rItems.begin();
                 i != rItems.end();
                 ++i
             )
@@ -431,9 +430,9 @@ void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel, Ite
     }
 }
 
-void ORoadmap::ChangeRoadmapItemID(ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex)
+void ORoadmap::ChangeRoadmapItemID(ItemId _nID, ItemId _NewID)
 {
-    RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
+    RoadmapItem* pItem = GetByID( _nID );
     if ( pItem != nullptr )
         pItem->SetID( _NewID );
 }
@@ -454,9 +453,9 @@ RoadmapItem* ORoadmap::GetByID(ItemId _nID, ItemIndex _nStartIndex)
     return nullptr;
 }
 
-const RoadmapItem* ORoadmap::GetByID(ItemId _nID, ItemIndex _nStartIndex) const
+const RoadmapItem* ORoadmap::GetByID(ItemId _nID) const
 {
-    return const_cast< ORoadmap* >( this )->GetByID( _nID, _nStartIndex );
+    return const_cast< ORoadmap* >( this )->GetByID( _nID );
 }
 
 RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex)

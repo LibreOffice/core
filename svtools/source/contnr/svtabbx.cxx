@@ -1123,9 +1123,9 @@ void SvHeaderTabListBox::GrabFocus()
     Control::GrabFocus();
 }
 
-Reference< XAccessible > SvHeaderTabListBox::GetAccessible( bool bCreate )
+Reference< XAccessible > SvHeaderTabListBox::GetAccessible()
 {
-    return Control::GetAccessible( bCreate );
+    return Control::GetAccessible();
 }
 
 vcl::Window* SvHeaderTabListBox::GetAccessibleParentWindow() const

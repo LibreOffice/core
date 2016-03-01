@@ -236,7 +236,7 @@ public:
     // Window
     virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
     virtual void                    GrabFocus() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
     virtual vcl::Window*                 GetAccessibleParentWindow() const override;
 
     /** Creates and returns the accessible object of the whole BrowseBox. */

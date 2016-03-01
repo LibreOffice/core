@@ -120,7 +120,7 @@ namespace svt { namespace table
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) override;
         SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
         SVT_DLLPRIVATE virtual void GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
-        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const override;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const override;
         SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const override;
 
         // temporary methods
@@ -134,7 +134,7 @@ namespace svt { namespace table
         // IAccessibleTable
         virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
         virtual void GrabFocus() override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
         virtual vcl::Window* GetAccessibleParentWindow() const override;
         virtual vcl::Window* GetWindowInstance() override;
         virtual sal_Int32 GetAccessibleControlCount() const override;
@@ -142,9 +142,9 @@ namespace svt { namespace table
         virtual long GetRowCount() const override;
         virtual long GetColumnCount() const override;
         virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) override;
-        virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
+        virtual Rectangle calcHeaderRect( bool _bIsColumnBar ) override;
         virtual Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
-        virtual Rectangle calcTableRect( bool _bOnScreen = true ) override;
+        virtual Rectangle calcTableRect() override;
         virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
         virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;

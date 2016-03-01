@@ -431,7 +431,7 @@ public:
 
     void            SetMaxPageWidth( long nMaxWidth );
 
-    void            EnableEditMode( bool bEnable = true ) { mbAutoEditMode = bEnable; }
+    void            EnableEditMode() { mbAutoEditMode = true; }
     bool            StartEditMode( sal_uInt16 nPageId );
     void            EndEditMode( bool bCancel = false );
     void            SetEditText( const OUString& rText ) { maEditText = rText; }

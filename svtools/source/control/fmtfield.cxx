@@ -1010,9 +1010,9 @@ void FormattedField::Last()
     SpinField::Last();
 }
 
-void FormattedField::UseInputStringForFormatting( bool bUseInputStr /* = true */ )
+void FormattedField::UseInputStringForFormatting()
 {
-    m_bUseInputStringForFormatting = bUseInputStr;
+    m_bUseInputStringForFormatting = true;
 }
 
 

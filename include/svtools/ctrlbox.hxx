@@ -175,10 +175,10 @@ public:
     sal_Int32       GetEntryPos( const Color& rColor ) const;
     Color           GetEntryColor( sal_Int32  nPos ) const;
 
-    void            SelectEntry( const OUString& rStr, bool bSelect = true )
-                        { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( const Color& rColor, bool bSelect = true );
-    Color           GetSelectEntryColor( sal_Int32  nSelIndex = 0 ) const;
+    void            SelectEntry( const OUString& rStr )
+                        { ListBox::SelectEntry( rStr ); }
+    void            SelectEntry( const Color& rColor );
+    Color           GetSelectEntryColor() const;
     bool            IsEntrySelected(const OUString& rStr ) const
     {
         return ListBox::IsEntrySelected(rStr);
@@ -198,16 +198,16 @@ private:
     ColorListBox&   operator =( const ColorListBox& ) = delete;
 };
 
-inline void ColorListBox::SelectEntry( const Color& rColor, bool bSelect )
+inline void ColorListBox::SelectEntry( const Color& rColor )
 {
     sal_Int32  nPos = GetEntryPos( rColor );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        ListBox::SelectEntryPos( nPos, bSelect );
+        ListBox::SelectEntryPos( nPos );
 }
 
-inline Color ColorListBox::GetSelectEntryColor( sal_Int32  nSelIndex ) const
+inline Color ColorListBox::GetSelectEntryColor() const
 {
-    sal_Int32  nPos = GetSelectEntryPos( nSelIndex );
+    sal_Int32  nPos = GetSelectEntryPos();
     Color aColor;
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         aColor = GetEntryColor( nPos );
@@ -328,7 +328,7 @@ public:
     sal_uInt16      GetEntryStyle( sal_Int32  nPos ) const;
 
     void            SelectEntry( sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID, bool bSelect = true );
-    sal_uInt16      GetSelectEntryStyle( sal_Int32  nSelIndex = 0 ) const;
+    sal_uInt16      GetSelectEntryStyle() const;
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
 
@@ -384,8 +384,8 @@ private:
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
 protected:
-    void            LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep = ';' );
-    void            SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep = ';' ) const;
+    void            LoadMRUEntries( const OUString& aFontMRUEntriesFile );
+    void            SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const;
 public:
                     FontNameBox( vcl::Window* pParent,
                                  WinBits nWinStyle = WB_SORT );

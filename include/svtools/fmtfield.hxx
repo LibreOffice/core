@@ -222,7 +222,7 @@ public:
         InputLine format.  That's also what you get in Calc when you edit a cell
         using F2
      */
-    void    UseInputStringForFormatting( bool bUseInputStr = true );
+    void    UseInputStringForFormatting();
     bool    IsUsingInputStringForFormatting() const { return m_bUseInputStringForFormatting;}
 
 protected:

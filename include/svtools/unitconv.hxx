@@ -32,7 +32,7 @@ typedef long (*FUNC_CONVERT)(long);
 // Functions -------------------------------------------------------------
 
 SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, bool bAll = false );
-SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit, bool bAll = false );
+SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit );
 
 SVT_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );
 SVT_DLLPUBLIC long      CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor );

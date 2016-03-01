@@ -261,7 +261,7 @@ namespace svt
             If this is <TRUE/>, then upon entering a new state, the "Next" button will automatically be
             enabled if and only if determineNextState does not return WZS_INVALID_STATE.
         */
-        void                enableAutomaticNextButtonState( bool _bEnable = true );
+        void                enableAutomaticNextButtonState();
         bool                isAutomaticNextButtonStateEnabled() const;
 
         /** removes a page from the history. Should be called when the page is being disabled
@@ -282,7 +282,7 @@ namespace svt
             @see skipUntil
             @see skipBackwardUntil
         */
-        void                    skip( sal_Int32 _nSteps = 1 );
+        void                    skip();
 
         /** skips one or more states, until a given state is reached
 

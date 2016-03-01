@@ -260,7 +260,7 @@ private:
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     using Window::ImplScroll;
     SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
-    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
+    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
@@ -307,13 +307,13 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     /// Insert @rImage item.
-    void            InsertItem(sal_uInt16 nItemId, const Image& rImage, size_t nPos = VALUESET_APPEND);
+    void            InsertItem(sal_uInt16 nItemId, const Image& rImage);
     /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
                                const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
-                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
+                               const OUString& rStr);
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
     /// Insert an User Drawn item with @rStr tooltip.
@@ -382,7 +382,7 @@ public:
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
 
     void            Format(vcl::RenderContext& rRenderContext);
-    void            SetFormat(bool bFormat = true);
+    void            SetFormat();
 
     void            StartSelection();
     void            EndSelection();
@@ -390,7 +390,7 @@ public:
     Size            CalcWindowSizePixel(const Size& rItemSize,
                                         sal_uInt16 nCalcCols = 0,
                                         sal_uInt16 nCalcLines = 0) const;
-    Size            CalcItemSizePixel(const Size& rSize, bool bOut = true) const;
+    Size            CalcItemSizePixel(const Size& rSize) const;
     long            GetScrollWidth() const;
 
     void            SetSelectHdl(const Link<ValueSet*,void>& rLink)

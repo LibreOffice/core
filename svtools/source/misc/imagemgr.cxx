@@ -595,11 +595,11 @@ Image SvFileInformationManager::GetImage( const INetURLObject& rObject, bool bBi
     return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, bool bBig )
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject )
 {
     sal_Int16 nImage = GetImageId_Impl( rObject, false );
     DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl( nImage, false/*bBig*/ );
 }
 
 Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, bool bBig )
@@ -613,7 +613,7 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
     return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, bool bBig )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo )
 {
     sal_uInt16 nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -627,7 +627,7 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     else if ( rInfo.m_bIsVolume )
         nImage = IMG_FIXEDDEV;
 
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl( nImage, false/*bBig*/ );
 }
 
 OUString SvFileInformationManager::GetDescription( const INetURLObject& rObject )

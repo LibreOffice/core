@@ -1053,7 +1053,7 @@ bool ValueSet::ImplScroll(const Point& rPos)
     return true;
 }
 
-size_t ValueSet::ImplGetItem( const Point& rPos, bool bMove ) const
+size_t ValueSet::ImplGetItem( const Point& rPos ) const
 {
     if (!mbHasVisibleItems)
     {
@@ -1084,13 +1084,6 @@ size_t ValueSet::ImplGetItem( const Point& rPos, bool bMove ) const
             {
                 return item;
             }
-        }
-
-        // return the previously selected item if spacing is set and
-        // the mouse hasn't left the window yet
-        if (bMove && mnSpacing && mnHighItemId)
-        {
-            return GetItemPos( mnHighItemId );
         }
     }
 
@@ -1597,13 +1590,13 @@ void ValueSet::UserDraw( const UserDrawEvent& )
 {
 }
 
-void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos )
+void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
 {
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( pItem, VALUESET_APPEND );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
@@ -1619,14 +1612,14 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                           const OUString& rText, size_t nPos )
+                           const OUString& rText )
 {
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( pItem, VALUESET_APPEND );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
@@ -2162,9 +2155,9 @@ void ValueSet::EndSelection()
     mbSelection = false;
 }
 
-void ValueSet::SetFormat(bool bFormat)
+void ValueSet::SetFormat()
 {
-    mbFormat = bFormat;
+    mbFormat = true;
 }
 
 void ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
@@ -2279,7 +2272,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
     return aSize;
 }
 
-Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
+Size ValueSet::CalcItemSizePixel( const Size& rItemSize) const
 {
     Size aSize = rItemSize;
 
@@ -2293,16 +2286,8 @@ Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
         else
             n = ITEM_OFFSET;
 
-        if ( bOut )
-        {
-            aSize.Width()  += n;
-            aSize.Height() += n;
-        }
-        else
-        {
-            aSize.Width()  -= n;
-            aSize.Height() -= n;
-        }
+        aSize.Width()  += n;
+        aSize.Height() += n;
     }
 
     return aSize;

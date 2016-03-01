@@ -67,9 +67,9 @@ private:
 
 public:
     SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, bool bBig = false );
-    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, bool bBig = false );
+    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL );
     SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, bool bBig = false );
-    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, bool bBig = false );
+    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo );
 
     SVT_DLLPUBLIC static rtl::OUString GetDescription( const INetURLObject& rObject );
     SVT_DLLPUBLIC static rtl::OUString GetFileDescription( const INetURLObject& rObject );

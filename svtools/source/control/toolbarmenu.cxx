@@ -739,15 +739,15 @@ void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, MenuItemBits 
 }
 
 
-void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits )
+void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& rImage )
 {
-    appendEntry( new ToolbarMenuEntry( *this, nEntryId, rImage, rStr, nItemBits ) );
+    appendEntry( new ToolbarMenuEntry( *this, nEntryId, rImage, rStr, MenuItemBits::NONE ) );
 }
 
 
-void ToolbarMenu::appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits )
+void ToolbarMenu::appendEntry( int nEntryId, Control* pControl )
 {
-    appendEntry( new ToolbarMenuEntry( *this, nEntryId, pControl, nItemBits ) );
+    appendEntry( new ToolbarMenuEntry( *this, nEntryId, pControl, MenuItemBits::NONE ) );
 }
 
 

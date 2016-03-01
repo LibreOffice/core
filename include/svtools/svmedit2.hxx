@@ -30,7 +30,7 @@ public:
                     ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
 
                     // methods of TextView
-    void            InsertText( const OUString& rNew, bool bSelect = false );
+    void            InsertText( const OUString& rNew );
     void            SetAutoScroll( bool bAutoScroll );
 
                     // methods of TextEngine

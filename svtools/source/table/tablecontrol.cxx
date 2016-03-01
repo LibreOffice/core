@@ -339,7 +339,7 @@ namespace svt { namespace table
     }
 
 
-    OUString TableControl::GetAccessibleObjectDescription( AccessibleTableControlObjType eObjType, sal_Int32 ) const
+    OUString TableControl::GetAccessibleObjectDescription( AccessibleTableControlObjType eObjType ) const
     {
         OUString aRetText;
         switch( eObjType )
@@ -510,9 +510,9 @@ namespace svt { namespace table
     }
 
 
-    Reference< XAccessible > TableControl::GetAccessible( bool bCreate )
+    Reference< XAccessible > TableControl::GetAccessible()
     {
-        return Control::GetAccessible( bCreate );
+        return Control::GetAccessible();
     }
 
 
@@ -616,9 +616,8 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
+    Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar )
     {
-        (void)_bOnScreen;
         return m_pImpl->calcHeaderRect( !_bIsColumnBar );
     }
 
@@ -629,9 +628,8 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::calcTableRect(bool _bOnScreen)
+    Rectangle TableControl::calcTableRect()
     {
-        (void)_bOnScreen;
         return m_pImpl->calcTableRect();
     }
 

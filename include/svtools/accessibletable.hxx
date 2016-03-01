@@ -71,12 +71,10 @@ public:
     /** return the description of the specified object.
         @param  eObjType
             The type to ask for
-        @param  _nPosition
-            The position of a tablecell (index position), header bar  column/row cell
         @return
             The description of the specified object.
     */
-    virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const= 0;
+    virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const= 0;
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
             the accessible object), depending on the specified object type. */
@@ -86,7 +84,7 @@ public:
     // Window
     virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true )= 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible()= 0;
     virtual vcl::Window* GetAccessibleParentWindow() const= 0;
     virtual vcl::Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
@@ -94,9 +92,9 @@ public:
     virtual long GetRowCount() const= 0;
     virtual long GetColumnCount() const= 0;
     virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )= 0;
-    virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) = 0;
+    virtual Rectangle calcHeaderRect( bool _bIsColumnBar ) = 0;
     virtual Rectangle calcHeaderCellRect( bool _bColHeader, sal_Int32 _nPos ) = 0;
-    virtual Rectangle calcTableRect( bool _bOnScreen = true ) = 0;
+    virtual Rectangle calcTableRect() = 0;
     virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) = 0;
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;

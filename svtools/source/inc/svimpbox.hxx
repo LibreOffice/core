@@ -190,7 +190,7 @@ private:
     void                SetNodeBmpTabDistance();
 
     // Selection-Engine
-    SvTreeListEntry* MakePointVisible( const Point& rPoint, bool bNotifyScroll=true );
+    SvTreeListEntry* MakePointVisible( const Point& rPoint );
 
     void                SetAnchorSelection( SvTreeListEntry* pOld,
                             SvTreeListEntry* pNewCursor );

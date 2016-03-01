@@ -248,7 +248,7 @@ public:
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;
 
-    void                SetChoiceWithCursor ( bool bDo = true );
+    void                SetChoiceWithCursor();
 
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );
@@ -265,8 +265,7 @@ public:
     SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
                                          const Image& rImage,
                                          sal_uLong nPos = CONTAINER_APPEND,
-                                         const Point* pPos = nullptr,
-                                         SvxIconViewFlags nFlags = SvxIconViewFlags::NONE
+                                         const Point* pPos = nullptr
                                        );
 
     /** creates automatic mnemonics for all icon texts in the control
@@ -292,9 +291,8 @@ public:
     // Re-calculation of cached view-data and invalidatiopn of those in the view
     void                    InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry );
 
-    // bHit == false: Entry is selectd, if the BoundRect is selected
-    //      == true : Bitmap or Text must be selected
-    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, bool bHit = false ) const;
+    // Entry is selectd, if the BoundRect is selected
+    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel ) const;
 
     // sal_uLong is the position of the selected element in the list
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;

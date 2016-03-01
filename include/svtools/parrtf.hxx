@@ -47,7 +47,7 @@ private:
 
 protected:
     sal_Unicode GetHexValue();
-    void ScanText( const sal_Unicode = 0 );
+    void ScanText();
     void SkipGroup();
 
     // scanne das naechste Token,

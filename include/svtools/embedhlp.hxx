@@ -92,7 +92,7 @@ public:
 
     sal_Int64       GetViewAspect() const;
     void            SetViewAspect( sal_Int64 nAspect );
-    const Graphic* GetGraphic( OUString* pMediaType = nullptr ) const;
+    const Graphic* GetGraphic() const;
 
     // the original size of the object ( size of the icon for iconified object )
     // no conversion is done if no target mode is provided

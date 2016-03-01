@@ -79,26 +79,23 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 }
 
 
-void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, bool bAll )
+void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit )
 {
     sal_Int64 nMin = rBox.Denormalize( rBox.GetMin( FUNIT_TWIP ) );
     sal_Int64 nMax = rBox.Denormalize( rBox.GetMax( FUNIT_TWIP ) );
 
-    if ( !bAll )
+    switch ( eUnit )
     {
-        switch ( eUnit )
-        {
-            case FUNIT_M:
-            case FUNIT_KM:
-                eUnit = FUNIT_CM;
-                break;
+        case FUNIT_M:
+        case FUNIT_KM:
+            eUnit = FUNIT_CM;
+            break;
 
-            case FUNIT_FOOT:
-            case FUNIT_MILE:
-                eUnit = FUNIT_INCH;
-                break;
-            default: ;//prevent warning
-        }
+        case FUNIT_FOOT:
+        case FUNIT_MILE:
+            eUnit = FUNIT_INCH;
+            break;
+        default: ;//prevent warning
     }
     rBox.SetUnit( eUnit );
 
@@ -107,11 +104,8 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, bool bAll )
     else
         rBox.SetDecimalDigits( 2 );
 
-    if ( !bAll )
-    {
-        rBox.SetMin( rBox.Normalize( nMin ), FUNIT_TWIP );
-        rBox.SetMax( rBox.Normalize( nMax ), FUNIT_TWIP );
-    }
+    rBox.SetMin( rBox.Normalize( nMin ), FUNIT_TWIP );
+    rBox.SetMax( rBox.Normalize( nMax ), FUNIT_TWIP );
 }
 
 

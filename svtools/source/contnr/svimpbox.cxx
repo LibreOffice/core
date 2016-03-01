@@ -827,7 +827,7 @@ SvTreeListEntry* SvImpLBox::GetEntry( const Point& rPoint ) const
 }
 
 
-SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint, bool bNotifyScroll)
+SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint)
 {
     if( !pCursor )
         return nullptr;
@@ -845,9 +845,9 @@ SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint, bool bNotifySc
             pView->SetEntryFocus( pCursor, false );
 
         if( nY < 0 )
-            KeyUp( false, bNotifyScroll );
+            KeyUp( false );
         else
-            KeyDown( false, bNotifyScroll );
+            KeyDown( false );
     }
     else
     {

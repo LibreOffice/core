@@ -376,13 +376,13 @@ public:
     {
         return pModel ? pModel->First() : nullptr;
     }
-    SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth = nullptr ) const
+    SvTreeListEntry* Next( SvTreeListEntry* pEntry ) const
     {
-         return pModel->Next(pEntry, pDepth);
+         return pModel->Next(pEntry);
     }
-    SvTreeListEntry* Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth = nullptr ) const
+    SvTreeListEntry* Prev( SvTreeListEntry* pEntry ) const
     {
-        return pModel->Prev(pEntry, pDepth);
+        return pModel->Prev(pEntry);
     }
     SvTreeListEntry* Last() const
     {
@@ -440,7 +440,7 @@ public:
 
         Be aware that enabling mnemonics gets more expensive as you add to the list.
     */
-    void            EnableEntryMnemonics( bool _bEnable = true );
+    void            EnableEntryMnemonics();
     bool            IsEntryMnemonicsEnabled() const;
 
     /** Handles the given key event.
@@ -678,8 +678,8 @@ public:
     Link<SvTreeListBox*,void>          GetCheckButtonHdl() const { return aCheckButtonHdl; }
     virtual void    CheckButtonHdl();
 
-    void            SetSublistOpenWithReturn( bool bMode = true );      // open/close sublist with return/enter
-    void            SetSublistOpenWithLeftRight( bool bMode = true );   // open/close sublist with cursor left/right
+    void            SetSublistOpenWithReturn();      // open/close sublist with return/enter
+    void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
 
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
@@ -711,7 +711,7 @@ public:
     void            ScrollOutputArea( short nDeltaEntries );
 
     short           GetEntryHeight() const  { return nEntryHeight; }
-    void            SetEntryHeight( short nHeight, bool bAlways = false );
+    void            SetEntryHeight( short nHeight );
     Size            GetOutputSizePixel() const;
     short           GetIndent() const { return nIndent; }
     void            SetIndent( short nIndent );

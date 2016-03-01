@@ -370,8 +370,7 @@ public:
     static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );
     static TransferableDataHelper   CreateFromSelection( vcl::Window * pWindow );
     static bool                     IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
-                                             const css::datatransfer::DataFlavor& rRequestFlavor,
-                                             bool bCompareParameters = false );
+                                             const css::datatransfer::DataFlavor& rRequestFlavor );
 };
 
 class SVT_DLLPUBLIC DragSourceHelper
@@ -517,8 +516,7 @@ public:
     using TransferableHelper::StartDrag;
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                    const Link<sal_Int8,void>& rCallbck,
-                                   sal_Int32 nDragPointer = DND_POINTER_NONE,
-                                   sal_Int32 nDragImage = DND_IMAGE_NONE );
+                                   sal_Int32 nDragPointer = DND_POINTER_NONE );
 };
 
 #endif

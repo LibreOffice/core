@@ -2177,8 +2177,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
 
 
 bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
-                                      const css::datatransfer::DataFlavor& rRequestFlavor,
-                                      bool )
+                                      const css::datatransfer::DataFlavor& rRequestFlavor )
 {
     Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
     bool                                    bRet = false;

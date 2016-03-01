@@ -66,8 +66,7 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         OUString *pNonConvertableChars = nullptr );
-    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen,
-                        rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
+    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen );
     SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const OUString&, const ImageMap&, const OUString&,

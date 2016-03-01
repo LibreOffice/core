@@ -26,7 +26,7 @@ ExtMultiLineEdit::ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle ) :
 {
 }
 
-void ExtMultiLineEdit::InsertText( const OUString& rNew, bool )
+void ExtMultiLineEdit::InsertText( const OUString& rNew )
 {
     GetTextView()->InsertText( rNew );
 }

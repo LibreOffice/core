@@ -812,15 +812,15 @@ namespace svt
     }
 
 
-    bool TemplateFolderCache::needsUpdate( bool _bForceCheck )
+    bool TemplateFolderCache::needsUpdate()
     {
-        return m_pImpl->needsUpdate( _bForceCheck );
+        return m_pImpl->needsUpdate( false/*_bForceCheck*/ );
     }
 
 
-    void TemplateFolderCache::storeState( bool _bForceRetrieval )
+    void TemplateFolderCache::storeState()
     {
-        m_pImpl->storeState( _bForceRetrieval );
+        m_pImpl->storeState( false/*_bForceRetrieval*/ );
     }
 
 

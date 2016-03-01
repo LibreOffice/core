@@ -1229,7 +1229,7 @@ void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeig
         aVerSBar->SetPosPixel( aPos );
 }
 
-void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
+void SvxIconChoiceCtrl_Impl::AdjustScrollBars()
 {
     long nVirtHeight = aVirtOutputSize.Height();
     long nVirtWidth = aVirtOutputSize.Width();
@@ -1572,7 +1572,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rec
 
 void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
-    vcl::RenderContext& rRenderContext, const OUString* pStr, vcl::ControlLayoutData* _pLayoutData )
+    vcl::RenderContext& rRenderContext, const OUString* pStr )
 {
     if (eItem == IcnViewFieldTypeText)
     {
@@ -1582,36 +1582,29 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
         else
             aText = *pStr;
 
-        if (_pLayoutData)
+        Color aOldFontColor = rRenderContext.GetTextColor();
+        if (pView->AutoFontColor())
         {
-            rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags, &_pLayoutData->m_aUnicodeBoundRects, &_pLayoutData->m_aDisplayText);
+            Color aBkgColor(rRenderContext.GetBackground().GetColor());
+            Color aFontColor;
+            sal_uInt16 nColor = (aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue()) / 3;
+            if (nColor > 127)
+                aFontColor.SetColor(COL_BLACK);
+            else
+                aFontColor.SetColor(COL_WHITE);
+            rRenderContext.SetTextColor(aFontColor);
         }
-        else
+
+        rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags);
+
+        if (pView->AutoFontColor())
+            rRenderContext.SetTextColor(aOldFontColor);
+
+        if (pEntry->IsFocused())
         {
-            Color aOldFontColor = rRenderContext.GetTextColor();
-            if (pView->AutoFontColor())
-            {
-                Color aBkgColor(rRenderContext.GetBackground().GetColor());
-                Color aFontColor;
-                sal_uInt16 nColor = (aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue()) / 3;
-                if (nColor > 127)
-                    aFontColor.SetColor(COL_BLACK);
-                else
-                    aFontColor.SetColor(COL_WHITE);
-                rRenderContext.SetTextColor(aFontColor);
-            }
-
-            rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags);
-
-            if (pView->AutoFontColor())
-                rRenderContext.SetTextColor(aOldFontColor);
-
-            if (pEntry->IsFocused())
-            {
-                Rectangle aRect (CalcFocusRect(pEntry));
-                ShowFocus(aRect);
-                DrawFocusRect(rRenderContext);
-            }
+            Rectangle aRect (CalcFocusRect(pEntry));
+            ShowFocus(aRect);
+            DrawFocusRect(rRenderContext);
         }
     }
     else
@@ -2051,8 +2044,7 @@ void SvxIconChoiceCtrl_Impl::SetBoundingRect_Impl( SvxIconChoiceCtrlEntry* pEntr
 }
 
 
-void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSyncSingleSelection,
-    bool bShowFocusAsync )
+void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSyncSingleSelection )
 {
     if( pEntry == pCursor )
     {
@@ -2076,15 +2068,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSy
         pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
         if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
             SelectEntry( pCursor, true );
-        if( !bShowFocusAsync )
-            ShowCursor( true );
-        else
-        {
-            if( !nUserEventShowCursor )
-                nUserEventShowCursor =
-                    Application::PostUserEvent( LINK( this, SvxIconChoiceCtrl_Impl, UserEventHdl),
-                                                EVENTID_SHOW_CURSOR );
-        }
+        ShowCursor( true );
     }
 }
 
@@ -3105,9 +3089,9 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
     return nullptr;
 }
 
-void SvxIconChoiceCtrl_Impl::SelectAll( bool bSelect, bool bPaint )
+void SvxIconChoiceCtrl_Impl::SelectAll( bool bSelect )
 {
-    bPaint = true;
+    bool bPaint = true;
 
     size_t nCount = aEntries.size();
     for( size_t nCur = 0; nCur < nCount && (bSelect || GetSelectionCount() ); nCur++ )

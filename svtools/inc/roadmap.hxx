@@ -53,12 +53,12 @@ public:
     virtual ~ORoadmap( );
     virtual void dispose() override;
 
-    void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
+    void            SetRoadmapBitmap( const BitmapEx& maBitmap );
 
-    void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex = 0  );
+    void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable );
 
-    void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel, ItemIndex _nStartIndex = 0 );
-    void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
+    void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel );
+    void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID  );
 
     void            SetRoadmapInteractive( bool _bInteractive );
     bool            IsRoadmapInteractive();
@@ -95,7 +95,7 @@ private:
     const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
 
     RoadmapItem*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
-    const RoadmapItem*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
+    const RoadmapItem*   GetByID( ItemId _nID  ) const;
     RoadmapItem*         GetPreviousHyperLabel( ItemIndex _Index);
 
     void                 DrawHeadline(vcl::RenderContext& rRenderContext);

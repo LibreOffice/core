@@ -174,15 +174,15 @@ public:
     bool IsReadStyle() const    { return bReadStyle; }
 
     // start PRE-/LISTING or XMP mode or filter tags respectively
-    inline void StartPRE( bool bRestart=false );
+    inline void StartPRE();
     void FinishPRE() { bReadPRE = false; }
     int FilterPRE( int nToken );
 
-    inline void StartListing( bool bRestart=false );
+    inline void StartListing();
     void FinishListing() { bReadListing = false; }
     int FilterListing( int nToken );
 
-    inline void StartXMP( bool bRestart=false );
+    inline void StartXMP();
     void FinishXMP() { bReadXMP = false; }
     int FilterXMP( int nToken );
 
@@ -243,24 +243,24 @@ public:
     bool SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 };
 
-inline void HTMLParser::StartPRE( bool bRestart )
+inline void HTMLParser::StartPRE()
 {
     bReadPRE = true;
-    bPre_IgnoreNewPara = !bRestart;
+    bPre_IgnoreNewPara = true;
     nPre_LinePos = 0UL;
 }
 
-inline void HTMLParser::StartListing( bool bRestart )
+inline void HTMLParser::StartListing()
 {
     bReadListing = true;
-    bPre_IgnoreNewPara = !bRestart;
+    bPre_IgnoreNewPara = true;
     nPre_LinePos = 0UL;
 }
 
-inline void HTMLParser::StartXMP( bool bRestart )
+inline void HTMLParser::StartXMP()
 {
     bReadXMP = true;
-    bPre_IgnoreNewPara = !bRestart;
+    bPre_IgnoreNewPara = true;
     nPre_LinePos = 0UL;
 }
 

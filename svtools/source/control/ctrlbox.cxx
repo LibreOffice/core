@@ -492,10 +492,10 @@ Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
     return ( *m_pColorDistFn )( rMain, rDefault );
 }
 
-sal_uInt16 LineListBox::GetSelectEntryStyle( sal_Int32 nSelIndex ) const
+sal_uInt16 LineListBox::GetSelectEntryStyle() const
 {
     sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID;
-    sal_Int32 nPos = GetSelectEntryPos( nSelIndex );
+    sal_Int32 nPos = GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if (!m_sNone.isEmpty())
@@ -962,9 +962,9 @@ void FontNameBox::dispose()
     ComboBox::dispose();
 }
 
-void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep ) const
+void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const
 {
-    OString aEntries(OUStringToOString(GetMRUEntries(cSep),
+    OString aEntries(OUStringToOString(GetMRUEntries(),
         RTL_TEXTENCODING_UTF8));
 
     if (aEntries.isEmpty() || aFontMRUEntriesFile.isEmpty())
@@ -983,7 +983,7 @@ void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     aStream.WriteLine( OString() );
 }
 
-void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep )
+void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
 {
     if( aFontMRUEntriesFile.isEmpty() )
         return;
@@ -999,7 +999,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     aStream.ReadLine( aLine );
     OUString aEntries = OStringToOUString(aLine,
         RTL_TEXTENCODING_UTF8);
-    SetMRUEntries( aEntries, cSep );
+    SetMRUEntries( aEntries );
 }
 
 void FontNameBox::InitFontMRUEntriesFile()

@@ -272,11 +272,11 @@ public:
     SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const
     { return pModel->NextVisible(this,pEntry,pDepth); }
 
-    SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const
-    { return pModel->PrevVisible(this,pEntry,pDepth); }
+    SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry ) const
+    { return pModel->PrevVisible(this,pEntry); }
 
-    SvTreeListEntry*        LastVisible( sal_uInt16* pDepth=nullptr ) const
-    { return pModel->LastVisible(this,pDepth); }
+    SvTreeListEntry*        LastVisible() const
+    { return pModel->LastVisible(this); }
 
     SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const
     { return pModel->NextVisible(this,pEntry,rDelta); }

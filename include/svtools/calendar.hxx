@@ -224,7 +224,7 @@ private:
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
-    SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev = true, bool bDrawNext = true);
+    SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev = true);
     SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                                              DayOfWeek eDayOfWeek, bool bBack = true,
@@ -272,7 +272,7 @@ public:
     void            SetNoSelection();
     bool            IsDateSelected( const Date& rDate ) const;
     Date            GetFirstSelectedDate() const;
-    void            EnableCallEverySelect( bool bEvery = true ) { mbAllSel = bEvery; }
+    void            EnableCallEverySelect() { mbAllSel = true; }
 
     void            SetCurDate( const Date& rNewDate );
     void            SetFirstDate( const Date& rNewFirstDate );
@@ -289,8 +289,7 @@ public:
 
     bool            IsTravelSelect() const { return mbTravelSelect; }
 
-    Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1,
-                                         long nCalcLines = 1 ) const;
+    Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1 ) const;
 
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
 };
@@ -360,8 +359,8 @@ public:
     VclPtr<Calendar>    CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
-    void                EnableToday( bool bToday = true ) { mbToday = bToday; }
-    void                EnableNone( bool bNone = true ) { mbNone = bNone; }
+    void                EnableToday() { mbToday = true; }
+    void                EnableNone() { mbNone = true; }
 
 protected:
     virtual void    StateChanged( StateChangedType nStateChange ) override;

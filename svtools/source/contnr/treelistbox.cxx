@@ -445,12 +445,12 @@ void SvTreeListBox::Clear()
         pModel->Clear();  // Model calls SvTreeListBox::ModelHasCleared()
 }
 
-void SvTreeListBox::EnableEntryMnemonics( bool _bEnable )
+void SvTreeListBox::EnableEntryMnemonics()
 {
-    if ( _bEnable == IsEntryMnemonicsEnabled() )
+    if ( IsEntryMnemonicsEnabled() )
         return;
 
-    mpImpl->m_bEntryMnemonicsEnabled = _bEnable;
+    mpImpl->m_bEntryMnemonicsEnabled = true;
     Invalidate();
 }
 
@@ -1568,14 +1568,14 @@ void SvTreeListBox::DisconnectFromModel()
     pImp->SetModel( GetModel() );
 }
 
-void SvTreeListBox::SetSublistOpenWithReturn( bool b )
+void SvTreeListBox::SetSublistOpenWithReturn()
 {
-    pImp->bSubLstOpRet = b;
+    pImp->bSubLstOpRet = true;
 }
 
-void SvTreeListBox::SetSublistOpenWithLeftRight( bool b )
+void SvTreeListBox::SetSublistOpenWithLeftRight()
 {
-    pImp->bSubLstOpLR = b;
+    pImp->bSubLstOpLR = true;
 }
 
 void SvTreeListBox::Resize()
@@ -2273,10 +2273,9 @@ void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
     }
 }
 
-void SvTreeListBox::SetEntryHeight( short nHeight, bool bAlways )
+void SvTreeListBox::SetEntryHeight( short nHeight )
 {
-
-    if( bAlways || nHeight > nEntryHeight )
+    if( nHeight > nEntryHeight )
     {
         nEntryHeight = nHeight;
         if( nEntryHeight )

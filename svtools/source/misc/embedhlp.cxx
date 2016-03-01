@@ -443,7 +443,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     }
 }
 
-const Graphic* EmbeddedObjectRef::GetGraphic( OUString* pMediaType ) const
+const Graphic* EmbeddedObjectRef::GetGraphic() const
 {
     try
     {
@@ -458,8 +458,6 @@ const Graphic* EmbeddedObjectRef::GetGraphic( OUString* pMediaType ) const
         SAL_WARN("svtools.misc", "Something went wrong on getting the graphic: " << ex.Message);
     }
 
-    if ( mpImpl->pGraphic && pMediaType )
-        *pMediaType = mpImpl->aMediaType;
     return mpImpl->pGraphic;
 }
 

@@ -76,7 +76,7 @@ public :
      OUString GetUser() { return m_pEDUsername->GetText(); };
      bool     IsRememberChecked() { return m_pCBPassword->IsChecked(); }
 
-     void ShowPasswordControl( bool bShow = true ) { m_bShowPassword = bShow; }
+     void ShowPasswordControl() { m_bShowPassword = true; }
 
 private:
 

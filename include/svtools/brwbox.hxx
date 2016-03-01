@@ -285,7 +285,7 @@ private:
 private:
     SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
-    SVT_DLLPRIVATE void            ToggleSelection( bool bForce = false );
+    SVT_DLLPRIVATE void            ToggleSelection();
 
     SVT_DLLPRIVATE void            UpdateScrollbars();
     SVT_DLLPRIVATE void            AutoSizeLastColumn();
@@ -460,7 +460,7 @@ public:
     void            SetColumnTitle( sal_uInt16 nColumnId, const OUString &rTitle );
     void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
-    void            FreezeColumn( sal_uInt16 nColumnId, bool bFreeze = true );
+    void            FreezeColumn( sal_uInt16 nColumnId );
     void            RemoveColumn( sal_uInt16 nColumnId );
     void            RemoveColumns();
 
@@ -496,13 +496,13 @@ public:
     virtual void    SelectRow( long nRow, bool _bSelect = true, bool bExpand = true ) override;
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect = true )
                         { SelectColumnPos( nCol, _bSelect, true); }
-    void            SelectColumnId( sal_uInt16 nColId, bool _bSelect = true )
-                        { SelectColumnPos( GetColumnPos(nColId), _bSelect, true); }
+    void            SelectColumnId( sal_uInt16 nColId )
+                        { SelectColumnPos( GetColumnPos(nColId), true, true); }
     long            GetSelectRowCount() const;
     sal_uInt16          GetSelectColumnCount() const;
     virtual bool    IsRowSelected( long nRow ) const override;
     bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
-    long            FirstSelectedRow( bool bInverse = false );
+    long            FirstSelectedRow();
     long            LastSelectedRow();
     long            NextSelectedRow();
     const MultiSelection* GetColumnSelection() const { return pColSel; }
@@ -514,9 +514,8 @@ public:
     bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
-    vcl::Window&         GetDataWindow() const { return *pDataWin; }
-    Rectangle       GetRowRectPixel( long nRow,
-                                     bool bRelToBrowser = true ) const;
+    vcl::Window&    GetDataWindow() const { return *pDataWin; }
+    Rectangle       GetRowRectPixel( long nRow ) const;
     Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
                                        bool bRelToBrowser = true) const;
     bool            IsFieldVisible( long nRow, sal_uInt16 nColId,
@@ -548,7 +547,7 @@ public:
         Note that this works only if there's a handle column, since only in this case,
         there *is* something for the user to click onto
     */
-    void            EnableInteractiveRowHeight( bool _bEnable = true ) { mbInteractiveRowHeight = _bEnable; }
+    void            EnableInteractiveRowHeight() { mbInteractiveRowHeight = true; }
     bool            IsInteractiveRowHeightEnabled( ) const { return mbInteractiveRowHeight; }
 
     /// access to selected methods, to be granted to the BrowserColumn
@@ -776,7 +775,7 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) override;
     virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
     virtual void                    GrabFocus() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
     virtual vcl::Window*            GetAccessibleParentWindow() const override;
     virtual vcl::Window*            GetWindowInstance() override;
 

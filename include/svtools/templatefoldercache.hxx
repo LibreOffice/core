@@ -75,22 +75,13 @@ namespace svt
         ~TemplateFolderCache( );
 
         /** determines whether or not the template configuration needs to be updated
-        @param _bForceCheck
-            set this to <TRUE/> if you want the object to rescan the template folders in every case. The default (<FALSE/>)
-            means that once the information has been retrieved in a first call, every second call returns the same result
-            as the first one, even if in the meantime the template folders changed.
         @return
             <TRUE/> if the template configuration needs to be updated
         */
-        bool    needsUpdate( bool _bForceCheck = false );
+        bool    needsUpdate();
 
-        /** stores the current state of the template folders in the cache
-        @param _bForceRetrieval
-            if set to <TRUE/>, the current state of the template folders is retrieved again, even if it is already known.
-            Usually, you set this to <FALSE/>: After calling <method>needsUpdate</method>, the state is know and does not
-            need to be read again.
-        */
-        void        storeState( bool _bForceRetrieval = false );
+        /** stores the current state of the template folders in the cache  */
+        void        storeState();
     };
 
 

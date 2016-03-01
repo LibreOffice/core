@@ -224,7 +224,7 @@ class SvxIconChoiceCtrl_Impl
                         DECL_LINK_TYPED( VisRectChangedHdl, Idle*, void );
                         DECL_LINK_TYPED( CallSelectHdlHdl, Idle*, void );
 
-    void                AdjustScrollBars( bool bVirtSizeGrowedOnly = false);
+    void                AdjustScrollBars();
     void                PositionScrollBars( long nRealWidth, long nRealHeight );
     static long         GetScrollBarPageSize( long nVisibleRange )
                         {
@@ -328,7 +328,7 @@ public:
     void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=nullptr );
     void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = nullptr );
     void                FontModified();
-    void                SelectAll( bool bSelect = true, bool bPaint = true );
+    void                SelectAll( bool bSelect = true );
     void                SelectEntry(
                             SvxIconChoiceCtrlEntry*,
                             bool bSelect,
@@ -372,8 +372,7 @@ public:
     void                SetCursor(
                             SvxIconChoiceCtrlEntry*,
                             // true == carry selection when single-selecting
-                            bool bSyncSingleSelection = true,
-                            bool bShowFocusAsync = false
+                            bool bSyncSingleSelection = true
                         );
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, bool bHit = false );
@@ -419,8 +418,7 @@ public:
                                       bool bIsBackgroundPainted = false);
 
     void                PaintItem(const Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
-                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext, const OUString* pStr = nullptr,
-                            vcl::ControlLayoutData* _pLayoutData = nullptr);
+                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext, const OUString* pStr = nullptr);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
@@ -592,11 +590,11 @@ public:
 
     void                Clear();
 
-    GridId              GetGrid( const Point& rDocPos, bool* pbClipped = nullptr );
+    GridId              GetGrid( const Point& rDocPos );
     GridId              GetGrid( sal_uInt16 nGridX, sal_uInt16 nGridY );
-    GridId              GetUnoccupiedGrid( bool bOccupyFound=true );
+    GridId              GetUnoccupiedGrid();
 
-    void                OccupyGrids( const SvxIconChoiceCtrlEntry*, bool bOccupy = true );
+    void                OccupyGrids( const SvxIconChoiceCtrlEntry* );
     void                OccupyGrid( GridId nId, bool bOccupy = true )
                         {
                             DBG_ASSERT(!_pGridMap || nId<(sal_uLong)(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");

@@ -544,9 +544,9 @@ void BrowseBox::GrabFocus()
     Control::GrabFocus();
 }
 
-Reference< XAccessible > BrowseBox::GetAccessible( bool bCreate )
+Reference< XAccessible > BrowseBox::GetAccessible()
 {
-    return Control::GetAccessible( bCreate );
+    return Control::GetAccessible();
 }
 
 vcl::Window* BrowseBox::GetAccessibleParentWindow() const
