@@ -1391,7 +1391,7 @@ Resource RID_GLOBSTR
     };
     String STR_ERR_NOREF
     {
-        Text [ en-US ] = "No references found." ;
+        Text [ en-US ] = "No cell references are found in the selected cells." ;
     };
     String STR_ERR_LINKOVERLAP
     {
