@@ -307,7 +307,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter(sal_uInt8  nRecordType,
 /**
  * @see SfxMiniRecordWriter
  */
-sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
+sal_uInt32 SfxMultiFixRecordWriter::Close()
 {
     // Header not written yet?
     if ( !_bHeaderOk )
@@ -320,8 +320,7 @@ sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
         _pStream->WriteUInt32( _nContentSize );
 
         // seek to end of record or stay after the header
-        if ( bSeekToEndOfRec )
-            _pStream->Seek(nEndPos);
+        _pStream->Seek(nEndPos);
         return nEndPos;
     }
 
@@ -417,7 +416,7 @@ void SfxMultiVarRecordWriter::NewContent()
 /**
  * @see SfxMiniRecordWriter
  */
-sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
+sal_uInt32 SfxMultiVarRecordWriter::Close()
 {
     // Header not written yet?
     if ( !_bHeaderOk )
@@ -444,8 +443,7 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
             _pStream->WriteUInt32( nContentOfsPos );
 
         // seek to the end of the record or stay where we are
-        if ( bSeekToEndOfRec )
-             _pStream->Seek(nEndPos);
+        _pStream->Seek(nEndPos);
         return nEndPos;
     }
 

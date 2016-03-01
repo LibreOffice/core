@@ -71,9 +71,9 @@ class INetURLHistory_Impl: private boost::noncopyable
 
         /** Initialization.
         */
-        void initialize (sal_uInt16 nLru, sal_uInt32 nHash = 0)
+        void initialize (sal_uInt16 nLru)
         {
-            m_nHash = nHash;
+            m_nHash = 0;
             m_nLru  = nLru;
             m_nMBZ  = 0;
         }
@@ -100,9 +100,9 @@ class INetURLHistory_Impl: private boost::noncopyable
 
         /** Initialization.
         */
-        void initialize (sal_uInt16 nThis, sal_uInt32 nHash = 0)
+        void initialize (sal_uInt16 nThis)
         {
-            m_nHash = nHash;
+            m_nHash = 0;
             m_nNext = nThis;
             m_nPrev = nThis;
         }

@@ -944,7 +944,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
     return GetEntryTable(eTypetmp, FIndex, rLnge);
 }
 
-sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditionalFormats )
+sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
 {
     ChangeIntl(eLnge);
     sal_uInt32 CLOffset = ImpGetCLOffset(ActLnge);
@@ -999,7 +999,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
         }
 
         MaxCLOffset += SV_COUNTRY_LANGUAGE_OFFSET;
-        ImpGenerateFormats( MaxCLOffset, bNoAdditionalFormats );
+        ImpGenerateFormats( MaxCLOffset, false/*bNoAdditionalFormats*/ );
         CLOffset = MaxCLOffset;
     }
     return CLOffset;
@@ -2092,13 +2092,13 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
 
 void SvNumberFormatter::ImpAdjustFormatCodeDefault(
         css::i18n::NumberFormatCode * pFormatArr,
-        sal_Int32 nCnt, bool bCheckCorrectness )
+        sal_Int32 nCnt )
 {
     using namespace ::com::sun::star;
 
     if ( !nCnt )
         return;
-    if (bCheckCorrectness && LocaleDataWrapper::areChecksEnabled())
+    if (LocaleDataWrapper::areChecksEnabled())
     {
         // check the locale data for correctness
         OStringBuffer aMsg;

@@ -204,7 +204,7 @@ public:
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
-    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;
+    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;
 
     void                            SetVersionMap( sal_uInt16 nVer,
                                                    sal_uInt16 nOldStart, sal_uInt16 nOldEnd,

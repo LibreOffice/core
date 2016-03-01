@@ -537,14 +537,13 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
 //static
 INetContentType INetContentTypes::RegisterContentType(OUString const & rTypeName,
                                                       OUString const & rPresentation,
-                                                      OUString const * pExtension,
-                                                      OUString const * pSystemFileType)
+                                                      OUString const * pExtension)
 {
     INetContentType eTypeID = GetContentType(rTypeName);
     if (eTypeID == CONTENT_TYPE_UNKNOWN)
         eTypeID = Registration::RegisterContentType(rTypeName, rPresentation,
                                                     pExtension,
-                                                    pSystemFileType);
+                                                    nullptr/*pSystemFileType*/);
     else if (eTypeID > CONTENT_TYPE_LAST)
     {
         TypeIDMapEntry * pTypeEntry = Registration::getEntry(eTypeID);
@@ -552,8 +551,6 @@ INetContentType INetContentTypes::RegisterContentType(OUString const & rTypeName
         {
             if (!rPresentation.isEmpty())
                 pTypeEntry->m_aPresentation = rPresentation;
-            if (pSystemFileType)
-                pTypeEntry->m_aSystemFileType = *pSystemFileType;
         }
         if (pExtension)
         {

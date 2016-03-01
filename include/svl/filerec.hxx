@@ -386,7 +386,7 @@ protected:
 public:
     inline          ~SfxMultiFixRecordWriter();
 
-    sal_uInt32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close();
 };
 
 /** write record with multiple content items
@@ -450,7 +450,7 @@ public:
 
     void                NewContent();
 
-    sal_uInt32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close();
 };
 
 /** write record with multiple content items with identical size

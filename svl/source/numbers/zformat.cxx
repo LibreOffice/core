@@ -1594,32 +1594,20 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
 
 void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
                                       LanguageType eConvertFrom,
-                                      LanguageType eConvertTo, bool bSystem )
+                                      LanguageType eConvertTo )
 {
     sal_Int32 nCheckPos;
     sal_uInt32 nKey;
     short nType = eType;
     OUString aFormatString( sFormatstring );
-    if ( bSystem )
-    {
-        rConverter.PutandConvertEntrySystem( aFormatString, nCheckPos, nType,
-                                             nKey, eConvertFrom, eConvertTo );
-    }
-    else
-    {
-        rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType,
-                                       nKey, eConvertFrom, eConvertTo );
-    }
+    rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType,
+                                   nKey, eConvertFrom, eConvertTo );
     const SvNumberformat* pFormat = rConverter.GetEntry( nKey );
     DBG_ASSERT( pFormat, "SvNumberformat::ConvertLanguage: Conversion ohne Format" );
     if ( pFormat )
     {
         ImpCopyNumberformat( *pFormat );
         // Reset values taken over from Formatter/Scanner
-        if ( bSystem )
-        {
-            maLocale.meLanguage = LANGUAGE_SYSTEM;
-        }
         // pColor still points to table in temporary Formatter/Scanner
         for ( sal_uInt16 i = 0; i < 4; i++ )
         {
@@ -4488,8 +4476,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
     return &NumFor[nNumFor].Info().sStrArray[nPos];
 }
 
-short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos,
-                                     bool bString /* = false */ ) const
+short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos ) const
 {
     if ( nNumFor > 3 )
     {
@@ -4503,40 +4490,10 @@ short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos,
     if ( nPos == 0xFFFF )
     {
         nPos = nAnz - 1;
-        if ( bString )
-        {
-            // Backwards
-            short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
-            while ( nPos > 0 && (*pType != NF_SYMBOLTYPE_STRING) &&
-                    (*pType != NF_SYMBOLTYPE_CURRENCY) )
-            {
-                pType--;
-                nPos--;
-            }
-            if ( (*pType != NF_SYMBOLTYPE_STRING) && (*pType != NF_SYMBOLTYPE_CURRENCY) )
-            {
-                return 0;
-            }
-        }
     }
     else if ( nPos > nAnz - 1 )
     {
         return 0;
-    }
-    else if ( bString )
-    {
-        // Forwards
-        short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
-        while ( nPos < nAnz && (*pType != NF_SYMBOLTYPE_STRING) &&
-                (*pType != NF_SYMBOLTYPE_CURRENCY) )
-        {
-            pType++;
-            nPos++;
-        }
-        if ( (*pType != NF_SYMBOLTYPE_STRING) && (*pType != NF_SYMBOLTYPE_CURRENCY) )
-        {
-            return 0;
-        }
     }
     return NumFor[nNumFor].Info().nTypeArray[nPos];
 }
@@ -4706,8 +4663,7 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
 }
 
 OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
-                                                const LocaleDataWrapper& rLocWrp,
-                                                bool bDontQuote ) const
+                                                const LocaleDataWrapper& rLocWrp ) const
 {
     OUStringBuffer aStr;
     bool bDefault[4];
@@ -4854,11 +4810,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         aStr.append( rLocWrp.getTime100SecSep() );
                         break;
                     case NF_SYMBOLTYPE_STRING :
-                        if( bDontQuote )
-                        {
-                            aStr.append( pStr[j] );
-                        }
-                        else if ( pStr[j].getLength() == 1 )
+                        if ( pStr[j].getLength() == 1 )
                         {
                             aStr.append( '\\' );
                             aStr.append( pStr[j] );
@@ -5076,8 +5028,7 @@ bool SvNumberformat::IsInQuote( const OUString& rStr, sal_Int32 nPos,
 
 // static
 sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
-                                       sal_Unicode cQuote, sal_Unicode cEscIn,
-                                       sal_Unicode cEscOut )
+                                       sal_Unicode cQuote, sal_Unicode cEscIn )
 {
     if ( nPos < 0 )
     {
@@ -5088,7 +5039,7 @@ sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
     {
         return -1;
     }
-    if ( !IsInQuote( rStr, nPos, cQuote, cEscIn, cEscOut ) )
+    if ( !IsInQuote( rStr, nPos, cQuote, cEscIn ) )
     {
         if ( rStr[ nPos ] == cQuote )
         {

@@ -120,8 +120,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           sal_Int32 & rEnd,
                                           CharClass const & rCharClass,
                                           INetURLObject::EncodeMechanism eMechanism = INetURLObject::WAS_ENCODED,
-                                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-                                          INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
+                                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
 /** Remove any password component from both absolute and relative URLs.
 
