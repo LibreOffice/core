@@ -182,6 +182,13 @@ void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyl
         maListStyleLists.erase( sListStyleName );
         maListStyleLists[sNewListStyleName] = pList;
     }
+    for (auto & it : maLists) // tdf#91131 update these references too
+    {
+        if (it.second->GetDefaultListStyleName() == sListStyleName)
+        {
+            it.second->SetDefaultListStyleName(sNewListStyleName);
+        }
+    }
 }
 
 
