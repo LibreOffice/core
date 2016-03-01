@@ -100,10 +100,11 @@ void OPreparedStatement::ensurePrepared()
         m_pInSqlda = static_cast<XSQLDA*>(calloc(1, XSQLDA_LENGTH(nItems)));
         m_pInSqlda->version = SQLDA_VERSION1;
         m_pInSqlda->sqln = nItems;
-        isc_dsql_describe_bind(m_statusVector,
-                               &m_aStatementHandle,
-                               1,
-                               m_pInSqlda);
+        aErr = isc_dsql_describe_bind(m_statusVector,
+                                      &m_aStatementHandle,
+                                      1,
+                                      m_pInSqlda);
+        SAL_WARN_IF(aErr, "connectivity.firebird", "isc_dsql_describe_bind failed");
     }
 
     if (!aErr)
