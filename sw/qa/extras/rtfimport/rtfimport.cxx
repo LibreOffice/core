@@ -49,6 +49,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
@@ -1281,6 +1282,20 @@ DECLARE_RTFIMPORT_TEST(testPoshPosv, "posh-posv.rtf")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(1), "HoriOrient"));
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(getShape(1), "VertOrient"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "FrameIsAutomaticHeight"));
+}
+
+DECLARE_RTFIMPORT_TEST(testTdf96326, "tdf96326.rtf")
+{
+    // Make sure this is not checked.
+    auto xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), "Bookmark");
+    uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
+    // This was true, ffres=25 was interpreted as checked.
+    CPPUNIT_ASSERT_EQUAL(false, bool(xParameters->hasElements()));
+
+    // And this is checked.
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(2), 2), "Bookmark");
+    xParameters = xFormField->getParameters();
+    CPPUNIT_ASSERT_EQUAL(true, xParameters->getByName("Checkbox_Checked").get<bool>());
 }
 
 DECLARE_RTFIMPORT_TEST(testN825305, "n825305.rtf")
