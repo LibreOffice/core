@@ -330,8 +330,7 @@ public:
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOpt,
-                                    const css::uno::Sequence< css::uno::Any >& rAnySeq,
-                                    bool bIgnoreEmpty = true ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    const css::uno::Sequence< css::uno::Any >& rAnySeq ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     virtual bool                CheckInsert( double fValue ) const
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );

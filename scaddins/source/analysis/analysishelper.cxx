@@ -1629,11 +1629,10 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
-        const uno::Sequence< uno::Any >& rAnySeq,
-        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        const uno::Sequence< uno::Any >& rAnySeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     rAnyConv.init( xOpt );
-    Append( rAnyConv, rAnySeq, bIgnoreEmpty );
+    Append( rAnyConv, rAnySeq, true/*bIgnoreEmpty*/ );
 }
 
 
