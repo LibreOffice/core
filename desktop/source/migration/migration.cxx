@@ -902,8 +902,7 @@ void MigrationImpl::runServices()
                 uno::Sequence< OUString > seqExtBlackList;
                 sal_uInt32 nSize = i_mig->excludeExtensions.size();
                 if ( nSize > 0 )
-                    seqExtBlackList = comphelper::arrayToSequence< OUString >(
-                                          &i_mig->excludeExtensions[0], nSize );
+                    seqExtBlackList = comphelper::containerToSequence( i_mig->excludeExtensions );
                 seqArguments[2] = uno::makeAny(NamedValue("ExtensionBlackList",
                                                uno::makeAny( seqExtBlackList )));
 

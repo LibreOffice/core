@@ -1732,7 +1732,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
 
             if( bFilter )
             {
-                aUserData = ::comphelper::containerToSequence< NamedValue, std::vector< NamedValue > >( aNewUserData );
+                aUserData = ::comphelper::containerToSequence( aNewUserData );
                 xNode->setUserData( aUserData );
             }
 

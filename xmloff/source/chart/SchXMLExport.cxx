@@ -384,7 +384,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
         }
     }
 
-    return comphelper::containerToSequence< Reference< chart2::data::XLabeledDataSequence > >( aContainer );
+    return comphelper::containerToSequence( aContainer );
 }
 
 Reference< chart2::data::XLabeledDataSequence >

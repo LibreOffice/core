@@ -853,7 +853,7 @@ Sequence< OUString > OServiceManager::getUniqueAvailableServiceNames(
         aNameSet.insert( (*aIt++).first );
     */
 
-    return comphelper::containerToSequence<OUString>(aNameSet);
+    return comphelper::containerToSequence(aNameSet);
 }
 
 // XMultiComponentFactory

@@ -637,7 +637,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
         items.push_back( pyObject2Any( rItem.get() ) );
     }
     while( (pItem = PyIter_Next( pObj )) );
-    a <<= comphelper::containerToSequence<Any>(items);
+    a <<= comphelper::containerToSequence(items);
     return true;
 }
 

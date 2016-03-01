@@ -89,7 +89,7 @@ void ChartConfigItem::ImplCommit()
 void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
 {
     m_aPropertiesToNotify.insert( rPropertyName );
-    EnableNotification( comphelper::containerToSequence<OUString>( m_aPropertiesToNotify ));
+    EnableNotification( comphelper::containerToSequence( m_aPropertiesToNotify ));
 }
 
 uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )

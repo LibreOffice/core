@@ -269,7 +269,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
         }
         else if ( aType == "stringList" )
         {
-            m_aGetValue <<= comphelper::containerToSequence<OUString>(aList);
+            m_aGetValue <<= comphelper::containerToSequence(aList);
             m_aGetValueCondition.set();
         }
         else

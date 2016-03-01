@@ -203,8 +203,7 @@ throw (uno::RuntimeException, std::exception)
         }
     }
 
-    uno::Sequence< sal_Int16 > aSeq =
-        comphelper::containerToSequence< sal_Int16, std::list< sal_Int16 > >( aGroupList );
+    uno::Sequence< sal_Int16 > aSeq = comphelper::containerToSequence( aGroupList );
 
     return aSeq;
 }
@@ -250,8 +249,7 @@ throw (uno::RuntimeException, std::exception)
         }
     }
 
-    uno::Sequence< frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
+    uno::Sequence< frame::DispatchInformation > aSeq = comphelper::containerToSequence( aCmdList );
 
     return aSeq;
 }

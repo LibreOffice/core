@@ -334,10 +334,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
                 "Could not find extension: " + identifier + ", " + fileName,
                 static_cast<cppu::OWeakObject*>(this), -1);
 
-        return comphelper::containerToSequence<
-            Reference<css::deployment::XPackage>,
-            ::std::list<Reference<css::deployment::XPackage> >
-            > (listExtensions);
+        return comphelper::containerToSequence(listExtensions);
     }
     catch ( const css::deployment::DeploymentException & )
     {
@@ -371,10 +368,7 @@ bool ExtensionManager::isUserDisabled(
     }
     OSL_ASSERT(listExtensions.size() == 3);
 
-    return isUserDisabled( ::comphelper::containerToSequence<
-                           Reference<css::deployment::XPackage>,
-                           ::std::list<Reference<css::deployment::XPackage> >
-                           > (listExtensions));
+    return isUserDisabled( ::comphelper::containerToSequence(listExtensions));
 }
 
 bool ExtensionManager::isUserDisabled(
@@ -427,10 +421,7 @@ void ExtensionManager::activateExtension(
     OSL_ASSERT(listExtensions.size() == 3);
 
     activateExtension(
-        ::comphelper::containerToSequence<
-        Reference<css::deployment::XPackage>,
-        ::std::list<Reference<css::deployment::XPackage> >
-        > (listExtensions),
+        ::comphelper::containerToSequence(listExtensions),
         bUserDisabled, bStartup, xAbortChannel, xCmdEnv);
 
     fireModified();

@@ -397,7 +397,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
             Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
 
             // tell it the objects to inspect
-            xInspector->inspect( comphelper::containerToSequence< Reference< XInterface > >(_rSelection) );
+            xInspector->inspect( comphelper::containerToSequence(_rSelection) );
         }
         catch( const VetoException& )
         {

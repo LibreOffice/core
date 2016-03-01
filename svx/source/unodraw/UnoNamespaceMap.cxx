@@ -224,7 +224,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
     while( aIter.next( aPrefix, aURL ) )
         aPrefixSet.insert( aPrefix );
 
-    return comphelper::containerToSequence<OUString>(aPrefixSet);
+    return comphelper::containerToSequence(aPrefixSet);
 }
 
 sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)

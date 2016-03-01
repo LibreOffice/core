@@ -412,7 +412,7 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException, std::exception
     if ( !m_bSupportsGroups )
         aNormalizedTypes.erase( cppu::UnoType<XGroupsSupplier>::get() );
 
-    return comphelper::containerToSequence<Type>(aNormalizedTypes);
+    return comphelper::containerToSequence(aNormalizedTypes);
 }
 
 Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException, std::exception)
