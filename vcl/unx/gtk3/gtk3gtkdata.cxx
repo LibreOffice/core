@@ -82,6 +82,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 
     m_bX11Display = GDK_IS_X11_DISPLAY( m_pGdkDisplay );
 
+#if GTK_CHECK_VERSION(3,10,0)
 #ifdef GDK_WINDOWING_X11
     if (m_bX11Display)
     {
@@ -90,6 +91,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
             gdk_x11_display_set_window_scale(m_pGdkDisplay, 1);
         }
     }
+#endif
 #endif
 
     gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
