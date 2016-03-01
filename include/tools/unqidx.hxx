@@ -33,7 +33,7 @@ public:
 
 private:
     std::map<Index, void*> maMap;
-    Index nStartIndex;
+    const Index nStartIndex;
     Index nUniqIndex;
     Index nCount;
 
