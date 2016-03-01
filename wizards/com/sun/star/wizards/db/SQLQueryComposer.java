@@ -242,13 +242,16 @@ public class SQLQueryComposer
         }
     }
 
-    public StringBuilder getFromClause()
+    public StringBuilder getFromClause() throws SQLException
     {
         StringBuilder sFromClause = new StringBuilder("FROM");
         String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
         for (int i = 0; i < sCommandNames.length; i++)
         {
             CommandName curCommandName = getComposedCommandByDisplayName(sCommandNames[i]);
+            if (curCommandName == null) {
+                throw new SQLException("Error: CommandName unavailable");
+            }
             sFromClause.append(" ").append(curCommandName.getComposedName()).append(" ").append(quoteName(curCommandName.getAliasName()));
             if (i < sCommandNames.length - 1)
             {
