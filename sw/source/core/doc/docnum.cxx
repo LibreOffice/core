@@ -1066,6 +1066,8 @@ void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
 bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
                               bool bBroadcast)
 {
+    assert(!FindNumRulePtr(rNewName));
+
     bool bResult = false;
     SwNumRule * pNumRule = FindNumRulePtr(rOldName);
 
