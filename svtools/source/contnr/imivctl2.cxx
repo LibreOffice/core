@@ -648,16 +648,13 @@ GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos )
     nY -= TBOFFS_WINBORDER;
     nX /= _pView->nGridDX;
     nY /= _pView->nGridDY;
-    bool bClipped = false;
     if( nX >= _nGridCols )
     {
         nX = _nGridCols - 1;
-        bClipped = true;
     }
     if( nY >= _nGridRows )
     {
         nY = _nGridRows - 1;
-        bClipped = true;
     }
     GridId nId = GetGrid( (sal_uInt16)nX, (sal_uInt16)nY );
     DBG_ASSERT(nId <(sal_uLong)(_nGridCols*_nGridRows),"GetGrid failed");
