@@ -114,10 +114,10 @@ public:
             SvxSearchCmd    GetCommand() const { return m_nCommand; }
             void            SetCommand(SvxSearchCmd nNewCommand) { m_nCommand = nNewCommand; }
 
-    inline  const OUString  GetSearchString() const;
+    inline  const OUString& GetSearchString() const;
     inline  void            SetSearchString(const OUString& rNewString);
 
-    inline  const OUString  GetReplaceString() const;
+    inline  const OUString& GetReplaceString() const;
     inline  void            SetReplaceString(const OUString& rNewString);
 
     inline  bool            GetWordOnly() const;
@@ -200,7 +200,7 @@ public:
     bool HasStartPoint() const;
 };
 
-const OUString SvxSearchItem::GetSearchString() const
+const OUString& SvxSearchItem::GetSearchString() const
 {
     return m_aSearchOpt.searchString;
 }
@@ -210,7 +210,7 @@ void SvxSearchItem::SetSearchString(const OUString& rNewString)
     m_aSearchOpt.searchString = rNewString;
 }
 
-const OUString SvxSearchItem::GetReplaceString() const
+const OUString& SvxSearchItem::GetReplaceString() const
 {
     return m_aSearchOpt.replaceString;
 }
