@@ -21,6 +21,8 @@ package org.openoffice.xmerge.util.registry;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -101,9 +103,14 @@ public class ConverterInfo {
         // Get instance of the PluginFactory.
 
         try {
-            URL jarURL = new URL(jarName);
-            URLClassLoader loader = new URLClassLoader(new URL[] { jarURL },
-               piClassLoader);
+            final URL jarURL = new URL(jarName);
+            final URL[] urls = new URL[] { jarURL };
+            URLClassLoader loader = AccessController.doPrivileged(
+                new PrivilegedAction<URLClassLoader>() {
+                    public URLClassLoader run() {
+                        return new URLClassLoader(urls, piClassLoader);
+                    }
+                });
             Class<?> clas = loader.loadClass(piClassImpl);
             Class<?>[] argumentTypes = { org.openoffice.xmerge.util.registry.ConverterInfo.class };
             Constructor<?> construct = clas.getConstructor(argumentTypes);
@@ -176,9 +183,14 @@ public class ConverterInfo {
         // Get instance of the PluginFactory.
 
         try {
-            URL jarURL = new URL(jarName);
-            URLClassLoader loader = new URLClassLoader(new URL[] { jarURL },
-               piClassLoader);
+            final URL jarURL = new URL(jarName);
+            final URL[] urls = new URL[] { jarURL };
+            URLClassLoader loader = AccessController.doPrivileged(
+                new PrivilegedAction<URLClassLoader>() {
+                    public URLClassLoader run() {
+                        return new URLClassLoader(urls, piClassLoader);
+                    }
+                });
             Class<?> clas = loader.loadClass(piClassImpl);
             Class<?>[] argumentTypes = { org.openoffice.xmerge.util.registry.ConverterInfo.class };
             Constructor<?> construct = clas.getConstructor(argumentTypes);
