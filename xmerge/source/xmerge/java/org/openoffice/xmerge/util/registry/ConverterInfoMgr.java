@@ -262,6 +262,14 @@ public final class ConverterInfoMgr {
         return null;
     }
 
+    static String readLine(BufferedReader br) throws IOException{
+        String ret = br.readLine();
+        if (ret == null) {
+            throw new IOException("short read");
+        }
+        return ret;
+    }
+
     /**
      * Main to let the user specify what plug-ins to register from jarfiles and
      * to display the currently registered plug-ins.
@@ -290,7 +298,7 @@ public final class ConverterInfoMgr {
             System.out.println("(Q)uit\n");
 
             try {
-                c = br.readLine().toUpperCase().trim().charAt(0);
+                c = readLine(br).toUpperCase().trim().charAt(0);
             } catch(Exception e) {
                 System.out.println("Invalid entry");
                 System.out.println("Error msg: " + e.getMessage());
@@ -308,7 +316,7 @@ public final class ConverterInfoMgr {
 
                 System.out.println("Enter path to jarfile: ");
                 try {
-                    String jarname = br.readLine().trim();
+                    String jarname = readLine(br).trim();
                     cir = new ConverterInfoReader(jarname,validate);
                 } catch (RegistryException e) {
                     System.out.println("Cannot load plug-in ConverterFactory implementation.");
@@ -346,7 +354,7 @@ public final class ConverterInfoMgr {
                 }
 
                 try {
-                    String name = br.readLine().trim();
+                    String name = readLine(br).trim();
                     boolean rc = false;
 
                     if (c == 'D') {
@@ -380,7 +388,7 @@ public final class ConverterInfoMgr {
                 }
 
                 try {
-                    findMimeOne = br.readLine().trim();
+                    findMimeOne = readLine(br).trim();
                 } catch (Exception e) {
                     System.out.println("Error adding data to registry");
                     System.out.println("Error msg: " + e.getMessage());
@@ -393,7 +401,7 @@ public final class ConverterInfoMgr {
                 }
 
                 try {
-                    findMimeTwo = br.readLine().trim();
+                    findMimeTwo = readLine(br).trim();
                 } catch (Exception e) {
                     System.out.println("Error adding data to registry");
                     System.out.println("Error msg: " + e.getMessage());
