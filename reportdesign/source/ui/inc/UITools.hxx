@@ -147,10 +147,9 @@ namespace rptui
     * \param _pObj
     * \param _rPage
     * \param _rView
-    * \param _bAllObjects  if <TRUE/> all objects are taken into account, otherwise only not marked ones
     * \return the object which is overlapped, otherwise <NULL/>. If the given object is not of type OUnoObject <NULL/> will be returned.
     */
-    SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false);
+    SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView);
 
     /** retrieves the names of the parameters of the command which the given RowSet is bound to
     */

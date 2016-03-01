@@ -581,9 +581,9 @@ void ODesignView::setCurrentPage(const OUString& _sLastActivePage)
         m_pPropWin->setCurrentPage(_sLastActivePage);
 }
 
-void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
+void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
-    m_aScrollWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
+    m_aScrollWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection);
 }
 
 bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)

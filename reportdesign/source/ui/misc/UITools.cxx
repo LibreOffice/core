@@ -906,13 +906,13 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
 }
 
 
-SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMarkedObjects)
+SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView)
 {
     SdrObject* pOverlappedObj = nullptr;
     if (dynamic_cast<OUnoObject*>(_pObj) != nullptr || dynamic_cast<OOle2Obj*>(_pObj) != nullptr) // this doesn't need to be done for shapes
     {
         Rectangle aRect = _pObj->GetCurrentBoundRect();
-        pOverlappedObj = isOver(aRect,_rPage,_rView,_bUnMarkedObjects,_pObj);
+        pOverlappedObj = isOver(aRect,_rPage,_rView,false/*_bUnMarkedObjects*/,_pObj);
     }
     return pOverlappedObj;
 }
