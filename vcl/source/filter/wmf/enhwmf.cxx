@@ -1051,6 +1051,38 @@ bool EnhWMFReader::ReadEnhWMF()
                             default :
                                 aLineInfo.SetStyle( LINE_SOLID );
                         }
+                        switch( nStyle & 0xF00 )
+                        {
+                            case PS_ENDCAP_ROUND :
+                                if ( aLineInfo.GetWidth() )
+                                {
+                                    aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
+                                    break;
+                                }
+                            case PS_ENDCAP_SQUARE :
+                                if ( aLineInfo.GetWidth() )
+                                {
+                                    aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
+                                    break;
+                                }
+                            case PS_ENDCAP_FLAT :
+                            default :
+                                aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
+                        }
+                        switch( nStyle & 0xF000 )
+                        {
+                            case PS_JOIN_ROUND :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Round );
+                            break;
+                            case PS_JOIN_MITER :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Miter );
+                            break;
+                            case PS_JOIN_BEVEL :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Bevel );
+                            break;
+                            default :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
+                        }
                         pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
                     }
                 }
