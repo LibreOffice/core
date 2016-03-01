@@ -51,7 +51,6 @@ class SwListImpl
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
-    private:
         // unique identifier of the list
         const OUString msListId;
         // default list style for the list items, identified by the list style name
@@ -230,6 +229,11 @@ const OUString SwList::GetListId() const
 const OUString SwList::GetDefaultListStyleName() const
 {
     return mpListImpl->GetDefaultListStyleName();
+}
+
+void SwList::SetDefaultListStyleName(OUString const& rNew)
+{
+    mpListImpl->msDefaultListStyleName = rNew;
 }
 
 void SwList::InsertListItem( SwNodeNum& rNodeNum,
