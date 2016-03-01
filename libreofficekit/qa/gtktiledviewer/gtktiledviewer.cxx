@@ -295,6 +295,7 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         ss << "lok::Document::getCommandValues(" << aCommand.str() << ")";
         g_info("%s", ss.str().c_str());
         char* pValues = pDocument->pClass->getCommandValues(pDocument, aCommand.str().c_str());
+        g_info("lok::Document::getCommandValues() returned '%s'", pValues);
         std::stringstream aStream(pValues);
         free(pValues);
         assert(!aStream.str().empty());
