@@ -400,7 +400,7 @@ void OfficeIPCThread::SetDowning()
 
 static bool s_bInEnableRequests = false;
 
-void OfficeIPCThread::EnableRequests( bool i_bEnable )
+void OfficeIPCThread::EnableRequests()
 {
     // switch between just queueing the requests and executing them
     ::osl::MutexGuard   aGuard( GetMutex() );
@@ -408,14 +408,11 @@ void OfficeIPCThread::EnableRequests( bool i_bEnable )
     if ( pGlobalOfficeIPCThread.is() )
     {
         s_bInEnableRequests = true;
-        pGlobalOfficeIPCThread->mbRequestsEnabled = i_bEnable;
-        if( i_bEnable )
-        {
-            // hit the compiler over the head
-            ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
-            // trigger already queued requests
-            OfficeIPCThread::ExecuteCmdLineRequests( aEmptyReq );
-        }
+        pGlobalOfficeIPCThread->mbRequestsEnabled = true;
+        // hit the compiler over the head
+        ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
+        // trigger already queued requests
+        OfficeIPCThread::ExecuteCmdLineRequests( aEmptyReq );
         s_bInEnableRequests = false;
     }
 }
@@ -430,14 +427,14 @@ bool OfficeIPCThread::AreRequestsPending()
         return false;
 }
 
-void OfficeIPCThread::RequestsCompleted( int nCount )
+void OfficeIPCThread::RequestsCompleted()
 {
     // Remove nCount pending requests from our internal counter
     ::osl::MutexGuard   aGuard( GetMutex() );
     if ( pGlobalOfficeIPCThread.is() )
     {
         if ( pGlobalOfficeIPCThread->mnPendingRequests > 0 )
-            pGlobalOfficeIPCThread->mnPendingRequests -= nCount;
+            pGlobalOfficeIPCThread->mnPendingRequests --;
     }
 }
 
@@ -682,12 +679,9 @@ void OfficeIPCThread::SetReady(
     }
 }
 
-void OfficeIPCThread::WaitForReady(
-    rtl::Reference< OfficeIPCThread > const & pThread)
-
+void OfficeIPCThread::WaitForReady()
 {
-    rtl::Reference< OfficeIPCThread > const & t(
-        pThread.is() ? pThread : pGlobalOfficeIPCThread);
+    rtl::Reference< OfficeIPCThread > const & t(pGlobalOfficeIPCThread);
     if (t.is())
     {
         t->cReady.wait();

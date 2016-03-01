@@ -106,9 +106,9 @@ class OfficeIPCThread : public salhelper::Thread
 
     // controlling pipe communication during shutdown
     static void                 SetDowning();
-    static void                 EnableRequests( bool i_bEnable = true );
+    static void                 EnableRequests();
     static bool                 AreRequestsPending();
-    static void                 RequestsCompleted( int n = 1 );
+    static void                 RequestsCompleted();
     static bool                 ExecuteCmdLineRequests( ProcessDocumentsRequest& );
 
     // return sal_False if second office
@@ -118,9 +118,7 @@ class OfficeIPCThread : public salhelper::Thread
     static void                 SetReady(
         rtl::Reference< OfficeIPCThread > const & pThread =
             rtl::Reference< OfficeIPCThread >());
-    static void                 WaitForReady(
-        rtl::Reference< OfficeIPCThread > const & pThread =
-            rtl::Reference< OfficeIPCThread >());
+    static void                 WaitForReady();
     static bool                 IsEnabled();
 
     bool                        AreRequestsEnabled() const { return mbRequestsEnabled && ! mbDowning; }

@@ -59,7 +59,7 @@ OUString toString( OptionInfo const * info );
 
 OptionInfo const * getOptionInfo(
     OptionInfo const * list,
-    OUString const & opt, sal_Unicode copt = '\0' );
+    OUString const & opt );
 
 
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex );
@@ -94,8 +94,7 @@ OUString const & getProcessWorkingDir();
 
 
 OUString makeAbsoluteFileUrl(
-    OUString const & sys_path, OUString const & base_url,
-    bool throw_exc = true );
+    OUString const & sys_path, OUString const & base_url );
 
 
 

@@ -51,7 +51,7 @@ public:
     bool get( OString * value, OString const & key ) const;
     const t_string2string_map& getEntries() const { return m_entries; }
     void put( OString const & key, OString const & value );
-    bool erase( OString const & key, bool flush_immediately = true );
+    bool erase( OString const & key );
 
 protected:
     void open();

@@ -67,7 +67,7 @@ OUString toString( OptionInfo const * info )
 
 OptionInfo const * getOptionInfo(
     OptionInfo const * list,
-    OUString const & opt, sal_Unicode copt )
+    OUString const & opt )
 {
     for ( ; list->m_name != nullptr; ++list )
     {
@@ -75,16 +75,7 @@ OptionInfo const * getOptionInfo(
         if (!opt.isEmpty())
         {
             if (opt.equalsAsciiL(
-                    option_info.m_name, option_info.m_name_length ) &&
-                (copt == '\0' || copt == option_info.m_short_option))
-            {
-                return &option_info;
-            }
-        }
-        else
-        {
-            OSL_ASSERT( copt != '\0' );
-            if (copt == option_info.m_short_option)
+                    option_info.m_name, option_info.m_name_length ))
             {
                 return &option_info;
             }
@@ -198,7 +189,7 @@ OUString const & getProcessWorkingDir()
 
 
 OUString makeAbsoluteFileUrl(
-    OUString const & sys_path, OUString const & base_url, bool throw_exc )
+    OUString const & sys_path, OUString const & base_url )
 {
     // system path to file url
     OUString file_url;
@@ -209,7 +200,7 @@ OUString makeAbsoluteFileUrl(
         {
             file_url = sys_path;
         }
-        else if (throw_exc)
+        else
         {
             throw RuntimeException("cannot get file url from system path: " +
                 sys_path );
@@ -220,16 +211,13 @@ OUString makeAbsoluteFileUrl(
     if (osl_getAbsoluteFileURL(
             base_url.pData, file_url.pData, &abs.pData ) != osl_File_E_None)
     {
-        if (throw_exc) {
-            OUStringBuffer buf;
-            buf.append( "making absolute file url failed: \"" );
-            buf.append( base_url );
-            buf.append( "\" (base-url) and \"" );
-            buf.append( file_url );
-            buf.append( "\" (file-url)!" );
-            throw RuntimeException( buf.makeStringAndClear() );
-        }
-        return OUString();
+        OUStringBuffer buf;
+        buf.append( "making absolute file url failed: \"" );
+        buf.append( base_url );
+        buf.append( "\" (base-url) and \"" );
+        buf.append( file_url );
+        buf.append( "\" (file-url)!" );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
     return abs[ abs.getLength() -1 ] == '/'
         ? abs.copy( 0, abs.getLength() -1 ) : abs;

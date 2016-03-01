@@ -290,7 +290,7 @@ void PersistentMap::put( OString const & key, OString const & value )
         flush();
 }
 
-bool PersistentMap::erase( OString const & key, bool flush_immediately )
+bool PersistentMap::erase( OString const & key )
 {
     if( m_bReadOnly)
         return false;
@@ -298,8 +298,7 @@ bool PersistentMap::erase( OString const & key, bool flush_immediately )
     if( !nCount)
         return false;
     m_bIsDirty = true;
-    if( flush_immediately)
-        flush();
+    flush();
     return true;
 }
 
