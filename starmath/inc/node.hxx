@@ -106,6 +106,9 @@ protected:
     sal_Int32       mnAccIndex;
 
 public:
+    SmNode(const SmNode&) = delete;
+    SmNode& operator=(const SmNode&) = delete;
+
     virtual             ~SmNode();
 
     virtual bool        IsVisible() const;
@@ -156,7 +159,7 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(OUString &rText);
 
-    virtual void    GetAccessibleText( OUStringBuffer &rText ) const;
+    virtual void    GetAccessibleText( OUStringBuffer &rText ) const = 0;
     sal_Int32       GetAccessibleIndex() const { return mnAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
 
@@ -180,7 +183,7 @@ public:
     /** Accept a visitor
      * Calls the method for this class on the visitor
      */
-    virtual void Accept(SmVisitor* pVisitor);
+    virtual void Accept(SmVisitor* pVisitor) = 0;
 
     /** True if this node is selected */
     bool IsSelected() const {return mbIsSelected;}
@@ -288,7 +291,6 @@ protected:
     {}
 
 public:
-            SmStructureNode( const SmStructureNode &rNode );
     virtual ~SmStructureNode();
 
     virtual bool        IsVisible() const override;
@@ -300,8 +302,6 @@ public:
     virtual SmNode *    GetSubNode(sal_uInt16 nIndex) override;
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = nullptr);
             void SetSubNodes(const SmNodeArray &rNodeArray);
-
-    SmStructureNode & operator = ( const SmStructureNode &rNode );
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 
