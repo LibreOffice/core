@@ -223,7 +223,7 @@ class RscTypCont
 
     void        InsWinBit( RscTop * pClass, const OString& rName,
                            Atom nVal );
-    void        WriteInc( FILE * fOutput, sal_uLong lKey );
+    void        WriteInc( FILE * fOutput, RscFileTab::Index lKey );
 
 public:
     RscBool             aBool;
@@ -274,13 +274,13 @@ public:
                           }
     RscTop  *         SearchType( Atom nTypId );
                       // deletes all resource objects of this file
-    void              Delete( sal_uLong lFileKey );
+    void              Delete( RscFileTab::Index lFileKey );
     RscTop  *         GetRoot()         { return pRoot; }
     sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
                                   sal_uInt32 nId, bool bFirst );
     void              ClearSysNames();
     ERRTYPE           WriteRc( WriteRcContext& rContext );
-    void              WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
+    void              WriteSrc( FILE * fOutput, RscFileTab::Index nFileIndex,
                                 bool bName = true );
     void              PutTranslatorKey( sal_uInt64 nKey );
     void              IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }

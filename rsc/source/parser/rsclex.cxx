@@ -369,7 +369,7 @@ void IncludeParser( RscFileInst * pFileInst )
     int           nToken;   // token value
     YYSTYPE       aYYSType; // token data
     RscFile     * pFName;   // file structure
-    sal_uLong         lKey;     // file key
+    RscFileTab::Index lKey;     // file key
     RscTypCont  * pTypCon  = pFileInst->pTypCont;
 
     pFName = pTypCon->aFileTab.Get( pFileInst->GetFileIndex() );

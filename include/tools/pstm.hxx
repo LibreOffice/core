@@ -91,8 +91,6 @@ public:
                                           SvPersistBase *& rpObj );
 };
 
-typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;
-
 class SvStream;
 
 /** Persistent Stream
@@ -130,12 +128,18 @@ class SvStream;
 */
 class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 {
+public:
+    typedef UniqueIndex<SvPersistBase>::Index Index;
+
+private:
+    typedef std::map<SvPersistBase*, Index> PersistBaseMap;
+
     SvClassManager &    rClassMgr;
     SvStream *          pStm;
     PersistBaseMap      aPTable; // reversed pointer and key
     UniqueIndex<SvPersistBase>
                         aPUIdx;
-    sal_uIntPtr         nStartIdx;
+    Index               nStartIdx;
     const SvPersistStream * pRefStm;
 
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) override;
@@ -151,13 +155,13 @@ public:
     virtual void        ResetError() override;
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
-                                         sal_uInt32 nStartIdx = 1 );
+                                         Index nStartIdx = 1 );
                         virtual ~SvPersistStream();
 
     void                SetStream( SvStream * pStream );
 
-    SvPersistBase *     GetObject( sal_uIntPtr nIdx ) const;
-    sal_uIntPtr         GetIndex( SvPersistBase * ) const;
+    SvPersistBase *     GetObject( Index nIdx ) const;
+    Index               GetIndex( SvPersistBase * ) const;
 
     static void         WriteCompressed( SvStream & rStm, sal_uInt32 nVal );
     static sal_uInt32   ReadCompressed( SvStream & rStm );

@@ -297,13 +297,13 @@ sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName,
     return pSysEntry->nKey;
 }
 
-void RscTypCont::WriteInc( FILE * fOutput, sal_uLong lFileKey )
+void RscTypCont::WriteInc( FILE * fOutput, RscFileTab::Index lFileKey )
 {
 
-    if( NOFILE_INDEX == lFileKey )
+    if( lFileKey == RscFileTab::IndexNotFound )
     {
-        sal_uIntPtr aIndex = aFileTab.FirstIndex();
-        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
+        RscFileTab::Index aIndex = aFileTab.FirstIndex();
+        while( aIndex != RscFileTab::IndexNotFound )
         {
             RscFile   * pFName = aFileTab.Get( aIndex );
             if( pFName->IsIncFile() )
@@ -503,7 +503,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
     return aError;
 }
 
-void RscTypCont::WriteSrc( FILE * fOutput, sal_uLong nFileKey,
+void RscTypCont::WriteSrc( FILE * fOutput, RscFileTab::Index nFileKey,
                              bool bName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
@@ -517,10 +517,10 @@ void RscTypCont::WriteSrc( FILE * fOutput, sal_uLong nFileKey,
         RscFile* pFName;
         WriteInc( fOutput, nFileKey );
 
-        if( NOFILE_INDEX == nFileKey )
+        if( nFileKey == RscFileTab::IndexNotFound )
         {
-            sal_uIntPtr aIndex = aFileTab.FirstIndex();
-            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
+            RscFileTab::Index aIndex = aFileTab.FirstIndex();
+            while( aIndex != RscFileTab::IndexNotFound )
             {
                 pFName = aFileTab.Get( aIndex );
                 if( !pFName->IsIncFile() )
@@ -542,10 +542,10 @@ void RscTypCont::WriteSrc( FILE * fOutput, sal_uLong nFileKey,
     else
     {
         RscId::SetNames( false );
-        if( NOFILE_INDEX == nFileKey )
+        if( nFileKey == RscFileTab::IndexNotFound )
         {
-            sal_uIntPtr aIndex = aFileTab.FirstIndex();
-            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
+            RscFileTab::Index aIndex = aFileTab.FirstIndex();
+            while( aIndex != RscFileTab::IndexNotFound )
             {
                 aEnumRef.WriteSrc( aIndex );
                 aIndex = aFileTab.NextIndex( aIndex );
@@ -579,7 +579,7 @@ IMPL_LINK_TYPED( RscDel, Delete, const NameNode&, r, void )
         pNode->pObjBiTree = pNode->GetObjNode()->DelObjNode( pNode, lFileKey );
 }
 
-void RscTypCont::Delete( sal_uLong lFileKey )
+void RscTypCont::Delete( RscFileTab::Index lFileKey )
 {
     // delete resource instance
     RscDel aDel( pRoot, lFileKey );

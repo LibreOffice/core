@@ -221,8 +221,6 @@ public:
     bool            IsIncFile(){  return bIncFile; };
 };
 
-#define NOFILE_INDEX UNIQUEINDEX_ENTRY_NOTFOUND
-
 class RscDefTree
 {
     RscDefine * pDefRoot;
@@ -238,8 +236,13 @@ public:
 
 class RscFileTab : public UniqueIndex<RscFile>
 {
+public:
+    using UniqueIndex<RscFile>::Index;
+    using UniqueIndex<RscFile>::IndexNotFound;
+
+private:
     RscDefTree aDefTree;
-    sal_uLong       Find(const OString& rName);
+    Index       Find(const OString& rName);
 public:
                 RscFileTab();
                 ~RscFileTab();
@@ -250,22 +253,22 @@ public:
                     return FindDef(rStr.getStr());
                 }
 
-    bool        Depend( sal_uLong lDepend, sal_uLong lFree );
-    bool        TestDef( sal_uLong lFileKey, size_t lPos,
+    bool        Depend( Index lDepend, Index lFree );
+    bool        TestDef( Index lFileKey, size_t lPos,
                          const RscDefine * pDefDec );
-    bool        TestDef( sal_uLong lFileKey, size_t lPos,
+    bool        TestDef( Index lFileKey, size_t lPos,
                          const RscExpression * pExpDec );
 
-    RscDefine * NewDef( sal_uLong lKey, const OString& rDefName,
+    RscDefine * NewDef( Index lKey, const OString& rDefName,
                         sal_Int32 lId, sal_uLong lPos );
-    RscDefine * NewDef( sal_uLong lKey, const OString& rDefName,
+    RscDefine * NewDef( Index lKey, const OString& rDefName,
                         RscExpression *, sal_uLong lPos );
 
            // deletes all defines defined in this file
-    void        DeleteFileContext( sal_uLong lKey );
-    sal_uLong   NewCodeFile(const OString& rName);
-    sal_uLong   NewIncFile(const OString& rName, const OString& rPath);
-    RscFile *   GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
+    void        DeleteFileContext( Index lKey );
+    Index       NewCodeFile(const OString& rName);
+    Index       NewIncFile(const OString& rName, const OString& rPath);
+    RscFile *   GetFile( Index lFileKey ){ return Get( lFileKey ); }
 };
 
 #endif // INCLUDED_RSC_INC_RSCDEF_HXX

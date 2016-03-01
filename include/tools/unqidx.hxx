@@ -20,45 +20,52 @@
 #define INCLUDED_TOOLS_UNQIDX_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/contnr.hxx>
+#include <limits>
 #include <map>
-
-#define UNIQUEINDEX_ENTRY_NOTFOUND   CONTAINER_ENTRY_NOTFOUND
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC UniqueIndexImpl
 {
+public:
+    typedef sal_uInt32 Index;
+    enum {
+        IndexNotFound = std::numeric_limits<Index>::max()
+    };
+
 private:
-    std::map<sal_uInt32, void*> maMap;
-    sal_uIntPtr   nStartIndex;
-    sal_uIntPtr   nUniqIndex;
-    sal_uIntPtr   nCount;
+    std::map<Index, void*> maMap;
+    Index nStartIndex;
+    Index nUniqIndex;
+    Index nCount;
 
 public:
-    UniqueIndexImpl( sal_uIntPtr _nStartIndex = 0 )
+    UniqueIndexImpl( Index _nStartIndex = 0 )
         : maMap(),
           nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex), nCount(0) {}
 
-    sal_uIntPtr   Insert( void* p );
+    Index Insert( void* p );
     // insert value with key, replacing existing entry if necessary
-    void*         Remove( sal_uIntPtr aIndex );
-    void*         Get( sal_uIntPtr aIndex ) const;
+    void* Remove( Index aIndex );
+    void* Get( Index aIndex ) const;
 
-    sal_uIntPtr   GetIndexOf( void* p ) const;
-    sal_uIntPtr   FirstIndex() const;
-    sal_uIntPtr   LastIndex() const;
-    sal_uIntPtr   NextIndex( sal_uIntPtr aCurrIndex ) const;
+    Index GetIndexOf( void* p ) const;
+    Index FirstIndex() const;
+    Index LastIndex() const;
+    Index NextIndex( Index aCurrIndex ) const;
 };
 
 template<typename T>
 class UniqueIndex : private UniqueIndexImpl
 {
 public:
-    UniqueIndex<T>( sal_uIntPtr _nStartIndex = 0 ) : UniqueIndexImpl(_nStartIndex) {}
+    using UniqueIndexImpl::Index;
+    using UniqueIndexImpl::IndexNotFound;
 
-    sal_uIntPtr Insert(T* p) { return UniqueIndexImpl::Insert(p); }
-    T*          Get(sal_uIntPtr idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }
-    T*          Remove(sal_uIntPtr idx) { return static_cast<T*>( UniqueIndexImpl::Remove(idx) ); }
-    sal_uIntPtr GetIndexOf(T* p) const { return UniqueIndexImpl::GetIndexOf(p); }
+    UniqueIndex<T>( Index _nStartIndex = 0 ) : UniqueIndexImpl(_nStartIndex) {}
+
+    Index Insert(T* p) { return UniqueIndexImpl::Insert(p); }
+    T*    Get(Index idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }
+    T*    Remove(Index idx) { return static_cast<T*>( UniqueIndexImpl::Remove(idx) ); }
+    Index GetIndexOf(T* p) const { return UniqueIndexImpl::GetIndexOf(p); }
 
     using UniqueIndexImpl::FirstIndex;
     using UniqueIndexImpl::LastIndex;
