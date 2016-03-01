@@ -4438,7 +4438,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_default, pIntValue);
         break;
     case RTF_FFRES:
-        if (m_nFormFieldType == RTFFormFieldType::CHECKBOX)
+        // 25 means undefined, see [MS-DOC] 2.9.79, FFDataBits.
+        if (m_nFormFieldType == RTFFormFieldType::CHECKBOX && nParam != 25)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFCheckBox_checked, pIntValue);
         else if (m_nFormFieldType == RTFFormFieldType::LIST)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_result, pIntValue);
