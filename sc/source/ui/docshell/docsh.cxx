@@ -3008,11 +3008,11 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     aCtrlShiftF4.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
     aKeys.push_back(&aCtrlShiftF4);
 
-    // CTRL+SHIFT+F4 Mac
-    awt::KeyEvent aCtrlShiftF4Mac;
-    aCtrlShiftF4Mac.KeyCode = awt::Key::F4;
-    aCtrlShiftF4Mac.Modifiers = awt::KeyModifier::MOD3 | awt::KeyModifier::SHIFT;
-    aKeys.push_back(&aCtrlShiftF4Mac);
+    // SHIFT+F4
+    awt::KeyEvent aShiftF4;
+    aShiftF4.KeyCode = awt::Key::F4;
+    aShiftF4.Modifiers = awt::KeyModifier::SHIFT;
+    aKeys.push_back(&aShiftF4);
 
     // Remove all involved keys first, because swapping commands don't work
     // well without doing this.
@@ -3028,13 +3028,13 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aAltDown, ".uno:DataSelect");
             xScAccel->setKeyEvent(aF4, ".uno:ToggleRelative");
             xScAccel->setKeyEvent(aCtrlShiftF4, ".uno:ViewDataSourceBrowser");
-            xScAccel->setKeyEvent(aCtrlShiftF4Mac, ".uno:ViewDataSourceBrowser");
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
             xScAccel->setKeyEvent(aDelete, ".uno:Delete");
             xScAccel->setKeyEvent(aBackspace, ".uno:ClearContents");
             xScAccel->setKeyEvent(aCtrlD, ".uno:DataSelect");
             xScAccel->setKeyEvent(aF4, ".uno:ViewDataSourceBrowser");
+            xScAccel->setKeyEvent(aShiftF4, ".uno:ToggleRelative");
         break;
         default:
             ;
