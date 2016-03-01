@@ -57,7 +57,7 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
         std::string ini_path = CrashReporter::getIniFileName();
         OString aCommand = getLibDir().copy(7) + "/minidump_upload " + ini_path.c_str();
         int retVal = std::system(aCommand.getStr());
-        SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
+        SAL_WARN_IF(retVal != 0, "svx.dialog", "Failed to upload minidump. Error Code: " << retVal);
         // TODO: moggi: return the id for the user to look it up
         Close();
     }
