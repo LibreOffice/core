@@ -92,8 +92,7 @@ public:
     bool IsScrollBarNeeded (const sal_Int32 nSlideCount);
     geometry::RealPoint2D GetLocalPosition (const geometry::RealPoint2D& rWindowPoint) const;
     geometry::RealPoint2D GetWindowPosition(const geometry::RealPoint2D& rLocalPoint) const;
-    sal_Int32 GetColumn (const geometry::RealPoint2D& rLocalPoint,
-        const bool bReturnInvalidValue = false) const;
+    sal_Int32 GetColumn (const geometry::RealPoint2D& rLocalPoint) const;
     sal_Int32 GetRow (const geometry::RealPoint2D& rLocalPoint,
         const bool bReturnInvalidValue = false) const;
     sal_Int32 GetSlideIndexForPosition (const css::geometry::RealPoint2D& rPoint) const;
@@ -1296,13 +1295,11 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetWindowPosition(
 }
 
 sal_Int32 PresenterSlideSorter::Layout::GetColumn (
-    const css::geometry::RealPoint2D& rLocalPoint,
-    const bool bReturnInvalidValue) const
+    const css::geometry::RealPoint2D& rLocalPoint) const
 {
     const sal_Int32 nColumn(floor(
         (rLocalPoint.X + mnHorizontalGap/2.0) / (maPreviewSize.Width+mnHorizontalGap)));
-    if (bReturnInvalidValue
-        || (nColumn>=mnFirstVisibleColumn && nColumn<=mnLastVisibleColumn))
+    if (nColumn>=mnFirstVisibleColumn && nColumn<=mnLastVisibleColumn)
     {
         return nColumn;
     }

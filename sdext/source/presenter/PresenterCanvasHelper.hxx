@@ -68,8 +68,7 @@ public:
 
     static css::geometry::RealSize2D GetTextSize (
         const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-        const OUString& rsText,
-        const sal_Int8 = css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+        const OUString& rsText );
 
 private:
     const css::rendering::ViewState maDefaultViewState;

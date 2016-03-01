@@ -162,8 +162,7 @@ namespace pdfi
                                           const css::uno::Sequence<
                                                 css::beans::PropertyValue>& xMask) override;
 
-        /// nElements == -1 means fill in number of pages
-        void startIndicator( const OUString& rText, sal_Int32 nElements = -1 );
+        void startIndicator( const OUString& rText );
         void endIndicator();
 
         void setupImage(ImageId nImage);

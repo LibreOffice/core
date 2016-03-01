@@ -42,8 +42,7 @@ PresenterPaintManager::PresenterPaintManager (
 
 ::std::function<void (const css::awt::Rectangle& rRepaintBox)>
     PresenterPaintManager::GetInvalidator (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow,
-        const bool bSynchronous)
+        const css::uno::Reference<css::awt::XWindow>& rxWindow)
 {
     return ::boost::bind(
         static_cast<void (PresenterPaintManager::*)(
@@ -53,16 +52,13 @@ PresenterPaintManager::PresenterPaintManager (
         this,
         rxWindow,
         _1,
-        bSynchronous);
+        false/*bSynchronous*/);
 }
 
 void PresenterPaintManager::Invalidate (
-    const css::uno::Reference<css::awt::XWindow>& rxWindow,
-    const bool bSynchronous)
+    const css::uno::Reference<css::awt::XWindow>& rxWindow)
 {
     sal_Int16 nInvalidateMode (awt::InvalidateStyle::CHILDREN);
-    if (bSynchronous)
-        nInvalidateMode |= awt::InvalidateStyle::UPDATE;
 
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindContentWindow(rxWindow));

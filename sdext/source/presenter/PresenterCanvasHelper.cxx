@@ -279,10 +279,9 @@ css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
 
 css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-    const OUString& rsText,
-    const sal_Int8 nTextDirection)
+    const OUString& rsText)
 {
-    const geometry::RealRectangle2D aTextBBox (GetTextBoundingBox(rxFont, rsText, nTextDirection));
+    const geometry::RealRectangle2D aTextBBox (GetTextBoundingBox(rxFont, rsText));
     return css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
 }
 

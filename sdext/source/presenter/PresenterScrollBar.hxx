@@ -107,8 +107,7 @@ public:
         scrollbar from the outside.
     */
     void Paint (
-        const css::awt::Rectangle& rUpdateBox,
-        bool bNoClip = false);
+        const css::awt::Rectangle& rUpdateBox);
 
     virtual sal_Int32 GetSize() const = 0;
 

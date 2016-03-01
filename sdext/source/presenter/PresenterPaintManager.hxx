@@ -48,16 +48,14 @@ public:
 
     ::std::function<void (const css::awt::Rectangle& rRepaintBox)>
         GetInvalidator (
-            const css::uno::Reference<css::awt::XWindow>& rxWindow,
-            const bool bSynchronous = false);
+            const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Request a repaint of the whole window.
         @param rxWindow
             May be the parent window or one of its descendents.
     */
     void Invalidate (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow,
-        const bool bSynchronous = false);
+        const css::uno::Reference<css::awt::XWindow>& rxWindow);
     void Invalidate (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         const sal_Int16 nInvalidateFlags);

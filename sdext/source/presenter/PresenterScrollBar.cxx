@@ -294,8 +294,7 @@ double PresenterScrollBar::ValidateThumbPosition (double nPosition)
 }
 
 void PresenterScrollBar::Paint (
-    const awt::Rectangle& rUpdateBox,
-    const bool bNoClip)
+    const awt::Rectangle& rUpdateBox)
 {
     if ( ! mxCanvas.is() || ! mxWindow.is())
     {
@@ -304,11 +303,8 @@ void PresenterScrollBar::Paint (
         return;
     }
 
-    if ( ! bNoClip)
-    {
-        if (PresenterGeometryHelper::AreRectanglesDisjoint (rUpdateBox, mxWindow->getPosSize()))
-            return;
-    }
+    if (PresenterGeometryHelper::AreRectanglesDisjoint (rUpdateBox, mxWindow->getPosSize()))
+        return;
 
     PaintBackground(rUpdateBox);
     PaintComposite(rUpdateBox, PagerUp,

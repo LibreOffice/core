@@ -601,10 +601,9 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     endIndicator();
 }
 
-void PDFIProcessor::startIndicator( const OUString& rText, sal_Int32 nElements )
+void PDFIProcessor::startIndicator( const OUString& rText  )
 {
-    if( nElements == -1 )
-        nElements = m_nPages;
+    sal_Int32 nElements = m_nPages;
     if( m_xStatusIndicator.is() )
     {
         sal_Int32 nUnicodes = rText.getLength();
