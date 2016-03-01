@@ -1006,7 +1006,12 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     // Allocate a separate buffer for the alpha device.
     std::vector<sal_uInt8> aAlpha(nCanvasWidth * nCanvasHeight);
     memset(aAlpha.data(), 0, nCanvasWidth * nCanvasHeight);
-    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
+    boost::shared_array<sal_uInt8> aAlphaBuffer;
+
+    // No alpha buffer for Calc: it would result in misrendered hyperlinks with
+    // pre-cairo headless codepath.
+    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_SPREADSHEET)
+        aAlphaBuffer.reset(aAlpha.data(), NoDelete<sal_uInt8>());
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
