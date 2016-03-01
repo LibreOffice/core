@@ -615,13 +615,19 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
         if ( bIsSubmenu )
             g_lo_menu_set_submenu_action_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand );
         else
+        {
             g_lo_menu_set_action_and_target_value_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand, pTarget );
+            pTarget = nullptr;
+        }
 
         g_free( aItemCommand );
     }
 
     if ( aCurrentCommand )
         g_free( aCurrentCommand );
+
+    if (pTarget)
+        g_variant_unref(pTarget);
 }
 
 GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu )
