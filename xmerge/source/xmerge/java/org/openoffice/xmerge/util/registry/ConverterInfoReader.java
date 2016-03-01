@@ -73,33 +73,26 @@ public class ConverterInfoReader {
         ParserConfigurationException, org.xml.sax.SAXException,
         RegistryException  {
 
-        InputStream            istream;
-        InputSource            isource;
-        DocumentBuilderFactory builderFactory;
-        DocumentBuilder        builder;
-        JarURLConnection       jarConnection;
-        JarEntry               jarentry;
-        JarFile                jarfile;
-        URL                    url;
-
         converterInfoList = new ArrayList<ConverterInfo>();
         jarfilename       = jar;
 
         // Get Jar via URL
+        URL url           = new URL("jar:" + jar + "!/META-INF/converter.xml");
+        JarURLConnection jarConnection = (JarURLConnection)url.openConnection();
+        JarEntry jarentry = jarConnection.getJarEntry();
+        JarFile jarfile   = jarConnection.getJarFile();
 
-        url               = new URL("jar:" + jar + "!/META-INF/converter.xml");
-        jarConnection     = (JarURLConnection)url.openConnection();
-        jarentry          = jarConnection.getJarEntry();
-        jarfile           = jarConnection.getJarFile();
+        if (jarfile == null) {
+            throw new IOException("Missing jar file");
+        }
 
         // Build the InputSource
-
-        istream           = jarfile.getInputStream(jarentry);
-        isource           = new InputSource(istream);
+        InputStream istream = jarfile.getInputStream(jarentry);
+        InputSource isource = new InputSource(istream);
 
         // Get the DOM builder and build the document.
 
-        builderFactory    = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
         //DTD validation
 
@@ -108,7 +101,7 @@ public class ConverterInfoReader {
             builderFactory.setValidating(true);
         }
 
-        builder = builderFactory.newDocumentBuilder();
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
         document = builder.parse(isource);
 
         // Parse the document.
