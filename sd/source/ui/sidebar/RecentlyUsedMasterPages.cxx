@@ -317,8 +317,7 @@ IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
 }
 
 void RecentlyUsedMasterPages::AddMasterPage (
-    MasterPageContainer::Token aToken,
-    bool bMakePersistent)
+    MasterPageContainer::Token aToken)
 {
     // For the page to be inserted the token has to be valid and the page
     // has to have a valid URL.  This excludes master pages that do not come
@@ -349,8 +348,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
             mvMasterPages.pop_back ();
         }
 
-        if (bMakePersistent)
-            SavePersistentValues ();
+        SavePersistentValues ();
         SendEvent();
     }
 }

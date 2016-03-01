@@ -110,15 +110,8 @@ private:
         list of most recently used master pages.  When the page is already a
         member of that list the associated descriptor is moved to the end of
         the list to make it the most recently used entry.
-        @param bMakePersistent
-            When <TRUE/> is given then the new list of recently used master
-            pages is written back into the configuration to make it
-            persistent.  Giving <FALSE/> to omit this is used while loading
-            the persistent list from the configuration.
     */
-    void AddMasterPage (
-        MasterPageContainer::Token aToken,
-        bool bMakePersistent = true);
+    void AddMasterPage(MasterPageContainer::Token aToken);
 
     /** Load the list of recently used master pages from the registry where
         it was saved to make it persistent.

@@ -563,10 +563,10 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     return pStandardPage;
 }
 
-void SdXImpressDocument::SetModified( bool bModified /* = sal_True */ ) throw()
+void SdXImpressDocument::SetModified() throw()
 {
     if( mpDoc )
-        mpDoc->SetChanged( bModified );
+        mpDoc->SetChanged();
 }
 
 // XModel

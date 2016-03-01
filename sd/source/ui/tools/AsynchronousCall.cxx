@@ -37,12 +37,10 @@ AsynchronousCall::~AsynchronousCall()
     maTimer.Stop();
 }
 
-void AsynchronousCall::Post (
-    const AsynchronousFunction& rFunction,
-    sal_uInt32 nTimeoutInMilliseconds)
+void AsynchronousCall::Post (const AsynchronousFunction& rFunction)
 {
     mpFunction.reset(new AsynchronousFunction(rFunction));
-    maTimer.SetTimeout(nTimeoutInMilliseconds);
+    maTimer.SetTimeout(10);
     maTimer.Start();
 }
 

@@ -82,14 +82,11 @@ void WindowUpdater::SetDocument (SdDrawDocument* pDocument)
 }
 
 void WindowUpdater::Update (
-    OutputDevice* pDevice,
-    SdDrawDocument* pDocument) const
+    OutputDevice* pDevice) const
 {
     if (pDevice != nullptr)
     {
         UpdateWindow (pDevice);
-        if (pDocument != nullptr)
-            pDocument->ReformatAllTextObjects();
     }
 }
 

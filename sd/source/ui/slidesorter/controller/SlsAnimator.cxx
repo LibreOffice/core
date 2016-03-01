@@ -201,9 +201,8 @@ void Animator::CleanUpAnimationList()
     maAnimations.swap(aActiveAnimations);
 }
 
-void Animator::RequestNextFrame (const double nFrameStart)
+void Animator::RequestNextFrame ()
 {
-    (void)nFrameStart;
     if ( ! maIdle.IsActive())
     {
         // Prevent redraws except for the ones in TimeoutHandler.  While the

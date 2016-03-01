@@ -2729,8 +2729,7 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
 
 // creates a image tag
 OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText,
-                                sal_Int16 nWidth,
-                                sal_Int16 nHeight )
+                                sal_Int16 nWidth )
 {
     OUStringBuffer aStr( "<img src=\"");
     aStr.append(aImage);
@@ -2751,11 +2750,6 @@ OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltTe
     if(nWidth > -1)
     {
         aStr.append(" width=" + OUString::number(nWidth));
-    }
-
-    if(nHeight > -1)
-    {
-        aStr.append(" height=" + OUString::number(nHeight));
     }
 
     aStr.append('>');

@@ -93,13 +93,10 @@ public:
     bool IsPageSelected (int nPageIndex);
 
     /** Deselect the descriptor that is associated with the given page.
-        @param bUpdateCurrentPage
-            When <TRUE/> then the current page is updated to the first slide
-            of the remaining selection.
+        The current page is updated to the first slide
+        of the remaining selection.
     */
-    void DeselectPage (
-        int nPageIndex,
-        const bool bUpdateCurrentPage = true);
+    void DeselectPage (int nPageIndex);
     void DeselectPage (
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bUpdateCurrentPage = true);

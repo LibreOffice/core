@@ -487,21 +487,21 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
 
 /** selects or deselects the given effect.
     Selections of other effects are not changed */
-void CustomAnimationList::select( CustomAnimationEffectPtr pEffect, bool bSelect /* = true */ )
+void CustomAnimationList::select( CustomAnimationEffectPtr pEffect )
 {
     CustomAnimationListEntry* pEntry = static_cast< CustomAnimationListEntry* >(First());
     while( pEntry )
     {
         if( pEntry->getEffect() == pEffect )
         {
-            Select( pEntry, bSelect );
+            Select( pEntry );
             MakeVisible( pEntry );
             break;
         }
         pEntry = static_cast< CustomAnimationListEntry* >(Next( pEntry ));
     }
 
-    if( !pEntry && bSelect )
+    if( !pEntry )
     {
         append( pEffect );
         select( pEffect );

@@ -142,8 +142,8 @@ public:
 
     /** Set whether to sort the template entries inside the regions.
     */
-    void EnableEntrySorting (bool isEntrySortingEnabled = true)
-        {mbEntrySortingEnabled = isEntrySortingEnabled;}
+    void EnableEntrySorting ()
+        {mbEntrySortingEnabled = true;}
 
 private:
     /** The current state determines which step will be executed next by

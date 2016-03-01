@@ -95,8 +95,7 @@ public:
 
     static bool StartPreview( ViewShellBase& rBase,
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
-        vcl::Window* pParent = nullptr );
+        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
 
     static void Stop( ViewShellBase& rBase );
 

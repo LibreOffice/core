@@ -69,7 +69,7 @@ public:
         calls to the PageSelector) to invalidate the relevant slots and send
         appropriate events.
     */
-    void SelectionHasChanged (const bool bMakeSelectionVisible = true);
+    void SelectionHasChanged ();
 
     /** Add a listener that is called when the selection of the slide sorter
         changes.

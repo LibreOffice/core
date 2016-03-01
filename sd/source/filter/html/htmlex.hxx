@@ -172,7 +172,7 @@ class HtmlExport
 
     static OUString CreateLink( const OUString& aLink, const OUString& aText,
                         const OUString& aTarget = OUString());
-    static OUString CreateImage( const OUString& aImage, const OUString& aAltText, sal_Int16 nWidth = -1, sal_Int16 nHeight = -1 );
+    static OUString CreateImage( const OUString& aImage, const OUString& aAltText, sal_Int16 nWidth = -1 );
     OUString CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
     OUString CreateBodyTag() const;
 

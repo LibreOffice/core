@@ -54,20 +54,16 @@ public:
     ~AsynchronousCall();
 
     /** Post a function object that is to be executed asynchronously.  When
-        this method is called while the current function object has not bee
-        executed then the later is destroyed and only the given function
+        this method is called while the current function object has not been
+        executed then the latter is destroyed and only the given function
         object will be executed.
         @param rFunction
             The function object that may be called asynchronously in the
             near future.
-        @param nTimeoutInMilliseconds
-            The timeout in milliseconds until the function object is
-            executed.
     */
     typedef ::std::function<void ()> AsynchronousFunction;
     void Post (
-        const AsynchronousFunction& rFunction,
-        sal_uInt32 nTimeoutInMilliseconds=10);
+        const AsynchronousFunction& rFunction);
 
 private:
     Timer maTimer;

@@ -58,7 +58,7 @@ public:
 
     /** selects or deselects the given effect.
         Selections of other effects are not changed */
-    void select( CustomAnimationEffectPtr pEffect, bool bSelect = true );
+    void select( CustomAnimationEffectPtr pEffect );
 
     /** populates the list with all effects from the given MainSequence */
     void update( MainSequencePtr pMainSequence );

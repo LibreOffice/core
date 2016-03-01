@@ -693,7 +693,7 @@ sal_Bool SAL_CALL SdLayerManager::hasElements() throw(uno::RuntimeException, std
  * If something was changed at the layers, this methods takes care that the
  * changes are made visible in sdbcx::View.
  */
-void SdLayerManager::UpdateLayerView( bool modify ) const throw()
+void SdLayerManager::UpdateLayerView() const throw()
 {
     if(mpModel->mpDocShell)
     {
@@ -706,8 +706,7 @@ void SdLayerManager::UpdateLayerView( bool modify ) const throw()
             pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), bLayerMode);
         }
 
-        if(modify)
-            mpModel->mpDoc->SetChanged();
+        mpModel->mpDoc->SetChanged();
     }
 }
 

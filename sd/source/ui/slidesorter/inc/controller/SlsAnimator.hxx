@@ -120,7 +120,7 @@ private:
     */
     void CleanUpAnimationList();
 
-    void RequestNextFrame (const double nFrameStart = 0);
+    void RequestNextFrame();
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

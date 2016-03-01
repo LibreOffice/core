@@ -184,12 +184,11 @@ css::uno::Reference< css::presentation::XSlideShowController > SlideShow::GetSli
 
 bool SlideShow::StartPreview( ViewShellBase& rBase,
     const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-    const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
-    vcl::Window* pParent /* = 0 */ )
+    const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     if( xSlideShow.is() )
-        return xSlideShow->startPreview( xDrawPage, xAnimationNode, pParent );
+        return xSlideShow->startPreview( xDrawPage, xAnimationNode );
 
     return false;
 }

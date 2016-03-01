@@ -86,9 +86,9 @@ void PageCache::InvalidatePreviewBitmap (
         RequestPreviewBitmap(aKey);
 }
 
-void PageCache::InvalidateCache (const bool bUpdateCache)
+void PageCache::InvalidateCache()
 {
-    mpImplementation->InvalidateCache(bUpdateCache);
+    mpImplementation->InvalidateCache(true);
 }
 
 void PageCache::SetPreciousFlag (

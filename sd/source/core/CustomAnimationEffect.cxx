@@ -1477,7 +1477,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     return bChanged;
 }
 
-void CustomAnimationEffect::createAudio( const css::uno::Any& rSource, double fVolume /* = 1.0 */ )
+void CustomAnimationEffect::createAudio( const css::uno::Any& rSource )
 {
     DBG_ASSERT( !mxAudio.is(), "sd::CustomAnimationEffect::createAudio(), node already has an audio!" );
 
@@ -1486,7 +1486,7 @@ void CustomAnimationEffect::createAudio( const css::uno::Any& rSource, double fV
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference< XAudio > xAudio( Audio::create( xContext ) );
         xAudio->setSource( rSource );
-        xAudio->setVolume( fVolume );
+        xAudio->setVolume( 1.0 );
         setAudio( xAudio );
     }
     catch( Exception& )

@@ -216,12 +216,12 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     }
 }
 
-void Clipboard::DoCut (vcl::Window* pWindow)
+void Clipboard::DoCut ()
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 1)
     {
-        DoCopy(pWindow);
-        DoDelete(pWindow);
+        DoCopy();
+        DoDelete();
     }
 }
 
@@ -238,13 +238,13 @@ void Clipboard::DoCopy (vcl::Window* pWindow )
     CreateSlideTransferable( pWindow, false );
 }
 
-void Clipboard::DoPaste (vcl::Window* pWindow)
+void Clipboard::DoPaste ()
 {
     SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
 
     if (pClipTransferable!=nullptr && pClipTransferable->IsPageTransferable())
     {
-        sal_Int32 nInsertPosition = GetInsertionPosition(pWindow);
+        sal_Int32 nInsertPosition = GetInsertionPosition(nullptr);
 
         if (nInsertPosition >= 0)
         {

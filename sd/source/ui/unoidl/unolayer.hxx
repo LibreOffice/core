@@ -170,7 +170,7 @@ private:
 
     ::sd::View* GetView() const throw();
     ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->mpDocShell; }
-    void UpdateLayerView( bool modify = true ) const throw();
+    void UpdateLayerView() const throw();
 };
 
 #endif

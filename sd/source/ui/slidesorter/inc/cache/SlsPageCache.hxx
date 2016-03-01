@@ -134,12 +134,8 @@ public:
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
-        @param bUpdateCache
-            When this flags is <TRUE/> then requests for updated previews
-            are created.  When it is <FALSE/> the existing previews are only
-            marked as not being up-to-date anymore.
     */
-    void InvalidateCache (const bool bUpdateCache = true);
+    void InvalidateCache ();
 
     /** With the precious flag you can control whether a bitmap can be
         removed or reduced in size to make room for other bitmaps or is so

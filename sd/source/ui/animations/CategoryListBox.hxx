@@ -14,7 +14,7 @@ public:
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32           InsertCategory( const OUString& rStr );
 
     DECL_LINK_TYPED(implDoubleClickHdl, ListBox&, void);
 

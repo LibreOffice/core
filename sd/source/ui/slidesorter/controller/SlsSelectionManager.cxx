@@ -201,10 +201,9 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
     }
 }
 
-void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
+void SelectionManager::SelectionHasChanged ()
 {
-    if (bMakeSelectionVisible)
-        mbIsMakeSelectionVisiblePending = true;
+    mbIsMakeSelectionVisiblePending = true;
 
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
     if (pViewShell != nullptr)

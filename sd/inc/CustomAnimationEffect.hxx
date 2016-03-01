@@ -151,7 +151,7 @@ public:
     SAL_DLLPRIVATE void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
     SAL_DLLPRIVATE bool getStopAudio() const;
     void setStopAudio();
-    void createAudio( const css::uno::Any& rSource, double fVolume = 1.0 );
+    void createAudio( const css::uno::Any& rSource );
     SAL_DLLPRIVATE void removeAudio();
     SAL_DLLPRIVATE const css::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
 

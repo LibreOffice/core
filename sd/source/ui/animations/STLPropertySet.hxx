@@ -55,7 +55,7 @@ public:
     ~STLPropertySet();
 
     void setPropertyDefaultValue( sal_Int32 nHandle, const css::uno::Any& rValue );
-    void setPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue, sal_Int32 nState = STLPropertyState_DIRECT );
+    void setPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue );
     css::uno::Any getPropertyValue( sal_Int32 nHandle ) const;
 
     sal_Int32 getPropertyState( sal_Int32 nHandle ) const;

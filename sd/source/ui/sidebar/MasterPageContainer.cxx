@@ -104,8 +104,7 @@ public:
 
     void FireContainerChange (
         MasterPageContainerChangeEvent::EventType eType,
-        Token aToken,
-        bool bNotifyAsynchronously = false);
+        Token aToken);
 
     virtual bool UpdateDescriptor (
         const SharedMasterPageDescriptor& rpDescriptor,
@@ -170,7 +169,6 @@ private:
     bool mbContainerCleaningPending;
 
     typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
-    DECL_LINK_TYPED(AsynchronousNotifyCallback, void*, void);
 
     Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
@@ -617,18 +615,6 @@ Size MasterPageContainer::Implementation::GetPreviewSizePixel (PreviewSize eSize
         return maLargePreviewSizePixel;
 }
 
-IMPL_LINK_TYPED(MasterPageContainer::Implementation,AsynchronousNotifyCallback, void*, p, void)
-{
-    EventData* pData = static_cast<EventData*>(p);
-    const ::osl::MutexGuard aGuard (maMutex);
-
-    if (pData != nullptr)
-    {
-        FireContainerChange(pData->first, pData->second);
-        delete pData;
-    }
-}
-
 MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     const SharedMasterPageDescriptor& rpDescriptor)
 {
@@ -945,25 +931,15 @@ void MasterPageContainer::Implementation::CleanContainer()
 
 void MasterPageContainer::Implementation::FireContainerChange (
     MasterPageContainerChangeEvent::EventType eType,
-    Token aToken,
-    bool bNotifyAsynchronously)
+    Token aToken)
 {
-    if (bNotifyAsynchronously)
-    {
-        Application::PostUserEvent(
-            LINK(this,Implementation,AsynchronousNotifyCallback),
-            new EventData(eType,aToken));
-    }
-    else
-    {
-        ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
-        ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener;
-        MasterPageContainerChangeEvent aEvent;
-        aEvent.meEventType = eType;
-        aEvent.maChildToken = aToken;
-        for (iListener=aCopy.begin(); iListener!=aCopy.end(); ++iListener)
-            iListener->Call(aEvent);
-    }
+    ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
+    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener;
+    MasterPageContainerChangeEvent aEvent;
+    aEvent.meEventType = eType;
+    aEvent.maChildToken = aToken;
+    for (iListener=aCopy.begin(); iListener!=aCopy.end(); ++iListener)
+        iListener->Call(aEvent);
 }
 
 bool MasterPageContainer::Implementation::UpdateDescriptor (

@@ -140,8 +140,7 @@ private:
 
     SharedPageObjectRun GetRun (
         view::Layouter& rLayouter,
-        const InsertPosition& rInsertPosition,
-        const bool bCreate = true);
+        const InsertPosition& rInsertPosition);
     RunContainer::const_iterator FindRun (const sal_Int32 nRunIndex) const;
 };
 
@@ -206,8 +205,7 @@ void InsertAnimator::Implementation::SetInsertPosition (
 
 SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     view::Layouter& rLayouter,
-    const InsertPosition& rInsertPosition,
-    const bool bCreate)
+    const InsertPosition& rInsertPosition)
 {
     const sal_Int32 nRow (rInsertPosition.GetRow());
     if (nRow < 0)
@@ -217,7 +215,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     if (rLayouter.GetColumnCount() == 1)
     {
         // There is only one run that contains all slides.
-        if (maRuns.empty() && bCreate)
+        if (maRuns.empty())
             maRuns.insert(SharedPageObjectRun(new PageObjectRun(
                 *this,
                 0,
@@ -228,7 +226,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     else
     {
         iRun = FindRun(nRow);
-        if (iRun == maRuns.end() && bCreate)
+        if (iRun == maRuns.end())
         {
             // Create a new run.
             const sal_Int32 nStartIndex (rLayouter.GetIndex(nRow, 0));

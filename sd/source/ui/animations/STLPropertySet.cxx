@@ -42,7 +42,7 @@ void STLPropertySet::setPropertyDefaultValue( sal_Int32 nHandle, const Any& rVal
     maPropertyMap[ nHandle ] = aEntry;
 }
 
-void STLPropertySet::setPropertyValue( sal_Int32 nHandle, const Any& rValue, sal_Int32 /* nState = STLPropertyState_DIRECT */ )
+void STLPropertySet::setPropertyValue( sal_Int32 nHandle, const Any& rValue )
 {
     PropertyMapIter aIter;
     if( findProperty( nHandle, aIter ) )

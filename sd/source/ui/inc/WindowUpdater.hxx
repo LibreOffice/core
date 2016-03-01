@@ -92,12 +92,8 @@ public:
         @param pWindow
             The device to update.  When the given pointer is NULL then
             nothing is done.
-        @param pDocument
-            When given a pointer to a document then tell it to reformat all
-            text objects.  This refomatting is necessary for the new values
-            to take effect.
     */
-    void Update (OutputDevice* pDevice, SdDrawDocument* pDocument=nullptr) const;
+    void Update (OutputDevice* pDevice) const;
 
     /** Callback that waits for notifications of a
         <type>SvtCTLOptions</type> object.

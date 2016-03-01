@@ -107,7 +107,7 @@ class AnnotationWindow : public FloatingWindow
 
         SvxLanguageItem GetLanguage();
 
-        void setAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
+        void setAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
         void ExecuteSlot( sal_uInt16 nSID );
 

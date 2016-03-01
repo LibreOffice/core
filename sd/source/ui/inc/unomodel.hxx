@@ -145,7 +145,7 @@ public:
     SdDrawDocument* GetDoc() const { return mpDoc; }
     bool IsImpressDocument() const { return mbImpressDoc; }
 
-    void SetModified( bool bModified = true ) throw();
+    void SetModified() throw();
 
     css::uno::Reference< css::i18n::XForbiddenCharacters > getForbiddenCharsTable();
 
