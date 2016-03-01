@@ -95,7 +95,7 @@ public:
 
     void    AddWeekDay( bool bLongFmt = true );
 
-    void    AddEra(bool bLongFmt = false);
+    void    AddEra();
 
     void    AddHour( bool bLongFmt = true );
 
@@ -155,11 +155,11 @@ inline void XFDateStyle::AddWeekDay( bool bLongFmt )
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddEra(bool bLongFmt)
+inline void XFDateStyle::AddEra()
 {
     XFDatePart  *part = new XFDatePart();
     part->SetPartType(enumXFDateEra);
-    part->SetLongFmt(bLongFmt);
+    part->SetLongFmt(false);
     m_aParts.AddStyle(part);
 }
 

@@ -84,7 +84,7 @@ public:
     virtual ~XFFrameStyle();
 
 public:
-    void    SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs = 0);
+    void    SetWrapType(enumXFWrap wrap);
 
     /**
      * @descr:  space between frame and paragraph text.
@@ -172,7 +172,7 @@ protected:
     enumXFFrameYRel m_eYRel;
 };
 
-inline void XFFrameStyle::SetWrapType(enumXFWrap wrap, sal_Int32 /*nParagraphs*/)
+inline void XFFrameStyle::SetWrapType(enumXFWrap wrap)
 {
     m_eWrap = wrap;
 }

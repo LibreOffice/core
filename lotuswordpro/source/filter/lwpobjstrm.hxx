@@ -92,13 +92,13 @@ public:
     void SkipExtra();
     sal_uInt16 CheckExtra();
 
-    bool QuickReadBool(bool *pFailure=nullptr);
+    bool QuickReadBool();
     sal_uInt32 QuickReaduInt32(bool *pFailure=nullptr);
     sal_uInt16 QuickReaduInt16(bool *pFailure=nullptr);
     sal_uInt8 QuickReaduInt8(bool *pFailure=nullptr);
-    sal_Int32 QuickReadInt32(bool *pFailure=nullptr);
-    sal_Int16 QuickReadInt16(bool *pFailure=nullptr);
-    double QuickReadDouble(bool *pFailure=nullptr);
+    sal_Int32 QuickReadInt32();
+    sal_Int16 QuickReadInt16();
+    double QuickReadDouble();
 
     OUString QuickReadStringPtr();
 

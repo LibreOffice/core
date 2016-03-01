@@ -81,38 +81,29 @@ XFDrawPath::XFDrawPath()
 {
 }
 
-void    XFDrawPath::MoveTo(XFPoint pt, bool absPosition)
+void    XFDrawPath::MoveTo(XFPoint pt)
 {
     XFSvgPathEntry  entry;
 
-    if( absPosition )
-        entry.SetCommand("M");
-    else
-        entry.SetCommand("m");
+    entry.SetCommand("M");
     entry.AddPoint(pt);
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::LineTo(XFPoint pt, bool absPosition)
+void    XFDrawPath::LineTo(XFPoint pt)
 {
     XFSvgPathEntry  entry;
 
-    if( absPosition )
-        entry.SetCommand("L");
-    else
-        entry.SetCommand("l");
+    entry.SetCommand("L");
     entry.AddPoint(pt);
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, bool absPosition)
+void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2)
 {
     XFSvgPathEntry  entry;
 
-    if( absPosition )
-        entry.SetCommand("C");
-    else
-        entry.SetCommand("c");
+    entry.SetCommand("C");
     entry.AddPoint(ctrl1);
     entry.AddPoint(ctrl2);
     entry.AddPoint(dest);
@@ -120,14 +111,11 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, bool abs
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::ClosePath(bool absPosition)
+void    XFDrawPath::ClosePath()
 {
     XFSvgPathEntry  entry;
 
-    if( absPosition )
-        entry.SetCommand("Z");
-    else
-        entry.SetCommand("z");
+    entry.SetCommand("Z");
 
     m_aPaths.push_back(entry);
 }

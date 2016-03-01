@@ -189,7 +189,7 @@ public:
     /**
      * @descr   Set crossout.
      */
-    void    SetCrossout(enumXFCrossout cross,bool wordByWord=false);
+    void    SetCrossout(enumXFCrossout cross);
 
     /**
      * @descr   Set font transform type,pls refer to enumXFTransform.
@@ -354,10 +354,10 @@ inline void XFFont::SetUnderline(enumXFUnderline underline, bool wordByWord)
     m_nFlag |= XFFONT_FLAG_UNDERLINE;
 }
 
-inline void XFFont::SetCrossout(enumXFCrossout cross, bool wordByWord)
+inline void XFFont::SetCrossout(enumXFCrossout cross)
 {
     m_eCrossout = cross;
-    m_bWordByWord = wordByWord;
+    m_bWordByWord = false;
     m_nFlag |= XFFONT_FLAG_CROSSOUT;
 }
 

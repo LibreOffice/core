@@ -70,7 +70,7 @@ public:
     XFListItem();
 
 public:
-    void    SetIsHeader(bool isHeader=true);
+    void    SetIsHeader();
 
     virtual void    ToXml(IXFStream *pStrm) override;
 
@@ -83,9 +83,9 @@ inline XFListItem::XFListItem()
     m_bIsHeader = false;
 }
 
-inline void XFListItem::SetIsHeader(bool isHeader)
+inline void XFListItem::SetIsHeader()
 {
-    m_bIsHeader = isHeader;
+    m_bIsHeader = true;
 }
 
 inline void XFListItem::ToXml(IXFStream *pStrm)

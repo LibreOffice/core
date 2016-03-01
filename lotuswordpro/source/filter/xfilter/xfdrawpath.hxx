@@ -107,22 +107,22 @@ public:
     /**
      * @descr   Move command.
      */
-    void    MoveTo(XFPoint pt, bool absPosition = true);
+    void    MoveTo(XFPoint pt);
 
     /**
      * @descr   Line command.
      */
-    void    LineTo(XFPoint pt, bool absPosition = true);
+    void    LineTo(XFPoint pt);
 
     /**
      * @descr   Curve command.
      */
-    void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, bool absPosition = true);
+    void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2);
 
     /**
      * @descr   Close path command.
      */
-    void    ClosePath(bool absPosition = true);
+    void    ClosePath();
 
     virtual void    ToXml(IXFStream *pStrm) override;
 
