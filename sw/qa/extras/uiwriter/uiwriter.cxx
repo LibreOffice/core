@@ -149,6 +149,7 @@ public:
     void testTdf73660();
     void testNewDocModifiedState();
     void testTdf77342();
+    void testTdf63553();
     void testTdf74230();
     void testTdf74363();
     void testTdf80663();
@@ -238,6 +239,7 @@ public:
     CPPUNIT_TEST(testTdf73660);
     CPPUNIT_TEST(testNewDocModifiedState);
     CPPUNIT_TEST(testTdf77342);
+    CPPUNIT_TEST(testTdf63553);
     CPPUNIT_TEST(testTdf74230);
     CPPUNIT_TEST(testTdf74363);
     CPPUNIT_TEST(testTdf80663);
@@ -2134,6 +2136,246 @@ void SwUiWriterTest::testTdf77342()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), rFootnote15.GetNumber());
     SwTextFootnote* pTFNote15 = static_cast<SwTextFootnote*> (pFootnote15);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pTFNote15->GetSeqRefNo());
+}
+
+void SwUiWriterTest::testTdf63553()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    //inserting first sequence field
+    SwSetExpFieldType* pSeqType = static_cast<SwSetExpFieldType*>(pWrtShell->GetFieldType(0, RES_SETEXPFLD));
+    SwSetExpField aSetField1(pSeqType, OUString(""), sal_uLong(4));
+    pWrtShell->Insert(aSetField1);
+    SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pWrtShell->GetFieldType(0, RES_GETREFFLD));
+    //moving cursor to the starting of document
+    pWrtShell->SttDoc();
+    //inserting reference field 1
+    SwGetRefField aGetField1(pRefType, OUString(""), REF_SEQUENCEFLD, sal_uInt16(0), REF_CONTENT);
+    pWrtShell->Insert(aGetField1);
+    //inserting second sequence field
+    SwSetExpField aSetField2(pSeqType, OUString(""), sal_uLong(4));
+    pWrtShell->Insert(aSetField2);
+    pWrtShell->SttDoc();
+    pCursor->Move(fnMoveForward);
+    //inserting reference field 2
+    SwGetRefField aGetField2(pRefType, OUString(""), REF_SEQUENCEFLD, sal_uInt16(1), REF_CONTENT);
+    pWrtShell->Insert(aGetField2);
+    //inserting third sequence field
+    SwSetExpField aSetField3(pSeqType, OUString(""), sal_uLong(4));
+    pWrtShell->Insert(aSetField3);
+    pWrtShell->SttDoc();
+    pCursor->Move(fnMoveForward);
+    pCursor->Move(fnMoveForward);
+    //inserting reference field 3
+    SwGetRefField aGetField3(pRefType, OUString(""), REF_SEQUENCEFLD, sal_uInt16(2), REF_CONTENT);
+    pWrtShell->Insert(aGetField3);
+    //now after all insertion we have ref1-ref2-ref3-seq3-seq2-seq1
+    //updating the fields
+    IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
+    rField.UpdateExpFields(nullptr, true);
+    //creating new clipboard doc
+    SwDoc* pClpDoc = new SwDoc();
+    pClpDoc->acquire();
+    pClpDoc->SetClipBoard(true);
+    pClpDoc->getIDocumentFieldsAccess().LockExpFields();
+    //selecting reference field 2 and 3 and sequence field 3
+    //selection is such that more than one and not all sequence fields and reference fields are selected
+    //ref1-[ref2-ref3-seq3]-seq2-seq1
+    pCursor->Move(fnMoveBackward);
+    pCursor->Move(fnMoveBackward);
+    //start marking
+    pCursor->SetMark();
+    pCursor->Move(fnMoveForward);
+    pCursor->Move(fnMoveForward);
+    pCursor->Move(fnMoveForward);
+    //copying the selection to clipboard
+    pWrtShell->Copy(pClpDoc);
+    //deleting selection mark after copy
+    pCursor->DeleteMark();
+    //checking that the sequence reference fields have same values after copy operation
+    uno::Any aAny;
+    sal_uInt16 aFormat,aSeqNum;
+    //reference field 1
+    pWrtShell->SttDoc();
+    SwField* pRef1 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pRef1->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pRef1->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //reference field 2
+    pCursor->Move(fnMoveForward);
+    SwField* pRef2 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pRef2->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pRef2->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //reference field 3
+    pCursor->Move(fnMoveForward);
+    SwField* pRef3 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pRef3->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pRef3->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //moving cursor to the end of the document
+    pWrtShell->EndDoc();
+    //pasting the copied selection at current cursor position
+    pWrtShell->Paste(pClpDoc);
+    //checking the fields, both new and old, for proper values
+    pWrtShell->SttDoc();
+    //now we have ref1-ref2-ref3-seq3-seq2-seq1-nref1-nref2-nseq1
+    //old reference field 1
+    SwField* pOldRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef11->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //old reference field 2
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef12->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old reference field 3
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef13 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef13->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef13->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 3
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pSeq3 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pSeq3->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aSeqNum);
+    pSeq3->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 2
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pSeq2 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pSeq2->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aSeqNum);
+    pSeq2->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 1
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pSeq1 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pSeq1->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), aSeqNum);
+    pSeq1->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //new reference field 1
+    pCursor->Move(fnMoveForward);
+    SwField* pNewRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pNewRef11->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //new reference field 2
+    pCursor->Move(fnMoveForward);
+    SwField* pNewRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pNewRef12->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //new sequence field 1
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pNewSeq1 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pNewSeq1->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), aSeqNum);
+    pNewSeq1->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //moving the cursor to the starting of document
+    pWrtShell->SttDoc();
+    //pasting the selection again at current cursor position
+    pWrtShell->Paste(pClpDoc);
+    //checking the fields, both new and old, for proper values
+    pWrtShell->SttDoc();
+    //now we have [nnref1-nnref2-nnseq1]-ref1-[ref2-ref3-seq3]-seq2-seq1-[nref1-nref2-nseq1]
+    //new reference field 1
+    SwField* pNewRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pNewRef21->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //new reference field 2
+    pCursor->Move(fnMoveForward);
+    SwField* pNewRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pNewRef22->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //new sequence field 1
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pNewSeq11 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pNewSeq11->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), aSeqNum);
+    pNewSeq11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old reference field 1
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef21->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //old reference field 2
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef22->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old reference field 3
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef23 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef23->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef23->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 1
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pOldSeq11 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pOldSeq11->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aSeqNum);
+    pOldSeq11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 2
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pOldSeq12 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pOldSeq12->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aSeqNum);
+    pOldSeq12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 3
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pOldSeq13 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pOldSeq13->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), aSeqNum);
+    pOldSeq13->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old reference field 4
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef24 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef24->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old reference field 5
+    pCursor->Move(fnMoveForward);
+    SwField* pOldRef25 = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    aFormat = pOldRef25->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old sequence field 4
+    pCursor->Move(fnMoveForward);
+    SwSetExpField* pOldSeq14 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
+    aSeqNum = pOldSeq14->GetSeqNumber();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), aSeqNum);
+    pOldSeq14->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
 }
 
 void SwUiWriterTest::testTdf74230()
