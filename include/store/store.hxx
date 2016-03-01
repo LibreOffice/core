@@ -323,15 +323,14 @@ public:
     /** Open the temporary file in memory.
         @see store_createMemoryFile()
      */
-    inline storeError createInMemory (
-        sal_uInt16 nPageSize = STORE_DEFAULT_PAGESIZE)
+    inline storeError createInMemory ()
     {
         if (m_hImpl)
         {
             (void) store_releaseHandle (m_hImpl);
             m_hImpl = nullptr;
         }
-        return store_createMemoryFile (nPageSize, &m_hImpl);
+        return store_createMemoryFile (STORE_DEFAULT_PAGESIZE, &m_hImpl);
     }
 
     /** Close the file.

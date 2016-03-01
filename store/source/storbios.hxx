@@ -92,17 +92,7 @@ public:
 
     storeError releasePage (const OStorePageDescriptor& rDescr);
 
-    /** Page Allocation.
-     */
-    enum Allocation
-    {
-        ALLOCATE_FIRST = 0,
-        ALLOCATE_BEST  = 1,
-        ALLOCATE_EOF   = 2
-    };
-
-    storeError allocate (
-        OStorePageObject& rPage, Allocation eAllocation = ALLOCATE_FIRST);
+    storeError allocate (OStorePageObject& rPage);
 
     storeError free (sal_uInt32 nAddr);
 
