@@ -689,7 +689,7 @@ public:
     sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
 
-    void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
+    void*           SwitchBuffer( sal_Size nInitSize=512 );
     void            SetBuffer( void* pBuf, sal_Size nSize,
                                bool bOwnsData=true, sal_Size nEOF=0 );
 

@@ -175,8 +175,7 @@ public:
     INetMIMEMessage* GetParent() const { return pParent; }
 
     void EnableAttachMultipartFormDataChild();
-    void AttachChild (
-        INetMIMEMessage& rChildMsg, bool bOwner = true );
+    void AttachChild( INetMIMEMessage& rChildMsg );
 
     const OString& GetMultipartBoundary() const { return m_aBoundary; }
 };

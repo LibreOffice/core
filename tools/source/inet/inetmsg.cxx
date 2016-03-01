@@ -305,11 +305,11 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     SetContentTransferEncoding("7bit");
 }
 
-void INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg, bool bOwner)
+void INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg)
 {
     if (IsContainer())
     {
-        if (bOwner) rChildMsg.pParent = this;
+        rChildMsg.pParent = this;
         aChildren.push_back( &rChildMsg );
     }
 }

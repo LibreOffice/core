@@ -645,7 +645,7 @@ bool StringRangeEnumerator::insertJoinedRanges(
     return true;
 }
 
-bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStrict )
+bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
 {
     mnCount = 0;
     maSequence.clear();
@@ -675,8 +675,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
         {
             if( bSequence && !aNumbers.empty() )
                 aNumbers.push_back( mnMax );
-            if( ! insertJoinedRanges( aNumbers, i_bStrict ) && i_bStrict )
-                return false;
+            insertJoinedRanges( aNumbers, false/*i_bStrict*/ );
 
             aNumbers.clear();
             bSequence = false;
@@ -690,8 +689,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
     // insert last entries
     if( bSequence && !aNumbers.empty() )
         aNumbers.push_back( mnMax );
-    if( ! insertJoinedRanges( aNumbers, i_bStrict ) && i_bStrict )
-        return false;
+    insertJoinedRanges( aNumbers, false/*i_bStrict*/ );
 
     return true;
 }
