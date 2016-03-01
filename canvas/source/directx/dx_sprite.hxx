@@ -37,6 +37,9 @@ namespace dxcanvas
             restoreTextures() call failed.
          */
         virtual void redraw() const = 0;
+
+    protected:
+        ~Sprite() {}
     };
 }
 
