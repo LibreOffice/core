@@ -279,13 +279,14 @@ ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId )
     return ERR_OK;
 }
 
-ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
+ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst )
 {
     RscMgrInst *    pClassData;
     RscId           aOldId, aId;
     ERRTYPE         aError;
     RSCINST         aTmpI = rInst;
     ObjNode *       pObjNode;
+    sal_uInt32      nDeep = 0;
 
     pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
 

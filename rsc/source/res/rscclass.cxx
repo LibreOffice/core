@@ -768,7 +768,7 @@ RscSysDepend::RscSysDepend( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
 }
 
 ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                        RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra, bool bFirst )
+                                        RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
 {
     ERRTYPE     aError;
     RSCINST     aFileName;
@@ -789,7 +789,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
         {
             nId = pTC->PutSysName( rInst.pClass->GetTypId(),
                                    aTmpMem.GetUTF8( 0 ),
-                                   0, 0, bFirst );
+                                   0, 0, false/*bFirst*/ );
         }
         rMem.Put( nId );
         aError = aFileName.pClass->WriteRcHeader( aFileName, rMem, pTC,

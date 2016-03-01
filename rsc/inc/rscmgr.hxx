@@ -35,7 +35,7 @@ class RscMgr : public RscClass
         void Create(){ aRefId.Create(); bDflt = true; }
         void Destroy(){ aRefId.Destroy(); }
     };
-    ERRTYPE         IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
+    ERRTYPE         IsToDeep( const RSCINST & rInst );
 public:
                     RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
 

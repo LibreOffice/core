@@ -99,8 +99,7 @@ class RscSysDepend : public RscClass
 public:
                     RscSysDepend( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
     ERRTYPE         WriteSysDependRc( const RSCINST &, RscWriteRc & aMem,
-                                      RscTypCont * pTC, sal_uInt32, bool bExtra,
-                                      bool bFirst = false );
+                                      RscTypCont * pTC, sal_uInt32, bool bExtra );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
