@@ -32,16 +32,17 @@ int main( int argc, char *argv[] )
 
     sal_Int32 nCount = rtl_getAppCommandArgCount();
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stdout, "rtl-commandargs (%d) real args:%i ", nCount, argc);
+#if OSL_DEBUG_LEVEL > 0
+    OUStringBuffer debugBuff;
+    debugBuff.append("rtl-commandargs (").append(nCount).append(")real args: ").append(argc);
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
         OUString data;
         rtl_getAppCommandArg( i , &(data.pData) );
         OString o = OUStringToOString( data, RTL_TEXTENCODING_ASCII_US );
-        fprintf( stdout, " %s", o.getStr() );
+        debugBuff.append(" ").append(o);
     }
-    fprintf( stdout, "\n" );
+    SAL_INFO("sal.test", debugBuff.toString());
 #endif
 
     if( nCount == 0 )
@@ -53,13 +54,7 @@ int main( int argc, char *argv[] )
     OUString iniName;
     Bootstrap::get(OUString("iniName"), iniName, OUString());
 
-#if OSL_DEBUG_LEVEL > 1
-     if(iniName.getLength())
-    {
-        OString tmp_iniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
-        fprintf(stderr, "using ini: %s\n", tmp_iniName.getStr());
-    }
-#endif
+    SAL_INFO_IF(!iniName.isEmpty(), "sal.test", "using ini: " << iniName);
 
     Bootstrap bootstrap(iniName);
 
