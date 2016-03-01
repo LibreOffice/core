@@ -219,8 +219,7 @@ class SVL_DLLPUBLIC INetContentTypes
 public:
     static INetContentType RegisterContentType(OUString const & rTypeName,
                                                OUString const & rPresentation,
-                                               OUString const * pExtension = nullptr,
-                                               OUString const * pSystemFileType = nullptr);
+                                               OUString const * pExtension = nullptr);
 
     static INetContentType GetContentType(OUString const & rTypeName);
 

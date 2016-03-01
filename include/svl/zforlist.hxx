@@ -845,7 +845,7 @@ private:
                                           LanguageType eLnge );
 
     // Create builtin formats for language/country if necessary, return CLOffset
-    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, bool bNoAdditionalFormats = false );
+    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge );
 
     // Build negative currency format, old compatibility style
     SVL_DLLPRIVATE void ImpGetNegCurrFormat(OUStringBuffer& sNegStr, const OUString& rCurrSymbol);
@@ -879,7 +879,7 @@ private:
     // Non-PRODUCT version may check locale data for matching defaults in one
     // FormatElement group.
     SVL_DLLPRIVATE void ImpAdjustFormatCodeDefault( css::i18n::NumberFormatCode * pFormatArr,
-                                                         sal_Int32 nCount, bool bCheckCorrectness = true );
+                                                         sal_Int32 nCount );
 
     // Obtain the format entry for a given key index.
     SVL_DLLPRIVATE       SvNumberformat* GetFormatEntry( sal_uInt32 nKey );

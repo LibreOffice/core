@@ -1000,14 +1000,14 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
 }
 
 
-sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, bool bDeep ) const
+sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
 {
     if ( !IsWhich(nWhich) )
         return 0;
 
     if ( !IsInRange( nWhich ) )
     {
-        if ( pImp->mpSecondary && bDeep )
+        if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetTrueSlotId(nWhich);
         assert(false && "unknown WhichId - cannot get slot-id");
         return 0;

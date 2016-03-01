@@ -196,8 +196,7 @@ public:
 
     // Build a format string of application defined keywords
     OUString GetMappedFormatstring( const NfKeywordTable& rKeywords,
-                                    const LocaleDataWrapper& rLoc,
-                                    bool bDontQuote = false ) const;
+                                    const LocaleDataWrapper& rLoc ) const;
 
     void SetStarFormatSupport( bool b )         { bStarFlag = b; }
 
@@ -239,7 +238,7 @@ public:
 
     //! Only onLoad: convert from stored to current system language/country
     void ConvertLanguage( SvNumberFormatter& rConverter,
-        LanguageType eConvertFrom, LanguageType eConvertTo, bool bSystem = false );
+        LanguageType eConvertFrom, LanguageType eConvertTo );
 
     // Substring of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring
@@ -249,8 +248,7 @@ public:
 
     // Subtype of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring
-    // bString==true: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
-    short GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos, bool bString = false ) const;
+    short GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos ) const;
 
     sal_Int32 GetForcedDenominatorForType( sal_uInt16 nNumFor ) const;
     /** If the count of string elements (substrings, ignoring [modifiers] and
@@ -354,8 +352,7 @@ public:
      */
     static sal_Int32 GetQuoteEnd( const OUString& rString, sal_Int32 nPos,
                                   sal_Unicode cQuote = '"',
-                                  sal_Unicode cEscIn = '\0',
-                                  sal_Unicode cEscOut = '\\' );
+                                  sal_Unicode cEscIn = '\0' );
 
     void SetComment( const OUString& rStr )
         { sComment = rStr; }

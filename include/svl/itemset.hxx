@@ -87,9 +87,9 @@ public:
     const SfxPoolItem*          GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const;
 
     /// Templatized version of GetItem() to directly return the correct type.
-    template<class T> const T* GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const
+    template<class T> const T* GetItem(sal_uInt16 nWhich) const
     {
-        const SfxPoolItem* pItem = GetItem(nWhich, bSearchInParent);
+        const SfxPoolItem* pItem = GetItem(nWhich);
         const T* pCastedItem = dynamic_cast<const T*>(pItem);
 
         assert(!pItem || pCastedItem); // if it exists, must have the correct type
@@ -97,10 +97,10 @@ public:
     }
 
     /// Templatized static version of GetItem() to directly return the correct type if the SfxItemSet is available.
-    template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent = true)
+    template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich)
     {
         if (pItemSet)
-            return pItemSet->GetItem<T>(nWhich, bSearchInParent);
+            return pItemSet->GetItem<T>(nWhich, true);
 
         return nullptr;
     }
@@ -118,7 +118,7 @@ public:
     void                        DisableItem(sal_uInt16 nWhich);
     void                        InvalidateItem( sal_uInt16 nWhich );
     sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
-    void                        ClearInvalidItems( bool bHardDefault = false );
+    void                        ClearInvalidItems();
     void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
 
     inline void                 SetParent( const SfxItemSet* pNew );
@@ -136,7 +136,7 @@ public:
     bool                        Set( const SfxItemSet&, bool bDeep = true );
 
     void                        Intersect( const SfxItemSet& rSet );
-    void                        MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
+    void                        MergeValues( const SfxItemSet& rSet );
     void                        Differentiate( const SfxItemSet& rSet );
     void                        MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
@@ -146,8 +146,7 @@ public:
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
-    void                        Load( SvStream &, bool bDirect = false,
-                                      const SfxItemPool *pRefPool = nullptr );
+    void                        Load( SvStream &, bool bDirect = false );
     void                        Store( SvStream &, bool bDirect = false ) const;
 
     bool                        operator==(const SfxItemSet &) const;

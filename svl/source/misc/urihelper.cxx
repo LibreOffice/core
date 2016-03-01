@@ -429,8 +429,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                        sal_Int32 & rEnd,
                                        CharClass const & rCharClass,
                                        INetURLObject::EncodeMechanism eMechanism,
-                                       rtl_TextEncoding eCharset,
-                                       INetURLObject::FSysStyle eStyle)
+                                       rtl_TextEncoding eCharset)
 {
     if (!(rBegin <= rEnd && rEnd <= rText.getLength()))
         return OUString();
@@ -529,7 +528,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     {
                         INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INetProtocol::File, eMechanism, eCharset,
-                                           eStyle);
+                                           INetURLObject::FSYS_DETECT);
                         if (!aUri.HasError())
                         {
                             rBegin = nPos;
@@ -618,7 +617,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     }
                 }
 
-                if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 3
+                if (rEnd - nPos >= 3
                     && rText[nPos + 1] == ':'
                     && (rText[nPos + 2] == '/'
                         || rText[nPos + 2] == '\\')) // 7th, 8th
@@ -644,7 +643,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     }
                 }
             }
-            else if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 2
+            else if (rEnd - nPos >= 2
                      && rText[nPos] == '\\'
                      && rText[nPos + 1] == '\\') // 6th
             {

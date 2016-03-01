@@ -325,29 +325,20 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
     return nDel;
 }
 
-void SfxItemSet::ClearInvalidItems( bool bHardDefault )
+void SfxItemSet::ClearInvalidItems()
 {
     sal_uInt16* pPtr = m_pWhichRanges;
     SfxItemArray ppFnd = m_pItems;
-    if ( bHardDefault )
-        while( *pPtr )
-        {
-            for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
-                if ( IsInvalidItem(*ppFnd) )
-                     *ppFnd = &m_pPool->Put( m_pPool->GetDefaultItem(nWhich) );
-            pPtr += 2;
-        }
-    else
-        while( *pPtr )
-        {
-            for( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
-                if( IsInvalidItem(*ppFnd) )
-                {
-                    *ppFnd = nullptr;
-                    --m_nCount;
-                }
-            pPtr += 2;
-        }
+    while( *pPtr )
+    {
+        for( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
+            if( IsInvalidItem(*ppFnd) )
+            {
+                *ppFnd = nullptr;
+                --m_nCount;
+            }
+        pPtr += 2;
+    }
 }
 
 void SfxItemSet::InvalidateAllItems()
@@ -1139,7 +1130,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
     }
 }
 
-void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
+void SfxItemSet::MergeValues( const SfxItemSet& rSet )
 {
     // WARNING! When making changes/fixing bugs, always update the table above!!
     assert( GetPool() == rSet.GetPool() && "MergeValues with different Pools" );
@@ -1167,7 +1158,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
         SfxItemArray ppFnd2 = rSet.m_pItems;
 
         for( ; nSize; --nSize, ++ppFnd1, ++ppFnd2 )
-            MergeItem_Impl(m_pPool, m_nCount, ppFnd1, *ppFnd2, bIgnoreDefaults);
+            MergeItem_Impl(m_pPool, m_nCount, ppFnd1, *ppFnd2, false/*bIgnoreDefaults*/);
     }
     else
     {
@@ -1180,14 +1171,13 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
             if( !pItem )
             {
                 // Not set, so default
-                if ( !bIgnoreDefaults )
-                    MergeValue( rSet.GetPool()->GetDefaultItem( nWhich ), bIgnoreDefaults );
+                MergeValue( rSet.GetPool()->GetDefaultItem( nWhich ) );
             }
             else if( IsInvalidItem( pItem ) )
                 // don't care
                 InvalidateItem( nWhich );
             else
-                MergeValue( *pItem, bIgnoreDefaults );
+                MergeValue( *pItem );
         }
     }
 }
@@ -1326,22 +1316,18 @@ void SfxItemSet::Load
 (
     SvStream&           rStream,    //  Stream we're loading from
 
-    bool                bDirect,    /*  true
+    bool                bDirect     /*  true
                                         Items are directly read form the stream
                                         and not via Surrogates
 
                                         false (default)
                                         Items are read via Surrogates */
-
-    const SfxItemPool*  pRefPool    /*  Pool that can resolve the Surrogates
-                                        (e.g. when inserting documents) */
 )
 {
     assert(m_pPool);
 
-    // No RefPool => Resolve Surrogates with ItemSet's Pool
-    if ( !pRefPool )
-        pRefPool = m_pPool;
+    // Resolve Surrogates with ItemSet's Pool
+    const SfxItemPool *pRefPool = m_pPool;
 
     // Load Item count and as many Items
     sal_uInt16 nCount = 0;
