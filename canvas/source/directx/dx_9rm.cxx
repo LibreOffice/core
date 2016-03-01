@@ -46,8 +46,6 @@
 #include "dx_impltools.hxx"
 #include "dx_rendermodule.hxx"
 
-
-#define MAX_TEXTURE_SIZE (2048)
 #define MIN_TEXTURE_SIZE (32)
 //#define FAKE_MAX_NUMBER_TEXTURES (2)
 //#define FAKE_MAX_TEXTURE_SIZE (4096)
