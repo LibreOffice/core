@@ -406,16 +406,14 @@ static sal_Bool __osl_attemptSocketDialupImpl()
 /*****************************************************************************/
 static sal_uInt32 g_nSocketImpl = 0;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 static sal_uInt32 g_nSocketAddr = 0;
 struct LeakWarning
 {
     ~LeakWarning()
     {
-        if( g_nSocketImpl )
-            OSL_TRACE( "sal_socket: %d socket instances leak" , g_nSocketImpl );
-        if( g_nSocketAddr )
-            OSL_TRACE( "sal_socket: %d socket address instances leak" , g_nSocketAddr );
+        SAL_WARN_IF( g_nSocketImpl, "sal.w32", "sal_socket: " << g_nSocketImpl << " socket instances leak" );
+        SAL_WARN_IF( g_nSocketAddr, "sal.w32", "sal_socket: " << g_nSocketAddr << " socket address instances leak" );
     }
 };
 LeakWarning socketWarning;
@@ -455,7 +453,7 @@ static oslSocketAddr __osl_createSocketAddr(  )
 {
     oslSocketAddr pAddr = (oslSocketAddr) rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl ));
     pAddr->m_nRefCount = 1;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     g_nSocketAddr ++;
 #endif
     return pAddr;
@@ -493,7 +491,7 @@ static oslSocketAddr __osl_createSocketAddrFromSystem( struct sockaddr *pSystemS
 
 static void __osl_destroySocketAddr( oslSocketAddr addr )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     g_nSocketAddr --;
 #endif
     rtl_freeMemory( addr );
