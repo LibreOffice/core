@@ -406,12 +406,10 @@ public class _XWindow extends MultiMethodTest {
     * removeKeyListener()
     */
     public static class TestKeyListener implements XKeyListener {
-        public boolean pressed = false;
-        public boolean released = false;
-        public void keyPressed(KeyEvent e) { pressed = true; }
-        public void keyReleased(KeyEvent e) { released = true; }
+        public void keyPressed(KeyEvent e) {}
+        public void keyReleased(KeyEvent e) {}
         public void disposing(EventObject e) {}
-        public void init() { pressed = false; released = false; }
+        public void init() {}
     }
 
     private final TestKeyListener kListener = new TestKeyListener();
@@ -445,34 +443,22 @@ public class _XWindow extends MultiMethodTest {
     * removeMouseListener()
     */
     public static class TestMouseListener implements XMouseListener {
-        public boolean pressed = false;
-        public boolean released = false;
-        public boolean entered = false;
-        public boolean exited = false;
 
         public void mousePressed(MouseEvent e) {
-            pressed = true;
         }
 
         public void mouseReleased(MouseEvent e) {
-            released = true;
         }
 
         public void mouseEntered(MouseEvent e) {
-            entered = true;
         }
 
         public void mouseExited(MouseEvent e) {
-            exited = true;
         }
 
         public void disposing(EventObject e) {}
 
         public void init() {
-            pressed = false;
-            released = false;
-            exited = false;
-            entered = false;
         }
 
     }
@@ -508,22 +494,17 @@ public class _XWindow extends MultiMethodTest {
     * removeMouseMotionListener()
     */
     public static class TestMouseMotionListener implements XMouseMotionListener {
-        public boolean dragged = false;
-        public boolean moved = false;
 
         public void mouseDragged(MouseEvent e) {
-            dragged = true;
         }
 
         public void mouseMoved(MouseEvent e) {
-            moved = true;
         }
 
-        public void disposing(EventObject e) {}
+        public void disposing(EventObject e) {
+        }
 
         public void init() {
-            dragged = false;
-            moved = false;
         }
 
     }
