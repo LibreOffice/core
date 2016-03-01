@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_57961f95",
+        "filename": "sal/qa/rtl/doublelock/rtl_doublelocking.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "This is a new log area not added to include/sal/log-areas.dox",
+      "range": {
+        "startLine": 193,
+        "startChar": 26,
+        "endLine": 193,
+        "endChar": 40
+      },
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_778d1b7b",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "SAL_INFO() can handle OUString, so converting _iniName to OString is superfluous now. Which when removed also eliminates the need to have this piece of code surrounded by OSL_DEBUG_LEVEL\u003e0",
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_d7e84f19",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "And calling getStr() isn\u0027t necessary for SAL_INFO().",
+      "range": {
+        "startLine": 354,
+        "startChar": 59,
+        "endLine": 354,
+        "endChar": 68
+      },
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_b7edc327",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "OSL_DEBUG_LEVEL\u003e0 is unnecessary if the only statement is a SAL_INFO() call.",
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_17f3f70b",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "This is odd now. Note that previously nLeaking got different values assigned depending on the value of OSL_DEBUG_LEVEL. Now the goal is to eliminate different levels, so probably OSL_DEBUG_LEVEL will be 1 in future, so here should be decided what value nLeaking should actually get. I\u0027d say 0 for the case of OSL_DEBUG_LEVEL\u003e0 to stress test the map erase below, and remove the OSL_DEBUG_LEVEL\u003d\u003d1 case.",
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_f7f74bf3",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "With only a SAL_INFO() call the #if is superfluous now.",
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_57dd7f6f",
+        "filename": "sal/test/testbootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "As already mentioned earlier, replacing a series of fprintf() with SAL_INFO() (which btw would be more appropriate than SAL_WARN) changes semantics in the sense that SAL_INFO outputs an additional newline if the fprintf() call didn\u0027t have one, which is the case here.\n\nIt would be better to accumulate the string to be output in an OUStringBuffer and then display that in one call using SAL_INFO().",
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_97e7e73f",
+        "filename": "sal/test/testbootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-01T18:36:29Z",
+      "side": 1,
+      "message": "This entire block can be replaced by\n\n SAL_INFO_IF( !iniName.isEmpty(), \"sal.test\", \"using ini: \" \u003c\u003c iniName);\n\nalso note SAL_INFO instead of SAL_WARN for a different call level.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "9c5607fc0398c2998b22b007a2eb1ea55f6247e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
