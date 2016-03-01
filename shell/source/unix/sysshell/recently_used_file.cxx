@@ -99,9 +99,9 @@ void recently_used_file::reset() const
 }
 
 
-void recently_used_file::truncate(off_t length)
+void recently_used_file::truncate()
 {
-    if (ftruncate(fileno(file_), length) == -1)
+    if (ftruncate(fileno(file_), 0) == -1)
         throw "I/O error: ftruncate failed";
 }
 

@@ -39,7 +39,7 @@ public:
     void reset() const;
 
 
-    void truncate(off_t length = 0);
+    void truncate();
 
 
     size_t read(
