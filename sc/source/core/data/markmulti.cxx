@@ -143,8 +143,8 @@ bool ScMultiSel::IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
             return true;
         ScMultiSelIter aMultiIter( *this, nCol );
         ScFlatBoolRowSegments::RangeData aRowRange;
-        aMultiIter.GetRowSegments().getRangeData( nStartRow, aRowRange );
-        return ( aRowRange.mbValue && aRowRange.mnRow2 >= nEndRow );
+        bool bRet = aMultiIter.GetRowSegments().getRangeData( nStartRow, aRowRange );
+        return bRet && aRowRange.mbValue && aRowRange.mnRow2 >= nEndRow;
     }
 
     if ( bHasMarks1 )
