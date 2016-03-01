@@ -78,7 +78,7 @@ public:
 
     bool Commit();
 
-    void  OpenStream( StgIo&, bool=false );     // set up an appropriate stream
+    void  OpenStream( StgIo& );     // set up an appropriate stream
     void  Close();
     sal_Int32 GetSize();
     bool  SetSize( sal_Int32 );

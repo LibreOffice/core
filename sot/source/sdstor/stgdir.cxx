@@ -261,11 +261,11 @@ bool StgDirEntry::IsDirty()
 
 // Set up a stream.
 
-void StgDirEntry::OpenStream( StgIo& rIo, bool bForceBig )
+void StgDirEntry::OpenStream( StgIo& rIo )
 {
     sal_Int32 nThreshold = (sal_uInt16) rIo.m_aHdr.GetThreshold();
     delete m_pStgStrm;
-    if( !bForceBig && m_aEntry.GetSize() < nThreshold )
+    if( m_aEntry.GetSize() < nThreshold )
         m_pStgStrm = new StgSmallStrm( rIo, *this );
     else
         m_pStgStrm = new StgDataStrm( rIo, *this );
