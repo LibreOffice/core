@@ -123,7 +123,6 @@ namespace dxcanvas
             SAL_INFO("canva.directx", "SpriteHelper::redraw(): output pos is (" <<
                      rPos.getX() << "," << rPos.getY() << ")" );
 
-            const double                                       fAlpha( getAlpha() );
             const ::basegfx::B2DVector&                        rSize( getSizePixel() );
             const ::basegfx::B2DHomMatrix&                     rTransform( getTransformation() );
             const uno::Reference< rendering::XPolyPolygon2D >& xClip( getClip() );
