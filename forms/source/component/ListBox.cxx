@@ -1403,7 +1403,7 @@ namespace frm
             }
 
             // copy the indexes to the sequence
-            aSelectIndexes = comphelper::containerToSequence<sal_Int16>( aSelectionSet );
+            aSelectIndexes = comphelper::containerToSequence( aSelectionSet );
         }
         break;
 

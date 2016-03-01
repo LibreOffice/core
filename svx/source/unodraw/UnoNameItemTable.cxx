@@ -247,7 +247,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
         aNameSet.insert(aApiName);
     }
 
-    return comphelper::containerToSequence<OUString>(aNameSet);
+    return comphelper::containerToSequence(aNameSet);
 }
 
 sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )

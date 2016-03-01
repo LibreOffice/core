@@ -81,7 +81,7 @@ namespace frm
 
     TypeBag::TypeSequence TypeBag::getTypes() const
     {
-        return comphelper::containerToSequence<css::uno::Type>(m_aTypes);
+        return comphelper::containerToSequence(m_aTypes);
     }
 
 

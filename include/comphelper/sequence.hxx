@@ -20,11 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_SEQUENCE_HXX
 #define INCLUDED_COMPHELPER_SEQUENCE_HXX
 
-#include <algorithm>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/comphelperdllapi.h>
 
+#include <algorithm>
+#include <type_traits>
 #include <vector>
 
 namespace comphelper
@@ -223,13 +224,12 @@ namespace comphelper
         prevent or detect precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
+    inline css::uno::Sequence< DstType > arrayToSequence( const SrcType& i_pArray, sal_Int32 nNum )
     {
         css::uno::Sequence< DstType > result( nNum );
         ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
         return result;
     }
-
 
     /** Copy from a Sequence into a plain C/C++ array
 
@@ -283,22 +283,21 @@ namespace comphelper
         truncated. There's currently no measure to prevent or detect
         precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType >
-    inline css::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
+    template< typename SrcType, typename DstType = typename SrcType::value_type >
+    inline css::uno::Sequence< DstType > containerToSequence( const SrcType & i_Container )
     {
         css::uno::Sequence< DstType > result( i_Container.size() );
         ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
         return result;
     }
 
-    template <typename T>
-    inline css::uno::Sequence<T> containerToSequence(
-        ::std::vector<T> const& v )
+    template< typename SrcType, typename DstType = typename SrcType::value_type >
+    inline css::uno::Sequence< DstType > containerToSequence( SrcType && i_Container )
     {
-        return css::uno::Sequence<T>(
-            v.data(), static_cast<sal_Int32>(v.size()) );
+        css::uno::Sequence< DstType > result( i_Container.size() );
+        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+        return result;
     }
-
 
     /** Copy from a Sequence into a container
 

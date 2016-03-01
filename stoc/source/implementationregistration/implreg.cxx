@@ -1628,7 +1628,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 
                         if (!implNames.empty())
                         {
-                            Sequence<OUString> seqImpl(comphelper::containerToSequence<OUString>(implNames));
+                            Sequence<OUString> seqImpl(comphelper::containerToSequence(implNames));
                             xImpl->closeKey();
                             return seqImpl;
                         }

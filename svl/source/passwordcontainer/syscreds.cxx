@@ -186,7 +186,7 @@ void SysCredentialsConfig::writeCfg()
 
     OSL_ENSURE( m_bCfgInited, "SysCredentialsConfig::writeCfg : not initialized!" );
 
-    m_aConfigItem.setSystemCredentialsURLs( comphelper::containerToSequence<OUString>(m_aCfgContainer) );
+    m_aConfigItem.setSystemCredentialsURLs( comphelper::containerToSequence(m_aCfgContainer) );
 }
 
 OUString SysCredentialsConfig::find( OUString const & aURL )

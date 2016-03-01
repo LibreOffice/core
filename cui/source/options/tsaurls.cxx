@@ -53,7 +53,7 @@ IMPL_LINK_NOARG_TYPED(TSAURLsDialog, OKHdl_Impl, Button*, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence<OUString>(m_aURLs), batch);
+    officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence(m_aURLs), batch);
     batch->commit();
 
     EndDialog(RET_OK);

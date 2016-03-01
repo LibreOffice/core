@@ -416,7 +416,7 @@ ScriptEventHelper::getEventListeners()
         }
     }
 
-    return comphelper::containerToSequence<OUString>(eventMethods);
+    return comphelper::containerToSequence(eventMethods);
 }
 
 Sequence< ScriptEventDescriptor >

@@ -817,7 +817,7 @@ namespace sfx2
                     // create a representation of the group which is understandable by the XFilterGroupManager
                     if ( _rGroup.size() )
                     {
-                        Sequence< StringPair > aFilters( comphelper::containerToSequence<StringPair>(_rGroup) );
+                        Sequence< StringPair > aFilters( comphelper::containerToSequence(_rGroup) );
                         if ( _bAddExtension )
                         {
                             StringPair* pFilters = aFilters.getArray();

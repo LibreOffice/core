@@ -562,7 +562,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
 {
     Guard< Mutex > aGuard( aLock );
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
-    return comphelper::containerToSequence<ScriptEventDescriptor>(aIt->aEventList);
+    return comphelper::containerToSequence(aIt->aEventList);
 }
 
 

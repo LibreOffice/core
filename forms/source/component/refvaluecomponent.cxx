@@ -177,7 +177,7 @@ namespace frm
             aTypes.push_front( cppu::UnoType<OUString>::get() );
             // push_front, because this is the preferred type
 
-        return comphelper::containerToSequence<Type>(aTypes);
+        return comphelper::containerToSequence(aTypes);
     }
 
 

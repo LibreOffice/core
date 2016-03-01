@@ -340,7 +340,7 @@ throw (css::uno::RuntimeException, std::exception)
     }
 
     css::uno::Sequence< css::frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< css::frame::DispatchInformation, std::list< css::frame::DispatchInformation > >( aDispatchInfoList );
+        comphelper::containerToSequence( aDispatchInfoList );
 
     return aSeq;
 }

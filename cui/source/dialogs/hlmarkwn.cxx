@@ -613,7 +613,7 @@ IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
         uno::Sequence< beans::NamedValue > aSettings
         {
             { TG_SETTING_LASTMARK, css::uno::makeAny(sLastSelectedMark) },
-            { TG_SETTING_LASTPATH, css::uno::makeAny(comphelper::containerToSequence<OUString>(aLastSelectedPath)) }
+            { TG_SETTING_LASTPATH, css::uno::makeAny(comphelper::containerToSequence(aLastSelectedPath)) }
         };
 
         // write
