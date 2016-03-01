@@ -29,6 +29,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <config_folders.h>
 
 using namespace com::sun::star;
@@ -309,14 +310,15 @@ SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
 
 void SfxClassificationHelper::Impl::parsePolicy()
 {
-    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/classification/example.xml");
+    uno::Reference<uno::XComponentContext> xComponentContext = comphelper::getProcessComponentContext();
+    OUString aPath = officecfg::Office::Common::Path::Current::Classification::get(xComponentContext);
     rtl::Bootstrap::expandMacros(aPath);
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(aPath, StreamMode::READ);
     uno::Reference<io::XInputStream> xInputStream(new utl::OStreamWrapper(*pStream));
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(comphelper::getProcessComponentContext());
+    uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xComponentContext);
     rtl::Reference<SfxClassificationParser> xClassificationParser(new SfxClassificationParser());
     uno::Reference<xml::sax::XDocumentHandler> xHandler(xClassificationParser.get());
     xParser->setDocumentHandler(xHandler);
