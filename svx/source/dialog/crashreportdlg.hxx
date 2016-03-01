@@ -19,7 +19,7 @@ public:
 
     CrashReportDialog(vcl::Window* pParent);
 
-    ~CrashReportDialog();
+    virtual ~CrashReportDialog();
 
     virtual void dispose() override;
 
