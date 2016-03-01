@@ -93,7 +93,7 @@ class TOOLS_DLLPUBLIC StringRangeEnumerator
     sal_Int32                                              mnOffset;
     bool                                                   mbValidInput;
 
-    bool setRange( const OUString& i_rNewRange, bool i_bStrict = false );
+    bool setRange( const OUString& i_rNewRange );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence, bool bMayAdjust );
     bool insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers, bool i_bStrict );
     bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
