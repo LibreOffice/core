@@ -127,6 +127,7 @@ namespace svgio
             SVGTokenSvg,
             SVGTokenSymbol,
             SVGTokenUse,
+            SVGTokenA,
 
             // shape elements
             SVGTokenCircle,
