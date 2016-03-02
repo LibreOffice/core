@@ -433,10 +433,10 @@ void IterateMatrix(
         }
         break;
         case ifCOUNT:
-            rCount += pMat->Count(bTextAsZero);
+            rCount += pMat->Count(bTextAsZero, false);  // do not count error values
         break;
         case ifCOUNT2:
-            rCount += pMat->Count(true);
+            rCount += pMat->Count(true, true);          // do count error values
         break;
         case ifPRODUCT:
         {

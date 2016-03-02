@@ -284,7 +284,7 @@ public:
     ScMatrix::IterateResult Sum(bool bTextAsZero) const;
     ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
     ScMatrix::IterateResult Product(bool bTextAsZero) const;
-    size_t Count(bool bCountStrings) const;
+    size_t Count(bool bCountStrings, bool bCountErrors) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
 
@@ -1177,8 +1177,10 @@ class CountElements : std::unary_function<MatrixImplType::element_block_node_typ
 {
     size_t mnCount;
     bool mbCountString;
+    bool mbCountErrors;
 public:
-    explicit CountElements(bool bCountString) : mnCount(0), mbCountString(bCountString) {}
+    explicit CountElements(bool bCountString, bool bCountErrors) :
+        mnCount(0), mbCountString(bCountString), mbCountErrors(bCountErrors) {}
 
     size_t getCount() const { return mnCount; }
 
@@ -1187,6 +1189,20 @@ public:
         switch (node.type)
         {
             case mdds::mtm::element_numeric:
+                mnCount += node.size;
+                if (!mbCountErrors)
+                {
+                    typedef MatrixImplType::numeric_block_type block_type;
+
+                    block_type::const_iterator it = block_type::begin(*node.data);
+                    block_type::const_iterator itEnd = block_type::end(*node.data);
+                    for (; it != itEnd; ++it)
+                    {
+                        if (!::rtl::math::isFinite(*it))
+                            --mnCount;
+                    }
+                }
+            break;
             case mdds::mtm::element_boolean:
                 mnCount += node.size;
             break;
@@ -1796,9 +1812,9 @@ ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
     return GetValueWithCount<sc::op::Product>(bTextAsZero, maMat);
 }
 
-size_t ScMatrixImpl::Count(bool bCountStrings) const
+size_t ScMatrixImpl::Count(bool bCountStrings, bool bCountErrors) const
 {
-    CountElements aFunc(bCountStrings);
+    CountElements aFunc(bCountStrings, bCountErrors);
     maMat.walk(aFunc);
     return aFunc.getCount();
 }
@@ -2609,9 +2625,9 @@ ScMatrix::IterateResult ScFullMatrix::Product(bool bTextAsZero) const
     return pImpl->Product(bTextAsZero);
 }
 
-size_t ScFullMatrix::Count(bool bCountStrings) const
+size_t ScFullMatrix::Count(bool bCountStrings, bool bCountErrors) const
 {
-    return pImpl->Count(bCountStrings);
+    return pImpl->Count(bCountStrings, bCountErrors);
 }
 
 size_t ScFullMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
@@ -3500,10 +3516,10 @@ ScMatrix::IterateResult ScVectorRefMatrix::Product(bool bTextAsZero) const
     return mpFullMatrix->Product(bTextAsZero);
 }
 
-size_t ScVectorRefMatrix::Count(bool bCountStrings) const
+size_t ScVectorRefMatrix::Count(bool bCountStrings, bool bCountErrors) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
-    return mpFullMatrix->Count(bCountStrings);
+    return mpFullMatrix->Count(bCountStrings, bCountErrors);
 }
 
 size_t ScVectorRefMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
