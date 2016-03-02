@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_37cef35a",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:41:41Z",
+      "side": 0,
+      "message": "You remove debug code ?, this can be in a SAL_WARN as well.",
+      "revId": "104c178a0c86b758288d9dbf6e5bd0db11fbb046",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
