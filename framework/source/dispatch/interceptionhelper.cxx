@@ -66,16 +66,23 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
         xInterceptor = pIt->xInterceptor;
 
     // b) No match by registration - but a valid interceptor list.
-    //    Use first interceptor everytimes.
-    //    Note: it doesn't matter, which direction this helper implementation use to ask interceptor objects.
-    //    Using of member m_aInterceptorList will starts at the beginning everytimes.
-    //    It depends from the filling operation, in which direction it works realy!
+    //    Find first interceptor w/o pattern, so we need to query it
     if (!xInterceptor.is() && m_lInterceptionRegs.size()>0)
     {
-        pIt          = m_lInterceptionRegs.begin();
-        xInterceptor = pIt->xInterceptor;
+        InterceptorList::const_iterator pIt2;
+        for (pIt2=m_lInterceptionRegs.begin(); pIt2!=m_lInterceptionRegs.end(); ++pIt2)
+        {
+            if (!pIt2->lURLPattern.getLength())
+            {
+                // no pattern -> need to ask this guy!
+                xInterceptor = pIt2->xInterceptor;
+                break;
+            }
+        }
+        // if we didn't find any non-pattern interceptor, there's no-one
+        // registered for this command url (we already searched for matching
+        // patterns above)
     }
-
     // c) No registered interceptor => use our direct slave.
     //    This helper exist by design and must be valid everytimes ...
     //    But to be more feature proof - we should check that .-)
