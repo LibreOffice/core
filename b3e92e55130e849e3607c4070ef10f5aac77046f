@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_1782d700",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-03-02T03:17:58Z",
+      "side": 1,
+      "message": "If this is working on a particular bug, can start the text with tdf#xxx as a bot will pick up the commit and automatically add a comment to the bug in BZ. That helps folks know what is being done, and you get kudos.",
+      "revId": "b3e92e55130e849e3607c4070ef10f5aac77046f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_d787af10",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-03-02T03:17:58Z",
+      "side": 1,
+      "message": "Can you make that ( nStyle \u0026 PS_STYLE_ENDCAP_MASK) - put the mask definition in vcl/source/filter/wmf/winmtf.hxx\n\nor PS_ENDCAPSTYLE_MASK, not really concerned.",
+      "revId": "b3e92e55130e849e3607c4070ef10f5aac77046f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_b78ca336",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-03-02T03:17:58Z",
+      "side": 1,
+      "message": "Can you make that ( nStyle \u0026 PS_STYLE_JOIN_MASK) - put the mask definition in vcl/source/filter/wmf/winmtf.hxx\n\nor PS_JOINSTYLE_MASK, not really concerned.",
+      "revId": "b3e92e55130e849e3607c4070ef10f5aac77046f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
