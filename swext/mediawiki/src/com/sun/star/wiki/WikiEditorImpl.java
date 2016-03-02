@@ -56,7 +56,6 @@ public final class WikiEditorImpl extends WeakBase
     private static final String protocolName = "vnd.com.sun.star.wiki:";
 
     private final XComponentContext m_xContext;
-    private final Map<String, com.sun.star.frame.XStatusListener> m_statusListeners = new HashMap<String, com.sun.star.frame.XStatusListener>();
     private XFrame m_xFrame;
     private XModel m_xModel;
     private final Settings m_aSettings;
@@ -177,33 +176,6 @@ public final class WikiEditorImpl extends WeakBase
         com.sun.star.frame.XStatusListener listener,
         com.sun.star.util.URL url )
     {
-        String urlstring = url.Complete;
-        m_statusListeners.put( urlstring, listener );
-        // synchronous callback required!!!
-        callStatusListener( urlstring );
-    }
-
-
-
-    private void callStatusListener( String uristring )
-    {
-        try
-        {
-            new URI( uristring );
-
-            // check whether any blogs are live...
-            setListenerState( "command");
-        } catch ( URISyntaxException ex )
-        {
-            ex.printStackTrace();
-        }
-    }
-
-
-    private void setListenerState( String urlstring)
-    {
-        com.sun.star.util.URL url = new com.sun.star.util.URL();
-        url.Complete = urlstring;
     }
 
     private void sendArticle()
