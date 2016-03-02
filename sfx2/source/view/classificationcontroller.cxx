@@ -24,11 +24,25 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/configurationlistener.hxx>
 
 using namespace com::sun::star;
 
 namespace sfx2
 {
+
+class ClassificationCategoriesController;
+using ClassificationPropertyListenerBase = comphelper::ConfigurationListenerProperty<OUString>;
+
+/// Listens to configuration changes, so no restart is needed after setting the classification path.
+class ClassificationPropertyListener : public ClassificationPropertyListenerBase
+{
+    ClassificationCategoriesController& m_rController;
+
+public:
+    ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController);
+    virtual void setProperty(const uno::Any& rProperty) override;
+};
 
 using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::ToolboxController, lang::XServiceInfo>;
 
@@ -36,6 +50,8 @@ using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::
 class ClassificationCategoriesController : public ClassificationCategoriesControllerBase
 {
     VclPtr<ListBox> m_pCategories;
+    rtl::Reference<comphelper::ConfigurationListener> m_xListener;
+    ClassificationPropertyListener m_aPropertyListener;
 
     DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
@@ -56,12 +72,29 @@ public:
 
     // XStatusListener
     virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
+
+    void removeEntries();
 };
+
+ClassificationPropertyListener::ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController)
+    : ClassificationPropertyListenerBase(xListener, "WritePath")
+    , m_rController(rController)
+{
+}
+
+void ClassificationPropertyListener::setProperty(const uno::Any& /*rProperty*/)
+{
+    // So that its gets re-filled with entries from the new policy.
+    m_rController.removeEntries();
+}
 
 ClassificationCategoriesController::ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext)
     : ClassificationCategoriesControllerBase(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:ClassificationApply"))
     , m_pCategories(nullptr)
+    , m_xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Paths/Paths/Classification"))
+    , m_aPropertyListener(m_xListener, *this)
 {
+
 }
 
 ClassificationCategoriesController::~ClassificationCategoriesController()
@@ -93,6 +126,8 @@ void ClassificationCategoriesController::dispose() throw (uno::RuntimeException,
 
     svt::ToolboxController::dispose();
     m_pCategories.disposeAndClear();
+    m_aPropertyListener.dispose();
+    m_xListener->dispose();
 }
 
 uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
@@ -144,6 +179,12 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     const OUString& rCategoryName = aHelper.GetBACName();
     if (!rCategoryName.isEmpty())
         m_pCategories->SelectEntry(rCategoryName);
+}
+
+void ClassificationCategoriesController::removeEntries()
+{
+    if (m_pCategories)
+        m_pCategories->Clear();
 }
 
 } // namespace sfx2
