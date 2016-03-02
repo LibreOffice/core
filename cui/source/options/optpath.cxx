@@ -115,6 +115,7 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
     { SvtPathOptions::PATH_TEMPLATE,    "Template" },
     { SvtPathOptions::PATH_WORK,        "Work" },
     { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
+    { SvtPathOptions::PATH_CLASSIFICATION, "Classification" },
 #if OSL_DEBUG_LEVEL > 1
     { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
 #endif
@@ -282,7 +283,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));
     long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(2));
 
-    for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_WORK; ++i )
+    for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_CLASSIFICATION; ++i )
     {
         // only writer uses autotext
         if ( i == SvtPathOptions::PATH_AUTOTEXT
@@ -299,12 +300,18 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             case SvtPathOptions::PATH_TEMP:
             case SvtPathOptions::PATH_TEMPLATE:
             case SvtPathOptions::PATH_DICTIONARY:
+            case SvtPathOptions::PATH_CLASSIFICATION:
 #if OSL_DEBUG_LEVEL > 1
             case SvtPathOptions::PATH_LINGUISTIC:
 #endif
             case SvtPathOptions::PATH_WORK:
             {
-                OUString aStr( CUI_RES( RID_SVXSTR_PATH_NAME_START + i ) );
+                sal_uInt32 nId = RID_SVXSTR_PATH_NAME_START + i;
+                if (i == SvtPathOptions::PATH_CLASSIFICATION)
+                    // RID_SVXSTR_KEY_USERDICTIONARY_DIR already took our slot, so name the key explicitly.
+                    nId = RID_SVXSTR_KEY_CLASSIFICATION_PATH;
+                OUString aStr(CUI_RES(nId));
+
                 nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
                 aStr += "\t";
                 OUString sInternal, sUser, sWritable;
