@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_bfb59fd1",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:30:36Z",
+      "side": 1,
+      "message": "please do not make white space changes",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_80c4c440",
         "filename": "desktop/source/app/officeipcthread.cxx",
         "patchSetId": 1
@@ -47,6 +64,23 @@
       "writtenOn": "2016-02-29T11:38:36Z",
       "side": 1,
       "message": "Accidental whitespace change?",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9fba63bf",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:30:36Z",
+      "side": 1,
+      "message": "please do not make white space changes",
       "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -99,6 +133,41 @@
       "side": 1,
       "message": "none the messages in this file seem like real warnings or errors to me. So I\u0027d rather have them as SAL_INFOs -- and since those are already conditional, Id rather not have additional conditionals (on OSL_DEBUG_LEVEL or otherwise) at all here.",
       "parentUuid": "3aaa91ec_38925e58",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ffaf277b",
+        "filename": "desktop/unx/source/start.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:30:36Z",
+      "side": 1,
+      "message": "Agreed to in IRC discussion",
+      "parentUuid": "3aaa91ec_38925e58",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_dfb4ebd2",
+        "filename": "desktop/unx/source/start.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:30:36Z",
+      "side": 1,
+      "message": "SAL_WARN do not need a newline. Did you test this code ?",
       "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
