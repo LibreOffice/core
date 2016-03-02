@@ -33,12 +33,6 @@
 #include "dbnamdlg.hxx"
 #include <dbdocfun.hxx>
 
-#define ABS_SREF          SCA_VALID \
-                        | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-                        | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 class DBSaveData;
 
 static DBSaveData* pSaveObj = nullptr;
@@ -225,7 +219,7 @@ void ScDbNameDlg::Init()
         theCurArea = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
                               ScAddress( nEndCol,   nEndRow,   nEndTab ) );
 
-        theAreaStr = theCurArea.Format(ABS_DREF3D, pDoc, aAddrDetails);
+        theAreaStr = theCurArea.Format(SCR_ABS_3D, pDoc, aAddrDetails);
 
         if ( pDBColl )
         {
@@ -301,7 +295,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         theCurArea = rRef;
 
-        OUString aRefStr(theCurArea.Format(ABS_DREF3D, pDocP, aAddrDetails));
+        OUString aRefStr(theCurArea.Format(SCR_ABS_3D, pDocP, aAddrDetails));
         m_pEdAssign->SetRefString( aRefStr );
         m_pOptions->Enable();
         m_pBtnAdd->Enable();
@@ -370,7 +364,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        OUString theArea(theCurArea.Format(ABS_DREF3D, pDoc, aAddrDetails));
+        OUString theArea(theCurArea.Format(SCR_ABS_3D, pDoc, aAddrDetails));
         m_pEdAssign->SetText( theArea );
         m_pBtnAdd->SetText( aStrModify );
         m_pBtnHeader->Check( pData->HasHeader() );

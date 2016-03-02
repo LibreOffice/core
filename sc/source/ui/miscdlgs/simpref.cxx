@@ -28,12 +28,6 @@
 #include "simpref.hxx"
 #include "scmod.hxx"
 
-#define ABS_SREF          SCA_VALID \
-                        | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-                        | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent)
     : ScAnyRefDlg(pB, pCW, pParent, "SimpleRefDialog", "modules/scalc/ui/simplerefdialog.ui")
 ,
@@ -108,7 +102,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aRefStr = aAdr.Format(SCA_ABS_3D, pDocP, pDocP->GetAddressConvention());
         }
         else
-            aRefStr = theCurArea.Format(ABS_DREF3D, pDocP, pDocP->GetAddressConvention());
+            aRefStr = theCurArea.Format(SCR_ABS_3D, pDocP, pDocP->GetAddressConvention());
 
         if ( bMultiSelection )
         {

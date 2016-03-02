@@ -28,14 +28,6 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 
-// defines -------------------------------------------------------------------
-
-#define ABS_SREF          SCA_VALID \
-                        | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-                        | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 //  class ScHighlightChgDlg
 
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
@@ -134,7 +126,7 @@ void ScHighlightChgDlg::Init()
     if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        OUString aRefStr(pRangeEntry->Format(ABS_DREF3D, pDoc));
+        OUString aRefStr(pRangeEntry->Format(SCR_ABS_3D, pDoc));
         m_pFilterCtr->SetRange(aRefStr);
     }
     m_pFilterCtr->Enable();
@@ -150,7 +142,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdAssign);
-        OUString aRefStr(rRef.Format(ABS_DREF3D, pDocP, pDocP->GetAddressConvention()));
+        OUString aRefStr(rRef.Format(SCR_ABS_3D, pDocP, pDocP->GetAddressConvention()));
         m_pEdAssign->SetRefString( aRefStr );
         m_pFilterCtr->SetRange(aRefStr);
     }

@@ -41,12 +41,6 @@
 
 // defines -------------------------------------------------------------------
 
-#define ABS_SREF          SCA_VALID \
-                        | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-                        | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 #define RD_SPECIAL_NONE         0
 #define RD_SPECIAL_CONTENT      1
 #define RD_SPECIAL_VISCONTENT   2
@@ -257,7 +251,7 @@ void ScAcceptChgDlg::Init()
     if( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        OUString aRefStr(pRangeEntry->Format(ABS_DREF3D, pDoc));
+        OUString aRefStr(pRangeEntry->Format(SCR_ABS_3D, pDoc));
         pTPFilter->SetRange(aRefStr);
     }
 
