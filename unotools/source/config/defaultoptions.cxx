@@ -60,7 +60,8 @@ using namespace com::sun::star::uno;
 #define DEFAULTPATH__TEMPLATE       18
 #define DEFAULTPATH__USERCONFIG     19
 #define DEFAULTPATH__WORK           20
-#define DEFAULTPATH__USERDICTIONARY 21
+#define DEFAULTPATH__CLASSIFICATION 21
+#define DEFAULTPATH__USERDICTIONARY 22
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
@@ -88,6 +89,7 @@ public:
     OUString         m_aTemplatePath;
     OUString         m_aUserConfigPath;
     OUString         m_aWorkPath;
+    OUString         m_aClassificationPath;
     OUString         m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
@@ -134,7 +136,8 @@ static PathToDefaultMapping_Impl const PathMap_Impl[] =
     { SvtPathOptions::PATH_TEMP,            &SvtDefaultOptions_Impl::m_aTempPath },
     { SvtPathOptions::PATH_TEMPLATE,        &SvtDefaultOptions_Impl::m_aTemplatePath },
     { SvtPathOptions::PATH_USERCONFIG,      &SvtDefaultOptions_Impl::m_aUserConfigPath },
-    { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath }
+    { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath },
+    { SvtPathOptions::PATH_CLASSIFICATION,  &SvtDefaultOptions_Impl::m_aClassificationPath }
 };
 
 // functions -------------------------------------------------------------
@@ -163,7 +166,8 @@ Sequence< OUString > GetDefaultPropertyNames()
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
         "UserConfig",       // PATH_USERCONFIG
-        "Work"              // PATH_WORK
+        "Work",             // PATH_WORK
+        "Classification"    // PATH_CLASSIFICATION
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -192,7 +196,7 @@ OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
     OUString aRet;
     sal_uInt16 nIdx = 0;
 
-    while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::PATH_WORK )
+    while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::PATH_CLASSIFICATION )
     {
         if ( nId == PathMap_Impl[nIdx]._ePath && PathMap_Impl[nIdx]._pDefaultPath )
         {
@@ -298,6 +302,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                     case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = aFullPath;      break;
                     case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
                     case DEFAULTPATH__WORK:             m_aWorkPath = aFullPath;          break;
+                    case DEFAULTPATH__CLASSIFICATION:   m_aClassificationPath = aFullPath;break;
                     case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = aFullPath;break;
 
                     default:
