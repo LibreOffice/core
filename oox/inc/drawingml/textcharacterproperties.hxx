@@ -77,8 +77,7 @@ struct TextCharacterProperties
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const ::oox::core::XmlFilterBase& rFilter,
-                            bool bUseOptional = false ) const;
+                            const ::oox::core::XmlFilterBase& rFilter ) const;
 };
 
 

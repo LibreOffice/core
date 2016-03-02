@@ -481,11 +481,11 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
 
 } // namespace
 
-OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget, bool bExternal )
+OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget )
 {
     Reference< XRelationshipAccess > xRelations( getStorage()->getXStorage(), UNO_QUERY );
     if( xRelations.is() )
-        return lclAddRelation( xRelations, mnRelId ++, rType, rTarget, bExternal );
+        return lclAddRelation( xRelations, mnRelId ++, rType, rTarget, false/*bExternal*/ );
 
     return OUString();
 }

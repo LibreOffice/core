@@ -146,7 +146,7 @@ public:
 
         @return  Added relation Id.
      */
-    OUString     addRelation( const OUString& rType, const OUString& rTarget, bool bExternal = false );
+    OUString     addRelation( const OUString& rType, const OUString& rTarget );
 
     /** Adds new relation to part's relations.
 

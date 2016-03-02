@@ -150,8 +150,7 @@ public:
     static OUString getUnusedName(
                             const css::uno::Reference< css::container::XNameAccess >& rxNameAccess,
                             const OUString& rSuggestedName,
-                            sal_Unicode cSeparator,
-                            sal_Int32 nFirstIndexToAppend = 1 );
+                            sal_Unicode cSeparator );
 
     /** Inserts an object into a name container.
 
@@ -167,8 +166,7 @@ public:
     static bool         insertByName(
                             const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rName,
-                            const css::uno::Any& rObject,
-                            bool bReplaceOldExisting = true );
+                            const css::uno::Any& rObject );
 
     /** Inserts an object into a name container.
 
@@ -184,13 +182,9 @@ public:
 
         @param rObject  The object to be inserted.
 
-        @param bRenameOldExisting  Specifies behaviour if an object with the
-            suggested name already exists. If false (default), the new object
-            will be inserted with a name not yet extant in the container (this
-            is done by appending a numerical index to the suggested name). If
-            true, the existing object will be removed and inserted with an
-            unused name, and the new object will be inserted with the suggested
-            name.
+        The new object
+        will be inserted with a name not yet extant in the container (this
+        is done by appending a numerical index to the suggested name).
 
         @return  The final name the object is inserted with. Will always be
             equal to the suggested name, if parameter bRenameOldExisting is
@@ -200,8 +194,7 @@ public:
                             const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
-                            const css::uno::Any& rObject,
-                            bool bRenameOldExisting = false );
+                            const css::uno::Any& rObject );
 
     // std::vector and std::map element access --------------------------------
 

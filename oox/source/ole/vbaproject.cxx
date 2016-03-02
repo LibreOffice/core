@@ -167,13 +167,13 @@ bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
    return hasModules() || hasDialogs();
 }
 
-void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
+void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper )
 {
     if( rVbaPrjStrg.isStorage() )
     {
         // load the code modules and forms
         if( isImportVba() )
-            importVba( rVbaPrjStrg, rGraphicHelper, bDefaultColorBgr );
+            importVba( rVbaPrjStrg, rGraphicHelper, true/*bDefaultColorBgr*/ );
         // copy entire storage into model
         if( isExportVba() )
             copyStorage( rVbaPrjStrg );

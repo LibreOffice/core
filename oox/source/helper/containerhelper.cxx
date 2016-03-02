@@ -77,12 +77,12 @@ void ValueRangeSet::insert( const ValueRange& rRange )
 
 OUString ContainerHelper::getUnusedName(
         const Reference< XNameAccess >& rxNameAccess, const OUString& rSuggestedName,
-        sal_Unicode cSeparator, sal_Int32 nFirstIndexToAppend )
+        sal_Unicode cSeparator )
 {
     OSL_ENSURE( rxNameAccess.is(), "ContainerHelper::getUnusedName - missing XNameAccess interface" );
 
     OUString aNewName = rSuggestedName;
-    sal_Int32 nIndex = nFirstIndexToAppend;
+    sal_Int32 nIndex = -1;
     while( rxNameAccess->hasByName( aNewName ) )
         aNewName = OUStringBuffer( rSuggestedName ).append( cSeparator ).append( nIndex++ ).makeStringAndClear();
     return aNewName;
@@ -90,13 +90,13 @@ OUString ContainerHelper::getUnusedName(
 
 bool ContainerHelper::insertByName(
         const Reference< XNameContainer >& rxNameContainer,
-        const OUString& rName, const Any& rObject, bool bReplaceOldExisting )
+        const OUString& rName, const Any& rObject )
 {
     OSL_ENSURE( rxNameContainer.is(), "ContainerHelper::insertByName - missing XNameContainer interface" );
     bool bRet = false;
     try
     {
-        if( bReplaceOldExisting && rxNameContainer->hasByName( rName ) )
+        if( rxNameContainer->hasByName( rName ) )
             rxNameContainer->replaceByName( rName, rObject );
         else
             rxNameContainer->insertByName( rName, rObject );
@@ -112,28 +112,12 @@ bool ContainerHelper::insertByName(
 OUString ContainerHelper::insertByUnusedName(
         const Reference< XNameContainer >& rxNameContainer,
         const OUString& rSuggestedName, sal_Unicode cSeparator,
-        const Any& rObject, bool bRenameOldExisting )
+        const Any& rObject )
 {
     OSL_ENSURE( rxNameContainer.is(), "ContainerHelper::insertByUnusedName - missing XNameContainer interface" );
 
     // find an unused name
     OUString aNewName = getUnusedName( rxNameContainer, rSuggestedName, cSeparator );
-
-    // rename existing object
-    if( bRenameOldExisting && rxNameContainer->hasByName( rSuggestedName ) )
-    {
-        try
-        {
-            Any aOldObject = rxNameContainer->getByName( rSuggestedName );
-            rxNameContainer->removeByName( rSuggestedName );
-            rxNameContainer->insertByName( aNewName, aOldObject );
-            aNewName = rSuggestedName;
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "ContainerHelper::insertByUnusedName - cannot rename old object" );
-        }
-    }
 
     // insert the new object and return its resulting name
     insertByName( rxNameContainer, aNewName, rObject );

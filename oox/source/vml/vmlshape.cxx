@@ -424,13 +424,13 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
     return xShape;
 }
 
-void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const ShapeParentAnchor* pParentAnchor ) const
+void ShapeBase::convertFormatting( const Reference< XShape >& rxShape ) const
 {
     if( rxShape.is() )
     {
         /*  Calculate shape rectangle. Applications may do something special
             according to some imported shape client data (e.g. Excel cell anchor). */
-        awt::Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        awt::Rectangle aShapeRect = calcShapeRectangle( nullptr );
 
         // convert the shape, if the calculated rectangle is not empty
         if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )

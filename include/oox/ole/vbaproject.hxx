@@ -118,8 +118,7 @@ public:
      */
     void                importVbaProject(
                             StorageBase& rVbaPrjStrg,
-                            const GraphicHelper& rGraphicHelper,
-                            bool bDefaultColorBgr = true );
+                            const GraphicHelper& rGraphicHelper );
 
     bool                importVbaProject(
                             StorageBase& rVbaPrjStrg );
