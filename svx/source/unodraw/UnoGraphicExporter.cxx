@@ -748,6 +748,10 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 pView->SetPageVisible( false );
                 pView->ShowSdrPage( pPage );
 
+                // tdf#96922 completely deactivate EditView PageVisualization, including
+                // PageBackground (formally 'wiese').
+                pView->SetPagePaintingAllowed(false);
+
                 const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
                 aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
                                  aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
