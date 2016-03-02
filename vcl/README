@@ -76,6 +76,20 @@ The way COM is used in LO generally:
 - oslWorkerWrapperFunction() puts every thread spawned via oslCreateThread()
   into MTA (free-threaded)
 
+== GDIMetafile ==
+
+GDIMetafile is a vector drawing representation that corresponds directly
+to the SVM (StarView Metafile) format; it is extremely important as
+an intermediate format in all sorts of drawing and printing operations.
+
+There is a class MetafileXmlDump in include/test/mtfxmldump.hxx that
+can store a GDIMetafile as XML, which makes debugging much easier
+since you can just use "diff" to see changes.
+
+To use it you need to link against "test" library and then (because
+"test" is not part of the installation) run with:
+LD_LIBRARY_PATH=workdir/LinkTarget/Library:workdir/UnpackedTarball/cppunit/src/cppunit/.libs instdir/program/soffice
+
 == EMF+ ==
 
 emf+ is vector file format used by MSO and is successor of wmf and
@@ -159,13 +173,13 @@ Printing from Writer works like this:
 
 1) individual pages print by passing an appropriate OutputDevice to XRenderable
 2) in drawinglayer, a VclMetafileProcessor2D is used to record everything on
-   the page (because the OutputDevice has been set up to record a MetaFile)
-3) the pages' MetaFiles are converted to PDF by the vcl::PDFWriter
+   the page (because the OutputDevice has been set up to record a GDIMetaFile)
+3) the pages' GDIMetaFiles are converted to PDF by the vcl::PDFWriter
    in vcl/source/gdi/pdfwriter*
 
 Creating the ODF thumbnail for the first page works as above except step 3 is:
 
-3) the MetaFile is replayed to create the thumbnail
+3) the GDIMetaFile is replayed to create the thumbnail
 
 On-screen display differs in step 1 and 2:
 
