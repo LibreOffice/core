@@ -324,7 +324,7 @@ void ScPivotLayoutDialog::SetupDestination()
         if (maPivotParameters.nTab != MAXTAB + 1)
         {
             ScAddress aAddress(maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
-            OUString aAddressString = aAddress.Format(SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE, mpDocument, maAddressDetails);
+            OUString aAddressString = aAddress.Format(SCA_ABS_3D, mpDocument, maAddressDetails);
             mpDestinationEdit->SetText(aAddressString);
             mpDestinationRadioSelection->Check();
         }

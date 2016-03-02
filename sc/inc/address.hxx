@@ -140,35 +140,37 @@ SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
 // not using gcc -fno-strict-aliasing
 
 // The result of ConvertRef() is a bit group of the following:
+enum ScAddr
+{
+    SCA_COL_ABSOLUTE  = 0x01,
+    SCA_ROW_ABSOLUTE  = 0x02,
+    SCA_TAB_ABSOLUTE  = 0x04,
+    SCA_TAB_3D        = 0x08,
+    SCA_COL2_ABSOLUTE = 0x10,
+    SCA_ROW2_ABSOLUTE = 0x20,
+    SCA_TAB2_ABSOLUTE = 0x40,
+    SCA_TAB2_3D       = 0x80,
+    SCA_VALID_ROW     = 0x0100,
+    SCA_VALID_COL     = 0x0200,
+    SCA_VALID_TAB     = 0x0400,
+    // SCA_BITS for convience
+    SCA_BITS          = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE | SCA_TAB_3D \
+                      | SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB,
+    // somewhat cheesy kludge to force the display of the document name even for
+    // local references.  Requires TAB_3D to be valid
+    SCA_FORCE_DOC     = 0x0800,
+    SCA_VALID_ROW2    = 0x1000,
+    SCA_VALID_COL2    = 0x2000,
+    SCA_VALID_TAB2    = 0x4000,
+    SCA_VALID         = 0x8000,
 
-#define SCA_COL_ABSOLUTE    0x01
-#define SCA_ROW_ABSOLUTE    0x02
-#define SCA_TAB_ABSOLUTE    0x04
-#define SCA_TAB_3D          0x08
-#define SCA_COL2_ABSOLUTE   0x10
-#define SCA_ROW2_ABSOLUTE   0x20
-#define SCA_TAB2_ABSOLUTE   0x40
-#define SCA_TAB2_3D         0x80
-#define SCA_VALID_ROW       0x0100
-#define SCA_VALID_COL       0x0200
-#define SCA_VALID_TAB       0x0400
-// SCA_BITS is a convience for
-// (SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE)
-#define SCA_BITS            0x070F
-// somewhat cheesy kludge to force the display of the document name even for
-// local references.  Requires TAB_3D to be valid
-#define SCA_FORCE_DOC       0x0800
-#define SCA_VALID_ROW2      0x1000
-#define SCA_VALID_COL2      0x2000
-#define SCA_VALID_TAB2      0x4000
-#define SCA_VALID           0x8000
+    SCA_ABS           = SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE,
 
-#define SCA_ABS    SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
+    SCR_ABS           = SCA_ABS | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE,
 
-#define SCR_ABS    SCA_ABS | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-
-#define SCA_ABS_3D SCA_ABS | SCA_TAB_3D
-#define SCR_ABS_3D SCR_ABS | SCA_TAB_3D
+    SCA_ABS_3D        = SCA_ABS | SCA_TAB_3D,
+    SCR_ABS_3D        = SCR_ABS | SCA_TAB_3D
+};
 
 //  ScAddress
 class ScAddress
