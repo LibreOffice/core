@@ -246,8 +246,7 @@ public:
 
     /** Converts position and formatting into the passed existing XShape. */
     void                convertFormatting(
-                            const css::uno::Reference< css::drawing::XShape >& rxShape,
-                            const ShapeParentAnchor* pParentAnchor = nullptr ) const;
+                            const css::uno::Reference< css::drawing::XShape >& rxShape ) const;
 
 protected:
     explicit            ShapeBase( Drawing& rDrawing );

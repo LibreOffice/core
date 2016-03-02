@@ -71,7 +71,7 @@ public:
 
     /** Parses a stream from the passed storage with the specified name.
         @param bCloseStream  True = closes the stream after parsing. */
-    void                parseStream( StorageBase& rStorage, const OUString& rStreamName, bool bCloseStream = false )
+    void                parseStream( StorageBase& rStorage, const OUString& rStreamName )
                             throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
     css::uno::Reference< css::xml::sax::XFastTokenHandler >

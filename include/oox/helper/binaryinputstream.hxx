@@ -188,7 +188,7 @@ public:
 
     /** Copies nBytes bytes from the current position to the passed output stream.
      */
-    void         copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64, sal_Int32 nAtomSize = 1 );
+    void         copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64 );
 
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base

@@ -126,9 +126,9 @@ void FastParser::parseStream( const Reference< XInputStream >& rxInStream, const
     parseStream( aInputSource, bCloseStream );
 }
 
-void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName, bool bCloseStream ) throw( SAXException, IOException, RuntimeException )
+void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName ) throw( SAXException, IOException, RuntimeException )
 {
-    parseStream( rStorage.openInputStream( rStreamName ), rStreamName, bCloseStream );
+    parseStream( rStorage.openInputStream( rStreamName ), rStreamName );
 }
 
 } // namespace core

@@ -182,10 +182,10 @@ void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValue>& aVe
     rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(aGrabBag));
 }
 
-void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter, bool bUseOptional ) const
+void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rFilter, bUseOptional );
+    pushToPropMap( aPropMap, rFilter );
     rPropSet.setProperties( aPropMap );
     pushToGrabBag(rPropSet, maTextEffectsProperties);
 }

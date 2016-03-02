@@ -67,7 +67,7 @@ void AxAlignedOutputStream::writeMemory( const void* opMem, sal_Int32 nBytes, si
     mnStrmPos = mpOutStrm->tell() - mnWrappedBeginPos;
 }
 
-void AxAlignedOutputStream::pad( sal_Int32 nBytes, size_t nAtomSize )
+void AxAlignedOutputStream::pad( sal_Int32 nBytes )
 {
    //PRESUMABLY we need to pad with 0's here as appropriate
    css::uno::Sequence< sal_Int8 > aData( nBytes );
@@ -75,7 +75,7 @@ void AxAlignedOutputStream::pad( sal_Int32 nBytes, size_t nAtomSize )
    // set to 0(s), easier to not get fooled by 0's when looking at
    // binary content......
    memset( static_cast<void*>( aData.getArray() ), 0, nBytes );
-   mpOutStrm->writeData( aData, nAtomSize );
+   mpOutStrm->writeData( aData );
    mnStrmPos = mpOutStrm->tell() - mnWrappedBeginPos;
 }
 
@@ -130,10 +130,10 @@ AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bo
     mnNextProp = 1;
 }
 
-void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue, bool bReverse )
+void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue )
 {
     // orbValue == bReverse false then we want to set the bit, e.g. don't skip
-    startNextProperty( orbValue == bReverse );
+    startNextProperty( !orbValue );
 }
 
 void AxBinaryPropertyWriter::writePairProperty( AxPairData& orPairData )
@@ -142,13 +142,10 @@ void AxBinaryPropertyWriter::writePairProperty( AxPairData& orPairData )
         maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( orPairData ) ) );
 }
 
-void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue, bool bCompressed )
+void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue )
 {
     sal_uInt32 nSize = orValue.getLength();
-    if ( bCompressed )
-        setFlag(  nSize, AX_STRING_COMPRESSED );
-    else
-        nSize *= 2;
+    setFlag(  nSize, AX_STRING_COMPRESSED );
     maOutStrm.writeAligned< sal_uInt32 >( nSize );
     maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
     startNextProperty();
@@ -187,9 +184,9 @@ void AxBinaryPropertyWriter::finalizeExport()
     maOutStrm.seek( nPos );
 }
 
-bool AxBinaryPropertyWriter::ensureValid( bool bCondition )
+bool AxBinaryPropertyWriter::ensureValid()
 {
-    mbValid = mbValid && bCondition && !maOutStrm.isEof();
+    mbValid = mbValid && !maOutStrm.isEof();
     return mbValid;
 }
 

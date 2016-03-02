@@ -123,14 +123,13 @@ BinaryOutputStream::writeUnicodeArray( const OUString& rString, bool bAllowNulCh
 #endif
 }
 
-void
-BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars )
+void BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, bool bCompressed )
 {
     if ( bCompressed )
          // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH
-        writeCharArrayUC( rString, RTL_TEXTENCODING_ISO_8859_1, bAllowNulChars );
+        writeCharArrayUC( rString, RTL_TEXTENCODING_ISO_8859_1 );
     else
-        writeUnicodeArray( rString, bAllowNulChars );
+        writeUnicodeArray( rString );
 }
 
 SequenceOutputStream::SequenceOutputStream( StreamDataSequence& rData ) :

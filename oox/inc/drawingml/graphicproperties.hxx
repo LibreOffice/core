@@ -44,8 +44,7 @@ struct GraphicProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const GraphicHelper& rGraphicHelper,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
+                            const GraphicHelper& rGraphicHelper ) const;
 };
 
 } // namespace drawingml
