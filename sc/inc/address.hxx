@@ -323,8 +323,7 @@ public:
     inline size_t hash() const;
 
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
-    OUString GetColRowString( bool bAbsolute = false,
-                              const Details& rDetails = detailsOOOa1) const;
+    OUString GetColRowString( bool bAbsolute = false ) const;
 };
 
 inline void ScAddress::PutInOrder( ScAddress& rAddress )
@@ -534,7 +533,7 @@ public:
 
     /** Same as Move() but with sticky end col/row anchors. */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
-            ScRange& rErrorRange, ScDocument* pDocument = nullptr );
+            ScRange& rErrorRange );
 
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?

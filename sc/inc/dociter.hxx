@@ -357,13 +357,10 @@ public:
                             the data is not sorted. Is always done if regular
                             expressions are involved.
 
-                        @param bIgnoreMismatchOnLeadingStrings
-                            Normally strings are sorted behind numerical
-                            values. If this parameter is true, the search does
-                            not stop when encountering a string and does not
-                            assume that no values follow anymore.
-                            If querying for a string a mismatch on the first
-                            entry, e.g. column header, is ignored.
+                        The search does not stop when encountering a string and does not
+                        assume that no values follow anymore.
+                        If querying for a string a mismatch on the first
+                        entry, e.g. column header, is ignored.
 
                         @ATTENTION! StopOnMismatch, TestEqualCondition and
                         the internal IgnoreMismatchOnLeadingStrings and query
@@ -372,8 +369,7 @@ public:
                         number format!
                       */
     bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
-                        SCROW& nFoundRow, bool bSearchForEqualAfterMismatch = false,
-                        bool bIgnoreMismatchOnLeadingStrings = true );
+                        SCROW& nFoundRow, bool bSearchForEqualAfterMismatch = false );
 };
 
 class ScDocAttrIterator             // all attribute areas

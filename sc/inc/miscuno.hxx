@@ -155,7 +155,7 @@ public:
     static bool             GetBoolProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault = false );
     static sal_Int32        GetLongProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
-                                            const OUString& rName, long nDefault = 0 );
+                                            const OUString& rName );
     static sal_Int32        GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, long nDefault );
     static OUString  GetStringProperty(

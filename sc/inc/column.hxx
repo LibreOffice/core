@@ -345,7 +345,7 @@ public:
 
     svl::SharedString GetSharedString( SCROW nRow ) const;
 
-    void SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast = true );
+    void SetRawString( SCROW nRow, const OUString& rStr );
     void SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetValue( SCROW nRow, double fVal );
@@ -518,7 +518,7 @@ public:
 
     void StartListeningFormulaCells(
         sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2,
-        SCROW* pStartRow = nullptr, SCROW* pEndRow = nullptr );
+        SCROW* pStartRow = nullptr );
 
     void EndListeningFormulaCells(
         sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,

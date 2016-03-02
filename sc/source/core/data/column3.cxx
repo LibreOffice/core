@@ -2381,7 +2381,7 @@ void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
     AttachNewFormulaCell(it, nRow, *pCell);
 }
 
-void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
+void ScColumn::SetRawString( SCROW nRow, const OUString& rStr )
 {
     if (!ValidRow(nRow))
         return;
@@ -2390,7 +2390,7 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
     if (!aSS.getData())
         return;
 
-    SetRawString(nRow, aSS, bBroadcast);
+    SetRawString(nRow, aSS);
 }
 
 void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast )

@@ -173,7 +173,7 @@ public:
     /** Places the caption inside the passed rectangle, tries to keep the cell rectangle uncovered. Uses page area if 0 is passed. */
     void                AutoPlaceCaption( const Rectangle* pVisRect = nullptr );
     /** Updates caption tail and textbox according to current cell position. Uses page area if 0 is passed. */
-    void                UpdateCaptionPos( const Rectangle* pVisRect = nullptr );
+    void                UpdateCaptionPos();
 
 protected:
     /** Helper constructor for derived classes. */
@@ -323,7 +323,7 @@ void ScCaptionCreator::AutoPlaceCaption( const Rectangle* pVisRect )
     FitCaptionToRect( pVisRect );
 }
 
-void ScCaptionCreator::UpdateCaptionPos( const Rectangle* pVisRect )
+void ScCaptionCreator::UpdateCaptionPos()
 {
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
 
@@ -345,7 +345,7 @@ void ScCaptionCreator::UpdateCaptionPos( const Rectangle* pVisRect )
         mpCaption->SetTailPos( aTailPos );
         mpCaption->SetLogicRect( aCaptRect );
         // fit caption into draw page
-        FitCaptionToRect( pVisRect );
+        FitCaptionToRect();
     }
 
     // update cell position in caption user data

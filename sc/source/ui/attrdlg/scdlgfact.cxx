@@ -433,10 +433,9 @@ ScConditionalFormat* AbstractScCondFormatManagerDlg_Impl::GetCondFormatSelected(
     return pDlg->GetCondFormatSelected();
 }
 
-long AbstractScMetricInputDlg_Impl::GetInputValue( FieldUnit eUnit ) const
+long AbstractScMetricInputDlg_Impl::GetInputValue() const
 {
-
-    return pDlg->GetInputValue( eUnit );
+    return pDlg->GetInputValue();
 }
 
 sal_uInt16 AbstractScMoveTableDlg_Impl::GetSelectedDocument() const
@@ -694,10 +693,9 @@ AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg(vcl::Wi
     return new AbstractScDataFormDlg_Impl(pDlg);
 }
 
-AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(vcl::Window* pParent,
-                                                                                     InsertDeleteFlags nCheckDefaults)
+AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(vcl::Window* pParent)
 {
-    VclPtr<ScDeleteContentsDlg> pDlg = VclPtr<ScDeleteContentsDlg>::Create(pParent, nCheckDefaults);
+    VclPtr<ScDeleteContentsDlg> pDlg = VclPtr<ScDeleteContentsDlg>::Create(pParent, InsertDeleteFlags::NONE);
     return new AbstractScDeleteContentsDlg_Impl( pDlg );
 }
 

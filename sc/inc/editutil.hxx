@@ -152,16 +152,16 @@ public:
                         const SfxItemSet& rDefaults, bool bRememberCopy = true );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        SfxItemSet* pDefaults, bool bTakeOwnership = true );
+                        SfxItemSet* pDefaults );
 
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
-                        const SfxItemSet& rDefaults, bool bRememberCopy = true );
+                        const SfxItemSet& rDefaults );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
-                        SfxItemSet* pDefaults, bool bTakeOwnership = true );
+                        SfxItemSet* pDefaults );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset

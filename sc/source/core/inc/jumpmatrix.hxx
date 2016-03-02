@@ -97,7 +97,7 @@ public:
     ScJumpMatrix( SCSIZE nColsP, SCSIZE nRowsP );
     ~ScJumpMatrix();
     void GetDimensions( SCSIZE& rCols, SCSIZE& rRows ) const;
-    void SetJump( SCSIZE nCol, SCSIZE nRow, double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
+    void SetJump( SCSIZE nCol, SCSIZE nRow, double fBool, short nStart, short nNext );
     void GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool, short& rStart, short& rNext, short& rStop ) const;
     void SetAllJumps( double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
     void SetJumpParameters( ScTokenVec* p );

@@ -506,7 +506,7 @@ public:
     void setCol(SCCOL nCol) { mrCalcPos.SetCol(nCol); }
     void setRow(SCROW nRow) { mrCalcPos.SetRow(nRow); }
 
-    void incTab(SCTAB nInc=1) { mrCalcPos.IncTab(nInc); }
+    void incTab() { mrCalcPos.IncTab(); }
     void incCol(SCCOL nInc=1) { mrCalcPos.IncCol(nInc); }
 
     void setOldMapMode(const MapMode& rOldMapMode) { maOldMapMode = rOldMapMode; }

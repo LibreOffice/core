@@ -318,8 +318,7 @@ void DoubleRefToVars( const formula::FormulaToken* p,
         bool bDontCheckForTableOp = false );
 ScDBRangeBase* PopDBDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
-                          SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-                          bool bDontCheckForTableOp = false );
+                          SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 );
 void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef);
 void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = nullptr);
 void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef,

@@ -127,7 +127,7 @@ public:
     void                AdjustDateMode( const ScDocument& rDoc );
 
     bool                HasActionRange() const { return mbIsActionRange; }
-    void                SetHasActionRange( bool bFlag = true ) { mbIsActionRange = bFlag; }
+    void                SetHasActionRange() { mbIsActionRange = true; }
     void                GetTheActionRange( sal_uLong& nFirst, sal_uLong& nLast ) const { nFirst = mnFirstAction; nLast = mnLastAction; }
     void                SetTheActionRange( sal_uLong nFirst, sal_uLong nLast ) { mnFirstAction = nFirst; mnLastAction = nLast; }
 };

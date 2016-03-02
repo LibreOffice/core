@@ -49,7 +49,7 @@ public:
     static OUString GetString(
         ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat,
         Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
-        bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce, bool bUseStarFormat = false );
+        bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce );
 
     static void GetInputString(
         ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter,
