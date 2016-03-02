@@ -61,7 +61,6 @@ public:
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-
     virtual bool    Close() override;
     void            SliderMoved();
     size_t          GetSliderPos();
@@ -165,7 +164,7 @@ public:
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
-
+    void            SyncFocusState();              //Fix for  tdf#93889
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
 
@@ -218,7 +217,7 @@ private:
     DECL_LINK_TYPED( EndDlgHdl,  Button*, void );
 
     // Hack: RefInput control
-    DECL_LINK_TYPED( TimeOutHdl, Idle*, void );
+    //DECL_LINK_TYPED( TimeOutHdl, Idle*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX
