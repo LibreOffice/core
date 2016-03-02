@@ -535,6 +535,30 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
+            case MetaActionType::POLYPOLYGON:
+            {
+                MetaPolyPolygonAction *const pMPPAction(
+                        static_cast<MetaPolyPolygonAction*>(pAction));
+                rWriter.startElement(sCurrentElementTag);
+
+                tools::PolyPolygon const& rPoly(pMPPAction->GetPolyPolygon());
+                for (sal_uInt16 j = 0; j < rPoly.Count(); ++j)
+                {
+                    rWriter.startElement("polygon");
+                    for (sal_uInt16 i = 0; i < rPoly[j].GetSize(); i++)
+                    {
+                        rWriter.startElement("point");
+                        rWriter.attribute("x", rPoly[j][i].X());
+                        rWriter.attribute("y", rPoly[j][i].Y());
+                        rWriter.endElement();
+                    }
+                    rWriter.endElement();
+                }
+
+                rWriter.endElement();
+            }
+            break;
+
             case MetaActionType::COMMENT:
             {
                 MetaCommentAction* pMetaCommentAction = static_cast<MetaCommentAction*>(pAction);
