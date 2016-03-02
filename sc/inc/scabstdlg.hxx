@@ -140,7 +140,7 @@ public:
     virtual double      GetStep() const = 0;
     virtual double      GetMax() const = 0;
     virtual OUString    GetStartStr() const = 0;
-    virtual void        SetEdStartValEnabled(bool bFlag=false) = 0;
+    virtual void        SetEdStartValEnabled(bool bFlag) = 0;
 };
 
 class AbstractScGroupDlg :  public VclAbstractDialog
@@ -205,7 +205,7 @@ public:
 class AbstractScMetricInputDlg : public VclAbstractDialog
 {
 public:
-    virtual long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const = 0;
+    virtual long GetInputValue() const = 0;
 };
 
 class AbstractScMoveTableDlg : public VclAbstractDialog
@@ -360,8 +360,7 @@ public:
     virtual AbstractScDataFormDlg * CreateScDataFormDlg(vcl::Window* pParent,
         ScTabViewShell* pTabViewShell) = 0;
 
-    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE) = 0;
+    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent) = 0;
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument& rDocument,
                                                             FillDir     eFillDir,

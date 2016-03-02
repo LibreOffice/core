@@ -629,7 +629,7 @@ SC_DLLPUBLIC    static sal_Int32       FindUnquoted( const OUString& rString, sa
         semantics as FindUnquoted( const String&, ...)
         @returns: pointer to cChar if found, else NULL
      */
-SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
+SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar );
 
     static  rtl_TextEncoding GetCharsetValue( const OUString& rCharSet );
     static  OUString        GetCharsetString( rtl_TextEncoding eVal );

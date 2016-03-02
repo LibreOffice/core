@@ -3573,7 +3573,7 @@ const ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
     return nullptr;
 }
 
-OUString ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
+OUString ScDPCollection::CreateNewName() const
 {
     OUString aBase("DataPilot");
 
@@ -3582,7 +3582,7 @@ OUString ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
     {
         OUStringBuffer aBuf;
         aBuf.append(aBase);
-        aBuf.append(static_cast<sal_Int32>(nMin + nAdd));
+        aBuf.append(static_cast<sal_Int32>(1 + nAdd));
         OUString aNewName = aBuf.makeStringAndClear();
         bool bFound = false;
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();

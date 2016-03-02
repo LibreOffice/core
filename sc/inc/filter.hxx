@@ -103,8 +103,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
 
     // various export filters
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) = 0;
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest,
-                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
+    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) = 0;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,

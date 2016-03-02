@@ -268,12 +268,11 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const For
     rSymbol = aStr;
 }
 
-void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                const FormulaGrammar::Grammar eGrammar )
+void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )
 {
     std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
     ScCompiler aComp( pDoc, rPos, *pTemp.get());
-    aComp.SetGrammar(eGrammar);
+    aComp.SetGrammar(formula::FormulaGrammar::GRAM_DEFAULT);
     aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());
     aComp.CreateStringFromTokenArray( rBuffer );
 }

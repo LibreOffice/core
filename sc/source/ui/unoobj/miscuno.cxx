@@ -63,9 +63,9 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
 }
 
 sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                                            const OUString& rName, long nDefault )
+                                            const OUString& rName )
 {
-    sal_Int32 nRet = nDefault;
+    sal_Int32 nRet = 0;
     if ( xProp.is() )
     {
         try

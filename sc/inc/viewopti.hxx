@@ -96,7 +96,7 @@ public:
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
-    SvxGridItem*            CreateGridItem( sal_uInt16 nId = SID_ATTR_GRID_OPTIONS ) const;
+    SvxGridItem*            CreateGridItem() const;
 
     const ScViewOptions&    operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;

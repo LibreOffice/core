@@ -1066,12 +1066,12 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 
 }
 
 void ScDocument::SetFormula(
-    const ScAddress& rPos, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
+    const ScAddress& rPos, const ScTokenArray& rArray )
 {
     if (!TableExists(rPos.Tab()))
         return;
 
-    maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rArray, eGram);
+    maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rArray, formula::FormulaGrammar::GRAM_DEFAULT);
 }
 
 void ScDocument::SetFormula(

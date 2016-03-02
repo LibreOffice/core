@@ -128,8 +128,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
 
 OUString ScCellFormat::GetString(
     ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat, Color** ppColor,
-    SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula, ScForceTextFmt eForceTextFmt,
-    bool bUseStarFormat )
+    SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula, ScForceTextFmt eForceTextFmt )
 {
     OUString aString;
     *ppColor = nullptr;
@@ -140,7 +139,7 @@ OUString ScCellFormat::GetString(
         case CELLTYPE_STRING:
         {
             ScRefCellValue aCell(rDoc, rPos);
-            rFormatter.GetOutputString(aCell.mpString->getString(), nFormat, aString, ppColor, bUseStarFormat);
+            rFormatter.GetOutputString(aCell.mpString->getString(), nFormat, aString, ppColor);
         }
         break;
         case CELLTYPE_EDIT:
@@ -165,7 +164,7 @@ OUString ScCellFormat::GetString(
                     rFormatter.GetOutputString(nValue, 0, aTemp, ppColor);
                     rFormatter.GetOutputString(aTemp, nFormat, aString, ppColor);
                 }
-                else rFormatter.GetOutputString(nValue, nFormat, aString, ppColor, bUseStarFormat);
+                else rFormatter.GetOutputString(nValue, nFormat, aString, ppColor);
             }
         }
         break;
@@ -203,12 +202,12 @@ OUString ScCellFormat::GetString(
                         double fValue = pFCell->GetValue();
                         if (!bNullVals && fValue == 0.0) aString.clear();
                         else if (pFCell->IsHybridValueCell()) aString = pFCell->GetString().getString();
-                        else rFormatter.GetOutputString(fValue, nFormat, aString, ppColor, bUseStarFormat);
+                        else rFormatter.GetOutputString(fValue, nFormat, aString, ppColor);
                     }
                     else
                     {
                         rFormatter.GetOutputString(pFCell->GetString().getString(),
-                                                   nFormat, aString, ppColor, bUseStarFormat);
+                                                   nFormat, aString, ppColor);
                     }
                 }
             }

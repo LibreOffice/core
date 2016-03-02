@@ -175,8 +175,7 @@ public:
     OUString getUniqueName(const OUString& rPrefix) const;
 
     void            ChangeListening( const OUString& rName,
-                                    const ScRangeListRef& rRangeListRef,
-                                    bool bDirty = false );
+                                    const ScRangeListRef& rRangeListRef );
     // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
     void            FreeUno( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,

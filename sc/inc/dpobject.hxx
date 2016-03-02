@@ -380,14 +380,11 @@ public:
 
     /**
      * Create a new name that's not yet used by any existing data pilot
-     * objects.  All data pilot names are 'DataPilot' + <num>, and the nMin
-     * specifies the minimum number allowed.
-     *
-     * @param nMin minimum number allowed.
+     * objects.  All data pilot names are 'DataPilot' + <num>
      *
      * @return new name for data pilot object.
      */
-    OUString CreateNewName( sal_uInt16 nMin = 1 ) const;
+    OUString CreateNewName() const;
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);

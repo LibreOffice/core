@@ -80,14 +80,12 @@ public:
                             ScProgress();
 #endif
 
-            bool            SetStateText( sal_uLong nVal, const OUString &rVal, sal_uLong nNewRange = 0 )
+            bool            SetStateText( sal_uLong nVal, const OUString &rVal )
                                 {
                                     if ( pProgress )
                                     {
-                                        if ( nNewRange )
-                                            nGlobalRange = nNewRange;
                                         CalcGlobalPercent( nVal );
-                                        if ( !pProgress->SetStateText( nVal, rVal, nNewRange ) )
+                                        if ( !pProgress->SetStateText( nVal, rVal ) )
                                             bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }

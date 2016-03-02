@@ -72,9 +72,9 @@ void ScJumpMatrix::GetDimensions(SCSIZE& rCols, SCSIZE& rRows) const
 }
 
 void ScJumpMatrix::SetJump(SCSIZE nCol, SCSIZE nRow, double fBool,
-                           short nStart, short nNext, short nStop)
+                           short nStart, short nNext)
 {
-    pJump[(sal_uLong)nCol * nRows + nRow].SetJump(fBool, nStart, nNext, nStop);
+    pJump[(sal_uLong)nCol * nRows + nRow].SetJump(fBool, nStart, nNext, SHRT_MAX);
 }
 
 void ScJumpMatrix::GetJump(

@@ -1310,12 +1310,11 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
     return bRet;
 }
 
-bool ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
+bool ScDocument::InsertRow( const ScRange& rRange )
 {
     return InsertRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Tab(),
-                      rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1),
-                      pRefUndoDoc );
+                      rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1) );
 }
 
 void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
@@ -1408,12 +1407,12 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     pChartListenerCollection->UpdateDirtyCharts();
 }
 
-void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, bool* pUndoOutline )
+void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     DeleteRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                rRange.aEnd.Col(),   rRange.aEnd.Tab(),
                rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1),
-               pRefUndoDoc, pUndoOutline );
+               pRefUndoDoc );
 }
 
 bool ScDocument::CanInsertCol( const ScRange& rRange ) const
@@ -1514,12 +1513,11 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
     return bRet;
 }
 
-bool ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
+bool ScDocument::InsertCol( const ScRange& rRange )
 {
     return InsertCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Row(),   rRange.aEnd.Tab(),
-                      rRange.aStart.Col(), static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1),
-                      pRefUndoDoc );
+                      rRange.aStart.Col(), static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1) );
 }
 
 void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTAB nEndTab,
@@ -1601,12 +1599,12 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     pChartListenerCollection->UpdateDirtyCharts();
 }
 
-void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, bool* pUndoOutline )
+void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     DeleteCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                rRange.aEnd.Row(),   rRange.aEnd.Tab(),
                rRange.aStart.Col(), static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1),
-               pRefUndoDoc, pUndoOutline );
+               pRefUndoDoc );
 }
 
 //  for Area-Links: Insert/delete cells, when the range is changed.
@@ -2007,8 +2005,7 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
-                            const ScMarkData* pMarks)
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc)
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -2018,7 +2015,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         sc::AutoCalcSwitch aACSwitch(*pDestDoc, false); // avoid multiple calculations
 
         if (nTab1 > 0)
-            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
+            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc );
 
         sc::CopyToDocContext aCxt(*pDestDoc);
         OSL_ASSERT( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(pDestDoc->maTabs.size()));
@@ -2026,11 +2023,11 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         {
             if (maTabs[i] && pDestDoc->maTabs[i])
                 maTabs[i]->UndoToTable(aCxt, nCol1, nRow1, nCol2, nRow2, nFlags,
-                                    bOnlyMarked, pDestDoc->maTabs[i], pMarks);
+                                    bOnlyMarked, pDestDoc->maTabs[i]);
         }
 
         if (nTab2 < MAXTAB)
-            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
+            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA, false, pDestDoc );
     }
 }
 
@@ -2066,8 +2063,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
 }
 
 void ScDocument::UndoToDocument(const ScRange& rRange,
-                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
-                            const ScMarkData* pMarks)
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc)
 {
     sc::AutoCalcSwitch aAutoCalcSwitch(*this, false);
 
@@ -2078,7 +2074,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 
     sc::CopyToDocContext aCxt(*pDestDoc);
     if (nTab1 > 0)
-        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
+        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc );
 
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
@@ -2086,11 +2082,11 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
         if (maTabs[i] && pDestDoc->maTabs[i])
             maTabs[i]->UndoToTable(aCxt, aNewRange.aStart.Col(), aNewRange.aStart.Row(),
                                     aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
-                                    nFlags, bOnlyMarked, pDestDoc->maTabs[i], pMarks);
+                                    nFlags, bOnlyMarked, pDestDoc->maTabs[i]);
     }
 
     if (nTab2 < static_cast<SCTAB>(maTabs.size()))
-        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
+        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), InsertDeleteFlags::FORMULA, false, pDestDoc );
 }
 
 // bUseRangeForVBA added for VBA api support to allow content of a specified
@@ -4006,13 +4002,13 @@ sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     return 0;
 }
 
-sal_uLong ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bHiddenAsZero ) const
+sal_uLong ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return 0;
 
-    return pTab->GetColWidth(nStartCol, nEndCol, bHiddenAsZero);
+    return pTab->GetColWidth(nStartCol, nEndCol);
 }
 
 sal_uInt16 ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
@@ -4047,10 +4043,10 @@ sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero 
     return 0;
 }
 
-sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
+sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetRowHeight( nRow, pStartRow, pEndRow, bHiddenAsZero );
+        return maTabs[nTab]->GetRowHeight( nRow, pStartRow, pEndRow );
     OSL_FAIL("Wrong sheet number");
     return 0;
 }
@@ -4393,12 +4389,12 @@ bool ScDocument::HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) con
     return maTabs[nTab]->HasFilteredRows(nStartRow, nEndRow);
 }
 
-bool ScDocument::ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol, SCCOL* pLastCol) const
+bool ScDocument::ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return false;
 
-    return maTabs[nTab]->ColFiltered(nCol, pFirstCol, pLastCol);
+    return maTabs[nTab]->ColFiltered(nCol, pFirstCol);
 }
 
 void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered)
@@ -4943,10 +4939,10 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool
         return new ScPatternAttr( GetPool() );      // empty
 }
 
-const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark, bool bDeep )
+const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark )
 {
     delete pSelectionAttr;
-    pSelectionAttr = CreateSelectionPattern( rMark, bDeep );
+    pSelectionAttr = CreateSelectionPattern( rMark );
     return pSelectionAttr;
 }
 
@@ -5808,7 +5804,7 @@ void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& 
 }
 
 void ScDocument::DeleteSelectionTab(
-    SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
+    SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
@@ -5838,7 +5834,7 @@ void ScDocument::DeleteSelectionTab(
             aCxt.purgeEmptyBroadcasters();
         }
 
-        maTabs[nTab]->DeleteSelection(nDelFlag, rMark, bBroadcast);
+        maTabs[nTab]->DeleteSelection(nDelFlag, rMark);
 
         if (bDelContent)
         {

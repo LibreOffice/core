@@ -190,7 +190,7 @@ class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
     virtual double      GetStep() const override;
     virtual double      GetMax() const override;
     virtual OUString    GetStartStr() const override;
-    virtual void        SetEdStartValEnabled(bool bFlag=false) override;
+    virtual void        SetEdStartValEnabled(bool bFlag) override;
 };
 
 class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg
@@ -256,7 +256,7 @@ class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
 class AbstractScMetricInputDlg_Impl : public AbstractScMetricInputDlg
 {
     DECL_ABSTDLG_BASE( AbstractScMetricInputDlg_Impl, ScMetricInputDlg)
-    virtual long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const override;
+    virtual long GetInputValue() const override;
 };
 
 class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
@@ -425,8 +425,7 @@ public:
     virtual AbstractScDataFormDlg* CreateScDataFormDlg(vcl::Window* pParent,
         ScTabViewShell* pTabViewShell) override;
 
-    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE) override;
+    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent) override;
 
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument&     rDocument,

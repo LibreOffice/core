@@ -4554,7 +4554,7 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 }
 
 bool ScCompiler::IsCharFlagAllConventions(
-    OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags, bool bTestLetterNumeric )
+    OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags )
 {
     sal_Unicode c = rStr[ nPos ];
     sal_Unicode cLast = nPos > 0 ? rStr[ nPos-1 ] : 0;
@@ -4570,10 +4570,8 @@ bool ScCompiler::IsCharFlagAllConventions(
         }
         return true;
     }
-    else if (bTestLetterNumeric)
-        return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
     else
-        return false;
+        return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
 }
 
 void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const

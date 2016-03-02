@@ -1025,8 +1025,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
 }
 
 void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
-                                 SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-                                 bool bDontCheckForTableOp )
+                                 SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2)
 {
     if( sp )
     {
@@ -1038,8 +1037,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToVars( p, rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
-                        bDontCheckForTableOp);
+                DoubleRefToVars( p, rCol1, rRow1, rTab1, rCol2, rRow2, rTab2);
                 break;
             default:
                 SetError( errIllegalParameter);

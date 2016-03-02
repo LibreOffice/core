@@ -720,7 +720,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {
-                        pDlg->SetEdStartValEnabled();
+                        pDlg->SetEdStartValEnabled(false);
                     }
 
                     if ( pDlg->Execute() == RET_OK )

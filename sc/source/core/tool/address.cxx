@@ -2166,7 +2166,7 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange, ScDoc
     return b;
 }
 
-bool ScRange::MoveSticky( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange, ScDocument* pDoc )
+bool ScRange::MoveSticky( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange )
 {
     bool bColRange = (aStart.Col() < aEnd.Col());
     bool bRowRange = (aStart.Row() < aEnd.Row());
@@ -2174,13 +2174,13 @@ bool ScRange::MoveSticky( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange,
         dy = 0;     // Entire column not to be moved.
     if (dx && aStart.Col() == 0 && aEnd.Col() == MAXCOL)
         dx = 0;     // Entire row not to be moved.
-    bool b1 = aStart.Move( dx, dy, dz, rErrorRange.aStart, pDoc );
+    bool b1 = aStart.Move( dx, dy, dz, rErrorRange.aStart );
     if (dx && bColRange && aEnd.Col() == MAXCOL)
         dx = 0;     // End column sticky.
     if (dy && bRowRange && aEnd.Row() == MAXROW)
         dy = 0;     // End row sticky.
     SCTAB nOldTab = aEnd.Tab();
-    bool b2 = aEnd.Move( dx, dy, dz, rErrorRange.aEnd, pDoc );
+    bool b2 = aEnd.Move( dx, dy, dz, rErrorRange.aEnd );
     if (!b2)
     {
         // End column or row of a range may have become sticky.
@@ -2235,31 +2235,30 @@ void ScRange::IncEndRowSticky( SCsROW nDelta )
         aEnd.IncRow( nDelta);   // was greater than MAXROW, caller should know..
 }
 
-OUString ScAddress::GetColRowString( bool bAbsolute,
-                                   const Details& rDetails ) const
+OUString ScAddress::GetColRowString( bool bAbsolute ) const
 {
     OUStringBuffer aString;
 
-    switch( rDetails.eConv )
+    switch( detailsOOOa1.eConv )
     {
     default :
     case formula::FormulaGrammar::CONV_OOO:
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-    if (bAbsolute)
-        aString.append("$");
+        if (bAbsolute)
+            aString.append("$");
 
-    lcl_ScColToAlpha( aString, nCol);
+        lcl_ScColToAlpha( aString, nCol);
 
-    if ( bAbsolute )
-        aString.append("$");
+        if ( bAbsolute )
+            aString.append("$");
 
-    aString.append(OUString::number(nRow+1));
+        aString.append(OUString::number(nRow+1));
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
-        lcl_r1c1_append_r ( aString, nRow, bAbsolute, rDetails );
-        lcl_r1c1_append_c ( aString, nCol, bAbsolute, rDetails );
+        lcl_r1c1_append_r ( aString, nRow, bAbsolute, detailsOOOa1 );
+        lcl_r1c1_append_c ( aString, nCol, bAbsolute, detailsOOOa1 );
         break;
     }
 

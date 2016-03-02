@@ -118,8 +118,7 @@ public:
     sal_uInt32      GetUnoType() const;
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
-    void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress&,
-                                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
+    void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& );
 
     /**
      * @param nLocalTab sheet index where this name belongs, or -1 for global

@@ -413,7 +413,7 @@ void ScRangeStringConverter::GetTokenByOffset(
     }
 }
 
-void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUString& rTabName, sal_Unicode /* cQuote */)
+void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUString& rTabName)
 {
     // quote character is always "'"
     OUString aQuotedTab(rTabName);
@@ -421,14 +421,14 @@ void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUStrin
     rBuf.append(aQuotedTab);
 }
 
-sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Unicode cSeparator, sal_Unicode cQuote )
+sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Unicode cSeparator )
 {
     OUString    sToken;
     sal_Int32   nCount = 0;
     sal_Int32   nOffset = 0;
     while( nOffset >= 0 )
     {
-        GetTokenByOffset( sToken, rString, nOffset, cQuote, cSeparator );
+        GetTokenByOffset( sToken, rString, nOffset, '\'', cSeparator );
         if( nOffset >= 0 )
             nCount++;
     }
@@ -559,12 +559,11 @@ bool ScRangeStringConverter::GetAreaFromString(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
-        sal_Unicode cSeparator,
-        sal_Unicode cQuote )
+        sal_Unicode cSeparator )
 {
     ScRange aScRange;
     bool bResult(false);
-    if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
+    if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
     {
         rArea.nTab = aScRange.aStart.Tab();
         rArea.nColStart = aScRange.aStart.Col();
@@ -582,12 +581,11 @@ bool ScRangeStringConverter::GetAddressFromString(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
-        sal_Unicode cSeparator,
-        sal_Unicode cQuote )
+        sal_Unicode cSeparator )
 {
     ScAddress aScAddress;
     bool bResult(false);
-    if( GetAddressFromString( aScAddress, rAddressStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
+    if( GetAddressFromString( aScAddress, rAddressStr, pDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiAddress( rAddress, aScAddress );
         bResult = true;
@@ -601,12 +599,11 @@ bool ScRangeStringConverter::GetRangeFromString(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
-        sal_Unicode cSeparator,
-        sal_Unicode cQuote )
+        sal_Unicode cSeparator )
 {
     ScRange aScRange;
     bool bResult(false);
-    if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
+    if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiRange( rRange, aScRange );
         bResult = true;
@@ -655,8 +652,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
         const ScRangeList* pRangeList,
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
-        sal_Unicode cSeparator,
-        sal_uInt16 nFormatFlags )
+        sal_Unicode cSeparator )
 {
     OUString sRangeListStr;
     if( pRangeList )
@@ -665,7 +661,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
         {
             const ScRange* pRange = (*pRangeList)[nIndex];
             if( pRange )
-                GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeparator, true, nFormatFlags );
+                GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeparator, true );
         }
     }
     rString = sRangeListStr;
@@ -690,11 +686,10 @@ void ScRangeStringConverter::GetStringFromAddress(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
-        bool bAppendStr,
-        sal_uInt16 nFormatFlags )
+        bool bAppendStr )
 {
     ScAddress aScAddress( static_cast<SCCOL>(rAddress.Column), static_cast<SCROW>(rAddress.Row), rAddress.Sheet );
-    GetStringFromAddress( rString, aScAddress, pDocument, eConv, cSeparator, bAppendStr, nFormatFlags );
+    GetStringFromAddress( rString, aScAddress, pDocument, eConv, cSeparator, bAppendStr );
 }
 
 void ScRangeStringConverter::GetStringFromRange(
@@ -716,15 +711,14 @@ void ScRangeStringConverter::GetStringFromRangeList(
         const uno::Sequence< table::CellRangeAddress >& rRangeSeq,
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
-        sal_Unicode cSeparator,
-        sal_uInt16 nFormatFlags )
+        sal_Unicode cSeparator )
 {
     OUString sRangeListStr;
     sal_Int32 nCount = rRangeSeq.getLength();
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
-        GetStringFromRange( sRangeListStr, rRange, pDocument, eConv, cSeparator, true, nFormatFlags );
+        GetStringFromRange( sRangeListStr, rRange, pDocument, eConv, cSeparator, true );
     }
     rString = sRangeListStr;
 }

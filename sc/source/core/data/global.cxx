@@ -819,8 +819,9 @@ sal_Int32 ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar)
     return -1;
 }
 
-const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote )
+const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar )
 {
+    sal_Unicode cQuote = '\'';
     const sal_Unicode* p = pString;
     bool bQuoted = false;
     while (*p)

@@ -434,10 +434,9 @@ public:
 
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
         bits) for all known address conventions. If more than one bit is given
-        in nFlags, all bits must match. If bTestLetterNumeric is false and
-        char>=128, no LetterNumeric test is done and false is returned. */
+        in nFlags, all bits must match. */
     static bool IsCharFlagAllConventions(
-        OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
+        OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags );
 
 private:
     // FormulaCompiler
