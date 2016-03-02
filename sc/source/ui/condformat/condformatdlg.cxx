@@ -525,12 +525,6 @@ bool ScCondFormatDlg::IsRefInputMode() const
     return mpEdRange->IsEnabled();
 }
 
-#define ABS_SREF          SCA_VALID \
-    | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-    | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 {
     formula::RefEdit* pEdit = mpLastEdit;
@@ -544,9 +538,9 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
         sal_uInt16 n = 0;
         if (mpLastEdit && mpLastEdit != mpEdRange)
-            n = ABS_DREF3D;
+            n = SCR_ABS_3D;
         else
-            n = ABS_DREF;
+            n = SCR_ABS;
 
         OUString aRefStr(rRef.Format(n, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));

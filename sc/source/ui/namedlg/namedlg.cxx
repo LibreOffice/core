@@ -39,14 +39,6 @@
 
 #include <map>
 
-// defines -------------------------------------------------------------------
-
-#define ABS_SREF          SCA_VALID \
-    | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-    | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 //logic
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
@@ -189,7 +181,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdAssign);
-        OUString aRefStr(rRef.Format(ABS_DREF3D, pDocP,
+        OUString aRefStr(rRef.Format(SCR_ABS_3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
         m_pEdAssign->SetRefString( aRefStr );
     }

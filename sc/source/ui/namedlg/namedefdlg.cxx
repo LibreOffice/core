@@ -24,14 +24,6 @@
 #include "tokenarray.hxx"
 #include "sc.hrc"
 
-// defines -------------------------------------------------------------------
-
-#define ABS_SREF          SCA_VALID \
-    | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
-    | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
         ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo )
@@ -83,7 +75,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* p
     ScRange aRange;
 
     pViewData->GetSimpleArea( aRange );
-    OUString aAreaStr(aRange.Format(ABS_DREF3D, mpDoc,
+    OUString aAreaStr(aRange.Format(SCR_ABS_3D, mpDoc,
             ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0)));
 
     m_pEdRange->SetText( aAreaStr );
@@ -310,7 +302,7 @@ void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdRange);
-        OUString aRefStr(rRef.Format(ABS_DREF3D, pDocP,
+        OUString aRefStr(rRef.Format(SCR_ABS_3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
         m_pEdRange->SetRefString( aRefStr );
     }
