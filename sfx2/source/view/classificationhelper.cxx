@@ -22,7 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <o3tl/make_unique.hxx>
 #include <comphelper/processfactory.hxx>
-#include <rtl/bootstrap.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -311,8 +311,8 @@ SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
 void SfxClassificationHelper::Impl::parsePolicy()
 {
     uno::Reference<uno::XComponentContext> xComponentContext = comphelper::getProcessComponentContext();
-    OUString aPath = officecfg::Office::Common::Path::Current::Classification::get(xComponentContext);
-    rtl::Bootstrap::expandMacros(aPath);
+    SvtPathOptions aOptions;
+    OUString aPath = aOptions.GetClassificationPath();
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(aPath, StreamMode::READ);
     uno::Reference<io::XInputStream> xInputStream(new utl::OStreamWrapper(*pStream));
     xml::sax::InputSource aParserInput;
