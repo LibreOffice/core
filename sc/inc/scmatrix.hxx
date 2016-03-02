@@ -362,7 +362,7 @@ public:
     virtual IterateResult Sum(bool bTextAsZero) const = 0;
     virtual IterateResult SumSquare(bool bTextAsZero) const = 0;
     virtual IterateResult Product(bool bTextAsZero) const = 0;
-    virtual size_t Count(bool bCountStrings) const = 0;
+    virtual size_t Count(bool bCountStrings, bool bCountErrors) const = 0;
     virtual size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const = 0;
     virtual size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const = 0;
 
@@ -567,7 +567,7 @@ public:
     virtual IterateResult Sum(bool bTextAsZero) const override;
     virtual IterateResult SumSquare(bool bTextAsZero) const override;
     virtual IterateResult Product(bool bTextAsZero) const override;
-    virtual size_t Count(bool bCountStrings) const override;
+    virtual size_t Count(bool bCountStrings, bool bCountErrors) const override;
     virtual size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const override;
     virtual size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const override;
 
@@ -776,7 +776,7 @@ public:
     virtual IterateResult Sum(bool bTextAsZero) const override;
     virtual IterateResult SumSquare(bool bTextAsZero) const override;
     virtual IterateResult Product(bool bTextAsZero) const override;
-    virtual size_t Count(bool bCountStrings) const override;
+    virtual size_t Count(bool bCountStrings, bool bCountErrors) const override;
     virtual size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const override;
     virtual size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const override;
 
