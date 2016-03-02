@@ -163,6 +163,7 @@
 #define RID_SVXSTR_KEY_BASIC_PATH           (RID_SVX_START + 1007)//?
 #define RID_SVXSTR_KEY_BITMAP_PATH          (RID_SVX_START + 1008)//?
 #define RID_SVXSTR_KEY_USERDICTIONARY_DIR   (RID_SVX_START + 1025)//?
+#define RID_SVXSTR_KEY_CLASSIFICATION_PATH  (RID_SVX_START + 1118)
 
 // dialogs
 #define STR_MODIFY                          (RID_SVX_START + 336)//from optdict.src

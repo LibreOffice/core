@@ -104,6 +104,10 @@ String RID_SVXSTR_KEY_USERDICTIONARY_DIR
 {
     Text [ en-US ] = "User-defined dictionaries";
 };
+String RID_SVXSTR_KEY_CLASSIFICATION_PATH
+{
+    Text [ en-US ] = "Classification" ;
+};
 String RID_SVXSTR_KEY_AUTOCORRECT_DIR
 {
     Text [ en-US ] = "AutoCorrect";

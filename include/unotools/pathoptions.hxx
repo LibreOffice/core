@@ -58,9 +58,9 @@ public:
         PATH_TEMPLATE,
         PATH_USERCONFIG,
         PATH_WORK,
+        PATH_CLASSIFICATION,
         PATH_UICONFIG,
         PATH_FINGERPRINT,
-        PATH_CLASSIFICATION,
         PATH_COUNT // should always be the last element
     };
 
