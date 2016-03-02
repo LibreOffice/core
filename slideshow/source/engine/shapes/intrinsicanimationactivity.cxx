@@ -248,7 +248,8 @@ namespace slideshow
         bool IntrinsicAnimationActivity::enableAnimations()
         {
             mbIsActive = true;
-            return maContext.mrActivitiesQueue.addActivity( ActivitySharedPtr(this) );
+            return maContext.mrActivitiesQueue.addActivity( std::dynamic_pointer_cast<Activity>(shared_from_this()) );
+
         }
 
 

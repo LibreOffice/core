@@ -36,6 +36,8 @@ namespace slideshow
          */
         class SharedPtrAble : public std::enable_shared_from_this<SharedPtrAble>
         {
+        public:
+            virtual ~SharedPtrAble() {}
         };
 
         /** Disposable interface

@@ -217,7 +217,7 @@ void RehearseTimingsActivity::start()
     for_each_sprite( []( const ::cppcanvas::CustomSpriteSharedPtr& pSprite )
                      { return pSprite->show(); } );
 
-    mrActivitiesQueue.addActivity( std::shared_ptr<Activity>(this) );
+    mrActivitiesQueue.addActivity( std::dynamic_pointer_cast<Activity>(shared_from_this()) );
 
     mpMouseHandler->reset();
     mrEventMultiplexer.addClickHandler(

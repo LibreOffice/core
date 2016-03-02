@@ -859,7 +859,7 @@ ActivityImpl::ActivityImpl(
 bool ActivityImpl::enableAnimations()
 {
     mbIsActive = true;
-    return maContext.mrActivitiesQueue.addActivity( ActivitySharedPtr(this) );
+    return maContext.mrActivitiesQueue.addActivity( std::dynamic_pointer_cast<Activity>(shared_from_this()) );
 }
 
 ActivityImpl::~ActivityImpl()
