@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_3786f3b9",
+        "filename": "desktop/source/deployment/manager/dp_extensionmanager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-02T10:21:18Z",
+      "side": 1,
+      "message": "Hmm, what do you need boost/bind for? Am I missing something?",
+      "revId": "c92137f6cac66fbe58628b451ce07415df034add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_77907bed",
+        "filename": "desktop/source/deployment/manager/dp_extensionmanager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-02T10:21:18Z",
+      "side": 1,
+      "message": "Relative paths are rather bad style of including header files. Maybe you can move the files in question to inc/ directory in desktop module?",
+      "revId": "c92137f6cac66fbe58628b451ce07415df034add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_5789ffc9",
+        "filename": "desktop/source/deployment/manager/dp_extensionmanager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-02T10:21:18Z",
+      "side": 1,
+      "message": "Are you sure this works, given there is return from the function on previous line?",
+      "revId": "c92137f6cac66fbe58628b451ce07415df034add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
