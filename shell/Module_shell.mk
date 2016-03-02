@@ -105,9 +105,6 @@ endif
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_recentfile \
-	Package_scripts \
-	Package_scripts_kde \
-	Package_scripts_tde \
 ))
 endif
 

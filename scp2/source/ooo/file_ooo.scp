@@ -59,31 +59,6 @@ End
 
 #endif
 
-#if defined UNX && ! defined MACOSX && ! defined LIBO_HEADLESS
-
-File gid_File_shell_scripts
-    BIN_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "shell_scripts.filelist";
-    Styles = (FILELIST, PACKED);
-End
-
-File gid_File_Bin_Kde_Open_Url
-    BIN_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "shell_scripts_kde.filelist";
-    Styles = (FILELIST, PACKED);
-End
-
-File gid_File_Bin_Tde_Open_Url
-    BIN_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "shell_scripts_tde.filelist";
-    Styles = (FILELIST, PACKED);
-End
-
-#endif
-
 #if defined UNX
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
