@@ -36,14 +36,6 @@ ScpAction scp_Copy_Readme_Txt
 End
 #endif
 
-#if !defined(WNT) && !defined(MACOSX) && defined(WITH_RPM)
-ScpAction scp_Copy_Install
-    Copy = "scripts/install";
-    Name = "install";
-    UnixRights = 755;
-End
-#endif
-
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
     Copy = "osxdndinstall.png";
