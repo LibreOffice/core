@@ -61,7 +61,6 @@ public:
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-
     virtual bool    Close() override;
     void            SliderMoved();
     size_t          GetSliderPos();
@@ -165,7 +164,7 @@ public:
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
-
+    void            SyncFocusState();
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
 
@@ -204,8 +203,6 @@ private:
     VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bRefInputMode;
 
-    // Hack: RefInput control
-    Idle*  pIdle;
 
 private:
     void            Init( const SfxItemSet& rArgSet );
