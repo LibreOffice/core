@@ -27,7 +27,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -132,7 +131,7 @@ void ConfigurationUpdater::UpdateConfiguration()
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration update");
     SetUpdateBeingProcessed(true);
     comphelper::ScopeGuard aScopeGuard (
-        ::boost::bind(&ConfigurationUpdater::SetUpdateBeingProcessed, this, false));
+        [this] () { return this->SetUpdateBeingProcessed(false); });
 
     try
     {

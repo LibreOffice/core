@@ -21,7 +21,6 @@
 
 #include "tools/ConfigurationAccess.hxx"
 #include <comphelper/processfactory.hxx>
-#include <boost/bind.hpp>
 #include <unordered_map>
 
 #include <tools/diagnose_ex.h>
@@ -105,7 +104,9 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
         ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
-            ::boost::bind(&ModuleController::ProcessFactory, this, _2));
+            [this] (OUString const&, ::std::vector<Any> const& xs) {
+                return this->ProcessFactory(xs);
+            } );
     }
     catch (Exception&)
     {
@@ -157,7 +158,9 @@ void ModuleController::InstantiateStartupServices()
         tools::ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
-            ::boost::bind(&ModuleController::ProcessStartupService, this, _2));
+            [this] (OUString const&, ::std::vector<Any> const& xs) {
+                return this->ProcessStartupService(xs);
+            } );
     }
     catch (Exception&)
     {
