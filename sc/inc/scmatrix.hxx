@@ -372,7 +372,7 @@ public:
     IterateResult Sum(bool bTextAsZero) const;
     IterateResult SumSquare(bool bTextAsZero) const;
     IterateResult Product(bool bTextAsZero) const;
-    size_t Count(bool bCountStrings) const;
+    size_t Count(bool bCountStrings, bool bCountErrors) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
 
