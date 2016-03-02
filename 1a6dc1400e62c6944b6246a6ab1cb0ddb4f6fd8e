@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_d72a0fe7",
+        "filename": "sd/source/filter/xml/sdxmlwrp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:55:45Z",
+      "side": 1,
+      "message": "Remove the #if",
+      "revId": "1a6dc1400e62c6944b6246a6ab1cb0ddb4f6fd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_b72f83f5",
+        "filename": "sd/source/filter/xml/sdxmlwrp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:55:45Z",
+      "side": 1,
+      "message": "Remove the #if",
+      "revId": "1a6dc1400e62c6944b6246a6ab1cb0ddb4f6fd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_1735b745",
+        "filename": "sd/source/filter/xml/sdxmlwrp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:55:45Z",
+      "side": 1,
+      "message": "Remove the #if",
+      "revId": "1a6dc1400e62c6944b6246a6ab1cb0ddb4f6fd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

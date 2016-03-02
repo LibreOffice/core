@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_f7390b43",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:55:45Z",
+      "side": 0,
+      "message": "This should be put under a #if",
+      "revId": "36ae1972ff64c80dc053680c82032904f7bbdcb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
