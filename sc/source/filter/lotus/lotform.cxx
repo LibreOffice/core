@@ -369,8 +369,7 @@ LotusToSc::LotusToSc(LotusContext &rContext, SvStream &rStream, svl::SharedStrin
 typedef FUNC_TYPE ( FuncType1 ) ( sal_uInt8 );
 typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 
-void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
-    const FORMULA_TYPE /*eFT*/ )
+void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
 {
     sal_uInt8               nOc;
     sal_uInt8               nAnz;

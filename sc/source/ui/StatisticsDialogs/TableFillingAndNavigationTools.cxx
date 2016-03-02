@@ -66,11 +66,10 @@ void FormulaTemplate::applyRange(const OUString& aVariable, const ScRange& aRang
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, bool b3D)
+void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList)
 {
-    sal_uInt16 nFlag = b3D ? SCR_ABS_3D : SCR_ABS;
     OUString aString;
-    aRangeList.Format(aString, nFlag, mpDoc, mpDoc->GetAddressConvention());
+    aRangeList.Format(aString, SCR_ABS_3D, mpDoc, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 

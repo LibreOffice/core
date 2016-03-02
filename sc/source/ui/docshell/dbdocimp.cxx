@@ -116,7 +116,7 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 }
 
 bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
-        const svx::ODataAccessDescriptor* pDescriptor, bool bRecord, bool bAddrInsert )
+        const svx::ODataAccessDescriptor* pDescriptor, bool bRecord )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     ScChangeTrack *pChangeTrack = nullptr;
@@ -125,16 +125,12 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScDBData* pDBData = nullptr;
-    if ( !bAddrInsert )
+    ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
+                                          rParam.nCol2, rParam.nRow2 );
+    if (!pDBData)
     {
-        pDBData = rDoc.GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
-                                            rParam.nCol2, rParam.nRow2 );
-        if (!pDBData)
-        {
-            OSL_FAIL( "DoImport: no DBData" );
-            return false;
-        }
+         OSL_FAIL( "DoImport: no DBData" );
+        return false;
     }
 
     vcl::Window* pWaitWin = ScDocShell::GetActiveDialogParent();
@@ -281,17 +277,15 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                     pCurrArr[i] = xMeta->isCurrency( i+1 );
                 }
 
-                if ( !bAddrInsert )                 // read column names
+                // read column names
+                nCol = rParam.nCol1;
+                for (long i=0; i<nColCount; i++)
                 {
-                    nCol = rParam.nCol1;
-                    for (long i=0; i<nColCount; i++)
-                    {
-                        pImportDoc->SetString( nCol, nRow, nTab,
-                                                xMeta->getColumnLabel( i+1 ) );
-                        ++nCol;
-                    }
-                    ++nRow;
+                    pImportDoc->SetString( nCol, nRow, nTab,
+                                            xMeta->getColumnLabel( i+1 ) );
+                    ++nCol;
                 }
+                ++nRow;
 
                 bool bEnd = false;
                 if ( !bDoSelection )
@@ -389,8 +383,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
     //  test for cell protection
 
-    bool bKeepFormat = !bAddrInsert && pDBData->IsKeepFmt();
-    bool bMoveCells = !bAddrInsert && pDBData->IsDoSize();
+    bool bKeepFormat = pDBData->IsKeepFmt();
+    bool bMoveCells = pDBData->IsDoSize();
     SCCOL nFormulaCols = 0; // columns to be filled with formulas
     if (bMoveCells && nEndCol == rParam.nCol2)
     {
@@ -486,8 +480,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &rDoc, nTab, nTab );
 
-            if ( !bAddrInsert )
-                pUndoDBData = new ScDBData( *pDBData );
+            pUndoDBData = new ScDBData( *pDBData );
         }
 
         ScMarkData aNewMark;
@@ -578,15 +571,13 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                     aNewMark, InsertDeleteFlags::CONTENTS );
         }
 
-        if( !bAddrInsert )      // update database range
-        {
-            pDBData->SetImportParam( rParam );
-            pDBData->SetHeader( true );
-            pDBData->SetByRow( true );
-            pDBData->SetArea( nTab, rParam.nCol1,rParam.nRow1, nEndCol,nEndRow );
-            pDBData->SetImportSelection( bRealSelection );
-            rDoc.CompileDBFormula();
-        }
+        // update database range
+        pDBData->SetImportParam( rParam );
+        pDBData->SetHeader( true );
+        pDBData->SetByRow( true );
+        pDBData->SetArea( nTab, rParam.nCol1,rParam.nRow1, nEndCol,nEndRow );
+        pDBData->SetImportSelection( bRealSelection );
+        rDoc.CompileDBFormula();
 
         if (bRecord)
         {

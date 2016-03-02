@@ -89,8 +89,7 @@ private:
 public:
     LotusToSc(LotusContext &rContext, SvStream& aStr, svl::SharedStringPool& rSPool, rtl_TextEncoding eSrc, bool b);
 
-    virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
-                                    const FORMULA_TYPE eFT = FT_CellFormula ) override;
+    virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest ) override;
 
     void                Reset( const ScAddress& rEingPos );
     inline void         SetWK3();

@@ -94,7 +94,7 @@ struct BinAddress
     inline explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
+    void                read( BiffInputStream& rStrm, bool bCol16Bit = true );
 };
 
 inline bool operator<( const BinAddress& rL, const BinAddress& rR )
@@ -130,7 +130,7 @@ struct BinRange
     inline explicit     BinRange( const css::table::CellRangeAddress& rRange ) : maFirst( rRange.StartColumn, rRange.StartRow ), maLast( rRange.EndColumn, rRange.EndRow ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
+    void                read( BiffInputStream& rStrm, bool bCol16Bit = true );
 };
 
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& orRange )
@@ -225,7 +225,6 @@ public:
         @param ornEndRow  (out-parameter) returns the converted end row index.
         @param rString  The string containing the cell address.
         @param nStart  Start index of string part in rString to be parsed.
-        @param nLength  Length of string part in rString to be parsed.
 
         @return  true = Parsed string was valid, returned values can be used.
      */
@@ -233,8 +232,7 @@ public:
                             sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
                             sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
                             const OUString& rString,
-                            sal_Int32 nStart = 0,
-                            sal_Int32 nLength = SAL_MAX_INT32 );
+                            sal_Int32 nStart = 0 );
 
     /** Returns the biggest valid cell address in the own Calc document. */
     inline const ScAddress&

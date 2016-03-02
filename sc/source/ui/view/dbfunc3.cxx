@@ -189,7 +189,7 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
 
 // auto outlines
 
-void ScDBFunc::AutoOutline( bool bRecord )
+void ScDBFunc::AutoOutline( )
 {
     SCTAB nTab = GetViewData().GetTabNo();
     ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // the complete sheet, if nothing is marked
@@ -202,7 +202,7 @@ void ScDBFunc::AutoOutline( bool bRecord )
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
-    aFunc.AutoOutline( aRange, bRecord );
+    aFunc.AutoOutline( aRange, true );
 }
 
 // select outline level
@@ -528,10 +528,10 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
 
 // consolidate
 
-void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, bool bRecord )
+void ScDBFunc::Consolidate( const ScConsolidateParam& rParam )
 {
     ScDocShell* pDocShell = GetViewData().GetDocShell();
-    pDocShell->DoConsolidate( rParam, bRecord );
+    pDocShell->DoConsolidate( rParam );
     SetTabNo( rParam.nTab, true );
 }
 
@@ -545,12 +545,12 @@ static OUString lcl_MakePivotTabName( const OUString& rPrefix, SCTAB nNumber )
 
 bool ScDBFunc::MakePivotTable(
     const ScDPSaveData& rData, const ScRange& rDest, bool bNewTable,
-    const ScDPObject& rSource, bool bApi )
+    const ScDPObject& rSource )
 {
     //  error message if no fields are set
     //  this must be removed when drag&drop of fields from a toolbox is available
 
-    if ( rData.IsEmpty() && !bApi )
+    if ( rData.IsEmpty() )
     {
         ErrorMessage(STR_PIVOT_NODATA);
         return false;

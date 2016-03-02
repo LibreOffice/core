@@ -273,9 +273,9 @@ void ScOutputData::SetShowSpellErrors( bool bSet )
     bShowSpellErrors = bSet;
 }
 
-void ScOutputData::SetSnapPixel( bool bSet )
+void ScOutputData::SetSnapPixel()
 {
-    bSnapPixel = bSet;
+    bSnapPixel = true;
 }
 
 void ScOutputData::SetEditCell( SCCOL nCol, SCROW nRow )

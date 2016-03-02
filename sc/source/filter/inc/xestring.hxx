@@ -71,12 +71,10 @@ public:
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string.
-        @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string (for appending). */
+        @param nFlags  Modifiers for string export. */
     void                Assign(
                             sal_Unicode cChar,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+                            XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Assigns an unformatted string, converts this object to a BIFF2-BIFF7 byte string.
         @param nFlags  Modifiers for string export.

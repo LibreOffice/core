@@ -90,7 +90,7 @@ ScVbaName::setVisible( sal_Bool /*bVisible*/ ) throw (css::uno::RuntimeException
 {
 }
 
-OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar, bool bPrependEquals )
+OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
     OUString aContent;
@@ -100,22 +100,16 @@ OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar,
         if (pData)
             pData->GetSymbol( aContent, eGrammar );
     }
-    if ( bPrependEquals )
-    {
-        if (aContent.indexOf('=') != 0)
-            aContent = "=" + aContent;
-    }
+    if (aContent.indexOf('=') != 0)
+        aContent = "=" + aContent;
     return aContent;
 }
 
-void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGrammar::Grammar eGrammar, bool bRemoveEquals )
+void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGrammar::Grammar eGrammar )
 {
     OUString sContent( rContent );
-    if ( bRemoveEquals )
-    {
-        if (sContent.startsWith("="))
-            sContent = sContent.copy(1);
-    }
+    if (sContent.startsWith("="))
+        sContent = sContent.copy(1);
     ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
 
     // We should be able to do the below by just setting calling SetCode on pNamedRange

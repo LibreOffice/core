@@ -288,7 +288,7 @@ public:
     inline ScHTMLTableId GetTableId() const { return nTab; }
 
     /** Sets or cleares the import always state. */
-    inline void         SetImportAlways( bool bSet = true ) { mbImportAlways = bSet; }
+    inline void         SetImportAlways() { mbImportAlways = true; }
     /** Sets start point of the entry selection to the start of the import info object. */
     void                AdjustStart( const ImportInfo& rInfo );
     /** Sets end point of the entry selection to the end of the import info object. */

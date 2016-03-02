@@ -91,7 +91,7 @@ public:
     inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     void                DoClose( sal_uInt16 nId );
     static void         SetDispatcherLock( bool bLock );
-    static void         EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
+    static void         EnableSpreadsheets( bool bFlag = true );
     static void         ViewShellChanged();
 
     static              void enableInput(bool _bInput);

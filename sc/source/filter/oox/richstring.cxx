@@ -380,7 +380,7 @@ bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* p
     return false;
 }
 
-void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, const oox::xls::Font* pFirstPortionFont ) const
+void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld ) const
 {
     if (maTextPortions.size() == 1)
     {
@@ -388,14 +388,13 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
         // It's much faster this way.
         RichStringPortion& rPtn = *maTextPortions.front();
         rxText->setString(rPtn.getText());
-        rPtn.writeFontProperties(rxText, pFirstPortionFont);
+        rPtn.writeFontProperties(rxText, nullptr);
         return;
     }
 
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
-        (*aIt)->convert( rxText, pFirstPortionFont, bReplaceOld );
-        pFirstPortionFont = nullptr;  // use passed font for first portion only
+        (*aIt)->convert( rxText, nullptr, bReplaceOld );
         bReplaceOld = false;    // do not replace first portion text with following portions
     }
 }

@@ -778,8 +778,9 @@ bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
     return  bisMarked;
 }
 
-void ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
+void ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV)
 {
+    SdrInsertFlags nOptions=SdrInsertFlags::NONE;
     // Do not change marks when the ole object is active
     // (for Drop from ole object would otherwise be deactivated in the middle of ExecuteDrag!)
 

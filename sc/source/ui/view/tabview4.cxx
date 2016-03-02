@@ -281,7 +281,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     }
 }
 
-void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, bool bPaint )
+void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
@@ -291,7 +291,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
         aViewData.SetRefStart( nCurX, nCurY, nCurZ );
         aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
 
-        if (nCurZ == aViewData.GetTabNo() && bPaint)
+        if (nCurZ == aViewData.GetTabNo())
         {
             SCCOL nStartX = nCurX;
             SCROW nStartY = nCurY;

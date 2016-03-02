@@ -70,8 +70,8 @@ public:
     _ScRangeListTabs ();
     ~_ScRangeListTabs();
 
-    void Append( const ScAddress& aSRD, SCTAB nTab, bool bLimit = true );
-    void Append( const ScRange& aCRD, SCTAB nTab, bool bLimit = true );
+    void Append( const ScAddress& aSRD, SCTAB nTab );
+    void Append( const ScRange& aCRD, SCTAB nTab );
 
     const ScRange* First ( SCTAB nTab = 0 );
     const ScRange* Next ();
@@ -129,8 +129,7 @@ protected:
 public:
     void                Reset( const ScAddress& rEingPos );
 
-    virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
-                                    const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
+    virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest ) = 0;
 
 protected:
     using               ConverterBase::Reset;

@@ -172,7 +172,7 @@ do { \
     nRef-=amt; \
 } while(false)
 
-ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, const FORMULA_TYPE /*eFT*/ )
+ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 {
     sal_uInt8 nFmla[ nBufSize ], i, nArg;
     sal_uInt8 nArgArray[ nBufSize ] = {0};

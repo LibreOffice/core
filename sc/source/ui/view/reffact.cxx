@@ -169,16 +169,13 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, bool bSet)
+void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize)
 {
-    bScSimpleRefFlag=bSet;
-    if(bScSimpleRefFlag)
-    {
-        nScSimpleRefX=aPos.X();
-        nScSimpleRefY=aPos.Y();
-        nScSimpleRefHeight=aSize.Height();
-        nScSimpleRefWidth=aSize.Width();
-    }
+    bScSimpleRefFlag=true;
+    nScSimpleRefX=aPos.X();
+    nScSimpleRefY=aPos.Y();
+    nScSimpleRefHeight=aSize.Height();
+    nScSimpleRefWidth=aSize.Width();
 }
 
 void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)

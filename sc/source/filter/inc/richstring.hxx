@@ -252,13 +252,10 @@ public:
 
     /** Converts the string and writes it into the passed XText.
         @param rxText  The XText interface of the target object.
-        @param bReplaceOld  True = replace old contents of the text object.
-        @param pFirstPortionFont  Optional font providing additional rich-text
-            formatting for the first text portion, e.g. font escapement. */
+        @param bReplaceOld  True = replace old contents of the text object. */
     void                convert(
                             const css::uno::Reference< css::text::XText >& rxText,
-                            bool bReplaceOld,
-                            const oox::xls::Font* pFirstPortionFont = nullptr ) const;
+                            bool bReplaceOld ) const;
     ::EditTextObject*   convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont ) const;
 
 private:

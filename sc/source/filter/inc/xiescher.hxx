@@ -1201,8 +1201,8 @@ public:
         @descr  The stream must point to the start of an DFF record containing properties. */
     void                Read( XclImpStream& rStrm );
 
-    /** Returns the specified property or the default value, if not extant. */
-    sal_uInt32          GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault = 0 ) const;
+    /** Returns the specified property or zero, if not extant. */
+    sal_uInt32          GetPropertyValue( sal_uInt16 nPropId ) const;
 
     /** Translates the properties and fills the item set. */
     void                FillToItemSet( SfxItemSet& rItemSet ) const;

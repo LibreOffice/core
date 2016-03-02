@@ -144,7 +144,7 @@ class ScHTMLExport : public ScExportBase
     bool WriteFieldText( const EditTextObject* pData );
 
     // copy a local file to internet if needed
-    void CopyLocalFileToINet( OUString& rFileNm, const OUString& rTargetNm, bool bFileToFile = false );
+    void CopyLocalFileToINet( OUString& rFileNm, const OUString& rTargetNm );
     bool HasCId()
     {
         return !aCId.isEmpty();

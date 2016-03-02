@@ -154,9 +154,8 @@ public:
                             const ScAddress& rCellAddr,
                             sal_Int16 nStdNumFmt );
 
-    /** Processes the cell formatting data of the passed cell.
-        @param nNumFmtId  If set, overrides number format of the cell XF. */
-    void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
+    /** Processes the cell formatting data of the passed cell. */
+    void                setCellFormat( const CellModel& rModel );
 
     /** Final processing after the sheet has been imported. */
     void                finalizeImport();

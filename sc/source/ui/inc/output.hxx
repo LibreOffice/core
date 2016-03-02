@@ -293,7 +293,7 @@ public:
     long    GetScrW() const     { return nScrW; }
     long    GetScrH() const     { return nScrH; }
 
-    void    SetSnapPixel( bool bSet = true );
+    void    SetSnapPixel();
 
     void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage);
     void    DrawStrings( bool bPixelToLogic = false );

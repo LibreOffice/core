@@ -4297,9 +4297,9 @@ void XclImpDffPropSet::Read( XclImpStream& rStrm )
     maDffConv.ReadPropSet( *mxMemStrm, nullptr );
 }
 
-sal_uInt32 XclImpDffPropSet::GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault ) const
+sal_uInt32 XclImpDffPropSet::GetPropertyValue( sal_uInt16 nPropId ) const
 {
-    return maDffConv.GetPropertyValue( nPropId, nDefault );
+    return maDffConv.GetPropertyValue( nPropId, 0 );
 }
 
 void XclImpDffPropSet::FillToItemSet( SfxItemSet& rItemSet ) const

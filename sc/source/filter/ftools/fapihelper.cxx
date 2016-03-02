@@ -339,12 +339,9 @@ void ScfPropSetHelper::ReadValue( bool& rbValue )
 
 // write properties -----------------------------------------------------------
 
-void ScfPropSetHelper::InitializeWrite( bool bClearAllAnys )
+void ScfPropSetHelper::InitializeWrite()
 {
     mnNextIdx = 0;
-    if( bClearAllAnys )
-        for( sal_Int32 nIdx = 0, nLen = maValueSeq.getLength(); nIdx < nLen; ++nIdx )
-            maValueSeq[ nIdx ].clear();
 }
 
 void ScfPropSetHelper::WriteValue( const Any& rAny )

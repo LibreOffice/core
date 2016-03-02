@@ -1126,14 +1126,14 @@ public:
 
     static uno::Reference< excel::XRange > createRangeFromRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference<uno::XComponentContext >& xContext,
         const uno::Reference< table::XCellRange >& xRange, const uno::Reference< sheet::XCellRangeAddressable >& xCellRangeAddressable,
-        sal_Int32 nStartColOffset = 0, sal_Int32 nStartRowOffset = 0, sal_Int32 nEndColOffset = 0, sal_Int32 nEndRowOffset = 0 )
+        sal_Int32 nStartColOffset = 0, sal_Int32 nStartRowOffset = 0, sal_Int32 nEndColOffset = 0 )
     {
         return uno::Reference< excel::XRange >( new ScVbaRange( xParent, xContext,
             xRange->getCellRangeByPosition(
                 xCellRangeAddressable->getRangeAddress().StartColumn + nStartColOffset,
                 xCellRangeAddressable->getRangeAddress().StartRow + nStartRowOffset,
                 xCellRangeAddressable->getRangeAddress().EndColumn + nEndColOffset,
-                xCellRangeAddressable->getRangeAddress().EndRow + nEndRowOffset ) ) );
+                xCellRangeAddressable->getRangeAddress().EndRow ) ) );
     }
 
 };
@@ -1361,7 +1361,7 @@ ScVbaRange::getRangeObjectForName(
     return getRangeForName( xContext, sRangeName, pDocSh, refAddr, eConv );
 }
 
-table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh,  formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1) throw ( uno::RuntimeException )
+table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh ) throw ( uno::RuntimeException )
 {
     uno::Reference< table::XCellRange > xRangeParam;
     switch ( aParam.getValueTypeClass() )
@@ -1372,7 +1372,7 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
             aParam >>= rString;
             ScRangeList aCellRanges;
             ScRange refRange;
-            if ( getScRangeListForAddress ( rString, pDocSh, refRange, aCellRanges, aConv ) )
+            if ( getScRangeListForAddress ( rString, pDocSh, refRange, aCellRanges ) )
             {
                 if ( aCellRanges.size() == 1 )
                 {

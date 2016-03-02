@@ -2768,13 +2768,13 @@ void ScDocShell::SetModified( bool bModified )
     }
 }
 
-void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
+void ScDocShell::SetDocumentModified()
 {
     //  BroadcastUno must also happen right away with pPaintLockData
     //  FIXME: Also for SetDrawModified, if Drawing is connected
     //  FIXME: Then own Hint?
 
-    if ( pPaintLockData && bIsModified )
+    if ( pPaintLockData )
     {
         // #i115009# broadcast BCA_BRDCST_ALWAYS, so a component can read recalculated results
         // of RecalcModeAlways formulas (like OFFSET) after modifying cells
@@ -2786,41 +2786,38 @@ void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
         return;
     }
 
-    SetDrawModified( bIsModified );
+    SetDrawModified();
 
-    if ( bIsModified )
+    if ( aDocument.IsAutoCalcShellDisabled() )
+        SetDocumentModifiedPending( true );
+    else
     {
-        if ( aDocument.IsAutoCalcShellDisabled() )
-            SetDocumentModifiedPending( true );
-        else
+        SetDocumentModifiedPending( false );
+        aDocument.InvalidateStyleSheetUsage();
+        aDocument.InvalidateTableArea();
+        aDocument.InvalidateLastTableOpParams();
+        aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+        if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
+            aDocument.CalcFormulaTree( true );
+        aDocument.RefreshDirtyTableColumnNames();
+        PostDataChanged();
+
+        //  Detective AutoUpdate:
+        //  Update if formulas were modified (DetectiveDirty) or the list contains
+        //  "Trace Error" entries (Trace Error can look completely different
+        //  after changes to non-formula cells).
+
+        ScDetOpList* pList = aDocument.GetDetOpList();
+        if ( pList && ( aDocument.IsDetectiveDirty() || pList->HasAddError() ) &&
+             pList->Count() && !IsInUndo() && SC_MOD()->GetAppOptions().GetDetectiveAuto() )
         {
-            SetDocumentModifiedPending( false );
-            aDocument.InvalidateStyleSheetUsage();
-            aDocument.InvalidateTableArea();
-            aDocument.InvalidateLastTableOpParams();
-            aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
-            if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
-                aDocument.CalcFormulaTree( true );
-            aDocument.RefreshDirtyTableColumnNames();
-            PostDataChanged();
-
-            //  Detective AutoUpdate:
-            //  Update if formulas were modified (DetectiveDirty) or the list contains
-            //  "Trace Error" entries (Trace Error can look completely different
-            //  after changes to non-formula cells).
-
-            ScDetOpList* pList = aDocument.GetDetOpList();
-            if ( pList && ( aDocument.IsDetectiveDirty() || pList->HasAddError() ) &&
-                 pList->Count() && !IsInUndo() && SC_MOD()->GetAppOptions().GetDetectiveAuto() )
-            {
-                GetDocFunc().DetectiveRefresh(true);    // sal_True = caused by automatic update
-            }
-            aDocument.SetDetectiveDirty(false);         // always reset, also if not refreshed
+            GetDocFunc().DetectiveRefresh(true);    // sal_True = caused by automatic update
         }
-
-        // notify UNO objects after BCA_BRDCST_ALWAYS etc.
-        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+        aDocument.SetDetectiveDirty(false);         // always reset, also if not refreshed
     }
+
+    // notify UNO objects after BCA_BRDCST_ALWAYS etc.
+    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 }
 
 /**

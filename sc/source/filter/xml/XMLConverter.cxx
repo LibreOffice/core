@@ -100,8 +100,7 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
 
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
-        const sheet::GeneralFunction eFunction,
-        bool bAppendStr )
+        const sheet::GeneralFunction eFunction )
 {
     OUString sFuncStr;
     switch( eFunction )
@@ -124,13 +123,12 @@ void ScXMLConverter::GetStringFromFunction(
             // added to avoid warnings
         }
     }
-    ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sFuncStr, false );
 }
 
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
-        const ScSubTotalFunc eFunction,
-        bool bAppendStr )
+        const ScSubTotalFunc eFunction )
 {
     OUString sFuncStr;
     switch( eFunction )
@@ -151,7 +149,7 @@ void ScXMLConverter::GetStringFromFunction(
         case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
         case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
     }
-    ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sFuncStr, false );
 }
 
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
@@ -170,8 +168,7 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
 
 void ScXMLConverter::GetStringFromOrientation(
     OUString& rString,
-    const sheet::DataPilotFieldOrientation eOrientation,
-    bool bAppendStr )
+    const sheet::DataPilotFieldOrientation eOrientation )
 {
     OUString sOrientStr;
     switch( eOrientation )
@@ -196,7 +193,7 @@ void ScXMLConverter::GetStringFromOrientation(
             // added to avoid warnings
         }
     }
-    ScRangeStringConverter::AssignString( rString, sOrientStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sOrientStr, false );
 }
 
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
@@ -229,8 +226,7 @@ bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUSt
 
 void ScXMLConverter::GetStringFromDetObjType(
         OUString& rString,
-        const ScDetectiveObjType eObjType,
-        bool bAppendStr )
+        const ScDetectiveObjType eObjType )
 {
     OUString sTypeStr;
     switch( eObjType )
@@ -249,13 +245,12 @@ void ScXMLConverter::GetStringFromDetObjType(
             // added to avoid warnings
         }
     }
-    ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sTypeStr, false );
 }
 
 void ScXMLConverter::GetStringFromDetOpType(
         OUString& rString,
-        const ScDetOpType eOpType,
-        bool bAppendStr )
+        const ScDetOpType eOpType )
 {
     OUString sTypeStr;
     switch( eOpType )
@@ -276,7 +271,7 @@ void ScXMLConverter::GetStringFromDetOpType(
             sTypeStr = GetXMLToken( XML_REMOVE_PRECEDENTS );
         break;
     }
-    ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sTypeStr, false );
 }
 
 void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)

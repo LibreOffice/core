@@ -422,8 +422,8 @@ private:
     void                AppendMissingNameToken( const OUString& rName, sal_uInt8 nSpaces = 0 );
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nSpaces = 0 );
     void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces = 0 );
-    void                AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces = 0 );
-    void                AppendEuroToolCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces = 0 );
+    void                AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData );
+    void                AppendEuroToolCallToken( const XclExpExtFuncData& rExtFuncData );
 
     void                AppendOperatorTokenId( sal_uInt8 nTokenId, const XclExpOperandListRef& rxOperands, sal_uInt8 nSpaces = 0 );
     void                AppendUnaryOperatorToken( sal_uInt8 nTokenId, sal_uInt8 nSpaces = 0 );
@@ -2358,7 +2358,7 @@ void XclExpFmlaCompImpl::AppendMacroCallToken( const XclExpExtFuncData& rExtFunc
     AppendNameToken( nNameIdx, nSpaces );
 }
 
-void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces )
+void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData )
 {
     OUString aXclFuncName;
     if( mxData->mpLinkMgr && ScGlobal::GetAddInCollection()->GetExcelName( rExtFuncData.maFuncName, GetUILanguage(), aXclFuncName ) )
@@ -2366,20 +2366,20 @@ void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFunc
         sal_uInt16 nExtSheet, nExtName;
         if( mxData->mpLinkMgr->InsertAddIn( nExtSheet, nExtName, aXclFuncName ) )
         {
-            AppendNameXToken( nExtSheet, nExtName, nSpaces );
+            AppendNameXToken( nExtSheet, nExtName );
             return;
         }
     }
-    AppendMacroCallToken( rExtFuncData, nSpaces );
+    AppendMacroCallToken( rExtFuncData );
 }
 
-void XclExpFmlaCompImpl::AppendEuroToolCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces )
+void XclExpFmlaCompImpl::AppendEuroToolCallToken( const XclExpExtFuncData& rExtFuncData )
 {
     sal_uInt16 nExtSheet(0), nExtName(0);
     if( mxData->mpLinkMgr && mxData->mpLinkMgr->InsertEuroTool( nExtSheet, nExtName, rExtFuncData.maFuncName ) )
-        AppendNameXToken( nExtSheet, nExtName, nSpaces );
+        AppendNameXToken( nExtSheet, nExtName );
     else
-        AppendMacroCallToken( rExtFuncData, nSpaces );
+        AppendMacroCallToken( rExtFuncData );
 }
 
 void XclExpFmlaCompImpl::AppendOperatorTokenId( sal_uInt8 nTokenId, const XclExpOperandListRef& rxOperands, sal_uInt8 nSpaces )

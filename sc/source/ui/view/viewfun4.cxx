@@ -172,12 +172,13 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ShowAllCursors();
     }
 }
-void ScViewFunc::DoRefConversion( bool bRecord )
+void ScViewFunc::DoRefConversion()
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
     SCTAB nTabCount = pDoc->GetTableCount();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    bool bRecord = true;
+    if (!pDoc->IsUndoEnabled())
         bRecord = false;
 
     ScRange aMarkRange;
@@ -297,7 +298,7 @@ void ScViewFunc::DoRefConversion( bool bRecord )
         ErrorMessage(STR_ERR_NOREF);
 }
 //  Thesaurus - Undo ok
-void ScViewFunc::DoThesaurus( bool bRecord )
+void ScViewFunc::DoThesaurus()
 {
     SCCOL nCol;
     SCROW nRow;
@@ -311,7 +312,8 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     std::unique_ptr<ESelection> pEditSel;
     std::unique_ptr<ScEditEngineDefaulter> pThesaurusEngine;
     bool bIsEditMode = GetViewData().HasEditView(eWhich);
-    if (bRecord && !rDoc.IsUndoEnabled())
+    bool bRecord = true;
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
     if (bIsEditMode)                                            // edit mode active
     {
@@ -417,10 +419,10 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     pDocSh->PostPaintGridAll();
 }
 
-void ScViewFunc::DoHangulHanjaConversion( bool bRecord )
+void ScViewFunc::DoHangulHanjaConversion()
 {
     ScConversionParam aConvParam( SC_CONVERSION_HANGULHANJA, LANGUAGE_KOREAN, 0, true );
-    DoSheetConversion( aConvParam, bRecord );
+    DoSheetConversion( aConvParam );
 }
 
 void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bRecord )

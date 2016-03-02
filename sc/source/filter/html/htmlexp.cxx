@@ -1285,16 +1285,15 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 }
 
 void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
-        const OUString& rTargetNm, bool bFileToFile )
+        const OUString& rTargetNm )
 {
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );
     aTargetUrl.SetSmartURL( rTargetNm );
     if( INetProtocol::File == aFileUrl.GetProtocol() &&
-        ( (bFileToFile && INetProtocol::File == aTargetUrl.GetProtocol()) ||
-          (!bFileToFile && INetProtocol::File != aTargetUrl.GetProtocol() &&
-                           INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
-                           INetProtocol::Javascript >= aTargetUrl.GetProtocol()) ) )
+        ( INetProtocol::File != aTargetUrl.GetProtocol() &&
+          INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
+          INetProtocol::Javascript >= aTargetUrl.GetProtocol())  )
     {
         if( pFileNameMap )
         {
@@ -1318,30 +1317,18 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         OUString aDest = aTargetUrl.GetPartBeforeLastName();
         aDest += aFileUrl.GetName();
 
-        if( bFileToFile )
+        SfxMedium aMedium( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
+
         {
-            INetURLObject aCpyURL( aDest );
-            SvFileStream aCpy( aCpyURL.PathToFileName(), StreamMode::WRITE );
+            SvFileStream aCpy( aMedium.GetPhysicalName(), StreamMode::WRITE );
             aCpy.WriteStream( aTmp );
-
-            aCpy.Close();
-            bRet = SVSTREAM_OK == aCpy.GetError();
         }
-        else
-        {
-            SfxMedium aMedium( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
 
-            {
-                SvFileStream aCpy( aMedium.GetPhysicalName(), StreamMode::WRITE );
-                aCpy.WriteStream( aTmp );
-            }
+        // Take over
+        aMedium.Close();
+        aMedium.Commit();
 
-            // Take over
-            aMedium.Close();
-            aMedium.Commit();
-
-            bRet = 0 == aMedium.GetError();
-        }
+        bRet = 0 == aMedium.GetError();
 
         if( bRet )
         {

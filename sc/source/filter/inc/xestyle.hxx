@@ -234,10 +234,9 @@ public:
     sal_uInt16          Insert( const vcl::Font& rFont,
                             XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
-        @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const SvxFont& rFont,
-                            XclExpColorType eColorType, bool bAppFont = false );
+                            XclExpColorType eColorType );
     /** Inserts the font contained in the passed item set into the buffer, if not present.
         @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.

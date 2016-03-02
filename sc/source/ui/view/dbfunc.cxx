@@ -195,7 +195,7 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
 
 // Sort
 
-void ScDBFunc::UISort( const ScSortParam& rSortParam, bool bRecord )
+void ScDBFunc::UISort( const ScSortParam& rSortParam )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -214,11 +214,11 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, bool bRecord )
     {
         //  repeat subtotals, with new sortorder
 
-        DoSubTotals( aSubTotalParam, bRecord, &rSortParam );
+        DoSubTotals( aSubTotalParam, true/*bRecord*/, &rSortParam );
     }
     else
     {
-        Sort( rSortParam, bRecord );        // just sort
+        Sort( rSortParam );        // just sort
     }
 }
 
@@ -439,7 +439,7 @@ void ScDBFunc::HideAutoFilter()
 
 //      Re-Import
 
-bool ScDBFunc::ImportData( const ScImportParam& rParam, bool bRecord )
+bool ScDBFunc::ImportData( const ScImportParam& rParam )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     ScEditableTester aTester( pDoc, GetViewData().GetTabNo(), rParam.nCol1,rParam.nRow1,
@@ -451,7 +451,7 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam, bool bRecord )
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData().GetDocShell() );
-    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr, bRecord );
+    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr, true/*bRecord*/ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

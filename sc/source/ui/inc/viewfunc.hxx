@@ -157,8 +157,7 @@ public:
     bool            InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType );
 
-    void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet,
-                                        bool bRecord = true );
+    void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet );
     void            ApplyAttr( const SfxPoolItem& rAttrItem );
     void            ApplySelectionPattern( const ScPatternAttr& rAttr,
                                             bool bRecord = true,
@@ -171,8 +170,7 @@ public:
 
     const SfxStyleSheet*
                     GetStyleSheetFromMarked();
-    void            SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,
-                                                        bool bRecord = true );
+    void            SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet );
     void            RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
     void            UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
@@ -189,21 +187,21 @@ public:
     void            Protect( SCTAB nTab, const OUString& rPassword );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword );
 
-    void            DeleteCells( DelCellCmd eCmd, bool bRecord = true );
+    void            DeleteCells( DelCellCmd eCmd );
     bool            InsertCells( InsCellCmd eCmd, bool bRecord = true, bool bPartOfPaste = false );
     void            DeleteMulti( bool bRows, bool bRecord = true );
 
-    void            DeleteContents( InsertDeleteFlags nFlags, bool bRecord = true );
+    void            DeleteContents( InsertDeleteFlags nFlags );
 
     void SetWidthOrHeight(
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
         sal_uInt16 nSizeTwips, bool bRecord = true, bool bPaint = true, ScMarkData* pMarkData = nullptr );
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        bool bRecord = true, bool bPaint = true );
+                                        bool bRecord = true );
 
     bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr );
-    bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint = true );
+    bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow );
 
     void            ModifyCellSize( ScDirection eDir, bool bOptimal );
 
@@ -225,20 +223,20 @@ public:
     bool            TestRemoveMerge();
 
     bool            MergeCells( bool bApi, bool& rDoContents, bool bRecord = true, bool bCenter = false );
-    bool            RemoveMerge( bool bRecord = true );
+    bool            RemoveMerge();
 
-    void            FillSimple( FillDir eDir, bool bRecord = true );
+    void            FillSimple( FillDir eDir );
     void            FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
-                                double fStart, double fStep, double fMax, bool bRecord = true );
+                                double fStart, double fStep, double fMax );
     void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount, bool bRecord = true );
+                                SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
     void            FillCrossDblClick();
     void            ConvertFormulaToValue();
 
     void            TransliterateText( sal_Int32 nType );
 
     ScAutoFormatData* CreateAutoFormatData();
-    void            AutoFormat( sal_uInt16 nFormatNo, bool bRecord = true );
+    void            AutoFormat( sal_uInt16 nFormatNo );
 
     bool            SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         bool bAddUndo, bool bIsApi );
@@ -286,10 +284,10 @@ public:
 
     void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText );
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate );
-    void            DoRefConversion( bool bRecord = true );
+    void            DoRefConversion();
 
-    void            DoHangulHanjaConversion( bool bRecord = true );
-    void            DoThesaurus( bool bRecord = true );
+    void            DoHangulHanjaConversion();
+    void            DoThesaurus();
 
     /** Generic implementation of sheet conversion functions. */
     void            DoSheetConversion( const ScConversionParam& rParam, bool bRecord = true );

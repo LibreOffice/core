@@ -238,7 +238,7 @@ public:
     // write properties -------------------------------------------------------
 
     /** Must be called before reading or storing property values in the helper. */
-    void                InitializeWrite( bool bClearAllAnys = false );
+    void                InitializeWrite();
 
     /** Writes the next value to the value sequence. */
     template< typename Type >

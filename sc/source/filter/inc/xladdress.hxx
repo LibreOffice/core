@@ -38,8 +38,8 @@ struct XclAddress
 
     inline void         Set( sal_uInt16 nCol, sal_uInt32 nRow ) { mnCol = nCol; mnRow = nRow; }
 
-    void                Read( XclImpStream& rStrm, bool bCol16Bit = true );
-    void                Write( XclExpStream& rStrm, bool bCol16Bit = true ) const;
+    void                Read( XclImpStream& rStrm );
+    void                Write( XclExpStream& rStrm ) const;
 };
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclAddress& rXclPos )

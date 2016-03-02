@@ -308,8 +308,7 @@ public:
 
     static void     UpdateInputLine();
 
-    void            InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType,
-                                 bool bPaint = true );
+    void            InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType );
     void            DoneRefMode( bool bContinue = false );
     void            UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ );
     void            StopRefMode();

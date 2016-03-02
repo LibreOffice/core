@@ -331,7 +331,7 @@ public:
                                                        SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
     void            UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange );
 
-    void            SetDocumentModified( bool bIsModified = true );
+    void            SetDocumentModified();
     void            SetDrawModified( bool bIsModified = true );
 
     void            LockPaint();

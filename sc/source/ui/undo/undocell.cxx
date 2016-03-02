@@ -50,7 +50,7 @@ using std::shared_ptr;
 namespace HelperNotifyChanges
 {
     void NotifyIfChangesListeners(ScDocShell& rDocShell, const ScAddress &rPos,
-        const ScUndoEnterData::ValuesType &rOldValues, const OUString &rType = OUString("cell-change"))
+        const ScUndoEnterData::ValuesType &rOldValues)
     {
         if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))
         {
@@ -61,7 +61,7 @@ namespace HelperNotifyChanges
                 aChangeRanges.Append( ScRange(rPos.Col(), rPos.Row(), rOldValues[i].mnTab));
             }
 
-            Notify(*pModelObj, aChangeRanges, rType);
+            Notify(*pModelObj, aChangeRanges, "cell-change");
         }
     }
 }

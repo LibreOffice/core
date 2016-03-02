@@ -46,7 +46,7 @@ public:
     void      autoReplaceUses3D(bool bUse3D = true) { mbUse3D = bUse3D; }
 
     void      applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D = true);
-    void      applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, bool b3D = true);
+    void      applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList);
     void      applyAddress(const OUString& aVariable, const ScAddress& aAddress, bool b3D = true);
     void      applyString(const OUString& aVariable, const OUString& aValue);
     void      applyNumber(const OUString& aVariable, sal_Int32 aValue);

@@ -155,11 +155,11 @@ void ScCsvControl::DisableRepaint()
     ++mrData.mnNoRepaint;
 }
 
-void ScCsvControl::EnableRepaint( bool bInvalidate )
+void ScCsvControl::EnableRepaint()
 {
     OSL_ENSURE( IsNoRepaint(), "ScCsvControl::EnableRepaint - invalid call" );
     --mrData.mnNoRepaint;
-    Repaint( bInvalidate );
+    Repaint();
 }
 
 // command handling -----------------------------------------------------------

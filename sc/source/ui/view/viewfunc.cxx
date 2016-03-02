@@ -314,8 +314,7 @@ static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 
 namespace HelperNotifyChanges
 {
-    void NotifyIfChangesListeners(ScDocShell &rDocShell, ScMarkData& rMark, SCCOL nCol, SCROW nRow,
-        const OUString &rType = OUString("cell-change"))
+    void NotifyIfChangesListeners(ScDocShell &rDocShell, ScMarkData& rMark, SCCOL nCol, SCROW nRow)
     {
         if (ScModelObj *pModelObj = getMustPropagateChangesModel(rDocShell))
         {
@@ -324,7 +323,7 @@ namespace HelperNotifyChanges
             for (; itr != itrEnd; ++itr)
                 aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
 
-            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, rType);
+            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "cell-change");
         }
     }
 }
@@ -861,8 +860,7 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
 //  complete set ( ATTR_STARTINDEX, ATTR_ENDINDEX )
 
 void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
-                                  const SfxItemSet* pOldSet,
-                                  bool              bRecord )
+                                  const SfxItemSet* pOldSet )
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -951,7 +949,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         bFrame = false;
 
     if (!bFrame)
-        ApplySelectionPattern( aNewAttrs, bRecord );                // standard only
+        ApplySelectionPattern( aNewAttrs );                // standard only
     else
     {
         // if new items are default-items, overwrite the old items:
@@ -961,8 +959,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
 
         ApplyPatternLines( aNewAttrs,
                            bDefNewOuter ? pOldOuter : pNewOuter,
-                           bDefNewInner ? pOldInner : pNewInner,
-                           bRecord );
+                           bDefNewInner ? pOldInner : pNewInner );
     }
 
     pNewPool->Remove( *pNewOuter );         // release
@@ -1295,7 +1292,7 @@ const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
     return pSheet;
 }
 
-void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord )
+void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -1313,7 +1310,8 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
     SCTAB nTabCount     = rDoc.GetTableCount();
-    if (bRecord && !rDoc.IsUndoEnabled())
+    bool bRecord = true;
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScDocShellModificator aModificator( *pDocSh );
@@ -1480,7 +1478,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
 
 //  delete cells - undo OK
 
-void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
+void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 {
     ScRange aRange;
     if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
@@ -1504,14 +1502,14 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
             }
             while ( nCount > 0 )
             {
-                pDocSh->GetDocFunc().DeleteCells( aDelRange, &rMark, eCmd, bRecord, false );
+                pDocSh->GetDocFunc().DeleteCells( aDelRange, &rMark, eCmd, true/*bRecord*/, false );
                 --nCount;
             }
         }
         else
 #endif
         {
-            pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, false );
+            pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, true/*bRecord*/, false );
         }
 
         pDocSh->UpdateOle(&GetViewData());
@@ -1538,9 +1536,9 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
     else
     {
         if (eCmd == DEL_DELCOLS)
-            DeleteMulti( false, bRecord );
+            DeleteMulti( false );
         else if (eCmd == DEL_DELROWS)
-            DeleteMulti( true, bRecord );
+            DeleteMulti( true );
         else
             ErrorMessage(STR_NOMULTISELECT);
     }
@@ -1735,7 +1733,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
 //  delete contents
 
-void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
+void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 {
     ScViewData& rViewData = GetViewData();
     rViewData.SetPasteMode( SC_PASTE_NONE );
@@ -1762,7 +1760,8 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
 
-    if (bRecord && !pDoc->IsUndoEnabled())
+    bool bRecord =true;
+    if (!pDoc->IsUndoEnabled())
         bRecord = false;
 
     if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
@@ -2109,7 +2108,7 @@ void ScViewFunc::SetWidthOrHeight(
 //  column width/row height (via marked range)
 
 void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        bool bRecord, bool bPaint )
+                                        bool bRecord)
 {
     ScMarkData& rMark = GetViewData().GetMarkData();
 
@@ -2128,7 +2127,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
     std::vector<sc::ColRowSpan> aRanges =
         bWidth ? rMark.GetMarkedColSpans() : rMark.GetMarkedRowSpans();
 
-    SetWidthOrHeight(bWidth, aRanges, eMode, nSizeTwips, bRecord, bPaint);
+    SetWidthOrHeight(bWidth, aRanges, eMode, nSizeTwips, bRecord);
 
     rMark.MarkToSimple();
 }

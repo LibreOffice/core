@@ -87,9 +87,9 @@ void BinAddress::read( SequenceInputStream& rStrm )
     mnCol = rStrm.readInt32();
 }
 
-void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
+void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit )
 {
-    mnRow = bRow32Bit ? rStrm.readInt32() : rStrm.readuInt16();
+    mnRow = rStrm.readuInt16();
     mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
@@ -101,10 +101,10 @@ void BinRange::read( SequenceInputStream& rStrm )
     maLast.mnCol = rStrm.readInt32();
 }
 
-void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
+void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit )
 {
-    maFirst.mnRow = bRow32Bit ? rStrm.readInt32() : rStrm.readuInt16();
-    maLast.mnRow = bRow32Bit ? rStrm.readInt32() : rStrm.readuInt16();
+    maFirst.mnRow =  rStrm.readuInt16();
+    maLast.mnRow = rStrm.readuInt16();
     maFirst.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
     maLast.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
@@ -284,22 +284,22 @@ bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRo
 bool AddressConverter::parseOoxRange2d(
         sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
         sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
-        const OUString& rString, sal_Int32 nStart, sal_Int32 nLength )
+        const OUString& rString, sal_Int32 nStart )
 {
     ornStartColumn = ornStartRow = ornEndColumn = ornEndRow = 0;
-    if( (nStart < 0) || (nStart >= rString.getLength()) || (nLength < 2) )
+    if( (nStart < 0) || (nStart >= rString.getLength()) )
         return false;
 
-    sal_Int32 nEnd = nStart + ::std::min( nLength, rString.getLength() - nStart );
+    sal_Int32 nEnd = nStart + ( rString.getLength() - nStart );
     sal_Int32 nColonPos = rString.indexOf( ':', nStart );
     if( (nStart < nColonPos) && (nColonPos + 1 < nEnd) )
     {
         return
             parseOoxAddress2d( ornStartColumn, ornStartRow, rString, nStart, nColonPos - nStart ) &&
-            parseOoxAddress2d( ornEndColumn, ornEndRow, rString, nColonPos + 1, nLength - nColonPos - 1 );
+            parseOoxAddress2d( ornEndColumn, ornEndRow, rString, nColonPos + 1, SAL_MAX_INT32 - nColonPos - 1 );
     }
 
-    if( parseOoxAddress2d( ornStartColumn, ornStartRow, rString, nStart, nLength ) )
+    if( parseOoxAddress2d( ornStartColumn, ornStartRow, rString, nStart ) )
     {
         ornEndColumn = ornStartColumn;
         ornEndRow = ornStartRow;

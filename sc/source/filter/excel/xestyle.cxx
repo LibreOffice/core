@@ -1240,9 +1240,9 @@ sal_uInt16 XclExpFontBuffer::Insert(
 }
 
 sal_uInt16 XclExpFontBuffer::Insert(
-        const SvxFont& rFont, XclExpColorType eColorType, bool bAppFont )
+        const SvxFont& rFont, XclExpColorType eColorType )
 {
-    return Insert( XclFontData( rFont ), eColorType, bAppFont );
+    return Insert( XclFontData( rFont ), eColorType );
 }
 
 sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,

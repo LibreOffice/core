@@ -589,7 +589,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
 
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const SdrTextObj& rTextObj,
-        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+        XclStrFlags nFlags )
 {
     XclExpStringRef xString;
     if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
@@ -599,7 +599,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
         rEE.SetUpdateMode( true );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
-        xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, nMaxLen );
+        xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, EXC_STR_MAXLEN );
         rEE.SetUpdateMode( bOldUpdateMode );
         // limit formats - TODO: BIFF dependent
         if( !xString->IsEmpty() )
@@ -612,21 +612,21 @@ XclExpStringRef XclExpStringHelper::CreateString(
     {
         OSL_FAIL( "XclExpStringHelper::CreateString - textbox without para object" );
         // create BIFF dependent empty Excel string
-        xString = CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
+        xString = CreateString( rRoot, EMPTY_OUSTRING, nFlags );
     }
     return xString;
 }
 
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const EditTextObject& rEditObj,
-        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+        XclStrFlags nFlags )
 {
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
     bool bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( true );
     rEE.SetText( rEditObj );
-    xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, nMaxLen );
+    xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, EXC_STR_MAXLEN );
     rEE.SetUpdateMode( bOldUpdateMode );
     // limit formats - TODO: BIFF dependent
     if( !xString->IsEmpty() )

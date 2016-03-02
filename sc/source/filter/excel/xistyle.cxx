@@ -1400,7 +1400,7 @@ void XclImpXF::ApplyPatternToAttrList(
 
 void XclImpXF::ApplyPattern(
         SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2,
-        SCTAB nScTab, sal_uLong nForceScNumFmt )
+        SCTAB nScTab )
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
     const ScPatternAttr& rPattern = CreatePattern();
@@ -1412,13 +1412,6 @@ void XclImpXF::ApplyPattern(
     if( HasUsedFlags() )
         rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, rPattern );
 
-    // #108770# apply special number format
-    if( nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
-    {
-        ScPatternAttr aPattern( GetDoc().GetPool() );
-        GetNumFmtBuffer().FillScFmtToItemSet( aPattern.GetItemSet(), nForceScNumFmt );
-        rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, aPattern );
-    }
 }
 
 /*static*/ void XclImpXF::ApplyPatternForBiff2CellFormat( const XclImpRoot& rRoot,

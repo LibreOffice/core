@@ -3339,9 +3339,9 @@ void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)
         pDoc->SetRangeOverflowType( nType );
 }
 
-void ScXMLImport::ProgressBarIncrement(bool bEditCell, sal_Int32 nInc)
+void ScXMLImport::ProgressBarIncrement(bool bEditCell)
 {
-    nProgressCount += nInc;
+    nProgressCount++;
     if (bEditCell || nProgressCount > 100)
     {
         GetProgressBarHelper()->Increment(nProgressCount);

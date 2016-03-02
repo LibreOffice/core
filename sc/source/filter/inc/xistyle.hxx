@@ -403,8 +403,7 @@ public:
     void                ApplyPattern(
                             SCCOL nScCol1, SCROW nScRow1,
                             SCCOL nScCol2, SCROW nScRow2,
-                            SCTAB nScTab,
-                            sal_uLong nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
+                            SCTAB nScTab );
 
     /** Converts formatting information from BIFF2 cell record data directly. */
     static void         ApplyPatternForBiff2CellFormat(

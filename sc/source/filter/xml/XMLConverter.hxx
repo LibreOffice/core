@@ -54,12 +54,10 @@ public:
 // EXPORT: GeneralFunction / ScSubTotalFunc
     static void         GetStringFromFunction(
                             OUString& rString,
-                            const css::sheet::GeneralFunction eFunction,
-                            bool bAppendStr = false );
+                            const css::sheet::GeneralFunction eFunction );
     static void         GetStringFromFunction(
                             OUString& rString,
-                            const ScSubTotalFunc eFunction,
-                            bool bAppendStr = false );
+                            const ScSubTotalFunc eFunction );
 
 // IMPORT: DataPilotFieldOrientation
     static css::sheet::DataPilotFieldOrientation
@@ -69,8 +67,7 @@ public:
 // EXPORT: DataPilotFieldOrientation
     static void         GetStringFromOrientation(
                             OUString& rString,
-                            const css::sheet::DataPilotFieldOrientation eOrientation,
-                            bool bAppendStr = false );
+                            const css::sheet::DataPilotFieldOrientation eOrientation );
 
 // IMPORT: Detective
     static ScDetectiveObjType
@@ -83,12 +80,10 @@ public:
 // EXPORT: Detective
     static void         GetStringFromDetObjType(
                             OUString& rString,
-                            const ScDetectiveObjType eObjType,
-                            bool bAppendStr = false );
+                            const ScDetectiveObjType eObjType );
     static void         GetStringFromDetOpType(
                             OUString& rString,
-                            const ScDetOpType eOpType,
-                            bool bAppendStr = false );
+                            const ScDetOpType eOpType );
 
 // IMPORT: Formulas
     static void         ConvertCellRangeAddress(

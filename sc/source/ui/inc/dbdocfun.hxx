@@ -62,8 +62,7 @@ public:
 
     bool DoImport( SCTAB nTab, const ScImportParam& rParam,
                    const svx::ODataAccessDescriptor* pDescriptor,      // used for selection an existing ResultSet
-                   bool bRecord,
-                   bool bAddrInsert = false );
+                   bool bRecord );
 
     bool DoImportUno( const ScAddress& rPos,
                       const css::uno::Sequence<css::beans::PropertyValue>& aArgs );

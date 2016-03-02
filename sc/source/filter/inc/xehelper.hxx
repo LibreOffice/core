@@ -297,24 +297,20 @@ public:
                 current BIFF version contained in the passed XclExpRoot object.
         @param rTextObj  The text box object.
         @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string.
         @return  The new string object (shared pointer). */
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             const SdrTextObj& rTextObj,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+                            XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Creates a new formatted string from a edit text string.
         @param rEditObj  The edittext object.
         @param nFlags  Modifiers for string export.
-        @param nMaxLen The maximum number of characters to store in this string.
         @return  The new string object. */
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             const EditTextObject& rEditObj,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+                            XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Returns the script type first text portion different to WEAK, or the system
         default script type, if there is only weak script in the passed string. */

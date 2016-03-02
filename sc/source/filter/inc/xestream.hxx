@@ -129,8 +129,7 @@ public:
     /** Writes string length field and OString buffer. */
     void                WriteByteString(
                             const OString& rString,
-                            sal_uInt16 nMaxLen = 0x00FF,
-                            bool b16BitCount = false );
+                            sal_uInt16 nMaxLen = 0x00FF );
 
     /** Writes 8-bit character buffer. */
     void                WriteCharBuffer( const ScfUInt8Vec& rBuffer );

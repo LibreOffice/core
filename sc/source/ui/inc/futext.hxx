@@ -50,7 +50,7 @@ public:
 
     void    SetInEditMode( SdrObject* pObj = nullptr, const Point* pMousePixel = nullptr,
                             bool bCursorToEnd = false, const KeyEvent* pInitialKey = nullptr );
-    void    StopEditMode(bool bTextDirection = false);
+    void    StopEditMode();
 
     // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;

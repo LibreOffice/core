@@ -181,7 +181,7 @@ public:
         Decryption is reenabled automatically, if a new record is started using
         the function startNextRecord().
      */
-    void                enableDecoder( bool bEnable = true );
+    void                enableDecoder();
 
     // stream/record state and info -------------------------------------------
 

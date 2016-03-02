@@ -207,9 +207,9 @@ void BiffInputStream::setDecoder( const BiffDecoderRef& rxDecoder )
     maRecBuffer.setDecoder( rxDecoder );
 }
 
-void BiffInputStream::enableDecoder( bool bEnable )
+void BiffInputStream::enableDecoder()
 {
-    maRecBuffer.enableDecoder( bEnable );
+    maRecBuffer.enableDecoder( true );
 }
 
 // stream/record state and info -----------------------------------------------

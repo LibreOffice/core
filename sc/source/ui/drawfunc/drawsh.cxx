@@ -374,7 +374,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
     }
 }
 
-void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
+void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
     bool                bHasMarked  = pView->AreObjectsMarked();
@@ -396,8 +396,6 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
             pObj,
             bHasMarked));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
-    if ( nTabPage != 0xffff )
-        pDlg->SetCurPageId( nTabPage );
 
     if ( pDlg->Execute() == RET_OK )
     {
@@ -411,7 +409,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     }
 }
 
-void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
+void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
     bool        bHasMarked  = pView->AreObjectsMarked();
@@ -425,9 +423,6 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
         pViewData->GetDialogParent(), &aNewAttr,
         pViewData->GetDocument()->GetDrawLayer(), true));
 
-    if ( nTabPage != 0xffff )
-        pDlg->SetCurPageId( nTabPage );
-
     if ( pDlg->Execute() == RET_OK )
     {
         if( bHasMarked )
@@ -440,7 +435,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     }
 }
 
-void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage */ )
+void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
     bool        bHasMarked  = pView->AreObjectsMarked();

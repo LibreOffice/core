@@ -679,7 +679,7 @@ void ScFormulaReferenceHelper::ViewShellChanged()
 
     EnableSpreadsheets();
 }
-void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
+void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag)
 {
     ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
     while( pDocShell )
@@ -701,8 +701,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
                         if(pParent)
                         {
                             pParent->EnableInput(bFlag,false);
-                            if(bChildren)
-                                pViewSh->EnableRefInput(bFlag);
+                            pViewSh->EnableRefInput(bFlag);
                         }
                     }
                 }

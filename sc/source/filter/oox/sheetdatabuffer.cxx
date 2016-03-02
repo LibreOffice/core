@@ -727,12 +727,12 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     }
 }
 
-void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId )
+void SheetDataBuffer::setCellFormat( const CellModel& rModel )
 {
-    if( (rModel.mnXfId >= 0) || (nNumFmtId >= 0) )
+    if( rModel.mnXfId >= 0 )
     {
-        ::std::vector< CellRangeAddress >::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
-        ::std::vector< CellRangeAddress >::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
+        ::std::vector< CellRangeAddress >::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rbegin();
+        ::std::vector< CellRangeAddress >::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rend();
         /* The xlsx sheet data contains row wise information.
          * It is sufficient to check if the row range size is one
          */
@@ -746,13 +746,13 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
         }
         else
         {
-            maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, nNumFmtId ) ].push_back(
+            maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, -1 ) ].push_back(
                               CellRangeAddress( rModel.maCellAddr.Tab(), rModel.maCellAddr.Col(), rModel.maCellAddr.Row(),
                               rModel.maCellAddr.Col(), rModel.maCellAddr.Row() ) );
         }
 
-        aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
-        aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
+        aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rbegin();
+        aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rend();
         ::std::vector< CellRangeAddress >::reverse_iterator aItM = aIt+1;
         while( aItM != aItEnd )
         {
@@ -764,7 +764,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
                         aIt->EndColumn == aItM->EndColumn)
                 {
                     aItM->EndRow = aIt->EndRow;
-                    maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].pop_back();
+                    maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].pop_back();
                     break;
                 }
                 else if( aIt->StartRow > aItM->EndRow + 1 )
