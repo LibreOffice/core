@@ -7,27 +7,33 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+xmlsec_patches :=
+xmlsec_patches += xmlsec1-configure.patch
+xmlsec_patches += xmlsec1-configure-libxml-libxslt.patch
+xmlsec_patches += xmlsec1-oldlibtool.patch
+xmlsec_patches += xmlsec1-nssdisablecallbacks.patch
+xmlsec_patches += xmlsec1-nssmangleciphers.patch
+xmlsec_patches += xmlsec1-noverify.patch
+xmlsec_patches += xmlsec1-mingw-keymgr-mscrypto.patch
+xmlsec_patches += xmlsec1-vc.patch
+xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch
+xmlsec_patches += xmlsec1-android.patch
+# Partial backport of <https://github.com/lsh123/xmlsec/commit/6a4968bc33f83aaf61efc0a80333350ce9c372f5>.
+xmlsec_patches += xmlsec1-1.2.14-ansi.patch
+xmlsec_patches += xmlsec1-customkeymanage.patch
+xmlsec_patches += xmlsec1-update-config.guess.patch.1
+# Upstreamed as <https://github.com/lsh123/xmlsec/commit/7069e2b0ab49679008abedd6d223fb95538b0684>.
+xmlsec_patches += xmlsec1-ooxml.patch.1
+# Partial backport of <https://github.com/lsh123/xmlsec/commit/a17e8da3a8f56348d71d325aa8d3e6366f13b512>.
+xmlsec_patches += xmlsec1-nss-sha256.patch.1
+xmlsec_patches += xmlsec1-mscrypto-sha256.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL),,libxmlsec))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
-	external/libxmlsec/xmlsec1-configure.patch \
-	external/libxmlsec/xmlsec1-configure-libxml-libxslt.patch \
-	external/libxmlsec/xmlsec1-oldlibtool.patch \
-	external/libxmlsec/xmlsec1-nssdisablecallbacks.patch \
-	external/libxmlsec/xmlsec1-nssmangleciphers.patch \
-	external/libxmlsec/xmlsec1-noverify.patch \
-	external/libxmlsec/xmlsec1-mingw-keymgr-mscrypto.patch \
-	external/libxmlsec/xmlsec1-vc.patch \
-	external/libxmlsec/xmlsec1-1.2.14_fix_extern_c.patch \
-	external/libxmlsec/xmlsec1-android.patch \
-	external/libxmlsec/xmlsec1-1.2.14-ansi.patch \
-	external/libxmlsec/xmlsec1-customkeymanage.patch \
-	external/libxmlsec/xmlsec1-update-config.guess.patch.1 \
-	external/libxmlsec/xmlsec1-ooxml.patch.1 \
-	external/libxmlsec/xmlsec1-nss-sha256.patch.1 \
-	external/libxmlsec/xmlsec1-mscrypto-sha256.patch.1 \
+	$(foreach patch,$(xmlsec_patches),external/libxmlsec/$(patch)) \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/mscrypto/akmngr.h,external/libxmlsec/include/akmngr_mscrypto.h))
