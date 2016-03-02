@@ -19,8 +19,8 @@
 #ifndef INCLUDED_TOOLS_UNQIDX_HXX
 #define INCLUDED_TOOLS_UNQIDX_HXX
 
+#include <sal/types.h>
 #include <tools/toolsdllapi.h>
-#include <limits>
 #include <map>
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC UniqueIndexImpl
@@ -28,7 +28,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC UniqueIndexImpl
 public:
     typedef sal_uInt32 Index;
     enum {
-        IndexNotFound = std::numeric_limits<Index>::max()
+        IndexNotFound = SAL_MAX_UINT32
     };
 
 private:
