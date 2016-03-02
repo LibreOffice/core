@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_f7ebcbae",
+        "filename": "filter/source/xsltfilter/LibXSLTTransformer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:35:15Z",
+      "side": 1,
+      "message": "This does not seem consistent. In the other files you added a new DEBUG variable, and here it is #if 0.",
+      "revId": "519288ef39c615a368e7f050b98420f2c22dda75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
