@@ -528,6 +528,7 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 
     gtk_button_set_relief(GTK_BUTTON(mpCloseButton), GTK_RELIEF_NONE);
     gtk_button_set_focus_on_click(GTK_BUTTON(mpCloseButton), false);
+    gtk_widget_set_can_focus(mpCloseButton, false);
 
     GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(mpCloseButton));
 
