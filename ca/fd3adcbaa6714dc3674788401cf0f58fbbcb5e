@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Michael Stahl <mstahl@redhat.com>
+Code-Review+2: Jan-Marek Glogowski <glogow@fbihome.de>
+Submitted-by: Jan-Marek Glogowski <glogow@fbihome.de>
+Submitted-at: Wed, 02 Mar 2016 16:19:27 +0000
+Reviewed-on: https://gerrit.libreoffice.org/21173
+Project: core
+Branch: refs/heads/master
