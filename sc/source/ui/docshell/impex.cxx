@@ -2057,7 +2057,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             case MM_REFERENCE :
                             {   // diff expression with 'I' M$-extension
                                 ScAddress aPos;
-                                pFCell->GetMatrixOrigin( aPos );
+                                (void)pFCell->GetMatrixOrigin( aPos );
                                 aPrefix = ";I;R";
                                 aPrefix += OUString::number( aPos.Row() - nStartRow + 1 );
                                 aPrefix += ";C";
