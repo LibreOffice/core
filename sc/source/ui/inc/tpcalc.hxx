@@ -60,8 +60,9 @@ private:
     VclPtr<CheckBox>       m_pBtnCase;
     VclPtr<CheckBox>       m_pBtnCalc;
     VclPtr<CheckBox>       m_pBtnMatch;
-    VclPtr<CheckBox>       m_pBtnWildcards;
-    VclPtr<CheckBox>       m_pBtnRegex;
+    VclPtr<RadioButton>    m_pBtnWildcards;
+    VclPtr<RadioButton>    m_pBtnRegex;
+    VclPtr<RadioButton>    m_pBtnLiteral;
     VclPtr<CheckBox>       m_pBtnLookUp;
     VclPtr<CheckBox>       m_pBtnGeneralPrec;
 
