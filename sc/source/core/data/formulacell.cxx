@@ -2712,10 +2712,10 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 {
 #if OSL_DEBUG_LEVEL > 0
                     OStringBuffer aMsg("broken Matrix, no MatFormula at origin, Pos: ");
-                    OUString aTmp(aPos.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument));
+                    OUString aTmp(aPos.Format(SCA_COL_VALID | SCA_ROW_VALID, pDocument));
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     aMsg.append(", MatOrg: ");
-                    aTmp = aOrg.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument);
+                    aTmp = aOrg.Format(SCA_COL_VALID | SCA_ROW_VALID, pDocument);
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     OSL_FAIL(aMsg.getStr());
 #endif
@@ -2743,10 +2743,10 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             else
             {
                 OStringBuffer aMsg( "broken Matrix, Pos: " );
-                OUString aTmp(aPos.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument));
+                OUString aTmp(aPos.Format(SCA_COL_VALID | SCA_ROW_VALID, pDocument));
                 aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
                 aMsg.append(", MatOrg: ");
-                aTmp = aOrg.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument);
+                aTmp = aOrg.Format(SCA_COL_VALID | SCA_ROW_VALID, pDocument);
                 aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
                 aMsg.append(", MatCols: ");
                 aMsg.append(static_cast<sal_Int32>( nC ));

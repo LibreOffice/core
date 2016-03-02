@@ -361,7 +361,7 @@ handle_r1c1:
                 if ( (nFlags & SCA_TAB2_3D) == 0 )
                     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 
-                if ( ( nFlags & ( SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2 ) ) == 0 )
+                if ( ( nFlags & ( SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID ) ) == 0 )
                 {
                     // #i73766# if a single ref was parsed, set the same "abs" flags for ref2,
                     // so Format doesn't output a double ref because of different flags.

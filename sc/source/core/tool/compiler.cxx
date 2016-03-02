@@ -2863,13 +2863,13 @@ bool ScCompiler::IsDoubleReference( const OUString& rName )
         aRef.Ref1.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
         aRef.Ref1.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
         aRef.Ref1.SetTabRel( (nFlags & SCA_TAB_ABSOLUTE) == 0 );
-        if ( !(nFlags & SCA_VALID_TAB) )
+        if ( !(nFlags & SCA_TAB_VALID) )
             aRef.Ref1.SetTabDeleted( true );        // #REF!
         aRef.Ref1.SetFlag3D( ( nFlags & SCA_TAB_3D ) != 0 );
         aRef.Ref2.SetColRel( (nFlags & SCA_COL2_ABSOLUTE) == 0 );
         aRef.Ref2.SetRowRel( (nFlags & SCA_ROW2_ABSOLUTE) == 0 );
         aRef.Ref2.SetTabRel( (nFlags & SCA_TAB2_ABSOLUTE) == 0 );
-        if ( !(nFlags & SCA_VALID_TAB2) )
+        if ( !(nFlags & SCA_TAB2_VALID) )
             aRef.Ref2.SetTabDeleted( true );        // #REF!
         aRef.Ref2.SetFlag3D( ( nFlags & SCA_TAB2_3D ) != 0 );
         aRef.SetRange(aRange, aPos);
@@ -2898,7 +2898,7 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
     sal_uInt16 nFlags = aAddr.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
     // Something must be valid in order to recognize Sheet1.blah or blah.a1
     // as a (wrong) reference.
-    if( nFlags & ( SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB ) )
+    if( nFlags & ( SCA_COL_VALID|SCA_ROW_VALID|SCA_TAB_VALID ) )
     {
         ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
@@ -2909,11 +2909,11 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
         // the reference is really invalid
         if( !( nFlags & SCA_VALID ) )
         {
-            if( !( nFlags & SCA_VALID_COL ) )
+            if( !( nFlags & SCA_COL_VALID ) )
                 aRef.SetColDeleted(true);
-            if( !( nFlags & SCA_VALID_ROW ) )
+            if( !( nFlags & SCA_ROW_VALID ) )
                 aRef.SetRowDeleted(true);
-            if( !( nFlags & SCA_VALID_TAB ) )
+            if( !( nFlags & SCA_TAB_VALID ) )
                 aRef.SetTabDeleted(true);
             nFlags |= SCA_VALID;
         }
@@ -3742,7 +3742,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
 
                 bool bChanged = false;
                 bool bOk = true;
-                sal_uInt16 nMask = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW;
+                sal_uInt16 nMask = SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID;
                 for ( int j=0; j<nRefs; j++ )
                 {
                     sal_Int32 nTmp = 0;

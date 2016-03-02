@@ -2151,7 +2151,7 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType == "ADDRESS" )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
-                sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
+                sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ADDR_ABS) : (SCA_ADDR_ABS_3D);
                 OUString aStr(aCellPos.Format(nFlags, pDok, pDok->GetAddressConvention()));
                 PushString(aStr);
             }
@@ -2188,10 +2188,10 @@ void ScInterpreter::ScCell()
                 OUStringBuffer aFuncResult;
                 OUString aCellStr =
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
-                    (SCA_COL_ABSOLUTE|SCA_VALID_COL), nullptr, pDok->GetAddressConvention() );
+                    (SCA_COL_ABSOLUTE|SCA_COL_VALID), nullptr, pDok->GetAddressConvention() );
                 aFuncResult.append(aCellStr);
                 aFuncResult.append(':');
-                aCellStr = aCellPos.Format((SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
+                aCellStr = aCellPos.Format((SCA_COL_ABSOLUTE|SCA_COL_VALID|SCA_ROW_ABSOLUTE|SCA_ROW_VALID),
                                  nullptr, pDok->GetAddressConvention());
                 aFuncResult.append(aCellStr);
                 PushString( aFuncResult.makeStringAndClear() );
@@ -7256,7 +7256,7 @@ void ScInterpreter::ScAddressFunc()
             case 4 : nFlags = 0; break; // both relative
         }
     }
-    nFlags |= SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
+    nFlags |= SCA_VALID | SCA_ROW_VALID | SCA_COL_VALID;
 
     SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
     SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());

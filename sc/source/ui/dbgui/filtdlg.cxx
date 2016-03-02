@@ -443,7 +443,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pEdCopyArea );
-        OUString aRefStr(rRef.aStart.Format(SCA_ABS_3D, pDocP, pDocP->GetAddressConvention()));
+        OUString aRefStr(rRef.aStart.Format(SCA_ADDR_ABS_3D, pDocP, pDocP->GetAddressConvention()));
         pEdCopyArea->SetRefString( aRefStr );
     }
 }

@@ -143,7 +143,7 @@ void ScDocument::UpdateAllCharts()
                             {
                                 ScRangeListRef aRanges = pChartObj->GetRangeList();
                                 OUString sRangeStr;
-                                aRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                                aRanges->Format( sRangeStr, SCA_RANGE_ABS_3D, this, GetAddressConvention() );
 
                                 chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                                 bool bHasCategories = pChartObj->HasRowHeaders();
@@ -281,7 +281,7 @@ void ScDocument::SetChartRanges( const OUString& rChartName, const ::std::vector
         {
             ScRangeList aScRangeList( rRangesVector[nN] );
             OUString sRangeStr;
-            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+            aScRangeList.Format( sRangeStr, SCA_RANGE_ABS_3D, this, GetAddressConvention() );
             aRangeStrings[nN]=sRangeStr;
         }
         ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
@@ -407,7 +407,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                     }
 
                     OUString sRangeStr;
-                    aNewRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                    aNewRanges->Format( sRangeStr, SCA_RANGE_ABS_3D, this, GetAddressConvention() );
 
                     lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
@@ -603,7 +603,7 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
                     lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
                     OUString sRangeStr;
-                    rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                    rNewRangeListRef->Format( sRangeStr, SCA_RANGE_ABS_3D, this, GetAddressConvention() );
 
                     lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 

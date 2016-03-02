@@ -538,9 +538,9 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
         sal_uInt16 n = 0;
         if (mpLastEdit && mpLastEdit != mpEdRange)
-            n = SCR_ABS_3D;
+            n = SCA_RANGE_ABS_3D;
         else
-            n = SCR_ABS;
+            n = SCA_RANGE_ABS;
 
         OUString aRefStr(rRef.Format(n, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));

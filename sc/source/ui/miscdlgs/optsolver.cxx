@@ -453,7 +453,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         m_pRbMax->Check();
         OUString aCursorStr;
         if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
-            aCursorStr = rCursorPos.Format(SCA_ABS, nullptr, mrDoc.GetAddressConvention());
+            aCursorStr = rCursorPos.Format(SCA_ADDR_ABS, nullptr, mrDoc.GetAddressConvention());
         m_pEdObjectiveCell->SetRefString( aCursorStr );
         if ( nImplCount > 0 )
             maEngine = maImplNames[0];  // use first implementation
@@ -562,11 +562,11 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aStr = aName;
         else                                                        // format cell/range reference
         {
-            sal_uInt16 nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
+            sal_uInt16 nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ADDR_ABS : SCA_ADDR_ABS_3D;
             if ( bSingle )
                 aStr = aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention());
             else
-                aStr = rRef.Format(nFmt | SCR_ABS, pDocP, pDocP->GetAddressConvention());
+                aStr = rRef.Format(nFmt | SCA_RANGE_ABS, pDocP, pDocP->GetAddressConvention());
         }
 
         // variable cells can be several ranges, so only the selection is replaced

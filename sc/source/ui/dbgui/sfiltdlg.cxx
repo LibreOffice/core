@@ -180,7 +180,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         ScRange aAdvSource;
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
         {
-            OUString aRefStr(aAdvSource.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+            OUString aRefStr(aAdvSource.Format(SCA_RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
             pEdFilterArea->SetRefString( aRefStr );
         }
     }
@@ -237,9 +237,9 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( pRefInputEdit == pEdCopyArea)
-            aRefStr = rRef.aStart.Format(SCA_ABS_3D, pDocP, eConv);
+            aRefStr = rRef.aStart.Format(SCA_ADDR_ABS_3D, pDocP, eConv);
         else if ( pRefInputEdit == pEdFilterArea)
-            aRefStr = rRef.Format(SCR_ABS_3D, pDocP, eConv);
+            aRefStr = rRef.Format(SCA_RANGE_ABS_3D, pDocP, eConv);
 
         pRefInputEdit->SetRefString( aRefStr );
     }

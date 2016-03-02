@@ -109,7 +109,7 @@ void ScSolverDlg::Init()
     m_pEdVariableCell->SetLoseFocusHdl ( aLink );
     m_pRBVariableCell->SetLoseFocusHdl ( aLink );
 
-    OUString aStr(theFormulaCell.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+    OUString aStr(theFormulaCell.Format(SCA_ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
 
     m_pEdFormulaCell->SetText( aStr );
     m_pEdFormulaCell->GrabFocus();
@@ -145,8 +145,8 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         ScAddress   aAdr = rRef.aStart;
         sal_uInt16      nFmt = ( aAdr.Tab() == nCurTab )
-                                ? SCA_ABS
-                                : SCA_ABS_3D;
+                                ? SCA_ADDR_ABS
+                                : SCA_ADDR_ABS_3D;
 
         OUString aStr(aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention()));
         pEdActive->SetRefString( aStr );

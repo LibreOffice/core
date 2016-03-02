@@ -2616,7 +2616,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_ABSNAME:
                     {
                         OUString sRet;
-                        aRanges.Format(sRet, SCR_ABS_3D, &pDocShell->GetDocument());
+                        aRanges.Format(sRet, SCA_RANGE_ABS_3D, &pDocShell->GetDocument());
                         rAny <<= sRet;
                     }
             }

@@ -146,7 +146,7 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     if (rRange.aStart != rRange.aEnd)
         RefInputStart(mpActiveEdit);
 
-    OUString aStr(rRange.aStart.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+    OUString aStr(rRange.aStart.Format(SCA_ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
     mpActiveEdit->SetRefString(aStr);
 
     RefEditModified();
@@ -308,7 +308,7 @@ void ScXMLSourceDlg::TreeItemSelected()
     const ScAddress& rPos = pUserData->maLinkedPos;
     if (rPos.IsValid())
     {
-        OUString aStr(rPos.Format(SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
+        OUString aStr(rPos.Format(SCA_ADDR_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
         mpRefEdit->SetRefString(aStr);
     }
     else

@@ -894,7 +894,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if( ! rReq.IsAPI() )
                             {
                                 ScAddress aAdr( nFillCol, nFillRow, 0 );
-                                OUString  aAdrStr(aAdr.Format(SCR_ABS, pDoc, pDoc->GetAddressConvention()));
+                                OUString  aAdrStr(aAdr.Format(SCA_RANGE_ABS, pDoc, pDoc->GetAddressConvention()));
 
                                 rReq.AppendItem( SfxStringItem( FID_FILL_AUTO, aAdrStr ) );
                                 rReq.Done();

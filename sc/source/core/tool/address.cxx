@@ -234,9 +234,9 @@ static bool lcl_ScRange_External_TabSpan(
 
     SCsTAB nSpan = pRefMgr->getCachedTabSpan( nFileId, rStartTabName, rEndTabName);
     if (nSpan == -1)
-        rFlags &= ~(SCA_VALID_TAB | SCA_VALID_TAB2);
+        rFlags &= ~(SCA_TAB_VALID | SCA_TAB2_VALID);
     else if (nSpan == 0)
-        rFlags &= ~SCA_VALID_TAB2;
+        rFlags &= ~SCA_TAB2_VALID;
     else if (nSpan >= 1)
         rRange.aEnd.SetTab( rRange.aStart.Tab() + nSpan - 1);
     else // (nSpan < -1)
@@ -535,7 +535,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         return nullptr;        // 3D
     if( p != startTabs )
     {
-        nFlags |= SCA_VALID_TAB | SCA_TAB_3D | SCA_TAB_ABSOLUTE;
+        nFlags |= SCA_TAB_VALID | SCA_TAB_3D | SCA_TAB_ABSOLUTE;
         if( *p == ':' ) // 3d ref
         {
             p = lcl_XL_ParseSheetRef( p+1, rEndTabName, false, pMsoxlQuoteStop);
@@ -544,13 +544,13 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                 nFlags = nSaveFlags;
                 return start; // invalid tab
             }
-            nFlags |= SCA_VALID_TAB2 | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
+            nFlags |= SCA_TAB2_VALID | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
         }
         else
         {
             // If only one sheet is given, the full reference is still valid,
             // only the second 3D flag is not set.
-            nFlags |= SCA_VALID_TAB2 | SCA_TAB2_ABSOLUTE;
+            nFlags |= SCA_TAB2_VALID | SCA_TAB2_ABSOLUTE;
             aEnd.SetTab( aStart.Tab() );
         }
 
@@ -564,7 +564,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     }
     else
     {
-        nFlags |= SCA_VALID_TAB | SCA_VALID_TAB2;
+        nFlags |= SCA_TAB_VALID | SCA_TAB2_VALID;
         // Use the current tab, it needs to be passed in. : aEnd.SetTab( .. );
     }
 
@@ -586,7 +586,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         if (!pDoc->GetTable(rStartTabName, nTab))
         {
             // invalid table name.
-            nFlags &= ~SCA_VALID_TAB;
+            nFlags &= ~SCA_TAB_VALID;
             nTab = -1;
         }
 
@@ -598,7 +598,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
             if (!pDoc->GetTable(rEndTabName, nTab))
             {
                 // invalid table name.
-                nFlags &= ~SCA_VALID_TAB2;
+                nFlags &= ~SCA_TAB2_VALID;
                 nTab = -1;
             }
 
@@ -648,7 +648,7 @@ static const sal_Unicode* lcl_r1c1_get_col( const sal_Unicode* p,
     if( n < 0 || n >= MAXCOLCOUNT )
         return nullptr;
     pAddr->SetCol( static_cast<SCCOL>( n ) );
-    *nFlags |= SCA_VALID_COL;
+    *nFlags |= SCA_COL_VALID;
 
     return pEnd;
 }
@@ -694,7 +694,7 @@ static inline const sal_Unicode* lcl_r1c1_get_row(
     if( n < 0 || n >= MAXROWCOUNT )
         return nullptr;
     pAddr->SetRow( static_cast<SCROW>( n ) );
-    *nFlags |= SCA_VALID_ROW;
+    *nFlags |= SCA_ROW_VALID;
 
     return pEnd;
 }
@@ -708,9 +708,9 @@ static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 {
     const sal_Unicode* pTmp = nullptr;
     OUString aExternDocName, aStartTabName, aEndTabName;
-    sal_uInt16 nFlags = SCA_VALID | SCA_VALID_TAB;
+    sal_uInt16 nFlags = SCA_VALID | SCA_TAB_VALID;
     // Keep in mind that nFlags2 gets left-shifted by 4 bits before being merged.
-    sal_uInt16 nFlags2 = SCA_VALID_TAB;
+    sal_uInt16 nFlags2 = SCA_TAB_VALID;
 
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
             aEndTabName, nFlags, bOnlyAcceptSingle );
@@ -747,13 +747,13 @@ static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             if (p && p[0] != 0)
             {
                 // any trailing invalid character must invalidate the whole address.
-                nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                            SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+                nFlags &= ~(SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID |
+                            SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID);
                 return nFlags;
             }
 
             nFlags |=
-                SCA_VALID_COL | SCA_VALID_COL2 |
+                SCA_COL_VALID | SCA_COL2_VALID |
                 SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE;
             r.aStart.SetCol( 0 );
             r.aEnd.SetCol( MAXCOL );
@@ -776,7 +776,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             if (p && p[0] != 0)
             {
                 // any trailing invalid character must invalidate the whole address.
-                nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+                nFlags &= ~(SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID);
                 return nFlags;
             }
 
@@ -789,8 +789,8 @@ static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         if (p && p[0] != 0)
         {
             // any trailing invalid character must invalidate the whole range.
-            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                        SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+            nFlags &= ~(SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID |
+                        SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID);
             return nFlags;
         }
 
@@ -817,13 +817,13 @@ static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         if (p && p[0] != 0)
         {
             // any trailing invalid character must invalidate the whole address.
-            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                        SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+            nFlags &= ~(SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID |
+                        SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID);
             return nFlags;
         }
 
         nFlags |=
-            SCA_VALID_ROW | SCA_VALID_ROW2 |
+            SCA_ROW_VALID | SCA_ROW2_VALID |
             SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE;
         r.aStart.SetRow( 0 );
         r.aEnd.SetRow( MAXROW );
@@ -855,7 +855,7 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
     if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
         return nullptr;
 
-    *nFlags |= SCA_VALID_COL;
+    *nFlags |= SCA_COL_VALID;
     pAddr->SetCol( nCol );
 
     return p;
@@ -878,7 +878,7 @@ static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
     if( nullptr == pEnd || p == pEnd || n < 0 || n > MAXROW )
         return nullptr;
 
-    *nFlags |= SCA_VALID_ROW;
+    *nFlags |= SCA_ROW_VALID;
     pAddr->SetRow( static_cast<SCROW>(n) );
 
     return pEnd;
@@ -887,8 +887,8 @@ static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
 /// B:B or 2:2, but not B:2 or 2:B or B2:B or B:B2 or ...
 static bool isValidSingleton( sal_uInt16 nFlags, sal_uInt16 nFlags2 )
 {
-    bool bCols = (nFlags & SCA_VALID_COL) && ((nFlags & SCA_VALID_COL2) || (nFlags2 & SCA_VALID_COL));
-    bool bRows = (nFlags & SCA_VALID_ROW) && ((nFlags & SCA_VALID_ROW2) || (nFlags2 & SCA_VALID_ROW));
+    bool bCols = (nFlags & SCA_COL_VALID) && ((nFlags & SCA_COL2_VALID) || (nFlags2 & SCA_COL_VALID));
+    bool bRows = (nFlags & SCA_ROW_VALID) && ((nFlags & SCA_ROW2_VALID) || (nFlags2 & SCA_ROW_VALID));
     return (bCols && !bRows) || (!bCols && bRows);
 }
 
@@ -901,7 +901,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 {
     const sal_Unicode* tmp1, *tmp2;
     OUString aExternDocName, aStartTabName, aEndTabName; // for external link table
-    sal_uInt16 nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB;
+    sal_uInt16 nFlags = SCA_VALID | SCA_TAB_VALID, nFlags2 = SCA_TAB_VALID;
 
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
             aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks );
@@ -932,7 +932,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 
         r.aStart.SetCol( 0 ); r.aEnd.SetCol( MAXCOL );
         nFlags |=
-            SCA_VALID_COL | SCA_VALID_COL2 |
+            SCA_COL_VALID | SCA_COL2_VALID |
             SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE;
         nFlags |= (nFlags2 << 4);
         return nFlags;
@@ -955,7 +955,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 
         r.aStart.SetRow( 0 ); r.aEnd.SetRow( MAXROW );
         nFlags |=
-            SCA_VALID_ROW | SCA_VALID_ROW2 |
+            SCA_ROW_VALID | SCA_ROW2_VALID |
             SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE;
         nFlags |= (nFlags2 << 4);
         return nFlags;
@@ -972,7 +972,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
         else
         {
             // any trailing invalid character must invalidate the address.
-            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+            nFlags &= ~(SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID);
             return nFlags;
         }
     }
@@ -991,8 +991,8 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
         }
         else
             nFlags &= ~(SCA_VALID |
-                    SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                    SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+                    SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID |
+                    SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID);
         return nFlags;
     }
 
@@ -1008,7 +1008,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
             if( !aEndTabName.isEmpty() && pDoc->GetTable( aEndTabName, nTab ) )
             {
                 r.aEnd.SetTab( nTab );
-                nFlags |= SCA_VALID_TAB2 | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
+                nFlags |= SCA_TAB2_VALID | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
             }
             if (*p == '!' || *p == ':')
                 p = lcl_eatWhiteSpace( p+1 );
@@ -1025,8 +1025,8 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
     if ( *tmp2 != 0 )
     {
         // any trailing invalid character must invalidate the range.
-        nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                    SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+        nFlags &= ~(SCA_VALID | SCA_COL_VALID | SCA_ROW_VALID | SCA_TAB_VALID |
+                    SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID);
         return nFlags;
     }
 
@@ -1081,7 +1081,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     SCCOL   nCol = 0;
     SCROW   nRow = 0;
     SCTAB   nTab = 0;
-    sal_uInt16  nBits = SCA_VALID_TAB;
+    sal_uInt16  nBits = SCA_TAB_VALID;
     const sal_Unicode* q;
     if ( ScGlobal::FindUnquoted( p, '.') )
     {
@@ -1148,7 +1148,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     q = p;
     if (*p)
     {
-        nBits = SCA_VALID_COL;
+        nBits = SCA_COL_VALID;
         if (*p == '$')
         {
             nBits |= SCA_COL_ABSOLUTE;
@@ -1174,7 +1174,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     q = p;
     if (*p)
     {
-        nBits = SCA_VALID_ROW;
+        nBits = SCA_ROW_VALID;
         if (*p == '$')
         {
             nBits |= SCA_ROW_ABSOLUTE;
@@ -1234,7 +1234,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
                 else
                 {
                     rAddr.SetTab( nTab);
-                    nRes |= SCA_VALID_TAB;
+                    nRes |= SCA_TAB_VALID;
                 }
             }
             else
@@ -1256,7 +1256,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
                                     &nTab).get())
                         {
                             rAddr.SetTab( nTab);
-                            nRes |= SCA_VALID_TAB;
+                            nRes |= SCA_TAB_VALID;
                         }
                         else
                             nRes = 0;
@@ -1269,20 +1269,20 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
                             nRes = 0;
                         else
                         {
-                            sal_uInt16 nFlags = nRes | SCA_VALID_TAB2;
+                            sal_uInt16 nFlags = nRes | SCA_TAB2_VALID;
                             if (!lcl_ScRange_External_TabSpan( *pRange, nFlags,
                                         pExtInfo, aDocName,
                                         pExtInfo->maTabName, aTab, pDoc))
-                                nRes &= ~SCA_VALID_TAB;
+                                nRes &= ~SCA_TAB_VALID;
                             else
                             {
-                                if (nFlags & SCA_VALID_TAB2)
+                                if (nFlags & SCA_TAB2_VALID)
                                 {
                                     rAddr.SetTab( pRange->aEnd.Tab());
-                                    nRes |= SCA_VALID_TAB;
+                                    nRes |= SCA_TAB_VALID;
                                 }
                                 else
-                                    nRes &= ~SCA_VALID_TAB;
+                                    nRes &= ~SCA_TAB_VALID;
                             }
                         }
                     }
@@ -1293,15 +1293,15 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
 
     rRawRes |= nRes;
 
-    if ( !(nRes & SCA_VALID_ROW) && (nRes & SCA_VALID_COL)
-            && !( (nRes & SCA_TAB_3D) && (nRes & SCA_VALID_TAB)) )
+    if ( !(nRes & SCA_ROW_VALID) && (nRes & SCA_COL_VALID)
+            && !( (nRes & SCA_TAB_3D) && (nRes & SCA_TAB_VALID)) )
     {   // no Row, no Tab, but Col => DM (...), B (...) et al
         nRes = 0;
     }
     if( !*p )
     {
-        sal_uInt16 nMask = nRes & ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
-        if( nMask == ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB ) )
+        sal_uInt16 nMask = nRes & ( SCA_ROW_VALID | SCA_COL_VALID | SCA_TAB_VALID );
+        if( nMask == ( SCA_ROW_VALID | SCA_COL_VALID | SCA_TAB_VALID ) )
             nRes |= SCA_VALID;
     }
     else
@@ -1477,7 +1477,7 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
         const sal_Unicode* p = aTmp.getStr();
         sal_uInt16 nRawRes1 = 0;
         if (((nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, rRange.aStart, nRawRes1, pExtInfo)) != 0) ||
-                ((nRawRes1 & (SCA_VALID_COL | SCA_VALID_ROW)) && (nRawRes1 & SCA_VALID_TAB)))
+                ((nRawRes1 & (SCA_COL_VALID | SCA_ROW_VALID)) && (nRawRes1 & SCA_TAB_VALID)))
         {
             rRange.aEnd = rRange.aStart;  // sheet must be initialized identical to first sheet
             sal_uInt16 nRawRes2 = 0;
@@ -1485,26 +1485,26 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
             if (!((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID)) &&
                     // If not fully valid addresses, check if both have a valid
                     // column or row, and both have valid (or omitted) sheet references.
-                    (nRawRes1 & (SCA_VALID_COL | SCA_VALID_ROW)) && (nRawRes1 & SCA_VALID_TAB) &&
-                    (nRawRes2 & (SCA_VALID_COL | SCA_VALID_ROW)) && (nRawRes2 & SCA_VALID_TAB) &&
+                    (nRawRes1 & (SCA_COL_VALID | SCA_ROW_VALID)) && (nRawRes1 & SCA_TAB_VALID) &&
+                    (nRawRes2 & (SCA_COL_VALID | SCA_ROW_VALID)) && (nRawRes2 & SCA_TAB_VALID) &&
                     // Both must be column XOR row references, A:A or 1:1 but not A:1 or 1:A
-                    ((nRawRes1 & (SCA_VALID_COL | SCA_VALID_ROW)) == (nRawRes2 & (SCA_VALID_COL | SCA_VALID_ROW))))
+                    ((nRawRes1 & (SCA_COL_VALID | SCA_ROW_VALID)) == (nRawRes2 & (SCA_COL_VALID | SCA_ROW_VALID))))
             {
                 nRes1 = nRawRes1 | SCA_VALID;
                 nRes2 = nRawRes2 | SCA_VALID;
-                if (nRawRes1 & SCA_VALID_COL)
+                if (nRawRes1 & SCA_COL_VALID)
                 {
                     rRange.aStart.SetRow(0);
                     rRange.aEnd.SetRow(MAXROW);
-                    nRes1 |= SCA_VALID_ROW | SCA_ROW_ABSOLUTE;
-                    nRes2 |= SCA_VALID_ROW | SCA_ROW_ABSOLUTE;
+                    nRes1 |= SCA_ROW_VALID | SCA_ROW_ABSOLUTE;
+                    nRes2 |= SCA_ROW_VALID | SCA_ROW_ABSOLUTE;
                 }
                 else
                 {
                     rRange.aStart.SetCol(0);
                     rRange.aEnd.SetCol(MAXCOL);
-                    nRes1 |= SCA_VALID_COL | SCA_COL_ABSOLUTE;
-                    nRes2 |= SCA_VALID_COL | SCA_COL_ABSOLUTE;
+                    nRes1 |= SCA_COL_VALID | SCA_COL_ABSOLUTE;
+                    nRes2 |= SCA_COL_VALID | SCA_COL_ABSOLUTE;
                 }
             }
             else if ((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID))
@@ -1534,7 +1534,7 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                 if ( rRange.aEnd.Col() < (nTempCol = rRange.aStart.Col()) )
                 {
                     rRange.aStart.SetCol(rRange.aEnd.Col()); rRange.aEnd.SetCol(nTempCol);
-                    nMask = (SCA_VALID_COL | SCA_COL_ABSOLUTE);
+                    nMask = (SCA_COL_VALID | SCA_COL_ABSOLUTE);
                     nBits1 = nRes1 & nMask;
                     nBits2 = nRes2 & nMask;
                     nRes1 = (nRes1 & ~nMask) | nBits2;
@@ -1544,7 +1544,7 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                 if ( rRange.aEnd.Row() < (nTempRow = rRange.aStart.Row()) )
                 {
                     rRange.aStart.SetRow(rRange.aEnd.Row()); rRange.aEnd.SetRow(nTempRow);
-                    nMask = (SCA_VALID_ROW | SCA_ROW_ABSOLUTE);
+                    nMask = (SCA_ROW_VALID | SCA_ROW_ABSOLUTE);
                     nBits1 = nRes1 & nMask;
                     nBits2 = nRes2 & nMask;
                     nRes1 = (nRes1 & ~nMask) | nBits2;
@@ -1554,7 +1554,7 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                 if ( rRange.aEnd.Tab() < (nTempTab = rRange.aStart.Tab()) )
                 {
                     rRange.aStart.SetTab(rRange.aEnd.Tab()); rRange.aEnd.SetTab(nTempTab);
-                    nMask = (SCA_VALID_TAB | SCA_TAB_ABSOLUTE | SCA_TAB_3D);
+                    nMask = (SCA_TAB_VALID | SCA_TAB_ABSOLUTE | SCA_TAB_3D);
                     nBits1 = nRes1 & nMask;
                     nBits2 = nRes2 & nMask;
                     nRes1 = (nRes1 & ~nMask) | nBits2;
@@ -1613,7 +1613,7 @@ sal_uInt16 ScRange::ParseAny( const OUString& rString, ScDocument* pDoc,
                               const ScAddress::Details& rDetails )
 {
     sal_uInt16 nRet = Parse( rString, pDoc, rDetails );
-    const sal_uInt16 nValid = SCA_VALID | SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
+    const sal_uInt16 nValid = SCA_VALID | SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID;
 
     if ( (nRet & nValid) != nValid )
     {
@@ -1649,13 +1649,13 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
             {
                 if( nullptr != (p = lcl_a1_get_col( p+1, &aEnd, &ignored )))
                 {
-                    nRes = SCA_VALID_COL;
+                    nRes = SCA_COL_VALID;
                 }
             }
             else
             {
                 aEnd = aStart;
-                nRes = SCA_VALID_COL;
+                nRes = SCA_COL_VALID;
             }
         }
         break;
@@ -1669,13 +1669,13 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
                 if( (p[1] == 'C' || p[1] == 'c') &&
                     nullptr != (p = lcl_r1c1_get_col( p+1, rDetails, &aEnd, &ignored )))
                 {
-                    nRes = SCA_VALID_COL;
+                    nRes = SCA_COL_VALID;
                 }
             }
             else
             {
                 aEnd = aStart;
-                nRes = SCA_VALID_COL;
+                nRes = SCA_COL_VALID;
             }
         }
         break;
@@ -1857,8 +1857,8 @@ template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
                                   const ScAddress::Details& rDetails)
 {
     if( nFlags & SCA_VALID )
-        nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
-    if( pDoc && (nFlags & SCA_VALID_TAB ) )
+        nFlags |= ( SCA_ROW_VALID | SCA_COL_VALID | SCA_TAB_VALID );
+    if( pDoc && (nFlags & SCA_TAB_VALID ) )
     {
         if ( nTab >= pDoc->GetTableCount() )
         {
@@ -1879,7 +1879,7 @@ template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
                     aTabName = aTabName.copy( nPos + 1 );
                 }
             }
-            else if( nFlags & SCA_FORCE_DOC )
+            else if( nFlags & ScAddr::SCA_FORCE_DOC )
             {
                 // VBA has an 'external' flag that forces the addition of the
                 // tab name _and_ the doc name.  The VBA code would be
@@ -1921,16 +1921,16 @@ template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
     case formula::FormulaGrammar::CONV_OOO:
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        if( nFlags & SCA_VALID_COL )
+        if( nFlags & SCA_COL_VALID )
             lcl_a1_append_c ( r, nCol, (nFlags & SCA_COL_ABSOLUTE) != 0 );
-        if( nFlags & SCA_VALID_ROW )
+        if( nFlags & SCA_ROW_VALID )
             lcl_a1_append_r ( r, nRow, (nFlags & SCA_ROW_ABSOLUTE) != 0 );
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
-        if( nFlags & SCA_VALID_ROW )
+        if( nFlags & SCA_ROW_VALID )
             lcl_r1c1_append_r ( r, nRow, (nFlags & SCA_ROW_ABSOLUTE) != 0, rDetails );
-        if( nFlags & SCA_VALID_COL )
+        if( nFlags & SCA_COL_VALID )
             lcl_r1c1_append_c ( r, nCol, (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
         break;
     }

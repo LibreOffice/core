@@ -177,7 +177,7 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
             const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
             sal_uInt16 nRes = aRange.ParseAny( aOne, pDoc, eConv );
-            sal_uInt16 nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
+            sal_uInt16 nEndRangeBits = SCA_COL2_VALID | SCA_ROW2_VALID | SCA_TAB2_VALID;
             sal_uInt16 nTmp1 = ( nRes & SCA_BITS );
             sal_uInt16 nTmp2 = ( nRes & nEndRangeBits );
             // If we have a valid single range with

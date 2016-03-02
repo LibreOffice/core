@@ -66,7 +66,7 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
                 // Out-of-bound sheet index.
                 continue;
 
-            OUString aPosStr = aPos.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
+            OUString aPosStr = aPos.Format(SCA_ADDR_ABS, nullptr, pDoc->GetAddressConvention());
             mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
         }
     }

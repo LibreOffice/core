@@ -108,7 +108,7 @@ void ScViewFunc::DetectiveRefresh()
 
 static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument* pDoc)
 {
-    OUString aAddrText(rRange.Format(SCR_ABS_3D, pDoc));
+    OUString aAddrText(rRange.Format(SCA_RANGE_ABS_3D, pDoc));
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
     SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
     pView->GetDispatcher().Execute(

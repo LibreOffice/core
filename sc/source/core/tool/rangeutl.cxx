@@ -749,12 +749,12 @@ static void lcl_appendCellAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(SCA_ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
     else
     {
-        OUString aAddr(rCell.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(SCA_ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
@@ -782,7 +782,7 @@ static void lcl_appendCellRangeAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell1.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell1.Format(SCA_ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
 
         rBuf.append(":");
@@ -794,7 +794,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append('.');
         }
 
-        aAddr = rCell2.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
+        aAddr = rCell2.Format(SCA_ADDR_ABS, nullptr, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -802,7 +802,7 @@ static void lcl_appendCellRangeAddress(
         ScRange aRange;
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
-        OUString aAddr(aRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(aRange.Format(SCA_RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }

@@ -184,7 +184,7 @@ void ScConsolidateDlg::Init()
         {
             aStr = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                     rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format(
-                        SCR_ABS_3D, pDoc, eConv );
+                        SCA_RANGE_ABS_3D, pDoc, eConv );
             pLbConsAreas->InsertEntry( aStr );
         }
     }
@@ -192,7 +192,7 @@ void ScConsolidateDlg::Init()
     if ( theConsData.nTab < pDoc->GetTableCount() )
     {
         aStr = ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
-                ).Format( SCA_ABS_3D, pDoc, eConv );
+                ).Format( SCA_ADDR_ABS_3D, pDoc, eConv );
         pEdDestArea->SetText( aStr );
     }
     else
@@ -219,7 +219,7 @@ void ScConsolidateDlg::Init()
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
-            OUString aStrArea(aRange.Format(SCA_ABS_3D, pDoc, eConv));
+            OUString aStrArea(aRange.Format(SCA_ADDR_ABS_3D, pDoc, eConv));
             pAreaData[nAt++].Set( aStrName, aStrArea, aIter.WasDBName() );
         }
     }
@@ -268,7 +268,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( pRefInputEdit );
 
         OUString      aStr;
-        sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab is still missing
+        sal_uInt16      nFmt = SCA_RANGE_ABS_3D;       //!!! nCurTab is still missing
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
@@ -447,7 +447,7 @@ IMPL_LINK_TYPED( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
                         const ScArea& rArea = *(ppAreas[i]);
                         aNewArea = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                                 rArea.nColEnd, rArea.nRowEnd, rArea.nTab
-                                ).Format(SCR_ABS_3D, pDoc, eConv);
+                                ).Format(SCA_RANGE_ABS_3D, pDoc, eConv);
 
                         if ( pLbConsAreas->GetEntryPos( aNewArea )
                              == LISTBOX_ENTRY_NOTFOUND )
