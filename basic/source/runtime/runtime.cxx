@@ -1014,9 +1014,9 @@ void SbiRuntime::ClearExprStack()
 // Take variable from the expression-stack without removing it
 // n counts from 0
 
-SbxVariable* SbiRuntime::GetTOS( short n )
+SbxVariable* SbiRuntime::GetTOS()
 {
-    n = nExprLvl - n - 1;
+    short n = nExprLvl - 1;
 #ifdef DBG_UTIL
     if( n < 0 )
     {

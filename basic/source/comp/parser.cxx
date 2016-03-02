@@ -243,10 +243,10 @@ void SbiParser::Exit()
         Error( ERRCODE_BASIC_BAD_EXIT );
 }
 
-bool SbiParser::TestSymbol( bool bKwdOk )
+bool SbiParser::TestSymbol()
 {
     Peek();
-    if( eCurTok == SYMBOL || ( bKwdOk && IsKwd( eCurTok ) ) )
+    if( eCurTok == SYMBOL )
     {
         Next(); return true;
     }
