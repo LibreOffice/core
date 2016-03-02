@@ -49,17 +49,12 @@ OUString lclGetFunctionMaskName(const sal_uInt16 nFunctionMask)
 
 OUString lclCreateDataItemName(const sal_uInt16 nFunctionMask, const OUString& rName, const sal_uInt8 nDuplicationCount)
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append(lclGetFunctionMaskName(nFunctionMask));
-    aBuffer.append(" - ");
-    aBuffer.append(rName);
+    OUString aBuffer = lclGetFunctionMaskName(nFunctionMask) + " - " + rName;
     if(nDuplicationCount > 0)
     {
-        aBuffer.append(" ");
-        aBuffer.append(OUString::number(nDuplicationCount));
+        aBuffer += " " + OUString::number(nDuplicationCount);
     }
-
-    return aBuffer.makeStringAndClear();
+    return aBuffer;
 }
 
 } // anonymous namespace
