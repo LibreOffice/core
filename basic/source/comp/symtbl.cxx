@@ -52,14 +52,13 @@ const OUString& SbiStringPool::Find( sal_uInt32 n ) const
         return aData[n - 1];
 }
 
-short SbiStringPool::Add( const OUString& rVal, bool bNoCase )
+short SbiStringPool::Add( const OUString& rVal )
 {
     sal_uInt32 n = aData.size();
     for( sal_uInt32 i = 0; i < n; ++i )
     {
         OUString& p = aData[i];
-        if( (  bNoCase && p == rVal )
-            || ( !bNoCase && p.equalsIgnoreAsciiCase( rVal ) ) )
+        if( p == rVal )
             return i+1;
     }
 

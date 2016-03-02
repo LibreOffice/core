@@ -100,9 +100,9 @@ public:
     void  ResetChannel()               { nChan = 0;   }
     void  Open( short, const OString&, StreamMode, SbiStreamFlags, short );
     void  Close();
-    void  Read(OString&, short = 0);
+    void  Read(OString&);
     char  Read();
-    void  Write(const OUString&, short = 0);
+    void  Write(const OUString&);
     // 0 == bad channel or no SvStream (nChannel=0..CHANNELS-1)
     SbiStream* GetStream( short nChannel ) const;
     void  CloseAll(); // JSM

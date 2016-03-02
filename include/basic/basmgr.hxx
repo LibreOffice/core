@@ -121,11 +121,11 @@ private:
     BASIC_DLLPRIVATE void Init();
 
 protected:
-    bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly = false );
+    bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
-    void            LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadBasics = true );
+    void            LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL );
     void            LoadOldBasicManager( SotStorage& rStorage );
     bool            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
     static bool     ImplEncryptStream( SvStream& rStream );

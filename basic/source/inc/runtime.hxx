@@ -299,7 +299,7 @@ class SbiRuntime
 
     void PushVar( SbxVariable* );
     SbxVariableRef PopVar();
-    SbxVariable* GetTOS( short=0 );
+    SbxVariable* GetTOS();
     void TOSMakeTemp();
     void ClearExprStack();
 

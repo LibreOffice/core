@@ -41,9 +41,7 @@ public:
     SbiStringPool();
    ~SbiStringPool();
     sal_uInt32 GetSize() const { return aData.size(); }
-    // From 8.4.1999: default changed to true because of #64236 -
-    // change it back to false when the bug is cleanly removed.
-    short Add( const OUString&, bool=true );
+    short Add( const OUString& );
     short Add( double, SbxDataType );
     const OUString& Find( sal_uInt32 ) const;
 };

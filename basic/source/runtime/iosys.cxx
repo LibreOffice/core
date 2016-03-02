@@ -852,7 +852,7 @@ void SbiIoSystem::Shutdown()
 }
 
 
-void SbiIoSystem::Read(OString& rBuf, short n)
+void SbiIoSystem::Read(OString& rBuf)
 {
     if( !nChan )
     {
@@ -864,7 +864,7 @@ void SbiIoSystem::Read(OString& rBuf, short n)
     }
     else
     {
-        nError = pChan[ nChan ]->Read( rBuf, n );
+        nError = pChan[ nChan ]->Read( rBuf );
     }
 }
 
@@ -892,7 +892,7 @@ char SbiIoSystem::Read()
     return ch;
 }
 
-void SbiIoSystem::Write(const OUString& rBuf, short n)
+void SbiIoSystem::Write(const OUString& rBuf)
 {
     if( !nChan )
     {
@@ -904,7 +904,7 @@ void SbiIoSystem::Write(const OUString& rBuf, short n)
     }
     else
     {
-        nError = pChan[ nChan ]->Write( OUStringToOString(rBuf, osl_getThreadTextEncoding()), n );
+        nError = pChan[ nChan ]->Write( OUStringToOString(rBuf, osl_getThreadTextEncoding()) );
     }
 }
 

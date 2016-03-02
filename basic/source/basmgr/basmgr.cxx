@@ -713,7 +713,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     pStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
 }
 
-void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadLibs )
+void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL )
 {
     tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
 
@@ -793,7 +793,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         mpImpl->aLibs.push_back(std::unique_ptr<BasicLibInfo>(pInfo));
         // Libs from external files should be loaded only when necessary.
         // But references are loaded at once, otherwise some big customers get into trouble
-        if ( bLoadLibs && pInfo->DoLoad() &&
+        if ( pInfo->DoLoad() &&
             ( !pInfo->IsExtern() ||  pInfo->IsReference()))
         {
             ImpLoadLibrary( pInfo, &rStorage );
@@ -928,7 +928,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
     return pInf;
 }
 
-bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly )
+bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage )
 {
     try {
     DBG_ASSERT( pLibInfo, "LibInfo!?" );
@@ -982,29 +982,18 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
             bool bLoaded = false;
             if ( xBasicStream->Seek( STREAM_SEEK_TO_END ) != 0 )
             {
-                if ( !bInfosOnly )
+                if ( !pLibInfo->GetLib().Is() )
                 {
-                    if ( !pLibInfo->GetLib().Is() )
-                    {
-                        pLibInfo->SetLib( new StarBASIC( GetStdLib(), mbDocMgr ) );
-                    }
-                    xBasicStream->SetBufferSize( 1024 );
-                    xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
-                    bLoaded = ImplLoadBasic( *xBasicStream, pLibInfo->GetLibRef() );
-                    xBasicStream->SetBufferSize( 0 );
-                    StarBASICRef xStdLib = pLibInfo->GetLib();
-                    xStdLib->SetName( pLibInfo->GetLibName() );
-                    xStdLib->SetModified( false );
-                    xStdLib->SetFlag( SbxFlagBits::DontStore );
+                    pLibInfo->SetLib( new StarBASIC( GetStdLib(), mbDocMgr ) );
                 }
-                else
-                {
-                    // Skip Basic...
-                    xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
-                    ImplEncryptStream( *xBasicStream );
-                    SbxBase::Skip( *xBasicStream );
-                    bLoaded = true;
-                }
+                xBasicStream->SetBufferSize( 1024 );
+                xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
+                bLoaded = ImplLoadBasic( *xBasicStream, pLibInfo->GetLibRef() );
+                xBasicStream->SetBufferSize( 0 );
+                StarBASICRef xStdLib = pLibInfo->GetLib();
+                xStdLib->SetName( pLibInfo->GetLibName() );
+                xStdLib->SetModified( false );
+                xStdLib->SetFlag( SbxFlagBits::DontStore );
             }
             if ( !bLoaded )
             {

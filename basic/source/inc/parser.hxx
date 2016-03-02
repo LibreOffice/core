@@ -92,7 +92,7 @@ public:
     bool HasGlobalCode();
 
     bool TestToken( SbiToken );
-    bool TestSymbol( bool bKwdOk=false );
+    bool TestSymbol();
     bool TestComma();
     void TestEoln();
 
