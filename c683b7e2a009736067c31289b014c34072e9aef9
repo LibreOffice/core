@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_373c332f",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:59:34Z",
+      "side": 1,
+      "message": "Now this code is called in production mode, that was not the intention",
+      "revId": "c683b7e2a009736067c31289b014c34072e9aef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9749a7d3",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:59:34Z",
+      "side": 1,
+      "message": "Now this code is called in production mode, that was not the intention",
+      "revId": "c683b7e2a009736067c31289b014c34072e9aef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
