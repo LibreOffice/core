@@ -153,7 +153,6 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    void Release();
 
     LwpPara* GetParent();
     LwpObjectID& GetStoryID();
@@ -277,7 +276,7 @@ protected:
 private:
     virtual ~LwpPara();
 
-    void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
+    static void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
     void OverrideIndent(LwpIndentOverride* base,LwpIndentOverride* over,XFParaStyle* pOverStyle);
     void OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,XFParaStyle* pOverStyle);
     void OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyle);

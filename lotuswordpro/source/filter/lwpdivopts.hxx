@@ -100,7 +100,7 @@ public:
     ~LwpTextLanguage();
     void Read(LwpObjectStream *pStrm);
 private:
-    sal_uInt16 ConvertFrom96(sal_uInt16 orgLang);
+    static sal_uInt16 ConvertFrom96(sal_uInt16 orgLang);
     sal_uInt16 m_nLanguage;
 };
 

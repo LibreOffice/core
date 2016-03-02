@@ -224,7 +224,7 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                     if (pPreFrib)
                     {
                         if ((pPreFrib->GetType() == FRIB_TAG_TEXT) &&
-                            (pPreFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
+                            (pPreFrib->GetModifiers() && pPreFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
                         {
                             pParaNumbering->pPrefix = static_cast<LwpFribText*>(pPreFrib);
                         }
@@ -369,7 +369,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
         pLocalBorder->Override(pFinalBorder.get());
     }
 
-    pParaStyle->ApplyParaBorder(pOverStyle, pFinalBorder.get());
+    LwpParaStyle::ApplyParaBorder(pOverStyle, pFinalBorder.get());
 }
 /**
  * @short:   Override parabreaks style.
@@ -628,8 +628,10 @@ bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualLayou
 bool LwpPara::IsInCell()
 {
     LwpStory *pStory = GetStory();
-    LwpVirtualLayout* pLayout = pStory ? pStory->GetLayout(NULL) : NULL;
-    if(pLayout && pLayout->IsCell())
+    if (!pStory)
+        return false;
+    rtl::Reference<LwpVirtualLayout> xLayout(pStory->GetLayout(nullptr));
+    if (xLayout.is() && xLayout->IsCell())
         return true;
     return false;
 }

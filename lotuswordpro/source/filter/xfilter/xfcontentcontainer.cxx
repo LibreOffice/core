@@ -73,14 +73,6 @@ void    XFContentContainer::Add(XFContent *pContent)
     m_aContents.push_back(pContent);
 }
 
-void XFContentContainer::InsertAtBegin(XFContent * pContent)
-{
-    m_aContents.insert(m_aContents.begin(), pContent);
-}
-void XFContentContainer::RemoveAt(sal_uInt32 nPos)
-{
-    m_aContents.erase(m_aContents.begin()+nPos);
-}
 void    XFContentContainer::Add(const OUString& text)
 {
     XFTextContent *pTC = new XFTextContent();

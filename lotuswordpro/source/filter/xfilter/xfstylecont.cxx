@@ -88,8 +88,7 @@ XFStyleContainer::~XFStyleContainer()
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
-        if( pStyle )
-            delete pStyle;
+        delete pStyle;
     }
 }
 
@@ -100,8 +99,7 @@ void    XFStyleContainer::Reset()
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
-        if( pStyle )
-            delete pStyle;
+        delete pStyle;
     }
     m_aStyles.clear();
 }
@@ -159,9 +157,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pConStyle = *it;
-        if( !pConStyle )
-            continue;
-
+        assert(pConStyle);
         if( pConStyle->Equal(pStyle) )
             return pConStyle;
     }
@@ -175,9 +171,7 @@ IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pConStyle = *it;
-        if( !pConStyle )
-            continue;
-
+        assert(pConStyle);
         if( pConStyle->GetStyleName() == name )
             return pConStyle;
     }
@@ -202,11 +196,7 @@ void    XFStyleContainer::ToXml(IXFStream *pStrm)
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
-
         assert(pStyle);
-        if( !pStyle )
-            continue;
-
         pStyle->ToXml(pStrm);
     }
 }

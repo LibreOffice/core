@@ -124,7 +124,10 @@ public:
     LwpObjectID& GetDefaultCellStyle() {return m_DefaultCellStyle;}
     sal_uInt16 GetRow() {return m_nRow;}
     sal_uInt16 GetColumn() {return m_nColumn;}
-    LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));}
+    rtl::Reference<LwpTableLayout> GetTableLayout()
+    {
+        return rtl::Reference<LwpTableLayout>(dynamic_cast<LwpTableLayout*>(GetLayout(nullptr).get()));
+    }
     bool IsNumberDown();
     virtual bool IsTable() SAL_OVERRIDE { return true;}
     LwpSuperTableLayout* GetSuperTableLayout();
@@ -184,7 +187,7 @@ public:
     virtual ~LwpGlossary();
 protected:
     void Read() SAL_OVERRIDE;
-    sal_uInt16 GetNumIndexRows(void);
+    sal_uInt16 GetNumIndexRows();
 };
 
 #endif

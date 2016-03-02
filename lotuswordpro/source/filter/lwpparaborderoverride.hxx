@@ -139,7 +139,7 @@ protected:
     LwpParaBorderOverride(LwpParaBorderOverride const& rOther);
 
 private:
-    LwpParaBorderOverride& operator=(LwpParaBorderOverride const& rOther); // not implemented
+    LwpParaBorderOverride& operator=(LwpParaBorderOverride const& rOther) SAL_DELETED_FUNCTION;
 
 protected:
     enum

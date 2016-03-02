@@ -117,7 +117,7 @@ public:
         return m_fHeight;
     }
 
-    void    SetStartPoint(XFPoint pt)
+    void SetStartPoint(const XFPoint& pt)
     {
         m_aPoint = pt;
     }

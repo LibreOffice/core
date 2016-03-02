@@ -176,8 +176,8 @@ private:
     LtTm m_nLastRevisionTime;
     LtTm m_nTotalEditTime;
 private:
-    OUString DateTimeToOUString(LtTm& dt);
-    OUString TimeToOUString(LtTm& dt);
+    static OUString DateTimeToOUString(LtTm& dt);
+    static OUString TimeToOUString(LtTm& dt);
 
 public:
     void Read() SAL_OVERRIDE;

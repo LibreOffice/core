@@ -247,7 +247,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     //note by ,1-27
     rtl::Reference<XFFont> pFont;
     XFTextStyle* pStyle = NULL;
-    m_StyleName = "";
+    m_StyleName.clear();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     XFTextStyle* pNamedStyle = nullptr;
     if (m_pModifiers->HasCharStyle && pFoundry)
@@ -257,11 +257,13 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     }
     if (pNamedStyle)
     {
+        LwpCharacterStyle* pCharStyle = nullptr;
         if (m_pModifiers->FontID && pFoundry)
+            pCharStyle = dynamic_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
+        if (pCharStyle)
         {
             pStyle = new XFTextStyle();
             *pStyle = *pNamedStyle;
-            LwpCharacterStyle* pCharStyle = static_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
 
             pStyle->SetStyleName("");
             pFont = pFoundry->GetFontManger().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
@@ -383,7 +385,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 
 /**
 *  @descr:   Whether there are other fribs following current frib.
-*  @return:  Ture if having following fribs, or false.
+*  @return:  True if having following fribs, or false.
 */
 bool LwpFrib::HasNextFrib()
 {

@@ -159,7 +159,7 @@ public:
     /**
      * @descr   Get the frame type. image, drawing or text-box.
      */
-    virtual enumXFFrameType GetFrameType();
+    enumXFFrameType GetFrameType();
 
     /**
      * @descr   Get content type, enumXFContentFrame.
@@ -174,7 +174,7 @@ public:
 private:
     void    StartFrame(IXFStream *pStrm);
 
-    void    EndFrame(IXFStream *pStrm);
+    static void EndFrame(IXFStream *pStrm);
 
     void    AdjustZIndex();
 

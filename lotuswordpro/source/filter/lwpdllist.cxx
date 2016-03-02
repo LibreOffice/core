@@ -64,7 +64,7 @@
 
 #include "lwpdllist.hxx"
 
-LwpDLList::LwpDLList(void)
+LwpDLList::LwpDLList()
 {
     m_pNext = m_pPrevious = NULL;
 }
@@ -80,7 +80,7 @@ LwpDLList::insert(LwpDLList* Next,LwpDLList* Previous)
     m_pPrevious = Previous;
 }
 
-LwpDLList::~LwpDLList(void)
+LwpDLList::~LwpDLList()
 {
     remove();
 }

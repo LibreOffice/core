@@ -252,10 +252,10 @@ public:
     ~LwpNumericFormat(){}
     void Read();
     static bool IsCurrencyFormat(sal_uInt16 Format);
-    sal_uInt16 GetDecimalPlaces(void);
-    bool IsDecimalPlacesOverridden(void);
-    bool IsNegativeOverridden(void);
-    bool IsZeroOverridden(void);
+    sal_uInt16 GetDecimalPlaces();
+    bool IsDecimalPlacesOverridden();
+    bool IsNegativeOverridden();
+    bool IsZeroOverridden();
     XFStyle* Convert();
 
 private:
@@ -282,23 +282,23 @@ private:
 
     void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegtive=false);
     void SetNumberType(XFNumberStyle* pStyle);
-    OUString    reencode(const OUString& sCode);
+    static OUString reencode(const OUString& sCode);
 };
 
 inline bool
-LwpNumericFormat::IsDecimalPlacesOverridden(void)
+LwpNumericFormat::IsDecimalPlacesOverridden()
 {
     return (cFlags & NF_OVER_DECIMAL_PLACES) != 0;
 }
 
 inline bool
-LwpNumericFormat::IsNegativeOverridden(void)
+LwpNumericFormat::IsNegativeOverridden()
 {
     return (cFlags & NF_OVER_NEGATIVE) != 0;
 }
 
 inline bool
-LwpNumericFormat::IsZeroOverridden(void)
+LwpNumericFormat::IsZeroOverridden()
 {
     return (cFlags & NF_OVER_ZERO) != 0;
 }

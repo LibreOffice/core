@@ -72,6 +72,7 @@
 #include "lwpbasetype.hxx"
 #include "lwpfont.hxx"
 #include "lwpdropcapmgr.hxx"
+#include <unordered_map>
 
 class LwpDocument;
 class LwpBookMark;
@@ -85,8 +86,8 @@ public:
     LwpVersionManager(){}
     ~LwpVersionManager(){}
 public:
-    void Read(LwpObjectStream *pStrm);
-    void Skip(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream *pStrm);
+    static void Skip(LwpObjectStream *pStrm);
 };
 
 class LwpObjectManager
@@ -309,7 +310,7 @@ private:
             }
     };
 
-    typedef boost::unordered_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
+    typedef std::unordered_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
     LwpStyleMap m_StyleList;
 public:
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}

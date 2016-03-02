@@ -106,17 +106,22 @@ void LwpTocSuperLayout::Read()
 
     m_SearchItems.Read(m_pObjStrm);
 
-    sal_uInt16 i;
     sal_uInt16 count = m_pObjStrm->QuickReaduInt16();
-    for (i = 0; (i < MAX_LEVELS) && (count > 0); i++, count--)
+    if (count > MAX_LEVELS)
+        throw std::range_error("corrupt LwpTocSuperLayout");
+    for (sal_uInt16 i = 0; i < count; ++i)
         m_DestName[i].Read(m_pObjStrm);
 
     count = m_pObjStrm->QuickReaduInt16();
-    for (i = 0; (i < MAX_LEVELS) && (count > 0); i++, count--)
+    if (count > MAX_LEVELS)
+        throw std::range_error("corrupt LwpTocSuperLayout");
+    for (sal_uInt16 i = 0; i < count; ++i)
         m_DestPGName[i].Read(m_pObjStrm);
 
     count = m_pObjStrm->QuickReaduInt16();
-    for (i = 0; i < count; i++)
+    if (count > MAX_LEVELS)
+        throw std::range_error("corrupt LwpTocSuperLayout");
+    for (sal_uInt16 i = 0; i < count; ++i)
         m_nFlags[i] = m_pObjStrm->QuickReaduInt32();
 
     m_pObjStrm->SkipExtra();
@@ -130,8 +135,8 @@ void LwpTocSuperLayout::RegisterStyle()
     LwpSuperTableLayout::RegisterStyle();
 
     // Get font info of default text style and set into tab style
-    const LwpObjectID *pDefaultTextStyle = m_pFoundry->GetDefaultTextStyle();
-    XFParaStyle* pBaseStyle = pDefaultTextStyle ? static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(*pDefaultTextStyle)) : nullptr;
+    const LwpObjectID *pDefaultTextStyle = m_pFoundry ? m_pFoundry->GetDefaultTextStyle() : nullptr;
+    XFParaStyle* pBaseStyle = pDefaultTextStyle ? dynamic_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(*pDefaultTextStyle)) : nullptr;
     XFTextStyle*pTextStyle = new XFTextStyle;
     if (pBaseStyle)
         pTextStyle->SetFont(pBaseStyle->GetFont()); // who delete this font?????
@@ -243,8 +248,12 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
     // add TOC content
     LwpSuperTableLayout::XFConvert(pToc);
 
+    rtl::Reference<LwpVirtualLayout> xContainer(GetContainerLayout());
+    if (!xContainer.is())
+        return;
+
     // if current TOC is located in a cell, we must add a frame between upper level container and TOC
-    if ( !GetContainerLayout()->IsCell() )
+    if (!xContainer->IsCell())
     {
         pCont->Add(pToc);
     }
@@ -342,7 +351,7 @@ void LwpTocSuperLayout::AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel, 
 bool LwpTocSuperLayout::GetRightAlignPageNumber(sal_uInt16 index)
 {
     if (index < MAX_LEVELS)
-        return (m_nFlags[index] & TS_RIGHTALIGN) ? sal_True : sal_False;
+        return (m_nFlags[index] & TS_RIGHTALIGN) != 0;
     return false;
 }
 /**
@@ -353,7 +362,7 @@ bool LwpTocSuperLayout::GetRightAlignPageNumber(sal_uInt16 index)
 bool LwpTocSuperLayout::GetUsePageNumber(sal_uInt16 index)
 {
     if (index < MAX_LEVELS)
-        return (m_nFlags[index] & TS_PAGENUMBER) ? sal_True : sal_False;
+        return (m_nFlags[index] & TS_PAGENUMBER) != 0;
     return false;
 }
 /**

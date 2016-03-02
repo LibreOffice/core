@@ -74,7 +74,7 @@ public:
 
 public:
     /**
-     * @descr   set shadow position. You can refer to enumXFShadowPos to get all posible positions.
+     * @descr   set shadow position. You can refer to enumXFShadowPos to get all possible positions.
      */
     void    SetPosition(enumXFShadowPos pos);
 

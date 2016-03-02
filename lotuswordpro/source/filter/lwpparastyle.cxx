@@ -158,8 +158,6 @@ void LwpParaStyle::Read()
 void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 {
     assert(pParaStyle);
-    if (!pParaStyle)
-        return;
 
     LwpVirtualPiece *pPiece = NULL;
     //alignment:
@@ -196,7 +194,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         LwpParaBorderOverride *pBorder = dynamic_cast<LwpParaBorderOverride*>(pPiece->GetOverride());
         if( pBorder )
         {
-            this->ApplyParaBorder(pParaStyle, pBorder);
+            ApplyParaBorder(pParaStyle, pBorder);
         }
     }
 
@@ -681,6 +679,9 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
 
 void LwpParaStyle::RegisterStyle()
 {
+    if (!m_pFoundry)
+        throw std::runtime_error("missing Foundry");
+
     XFParaStyle* pStyle = new XFParaStyle();
 
     //Set name

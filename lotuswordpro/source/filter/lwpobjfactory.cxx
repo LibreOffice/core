@@ -135,7 +135,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
 {
     rtl::Reference<LwpObject> newObj;
     m_nNumObjs++;
-    assert(type<300);
+    SAL_WARN_IF(type>=300, "lwp", "invalid type: " << type);
     switch(type)
     {
         case VO_DOCUMENT:
@@ -666,18 +666,22 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
         default:
         {
             //Unknown object type
-            assert(false);
             newObj = NULL;
             break;
         }
     }
-    if(newObj.is())
+    if (newObj.is())
     {
         newObj->QuickRead();
-        m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        auto result = m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        if (!result.second)
+        {
+            SAL_WARN("lwp", "clearing duplicate object");
+            newObj.clear();
+        }
     }
 
-    return(newObj);
+    return newObj;
 }
 /**
  * @descr       query object by object id
@@ -707,7 +711,12 @@ rtl::Reference<LwpObject> LwpObjectFactory::QueryObject(const LwpObjectID &objID
             return NULL;
         }
 
+        if (std::find(m_aObjsIDInCreation.begin(), m_aObjsIDInCreation.end(), objID) != m_aObjsIDInCreation.end())
+            throw std::runtime_error("recursion in object creation");
+
+        m_aObjsIDInCreation.push_back(objID);
         obj = CreateObject(objHdr.GetTag(), objHdr);
+        m_aObjsIDInCreation.pop_back();
     }
     return obj;
 }
@@ -719,7 +728,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::FindObject(const LwpObjectID &objID)
 {
     LwpIdToObjMap::const_iterator it =  m_IdToObjList.find(objID);
     if (it != m_IdToObjList.end()) {
-        return((*it).second);
+        return (*it).second;
     }
     else
     {

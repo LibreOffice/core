@@ -91,15 +91,9 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
     *ppContainer = pContainer;
     return BenErr_OK;
 }
-BenError
-LtcBenContainer::Close()
-{
-    return BenErr_OK;
-}
 
 LtcBenContainer::~LtcBenContainer()
 {
-    Close();
 }
 
 BenError
@@ -358,7 +352,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
         delete pS;
     }
 
-    pMemStream = new SvMemoryStream(pBuf, nLen, STREAM_READ);
+    pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
     assert(pMemStream != NULL);
 
     pStream = pMemStream;

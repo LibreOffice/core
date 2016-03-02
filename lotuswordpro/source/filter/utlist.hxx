@@ -125,7 +125,7 @@ public: // Methods
     bool IsEmpty() { return GetFirst() == &GetTerminating(); };
     bool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
 
-    void Destroy(void);
+    void Destroy();
 
 private: // Data
     CUtListElmt cDummyElmt;

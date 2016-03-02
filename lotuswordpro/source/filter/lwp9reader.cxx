@@ -169,7 +169,7 @@ sal_Int64 Lwp9Reader::GetFileSize()
 
     sal_Int64 size = m_pDocStream->Seek( STREAM_SEEK_TO_END);
     m_pDocStream->Seek(pos);
-    return(size);
+    return size;
 }
 
 /**

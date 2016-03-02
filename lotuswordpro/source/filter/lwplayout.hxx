@@ -100,54 +100,94 @@ class LwpVirtualLayout : public LwpDLNFPVList
 public:
     LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpVirtualLayout(){}
-    virtual bool MarginsSameAsParent();
     inline virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
-    virtual double GetMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
     virtual double GetExtMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
     virtual bool IsAutoGrow(){ return false;}
     virtual bool IsAutoGrowUp(){ return false;}
     virtual bool IsAutoGrowDown(){ return false;}
     virtual bool IsAutoGrowLeft(){ return false;}
     virtual bool IsAutoGrowRight(){ return false;}
-    virtual bool IsFitGraphic();
-    virtual bool IsAutoGrowWidth();
-    virtual bool IsInlineToMargin();
+    bool IsFitGraphic();
+    bool IsAutoGrowWidth();
+    bool IsInlineToMargin();
     virtual sal_uInt8 GetContentOrientation(){ return TEXT_ORIENT_LRTB;}
-    virtual bool HonorProtection();
-    virtual bool IsProtected();
-    virtual bool HasProtection();
-    virtual OUString GetStyleName(){ return m_StyleName;}
-    virtual bool IsComplex();
+    bool GetHonorProtection()
+    {
+        if (m_bGettingHonorProtection)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingHonorProtection = true;
+        bool bRet = HonorProtection();
+        m_bGettingHonorProtection = false;
+        return bRet;
+    }
+    bool GetMarginsSameAsParent()
+    {
+        if (m_bGettingMarginsSameAsParent)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingMarginsSameAsParent = true;
+        bool bRet = MarginsSameAsParent();
+        m_bGettingMarginsSameAsParent = false;
+        return bRet;
+    }
+    bool GetIsProtected()
+    {
+        if (m_bGettingIsProtected)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingIsProtected = true;
+        bool bRet = IsProtected();
+        m_bGettingIsProtected = false;
+        return bRet;
+    }
+    bool GetHasProtection()
+    {
+        if (m_bGettingHasProtection)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingHasProtection = true;
+        bool bRet = HasProtection();
+        m_bGettingHasProtection = false;
+        return bRet;
+    }
+    double GetMarginsValue(const sal_uInt8& nWhichSide)
+    {
+        if (m_bGettingMarginsValue)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingMarginsValue = true;
+        auto fRet = MarginsValue(nWhichSide);
+        m_bGettingMarginsValue = false;
+        return fRet;
+    }
+    OUString GetStyleName(){ return m_StyleName;}
+    bool IsComplex();
     virtual bool IsAnchorPage(){ return false;}
     virtual bool IsAnchorFrame(){ return false;}
     virtual bool IsAnchorCell(){ return false;}
-    virtual bool IsPage();
-    virtual bool IsHeader();
-    virtual bool IsFooter();
-    virtual bool IsFrame();
-    virtual bool IsCell();
-    virtual bool IsSuperTable();
-    virtual bool IsGroupHead();
+    bool IsPage();
+    bool IsHeader();
+    bool IsFooter();
+    bool IsFrame();
+    bool IsCell();
+    bool IsSuperTable();
+    bool IsGroupHead();
     virtual sal_uInt8 GetRelativeType();
-    virtual bool IsRelativeAnchored();
-    virtual LwpUseWhen* GetUseWhen();
+    bool IsRelativeAnchored();
+    LwpUseWhen* GetUseWhen();
     virtual LwpUseWhen* VirtualGetUseWhen(){ return NULL;}
     virtual bool IsUseOnAllPages(){ return false;}
     virtual bool IsUseOnAllEvenPages(){ return false;}
     virtual bool IsUseOnAllOddPages(){ return false;}
     virtual bool IsUseOnPage(){ return false;}
     virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/ = 0){ return -1;}
-    virtual bool IsMinimumHeight();
+    bool IsMinimumHeight();
     virtual bool IsForWaterMark(){ return false;}
-    virtual LwpPara* GetLastParaOfPreviousStory() { return NULL; }
-    virtual LwpVirtualLayout* GetParentLayout();
-    virtual LwpVirtualLayout* GetContainerLayout(){ return NULL;}
-    virtual void RegisterChildStyle();
-    virtual bool NoContentReference();
-    virtual bool IsStyleLayout();
-    virtual enumXFAlignType GetVerticalAlignmentType()
+    virtual LwpPara* GetLastParaOfPreviousStory() { return nullptr; }
+    rtl::Reference<LwpVirtualLayout> GetParentLayout();
+    virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() { return rtl::Reference<LwpVirtualLayout>(); }
+    void RegisterChildStyle();
+    bool NoContentReference();
+    bool IsStyleLayout();
+    enumXFAlignType GetVerticalAlignmentType()
     {
         if (m_nAttributes & STYLE_CENTEREDVERTICALLY)
         {
@@ -159,7 +199,7 @@ public:
         }
         return enumXFAlignTop;
     };
-    virtual void SetStyleName(const OUString & str){ m_StyleName = str;}
+    void SetStyleName(const OUString & str){ m_StyleName = str;}
     virtual double GetWidth(){return -1;}
 
     //Check whether there are contents in the layout
@@ -167,7 +207,17 @@ public:
     //End by
 protected:
     void Read() SAL_OVERRIDE;
+    bool HasProtection();
+    virtual bool HonorProtection();
+    virtual bool IsProtected();
+    virtual double MarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
+    virtual bool MarginsSameAsParent();
 protected:
+    bool m_bGettingHonorProtection;
+    bool m_bGettingMarginsSameAsParent;
+    bool m_bGettingHasProtection;
+    bool m_bGettingIsProtected;
+    bool m_bGettingMarginsValue;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
@@ -219,7 +269,7 @@ protected:
     enum    {SHIFT_UP = 0, SHIFT_DOWN = 4, SHIFT_LEFT = 8, SHIFT_RIGHT =12};
 public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_VIRTUAL_LAYOUT;}
-    virtual LwpVirtualLayout* FindChildByType(LWP_LAYOUT_TYPE eType);
+    LwpVirtualLayout* FindChildByType(LWP_LAYOUT_TYPE eType);
 };
 
 class LwpAssociatedLayouts
@@ -229,8 +279,7 @@ public:
 public:
     void Read(LwpObjectStream* pStrm);
     LwpObjectID& GetOnlyLayout() { return m_OnlyLayout;}
-    LwpDLVListHeadTail& GetLayouts() { return m_Layouts;}
-    LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
 protected:
     LwpObjectID m_OnlyLayout; //LwpVirtualLayout
     LwpDLVListHeadTail m_Layouts;
@@ -242,7 +291,7 @@ public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeadLayout(){}
     void RegisterStyle() SAL_OVERRIDE;
-    LwpVirtualLayout* FindEnSuperTableLayout();
+    rtl::Reference<LwpVirtualLayout> FindEnSuperTableLayout();
 protected:
     void Read() SAL_OVERRIDE;
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_HEAD_LAYOUT;}
@@ -279,8 +328,7 @@ class LwpMiddleLayout : public LwpVirtualLayout
 public:
     LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
     virtual ~LwpMiddleLayout();
-    virtual bool MarginsSameAsParent() SAL_OVERRIDE;
-    virtual double GetMarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
+    virtual double MarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
     virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
     LwpLayoutGeometry* GetGeometry()
     {
@@ -306,26 +354,26 @@ public:
     virtual sal_uInt8 GetContentOrientation() SAL_OVERRIDE;
     virtual bool HonorProtection() SAL_OVERRIDE;
     virtual bool IsProtected() SAL_OVERRIDE;
-    virtual LwpVirtualLayout* GetWaterMarkLayout();
+    rtl::Reference<LwpVirtualLayout> GetWaterMarkLayout();
     XFBGImage* GetXFBGImage();
-    virtual bool GetUsePrinterSettings();
+    bool GetUsePrinterSettings();
 
     LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj().get());}
-        sal_uInt16 GetScaleMode(void);
-    sal_uInt16 GetScaleTile(void);
-    sal_uInt16 GetScaleCenter(void);
-    sal_uInt32 GetScalePercentage(void);
-    double GetScaleWidth(void);
-    double GetScaleHeight(void);
+        sal_uInt16 GetScaleMode();
+    sal_uInt16 GetScaleTile();
+    sal_uInt16 GetScaleCenter();
+    sal_uInt32 GetScalePercentage();
+    double GetScaleWidth();
+    double GetScaleHeight();
 
-    bool CanSizeRight(void);
+    bool CanSizeRight();
     virtual double GetWidth() SAL_OVERRIDE;
-    virtual sal_Int32 GetMinimumWidth();
-    bool IsSizeRightToContent(void);
-    bool IsSizeRightToContainer(void);
+    sal_Int32 GetMinimumWidth();
+    bool IsSizeRightToContent();
+    bool IsSizeRightToContainer();
     sal_Int32 DetermineWidth();
     virtual double GetHeight();
-    virtual LwpPoint GetOrigin();
+    LwpPoint GetOrigin();
 
     bool IsPatternFill();
     XFBGImage* GetFillPattern();
@@ -336,6 +384,7 @@ public:
 
 protected:
     void Read() SAL_OVERRIDE;
+    virtual bool MarginsSameAsParent() SAL_OVERRIDE;
 private:
     LwpObjectID m_BasedOnStyle;
     LwpLayoutGeometry* Geometry();
@@ -388,7 +437,7 @@ public:
     virtual sal_uInt16 GetNumCols() SAL_OVERRIDE;
     virtual double GetColWidth(sal_uInt16 nIndex) SAL_OVERRIDE;
     virtual double GetColGap(sal_uInt16 nIndex) SAL_OVERRIDE;
-    virtual sal_uInt16 GetUsePage();
+    sal_uInt16 GetUsePage();
 public:
     enum UseWhenType
     {
@@ -399,13 +448,13 @@ public:
         StartOnEvenPage
     };
 public:
-    virtual UseWhenType GetUseWhenType();
+    UseWhenType GetUseWhenType();
     virtual bool IsUseOnAllPages() SAL_OVERRIDE;
     virtual bool IsUseOnAllEvenPages() SAL_OVERRIDE;
     virtual bool IsUseOnAllOddPages() SAL_OVERRIDE;
     virtual bool IsUseOnPage() SAL_OVERRIDE;
     LwpObjectID& GetPosition(){ return m_Positon;}
-    virtual LwpVirtualLayout* GetContainerLayout() SAL_OVERRIDE;
+    virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() SAL_OVERRIDE;
 };
 
 class LwpPlacableLayout : public LwpLayout
@@ -413,10 +462,10 @@ class LwpPlacableLayout : public LwpLayout
 public:
     LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
     virtual ~LwpPlacableLayout();
-    virtual sal_uInt8 GetWrapType();
-    virtual LwpLayoutRelativity* GetRelativityPiece();
+    sal_uInt8 GetWrapType();
+    LwpLayoutRelativity* GetRelativityPiece();
     virtual sal_uInt8 GetRelativeType() SAL_OVERRIDE;
-    virtual sal_Int32 GetBaseLineOffset();
+    sal_Int32 GetBaseLineOffset();
     virtual bool IsAnchorPage() SAL_OVERRIDE;
     virtual bool IsAnchorFrame() SAL_OVERRIDE;
     virtual bool IsAnchorCell() SAL_OVERRIDE;

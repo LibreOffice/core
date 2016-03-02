@@ -75,6 +75,9 @@
 #include "lwpobjhdr.hxx"
 #include "lwpidxmgr.hxx"
 
+#include <unordered_map>
+#include <vector>
+
 /**
  * @brief   object factory used for lwp object creation and maintenance
 */
@@ -88,9 +91,9 @@ public:
 
 //For object Factory and object manager
 private:
-//  static LwpObjectFactory *m_pMgr;
     sal_uInt32 m_nNumObjs;
     LwpSvStream* m_pSvStream;
+    std::vector<LwpObjectID> m_aObjsIDInCreation;
     struct hashFunc
     {
             size_t operator()( const LwpObjectID& rName ) const
@@ -105,7 +108,7 @@ private:
                 return(rKey1==rKey2);
             }
     };
-    typedef boost::unordered_map<LwpObjectID, rtl::Reference<LwpObject>, hashFunc, eqFunc> LwpIdToObjMap;
+    typedef std::unordered_map<LwpObjectID, rtl::Reference<LwpObject>, hashFunc, eqFunc> LwpIdToObjMap;
     LwpIdToObjMap m_IdToObjList;
     LwpIndexManager m_IndexMgr;
     void ClearObjectMap();

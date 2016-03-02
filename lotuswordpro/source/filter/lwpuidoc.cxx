@@ -75,7 +75,7 @@ LwpUIDocument::~LwpUIDocument()
 
 void LwpUIDocument::Read(LwpObjectStream *pStrm)
 {
-    m_NamedProps.Read(pStrm);
+    LwpNamedProperties::Read(pStrm);
     m_ARMacroOpts.Read(pStrm);
     m_MergedOpts.Read(pStrm);
     m_SheetFullPath.ReadPathAtom(pStrm);

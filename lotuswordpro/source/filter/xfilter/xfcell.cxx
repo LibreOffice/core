@@ -94,9 +94,13 @@ void    XFCell::Add(XFContent *pContent)
         assert(false);
         return;
     }
+    if (!pContent)
+    {
+        throw std::runtime_error("no content");
+    }
     if( pContent->GetContentType() == enumXFContentTable )
     {
-        XFTable *pTable = static_cast<XFTable*>(pContent);
+        XFTable *pTable = dynamic_cast<XFTable*>(pContent);
         if( !pTable )
             return;
         //the sub table will fill all the cell, there can't be other contents.

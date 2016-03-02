@@ -292,7 +292,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         }
 
         //adjust
-        aStr = "";
+        aStr.clear();
         switch (m_pFontWorkStyle->GetAdjustType())
         {
         default: // fall througth
@@ -315,7 +315,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         }
 
         //form
-        aStr = "";
+        aStr.clear();
         switch (m_pFontWorkStyle->GetButtonForm())
         {
         default: // fall through!

@@ -174,8 +174,8 @@ void LwpPara::Read()
         const int DISK_SIMPLE = 1;
         const int DISK_NOTIFY = 2;
 
-        Simple = (Flag & DISK_SIMPLE) ? sal_True : sal_False;
-        Notify = (Flag & DISK_NOTIFY) ? sal_True : sal_False;
+        Simple = (Flag & DISK_SIMPLE) != 0;
+        Notify = (Flag & DISK_NOTIFY) != 0;
     }
 
     if(!Simple)
@@ -279,6 +279,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
 
     //Create an XFPara for this VO_PARA
     XFParagraph *pPara = new XFParagraph;
+    rtl::Reference<XFContentContainer> xHolder(pPara);
     pPara->SetStyleName(m_StyleName);
 
     if(!m_SectionStyleName.isEmpty())
@@ -290,7 +291,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         m_pXFContainer = pSection;
     }
 
-    if (m_bHasBullet &&  m_pSilverBullet)
+    if (m_bHasBullet && m_pSilverBullet)
     {
         XFContentContainer* pListItem = AddBulletList(m_pXFContainer);
         if (pListItem)
@@ -298,7 +299,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
             pListItem->Add(pPara);
         }
     }
-    else
+    else if (m_pXFContainer)
     {
         LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
         if (pBulletStyleMgr)
@@ -312,7 +313,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
     m_Fribs.SetXFPara(pPara);
     m_Fribs.XFConvert();
 
-    if (m_pBreaks)
+    if (m_pBreaks && m_pXFContainer)
         AddBreakAfter(m_pXFContainer);
 }
 
@@ -355,13 +356,14 @@ void LwpPara::RegisterStyle()
   //2 reg para style
     if (!m_pFoundry)
         return;
-    XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
-    if (pBaseStyle == NULL) return;
+    XFParaStyle* pBaseStyle = dynamic_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
+    if (pBaseStyle == nullptr) return;
     m_StyleName = pBaseStyle->GetStyleName();//such intf to be added
     m_ParentStyleName = m_StyleName;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
-    if (GetParaStyle()->GetIndent())
+    LwpParaStyle* pParaStyle = GetParaStyle();
+    if (pParaStyle && pParaStyle->GetIndent())
     {
         std::unique_ptr<LwpIndentOverride> pIndentOverride(GetParaStyle()->GetIndent()->clone());
         delete m_pIndentOverride;
@@ -587,8 +589,6 @@ void LwpPara::RegisterStyle()
                     LwpNumberingOverride* pNumbering = this->GetParaNumbering();
                     sal_uInt16 nPosition = pNumbering->GetPosition();
                     bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
-                    /*sal_Bool bResetSection =*/ m_pSilverBullet->IsNewSection(nPosition);
-                    bool bHeading;
                     LwpPara* pPara = this;
                     LwpPara* pPrePara = NULL;
                     sal_uInt16 nNum = 0, nLevel = 0, nFoundLevel = 0xffff, nFoundBound = 0;
@@ -598,7 +598,7 @@ void LwpPara::RegisterStyle()
                     {
                         nFoundBound++;
                     }
-                    bHeading = pNumbering->IsHeading();
+                    bool bHeading = pNumbering->IsHeading();
 
                     while(true)
                     {
@@ -624,7 +624,7 @@ void LwpPara::RegisterStyle()
                                 * higher than our current level.
                                 */
                             // restart based on Outline level?
-                            if (pNumbering && bLesser && (bHeading ? pNumbering->IsHeading() : sal_True))
+                            if (pNumbering && bLesser && (!bHeading || pNumbering->IsHeading()))
                             {
                                 if (nFoundLevel != 0xffff)
                                 {
@@ -703,7 +703,7 @@ void LwpPara::RegisterStyle()
                         if (!pPrePara)
                         {
                             LwpStory* pStory = pPara->GetStory();
-                            pPrePara = pStory->GetLastParaOfPreviousStory();
+                            pPrePara = pStory ? pStory->GetLastParaOfPreviousStory() : nullptr;
 
                             if (!pPrePara)
                             {
@@ -771,13 +771,13 @@ void LwpPara::RegisterStyle()
     //register tab style
     if(m_Fribs.HasFrib(FRIB_TAG_TAB))
     {
-        XFParaStyle* pParaStyle = new XFParaStyle;
-        *pParaStyle = *GetXFParaStyle();
+        XFParaStyle* pNewParaStyle = new XFParaStyle;
+        *pNewParaStyle = *GetXFParaStyle();
         //pOverStyle->SetStyleName("");
-        this->RegisterTabStyle(pParaStyle);
+        this->RegisterTabStyle(pNewParaStyle);
         if (!m_ParentStyleName.isEmpty())
-                    pParaStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
+                    pNewParaStyle->SetParentStyleName(m_ParentStyleName);
+        m_StyleName = pXFStyleManager->AddStyle(pNewParaStyle).m_pStyle->GetStyleName();
     }
 
     //register master page;
@@ -821,7 +821,7 @@ XFSection* LwpPara::CreateXFSection()
 {
     XFSection* pXFSection = new XFSection();
     pXFSection->SetStyleName(m_SectionStyleName);
-    m_SectionStyleName = "";
+    m_SectionStyleName.clear();
     return pXFSection;
 }
 
@@ -971,8 +971,5 @@ void LwpNotifyListPersistent::Read(LwpObjectStream* pObjStrm)
     m_Head.ReadIndexed(pObjStrm);
     pObjStrm->SkipExtra();
 }
-
-void LwpPara::Release()
-{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

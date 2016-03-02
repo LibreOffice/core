@@ -328,7 +328,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
     // we should judt its style by current position
     if (pTable->GetDefaultCellStyle() == GetObjectID())
     {
-        aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout());
+        aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout().get());
     }
 
     // content of cell
@@ -423,10 +423,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
 LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
 {
     if (!pTableLayout)
-    {
-        assert(false);
         return enumWholeBorder;
-    }
 
     // get left cell and judge if neighbour border is different
     XFBorders * pBorders = GetXFBorders();
@@ -572,8 +569,8 @@ void LwpCellLayout::RegisterDefaultCell()
  */
 void LwpCellLayout::RegisterStyle()
 {
-    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent().obj().get());
-    if (!pParent || pParent->GetLayoutType() != LWP_ROW_LAYOUT)
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout *>(GetParent().obj().get()));
+    if (!xParent.is() || xParent->GetLayoutType() != LWP_ROW_LAYOUT)
     {
         // default cell layout, we must register 4 styles for it
         RegisterDefaultCell();
@@ -650,7 +647,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
 {
     bool bProtected = false;
     // judge current cell
-    if (IsProtected())
+    if (GetIsProtected())
     {
         bProtected = true;
     }
@@ -658,7 +655,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
     {
         // judge base on
         LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(GetBasedOnStyle().get());
-        if (pBase && pBase->IsProtected())
+        if (pBase && pBase->GetIsProtected())
         {
             bProtected = true;
         }
@@ -666,9 +663,9 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         {
             // judge whole table
             LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
-            LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : NULL;
-            LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : NULL;
-            if (pSuper && pSuper->IsProtected())
+            rtl::Reference<LwpTableLayout> xTableLayout(pTable ? pTable->GetTableLayout() : nullptr);
+            LwpSuperTableLayout * pSuper = xTableLayout.is() ? xTableLayout->GetSuperTableLayout() : nullptr;
+            if (pSuper && pSuper->GetIsProtected())
             {
                 bProtected = true;
             }
@@ -764,7 +761,11 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
         }
     }
 
-    if ( (nRow + nRowSpan) == pTableLayout->GetTable()->GetRow() )
+    LwpTable* pTable = pTableLayout->GetTable();
+    if (!pTable)
+        throw std::runtime_error("missing table");
+
+    if ( (nRow + nRowSpan) == pTable->GetRow())
     {
         bNoBottomBorder = false;
     }

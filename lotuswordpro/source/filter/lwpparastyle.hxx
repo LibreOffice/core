@@ -86,8 +86,8 @@ public:
 
     virtual void    Apply(XFParaStyle *pStrm);
     // 01/26/2005
-    void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
-    void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
+    static void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
+    static void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
     //end
     static void ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride* pAlign);
     static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpIndentOverride* pIndent);

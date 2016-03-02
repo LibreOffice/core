@@ -69,7 +69,7 @@ class   LwpTabRack;
 class LwpTab
 {
 public:
-    LwpTab(void);
+    LwpTab();
 
     enum TabType
     {

@@ -89,6 +89,7 @@ public:
 
 private:
     LwpFoundry* m_pOwnedFoundry;
+    bool m_bGettingFirstDivisionWithContentsThatIsNotOLE;
 
     //Data members in file format
     LwpObjectID m_DocSockID;
@@ -137,8 +138,7 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
 
     inline bool IsChildDoc();
-    inline bool HonorProtection();
-    inline LwpObjectID& GetContentList();
+    inline bool GetHonorProtection();
     inline LwpObjectID& GetDocData();
     inline LwpObjectID& GetSocket();
 
@@ -160,12 +160,20 @@ public:
     LwpDocument* GetLastDivisionWithContents();
     LwpDocument* GetLastInGroupWithContents();
     LwpDocument* GetRootDocument();
-    LwpDocument* GetFirstDivisionWithContentsThatIsNotOLE();
+    LwpDocument* GetFirstDivisionWithContentsThatIsNotOLE()
+    {
+        if (m_bGettingFirstDivisionWithContentsThatIsNotOLE)
+            throw std::runtime_error("recursion in page divisions");
+        m_bGettingFirstDivisionWithContentsThatIsNotOLE = true;
+        LwpDocument* pRet = ImplGetFirstDivisionWithContentsThatIsNotOLE();
+        m_bGettingFirstDivisionWithContentsThatIsNotOLE = false;
+        return pRet;
+    }
     LwpDocument* GetLastDivisionThatHasEndnote();
 
     LwpDocument* GetLastDivision();
     LwpDocument* GetFirstDivision();
-    LwpVirtualLayout* GetEnSuperTableLayout();
+    rtl::Reference<LwpVirtualLayout> GetEnSuperTableLayout();
     bool GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount);
 
     sal_uInt16 GetNumberOfPagesBefore();
@@ -173,8 +181,9 @@ public:
 
 private:
     void MaxNumberOfPages(sal_uInt16& nNumPages);
+    LwpDocument* ImplGetFirstDivisionWithContentsThatIsNotOLE();
     void XFConvertFrameInPage(XFContentContainer* pCont);
-    void ChangeStyleName();
+    static void ChangeStyleName();
     bool IsSkippedDivision();
 };
 
@@ -182,13 +191,9 @@ inline bool LwpDocument::IsChildDoc()
 {
     return (m_nPersistentFlags & DOC_CHILDDOC) != 0;
 }
-inline bool LwpDocument::HonorProtection()
+inline bool LwpDocument::GetHonorProtection()
 {
     return (m_nPersistentFlags & DOC_PROTECTED) != 0;
-}
-inline LwpObjectID& LwpDocument::GetContentList()
-{
-    return m_pFoundry->GetContentManager().GetContentList();
 }
 inline LwpObjectID& LwpDocument::GetSocket()
 {

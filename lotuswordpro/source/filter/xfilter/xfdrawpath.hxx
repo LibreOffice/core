@@ -81,7 +81,10 @@ public:
     /**
      * @descr   Set svg path point.
      */
-    void    AddPoint(XFPoint pt);
+    void    AddPoint(const XFPoint& pt)
+    {
+        m_aPoints.push_back(pt);
+    }
 
     OUString ToString();
 
@@ -130,11 +133,6 @@ private:
 inline void XFSvgPathEntry::SetCommand(const OUString& cmd)
 {
     m_strCommand = cmd;
-}
-
-inline void XFSvgPathEntry::AddPoint(XFPoint pt)
-{
-    m_aPoints.push_back(pt);
 }
 
 #endif

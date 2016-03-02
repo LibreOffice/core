@@ -110,7 +110,7 @@ protected:
     void Read() SAL_OVERRIDE;
 public:
     inline LwpAssociatedLayouts& GetLayoutsWithMe();
-    LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
     inline bool IsActive();
     virtual bool IsTable();
     inline OUString GetClassName();

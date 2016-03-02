@@ -80,12 +80,9 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
     *pOverStyle = *pBaseStyle;
     pOverStyle->SetStyleName("");
 
-    //Old code
-    //if (static_cast<LwpStory*>(pPara->GetStoryID()->obj())
-    //  ->GetCurrentLayout()->GetNumCols() == 1)
     //New code
-    LwpStory* pStory = static_cast<LwpStory*>(pPara->GetStoryID().obj().get());
-    LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : NULL;
+    LwpStory* pStory = dynamic_cast<LwpStory*>(pPara->GetStoryID().obj().get());
+    LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
     if( pCurLayout && (pCurLayout->GetNumCols() == 1) )
 
     {
@@ -129,7 +126,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
     XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
     if (pBaseStyle == NULL) return;
 
-    LwpPageLayout* pLayout = static_cast<LwpPageLayout*>(m_Layout.obj().get());
+    LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(m_Layout.obj().get());
     if(pLayout)
     {
         m_pMasterPage = new LwpMasterPage(pPara, pLayout);

@@ -317,11 +317,11 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
 
     if (nLeftArrow)
     {
-        pOpenedObjStyle->SetArrowStart( this->GetArrowName(nLeftArrow), fArrowSize, true);
+        pOpenedObjStyle->SetArrowStart( GetArrowName(nLeftArrow), fArrowSize, true);
     }
     if (nRightArrow)
     {
-        pOpenedObjStyle->SetArrowEnd( this->GetArrowName(nRightArrow), fArrowSize, true);
+        pOpenedObjStyle->SetArrowEnd( GetArrowName(nRightArrow), fArrowSize, true);
     }
 
 }
@@ -440,10 +440,10 @@ OUString LwpDrawLine::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aLineRec.nLineWidth, m_aLineRec.nLineStyle, m_aLineRec.aPenColor);
+    SetLineStyle(pStyle, m_aLineRec.nLineWidth, m_aLineRec.nLineStyle, m_aLineRec.aPenColor);
 
     // set arrow head
-    this->SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
+    SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     return (pXFStyleManager->AddStyle(pStyle)).m_pStyle->GetStyleName();
@@ -522,11 +522,11 @@ OUString LwpDrawPolyLine::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aPolyLineRec.nLineWidth, m_aPolyLineRec.nLineStyle,
+    SetLineStyle(pStyle, m_aPolyLineRec.nLineWidth, m_aPolyLineRec.nLineStyle,
         m_aPolyLineRec.aPenColor);
 
     // set arrow head
-    this->SetArrowHead(pStyle, m_aPolyLineRec.nLineEnd, m_aPolyLineRec.nLineWidth);
+    SetArrowHead(pStyle, m_aPolyLineRec.nLineEnd, m_aPolyLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
@@ -608,7 +608,7 @@ OUString LwpDrawPolygon::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
+    SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
     // set fill style
@@ -688,7 +688,7 @@ OUString LwpDrawRectangle::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
+    SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
     // set fill style
@@ -847,7 +847,7 @@ OUString LwpDrawEllipse::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
+    SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
     // set fill style
@@ -926,11 +926,11 @@ OUString LwpDrawArc::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aArcRec.nLineWidth, m_aArcRec.nLineStyle,
+    SetLineStyle(pStyle, m_aArcRec.nLineWidth, m_aArcRec.nLineStyle,
         m_aArcRec.aPenColor);
 
     // set arrow head
-    this->SetArrowHead(pStyle, m_aArcRec.nLineEnd, m_aArcRec.nLineWidth);
+    SetArrowHead(pStyle, m_aArcRec.nLineEnd, m_aArcRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
@@ -1074,8 +1074,8 @@ OUString LwpDrawTextBox::RegisterStyle()
     rtl::Reference<XFFont> pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
-    OUString aFontName = OUString((sal_Char*)m_aTextRec.tmpTextFaceName,
-        strlen((char*)m_aTextRec.tmpTextFaceName), aEncoding);
+    OUString aFontName = OUString(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName),
+        strlen(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName)), aEncoding);
     pFont->SetFontName(aFontName);
 
     SetFontStyle(pFont, &m_aTextRec);
@@ -1099,11 +1099,11 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     else
     {
         // temporary code, need to create Encoding from the value of nTextCharacterSet
-        aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+        aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
 
     XFParagraph* pXFPara = new XFParagraph();
-    pXFPara->Add(OUString((sal_Char*)m_aTextRec.pTextString, (TextLength-2), aEncoding));
+    pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextRec.pTextString), (TextLength-2), aEncoding));
     pXFPara->SetStyleName(rStyleName);
 
     pTextBox->Add(pXFPara);
@@ -1279,8 +1279,8 @@ OUString LwpDrawTextArt::RegisterStyle()
     rtl::Reference<XFFont> pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
-    OUString aFontName = OUString((sal_Char*)m_aTextArtRec.tmpTextFaceName,
-        strlen((char*)m_aTextArtRec.tmpTextFaceName), aEncoding);
+    OUString aFontName = OUString(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName),
+        strlen(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName)), aEncoding);
     pFont->SetFontName(aFontName);
 
     LwpDrawTextBox::SetFontStyle(pFont, &m_aTextArtRec);
@@ -1311,11 +1311,11 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     else
     {
         // temporary code, need to create Encoding from the value of nTextCharacterSet
-        aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+        aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
 
     XFParagraph* pXFPara = new XFParagraph();
-    pXFPara->Add(OUString((sal_Char*)m_aTextArtRec.pTextString, (m_aTextArtRec.nTextLen-1), aEncoding));
+    pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextArtRec.pTextString), (m_aTextArtRec.nTextLen-1), aEncoding));
     pXFPara->SetStyleName(rStyleName);
     pRetObj->Add(pXFPara);
 

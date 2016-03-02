@@ -136,11 +136,11 @@ void LwpGraphicObject::Read()
     }
     if (nServerContextSize == 0)
     {
-        if (strcmp((char *)m_sServerContextFormat, ".cht") == 0 &&
-            strcmp((char *)m_sDataFormat, ".sdw") == 0)
+        if (strcmp(reinterpret_cast<char *>(m_sServerContextFormat), ".cht") == 0 &&
+            strcmp(reinterpret_cast<char *>(m_sDataFormat), ".sdw") == 0)
         {
-            strcpy((char *)m_sServerContextFormat, ".lch");
-            strcpy((char *)m_sDataFormat, ".lch");
+            strcpy(reinterpret_cast<char *>(m_sServerContextFormat), ".lch");
+            strcpy(reinterpret_cast<char *>(m_sDataFormat), ".lch");
         }
     }
     m_nCachedBaseLine = m_pObjStrm->QuickReadInt32();
@@ -203,7 +203,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
             pCont->Add(iter->get());
         }
     }
-    else if (this->IsGrafFormatValid())
+    else if (this->IsGrafFormatValid() && !m_vXFDrawObjects.empty())
     {
         XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front().get());
 
@@ -277,8 +277,8 @@ void LwpGraphicObject::RegisterStyle()
 
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
     {
-        LwpVirtualLayout* pMyLayout = GetLayout(NULL);
-        if (pMyLayout && pMyLayout->IsFrame())
+        rtl::Reference<LwpVirtualLayout> xMyLayout(GetLayout(nullptr));
+        if (xMyLayout.is() && xMyLayout->IsFrame())
         {
             XFFrameStyle* pXFFrameStyle = new XFFrameStyle();
             pXFFrameStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
@@ -308,7 +308,7 @@ void LwpGraphicObject::CreateDrawObjects()
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(rMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pDrawObjStream, aGrfObjName.c_str());
@@ -360,7 +360,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(rMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pGrafStream, aGrfObjName.c_str());
@@ -403,7 +403,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(rMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     char sDName[64]="";
     sprintf(sDName, "%s-D", aGrfObjName.c_str());
@@ -701,7 +701,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
             {
                 pEquData[nIndex] = pGrafData[nBegin + nIndex];
             }
-            pXFNotePara->Add(OUString((sal_Char*)pEquData, (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
+            pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
             delete [] pEquData;
         }
         pXFNote->Add(pXFNotePara);

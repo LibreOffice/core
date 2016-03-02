@@ -66,6 +66,7 @@
 
 #include <rtl/ref.hxx>
 
+#include "xffont.hxx"
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"
@@ -81,7 +82,6 @@
 #define     XFPARA_FLAG_DROPCAP     0X00000002
 #define     XFPARA_FLAG_BACKCOLOR   0X00000004
 
-class XFFont;
 class XFBorders;
 class XFBGImage;
 
@@ -163,7 +163,7 @@ public:
     void    SetLastLineAlign(enumXFAlignType align,bool bJustSingleWord = false);
 
     /**
-     * @descr   Set the shadow of the paragraph.there is 4 postions, you
+     * @descr   Set the shadow of the paragraph.there is 4 positions, you
                 can find it in the definition of enumShadowPos.
      * @param   pos
      * @param   offset the distance between the paragraph border and the shadow.

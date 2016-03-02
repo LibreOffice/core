@@ -141,7 +141,7 @@ private:
                 sal_uInt8 nEndCol,sal_uInt16 nRowID);
     void ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     sal_uInt16 ConvertHeadingRow(XFTable* pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow);
-    bool  FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
+    static bool FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
     void SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
                 sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark);
 

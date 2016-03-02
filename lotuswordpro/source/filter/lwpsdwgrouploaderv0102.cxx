@@ -131,11 +131,11 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     m_pStream->SeekRel(2);
 
     //for calculating transformation params.
-    LwpFrameLayout* pMyFrameLayout = static_cast<LwpFrameLayout*>(m_pGraphicObj->GetLayout(NULL));
-    if (pMyFrameLayout)
+    rtl::Reference<LwpFrameLayout> xMyFrameLayout(dynamic_cast<LwpFrameLayout*>(m_pGraphicObj->GetLayout(nullptr).get()));
+    if (xMyFrameLayout.is())
     {
-        LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
-        LwpLayoutGeometry* pFrameGeo = pMyFrameLayout->GetGeometry();
+        LwpLayoutScale* pMyScale = xMyFrameLayout->GetLayoutScale();
+        LwpLayoutGeometry* pFrameGeo = xMyFrameLayout->GetGeometry();
         if (pMyScale && pFrameGeo)
         {
             // original drawing size
@@ -145,10 +145,8 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             double fGrafOrgHeight = (double)nHeight/TWIPS_PER_CM;
 
             // get margin values
-            double fLeftMargin = pMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
-//          double fRightMargin = pMyFrameLayout->GetMarginsValue(MARGIN_RIGHT);
-            double fTopMargin = pMyFrameLayout->GetMarginsValue(MARGIN_TOP);
-//          double fBottomMargin = pMyFrameLayout->GetMarginsValue(MARGIN_BOTTOM);
+            double fLeftMargin = xMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
+            double fTopMargin = xMyFrameLayout->GetMarginsValue(MARGIN_TOP);
 
             // frame size
             double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
@@ -199,7 +197,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             }
 
             // placement: centered
-            if (pMyFrameLayout->GetScaleCenter())
+            if (xMyFrameLayout->GetScaleCenter())
             {
                 Rectangle aBoundRect(static_cast<long>(left*m_aTransformData.fScaleX + fLeftMargin),
                     static_cast<long>(top    * m_aTransformData.fScaleY + fTopMargin),
@@ -243,7 +241,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
  *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
-XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject(void)
+XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
 {
     //flag
     unsigned char BinSignature[2];
@@ -304,7 +302,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject(void)
  * @descr   Create the XF-drawing objects according to the object type read from bento stream.
  * @return   the created XF-drawing objects.
  */
-XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject(void)
+XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
 {
     //record type
     unsigned char recType;

@@ -68,7 +68,10 @@ public:
     XFDrawRect();
 
 public:
-    void    SetStartPoint(XFPoint pt);
+    void SetStartPoint(const XFPoint& pt)
+    {
+        m_aRect.SetStartPoint(pt);
+    }
 
     void    SetSize(double width, double height);
 
@@ -83,11 +86,6 @@ public:
 private:
     double  m_fCornerRadius;
 };
-
-inline void XFDrawRect::SetStartPoint(XFPoint pt)
-{
-    m_aRect.SetStartPoint(pt);
-}
 
 inline void XFDrawRect::SetSize(double width, double height)
 {

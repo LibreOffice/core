@@ -119,14 +119,14 @@ void LwpFnRowLayout::RegisterStyle()
 {
     // register cells' style
     LwpObjectID& rCellID = GetChildHead();
-    LwpCellLayout * pCellLayout = static_cast<LwpCellLayout *>(rCellID.obj().get());
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
 
     while(pCellLayout)
     {
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
         rCellID = pCellLayout->GetNext();
-        pCellLayout = static_cast<LwpCellLayout *>(rCellID.obj().get());
+        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
     }
 }
 
@@ -199,14 +199,14 @@ void LwpEndnoteLayout::RegisterStyle()
 {
     // register style of rows
     LwpObjectID& rRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(rRowID.obj().get());
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
     while (pRowLayout)
     {
         pRowLayout->SetFoundry(m_pFoundry);
         pRowLayout->RegisterStyle();
 
         rRowID = pRowLayout->GetNext();
-        pRowLayout = static_cast<LwpRowLayout *>(rRowID.obj().get());
+        pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
     }
 }
 
@@ -262,7 +262,7 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
 
     while(!rID.IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(rID.obj().get());
+        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout*>(rID.obj().get());
         if(!pLayout)
         {
             break;
@@ -318,7 +318,7 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
 
     while(!rID.IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(rID.obj().get());
+        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(rID.obj().get());
         if(!pLayout)
         {
             break;

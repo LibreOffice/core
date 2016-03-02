@@ -391,11 +391,11 @@ void LwpFieldMark::ParseIndex(OUString& sKey1,OUString& sKey2)
     if (index[0]>=0 && index[1]>=0)
         sKey1 = sFormula.copy(index[0]+1,index[1]-index[0]-1);
     else
-        sKey1 = "";
+        sKey1.clear();
     if (index[2]>=0 && index[3]>=0)
         sKey2 = sFormula.copy(index[2]+1,index[3]-index[2]-1);
     else
-        sKey2 = "";
+        sKey2.clear();
 }
 
 void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
@@ -413,11 +413,11 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
     if (index[0]>=0 && index[1]>=0)
         sLevel = sFormula.copy(index[0]+1,index[1]-index[0]-1);
     else
-        sLevel = "";
+        sLevel.clear();
     if (index[2]>=0 && index[3]>=0)
         sText = sFormula.copy(index[2]+1,index[3]-index[2]-1);
     else
-        sText = "";
+        sText.clear();
 }
 
 bool LwpFieldMark::IsFormulaInsert()

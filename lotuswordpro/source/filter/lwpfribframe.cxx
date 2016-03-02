@@ -156,13 +156,13 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
     sal_uInt8 nType = pLayout->GetRelativeType();
     if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {
-        LwpVirtualLayout* pContainerLayout = pLayout->GetContainerLayout();
-        if(pContainerLayout && pContainerLayout->IsFrame())
+        rtl::Reference<LwpVirtualLayout> xContainerLayout(pLayout->GetContainerLayout());
+        if (xContainerLayout.is() && xContainerLayout->IsFrame())
         {
             //same page as text and in frame
             pXFContentContainer = m_pPara->GetXFContainer();
         }
-        else if(pContainerLayout && pContainerLayout->IsCell())
+        else if (xContainerLayout.is() && xContainerLayout->IsCell())
         {
             //same page as text and in cell, get the first xfpara
             rtl::Reference<XFContent> first(

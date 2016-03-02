@@ -506,24 +506,24 @@ void LwpPageLayout::ResetXFColumns()
 
 LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
 {
-    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLay)
+    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLay.is())
     {
-        if( pLay->GetLayoutType() == LWP_HEADER_LAYOUT )
-            return ( static_cast<LwpHeaderLayout*> (pLay) );
-        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+        if (xLay->GetLayoutType() == LWP_HEADER_LAYOUT)
+            return dynamic_cast<LwpHeaderLayout*>(xLay.get());
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
     return NULL;
 }
 
 LwpFooterLayout* LwpPageLayout::GetFooterLayout()
 {
-    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLay)
+    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLay.is())
     {
-        if( pLay->GetLayoutType() == LWP_FOOTER_LAYOUT )
-            return ( static_cast<LwpFooterLayout*> (pLay) );
-        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+        if (xLay->GetLayoutType() == LWP_FOOTER_LAYOUT)
+            return dynamic_cast<LwpFooterLayout*>(xLay.get());
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
     return NULL;
 }
@@ -536,19 +536,19 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
 {
     if(IsComplex())
     {
-        LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-        while(pLay)
+        rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+        while (xLay.is())
         {
-            if( pLay->GetLayoutType() == LWP_PAGE_LAYOUT )
+            if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
             {
-                LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*> (pLay);
+                LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*>(xLay.get());
                 LwpUseWhen* pUseWhen = pPageLayout->GetUseWhen();
                 if(pUseWhen && pUseWhen->IsUseOnAllOddPages())
                 {
                     return pPageLayout;
                 }
             }
-            pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+            xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
         }
     }
     return NULL;
@@ -579,6 +579,8 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
 {
     sal_Int16 nPageNumber = -1;
     LwpFoundry* pFoundry = this->GetFoundry();
+    if (!pFoundry)
+        return nPageNumber;
     LwpDocument* pDoc = pFoundry->GetDocument();
     LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID().obj().get());
     if(!pHeadTail) return nPageNumber;
@@ -640,12 +642,12 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
     if(GetUsePrinterSettings())
     {
         //replaced by printer paper size
-        Printer aPrinter;
-        bool bScreen = aPrinter.IsDisplayPrinter();
+        ScopedVclPtrInstance< Printer > pPrinter;
+        bool bScreen = pPrinter->IsDisplayPrinter();
         if (!bScreen)//Printer available
         {
-            Size aPaperSize = aPrinter.GetPaperSize();
-            aPaperSize = aPrinter.PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
+            Size aPaperSize = pPrinter->GetPaperSize();
+            aPaperSize = pPrinter->PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
             fWidth = static_cast<double>(aPaperSize.Width())/100;   //cm unit
             fHeight = static_cast<double>(aPaperSize.Height())/100;
         }
@@ -683,7 +685,7 @@ double LwpPageLayout::GetHeight()
     return fHeight;
 }
 /**
-* @descr:  Compare the position of layout. If the poistion of this layout is earlier than other layout,return ture, or return false
+* @descr:  Compare the position of layout. If the position of this layout is earlier than other layout,return true, or return false
 *
 */
 bool LwpPageLayout::operator<(LwpPageLayout& Other)
