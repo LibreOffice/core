@@ -1580,12 +1580,6 @@
           </info>
           <value>$(insturl)/@LIBO_SHARE_FOLDER@/config/symbol</value>
         </prop>
-        <prop oor:name="Classification" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <desc>Contains the URL of the current TSCP BAF policy file.</desc>
-          </info>
-	  <value>$BRAND_BASE_DIR/@LIBO_SHARE_FOLDER@/classification/example.xml</value>
-        </prop>
         <prop oor:name="Config" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Contains the configuration files. This value cannot be changed
@@ -1780,12 +1774,6 @@
             can be used for the menu and toolbar icons, are located.</desc>
           </info>
           <value>$(insturl)/@LIBO_SHARE_FOLDER@/config/symbol</value>
-        </prop>
-        <prop oor:name="Classification" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <desc>Contains the URL of the default TSCP BAF policy file.</desc>
-          </info>
-	  <value>$BRAND_BASE_DIR/@LIBO_SHARE_FOLDER@/classification/example.xml</value>
         </prop>
         <prop oor:name="Config" oor:type="xs:string" oor:nillable="false">
           <info>

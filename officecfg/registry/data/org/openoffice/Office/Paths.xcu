@@ -206,6 +206,16 @@
         <value>$(work)</value>
       </prop>
     </node>
+    <node oor:name="Classification" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="IsSinglePath" oor:finalized="true">
+        <value>true</value>
+      </prop>
+      <node oor:name="InternalPaths" oor:finalized="true"/>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value>$(insturl)/@LIBO_SHARE_FOLDER@/classification/example.xml</value>
+      </prop>
+    </node>
   </node>
   <node oor:name="Variables">
     <prop oor:name="Work">

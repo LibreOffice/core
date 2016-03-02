@@ -126,6 +126,7 @@ class SvtPathOptions_Impl
         const OUString& GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
         const OUString& GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
         const OUString& GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
+        const OUString& GetClassificationPath() { return GetPath( SvtPathOptions::PATH_CLASSIFICATION ); }
 
         // set the paths
         void            SetPath( SvtPathOptions::Paths, const OUString& rNewPath );
@@ -151,6 +152,7 @@ class SvtPathOptions_Impl
         void            SetTemplatePath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
         void            SetUserConfigPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
         void            SetWorkPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
+        void            SetClassificationPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_CLASSIFICATION, rPath ); }
 
         OUString   SubstVar( const OUString& rVar ) const;
         OUString   ExpandMacros( const OUString& rPath ) const;
@@ -202,7 +204,8 @@ static const PropertyStruct aPropNames[] =
     { "UserConfig",     SvtPathOptions::PATH_USERCONFIG     },
     { "Work",           SvtPathOptions::PATH_WORK           },
     { "UIConfig",       SvtPathOptions::PATH_UICONFIG       },
-    { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    }
+    { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    },
+    { "Classification", SvtPathOptions::PATH_CLASSIFICATION }
 };
 
 static const VarNameAttribute aVarNameAttribute[] =
@@ -584,6 +587,11 @@ const OUString& SvtPathOptions::GetWorkPath() const
     return pImp->GetWorkPath();
 }
 
+const OUString& SvtPathOptions::GetClassificationPath() const
+{
+    return pImp->GetClassificationPath();
+}
+
 void SvtPathOptions::SetAddinPath( const OUString& rPath )
 {
     pImp->SetAddinPath( rPath );
@@ -694,6 +702,11 @@ void SvtPathOptions::SetWorkPath( const OUString& rPath )
     pImp->SetWorkPath( rPath );
 }
 
+void SvtPathOptions::SetClassificationPath( const OUString& rPath )
+{
+    pImp->SetClassificationPath( rPath );
+}
+
 OUString SvtPathOptions::SubstituteVariable( const OUString& rVar ) const
 {
     return pImp->SubstVar( rVar );
@@ -778,6 +791,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
                 case PATH_FINGERPRINT:  aPath = GetFingerprintPath();   break;
+                case PATH_CLASSIFICATION: aPath = GetClassificationPath(); break;
                 // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                 case PATH_USERCONFIG:
                 case PATH_COUNT:
