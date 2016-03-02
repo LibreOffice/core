@@ -74,7 +74,7 @@ bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::sun::
             pValue[i].Value >>= sURL;
     }
 
-    SvFileStream inputStream( sURL, StreamMode::READ );
+    SvFileStream inputStream( sURL, STREAM_READ );
     if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
          return false;
 

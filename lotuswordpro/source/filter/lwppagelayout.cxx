@@ -642,12 +642,12 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
     if(GetUsePrinterSettings())
     {
         //replaced by printer paper size
-        ScopedVclPtrInstance< Printer > pPrinter;
-        bool bScreen = pPrinter->IsDisplayPrinter();
+        Printer aPrinter;
+        bool bScreen = aPrinter.IsDisplayPrinter();
         if (!bScreen)//Printer available
         {
-            Size aPaperSize = pPrinter->GetPaperSize();
-            aPaperSize = pPrinter->PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
+            Size aPaperSize = aPrinter.GetPaperSize();
+            aPaperSize = aPrinter.PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
             fWidth = static_cast<double>(aPaperSize.Width())/100;   //cm unit
             fHeight = static_cast<double>(aPaperSize.Height())/100;
         }
