@@ -1534,7 +1534,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
     invalidateUndoRedo();
 }
 
-OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition, bool bVis, bool bActivate)
+OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition, bool bVis)
 {
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
     if (!pSourceWin)
@@ -1555,7 +1555,7 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxd
     aInfo->SetDataType(pInf->GetDataType());
     aInfo->SetVisible(bVis);
 
-    return InsertField(aInfo, _nColumnPosition, bVis, bActivate);
+    return InsertField(aInfo, _nColumnPosition, bVis);
 }
 
 OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _rInfo, sal_uInt16 _nColumnPosition, bool bVis, bool bActivate)

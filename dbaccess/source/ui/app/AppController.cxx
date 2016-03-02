@@ -1765,9 +1765,9 @@ bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTab
 }
 
 Reference< XComponent > OApplicationController::openElement(const OUString& _sName, ElementType _eType,
-    ElementOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand )
+    ElementOpenMode _eOpenMode )
 {
-    return openElementWithArguments( _sName, _eType, _eOpenMode, _nInstigatorCommand, ::comphelper::NamedValueCollection() );
+    return openElementWithArguments( _sName, _eType, _eOpenMode, 0, ::comphelper::NamedValueCollection() );
 }
 
 Reference< XComponent > OApplicationController::openElementWithArguments( const OUString& _sName, ElementType _eType,

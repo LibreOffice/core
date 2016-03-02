@@ -1009,9 +1009,10 @@ void ODatabaseModelImpl::commitStorages()
     getDocumentStorageAccess()->commitStorages();
 }
 
-Reference< XStorage > ODatabaseModelImpl::getStorage( const ObjectType _eType, const sal_Int32 _nDesiredMode )
+Reference< XStorage > ODatabaseModelImpl::getStorage( const ObjectType _eType )
 {
-    return getDocumentStorageAccess()->getDocumentSubStorage( getObjectContainerStorageName( _eType ), _nDesiredMode );
+    return getDocumentStorageAccess()->getDocumentSubStorage( getObjectContainerStorageName( _eType ),
+                    css::embed::ElementModes::READWRITE );
 }
 
 const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()

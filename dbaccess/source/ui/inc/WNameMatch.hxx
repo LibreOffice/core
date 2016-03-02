@@ -39,7 +39,7 @@ namespace dbaui
         OColumnTreeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
-        void SetReadOnly(bool _bRo=true) { m_bReadOnly = _bRo; }
+        void SetReadOnly() { m_bReadOnly = true; }
         virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
 
     private:

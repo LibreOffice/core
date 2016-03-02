@@ -134,7 +134,7 @@ namespace dbaui
         void SwitchType( const TOTypeInfoSP& _pType );
 
         /// force displaying of the given row
-        void DisplayData( long nRow, bool bGrabFocus = true );
+        void DisplayData( long nRow );
 
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) override;
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rSaveData ) override;

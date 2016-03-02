@@ -152,15 +152,12 @@ namespace dbaui
                 Defines the type to open
             @param  _eOpenMode
                 denotes the mode in which to open the object
-            @param _nInstigatorCommand
-                denotes the command which instigated the action. Might be 0.
             @return the form or report model will only be returned, otherwise <NULL/>
         */
         css::uno::Reference< css::lang::XComponent > openElement(
             const OUString& _sName,
             ElementType _eType,
-            ElementOpenMode _eOpenMode,
-            sal_uInt16 _nInstigatorCommand = 0
+            ElementOpenMode _eOpenMode
         );
 
         /** opens a new sub frame with a table/query/form/report/view, passing additional arguments

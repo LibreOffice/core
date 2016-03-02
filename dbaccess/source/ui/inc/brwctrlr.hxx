@@ -288,9 +288,9 @@ namespace dbaui
         bool SaveModified(bool bAskFor = true);
             // save the modified record
 
-        css::uno::Reference< css::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
-            // a PropertySet corresponding to the cursor field a column is bound to
-            // if nViewPos is (sal_uInt16)-1 (the default) then the field for the current column will be retrieved
+        css::uno::Reference< css::beans::XPropertySet >   getBoundField() const;
+            // a PropertySet corresponding to the cursor field a column is bound to.
+            // The field for the current column will be retrieved.
 
         void enterFormAction();
         void leaveFormAction();

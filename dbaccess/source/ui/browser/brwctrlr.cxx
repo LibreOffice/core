@@ -2295,18 +2295,15 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTime
         InvalidateFeature(ID_BROWSER_PASTE);
 }
 
-Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 nViewPos) const
+Reference< XPropertySet >  SbaXDataBrowserController::getBoundField() const
 {
     Reference< XPropertySet >  xEmptyReturn;
 
     // get the current column from the grid
-    if (nViewPos == (sal_uInt16)-1)
-    {
-        Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-        if (!xGrid.is())
+    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    if (!xGrid.is())
             return xEmptyReturn;
-        nViewPos = xGrid->getCurrentColumnPosition();
-    }
+    sal_uInt16 nViewPos = xGrid->getCurrentColumnPosition();
     sal_uInt16 nCurrentCol = getBrowserView()->View2ModelPos(nViewPos);
     if (nCurrentCol == (sal_uInt16)-1)
         return xEmptyReturn;

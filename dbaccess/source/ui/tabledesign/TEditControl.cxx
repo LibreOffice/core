@@ -436,7 +436,7 @@ void OTableEditorCtrl::SaveCurRow()
     pDescrWin->SaveData( pActRow->GetActFieldDescr() );
 }
 
-void OTableEditorCtrl::DisplayData(long nRow, bool bGrabFocus)
+void OTableEditorCtrl::DisplayData(long nRow)
 {
     // go to the correct cell
     SetDataPtr(nRow);
@@ -459,8 +459,7 @@ void OTableEditorCtrl::DisplayData(long nRow, bool bGrabFocus)
     RowModified(nRow);
 
     // and re-enable edit mode
-    if (bWasEditing || bGrabFocus)
-        ActivateCell(nRow, GetCurColumnId(), bGrabFocus);
+    ActivateCell(nRow, GetCurColumnId());
 }
 
 void OTableEditorCtrl::CursorMoved()

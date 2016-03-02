@@ -107,8 +107,7 @@ namespace dbaui
         */
         void appendError(
                         const OUString& _rErrorMessage,
-                        const ::dbtools::StandardSQLState _eSQLState = ::dbtools::StandardSQLState::GENERAL_ERROR,
-                        const sal_Int32 _nErrorCode = 1000
+                        const ::dbtools::StandardSQLState _eSQLState = ::dbtools::StandardSQLState::GENERAL_ERROR
                      );
 
         /** clears the error state.

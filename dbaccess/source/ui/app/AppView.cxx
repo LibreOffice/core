@@ -448,11 +448,11 @@ void OApplicationView::elementReplaced(ElementType _eType
     getDetailView()->elementReplaced(_eType, _rOldName, _rNewName );
 }
 
-void OApplicationView::clearPages(bool _bTaskAlso)
+void OApplicationView::clearPages()
 {
     OSL_ENSURE(m_pWin && getDetailView() && getPanel(),"Detail view is NULL! -> GPF");
     getPanel()->clearSelection();
-    getDetailView()->clearPages(_bTaskAlso);
+    getDetailView()->clearPages();
 }
 
 void OApplicationView::selectContainer(ElementType _eType)

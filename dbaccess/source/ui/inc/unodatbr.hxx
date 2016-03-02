@@ -330,7 +330,7 @@ namespace dbaui
         void    implAdministrate( SvTreeListEntry* _pApplyTo );
 
         TransferableHelper*
-                implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, bool _bAllowConnection = true );
+                implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType );
 
         EntryType getEntryType( const SvTreeListEntry* _pEntry ) const;
         EntryType   getChildType( SvTreeListEntry* _pEntry ) const;

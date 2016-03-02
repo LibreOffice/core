@@ -61,7 +61,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svx;
 
-    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, bool _bAllowConnection )
+    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType )
     {
         try
         {
@@ -72,7 +72,7 @@ namespace dbaui
             SharedConnection xConnection;
             if ( CommandType::QUERY != _nCommandType )
             {
-                if ( _bAllowConnection && !ensureConnection( _pApplyTo, xConnection) )
+                if ( !ensureConnection( _pApplyTo, xConnection) )
                     return nullptr;
                 pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
             }

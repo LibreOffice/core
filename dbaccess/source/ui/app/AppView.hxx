@@ -181,10 +181,9 @@ namespace dbaui
         sal_Int32 getSelectionCount();
 
         /** clears the detail page and the selection on the left side.
-            @param  _bTaskAlso
-                If <TRUE/> the task window will also be cleared.
+            The task window will also be cleared.
         */
-        void clearPages(bool _bTaskAlso = true);
+        void clearPages();
 
         /** returns the element names which are selected
             @param  _rNames

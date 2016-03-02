@@ -285,8 +285,7 @@ public:
     inline OUString getDocFileLocation() const   { return m_sDocFileLocation; }
 
     css::uno::Reference< css::embed::XStorage >
-            getStorage(
-                const ObjectType _eType, const sal_Int32 _nDesiredMode = css::embed::ElementModes::READWRITE );
+            getStorage( const ObjectType _eType );
 
 // helper
     const css::uno::Reference< css::util::XNumberFormatsSupplier >&
