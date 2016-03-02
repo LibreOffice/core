@@ -27,9 +27,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC UniqueIndexImpl
 {
 public:
     typedef sal_uInt32 Index;
-    enum {
-        IndexNotFound = SAL_MAX_UINT32
-    };
+    static Index const IndexNotFound = SAL_MAX_UINT32;
 
 private:
     std::map<Index, void*> maMap;
