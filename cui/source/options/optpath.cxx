@@ -46,11 +46,14 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
 
+using namespace css;
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::ui::dialogs;
@@ -546,6 +549,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     sal_uInt16 nPos = ( pEntry != nullptr ) ? static_cast<PathUserData_Impl*>(pEntry->GetUserData())->nRealId : 0;
     OUString sInternal, sUser, sWritable;
+    bool bPickFile = false;
     if ( pEntry )
     {
         PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pEntry->GetUserData());
@@ -553,6 +557,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
         GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
         sUser = pPathImpl->sUserPath;
         sWritable = pPathImpl->sWritablePath;
+        bPickFile = pPathImpl->nRealId == SvtPathOptions::PATH_CLASSIFICATION;
     }
 
     if(pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
@@ -614,7 +619,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
             }
         }
     }
-    else if ( pEntry )
+    else if (pEntry && !bPickFile)
     {
         try
         {
@@ -640,6 +645,24 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
         catch( Exception& )
         {
             SAL_WARN( "cui.options", "SvxPathTabPage::PathHdl_Impl: exception from folder picker" );
+        }
+    }
+    else if (pEntry)
+    {
+        try
+        {
+            uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+            uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = ui::dialogs::FilePicker::createWithMode(xComponentContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
+            xFilePicker->appendFilter(OUString(), "*.xml");
+            if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
+            {
+                uno::Sequence<OUString> aPathSeq(xFilePicker->getSelectedFiles());
+                ChangeCurrentEntry(aPathSeq[0]);
+            }
+        }
+        catch (const uno::Exception& rException)
+        {
+            SAL_WARN("cui.options", "SvxPathTabPage::PathHdl_Impl: exception from file picker: " << rException.Message);
         }
     }
 }
