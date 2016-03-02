@@ -1936,6 +1936,10 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window *pWin, c
     PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
     if ( pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception( *pVCLMenu, rResName, aEvent ) )
         pVCLMenu->Execute( pWindow, aPos );
+
+    css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
+    if ( xComponent.is() )
+        xComponent->dispose();
 }
 
 /** With this method the SfxDispatcher can be locked and released. A locked
