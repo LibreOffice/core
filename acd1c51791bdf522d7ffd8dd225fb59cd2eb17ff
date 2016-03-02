@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_f702ab6e",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:48:36Z",
+      "side": 0,
+      "message": "This should be converted into a comment, as it contains useful information.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_57f8df7c",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:48:36Z",
+      "side": 0,
+      "message": "This should be converted into a comment, as it contains useful information",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

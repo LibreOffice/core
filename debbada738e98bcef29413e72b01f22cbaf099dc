@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_17fe576b",
+        "filename": "cli_ure/source/climaker/climaker_app.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-02T07:48:36Z",
+      "side": 1,
+      "message": "This is now production code, that was not the intention. This line should be removed",
+      "revId": "debbada738e98bcef29413e72b01f22cbaf099dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
