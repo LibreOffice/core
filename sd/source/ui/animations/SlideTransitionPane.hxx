@@ -96,7 +96,7 @@ private:
     DECL_LINK_TYPED( AdvanceSlideRadioButtonToggled, RadioButton&, void );
     DECL_LINK_TYPED( AdvanceTimeModified, Edit&, void );
     DECL_LINK_TYPED( VariantListBoxSelected, ListBox&, void );
-    DECL_LINK_TYPED( SpeedListBoxSelected, ListBox&, void );
+    DECL_LINK_TYPED( DurationModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( SoundListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );
     DECL_LINK_TYPED( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
@@ -108,8 +108,8 @@ private:
     VclPtr<ValueSet>     mpVS_TRANSITION_ICONS;
     VclPtr<FixedText>    mpFT_VARIANT;
     VclPtr<ListBox>      mpLB_VARIANT;
-    VclPtr<FixedText>    mpFT_SPEED;
-    VclPtr<ListBox>      mpLB_SPEED;
+    VclPtr<FixedText>    mpFT_duration;
+    VclPtr<MetricBox>    mpCBX_duration;
     VclPtr<FixedText>    mpFT_SOUND;
     VclPtr<ListBox>      mpLB_SOUND;
     VclPtr<CheckBox>     mpCB_LOOP_SOUND;

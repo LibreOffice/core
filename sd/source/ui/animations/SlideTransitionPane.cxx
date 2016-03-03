@@ -412,8 +412,8 @@ SlideTransitionPane::SlideTransitionPane(
 {
     get(mpFT_VARIANT, "variant_label");
     get(mpLB_VARIANT, "variant_list");
-    get(mpFT_SPEED, "speed_label");
-    get(mpLB_SPEED, "speed_list");
+    get(mpFT_duration, "duration_label");
+    get(mpCBX_duration, "transition_duration");
     get(mpFT_SOUND, "sound_label");
     get(mpLB_SOUND, "sound_list");
     get(mpCB_LOOP_SOUND, "loop_sound" );
@@ -445,6 +445,11 @@ SlideTransitionPane::SlideTransitionPane(
         VALUESET_APPEND, /* show legend */ true );
     mpVS_TRANSITION_ICONS->RecalculateItemSizes();
 
+    mpCBX_duration->InsertValue(100, FUNIT_CUSTOM);
+    mpCBX_duration->InsertValue(200, FUNIT_CUSTOM);
+    mpCBX_duration->InsertValue(300, FUNIT_CUSTOM);
+    mpCBX_duration->AdaptDropDownLineCountToMaximum();
+
     // set defaults
     mpCB_AUTO_PREVIEW->Check();      // automatic preview on
 
@@ -458,7 +463,7 @@ SlideTransitionPane::SlideTransitionPane(
     mpVS_TRANSITION_ICONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
 
     mpLB_VARIANT->SetSelectHdl( LINK( this, SlideTransitionPane, VariantListBoxSelected ));
-    mpLB_SPEED->SetSelectHdl( LINK( this, SlideTransitionPane, SpeedListBoxSelected ));
+    mpCBX_duration->SetModifyHdl(LINK( this, SlideTransitionPane, DurationModifiedHdl));
     mpLB_SOUND->SetSelectHdl( LINK( this, SlideTransitionPane, SoundListBoxSelected ));
     mpCB_LOOP_SOUND->SetClickHdl( LINK( this, SlideTransitionPane, LoopSoundBoxChecked ));
 
@@ -487,8 +492,8 @@ void SlideTransitionPane::dispose()
     mpVS_TRANSITION_ICONS.disposeAndClear();
     mpFT_VARIANT.clear();
     mpLB_VARIANT.clear();
-    mpFT_SPEED.clear();
-    mpLB_SPEED.clear();
+    mpFT_duration.clear();
+    mpCBX_duration.clear();
     mpFT_SOUND.clear();
     mpLB_SOUND.clear();
     mpCB_LOOP_SOUND.clear();
@@ -510,7 +515,7 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
 void SlideTransitionPane::UpdateLook()
 {
     SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
-    mpFT_SPEED->SetBackground(Wallpaper());
+    mpFT_duration->SetBackground(Wallpaper());
     mpFT_SOUND->SetBackground(Wallpaper());
 }
 
@@ -597,12 +602,14 @@ void SlideTransitionPane::updateControls()
     }
 
     if( aEffect.mbDurationAmbiguous )
-        mpLB_SPEED->SetNoSelection();
+    {
+        mpCBX_duration->SetText("");
+        mpCBX_duration->SetNoSelection();
+    }
     else
-        mpLB_SPEED->SelectEntryPos(
-            (aEffect.mfDuration > 2.0 )
-            ? 0 : (aEffect.mfDuration < 2.0)
-            ? 2 : 1 );       // else FADE_SPEED_FAST
+    {
+        mpCBX_duration->SetValue( (aEffect.mfDuration)*100.0 );
+    }
 
     if( aEffect.mbSoundAmbiguous )
     {
@@ -621,7 +628,6 @@ void SlideTransitionPane::updateControls()
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
-                // skip first three entries
                 mpLB_SOUND->SelectEntryPos( nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
@@ -665,7 +671,7 @@ void SlideTransitionPane::updateControlState()
 {
     mpVS_TRANSITION_ICONS->Enable( mbHasSelection );
     mpLB_VARIANT->Enable( mbHasSelection && mpLB_VARIANT->GetEntryCount() > 0 );
-    mpLB_SPEED->Enable( mbHasSelection );
+    mpCBX_duration->Enable( mbHasSelection );
     mpLB_SOUND->Enable( mbHasSelection );
     mpCB_LOOP_SOUND->Enable( mbHasSelection && (mpLB_SOUND->GetSelectEntryPos() > 2));
     mpRB_ADVANCE_ON_MOUSE->Enable( mbHasSelection );
@@ -805,23 +811,33 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             }
         }
         aResult.mbEffectAmbiguous = false;
-
-    } else if (mpVS_TRANSITION_ICONS->IsNoSelection())
-        aResult.mbEffectAmbiguous = false;
-
-    // speed
-    if( mpLB_SPEED->IsEnabled() &&
-        mpLB_SPEED->GetSelectEntryCount() > 0 )
+    }
+    else if (mpVS_TRANSITION_ICONS->IsNoSelection())
     {
-        sal_Int32 nPos = mpLB_SPEED->GetSelectEntryPos();
-        aResult.mfDuration = (nPos == 0)
-            ? 3.0
+        aResult.mbEffectAmbiguous = false;
+    }
+
+    //duration
+
+    if( mpCBX_duration->IsEnabled() )
+    {
+        if(mpCBX_duration->GetSelectEntryCount() > 0 )
+        {
+            sal_Int32 nPos = mpCBX_duration->GetSelectEntryPos();
+            aResult.mfDuration = (nPos == 0)
+            ? 1.0
             : (nPos == 1)
             ? 2.0
-            : 1.0;   // nPos == 2
-        DBG_ASSERT( aResult.mfDuration != 1.0 || nPos == 2, "Invalid Listbox Entry" );
+            : 3.0;   //nPos ==2
 
-        aResult.mbDurationAmbiguous = false;
+            DBG_ASSERT( aResult.mfDuration != 1.0 || nPos == 2, "Invalid Listbox Entry" );
+            aResult.mbDurationAmbiguous = false;
+        }
+        else if(!(mpCBX_duration->GetText()).isEmpty())
+        {
+            aResult.mfDuration = static_cast<double>(mpCBX_duration->GetValue())/100.0;
+            aResult.mbDurationAmbiguous = false;
+        }
     }
 
     // slide-advance mode
@@ -1083,7 +1099,7 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, VariantListBoxSelected, ListBox&, voi
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, SpeedListBoxSelected, ListBox&, void)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
 {
     applyToSelectedPages();
 }
