@@ -113,7 +113,6 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 const TransformPrimitive2D& rTransformPrimitive2D = dynamic_cast<const TransformPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("transform");
-                //pTransformPrimitive2D->getTransformation()
                 decomposeAndWrite(rTransformPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
@@ -125,6 +124,10 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.startElement("polypolygoncolor");
                 rWriter.attribute("color", convertColorToString(rPolyPolygonColorPrimitive2D.getBColor()));
+                const basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon());
+                const basegfx::B2DRange aB2DRange(aB2DPolyPolygon.getB2DRange());
+                rWriter.attribute("height", aB2DRange.getHeight());
+                rWriter.attribute("width", aB2DRange.getWidth());
                 rWriter.startElement("polypolygon");
                 rWriter.content(basegfx::tools::exportToSvgD(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), true, true, false));
                 rWriter.endElement();
