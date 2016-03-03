@@ -511,7 +511,7 @@ void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>&
         {
             mpReplacement = rpCompressor->Compress(maPreview);
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef DEBUG_SD_CACHE
             sal_uInt32 nOldSize (maPreview.GetSizeBytes());
             sal_uInt32 nNewSize (mpReplacement.get()!=NULL ? mpReplacement->GetMemorySize() : 0);
             if (nOldSize == 0)
