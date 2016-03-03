@@ -3383,6 +3383,18 @@ void Test::testFuncCOUNT()
     m_pDoc->SetString(aPos, "=COUNT(A1:A3;2;4;6)");
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
 
+    // Matrix in C1.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(2, 0, 2, 0, aMark, "=COUNT(SEARCH(\"a\";{\"a\";\"b\";\"a\"}))");
+    // Check that the #VALUE! error of "a" not found in "b" is not counted.
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    // Matrix in C3.
+    m_pDoc->InsertMatrixFormula(2, 2, 2, 2, aMark, "=COUNTA(SEARCH(\"a\";{\"a\";\"b\";\"a\"}))");
+    // Check that the #VALUE! error of "a" not found in "b" is counted.
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
