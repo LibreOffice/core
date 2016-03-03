@@ -129,6 +129,8 @@ public:
     SAL_DLLPRIVATE static Point     ImplCalcPos( vcl::Window* pWindow,
                                                  const Rectangle& rRect, FloatWinPopupFlags nFlags,
                                                  sal_uInt16& rArrangeIndex );
+    SAL_DLLPRIVATE static Point     ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
+    SAL_DLLPRIVATE static Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const Rectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE, VclPtr<vcl::Window> xFocusId = nullptr );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }

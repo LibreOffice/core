@@ -449,10 +449,8 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
     return pW->OutputToScreenPixel( aPos );
 }
 
-FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest )
+Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos)
 {
-    FloatingWindow* pWin = this;
-
     Point aAbsolute( rPos );
 
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
@@ -471,6 +469,37 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
     else
         aAbsolute = Point( pReference->OutputToAbsoluteScreenPixel(
             pReference->ScreenToOutputPixel(rPos) ) );
+
+    return aAbsolute;
+}
+
+Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Rectangle& rRect)
+{
+    Rectangle aFloatRect = rRect;
+
+    const OutputDevice *pParentWinOutDev = pReference->GetOutDev();
+
+    // compare coordinates in absolute screen coordinates
+    // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
+    if( pReference->HasMirroredGraphics()  )
+    {
+        if(!pReference->IsRTLEnabled() )
+            // --- RTL --- re-mirror back to get device coordinates
+            pParentWinOutDev->ReMirror(aFloatRect);
+
+        aFloatRect.SetPos(pReference->ScreenToOutputPixel(aFloatRect.TopLeft()));
+        aFloatRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel(aFloatRect);
+    }
+    else
+        aFloatRect.SetPos(pReference->OutputToAbsoluteScreenPixel(pReference->ScreenToOutputPixel(rRect.TopLeft())));
+    return aFloatRect;
+}
+
+FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest )
+{
+    FloatingWindow* pWin = this;
+
+    Point aAbsolute(FloatingWindow::ImplConvertToAbsPos(pReference, rPos));
 
     do
     {
@@ -665,24 +694,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     // convert maFloatRect to absolute device coordinates
     // so they can be compared across different frames
     // !!! rRect is expected to be in screen coordinates of the parent frame window !!!
-    maFloatRect             = rRect;
-
-    vcl::Window *pReference =  GetParent();
-    const OutputDevice *pParentWinOutDev = pReference->GetOutDev();
-
-    // compare coordinates in absolute screen coordinates
-    // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pReference->HasMirroredGraphics()  )
-    {
-        if(!pReference->IsRTLEnabled() )
-            // --- RTL --- re-mirror back to get device coordinates
-            pParentWinOutDev->ReMirror(maFloatRect);
-
-        maFloatRect.SetPos(pReference->ScreenToOutputPixel(maFloatRect.TopLeft()));
-        maFloatRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel(maFloatRect);
-    }
-    else
-        maFloatRect.SetPos(pReference->OutputToAbsoluteScreenPixel(pReference->ScreenToOutputPixel(rRect.TopLeft())));
+    maFloatRect = FloatingWindow::ImplConvertToAbsPos(GetParent(), rRect);
 
     maFloatRect.Left()     -= 2;
     maFloatRect.Top()      -= 2;
