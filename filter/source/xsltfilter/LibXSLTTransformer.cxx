@@ -294,7 +294,7 @@ namespace XSLT
         xsltTransformContextPtr tcontext = nullptr;
         exsltRegisterAll();
         registerExtensionModule();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_LIBXSLTTRANSFORMER
         xsltSetGenericDebugFunc(stderr, NULL);
         xsltDebugDumpExtensions(NULL);
 #endif

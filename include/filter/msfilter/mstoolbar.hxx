@@ -21,8 +21,8 @@
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 
-class TBCHeader;
 
+class TBCHeader;
 
 class MSOCommandConvertor
 {
@@ -70,7 +70,7 @@ class MSFILTER_DLLPUBLIC TBBase
 friend class Indent;
     static int nIndent; // num spaces to indent before printing
 protected:
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     static void indent_printf(FILE* fp, const char* format, ... );
 #endif
     sal_uInt32 nOffSet; // usually for debug we can store the offset in the stream to this record
@@ -79,7 +79,7 @@ public:
     virtual ~TBBase(){}
 
     virtual bool Read(SvStream &rS) = 0;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output
 #endif
     sal_uInt32 GetOffset() { return nOffSet; }
@@ -127,7 +127,7 @@ public:
     TBCExtraInfo();
     virtual ~TBCExtraInfo(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
     OUString getOnAction();
@@ -161,7 +161,7 @@ public:
     TBCBitMap();
     virtual ~TBCBitMap();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
    // #FIXME Const-ness
@@ -275,7 +275,7 @@ public:
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
     bool isBeginGroup() { return ( bFlagsTCR & 0x2 ) != 0; }
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
     sal_uInt32 getTbct() { return tbct; };
@@ -292,7 +292,7 @@ public:
     TBCData( const TBCHeader& Header );
     virtual ~TBCData(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
     bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
@@ -314,7 +314,7 @@ public:
     TB();
     virtual ~TB(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
     sal_Int16 getcCL(){ return cCL; }
@@ -332,7 +332,7 @@ public:
     sal_Int16 right;
     sal_Int16 bottom;
     bool Read( SvStream &rS ) override { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* fo ) override;
 #endif
 };
@@ -352,7 +352,7 @@ public:
     TBVisualData();
     virtual ~TBVisualData(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
 };
