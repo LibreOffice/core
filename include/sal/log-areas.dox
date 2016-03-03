@@ -92,6 +92,7 @@ certain functionality.
 @li @c cppu
 @li @c cppu.log
 @li @c cppu.threadpool
+@li @c cppu.typelib
 @li @c cppu.unsafebridge
 
 @section cppuhelper
