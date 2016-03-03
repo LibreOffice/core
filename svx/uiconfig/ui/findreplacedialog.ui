@@ -581,23 +581,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="backwards">
-                                    <property name="label" translatable="yes">Bac_kwards</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="no_show_all">True</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkCheckButton" id="layout">
-                                    <property name="label" translatable="yes">Search for st_yles</property>
+                                    <property name="label" translatable="yes">Cell st_yles</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
@@ -692,7 +677,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="allsheets">
-                                        <property name="label" translatable="yes">Search in all sheets</property>
+                                        <property name="label" translatable="yes">All sheets</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -936,8 +921,23 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="backwards">
+                        <property name="label" translatable="yes">Bac_kwards</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="searchformatted">
-                        <property name="label" translatable="yes">Search formatted display string</property>
+                        <property name="label" translatable="yes">Formatted display</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -946,7 +946,7 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
@@ -985,7 +985,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
+                        <property name="left_attach">3</property>
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
