@@ -134,10 +134,10 @@ ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormat
     maRange.reserve( mnCount );
     mbInitialised = false;
     mnMonthDay = 0;
-    mpBase     = 0;
-    mpTrend    = 0;
-    mpPerIdx   = 0;
-    mpForecast = 0;
+    mpBase     = nullptr;
+    mpTrend    = nullptr;
+    mpPerIdx   = nullptr;
+    mpForecast = nullptr;
 }
 
 ScETSForecastCalculation::~ScETSForecastCalculation()
@@ -1312,7 +1312,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
     ScETSForecastCalculation aETSCalc( pMatX->GetElementCount(), pFormatter );
     if ( !aETSCalc.PreprocessDataRange( pMatX, pMatY, nSmplInPrd, bDataCompletion,
                                        nAggregation,
-                                       ( eETSType != etsStatAdd && eETSType != etsStatMult ? pTMat : 0 ),
+                                       ( eETSType != etsStatAdd && eETSType != etsStatMult ? pTMat : nullptr ),
                                        eETSType ) )
     {
         PushError( aETSCalc.GetError() );
