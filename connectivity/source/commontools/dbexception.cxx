@@ -185,11 +185,11 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 }
 
 
-void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
+void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& _rSQLState )
 {
     SQLException aException;
     aException.Message = _rErrorMessage;
-    aException.ErrorCode = _nErrorCode;
+    aException.ErrorCode = 0;
     aException.SQLState = !_rSQLState.isEmpty() ? _rSQLState : "S1000";
     aException.NextException = m_aContent;
     m_aContent <<= aException;
@@ -369,8 +369,7 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
 }
 
 void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
-    const css::uno::Reference<css::uno::XInterface>& _rxContext,
-    const css::uno::Any& _rNextException) throw (css::sdbc::SQLException)
+    const css::uno::Reference<css::uno::XInterface>& _rxContext) throw (css::sdbc::SQLException)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -382,7 +381,7 @@ void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
         _rxContext,
         getStandardSQLState( StandardSQLState::FUNCTION_NOT_SUPPORTED ),
         0,
-        _rNextException
+        css::uno::Any()
     );
 }
 
@@ -413,7 +412,7 @@ void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface
     throw SQLException( _rMsg, _rxSource, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 0, _rNextException);
 }
 
-void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
+void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext )
     throw (SQLException)
 {
     ::connectivity::SharedResources aResources;
@@ -427,7 +426,7 @@ void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, cons
         _rxContext,
         getStandardSQLState( StandardSQLState::FEATURE_NOT_IMPLEMENTED ),
         0,
-        _pNextException ? *_pNextException : Any()
+        Any()
     );
 }
 
@@ -467,10 +466,9 @@ void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
 
 
 void throwSQLException( const OUString& _rMessage, StandardSQLState _eSQLState,
-        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
-        const Any* _pNextException ) throw (SQLException)
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode ) throw (SQLException)
 {
-    throwSQLException( _rMessage, getStandardSQLState( _eSQLState ), _rxContext, _nErrorCode, _pNextException );
+    throwSQLException( _rMessage, getStandardSQLState( _eSQLState ), _rxContext, _nErrorCode );
 }
 
 

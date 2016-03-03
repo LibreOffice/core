@@ -734,11 +734,11 @@ Sequence< OUString > getFieldNamesByCommandDescriptor( const Reference< XConnect
 }
 
 SQLException prependErrorInfo( const SQLException& _rChainedException, const Reference< XInterface >& _rxContext,
-    const OUString& _rAdditionalError, const StandardSQLState _eSQLState, const sal_Int32 _nErrorCode )
+    const OUString& _rAdditionalError, const StandardSQLState _eSQLState )
 {
     return SQLException( _rAdditionalError, _rxContext,
         _eSQLState == StandardSQLState::ERROR_UNSPECIFIED ? OUString() : getStandardSQLState( _eSQLState ),
-        _nErrorCode, makeAny( _rChainedException ) );
+        0, makeAny( _rChainedException ) );
 }
 
 namespace

@@ -108,18 +108,12 @@ namespace connectivity
                 not present (see <code>::boost::optional::operator !</code>), then no replacement
                 will happen, and <code>_rParamValue3</code> will be ignored.
 
-            @param _rParamValue1
-                the value which the placeholder $1$ should be replaced with. If this value is
-                not present (see <code>::boost::optional::operator !</code>), then no replacement
-                will happen.
-
             @see css::sdb::ErrorCondition
         */
         OUString getErrorMessage(
                             const ErrorCondition _eCondition,
                             const ParamValue& _rParamValue1 = ParamValue(),
-                            const ParamValue& _rParamValue2 = ParamValue(),
-                            const ParamValue& _rParamValue3 = ParamValue()
+                            const ParamValue& _rParamValue2 = ParamValue()
                         ) const;
 
         /** returns the error code associated with a given error condition
@@ -204,19 +198,13 @@ namespace connectivity
                 which is associated with <arg>_eCondition</arg>, replacing the second placeholder
                 in this message.
 
-            @param _rParamValue3
-                a runtime-dependent value which should be filled into the error message
-                which is associated with <arg>_eCondition</arg>, replacing the third placeholder
-                in this message.
-
             @see getErrorMessage
             @see getErrorCode
         */
         void            raiseException(
                             const ErrorCondition _eCondition,
                             const ParamValue& _rParamValue1 = ParamValue(),
-                            const ParamValue& _rParamValue2 = ParamValue(),
-                            const ParamValue& _rParamValue3 = ParamValue()
+                            const ParamValue& _rParamValue2 = ParamValue()
                         ) const;
 
         /** raises a typed exception, that is, a UNO exception which is derived from
@@ -243,11 +231,6 @@ namespace connectivity
                 which is associated with <arg>_eCondition</arg>, replacing the second placeholder
                 in this message.
 
-            @param _rParamValue3
-                a runtime-dependent value which should be filled into the error message
-                which is associated with <arg>_eCondition</arg>, replacing the third placeholder
-                in this message.
-
             @throws ::std::bad_cast
                 if <arg>_rExceptionType</arg> does not specify an exception class derived from
                 css::sdbc::SQLException.
@@ -260,8 +243,7 @@ namespace connectivity
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
                             const css::uno::Type& _rExceptionType,
                             const ParamValue& _rParamValue1 = ParamValue(),
-                            const ParamValue& _rParamValue2 = ParamValue(),
-                            const ParamValue& _rParamValue3 = ParamValue()
+                            const ParamValue& _rParamValue2 = ParamValue()
                         ) const;
 
         /** retrieves an <code>SQLException</code> object which contains information about

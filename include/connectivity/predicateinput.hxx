@@ -79,36 +79,27 @@ namespace dbtools
             the value which has been normalized using normalizePredicateString
         @param _rxField
             is the field for which a predicate is to be entered
-        @param _pErrorMessage
-            If not <NULL/>, and a parsing error occurs, the error message will be copied to the string the argument
-            points to.
         @see normalizePredicateString
         */
         OUString getPredicateValueStr(
             const OUString& _rPredicateValue,
-            const css::uno::Reference< css::beans::XPropertySet > & _rxField,
-            OUString* _pErrorMessage = nullptr
+            const css::uno::Reference< css::beans::XPropertySet > & _rxField
         ) const;
 
         OUString getPredicateValueStr(
             const OUString& _sField
-            , const OUString& _rPredicateValue
-            , OUString* _pErrorMessage = nullptr) const;
+            , const OUString& _rPredicateValue) const;
 
         /** get the value of the predicate, either as an empty or as a string
         @param _rPredicateValue
             the value which has been normalized using normalizePredicateString
         @param _rxField
             is the field for which a predicate is to be entered
-        @param _pErrorMessage
-            If not <NULL/>, and a parsing error occurs, the error message will be copied to the string the argument
-            points to.
         @see normalizePredicateString
         */
         css::uno::Any getPredicateValue(
             const OUString& _rPredicateValue,
-            const css::uno::Reference< css::beans::XPropertySet > & _rxField,
-            OUString* _pErrorMessage = nullptr
+            const css::uno::Reference< css::beans::XPropertySet > & _rxField
         ) const;
 
     private:
