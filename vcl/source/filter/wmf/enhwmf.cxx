@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "winmtf.hxx"
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
+
+#include "winmtf.hxx"
+
 #include <memory>
 
 #ifdef DBG_UTIL
@@ -912,37 +914,27 @@ bool EnhWMFReader::ReadEnhWMF()
                             aLineInfo.SetWidth( aSize.Width() );
 
                         bool bTransparent = false;
-                        switch( nStyle & 0xFF )
+                        switch( nStyle & PS_STYLE_MASK )
                         {
                             case PS_DASHDOTDOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 2 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASHDOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 90 );
                             break;
                             case PS_DOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 0 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASH :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 0 );
-                                aLineInfo.SetDashLen( 225 );
-                                aLineInfo.SetDistance( 100 );
                             break;
                             case PS_NULL :
                                 bTransparent = true;
@@ -1015,31 +1007,21 @@ bool EnhWMFReader::ReadEnhWMF()
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 2 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASHDOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 90 );
                             break;
                             case PS_DOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 0 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASH :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 0 );
-                                aLineInfo.SetDashLen( 225 );
-                                aLineInfo.SetDistance( 100 );
                             break;
                             case PS_NULL :
                                 bTransparent = true;
