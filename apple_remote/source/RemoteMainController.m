@@ -102,13 +102,13 @@
 - (void) remoteButton: (RemoteControlEventIdentifier)buttonIdentifier pressedDown: (BOOL) pressedDown clickCount: (unsigned int)clickCount
 {
     (void)clickCount;
-    NSString* pressed = @"";
+    //NSString* pressed = @""; // set but not used
 #ifdef DEBUG
     NSString* buttonName = nil;
 #endif
     if (pressedDown)
     {
-        pressed = @"(AppleRemoteMainController: button pressed)";
+        //pressed = @"(AppleRemoteMainController: button pressed)"; // set but not used
 
 #ifdef DEBUG
         switch(buttonIdentifier)
@@ -132,10 +132,8 @@
 #endif
         [ self postTheEvent:buttonIdentifier modifierFlags: 0 ];
     }
-    else // not pressed
-    {
-        pressed = @"(AppleRemoteMainController: button released)";
-    }
+    //else // not pressed
+        //pressed = @"(AppleRemoteMainController: button released)"; // set but not used
 
 #ifdef DEBUG
 	//NSLog(@"Button %@ pressed %@", buttonName, pressed);
@@ -153,9 +151,18 @@
 }
 
 - (void) dealloc {
-    [remoteControl autorelease];
-	[remoteControlBehavior autorelease];
-	[super dealloc];
+    if ( remoteControl )
+    {
+        [ remoteControl release ];
+        remoteControl = nil;
+    }
+    if ( remoteControlBehavior )
+    {
+        [ remoteControlBehavior release ];
+        remoteControlBehavior = nil;
+    }
+
+    [super dealloc];
 }
 
 // for bindings access
