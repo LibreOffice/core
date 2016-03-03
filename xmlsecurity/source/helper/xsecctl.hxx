@@ -457,14 +457,16 @@ public:
         sal_Int32 nSecurityId,
         const OUString& ouX509IssuerName,
         const OUString& ouX509SerialNumber,
-        const OUString& ouX509Cert);
+        const OUString& ouX509Cert,
+        const OUString& ouX509CertDigest);
     // see the other setX509Certifcate function
     void setX509Certificate(
         sal_Int32 nSecurityId,
         const sal_Int32 nSecurityEnvironmentIndex,
         const OUString& ouX509IssuerName,
         const OUString& ouX509SerialNumber,
-        const OUString& ouX509Cert);
+        const OUString& ouX509Cert,
+        const OUString& ouX509CertDigest);
 
     void setDate(
         sal_Int32 nSecurityId,
