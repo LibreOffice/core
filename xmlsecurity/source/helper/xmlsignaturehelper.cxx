@@ -123,13 +123,15 @@ void XMLSignatureHelper::SetX509Certificate(
         sal_Int32 nSecurityId,
         const OUString& ouX509IssuerName,
         const OUString& ouX509SerialNumber,
-        const OUString& ouX509Cert)
+        const OUString& ouX509Cert,
+        const OUString& ouX509CertDigest)
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
         ouX509IssuerName,
         ouX509SerialNumber,
-        ouX509Cert);
+        ouX509Cert,
+        ouX509CertDigest);
 }
 
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::Date& rDate, const tools::Time& rTime )

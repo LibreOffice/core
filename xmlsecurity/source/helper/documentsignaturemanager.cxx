@@ -32,6 +32,8 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
+#include <certificate.hxx>
+
 using namespace com::sun::star;
 
 DocumentSignatureManager::DocumentSignatureManager(const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
@@ -208,7 +210,17 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     OUStringBuffer aStrBuffer;
     sax::Converter::encodeBase64(aStrBuffer, xCert->getEncoded());
 
-    maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial, aStrBuffer.makeStringAndClear());
+    OUString aCertDigest;
+    if (xmlsecurity::Certificate* pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
+    {
+        OUStringBuffer aBuffer;
+        sax::Converter::encodeBase64(aBuffer, pCertificate->getSHA256Thumbprint());
+        aCertDigest = aBuffer.makeStringAndClear();
+    }
+    else
+        SAL_WARN("xmlsecurity.helper", "XCertificate implementation without an xmlsecurity::Certificate one");
+
+    maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial, aStrBuffer.makeStringAndClear(), aCertDigest);
 
     std::vector< OUString > aElements = DocumentSignatureHelper::CreateElementList(mxStore, meSignatureMode, OOo3_2Document);
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);

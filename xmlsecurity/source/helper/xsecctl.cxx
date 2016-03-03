@@ -40,8 +40,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <certificate.hxx>
-
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
@@ -1320,21 +1318,8 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
         xDocumentHandler->endElement("DigestMethod");
         xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
 
-        if (rInformation.ouCertDigest.isEmpty())
-        {
-            uno::Reference<xml::crypto::XSecurityEnvironment> xEnvironment = m_xSecurityContext->getSecurityEnvironment();
-            uno::Reference<security::XCertificate> xCertificate = xEnvironment->createCertificateFromAscii(rInformation.ouX509Certificate);
-            if (xmlsecurity::Certificate* pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCertificate.get()))
-            {
-                OUStringBuffer aBuffer;
-                sax::Converter::encodeBase64(aBuffer, pCertificate->getSHA256Thumbprint());
-                xDocumentHandler->characters(aBuffer.makeStringAndClear());
-            }
-            else
-                SAL_WARN("xmlsecurity.helper", "XCertificate implementation without an xmlsecurity::Certificate one");
-        }
-        else
-            xDocumentHandler->characters(rInformation.ouCertDigest);
+        assert(!rInformation.ouCertDigest.isEmpty());
+        xDocumentHandler->characters(rInformation.ouCertDigest);
 
         xDocumentHandler->endElement("DigestValue");
         xDocumentHandler->endElement("xd:CertDigest");

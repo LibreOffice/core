@@ -226,9 +226,10 @@ void XSecController::setX509Certificate(
     sal_Int32 nSecurityId,
     const OUString& ouX509IssuerName,
     const OUString& ouX509SerialNumber,
-    const OUString& ouX509Cert)
+    const OUString& ouX509Cert,
+    const OUString& ouX509CertDigest)
 {
-    setX509Certificate(nSecurityId, -1, ouX509IssuerName, ouX509SerialNumber, ouX509Cert);
+    setX509Certificate(nSecurityId, -1, ouX509IssuerName, ouX509SerialNumber, ouX509Cert, ouX509CertDigest);
 }
 
 void XSecController::setX509Certificate(
@@ -236,7 +237,8 @@ void XSecController::setX509Certificate(
     const sal_Int32 nSecurityEnvironmentIndex,
     const OUString& ouX509IssuerName,
     const OUString& ouX509SerialNumber,
-    const OUString& ouX509Cert)
+    const OUString& ouX509Cert,
+    const OUString& ouX509CertDigest)
 {
     int index = findSignatureInfor( nSecurityId );
 
@@ -247,6 +249,7 @@ void XSecController::setX509Certificate(
         isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
         isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
         isi.signatureInfor.ouX509Certificate = ouX509Cert;
+        isi.signatureInfor.ouCertDigest = ouX509CertDigest;
         m_vInternalSignatureInformations.push_back( isi );
     }
     else
@@ -256,6 +259,7 @@ void XSecController::setX509Certificate(
         si.ouX509IssuerName = ouX509IssuerName;
         si.ouX509SerialNumber = ouX509SerialNumber;
         si.ouX509Certificate = ouX509Cert;
+        si.ouCertDigest = ouX509CertDigest;
         si.nSecurityEnvironmentIndex = nSecurityEnvironmentIndex;
     }
 }
