@@ -900,7 +900,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     return rStream;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CONNECTIVITY_DINDEXNODE
 
 void ONDXPage::PrintPage()
 {
@@ -930,7 +930,7 @@ void ONDXPage::PrintPage()
     OSL_TRACE("SDB: -----------------------------------------------");
     if (!IsLeaf())
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CONNECTIVITY_DINDEXNODE
         GetChild(&rIndex)->PrintPage();
         for (sal_uInt16 i = 0; i < nCount; i++)
         {
