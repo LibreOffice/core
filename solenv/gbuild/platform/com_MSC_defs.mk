@@ -166,6 +166,17 @@ gb_CFLAGS := \
 	-Zc:wchar_t- \
 	$(if $(filter-out 120,$(VCVER)), -Wv:18) \
 
+ifeq ($(COM_IS_CLANG),TRUE)
+gb_CFLAGS += \
+	-Wdeclaration-after-statement \
+	-Wendif-labels \
+	-Wshadow \
+	-Wstrict-prototypes \
+	-Wundef \
+	-Wunused-macros \
+
+endif
+
 gb_CXXFLAGS := \
 	-Gd \
 	-GR \
@@ -215,7 +226,14 @@ endif
 
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS += \
+	-Wendif-labels \
 	-Wno-missing-braces \
+	-Wno-missing-braces \
+	-Wnon-virtual-dtor \
+	-Woverloaded-virtual \
+	-Wshadow \
+	-Wundef \
+	-Wunused-macros \
 
 endif
 

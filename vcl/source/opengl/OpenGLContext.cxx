@@ -268,8 +268,8 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         return false;
     }
     // Get our pixel format
-    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
-    if (!wglChoosePixelFormatARB)
+    PFNWGLCHOOSEPIXELFORMATARBPROC fn_wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+    if (!fn_wglChoosePixelFormatARB)
     {
         return false;
     }
@@ -317,7 +317,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     bool bArbMultisampleSupported = false;
 
     // First we check to see if we can get a pixel format for 8 samples
-    valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
+    valid = fn_wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     // If we returned true, and our format count is greater than 1
     if (valid && numFormats >= 1)
     {
@@ -332,7 +332,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     // Our pixel format with 8 samples failed, test for 2 samples
     assert(iAttributes[18] == WGL_SAMPLES_ARB);
     iAttributes[19] = 2;
-    valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
+    valid = fn_wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     if (valid && numFormats >= 1)
     {
         bArbMultisampleSupported = true;

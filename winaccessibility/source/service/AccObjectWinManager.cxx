@@ -348,8 +348,7 @@ short AccObjectWinManager::GetParentRole( XAccessible* pXAcc )
         pObj = pObj->GetParentObj();
         if(pObj->GetXAccessible().is())
         {
-            XAccessible* pXAcc = pObj->GetXAccessible().get();
-            Reference< XAccessibleContext > pRContext = pXAcc->getAccessibleContext();
+            Reference< XAccessibleContext > pRContext = pObj->GetXAccessible()->getAccessibleContext();
             if(pRContext.is())
                 return pRContext->getAccessibleRole();
         }

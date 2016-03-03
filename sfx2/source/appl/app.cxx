@@ -23,9 +23,6 @@
 #include <limits.h>
 #else // UNX
 #include <stdlib.h>
-#ifndef PATH_MAX
-#define PATH_MAX _MAX_PATH
-#endif
 #endif // UNX
 
 #include <sfx2/app.hxx>

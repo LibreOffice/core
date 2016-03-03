@@ -21,7 +21,6 @@
 #include "XNotifyingDataObject.hxx"
 #include "../clipb/WinClipbImpl.hxx"
 #include "../clipb/WinClipboard.hxx"
-#include "../../inc/DtObjFactory.hxx"
 
 #ifdef __MINGW32__
 #if defined __uuidof

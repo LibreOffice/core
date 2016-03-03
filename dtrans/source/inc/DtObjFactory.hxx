@@ -25,14 +25,11 @@
 
 #include <systools/win32/comtools.hxx>
 
-class CDTransObjFactory
+namespace CDTransObjFactory
 {
-public:
-    virtual IDataObjectPtr SAL_CALL createDataObjFromTransferable( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    IDataObjectPtr createDataObjFromTransferable( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                    const css::uno::Reference< css::datatransfer::XTransferable >& refXTransferable );
-    virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL createTransferableFromDataObj(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext, IDataObjectPtr pIDataObject );
-};
+}
 
 #endif
 

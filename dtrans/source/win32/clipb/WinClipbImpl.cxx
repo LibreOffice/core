@@ -23,6 +23,7 @@
 #include <systools/win32/comtools.hxx>
 #include "../../inc/DtObjFactory.hxx"
 #include "../dtobj/APNDataObject.hxx"
+#include "../dtobj/DOTransferable.hxx"
 #include "WinClipboard.hxx"
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include "../dtobj/XNotifyingDataObject.hxx"
@@ -103,10 +104,8 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
         // com smart pointer to the IDataObject from clipboard
         IDataObjectPtr pIDo( new CAPNDataObject( pIDataObject ) );
 
-        CDTransObjFactory objFactory;
-
         // remember pIDo destroys itself due to the smart pointer
-        rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_xContext, pIDo );
+        rClipContent = CDOTransferable::create( m_pWinClipboard->m_xContext, pIDo );
     }
 
     return rClipContent;
@@ -119,7 +118,6 @@ void SAL_CALL CWinClipbImpl::setContents(
     const Reference< XClipboardOwner >& xClipboardOwner )
     throw( RuntimeException )
 {
-    CDTransObjFactory objFactory;
     IDataObjectPtr    pIDataObj;
 
     if ( xTransferable.is( ) )
@@ -127,7 +125,7 @@ void SAL_CALL CWinClipbImpl::setContents(
         ClearableMutexGuard aGuard( m_ClipContentMutex );
 
         m_pCurrentClipContent = new CXNotifyingDataObject(
-            objFactory.createDataObjFromTransferable( m_pWinClipboard->m_xContext , xTransferable ),
+            CDTransObjFactory::createDataObjFromTransferable( m_pWinClipboard->m_xContext , xTransferable ),
             xTransferable,
             xClipboardOwner,
             this );

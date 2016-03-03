@@ -29,6 +29,8 @@
 #include <rtl/ustring.h>
 #include <osl/thread.h>
 
+#include "../dtobj/DOTransferable.hxx"
+
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -323,7 +325,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         else
         {
             // Convert the IDataObject to a XTransferable
-            m_currentData= m_aDataConverter.createTransferableFromDataObj(
+            m_currentData= CDOTransferable::create(
                                             m_xContext, IDataObjectPtr(pDataObj));
         }
 

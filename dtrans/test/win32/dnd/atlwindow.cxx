@@ -168,7 +168,7 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
             pData->SetData( &format,  &medium, TRUE); // releases HGLOBAL eventually
 
-            Reference<XTransferable> xTrans= m_aDataConverter.createTransferableFromDataObj(
+            Reference<XTransferable> xTrans= CDOTransferable::create(
                                                 MultiServiceFactory, pData);
 
             // call XDragSource::executeDrag from an MTA

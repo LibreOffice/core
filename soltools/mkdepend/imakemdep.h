@@ -566,7 +566,7 @@ struct pair predefs[] = {
 #ifdef __GNUC__
     {"__GNUC__", "1", NULL},
 #endif
-#if __STDC__
+#ifdef __STDC__
     {"__STDC__", "1", NULL},
 #endif
 #ifdef __HIGHC__

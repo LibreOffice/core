@@ -317,7 +317,9 @@ typedef void *                   sal_Handle;
     Compilers that support a construct of this nature will emit a compile
     time warning on unchecked return value.
 */
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
+#if (defined __GNUC__ \
+     && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))) \
+    || defined __clang__
 #   define SAL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #else
 #   define SAL_WARN_UNUSED_RESULT
@@ -491,7 +493,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #if HAVE_GCC_DEPRECATED_MESSAGE
 #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
-#elif (__GNUC__)
+#elif defined __GNUC__ || defined __clang__
 #    define SAL_DEPRECATED(message) __attribute__((deprecated))
 #elif defined(_MSC_VER)
 #    define SAL_DEPRECATED(message) __declspec(deprecated(message))
@@ -585,7 +587,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
     @since LibreOffice 3.6
  */
 #if defined __cplusplus
-#if defined __GNUC__
+#if defined __GNUC__ || defined __clang__
 #define SAL_UNUSED_PARAMETER __attribute__ ((unused))
 #else
 #define SAL_UNUSED_PARAMETER
@@ -614,7 +616,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 /// @cond INTERNAL
 
-#if defined(__GNUC__)
+#if defined __GNUC__ || defined __clang__
 // Macro to try to catch and warn on assignments inside expr.
 #    define SAL_DETAIL_BOOLEAN_EXPR(expr)   \
         __extension__ ({                    \

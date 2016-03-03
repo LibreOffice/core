@@ -31,6 +31,7 @@
 
 #include "FilePicker.hxx"
 #include "controlaccess.hxx"
+#include "customcontrolfactory.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
 #include <osl/thread.hxx>
@@ -84,8 +85,7 @@ CWinFileOpenImpl::CWinFileOpenImpl(
     CFileOpenDialog(bFileOpenDialog, dwFlags, dwTemplateId, hInstance),
     m_filterContainer(new CFilterContainer()),
     m_Preview(new CPreviewAdapter(hInstance)),
-    m_CustomControlFactory(new CCustomControlFactory()),
-    m_CustomControls(m_CustomControlFactory->CreateCustomControlContainer()),
+    m_CustomControls(CCustomControlFactory::CreateCustomControlContainer()),
     m_FilePicker(aFilePicker),
     m_bInitialSelChanged(sal_True),
     m_HelpPopupWindow(hInstance, m_hwndFileOpenDlg),
@@ -550,7 +550,7 @@ void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
 void SAL_CALL CWinFileOpenImpl::InitCustomControlContainer(HWND hCustomControl)
 {
     m_CustomControls->AddControl(
-        m_CustomControlFactory->CreateCustomControl(hCustomControl,m_hwndFileOpenDlg));
+        CCustomControlFactory::CreateCustomControl(hCustomControl,m_hwndFileOpenDlg));
 }
 
 

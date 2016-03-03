@@ -1023,7 +1023,7 @@ static int yy_top_state YY_PROTO(( void ));
 #ifdef YY_MALLOC_DECL
 YY_MALLOC_DECL
 #else
-#if __STDC__
+#if defined __STDC__ && __STDC__
 #ifndef __cplusplus
 #include <stdlib.h>
 #endif

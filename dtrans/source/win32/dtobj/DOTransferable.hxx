@@ -31,7 +31,6 @@
 #include <systools/win32/comtools.hxx>
 
 // forward
-class CDTransObjFactory;
 class CFormatEtc;
 
 class CDOTransferable : public ::cppu::WeakImplHelper<
@@ -40,6 +39,9 @@ class CDOTransferable : public ::cppu::WeakImplHelper<
 {
 public:
     typedef css::uno::Sequence< sal_Int8 > ByteSequence_t;
+
+    static css::uno::Reference< css::datatransfer::XTransferable > create(
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext, IDataObjectPtr pIDataObject );
 
     // XTransferable
 
@@ -58,7 +60,6 @@ public:
     (css::uno::RuntimeException);
 
 private:
-    // should be created only by CDTransObjFactory
     explicit CDOTransferable(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         IDataObjectPtr rDataObject );
@@ -103,8 +104,6 @@ private:
 private:
     CDOTransferable( const CDOTransferable& );
     CDOTransferable& operator=( const CDOTransferable& );
-
-    friend class CDTransObjFactory;
 };
 
 #endif

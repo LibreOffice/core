@@ -30,17 +30,15 @@
 
 class CCustomControl;
 
-class CCustomControlFactory
+namespace CCustomControlFactory
 {
-public:
-
     // The CCustomControl instances will be created on the heap
     // and the client is responsible for deleting this instances
     // (he adopts ownership)
-    virtual CCustomControl* CreateCustomControl(HWND aControlHandle, HWND aParentHandle);
+    CCustomControl* CreateCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual CCustomControl* CreateCustomControlContainer();
-};
+    CCustomControl* CreateCustomControlContainer();
+}
 
 #endif
 

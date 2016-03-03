@@ -35,6 +35,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python33/python-msvc-disable-sse2.patch.1 \
 	external/python33/python-lsan.patch.0 \
 	external/python33/ubsan.patch.0 \
+	external/python33/clang-cl.patch.0 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)

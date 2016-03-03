@@ -29,6 +29,9 @@ public:
 
     // dispatches a FilePickerEvent to wherever
     virtual void SAL_CALL helpRequested( css::lang::EventObject aEvent ) const = 0;
+
+protected:
+    ~CFOPEventDispatcher() {}
 };
 
 #endif

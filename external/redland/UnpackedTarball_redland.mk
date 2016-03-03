@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,redland,\
 	$(if $(CROSS_COMPILING),external/redland/redland/redland-xcompile.patch.1) \
 	external/redland/redland/redland-format.patch.0 \
 	external/redland/redland/rpath.patch \
+	external/redland/redland/clang-cl.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

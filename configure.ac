@@ -5990,7 +5990,7 @@ AC_SUBST(HAVE_THREADSAFE_STATICS)
 dnl ===================================================================
 dnl visibility and other gcc features
 dnl ===================================================================
-if test "$GCC" = "yes"; then
+if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -fvisibility=hidden"

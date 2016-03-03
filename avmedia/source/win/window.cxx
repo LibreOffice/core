@@ -24,7 +24,6 @@
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
-#define STRSAFE_NO_DEPRECATE
 #include <dshow.h>
 #if defined _MSC_VER
 #pragma warning(pop)

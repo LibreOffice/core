@@ -112,7 +112,7 @@ void DragSource::StartDragImpl(
     g_XTransferable = trans;
     //<-- TRA
 
-    m_spDataObject= m_aDataConverter.createDataObjFromTransferable(
+    m_spDataObject= CDTransObjFactory::createDataObjFromTransferable(
                     m_xContext, trans);
 
     // Obtain the id of the thread that created the window

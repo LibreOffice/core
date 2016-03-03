@@ -533,10 +533,9 @@ void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
 BOOL DocumentHolder::InPlaceMenuCreate()
 {
     HMENU               hMenu;
-    UINT                i;
     OLEMENUGROUPWIDTHS  mgw;
 
-    for (i=0; i<6; i++)
+    for (UINT i=0; i<6; i++)
         mgw.width[i]=0;
 
     //We already have popup menu handles in m_pFR->m_phMenu[]
