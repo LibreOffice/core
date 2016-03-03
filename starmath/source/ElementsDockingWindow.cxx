@@ -760,7 +760,7 @@ IMPL_LINK_TYPED(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElemen
     {
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-            new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()), 0L);
+            new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()), 0);
     }
 }
 

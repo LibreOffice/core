@@ -1048,7 +1048,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_BULLET, (sal_uInt16)0xFFFF);
-            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SfxCallMode::RECORD, &aItem, 0L );
+            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SfxCallMode::RECORD, &aItem, 0 );
         }
         break;
 
@@ -1056,7 +1056,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_NUMBER, (sal_uInt16)0xFFFF);
-            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SfxCallMode::RECORD, &aItem, 0L );
+            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SfxCallMode::RECORD, &aItem, 0 );
         }
         break;
 
@@ -1716,7 +1716,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                                         &aUrl, &aTarget,
                                                         &aFrm, &aReferer,
                                                         &aNewView, &aBrowsing,
-                                                        0L );
+                                                        0 );
                     }
                 }
             }

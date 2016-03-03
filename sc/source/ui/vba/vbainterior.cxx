@@ -83,7 +83,7 @@ ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent,
 {
     // auto color
     m_aPattColor.SetColor( (sal_uInt32)0x0 );
-    m_nPattern = 0L;
+    m_nPattern = 0;
     if ( !m_xProps.is() )
         throw lang::IllegalArgumentException("properties", uno::Reference< uno::XInterface >(), 2 );
 }

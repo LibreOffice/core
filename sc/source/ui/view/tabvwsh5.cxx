@@ -113,7 +113,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
                     GetViewData().GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::ASYNCHRON,
-                                                &aItem, 0L );
+                                                &aItem, 0 );
 
                     UpdateInputContext();
                 }

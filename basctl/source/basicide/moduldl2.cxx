@@ -632,7 +632,7 @@ IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
-                                    SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
+                                    SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0 );
         EndTabDialog( 1 );
         return;
     }
@@ -1356,7 +1356,7 @@ void LibPage::DeleteCurrent()
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBREMOVED,
-                                  SfxCallMode::SYNCHRON, &aDocItem, &aLibNameItem, 0L );
+                                  SfxCallMode::SYNCHRON, &aDocItem, &aLibNameItem, 0 );
 
         // remove library from module and dialog library containers
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -1535,7 +1535,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                          SfxCallMode::SYNCHRON, &aSbxItem, 0L );
+                                          SfxCallMode::SYNCHRON, &aSbxItem, 0 );
 
                 if( pBasicBox )
                 {

@@ -78,7 +78,7 @@ bool SdCGMFilter::Import()
         OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         sal_uInt32          nRetValue;
 
-        if( mrDocument.GetPageCount() == 0L )
+        if( mrDocument.GetPageCount() == 0 )
             mrDocument.CreateFirstPages();
 
         CreateStatusIndicator();

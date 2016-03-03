@@ -751,7 +751,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 
             SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
             GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0 );
         }
     }
 

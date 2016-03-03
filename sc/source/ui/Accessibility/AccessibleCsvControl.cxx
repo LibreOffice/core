@@ -1371,7 +1371,7 @@ OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn
     if( (nColumn > 0) && (nRow > 0) )
         aCellStr = rGrid.GetCellText( lcl_GetGridColumn( nColumn ), nLine );
     else if( nRow > 0 )
-        aCellStr = OUString::number( nLine + 1L );
+        aCellStr = OUString::number( nLine + 1 );
     else if( nColumn > 0 )
         aCellStr = rGrid.GetColumnTypeName( lcl_GetGridColumn( nColumn ) );
     return aCellStr;

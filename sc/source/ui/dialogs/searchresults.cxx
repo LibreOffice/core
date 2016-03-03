@@ -85,7 +85,7 @@ bool SearchResultsDlg::Close()
         SfxBoolItem aItem(SID_SEARCH_RESULTS_DIALOG, false);
         if (pDispacher)
             pDispacher->Execute(
-                SID_SEARCH_RESULTS_DIALOG, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L);
+                SID_SEARCH_RESULTS_DIALOG, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0);
     }
 
     return ModelessDialog::Close();

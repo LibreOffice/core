@@ -582,7 +582,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 if  ( pWData && CommandWheelMode::ZOOM == pWData->GetMode() )
                 {
                     sal_uInt16 nTmpZoom = GetZoom();
-                    if( 0L > pWData->GetDelta() )
+                    if( 0 > pWData->GetDelta() )
                         nTmpZoom -= 10;
                     else
                         nTmpZoom += 10;
@@ -1546,7 +1546,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 {
                     GetViewFrame()->GetDispatcher()->Execute(
                                 SID_COPYOBJECT, SfxCallMode::RECORD,
-                                new SfxVoidItem(SID_COPYOBJECT), 0L);
+                                new SfxVoidItem(SID_COPYOBJECT), 0);
                 }
                 else
                     pWin->Copy();
@@ -1572,7 +1572,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 {
                     GetViewFrame()->GetDispatcher()->Execute(
                             SID_PASTEOBJECT, SfxCallMode::RECORD,
-                            new SfxVoidItem(SID_PASTEOBJECT), 0L);
+                            new SfxVoidItem(SID_PASTEOBJECT), 0);
                 }
             }
             break;

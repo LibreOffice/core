@@ -2088,7 +2088,7 @@ sal_Int32 Converter::decodeBase64SomeChars(
 double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     double fRetval(1.0);
-    rUnit.setLength(0L);
+    rUnit.setLength(0);
 
 
     if(nSourceUnit != nTargetUnit)
@@ -2443,7 +2443,7 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
 
 sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefaultUnit)
 {
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.getLength();
     sal_Int16 nRetUnit = nDefaultUnit;
 
