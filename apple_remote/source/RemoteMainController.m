@@ -102,15 +102,15 @@
 - (void) remoteButton: (RemoteControlEventIdentifier)buttonIdentifier pressedDown: (BOOL) pressedDown clickCount: (unsigned int)clickCount
 {
     (void)clickCount;
-    NSString* pressed = @"";
 #ifdef DEBUG
+    NSString* pressed = @"";
     NSString* buttonName = nil;
 #endif
     if (pressedDown)
     {
+#ifdef DEBUG
         pressed = @"(AppleRemoteMainController: button pressed)";
 
-#ifdef DEBUG
         switch(buttonIdentifier)
         {
             case kRemoteButtonPlus:         buttonName = @"Volume up";              break;  // MEDIA_COMMAND_VOLUME_UP  ( see include/vcl/commandevent.hxx )
@@ -134,14 +134,16 @@
     }
     else // not pressed
     {
+#ifdef DEBUG
         pressed = @"(AppleRemoteMainController: button released)";
+#endif
     }
 
 #ifdef DEBUG
 	//NSLog(@"Button %@ pressed %@", buttonName, pressed);
 	NSString* clickCountString = @"";
 	if (clickCount > 1) clickCountString = [NSString stringWithFormat: @"%d clicks", clickCount];
-	NSString* feedbackString = [NSString stringWithFormat:@"(Value:%4d) %@  %@ %@",buttonIdentifier, buttonName, pressed, clickCountString];
+	NSString* feedbackString = [NSString stringWithFormat:@"(Value:%4d) %@  %@ %@", buttonIdentifier, buttonName, pressed, clickCountString];
 
 	// print out events
 	NSLog(@"%@", feedbackString);
