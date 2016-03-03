@@ -39,8 +39,8 @@ void BlocklistParserTest::testParse()
     WinBlocklistParser aBlocklistParser(getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_parse.xml", aDriveInfos);
     aBlocklistParser.parse();
 
-    auto const n = aDriveInfos.size();
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(n)>(20), n);
+    size_t const n = aDriveInfos.size();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), n);
 
     size_t i = 0;
 
