@@ -4981,12 +4981,10 @@ void ToolBox::LoseFocus()
 }
 
 // performs the action associated with an item, ie simulates clicking the item
-void ToolBox::TriggerItem( sal_uInt16 nItemId, bool bShift )
+void ToolBox::TriggerItem( sal_uInt16 nItemId )
 {
     mnHighItemId = nItemId;
     sal_uInt16 nModifier = 0;
-    if( bShift )
-        nModifier |= KEY_SHIFT;
     vcl::KeyCode aKeyCode( 0, nModifier );
     ImplActivateItem( aKeyCode );
 }

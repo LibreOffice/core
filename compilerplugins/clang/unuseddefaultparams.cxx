@@ -68,8 +68,11 @@ public:
         myfile.close();
     }
 
+    bool shouldVisitTemplateInstantiations () const { return true; }
+
     bool VisitCallExpr(CallExpr * callExpr);
     bool VisitFunctionDecl( const FunctionDecl* functionDecl );
+    bool VisitDeclRefExpr( const DeclRefExpr* declRefExpr );
 private:
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
 };
@@ -205,6 +208,18 @@ bool UnusedDefaultParams::VisitFunctionDecl( const FunctionDecl* functionDecl )
         MyFuncInfo funcInfo = niceName(functionDecl);
         definitionSet.insert(funcInfo);
     }
+    return true;
+}
+
+// this catches places that take the address of a method
+bool UnusedDefaultParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
+{
+    const Decl* functionDecl = declRefExpr->getDecl();
+    if (!isa<FunctionDecl>(functionDecl)) {
+        return true;
+    }
+    MyFuncInfo funcInfo = niceName(dyn_cast<FunctionDecl>(functionDecl));
+    callSet.insert(funcInfo);
     return true;
 }
 

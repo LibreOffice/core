@@ -1696,7 +1696,7 @@ void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
     }
 }
 
-void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase, bool bLayout)
+void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1708,24 +1708,21 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->mnHeight));
 
-    if (!bLayout)
+    if (mpEntryList->IsEntryPosSelected(nPos))
     {
-        if (mpEntryList->IsEntryPosSelected(nPos))
-        {
-            rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor());
-            rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
-            rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
-            rRenderContext.DrawRect(aRect);
-        }
-        else
-        {
-            ApplySettings(rRenderContext);
-            if (!IsEnabled())
-                rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
-            rRenderContext.SetTextFillColor();
-            if (bErase)
-                rRenderContext.Erase(aRect);
-        }
+        rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.DrawRect(aRect);
+    }
+    else
+    {
+        ApplySettings(rRenderContext);
+        if (!IsEnabled())
+            rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+        rRenderContext.SetTextFillColor();
+        if (bErase)
+            rRenderContext.Erase(aRect);
     }
 
     if (IsUserDrawEnabled())
@@ -1747,7 +1744,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
     else
     {
-        DrawEntry(rRenderContext, nPos, true, true, false, bLayout);
+        DrawEntry(rRenderContext, nPos, true, true);
     }
 }
 

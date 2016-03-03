@@ -139,7 +139,7 @@ public:
         // to page (useful for transformation matrices
         // if pOutPoint is set it will be updated to the emitted point
         // (in PDF map mode, that is 10th of point)
-        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg = false, Point* pOutPoint = nullptr ) const;
+        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg = false ) const;
         // appends a B2DPoint without further transformation
         void appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const;
         // appends a rectangle
@@ -149,7 +149,7 @@ public:
         // appends a polygon optionally closing it
         void appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polygon optionally closing it
-        void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
+        void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const;
         // appends a polypolygon optionally closing the subpaths
         void appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
         // appends a polypolygon optionally closing the subpaths

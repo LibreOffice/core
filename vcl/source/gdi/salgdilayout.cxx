@@ -293,7 +293,7 @@ basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, con
     return aRet;
 }
 
-basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *i_pOutDev, bool i_bBack ) const
+basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *i_pOutDev ) const
 {
     long w;
     if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -308,7 +308,7 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     {
         sal_Int32 nPoly = i_rPoly.count();
         for( sal_Int32 i = 0; i < nPoly; i++ )
-            aRet.append( mirror( i_rPoly.getB2DPolygon( i ), i_pOutDev, i_bBack ) );
+            aRet.append( mirror( i_rPoly.getB2DPolygon( i ), i_pOutDev ) );
         aRet.setClosed( i_rPoly.isClosed() );
         aRet.flip();
     }

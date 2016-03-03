@@ -137,8 +137,8 @@ public:
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep = ';' );
-    OUString        GetMRUEntries( sal_Unicode cSep = ';' ) const;
+    void            SetMRUEntries( const OUString& rEntries );
+    OUString        GetMRUEntries() const;
     void            SetMaxMRUCount( sal_Int32  n );
     sal_Int32       GetMaxMRUCount() const;
     void            SetEntryData( sal_Int32  nPos, void* pNewData );

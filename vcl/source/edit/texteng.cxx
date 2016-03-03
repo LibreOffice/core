@@ -820,7 +820,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextSelection& rCurSel )
     return ImpInsertParaBreak( aPaM );
 }
 
-TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs )
+TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoSplitPara( this, rPaM.GetPara(), rPaM.GetIndex() ) );
@@ -828,7 +828,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAtt
     TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
     bool bFirstParaContentChanged = rPaM.GetIndex() < pNode->GetText().getLength();
 
-    TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, bKeepEndingAttribs ) );
+    TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, true/*bKeepEndingAttribs*/ ) );
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
     DBG_ASSERT( pPortion, "ImpInsertParaBreak: Hidden Portion" );
@@ -2905,7 +2905,7 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
 
 }
 
-sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart )
+sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos )
 {
     sal_uInt8 nRightToLeft = 0;
 
@@ -2922,8 +2922,6 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_I
             if ( rWritingDirectionInfo.nStartPos <= nPos && rWritingDirectionInfo.nEndPos >= nPos )
             {
                 nRightToLeft = rWritingDirectionInfo.nType;
-                if ( pStart )
-                    *pStart = rWritingDirectionInfo.nStartPos;
                 break;
             }
         }

@@ -1031,50 +1031,23 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
 }
 
 void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
-        const LanguageTag& rLanguageTag, bool bWriteEmpty, xmloff::token::XMLTokenEnum eClass )
+        const LanguageTag& rLanguageTag, bool bWriteEmpty )
 {
-    xmloff::token::XMLTokenEnum eLanguage, eScript, eCountry, eRfcLanguageTag;
-    switch (eClass)
-    {
-        default:
-        case XML_LANGUAGE:
-            eLanguage       = XML_LANGUAGE;
-            eScript         = XML_SCRIPT;
-            eCountry        = XML_COUNTRY;
-            eRfcLanguageTag = XML_RFC_LANGUAGE_TAG;
-            break;
-        case XML_LANGUAGE_ASIAN:
-            eLanguage       = XML_LANGUAGE_ASIAN;
-            eScript         = XML_SCRIPT_ASIAN;
-            eCountry        = XML_COUNTRY_ASIAN;
-            eRfcLanguageTag = XML_RFC_LANGUAGE_TAG_ASIAN;
-            if (nPrefix == XML_NAMESPACE_FO)
-                nPrefix = XML_NAMESPACE_STYLE;
-            break;
-        case XML_LANGUAGE_COMPLEX:
-            eLanguage       = XML_LANGUAGE_COMPLEX;
-            eScript         = XML_SCRIPT_COMPLEX;
-            eCountry        = XML_COUNTRY_COMPLEX;
-            eRfcLanguageTag = XML_RFC_LANGUAGE_TAG_COMPLEX;
-            if (nPrefix == XML_NAMESPACE_FO)
-                nPrefix = XML_NAMESPACE_STYLE;
-            break;
-    }
     if (rLanguageTag.isIsoODF())
     {
         if (bWriteEmpty || !rLanguageTag.isSystemLocale())
         {
-            AddAttribute( nPrefix, eLanguage, rLanguageTag.getLanguage());
+            AddAttribute( nPrefix, XML_LANGUAGE, rLanguageTag.getLanguage());
             if (rLanguageTag.hasScript() && getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
-                AddAttribute( nPrefix, eScript, rLanguageTag.getScript());
+                AddAttribute( nPrefix, XML_SCRIPT, rLanguageTag.getScript());
             if (bWriteEmpty || !rLanguageTag.getCountry().isEmpty())
-                AddAttribute( nPrefix, eCountry, rLanguageTag.getCountry());
+                AddAttribute( nPrefix, XML_COUNTRY, rLanguageTag.getCountry());
         }
     }
     else
     {
         if (getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
-            AddAttribute( nPrefixRfc, eRfcLanguageTag, rLanguageTag.getBcp47());
+            AddAttribute( nPrefixRfc, XML_RFC_LANGUAGE_TAG, rLanguageTag.getBcp47());
         // Also in case of non-pure-ISO tag store best matching fo: attributes
         // for consumers not handling *:rfc-language-tag, ensuring that only
         // valid ISO codes are stored. Here the bWriteEmpty parameter has no
@@ -1083,11 +1056,11 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         rLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
         if (!aLanguage.isEmpty())
         {
-            AddAttribute( nPrefix, eLanguage, aLanguage);
+            AddAttribute( nPrefix, XML_LANGUAGE, aLanguage);
             if (!aScript.isEmpty() && getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
-                AddAttribute( nPrefix, eScript, aScript);
+                AddAttribute( nPrefix, XML_SCRIPT, aScript);
             if (!aCountry.isEmpty())
-                AddAttribute( nPrefix, eCountry, aCountry);
+                AddAttribute( nPrefix, XML_COUNTRY, aCountry);
         }
     }
 }

@@ -1391,17 +1391,8 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 }
 }
 
-void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg, Point* pOutPoint ) const
+void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg ) const
 {
-    if( pOutPoint )
-    {
-        Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                                   m_pWriter->m_aMapMode,
-                                   m_pWriter->getReferenceDevice(),
-                                   rPoint ) );
-        *pOutPoint = aPoint;
-    }
-
     Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                m_pWriter->m_aMapMode,
                                m_pWriter->getReferenceDevice(),
@@ -1504,7 +1495,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OString
     }
 }
 
-void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
+void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const
 {
     basegfx::B2DPolygon aPoly( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                             m_pWriter->m_aMapMode,
@@ -1575,8 +1566,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
                     rBuffer.append( " " );
             }
         }
-        if( bClose )
-            rBuffer.append( "h\n" );
+        rBuffer.append( "h\n" );
     }
 }
 

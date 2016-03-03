@@ -1130,8 +1130,7 @@ public:
     OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
                                                    DrawTextFlags nStyle = DrawTextFlags::EndEllipsis ) const;
 
-    long                        GetCtrlTextWidth( const OUString& rStr, sal_Int32 nIndex = 0,
-                                                  sal_Int32 nLen = -1 ) const;
+    long                        GetCtrlTextWidth( const OUString& rStr, sal_Int32 nIndex = 0 ) const;
 
     static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
 
@@ -1197,7 +1196,7 @@ public:
 
     bool                        GetCaretPositions( const OUString&, long* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
-                                              long* pDXAry = nullptr, long nWidth = 0 ) const;
+                                              long* pDXAry = nullptr ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);

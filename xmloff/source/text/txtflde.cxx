@@ -2483,12 +2483,11 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
 
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        sal_uInt16 nValuePrefix,
-                                       const OUString& sValue,
-                                       bool bOmitEmpty)
+                                       const OUString& sValue)
 {
     OUString sQValue =
         GetExport().GetNamespaceMap().GetQNameByKey( nValuePrefix, sValue, false );
-    ProcessString( eName, sQValue, bOmitEmpty );
+    ProcessString( eName, sQValue );
 }
 
 /// export a string attribute
