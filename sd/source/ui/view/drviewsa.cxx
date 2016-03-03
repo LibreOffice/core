@@ -69,7 +69,6 @@
 #include "annotationmanager.hxx"
 #include "DrawController.hxx"
 
-#include <boost/bind.hpp>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -114,7 +113,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     , mbIsLayerModeActive(false)
     , mbIsInSwitchPage(false)
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-          ::boost::bind(&DrawViewShell::GetSidebarContextName, this),
+          [this] () { return this->GetSidebarContextName(); },
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
           sfx2::sidebar::EnumContext::Context_Default))
 {
