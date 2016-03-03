@@ -144,7 +144,7 @@ public:
     bool            MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& );
 
     // get the stored representation for the object
-    css::uno::Reference < css::io::XInputStream > GetObjectStream( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString* pMediaType=nullptr );
+    css::uno::Reference < css::io::XInputStream > GetObjectStream( const css::uno::Reference < css::embed::XEmbeddedObject >& );
     css::uno::Reference < css::io::XInputStream > GetObjectStream( const OUString& aName, OUString* pMediaType );
 
     // get the stored graphical representation for the object

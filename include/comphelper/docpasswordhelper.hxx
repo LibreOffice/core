@@ -172,17 +172,12 @@ public:
         @param aString
             The string for which the hash should be calculated
 
-        @param nEnc
-            The encoding that should be used to generate the 8-bit string
-            before the hash is generated
-
         @return
             The hash represented by sequence of bytes in BigEndian form
       */
 
     static css::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
-                const OUString& aString,
-                rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
+                const OUString& aString );
 
 
     /** This helper function generates a random sequence of bytes of

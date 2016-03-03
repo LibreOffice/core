@@ -145,8 +145,7 @@ public:
             const OUString& aURL,
             sal_Int32 nStorageMode,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >(),
-            bool bRepairStorage = false )
+                            = css::uno::Reference< css::uno::XComponentContext >() )
         throw ( css::uno::Exception );
 
     static css::uno::Reference< css::embed::XStorage >
