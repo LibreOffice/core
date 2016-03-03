@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_0ad10ece",
+        "filename": "include/sal/log-areas.dox",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-03T10:49:13Z",
+      "side": 1,
+      "message": "please keep this block lexicographically sorted",
+      "revId": "b5e5fafac6d153f1aa3cd75ac434c74a5e1e9d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ead5a2b9",
+        "filename": "include/sal/log-areas.dox",
+        "patchSetId": 11
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-03T10:49:13Z",
+      "side": 1,
+      "message": "probably doesn\u0027t make sense to introduce a \"cppu.uno\" sub-area for a single use case; just sticking to plain \"cppu\" should be fine there",
+      "revId": "b5e5fafac6d153f1aa3cd75ac434c74a5e1e9d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
