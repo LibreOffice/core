@@ -1615,7 +1615,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().eDestination = Destination::LEVELNUMBERS;
             break;
         case RTF_SHPPICT:
-            m_aStates.top().resetFrame();
+            resetFrame();
             m_aStates.top().eDestination = Destination::SHPPICT;
             break;
         case RTF_PICT:
@@ -3013,7 +3013,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // Ideally getDefaultSPRM() would take care of this, but it would not when we're buffering.
             m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_tabs, std::make_shared<RTFValue>());
         }
-        m_aStates.top().resetFrame();
+        resetFrame();
 
         // Reset currently selected paragraph style as well.
         // By default the style with index 0 is applied.
@@ -5643,8 +5643,8 @@ RTFError RTFDocumentImpl::popState()
         m_bNeedCr = m_bNeedCrOrig;
         if (aState.aFrame.inFrame())
         {
-            // parBreak modify m_aStates.top() so we can't apply resetFrame directly on aState
-            m_aStates.top().resetFrame();
+            // parBreak() modifies m_aStates.top() so we can't apply resetFrame() directly on aState
+            resetFrame();
             parBreak();
             // Save this state for later use, so we only reset frame status only for the first shape inside a frame.
             aState = m_aStates.top();
@@ -6330,9 +6330,9 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
 {
 }
 
-void RTFParserState::resetFrame()
+void RTFDocumentImpl::resetFrame()
 {
-    aFrame = RTFFrame(this);
+    m_aStates.top().aFrame = RTFFrame(&m_aStates.top());
 }
 
 RTFColorTableEntry::RTFColorTableEntry()

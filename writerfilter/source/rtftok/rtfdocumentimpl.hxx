@@ -210,8 +210,6 @@ class RTFParserState
 {
 public:
     RTFParserState(RTFDocumentImpl* pDocumentImpl);
-    /// Resets aFrame.
-    void resetFrame();
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -397,6 +395,8 @@ public:
     oox::GraphicHelper& getGraphicHelper();
     /// Are we inside the stylesheet table?
     bool isStyleSheetImport();
+    /// Resets m_aStates.top().aFrame.
+    void resetFrame();
 
 private:
     SvStream& Strm();
