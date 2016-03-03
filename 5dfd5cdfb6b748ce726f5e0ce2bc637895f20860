@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_ad8c5436",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T18:52:42Z",
+      "side": 1,
+      "message": "The commit message could use a sensible line wrap, say at column 72 for example..",
+      "revId": "5dfd5cdfb6b748ce726f5e0ce2bc637895f20860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2de4e40b",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T18:52:42Z",
+      "side": 1,
+      "message": "We know already the ScTable instance when calling fillSortedColumnArray() so don\u0027t need the ScDocument indirection for each and every cell. This could be\n\n pTable-\u003eGetBroadcaster( nCol1 + j, aOrderIndices[i])\n\nif fillSortedColumnArray(...,ScTable*) was called as\n\n fillSortedColumnArray(...,this)\n\nin the places below instead of fillSortedColumnArray(...,pDocument)\n\nI\u0027ll change that in an amended commit.",
+      "range": {
+        "startLine": 792,
+        "startChar": 47,
+        "endLine": 792,
+        "endChar": 118
+      },
+      "revId": "5dfd5cdfb6b748ce726f5e0ce2bc637895f20860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
