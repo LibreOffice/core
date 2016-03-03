@@ -659,7 +659,6 @@ void SvxRTFParser::ReadInfo()
     DBG_ASSERT(m_xDocProps.is(),
         "SvxRTFParser::ReadInfo: no DocumentProperties");
     OUString sStr, sComment;
-    long nVersNo = 0;
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -734,7 +733,6 @@ void SvxRTFParser::ReadInfo()
             break;
 
         case RTF_VERN:
-            nVersNo = nTokenValue;
             break;
 
         case RTF_EDMINS:
