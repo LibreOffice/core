@@ -269,6 +269,10 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         int nSignatureCount = maCurrentSignatureInformations.size() + 1;
         maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
 
+        // Export old signatures.
+        for (size_t i = 0; i < maCurrentSignatureInformations.size(); ++i)
+            maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);
+
         // Create a new signature.
         maSignatureHelper.CreateAndWriteOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, nSignatureCount);
 
