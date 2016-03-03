@@ -362,10 +362,10 @@ void ONDXPage::Release(bool bSave)
     aParent.Clear();
 }
 
-void ONDXPage::ReleaseFull(bool bSave)
+void ONDXPage::ReleaseFull()
 {
     ONDXPagePtr aTempParent = aParent;
-    Release(bSave);
+    Release();
 
     if (aTempParent.Is())
     {

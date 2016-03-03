@@ -250,7 +250,7 @@ public: // OComponentHelper
 private:
     void checkColumnIndex( sal_Int32 parameterIndex );
     void checkClosed() throw (com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException);
-    void raiseSQLException( const char * errorMsg, const char *errorType = nullptr )
+    void raiseSQLException( const char * errorMsg )
         throw ( com::sun::star::sdbc::SQLException );
 //     PGresult *pgExecute( OString *pQuery );
 };

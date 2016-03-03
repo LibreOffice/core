@@ -137,7 +137,7 @@ namespace connectivity
             bool    Delete(sal_uInt16);
             void    Remove(sal_uInt16);
             void    Release(bool bSave = true);
-            void    ReleaseFull(bool bSave = true);
+            void    ReleaseFull();
 
             // Split and merge
             ONDXNode Split(ONDXPage& rPage);

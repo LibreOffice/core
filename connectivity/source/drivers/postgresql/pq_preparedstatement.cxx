@@ -310,18 +310,11 @@ void PreparedStatement::close(  ) throw (SQLException, RuntimeException, std::ex
     }
 }
 
-void PreparedStatement::raiseSQLException(
-    const char * errorMsg, const char *errorType )
+void PreparedStatement::raiseSQLException( const char * errorMsg )
     throw( SQLException )
 {
     OUStringBuffer buf(128);
     buf.append( "pq_driver: ");
-    if( errorType )
-    {
-        buf.append( "[" );
-        buf.appendAscii( errorType );
-        buf.append( "]" );
-    }
     buf.append(
         OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
     buf.append( " (caused by statement '" );
