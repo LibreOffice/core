@@ -2856,22 +2856,22 @@ bool ScCompiler::IsDoubleReference( const OUString& rName )
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
     sal_uInt16 nFlags = aRange.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
-    if( nFlags & SCA_VALID )
+    if( nFlags & ScAddr::VALID )
     {
         ScComplexRefData aRef;
         aRef.InitRange( aRange );
-        aRef.Ref1.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
-        aRef.Ref1.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
-        aRef.Ref1.SetTabRel( (nFlags & SCA_TAB_ABSOLUTE) == 0 );
-        if ( !(nFlags & SCA_VALID_TAB) )
+        aRef.Ref1.SetColRel( (nFlags & ScAddr::COL_ABSOLUTE) == 0 );
+        aRef.Ref1.SetRowRel( (nFlags & ScAddr::ROW_ABSOLUTE) == 0 );
+        aRef.Ref1.SetTabRel( (nFlags & ScAddr::TAB_ABSOLUTE) == 0 );
+        if ( !(nFlags & ScAddr::TAB_VALID) )
             aRef.Ref1.SetTabDeleted( true );        // #REF!
-        aRef.Ref1.SetFlag3D( ( nFlags & SCA_TAB_3D ) != 0 );
-        aRef.Ref2.SetColRel( (nFlags & SCA_COL2_ABSOLUTE) == 0 );
-        aRef.Ref2.SetRowRel( (nFlags & SCA_ROW2_ABSOLUTE) == 0 );
-        aRef.Ref2.SetTabRel( (nFlags & SCA_TAB2_ABSOLUTE) == 0 );
-        if ( !(nFlags & SCA_VALID_TAB2) )
+        aRef.Ref1.SetFlag3D( ( nFlags & ScAddr::TAB_3D ) != 0 );
+        aRef.Ref2.SetColRel( (nFlags & ScAddr::COL2_ABSOLUTE) == 0 );
+        aRef.Ref2.SetRowRel( (nFlags & ScAddr::ROW2_ABSOLUTE) == 0 );
+        aRef.Ref2.SetTabRel( (nFlags & ScAddr::TAB2_ABSOLUTE) == 0 );
+        if ( !(nFlags & ScAddr::TAB2_VALID) )
             aRef.Ref2.SetTabDeleted( true );        // #REF!
-        aRef.Ref2.SetFlag3D( ( nFlags & SCA_TAB2_3D ) != 0 );
+        aRef.Ref2.SetFlag3D( ( nFlags & ScAddr::TAB2_3D ) != 0 );
         aRef.SetRange(aRange, aPos);
         if (aExtInfo.mbExternal)
         {
@@ -2887,7 +2887,7 @@ bool ScCompiler::IsDoubleReference( const OUString& rName )
         }
     }
 
-    return ( nFlags & SCA_VALID ) != 0;
+    return ( nFlags & ScAddr::VALID ) != 0;
 }
 
 bool ScCompiler::IsSingleReference( const OUString& rName )
@@ -2898,24 +2898,24 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
     sal_uInt16 nFlags = aAddr.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
     // Something must be valid in order to recognize Sheet1.blah or blah.a1
     // as a (wrong) reference.
-    if( nFlags & ( SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB ) )
+    if( nFlags & ( ScAddr::COL_VALID|ScAddr::ROW_VALID|ScAddr::TAB_VALID ) )
     {
         ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
-        aRef.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
-        aRef.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
-        aRef.SetTabRel( (nFlags & SCA_TAB_ABSOLUTE) == 0 );
-        aRef.SetFlag3D( ( nFlags & SCA_TAB_3D ) != 0 );
+        aRef.SetColRel( (nFlags & ScAddr::COL_ABSOLUTE) == 0 );
+        aRef.SetRowRel( (nFlags & ScAddr::ROW_ABSOLUTE) == 0 );
+        aRef.SetTabRel( (nFlags & ScAddr::TAB_ABSOLUTE) == 0 );
+        aRef.SetFlag3D( ( nFlags & ScAddr::TAB_3D ) != 0 );
         // the reference is really invalid
-        if( !( nFlags & SCA_VALID ) )
+        if( !( nFlags & ScAddr::VALID ) )
         {
-            if( !( nFlags & SCA_VALID_COL ) )
+            if( !( nFlags & ScAddr::COL_VALID ) )
                 aRef.SetColDeleted(true);
-            if( !( nFlags & SCA_VALID_ROW ) )
+            if( !( nFlags & ScAddr::ROW_VALID ) )
                 aRef.SetRowDeleted(true);
-            if( !( nFlags & SCA_VALID_TAB ) )
+            if( !( nFlags & ScAddr::TAB_VALID ) )
                 aRef.SetTabDeleted(true);
-            nFlags |= SCA_VALID;
+            nFlags |= ScAddr::VALID;
         }
         aRef.SetAddress(aAddr, aPos);
 
@@ -2931,7 +2931,7 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
             maRawToken.SetSingleReference(aRef);
     }
 
-    return ( nFlags & SCA_VALID ) != 0;
+    return ( nFlags & ScAddr::VALID ) != 0;
 }
 
 bool ScCompiler::IsReference( const OUString& rName )
@@ -3742,7 +3742,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
 
                 bool bChanged = false;
                 bool bOk = true;
-                sal_uInt16 nMask = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW;
+                sal_uInt16 nMask = ScAddr::VALID | ScAddr::COL_VALID | ScAddr::ROW_VALID;
                 for ( int j=0; j<nRefs; j++ )
                 {
                     sal_Int32 nTmp = 0;
@@ -4716,7 +4716,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         ScAddress aAbs = rRef.toAbs(aPos);
         const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::AREA);
         SAL_WARN_IF( !pData, "sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef without ScDBData: " <<
-                aAbs.Format( SCA_VALID | SCA_TAB_3D, pDoc));
+                aAbs.Format( ScAddr::VALID | ScAddr::TAB_3D, pDoc));
         if (pData)
             aStr = pData->GetTableColumnName( aAbs.Col());
         if (aStr.isEmpty())
@@ -4724,13 +4724,13 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
             if (pData && pData->HasHeader())
             {
                 SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef falling back to cell: " <<
-                        aAbs.Format( SCA_VALID | SCA_TAB_3D, pDoc));
+                        aAbs.Format( ScAddr::VALID | ScAddr::TAB_3D, pDoc));
                 aStr = pDoc->GetString(aAbs);
             }
             else
             {
                 SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef of empty header-less: " <<
-                        aAbs.Format( SCA_VALID | SCA_TAB_3D, pDoc));
+                        aAbs.Format( ScAddr::VALID | ScAddr::TAB_3D, pDoc));
                 aStr = aErrRef;
             }
         }

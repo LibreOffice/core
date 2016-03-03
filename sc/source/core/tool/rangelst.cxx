@@ -166,7 +166,7 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         if (!cDelimiter)
             cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
-        nMask |= SCA_VALID;             // falls das jemand vergessen sollte
+        nMask |= ScAddr::VALID;             // falls das jemand vergessen sollte
         sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
         ScRange aRange;
         const SCTAB nTab = pDoc ? nDefaultTab : 0;
@@ -177,13 +177,13 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
             const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
             sal_uInt16 nRes = aRange.ParseAny( aOne, pDoc, eConv );
-            sal_uInt16 nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
-            sal_uInt16 nTmp1 = ( nRes & SCA_BITS );
+            sal_uInt16 nEndRangeBits = ScAddr::COL2_VALID | ScAddr::ROW2_VALID | ScAddr::TAB2_VALID;
+            sal_uInt16 nTmp1 = ( nRes & ScAddr::BITS );
             sal_uInt16 nTmp2 = ( nRes & nEndRangeBits );
             // If we have a valid single range with
             // any of the address bits we are interested in
             // set - set the equiv end range bits
-            if ( (nRes & SCA_VALID ) && nTmp1 && ( nTmp2 != nEndRangeBits ) )
+            if ( (nRes & ScAddr::VALID ) && nTmp1 && ( nTmp2 != nEndRangeBits ) )
                     nRes |= ( nTmp1 << 4 );
 
             if ( (nRes & nMask) == nMask )
@@ -192,7 +192,7 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         }
         while (nPos >= 0);
 
-        return nResult;             // SCA_VALID gesetzt wenn alle ok
+        return nResult;             // ScAddr::VALID gesetzt wenn alle ok
     }
     else
         return 0;

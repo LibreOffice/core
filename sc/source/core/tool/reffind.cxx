@@ -220,8 +220,8 @@ static sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
     sal_uInt16 nNew = nOld & 7;                 // die drei Abs-Flags
     nNew = ( nNew - 1 ) & 7;                // weiterzaehlen
 
-    if (!(nOld & SCA_TAB_3D))
-        nNew &= ~SCA_TAB_ABSOLUTE;          // not 3D -> never absolute!
+    if (!(nOld & ScAddr::TAB_3D))
+        nNew &= ~ScAddr::TAB_ABSOLUTE;          // not 3D -> never absolute!
 
     return ( nOld & 0xfff8 ) | nNew;
 }
@@ -265,7 +265,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
         ScAddress::ExternalInfo aExtInfo;
         sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
-        if ( nResult & SCA_VALID )
+        if ( nResult & ScAddr::VALID )
         {
             sal_uInt16 nFlags = lcl_NextFlags( nResult );
             if( aExtInfo.mbExternal )
