@@ -39,7 +39,7 @@ public:
     void Append( const ScRange& rRange );
 
     sal_uInt16 Parse( const OUString&, ScDocument* = nullptr,
-                      sal_uInt16 nMask = SCA_VALID,
+                      sal_uInt16 nMask = static_cast<sal_uInt16>(ScAddr::VALID),
                       formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                       SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 

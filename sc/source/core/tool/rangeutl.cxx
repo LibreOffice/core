@@ -448,11 +448,11 @@ bool ScRangeStringConverter::GetAddressFromString(
     GetTokenByOffset( sToken, rAddressStr, nOffset, cSeparator, cQuote );
     if( nOffset >= 0 )
     {
-        if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & SCA_VALID) == SCA_VALID)
+        if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID))
             return true;
         ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
         if (eConv != eConvUI)
-            return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
+            return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID));
     }
     return false;
 }
@@ -478,11 +478,11 @@ bool ScRangeStringConverter::GetRangeFromString(
         {
             if ( aUIString[0] == '.' )
                 aUIString = aUIString.copy( 1 );
-            bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
+            bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID));
             ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
             if (!bResult && eConv != eConvUI)
                 bResult = ((rRange.aStart.Parse(
-                    aUIString, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
+                    aUIString, const_cast<ScDocument*>(pDocument), eConvUI) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID));
             rRange.aEnd = rRange.aStart;
         }
         else
@@ -497,24 +497,24 @@ bool ScRangeStringConverter::GetRangeFromString(
                     aUIString[ nIndex + 1 ] == '.' )
                 aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
-            bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
+            bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID));
 
             // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
                 bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
-                                eConv) & SCA_VALID) == SCA_VALID) &&
+                                eConv) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID)) &&
                           ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument),
-                                eConv) & SCA_VALID) == SCA_VALID);
+                                eConv) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID));
 
                 ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
                     bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
-                                    eConvUI) & SCA_VALID) == SCA_VALID) &&
+                                    eConvUI) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID)) &&
                               ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument),
-                                    eConvUI) & SCA_VALID) == SCA_VALID);
+                                    eConvUI) & static_cast<sal_uInt16>(ScAddr::VALID)) == static_cast<sal_uInt16>(ScAddr::VALID));
                 }
             }
         }
@@ -743,12 +743,12 @@ static void lcl_appendCellAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS), nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
     else
     {
-        OUString aAddr(rCell.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS_3D), pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
@@ -776,7 +776,7 @@ static void lcl_appendCellRangeAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell1.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell1.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS), nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
 
         rBuf.append(":");
@@ -788,7 +788,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append('.');
         }
 
-        aAddr = rCell2.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
+        aAddr = rCell2.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS), nullptr, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -796,7 +796,7 @@ static void lcl_appendCellRangeAddress(
         ScRange aRange;
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
-        OUString aAddr(aRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(aRange.Format(static_cast<sal_uInt16>(ScAddr::RANGE_ABS_3D), pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
@@ -853,27 +853,27 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;
             ScAddress aCell1, aCell2;
             sal_uInt16 nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
-            if ((nRet & SCA_VALID) != SCA_VALID)
+            if ((nRet & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
             {
                 // first cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
                 nRet = aCell1.Parse(aBeginCell, pDoc, eConv, &aExtInfo1);
-                if ((nRet & SCA_VALID) != SCA_VALID)
+                if ((nRet & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
                     // first cell is really invalid.
                     continue;
             }
 
             nRet = aCell2.Parse(aEndCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
-            if ((nRet & SCA_VALID) != SCA_VALID)
+            if ((nRet & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
             {
                 // second cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
                 nRet = aCell2.Parse(aEndCell, pDoc, eConv, &aExtInfo2);
-                if ((nRet & SCA_VALID) != SCA_VALID)
+                if ((nRet & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
                     // second cell is really invalid.
                     continue;
             }
@@ -897,10 +897,10 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             ScAddress::ExternalInfo aExtInfo;
             ScAddress aCell;
             sal_uInt16 nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
-            if ((nRet & SCA_VALID) != SCA_VALID)
+            if ((nRet & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
             {
                 nRet = aCell.Parse(aToken, pDoc, eConv, &aExtInfo);
-                if ((nRet & SCA_VALID) != SCA_VALID)
+                if ((nRet & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
                     continue;
             }
 

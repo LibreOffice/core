@@ -251,7 +251,7 @@ void ScAcceptChgDlg::Init()
     if( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        OUString aRefStr(pRangeEntry->Format(SCR_ABS_3D, pDoc));
+        OUString aRefStr(pRangeEntry->Format(static_cast<sal_uInt16>(ScAddr::RANGE_ABS_3D), pDoc));
         pTPFilter->SetRange(aRefStr);
     }
 

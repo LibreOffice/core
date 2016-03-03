@@ -477,7 +477,7 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
 
     ScRange aRange;
     sal_uInt16 nRes = aRange.ParseAny(aRangeStr, &rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
-    if ((nRes & SCA_VALID) != SCA_VALID)
+    if ((nRes & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
         return false;
 
     if (aRange.aStart.Tab() != aRange.aEnd.Tab())

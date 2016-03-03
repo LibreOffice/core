@@ -196,7 +196,7 @@ public:
 
     void appendAddress( const ScAddress &rPos )
     {
-        aMessage.append( rPos.Format( SCA_VALID ) );
+        aMessage.append( rPos.Format( static_cast<sal_uInt16>(ScAddr::VALID) ) );
         appendSeparator();
     }
 

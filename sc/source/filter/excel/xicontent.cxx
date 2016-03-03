@@ -345,7 +345,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
                     {
                         ScRange aRange;
                         if ((aRange.ParseAny( xTextMark->copy( nSepPos + 1 ), nullptr,
-                                        formula::FormulaGrammar::CONV_XL_R1C1) & SCA_VALID) != SCA_VALID)
+                                        formula::FormulaGrammar::CONV_XL_R1C1) & static_cast<sal_uInt16>(ScAddr::VALID)) != static_cast<sal_uInt16>(ScAddr::VALID))
                             xTextMark.reset( new OUString( xTextMark->replaceAt( nSepPos, 1, OUString( '.' ))));
                     }
                 }

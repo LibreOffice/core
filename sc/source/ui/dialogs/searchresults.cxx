@@ -66,7 +66,7 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
                 // Out-of-bound sheet index.
                 continue;
 
-            OUString aPosStr = aPos.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
+            OUString aPosStr = aPos.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS), nullptr, pDoc->GetAddressConvention());
             mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
         }
     }
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG_TYPED( SearchResultsDlg, ListSelectHdl, SvTreeListBox*, void )
 
     ScAddress aPos;
     sal_uInt16 nRes = aPos.Parse(aPosStr, mpDoc, mpDoc->GetAddressConvention());
-    if (!(nRes & SCA_VALID))
+    if (!(nRes & static_cast<sal_uInt16>(ScAddr::VALID)))
         // Invalid address string.
         return;
 

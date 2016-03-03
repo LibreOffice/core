@@ -74,17 +74,17 @@ static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, Sc
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     sal_uInt16 nResult = rScRange.Parse(aAddress, pDoc, eConv);
-    if ( (nResult & SCA_VALID) )
+    if ( (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
         return nResult;
 
     // try the default Calc (A1) address convention
     nResult = rScRange.Parse(aAddress, pDoc);
-    if ( (nResult & SCA_VALID) )
+    if ( (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
         return nResult;
 
     // try the Excel A1 address convention
     nResult = rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
-    if ( (nResult & SCA_VALID) )
+    if ( (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
         return nResult;
 
     // try Excel R1C1 address convention
@@ -96,17 +96,17 @@ static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddre
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     sal_uInt16 nResult = rScAddress.Parse(aAddress, pDoc, eConv);
-    if ( (nResult & SCA_VALID) )
+    if ( (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
         return nResult;
 
     // try the default Calc (A1) address convention
     nResult = rScAddress.Parse(aAddress, pDoc);
-    if ( (nResult & SCA_VALID) )
+    if ( (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
         return nResult;
 
     // try the Excel A1 address convention
     nResult = rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
-    if ( (nResult & SCA_VALID) )
+    if ( (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
         return nResult;
 
     // try Excel R1C1 address convention
@@ -283,9 +283,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool        bMark = true;
 
                 // Is this a range ?
-                if( nResult & SCA_VALID )
+                if( nResult & static_cast<sal_uInt16>(ScAddr::VALID) )
                 {
-                    if ( nResult & SCA_TAB_3D )
+                    if ( nResult & static_cast<sal_uInt16>(ScAddr::TAB_3D) )
                     {
                         if( aScRange.aStart.Tab() != nTab )
                             SetTabNo( nTab = aScRange.aStart.Tab() );
@@ -297,9 +297,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
                 // Is this a cell ?
-                else if ( (nResult = lcl_ParseAddress(aScAddress, aAddress, pDoc, nSlot)) & SCA_VALID )
+                else if ( (nResult = lcl_ParseAddress(aScAddress, aAddress, pDoc, nSlot)) & static_cast<sal_uInt16>(ScAddr::VALID) )
                 {
-                    if ( nResult & SCA_TAB_3D )
+                    if ( nResult & static_cast<sal_uInt16>(ScAddr::TAB_3D) )
                     {
                         if( aScAddress.Tab() != nTab )
                             SetTabNo( nTab = aScAddress.Tab() );
@@ -319,13 +319,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if( ScRangeUtil::MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
                         ScRangeUtil::MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
-                        nResult |= SCA_VALID;
+                        nResult |= static_cast<sal_uInt16>(ScAddr::VALID);
                         if( aScRange.aStart.Tab() != nTab )
                             SetTabNo( nTab = aScRange.aStart.Tab() );
                     }
                 }
 
-                if ( !(nResult & SCA_VALID) && comphelper::string::isdigitAsciiString(aAddress) )
+                if ( !(nResult & static_cast<sal_uInt16>(ScAddr::VALID)) && comphelper::string::isdigitAsciiString(aAddress) )
                 {
                     sal_Int32 nNumeric = aAddress.toInt32();
                     if ( nNumeric > 0 && nNumeric <= MAXROW+1 )
@@ -337,7 +337,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         aScAddress.SetTab( nTab );
                         aScRange = ScRange( aScAddress, aScAddress );
                         bMark    = false;
-                        nResult  = SCA_VALID;
+                        nResult  = static_cast<sal_uInt16>(ScAddr::VALID);
                     }
                 }
 
@@ -345,7 +345,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     nResult = 0;
 
                 // we have found something
-                if( nResult & SCA_VALID )
+                if( nResult & static_cast<sal_uInt16>(ScAddr::VALID) )
                 {
                     bFound = true;
                     SCCOL nCol = aScRange.aStart.Col();

@@ -453,7 +453,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         m_pRbMax->Check();
         OUString aCursorStr;
         if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
-            aCursorStr = rCursorPos.Format(SCA_ABS, nullptr, mrDoc.GetAddressConvention());
+            aCursorStr = rCursorPos.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS), nullptr, mrDoc.GetAddressConvention());
         m_pEdObjectiveCell->SetRefString( aCursorStr );
         if ( nImplCount > 0 )
             maEngine = maImplNames[0];  // use first implementation
@@ -562,11 +562,11 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aStr = aName;
         else                                                        // format cell/range reference
         {
-            sal_uInt16 nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
+            sal_uInt16 nFmt = ( aAdr.Tab() == mnCurTab ) ? static_cast<sal_uInt16>(ScAddr::ADDR_ABS) : static_cast<sal_uInt16>(ScAddr::ADDR_ABS_3D);
             if ( bSingle )
                 aStr = aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention());
             else
-                aStr = rRef.Format(nFmt | SCR_ABS, pDocP, pDocP->GetAddressConvention());
+                aStr = rRef.Format(nFmt | static_cast<sal_uInt16>(ScAddr::RANGE_ABS), pDocP, pDocP->GetAddressConvention());
         }
 
         // variable cells can be several ranges, so only the selection is replaced
@@ -806,11 +806,11 @@ bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAl
     ScRangeUtil aRangeUtil;
     ScAddress::Details aDetails(mrDoc.GetAddressConvention(), 0, 0);
     sal_uInt16 nFlags = rRange.ParseAny( rInput, &mrDoc, aDetails );
-    if ( nFlags & SCA_VALID )
+    if ( nFlags & static_cast<sal_uInt16>(ScAddr::VALID) )
     {
-        if ( (nFlags & SCA_TAB_3D) == 0 )
+        if ( (nFlags & static_cast<sal_uInt16>(ScAddr::TAB_3D)) == 0 )
             rRange.aStart.SetTab( mnCurTab );
-        if ( (nFlags & SCA_TAB2_3D) == 0 )
+        if ( (nFlags & static_cast<sal_uInt16>(ScAddr::TAB2_3D)) == 0 )
             rRange.aEnd.SetTab( rRange.aStart.Tab() );
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
     }

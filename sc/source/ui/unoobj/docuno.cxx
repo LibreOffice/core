@@ -1185,11 +1185,11 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, Rec
     bool bRangeValid = false;
     bool bRectValid = false;
 
-    if ( rTargetRange.Parse( rTarget, pDoc ) & SCA_VALID )
+    if ( rTargetRange.Parse( rTarget, pDoc ) & static_cast<sal_uInt16>(ScAddr::VALID) )
     {
         bRangeValid = true;             // range reference
     }
-    else if ( aAddress.Parse( rTarget, pDoc ) & SCA_VALID )
+    else if ( aAddress.Parse( rTarget, pDoc ) & static_cast<sal_uInt16>(ScAddr::VALID) )
     {
         rTargetRange = aAddress;
         bRangeValid = true;             // cell reference

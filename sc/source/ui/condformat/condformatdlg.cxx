@@ -451,7 +451,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
 
     OUString aRangeString;
-    rRange.Format(aRangeString, SCA_VALID, pViewData->GetDocument(),
+    rRange.Format(aRangeString, static_cast<sal_uInt16>(ScAddr::VALID), pViewData->GetDocument(),
                     pViewData->GetDocument()->GetAddressConvention());
     mpEdRange->SetText(aRangeString);
 
@@ -538,9 +538,9 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
         sal_uInt16 n = 0;
         if (mpLastEdit && mpLastEdit != mpEdRange)
-            n = SCR_ABS_3D;
+            n = static_cast<sal_uInt16>(ScAddr::RANGE_ABS_3D);
         else
-            n = SCR_ABS;
+            n = static_cast<sal_uInt16>(ScAddr::RANGE_ABS);
 
         OUString aRefStr(rRef.Format(n, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));
@@ -557,10 +557,10 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
-        SCA_VALID, mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
+        static_cast<sal_uInt16>(ScAddr::VALID), mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
     ScConditionalFormat* pFormat = mpCondFormList->GetConditionalFormat();
 
-    if(nFlags & SCA_VALID && !aRange.empty() && pFormat)
+    if(nFlags & static_cast<sal_uInt16>(ScAddr::VALID) && !aRange.empty() && pFormat)
         pFormat->SetRange(aRange);
     else
     {
@@ -761,8 +761,8 @@ IMPL_LINK_TYPED( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
     OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
-        SCA_VALID, mpViewData->GetDocument()->GetAddressConvention());
-    if(nFlags & SCA_VALID)
+        static_cast<sal_uInt16>(ScAddr::VALID), mpViewData->GetDocument()->GetAddressConvention());
+    if(nFlags & static_cast<sal_uInt16>(ScAddr::VALID))
         rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else
         rEdit.SetControlBackground(COL_LIGHTRED);

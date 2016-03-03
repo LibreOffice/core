@@ -180,7 +180,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         ScRange aAdvSource;
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
         {
-            OUString aRefStr(aAdvSource.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+            OUString aRefStr(aAdvSource.Format(static_cast<sal_uInt16>(ScAddr::RANGE_ABS_3D), pDoc, pDoc->GetAddressConvention()));
             pEdFilterArea->SetRefString( aRefStr );
         }
     }
@@ -237,9 +237,9 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( pRefInputEdit == pEdCopyArea)
-            aRefStr = rRef.aStart.Format(SCA_ABS_3D, pDocP, eConv);
+            aRefStr = rRef.aStart.Format(static_cast<sal_uInt16>(ScAddr::ADDR_ABS_3D), pDocP, eConv);
         else if ( pRefInputEdit == pEdFilterArea)
-            aRefStr = rRef.Format(SCR_ABS_3D, pDocP, eConv);
+            aRefStr = rRef.Format(static_cast<sal_uInt16>(ScAddr::RANGE_ABS_3D), pDocP, eConv);
 
         pRefInputEdit->SetRefString( aRefStr );
     }
@@ -307,7 +307,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
             sal_uInt16 nResult = theAdrCopy.Parse( theCopyStr, pDoc, eConv );
 
-            if ( SCA_VALID != (nResult & SCA_VALID) )
+            if ( static_cast<sal_uInt16>(ScAddr::VALID) != (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
             {
                 if (!pExpander->get_expanded())
                     pExpander->set_expanded(true);
@@ -322,7 +322,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
         {
             sal_uInt16 nResult = ScRange().Parse( theAreaStr, pDoc, eConv );
 
-            if ( SCA_VALID != (nResult & SCA_VALID) )
+            if ( static_cast<sal_uInt16>(ScAddr::VALID) != (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
             {
                 ERRORBOX( STR_INVALID_TABREF );
                 pEdFilterArea->GrabFocus();
@@ -340,7 +340,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
             sal_uInt16  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
 
-            if ( SCA_VALID == (nResult & SCA_VALID) )
+            if ( static_cast<sal_uInt16>(ScAddr::VALID) == (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
             {
                 ScAddress& rStart = theFilterArea.aStart;
                 ScAddress& rEnd   = theFilterArea.aEnd;
@@ -448,7 +448,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, FilterAreaModHdl, Edit&, rEd, void )
             OUString  theCurAreaStr = rEd.GetText();
             sal_uInt16  nResult = ScRange().Parse( theCurAreaStr, pDoc );
 
-            if ( SCA_VALID == (nResult & SCA_VALID) )
+            if ( static_cast<sal_uInt16>(ScAddr::VALID) == (nResult & static_cast<sal_uInt16>(ScAddr::VALID)) )
             {
                 const sal_Int32 nCount  = pLbFilterArea->GetEntryCount();
 

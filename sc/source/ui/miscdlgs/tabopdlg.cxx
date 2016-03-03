@@ -156,8 +156,8 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         OUString      aStr;
         sal_uInt16      nFmt = ( rRef.aStart.Tab() == nCurTab )
-                                ? SCR_ABS
-                                : SCR_ABS_3D;
+                                ? static_cast<sal_uInt16>(ScAddr::RANGE_ABS)
+                                : static_cast<sal_uInt16>(ScAddr::RANGE_ABS_3D);
 
         if (pEdActive == m_pEdFormulaRange)
         {
