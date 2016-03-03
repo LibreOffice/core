@@ -380,13 +380,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (comphelper::LibreOfficeKit::isActive() &&
         static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
     {
-        boost::property_tree::ptree aTree;
-        std::stringstream aStream;
-        aTree.put("action", "PartInserted");
-        aTree.put("part", OUString::number(nPos / 2).toUtf8().getStr());
-        boost::property_tree::write_json(aStream, aTree);
-        const OString aPayload = aStream.str().c_str();
-        libreOfficeKitCallback(LOK_CALLBACK_PARTS_COUNT_CHANGED, aPayload.getStr());
+        libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 }
 
@@ -415,13 +409,7 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     if (comphelper::LibreOfficeKit::isActive() &&
         static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
     {
-        boost::property_tree::ptree aTree;
-        std::stringstream aStream;
-        aTree.put("action", "PartDeleted");
-        aTree.put("part", OUString::number(nPgNum / 2).toUtf8().getStr());
-        boost::property_tree::write_json(aStream, aTree);
-        const OString aPayload = aStream.str().c_str();
-        libreOfficeKitCallback(LOK_CALLBACK_PARTS_COUNT_CHANGED, aPayload.getStr());
+        libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 
     return pPage;
