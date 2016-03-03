@@ -25,7 +25,6 @@ struct DataPoint
 {
     double X, Y;
 
-    DataPoint() : X( 0.0 ), Y( 0.0 ) {};
     DataPoint( double rX, double rY ) : X( rX ), Y( rY ) {};
 };
 
