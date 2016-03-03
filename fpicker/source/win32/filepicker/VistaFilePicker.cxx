@@ -61,12 +61,6 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-#define FILE_PICKER_DLL_NAME  TEXT("fps.dll")
-
-
-// helper functions
-
-
 namespace
 {
     css::uno::Sequence< OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()

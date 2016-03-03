@@ -210,7 +210,7 @@ void AccObject::InsertChild( AccObject* pChild,short pos )
     }
     else
     {
-        std::vector<AccObject*>::iterator iter=m_childrenList.begin()+pos;
+        iter=m_childrenList.begin()+pos;
         m_childrenList.insert(iter,pChild);
     }
 

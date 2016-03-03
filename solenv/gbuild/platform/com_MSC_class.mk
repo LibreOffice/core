@@ -42,9 +42,9 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
 		$(if $(filter %.c,$(3)), $(gb_CC), $(gb_CXX))) \
 		$(DEFS) \
-		$(if $(EXTERNAL_CODE),,$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(2) \
+		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(PCHFLAGS) \
@@ -79,7 +79,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
-		$(if $(EXTERNAL_CODE),,$(gb_DEFS_INTERNAL)) \
+		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(dir $(3)) \

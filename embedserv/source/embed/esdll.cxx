@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define STRICT
 #define _WIN32_DCOM
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)

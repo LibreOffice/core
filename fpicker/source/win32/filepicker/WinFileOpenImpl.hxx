@@ -29,7 +29,6 @@
 #include "previewadapter.hxx"
 #include "helppopupwindow.hxx"
 #include "customcontrol.hxx"
-#include "customcontrolfactory.hxx"
 #include "../misc/resourceprovider.hxx"
 
 #include <utility>
@@ -181,7 +180,6 @@ private:
 private:
     std::unique_ptr<CFilterContainer>       m_filterContainer;
     std::unique_ptr<CPreviewAdapter>        m_Preview;
-    std::unique_ptr<CCustomControlFactory>  m_CustomControlFactory;
     std::unique_ptr<CCustomControl>         m_CustomControls;
     CFilePicker*                            m_FilePicker;
     WNDPROC                                 m_pfnOldDlgProc;

@@ -35,6 +35,7 @@
 #pragma clang diagnostic ignored "-Wall"
 #pragma clang diagnostic ignored "-Wextra"
 #pragma clang diagnostic ignored "-Wmicrosoft"
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
 #include <atldbcli.h>
 #if defined __clang__

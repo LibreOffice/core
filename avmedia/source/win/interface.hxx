@@ -70,6 +70,9 @@ public:
           double *pVal) = 0;
     virtual  HRESULT __stdcall EnterBitmapGrabMode(
         double SeekTime) = 0;
+
+protected:
+    ~IMediaDet() {}
 };
 
 extern "C" const IID IID_ISampleGrabberCB;
@@ -87,6 +90,9 @@ public:
         double SampleTime,
         BYTE *pBuffer,
         long BufferLen) = 0;
+
+protected:
+    ~ISampleGrabberCB() {}
 };
 
 extern "C" const IID IID_ISampleGrabber;
@@ -114,6 +120,8 @@ public:
         ISampleGrabberCB *pCallback,
         long WhichMethodToCallback) = 0;
 
+protected:
+    ~ISampleGrabber() {}
 };
 
 #endif

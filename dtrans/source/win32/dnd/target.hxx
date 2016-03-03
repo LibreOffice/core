@@ -36,7 +36,10 @@
 #pragma warning(pop)
 #endif
 #include "globals.hxx"
-#include "../../inc/DtObjFactory.hxx"
+
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -100,8 +103,6 @@ private:
 //  sal_Int8 m_userAction;
     // Set by listeners when they call XDropTargetDropContext::dropComplete
     sal_Bool m_bDropComplete;
-    // converts IDataObject objects to XTransferable objects.
-    CDTransObjFactory m_aDataConverter;
     Reference<XDropTargetDragContext> m_currentDragContext;
     Reference<XDropTargetDropContext> m_currentDropContext;
 

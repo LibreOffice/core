@@ -18,9 +18,17 @@
  */
 
 #include "stdafx.h"
-#include "UAccCOM.h"
 #include "EnumVariant.h"
 #include "MAccessible.h"
+
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#endif
+#include  "UAccCOM.h"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 #include <vcl/svapp.hxx>
 
@@ -68,7 +76,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
         {
             if(CMAccessible::g_pAgent)
                 CMAccessible::g_pAgent->InsertAccObj(pRXAcc.get(),pUNOInterface);
-            BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible(
+            isGet = CMAccessible::get_IAccessibleFromXAccessible(
                             pRXAcc.get(), &pChild);
             if(isGet)
             {

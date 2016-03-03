@@ -39,6 +39,8 @@ IJScriptValueObject: public IUnknown
     STDMETHOD( IsInOutParam)( VARIANT_BOOL * flag)= 0;
     STDMETHOD( GetValue)( BSTR* type, VARIANT *value)= 0;
 
+protected:
+    ~IJScriptValueObject() {}
 };
 
 MIDL_INTERFACE("7B5C3410-66FA-11d4-832A-005004526AB4")
@@ -48,6 +50,8 @@ IUnoObjectWrapper: public IUnknown
     STDMETHOD( getOriginalUnoObject)( Reference<XInterface>* pInt)=0;
     STDMETHOD( getOriginalUnoStruct)( Any * pStruct)=0;
 
+protected:
+    ~IUnoObjectWrapper() {}
 };
 
 MIDL_INTERFACE("8BB66591-A544-4de9-822C-57AB57BCED1C")
@@ -55,6 +59,9 @@ IUnoTypeWrapper: public IUnknown
 {
     STDMETHOD(put_Name)(BSTR val) = 0;
     STDMETHOD(get_Name)(BSTR* pVal) = 0;
+
+protected:
+    ~IUnoTypeWrapper() {}
 };
 
 

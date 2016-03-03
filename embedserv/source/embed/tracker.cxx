@@ -768,7 +768,7 @@ int Tracker::HitTestHandles(POINT point) const
     // last of all, check for non-hit outside of object, between resize handles
     if ((m_nStyle & hatchedBorder) == 0)
     {
-        RECT rect = m_rect;
+        rect = m_rect;
         NormalizeRect(&rect);
         if ((m_nStyle & (dottedLine|solidLine)) != 0)
             InflateRect(&rect,+1, +1);

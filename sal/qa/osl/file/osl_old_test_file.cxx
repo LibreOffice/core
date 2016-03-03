@@ -26,9 +26,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #define TEST_VOLUME ""
-#else
-// WINDOWS
-#define TEST_VOLUME "c:/"
 #endif
 
 #include <cppunit/TestFixture.h>

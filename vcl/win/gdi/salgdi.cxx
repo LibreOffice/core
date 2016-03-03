@@ -44,7 +44,6 @@
 #define DITHER_PAL_COUNT                (DITHER_PAL_STEPS*DITHER_PAL_STEPS*DITHER_PAL_STEPS)
 #define DITHER_MAX_SYSCOLOR             16
 #define DITHER_EXTRA_COLORS             1
-#define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
 struct SysColorEntry
 {

@@ -26,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/redland/rasqal/rasqal-mingw.patch.1) \
 	$(if $(CROSS_COMPILING),external/redland/rasqal/rasqal-xcompile.patch.1) \
 	external/redland/rasqal/rpath.patch \
+	external/redland/rasqal/clang-cl.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
