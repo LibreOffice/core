@@ -2192,6 +2192,16 @@ static sal_Int32 getMaxScale( sal_Int32 dataType )
     return ret;
 }
 
+namespace
+{
+    OUString construct_full_typename(OUString ns, OUString tn)
+    {
+        if(ns == "pg_catalog")
+            return tn;
+        else
+            return ns + "." + tn;
+    }
+}
 
 static void pgTypeInfo2ResultSet(
      SequenceAnyVector &vec,
@@ -2256,7 +2266,7 @@ static void pgTypeInfo2ResultSet(
             row[CREATE_PARAMS] <<= OUString("length, scale");
         }
 
-        row[TYPE_NAME] <<= xRow->getString(1);
+        row[TYPE_NAME] <<= construct_full_typename(xRow->getString(6), xRow->getString(1));
         row[DATA_TYPE] <<= OUString::number(dataType);
         row[PRECISION] <<= OUString::number( precision );
         sal_Int32 nullable = xRow->getBoolean(4) ?
@@ -2298,8 +2308,9 @@ static void pgTypeInfo2ResultSet(
           "pg_type.typtype AS typtype,"        //2
           "pg_type.typlen AS typlen,"          //3
           "pg_type.typnotnull AS typnotnull,"  //4
-          "pg_type.typname AS typname "        //5
-          "FROM pg_type "
+          "pg_type.typname AS typname, "       //5
+          "pg_namespace.nspname as typns "     //6
+          "FROM pg_type LEFT JOIN pg_namespace ON pg_type.typnamespace=pg_namespace.oid "
           "WHERE pg_type.typtype = 'b' "
           "OR pg_type.typtype = 'p'"
             );
@@ -2313,8 +2324,9 @@ static void pgTypeInfo2ResultSet(
         "t2.typtype AS typtype,"
         "t2.typlen AS typlen,"
         "t2.typnotnull AS typnotnull,"
-        "t2.typname as realtypname "
-        "FROM pg_type as t1 LEFT JOIN pg_type AS t2 ON t1.typbasetype=t2.oid "
+        "t2.typname as realtypname, "
+        "pg_namespace.nspname as typns "
+        "FROM pg_type as t1 LEFT JOIN pg_type AS t2 ON t1.typbasetype=t2.oid LEFT JOIN pg_namespace ON t1.typnamespace=pg_namespace.oid "
         "WHERE t1.typtype = 'd'" );
     pgTypeInfo2ResultSet( vec, rs );
 
