@@ -1,0 +1,12 @@
+diff -ru coinmp.orig/Osi/src/Osi/OsiCuts.hpp coinmp/Osi/src/Osi/OsiCuts.hpp
+--- Osi/src/Osi/OsiCuts.hpp	2011-06-13 17:08:11.000000000 +0200
++++ Osi/src/Osi/OsiCuts.hpp	2016-03-03 22:21:04.669838200 +0100
+@@ -74,7 +74,7 @@
+     class const_iterator {
+       friend class OsiCuts;
+ 	public:
+-	  typedef std::bidirectional_iterator_tag iterator_category;
++	  typedef std::forward_iterator_tag iterator_category;
+ 	  typedef OsiCut* value_type;
+ 	  typedef size_t difference_type;
+ 	  typedef OsiCut ** pointer;
