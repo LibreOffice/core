@@ -993,7 +993,9 @@ static bool lcl_isOOXMLBlacklist(const OUString& rStreamName)
     {
         OUStringLiteral("/%5BContent_Types%5D.xml"),
         OUStringLiteral("/docProps/app.xml"),
-        OUStringLiteral("/docProps/core.xml")
+        OUStringLiteral("/docProps/core.xml"),
+        // Don't attempt to sign other signatures for now.
+        OUStringLiteral("/_xmlsignatures")
     };
     // Just check the prefix, as we don't care about the content type part of the stream name.
     return std::find_if(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral) { return rStreamName.startsWith(rLiteral); }) != vBlacklist.end();
