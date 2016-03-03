@@ -139,6 +139,7 @@ certain functionality.
 @li @c desktop.opengl
 @li @c desktop.splash
 @li @c desktop.test
+@li @c desktop.unx
 
 @section Draw
 

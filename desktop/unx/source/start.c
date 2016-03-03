@@ -65,20 +65,15 @@ charp_to_ustr( const char *pStr )
 }
 
 /* Easier debugging of rtl_uString values. */
-#if OSL_DEBUG_LEVEL > 1
-static void
-ustr_debug( const char *pMessage, rtl_uString *pStr )
+static void ustr_debug( const char *pMessage, rtl_uString *pStr )
 {
     rtl_String *pOut = ustr_to_str( pStr );
 
-    fprintf( stderr, "%s: %s\n", pMessage, rtl_string_getStr( pOut ) );
+    SAL_INFO("desktop.unx", pMessage << ": " << rtl_string_getStr( pOut ));
 
     rtl_string_release( pOut );
     return;
 }
-#else
-#define ustr_debug( a, b ) {}
-#endif
 
 typedef struct {
     int        status_fd;
@@ -237,18 +232,14 @@ get_md5hash( rtl_uString *pText )
     sal_uInt32 md5_key_len = 0;
     sal_uInt8* md5_buf = NULL;
     sal_uInt32 i = 0;
-#if OSL_DEBUG_LEVEL > 1
     rtl_String *pOut;
-#endif
 
     if ( !pText )
         return NULL;
 
-#if OSL_DEBUG_LEVEL > 1
     pOut = ustr_to_str( pText );
-    fprintf (stderr, "Generate pipe md5 for '%s'\n", pOut->buffer);
+    SAL_INFO("desktop.unx", "Generate pipe md5 for '" << pOut->buffer << "'");
     rtl_string_release( pOut );
-#endif
 
     pData = (unsigned char *)rtl_uString_getStr( pText );
     nSize = rtl_uString_getLength( pText ) * sizeof( sal_Unicode );
@@ -570,9 +561,7 @@ read_percent( ChildInfo *info, int *pPercent )
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Got status: %s\n", pBegin );
-#endif
+    SAL_INFO("desktop.unx", "Got status: " << pBegin << "\n");
     if ( !strncasecmp( pBegin, "end", 3 ) )
         return ProgressExit;
     else if ( !strncasecmp( pBegin, "restart", 7 ) )
@@ -725,9 +714,7 @@ exec_javaldx (Args *args)
             *chomp = '\0';
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf (stderr, "Adding javaldx path of '%s'\n", newpath);
-#endif
+    SAL_INFO("desktop.unx", "Adding javaldx path of '" << newpath << "'\n");
     extend_library_path (newpath);
 
     if (javaldx)
@@ -815,10 +802,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
             close( fd );
         }
-#if OSL_DEBUG_LEVEL > 1
         else
             ustr_debug( "Failed to connect to pipe", pPipePath );
-#endif
     }
 
     if ( !bSentArgs )
@@ -872,31 +857,23 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     bShortWait = sal_False;
                 }
 
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "Polling, result is %s\n",
-                         ( eResult == ProgressContinue )? "continue" :
-                         ( ( eResult == ProgressRestart )? "restart" : "exit" ) );
-#endif
+               SAL_INFO("desktop.unx", "Polling, result is " <<
+                       (eResult == ProgressContinue) ? "continue" :
+                       ( ( eResult == ProgressRestart) ? "restart" : "exit" ));
             }
 
-#if OSL_DEBUG_LEVEL > 1
-            fprintf (stderr, "Exited with code '%d'\n", child_get_exit_code (info));
-#endif
+            SAL_INFO("desktop.unx", "Exited with code '" << child_get_exit_code(info) << "'");
 
             status = child_get_exit_code(info);
             g_pProcess = NULL; // reset
             switch (status) {
             case EXITHELPER_CRASH_WITH_RESTART: // re-start with just -env: parameters
-#if OSL_DEBUG_LEVEL > 1
-                fprintf (stderr, "oosplash: re-start with just -env: params !\n");
-#endif
+                SAL_INFO("desktop.unx", "oosplash: re-start with just -env: params !");
                 bRestart = sal_True;
                 bAllArgs = sal_False;
                 break;
             case EXITHELPER_NORMAL_RESTART: // re-start with all arguments
-#if OSL_DEBUG_LEVEL > 1
-                fprintf (stderr, "oosplash: re-start with all params !\n");
-#endif
+                SAL_INFO("desktop.unx", "oosplash: re-start with all params !\n");
                 bRestart = sal_True;
                 bAllArgs = sal_True;
                 break;

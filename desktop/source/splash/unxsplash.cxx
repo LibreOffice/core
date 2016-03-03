@@ -36,10 +36,7 @@ namespace desktop
 
 UnxSplashScreen::~UnxSplashScreen()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "UnxSplashScreen::~UnxSplashScreen()\n" );
-#endif
-
+    SAL_WARN("desktop.splash", "UnxSplashScreen::~UnxSplashScreen()");
     if ( m_pOutFd )
     {
         fclose( m_pOutFd );
@@ -55,9 +52,7 @@ void SAL_CALL UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRa
 void SAL_CALL UnxSplashScreen::end()
     throw ( uno::RuntimeException, std::exception )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "UnxSplashScreen::end()\n" );
-#endif
+    SAL_WARN("desktop.splash", "UnxSplashScreen::end()");
     if( !m_pOutFd )
         return;
 
@@ -68,9 +63,7 @@ void SAL_CALL UnxSplashScreen::end()
 void SAL_CALL UnxSplashScreen::reset()
     throw ( uno::RuntimeException, std::exception )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "UnxSplashScreen::reset()\n" );
-#endif
+    SAL_WARN("desktop.splash", "UNXSplashScreen::reset()");
     if( !m_pOutFd )
         return;
 
@@ -108,11 +101,9 @@ UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
         {
             int fd = aNum.toInt32();
             m_pOutFd = fdopen( fd, "w" );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Got argument '--splash-pipe=%d ('%s') (%p)\n",
-                     fd, OUStringToOString( aNum, RTL_TEXTENCODING_UTF8 ).getStr(),
-                     m_pOutFd );
-#endif
+            SAL_WARN("desktop.splash", "Got argument '--splash-pipe=" << fd << " ('"
+                << aNum << "') ("
+                << static_cast<void *>(m_pOutFd) << ")");
         }
     }
 }
