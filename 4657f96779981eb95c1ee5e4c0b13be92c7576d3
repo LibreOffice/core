@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_6d8d4c7b",
+        "filename": "sc/source/ui/dbgui/sfiltdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-03-03T16:48:29Z",
+      "side": 1,
+      "message": "One of the golden rules here - is to make the code look (stylistically) just like the other code around it.\n\nDo you see any other code in this module that puts a statement immediately after a bracket like that ? \u003d)\n\nOtherwise - this is a nice patch.",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 18
+      },
+      "revId": "4657f96779981eb95c1ee5e4c0b13be92c7576d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_cde8c019",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-03-03T16:48:29Z",
+      "side": 1,
+      "message": "I\u0027d drop the comment here - git knows this - we\u0027ll have the bug id in the comment, and this code should have been like this always.",
+      "revId": "4657f96779981eb95c1ee5e4c0b13be92c7576d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
