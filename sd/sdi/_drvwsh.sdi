@@ -2746,5 +2746,9 @@ interface DrawView
         ExecMethod = ExecGoToLastPage ;
         StateMethod = GetStateGoToLastPage ;
     ]
+    SID_CLASSIFICATION_APPLY
+    [
+        ExecMethod = FuTemporary ;
+    ]
 
 }

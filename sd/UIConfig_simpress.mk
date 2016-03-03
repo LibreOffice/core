@@ -58,6 +58,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 	sd/uiconfig/simpress/toolbar/bezierobjectbar \
 	sd/uiconfig/simpress/toolbar/calloutshapes \
 	sd/uiconfig/simpress/toolbar/choosemodebar \
+	sd/uiconfig/simpress/toolbar/classificationbar \
 	sd/uiconfig/simpress/toolbar/colorbar \
 	sd/uiconfig/simpress/toolbar/commentsbar \
 	sd/uiconfig/simpress/toolbar/commontaskbar \

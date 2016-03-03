@@ -170,6 +170,7 @@
 #include "undolayer.hxx"
 #include "unmodpg.hxx"
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/classificationhelper.hxx>
 
 #include "ViewShellBase.hxx"
 #include <memory>
@@ -1141,6 +1142,29 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 #endif
+        case SID_CLASSIFICATION_APPLY:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem = 0;
+            if (pArgs && pArgs->GetItemState(nSId, false, &pItem) == SfxItemState::SET)
+            {
+                const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                if (SfxViewFrame* pViewFrame = GetViewFrame())
+                {
+                    if (SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell())
+                    {
+                        SfxClassificationHelper aHelper(*pObjectShell);
+                        aHelper.SetBACName(rName);
+                    }
+                }
+            }
+            else
+                SAL_WARN("sd.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
+
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
 
         case SID_COPYOBJECTS:
         {
