@@ -361,8 +361,24 @@ void GtkSalMenu::UpdateFull()
     ImplUpdate(true, !pMenu->mbMenuBar);
 }
 
-bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rRect*/,
-                                     FloatWinPopupFlags /*nFlags*/)
+#if GTK_CHECK_VERSION(3,0,0)
+static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer user_data)
+{
+    Point *pPos = static_cast<Point*>(user_data);
+    *x = pPos->X();
+    if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+    {
+        GtkRequisition natural_size;
+        gtk_widget_get_preferred_size(GTK_WIDGET(menu), nullptr, &natural_size);
+        *x -= natural_size.width;
+    }
+    *y = pPos->Y();
+    *push_in = false;
+}
+#endif
+
+bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRect,
+                                     FloatWinPopupFlags nFlags)
 {
 #if GTK_CHECK_VERSION(3,0,0)
     guint nButton;
@@ -383,7 +399,14 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rR
         nTime = gtk_get_current_event_time();
     }
 
-    mpFrame = static_cast<GtkSalFrame*>(pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame());
+    VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
+    mpFrame = static_cast<GtkSalFrame*>(xParent->ImplGetFrame());
+
+    // do the same strange semantics as vcl popup windows to arrive at a frame geometry
+    // in mirrored UI case; best done by actually executing the same code
+    sal_uInt16 nArrangeIndex;
+    Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
+    aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
 
     GLOActionGroup* pActionGroup = g_lo_action_group_new(static_cast<gpointer>(mpFrame));
     g_lo_action_group_set_top_menu(pActionGroup, static_cast<gpointer>(this));
@@ -404,7 +427,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rR
     //until the gtk menu is destroyed
     GMainLoop* pLoop = g_main_loop_new(nullptr, true);
     g_signal_connect_swapped(G_OBJECT(pWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
-    gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, nullptr, nullptr, nButton, nTime);
+    gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, MenuPositionFunc,
+                   &aPos, nButton, nTime);
     if (g_main_loop_is_running(pLoop))
     {
         gdk_threads_leave();
@@ -422,6 +446,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rR
     return true;
 #else
     (void)pWin;
+    (void)rRect;
+    (void)nFlags;
     return false;
 #endif
 }
