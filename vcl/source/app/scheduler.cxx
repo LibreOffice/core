@@ -169,7 +169,6 @@ bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 {
     ImplSchedulerData* pSchedulerData;
 
-    // tdf#91727 - NB. bTimerOnly is ultimately not used
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
     {
         SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerData->GetDebugName());
