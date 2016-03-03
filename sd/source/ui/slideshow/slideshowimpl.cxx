@@ -78,7 +78,7 @@
 #include "customshowlist.hxx"
 #include "unopage.hxx"
 
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 
 using ::comphelper::OInterfaceContainerHelper2;
 using ::com::sun::star::animations::XAnimationNode;
@@ -3325,7 +3325,12 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::beginEvent, _1,  boost::cref(xNode) ));
+    {
+        maListeners.forEach<XSlideShowListener>(
+            [&] (Reference<XAnimationListener> const& xListener) {
+                return xListener->beginEvent(xNode);
+            } );
+    }
 }
 
 void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
@@ -3333,7 +3338,12 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::endEvent, _1, boost::cref(xNode) ));
+    {
+        maListeners.forEach<XSlideShowListener>(
+            [&] (Reference<XAnimationListener> const& xListener) {
+                return xListener->endEvent(xNode);
+            } );
+    }
 }
 
 void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException, std::exception)
@@ -3341,7 +3351,12 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  boost::cref(xNode), boost::cref(nRepeat) ));
+    {
+        maListeners.forEach<XSlideShowListener>(
+            [&] (Reference<XAnimationListener> const& xListener) {
+                return xListener->repeat(xNode, nRepeat);
+            } );
+    }
 }
 
 // css::presentation::XSlideShowListener:
@@ -3392,8 +3407,12 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeExcepti
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if( maListeners.getLength() >= 0 )
+        {
             maListeners.forEach<XSlideShowListener>(
-                boost::bind( &XSlideShowListener::slideEnded, _1, bReverse) );
+                [&] (Reference<XSlideShowListener> const& xListener) {
+                    return xListener->slideEnded(bReverse);
+                } );
+        }
     }
 
     {
@@ -3409,7 +3428,12 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if( maListeners.getLength() >= 0 )
-            maListeners.forEach<XSlideShowListener>( boost::bind( &XSlideShowListener::hyperLinkClicked, _1, boost::cref(aHyperLink) ));
+        {
+            maListeners.forEach<XSlideShowListener>(
+                [&] (Reference<XSlideShowListener> const& xListener) {
+                    return xListener->hyperLinkClicked(aHyperLink);
+                } );
+        }
     }
 
     {

@@ -42,7 +42,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/limits.hpp>
 #include <boost/noncopyable.hpp>

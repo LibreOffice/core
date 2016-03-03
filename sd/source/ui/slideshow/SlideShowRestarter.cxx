@@ -27,7 +27,8 @@
 #include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
-#include <boost/bind.hpp>
+
+#include <functional>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -110,7 +111,7 @@ IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
 
                     pHelper->RunOnConfigurationEvent(
                         FrameworkHelper::msConfigurationUpdateEndEvent,
-                        ::boost::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
+                        ::std::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
                     pHelper->UpdateConfiguration();
                 }
                 else
