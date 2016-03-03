@@ -81,6 +81,7 @@
 
 #include "scabstdlg.hxx"
 #include <editeng/fontitem.hxx>
+#include <sfx2/classificationhelper.hxx>
 
 #include <memory>
 
@@ -966,6 +967,18 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         if ( bListAction )
             pDocSh->GetUndoManager()->LeaveListAction();
+    }
+    else if (nSlotId == SID_CLASSIFICATION_APPLY)
+    {
+        const SfxPoolItem* pItem = 0;
+        if (pArgs && pArgs->GetItemState(nSlotId, false, &pItem) == SfxItemState::SET)
+        {
+            const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            SfxClassificationHelper aHelper(*pDocSh);
+            aHelper.SetBACName(rName);
+        }
+        else
+            SAL_WARN("sc.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
     }
     else
     {
