@@ -120,6 +120,50 @@ void WmfTest::testEmfProblem()
     assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "right", "1876");
 }
 
+void WmfTest::testEmfLineStyles()
+{
+    SvFileStream aFileStream(getFullUrl("line_styles.emf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    dumper.filterAllActionTypes();
+    dumper.filterActionType(MetaActionType::LINE, false);
+    dumper.filterActionType(MetaActionType::LINECOLOR, false);
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+
+    CPPUNIT_ASSERT (pDoc);
+
+    assertXPath(pDoc, "/metafile/line", 4);
+    assertXPath(pDoc, "/metafile/linecolor", 5);
+
+    assertXPath(pDoc, "/metafile/linecolor[1]", "color", "#ffffff");
+    assertXPath(pDoc, "/metafile/linecolor[2]", "color", "#00ff00");
+    assertXPath(pDoc, "/metafile/linecolor[3]", "color", "#408080");
+    assertXPath(pDoc, "/metafile/linecolor[4]", "color", "#ff0000");
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", "#0000ff");
+
+    assertXPath(pDoc, "/metafile/line[1]", "style", "dash");
+    assertXPath(pDoc, "/metafile/line[1]", "dashlen", "528");
+    assertXPath(pDoc, "/metafile/line[1]", "dotlen", "176");
+    assertXPath(pDoc, "/metafile/line[1]", "distance", "176");
+
+    assertXPath(pDoc, "/metafile/line[2]", "style", "dash");
+    assertXPath(pDoc, "/metafile/line[2]", "dashlen", "528");
+    assertXPath(pDoc, "/metafile/line[2]", "dotlen", "176");
+    assertXPath(pDoc, "/metafile/line[2]", "distance", "176");
+
+    assertXPath(pDoc, "/metafile/line[3]", "style", "dash");
+    assertXPath(pDoc, "/metafile/line[3]", "dashlen", "528");
+    assertXPath(pDoc, "/metafile/line[3]", "dotlen", "176");
+    assertXPath(pDoc, "/metafile/line[3]", "distance", "176");
+
+    assertXPath(pDoc, "/metafile/line[4]", "style", "dash");
+    assertXPath(pDoc, "/metafile/line[4]", "dashlen", "528");
+    assertXPath(pDoc, "/metafile/line[4]", "dotlen", "176");
+    assertXPath(pDoc, "/metafile/line[4]", "distance", "176");
+};
+
 void WmfTest::testWorldTransformFontSize()
 {
     SvFileStream aFileStream(getFullUrl("image1.emf"), StreamMode::READ);
