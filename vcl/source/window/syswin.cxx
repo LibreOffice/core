@@ -642,9 +642,10 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnHeight             = rData.GetHeight();
 
         if ( (aState.mnMask & SAL_FRAME_POSSIZE_X) &&
-            (aState.mnMask & SAL_FRAME_POSSIZE_Y) &&
-            (aState.mnMask & SAL_FRAME_POSSIZE_WIDTH) &&
-            (aState.mnMask & SAL_FRAME_POSSIZE_HEIGHT) ) {
+             (aState.mnMask & SAL_FRAME_POSSIZE_Y) &&
+             (aState.mnMask & SAL_FRAME_POSSIZE_WIDTH) &&
+             (aState.mnMask & SAL_FRAME_POSSIZE_HEIGHT) )
+        {
             mbInitialLayoutDone = true;
         }
 
@@ -1107,7 +1108,8 @@ void SystemWindow::DoInitialLayout()
 
     if (isLayoutEnabled())
     {
-        if (!mbInitialLayoutDone) {
+        if (!mbInitialLayoutDone)
+        {
             mbIsCalculatingInitialLayoutSize = true;
             setDeferredProperties();
             setOptimalLayoutSize();
