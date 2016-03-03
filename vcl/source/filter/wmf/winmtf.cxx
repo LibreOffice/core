@@ -729,8 +729,16 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
             {
                 WinMtfLineStyle* pLineStyle = static_cast<WinMtfLineStyle*>(pStyle);
                 Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
-                aSize = ImplMap(aSize);
-                pLineStyle->aLineInfo.SetWidth(aSize.Width());
+                pLineStyle->aLineInfo.SetWidth( ImplMap(aSize).Width() );
+
+                if ( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetStyle() == LINE_DASH )
+                {
+                    aSize.Width() += 1;
+                    long nDotLen = ImplMap( aSize ).Width();
+                    ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDistance( nDotLen );
+                    ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDotLen( nDotLen );
+                    ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDashLen( nDotLen * 4 );
+                }
             }
         }
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
