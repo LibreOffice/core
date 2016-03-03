@@ -29,7 +29,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 
 namespace comphelper
 {
@@ -71,17 +70,6 @@ public:
     TPropertyValueEqualFunctor()
     {}
     bool operator() (const css::beans::PropertyValue& lhs, const OUString& rhs) const
-    {
-        return !!(lhs.Name == rhs);
-    }
-};
-
-class TNamedValueEqualFunctor : public ::std::binary_function< css::beans::NamedValue,OUString,bool>
-{
-public:
-    TNamedValueEqualFunctor()
-    {}
-    bool operator() (const css::beans::NamedValue& lhs, const OUString& rhs) const
     {
         return !!(lhs.Name == rhs);
     }

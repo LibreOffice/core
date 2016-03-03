@@ -47,7 +47,6 @@ extern "C" {
 #include "rtl/ustrbuf.hxx"
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequence.hxx"
-#include <comphelper/stl_types.hxx>
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
 #include "DAVAuthListener.hxx"
@@ -71,7 +70,6 @@ extern "C" {
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
-#include <boost/bind.hpp>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
@@ -148,9 +146,7 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
     const sal_Int32          nLen(rFlags.getLength());
     const beans::NamedValue* pValue(
         std::find_if(pAry,pAry+nLen,
-                     boost::bind(comphelper::TNamedValueEqualFunctor(),
-                                 _1,
-                                 OUString("KeepAlive"))));
+            [] (beans::NamedValue const& rNV) { return rNV.Name == OUString("KeepAlive"); } ));
     if ( pValue != pAry+nLen && !pValue->Value.get<sal_Bool>() )
         return true;
 
