@@ -1145,7 +1145,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CLASSIFICATION_APPLY:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             if (pArgs && pArgs->GetItemState(nSId, false, &pItem) == SfxItemState::SET)
             {
                 const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
