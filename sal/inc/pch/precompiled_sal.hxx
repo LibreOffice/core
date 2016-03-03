@@ -32,7 +32,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
