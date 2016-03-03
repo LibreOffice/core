@@ -29,13 +29,32 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <officecfg/Office/Common.hxx>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <config_folders.h>
 
 using namespace com::sun::star;
 
 namespace
 {
+
+const OUString& PROP_BACNAME()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
+    return sProp;
+}
+
+const OUString& PROP_STARTVALIDITY()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:Authorization:StartValidity");
+    return sProp;
+}
+
+const OUString& PROP_NONE()
+{
+    static OUString sProp("None");
+    return sProp;
+}
 
 /// Represents one category of a classification policy.
 class SfxClassificationCategory
@@ -151,15 +170,15 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"] = aIdentifier;
 
             // Also initialize defaults.
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Identifier"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Country"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Identifier"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Name"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier:OID"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Locator"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:MarkingPrecedence"] = "None";
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Identifier"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Country"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Identifier"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Name"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier:OID"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Locator"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:MarkingPrecedence"] = PROP_NONE();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-summary"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-warning-statement"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-warning-statement:ext:2"].clear();
@@ -176,8 +195,8 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-last-line-of-text"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-subject-prefix"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-subject-suffix"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Authorization:StartValidity"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Authorization:StopValidity"] = "None";
+            rCategory.m_aLabels[PROP_STARTVALIDITY()] = PROP_NONE();
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:Authorization:StopValidity"] = PROP_NONE();
             m_pCategory = &rCategory;
         }
     }
@@ -280,12 +299,6 @@ void SAL_CALL SfxClassificationParser::setDocumentLocator(const uno::Reference<x
 {
 }
 
-const OUString& PROP_BACNAME()
-{
-    static OUString sProp("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
-    return sProp;
-}
-
 } // anonymous namespace
 
 /// Implementation details of SfxClassificationHelper.
@@ -301,6 +314,8 @@ public:
     void parsePolicy();
     /// Synchronize m_aLabels back to the object shell.
     void pushToObjectShell();
+    /// Set the classification start date to the system time.
+    void setStartValidity();
 };
 
 SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
@@ -339,6 +354,21 @@ bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, con
     {
         return rProperty.Name == rName;
     }) != rProperties.end();
+}
+
+void SfxClassificationHelper::Impl::setStartValidity()
+{
+    std::map<OUString, OUString>::iterator it = m_aCategory.m_aLabels.find(PROP_STARTVALIDITY());
+    if (it != m_aCategory.m_aLabels.end())
+    {
+        if (it->second == PROP_NONE())
+        {
+            // The policy left the start date unchanged, replace it with the system time.
+            util::DateTime aDateTime = DateTime(DateTime::SYSTEM).GetUNODateTime();
+            OUStringBuffer aBuffer = utl::toISO8601(aDateTime);
+            it->second = aBuffer.toString();
+        }
+    }
 }
 
 void SfxClassificationHelper::Impl::pushToObjectShell()
@@ -538,6 +568,8 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
     }
 
     m_pImpl->m_aCategory = *it;
+
+    m_pImpl->setStartValidity();
     m_pImpl->pushToObjectShell();
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if (!pViewFrame)
