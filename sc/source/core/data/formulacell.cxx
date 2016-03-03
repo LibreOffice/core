@@ -116,7 +116,7 @@ static struct DebugCalculation
     {
         for (auto const& it : mvPos)
         {
-            OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc) +
+            OUString aStr( it.maPos.Format( ScAddr::VALID | ScAddr::TAB_3D, it.mpDoc) +
                     " [" + OUString::number( it.mnRecursion) + "," + OUString::number( it.mnGroup) + "]");
             fprintf( stderr, "%s -> ", aStr.toUtf8().getStr());
         }
@@ -128,7 +128,7 @@ static struct DebugCalculation
     {
         for (auto const& it : mvResults)
         {
-            OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc));
+            OUString aStr( it.maPos.Format( ScAddr::VALID | ScAddr::TAB_3D, it.mpDoc));
             aStr += " (" + it.maResult + ")";
             fprintf( stderr, "%s, ", aStr.toUtf8().getStr());
         }
@@ -2712,10 +2712,10 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 {
 #if OSL_DEBUG_LEVEL > 0
                     OStringBuffer aMsg("broken Matrix, no MatFormula at origin, Pos: ");
-                    OUString aTmp(aPos.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument));
+                    OUString aTmp(aPos.Format(ScAddr::COL_VALID | ScAddr::ROW_VALID, pDocument));
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     aMsg.append(", MatOrg: ");
-                    aTmp = aOrg.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument);
+                    aTmp = aOrg.Format(ScAddr::COL_VALID | ScAddr::ROW_VALID, pDocument);
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     OSL_FAIL(aMsg.getStr());
 #endif
@@ -2743,10 +2743,10 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             else
             {
                 OStringBuffer aMsg( "broken Matrix, Pos: " );
-                OUString aTmp(aPos.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument));
+                OUString aTmp(aPos.Format(ScAddr::COL_VALID | ScAddr::ROW_VALID, pDocument));
                 aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
                 aMsg.append(", MatOrg: ");
-                aTmp = aOrg.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument);
+                aTmp = aOrg.Format(ScAddr::COL_VALID | ScAddr::ROW_VALID, pDocument);
                 aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
                 aMsg.append(", MatCols: ");
                 aMsg.append(static_cast<sal_Int32>( nC ));

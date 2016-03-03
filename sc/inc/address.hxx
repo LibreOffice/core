@@ -140,35 +140,37 @@ SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
 // not using gcc -fno-strict-aliasing
 
 // The result of ConvertRef() is a bit group of the following:
+enum ScAddr
+{
+    COL_ABSOLUTE  = 0x01,
+    ROW_ABSOLUTE  = 0x02,
+    TAB_ABSOLUTE  = 0x04,
+    TAB_3D        = 0x08,
+    COL2_ABSOLUTE = 0x10,
+    ROW2_ABSOLUTE = 0x20,
+    TAB2_ABSOLUTE = 0x40,
+    TAB2_3D       = 0x80,
+    ROW_VALID     = 0x0100,
+    COL_VALID     = 0x0200,
+    TAB_VALID     = 0x0400,
+    // BITS for convience
+    BITS          = COL_ABSOLUTE | ROW_ABSOLUTE | TAB_ABSOLUTE | TAB_3D \
+                  | ROW_VALID | COL_VALID | TAB_VALID,
+    // somewhat cheesy kludge to force the display of the document name even for
+    // local references.  Requires TAB_3D to be valid
+    FORCE_DOC     = 0x0800,
+    ROW2_VALID    = 0x1000,
+    COL2_VALID    = 0x2000,
+    TAB2_VALID    = 0x4000,
+    VALID         = 0x8000,
 
-#define SCA_COL_ABSOLUTE    0x01
-#define SCA_ROW_ABSOLUTE    0x02
-#define SCA_TAB_ABSOLUTE    0x04
-#define SCA_TAB_3D          0x08
-#define SCA_COL2_ABSOLUTE   0x10
-#define SCA_ROW2_ABSOLUTE   0x20
-#define SCA_TAB2_ABSOLUTE   0x40
-#define SCA_TAB2_3D         0x80
-#define SCA_VALID_ROW       0x0100
-#define SCA_VALID_COL       0x0200
-#define SCA_VALID_TAB       0x0400
-// SCA_BITS is a convience for
-// (SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE)
-#define SCA_BITS            0x070F
-// somewhat cheesy kludge to force the display of the document name even for
-// local references.  Requires TAB_3D to be valid
-#define SCA_FORCE_DOC       0x0800
-#define SCA_VALID_ROW2      0x1000
-#define SCA_VALID_COL2      0x2000
-#define SCA_VALID_TAB2      0x4000
-#define SCA_VALID           0x8000
+    ADDR_ABS      = VALID | COL_ABSOLUTE | ROW_ABSOLUTE | TAB_ABSOLUTE,
 
-#define SCA_ABS    SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
+    RANGE_ABS     = ADDR_ABS | COL2_ABSOLUTE | ROW2_ABSOLUTE | TAB2_ABSOLUTE,
 
-#define SCR_ABS    SCA_ABS | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-
-#define SCA_ABS_3D SCA_ABS | SCA_TAB_3D
-#define SCR_ABS_3D SCR_ABS | SCA_TAB_3D
+    ADDR_ABS_3D   = ADDR_ABS | TAB_3D,
+    RANGE_ABS_3D  = RANGE_ABS | TAB_3D
+};
 
 //  ScAddress
 class ScAddress
@@ -502,7 +504,7 @@ public:
         @returns
             Pointer to the position after '!' if successfully parsed, and
             rExternDocName, rStartTabName and/or rEndTabName filled if
-            applicable. SCA_... flags set in nFlags.
+            applicable. ScAddr::... flags set in nFlags.
             Or if no valid document and/or sheet header could be parsed the start
             position passed with pString.
             Or NULL if a 3D sheet header could be parsed but

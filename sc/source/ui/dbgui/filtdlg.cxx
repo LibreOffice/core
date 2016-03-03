@@ -443,7 +443,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pEdCopyArea );
-        OUString aRefStr(rRef.aStart.Format(SCA_ABS_3D, pDocP, pDocP->GetAddressConvention()));
+        OUString aRefStr(rRef.aStart.Format(ScAddr::ADDR_ABS_3D, pDocP, pDocP->GetAddressConvention()));
         pEdCopyArea->SetRefString( aRefStr );
     }
 }
@@ -666,7 +666,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     {
         sal_uInt16 nResult = theCopyPos.Parse(
             pEdCopyArea->GetText(), pDoc, pDoc->GetAddressConvention());
-        bCopyPosOk = ( SCA_VALID == (nResult & SCA_VALID) );
+        bCopyPosOk = ( ScAddr::VALID == (nResult & ScAddr::VALID) );
     }
 
     if ( pBtnCopyResult->IsChecked() && bCopyPosOk )

@@ -141,7 +141,7 @@ void Test::testSortHorizontal()
 
     // Insert raw data into A1:D4.
     ScRange aDataRange = insertRangeData(m_pDoc, ScAddress(0,0,0), aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_EQUAL(OUString("A1:D4"), aDataRange.Format(SCA_VALID));
+    CPPUNIT_ASSERT_EQUAL(OUString("A1:D4"), aDataRange.Format(ScAddr::VALID));
 
     // Check the formula values.
     CPPUNIT_ASSERT_EQUAL(OUString("Yes-No"), m_pDoc->GetString(ScAddress(3,1,0)));

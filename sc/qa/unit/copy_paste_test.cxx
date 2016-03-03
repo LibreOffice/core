@@ -78,7 +78,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     // 2. Highlight B2:C5
     ScRange aSrcRange;
     sal_uInt16 nRes = aSrcRange.Parse("B2:C5", &rDoc, rDoc.GetAddressConvention());
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScAddr::VALID) != 0);
 
     ScMarkData aMark;
     aMark.SetMarkArea(aSrcRange);
