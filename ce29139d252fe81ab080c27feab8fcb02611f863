@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_ad3bb49b",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "All these TestData() calls are quite expensive and significantly slow down working with the application, so should only be activated on demand. All these calls and the corresponding declaration in the header file are a case for an #if DEBUG_SC_TESTATTRARRAY",
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_0d41280c",
+        "filename": "sc/source/core/data/dptabres.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2983,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "found, not founf ;-)",
+      "range": {
+        "startLine": 2983,
+        "startChar": 54,
+        "endLine": 2983,
+        "endChar": 55
+      },
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ed45bc17",
+        "filename": "sc/source/core/inc/parclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "DEBUG_SC_PARCLASSDOC, not DEBUG_SC_PARCLASSSOC ;-)",
+      "range": {
+        "startLine": 126,
+        "startChar": 24,
+        "endLine": 126,
+        "endChar": 25
+      },
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_4d4b302c",
+        "filename": "sc/source/core/inc/parclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "Then please also change the end comment to DEBUG_SC_PARCLASSDOC",
+      "range": {
+        "startLine": 164,
+        "startChar": 10,
+        "endLine": 164,
+        "endChar": 25
+      },
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2d48642d",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "Make this a SAL_WARN instead. I\u0027d also prefer the already existing \"sal.core\" log area instead of \"sal.tool\"",
+      "range": {
+        "startLine": 251,
+        "startChar": 16,
+        "endLine": 251,
+        "endChar": 24
+      },
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_8d5518c8",
+        "filename": "sc/source/filter/xml/xmlbodyi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "Just use the already existing \"sc.filter\" instead of a new \"sc.xml\"",
+      "range": {
+        "startLine": 79,
+        "startChar": 17,
+        "endLine": 79,
+        "endChar": 25
+      },
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_6d526cdf",
+        "filename": "sc/source/ui/Accessibility/DrawModelBroadcaster.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "If the only statement is a SAL_INFO or SAL_WARN then #if... is not needed.",
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_cd5d60ee",
+        "filename": "sc/source/ui/Accessibility/DrawModelBroadcaster.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T17:21:15Z",
+      "side": 1,
+      "message": "Reuse \"sc.ui\" instead, and please no capitalization in log area names. Also in this case a SAL_WARN may be more appropriate.",
+      "range": {
+        "startLine": 77,
+        "startChar": 21,
+        "endLine": 77,
+        "endChar": 39
+      },
+      "revId": "ce29139d252fe81ab080c27feab8fcb02611f863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
