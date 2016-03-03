@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_2dda2479",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T16:58:41Z",
+      "side": 1,
+      "message": "Btw, in the commit message we don\u0027t document the iterations done during gerrit reviews.",
+      "revId": "0e3403db0ac15baac9452095bf05ed2e48f278f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_aded7427",
+        "filename": "sal/osl/w32/socket.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T16:58:41Z",
+      "side": 1,
+      "message": "All together, both if(...)SAL_INFO(...) can be replaced with SAL_INFO_IF(...). Or actually in this case a SAL_WARN_IF() would be appropriate. I\u0027ll do that in an amended commit.",
+      "range": {
+        "startLine": 415,
+        "startChar": 1,
+        "endLine": 418,
+        "endChar": 92
+      },
+      "revId": "0e3403db0ac15baac9452095bf05ed2e48f278f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_8d907897",
+        "filename": "sal/osl/w32/socket.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T16:58:41Z",
+      "side": 1,
+      "message": "This lacks a log area specifier, for example \"sal.w32\". I\u0027ll add that in an amended commit.",
+      "revId": "0e3403db0ac15baac9452095bf05ed2e48f278f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_4dddf06f",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T16:58:41Z",
+      "side": 1,
+      "message": "Adding a space before \"value\" instead of after would make the string of nameValue.sName more readable ;-) I\u0027ll do in an amended commit.",
+      "range": {
+        "startLine": 370,
+        "startChar": 76,
+        "endLine": 370,
+        "endChar": 82
+      },
+      "revId": "0e3403db0ac15baac9452095bf05ed2e48f278f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ad861463",
+        "filename": "sal/test/testbootstrap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-03T16:58:41Z",
+      "side": 1,
+      "message": "Assigning the OUStringBuffer to itself is unnecessary.\nI\u0027ll change this on the fly in an amended commit.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "0e3403db0ac15baac9452095bf05ed2e48f278f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
