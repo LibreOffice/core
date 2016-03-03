@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_346a711b",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1001222
+      },
+      "writtenOn": "2016-03-03T16:35:41Z",
+      "side": 1,
+      "message": "The goal is to check the fill style at the end of an inheritance chain.  The chain starts with the default graphic style (created by LO), which defines fill style of type FillStyle_SOLID.  If I don\u0027t initialize FillStyle explicitly, then it\u0027s set to FillStyle_NONE anyway, because it\u0027s the 1st member of the enum.",
+      "parentUuid": "1aa78d24_140f75e2",
+      "revId": "a838596564fc6197be817ae435761feae61fa84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_54f9fdc7",
         "filename": "sd/qa/unit/import-tests.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-29T21:53:02Z",
       "side": 1,
       "message": "as when getPropertyValue call fails for whatever reason, your test will still pass because aFillStyle has been initialized with the very value you want to test ;)",
+      "revId": "a838596564fc6197be817ae435761feae61fa84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9477e501",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1001222
+      },
+      "writtenOn": "2016-03-03T16:35:41Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you meant by \"call fails for whatever reason\".  If fill style is not defined at all, then I want to avoid the assert at line 1145.",
+      "parentUuid": "1aa78d24_54f9fdc7",
       "revId": "a838596564fc6197be817ae435761feae61fa84a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
