@@ -510,9 +510,9 @@ void ScFormulaDlg::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
 {
     m_aHelper.ToggleCollapsed(pEdit,pButton);
 }
-void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton)
+void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit)
 {
-    m_aHelper.ReleaseFocus(pEdit,pButton);
+    m_aHelper.ReleaseFocus(pEdit);
 }
 void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
 {

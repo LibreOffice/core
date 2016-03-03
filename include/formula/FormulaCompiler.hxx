@@ -237,8 +237,7 @@ public:
 
     void CreateStringFromTokenArray( OUString& rFormula );
     void CreateStringFromTokenArray( OUStringBuffer& rBuffer );
-    const FormulaToken* CreateStringFromToken( OUString& rFormula, const FormulaToken* pToken,
-                                    bool bAllowArrAdvance = false );
+    const FormulaToken* CreateStringFromToken( OUString& rFormula, const FormulaToken* pToken );
     const FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, const FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
 

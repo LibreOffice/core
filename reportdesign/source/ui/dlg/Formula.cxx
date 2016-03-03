@@ -189,7 +189,7 @@ void FormulaDialog::HideReference( bool /*bDoneRefMode*/)
 {
 }
 
-void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/, RefButton* /*pButton*/)
+void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/)
 {
 }
 

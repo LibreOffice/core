@@ -1866,11 +1866,10 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     }
 }
 
-const FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, const FormulaToken* pTokenP,
-        bool bAllowArrAdvance )
+const FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, const FormulaToken* pTokenP )
 {
     OUStringBuffer aBuffer;
-    const FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
+    const FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP );
     rFormula += aBuffer.makeStringAndClear();
     return p;
 }

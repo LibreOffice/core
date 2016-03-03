@@ -88,7 +88,7 @@ public:
     virtual void HideReference( bool bDoneRefMode = true ) override;
     virtual void SetReference( const ScRange& rRef, ScDocument* pD ) override;
 
-    virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
+    virtual void ReleaseFocus( formula::RefEdit* pEdit ) override;
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     virtual void RefInputDone( bool bForced = false ) override;
     virtual bool IsTableLocked() const override;

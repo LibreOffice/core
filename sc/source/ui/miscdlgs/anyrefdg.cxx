@@ -962,9 +962,9 @@ void ScRefHandler::ShowReference(const OUString& rStr)
     m_aHelper.ShowReference(rStr);
 }
 
-void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit )
 {
-    m_aHelper.ReleaseFocus( pEdit,pButton );
+    m_aHelper.ReleaseFocus( pEdit );
 }
 
 void ScRefHandler::RefInputDone( bool bForced )
