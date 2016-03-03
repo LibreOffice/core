@@ -136,7 +136,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 SfxBoolItem aBrowseItem(SID_BROWSE, true);
                 pFrame->GetDispatcher()->
                 Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                            &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
+                            &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0);
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();

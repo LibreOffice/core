@@ -1528,7 +1528,7 @@ IMPL_LINK_NOARG_TYPED( SmSymbolDialog, GetClickHdl, Button*, void )
 
         rViewSh.GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTSYMBOL, SfxCallMode::RECORD,
-                new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()), 0L);
+                new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()), 0);
     }
 }
 

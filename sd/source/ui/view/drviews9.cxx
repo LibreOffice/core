@@ -177,7 +177,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
     else if( nType == css::gallery::GalleryItemType::MEDIA )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
-        GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0L );
+        GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0 );
     }
 
     GetDocSh()->SetWaitCursor( false );

@@ -293,7 +293,7 @@ bool ScOutlineWindow::GetEntryPos(
                 (rnStartPos - ( SC_OL_BITMAPSIZE / 2 ) * nEntriesSign) :
                 rnStartPos + nEntriesSign;
     long nCenter = (rnStartPos + rnEndPos - SC_OL_BITMAPSIZE * nEntriesSign +
-                        ( mbMirrorEntries ? 1 : 0 )) / 2L;
+                        ( mbMirrorEntries ? 1 : 0 )) / 2;
     rnImagePos = mbMirrorEntries ? std::max( rnImagePos, nCenter ) : std::min( rnImagePos, nCenter );
 
     // --- refinements ---

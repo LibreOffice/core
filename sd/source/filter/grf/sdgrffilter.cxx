@@ -188,7 +188,7 @@ bool SdGRFFilter::Import()
             HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError().nStreamError );
         else
         {
-            if( mrDocument.GetPageCount() == 0L )
+            if( mrDocument.GetPageCount() == 0 )
                 mrDocument.CreateFirstPages();
 
             SdPage*     pPage = mrDocument.GetSdPage( 0, PK_STANDARD );

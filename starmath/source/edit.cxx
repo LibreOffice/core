@@ -400,7 +400,7 @@ IMPL_LINK_TYPED( SmEditWindow, MenuSelectHdl, Menu *, pMenu, bool )
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTCOMMAND, SfxCallMode::RECORD,
-                new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()), 0L);
+                new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()), 0);
     return false;
 }
 
@@ -597,10 +597,10 @@ Rectangle SmEditWindow::AdjustScrollBars()
     if (pVScrollBar && pHScrollBar && pScrollBox)
     {
         const long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
-        Point aPt( aRect.TopRight() ); aPt.X() -= nTmp -1L;
+        Point aPt( aRect.TopRight() ); aPt.X() -= nTmp -1;
         pVScrollBar->SetPosSizePixel( aPt, Size(nTmp, aOut.Height() - nTmp));
 
-        aPt = aRect.BottomLeft(); aPt.Y() -= nTmp - 1L;
+        aPt = aRect.BottomLeft(); aPt.Y() -= nTmp - 1;
         pHScrollBar->SetPosSizePixel( aPt, Size(aOut.Width() - nTmp, nTmp));
 
         aPt.X() = pHScrollBar->GetSizePixel().Width();
@@ -1075,7 +1075,7 @@ void SmEditWindow::Flush()
         {
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                     SID_TEXT, SfxCallMode::RECORD,
-                    new SfxStringItem(SID_TEXT, GetText()), 0L);
+                    new SfxStringItem(SID_TEXT, GetText()), 0);
         }
     }
     if (aCursorMoveIdle.IsActive())

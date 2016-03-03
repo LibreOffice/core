@@ -1851,7 +1851,7 @@ XclExpWebQuery::XclExpWebQuery(
     maDestRange( rRangeName ),
     maUrl( rUrl ),
     // refresh delay time: seconds -> minutes
-    mnRefresh( ulimit_cast< sal_Int16 >( (nRefrSecs + 59L) / 60L ) ),
+    mnRefresh( ulimit_cast< sal_Int16 >( (nRefrSecs + 59) / 60 ) ),
     mbEntireDoc( false )
 {
     // comma separated list of HTML table names or indexes

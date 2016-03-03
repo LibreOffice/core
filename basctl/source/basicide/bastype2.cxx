@@ -932,7 +932,7 @@ bool TreeListBox::OpenCurrent()
                 );
                 pDispatcher->Execute(
                     SID_BASICIDE_SHOWSBX,
-                    SfxCallMode::SYNCHRON, &aSbxItem, 0L
+                    SfxCallMode::SYNCHRON, &aSbxItem, 0
                 );
                 return true;
             }
