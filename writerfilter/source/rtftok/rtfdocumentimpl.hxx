@@ -185,14 +185,14 @@ class RTFFrame
 {
 private:
     RTFParserState* m_pParserState;
-    sal_Int32 nX, nY, nW, nH;
-    sal_Int32 nHoriPadding, nVertPadding;
-    sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
-    Id nHRule;
-    boost::optional<Id> oWrap;
+    sal_Int32 m_nX, m_nY, m_nW, m_nH;
+    sal_Int32 m_nHoriPadding, m_nVertPadding;
+    sal_Int32 m_nHoriAlign, m_nHoriAnchor, m_nVertAlign, m_nVertAnchor;
+    Id m_nHRule;
+    boost::optional<Id> m_oWrap;
 public:
     RTFFrame(RTFParserState* pParserState);
-    sal_Int16 nAnchorType;
+    sal_Int16 m_nAnchorType;
 
     /// Convert the stored properties to Sprms
     RTFSprms getSprms();

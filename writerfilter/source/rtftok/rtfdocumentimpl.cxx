@@ -1129,10 +1129,10 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
 
 bool RTFFrame::inFrame()
 {
-    return nW > 0
-           || nH > 0
-           || nX > 0
-           || nY > 0;
+    return m_nW > 0
+           || m_nH > 0
+           || m_nX > 0
+           || m_nY > 0;
 }
 
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
@@ -4547,7 +4547,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     break;
     case RTF_FLYANCHOR:
-        m_aStates.top().aFrame.nAnchorType = nParam;
+        m_aStates.top().aFrame.m_nAnchorType = nParam;
         break;
     case RTF_WMETAFILE:
         m_aStates.top().aPicture.eWMetafile = nParam;
@@ -6390,18 +6390,18 @@ RTFDrawingObject::RTFDrawingObject()
 
 RTFFrame::RTFFrame(RTFParserState* pParserState)
     : m_pParserState(pParserState),
-      nX(0),
-      nY(0),
-      nW(0),
-      nH(0),
-      nHoriPadding(0),
-      nVertPadding(0),
-      nHoriAlign(0),
-      nHoriAnchor(0),
-      nVertAlign(0),
-      nVertAnchor(0),
-      nHRule(NS_ooxml::LN_Value_doc_ST_HeightRule_auto),
-      nAnchorType(0)
+      m_nX(0),
+      m_nY(0),
+      m_nW(0),
+      m_nH(0),
+      m_nHoriPadding(0),
+      m_nVertPadding(0),
+      m_nHoriAlign(0),
+      m_nHoriAnchor(0),
+      m_nVertAlign(0),
+      m_nVertAnchor(0),
+      m_nHRule(NS_ooxml::LN_Value_doc_ST_HeightRule_auto),
+      m_nAnchorType(0)
 {
 }
 
@@ -6415,37 +6415,37 @@ void RTFFrame::setSprm(Id nId, Id nValue)
     switch (nId)
     {
     case NS_ooxml::LN_CT_FramePr_w:
-        nW = nValue;
+        m_nW = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_h:
-        nH = nValue;
+        m_nH = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_x:
-        nX = nValue;
+        m_nX = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_y:
-        nY = nValue;
+        m_nY = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_hSpace:
-        nHoriPadding = nValue;
+        m_nHoriPadding = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_vSpace:
-        nVertPadding = nValue;
+        m_nVertPadding = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_xAlign:
-        nHoriAlign = nValue;
+        m_nHoriAlign = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_hAnchor:
-        nHoriAnchor = nValue;
+        m_nHoriAnchor = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_yAlign:
-        nVertAlign = nValue;
+        m_nVertAlign = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_vAnchor:
-        nVertAnchor = nValue;
+        m_nVertAnchor = nValue;
         break;
     case NS_ooxml::LN_CT_FramePr_wrap:
-        oWrap = nValue;
+        m_oWrap = nValue;
         break;
     default:
         break;
@@ -6482,66 +6482,66 @@ RTFSprms RTFFrame::getSprms()
         switch (nId)
         {
         case NS_ooxml::LN_CT_FramePr_x:
-            if (nX != 0)
-                pValue = std::make_shared<RTFValue>(nX);
+            if (m_nX != 0)
+                pValue = std::make_shared<RTFValue>(m_nX);
             break;
         case NS_ooxml::LN_CT_FramePr_y:
-            if (nY != 0)
-                pValue = std::make_shared<RTFValue>(nY);
+            if (m_nY != 0)
+                pValue = std::make_shared<RTFValue>(m_nY);
             break;
         case NS_ooxml::LN_CT_FramePr_h:
-            if (nH != 0)
+            if (m_nH != 0)
             {
-                if (nHRule == NS_ooxml::LN_Value_doc_ST_HeightRule_exact)
-                    pValue = std::make_shared<RTFValue>(-nH); // The negative value just sets nHRule
+                if (m_nHRule == NS_ooxml::LN_Value_doc_ST_HeightRule_exact)
+                    pValue = std::make_shared<RTFValue>(-m_nH); // The negative value just sets nHRule
                 else
-                    pValue = std::make_shared<RTFValue>(nH);
+                    pValue = std::make_shared<RTFValue>(m_nH);
             }
             break;
         case NS_ooxml::LN_CT_FramePr_w:
-            if (nW != 0)
-                pValue = std::make_shared<RTFValue>(nW);
+            if (m_nW != 0)
+                pValue = std::make_shared<RTFValue>(m_nW);
             break;
         case NS_ooxml::LN_CT_FramePr_hSpace:
-            if (nHoriPadding != 0)
-                pValue = std::make_shared<RTFValue>(nHoriPadding);
+            if (m_nHoriPadding != 0)
+                pValue = std::make_shared<RTFValue>(m_nHoriPadding);
             break;
         case NS_ooxml::LN_CT_FramePr_vSpace:
-            if (nVertPadding != 0)
-                pValue = std::make_shared<RTFValue>(nVertPadding);
+            if (m_nVertPadding != 0)
+                pValue = std::make_shared<RTFValue>(m_nVertPadding);
             break;
         case NS_ooxml::LN_CT_FramePr_hAnchor:
         {
-            if (nHoriAnchor == 0)
-                nHoriAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
-            pValue = std::make_shared<RTFValue>(nHoriAnchor);
+            if (m_nHoriAnchor == 0)
+                m_nHoriAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
+            pValue = std::make_shared<RTFValue>(m_nHoriAnchor);
         }
         break;
         case NS_ooxml::LN_CT_FramePr_vAnchor:
         {
-            if (nVertAnchor == 0)
-                nVertAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_margin;
-            pValue = std::make_shared<RTFValue>(nVertAnchor);
+            if (m_nVertAnchor == 0)
+                m_nVertAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_margin;
+            pValue = std::make_shared<RTFValue>(m_nVertAnchor);
         }
         break;
         case NS_ooxml::LN_CT_FramePr_xAlign:
-            pValue = std::make_shared<RTFValue>(nHoriAlign);
+            pValue = std::make_shared<RTFValue>(m_nHoriAlign);
             break;
         case NS_ooxml::LN_CT_FramePr_yAlign:
-            pValue = std::make_shared<RTFValue>(nVertAlign);
+            pValue = std::make_shared<RTFValue>(m_nVertAlign);
             break;
         case NS_ooxml::LN_CT_FramePr_hRule:
         {
-            if (nH < 0)
-                nHRule = NS_ooxml::LN_Value_doc_ST_HeightRule_exact;
-            else if (nH > 0)
-                nHRule = NS_ooxml::LN_Value_doc_ST_HeightRule_atLeast;
-            pValue = std::make_shared<RTFValue>(nHRule);
+            if (m_nH < 0)
+                m_nHRule = NS_ooxml::LN_Value_doc_ST_HeightRule_exact;
+            else if (m_nH > 0)
+                m_nHRule = NS_ooxml::LN_Value_doc_ST_HeightRule_atLeast;
+            pValue = std::make_shared<RTFValue>(m_nHRule);
         }
         break;
         case NS_ooxml::LN_CT_FramePr_wrap:
-            if (oWrap)
-                pValue = std::make_shared<RTFValue>(*oWrap);
+            if (m_oWrap)
+                pValue = std::make_shared<RTFValue>(*m_oWrap);
             break;
         default:
             break;
@@ -6558,10 +6558,10 @@ RTFSprms RTFFrame::getSprms()
 
 bool RTFFrame::hasProperties()
 {
-    return nX != 0 || nY != 0 || nW != 0 || nH != 0 ||
-           nHoriPadding != 0 || nVertPadding != 0 ||
-           nHoriAlign != 0 || nHoriAnchor != 0 || nVertAlign != 0 || nVertAnchor != 0 ||
-           nAnchorType != 0;
+    return m_nX != 0 || m_nY != 0 || m_nW != 0 || m_nH != 0 ||
+           m_nHoriPadding != 0 || m_nVertPadding != 0 ||
+           m_nHoriAlign != 0 || m_nHoriAnchor != 0 || m_nVertAlign != 0 || m_nVertAnchor != 0 ||
+           m_nAnchorType != 0;
 }
 
 } // namespace rtftok
