@@ -180,21 +180,15 @@ OUString LotusWordProImportFilter_getImplementationName ()
     return OUString ( "com.sun.star.comp.Writer.LotusWordProImportFilter" );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-
 Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME1 );
-    pArray[1] =  OUString ( SERVICE_NAME2 );
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
-
-#undef SERVICE_NAME2
-#undef SERVICE_NAME1
 
 uno::Reference< XInterface > SAL_CALL LotusWordProImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )

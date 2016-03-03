@@ -167,13 +167,13 @@ public:
      */
     void    SetWidthOuter(enumXFBorder side, double outer);
 
-    XFBorder * GetLeft() {return &m_aBorderLeft;}
+    XFBorder& GetLeft()   {return m_aBorderLeft;}
 
-    XFBorder * GetRight() {return &m_aBorderRight;}
+    XFBorder& GetRight()  {return m_aBorderRight;}
 
-    XFBorder * GetTop() {return &m_aBorderTop;}
+    XFBorder& GetTop()    {return m_aBorderTop;}
 
-    XFBorder * GetBottom() {return &m_aBorderBottom;}
+    XFBorder& GetBottom() {return m_aBorderBottom;}
 
     void    ToXml(IXFStream *pStrm);
 

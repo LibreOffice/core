@@ -57,7 +57,12 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
+
+#include <sal/config.h>
+
+#include <xfparastyle.hxx>
 #include "xfstylemanager.hxx"
+#include <xftextstyle.hxx>
 #include "ixfstyle.hxx"
 
 XFStyleManager::XFStyleManager() : s_aStdArrowStyles( "arrow" ), s_aTextStyles( "T" ),
@@ -104,94 +109,97 @@ void    XFStyleManager::AddFontDecl(XFFontDecl& aFontDecl)
     s_aFontDecls.push_back(aFontDecl);
 }
 
-IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
+IXFStyleRet XFStyleManager::AddStyle(IXFStyle *pStyle)
 {
+    IXFStyleRet aRet;
+
     assert(pStyle);
     OUString   name;
-    IXFStyle    *pStyleRet = NULL;
 
-    if( !pStyle )
-        return NULL;
     name = pStyle->GetStyleName();
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
     {
         if( !name.isEmpty() )
         {
-            pStyleRet = s_aStdTextStyles.AddStyle(pStyle);
+            aRet = s_aStdTextStyles.AddStyle(pStyle);
         }
         else
-            pStyleRet = s_aTextStyles.AddStyle(pStyle);
+        {
+            aRet = s_aTextStyles.AddStyle(pStyle);
+        }
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePara )
     {
         if( !name.isEmpty() )
         {
-            pStyleRet = s_aStdParaStyles.AddStyle(pStyle);
+            aRet = s_aStdParaStyles.AddStyle(pStyle);
         }
         else
-            pStyleRet = s_aParaStyles.AddStyle(pStyle);
+        {
+            aRet = s_aParaStyles.AddStyle(pStyle);
+        }
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleDefaultPara )
     {
-        pStyleRet = s_aStdParaStyles.AddStyle(pStyle);
+        aRet = s_aStdParaStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleList )
     {
-        pStyleRet = s_aListStyles.AddStyle(pStyle);
+        aRet = s_aListStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleSection )
     {
-        pStyleRet = s_aSectionStyles.AddStyle(pStyle);
+        aRet = s_aSectionStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePageMaster )
     {
-        pStyleRet = s_aPageMasters.AddStyle(pStyle);
+        aRet = s_aPageMasters.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleMasterPage )
     {
         //Master page don't need name.
-        pStyleRet = s_aMasterpages.AddStyle(pStyle);
+        aRet = s_aMasterpages.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleDate )
     {
-        pStyleRet = s_aDateStyles.AddStyle(pStyle);
+        aRet = s_aDateStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleTime )
     {
-        pStyleRet = s_aDateStyles.AddStyle(pStyle);
+        aRet = s_aDateStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleNumber )
     {
-        pStyleRet = s_aDateStyles.AddStyle(pStyle);
+        aRet = s_aDateStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePercent )
     {
-        pStyleRet = s_aDateStyles.AddStyle(pStyle);
+        aRet = s_aDateStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleCurrency )
     {
-        pStyleRet = s_aDateStyles.AddStyle(pStyle);
+        aRet = s_aDateStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleGraphics )
     {
-        pStyleRet = s_aGraphicsStyles.AddStyle(pStyle);
+        aRet = s_aGraphicsStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleTable )
     {
-        pStyleRet = s_aTableStyles.AddStyle(pStyle);
+        aRet = s_aTableStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleTableCell )
     {
-        pStyleRet = s_aTableCellStyles.AddStyle(pStyle);
+        aRet = s_aTableCellStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleTableRow )
     {
-        pStyleRet = s_aTableRowStyles.AddStyle(pStyle);
+        aRet = s_aTableRowStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleTableCol )
     {
-        pStyleRet = s_aTableColStyles.AddStyle(pStyle);
+        aRet = s_aTableColStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleOutline )
     {
@@ -201,30 +209,30 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleStrokeDash )
     {
-        pStyleRet = s_aStdStrokeDashStyles.AddStyle(pStyle);
+        aRet = s_aStdStrokeDashStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleArea )
     {
-        pStyleRet = s_aStdAreaStyles.AddStyle(pStyle);
+        aRet = s_aStdAreaStyles.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleArrow )
     {
-        pStyleRet = s_aStdArrowStyles.AddStyle(pStyle);
+        aRet = s_aStdArrowStyles.AddStyle(pStyle);
     }
     else if (pStyle->GetStyleFamily() == enumXFStyleRuby)
     {
-        pStyleRet = s_aRubyStyles.AddStyle(pStyle);
+        aRet = s_aRubyStyles.AddStyle(pStyle);
     }
 
-    return pStyleRet;
+    return aRet;
 }
 
 IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
 {
-    IXFStyle *pStyle = (IXFStyle*)FindParaStyle(name);
+    IXFStyle *pStyle = FindParaStyle(name);
     if( pStyle )
         return pStyle;
-    pStyle = (IXFStyle*)FindTextStyle(name);
+    pStyle = FindTextStyle(name);
     if( pStyle )
         return pStyle;
     pStyle = s_aListStyles.FindStyle(name);
@@ -276,18 +284,18 @@ XFParaStyle*    XFStyleManager::FindParaStyle(const OUString& name)
 {
     IXFStyle *pStyle = s_aParaStyles.FindStyle(name);
     if( pStyle )
-        return (XFParaStyle*)pStyle;
+        return static_cast<XFParaStyle*>(pStyle);
     else
-        return (XFParaStyle*)s_aStdParaStyles.FindStyle(name);
+        return static_cast<XFParaStyle*>(s_aStdParaStyles.FindStyle(name));
 }
 
 XFTextStyle*    XFStyleManager::FindTextStyle(const OUString& name)
 {
     IXFStyle *pStyle = s_aTextStyles.FindStyle(name);
     if( pStyle )
-        return (XFTextStyle*)pStyle;
+        return static_cast<XFTextStyle*>(pStyle);
     else
-        return (XFTextStyle*)s_aStdTextStyles.FindStyle(name);
+        return static_cast<XFTextStyle*>(s_aStdTextStyles.FindStyle(name));
 }
 
 void    XFStyleManager::SetLineNumberConfig(XFLineNumberConfig *pLNConf)

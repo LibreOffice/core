@@ -76,7 +76,7 @@ public:
         if( LwpFileHeader::m_nFileRevision < 0x0006 )
             pStrm->SkipExtra();
     }
-    LwpObjectID* GetNext(){return &m_NextID;}
+    LwpObjectID& GetNext(){return m_NextID;}
 public:
 private:
     LwpObjectID     m_NextID;

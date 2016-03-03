@@ -66,8 +66,8 @@ CBenObject::IsNamedObject()
 pCBenProperty
 CBenObject::UseProperty(BenObjectID PropertyID)
 {
-    pCBenIDListElmt pPrev;
-    return (pCBenProperty) FindID(&cProperties, PropertyID, &pPrev);
+    pCUtListElmt pPrev;
+    return static_cast<pCBenProperty>( FindID(&cProperties, PropertyID, &pPrev) );
 }
 
 pCBenValue
@@ -76,7 +76,7 @@ CBenObject::UseValue(BenObjectID PropertyID)
     pCBenProperty pProperty = UseProperty(PropertyID);
     if (pProperty == NULL)
         return NULL;
-    return pProperty->UseValue();
+    return &pProperty->UseValue();
 }
 
 }// end namespace OpenStormBento

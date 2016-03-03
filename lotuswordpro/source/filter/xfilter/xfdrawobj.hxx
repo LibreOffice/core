@@ -72,7 +72,7 @@
 /**
  * @brief
  * Base class for all drawing object(ellipse,rect,circle,...).
- * I can set Postions,anchor,rotate,text style name here.
+ * I can set Positions,anchor,rotate,text style name here.
  *
  * Drawing objects can be rotated,scaled and skewed, drawing objects must have positions setted,
  * you can use SetPosition(...).
@@ -91,7 +91,12 @@ public:
     /**
      * @descr   Set drawing object rotate.
      */
-    void    SetRotate(double degree, XFPoint aRotatePoint=XFPoint(0,0));
+    void SetRotate(double degree, const XFPoint& rRotatePoint=XFPoint(0,0))
+    {
+        m_nFlag |= XFDRAWOBJECT_FLAG_ROTATE;
+        m_fRotate = degree*2*PI/360;
+        m_aRotatePoint = rRotatePoint;
+    }
 
     /**
      * @descr   Set drawing object scale.
@@ -128,13 +133,6 @@ protected:
 inline void XFDrawObject::SetTextStyleName(const OUString& style)
 {
     m_strTextStyle = style;
-}
-
-inline void XFDrawObject::SetRotate(double degree, XFPoint aRotatePoint)
-{
-    m_nFlag |= XFDRAWOBJECT_FLAG_ROTATE;
-    m_fRotate = degree*2*PI/360;
-    m_aRotatePoint = aRotatePoint;
 }
 
 inline void XFDrawObject::SetScale(double cx, double cy)

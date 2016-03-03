@@ -61,12 +61,11 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBREAKS_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
 /**
  * @descr   Page|Column break object.
  */
-class XFBreaks : public IXFProperty
+class XFBreaks
 {
 public:
     XFBreaks();
@@ -82,7 +81,7 @@ public:
     /**
      * @descr   Output breaks object.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFBreaks& b1, XFBreaks& b2);
     friend bool operator!=(XFBreaks& b1, XFBreaks& b2);

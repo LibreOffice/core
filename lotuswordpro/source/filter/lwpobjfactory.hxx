@@ -65,11 +65,18 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJFACTORY_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJFACTORY_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "lwpheader.hxx"
 #include "lwpobjid.hxx"
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"
 #include "lwpidxmgr.hxx"
+
+#include <unordered_map>
+#include <vector>
 
 /**
  * @brief   object factory used for lwp object creation and maintenance
@@ -84,9 +91,9 @@ public:
 
 //For object Factory and object manager
 private:
-//  static LwpObjectFactory *m_pMgr;
     sal_uInt32 m_nNumObjs;
     LwpSvStream* m_pSvStream;
+    std::vector<LwpObjectID> m_aObjsIDInCreation;
     struct hashFunc
     {
             size_t operator()( const LwpObjectID& rName ) const
@@ -101,19 +108,19 @@ private:
                 return(rKey1==rKey2);
             }
     };
-    typedef boost::unordered_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpIdToObjMap;
+    typedef std::unordered_map<LwpObjectID, rtl::Reference<LwpObject>, hashFunc, eqFunc> LwpIdToObjMap;
     LwpIdToObjMap m_IdToObjList;
     LwpIndexManager m_IndexMgr;
     void ClearObjectMap();
 
 protected:
-    LwpObject* FindObject(const LwpObjectID &objID);
+    rtl::Reference<LwpObject> FindObject(const LwpObjectID &objID);
 public:
-    LwpObject* CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr);
-    LwpObject* QueryObject(const LwpObjectID &objID);
+    rtl::Reference<LwpObject> CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr);
+    rtl::Reference<LwpObject> QueryObject(const LwpObjectID &objID);
     void ReleaseObject(const LwpObjectID &objID);
     void ReadIndex(LwpSvStream* pStrm);
-    LwpIndexManager* GetIndexManager(){return &m_IndexMgr;}
+    LwpIndexManager& GetIndexManager(){return m_IndexMgr;}
 
 };
 

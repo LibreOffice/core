@@ -58,11 +58,19 @@
  * Mar 2005         revised for new processing procedure.
  * Jan 2005         created
  ****************************************************************************/
-#include <assert.h>
+
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
+
+#include <sal/config.h>
+
+#include <vector>
+
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
+
 #include "lwpheader.hxx"
 #include "xfilter/ixfstream.hxx"
-#include <vector>
 
 class XFFrame;
 class LwpGraphicObject;
@@ -73,14 +81,16 @@ private:
     LwpGraphicObject* m_pGraphicObj;
 public:
     LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj);
-    ~LwpSdwFileLoader(void);
+    ~LwpSdwFileLoader();
 public:
-//  void LoadObjectList(void);
-//  void RegisterStyle(void);
+//  void LoadObjectList();
+//  void RegisterStyle();
 
     // add by  ,03/25/2005
-    void CreateDrawObjects(std::vector <XFFrame*>* pDrawObjVector);
+    void CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
     // end add
 };
+
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

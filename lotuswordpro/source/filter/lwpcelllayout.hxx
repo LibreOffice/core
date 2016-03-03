@@ -96,11 +96,11 @@ public:
     sal_uInt16 GetRowID(){return crowid;}
     sal_uInt8 GetColID(){return ccolid;}
     void RegisterStyle() SAL_OVERRIDE;
-    LwpObjectID * GetNumericsObject() {return &cLayNumerics;}
+    LwpObjectID& GetNumericsObject() {return cLayNumerics;}
     LwpObjectID * GetPreviousCellStory();
     virtual LwpPara* GetLastParaOfPreviousStory() SAL_OVERRIDE;
     LwpTableLayout * GetTableLayout();
-    virtual void SetCellMap(void);
+    virtual void SetCellMap();
     double GetActualWidth();
     OUString GetNumfmtName(){return m_NumfmtName;}
 protected:
@@ -117,8 +117,8 @@ protected:
     OUString GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
     void RegisterDefaultCell();
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
-    LwpCellLayout * GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
-    virtual sal_uInt16 GetLeftColID(sal_uInt16 nCol){return nCol - 1; };
+    static LwpCellLayout * GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
+    static sal_uInt16 GetLeftColID(sal_uInt16 nCol){return nCol - 1; };
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow){return nRow + 1; };
 
     sal_uInt16 crowid;
@@ -154,7 +154,7 @@ public:
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     virtual XFCell* ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol) SAL_OVERRIDE;
     void RegisterStyle() SAL_OVERRIDE {}
-    virtual void SetCellMap(void) SAL_OVERRIDE;
+    virtual void SetCellMap() SAL_OVERRIDE;
 protected:
     void Read() SAL_OVERRIDE;
     LwpObjectID cconnectedlayout;
@@ -174,7 +174,7 @@ public:
     virtual XFCell* ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol) SAL_OVERRIDE;
     sal_uInt16 GetNumrows(){return m_nRealrowspan;}
     sal_uInt8 GetNumcols(){return m_nRealcolspan;}
-    virtual void SetCellMap(void) SAL_OVERRIDE;
+    virtual void SetCellMap() SAL_OVERRIDE;
     void SetNumrows(sal_uInt16 nVal){m_nRealrowspan = nVal;}
     void SetNumcols(sal_uInt8 nVal){m_nRealcolspan = nVal;}
 protected:

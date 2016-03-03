@@ -93,17 +93,17 @@ LwpRowLayout::~LwpRowLayout()
  * @param
  * @return
  */
-void LwpRowLayout::SetRowMap(void)
+void LwpRowLayout::SetRowMap()
 {
-    LwpObjectID *pCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+    LwpObjectID& rCellID= GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
 
     while(pCellLayout)
     {
         pCellLayout->SetCellMap();
 
-        pCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+        rCellID = pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
     }
 }
 /**
@@ -127,7 +127,7 @@ void LwpRowLayout::RegisterStyle()
         pRowStyle->SetRowHeight((float)LwpTools::ConvertFromUnitsToMetric(cheight));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pRowStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName();
 
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (pTableLayout)
@@ -135,15 +135,15 @@ void LwpRowLayout::RegisterStyle()
         pTableLayout->GetTable();
     }
     // register cells' style
-    LwpObjectID *pCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+    LwpObjectID& rCellID= GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
 
     while(pCellLayout)
     {
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
-        pCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+        rCellID = pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
     }
 
 }
@@ -225,7 +225,7 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
             sal_uInt8 nColID = m_ConnCellList[nMarkConnCell]->GetColID()
                     +m_ConnCellList[nMarkConnCell]->GetNumcols()-1;
             pXFCell = m_ConnCellList[nMarkConnCell]->ConvertCell(
-                *pTable->GetObjectID(),
+                pTable->GetObjectID(),
                 crowid+m_ConnCellList[nMarkConnCell]->GetNumrows()-1,
                 m_ConnCellList[nMarkConnCell]->GetColID());
 
@@ -293,7 +293,7 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
         pNewStyle->SetRowHeight((float)fHeight);
     }
 
-    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pNewStyle)->GetStyleName());
+    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pNewStyle).m_pStyle->GetStyleName());
 }
 
 /**
@@ -366,19 +366,22 @@ sal_uInt16 LwpRowLayout::GetCurMaxSpannedRows(sal_uInt8 nStartCol,sal_uInt8 nEnd
  */
 void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
+    LwpTableLayout* pTableLayout = GetParentTableLayout();
+    if (!pTableLayout)
+        return;
+
     XFRow* pRow = new XFRow;
     pRow->SetStyleName(m_StyleName);
 
-    XFCell * pCell = NULL;
-    LwpTableLayout* pTableLayout = GetParentTableLayout();
+    XFCell * pCell = nullptr;
     LwpTable* pTable = pTableLayout->GetTable();
     sal_uInt8 nCellStartCol,nCellEndCol;
 
     for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)
     {
         // add row to table
-        LwpObjectID *pCellID= GetChildHead();
-        LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+        LwpObjectID& rCellID= GetChildHead();
+        LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
         nCellStartCol = i;//mark the begin position of cell
         nCellEndCol = i;//mark the end position of cell
         while(pCellLayout)
@@ -391,11 +394,11 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
                     nCellEndCol = i+pConnCell->GetNumcols()-1;
                     i = nCellEndCol;
                 }
-                pCell = pCellLayout->ConvertCell(*pTable->GetObjectID(),crowid,i);
+                pCell = pCellLayout->ConvertCell(pTable->GetObjectID(),crowid,i);
                 break;
             }
-            pCellID = pCellLayout->GetNext();
-            pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+            rCellID = pCellLayout->GetNext();
+            pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
         }
         if (!pCellLayout)
         {
@@ -405,7 +408,7 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
             if (pDefaultCell)
             {
                 pCell = pDefaultCell->ConvertCell(
-                    *pTable->GetObjectID(),crowid, i);
+                    pTable->GetObjectID(),crowid, i);
             }
             else
             {
@@ -425,8 +428,8 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
  */
 void LwpRowLayout::CollectMergeInfo()
 {
-    LwpObjectID *pCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+    LwpObjectID& rCellID= GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
 
     while(pCellLayout)
     {
@@ -435,8 +438,8 @@ void LwpRowLayout::CollectMergeInfo()
             LwpConnectedCellLayout* pConnCell = static_cast<LwpConnectedCellLayout*>(pCellLayout);
             m_ConnCellList.push_back(pConnCell);
         }
-        pCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
+        rCellID = pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
     }
 }
 /**

@@ -143,7 +143,7 @@ void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
 {
     if( LwpFileHeader::m_nFileRevision >= 0x0000B)
     {
-        m_bHasProperties = pObjStrm->QuickReaduInt8();
+        m_bHasProperties = pObjStrm->QuickReaduInt8() != 0;
         if (m_bHasProperties)
         {
             m_pPropList = new LwpPropList;

@@ -70,7 +70,7 @@
 /**
  * @descr   Columns object for page or section.
  */
-class XFColumn : public IXFObject
+class XFColumn
 {
 public:
     XFColumn()
@@ -94,7 +94,7 @@ public:
     /**
      * @descr   output column style as an xml node.
      */
-    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFColumn& c1, XFColumn& c2);
     friend bool operator!=(XFColumn& c1, XFColumn& c2);
@@ -106,7 +106,7 @@ private:
     double      m_fMarginRight;
 };
 
-class XFColumnSep : public IXFObject
+class XFColumnSep
 {
 public:
     XFColumnSep()
@@ -121,7 +121,7 @@ public:
     void    SetColor(XFColor& color);
     void    SetVerticalAlign(enumXFAlignType align);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFColumnSep& sep1, XFColumnSep& sep2);
     friend bool operator!=(XFColumnSep& sep1, XFColumnSep& sep2);

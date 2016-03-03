@@ -65,11 +65,22 @@
 
 class IXFStyle;
 
+struct IXFStyleRet
+{
+    IXFStyle* m_pStyle;
+    bool m_bOrigDeleted;
+    IXFStyleRet()
+        : m_pStyle(NULL)
+        , m_bOrigDeleted(false)
+    {
+    }
+};
+
 /**
  * @descr   container object for styles.
  *          All styles can be placed into an style container.
  */
-class XFStyleContainer : public IXFObject
+class XFStyleContainer
 {
 public:
     XFStyleContainer(){}
@@ -87,7 +98,7 @@ public:
      * @descr   Add style to container.
      *          If the same style has exist, then pStyle will be deleted, and the same style will be return.
      */
-    IXFStyle*       AddStyle(IXFStyle *pStyle);
+    IXFStyleRet     AddStyle(IXFStyle *pStyle);
 
     /**
      * @descr   Find the same style.
@@ -117,7 +128,7 @@ public:
     /**
      * @descr   Output all style.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFStyleContainer& b1, XFStyleContainer& b2);
     friend bool operator!=(XFStyleContainer& b1, XFStyleContainer& b2);

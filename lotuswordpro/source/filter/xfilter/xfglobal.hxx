@@ -67,7 +67,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include "ixfobject.hxx"
 #include "ixfstream.hxx"
 #include "ixfattrlist.hxx"
 

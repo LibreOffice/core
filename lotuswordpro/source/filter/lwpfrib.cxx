@@ -85,6 +85,9 @@
 #include "lwpdocdata.hxx"
 #include "lwpglobalmgr.hxx"
 
+#include <osl/diagnose.h>
+
+
 LwpFrib::LwpFrib(LwpPara* pPara)
     : m_pPara(pPara)
     , m_pNext(NULL)
@@ -132,7 +135,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
             break;
         case FRIB_TAG_TEXT:
         {
-            newFrib = new LwpFribText (pPara, fribtag & FRIB_TAG_NOUNICODE);
+            newFrib = new LwpFribText (pPara, (fribtag & FRIB_TAG_NOUNICODE) != 0);
             break;
         }
         case FRIB_TAG_TABLE:
@@ -242,26 +245,33 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     //we only read four modifiers, in these modifiers,CodePage and LangOverride are not styles,
     //so we can only handle fontid and characstyle, if others ,we should not reg style
     //note by ,1-27
-    XFFont* pFont;
+    rtl::Reference<XFFont> pFont;
     XFTextStyle* pStyle = NULL;
     m_StyleName = "";
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    if (m_pModifiers->HasCharStyle)
+    XFTextStyle* pNamedStyle = nullptr;
+    if (m_pModifiers->HasCharStyle && pFoundry)
     {
-        XFTextStyle* pNamedStyle = static_cast<XFTextStyle*>
+        pNamedStyle = static_cast<XFTextStyle*>
                                 (pFoundry->GetStyleManager()->GetStyle(m_pModifiers->CharStyleID));
-        if (m_pModifiers->FontID)
+    }
+    if (pNamedStyle)
+    {
+        LwpCharacterStyle* pCharStyle = nullptr;
+        if (m_pModifiers->FontID && pFoundry)
+            pCharStyle = dynamic_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
+        if (pCharStyle)
         {
             pStyle = new XFTextStyle();
             *pStyle = *pNamedStyle;
-            LwpCharacterStyle* pCharStyle = static_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj());
 
             pStyle->SetStyleName("");
-            pFont = pFoundry->GetFontManger()->CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
+            pFont = pFoundry->GetFontManger().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
             pStyle->SetFont(pFont);
-            IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
-            m_StyleName = pNewStyle->GetStyleName();
-            if (pNewStyle != pStyle)
+            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(pStyle);
+            m_StyleName = aNewStyle.m_pStyle->GetStyleName();
+            pStyle = dynamic_cast<XFTextStyle*>(aNewStyle.m_pStyle);
+            if (aNewStyle.m_bOrigDeleted)
                 pStyle = NULL;
         }
         else
@@ -269,14 +279,15 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     }
     else
     {
-        if (m_pModifiers->FontID)
+        if (m_pModifiers->FontID && pFoundry)
         {
             pStyle = new XFTextStyle();
-            pFont = pFoundry->GetFontManger()->CreateFont(m_pModifiers->FontID);
+            pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
             pStyle->SetFont(pFont);
-            IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
-            m_StyleName = pNewStyle->GetStyleName();
-            if (pNewStyle != pStyle)
+            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(pStyle);
+            m_StyleName = aNewStyle.m_pStyle->GetStyleName();
+            pStyle = dynamic_cast<XFTextStyle*>(aNewStyle.m_pStyle);
+            if (aNewStyle.m_bOrigDeleted)
                 pStyle = NULL;
         }
     }
@@ -302,7 +313,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
                 pFont->SetBackColor(aColor);
                 pStyle->SetFont(pFont);
             }
-            m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
         }
     }
 }
@@ -374,7 +385,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 
 /**
 *  @descr:   Whether there are other fribs following current frib.
-*  @return:  Ture if having following fribs, or false.
+*  @return:  True if having following fribs, or false.
 */
 bool LwpFrib::HasNextFrib()
 {
@@ -412,13 +423,13 @@ void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyp
 *  @descr:   Get the current frib font style
 *  @return:  XFFont pointer
 */
-XFFont* LwpFrib::GetFont()
+rtl::Reference<XFFont> LwpFrib::GetFont()
 {
-    XFFont* pFont = NULL;
+    rtl::Reference<XFFont> pFont;
     if(m_pModifiers&&m_pModifiers->FontID)
     {
         LwpFoundry* pFoundry = m_pPara->GetFoundry();
-        pFont = pFoundry->GetFontManger()->CreateFont(m_pModifiers->FontID);
+        pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
     }
     else
     {

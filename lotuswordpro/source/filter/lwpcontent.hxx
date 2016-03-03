@@ -109,8 +109,8 @@ protected:
 protected:
     void Read() SAL_OVERRIDE;
 public:
-    inline LwpAssociatedLayouts* GetLayoutsWithMe();
-    LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
+    inline LwpAssociatedLayouts& GetLayoutsWithMe();
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
     inline bool IsActive();
     virtual bool IsTable();
     inline OUString GetClassName();
@@ -119,9 +119,9 @@ public:
     bool IsStyleContent();
 };
 
-LwpAssociatedLayouts* LwpContent::GetLayoutsWithMe()
+LwpAssociatedLayouts& LwpContent::GetLayoutsWithMe()
 {
-    return &m_LayoutsWithMe;
+    return m_LayoutsWithMe;
 }
 
 inline bool LwpContent::IsActive()
@@ -141,7 +141,7 @@ inline OUString LwpContent::GetClassName()
 
 inline LwpContent* LwpContent::GetNextEnumerated()
 {
-    return dynamic_cast<LwpContent*>(m_NextEnumerated.obj());
+    return dynamic_cast<LwpContent*>(m_NextEnumerated.obj().get());
 }
 /**
  * @brief

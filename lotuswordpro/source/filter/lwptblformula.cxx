@@ -167,12 +167,12 @@ bool LwpFormulaInfo::ReadCellRange()
     bool readSucceeded = true;
     if (!ReadCellID( )) // start
         readSucceeded = false;
-    LwpFormulaCellAddr* pStartCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
+    LwpFormulaCellAddr* pStartCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
     m_aStack.pop_back();
 
     if (!ReadCellID()) // end
         readSucceeded = false;
-    LwpFormulaCellAddr* pEndCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
+    LwpFormulaCellAddr* pEndCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
     m_aStack.pop_back();
 
     m_aStack.push_back( new LwpFormulaCellRangeAddr(pStartCellAddr->GetCol(),
@@ -201,8 +201,13 @@ bool LwpFormulaInfo::ReadExpression()
 //  Len = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SeekRel(2);
 
-    while ((TokenType = m_pObjStrm->QuickReaduInt16()) != TK_END)
+    bool bError = false;
+    while ((TokenType = m_pObjStrm->QuickReaduInt16(&bError)) != TK_END)
     {
+
+        if (bError)
+            throw std::runtime_error("error reading expression");
+
         // Get the disk length of this token
         DiskLength = m_pObjStrm->QuickReaduInt16();
 
@@ -252,18 +257,28 @@ bool LwpFormulaInfo::ReadExpression()
             case TK_NOT:
                 m_pObjStrm->SeekRel(DiskLength); // extensible for future
 
+                if (m_aStack.size() >= 2)
                 {//binary operator
                     LwpFormulaOp* pOp = new LwpFormulaOp(TokenType);
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
                 }
+                else
+                {
+                    readSucceeded = false;
+                }
                 break;
             case TK_UNARY_MINUS:
+                if (!m_aStack.empty())
                 {
                     LwpFormulaUnaryOp* pOp = new LwpFormulaUnaryOp(TokenType);
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
+                }
+                else
+                {
+                    readSucceeded = false;
                 }
                 break;
             default:
@@ -310,14 +325,13 @@ bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
     sal_uInt16 NumberOfArguments = m_pObjStrm->QuickReaduInt16();
     sal_uInt16 ArgumentDiskLength, Count;
     sal_uInt8 ArgumentType;
-    bool bArgument = false;
     bool readSucceeded = true;
 
     for (Count = 0; Count < NumberOfArguments; Count++)
     {
         ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
         ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
-        bArgument = true;
+        bool bArgument = true;
 
         switch(ArgumentType)
         {
@@ -368,7 +382,7 @@ void LwpFormulaInfo::Read()
 {
     LwpCellList::Read();
     {
-        LwpRowList* pRowList =(LwpRowList*)cParent.obj();
+        LwpRowList* pRowList = dynamic_cast<LwpRowList*>(cParent.obj().get());
         if (pRowList)
         {
             m_nFormulaRow = pRowList->GetRowID();

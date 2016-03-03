@@ -76,16 +76,16 @@ namespace OpenStormBento
   typedef const Name * pConst##Name
 
 inline UtWord UtGetIntelWord(UtByte * pData)
-{ return * (UtWord *) pData; }
+{ return pData[0] | pData[1] << 8; }
 
 inline UtDWord UtGetIntelDWord(UtByte * pData)
-{ return * (UtDWord *) pData; }
+{ return pData[0] | pData[1] << 8 | pData[2] << 16 | pData[3] << 24; }
 
 inline void UtPutIntelWord(UtByte * pData, UtWord Val)
-{ * (UtWord *) pData = Val; }
+{ pData[0] = Val; pData[1] = Val >> 8; }
 
 inline void UtPutIntelDWord(UtByte * pData, UtDWord Val)
-{ * (UtDWord *) pData = Val; }
+{ pData[0] = Val; pData[1] = Val >> 8; pData[2] = Val >> 16; pData[3] = Val >> 24; }
 
 inline UtByte UtGetIntelByte(UtByte * pData)
 { return * pData; }

@@ -146,8 +146,8 @@ void LwpCHBlkMarker::Read()
 OUString LwpCHBlkMarker::GetPromptText()
 {
     LwpStory* pStory = NULL;
-    if (m_objPromptStory.obj())
-        pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj());
+    if (m_objPromptStory.obj().is())
+        pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj().get());
     if (pStory)
         return pStory->GetContentText();
     return OUString("");
@@ -300,7 +300,7 @@ bool LwpCHBlkMarker::IsHasFilled()
 
 bool LwpCHBlkMarker::IsBubbleHelp()
 {
-    return (CHB_HELP & m_nFlag);
+    return (CHB_HELP & m_nFlag) != 0;
 }
 
 void LwpCHBlkMarker::EnumAllKeywords()
@@ -351,10 +351,7 @@ bool LwpBookMark::IsRightMarker(LwpObjectID objMarker)
 
 OUString LwpBookMark::GetName()
 {
-    if (LwpDLNFVList::GetName())
-        return LwpDLNFVList::GetName()->str();
-    else
-        return OUString("");
+    return LwpDLNFVList::GetName().str();
 }
 
 LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)

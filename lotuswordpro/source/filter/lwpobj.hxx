@@ -65,11 +65,16 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 
+#include <sal/config.h>
+
+#include <stdexcept>
+
+#include <salhelper/simplereferenceobject.hxx>
+
 #include "lwpheader.hxx"
 
 #include "lwpobjhdr.hxx"
 #include "lwpobjstrm.hxx"
-#include "lwpunoheader.hxx"
 #include "xfilter/ixfstream.hxx"
 #include "xfilter/xfcontentcontainer.hxx"
 
@@ -77,29 +82,52 @@ class LwpFoundry;
 /**
  * @brief   Base class of all Lwp VO objects
 */
-class LwpObject
+class LwpObject: public salhelper::SimpleReferenceObject
 {
 private:
     LwpObject();//Don't permit to create an object without header
 public:
     LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm);
-    virtual ~LwpObject();
 protected:
+    virtual ~LwpObject();
     LwpObjectHeader m_ObjHdr;
     LwpObjectStream* m_pObjStrm;
     LwpFoundry* m_pFoundry;
     LwpSvStream* m_pStrm;
+    bool m_bRegisteringStyle;
+    bool m_bParsingStyle;
 protected:
     virtual void Read();
-public:
-    void QuickRead();
     virtual void RegisterStyle();
     virtual void Parse(IXFStream* pOutputStream);
+public:
+    void QuickRead();
+    //calls RegisterStyle but bails if DoRegisterStyle is called
+    //on the same object recursively
+    void DoRegisterStyle()
+    {
+        if (m_bRegisteringStyle)
+            throw std::runtime_error("recursion in styles");
+        m_bRegisteringStyle = true;
+        RegisterStyle();
+        m_bRegisteringStyle = false;
+    }
+    //calls Parse but bails if DoParse is called
+    //on the same object recursively
+    void DoParse(IXFStream* pOutputStream)
+    {
+        if (m_bParsingStyle)
+            throw std::runtime_error("recursion in parsing");
+        m_bParsingStyle = true;
+        Parse(pOutputStream);
+        m_bParsingStyle = false;
+    }
+
     virtual void XFConvert(XFContentContainer* pCont);
 
     LwpFoundry* GetFoundry(){return m_pFoundry;}
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}
-    LwpObjectID* GetObjectID(){ return m_ObjHdr.GetID();}
+    LwpObjectID& GetObjectID(){ return m_ObjHdr.GetID();}
     sal_uInt32 GetTag() { return m_ObjHdr.GetTag();}
     LwpSvStream* GetStream() { return m_pStrm; }
 };

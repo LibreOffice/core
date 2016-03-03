@@ -175,13 +175,13 @@ LwpPara* LwpPara::GetParent()
 
     if (level != 1)
     {
-        pPara = dynamic_cast<LwpPara*>(GetPrevious()->obj());
+        pPara = dynamic_cast<LwpPara*>(GetPrevious().obj().get());
         while (pPara)
         {
             otherlevel = pPara->GetLevel();
             if ((otherlevel < level) || (otherlevel && (level == 0)))
                 return pPara;
-            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious().obj().get());
         }
     }
     return NULL;
@@ -224,7 +224,7 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                     if (pPreFrib)
                     {
                         if ((pPreFrib->GetType() == FRIB_TAG_TEXT) &&
-                            (pPreFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
+                            (pPreFrib->GetModifiers() && pPreFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
                         {
                             pParaNumbering->pPrefix = static_cast<LwpFribText*>(pPreFrib);
                         }
@@ -241,7 +241,7 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                         {
                             if (
                                  (pFrib->GetNext() && pFrib->GetNext()->GetType() == FRIB_TAG_TEXT) ||
-                                 (pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels)
+                                 (pFrib->GetModifiers() && pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels)
                                )
                             {
                                 pParaNumbering->pSuffix = static_cast<LwpFribText*>(pFrib);
@@ -336,7 +336,7 @@ void LwpPara::OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,
  */
 LwpParaStyle* LwpPara::GetParaStyle()
 {
-    return dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj(VO_PARASTYLE));
+    return dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj(VO_PARASTYLE).get());
 }
 
 /**
@@ -354,13 +354,11 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBorder = pParaStyle->GetParaBorder();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     boost::scoped_ptr<LwpParaBorderOverride> pFinalBorder(
         pBorder
             ? polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone())
             : new LwpParaBorderOverride)
         ;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get local border
     pBorder = static_cast<LwpParaBorderProperty*>(pProps)->GetLocalParaBorder();
@@ -371,7 +369,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
         pLocalBorder->Override(pFinalBorder.get());
     }
 
-    pParaStyle->ApplyParaBorder(pOverStyle, pFinalBorder.get());
+    LwpParaStyle::ApplyParaBorder(pOverStyle, pFinalBorder.get());
 }
 /**
  * @short:   Override parabreaks style.
@@ -388,13 +386,11 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBreaks = pParaStyle->GetBreaks();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpBreaksOverride> pFinalBreaks(
+    std::unique_ptr<LwpBreaksOverride> pFinalBreaks(
         pBreaks
             ? polymorphic_downcast<LwpBreaksOverride*>(pBreaks->clone())
             : new LwpBreaksOverride)
         ;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get local breaks
     pBreaks = static_cast<LwpParaBreaksProperty*>(pProps)->GetLocalParaBreaks();
@@ -418,25 +414,25 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftPage);
-        m_BefPageBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_BefPageBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     if (m_pBreaks->IsPageBreakAfter())
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftPage);
-        m_AftPageBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_AftPageBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     if (m_pBreaks->IsColumnBreakBefore())
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftColumn);//tmp after, should change when layout read
-        m_BefColumnBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_BefColumnBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     if (m_pBreaks->IsColumnBreakAfter())
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftColumn);
-        m_AftColumnBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_AftColumnBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
 
 //  pParaStyle->ApplyBreaks(pOverStyle, &aFinalBreaks);
@@ -475,13 +471,11 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_bHasBullet = true;
 
             LwpOverride* pBullet= pParaStyle->GetBulletOverride();
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr<LwpBulletOverride> pFinalBullet(
+            std::unique_ptr<LwpBulletOverride> pFinalBullet(
                 pBullet
                     ? polymorphic_downcast<LwpBulletOverride*>(pBullet->clone())
                     : new LwpBulletOverride)
                 ;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
 
             boost::scoped_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
             pLocalBullet2->Override(pFinalBullet.get());
@@ -491,7 +485,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_pBullOver = pFinalBullet.release();
             if (!aSilverBulletID.IsNull())
             {
-                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET));
+                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET).get());
                 if (m_pSilverBullet)
                     m_pSilverBullet->SetFoundry(m_pFoundry);
             }
@@ -510,14 +504,12 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             {
                 m_bHasBullet = true;
 
-                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET));
+                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET).get());
                 if (m_pSilverBullet)
                     m_pSilverBullet->SetFoundry(m_pFoundry);
             }
 
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            std::unique_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
             delete m_pBullOver;
             m_pBullOver = pBulletOverride.release();
         }
@@ -537,9 +529,7 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
     }
 
     LwpNumberingOverride* pParaNumbering = pParaStyle->GetNumberingOverride();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpNumberingOverride> pOver(new LwpNumberingOverride);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<LwpNumberingOverride> pOver(new LwpNumberingOverride);
     //Override with the local numbering, if any
     if (pProps)
     {
@@ -569,7 +559,7 @@ void LwpPara::FindLayouts()
 {
     m_Fribs.SetPara(this);
     m_Fribs.FindLayouts();
-    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext()->obj());
+    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext().obj().get());
     if(pNextPara)
     {
         pNextPara->FindLayouts();
@@ -638,8 +628,10 @@ bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualLayou
 bool LwpPara::IsInCell()
 {
     LwpStory *pStory = GetStory();
-    LwpVirtualLayout* pLayout = pStory ? pStory->GetLayout(NULL) : NULL;
-    if(pLayout && pLayout->IsCell())
+    if (!pStory)
+        return false;
+    rtl::Reference<LwpVirtualLayout> xLayout(pStory->GetLayout(nullptr));
+    if (xLayout.is() && xLayout->IsCell())
         return true;
     return false;
 }

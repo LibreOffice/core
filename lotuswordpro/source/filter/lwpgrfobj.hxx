@@ -110,7 +110,7 @@ private:
     void ParseChart(IXFStream* pOutputStream);
     bool IsGrafFormatValid();
     // add by , 03/25/2005
-    std::vector <XFFrame*> m_vXFDrawObjects;
+    std::vector< rtl::Reference<XFFrame> > m_vXFDrawObjects;
     // end add
 
 public:
@@ -124,7 +124,7 @@ public:
     // add by , 03/25/2005
     void CreateDrawObjects();
     void CreateGrafObject();
-    void GetBentoNamebyID(LwpObjectID* pMyID, std::string& rName);
+    static void GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName);
     sal_uInt32 GetRawGrafData(sal_uInt8*& pGrafData);
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }

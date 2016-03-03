@@ -68,10 +68,10 @@ typedef BenByte * BenByteDataPtr;
 typedef const BenByte * BenConstByteDataPtr;
 
 pCBenNamedObject FindNamedObject(pCUtList pList, const char * sName,
-  pCBenNamedObjectListElmt * ppPrev);
+  pCUtListElmt * ppPrev);
 
 pCBenIDListElmt FindID(pCUtList pList, BenObjectID ObjectID,
-  pCBenIDListElmt * ppPrev);
+  pCUtListElmt * ppPrev);
 } // end namespace
 
 // Private headers

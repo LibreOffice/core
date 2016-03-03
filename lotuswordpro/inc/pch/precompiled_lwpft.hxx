@@ -58,6 +58,7 @@
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
 #include <sal/macros.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>

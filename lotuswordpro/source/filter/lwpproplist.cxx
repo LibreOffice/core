@@ -71,7 +71,7 @@ LwpPropListElement::LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pSt
 
 LwpPropListElement* LwpPropListElement::GetNext()
 {
-    return static_cast<LwpPropListElement*>(LwpDLVList::GetNext()->obj());
+    return dynamic_cast<LwpPropListElement*>(LwpDLVList::GetNext().obj().get());
 }
 
 void LwpPropListElement::Read()
@@ -117,7 +117,7 @@ void LwpPropList::Read(LwpObjectStream* pObjStrm)
 
 LwpPropListElement* LwpPropList::GetFirst()
 {
-    return static_cast<LwpPropListElement*>(LwpDLVListHead::GetFirst()->obj());
+    return dynamic_cast<LwpPropListElement*>(LwpDLVListHead::GetFirst().obj().get());
 }
 
 OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
@@ -131,11 +131,10 @@ OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
             value = pElement->GetValue().str();
             name  = pElement->GetName().str();
             pElement = pElement->GetNext();
-            return  pElement->GetName().str();
+            if(pElement)
+                return  pElement->GetName().str();
         }
-        else
-            return OUString("");
-
+        return OUString("");
     }
     else
     {

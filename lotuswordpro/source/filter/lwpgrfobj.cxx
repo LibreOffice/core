@@ -136,11 +136,11 @@ void LwpGraphicObject::Read()
     }
     if (nServerContextSize == 0)
     {
-        if (strcmp((char *)m_sServerContextFormat, ".cht") == 0 &&
-            strcmp((char *)m_sDataFormat, ".sdw") == 0)
+        if (strcmp(reinterpret_cast<char *>(m_sServerContextFormat), ".cht") == 0 &&
+            strcmp(reinterpret_cast<char *>(m_sDataFormat), ".sdw") == 0)
         {
-            strcpy((char *)m_sServerContextFormat, ".lch");
-            strcpy((char *)m_sDataFormat, ".lch");
+            strcpy(reinterpret_cast<char *>(m_sServerContextFormat), ".lch");
+            strcpy(reinterpret_cast<char *>(m_sDataFormat), ".lch");
         }
     }
     m_nCachedBaseLine = m_pObjStrm->QuickReadInt32();
@@ -197,15 +197,15 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
     if ((m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w'))
     {
-        std::vector <XFFrame*>::iterator iter;
+        std::vector< rtl::Reference<XFFrame> >::iterator iter;
         for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
         {
-            pCont->Add(*iter);
+            pCont->Add(iter->get());
         }
     }
-    else if (this->IsGrafFormatValid())
+    else if (this->IsGrafFormatValid() && !m_vXFDrawObjects.empty())
     {
-        XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front());
+        XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front().get());
 
         if (m_bIsLinked)
         {
@@ -277,14 +277,14 @@ void LwpGraphicObject::RegisterStyle()
 
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
     {
-        LwpVirtualLayout* pMyLayout = GetLayout(NULL);
-        if (pMyLayout && pMyLayout->IsFrame())
+        rtl::Reference<LwpVirtualLayout> xMyLayout(GetLayout(nullptr));
+        if (xMyLayout.is() && xMyLayout->IsFrame())
         {
             XFFrameStyle* pXFFrameStyle = new XFFrameStyle();
             pXFFrameStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
             pXFFrameStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelPara);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_strStyleName = pXFStyleManager->AddStyle(pXFFrameStyle)->GetStyleName();
+            m_strStyleName = pXFStyleManager->AddStyle(pXFFrameStyle).m_pStyle->GetStyleName();
         }
     }
 
@@ -306,9 +306,9 @@ void LwpGraphicObject::CreateDrawObjects()
     SvStream* pDrawObjStream = NULL;
 
     // get graphic object's bento objet name
-    LwpObjectID* pMyID = this->GetObjectID();
+    LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(pMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pDrawObjStream, aGrfObjName.c_str());
@@ -325,10 +325,10 @@ void LwpGraphicObject::CreateDrawObjects()
 /**
  * @descr   create drawing object.
  */
-void LwpGraphicObject::GetBentoNamebyID(LwpObjectID* pMyID, std::string& rName)
+void LwpGraphicObject::GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName)
 {
-    sal_uInt16 nHigh = pMyID->GetHigh();
-    sal_uInt16 nLow = pMyID->GetLow();
+    sal_uInt16 nHigh = rMyID.GetHigh();
+    sal_uInt16 nLow = rMyID.GetLow();
     char pTempStr[32];
     rName = std::string("Gr");
     sprintf(pTempStr, "%X,%X", nHigh, nLow);
@@ -358,9 +358,9 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     SvStream* pGrafStream = NULL;
 
     // get graphic object's bento objet name
-    LwpObjectID* pMyID = this->GetObjectID();
+    LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(pMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pGrafStream, aGrfObjName.c_str());
@@ -401,9 +401,9 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     SvStream* pGrafStream = NULL;
 
     // get graphic object's bento objet name
-    LwpObjectID* pMyID = this->GetObjectID();
+    LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(pMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     char sDName[64]="";
     sprintf(sDName, "%s-D", aGrfObjName.c_str());
@@ -438,7 +438,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
  */
 void LwpGraphicObject::CreateGrafObject()
 {
-    XFImage* pImage = new XFImage();
+    rtl::Reference<XFImage> pImage = new XFImage();
 
     // set image processing styles
     XFImageStyle* pImageStyle = new XFImageStyle();
@@ -457,9 +457,9 @@ void LwpGraphicObject::CreateGrafObject()
     }
 
     // set scale and crop styles
-    LwpAssociatedLayouts* pLayoutWithMe = GetLayoutsWithMe();
+    LwpAssociatedLayouts& rLayoutWithMe = GetLayoutsWithMe();
     LwpFrameLayout* pMyFrameLayout =
-        static_cast<LwpFrameLayout*>(pLayoutWithMe->GetOnlyLayout()->obj(VO_FRAMELAYOUT));
+        static_cast<LwpFrameLayout*>(rLayoutWithMe.GetOnlyLayout().obj(VO_FRAMELAYOUT).get());
     if (pMyFrameLayout)
     {
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
@@ -576,9 +576,9 @@ void LwpGraphicObject::CreateGrafObject()
                 pImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 
                 // get image position offset
-                LwpPoint* pOffset = pMyScale->GetOffset();
-                double fOffsetX = LwpTools::ConvertFromUnitsToMetric(pOffset->GetX());
-                double fOffsetY = LwpTools::ConvertFromUnitsToMetric(pOffset->GetY());
+                LwpPoint& rOffset = pMyScale->GetOffset();
+                double fOffsetX = LwpTools::ConvertFromUnitsToMetric(rOffset.GetX());
+                double fOffsetY = LwpTools::ConvertFromUnitsToMetric(rOffset.GetY());
 
                 struct LwpRect
                 {
@@ -647,20 +647,20 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set style for the image
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle)->GetStyleName());
+    pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle).m_pStyle->GetStyleName());
 
     // set archor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);
 
     // set object name
-    LwpAtomHolder* pHolder = this->GetName();
-    if ( pHolder && !pHolder->str().isEmpty() )
+    LwpAtomHolder& rHolder = this->GetName();
+    if ( !rHolder.str().isEmpty() )
     {
-        pImage->SetName(pHolder->str());
+        pImage->SetName(rHolder.str());
     }
 
     // insert image object into array
-    m_vXFDrawObjects.push_back(pImage);
+    m_vXFDrawObjects.push_back(pImage.get());
 
 }
 
@@ -701,7 +701,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
             {
                 pEquData[nIndex] = pGrafData[nBegin + nIndex];
             }
-            pXFNotePara->Add(OUString((sal_Char*)pEquData, (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
+            pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
             delete [] pEquData;
         }
         pXFNote->Add(pXFNotePara);

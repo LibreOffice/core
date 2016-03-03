@@ -60,8 +60,13 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENTCONTAINER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENTCONTAINER_HXX
 
-#include "xfcontent.hxx"
+#include <sal/config.h>
+
 #include <vector>
+
+#include <rtl/ref.hxx>
+
+#include "xfcontent.hxx"
 
 /**
  * @brief
@@ -73,10 +78,6 @@ class XFContentContainer : public XFContent
 public:
     XFContentContainer();
 
-    XFContentContainer(const XFContentContainer& other);
-
-    XFContentContainer& operator=(const XFContentContainer& other);
-
     /**
      * @descr   Destructure, all contents will be deleted too.
      */
@@ -84,18 +85,16 @@ public:
 
 public:
     /**
-     * @descr   Add conent.
+     * @descr   Add content.
      */
-    virtual void    Add(IXFContent *pContent);
+    virtual void    Add(XFContent *pContent);
 
-    virtual void    InsertAtBegin(IXFContent *pContent);
-    virtual void    RemoveAt(sal_uInt32 nPos);
-    virtual IXFContent* GetLastContent();
-    virtual void    RemoveLastContent();
+    rtl::Reference<XFContent> GetLastContent();
+    void    RemoveLastContent();
     /**
      * @descr   convience function for add text content.
      */
-    virtual void    Add(const OUString& text);
+    void    Add(const OUString& text);
 
     /**
      * @descr   return the number of contents in the container.
@@ -105,7 +104,7 @@ public:
     /**
      * @descr   get content by index.
      */
-    IXFContent* GetContent(sal_uInt32 index) const;
+    rtl::Reference<XFContent> GetContent(sal_uInt32 index) const;
 
     /**
      * @descr   clear all contents in the container.
@@ -115,7 +114,7 @@ public:
     /**
      * @descr   helper function, find first content by type.
      */
-    IXFContent* FindFirstContent(enumXFContent type);
+    rtl::Reference<XFContent> FindFirstContent(enumXFContent type);
 
     /**
      * @descr   return the content type.
@@ -127,10 +126,10 @@ public:
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    std::vector<IXFContent*>    m_aContents;
+    std::vector< rtl::Reference<XFContent> >    m_aContents;
 };
 
-inline IXFContent* XFContentContainer::GetContent(sal_uInt32 index) const
+inline rtl::Reference<XFContent> XFContentContainer::GetContent(sal_uInt32 index) const
 {
     if (index > m_aContents.size()-1)
         return NULL;

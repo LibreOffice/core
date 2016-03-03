@@ -97,7 +97,10 @@ void LwpSilverBullet::Read()
 
     sal_uInt16 nNumPos = m_pObjStrm->QuickReaduInt16();
 
-    for (sal_uInt8 nC = 0; nC < nNumPos; nC++)
+    if (nNumPos > SAL_N_ELEMENTS(m_pResetPositionFlags))
+        throw std::range_error("corrupt SilverBullet");
+
+    for (sal_uInt16 nC = 0; nC < nNumPos; nC++)
         m_pResetPositionFlags[nC] = m_pObjStrm->QuickReaduInt8();
 
     m_nUseCount = m_pObjStrm->QuickReaduInt32();
@@ -143,7 +146,7 @@ void LwpSilverBullet::RegisterStyle()
                         aFmt.SetPrefix(aPrefix + aParaNumbering.pPrefix->GetText());
                     }
 
-                    aFmt.SetFormat(this->GetNumCharByStyleID(pParaNumber));
+                    aFmt.SetFormat(GetNumCharByStyleID(pParaNumber));
 
                     if (aParaNumbering.pSuffix)
                     {
@@ -171,7 +174,7 @@ void LwpSilverBullet::RegisterStyle()
                         aSuffix = aParaNumbering.pSuffix->GetText();
                     }
 
-                    pListStyle->SetListBullet(nPos, this->GetNumCharByStyleID(pParaNumber).toChar(),
+                    pListStyle->SetListBullet(nPos, GetNumCharByStyleID(pParaNumber).toChar(),
                         "Times New Roman", aPrefix, aSuffix);
                 }
 
@@ -182,7 +185,7 @@ void LwpSilverBullet::RegisterStyle()
     }
 
     //add style-list to style manager.
-    m_strStyleName = pXFStyleManager->AddStyle(pListStyle)->GetStyleName();
+    m_strStyleName = pXFStyleManager->AddStyle(pListStyle).m_pStyle->GetStyleName();
 }
 
 /**
@@ -200,11 +203,7 @@ OUString LwpSilverBullet::GetBulletFontName()
         return aEmpty;
     }
 
-    LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
-    if (!pFontMgr)
-    {
-        return aEmpty;
-    }
+    LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
 
     sal_uInt32 nBulletFontID = m_pBulletPara->GetBulletFontID();
     sal_uInt16 nFinalFont = static_cast<sal_uInt16>((nBulletFontID >> 16) & 0xFFFF);
@@ -216,7 +215,7 @@ OUString LwpSilverBullet::GetBulletFontName()
     }
 
     //get font name from font manager.
-    OUString aFontName = pFontMgr->GetNameByID(nBulletFontID);
+    OUString aFontName = rFontMgr.GetNameByID(nBulletFontID);
 
     return aFontName;
 }
@@ -239,13 +238,13 @@ LwpPara* LwpSilverBullet::GetBulletPara()
 {
     if (!m_pBulletPara)
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY));
+        LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
         if (!pStory)
         {
             return NULL;
         }
 
-        m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara()->obj(VO_PARA));
+        m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj(VO_PARA).get());
     }
 
     return m_pBulletPara;
@@ -332,12 +331,9 @@ bool LwpSilverBullet::IsBulletOrdered()
     if (!m_pBulletPara)
         return false;
 
-    LwpFribPtr* pFribs = m_pBulletPara->GetFribs();
+    LwpFribPtr& rFribs = m_pBulletPara->GetFribs();
 
-    if (!pFribs)
-        return false;
-
-    return (pFribs->HasFrib(FRIB_TAG_PARANUMBER) != NULL);
+    return (rFribs.HasFrib(FRIB_TAG_PARANUMBER) != NULL);
 }
 
 /**
@@ -378,7 +374,7 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
     bool bDivisionName = false;
     bool bSectionName = false;
 
-    LwpFrib* pParaFrib = m_pBulletPara->GetFribs()->GetFribs();
+    LwpFrib* pParaFrib = m_pBulletPara->GetFribs().GetFribs();
     if (!pParaFrib)
     {
         return aEmpty;
@@ -435,10 +431,10 @@ OUString LwpSilverBullet::GetDivisionName()
     LwpDocument* pDoc = m_pFoundry->GetDocument();
     if (pDoc)
     {
-        LwpObjectID* pID = pDoc->GetDivInfoID();
-        if (!pID->IsNull())
+        LwpObjectID& rID = pDoc->GetDivInfoID();
+        if (!rID.IsNull())
         {
-            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
+            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(rID.obj(VO_DIVISIONINFO).get());
             if (pInfo)
                 aRet = pInfo->GetDivName();
         }
@@ -450,7 +446,7 @@ OUString LwpSilverBullet::GetDivisionName()
 OUString LwpSilverBullet::GetSectionName()
 {
     OUString aEmpty;
-    LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY));
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
     if (!pStory)
     {
         return aEmpty;
@@ -461,14 +457,7 @@ OUString LwpSilverBullet::GetSectionName()
 
 bool LwpSilverBullet::HasName()
 {
-    LwpAtomHolder* pName = this->GetName();
-    if (pName)
-    {
-        return (!pName->str().isEmpty());
-    }
-    else
-    {
-        return false;
-    }
+    LwpAtomHolder& rName = this->GetName();
+    return (!rName.str().isEmpty());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

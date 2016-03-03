@@ -90,14 +90,14 @@ XFFrame::~XFFrame()
 {
 }
 
-void    XFFrame::Add(IXFContent *pContent)
+void    XFFrame::Add(XFContent *pContent)
 {
     if (!pContent)
         return;
     XFContentContainer::Add(pContent);
     if( pContent->GetContentType() == enumXFContentFrame )
     {
-        XFFrame *pFrame = (XFFrame*)pContent;
+        XFFrame *pFrame = static_cast<XFFrame*>(pContent);
         if( pFrame )
         {
             pFrame->SetZIndex(pFrame->m_nZIndex + 1);
@@ -140,8 +140,8 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
     if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
-    assert(!m_strName.isEmpty());    //name should not be null.
-    if( !m_strName.isEmpty() && m_isTextBox == false)
+    assert(!m_strName.isEmpty() && "name should not be null.");
+    if( !m_strName.isEmpty() && !m_isTextBox)
         pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:
     switch( m_eAnchor )
@@ -194,12 +194,12 @@ void    XFFrame::AdjustZIndex()
 {
     for( int i=0; i<GetCount(); i++ )
     {
-        IXFContent *pContent = GetContent(i);
-        if( pContent )
+        rtl::Reference<XFContent> pContent = GetContent(i);
+        if( pContent.is() )
         {
             if( pContent->GetContentType() == enumXFContentFrame )
             {
-                XFFrame *pFrame = (XFFrame*)pContent;
+                XFFrame *pFrame = static_cast<XFFrame*>(pContent.get());
                 pFrame->m_nZIndex = m_nZIndex + 1;
                 pFrame->AdjustZIndex();
             }

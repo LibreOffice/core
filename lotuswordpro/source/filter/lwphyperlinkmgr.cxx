@@ -72,10 +72,6 @@ LwpHyperlinkMgr::~LwpHyperlinkMgr()
 {
 }
 
-OUString LwpHyperlinkMgr::GetHyperlink()
-{
-    return m_Hyperlink;
-}
 
 void LwpHyperlinkMgr::SetHyperlink(const OUString& hyperlink)
 {

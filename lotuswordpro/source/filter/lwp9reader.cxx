@@ -53,9 +53,9 @@
  *
  *
  ************************************************************************/
+
 #include "lwp9reader.hxx"
 #include "lwpglobalmgr.hxx"
-#include "lwpunoheader.hxx"
 #include "lwparrowstyles.hxx"
 #include "lwpobjhdr.hxx"
 #include "lwpdoc.hxx"
@@ -98,12 +98,6 @@ void Lwp9Reader::Read()
     LwpGlobalMgr::DeleteInstance();
 }
 
-/**
- * @descr   Read the OLE objects.
- */
-void Lwp9Reader::ReadOleObjects()
-{
-}
 /**
  * @descr   Read the LWP7 object.
  */
@@ -175,7 +169,7 @@ sal_Int64 Lwp9Reader::GetFileSize()
 
     sal_Int64 size = m_pDocStream->Seek( STREAM_SEEK_TO_END);
     m_pDocStream->Seek(pos);
-    return(size);
+    return size;
 }
 
 /**
@@ -186,19 +180,19 @@ void Lwp9Reader::ParseDocument()
     WriteDocHeader();
 
     //Get root document
-    LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID()->obj() );
+    LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID().obj().get() );
 
     if (!doc)
         return;
 
     //Parse Doc Data
-    LwpDocData *pDocData = dynamic_cast<LwpDocData*>((doc->GetDocData())->obj());
+    LwpDocData *pDocData = dynamic_cast<LwpDocData*>(doc->GetDocData().obj().get());
     if (pDocData!=NULL)
         pDocData->Parse(m_pStream);
 
     //Register Styles
     RegisteArrowStyles();
-    doc->RegisterStyle();
+    doc->DoRegisterStyle();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->ToXml(m_pStream);
 

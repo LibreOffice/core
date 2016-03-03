@@ -57,6 +57,11 @@
  * @file
  * index entry object.
  ************************************************************************/
+
+#include <sal/config.h>
+
+#include "ixfattrlist.hxx"
+#include "ixfstream.hxx"
 #include "xfcrossref.hxx"
 
 XFCrossRefStart::XFCrossRefStart()

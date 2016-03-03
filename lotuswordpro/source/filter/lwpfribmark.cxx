@@ -94,7 +94,7 @@ void LwpFribCHBlock::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 LwpCHBlkMarker* LwpFribCHBlock::GetMarker()
 {
-    return dynamic_cast<LwpCHBlkMarker*>(m_objMarker.obj());
+    return dynamic_cast<LwpCHBlkMarker*>(m_objMarker.obj().get());
 }
 
 void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
@@ -136,18 +136,18 @@ void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
 void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
 {
     OUString name;
-    LwpBookMark* pBook = pFoundry->GetBookMark(GetMarkerID());
+    LwpBookMark* pBook = pFoundry ? pFoundry->GetBookMark(GetMarkerID()) : nullptr;
     if (pBook)
         name = pBook->GetName();
 
     OUString sDivision;
-    LwpDocument* pDoc = pFoundry->GetDocument();
+    LwpDocument* pDoc = pFoundry ? pFoundry->GetDocument() : nullptr;
     if (pDoc)
     {
-        LwpObjectID* pID = pDoc->GetDivInfoID();
-        if (!pID->IsNull())
+        LwpObjectID& rID = pDoc->GetDivInfoID();
+        if (!rID.IsNull())
         {
-            LwpDivInfo *pDivInvo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
+            LwpDivInfo *pDivInvo = dynamic_cast<LwpDivInfo*>(rID.obj(VO_DIVISIONINFO).get());
             if (pDivInvo)
                 sDivision = pDivInvo->GetDivName();
         }
@@ -237,7 +237,7 @@ void LwpFribField::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 LwpFieldMark* LwpFribField::GetMarker()
 {
-    return dynamic_cast<LwpFieldMark*>(m_objMarker.obj());
+    return dynamic_cast<LwpFieldMark*>(m_objMarker.obj().get());
 }
 
 void LwpFribField::XFConvert(XFContentContainer* pXFPara)
@@ -261,7 +261,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     //end marker
     if (type == MARKER_END)
     {
-        if (pFieldMark->GetStart() == false)
+        if (!pFieldMark->GetStart())
             return;
         if (pFieldMark->IsFormulaInsert())
         {
@@ -408,7 +408,7 @@ void LwpFribField::RegisterTotalTimeStyle()
     pTimeStyle->SetTruncate(false);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
 }
 
 void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
@@ -1179,9 +1179,9 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     if (pDateStyle)
-        m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle)->GetStyleName();
+        m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle).m_pStyle->GetStyleName();
     if (pTimeStyle)
-        m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
+        m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
 }
 
 void LwpFribField::CheckFieldType(LwpFieldMark* pFieldMark)
@@ -1428,7 +1428,7 @@ LwpFribRubyMarker::LwpFribRubyMarker( LwpPara* pPara )
 
 LwpRubyMarker* LwpFribRubyMarker::GetMarker()
 {
-    return dynamic_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER));
+    return dynamic_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER).get());
 }
 
 void LwpFribRubyMarker::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)

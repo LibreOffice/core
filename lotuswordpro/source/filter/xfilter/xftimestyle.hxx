@@ -62,7 +62,6 @@
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"
-#include "ixfproperty.hxx"
 #include <vector>
 
 class XFDateTimePart : public XFStyle

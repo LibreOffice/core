@@ -90,42 +90,42 @@ class LwpParaProperty : public LwpDLList
 {
 public:
     LwpParaProperty(){}
-    virtual ~LwpParaProperty(void){}
-    virtual sal_uInt32  GetType(void) = 0;
-    inline  LwpParaProperty* GetNext(void);
-    inline  LwpParaProperty* GetPrevious(void);
+    virtual ~LwpParaProperty(){}
+    virtual sal_uInt32  GetType() = 0;
+    inline  LwpParaProperty* GetNext();
+    inline  LwpParaProperty* GetPrevious();
 
-    static LwpParaProperty* ReadPropertyList(LwpObjectStream* pFile,LwpObject* Whole);
+    static LwpParaProperty* ReadPropertyList(LwpObjectStream* pFile,rtl::Reference<LwpObject> const & Whole);
 
 };
 
-inline LwpParaProperty* LwpParaProperty::GetNext(void)
+inline LwpParaProperty* LwpParaProperty::GetNext()
 {
     return static_cast<LwpParaProperty*>(LwpDLList::GetNext());
 }
 
-inline LwpParaProperty* LwpParaProperty::GetPrevious(void)
+inline LwpParaProperty* LwpParaProperty::GetPrevious()
 {
     return static_cast<LwpParaProperty*>(LwpDLList::GetPrevious());
 }
 
 //align/indent/spacing
-//TO DO:border/backgroud etc
+//TO DO:border/background etc
 
 class LwpParaAlignProperty : public LwpParaProperty
 {
 public:
 //      LwpParaAlignProperty(LwpParaAlignProperty* pOther);
         LwpParaAlignProperty(LwpObjectStream* pFile);
-        virtual ~LwpParaAlignProperty(void);
-        LwpAlignmentOverride* GetAlignment(void);
-        sal_uInt32  GetType(void) SAL_OVERRIDE;
+        virtual ~LwpParaAlignProperty();
+        LwpAlignmentOverride* GetAlignment();
+        sal_uInt32  GetType() SAL_OVERRIDE;
 
 private:
         LwpAlignmentOverride* m_pAlignment;
 };
 
-inline LwpAlignmentOverride* LwpParaAlignProperty::GetAlignment(void)
+inline LwpAlignmentOverride* LwpParaAlignProperty::GetAlignment()
 {
     return m_pAlignment;
 }
@@ -134,9 +134,9 @@ class LwpParaIndentProperty : public LwpParaProperty
 {
 public:
         LwpParaIndentProperty(LwpObjectStream* pFile);
-        virtual ~LwpParaIndentProperty(void);
-        LwpIndentOverride* GetIndent(void);
-        sal_uInt32 GetType(void) SAL_OVERRIDE;
+        virtual ~LwpParaIndentProperty();
+        LwpIndentOverride* GetIndent();
+        sal_uInt32 GetType() SAL_OVERRIDE;
         inline LwpObjectID GetIndentID();
 
 private:
@@ -147,7 +147,7 @@ inline LwpObjectID LwpParaIndentProperty::GetIndentID()
 {
     return m_aIndentID;
 }
-inline LwpIndentOverride* LwpParaIndentProperty::GetIndent(void)
+inline LwpIndentOverride* LwpParaIndentProperty::GetIndent()
 {
     return m_pIndent;
 }
@@ -156,15 +156,15 @@ class LwpParaSpacingProperty : public LwpParaProperty
 {
 public:
         LwpParaSpacingProperty(LwpObjectStream* pFile);
-        virtual ~LwpParaSpacingProperty(void);
-        LwpSpacingOverride* GetSpacing(void);
-        sal_uInt32 GetType(void) SAL_OVERRIDE;
+        virtual ~LwpParaSpacingProperty();
+        LwpSpacingOverride* GetSpacing();
+        sal_uInt32 GetType() SAL_OVERRIDE;
 private:
         LwpSpacingOverride* m_pSpacing;
 
 };
 
-inline LwpSpacingOverride* LwpParaSpacingProperty::GetSpacing(void)
+inline LwpSpacingOverride* LwpParaSpacingProperty::GetSpacing()
 {
     return m_pSpacing;
 }
@@ -248,7 +248,7 @@ class LwpParaTabRackProperty : public LwpParaProperty
 {
 public:
     LwpParaTabRackProperty(LwpObjectStream* pStrm);
-    virtual ~LwpParaTabRackProperty(void);
+    virtual ~LwpParaTabRackProperty();
     sal_uInt32 GetType() SAL_OVERRIDE { return PP_LOCAL_TABRACK; }
 
     inline LwpTabOverride* GetTab();
@@ -266,14 +266,14 @@ class LwpParaBackGroundProperty : public LwpParaProperty
 {
 public:
     LwpParaBackGroundProperty(LwpObjectStream* pFile);
-    virtual ~LwpParaBackGroundProperty(void);
-    LwpBackgroundOverride* GetBackground(void);
-    sal_uInt32 GetType(void) SAL_OVERRIDE;
+    virtual ~LwpParaBackGroundProperty();
+    LwpBackgroundOverride* GetBackground();
+    sal_uInt32 GetType() SAL_OVERRIDE;
 private:
     LwpBackgroundOverride* m_pBackground;
 };
 
-inline LwpBackgroundOverride* LwpParaBackGroundProperty::GetBackground(void)
+inline LwpBackgroundOverride* LwpParaBackGroundProperty::GetBackground()
 {
     return m_pBackground;
 }

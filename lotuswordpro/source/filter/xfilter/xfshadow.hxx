@@ -61,23 +61,20 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSHADOW_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 #include "xfcolor.hxx"
 
 /**
  * @brief
  * Shadow object.
  */
-class XFShadow : public IXFProperty
+class XFShadow
 {
 public:
     XFShadow();
 
-    virtual ~XFShadow();
-
 public:
     /**
-     * @descr   set shadow position. You can refer to enumXFShadowPos to get all posible positions.
+     * @descr   set shadow position. You can refer to enumXFShadowPos to get all possible positions.
      */
     void    SetPosition(enumXFShadowPos pos);
 
@@ -108,7 +105,7 @@ public:
 
     OUString   ToString();
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFShadow& s1, XFShadow& s2);
     friend bool operator!=(XFShadow& s1, XFShadow& s2);

@@ -57,8 +57,9 @@
  * @file
  * Style of Fontwork object.
  ************************************************************************/
- #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
- #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
+
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
 
 #include "xfstyle.hxx"
 
@@ -150,6 +151,6 @@ inline enumXFFWShadow XFFontWorkStyle::GetShadowType() const
     return m_eShadowType;
 }
 
-#endif
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

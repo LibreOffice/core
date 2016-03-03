@@ -78,9 +78,8 @@ class LwpDivInfo : public LwpObject
 {
 public:
     LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDivInfo();
-    LwpObjectID* GetInitialLayoutID(){ return &m_InitialLayoutID;}
-    LwpObjectID* GetFillerPageTextID(){ return &m_FillerPageTextID;}
+    LwpObjectID& GetInitialLayoutID() { return m_InitialLayoutID; }
+    LwpObjectID& GetFillerPageTextID() { return m_FillerPageTextID; }
     // add by  ,03/14/2004
     OUString GetDivName() { return m_Name.str(); }
     // end add
@@ -93,10 +92,12 @@ public:
     inline LwpDocument* GetDivision();
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
-    LwpAtomHolder* GetExternalName(){return &m_ExternalName;}
+    LwpAtomHolder& GetExternalName() { return m_ExternalName; }
 protected:
     void Read() SAL_OVERRIDE;
 private:
+    virtual ~LwpDivInfo();
+
     LwpObjectID m_ParentID;
     LwpAtomHolder m_Name;
     LwpObjectID m_LayoutID;
@@ -138,7 +139,7 @@ private:
 
 inline bool LwpDivInfo::HasContents()
 {
-    return (m_nFlags & DI_HASCONTENTS) ? sal_True : sal_False;
+    return (m_nFlags & DI_HASCONTENTS) != 0;
 }
 
 inline bool LwpDivInfo::IsOleDivision()
@@ -151,7 +152,7 @@ inline bool LwpDivInfo::IsOleDivision()
 
 inline bool LwpDivInfo::IsScrollable()
 {
-    return (m_nFlags & DI_SCROLLABLE) ? sal_True : sal_False;
+    return (m_nFlags & DI_SCROLLABLE) != 0;
 }
 
 inline bool LwpDivInfo::IsGotoable()
@@ -161,7 +162,7 @@ inline bool LwpDivInfo::IsGotoable()
 
 inline LwpDocument* LwpDivInfo::GetDivision()
 {
-    return dynamic_cast<LwpDocument*>(m_ParentID.obj());
+    return dynamic_cast<LwpDocument*>(m_ParentID.obj().get());
 }
 #endif
 

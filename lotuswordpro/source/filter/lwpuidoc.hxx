@@ -83,7 +83,7 @@ public:
     LwpNamedProperties(){}
     ~LwpNamedProperties(){}
 public:
-    void Read(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream *pStrm);
 };
 /**
  * @brief       macro options contained in UIDocument structure

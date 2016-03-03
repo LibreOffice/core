@@ -106,19 +106,19 @@ public:
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     void XFConvertFrameInPage(XFContentContainer* pCont);
-    inline LwpDLVListHeadTail* GetParaList();
-    inline LwpObjectID* GetFirstPara();
-    inline LwpObjectID* GetLastPara();
+    inline LwpDLVListHeadTail& GetParaList();
+    inline LwpObjectID& GetFirstPara();
+    inline LwpObjectID& GetLastPara();
      XFContentContainer* GetXFContent();
     void AddXFContent(XFContent* pContent);
 
-    inline bool GetDropcapFlag();
-    inline LwpPageLayout* GetCurrentLayout();
+    bool GetDropcapFlag() { return m_bDropcap; }
+    LwpPageLayout* GetCurrentLayout() { return m_pCurrentLayout; }
     inline LwpMiddleLayout* GetTabLayout();//for register tab style
-    inline OUString GetSectionName();
-    inline LwpHyperlinkMgr* GetHyperlinkMgr();
+    OUString GetSectionName() { return m_CurrSectionName; }
+    LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr; }
 
-    inline bool IsPMModified();
+    inline bool IsPMModified() { return m_bPMModified; }
     inline void SetPMModified(bool bPMModified);
     inline void SetDropcapFlag(bool bFlag);
     inline void SetTabLayout(LwpLayout* pLayout);
@@ -139,27 +139,23 @@ public:
     OUString RegisterFirstFribStyle();
 };
 
-LwpDLVListHeadTail* LwpStory::GetParaList()
+LwpDLVListHeadTail& LwpStory::GetParaList()
 {
-    return &m_ParaList;
+    return m_ParaList;
 }
-LwpObjectID* LwpStory::GetFirstPara()
+LwpObjectID& LwpStory::GetFirstPara()
 {
     return m_ParaList.GetHead();
 }
-LwpObjectID* LwpStory::GetLastPara()
+LwpObjectID& LwpStory::GetLastPara()
 {
     return m_ParaList.GetTail();
-}
-bool LwpStory::GetDropcapFlag()
-{
-    return m_bDropcap;
 }
 LwpMiddleLayout* LwpStory::GetTabLayout()
 {
     if(m_pTabLayout)
         return m_pTabLayout;
-    return static_cast<LwpMiddleLayout*>(GetLayout(NULL));
+    return dynamic_cast<LwpMiddleLayout*>(GetLayout(nullptr).get());
 }
 void LwpStory::SetPMModified(bool bPMModified)
 {
@@ -176,22 +172,6 @@ void LwpStory::SetTabLayout(LwpLayout* pLayout)
 void LwpStory::SetSectionName(const OUString& StyleName)
 {
     m_CurrSectionName = StyleName;
-}
-OUString LwpStory::GetSectionName()
-{
-    return m_CurrSectionName;
-}
-bool LwpStory::IsPMModified()
-{
-    return m_bPMModified;
-}
-LwpPageLayout* LwpStory::GetCurrentLayout()
-{
-    return m_pCurrentLayout;
-}
-LwpHyperlinkMgr* LwpStory::GetHyperlinkMgr()
-{
-    return m_pHyperlinkMgr;
 }
 inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos)
 {

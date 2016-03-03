@@ -56,6 +56,7 @@
 #include "first.hxx"
 #include "assert.h"
 #include <stdio.h>
+#include <osl/diagnose.h>
 #include <sot/storinfo.hxx>
 namespace OpenStormBento
 {
@@ -90,15 +91,9 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
     *ppContainer = pContainer;
     return BenErr_OK;
 }
-BenError
-LtcBenContainer::Close()
-{
-    return BenErr_OK;
-}
 
 LtcBenContainer::~LtcBenContainer()
 {
-    Close();
 }
 
 BenError
@@ -117,7 +112,7 @@ BenError
 LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
   pCBenPropertyName * ppPropertyName)
 {
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt;
+    pCUtListElmt pPrevNamedObjectListElmt;
     pCBenNamedObject pNamedObject = FindNamedObject(&cNamedObjects,
       sPropertyName, &pPrevNamedObjectListElmt);
 
@@ -125,16 +120,16 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     {
         if (! pNamedObject->IsPropertyName())
             return BenErr_NameConflict;
-        else *ppPropertyName = (pCBenPropertyName) pNamedObject;
+        else *ppPropertyName = static_cast<pCBenPropertyName>(pNamedObject);
     }
     else
     {
-        pCBenIDListElmt pPrevObject;
+        pCUtListElmt pPrevObject;
         if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != NULL)
             return BenErr_DuplicateObjectID;
 
         *ppPropertyName = new CBenPropertyName(this, cNextAvailObjectID,
-          (pCBenObject) pPrevObject, sPropertyName, pPrevNamedObjectListElmt);
+          static_cast<pCBenObject>(pPrevObject), sPropertyName, pPrevNamedObjectListElmt);
         ++cNextAvailObjectID;
     }
 
@@ -144,7 +139,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
 pCBenObject
 LtcBenContainer::GetNextObject(pCBenObject pCurrObject)
 {
-    return (pCBenObject) cObjects.GetNextOrNULL(pCurrObject);
+    return static_cast<pCBenObject>(cObjects.GetNextOrNULL(pCurrObject));
 }
 
 pCBenObject
@@ -236,7 +231,7 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
 */
 LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream)
 {
-    CBenPropertyName * pPropertyName;
+    CBenPropertyName * pPropertyName(nullptr);
     RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
 
     if (NULL == pPropertyName)

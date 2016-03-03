@@ -67,7 +67,7 @@ CBenTOCReader::ReadLabelAndTOC()
     if ((Err = ReadLabel(&TOCOffset, &cTOCSize)) != BenErr_OK)
         return Err;
 
-    unsigned long nLength;
+    sal_uLong nLength;
     if ((Err = cpContainer->GetSize(&nLength)) != BenErr_OK)
         return Err;
 
@@ -118,13 +118,15 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
     assert(Flags == 0x0101 || Flags == 0x0);
 
     cBlockSize = UtGetIntelWord(pCurrLabel) * 1024; pCurrLabel += 2;
+    if (cBlockSize == 0)
+        return BenErr_NotBentoContainer;
 
     // Check major version
     if (UtGetIntelWord(pCurrLabel) != BEN_CURR_MAJOR_VERSION)
         return BenErr_UnknownBentoFormatVersion;
     pCurrLabel += 2;
 
-    UtGetIntelWord(pCurrLabel); pCurrLabel += 2;    // Minor version
+    pCurrLabel += 2;    // Minor version
 
     *pTOCOffset = UtGetIntelDWord(pCurrLabel); pCurrLabel += 4;
     *pTOCSize = UtGetIntelDWord(pCurrLabel);
@@ -287,16 +289,16 @@ CBenTOCReader::ReadTOC()
                         return Err;
                     }
 
-                    pCBenNamedObjectListElmt pPrevNamedObjectListElmt;
-                    if (FindNamedObject(cpContainer->GetNamedObjects(),
+                    pCUtListElmt pPrevNamedObjectListElmt;
+                    if (FindNamedObject(&cpContainer->GetNamedObjects(),
                       sBuffer, &pPrevNamedObjectListElmt) != NULL)
                     {
                         delete[] sAllocBuffer;
                         return BenErr_DuplicateName;
                     }
 
-                    pCBenObject pPrevObject = (pCBenObject) cpContainer->
-                      GetObjects()->GetLast();
+                    pCBenObject pPrevObject = static_cast<pCBenObject>( cpContainer->
+                      GetObjects().GetLast());
 
                     if (PropertyID == BEN_PROPID_GLOBAL_PROPERTY_NAME)
                         pObject = new CBenPropertyName(cpContainer, ObjectID,
@@ -342,12 +344,12 @@ CBenTOCReader::ReadTOC()
 
                     if (pObject == NULL)
                         pObject = new CBenObject(cpContainer, ObjectID,
-                          (pCBenObject) cpContainer->GetObjects()->GetLast());
+                          cpContainer->GetObjects().GetLast());
 
                     pProperty = new CBenProperty(pObject, PropertyID, TypeID,
-                      (pCBenProperty) pObject->GetProperties()->GetLast());
+                      pObject->GetProperties().GetLast());
 
-                    if ((Err = ReadSegments(pProperty->UseValue(),
+                    if ((Err = ReadSegments(&pProperty->UseValue(),
                       &LookAhead)) != BenErr_OK)
                         return Err;
                 }

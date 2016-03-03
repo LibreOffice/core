@@ -77,15 +77,15 @@ CUtListElmt::~CUtListElmt()
 
 CUtList::~CUtList()
 {
-    pCUtListElmt pTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != pTerminating; )
+    CUtListElmt& rTerminating = GetTerminating();
+    for (pCUtListElmt pCurr = GetFirst(); pCurr != &rTerminating; )
     {
         pCUtListElmt pNext = pCurr->GetNext();
         pCurr->MakeNotOnList();
         pCurr = pNext;
     }
-    pTerminating->SetPrev(pTerminating);
-    pTerminating->SetNext(pTerminating);
+    rTerminating.SetPrev(&rTerminating);
+    rTerminating.SetNext(&rTerminating);
 }
 
 // If pCurr is NULL, returns first item in list.  Otherwise, returns item
@@ -99,7 +99,7 @@ CUtList::GetNextOrNULL(pCUtListElmt pCurr)
     if (pCurr == NULL)
         pNext = GetFirst();
     else pNext = pCurr->GetNext();
-    if (pNext == GetTerminating())
+    if (pNext == &GetTerminating())
         pNext = NULL;
     return pNext;
 }
@@ -107,8 +107,8 @@ CUtList::GetNextOrNULL(pCUtListElmt pCurr)
 void
 CUtList::Destroy()
 {
-    pCUtListElmt pTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != pTerminating; )
+    CUtListElmt& rTerminating = GetTerminating();
+    for (pCUtListElmt pCurr = GetFirst(); pCurr != &rTerminating; )
     {
         pCUtListElmt pNext = pCurr->GetNext();
         delete pCurr;

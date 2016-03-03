@@ -70,7 +70,8 @@
 
 LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
-    , m_pOwnedFoundry(NULL)
+    , m_pOwnedFoundry(nullptr)
+    , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
     , m_pLnOpts(NULL)
@@ -163,10 +164,10 @@ void LwpDocument::Parse(IXFStream* pOutputStream)
         ParseDocContent(pOutputStream);
     }
 
-    LwpObject* pDocSock = GetSocket()->obj( VO_DOCSOCK );
-    if(pDocSock!=NULL)
+    rtl::Reference<LwpObject> pDocSock = GetSocket().obj( VO_DOCSOCK );
+    if(pDocSock.is())
     {
-        pDocSock->Parse(pOutputStream);
+        pDocSock->DoParse(pOutputStream);
     }
 }
 
@@ -174,7 +175,7 @@ bool LwpDocument::IsSkippedDivision()
 {
     OUString sDivName;
     bool ret = false;
-    LwpDivInfo* pDiv = dynamic_cast<LwpDivInfo*>(GetDivInfoID()->obj(VO_DIVISIONINFO));
+    LwpDivInfo* pDiv = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj(VO_DIVISIONINFO).get());
     if (pDiv == NULL)
         return true;
     sDivName = pDiv->GetDivName();
@@ -186,17 +187,17 @@ bool LwpDocument::IsSkippedDivision()
         || (strClassName == STR_DivisionGroupEndnote)
         || (strClassName == STR_DocumentEndnote))
     {
-        LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDiv->GetInitialLayoutID()->obj(VO_PAGELAYOUT));
+        LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDiv->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
         if(pPageLayout)
         {
-            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent()->obj(VO_STORY));
+            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent().obj(VO_STORY).get());
             if(pStory)
             {
                 //This judgement maybe have problem. If there is only one para in the story,
                 //this endnote division has no other contents except endnote table.
-                LwpObjectID* pFirst = pStory->GetFirstPara();
-                LwpObjectID* pLast = pStory->GetLastPara();
-                if(*pFirst == *pLast)
+                LwpObjectID& rFirst = pStory->GetFirstPara();
+                LwpObjectID& rLast = pStory->GetLastPara();
+                if(rFirst == rLast)
                     ret = true;
             }
         }
@@ -221,10 +222,10 @@ void LwpDocument::RegisterStyle()
     RegisterFootnoteStyles();
 
     //Register styles in other document connected with this document: next doc, children doc
-    LwpObject* pDocSock = GetSocket()->obj();
-    if(pDocSock!=NULL)
+    rtl::Reference<LwpObject> pDocSock = GetSocket().obj();
+    if(pDocSock.is())
     {
-        pDocSock->RegisterStyle();
+        pDocSock->DoRegisterStyle();
     }
 }
 /**
@@ -233,15 +234,17 @@ void LwpDocument::RegisterStyle()
 void LwpDocument::RegisterTextStyles()
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead()->obj());
+    LwpDLVListHeadHolder* pParaStyleHolder = m_pFoundry
+        ? dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead().obj().get())
+        : nullptr;
     if(pParaStyleHolder)
     {
-        LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID()->obj());
+        LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID().obj().get());
         while(pParaStyle)
         {
             pParaStyle->SetFoundry(m_pFoundry);
             pParaStyle->RegisterStyle();
-            pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext()->obj());
+            pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext().obj().get());
         }
     }
     ChangeStyleName();//add by ,for click here block,05/5/26
@@ -252,19 +255,21 @@ void LwpDocument::RegisterTextStyles()
  */
 void LwpDocument::RegisterLayoutStyles()
 {
-    //Register all layout styles, before register all styles in para
-    m_pFoundry->RegisterAllLayouts();
+    if (m_pFoundry)
+    {
+        //Register all layout styles, before register all styles in para
+        m_pFoundry->RegisterAllLayouts();
+    }
 
     //set initial pagelayout in story for parsing pagelayout
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO));
-    LwpPageLayout* pPageLayout = NULL;
-    if(pDivInfo)
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO).get());
+    if (pDivInfo)
     {
-        pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID()->obj(VO_PAGELAYOUT));
+        LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
         if(pPageLayout)
         {
             //In Ole division, the content of pagelayout is VO_OLEOBJECT
-            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent()->obj(VO_STORY));
+            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent().obj(VO_STORY).get());
             if(pStory)
             {
                 //add all the pagelayout in order into the pagelayout list;
@@ -280,16 +285,18 @@ void LwpDocument::RegisterLayoutStyles()
 void LwpDocument::RegisterStylesInPara()
 {
     //Register all automatic styles in para
-    LwpHeadContent* pContent = dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager()->GetContentList()->obj());
-    if(pContent)
+    rtl::Reference<LwpHeadContent> xContent(m_pFoundry
+        ? dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get())
+        : nullptr);
+    if (xContent.is())
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*>(pContent->GetChildHead()->obj(VO_STORY));
-        while(pStory)
+        rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
+        while (xStory.is())
         {
             //Register the child para
-            pStory->SetFoundry(m_pFoundry);
-            pStory->RegisterStyle();
-            pStory = dynamic_cast<LwpStory*>(pStory->GetNext()->obj(VO_STORY));
+            xStory->SetFoundry(m_pFoundry);
+            xStory->DoRegisterStyle();
+            xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
         }
     }
 }
@@ -298,19 +305,20 @@ void LwpDocument::RegisterStylesInPara()
  */
 void LwpDocument::RegisterBulletStyles()
 {
+    if (!m_pFoundry)
+        return;
     //Register bullet styles
     LwpDLVListHeadHolder* mBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
-                (m_pFoundry->GetBulletManagerID()->obj(VO_HEADHOLDER));
-    if( mBulletHead )
+        (m_pFoundry->GetBulletManagerID().obj(VO_HEADHOLDER).get());
+    if (!mBulletHead)
+        return;
+    LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
+                        (mBulletHead->GetHeadID().obj().get());
+    while(pBullet)
     {
-        LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
-                            (mBulletHead->GetHeadID()->obj());
-        while(pBullet)
-        {
-            pBullet->SetFoundry(m_pFoundry);
-            pBullet->RegisterStyle();
-            pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext()->obj());
-        }
+        pBullet->SetFoundry(m_pFoundry);
+        pBullet->RegisterStyle();
+        pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
     }
 }
 /**
@@ -318,13 +326,14 @@ void LwpDocument::RegisterBulletStyles()
  */
 void LwpDocument::RegisterGraphicsStyles()
 {
+    if (!m_pFoundry)
+        return;
     //Register all graphics styles, the first object should register the next;
-    LwpObject* pGraphic = m_pFoundry->GetGraphicListHead()->obj(VO_GRAPHIC);
-    if(pGraphic)
-    {
-        pGraphic->SetFoundry(m_pFoundry);
-        pGraphic->RegisterStyle();
-    }
+    rtl::Reference<LwpObject> pGraphic = m_pFoundry->GetGraphicListHead().obj(VO_GRAPHIC);
+    if (!pGraphic.is())
+        return;
+    pGraphic->SetFoundry(m_pFoundry);
+    pGraphic->DoRegisterStyle();
 }
 /**
  * @descr  Register line number styles
@@ -344,7 +353,7 @@ void LwpDocument::RegisterFootnoteStyles()
     //Register footnote and endnote configuration for the entire document
     if(!m_FootnoteOpts.IsNull())
     {
-        LwpFootnoteOptions* pFootnoteOpts = dynamic_cast<LwpFootnoteOptions*>(m_FootnoteOpts.obj());
+        LwpFootnoteOptions* pFootnoteOpts = dynamic_cast<LwpFootnoteOptions*>(m_FootnoteOpts.obj().get());
         if (pFootnoteOpts)
         {
             pFootnoteOpts->SetMasterPage("Endnote");
@@ -356,13 +365,13 @@ void LwpDocument::RegisterFootnoteStyles()
     LwpDocument* pEndnoteDiv = GetLastDivisionThatHasEndnote();
     if(this == pEndnoteDiv)
     {
-        LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(GetPageHintsID()->obj());
+        LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(GetPageHintsID().obj().get());
         if(pHeadTail)
         {
-            LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetTail()->obj());
-            if(pPageHint && !pPageHint->GetPageLayoutID()->IsNull())
+            LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetTail().obj().get());
+            if(pPageHint && !pPageHint->GetPageLayoutID().IsNull())
             {
-                LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pPageHint->GetPageLayoutID()->obj());
+                LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pPageHint->GetPageLayoutID().obj().get());
                 if(pPageLayout)
                 {
                     pPageLayout->SetFoundry(GetFoundry());
@@ -386,7 +395,7 @@ void LwpDocument::RegisterDefaultParaStyles()
         LwpDocument* pFirstDoc = GetFirstDivisionWithContentsThatIsNotOLE();
         if(pFirstDoc)
         {
-            LwpVerDocument* pVerDoc = dynamic_cast<LwpVerDocument*>(pFirstDoc->GetVerDoc()->obj());
+            LwpVerDocument* pVerDoc = dynamic_cast<LwpVerDocument*>(pFirstDoc->GetVerDoc().obj().get());
             if(pVerDoc)
             {
                 pVerDoc->RegisterStyle();
@@ -403,17 +412,17 @@ void LwpDocument::RegisterDefaultParaStyles()
 void LwpDocument::ParseDocContent(IXFStream* pOutputStream)
 {
     //Parse content in PageLayout
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj().get());
     if(pDivInfo==NULL) return;
 
-    LwpObject* pLayoutObj = pDivInfo->GetInitialLayoutID()->obj();
-    if(pLayoutObj==NULL)
+    rtl::Reference<LwpObject> pLayoutObj = pDivInfo->GetInitialLayoutID().obj();
+    if(!pLayoutObj.is())
     {
         //master document not supported now.
         return;
     }
     pLayoutObj->SetFoundry(m_pFoundry);
-    pLayoutObj->Parse(pOutputStream);
+    pLayoutObj->DoParse(pOutputStream);
 }
 
 /**
@@ -424,7 +433,7 @@ LwpObjectID* LwpDocument::GetValidFootnoteOpts()
     LwpDocument* pRoot = GetRootDocument();
     if(pRoot)
     {
-        return pRoot->GetFootnoteOpts();
+        return &pRoot->GetFootnoteOpts();
     }
     return NULL;
 }
@@ -434,7 +443,7 @@ LwpObjectID* LwpDocument::GetValidFootnoteOpts()
  */
 sal_uInt16 LwpDocument::GetEndnoteType()
 {
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID()->obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj().get());
     if (!pDivInfo)
         return FN_DONTCARE;
     OUString strClassName = pDivInfo->GetClassName();
@@ -451,10 +460,10 @@ sal_uInt16 LwpDocument::GetEndnoteType()
  */
 LwpDocument* LwpDocument::GetPreviousDivision()
 {
-    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket()->obj());
+    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
     {
-        return dynamic_cast<LwpDocument*>(pDocSock->GetPrevious()->obj());
+        return dynamic_cast<LwpDocument*>(pDocSock->GetPrevious().obj().get());
     }
     return NULL;
 }
@@ -463,10 +472,10 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  */
  LwpDocument* LwpDocument::GetNextDivision()
 {
-    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket()->obj());
+    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
     {
-        return dynamic_cast<LwpDocument*>(pDocSock->GetNext()->obj());
+        return dynamic_cast<LwpDocument*>(pDocSock->GetNext().obj().get());
     }
     return NULL;
 }
@@ -475,10 +484,10 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  */
  LwpDocument* LwpDocument::GetParentDivision()
 {
-    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket()->obj());
+    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
     {
-        return dynamic_cast<LwpDocument*>(pDocSock->GetParent()->obj());
+        return dynamic_cast<LwpDocument*>(pDocSock->GetParent().obj().get());
     }
     return NULL;
 }
@@ -491,7 +500,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     for (pPrev = GetPreviousDivision(); pPrev; pPrev = pPrev->GetPreviousDivision())
     {
-        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pPrev->GetDivInfoID()->obj());
+        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pPrev->GetDivInfoID().obj().get());
         if(pDivInfo && pDivInfo->HasContents())
             return pPrev;
     }
@@ -506,7 +515,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     for (pNext = GetNextDivision(); pNext; pNext = pNext->GetNextDivision())
     {
-        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pNext->GetDivInfoID()->obj());
+        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pNext->GetDivInfoID().obj().get());
         if(pDivInfo && pDivInfo->HasContents())
             return pNext;
     }
@@ -533,18 +542,17 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  */
  LwpDocument* LwpDocument::GetLastDivisionWithContents()
 {
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID()->obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj().get());
     if(pDivInfo && pDivInfo->HasContents())
     {
         return this;
     }
 
     LwpDocument* pDivision = GetLastDivision();
-    LwpDocument* pContentDivision = NULL;
 
-    while(pDivision)
+    while (pDivision && pDivision != this)
     {
-        pContentDivision = pDivision->GetLastDivisionWithContents();
+        LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
         if(pContentDivision)
         {
             return pContentDivision;
@@ -564,7 +572,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     while (pNext)
     {
-        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pNext->GetDivInfoID()->obj());
+        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pNext->GetDivInfoID().obj().get());
         if (pDivInfo && pDivInfo->HasContents())
             pLast = pNext;
         pNext = pNext->GetNextInGroup();
@@ -578,9 +586,9 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  */
  LwpDocument* LwpDocument::GetLastDivision()
 {
-    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket()->obj());
+    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
-        return dynamic_cast<LwpDocument*>(pDocSock->GetChildTail()->obj());
+        return dynamic_cast<LwpDocument*>(pDocSock->GetChildTail().obj().get());
     return NULL;
 }
 
@@ -589,9 +597,9 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  */
  LwpDocument* LwpDocument::GetFirstDivision()
 {
-    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket()->obj());
+    LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
-        return dynamic_cast<LwpDocument*>(pDocSock->GetChildHead()->obj());
+        return dynamic_cast<LwpDocument*>(pDocSock->GetChildHead().obj().get());
     return NULL;
 }
 
@@ -612,20 +620,18 @@ LwpDocument* LwpDocument::GetPreviousDivision()
   /**
  * @descr    Get first division with contents that is not ole, copy from lwp-source code
  */
- LwpDocument* LwpDocument::GetFirstDivisionWithContentsThatIsNotOLE()
+ LwpDocument* LwpDocument::ImplGetFirstDivisionWithContentsThatIsNotOLE()
 {
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID()->obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj().get());
     if(pDivInfo && pDivInfo->HasContents()
         && !pDivInfo->IsOleDivision())
         return this;
 
     LwpDocument* pDivision = GetFirstDivision();
 
-    LwpDocument*  pContentDivision = NULL;
-
     while (pDivision)
     {
-        pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
+        LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
         if(pContentDivision)
             return pContentDivision;
         pDivision = pDivision->GetNextDivision();
@@ -638,10 +644,10 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  LwpDocument* LwpDocument::GetLastDivisionThatHasEndnote()
 {
     LwpDocument* pRoot = GetRootDocument();
-    LwpDocument *pLastDoc = pRoot->GetLastDivisionWithContents();
-    while(pLastDoc)
+    LwpDocument *pLastDoc = pRoot ? pRoot->GetLastDivisionWithContents() : nullptr;
+    while (pLastDoc)
     {
-        if(pLastDoc->GetEnSuperTableLayout())
+        if (pLastDoc->GetEnSuperTableLayout().is())
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
     }
@@ -651,14 +657,14 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  /**
  * @descr    Get endnote supertable layout, every division has only one endnote supertable layout.
  */
- LwpVirtualLayout* LwpDocument::GetEnSuperTableLayout()
+rtl::Reference<LwpVirtualLayout> LwpDocument::GetEnSuperTableLayout()
 {
-    LwpHeadLayout* pHeadLayout = dynamic_cast<LwpHeadLayout*>(GetFoundry()->GetLayout()->obj());
+    LwpHeadLayout* pHeadLayout = dynamic_cast<LwpHeadLayout*>(GetFoundry()->GetLayout().obj().get());
     if(pHeadLayout)
     {
         return pHeadLayout->FindEnSuperTableLayout();
     }
-    return NULL;
+    return rtl::Reference<LwpVirtualLayout>();
 }
 
 /**
@@ -669,7 +675,7 @@ bool LwpDocument::GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount
     if(this == pEndDivision)
         return true;
 
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(m_DivInfo.obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(m_DivInfo.obj().get());
     if(pDivInfo)
     {
         pDivInfo->GetNumberOfPages(nCount);
@@ -704,7 +710,7 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
 {
     LwpDocument* pDivision = GetFirstDivision();
 
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(m_DivInfo.obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(m_DivInfo.obj().get());
     if(pDivInfo)
         nNumPages += pDivInfo->GetMaxNumberOfPages();
     while(pDivision)
@@ -737,13 +743,13 @@ void LwpDocument::XFConvertFrameInPage(XFContentContainer * pCont)
 {
     LwpDocument* pDivision = GetFirstDivision();
 
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (GetDivInfoID()->obj());
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (GetDivInfoID().obj().get());
     if(pDivInfo)
     {
-        LwpPageLayout*  pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID()->obj());
+        LwpPageLayout*  pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj().get());
         if(pPageLayout)
         {
-            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent()->obj());
+            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent().obj().get());
             if(pStory)
                 pStory->XFConvertFrameInPage(pCont);
         }
@@ -784,26 +790,26 @@ void LwpDocSock::Read()
  */
 void LwpDocSock::RegisterStyle()
 {
-    LwpObject* pDoc = GetNext()->obj();
-    if(pDoc)
-        pDoc->RegisterStyle();
+    rtl::Reference<LwpObject> pDoc = GetNext().obj();
+    if(pDoc.is())
+        pDoc->DoRegisterStyle();
 
-    pDoc = GetChildHead()->obj();
-    if(pDoc)
-        pDoc->RegisterStyle();
+    pDoc = GetChildHead().obj();
+    if(pDoc.is())
+        pDoc->DoRegisterStyle();
 }
  /**
  * @descr    parse contents of documents plugged
  */
 void LwpDocSock::Parse(IXFStream* pOutputStream)
 {
-    LwpObject* pDoc = GetChildHead()->obj();
-    if(pDoc)
-        pDoc->Parse(pOutputStream);
+    rtl::Reference<LwpObject> pDoc = GetChildHead().obj();
+    if(pDoc.is())
+        pDoc->DoParse(pOutputStream);
 
-    pDoc = GetNext()->obj();
-    if(pDoc)
-        pDoc->Parse(pOutputStream);
+    pDoc = GetNext().obj();
+    if(pDoc.is())
+        pDoc->DoParse(pOutputStream);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

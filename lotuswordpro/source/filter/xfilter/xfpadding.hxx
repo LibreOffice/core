@@ -61,7 +61,6 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPADDING_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
 #define XFPADDING_FLAG_LEFT     0X00000001
 #define XFPADDING_FLAG_RIGHT    0X00000002
@@ -72,7 +71,7 @@
  * @brief
  * Padings for paragraph,frame,...
  */
-class XFPadding : public IXFProperty
+class XFPadding
 {
 public:
     XFPadding();
@@ -106,7 +105,7 @@ public:
     /**
      * @descr   Output padding properties.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFPadding& p1, XFPadding& p2);
     friend bool operator!=(XFPadding& p1, XFPadding& p2);

@@ -135,17 +135,23 @@ inline sal_Int32 LwpTools::ConvertToUnits(const double& fInch)
 }
 inline bool LwpTools::IsOddNumber(sal_uInt16& nNumber)
 {
-    return (nNumber%2)? sal_True : sal_False;
+    return (nNumber%2) != 0;
 }
 inline bool LwpTools::IsEvenNumber(sal_uInt16& nNumber)
 {
-    return (nNumber%2)? sal_False : sal_True;
+    return (nNumber%2) == 0;
 }
 
 class BadSeek : public std::runtime_error
 {
 public:
     BadSeek() : std::runtime_error("Lotus Word Pro Bad Seek") { }
+};
+
+class BadRead: public std::runtime_error
+{
+public:
+    BadRead() : std::runtime_error("Lotus Word Pro Bad Read") { }
 };
 
 class BadDecompress : public std::runtime_error

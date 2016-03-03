@@ -82,7 +82,7 @@ private:
     LwpFrib* m_pFribs;
     XFParagraph* m_pXFPara;//for parse ,add by 1-17 //Current XFPara used for frib parsing
     LwpPara* m_pPara;//for get foundry, add by 1-17
-    void ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen);
+    static void ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen);
 public:
 //  String GetText();
     void XFConvert();

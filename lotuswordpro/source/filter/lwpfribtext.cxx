@@ -98,7 +98,7 @@ void LwpFribText::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
                 rEncode = LwpCharSetMgr::GetInstance()->
                                               GetTextCharEncoding(m_pModifiers->CodePage);
             else
-                rEncode = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+                rEncode = LwpCharSetMgr::GetTextCharEncoding();
         }
         LwpTools::QuickReadUnicode(pObjStrm, m_Content, len, rEncode);
     }
@@ -205,7 +205,7 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
     pDateStyle->AddSecond(true,0);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle)->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle).m_pStyle->GetStyleName();
 }
 void LwpFribDocVar::RegisterTotalTimeStyle()
 {
@@ -213,7 +213,7 @@ void LwpFribDocVar::RegisterTotalTimeStyle()
     pTimeStyle->SetTruncate(false);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
 }
 
 /**
@@ -413,7 +413,7 @@ void LwpFribUnicode::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
                 rEncode = LwpCharSetMgr::GetInstance()->
                                           GetTextCharEncoding(m_pModifiers->CodePage);
         else
-                rEncode = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+                rEncode = LwpCharSetMgr::GetTextCharEncoding();
 
         LwpTools::QuickReadUnicode(pObjStrm, m_Content, len, rEncode);
 

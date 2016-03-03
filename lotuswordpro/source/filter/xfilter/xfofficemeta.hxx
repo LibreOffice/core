@@ -63,7 +63,7 @@
 
 #include "xfglobal.hxx"
 
-class XFOfficeMeta : public IXFObject
+class XFOfficeMeta
 {
 public:
     XFOfficeMeta(){}
@@ -76,7 +76,7 @@ public:
     void SetLastTime(const OUString& lstime);
     void SetEditTime(const OUString& edtime);
 
-    virtual void ToXml(IXFStream *pStream) SAL_OVERRIDE;
+    void ToXml(IXFStream *pStream);
 private:
     OUString   m_strGenerator;
     OUString   m_strTitle;

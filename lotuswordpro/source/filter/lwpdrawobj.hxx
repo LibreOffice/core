@@ -62,6 +62,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "lwpsdwdrawheader.hxx"
 
 class SvStream;
@@ -91,11 +95,11 @@ private:
 protected:
     void ReadClosedObjStyle();
     void SetFillStyle(XFDrawStyle* pStyle);
-    void SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 nLineStyle,
+    static void SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 nLineStyle,
         const SdwColor& rColor);
     void SetPosition(XFFrame* pObj);
-    void SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag, sal_uInt8 nLineWidth);
-    OUString GetArrowName(sal_uInt8 nArrowStyle);
+    static void SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag, sal_uInt8 nLineWidth);
+    static OUString GetArrowName(sal_uInt8 nArrowStyle);
 
 protected:
     /**
@@ -303,7 +307,7 @@ private:
 public:
     LwpDrawTextBox(SvStream* pStream);
     virtual ~LwpDrawTextBox();
-    static void SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec);
+    static void SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord* pRec);
 
 protected:
     virtual void Read() SAL_OVERRIDE;

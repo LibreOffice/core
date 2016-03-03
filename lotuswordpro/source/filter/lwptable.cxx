@@ -142,9 +142,9 @@ void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
 
  LwpSuperTableLayout* LwpTable::GetSuperTableLayout()
 {
-    LwpTableLayout* pLayout = dynamic_cast<LwpTableLayout*>(m_Layout.obj());
+    LwpTableLayout* pLayout = dynamic_cast<LwpTableLayout*>(m_Layout.obj().get());
     if(pLayout)
-        return dynamic_cast<LwpSuperTableLayout*>(pLayout->GetParent()->obj());
+        return dynamic_cast<LwpSuperTableLayout*>(pLayout->GetParent().obj().get());
 
     return NULL;
 }
@@ -190,7 +190,7 @@ LwpGlossary::LwpGlossary(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpParalle
 LwpGlossary::~LwpGlossary()
 {
 }
-sal_uInt16 LwpGlossary::GetNumIndexRows(void)
+sal_uInt16 LwpGlossary::GetNumIndexRows()
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)
         return GetRow() - 1;    // Minus one row for repeated heading.

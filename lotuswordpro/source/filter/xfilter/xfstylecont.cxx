@@ -70,7 +70,7 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 {
 }
 
-XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):IXFObject(other),
+XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):
     m_aStyles(other.m_aStyles), m_strStyleNamePrefix(other.m_strStyleNamePrefix)
 {
 }
@@ -88,8 +88,7 @@ XFStyleContainer::~XFStyleContainer()
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
-        if( pStyle )
-            delete pStyle;
+        delete pStyle;
     }
 }
 
@@ -100,19 +99,20 @@ void    XFStyleContainer::Reset()
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
-        if( pStyle )
-            delete pStyle;
+        delete pStyle;
     }
     m_aStyles.clear();
 }
 
-IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
+IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
 {
+    IXFStyleRet aRet;
+
     IXFStyle    *pConStyle = NULL;
     OUString   name;
 
     if( !pStyle )
-        return NULL;
+        return aRet;
     //no matter we want to delete the style or not,XFFont object should be saved first.
     ManageStyleFont(pStyle);
 
@@ -122,7 +122,9 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
     if( pConStyle )//such a style has exist:
     {
         delete pStyle;
-        return pConStyle;
+        aRet.m_pStyle = pConStyle;
+        aRet.m_bOrigDeleted = true;
+        return aRet;;
     }
     else
     {
@@ -144,8 +146,8 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 
         m_aStyles.push_back(pStyle);
         //transform the font object to XFFontFactory
-
-        return pStyle;
+        aRet.m_pStyle = pStyle;
+        return aRet;
     }
 }
 
@@ -155,9 +157,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pConStyle = *it;
-        if( !pConStyle )
-            continue;
-
+        assert(pConStyle);
         if( pConStyle->Equal(pStyle) )
             return pConStyle;
     }
@@ -171,9 +171,7 @@ IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pConStyle = *it;
-        if( !pConStyle )
-            continue;
-
+        assert(pConStyle);
         if( pConStyle->GetStyleName() == name )
             return pConStyle;
     }
@@ -198,38 +196,32 @@ void    XFStyleContainer::ToXml(IXFStream *pStrm)
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
-
         assert(pStyle);
-        if( !pStyle )
-            continue;
-
         pStyle->ToXml(pStrm);
     }
 }
 
 void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
 {
-    XFFont *pStyleFont = NULL;
-    XFFont *pFactoryFont = NULL;
+    rtl::Reference<XFFont> pStyleFont;
+    rtl::Reference<XFFont> pFactoryFont;
 
     if( !pStyle )
         return;
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
     {
-        XFTextStyle *pTS = (XFTextStyle*)pStyle;
+        XFTextStyle *pTS = static_cast<XFTextStyle*>(pStyle);
         pStyleFont = pTS->GetFont();
-        if( !pStyleFont )
+        if( !pStyleFont.is() )
             return;
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         XFFontFactory* pFontFactory = pGlobal->GetXFFontFactory();
         pFactoryFont = pFontFactory->FindSameFont(pStyleFont);
         //this font has been exists in the factory:
-        if( pFactoryFont )
+        if( pFactoryFont.is() )
         {
             pTS->SetFont(pFactoryFont);
-            if( pStyleFont != pFactoryFont )
-                delete pStyleFont;
         }
         else
         {
@@ -238,19 +230,17 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePara )
     {
-        XFParaStyle *pPS = (XFParaStyle*)pStyle;
+        XFParaStyle *pPS = static_cast<XFParaStyle*>(pStyle);
         pStyleFont = pPS->GetFont();
-        if( !pStyleFont )
+        if( !pStyleFont.is() )
             return;
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         XFFontFactory* pFontFactory = pGlobal->GetXFFontFactory();
         pFactoryFont = pFontFactory->FindSameFont(pStyleFont);
         //this font has been exists in the factory:
-        if( pFactoryFont )
+        if( pFactoryFont.is() )
         {
             pPS->SetFont(pFactoryFont);
-            if( pFactoryFont != pStyleFont )
-                delete pStyleFont;
         }
         else
         {

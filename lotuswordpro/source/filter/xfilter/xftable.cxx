@@ -70,47 +70,6 @@ XFTable::XFTable()
     m_pOwnerCell = NULL;
 }
 
-XFTable::XFTable(const XFTable& other):XFContent(other)
-{
-    m_strName = other.m_strName;
-    m_bSubTable = other.m_bSubTable;
-    m_pOwnerCell = NULL;
-    for( int i=1; i<=other.m_aHeaderRows.GetCount(); i++ )
-    {
-        XFRow *pRow = (XFRow*)other.m_aHeaderRows.GetContent(i+1);
-        if( pRow )
-        {
-            m_aHeaderRows.Add( new XFRow(*pRow) );
-        }
-    }
-
-    m_aColumns = other.m_aColumns;
-    m_strDefCellStyle = other.m_strDefCellStyle;
-    m_strDefRowStyle = other.m_strDefRowStyle;
-    m_strDefColStyle = other.m_strDefColStyle;
-}
-
-XFTable& XFTable::operator =(const XFTable& other)
-{
-    m_strName = other.m_strName;
-    m_bSubTable = other.m_bSubTable;
-    m_pOwnerCell = NULL;
-    for( int i=1; i<=other.m_aHeaderRows.GetCount(); i++ )
-    {
-        XFRow *pRow = (XFRow*)other.m_aHeaderRows.GetContent(i);
-        if( pRow )
-        {
-            m_aHeaderRows.Add( new XFRow(*pRow) );
-        }
-    }
-
-    m_aColumns = other.m_aColumns;
-    m_strDefCellStyle = other.m_strDefCellStyle;
-    m_strDefRowStyle = other.m_strDefRowStyle;
-    m_strDefColStyle = other.m_strDefColStyle;
-    return *this;
-}
-
 XFTable::~XFTable()
 {
     std::map<sal_uInt16, XFRow*>::iterator it;
@@ -128,11 +87,9 @@ void    XFTable::SetColumnStyle(sal_Int32 col, const OUString& style)
     m_aColumns[col] = style;
 }
 
-void    XFTable::AddRow(XFRow *pRow)
+void XFTable::AddRow(XFRow *pRow)
 {
     assert(pRow);
-    if( !pRow )
-        return;
 
     int row = pRow->GetRow();
 
@@ -147,11 +104,13 @@ void    XFTable::AddRow(XFRow *pRow)
     m_aRows[row] = pRow;
 }
 
-void    XFTable::AddHeaderRow(XFRow *pRow)
+void XFTable::AddHeaderRow(XFRow *pRow)
 {
-    if( !pRow )
+    if( !pRow)
         return;
-    m_aHeaderRows.Add(pRow);
+    if (!m_aHeaderRows.is())
+        return;
+    m_aHeaderRows->Add(pRow);
 }
 
 OUString XFTable::GetTableName()
@@ -250,10 +209,10 @@ void    XFTable::ToXml(IXFStream *pStrm)
         }
     }
 
-    if( m_aHeaderRows.GetCount()>0 )
+    if (m_aHeaderRows.is() && m_aHeaderRows->GetCount()>0)
     {
         pStrm->StartElement( "table:table-header-rows" );
-        m_aHeaderRows.ToXml(pStrm);
+        m_aHeaderRows->ToXml(pStrm);
         pStrm->EndElement( "table:table-header-rows" );
     }
     //output rows:

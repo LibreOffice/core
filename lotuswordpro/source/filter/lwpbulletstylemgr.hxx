@@ -101,7 +101,6 @@ private:
     typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
     std::vector <OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
-    OUString m_aCurrentStyleName;
     LwpFoundry* m_pFoundry;
     XFList* m_pBulletList;
     bool m_bContinue;

@@ -104,7 +104,7 @@ using namespace OpenStormBento;
  bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
-    std::auto_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
+    std::unique_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
     unsigned char buffer[512];
     pCompressed->Read(buffer, 16);
     aDecompressed->Write(buffer, 16);
@@ -115,7 +115,7 @@ using namespace OpenStormBento;
     if (ulRet != BenErr_OK)
         return false;
 
-    boost::scoped_ptr<LtcUtBenValueStream> aWordProData((LtcUtBenValueStream *)pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
+    boost::scoped_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
     if (!aWordProData.get())
         return false;
@@ -148,8 +148,8 @@ using namespace OpenStormBento;
 {
     SvStream * pDecompressed = NULL;
 
-    sal_uInt32 nTag;
     pStream->Seek(0x10);
+    sal_uInt32 nTag(0);
     pStream->ReadUInt32( nTag );
     if (nTag != 0x3750574c) // "LWP7"
     {

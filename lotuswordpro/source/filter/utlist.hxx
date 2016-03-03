@@ -120,12 +120,12 @@ public: // Methods
     virtual ~CUtList();
     pCUtListElmt GetFirst() { return cDummyElmt.GetNext(); }
     pCUtListElmt GetLast() { return cDummyElmt.GetPrev(); }
-    pCUtListElmt GetTerminating() { return &cDummyElmt; }
+    CUtListElmt& GetTerminating() { return cDummyElmt; }
     pCUtListElmt GetNextOrNULL(pCUtListElmt pCurr);
-    bool IsEmpty() { return GetFirst() == GetTerminating(); };
+    bool IsEmpty() { return GetFirst() == &GetTerminating(); };
     bool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
 
-    void Destroy(void);
+    void Destroy();
 
 private: // Data
     CUtListElmt cDummyElmt;

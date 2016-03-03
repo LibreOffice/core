@@ -69,23 +69,21 @@
 class XFInputList : public XFContent
 {
 public:
-    void SetName(const OUString& sName);
-    void SetLabels(std::vector<OUString> list);
+    void SetName(const OUString& sName)
+    {
+        m_strName = sName;
+    }
+
+    void SetLabels(const std::vector<OUString>& list)
+    {
+        m_list=list;
+    }
+
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 private:
     OUString m_strName;
     std::vector<OUString> m_list;
 };
-
-inline void XFInputList::SetName(const OUString& sName)
-{
-    m_strName = sName;
-}
-
-inline void XFInputList::SetLabels(std::vector<OUString> list)
-{
-    m_list=list;
-}
 
 inline void XFInputList::ToXml(IXFStream *pStrm)
 {

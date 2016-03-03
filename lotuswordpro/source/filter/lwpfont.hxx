@@ -124,7 +124,7 @@ public:
     void Read(LwpObjectStream *pStrm);
     inline sal_uInt16 GetFaceID(){return m_nFaceName;}
     inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;}
-    void Override(XFFont* pFont);
+    void Override(rtl::Reference<XFFont> const & pFont);
     inline bool IsFaceNameOverridden();
     inline bool IsAltFaceNameOverridden();
 private:
@@ -174,7 +174,7 @@ private:
 
 public:
     void Read(LwpObjectStream *pStrm);
-    void    Override(sal_uInt16 index, XFFont* pFont);
+    void    Override(sal_uInt16 index, rtl::Reference<XFFont> const & pFont);
 };
 
 class LwpFontAttrEntry
@@ -192,7 +192,7 @@ public:
     ~LwpFontAttrEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
-    void Override(XFFont*pFont);
+    void Override(rtl::Reference<XFFont> const & pFont);
 private:
     sal_uInt16 m_nAttrBits;
     sal_uInt16 m_nAttrOverrideBits;
@@ -257,7 +257,7 @@ public:
     ~LwpFontAttrManager();
 public:
     void Read(LwpObjectStream *pStrm);
-    void Override(sal_uInt16 index, XFFont*pFont);
+    void Override(sal_uInt16 index, rtl::Reference<XFFont> const & pFont);
 private:
     sal_uInt16 m_nCount;
     LwpFontAttrEntry* m_pFontAttrs;
@@ -274,14 +274,14 @@ private:
 
 public:
     void Read(LwpObjectStream *pStrm);
-    XFFont* CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID);
-    XFFont*  CreateFont(sal_uInt32 fontID);
+    rtl::Reference<XFFont> CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID);
+    rtl::Reference<XFFont> CreateFont(sal_uInt32 fontID);
     OUString GetNameByID(sal_uInt32 fontID);
 
 private:
-    void Override(sal_uInt32 fontID, XFFont* pFont);
-    inline sal_uInt16 GetFontNameIndex(sal_uInt32 fontID);
-    inline sal_uInt16 GetFontAttrIndex(sal_uInt32 fontID);
+    void Override(sal_uInt32 fontID, rtl::Reference<XFFont> const & pFont);
+    static inline sal_uInt16 GetFontNameIndex(sal_uInt32 fontID);
+    static inline sal_uInt16 GetFontAttrIndex(sal_uInt32 fontID);
 };
 
 sal_uInt16 LwpFontManager::GetFontNameIndex(sal_uInt32 fontID)

@@ -89,6 +89,7 @@ public:
 
 private:
     LwpFoundry* m_pOwnedFoundry;
+    bool m_bGettingFirstDivisionWithContentsThatIsNotOLE;
 
     //Data members in file format
     LwpObjectID m_DocSockID;
@@ -137,16 +138,15 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
 
     inline bool IsChildDoc();
-    inline bool HonorProtection();
-    inline LwpObjectID* GetContentList();
-    inline LwpObjectID* GetDocData();
-    inline LwpObjectID* GetSocket();
+    inline bool GetHonorProtection();
+    inline LwpObjectID& GetDocData();
+    inline LwpObjectID& GetSocket();
 
     inline LwpFoundry* GetFoundry();
-    inline LwpObjectID* GetDivInfoID();
-    inline LwpObjectID* GetPageHintsID();
-    inline LwpObjectID* GetFootnoteOpts();
-    inline LwpObjectID* GetVerDoc();
+    inline LwpObjectID& GetDivInfoID();
+    inline LwpObjectID& GetPageHintsID();
+    inline LwpObjectID& GetFootnoteOpts();
+    inline LwpObjectID& GetVerDoc();
     LwpObjectID* GetValidFootnoteOpts();
 
     sal_uInt16 GetEndnoteType();
@@ -160,12 +160,20 @@ public:
     LwpDocument* GetLastDivisionWithContents();
     LwpDocument* GetLastInGroupWithContents();
     LwpDocument* GetRootDocument();
-    LwpDocument* GetFirstDivisionWithContentsThatIsNotOLE();
+    LwpDocument* GetFirstDivisionWithContentsThatIsNotOLE()
+    {
+        if (m_bGettingFirstDivisionWithContentsThatIsNotOLE)
+            throw std::runtime_error("recursion in page divisions");
+        m_bGettingFirstDivisionWithContentsThatIsNotOLE = true;
+        LwpDocument* pRet = ImplGetFirstDivisionWithContentsThatIsNotOLE();
+        m_bGettingFirstDivisionWithContentsThatIsNotOLE = false;
+        return pRet;
+    }
     LwpDocument* GetLastDivisionThatHasEndnote();
 
     LwpDocument* GetLastDivision();
     LwpDocument* GetFirstDivision();
-    LwpVirtualLayout* GetEnSuperTableLayout();
+    rtl::Reference<LwpVirtualLayout> GetEnSuperTableLayout();
     bool GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount);
 
     sal_uInt16 GetNumberOfPagesBefore();
@@ -173,50 +181,47 @@ public:
 
 private:
     void MaxNumberOfPages(sal_uInt16& nNumPages);
+    LwpDocument* ImplGetFirstDivisionWithContentsThatIsNotOLE();
     void XFConvertFrameInPage(XFContentContainer* pCont);
-    void ChangeStyleName();
+    static void ChangeStyleName();
     bool IsSkippedDivision();
 };
 
 inline bool LwpDocument::IsChildDoc()
 {
-    return (m_nPersistentFlags & DOC_CHILDDOC);
+    return (m_nPersistentFlags & DOC_CHILDDOC) != 0;
 }
-inline bool LwpDocument::HonorProtection()
+inline bool LwpDocument::GetHonorProtection()
 {
-    return m_nPersistentFlags & DOC_PROTECTED;
+    return (m_nPersistentFlags & DOC_PROTECTED) != 0;
 }
-inline LwpObjectID* LwpDocument::GetContentList()
+inline LwpObjectID& LwpDocument::GetSocket()
 {
-    return(m_pFoundry->GetContentManager()->GetContentList());
-}
-inline LwpObjectID* LwpDocument::GetSocket()
-{
-    return &m_DocSockID;
+    return m_DocSockID;
 }
 inline LwpFoundry* LwpDocument::GetFoundry()
 {
     return m_pFoundry;
 }
-inline LwpObjectID* LwpDocument::GetDivInfoID()
+inline LwpObjectID& LwpDocument::GetDivInfoID()
 {
-    return &m_DivInfo;
+    return m_DivInfo;
 }
-inline LwpObjectID* LwpDocument::GetPageHintsID()
+inline LwpObjectID& LwpDocument::GetPageHintsID()
 {
-    return &m_WYSIWYGPageHints;
+    return m_WYSIWYGPageHints;
 }
-inline LwpObjectID* LwpDocument::GetFootnoteOpts()
+inline LwpObjectID& LwpDocument::GetFootnoteOpts()
 {
-    return &m_FootnoteOpts;
+    return m_FootnoteOpts;
 }
-inline LwpObjectID* LwpDocument::GetDocData()
+inline LwpObjectID& LwpDocument::GetDocData()
 {
-    return &m_DocData;
+    return m_DocData;
 }
-inline LwpObjectID* LwpDocument::GetVerDoc()
+inline LwpObjectID& LwpDocument::GetVerDoc()
 {
-    return &m_VerDoc;
+    return m_VerDoc;
 }
 
 /**

@@ -141,7 +141,7 @@ void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
  */
 LwpFootnote* LwpFribFootnote::GetFootnote()
 {
-    return dynamic_cast<LwpFootnote*>(m_Footnote.obj());
+    return dynamic_cast<LwpFootnote*>(m_Footnote.obj().get());
 }
 
 LwpFootnote::LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
@@ -181,7 +181,7 @@ void LwpFootnote::RegisterStyle()
         if(pContent)
         {
             pContent->SetFoundry(m_pFoundry);
-            pContent->RegisterStyle();
+            pContent->DoRegisterStyle();
         }
     }
 }
@@ -206,13 +206,13 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
     LwpEnSuperTableLayout* pEnSuperLayout = FindFootnoteTableLayout();
     if(pEnSuperLayout)
     {
-        LwpTableLayout* pTableLayout = static_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
+        LwpTableLayout* pTableLayout = dynamic_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
         if(pTableLayout)
         {
             LwpRowLayout* pRowLayout = pTableLayout->GetRowLayout(m_nRow);
             if(pRowLayout)
             {
-                return dynamic_cast<LwpCellLayout*>(pRowLayout->GetChildHead()->obj());
+                return dynamic_cast<LwpCellLayout*>(pRowLayout->GetChildHead().obj().get());
             }
         }
     }
@@ -235,7 +235,7 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
     // The division might not have a DivisionInfo if it's being Destruct()ed
     pPrev = m_pFoundry->GetDocument();
     pFootnoteDivision = pPrev;
-    if (!pPrev || pPrev->GetDivInfoID()->IsNull())
+    if (!pPrev || pPrev->GetDivInfoID().IsNull())
         return NULL;
 
     switch (m_nType)
@@ -372,11 +372,11 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 
     while ((pContent = pFoundry->EnumContents(pContent)) != NULL)
         if (pContent->IsTable() && (strClassName.equals(pContent->GetClassName())) &&
-            pContent->IsActive() && pContent->GetLayout(NULL))
+            pContent->IsActive() && pContent->GetLayout(nullptr).is())
         {
             // Found it!
-            return (LwpEnSuperTableLayout *)
-                ((LwpTable*)pContent)->GetSuperTableLayout();
+            return static_cast<LwpEnSuperTableLayout *>(
+                static_cast<LwpTable*>(pContent)->GetSuperTableLayout());
         }
 
     return NULL;
@@ -387,16 +387,16 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
  */
 LwpContent* LwpFootnote::FindFootnoteContent()
 {
-    LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj());
+    LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj().get());
     //if the content has layout, the content has footnote contents;
     //or looking for the celllayout and return the footnote contents.
-    if(pContent && pContent->GetLayout(NULL))
+    if (pContent && pContent->GetLayout(nullptr).is())
         return pContent;
 
     LwpCellLayout* pCellLayout = GetCellLayout();
     if(pCellLayout)
     {
-        pContent = dynamic_cast<LwpContent*>(pCellLayout->GetContent()->obj());
+        pContent = dynamic_cast<LwpContent*>(pCellLayout->GetContent().obj().get());
     }
 
     return pContent;

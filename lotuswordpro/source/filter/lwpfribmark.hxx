@@ -144,7 +144,7 @@ private:
     void ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);
     void ConvertDateTimeStart(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);
     void ConvertDateTimeEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);
-    void ConvertCrossRefEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);
+    static void ConvertCrossRefEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);
     void ConvertCrossRefStart(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);
 };
 

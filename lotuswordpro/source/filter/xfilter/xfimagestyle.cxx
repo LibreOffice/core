@@ -193,7 +193,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         OUString clip = "rect(" + OUString::number(m_fClipTop) + "cm " +
             OUString::number(m_fClipRight) + "cm " +
             OUString::number(m_fClipBottom) + "cm " +
-            OUString::number(m_fClipLeft) + "cm" + ")";
+            OUString::number(m_fClipLeft) + "cm)";
         pAttrList->AddAttribute("fo:clip",clip);
     }
 

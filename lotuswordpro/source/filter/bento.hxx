@@ -144,7 +144,7 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
 class CBenIDListElmt : public CUtListElmt
 {
 public: // Internal methods
-    CBenIDListElmt(BenObjectID ID, pCBenIDListElmt pPrev) : CUtListElmt(pPrev)
+    CBenIDListElmt(BenObjectID ID, pCUtListElmt pPrev) : CUtListElmt(pPrev)
       { cID = ID; }
     CBenIDListElmt(BenObjectID ID) { cID = ID; }
     BenObjectID GetID() { return cID; }
@@ -157,7 +157,7 @@ class CBenNamedObjectListElmt : public CUtListElmt
 {
 public: // Methods
     // added to remove warning
-    CBenNamedObjectListElmt(pCBenNamedObjectListElmt pPrev) : CUtListElmt(pPrev)
+    CBenNamedObjectListElmt(pCUtListElmt pPrev) : CUtListElmt(pPrev)
       { cpNamedObject = NULL; }
     void SetNamedObject(pCBenNamedObject pObj)
     {
@@ -204,7 +204,6 @@ class LtcBenContainer
 {
 public:
     BenError Open();
-    BenError Close();
     BenError RegisterPropertyName(const char * sPropertyName,
       pCBenPropertyName * ppPropertyName);
     // Pass NULL to begin iteration.  Done when returns NULL.
@@ -225,8 +224,8 @@ public: // Internal methods
 
     BenObjectID GetNextAvailObjectID() { return cNextAvailObjectID; }
     void SetNextAvailObjectID(BenObjectID ID) { cNextAvailObjectID = ID; }
-    pCUtList GetObjects() { return &cObjects; }
-    pCUtList GetNamedObjects() { return &cNamedObjects; }
+    CUtList& GetObjects() { return cObjects; }
+    CUtList& GetNamedObjects() { return cNamedObjects; }
 
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
@@ -255,9 +254,9 @@ public:
     BenObjectID GetObjectID() { return GetID(); }
 public: // Internal methods
     CBenObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
-      pCBenIDListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
+      pCUtListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
       { cpContainer = pContainer; }
-    pCUtList GetProperties() { return &cProperties; }
+    CUtList& GetProperties() { return cProperties; }
 
 private: // Data
     pLtcBenContainer cpContainer;
@@ -296,9 +295,7 @@ public: // Internal methods
     inline pCBenValueSegment GetNextValueSegment(pCBenValueSegment
       pCurrValueSegment);
     inline pLtcBenContainer GetContainer();
-    pCUtList GetValueSegments() { return &cValueSegments; }
-    // Currently, no generation support
-    BenGeneration GetGeneration() { return 1; }
+    CUtList& GetValueSegments() { return cValueSegments; }
 
 private: // Data
     pCBenProperty cpProperty;
@@ -313,14 +310,14 @@ public:
     // different type.  But we never use it that way, so in this code a
     // property has exactly one value
 
-    pCBenValue UseValue() { return &cValue; }
+    CBenValue& UseValue() { return cValue; }
     pCBenObject GetBenObject() { return cpObject; }
     pLtcBenContainer GetContainer() { return GetBenObject()->GetContainer(); }
 
 public: // Internal methods
     // changed to remove WARNING here
     CBenProperty(pCBenObject pObject, BenObjectID PropertyID,
-      BenObjectID TypeID, pCBenIDListElmt pPrevProperty) :
+      BenObjectID TypeID, pCUtListElmt pPrevProperty) :
       CBenIDListElmt(PropertyID, pPrevProperty), cValue(TypeID)
     {
         cpObject = pObject;
@@ -351,11 +348,11 @@ class CBenValueSegment : public CUtListElmt
 {
 public: // Internal methods
     CBenValueSegment(pCBenValue pValue, BenContainerPos Pos,
-      unsigned long Size) : CUtListElmt(pValue->GetValueSegments())
+      unsigned long Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = false; cPos = Pos;
       cSize = Size; }
     CBenValueSegment(pCBenValue pValue, BenConstDataPtr pImmData,
-      unsigned short Size) : CUtListElmt(pValue->GetValueSegments())
+      unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     CBenValueSegment(BenContainerPos Pos, unsigned long Size)
@@ -366,7 +363,7 @@ public: // Internal methods
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsLast()
     {
-        return cpValue == NULL || cpValue->GetValueSegments()->GetLast() ==
+        return cpValue == NULL || cpValue->GetValueSegments().GetLast() ==
           this;
     }
     bool IsImmediate() { return cImmediate; }
@@ -388,7 +385,7 @@ private: // Data
 
 inline pCBenValueSegment CBenValue::GetNextValueSegment(pCBenValueSegment
   pCurrValueSegment)
-{ return (pCBenValueSegment) cValueSegments.GetNextOrNULL(pCurrValueSegment); }
+{ return static_cast<pCBenValueSegment>( cValueSegments.GetNextOrNULL(pCurrValueSegment) ); }
 
 inline pLtcBenContainer CBenValue::GetContainer()
 { return GetProperty()->GetContainer(); }
@@ -403,15 +400,15 @@ public: // Methods
 public: // Internal methods
     CBenNamedObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt);
+    pCUtListElmt pPrevNamedObjectListElmt);
     const char * GetName() { return csName.data(); }
 
     const char * GetNameCStr() { return csName.c_str(); }
 
     void SetPosition(BenContainerPos Pos) { cPos = Pos; }
-    BenContainerPos GetPosition(void) { return cPos; }
-    size_t GetLength(void) { return csName.length()+ 1; }
-    pCBenNamedObjectListElmt GetNameListElmt() { return &cNameListElmt; }
+    BenContainerPos GetPosition() { return cPos; }
+    size_t GetLength() { return csName.length()+ 1; }
+    CBenNamedObjectListElmt& GetNameListElmt() { return cNameListElmt; }
 
 private: // Data
     std::string csName;
@@ -424,7 +421,7 @@ class CBenPropertyName : public CBenNamedObject
 public: // Internal methods
     CBenPropertyName(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
+    pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
     virtual bool IsPropertyName() SAL_OVERRIDE;
@@ -435,7 +432,7 @@ class CBenTypeName : public CBenNamedObject
 public: // Internal methods
     CBenTypeName(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
+    pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
     virtual bool IsTypeName() SAL_OVERRIDE;

@@ -128,11 +128,11 @@ sal_uInt8* LwpObjectStream::AllocBuffer(sal_uInt16 size)
 {
     if(size<=100)
     {
-        return(m_SmallBuffer);
+        return m_SmallBuffer;
     }
     else
     {
-        return (new sal_uInt8[size]);
+        return new sal_uInt8[size];
     }
 }
 /**
@@ -170,7 +170,7 @@ sal_uInt16 LwpObjectStream::QuickRead(void* buf, sal_uInt16 len)
     memset(buf, 0, len);
     if( len > m_nBufSize - m_nReadPos )
     {
-        assert(false);
+        SAL_WARN("lwp", "read request longer than buffer");
         len = m_nBufSize - m_nReadPos;
     }
     if( m_pContentBuf && len)
@@ -364,7 +364,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
 
                 *pDst++ = 0;
                 DstSize++;
-                // fall thru into next case!
+                // fall through into next case!
 
             case 0xC0:
                 // 1 - 64 bytes of non-zero
@@ -388,12 +388,12 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
             throw BadDecompress();
 
     }
-    return(static_cast<sal_uInt16>(DstSize));
+    return static_cast<sal_uInt16>(DstSize);
 }
 /**
  * @descr  quick read string with 1252
  */
-OUString LwpObjectStream::QuickReadStringPtr(void)
+OUString LwpObjectStream::QuickReadStringPtr()
 {
     sal_uInt16 diskSize;
 

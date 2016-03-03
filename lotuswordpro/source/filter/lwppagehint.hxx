@@ -100,15 +100,15 @@ class LwpPageHint : public LwpDLVList
 {
 public:
     LwpPageHint(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpPageHint(){}
     void Read() SAL_OVERRIDE;
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     sal_uInt16 GetPageNumber(){return m_nPageNumber;}
-    LwpObjectID* GetCurrentSectionID(){return &m_CurrentSection;}
+    LwpObjectID& GetCurrentSectionID(){return m_CurrentSection;}
     sal_uInt16 GetCurrentSectionPage(){return m_nCurrentSectionPage;}
-    LwpObjectID* GetPageLayoutID(){ return &m_PageLayout;}
+    LwpObjectID& GetPageLayoutID(){ return m_PageLayout;}
     sal_uInt16 GetLayoutPageNumber(){ return m_nLayoutPageNumber;}
 private:
+    virtual ~LwpPageHint(){}
 
     LwpObjectID m_PageLayout;
     LwpContentHintHead m_ContentHints;

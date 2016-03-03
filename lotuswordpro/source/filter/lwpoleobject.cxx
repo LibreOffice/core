@@ -116,10 +116,10 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
     double fSclGrafWidth = fWidth;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
     double fSclGrafHeight = fHeight;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
 
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
-    if (pLayout && pLayout->IsFrame())
+    rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
+    if (xLayout.is() && xLayout->IsFrame())
     {
-        LwpFrameLayout* pMyFrameLayout = static_cast<LwpFrameLayout*>(pLayout);
+        LwpFrameLayout* pMyFrameLayout = static_cast<LwpFrameLayout*>(xLayout.get());
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
         LwpLayoutGeometry* pFrameGeo = pMyFrameLayout->GetGeometry();
 

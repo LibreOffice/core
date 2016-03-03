@@ -77,8 +77,8 @@ LwpObjectID::LwpObjectID(sal_uInt32 low, sal_uInt16 high)
 */
 sal_uInt32 LwpObjectID::Read(LwpSvStream *pStrm)
 {
-    *pStrm >> m_nLow;
-    *pStrm >> m_nHigh;
+    pStrm->ReadUInt32( m_nLow );
+    pStrm->ReadUInt16( m_nHigh );
     return DiskSize();
 }
 /**
@@ -104,7 +104,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
         return Read(pStrm);
     }
 
-    *pStrm >> m_nIndex;
+    pStrm->ReadUInt8( m_nIndex );
 
     if (m_nIndex)
     {
@@ -112,14 +112,14 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
         //m_nLow = index;       //note the m_nLow stores the index instead of the actual time id
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
-        LwpIndexManager* pIdxMgr = pFactory->GetIndexManager();
-        m_nLow =  pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
+        LwpIndexManager& rIdxMgr = pFactory->GetIndexManager();
+        m_nLow = rIdxMgr.GetObjTime( (sal_uInt16)m_nIndex);
     }
     else
     {
-        *pStrm >> m_nLow;
+        pStrm->ReadUInt32( m_nLow );
     }
-    *pStrm >> m_nHigh;
+    pStrm->ReadUInt16( m_nHigh );
     return DiskSizeIndexed();
 }
 
@@ -143,8 +143,8 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         //m_nLow = index;       //note the m_nLow stores the index instead of the actual time id
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
-        LwpIndexManager* pIdxMgr = pFactory->GetIndexManager();
-        m_nLow = pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
+        LwpIndexManager& rIdxMgr = pFactory->GetIndexManager();
+        m_nLow = rIdxMgr.GetObjTime( (sal_uInt16)m_nIndex);
     }
     else
         m_nLow = pStrm->QuickReaduInt32();
@@ -183,32 +183,25 @@ sal_uInt32 LwpObjectID::DiskSizeIndexed() const
         + sizeof(m_nHigh);
 }
 /**
- * @descr       return the size of object id with format: low(4bytes)+high(2bytes)
-*/
-sal_uInt32 LwpObjectID::DiskSize() const
-{
-    return sizeof(m_nLow) + sizeof(m_nHigh);
-}
-/**
  * @descr       get object from object factory per the object id
 */
-LwpObject* LwpObjectID::obj(VO_TYPE tag) const
+rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
 {
-    LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
-    LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
-    if(IsNull())
+    if (IsNull())
     {
         return NULL;
     }
-    LwpObject* pObj = pObjMgr->QueryObject(*this);
-    if( tag!=VO_INVALID &&  (pObj) )
+    LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
+    LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
+    rtl::Reference<LwpObject> pObj = pObjMgr->QueryObject(*this);
+    if( tag!=VO_INVALID &&  (pObj.is()) )
     {
         if(static_cast<sal_uInt32>(tag) != pObj->GetTag())
         {
-            pObj=NULL;
+            pObj.clear();
         }
     }
-    return(pObj);
+    return pObj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

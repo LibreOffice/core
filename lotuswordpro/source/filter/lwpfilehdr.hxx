@@ -76,15 +76,15 @@ public:
     static sal_uInt16 m_nFileRevision;
     sal_uInt32 Read(LwpSvStream *pStrm);
     sal_uInt32 GetRootIndexOffset();
-    LwpObjectID* GetDocID();
+    LwpObjectID& GetDocID();
 };
 inline sal_uInt32 LwpFileHeader::GetRootIndexOffset()
 {
     return m_nRootIndexOffset;
 }
-inline LwpObjectID* LwpFileHeader::GetDocID()
+inline LwpObjectID& LwpFileHeader::GetDocID()
 {
-    return &m_cDocumentID;
+    return m_cDocumentID;
 }
 
 #endif

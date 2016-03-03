@@ -118,13 +118,6 @@ LwpObjectFactory::~LwpObjectFactory()
 */
 void LwpObjectFactory::ClearObjectMap()
 {
-    LwpIdToObjMap::iterator it = m_IdToObjList.begin();
-    while( it!=m_IdToObjList.end() )
-    {
-        delete it->second;
-        it->second = NULL;
-        ++it;
-    }
     m_IdToObjList.clear();
 }
 /**
@@ -138,11 +131,11 @@ void LwpObjectFactory::ReadIndex(LwpSvStream* pStrm)
 /**
  * @descr       create all kinds of objects except lwp7
 */
-LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr)
+rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr)
 {
-    LwpObject* newObj = NULL;
+    rtl::Reference<LwpObject> newObj;
     m_nNumObjs++;
-    assert(type<300);
+    SAL_WARN_IF(type>=300, "lwp", "invalid type: " << type);
     switch(type)
     {
         case VO_DOCUMENT:
@@ -673,27 +666,31 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
         default:
         {
             //Unknown object type
-            assert(false);
             newObj = NULL;
             break;
         }
     }
-    if(newObj)
+    if (newObj.is())
     {
         newObj->QuickRead();
-        m_IdToObjList.insert(LwpIdToObjMap::value_type(*objHdr.GetID(), newObj));
+        auto result = m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        if (!result.second)
+        {
+            SAL_WARN("lwp", "clearing duplicate object");
+            newObj.clear();
+        }
     }
 
-    return(newObj);
+    return newObj;
 }
 /**
  * @descr       query object by object id
  *          object is created if not in the factory
 */
-LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
+rtl::Reference<LwpObject> LwpObjectFactory::QueryObject(const LwpObjectID &objID)
 {
-    LwpObject* obj = FindObject( objID );
-    if(!obj)
+    rtl::Reference<LwpObject> obj = FindObject( objID );
+    if(!obj.is())
     {
         //Read the object from file
         sal_uInt32 nStreamOffset = m_IndexMgr.GetObjOffset(objID);
@@ -707,14 +704,19 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
         if (!objHdr.Read(*m_pSvStream))
             return NULL;
 
-        LwpObjectID* pId = objHdr.GetID();
-        if (pId && (*pId != objID))
+        LwpObjectID& rId = objHdr.GetID();
+        if (rId != objID)
         {
             OSL_FAIL("apparently incorrect objid, invalidating");
             return NULL;
         }
 
+        if (std::find(m_aObjsIDInCreation.begin(), m_aObjsIDInCreation.end(), objID) != m_aObjsIDInCreation.end())
+            throw std::runtime_error("recursion in object creation");
+
+        m_aObjsIDInCreation.push_back(objID);
         obj = CreateObject(objHdr.GetTag(), objHdr);
+        m_aObjsIDInCreation.pop_back();
     }
     return obj;
 }
@@ -722,11 +724,11 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
 /**
  * @descr       find object in the factory per the object id
 */
-LwpObject* LwpObjectFactory::FindObject(const LwpObjectID &objID)
+rtl::Reference<LwpObject> LwpObjectFactory::FindObject(const LwpObjectID &objID)
 {
     LwpIdToObjMap::const_iterator it =  m_IdToObjList.find(objID);
     if (it != m_IdToObjList.end()) {
-        return((*it).second);
+        return (*it).second;
     }
     else
     {
@@ -738,10 +740,7 @@ LwpObject* LwpObjectFactory::FindObject(const LwpObjectID &objID)
 */
 void LwpObjectFactory::ReleaseObject(const LwpObjectID &objID)
 {
-    LwpObject* obj = FindObject( objID );
     m_IdToObjList.erase(objID);
-    if( obj )
-        delete obj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

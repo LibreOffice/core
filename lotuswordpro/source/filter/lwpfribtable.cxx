@@ -73,12 +73,14 @@ void LwpFribTable::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 LwpSuperTableLayout* LwpFribTable::GetSuperTable()
 {
-    return static_cast<LwpSuperTableLayout*>(m_objTable.obj());
+    return dynamic_cast<LwpSuperTableLayout*>(m_objTable.obj().get());
 }
 
 void LwpFribTable::RegisterNewStyle()
 {
-    GetSuperTable()->RegisterNewStyle();
+    LwpSuperTableLayout* pSuper = GetSuperTable();
+    if (pSuper)
+        pSuper->RegisterNewStyle();
     XFParaStyle* pOldStyle = m_pPara->GetXFParaStyle();
     if(HasNextFrib())
     {
@@ -89,7 +91,7 @@ void LwpFribTable::RegisterNewStyle()
             XFParaStyle* pParaStyle = new XFParaStyle;
             *pParaStyle = *(pOldStyle);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
         }
     }
 }
@@ -98,17 +100,19 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
 {
     XFContentContainer* pXFContentContainer = pCont;
     LwpSuperTableLayout* pSuper = GetSuperTable();
+    if (!pSuper)
+        return;
     sal_uInt8 nType = pSuper->GetRelativeType();
-    LwpVirtualLayout* pContainer = pSuper->GetContainerLayout();
-    if (!pContainer)
+    rtl::Reference<LwpVirtualLayout> xContainer(pSuper->GetContainerLayout());
+    if (!xContainer.is())
         return;
     if ( LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
-        && !pContainer->IsCell())
+        && !xContainer->IsCell())
     {
         pXFContentContainer = m_pPara->GetXFContainer();
         //delete the additional blank para, 06/28/2005
-        XFParagraph* pCurrPara = m_pPara->GetFribs()->GetXFPara();
-        if(!pCurrPara->HasContents())
+        XFParagraph* pCurrPara = m_pPara->GetFribs().GetXFPara();
+        if (pXFContentContainer && !pCurrPara->HasContents())
         {
             if(pXFContentContainer->GetLastContent() == pCurrPara)
             {
@@ -120,14 +124,16 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
     else if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {
         //same page as text and in frame
-        if(pContainer->IsFrame())
+        if (xContainer->IsFrame())
         {
             pXFContentContainer = m_pPara->GetXFContainer();
         }
-        else if(pContainer->IsCell())
+        else if (xContainer->IsCell())
         {
             //same page as text and in cell, get the first xfpara
-            XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
+            rtl::Reference<XFContent> first(
+                pCont->FindFirstContent(enumXFContentPara));
+            XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
             if(pXFFirtPara)
                 pXFContentContainer = pXFFirtPara;
         }
@@ -138,18 +144,20 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
         sChangeID = pChangeMgr->GetChangeID(this);
-        if (!sChangeID.isEmpty())
+        if (!sChangeID.isEmpty() && pXFContentContainer)
         {
             XFChangeStart* pChangeStart = new XFChangeStart;
             pChangeStart->SetChangeID(sChangeID);
             pXFContentContainer->Add(pChangeStart);
         }
     }
-    pSuper->XFConvert(pXFContentContainer);
+
+    if (pXFContentContainer)
+        pSuper->XFConvert(pXFContentContainer);
 
     if(m_bRevisionFlag)
     {
-        if (!sChangeID.isEmpty())
+        if (!sChangeID.isEmpty() && pXFContentContainer)
         {
             XFChangeEnd* pChangeEnd = new XFChangeEnd;
             pChangeEnd->SetChangeID(sChangeID);
@@ -163,7 +171,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         XFParagraph* pXFPara = new XFParagraph();
         pXFPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pXFPara);
-        m_pPara->GetFribs()->SetXFPara(pXFPara);
+        m_pPara->GetFribs().SetXFPara(pXFPara);
     }
 
 }

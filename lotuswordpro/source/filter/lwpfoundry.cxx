@@ -74,6 +74,9 @@
 #include "lwpcharacterstyle.hxx"
 #include "lwpglobalmgr.hxx"
 
+#include <osl/diagnose.h>
+
+
 LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
     : m_pDoc(pDoc)
     , m_bRegisteredAll(false)
@@ -108,7 +111,7 @@ void LwpFoundry::Read(LwpObjectStream *pStrm)
 {
     if (!m_pDoc->IsChildDoc())
     {
-        m_VerMgr.Read(pStrm);
+        LwpVersionManager::Read(pStrm);
     }
     m_ObjMgr.Read(pStrm);
 
@@ -195,59 +198,56 @@ void LwpFoundry::RegisterAllLayouts()
     m_bRegisteredAll = true;
 
     //Register CellStyle
-    LwpObject* pStyle = m_CellStyle.obj();
-    if( pStyle )
+    rtl::Reference<LwpObject> pStyle = m_CellStyle.obj();
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
     //register content page layout list: Layout
     pStyle = m_Layout.obj();
-    if( pStyle )
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
     //Register page style layout list: PageStyle, such as "Default Page"
     pStyle = m_PageStyle.obj();
-    if( pStyle )
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
     //Register FrameStyle
     pStyle = m_FrameStyle.obj();
-    if( pStyle )
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
 }
 
 LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
 {
-    LwpDLVListHeadHolder* pHeadHolder= static_cast
-                    <LwpDLVListHeadHolder*>(m_BookMarkHead.obj());
-    LwpObjectID* pObjID = pHeadHolder->GetHeadID();
-    LwpBookMark* pBookMark;
-    if (pObjID)
-        pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
-    else
-        return NULL;
+    LwpDLVListHeadHolder* pHeadHolder= dynamic_cast
+                    <LwpDLVListHeadHolder*>(m_BookMarkHead.obj().get());
+
+    if (!pHeadHolder)
+        return nullptr;
+
+    LwpObjectID& rObjID = pHeadHolder->GetHeadID();
+    LwpBookMark* pBookMark = dynamic_cast<LwpBookMark*>(rObjID.obj().get());
 
     while (pBookMark)
     {
         if (pBookMark->IsRightMarker(objMarker))
             return pBookMark;
-        pObjID = pBookMark->GetNext();
-        if (pObjID)
-            pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
-        else
-            return NULL;
+        rObjID = pBookMark->GetNext();
+        pBookMark = dynamic_cast<LwpBookMark*>(rObjID.obj().get());
     }
     return NULL;
 }
@@ -258,7 +258,7 @@ LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
 */
 LwpContent* LwpFoundry::EnumContents(LwpContent * pContent)
 {
-    return GetContentManager()->EnumContents(pContent);
+    return GetContentManager().EnumContents(pContent);
 }
 
 /**
@@ -276,11 +276,11 @@ LwpSection* LwpFoundry::EnumSections(LwpSection * pSection)
 */
 LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 {
-    LwpVersionedPointer * pPointer = static_cast<LwpVersionedPointer *>(m_DefaultTextStyle.obj());
+    LwpVersionedPointer * pPointer = dynamic_cast<LwpVersionedPointer *>(m_DefaultTextStyle.obj().get());
     if (!pPointer)
         return NULL;
 
-    return pPointer->GetPointer();
+    return &pPointer->GetPointer();
 }
 
 /**
@@ -290,16 +290,16 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 LwpObjectID * LwpFoundry::FindParaStyleByName(const OUString& name)
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = static_cast<LwpDLVListHeadHolder*>(GetTextStyleHead()->obj());
+    LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(GetTextStyleHead().obj().get());
     if(pParaStyleHolder)
     {
-        LwpTextStyle* pParaStyle = static_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID()->obj());
+        LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID().obj().get());
         while(pParaStyle)
         {
-            OUString strName = pParaStyle->GetName()->str();
+            OUString strName = pParaStyle->GetName().str();
             if(strName == name)
-                return pParaStyle->GetObjectID();
-            pParaStyle = static_cast<LwpTextStyle*>(pParaStyle->GetNext()->obj());
+                return &pParaStyle->GetObjectID();
+            pParaStyle = dynamic_cast<LwpTextStyle*>(pParaStyle->GetNext().obj().get());
         }
     }
 
@@ -408,8 +408,8 @@ LwpContent* LwpContentManager::EnumContents(LwpContent* pContent)
 {
     if(pContent)
         return pContent->GetNextEnumerated();
-    LwpVersionedPointer* pPointer = static_cast<LwpVersionedPointer*>(m_EnumHead.obj());
-    return pPointer ? static_cast<LwpContent*>(pPointer->GetPointer()->obj()) : NULL;
+    LwpVersionedPointer* pPointer = dynamic_cast<LwpVersionedPointer*>(m_EnumHead.obj().get());
+    return pPointer ? dynamic_cast<LwpContent*>(pPointer->GetPointer().obj().get()) : nullptr;
 }
 
 void LwpPieceManager::Read(LwpObjectStream *pStrm)
@@ -459,15 +459,15 @@ void LwpOrderedObjectManager::Read(LwpObjectStream *pStrm)
 LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 {
     // If Last has a next, return it.
-    if(pLast && !pLast->GetNext()->IsNull())
-        return static_cast<LwpOrderedObject*>(pLast->GetNext()->obj());
+    if(pLast && !pLast->GetNext().IsNull())
+        return dynamic_cast<LwpOrderedObject*>(pLast->GetNext().obj().get());
 
     LwpListList* pList = NULL;
     if(pLast)
     {
         // We're at the end of Last's list (not Liszt's list).
         // Start with the next active list
-        pList = static_cast<LwpListList*>(pLast->GetListList()->obj());
+        pList = dynamic_cast<LwpListList*>(pLast->GetListList().obj().get());
         pList= GetNextActiveListList(pList);
     }
     else
@@ -478,7 +478,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 
     if(pList)
     {
-        return static_cast<LwpOrderedObject*>(pList->GetHead()->obj());
+        return dynamic_cast<LwpOrderedObject*>(pList->GetHead().obj().get());
     }
 
     return NULL;
@@ -491,25 +491,23 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
 {
     LwpListList* pList = NULL;
-    LwpContent* pContent = NULL;
     if(pLast)
-        pList = static_cast<LwpListList*>(pLast->GetNext()->obj());
+        pList = dynamic_cast<LwpListList*>(pLast->GetNext().obj().get());
     else
     {
-        LwpDLVListHeadHolder* pHeadHolder= static_cast<LwpDLVListHeadHolder*>(m_Head.obj());
+        LwpDLVListHeadHolder* pHeadHolder= dynamic_cast<LwpDLVListHeadHolder*>(m_Head.obj().get());
         if(pHeadHolder)
         {
-            pList = static_cast<LwpListList*>(pHeadHolder->GetHeadID()->obj());
+            pList = dynamic_cast<LwpListList*>(pHeadHolder->GetHeadID().obj().get());
         }
     }
 
     while(pList)
     {
-        pContent = static_cast<LwpContent*>(pList->GetObject()->obj());
-        if(pContent && pContent->HasNonEmbeddedLayouts() &&
-            !pContent->IsStyleContent())
+        LwpContent* pContent = dynamic_cast<LwpContent*>(pList->GetObject().obj().get());
+        if (pContent && pContent->HasNonEmbeddedLayouts() && !pContent->IsStyleContent())
             return pList;
-        pList = static_cast<LwpListList*>(pList->GetNext()->obj());
+        pList = dynamic_cast<LwpListList*>(pList->GetNext().obj().get());
     }
     return NULL;
 }
@@ -524,7 +522,6 @@ LwpStyleManager::~LwpStyleManager()
     m_StyleList.clear();
 }
 
-#include "xfilter/xfstylemanager.hxx"
 /*
 VO_PARASTYLE/VO_CHARACTERSTYLE call this method to add its created style to XFStyleManager
 1. Add the style to XFStyleManager, and return the <office:styles> style name
@@ -537,7 +534,7 @@ IXFStyle* LwpStyleManager::AddStyle(LwpObjectID styleObjID, IXFStyle* pStyle)
     assert(pStyle);
     //pStyle may change if same style is found in XFStyleManager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pStyle = pXFStyleManager->AddStyle(pStyle);
+    pStyle = pXFStyleManager->AddStyle(pStyle).m_pStyle;
     m_StyleList.insert(LwpStyleMap::value_type(styleObjID, pStyle));
     return pStyle;
 }

@@ -87,8 +87,8 @@ private:
     LwpAtomHolder m_SelectedPages;
 
 public:
-    void Read(LwpObjectStream* pStrm);
-    void Skip(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream* pStrm);
+    static void Skip(LwpObjectStream *pStrm);
 };
 #endif
 

@@ -222,7 +222,7 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_PAGEBREAK:
         {
             LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-            LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
+            LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout().obj().get());
             if(pLayout)
             {
                 pPageBreak->ParseLayout();
@@ -269,9 +269,9 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_HARDSPACE:
         {
             OUString sHardSpace(sal_Unicode(0x00a0));
-            LwpHyperlinkMgr* pHyperlink =
-                    m_pPara->GetStory()->GetHyperlinkMgr();
-            if (pHyperlink->GetHyperlinkFlag())
+            LwpStory *pStory = m_pPara->GetStory();
+            LwpHyperlinkMgr* pHyperlink = pStory ? pStory->GetHyperlinkMgr() : nullptr;
+            if (pHyperlink && pHyperlink->GetHyperlinkFlag())
                 pFrib->ConvertHyperLink(m_pXFPara,pHyperlink,sHardSpace);
             else
                 pFrib->ConvertChars(m_pXFPara,sHardSpace);
@@ -286,12 +286,17 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_FRAME:
         {
             LwpFribFrame* frameFrib= static_cast<LwpFribFrame*>(pFrib);
-            LwpObject* pLayout = frameFrib->GetLayout();
-            if (pLayout && pLayout->GetTag() == VO_DROPCAPLAYOUT)
-                m_pPara->GetFoundry()->GetDropcapMgr()->SetXFPara(m_pXFPara);
+            rtl::Reference<LwpObject> pLayout = frameFrib->GetLayout();
+            if (pLayout.is() && pLayout->GetTag() == VO_DROPCAPLAYOUT)
+            {
+                LwpFoundry* pFoundry = m_pPara->GetFoundry();
+                LwpDropcapMgr* pMgr = pFoundry ? pFoundry->GetDropcapMgr() : nullptr;
+                if (pMgr)
+                    pMgr->SetXFPara(m_pXFPara);
+            }
             frameFrib->XFConvert(m_pXFPara);
-        }
             break;
+        }
         case FRIB_TAG_CHBLOCK:
         {
             LwpFribCHBlock* chbFrib = static_cast<LwpFribCHBlock*>(pFrib);
@@ -397,7 +402,7 @@ void LwpFribPtr::FindLayouts()
                             //StartWithinColume type not support now
                             break;
                         }
-                        LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
+                        LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
                         if (pStory)
                             pStory->AddPageLayout(pSection->GetPageLayout());
                     }
@@ -408,10 +413,10 @@ void LwpFribPtr::FindLayouts()
             case FRIB_TAG_PAGEBREAK:
             {
                 LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-                LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
+                LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout().obj().get());
                 if(pLayout)
                 {
-                    LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
+                    LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
                     if (pStory)
                         pStory->AddPageLayout(pLayout);
                 }
@@ -607,7 +612,7 @@ void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
             XFTextStyle* pFribStyle = pXFStyleManager->FindTextStyle(pFrib->GetStyleName());
             pFribStyle->GetFont()->SetFontSize(0);
 
-            LwpDropcapLayout* pObj = dynamic_cast<LwpDropcapLayout*>(pStory->GetLayoutsWithMe()->GetOnlyLayout()->obj());
+            LwpDropcapLayout* pObj = dynamic_cast<LwpDropcapLayout*>(pStory->GetLayoutsWithMe().GetOnlyLayout().obj().get());
             if (pObj)
                 pObj->SetChars(nLen);
         }
@@ -642,7 +647,7 @@ bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLay
             case FRIB_TAG_PAGEBREAK:
             {
                 LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-                pLayout = dynamic_cast<LwpVirtualLayout*>(pPageBreak->GetLayout()->obj());
+                pLayout = dynamic_cast<LwpVirtualLayout*>(pPageBreak->GetLayout().obj().get());
                 break;
             }
             default:

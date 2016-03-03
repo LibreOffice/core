@@ -170,7 +170,7 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
 
 bool LwpTextAttributeOverride::IsHighlight()
 {
-    return (m_nValues & TAO_HIGHLIGHT);
+    return (m_nValues & TAO_HIGHLIGHT) != 0;
 }
 
 /*class LwpKinsokuOptsOverride*/
@@ -386,12 +386,10 @@ LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     , m_pParaSpacingAbove(0)
     , m_pParaSpacingBelow(0)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpSpacingCommonOverride> pSpacing(::clone(rOther.m_pSpacing));
-    std::auto_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(::clone(rOther.m_pAboveLineSpacing));
-    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingAbove(::clone(rOther.m_pParaSpacingAbove));
-    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingBelow(::clone(rOther.m_pParaSpacingBelow));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<LwpSpacingCommonOverride> pSpacing(::clone(rOther.m_pSpacing));
+    std::unique_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(::clone(rOther.m_pAboveLineSpacing));
+    std::unique_ptr<LwpSpacingCommonOverride> pParaSpacingAbove(::clone(rOther.m_pParaSpacingAbove));
+    std::unique_ptr<LwpSpacingCommonOverride> pParaSpacingBelow(::clone(rOther.m_pParaSpacingBelow));
     m_pSpacing = pSpacing.release();
     m_pAboveLineSpacing = pAboveLineSpacing.release();
     m_pParaSpacingAbove = pParaSpacingAbove.release();
@@ -469,9 +467,7 @@ LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
     , m_pBackgroundStuff(0)
     , m_nType(rOther.m_nType)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpBackgroundStuff> pBackgroundStuff(::clone(rOther.m_pBackgroundStuff));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<LwpBackgroundStuff> pBackgroundStuff(::clone(rOther.m_pBackgroundStuff));
     m_pBackgroundStuff = pBackgroundStuff.release();
 }
 

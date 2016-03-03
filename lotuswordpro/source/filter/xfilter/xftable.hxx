@@ -72,10 +72,6 @@ class XFTable : public XFContent
 public:
     XFTable();
 
-    XFTable(const XFTable& other);
-
-    XFTable& operator=(const XFTable& other);
-
     virtual ~XFTable();
 
 public:
@@ -121,7 +117,7 @@ private:
     OUString   m_strName;
     bool    m_bSubTable;
     XFCell      *m_pOwnerCell;
-    XFContentContainer  m_aHeaderRows;
+    rtl::Reference<XFContentContainer> m_aHeaderRows;
     std::map<sal_uInt16, XFRow*>  m_aRows;
     std::map<sal_Int32,OUString>   m_aColumns;
     OUString   m_strDefCellStyle;

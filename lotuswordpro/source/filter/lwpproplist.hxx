@@ -73,13 +73,14 @@ class LwpPropListElement : public LwpDLVList
 {
 public:
     LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
-    virtual ~LwpPropListElement(){}
     void Read() SAL_OVERRIDE;
     bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
     LwpAtomHolder GetValue(){return m_Value;}
     LwpAtomHolder GetName(){return m_Name;}
 private:
+    virtual ~LwpPropListElement(){}
+
     LwpAtomHolder m_Name;
     LwpAtomHolder m_Value;
 };

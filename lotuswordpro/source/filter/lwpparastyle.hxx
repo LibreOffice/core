@@ -86,8 +86,8 @@ public:
 
     virtual void    Apply(XFParaStyle *pStrm);
     // 01/26/2005
-    void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
-    void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
+    static void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
+    static void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
     //end
     static void ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride* pAlign);
     static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpIndentOverride* pIndent);
@@ -103,7 +103,7 @@ public:
     LwpParaBorderOverride* GetParaBorder() const;
     LwpBreaksOverride* GetBreaks() const;
     LwpTabOverride* GetTabOverride() const;
-    LwpBulletOverride* GetBulletOverride() const;
+    LwpBulletOverride* GetBulletOverride() const { return m_pBulletOverride;}
     LwpNumberingOverride* GetNumberingOverride() const;
 public:
     static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);

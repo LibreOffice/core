@@ -90,7 +90,7 @@ public:
     LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_LAYOUT;}
-    LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;}
+    LwpObjectID& GetColumnLayoutHead(){return m_ColumnLayout;}
     void RegisterStyle() SAL_OVERRIDE;
     LwpTable *  GetTable();
     LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;}
@@ -102,7 +102,7 @@ public:
     {
         if (nRow >= m_nRows || nCol >= m_nCols)
             return;
-        m_WordProCellsMap[nRow * m_nCols + nCol] = pCell;
+        m_WordProCellsMap[static_cast<size_t>(nRow) * m_nCols + nCol] = pCell;
     };
 protected:
     void Read() SAL_OVERRIDE;
@@ -118,7 +118,6 @@ protected:
 private:
     //CColumnLayoutHead cColumnLayout;
     LwpObjectID m_ColumnLayout;
-    OUString m_FrameStyleName;
     LwpCellLayout * m_pDefaultCellLayout;
     OUString m_DefaultColumnStyleName;
     OUString m_DefaultRowStyleName;
@@ -142,7 +141,7 @@ private:
                 sal_uInt8 nEndCol,sal_uInt16 nRowID);
     void ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     sal_uInt16 ConvertHeadingRow(XFTable* pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow);
-    bool  FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
+    static bool FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
     void SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
                 sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark);
 

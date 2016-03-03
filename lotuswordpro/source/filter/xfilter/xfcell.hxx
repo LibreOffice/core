@@ -76,10 +76,6 @@ class XFCell : public XFContentContainer
 public:
     XFCell();
 
-    XFCell(const XFCell& other);
-
-    XFCell& operator=(const XFCell& other);
-
     virtual ~XFCell();
 
 public:
@@ -88,7 +84,7 @@ public:
     /**
      * @descr   Add content for table cell.
      */
-    void    Add(IXFContent *pContent) SAL_OVERRIDE;
+    void    Add(XFContent *pContent) SAL_OVERRIDE;
 
     /**
      * @descr   If cell spans more the one column, then set column span.
@@ -168,7 +164,6 @@ private:
     sal_Int32   m_nRepeated;
     enumXFValueType m_eValueType;
     OUString   m_strValue;
-    OUString   m_strDisplay;
     OUString   m_strFormula;
     bool    m_bProtect;
 };

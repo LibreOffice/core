@@ -158,7 +158,7 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
 bool    LwpBorderStuff::HasSide(sal_uInt16 side)
 {
-    return m_nSides&side;
+    return (m_nSides & side) != 0;
 }
 
 sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)

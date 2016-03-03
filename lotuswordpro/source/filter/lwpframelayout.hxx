@@ -114,8 +114,8 @@ public:
     LwpFrameLink();
     ~LwpFrameLink();
     void Read(LwpObjectStream* pStrm);
-    LwpObjectID* GetNextLayout(){ return &m_NextLayout;}
-    LwpObjectID* GetPreviousLayout(){ return &m_PreviousLayout;}
+    LwpObjectID& GetNextLayout(){ return m_NextLayout;}
+    LwpObjectID& GetPreviousLayout(){ return m_PreviousLayout;}
 private:
     LwpObjectID m_PreviousLayout;
     LwpObjectID m_NextLayout;

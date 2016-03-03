@@ -58,6 +58,9 @@
  * Table cell.
  ************************************************************************/
 #include "xfcell.hxx"
+
+#include <stdexcept>
+
 #include "xfparagraph.hxx"
 #include "xftable.hxx"
 #include "xfrow.hxx"
@@ -73,55 +76,13 @@ XFCell::XFCell()
     m_bProtect = false;
 }
 
-XFCell::XFCell(const XFCell& other) : XFContentContainer(other)
-{
-    if( other.m_pSubTable )
-        m_pSubTable = new XFTable(*other.m_pSubTable);
-    else
-        m_pSubTable = NULL;
-    m_pOwnerRow = NULL;
-    m_nCol = other.m_nCol;
-    m_nColSpaned = other.m_nColSpaned;
-    m_nRepeated = other.m_nRepeated;
-    m_eValueType = other.m_eValueType;
-    m_bProtect = other.m_bProtect;
-    m_strValue = other.m_strValue;
-    m_strDisplay = other.m_strDisplay;
-    m_strFormula = other.m_strFormula;
-}
-
-XFCell& XFCell::operator=(const XFCell& other)
-{
-    if( this == &other )
-        return *this;
-
-    if( m_pSubTable )
-        delete m_pSubTable;
-
-    if( other.m_pSubTable )
-        m_pSubTable = new XFTable(*other.m_pSubTable);
-    else
-        m_pSubTable = NULL;
-    m_pOwnerRow = NULL;
-    m_nCol = other.m_nCol;
-    m_nColSpaned = other.m_nColSpaned;
-    m_nRepeated = other.m_nRepeated;
-    m_eValueType = other.m_eValueType;
-    m_bProtect = other.m_bProtect;
-    m_strValue = other.m_strValue;
-    m_strDisplay = other.m_strDisplay;
-    m_strFormula = other.m_strFormula;
-
-    return *this;
-}
-
 XFCell::~XFCell()
 {
     if( m_pSubTable )
         delete m_pSubTable;
 }
 
-void    XFCell::Add(IXFContent *pContent)
+void    XFCell::Add(XFContent *pContent)
 {
     if( m_eValueType != enumXFValueTypeNone )
     {
@@ -133,9 +94,13 @@ void    XFCell::Add(IXFContent *pContent)
         assert(false);
         return;
     }
+    if (!pContent)
+    {
+        throw std::runtime_error("no content");
+    }
     if( pContent->GetContentType() == enumXFContentTable )
     {
-        XFTable *pTable = static_cast<XFTable*>(pContent);
+        XFTable *pTable = dynamic_cast<XFTable*>(pContent);
         if( !pTable )
             return;
         //the sub table will fill all the cell, there can't be other contents.

@@ -91,7 +91,7 @@ LwpCellLayout::~LwpCellLayout()
  */
 LwpTableLayout * LwpCellLayout::GetTableLayout()
 {
-    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent()->obj());
+    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent().obj().get());
     if(!pRow)
     {
         return NULL;
@@ -121,8 +121,9 @@ LwpTable * LwpCellLayout::GetTable()
  */
 void LwpCellLayout::SetCellMap()
 {
-    // this function is called from LwpTableLayout, so it can't be NULL
-    GetTableLayout()->SetWordProCellMap(crowid, ccolid, this);
+    LwpTableLayout * pTableLayout = GetTableLayout();
+    if (pTableLayout)
+        pTableLayout->SetWordProCellMap(crowid, ccolid, this);
 }
 /**
  * @short  Get actual width of this cell layout
@@ -265,14 +266,14 @@ void LwpCellLayout::ApplyBackColor(XFCellStyle *pCellStyle)
  */
 void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
 {
-    LwpLayoutNumerics* pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(cLayNumerics.obj());
+    LwpLayoutNumerics* pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(cLayNumerics.obj().get());
     if (!pLayoutNumerics)
     {
         // if current layout doesn't have format, go to based on layout
-        LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(m_BasedOnStyle.obj());
+        LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(GetBasedOnStyle().get());
         if (pCellLayout)
         {
-            pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject()->obj());
+            pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject().obj().get());
         }
     }
 
@@ -283,7 +284,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
         if (pStyle)
         {
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_NumfmtName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+            m_NumfmtName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
             pCellStyle->SetDataStyle(m_NumfmtName);
         }
     }
@@ -314,7 +315,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
 {
     // if cell layout is aTableID's default cell layout
     // it can't have any content, bypass these code
-    LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj());
+    LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
     if (!pTable)
     {
         assert(false);
@@ -325,13 +326,13 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
 
     // if cell layout is aTableID's default cell layout
     // we should judt its style by current position
-    if (*pTable->GetDefaultCellStyle() == *GetObjectID())
+    if (pTable->GetDefaultCellStyle() == GetObjectID())
     {
-        aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout());
+        aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout().get());
     }
 
     // content of cell
-    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Content.obj());
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Content.obj().get());
     if (pStory)
     {
         pStory->XFConvert(pXFCell);
@@ -347,8 +348,8 @@ LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
     LwpObjectID* pPreStoryID = this->GetPreviousCellStory();
     if (pPreStoryID && !(pPreStoryID->IsNull()))
     {
-        LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY));
-        return dynamic_cast<LwpPara*>(pPreStory->GetLastPara()->obj(VO_PARA));
+        LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());
+        return dynamic_cast<LwpPara*>(pPreStory->GetLastPara().obj(VO_PARA).get());
     }
     else
     {
@@ -422,10 +423,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
 LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
 {
     if (!pTableLayout)
-    {
-        assert(false);
         return enumWholeBorder;
-    }
 
     // get left cell and judge if neighbour border is different
     XFBorders * pBorders = GetXFBorders();
@@ -433,8 +431,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
     {
         return enumWholeBorder;
     }
-    XFBorder *pLeftBorder = pBorders->GetLeft();
-    XFBorder *pBottomBorder = pBorders->GetBottom();
+    XFBorder& rLeftBorder = pBorders->GetLeft();
+    XFBorder& rBottomBorder = pBorders->GetBottom();
     bool bNoLeftBorder = false;
     bool bNoBottomBorder = false;
 
@@ -444,8 +442,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
         XFBorders * pNeighbourBorders = pLeftNeighbour->GetXFBorders();
         if (pNeighbourBorders)
         {
-            XFBorder * pRightBorder = pNeighbourBorders->GetRight();
-            if (*pLeftBorder == *pRightBorder)
+            XFBorder& rRightBorder = pNeighbourBorders->GetRight();
+            if (rLeftBorder == rRightBorder)
             {
                 // for these 2 types cell, left border should be ignored for sake of avoiding duplication border
                 // but if left border is different with right border of left cell
@@ -463,8 +461,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
         XFBorders * pBelowBorders = pBelowNeighbour->GetXFBorders();
         if (pBelowBorders)
         {
-            XFBorder * pTopBorder = pBelowBorders->GetTop();
-            if (*pTopBorder == *pBottomBorder)
+            XFBorder& rTopBorder = pBelowBorders->GetTop();
+            if (rTopBorder == rBottomBorder)
             {
                 // for these 2 types cell, bottom border should be ignored for sake of avoiding duplication border
                 // but if bottom border is different with right border of left cell
@@ -559,7 +557,7 @@ void LwpCellLayout::RegisterDefaultCell()
             }
             pCellStyle->SetBorders(pBorders);
         }
-        m_CellStyleNames[eLoop] = pXFStyleManager->AddStyle(pCellStyle)->GetStyleName();
+        m_CellStyleNames[eLoop] = (pXFStyleManager->AddStyle(pCellStyle)).m_pStyle->GetStyleName();
     }
 }
 /**
@@ -571,8 +569,8 @@ void LwpCellLayout::RegisterDefaultCell()
  */
 void LwpCellLayout::RegisterStyle()
 {
-    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent()->obj());
-    if (!pParent || pParent->GetLayoutType() != LWP_ROW_LAYOUT)
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout *>(GetParent().obj().get()));
+    if (!xParent.is() || xParent->GetLayoutType() != LWP_ROW_LAYOUT)
     {
         // default cell layout, we must register 4 styles for it
         RegisterDefaultCell();
@@ -583,7 +581,6 @@ void LwpCellLayout::RegisterStyle()
     XFCellStyle *pCellStyle = new XFCellStyle();
 
     ApplyPadding(pCellStyle);
-//  ApplyBackColor(pCellStyle);
     ApplyBackGround(pCellStyle);
     ApplyWatermark(pCellStyle);
     ApplyFmtStyle(pCellStyle);
@@ -592,14 +589,14 @@ void LwpCellLayout::RegisterStyle()
     pCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pCellStyle)->GetStyleName();
+    m_StyleName = (pXFStyleManager->AddStyle(pCellStyle)).m_pStyle->GetStyleName();
 
     // content object register styles
-    LwpObject * pObj = m_Content.obj();
-    if (pObj)
+    rtl::Reference<LwpObject> pObj = m_Content.obj();
+    if (pObj.is())
     {
         pObj->SetFoundry(m_pFoundry);
-        pObj->RegisterStyle();
+        pObj->DoRegisterStyle();
     }
 
     //register child layout style
@@ -650,25 +647,25 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
 {
     bool bProtected = false;
     // judge current cell
-    if (IsProtected())
+    if (GetIsProtected())
     {
         bProtected = true;
     }
     else
     {
         // judge base on
-        LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(m_BasedOnStyle.obj());
-        if (pBase && pBase->IsProtected())
+        LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(GetBasedOnStyle().get());
+        if (pBase && pBase->GetIsProtected())
         {
             bProtected = true;
         }
         else
         {
             // judge whole table
-            LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj());
-            LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : NULL;
-            LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : NULL;
-            if (pSuper && pSuper->IsProtected())
+            LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
+            rtl::Reference<LwpTableLayout> xTableLayout(pTable ? pTable->GetTableLayout() : nullptr);
+            LwpSuperTableLayout * pSuper = xTableLayout.is() ? xTableLayout->GetSuperTableLayout() : nullptr;
+            if (pSuper && pSuper->GetIsProtected())
             {
                 bProtected = true;
             }
@@ -696,8 +693,10 @@ LwpConnectedCellLayout::~LwpConnectedCellLayout()
  */
 void LwpConnectedCellLayout::SetCellMap()
 {
-    // this function is called from LwpTableLayout, so it can't be NULL
     LwpTableLayout * pTableLayout = GetTableLayout();
+    if (!pTableLayout)
+        return;
+
     sal_uInt16 nRowSpan = m_nRealrowspan;
 
     for (sal_uInt16 iLoop = 0; iLoop < nRowSpan; iLoop ++)
@@ -730,8 +729,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
     {
         return enumWholeBorder;
     }
-    XFBorder *pLeftBorder = pBorders->GetLeft();
-    XFBorder *pBottomBorder = pBorders->GetBottom();
+    XFBorder& rLeftBorder = pBorders->GetLeft();
+    XFBorder& rBottomBorder = pBorders->GetBottom();
     bool bNoLeftBorder = true;
     bool bNoBottomBorder = true;
 
@@ -749,8 +748,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                 boost::scoped_ptr<XFBorders> pNeighbourBorders(pLeftNeighbour->GetXFBorders());
                 if (pNeighbourBorders)
                 {
-                    XFBorder * pRightBorder = pNeighbourBorders->GetRight();
-                    if (*pLeftBorder != *pRightBorder)
+                    XFBorder& rRightBorder = pNeighbourBorders->GetRight();
+                    if (rLeftBorder != rRightBorder)
                     {
                         // if left border is different with right border of left cell
                         // we should not ignored it
@@ -762,7 +761,11 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
         }
     }
 
-    if ( (nRow + nRowSpan) == pTableLayout->GetTable()->GetRow() )
+    LwpTable* pTable = pTableLayout->GetTable();
+    if (!pTable)
+        throw std::runtime_error("missing table");
+
+    if ( (nRow + nRowSpan) == pTable->GetRow())
     {
         bNoBottomBorder = false;
     }
@@ -776,8 +779,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                 boost::scoped_ptr<XFBorders> pBelowBorders(pBelowNeighbour->GetXFBorders());
                 if (pBelowBorders)
                 {
-                    XFBorder * pTopBorder = pBelowBorders->GetTop();
-                    if (*pTopBorder != *pBottomBorder)
+                    XFBorder& rTopBorder = pBelowBorders->GetTop();
+                    if (rTopBorder != rBottomBorder)
                     {
                         // if bottom border is different with right border of left cell
                         // we should not ignored it
@@ -877,19 +880,19 @@ void LwpHiddenCellLayout::Read()
 
 XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol)
 {
-    if (!cconnectedlayout.obj())
+    if (!cconnectedlayout.obj().is())
         return NULL;
-    LwpConnectedCellLayout* pConnCell = dynamic_cast<LwpConnectedCellLayout* >(cconnectedlayout.obj());
+    LwpConnectedCellLayout* pConnCell = dynamic_cast<LwpConnectedCellLayout* >(cconnectedlayout.obj().get());
 
     if (!pConnCell || nRow < (pConnCell->GetNumrows()+pConnCell->GetRowID()))
         return NULL;
     // if the hidden cell should be displayed for limit of SODC
     // use the default cell layout
     XFCell* pXFCell = NULL;
-    LwpTable *pTable = dynamic_cast<LwpTable *>(aTableID.obj());
+    LwpTable *pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
     if (pTable)
     {
-        LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle()->obj());
+        LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle().obj().get());
         if (pDefault)
         {
             pXFCell = pDefault->ConvertCell(aTableID, nRow, nCol);

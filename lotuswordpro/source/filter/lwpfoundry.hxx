@@ -72,6 +72,7 @@
 #include "lwpbasetype.hxx"
 #include "lwpfont.hxx"
 #include "lwpdropcapmgr.hxx"
+#include <unordered_map>
 
 class LwpDocument;
 class LwpBookMark;
@@ -85,8 +86,8 @@ public:
     LwpVersionManager(){}
     ~LwpVersionManager(){}
 public:
-    void Read(LwpObjectStream *pStrm);
-    void Skip(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream *pStrm);
+    static void Skip(LwpObjectStream *pStrm);
 };
 
 class LwpObjectManager
@@ -121,7 +122,7 @@ private:
     LwpObjectID m_Head;
 public:
     void Read(LwpObjectStream *pStrm);
-    LwpObjectID* GetHeadID() { return &m_Head;}
+    LwpObjectID& GetHeadID() { return m_Head;}
 };
 
 class LwpContent;
@@ -141,8 +142,8 @@ private:
     LwpObjectID m_OleHead;
     LwpObjectID m_OleTail;
 public:
-    inline LwpObjectID* GetContentList() { return &m_ContentList; }
-    inline LwpObjectID* GetGraphicListHead() { return &m_GrapHead; }
+    inline LwpObjectID& GetContentList() { return m_ContentList; }
+    inline LwpObjectID& GetGraphicListHead() { return m_GrapHead; }
     LwpContent* EnumContents(LwpContent* pContent);
 
 public:
@@ -195,7 +196,7 @@ protected:
     LwpObjectID m_Head;
 public:
     void Read(LwpObjectStream *pStrm);
-    LwpObjectID* GetHeadID() { return &m_Head;}
+    LwpObjectID& GetHeadID() { return m_Head;}
     LwpOrderedObject* Enumerate(LwpOrderedObject* pLast);
 protected:
     LwpListList* GetNextActiveListList(LwpListList* pLast);
@@ -262,14 +263,14 @@ private: //file members
 private:
     void ReadStyles(LwpObjectStream *pStrm);
 public:
-    inline LwpContentManager* GetContentManager() { return &m_ContentMgr; }
-    inline LwpObjectID* GetGraphicListHead() { return m_ContentMgr.GetGraphicListHead(); }
-    inline LwpFontManager* GetFontManger() { return &m_FontMgr;}
-    inline LwpObjectID* GetTextStyleHead()  { return &m_TextStyle;}
-    inline LwpObjectID* GetLayout() {return &m_Layout;}
-    inline LwpObjectID* GetBulletManagerID() { return m_BulMgr.GetHeadID();}
+    inline LwpContentManager& GetContentManager() { return m_ContentMgr; }
+    inline LwpObjectID& GetGraphicListHead() { return m_ContentMgr.GetGraphicListHead(); }
+    inline LwpFontManager& GetFontManger() { return m_FontMgr;}
+    inline LwpObjectID& GetTextStyleHead()  { return m_TextStyle;}
+    inline LwpObjectID& GetLayout() {return m_Layout;}
+    inline LwpObjectID& GetBulletManagerID() { return m_BulMgr.GetHeadID();}
     inline LwpDocument* GetDocument(){ return m_pDoc;}
-    inline LwpNumberManager* GetNumberManager() { return &m_NumMgr;}
+    inline LwpNumberManager& GetNumberManager() { return m_NumMgr;}
     LwpObjectID * GetDefaultTextStyle() ;
 private:
     LwpStyleManager* m_pStyleMgr;
@@ -309,7 +310,7 @@ private:
             }
     };
 
-    typedef boost::unordered_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
+    typedef std::unordered_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
     LwpStyleMap m_StyleList;
 public:
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}

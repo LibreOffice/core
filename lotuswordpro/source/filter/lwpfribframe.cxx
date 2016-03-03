@@ -80,7 +80,7 @@ void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 *  @descr:  Get the layout object which the frib points to
 *
 */
-LwpObject* LwpFribFrame::GetLayout()
+rtl::Reference<LwpObject> LwpFribFrame::GetLayout()
 {
     return m_objLayout.obj();
 }
@@ -92,11 +92,11 @@ LwpObject* LwpFribFrame::GetLayout()
 */
 void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
 {
-    LwpObject *pObject = m_objLayout.obj();
+    rtl::Reference<LwpObject> pObject = m_objLayout.obj();
 
-    if (pObject && pObject->GetTag() == VO_DROPCAPLAYOUT)
+    if (pObject.is() && pObject->GetTag() == VO_DROPCAPLAYOUT)
     {
-        LwpDropcapLayout *pLayout = dynamic_cast<LwpDropcapLayout*>(pObject);
+        LwpDropcapLayout *pLayout = dynamic_cast<LwpDropcapLayout*>(pObject.get());
         if (!pLayout)
             return;
         pLayout->RegisterStyle(pFoundry);
@@ -104,11 +104,11 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
     else
     {
         //register frame style
-        LwpPlacableLayout* pLayout = dynamic_cast<LwpPlacableLayout*>(pObject);
+        LwpPlacableLayout* pLayout = dynamic_cast<LwpPlacableLayout*>(pObject.get());
         if (!pLayout)
             return;
         pLayout->SetFoundry(pFoundry);
-        pLayout->RegisterStyle();
+        pLayout->DoRegisterStyle();
 
         //register next frib text style
         sal_uInt8 nType = pLayout->GetRelativeType();
@@ -123,7 +123,7 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
                 XFParaStyle* pParaStyle = new XFParaStyle;
                 *pParaStyle = *(pOldStyle);
                 XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-                m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
+                m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
             }
         }
         //remember the current paragraph font size which will be used in parsing frame
@@ -132,12 +132,12 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
 }
 void LwpFribFrame::SetParaDropcap(LwpPara* pPara)
 {
-    LwpObject *pObject = m_objLayout.obj();
+    rtl::Reference<LwpObject> pObject = m_objLayout.obj();
 
-    if (pObject && pObject->GetTag() == VO_DROPCAPLAYOUT)
+    if (pObject.is() && pObject->GetTag() == VO_DROPCAPLAYOUT)
     {
         pPara->SetParaDropcap(true);
-        pPara->SetDropcapLayout(dynamic_cast<LwpDropcapLayout*>(pObject));
+        pPara->SetDropcapLayout(dynamic_cast<LwpDropcapLayout*>(pObject.get()));
     }
     else
         pPara->SetParaDropcap(false);
@@ -150,22 +150,24 @@ void LwpFribFrame::SetParaDropcap(LwpPara* pPara)
 void LwpFribFrame::XFConvert(XFContentContainer* pCont)
 {
     XFContentContainer* pXFContentContainer = pCont;
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetLayout());
+    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetLayout().get());
     if (!pLayout)
         return;
     sal_uInt8 nType = pLayout->GetRelativeType();
     if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {
-        LwpVirtualLayout* pContainerLayout = pLayout->GetContainerLayout();
-        if(pContainerLayout && pContainerLayout->IsFrame())
+        rtl::Reference<LwpVirtualLayout> xContainerLayout(pLayout->GetContainerLayout());
+        if (xContainerLayout.is() && xContainerLayout->IsFrame())
         {
             //same page as text and in frame
             pXFContentContainer = m_pPara->GetXFContainer();
         }
-        else if(pContainerLayout && pContainerLayout->IsCell())
+        else if (xContainerLayout.is() && xContainerLayout->IsCell())
         {
             //same page as text and in cell, get the first xfpara
-            XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
+            rtl::Reference<XFContent> first(
+                pCont->FindFirstContent(enumXFContentPara));
+            XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
             if(pXFFirtPara)
                 pXFContentContainer = pXFFirtPara;
         }
@@ -202,7 +204,7 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         XFParagraph* pXFPara = new XFParagraph();
         pXFPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pXFPara);
-        m_pPara->GetFribs()->SetXFPara(pXFPara);
+        m_pPara->GetFribs().SetXFPara(pXFPara);
     }
 
 }
@@ -243,7 +245,7 @@ void LwpFribRubyFrame::XFConvert(XFContentContainer* /*pCont*/)
 
 LwpRubyLayout* LwpFribRubyFrame::GetLayout()
 {
-    return dynamic_cast<LwpRubyLayout*>(m_objLayout.obj());
+    return dynamic_cast<LwpRubyLayout*>(m_objLayout.obj().get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,9 +61,8 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDROPCAP_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
-class XFDropcap : public IXFProperty
+class XFDropcap
 {
 public:
     XFDropcap()
@@ -80,7 +79,7 @@ public:
 
     void    Reset();
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFDropcap& dc1, XFDropcap& dc2);
     friend bool operator!=(XFDropcap& dc1, XFDropcap& dc2);

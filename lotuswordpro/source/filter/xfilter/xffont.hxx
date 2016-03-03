@@ -60,6 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONT_HXX
 
+#include <sal/config.h>
+
+#include <salhelper/simplereferenceobject.hxx>
+
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"
 
@@ -111,7 +115,7 @@
  * font underline
  * font underline color
  */
-class XFFont
+class XFFont: public salhelper::SimpleReferenceObject
 {
 public:
     XFFont();
@@ -262,6 +266,8 @@ public:
     friend bool operator!=(XFFont& f1, XFFont& f2);
     friend class    XFFontFactory;
 private:
+    virtual ~XFFont() {}
+
     OUString   m_strFontName;
     OUString   m_strFontNameAsia;
     OUString   m_strFontNameComplex;

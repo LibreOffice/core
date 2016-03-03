@@ -164,8 +164,9 @@ class LwpDocData : public LwpObject
 {
 public:
     LwpDocData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDocData();
 private:
+    virtual ~LwpDocData();
+
     LwpDocOptions m_DocOptions;
     LwpDocInfo m_DocInfo;
     LwpDocControl m_DocControl;
@@ -175,8 +176,8 @@ private:
     LtTm m_nLastRevisionTime;
     LtTm m_nTotalEditTime;
 private:
-    OUString DateTimeToOUString(LtTm& dt);
-    OUString TimeToOUString(LtTm& dt);
+    static OUString DateTimeToOUString(LtTm& dt);
+    static OUString TimeToOUString(LtTm& dt);
 
 public:
     void Read() SAL_OVERRIDE;
