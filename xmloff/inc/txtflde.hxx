@@ -267,8 +267,7 @@ protected:
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         sal_uInt16 nValuePrefix,
-        const OUString& sValue,  /// attribute value
-        bool bOmitEmpty = false); /// omit attribute, if value is empty
+        const OUString& sValue);  /// attribute value
 
 
     /// export a string attribute, omit if default

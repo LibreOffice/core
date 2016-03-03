@@ -149,7 +149,7 @@ protected:
     TextPaM             ImpInsertText( const TextSelection& rSel, sal_Unicode c, bool bOverwrite = false );
     TextPaM             ImpInsertText( const TextSelection& rSel, const OUString& rText );
     TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection );
-    TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs = true );
+    TextPaM             ImpInsertParaBreak( const TextPaM& rPaM );
     void                ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
     TextPaM             ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight );
     void                ImpRemoveParagraph( sal_uInt32 nPara );
@@ -201,7 +201,7 @@ protected:
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uInt16 nTextPortion );
     long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
-    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart = nullptr );
+    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos );
     static void         ImpInitLayoutMode( OutputDevice* pOutDev );
     TxtAlign            ImpGetAlign() const;
 

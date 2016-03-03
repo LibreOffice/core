@@ -3449,7 +3449,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
 void XMLShapeExport::ImpExport3DShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, XMLShapeExportFlags /* nFeatures = SEF_DEFAULT */)
+    XmlShapeType eShapeType)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())

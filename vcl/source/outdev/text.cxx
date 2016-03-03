@@ -1093,7 +1093,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 
 bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen,
-                                      long* pDXAry, long nLayoutWidth ) const
+                                      long* pDXAry ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1103,7 +1103,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
 
     // layout complex text
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen,
-                                        Point(0,0), nLayoutWidth, pDXAry );
+                                        Point(0,0), 0, pDXAry );
     if( !pSalLayout )
         return false;
 
@@ -2283,18 +2283,9 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 }
 
 long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
-                                     sal_Int32 nIndex, sal_Int32 nLen ) const
+                                     sal_Int32 nIndex ) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetCtrlTextWidth Suspicious arguments nLen:" << nLen);
-    }
-    /* defensive code */
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
+    sal_Int32 nLen = rStr.getLength() - nIndex;
 
     sal_Int32  nMnemonicPos;
     OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );

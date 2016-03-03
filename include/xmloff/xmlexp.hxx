@@ -380,8 +380,7 @@ public:
         instead of Locale.
      */
     void AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
-            const LanguageTag& rLanguageTag, bool bWriteEmpty,
-            enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_LANGUAGE );
+            const LanguageTag& rLanguageTag, bool bWriteEmpty );
 
     // add several attributes to the common attribute list
     void AddAttributeList( const css::uno::Reference<

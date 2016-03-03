@@ -40,7 +40,7 @@ public:
     void        HandleDestroyIM();
     void        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
-    void        SetLocale( const char* pLocale = "" );
+    void        SetLocale();
     bool        FilterEvent( XEvent *pEvent, ::Window window );
 
     SalI18N_InputMethod();

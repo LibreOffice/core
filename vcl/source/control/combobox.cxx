@@ -1335,14 +1335,14 @@ void ComboBox::SetSeparatorPos( sal_Int32 n )
     m_pImpl->m_pImplLB->SetSeparatorPos( n );
 }
 
-void ComboBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
+void ComboBox::SetMRUEntries( const OUString& rEntries )
 {
-    m_pImpl->m_pImplLB->SetMRUEntries( rEntries, cSep );
+    m_pImpl->m_pImplLB->SetMRUEntries( rEntries, ';' );
 }
 
-OUString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
+OUString ComboBox::GetMRUEntries() const
 {
-    return m_pImpl->m_pImplLB ? m_pImpl->m_pImplLB->GetMRUEntries( cSep ) : OUString();
+    return m_pImpl->m_pImplLB ? m_pImpl->m_pImplLB->GetMRUEntries( ';' ) : OUString();
 }
 
 void ComboBox::SetMaxMRUCount( sal_Int32 n )

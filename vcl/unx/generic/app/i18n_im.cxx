@@ -195,13 +195,13 @@ IsXWindowCompatibleLocale( const char* p_locale )
 // on Solaris the environment needs to be set equivalent to the locale (#i37047#)
 
 void
-SalI18N_InputMethod::SetLocale( const char* pLocale )
+SalI18N_InputMethod::SetLocale()
 {
     // check whether we want an Input Method engine, if we don't we
     // do not need to set the locale
     if ( mbUseable )
     {
-        char *locale = SetSystemLocale( pLocale );
+        char *locale = SetSystemLocale( "" );
         if ( (!IsXWindowCompatibleLocale(locale)) || IsPosixLocale(locale) )
         {
             osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);

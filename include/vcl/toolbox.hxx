@@ -386,7 +386,7 @@ public:
     void                EnableItem( sal_uInt16 nItemId, bool bEnable = true );
     bool                IsItemEnabled( sal_uInt16 nItemId ) const;
 
-    void                TriggerItem( sal_uInt16 nItemId, bool bShift = false );
+    void                TriggerItem( sal_uInt16 nItemId );
 
     /// Shows or hides items.
     void                ShowItem(sal_uInt16 nItemId, bool bVisible = true);

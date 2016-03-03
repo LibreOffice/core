@@ -2017,12 +2017,10 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
 void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                             const Point& rPos, const Size& rSize,
                             const Size& rImageSize, Rectangle& rStateRect,
-                            Rectangle& rMouseRect, bool bLayout )
+                            Rectangle& rMouseRect )
 {
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
-    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
-    OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
 
     pDev->Push( PushFlags::CLIPREGION );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
@@ -2051,7 +2049,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                 aSize.Height() = rImageSize.Height();
             }
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
+            ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, 1,
                                   nDrawFlags, nTextStyle );
 
             rMouseRect          = Rectangle( aPos, aSize );
@@ -2140,7 +2138,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                 aTxtPos.X() += aImageRect.Right()+8;
                 aTxtPos.Y() += (rSize.Height()-nTextHeight)/2;
             }
-            pDev->DrawCtrlText( aTxtPos, aText, 0, aText.getLength(), DrawTextFlags::Mnemonic, pVector, pDisplayText );
+            pDev->DrawCtrlText( aTxtPos, aText, 0, aText.getLength() );
         }
 
         rMouseRect = aImageRect;
