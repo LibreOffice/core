@@ -292,14 +292,7 @@ namespace cppcanvas
 
                 aPolygon.clear ();
 
-#if OSL_DEBUG_LEVEL > 1
-                const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (GetPolygon (rR)));
-
-                SAL_INFO ("cppcanvas.emf",
-                          "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << aBounds.getWidth () << "x" << aBounds.getHeight () << " (mapped)");
-#else
                 (void) rR; // avoid warnings
-#endif
             }
 
             ::basegfx::B2DPolyPolygon& GetPolygon (ImplRenderer& rR, bool bMapIt = true)
@@ -358,7 +351,7 @@ namespace cppcanvas
                 if (polygon.count ()) {
                     aPolygon.append (polygon);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CPPCANVAS_MTFRENDERER
                     for (unsigned int i=0; i<aPolygon.count(); i++) {
                         polygon = aPolygon.getB2DPolygon(i);
                         SAL_INFO ("cppcanvas.emf", "polygon: " << i);
@@ -932,11 +925,7 @@ namespace cppcanvas
 
             void SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
             {
-#if OSL_DEBUG_LEVEL > 1
-                if (width == 0.0) {
-                    SAL_INFO ("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct\n");
-                }
-#endif
+                SAL_INFO_IF(width == 0.0, "cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct");
                 rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getLength());
             }
 
@@ -1143,7 +1132,7 @@ namespace cppcanvas
                     filter.ImportGraphic (graphic, OUString(), mfStream);
 
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CPPCANVAS_MTFRENDERER
                         mfStream.Seek(0);
                         static sal_Int32 emfp_debug_stream_number = 0;
                         OUString emfp_debug_filename = "/tmp/emf-embedded-stream" +
@@ -2331,11 +2320,7 @@ namespace cppcanvas
                             int combineMode = (flags >> 8) & 0xf;
 
                             SAL_INFO("cppcanvas.emf", "EMF+ SetClipRect combine mode: " << combineMode);
-#if OSL_DEBUG_LEVEL > 1
-                            if (combineMode > 1) {
-                                SAL_INFO ("cppcanvas.emf", "EMF+ TODO combine mode > 1");
-                            }
-#endif
+                            SAL_INFO_IF(combineMode > 1, "cppcanvas.emf", "EMF+ TODO combine  mode > 1");
 
                             float dx, dy, dw, dh;
 
