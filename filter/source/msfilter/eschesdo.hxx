@@ -58,8 +58,8 @@ public:
 
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, sal_uInt32 nDef = 0 )
     { return ImplGetPropertyValue( pStr ) ? *static_cast<sal_Int32 const *>(mAny.getValue()) : nDef; }
-    sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr, sal_uInt32 nDef = 0 )
-    { return ImplGetInt32PropertyValue(rStr.getStr(), nDef); }
+    sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr )
+    { return ImplGetInt32PropertyValue(rStr.getStr()); }
 
     const css::uno::Reference< css::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
     const css::uno::Any&       GetUsrAny() const       { return mAny; }
@@ -141,8 +141,7 @@ protected:
 
     void                ImplWritePage(
                             EscherSolverContainer& rSolver,
-                            ImplEESdrPageType ePageType,
-                            bool bBackGround = false );
+                            ImplEESdrPageType ePageType );
 
     sal_uInt32          ImplWriteShape( ImplEESdrObject& rObj,
                             EscherSolverContainer& rSolver,

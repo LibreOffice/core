@@ -179,14 +179,14 @@ private:
     void                ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode = PS_WRAP );
 
                         // writes nNumb as number from 0.000 till 1.000 in ASCII format to stream
-    void                ImplWriteB1( sal_uInt8 nNumb, sal_uLong nMode = PS_SPACE );
+    void                ImplWriteB1( sal_uInt8 nNumb );
 
-    inline void         ImplWritePoint( const Point&, sal_uInt32 nMode = PS_SPACE );
-    void                ImplMoveTo( const Point&, sal_uInt32 nMode = PS_SPACE );
+    inline void         ImplWritePoint( const Point& );
+    void                ImplMoveTo( const Point& );
     void                ImplLineTo( const Point&, sal_uInt32 nMode = PS_SPACE );
     void                ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode = PS_SPACE );
-    void                ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
-    void                ImplScale( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
+    void                ImplTranslate( const double& fX, const double& fY );
+    void                ImplScale( const double& fX, const double& fY );
 
     void                ImplAddPath( const tools::Polygon & rPolygon );
     void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
@@ -207,7 +207,7 @@ private:
     void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry = nullptr, bool bStretch = false );
     void                ImplDefineFont( const char*, const char* );
 
-    void                ImplClosePathDraw( sal_uLong nMode = PS_RET );
+    void                ImplClosePathDraw();
     void                ImplPathDraw();
 
     inline void         ImplWriteLineColor( sal_uLong nMode = PS_RET );
@@ -1423,17 +1423,17 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
     }
 }
 
-inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
+inline void PSWriter::ImplWritePoint( const Point& rPoint )
 {
     ImplWriteDouble( rPoint.X() );
-    ImplWriteDouble( rPoint.Y(), nMode );
+    ImplWriteDouble( rPoint.Y() );
 }
 
-void PSWriter::ImplMoveTo( const Point& rPoint, sal_uInt32 nMode )
+void PSWriter::ImplMoveTo( const Point& rPoint )
 {
     ImplWritePoint( rPoint );
     ImplWriteByte( 'm' );
-    ImplExecMode( nMode );
+    ImplExecMode( PS_SPACE );
 }
 
 void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
@@ -1452,20 +1452,20 @@ void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3
     ImplExecMode( nMode );
 }
 
-void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode )
+void PSWriter::ImplTranslate( const double& fX, const double& fY )
 {
     ImplWriteDouble( fX );
     ImplWriteDouble( fY );
     ImplWriteByte( 't' );
-    ImplExecMode( nMode );
+    ImplExecMode( PS_RET );
 }
 
-void PSWriter::ImplScale( const double& fX, const double& fY, sal_uInt32 nMode )
+void PSWriter::ImplScale( const double& fX, const double& fY )
 {
     ImplWriteDouble( fX );
     ImplWriteDouble( fY );
     ImplWriteByte( 's' );
-    ImplExecMode( nMode );
+    ImplExecMode( PS_RET );
 }
 
 void PSWriter::ImplRect( const Rectangle & rRect )
@@ -2137,11 +2137,11 @@ void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
     ImplWriteLine( " f" );
 }
 
-void PSWriter::ImplClosePathDraw( sal_uLong nMode )
+void PSWriter::ImplClosePathDraw()
 {
     mpPS->WriteCharPtr( "pc" );
     mnCursorPos += 2;
-    ImplExecMode( nMode );
+    ImplExecMode( PS_RET );
 }
 
 void PSWriter::ImplPathDraw()
@@ -2447,9 +2447,9 @@ void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
 
 // writes the sal_uInt8 nNumb as a Number from 0.000 up to 1.000
 
-void PSWriter::ImplWriteB1( sal_uInt8 nNumb, sal_uLong nMode )
+void PSWriter::ImplWriteB1( sal_uInt8 nNumb )
 {
-    ImplWriteF( 1000 * ( nNumb + 1 ) / 256 , 3, nMode );
+    ImplWriteF( 1000 * ( nNumb + 1 ) / 256  );
 }
 
 inline void PSWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )

@@ -1284,12 +1284,12 @@ sal_uInt32 DffPropSet::GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault ) c
     return ( mpPropSetEntries[ nId ].aFlags.bSet ) ? mpPropSetEntries[ nId ].nContent : nDefault;
 };
 
-bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
+bool DffPropSet::GetPropertyBool( sal_uInt32 nId ) const
 {
     sal_uInt32 nBaseId = nId | 31;              // base ID to get the sal_uInt32 property value
     sal_uInt32 nMask = 1 << (nBaseId - nId);    // bit mask of the boolean property
 
-    sal_uInt32 nPropValue = GetPropertyValue( nBaseId, bDefault ? nMask : 0 );
+    sal_uInt32 nPropValue = GetPropertyValue( nBaseId, 0 );
     return (nPropValue & nMask) != 0;
 }
 

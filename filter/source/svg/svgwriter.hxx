@@ -91,7 +91,7 @@ private:
 
                              SVGAttributeWriter();
 
-    static double            ImplRound( double fVal, sal_Int32 nDecs = 3 );
+    static double            ImplRound( double fVal );
 
 public:
 
@@ -213,8 +213,7 @@ class SVGTextWriter
     template< typename MetaBitmapActionType >
     void writeBitmapPlaceholder( const MetaBitmapActionType* pAction );
     void implWriteEmbeddedBitmaps();
-    void writeTextPortion( const Point& rPos, const OUString& rText,
-                           bool bApplyMapping = true );
+    void writeTextPortion( const Point& rPos, const OUString& rText );
     void implWriteTextPortion( const Point& rPos, const OUString& rText,
                                Color aTextColor, bool bApplyMapping );
 
@@ -303,24 +302,21 @@ private:
                                            bool bApplyMapping = true );
     void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0,
                                            bool bApplyMapping = true );
-    void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
-                                              bool bApplyMapping = true );
+    void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY );
     void                    ImplWritePattern( const tools::PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
-    void                    ImplAddLineAttr( const LineInfo &rAttrs,
-                                             bool bApplyMapping = true );
+    void                    ImplAddLineAttr( const LineInfo &rAttrs );
     void                    ImplWritePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bLineOnly,
                                                   bool bApplyMapping = true );
-    void                    ImplWriteShape( const SVGShapeDescriptor& rShape, bool bApplyMapping = true );
+    void                    ImplWriteShape( const SVGShapeDescriptor& rShape );
     void                    ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
     void                    ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
     static Color            ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     static Color            ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, bool bApplyMapping = true );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );
-    void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
-                                          bool bApplyMapping = true );
+    void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz );
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,

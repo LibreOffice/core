@@ -822,7 +822,7 @@ bool ImplEESdrWriter::ImplInitPageValues()
 
 void ImplEESdrWriter::ImplWritePage(
             EscherSolverContainer& rSolverContainer,
-            ImplEESdrPageType ePageType, bool /* bBackGround */ )
+            ImplEESdrPageType ePageType )
 {
     ImplInitPageValues();
 

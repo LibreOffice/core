@@ -5373,17 +5373,12 @@ void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle& )
     rProps.Commit( GetStream() );
 }
 
-sal_uInt32 EscherEx::GetColor( const sal_uInt32 nSOColor, bool bSwap )
+sal_uInt32 EscherEx::GetColor( const sal_uInt32 nSOColor )
 {
-    if ( bSwap )
-    {
-        sal_uInt32 nColor = nSOColor & 0xff00;          // Green
-        nColor |= (sal_uInt8)( nSOColor ) << 16;        // Red
-        nColor |= (sal_uInt8)( nSOColor >> 16 );        // Blue
-        return nColor;
-    }
-    else
-        return nSOColor & 0xffffff;
+    sal_uInt32 nColor = nSOColor & 0xff00;          // Green
+    nColor |= (sal_uInt8)( nSOColor ) << 16;        // Red
+    nColor |= (sal_uInt8)( nSOColor >> 16 );        // Blue
+    return nColor;
 }
 
 sal_uInt32 EscherEx::GetColor( const Color& rSOColor, bool bSwap )

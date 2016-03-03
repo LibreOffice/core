@@ -56,7 +56,7 @@ class MSFILTER_DLLPUBLIC DffPropSet
         bool        IsHardAttribute( sal_uInt32 nId ) const;
         sal_uInt32  GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault ) const;
         /** Returns a boolean property by its real identifier. */
-        bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
+        bool        GetPropertyBool( sal_uInt32 nId ) const;
         /** Returns a string property. */
         OUString    GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
         bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
