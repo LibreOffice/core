@@ -93,11 +93,11 @@ Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy 
 }
 
 
-long SvxPaperInfo::GetSloppyPaperDimension( long nSize, MapUnit eUnit )
+long SvxPaperInfo::GetSloppyPaperDimension( long nSize )
 {
-    nSize = eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, eUnit, MAP_100TH_MM);
+    nSize = OutputDevice::LogicToLogic(nSize, MAP_TWIP, MAP_100TH_MM);
     nSize = PaperInfo::sloppyFitPageDimension(nSize);
-    return eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, MAP_100TH_MM, eUnit);
+    return OutputDevice::LogicToLogic(nSize, MAP_100TH_MM, MAP_TWIP);
 }
 
 

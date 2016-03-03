@@ -369,7 +369,7 @@ void EditTextObject::Store( SvStream& rOStream ) const
     rOStream.Seek( nEndPos );
 }
 
-EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
+EditTextObject* EditTextObject::Create( SvStream& rIStream )
 {
     sal_Size nStartPos = rIStream.Tell();
 
@@ -390,7 +390,7 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     if ( rIStream.GetError() )
         return nullptr;
 
-    EditTextObject* pTxtObj = new EditTextObject(pGlobalTextObjectPool);
+    EditTextObject* pTxtObj = new EditTextObject(nullptr);
     pTxtObj->CreateData(rIStream);
 
     // Make sure that the stream is left at the correct place.

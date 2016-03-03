@@ -114,7 +114,7 @@ namespace editeng {
         void            GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0 );
 
         // TODO Hacky method to mirror lines in only a few cases
-        void            SetMirrorWidths( bool bMirror = true ) { m_bMirrorWidths = bMirror; }
+        void            SetMirrorWidths() { m_bMirrorWidths = true; }
         long            GetWidth( ) const { return m_nWidth; }
         sal_uInt16      GetOutWidth() const;
         sal_uInt16      GetInWidth() const;

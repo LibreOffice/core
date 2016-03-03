@@ -95,7 +95,7 @@ public:
     inline bool     IsStartDone(){ return bStartDone; }
     inline bool     IsEndDone(){ return bEndDone; }
     inline bool     IsHyphen(){ return bHyphen; } // Split instead of Spell check
-    inline void     SetHyphen( const bool bNew = true ){ bHyphen = bNew; }
+    inline void     SetHyphen() { bHyphen = true; }
     inline bool     IsAllRight()        { return bAllRight; }
 
 protected:

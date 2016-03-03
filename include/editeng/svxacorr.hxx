@@ -395,8 +395,7 @@ public:
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
-                                sal_Int32 nSttPos, sal_Int32 nEndPos,
-                                LanguageType eLang = LANGUAGE_SYSTEM );
+                                sal_Int32 nSttPos, sal_Int32 nEndPos );
     bool FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);

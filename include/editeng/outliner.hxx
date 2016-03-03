@@ -293,7 +293,7 @@ public:
     Pointer     GetPointer( const Point& rPosPixel );
     void        Command( const CommandEvent& rCEvt );
 
-    void            StartSpeller( bool bMultipleDoc = false );
+    void            StartSpeller();
     EESpellState    StartThesaurus();
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
@@ -361,7 +361,7 @@ public:
     */
     void        EnableBullets();
 
-    bool        IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
+    bool        IsCursorAtWrongSpelledWord();
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
     void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
 
@@ -634,13 +634,13 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     void                ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRecalcChildren );
     OUString            ImplGetBulletText( sal_Int32 nPara );
     void                ImplCheckNumBulletItem( sal_Int32 nPara );
-    void                ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo, bool bUndoAction = false );
-    void                ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* pLevelStyle = nullptr );
+    void                ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo );
+    void                ImplSetLevelDependendStyleSheet( sal_Int32 nPara );
 
     void                ImplBlockInsertionCallbacks( bool b );
 
     void        ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara );
-    bool        ImpConvertEdtToOut( sal_Int32 nPara, EditView* pView = nullptr );
+    bool        ImpConvertEdtToOut( sal_Int32 nPara );
 
     void        ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount );
     vcl::Font   ImpCalcBulletFont( sal_Int32 nPara ) const;
@@ -717,7 +717,7 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
 
-    void            SetMaxDepth( sal_Int16 nDepth, bool bCheckParas = false );
+    void            SetMaxDepth( sal_Int16 nDepth );
     sal_Int16       GetMaxDepth() const { return nMaxDepth; }
 
     void            SetUpdateMode( bool bUpdate );
@@ -798,7 +798,7 @@ public:
     Link<EditStatus&, void> GetStatusEventHdl() const;
 
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
-    void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
+    void            Draw( OutputDevice* pOutDev, const Point& rStartPos );
 
     const Size&     GetPaperSize() const;
     void            SetPaperSize( const Size& rSize );
@@ -885,7 +885,7 @@ public:
 
     sal_uLong           GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
-    sal_uLong           GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
+    sal_uLong           GetLineHeight( sal_Int32 nParagraph );
 
     sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
@@ -900,7 +900,7 @@ public:
     void            QuickInsertText( const OUString& rText, const ESelection& rSel );
     void            QuickDelete( const ESelection& rSel );
     void            RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
-    void            QuickFormatDoc( bool bFull = false );
+    void            QuickFormatDoc();
 
     bool            UpdateFields();
     void            RemoveFields( bool bKeepFieldText, std::function<bool ( const SvxFieldData* )> isFieldData = [] (const SvxFieldData* ){return true;} );
