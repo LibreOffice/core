@@ -17,8 +17,6 @@
 #include <cmath>
 #include <vector>
 
-
-using ::std::vector;
 using namespace formula;
 
 struct DataPoint
@@ -72,7 +70,7 @@ class ScETSForecastCalculation
 {
 private:
     SvNumberFormatter* mpFormatter;
-    vector< DataPoint > maRange;        // data (X, Y)
+    std::vector< DataPoint > maRange;   // data (X, Y)
     double* mpBase;                     // calculated base value array
     double* mpTrend;                    // calculated trend factor array
     double* mpPerIdx;                   // calculated periodical deviation array, not used with eds
@@ -267,7 +265,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( ScMatrixRef rMatX, ScMatrixR
 
                 case 5 : // MEDIAN
                          {
-                             vector< double > aTmp;
+                             std::vector< double > aTmp;
                              aTmp.push_back( maRange[ i - 1 ].Y );
                              while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
                              {
@@ -436,7 +434,7 @@ bool ScETSForecastCalculation::prefillPerIdx()
             return false;
         }
         SCSIZE nPeriods = mnCount / mnSmplInPrd;
-        vector< double > aPeriodAverage( nPeriods, 0.0 );
+        std::vector< double > aPeriodAverage( nPeriods, 0.0 );
         for ( SCSIZE i = 0; i < nPeriods ; i++ )
         {
             for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
@@ -1003,7 +1001,7 @@ bool ScETSForecastCalculation::GetETSPredictionIntervals( ScMatrixRef rTMat, ScM
     std::unique_ptr< double[] > xScenBase( new double[nSize]);
     std::unique_ptr< double[] > xScenTrend( new double[nSize]);
     std::unique_ptr< double[] > xScenPerIdx( new double[nSize]);
-    vector< vector< double > >  aPredictions( nSize, vector< double >( cnScenarios ) );
+    std::vector< std::vector< double > >  aPredictions( nSize, std::vector< double >( cnScenarios ) );
 
     // fill scenarios
     for ( SCSIZE k = 0; k < cnScenarios; k++ )
@@ -1132,7 +1130,7 @@ bool ScETSForecastCalculation::GetEDSPredictionIntervals( ScMatrixRef rTMat, ScM
 
     double z = ScInterpreter::gaussinv( ( 1.0 + fPILevel ) / 2.0 );
     double o = 1 - fPILevel;
-    vector< double > c( nSize );
+    std::vector< double > c( nSize );
     for ( SCSIZE i = 0; i < nSize; i++ )
     {
         c[ i ] = sqrt( 1 + ( fPILevel / pow( 1 + o, 3.0 ) ) *
