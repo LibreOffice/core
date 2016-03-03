@@ -146,7 +146,7 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
     const sal_Int32          nLen(rFlags.getLength());
     const beans::NamedValue* pValue(
         std::find_if(pAry,pAry+nLen,
-            [] (beans::NamedValue const& rNV) { return rNV.Name == OUString("KeepAlive"); } ));
+            [] (beans::NamedValue const& rNV) { return rNV.Name == "KeepAlive"; } ));
     if ( pValue != pAry+nLen && !pValue->Value.get<sal_Bool>() )
         return true;
 
