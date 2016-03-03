@@ -1012,20 +1012,13 @@ void LanguageTag::resetVars()
 }
 
 
-LanguageTag & LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize )
+LanguageTag & LanguageTag::reset( const OUString & rBcp47LanguageTag )
 {
     resetVars();
     maBcp47             = rBcp47LanguageTag;
     mbSystemLocale      = rBcp47LanguageTag.isEmpty();
     mbInitializedBcp47  = !mbSystemLocale;
 
-    if (bCanonicalize)
-    {
-        getImpl()->canonicalize();
-        // Registration itself may already have canonicalized, so do an
-        // unconditional sync.
-        syncFromImpl();
-    }
     return *this;
 }
 
@@ -2639,17 +2632,13 @@ OUString LanguageTag::convertToBcp47( const css::lang::Locale& rLocale, bool bRe
 
 
 // static
-OUString LanguageTag::convertToBcp47( LanguageType nLangID, bool bResolveSystem )
+OUString LanguageTag::convertToBcp47( LanguageType nLangID )
 {
-    // Catch this first so we don't need the rest.
-    if (!bResolveSystem && lcl_isSystem( nLangID))
-        return OUString();
-
-    lang::Locale aLocale( LanguageTag::convertToLocale( nLangID, bResolveSystem));
+    lang::Locale aLocale( LanguageTag::convertToLocale( nLangID ));
     // If system for some reason (should not happen.. haha) could not be
     // resolved DO NOT CALL LanguageTag::convertToBcp47(Locale) because that
     // would recurse into this method here!
-    if (aLocale.Language.isEmpty() && bResolveSystem)
+    if (aLocale.Language.isEmpty())
         return OUString();      // bad luck, bail out
     return LanguageTagImpl::convertToBcp47( aLocale);
 }
@@ -2666,12 +2655,9 @@ css::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp47, bool bRe
 
 
 // static
-LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bResolveSystem )
+LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47 )
 {
-    if (rBcp47.isEmpty() && !bResolveSystem)
-        return LANGUAGE_SYSTEM;
-
-    return LanguageTag( rBcp47).getLanguageType( bResolveSystem);
+    return LanguageTag( rBcp47).getLanguageType();
 }
 
 

@@ -82,8 +82,7 @@ private:
 ::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
                                       const ::rtl::OString& type,
                                       const ::rtl::OString& postfix,
-                                      bool bLowerCase=false,
-                                      const ::rtl::OString& prefix="");
+                                      bool bLowerCase=false);
 
 bool fileExists(const ::rtl::OString& fileName);
 bool makeValidTypeFile(const ::rtl::OString& targetFileName,

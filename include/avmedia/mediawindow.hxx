@@ -106,7 +106,7 @@ namespace avmedia
         static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
 
         static css::uno::Reference< css::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
-            const OUString& sMimeType, double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );
+            const OUString& sMimeType );
 
         static BitmapEx getAudioLogo();
         static BitmapEx getEmptyLogo();

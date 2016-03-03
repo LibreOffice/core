@@ -4782,9 +4782,9 @@ void HwpReader::makeOutline(Outline * hbox)
 }
 
 
-void HwpReader::parsePara(HWPPara * para, bool bParaStart)
+void HwpReader::parsePara(HWPPara * para)
 {
-
+    bool bParaStart = false;
     while (para)
     {
         if( para->nch == 1)

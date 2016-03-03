@@ -113,12 +113,12 @@ getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, cons
 
 static inline sal_Int32
 getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
-                    const OUString& aName, sal_Int32 nDefault=-1)
+                    const OUString& aName)
 {
     OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
 
-    sal_Int32 n=nDefault;
+    sal_Int32 n = -1;
     aValue >>= n;
     return n;
 }

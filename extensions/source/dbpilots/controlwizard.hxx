@@ -72,12 +72,10 @@ namespace dbp
     protected:
         static void fillListBox(
             ListBox& _rList,
-            const css::uno::Sequence< OUString >& _rItems,
-            bool _bClear = true);
+            const css::uno::Sequence< OUString >& _rItems);
         static void fillListBox(
             ComboBox& _rList,
-            const css::uno::Sequence< OUString >& _rItems,
-            bool _bClear = true);
+            const css::uno::Sequence< OUString >& _rItems);
 
     protected:
         void enableFormDatasourceDisplay();

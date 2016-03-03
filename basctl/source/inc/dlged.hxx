@@ -175,7 +175,7 @@ public:
     bool            UnmarkDialog();
     bool            RemarkDialog();
 
-    void            SetDialogModelChanged (bool bChanged = true) { bDialogModelChanged = bChanged; }
+    void            SetDialogModelChanged() { bDialogModelChanged = true; }
 
     bool            IsModified () const;
     void            ClearModifyFlag();
