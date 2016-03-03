@@ -610,7 +610,7 @@ class WinMtfOutput
     void                ImplMap( vcl::Font& rFont );
     tools::Polygon&     ImplMap( tools::Polygon& rPolygon );
     tools::PolyPolygon& ImplMap( tools::PolyPolygon& rPolyPolygon );
-    tools::Polygon&     ImplScale( tools::Polygon& rPolygon );
+    void                ImplScale( tools::Polygon& rPolygon );
     tools::PolyPolygon& ImplScale( tools::PolyPolygon& rPolyPolygon );
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
