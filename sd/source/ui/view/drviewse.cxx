@@ -619,7 +619,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
                         GetViewFrame()->GetDispatcher()->
                             Execute(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
-                                SfxCallMode::RECORD, &aItem, 0L);
+                                SfxCallMode::RECORD, &aItem, 0);
                         // Put text object into edit mode.
                         GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObj), pPageView);
                         break;

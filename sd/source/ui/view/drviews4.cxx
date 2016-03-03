@@ -844,7 +844,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
         SfxItemSet aSet(GetPool(), SID_CONTEXT, SID_CONTEXT,
                                    SID_ATTR_POSITION, SID_ATTR_POSITION,
                                    SID_ATTR_SIZE, SID_ATTR_SIZE,
-                                   0L);
+                                   0);
 
         GetStatusBarState(aSet);
 

@@ -456,7 +456,7 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     XclBiff eBiff = GetBiff();
     ScDocument& rDoc = GetDoc();
 
-    OSL_ENSURE( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
+    OSL_ENSURE( (mnScTab >= 0) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
     OSL_ENSURE( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)
@@ -598,7 +598,7 @@ void ExcTable::FillAsTableXml()
 
     ScDocument& rDoc = GetDoc();
 
-    OSL_ENSURE( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
+    OSL_ENSURE( (mnScTab >= 0) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
     OSL_ENSURE( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)

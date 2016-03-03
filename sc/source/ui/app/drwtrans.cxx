@@ -466,7 +466,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                 const SvxFontHeightItem& rDefaultFontHeight = static_cast<const SvxFontHeightItem&>(rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT));
 
                 // SW should have no MasterPages
-                OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+                OSL_ENSURE(0 == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
                 for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
                 {

@@ -499,7 +499,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
         pDisp->Execute( SID_STYLE_NEW, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
                 &aFamilyItem,
                 &aRefItem,
-                0L );
+                0 );
 
         if (bLocked)
             pDisp->Lock(true);

@@ -301,7 +301,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
                             rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
                                             SfxCallMode::RECORD,
-                            &aSearchItem, 0L );
+                            &aSearchItem, 0 );
                     const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
@@ -338,7 +338,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
                         rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
                                         SfxCallMode::RECORD,
-                        &aSearchItem, 0L );
+                        &aSearchItem, 0 );
             }
             break;
 //      case FID_SEARCH_COUNT:
