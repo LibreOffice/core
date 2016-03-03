@@ -12876,7 +12876,10 @@ else
             # needed for msi packaging
             pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
         fi
-        pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
+        # .NET 4.6 and higher don't have bin directory
+        if test -f "$DOTNET_FRAMEWORK_HOME/bin"; then
+            pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
+        fi
         pathmunge "$ASM_HOME" "before"
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
         pathmunge "$CSC_PATH" "before"
