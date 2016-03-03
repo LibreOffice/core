@@ -851,7 +851,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             pPHdl->NextPos( ++pPHdl->nActPos );
         }
 
-    } while( pTmpCursor != pSaveCursor );
+    } while( pTmpCursor != pSaveCursor && pTmpCursor->GetNext() != pTmpCursor);
 
     if( nFound && !pFndRing ) // if no ring should be created
         pFndRing = pCurrentCursor->Create();
