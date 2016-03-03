@@ -20,6 +20,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
@@ -93,9 +94,11 @@ private:
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
-    std::vector<unsigned> m_aPageList;
     int m_nSelectionBeforeSearchResult;
     int m_nSelectionAfterSearchResult;
+
+    /// For document size changed callback.
+    osl::Condition m_aDocumentSizeCondition;
 #endif
 };
 
@@ -200,6 +203,11 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         m_bFound = false;
     }
     break;
+    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    {
+        m_aDocumentSizeCondition.set();
+    }
+    break;
     case LOK_CALLBACK_SET_PART:
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
@@ -217,19 +225,6 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         {
             m_aSearchResultSelection.push_back(rValue.second.get<std::string>("rectangles").c_str());
             m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
-        }
-    }
-    break;
-    case LOK_CALLBACK_PARTS_COUNT_CHANGED:
-    {
-        boost::property_tree::ptree aTree;
-        std::stringstream aStream(pPayload);
-        boost::property_tree::read_json(aStream, aTree);
-        auto aAction = aTree.get<std::string>("action", "");
-        auto aPart = aTree.get<std::string>("part", "");
-        if (!aAction.empty() && !aPart.empty())
-        {
-            m_aPageList.push_back(std::atoi(aPart.data()));
         }
     }
     break;
@@ -516,6 +511,23 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 }
 
+namespace {
+
+std::vector<OUString> getCurrentParts(SdXImpressDocument* pDocument)
+{
+    int parts = pDocument->getParts();
+    std::vector<OUString> result;
+
+    for (int i = 0; i < parts; i++)
+    {
+        result.push_back(pDocument->getPartName(i));
+    }
+
+    return result;
+}
+
+}
+
 void SdTiledRenderingTest::testInsertDeletePage()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -525,59 +537,84 @@ void SdTiledRenderingTest::testInsertDeletePage()
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
 
+    std::vector<OUString> aInserted = {
+        "Slide 1", "Slide 2", "Slide 3", "Slide 4", "Slide 5",
+        "Slide 6", "Slide 7", "Slide 8", "Slide 9", "Slide 10", "Slide 11"
+    };
+
+    std::vector<OUString> aDeleted = {
+        "Slide 1"
+    };
+
     // the document has 1 slide
     CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
 
     uno::Sequence<beans::PropertyValue> aArgs;
 
     // Insert slides
+    m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:InsertPage", aArgs);
 
+    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
+    osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
     // Verify inserted slides
-    for (auto i: m_aPageList)
+    std::vector<OUString> aPageList(getCurrentParts(pXImpressDocument));
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aInserted.size());
+
+    for (auto it1 = aPageList.begin(), it2 = aInserted.begin(); it1 != aPageList.end(); ++it1, ++it2)
     {
-        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
-        CPPUNIT_ASSERT(pPage);
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
     }
 
-    m_aPageList.clear();
-
     // Delete slides
+    m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:DeletePage", aArgs);
 
+    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
     // Verify deleted slides
-    for (auto i: m_aPageList)
+    aPageList = getCurrentParts(pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aDeleted.size());
+    for (auto it1 = aPageList.begin(), it2 = aDeleted.begin(); it1 != aPageList.end(); ++it1, ++it2)
     {
-        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
-        CPPUNIT_ASSERT(pPage == nullptr);
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
     }
 
-    m_aPageList.clear();
-
     // Undo deleted slides
+    m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Undo", aArgs);
 
+    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
     // Verify inserted slides
-    for (auto i: m_aPageList)
+    aPageList = getCurrentParts(pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aInserted.size());
+    for (auto it1 = aPageList.begin(), it2 = aInserted.begin(); it1 != aPageList.end(); ++it1, ++it2)
     {
-        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
-        CPPUNIT_ASSERT(pPage);
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
     }
 
-    m_aPageList.clear();
-
     // Redo deleted slides
+    m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Redo", aArgs);
 
+    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
     // Verify deleted slides
-    for (auto i: m_aPageList)
+    aPageList = getCurrentParts(pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aDeleted.size());
+    for (auto it1 = aPageList.begin(), it2 = aDeleted.begin(); it1 != aPageList.end(); ++it1, ++it2)
     {
-        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
-        CPPUNIT_ASSERT(pPage == nullptr);
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
     }
 
     // the document has 1 slide
@@ -585,6 +622,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
 
     comphelper::LibreOfficeKit::setActive(false);
 }
+
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
