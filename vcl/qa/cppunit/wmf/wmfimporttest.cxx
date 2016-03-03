@@ -146,36 +146,36 @@ void WmfTest::testEmfLineStyles()
     assertXPath(pDoc, "/metafile/linecolor[5]", "color", "#0000ff");
 
     assertXPath(pDoc, "/metafile/line[1]", "style", "dash");
-    assertXPath(pDoc, "/metafile/line[1]", "dashlen", "225");
+    assertXPath(pDoc, "/metafile/line[1]", "dashlen", "528");
     assertXPath(pDoc, "/metafile/line[1]", "dashcount", "1");
-    assertXPath(pDoc, "/metafile/line[1]", "dotlen", "0");
+    assertXPath(pDoc, "/metafile/line[1]", "dotlen", "176");
     assertXPath(pDoc, "/metafile/line[1]", "dotcount", "0");
     assertXPath(pDoc, "/metafile/line[1]", "distance", "100");
     assertXPath(pDoc, "/metafile/line[1]", "join", "miter");
     assertXPath(pDoc, "/metafile/line[1]", "cap", "butt");
 
     assertXPath(pDoc, "/metafile/line[2]", "style", "dash");
-    assertXPath(pDoc, "/metafile/line[2]", "dashlen", "0");
+    assertXPath(pDoc, "/metafile/line[2]", "dashlen", "528");
     assertXPath(pDoc, "/metafile/line[2]", "dashcount", "0");
-    assertXPath(pDoc, "/metafile/line[2]", "dotlen", "30");
+    assertXPath(pDoc, "/metafile/line[2]", "dotlen", "176");
     assertXPath(pDoc, "/metafile/line[2]", "dotcount", "1");
-    assertXPath(pDoc, "/metafile/line[2]", "distance", "50");
+    assertXPath(pDoc, "/metafile/line[2]", "distance", "176");
     assertXPath(pDoc, "/metafile/line[2]", "join", "miter");
     assertXPath(pDoc, "/metafile/line[2]", "cap", "butt");
 
     assertXPath(pDoc, "/metafile/line[3]", "style", "dash");
-    assertXPath(pDoc, "/metafile/line[3]", "dashlen", "150");
+    assertXPath(pDoc, "/metafile/line[3]", "dashlen", "528");
     assertXPath(pDoc, "/metafile/line[3]", "dashcount", "1");
-    assertXPath(pDoc, "/metafile/line[3]", "dotlen", "30");
+    assertXPath(pDoc, "/metafile/line[3]", "dotlen", "176");
     assertXPath(pDoc, "/metafile/line[3]", "dotcount", "1");
-    assertXPath(pDoc, "/metafile/line[3]", "distance", "90");
+    assertXPath(pDoc, "/metafile/line[3]", "distance", "176");
 
     assertXPath(pDoc, "/metafile/line[4]", "style", "dash");
-    assertXPath(pDoc, "/metafile/line[4]", "dashlen", "150");
+    assertXPath(pDoc, "/metafile/line[4]", "dashlen", "528");
     assertXPath(pDoc, "/metafile/line[4]", "dashcount", "1");
-    assertXPath(pDoc, "/metafile/line[4]", "dotlen", "30");
+    assertXPath(pDoc, "/metafile/line[4]", "dotlen", "176");
     assertXPath(pDoc, "/metafile/line[4]", "dotcount", "2");
-    assertXPath(pDoc, "/metafile/line[4]", "distance", "50");
+    assertXPath(pDoc, "/metafile/line[4]", "distance", "176");
     assertXPath(pDoc, "/metafile/line[4]", "join", "miter");
     assertXPath(pDoc, "/metafile/line[4]", "cap", "butt");
 };

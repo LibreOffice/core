@@ -503,14 +503,13 @@ tools::Polygon& WinMtfOutput::ImplMap( tools::Polygon& rPolygon )
     return rPolygon;
 }
 
-tools::Polygon& WinMtfOutput::ImplScale( tools::Polygon& rPolygon )
+void WinMtfOutput::ImplScale( tools::Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     for ( sal_uInt16 i = 0; i < nPoints; i++ )
     {
         rPolygon[ i ] = ImplScale( rPolygon[ i ] );
     }
-    return rPolygon;
 }
 
 tools::PolyPolygon& WinMtfOutput::ImplScale( tools::PolyPolygon& rPolyPolygon )
@@ -730,8 +729,16 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
             {
                 WinMtfLineStyle* pLineStyle = static_cast<WinMtfLineStyle*>(pStyle);
                 Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
-                aSize = ImplMap(aSize);
-                pLineStyle->aLineInfo.SetWidth(aSize.Width());
+                pLineStyle->aLineInfo.SetWidth( ImplMap(aSize).Width() );
+
+                if ( pLineStyle->aLineInfo.GetStyle() == LINE_DASH )
+                {
+                    aSize.Width() += 1;
+                    long nDotLen = ImplMap( aSize ).Width();
+                    pLineStyle->aLineInfo.SetDistance( nDotLen );
+                    pLineStyle->aLineInfo.SetDotLen( nDotLen );
+                    pLineStyle->aLineInfo.SetDashLen( nDotLen * 3 );
+                }
             }
         }
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
