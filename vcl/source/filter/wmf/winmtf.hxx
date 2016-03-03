@@ -148,9 +148,6 @@ struct WMF_EXTERNALHEADER;
 #define PS_INSIDEFRAME          6
 #define PS_STYLE_MASK           15
 
-#define PS_ENDCAP_ROUND     0x000
-#define PS_ENDCAP_SQUARE    0x100
-#define PS_ENDCAP_FLAT      0x200
 #define PS_ENDCAP_ROUND      0x000
 #define PS_ENDCAP_SQUARE     0x100
 #define PS_ENDCAP_FLAT       0x200
