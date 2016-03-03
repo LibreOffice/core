@@ -409,9 +409,9 @@ void BibToolBar::UpdateSourceList(bool bFlag)
     aLBSource->SetUpdateMode(bFlag);
 }
 
-void BibToolBar::InsertSourceEntry(const OUString& aEntry, sal_Int32 nPos)
+void BibToolBar::InsertSourceEntry(const OUString& aEntry)
 {
-    aLBSource->InsertEntry(aEntry, nPos);
+    aLBSource->InsertEntry(aEntry);
 }
 
 void BibToolBar::SelectSourceEntry(const OUString& aStr)

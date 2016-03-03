@@ -127,7 +127,7 @@ namespace pcr
         void Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction);
 
         typedef void (OPropertyEditor::*PageOperation)( OBrowserPage&, const void* );
-        void    forEachPage( PageOperation _pOperation, const void* _pArgument = nullptr );
+        void    forEachPage( PageOperation _pOperation );
 
         void    setPageLineListener( OBrowserPage& _rPage, const void* );
         void    setPageControlObserver( OBrowserPage& _rPage, const void* );

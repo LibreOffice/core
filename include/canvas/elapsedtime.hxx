@@ -113,13 +113,8 @@ namespace canvas
                 This value will be added to the current time, i.e. the
                 next call to getElapsedTime() (when performed
                 immediately) will be adjusted by fOffset.
-
-                @param bLimitToLastQueriedTime
-                Limits the given offset to the time that has been
-                taken via getElapsedTime()
             */
-            void adjustTimer( double fOffset,
-                              bool bLimitToLastQueriedTime = true );
+            void adjustTimer( double fOffset );
 
             /** Holds the current time.
 

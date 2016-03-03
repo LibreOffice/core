@@ -368,8 +368,7 @@ uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL
 
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
                                                             const OUString& rReferer,
-                                                            const OUString& sMimeType,
-                                                            double fMediaTime )
+                                                            const OUString& sMimeType )
 {
     uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer, &sMimeType ) );
     uno::Reference< graphic::XGraphic > xRet;
@@ -381,8 +380,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
         if( xGrabber.is() )
         {
-            if( AVMEDIA_FRAMEGRABBER_DEFAULTFRAME == fMediaTime )
-                fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME;
+            double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME;
 
             if( fMediaTime >= xPlayer->getDuration() )
                 fMediaTime = ( xPlayer->getDuration() * 0.5 );

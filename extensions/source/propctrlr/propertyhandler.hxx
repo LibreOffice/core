@@ -165,8 +165,7 @@ namespace pcr
         */
         inline void addStringPropertyDescription(
                     ::std::vector< css::beans::Property >& _rProperties,
-                    const OUString& _rPropertyName,
-                    sal_Int16 _nAttribs = 0
+                    const OUString& _rPropertyName
                 ) const;
 
         /** adds a description for the given int32 property to the given property vector
@@ -304,9 +303,9 @@ namespace pcr
     };
 
 
-    inline void PropertyHandler::addStringPropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addStringPropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<OUString>::get(), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<OUString>::get() );
     }
 
     inline void PropertyHandler::addInt32PropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const

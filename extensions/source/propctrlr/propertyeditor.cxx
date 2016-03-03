@@ -297,7 +297,7 @@ namespace pcr
     }
 
 
-    void OPropertyEditor::forEachPage( PageOperation _pOperation, const void* _pArgument )
+    void OPropertyEditor::forEachPage( PageOperation _pOperation )
     {
         sal_uInt16 nCount = m_aTabControl->GetPageCount();
         for ( sal_uInt16 i=0; i<nCount; ++i )
@@ -306,7 +306,7 @@ namespace pcr
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl->GetTabPage( nID ) );
             if ( !pPage )
                 continue;
-            (this->*_pOperation)( *pPage, _pArgument );
+            (this->*_pOperation)( *pPage, nullptr );
         }
     }
 

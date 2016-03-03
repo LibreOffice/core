@@ -135,10 +135,9 @@ namespace dbp
     }
 
 
-    void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< OUString >& _rItems, bool _bClear)
+    void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< OUString >& _rItems)
     {
-        if (_bClear)
-            _rList.Clear();
+        _rList.Clear();
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
         ::svt::WizardTypes::WizardState nPos;
@@ -151,10 +150,9 @@ namespace dbp
     }
 
 
-    void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< OUString >& _rItems, bool _bClear)
+    void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< OUString >& _rItems)
     {
-        if (_bClear)
-            _rList.Clear();
+        _rList.Clear();
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
         ::svt::WizardTypes::WizardState nPos;

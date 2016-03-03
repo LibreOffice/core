@@ -142,7 +142,7 @@ void ElapsedTime::reset()
     m_bInHoldMode = false;
 }
 
-void ElapsedTime::adjustTimer( double fOffset, bool /*bLimitToLastQueriedTime*/ )
+void ElapsedTime::adjustTimer( double fOffset )
 {
     // to make getElapsedTime() become _larger_, have to reduce
     // m_fStartTime.

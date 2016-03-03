@@ -239,7 +239,7 @@ public:
 
 
     /** Reset with existing BCP 47 language tag string. See ctor. */
-    LanguageTag &                   reset( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
+    LanguageTag &                   reset( const OUString & rBcp47LanguageTag );
 
     /** Reset with Locale. */
     LanguageTag &                   reset( const css::lang::Locale & rLocale );
@@ -411,12 +411,10 @@ public:
 
     /** Convert MS-LangID to BCP 47 string.
 
-        @param bResolveSystem
-               If TRUE, resolve an empty language tag denoting the system
-               locale to the real locale used.
-               If FALSE, return an empty OUString for such a tag.
+        Resolve an empty language tag denoting the system
+       locale to the real locale used.
      */
-    static OUString convertToBcp47( LanguageType nLangID, bool bResolveSystem = true );
+    static OUString convertToBcp47( LanguageType nLangID );
 
     /** Convert Locale to BCP 47 string.
 
@@ -448,12 +446,10 @@ public:
         conversion so does not save anything compared to
         LanguageTag(rBcp47).getLanguageType(bResolveSystem).
 
-        @param bResolveSystem
-               If TRUE, resolve an empty language tag denoting the system
-               locale to the real locale used.
-               If FALSE, return LANGUAGE_SYSTEM for such a tag.
+        Resolve an empty language tag denoting the system
+        locale to the real locale used.
      */
-    static LanguageType convertToLanguageType( const OUString& rBcp47, bool bResolveSystem = true );
+    static LanguageType convertToLanguageType( const OUString& rBcp47 );
 
     /** Convert BCP 47 string to MS-LangID with fallback, convenience method.
 

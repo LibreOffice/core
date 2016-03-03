@@ -49,10 +49,9 @@ namespace basegfx
 
         inline bool isOnNumberChar(const OUString& rStr,
                                    const sal_Int32 nPos,
-                                   bool            bSignAllowed = true,
-                                   bool            bDotAllowed = true)
+                                   bool            bSignAllowed = true)
         {
-            return isOnNumberChar(rStr[nPos], bSignAllowed, bDotAllowed);
+            return isOnNumberChar(rStr[nPos], bSignAllowed);
         }
 
         bool getDoubleChar(double&          o_fRetval,
