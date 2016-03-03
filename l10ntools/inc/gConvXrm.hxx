@@ -37,7 +37,7 @@ class convert_xrm : public convert_gen_impl
   public:
     bool mbNoCollectingData;
     convert_xrm(l10nMem& crMemory);
-    ~convert_xrm();
+    virtual ~convert_xrm();
 
     void setId(char *yytext);
     void setLang(char *yytext);
@@ -51,6 +51,6 @@ class convert_xrm : public convert_gen_impl
     bool        mbIsLang;
     std::string msTag;
 
-    void execute();
+    void execute() override;
 };
 #endif

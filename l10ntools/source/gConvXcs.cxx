@@ -78,12 +78,12 @@ void convert_xcs::setKey(char *syyText)
 
   // is it to be translated
   if (sText.find("oor:localized=") == std::string::npos)
-  return;
+      return;
 
   // locate key (is any)
   nL = sText.find("oor:name=\"");
   if (nL == (int)std::string::npos)
-  return;
+      return;
   sHead = sText.substr(nL+10);
   nL    = sHead.find("\"");
   msKey = sHead.substr(0,nL);

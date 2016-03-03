@@ -36,7 +36,7 @@ class convert_xhp : public convert_gen_impl
 {
   public:
     convert_xhp(l10nMem& crMemory);
-    ~convert_xhp();
+    virtual ~convert_xhp();
 
     void setString(char *yytext);
     void openTag(char *yytext);
@@ -72,6 +72,6 @@ class convert_xhp : public convert_gen_impl
     std::string    *msLangText;
     std::ofstream  *mcOutputFiles;
     int             miCntLanguages;
-    void            execute();
+    void            execute() override;
 };
 #endif

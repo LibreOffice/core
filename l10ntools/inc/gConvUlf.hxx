@@ -36,7 +36,7 @@ class convert_ulf : public convert_gen_impl
 {
   public:
     convert_ulf(l10nMem& crMemory);
-    ~convert_ulf();
+    virtual ~convert_ulf();
 
     void setKey(char *syyText);
     void setText(char *syyText, bool bIsEnUs);
@@ -46,7 +46,7 @@ class convert_ulf : public convert_gen_impl
     std::string msKey;
 
 
-    void execute();
+    void execute() override;
     void handleLines();
 };
 #endif

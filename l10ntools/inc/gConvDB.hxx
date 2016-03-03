@@ -36,14 +36,14 @@ class convert_db : public convert_gen_impl
 {
   public:
     convert_db(l10nMem& crMemory);
-    ~convert_db();
+    virtual ~convert_db();
 
   private:
     static const int NUMFIELD = 16;
     std::string      msFields[NUMFIELD];
     int              miSize;
 
-    void execute();
+    void execute() override;
     bool collectLine();
 };
 #endif

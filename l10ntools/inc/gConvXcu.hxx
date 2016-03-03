@@ -39,7 +39,7 @@ class convert_xcu : public convert_gen_impl
     bool mbNoCollectingData;
 
     convert_xcu(l10nMem& crMemory);
-    ~convert_xcu();
+    virtual ~convert_xcu();
 
     void pushKey(char *syyText);
     void popKey(char *syyText);
@@ -55,6 +55,6 @@ class convert_xcu : public convert_gen_impl
     int                      miLevel;
     bool                     mbNoTranslate;
 
-    void execute();
+    void execute() override;
 };
 #endif

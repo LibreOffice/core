@@ -74,7 +74,7 @@ void convert_ulf::setText(char *syyText, bool bIsEnUs)
 
 
   if (!bIsEnUs)
-    mcMemory.showError(sText);
+      l10nMem::showError(sText);
 }
 
 

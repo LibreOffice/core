@@ -52,7 +52,7 @@ class convert_tree : public convert_gen_impl
     } STATE_VAL;
 
     convert_tree(l10nMem& crMemory);
-    ~convert_tree();
+    virtual ~convert_tree();
 
     void         setString         (char *yytext);
     void         setState          (char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL);
@@ -70,6 +70,6 @@ class convert_tree : public convert_gen_impl
     STATE_VAL       meStateVal;
     int             miCntLanguages;
 
-    void execute();
+    void execute() override;
 };
 #endif

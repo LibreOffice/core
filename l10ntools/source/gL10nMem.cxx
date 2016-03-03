@@ -35,7 +35,7 @@
 
 
 /*******************   G L O B A L   D E F I N I T I O N   *******************/
-l10nMem_impl * l10nMem_impl::mcImpl    = NULL;
+l10nMem_impl * l10nMem_impl::mcImpl    = nullptr;
 bool           l10nMem_impl::mbVerbose = false;
 bool           l10nMem_impl::mbDebug   = false;
 
@@ -701,9 +701,9 @@ void l10nMem_impl::convEntryKey(int                iLineNo,
 /**********************   I M P L E M E N T A T I O N   **********************/
 void l10nMem_impl::convertToInetString(std::string& sText)
 {
-static const char *replacingStr[] = {"&",     "\'",     ">",     "<",   "\"",     NULL };
+static const char *replacingStr[] = {"&",     "\'",     ">",     "<",   "\"",     nullptr };
 static const int   replacingLen[] = {1,       1,        1,      1,      1,        0    };
-static const char *newStr[]       = {"&amp;", "&apos;", "&gt;", "&lt;", "&quot;", NULL };
+static const char *newStr[]       = {"&amp;", "&apos;", "&gt;", "&lt;", "&quot;", nullptr };
 static const int   newLen[]       = {5,       6,        4,      4,      6,        0    };
   int i, pos;
 
@@ -722,9 +722,9 @@ static const int   newLen[]       = {5,       6,        4,      4,      6,      
 /**********************   I M P L E M E N T A T I O N   **********************/
 void l10nMem_impl::convertFromInetString(std::string& sText)
 {
-static const char *replacingStr[] = {"&amp;", "&apos;", "&gt;", "&lt;", "&quot;", NULL };
+static const char *replacingStr[] = {"&amp;", "&apos;", "&gt;", "&lt;", "&quot;", nullptr };
 static const int   replacingLen[] = {5,       6,        4,      4,      6,        0    };
-static const char *newStr[]       = {"&",     "\'",     ">",     "<",   "\"",     NULL };
+static const char *newStr[]       = {"&",     "\'",     ">",     "<",   "\"",     nullptr };
 static const int   newLen[]       = {1,       1,        1,      1,      1,        0    };
   int i, pos;
 

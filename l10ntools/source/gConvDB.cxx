@@ -87,7 +87,7 @@ bool convert_db::collectLine()
      {
        if (i >= NUMFIELD)
        {
-         l10nMem::showError((char*)"TOO many fields", miLineNo);
+         l10nMem::showError("TOO many fields", miLineNo);
        }
        msFields[i++] = msSourceBuffer.substr(iStart, miSourceReadIndex - iStart);
        iStart       = miSourceReadIndex +1;

@@ -36,10 +36,10 @@ class convert_prop : public convert_gen_impl
 {
   public:
     convert_prop(l10nMem& crMemory);
-    ~convert_prop();
+    virtual ~convert_prop();
 
 
   private:
-    void execute();
+    void execute() override;
 };
 #endif

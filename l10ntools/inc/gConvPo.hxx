@@ -40,7 +40,7 @@ class convert_po : public convert_gen_impl
 
 
     convert_po(l10nMem& crMemory);
-    ~convert_po();
+    virtual ~convert_po();
 
     void startLook ();
     void setValue  (char *syyText, int iLineCnt);
@@ -57,15 +57,15 @@ class convert_po : public convert_gen_impl
     bool         mbFuzzy;
     std::filebuf outBuffer;
 
-    void execute();
+    void execute() override;
 
     void startSave(const std::string& sLanguage,
-                   const std::string& sFile);
+                   const std::string& sFile) override;
     void save(const std::string& sFileName,
               const std::string& sKey,
               const std::string& sENUStext,
               const std::string& sText,
-              bool               bFuzzy);
-    void endSave();
+              bool               bFuzzy) override;
+    void endSave() override;
 };
 #endif

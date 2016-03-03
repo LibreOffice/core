@@ -124,7 +124,7 @@ void convert_xcu::startCollectData(char *syyText)
     else
     {
       std::string sErr = sTag.substr(nL,5) + " is not en-US";
-      mcMemory.showError(sErr);
+      l10nMem::showError(sErr);
     }
   }
 }

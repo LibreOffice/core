@@ -106,7 +106,7 @@ void convert_xrm::setLang(char *yytext)
     if (sLang == "en-US")
       mbIsLang = true;
     else
-      mcMemory.showError(sLang + " is no en-US language");
+      l10nMem::showError(sLang + " is no en-US language");
   }
 }
 

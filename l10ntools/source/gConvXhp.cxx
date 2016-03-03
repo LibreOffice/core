@@ -33,8 +33,8 @@
 convert_xhp::convert_xhp(l10nMem& crMemory)
                         : convert_gen_impl(crMemory),
                           meExpectValue(VALUE_NOT_USED),
-                          msLangText(NULL),
-                          mcOutputFiles(NULL),
+                          msLangText(nullptr),
+                          mcOutputFiles(nullptr),
                           miCntLanguages(0)
 {
   // xhp files are written through a local routine
@@ -102,7 +102,7 @@ void convert_xhp::execute()
 //  XhpWrap::yylex();
 
   // dump last line
-  copySourceSpecial(NULL,3);
+  copySourceSpecial(nullptr,3);
 }
 
 
@@ -219,7 +219,7 @@ void convert_xhp::setLang(char *yytext)
          if (sLang == "en-US")
            meExpectValue = VALUE_IS_TAG_TRANS;
          else
-          mcMemory.showError(sLang + " is no en-US language");
+             l10nMem::showError(sLang + " is no en-US language");
          break;
 
     case VALUE_IS_VALUE_TAG:

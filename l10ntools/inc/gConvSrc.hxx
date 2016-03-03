@@ -37,7 +37,7 @@ class convert_src : public convert_gen_impl
     bool mbExpectValue;
 
     convert_src(l10nMem& crMemory);
-    ~convert_src();
+    virtual ~convert_src();
 
     void setValue      (char *syyText, char *sbuildValue);
     void setLang       (char *syyText, bool bEnUs);
@@ -47,7 +47,7 @@ class convert_src : public convert_gen_impl
     void setCmd        (char *syyText);
     void setMacro      (char *syyText);
     void setList       (char *syyText);
-    void setListItem   (char *syyText, bool bIsStart);
+    void setListItem   (char const *syyText, bool bIsStart);
     void setNL         (char *syyText, bool bMacro);
     void startBlock    (char *syyText);
     void stopBlock     (char *syyText);
@@ -67,7 +67,7 @@ class convert_src : public convert_gen_impl
     bool                     mbInListItem;
     int                      miListCount;
     int                      miMacroLevel;
-    void execute();
+    void execute() override;
     void trim(std::string& sText);
     void buildKey(std::string& sKey);
     void insertLanguagePart(std::string& sKey, std::string& sTextType);

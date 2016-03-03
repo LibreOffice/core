@@ -32,7 +32,7 @@
 /**********************   I M P L E M E N T A T I O N   **********************/
 convert_tree::convert_tree(l10nMem& crMemory)
                           : convert_gen_impl(crMemory),
-                            mcOutputFiles(NULL),
+                            mcOutputFiles(nullptr),
                             meStateTag(STATE_TAG_NONE),
                             meStateVal(STATE_VAL_NONE),
                             miCntLanguages(0)
@@ -103,7 +103,7 @@ void convert_tree::execute()
 //  TreeWrap::yylex();
 
   // dump last line
-  copySourceSpecial(NULL,3);
+  copySourceSpecial(nullptr,3);
 }
 
 

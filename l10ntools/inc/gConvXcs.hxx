@@ -36,7 +36,7 @@ class convert_xcs : public convert_gen_impl
 {
   public:
     convert_xcs(l10nMem& crMemory);
-    ~convert_xcs();
+    virtual ~convert_xcs();
 
     void setKey(char *syyText);
     void unsetKey(char *syyText);
@@ -47,6 +47,6 @@ class convert_xcs : public convert_gen_impl
     std::string msKey;
     bool        mbCollectingData;
 
-    void execute();
+    void execute() override;
 };
 #endif

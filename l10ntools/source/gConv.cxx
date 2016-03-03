@@ -53,7 +53,7 @@
 
 
 /*******************   G L O B A L   D E F I N I T I O N   *******************/
-convert_gen_impl * convert_gen_impl::mcImpl = NULL;
+convert_gen_impl * convert_gen_impl::mcImpl = nullptr;
 
 
 
@@ -198,7 +198,7 @@ bool convert_gen::createDir(std::string& sDir, std::string& sFile)
 
     if (!checkAccess(sNewDir))
     {
-      OS_MKDIR((char *)sNewDir.c_str());
+      OS_MKDIR(sNewDir.c_str());
     }
 
   }
@@ -223,7 +223,7 @@ convert_gen_impl::convert_gen_impl(l10nMem& crMemory)
 /**********************   I M P L E M E N T A T I O N   **********************/
 convert_gen_impl::~convert_gen_impl()
 {
-  mcImpl = NULL;
+  mcImpl = nullptr;
 }
 
 
@@ -252,7 +252,7 @@ bool convert_gen_impl::prepareFile()
   inputFile.seekg (0, std::ios::beg);
 
   // get size, prepare std::string and read whole file
-  inputFile.read((char *)msSourceBuffer.c_str(), msSourceBuffer.size());
+  inputFile.read(const_cast<char *>(msSourceBuffer.c_str()), msSourceBuffer.size());
   if ((unsigned int)inputFile.gcount() != msSourceBuffer.size())
     throw l10nMem::showError("cannot read whole file");
   inputFile.close();
@@ -325,7 +325,7 @@ void convert_gen_impl::writeSourceFile(const std::string& line)
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-std::string& convert_gen_impl::copySource(char *yyText, bool bDoClear)
+std::string& convert_gen_impl::copySource(char const *yyText, bool bDoClear)
 {
   int nL;
 

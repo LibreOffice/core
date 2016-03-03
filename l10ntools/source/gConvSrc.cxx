@@ -75,8 +75,8 @@ void convert_src::setValue(char *syyText, char *sbuildValue)
 
   if (mbInList && !mbInListItem)
   {
-    setListItem((char *)"", true);
-    setListItem((char *)"", false);
+    setListItem("", true);
+    setListItem("", false);
   }
   msValue        = sbuildValue;
   mbValuePresent = true;
@@ -92,7 +92,7 @@ void convert_src::setLang(char *syyText, bool bEnUs)
 
   mbEnUs = bEnUs;
   if (!bEnUs && mbExpectValue)
-    mcMemory.showError(useText);
+      l10nMem::showError(useText);
 }
 
 
@@ -258,7 +258,7 @@ void convert_src::stopBlock(char *syyText)
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-void convert_src::setListItem(char *syyText, bool bIsStart)
+void convert_src::setListItem(char const *syyText, bool bIsStart)
 {
   copySource(syyText);
 
