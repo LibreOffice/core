@@ -970,7 +970,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     }
     else if (nSlotId == SID_CLASSIFICATION_APPLY)
     {
-        const SfxPoolItem* pItem = 0;
+        const SfxPoolItem* pItem = nullptr;
         if (pArgs && pArgs->GetItemState(nSlotId, false, &pItem) == SfxItemState::SET)
         {
             const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
