@@ -2195,7 +2195,7 @@ namespace
 {
     OUString construct_full_typename(OUString ns, OUString tn)
     {
-        if(ns == "pg_catalog")
+        if(ns.isEmpty() || ns == "pg_catalog")
             return tn;
         else
             return ns + "." + tn;
