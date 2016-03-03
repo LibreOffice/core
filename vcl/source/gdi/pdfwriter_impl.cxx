@@ -845,17 +845,14 @@ static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
         rBuffer.append( '-' );
         nValue = -nValue;
     }
-    sal_Int32 nFactor = 10;
-    sal_Int32 nInt = nValue / nFactor;
+    const sal_Int32 nFactor = 10;
+    const sal_Int32 nInt = nValue / nFactor;
     rBuffer.append( nInt );
     sal_Int32 nDecimal  = nValue % nFactor;
-    if( nDecimal )
+    if (nDecimal)
     {
-        rBuffer.append( '.' );
-        // omit trailing zeros
-        while( (nDecimal % 10) == 0 )
-            nDecimal /= 10;
-        rBuffer.append( nDecimal );
+        rBuffer.append('.');
+        rBuffer.append(nDecimal);
     }
 }
 
