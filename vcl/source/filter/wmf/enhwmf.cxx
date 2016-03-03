@@ -23,6 +23,8 @@
 #include <vcl/dibtools.hxx>
 #include <memory>
 
+#include <com/sun/star/drawing/LineCap.hpp>
+
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
@@ -918,31 +920,21 @@ bool EnhWMFReader::ReadEnhWMF()
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 2 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASHDOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 90 );
                             break;
                             case PS_DOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 0 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASH :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 0 );
-                                aLineInfo.SetDashLen( 225 );
-                                aLineInfo.SetDistance( 100 );
                             break;
                             case PS_NULL :
                                 bTransparent = true;
@@ -1015,31 +1007,25 @@ bool EnhWMFReader::ReadEnhWMF()
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 2 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
+                                aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
                             break;
                             case PS_DASHDOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 90 );
+                                aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
                             break;
                             case PS_DOT :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 0 );
                                 aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
+                                aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
                             break;
                             case PS_DASH :
                                 aLineInfo.SetStyle( LINE_DASH );
                                 aLineInfo.SetDashCount( 1 );
                                 aLineInfo.SetDotCount( 0 );
-                                aLineInfo.SetDashLen( 225 );
-                                aLineInfo.SetDistance( 100 );
+                                aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
                             break;
                             case PS_NULL :
                                 bTransparent = true;
