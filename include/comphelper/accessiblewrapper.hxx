@@ -349,8 +349,7 @@ namespace comphelper
         /// retrieves a wrapper for the given accessible
         css::uno::Reference< css::accessibility::XAccessible >
                 getAccessibleWrapperFor(
-                    const css::uno::Reference< css::accessibility::XAccessible >& _rxKey,
-                    bool _bCreate = true
+                    const css::uno::Reference< css::accessibility::XAccessible >& _rxKey
                 );
 
         /// erases the given key from the map (if it is present there)

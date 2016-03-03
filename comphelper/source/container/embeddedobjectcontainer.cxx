@@ -1206,10 +1206,10 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( co
     return xInputStream;
 }
 
-uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString* pMediaType )
+uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
     // try to load it from the container storage
-    return GetObjectStream( GetEmbeddedObjectName( xObj ), pMediaType );
+    return GetObjectStream( GetEmbeddedObjectName( xObj ), nullptr );
 }
 
 bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )

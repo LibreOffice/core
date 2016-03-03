@@ -88,7 +88,7 @@ namespace comphelper
 
 
     Reference< XAccessible > OWrappedAccessibleChildrenManager::getAccessibleWrapperFor(
-        const Reference< XAccessible >& _rxKey, bool _bCreate )
+        const Reference< XAccessible >& _rxKey )
     {
         Reference< XAccessible > xValue;
 
@@ -104,7 +104,7 @@ namespace comphelper
         {
             xValue = aPos->second;
         }
-        else if ( _bCreate )
+        else
         {   // not found in the cache, and allowed to create
             // -> new wrapper
             xValue = new OAccessibleWrapper( m_xContext, _rxKey, m_aOwningAccessible );

@@ -113,8 +113,7 @@ namespace comphelper
         void registerImplementation(
             const OUString& _rImplementationName,
             const css::uno::Sequence< OUString >& _rServiceNames,
-            ::cppu::ComponentFactoryFunc _pCreateFunction,
-            FactoryInstantiation _pFactoryFunction = ::cppu::createSingleComponentFactory );
+            ::cppu::ComponentFactoryFunc _pCreateFunction );
 
         /** registers a component given by ComponentDescription
         */

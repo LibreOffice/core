@@ -105,9 +105,9 @@ namespace comphelper
 
 
     void OModule::registerImplementation( const OUString& _rImplementationName, const css::uno::Sequence< OUString >& _rServiceNames,
-        ::cppu::ComponentFactoryFunc _pCreateFunction, FactoryInstantiation _pFactoryFunction )
+        ::cppu::ComponentFactoryFunc _pCreateFunction )
     {
-        ComponentDescription aComponent( _rImplementationName, _rServiceNames, _pCreateFunction, _pFactoryFunction );
+        ComponentDescription aComponent( _rImplementationName, _rServiceNames, _pCreateFunction, ::cppu::createSingleComponentFactory );
         registerImplementation( aComponent );
     }
 
