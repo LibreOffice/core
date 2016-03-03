@@ -142,14 +142,10 @@ ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormat
 
 ScETSForecastCalculation::~ScETSForecastCalculation()
 {
-    if ( mpBase )
-        delete mpBase;
-    if ( mpTrend )
-        delete mpTrend;
-    if ( mpPerIdx )
-        delete mpPerIdx;
-    if ( mpForecast )
-        delete mpForecast;
+    delete mpBase;
+    delete mpTrend;
+    delete mpPerIdx;
+    delete mpForecast;
 }
 
 bool ScETSForecastCalculation::PreprocessDataRange( ScMatrixRef rMatX, ScMatrixRef rMatY, int& rSmplInPrd,
