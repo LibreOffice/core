@@ -716,8 +716,7 @@ bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
 
 bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                        sal_Int32 , sal_Int32 nEndPos,
-                                        LanguageType eLang )
+                                        sal_Int32 , sal_Int32 nEndPos )
 {
     // Condition:
     //  at the beginning:   _ or * after Space with the folloeing !Space
@@ -733,7 +732,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
     bool bAlphaNum = false;
     sal_Int32 nPos = nEndPos;
     sal_Int32  nFndPos = -1;
-    CharClass& rCC = GetCharClass( eLang );
+    CharClass& rCC = GetCharClass( LANGUAGE_SYSTEM );
 
     while( nPos )
     {

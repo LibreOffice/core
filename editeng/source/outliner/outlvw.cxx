@@ -1372,9 +1372,9 @@ sal_uInt16 OutlinerView::GetInvalidateMore() const
 }
 
 
-bool OutlinerView::IsCursorAtWrongSpelledWord( bool bMarkIfWrong )
+bool OutlinerView::IsCursorAtWrongSpelledWord()
 {
-    return pEditView->IsCursorAtWrongSpelledWord( bMarkIfWrong );
+    return pEditView->IsCursorAtWrongSpelledWord();
 }
 
 

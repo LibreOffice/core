@@ -100,8 +100,7 @@ public:
 
     bool Store( SvStream& rOStream ) const;
 
-    static EditTextObject* Create(
-        SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool = nullptr );
+    static EditTextObject* Create( SvStream& rIStream );
 
     sal_Int32 GetParagraphCount() const;
 

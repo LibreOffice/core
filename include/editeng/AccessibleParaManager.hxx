@@ -175,8 +175,7 @@ namespace accessibility
 
         void FireEvent( sal_Int32 nPara,
                         const sal_Int16 nEventId,
-                        const css::uno::Any& rNewValue = css::uno::Any(),
-                        const css::uno::Any& rOldValue = css::uno::Any() ) const;
+                        const css::uno::Any& rNewValue = css::uno::Any() ) const;
 
         static bool IsReferencable( WeakPara::HardRefType aChild );
         bool IsReferencable( sal_Int32 nChild ) const;

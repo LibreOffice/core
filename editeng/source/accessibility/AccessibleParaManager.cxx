@@ -96,8 +96,7 @@ namespace accessibility
 
     void AccessibleParaManager::FireEvent( sal_Int32 nPara,
                                            const sal_Int16 nEventId,
-                                           const uno::Any& rNewValue,
-                                           const uno::Any& rOldValue ) const
+                                           const uno::Any& rNewValue ) const
     {
         DBG_ASSERT( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara),
                 "AccessibleParaManager::FireEvent: invalid index" );
@@ -106,7 +105,7 @@ namespace accessibility
         {
             WeakPara::HardRefType maChild( GetChild( nPara ).first.get() );
             if( maChild.is() )
-                maChild->FireEvent( nEventId, rNewValue, rOldValue );
+                maChild->FireEvent( nEventId, rNewValue, css::uno::Any() );
         }
     }
 

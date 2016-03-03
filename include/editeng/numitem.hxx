@@ -282,7 +282,7 @@ public:
     SvxNumRuleFlags         GetFeatureFlags() const {return nFeatureFlags;}
     void                    SetFeatureFlag( SvxNumRuleFlags nFlag, bool bSet = true ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
 
-    OUString                MakeNumString( const SvxNodeNum&, bool bInclStrings = true ) const;
+    OUString                MakeNumString( const SvxNodeNum& ) const;
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
 

@@ -521,20 +521,17 @@ void EditHTMLParser::ImpInsertParaBreak()
     aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
 }
 
-void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel )
+void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems )
 {
     // pSel, when character attributes, otherwise paragraph attributes for
     // the current paragraph.
-    DBG_ASSERT( pSel || ( aCurSel.Min().GetNode() == aCurSel.Max().GetNode() ), "ImpInsertAttribs: Selection?" );
+    DBG_ASSERT( aCurSel.Min().GetNode() == aCurSel.Max().GetNode(), "ImpInsertAttribs: Selection?" );
 
-    EditPaM aStartPaM( pSel ? pSel->Min() : aCurSel.Min() );
-    EditPaM aEndPaM( pSel ? pSel->Max() : aCurSel.Max() );
+    EditPaM aStartPaM( aCurSel.Min() );
+    EditPaM aEndPaM( aCurSel.Max() );
 
-    if ( !pSel )
-    {
-        aStartPaM.SetIndex( 0 );
-        aEndPaM.SetIndex( aEndPaM.GetNode()->Len() );
-    }
+    aStartPaM.SetIndex( 0 );
+    aEndPaM.SetIndex( aEndPaM.GetNode()->Len() );
 
     if (mpEditEngine->IsImportHandlerSet())
     {

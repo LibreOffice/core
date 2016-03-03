@@ -808,7 +808,7 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
     }
 }
 
-OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, bool bInclStrings ) const
+OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum ) const
 {
     OUString aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
@@ -854,10 +854,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, bool bInclStrings ) 
             }
         }
 
-        if( bInclStrings )
-        {
-            aStr = rMyNFmt.GetPrefix() + aStr + rMyNFmt.GetSuffix();
-        }
+        aStr = rMyNFmt.GetPrefix() + aStr + rMyNFmt.GetSuffix();
     }
     return aStr;
 }

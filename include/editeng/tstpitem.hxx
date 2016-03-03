@@ -119,8 +119,7 @@ public:
     // unprivatized:
     sal_uInt16          Count() const { return maTabStops.size(); }
     bool                Insert( const SvxTabStop& rTab );
-    void                Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0,
-                            sal_uInt16 nEnd = USHRT_MAX );
+    void                Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0 );
     void                Remove( const sal_uInt16 nPos, const sal_uInt16 nLen = 1 )
                         { maTabStops.erase( maTabStops.begin() + nPos, maTabStops.begin() + nPos + nLen ); }
 

@@ -175,8 +175,7 @@ private:
         css::uno::Reference<css::datatransfer::XTransferable >& rxDataObj,
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
 
-    EDITENG_DLLPRIVATE EditPaM EndOfWord(
-        const EditPaM& rPaM, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+    EDITENG_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
 
     EDITENG_DLLPRIVATE EditPaM GetPaM(const Point& aDocPos, bool bSmart = true);
 
@@ -271,7 +270,7 @@ public:
     void            SetMaxAutoPaperSize( const Size& rSz );
 
     OUString        GetText( LineEnd eEnd = LINEEND_LF ) const;
-    OUString        GetText( const ESelection& rSelection, const LineEnd eEnd = LINEEND_LF ) const;
+    OUString        GetText( const ESelection& rSelection ) const;
     sal_uInt32      GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
@@ -551,8 +550,7 @@ public:
     EditPaM InsertField(const EditSelection& rEditSelection, const SvxFieldItem& rFld);
     EditPaM InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
     EditSelection InsertText(const EditTextObject& rTextObject, const EditSelection& rSel);
-    EditPaM InsertParaBreak(
-        const EditSelection& rEditSelection, bool bKeepEndingAttribs = true);
+    EditPaM InsertParaBreak(const EditSelection& rEditSelection);
     EditPaM InsertLineBreak(const EditSelection& rEditSelection);
 
     EditPaM CursorLeft(
@@ -561,7 +559,7 @@ public:
         const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL);
 
     void SeekCursor(
-        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = nullptr, sal_uInt16 nIgnoreWhich = 0);
+        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = nullptr);
 
     EditPaM DeleteSelection(const EditSelection& rSel);
 
@@ -572,7 +570,7 @@ public:
     void SetParaAttribsOnly(sal_Int32 nPara, const SfxItemSet& rSet);
     void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
 
-    OUString GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
+    OUString GetSelected(const EditSelection& rSel) const;
     EditPaM DeleteSelected(const EditSelection& rSel);
 
     SvtScriptType GetScriptType(const EditSelection& rSel) const;

@@ -178,9 +178,9 @@ void Outliner::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect )
     pEditEngine->Draw( pOutDev, rOutRect );
 }
 
-void Outliner::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation )
+void Outliner::Draw( OutputDevice* pOutDev, const Point& rStartPos )
 {
-    pEditEngine->Draw( pOutDev, rStartPos, nOrientation );
+    pEditEngine->Draw( pOutDev, rStartPos );
 }
 
 void Outliner::SetPaperSize( const Size& rSize )
@@ -328,9 +328,9 @@ sal_Int32 Outliner::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
     return pEditEngine->GetLineLen( nParagraph, nLine );
 }
 
-sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
+sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph )
 {
-    return pEditEngine->GetLineHeight( nParagraph, nLine );
+    return pEditEngine->GetLineHeight( nParagraph );
 }
 
 void Outliner::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
@@ -486,9 +486,9 @@ void Outliner::QuickInsertLineBreak( const ESelection& rSel )
     pEditEngine->QuickInsertLineBreak( rSel );
 }
 
-void Outliner::QuickFormatDoc( bool bFull )
+void Outliner::QuickFormatDoc()
 {
-    pEditEngine->QuickFormatDoc( bFull );
+    pEditEngine->QuickFormatDoc();
 }
 
 void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )

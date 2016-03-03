@@ -99,13 +99,13 @@ public:
     void SetFieldOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnFieldOffset = nOffset; mnFieldLen = nLen; }
     sal_Int32 GetFieldOffset() const { return mnFieldOffset; }
     sal_Int32 GetFieldLen() const { return mnFieldLen; }
-    void AreInField( bool bInField = true ) { mbInField = bInField; }
+    void AreInField() { mbInField = true; }
     bool InField() const { return mbInField; }
 
     void SetBulletOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnBulletOffset = nOffset; mnBulletLen = nLen; }
     sal_Int32 GetBulletOffset() const { return mnBulletOffset; }
     sal_Int32 GetBulletLen() const { return mnBulletLen; }
-    void AreInBullet( bool bInBullet = true ) { mbInBullet = bInBullet; }
+    void AreInBullet() { mbInBullet = true; }
     bool InBullet() const { return mbInBullet; }
 
     /// returns false if the given range is non-editable (e.g. contains bullets or _parts_ of fields)

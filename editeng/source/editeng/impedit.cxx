@@ -766,7 +766,7 @@ void ImpEditView::CalcAnchorPoint()
     }
 }
 
-void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16 nShowCursorFlags )
+void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 {
     // No ShowCursor in an empty View ...
     if ( ( aOutArea.Left() >= aOutArea.Right() ) && ( aOutArea.Top() >= aOutArea.Bottom() ) )
@@ -797,9 +797,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
 
     const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
 
-    nShowCursorFlags |= nExtraCursorFlags;
-
-    nShowCursorFlags |= GETCRSR_TXTONLY;
+    sal_uInt16 nShowCursorFlags = nExtraCursorFlags | GETCRSR_TXTONLY;
 
     // Use CursorBidiLevel 0/1 in meaning of
     // 0: prefer portion end, normal mode

@@ -224,7 +224,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void ClearStyleTbl();
     void ClearAttrStack();
 
-    SvxRTFItemStackType* _GetAttrSet(bool bCopyAttr = false);  // Create new ItemStackType:s
+    SvxRTFItemStackType* _GetAttrSet();  // Create new ItemStackType:s
     void _ClearStyleAttr( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
@@ -268,7 +268,7 @@ protected:
     // Read Document-Info
     css::util::DateTime GetDateTimeStamp( );
     OUString& GetTextToEndGroup( OUString& rStr );
-    void ReadInfo( const sal_Char* pChkForVerNo = nullptr );
+    void ReadInfo();
 
     inline SfxItemSet& GetAttrSet();
     // no text yet inserted? (SttPos from the top stack entry!)

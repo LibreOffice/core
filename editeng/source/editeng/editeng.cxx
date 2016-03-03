@@ -552,10 +552,10 @@ OUString EditEngine::GetText( LineEnd eEnd ) const
     return pImpEditEngine->GetEditDoc().GetText( eEnd );
 }
 
-OUString EditEngine::GetText( const ESelection& rESelection, const LineEnd eEnd ) const
+OUString EditEngine::GetText( const ESelection& rESelection ) const
 {
     EditSelection aSel( pImpEditEngine->CreateSel( rESelection ) );
-    return pImpEditEngine->GetSelected( aSel, eEnd );
+    return pImpEditEngine->GetSelected( aSel );
 }
 
 sal_uInt32 EditEngine::GetTextLen() const
@@ -800,9 +800,9 @@ EditSelection EditEngine::InsertText(
     return pImpEditEngine->InsertText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
 }
 
-EditPaM EditEngine::EndOfWord(const EditPaM& rPaM, sal_Int16 nWordType)
+EditPaM EditEngine::EndOfWord(const EditPaM& rPaM)
 {
-    return pImpEditEngine->EndOfWord(rPaM, nWordType);
+    return pImpEditEngine->EndOfWord(rPaM);
 }
 
 EditPaM EditEngine::GetPaM(const Point& aDocPos, bool bSmart)
@@ -874,9 +874,9 @@ const ParaPortionList& EditEngine::GetParaPortions() const
 }
 
 void EditEngine::SeekCursor(
-        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut, sal_uInt16 nIgnoreWhich)
+        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut)
 {
-    pImpEditEngine->SeekCursor(pNode, nPos, rFont, pOut, nIgnoreWhich);
+    pImpEditEngine->SeekCursor(pNode, nPos, rFont, pOut);
 }
 
 EditPaM EditEngine::DeleteSelection(const EditSelection& rSel)
@@ -909,9 +909,9 @@ void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, s
     pImpEditEngine->SetAttribs(rSel, rSet, nSpecial);
 }
 
-OUString EditEngine::GetSelected(const EditSelection& rSel, const LineEnd eParaSep) const
+OUString EditEngine::GetSelected(const EditSelection& rSel) const
 {
-    return pImpEditEngine->GetSelected(rSel, eParaSep);
+    return pImpEditEngine->GetSelected(rSel);
 }
 
 EditPaM EditEngine::DeleteSelected(const EditSelection& rSel)
@@ -2735,10 +2735,9 @@ void EditEngine::CallImportHandler(ImportInfo& rInfo)
     pImpEditEngine->aImportHdl.Call(rInfo);
 }
 
-EditPaM EditEngine::InsertParaBreak(
-        const EditSelection& rEditSelection, bool bKeepEndingAttribs)
+EditPaM EditEngine::InsertParaBreak(const EditSelection& rEditSelection)
 {
-    return pImpEditEngine->ImpInsertParaBreak(rEditSelection, bKeepEndingAttribs);
+    return pImpEditEngine->ImpInsertParaBreak(rEditSelection);
 }
 
 EditPaM EditEngine::InsertLineBreak(const EditSelection& rEditSelection)
