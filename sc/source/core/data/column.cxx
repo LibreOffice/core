@@ -2790,15 +2790,16 @@ struct SetDirtyIfPostponedHandler
 
 struct CalcAllHandler
 {
+#define DEBUG_SC_CHECK_FORMULATREE_CALCULATION 0
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-#if OSL_DEBUG_LEVEL > 0
+#if DEBUG_SC_CHECK_FORMULATREE_CALCULATION
         // after F9 ctrl-F9: check the calculation for each FormulaTree
         double nOldVal, nNewVal;
         nOldVal = pCell->GetValue();
 #endif
         pCell->Interpret();
-#if OSL_DEBUG_LEVEL > 0
+#if DEBUG_SC_CHECK_FORMULATREE_CALCULATION
         if (pCell->GetCode()->IsRecalcModeNormal())
             nNewVal = pCell->GetValue();
         else
@@ -2807,6 +2808,7 @@ struct CalcAllHandler
         assert(nOldVal == nNewVal);
 #endif
     }
+#undef DEBUG_SC_CHECK_FORMULATREE_CALCULATION
 };
 
 class CompileAllHandler
