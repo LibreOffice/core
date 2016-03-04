@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
+#include <com/sun/star/uno/Sequence.h>
 
 #include <vector>
 
@@ -83,6 +84,8 @@ struct SignatureInformation
     OUString ouDescriptionPropertyId;
     /// OOXML certificate SHA-256 digest, empty for ODF.
     OUString ouCertDigest;
+    /// A full OOXML signguature for unchanged roundtrip, empty for ODF.
+    css::uno::Sequence<sal_Int8> aSignatureBytes;
 
     SignatureInformation( sal_Int32 nId )
     {
