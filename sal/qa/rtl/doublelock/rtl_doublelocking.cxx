@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// include files
+#include <sal/config.h>
+
+#include <iostream>
 
 #include <sal/types.h>
 
@@ -190,24 +192,23 @@ namespace rtl_DoubleLocking
                 sal_Int32 nValueOK2 = 0;
                 nValueOK2 = p2Thread->getOK();
 
-                SAL_INFO("sal.doublelock", "Value in Thread #1 is " << nValueOK);
-                SAL_INFO("sal.doublelock", "Value in Thread #2 is " << nValueOK2);
+                std::cout << "Value in Thread #1 is " << nValueOK << "\n";
+                std::cout << "Value in Thread #2 is " << nValueOK2 << "\n";
                 sal_Int32 nValueFails = 0;
                 nValueFails = pThread->getFails();
 
                 sal_Int32 nValueFails2 = 0;
                 nValueFails2 = p2Thread->getFails();
 
-                SAL_INFO("sal.doublelock", "Fails in Thread #1 is " << nValueFails);
-                SAL_INFO("sal.doublelock", "Fails in Thead #2 is " << nValueFails2);
-
                 delete pThread;
                 delete p2Thread;
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "getValue() failed, wrong value expected.",
-                    nValueOK != 0 && nValueFails == 0 && nValueFails2 == 0
+                    nValueOK != 0
                     );
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValueFails);
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValueFails2);
             }
 
         CPPUNIT_TEST_SUITE(getValue);
