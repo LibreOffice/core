@@ -89,7 +89,7 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
     ComSmart< OleWrapperAdviseSink > m_pDataAdvises[DEFAULT_ARRAY_LEN];
     ComSmart< OleWrapperAdviseSink > m_pViewAdvise;
 
-    class InternalCacheWrapper : public IOleCache2
+    class InternalCacheWrapper final: public IOleCache2
     {
         InprocEmbedDocument_Impl& m_rOwnDocument;
 
@@ -97,6 +97,8 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
         explicit InternalCacheWrapper( InprocEmbedDocument_Impl& rOwnDocument )
         : m_rOwnDocument( rOwnDocument )
         {}
+
+        virtual ~InternalCacheWrapper() {}
 
         /* IUnknown methods */
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
