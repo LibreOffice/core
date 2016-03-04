@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_48c15e80",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-04T13:57:14Z",
+      "side": 1,
+      "message": "Use \u0027auto\u0027 here.",
+      "revId": "5043e81a59448cfc8c00261df45e8d6176b3d028",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_a8be02fd",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-04T13:57:14Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "5043e81a59448cfc8c00261df45e8d6176b3d028",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_88bb460e",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-04T13:57:14Z",
+      "side": 1,
+      "message": "Use \u0027auto\u0027 (and cbegin()  and cend(), I guess)",
+      "revId": "5043e81a59448cfc8c00261df45e8d6176b3d028",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
