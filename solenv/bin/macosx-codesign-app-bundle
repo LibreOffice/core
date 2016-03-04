@@ -36,7 +36,7 @@ APP_BUNDLE="$1"
 # add some where it makes sense. Make a depth-first search to sign the contents
 # of e.g. the spotlight plugin before attempting to sign the plugin itself
 
-find -d "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' \
+find -d "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' -or -name '*.odt' \
         -or -name 'schema.strings' -or -name 'schema.xml' -or -name '*.mdimporter' \
         -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
         -or -name '*.applescript' \) ! -type l | grep -v "LibreOfficePython\.framework" | \
@@ -45,7 +45,7 @@ while read file; do
     codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
 done
 
-find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
+find "$APP_BUNDLE" -name '*.dylib.*' ! -type l | \
 while read dylib; do \
     id=`basename "$dylib"`; \
     id=`echo $id | sed -e 's/dylib.*/dylib/'`; \
@@ -76,13 +76,14 @@ done
 # it has just one version, so this generic search is mostly for
 # completeness.
 
-for framework in `find $APP_BUNDLE -name '*.framework' -type d`; do \
-    fn="$(basename $framework)"
+find "$APP_BUNDLE" -name '*.framework' -type d -print0 | \
+while IFS= read -r -d '' framework; do \
+    fn=$(basename "$framework")
     fn=${fn%.*}
-    for version in $framework/Versions/*; do \
-        if test ! -L $version -a -d $version; then
-            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version/$fn || exit 1
-            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version || exit 1
+    for version in "$framework"/Versions/*; do \
+        if test ! -L "$version" -a -d "$version"; then
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$version/$fn" || exit 1
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" || exit 1
         fi; \
     done; \
 done
@@ -103,6 +104,6 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE || exit 1
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
 
 exit 0
