@@ -364,6 +364,11 @@ public class XMergeBridge {
 
         }
 
+        private static void close(FileOutputStream c) throws IOException {
+            if (c == null) return;
+            c.close();
+        }
+
         private void convert (com.sun.star.io.XInputStream xml,com.sun.star.io.XOutputStream device,
                               boolean convertFromOffice,String pluginUrl,String FileName,String offMime,String sdMime) throws com.sun.star.uno.RuntimeException, IOException {
 
@@ -436,11 +441,15 @@ public class XMergeBridge {
                                         newFile =new File(newFileName.concat(String.valueOf(i)));
                                     }
 
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    docOut      = (Document)docEnum.next();
-                                    docOut.write(fos);
-                                    fos.flush();
-                                    fos.close();
+                                    FileOutputStream fos = null;
+                                    try {
+                                        fos = new FileOutputStream(newFile);
+                                        docOut = (Document)docEnum.next();
+                                        docOut.write(fos);
+                                        fos.flush();
+                                    } finally {
+                                        close(fos);
+                                    }
                                     i++;
 
                                 }
