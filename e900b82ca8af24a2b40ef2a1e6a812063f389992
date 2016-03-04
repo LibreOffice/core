@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_28b6928a",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-04T21:53:55Z",
+      "side": 1,
+      "message": "You can as well do aAny \u003e\u003e\u003d aFillStyle. Or CPPUNIT_ASSERT(aAny \u003e\u003e\u003d aFillStyle) for a bit of extra paranoia :)\n\nI\u0027ll just amend the patch, it\u0027s only a cosmetic change ...",
+      "revId": "e900b82ca8af24a2b40ef2a1e6a812063f389992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
