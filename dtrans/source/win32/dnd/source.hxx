@@ -26,11 +26,14 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "../../inc/DtObjFactory.hxx"
 #include "globals.hxx"
 #include <oleidl.h>
 
 #include <systools/win32/comtools.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -53,8 +56,6 @@ class DragSource:
 
     // The mouse button that set off the drag and drop operation
     short m_MouseButton;
-    // Converts XTransferable objects to IDataObject objects.
-    CDTransObjFactory m_aDataConverter;
 
     DragSource();
     DragSource(const DragSource&);

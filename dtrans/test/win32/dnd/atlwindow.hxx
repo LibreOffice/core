@@ -49,8 +49,6 @@ class AWindow: public CWindowImpl<AWindow, CWindow,
 
     HWND m_hwndEdit;
 
-    CDTransObjFactory m_aDataConverter;
-
 public:
     explicit AWindow(LPCTSTR strName)
     {

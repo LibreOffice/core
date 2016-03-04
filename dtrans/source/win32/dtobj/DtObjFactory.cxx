@@ -21,8 +21,6 @@
 
 #include "XTDataObject.hxx"
 
-#include "DOTransferable.hxx"
-
 // namespace directives
 
 using namespace com::sun::star::uno;
@@ -35,19 +33,6 @@ IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable(const R
                                                                        const Reference< XTransferable >& refXTransferable)
 {
     return (IDataObjectPtr(new CXTDataObject(rxContext, refXTransferable)));
-}
-
-Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDataObj( const Reference< XComponentContext >& rxContext,
-                                                                                     IDataObjectPtr pIDataObject )
-{
-    CDOTransferable* pTransf = new CDOTransferable(rxContext, pIDataObject);
-    Reference<XTransferable> refDOTransf(pTransf);
-
-    pTransf->acquire();
-    pTransf->initFlavorList();
-    pTransf->release();
-
-    return refDOTransf;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

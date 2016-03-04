@@ -58,7 +58,18 @@ namespace
 
 } // end namespace
 
-// ctor
+Reference< XTransferable > SAL_CALL CDOTransferable::create( const Reference< XComponentContext >& rxContext,
+                                                                                     IDataObjectPtr pIDataObject )
+{
+    CDOTransferable* pTransf = new CDOTransferable(rxContext, pIDataObject);
+    Reference<XTransferable> refDOTransf(pTransf);
+
+    pTransf->acquire();
+    pTransf->initFlavorList();
+    pTransf->release();
+
+    return refDOTransf;
+}
 
 CDOTransferable::CDOTransferable(
     const Reference< XComponentContext >& rxContext, IDataObjectPtr rDataObject ) :
