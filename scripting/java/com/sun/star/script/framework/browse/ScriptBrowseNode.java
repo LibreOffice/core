@@ -48,8 +48,6 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
-import java.util.HashMap;
-
 public class ScriptBrowseNode extends PropertySet implements
     XBrowseNode, XInvocation {
 
@@ -247,8 +245,7 @@ public class ScriptBrowseNode extends PropertySet implements
 
                 String language = provider.getName();
 
-                ScriptEntry entry = new ScriptEntry(language, languageName,
-                                                    new HashMap<String, String>());
+                ScriptEntry entry = new ScriptEntry(language, languageName);
 
                 ScriptMetaData data =
                     new ScriptMetaData(parent, entry, oldSource);

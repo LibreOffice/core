@@ -47,7 +47,6 @@ import com.sun.star.uno.XComponentContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
@@ -207,8 +206,7 @@ public class ParcelBrowseNode extends PropertySet implements
 
                     String language = container.getLanguage();
 
-                    ScriptEntry entry = new ScriptEntry(language, languageName,
-                                                        new HashMap<String, String>());
+                    ScriptEntry entry = new ScriptEntry(language, languageName);
 
                     Parcel parcel = (Parcel)container.getByName(getName());
                     ScriptMetaData data = new ScriptMetaData(parcel, entry, source);
