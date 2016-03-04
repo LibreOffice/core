@@ -82,8 +82,8 @@ public class ConverterInfoReader {
         JarEntry jarentry = jarConnection.getJarEntry();
         JarFile jarfile   = jarConnection.getJarFile();
 
-        if (jarfile == null) {
-            throw new IOException("Missing jar file");
+        if (jarfile == null || jarentry == null) {
+            throw new IOException("Missing jar entry");
         }
 
         // Build the InputSource
