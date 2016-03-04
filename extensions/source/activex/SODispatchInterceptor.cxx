@@ -19,6 +19,10 @@
 
 // SODispatchInterceptor.cpp : Implementation of CHelpApp and DLL registration.
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "stdio.h"
 #include "stdafx2.h"
 #include "so_activex.h"
@@ -35,7 +39,7 @@ STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
         &IID_ISODispatchInterceptor,
     };
 
-    for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
+    for (std::size_t i=0;i<SAL_N_ELEMENTS(arr);i++)
     {
 #ifdef _MSC_VER
         if (InlineIsEqualGUID(*arr[i],riid))
