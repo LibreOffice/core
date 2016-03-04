@@ -23,14 +23,14 @@ OpenCLConfig::OpenCLConfig() :
     // This entry we have had for some time (when blacklisting was
     // done elsewhere in the code), so presumably there is a known
     // good reason for it.
-    maBlackList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
+    maBlackList.insert(ImplMatcher("Windows", "", "Intel(R) Corporation", "", "9.17.10.2884"));
 
     // This is what I have tested on Linux and it works for our unit tests.
-    maWhiteList.insert(ImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
+    maWhiteList.insert(ImplMatcher("Linux", "", "Advanced Micro Devices, Inc.", "", "1445.5 (sse2,avx)"));
 
     // For now, assume that AMD, Intel and NVIDIA drivers are good
-    maWhiteList.insert(ImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
-    maWhiteList.insert(ImplMatcher("", "", "Intel\\(R\\) Corporation", "", ""));
+    maWhiteList.insert(ImplMatcher("", "", "Advanced Micro Devices, Inc.", "", ""));
+    maWhiteList.insert(ImplMatcher("", "", "Intel(R) Corporation", "", ""));
     maWhiteList.insert(ImplMatcher("", "", "NVIDIA Corporation", "", ""));
 }
 
