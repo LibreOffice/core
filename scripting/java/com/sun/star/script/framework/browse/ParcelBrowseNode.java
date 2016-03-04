@@ -207,7 +207,7 @@ public class ParcelBrowseNode extends PropertySet implements
 
                     String language = container.getLanguage();
 
-                    ScriptEntry entry = new ScriptEntry(language, languageName, "",
+                    ScriptEntry entry = new ScriptEntry(language, languageName,
                                                         new HashMap<String, String>());
 
                     Parcel parcel = (Parcel)container.getByName(getName());

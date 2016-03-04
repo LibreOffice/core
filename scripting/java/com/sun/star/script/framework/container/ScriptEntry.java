@@ -25,7 +25,6 @@ public class ScriptEntry implements Cloneable {
 
     private final String language;
     private final String languagename;
-    private final String location;
     private final String logicalname;
     private final String description;
 
@@ -35,18 +34,17 @@ public class ScriptEntry implements Cloneable {
         this.language = entry.language;
         this.languagename = entry.languagename;
         this.logicalname = entry.languagename;
-        this.location = entry.location;
         this.languagedepprops = entry.languagedepprops;
         this.description = entry.description;
     }
 
     public ScriptEntry(String language, String languagename,
-                       String location, Map<String, String> languagedepprops) {
-        this(language, languagename, location, languagedepprops, "");
+                       Map<String, String> languagedepprops) {
+        this(language, languagename, languagedepprops, "");
     }
 
     public ScriptEntry(String language, String languagename,
-                       String location, Map<String, String> languagedepprops,
+                       Map<String, String> languagedepprops,
                        String description) {
         this.language = language;
         this.languagename = languagename;
@@ -55,7 +53,6 @@ public class ScriptEntry implements Cloneable {
         // function name ( from xml ) will be used
         // as logical name also
         this.logicalname = languagename;
-        this.location = location;
         this.languagedepprops = languagedepprops;
         this.description = description;
     }
@@ -69,8 +66,7 @@ public class ScriptEntry implements Cloneable {
         return language.equals(other.getLanguage()) &&
                languagename.equals(other.getLanguageName()) &&
                logicalname.equals(other.getLogicalName()) &&
-               languagedepprops.equals(other.getLanguageProperties()) &&
-               location.equals(other.getLocation());
+               languagedepprops.equals(other.getLanguageProperties());
     }
 
     @Override
@@ -94,10 +90,6 @@ public class ScriptEntry implements Cloneable {
         return language;
     }
 
-    public  String getLocation() {
-        return location;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -106,7 +98,6 @@ public class ScriptEntry implements Cloneable {
     public String toString() {
         return "\nLogicalName = " + logicalname +
                "\nLanguageName = " + languagename +
-               "\nLocation = " + location +
                "\nLanguaguageProperties = " + languagedepprops;
     }
 }

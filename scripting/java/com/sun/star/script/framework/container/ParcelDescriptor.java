@@ -196,7 +196,7 @@ public class ParcelDescriptor {
             }
 
             ScriptEntry entry =
-                new ScriptEntry(language, languagename, "", langProps, description);
+                new ScriptEntry(language, languagename, langProps, description);
             scripts.add(entry);
         }
 

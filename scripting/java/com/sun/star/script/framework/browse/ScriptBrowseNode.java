@@ -247,7 +247,7 @@ public class ScriptBrowseNode extends PropertySet implements
 
                 String language = provider.getName();
 
-                ScriptEntry entry = new ScriptEntry(language, languageName, "",
+                ScriptEntry entry = new ScriptEntry(language, languageName,
                                                     new HashMap<String, String>());
 
                 ScriptMetaData data =
