@@ -1,0 +1,22 @@
+diff -ru nss.orig/nss/coreconf/WIN32.mk nss/nss/coreconf/WIN32.mk
+--- a/nss.orig/nss/coreconf/WIN32.mk	2016-03-04 08:30:16.306639400 +0100
++++ b/nss/nss/coreconf/WIN32.mk	2016-03-04 08:31:17.987233200 +0100
+@@ -169,15 +169,15 @@
+ 	DLLFLAGS   += -OUT:$@
+ 	ifdef MOZ_DEBUG_SYMBOLS
+ 		ifdef MOZ_DEBUG_FLAGS
+-			OPTIMIZER += $(MOZ_DEBUG_FLAGS) -Fd$(OBJDIR)/
++			OPTIMIZER += $(MOZ_DEBUG_FLAGS) -Fd./
+ 		else
+-			OPTIMIZER += -Zi -Fd$(OBJDIR)/
++			OPTIMIZER += -Zi -Fd./
+ 		endif
+ 		DLLFLAGS += -DEBUG -OPT:REF
+ 		LDFLAGS += -DEBUG -OPT:REF
+ 	endif
+     else
+-	OPTIMIZER += -Zi -Fd$(OBJDIR)/ -Od
++	OPTIMIZER += -Zi -Fd./ -Od
+ 	NULLSTRING :=
+ 	SPACE      := $(NULLSTRING) # end of the line
+ 	USERNAME   := $(subst $(SPACE),_,$(USERNAME))
