@@ -413,7 +413,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 // will not contain
                 // SecurityOperationStatus_OPERATION_SUCCEEDED
                 mbVerifySignatures = true;
-                ImplGetSignatureInformations(true);
+                ImplGetSignatureInformations(true, /*bCacheLastSignature=*/false);
                 ImplFillSignaturesBox();
             }
         }
@@ -422,7 +422,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     {
         OSL_FAIL( "Exception while adding a signature!" );
         // Don't keep invalid entries...
-        ImplGetSignatureInformations(true);
+        ImplGetSignatureInformations(true, /*bCacheLastSignature=*/false);
         ImplFillSignaturesBox();
     }
 }
@@ -624,9 +624,9 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
 //If bUseTempStream is true then the temporary signature stream is used.
 //Otherwise the real signature stream is used.
-void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream)
+void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature)
 {
-    maSignatureManager.read(bUseTempStream);
+    maSignatureManager.read(bUseTempStream, bCacheLastSignature);
     mbVerifySignatures = false;
 }
 

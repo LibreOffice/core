@@ -178,7 +178,7 @@ public:
     static void ExportSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler, const SignatureInformation& signatureInfo );
 
     /// Read and verify OOXML signatures.
-    bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage);
+    bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bCacheLastSignature = true);
     /// Read and verify a single OOXML signature.
     bool ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     /// Adds an OOXML digital signature relation to _rels/.rels if there wasn't any before.

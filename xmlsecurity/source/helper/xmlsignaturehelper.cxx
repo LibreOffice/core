@@ -385,7 +385,7 @@ bool lcl_isSignatureOriginType(const beans::StringPair& rPair)
 }
 }
 
-bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embed::XStorage>& xStorage)
+bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embed::XStorage>& xStorage, bool bCacheLastSignature)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READ;
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
@@ -393,8 +393,9 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
     uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo;
     aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, "origin.sigs.rels", mxCtx);
 
-    for (const uno::Sequence<beans::StringPair>& rRelation : aRelationsInfo)
+    for (sal_Int32 i = 0; i < aRelationsInfo.getLength(); ++i)
     {
+        const uno::Sequence<beans::StringPair>& rRelation = aRelationsInfo[i];
         auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rRelation);
         if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureType) != aRelation.end())
         {
@@ -412,17 +413,25 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
                 if (!ReadAndVerifySignatureStorageStream(xInputStream))
                     return false;
 
-                // Store the contents of the stream as is, in case we need to write it back later.
-                xInputStream.clear();
-                xInputStream.set(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
-                if (xPropertySet.is())
+                // By default, we cache. If it's requested, then we don't cache the last signature.
+                bool bCache = true;
+                if (!bCacheLastSignature && i == aRelationsInfo.getLength() - 1)
+                    bCache = false;
+
+                if (bCache)
                 {
-                    sal_Int64 nSize = 0;
-                    xPropertySet->getPropertyValue("Size") >>= nSize;
-                    uno::Sequence<sal_Int8> aData;
-                    xInputStream->readBytes(aData, nSize);
-                    mpXSecController->setSignatureBytes(aData);
+                    // Store the contents of the stream as is, in case we need to write it back later.
+                    xInputStream.clear();
+                    xInputStream.set(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
+                    if (xPropertySet.is())
+                    {
+                        sal_Int64 nSize = 0;
+                        xPropertySet->getPropertyValue("Size") >>= nSize;
+                        uno::Sequence<sal_Int8> aData;
+                        xInputStream->readBytes(aData, nSize);
+                        mpXSecController->setSignatureBytes(aData);
+                    }
                 }
             }
         }
