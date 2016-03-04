@@ -26,7 +26,7 @@ public:
     bool C:1;
     sal_uInt16 reserved3:8;
     bool Read( SvStream& rS ) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
     virtual void Print(FILE* fp) override;
 #endif
 };
@@ -39,7 +39,7 @@ class ScTBC : public TBBase
 public:
     ScTBC();
     virtual ~ScTBC(){}
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif
     bool Read(SvStream &rS) override;
@@ -56,7 +56,7 @@ class ScCTB : public TBBase
 public:
     explicit ScCTB(sal_uInt16);
     virtual ~ScCTB(){}
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif
     bool Read(SvStream &rS) override;
@@ -82,7 +82,7 @@ public:
     CTBS& operator = ( const CTBS&);
     CTBS();
     virtual ~CTBS(){}
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif
     bool Read(SvStream &rS) override;
@@ -98,7 +98,7 @@ public:
     ScCTBWrapper();
     virtual ~ScCTBWrapper();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif
     void ImportCustomToolBar( SfxObjectShell& rDocSh );

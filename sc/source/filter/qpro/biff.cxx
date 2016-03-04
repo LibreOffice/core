@@ -66,7 +66,7 @@ bool ScBiffReader::nextRecord()
     mpStream->ReadUInt16( mnId ).ReadUInt16( mnLength );
 
     mnOffset = mpStream->Tell();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_QPRO
     fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
         (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
 
