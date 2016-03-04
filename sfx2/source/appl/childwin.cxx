@@ -578,8 +578,7 @@ bool SfxChildWindow::WantsFocus() const
 bool SfxChildWinInfo::GetExtraData_Impl
 (
     SfxChildAlignment   *pAlign,
-    SfxChildAlignment   *pLastAlign,
-    Size                *pSize
+    SfxChildAlignment   *pLastAlign
 )   const
 {
     // invalid?
@@ -628,8 +627,6 @@ bool SfxChildWinInfo::GetExtraData_Impl
     Size aChildSize;
     if ( GetPosSizeFromString( aStr, aChildPos, aChildSize ) )
     {
-        if ( pSize )
-            *pSize = aChildSize;
         return true;
     }
     return false;

@@ -59,7 +59,7 @@ public:
 
     inline bool   isStrongLowerRequested( sal_Int32 nDimensionIndex ) const;
     inline bool   isLogicVisible( double fX, double fY, double fZ ) const;
-    inline void   doLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
+    inline void   doLogicScaling( double* pX, double* pY, double* pZ ) const;
     inline void   doUnshiftedLogicScaling( double* pX, double* pY, double* pZ ) const;
     inline void   clipLogicValues( double* pX, double* pY, double* pZ ) const;
            void   clipScaledLogicValues( double* pX, double* pY, double* pZ ) const;
@@ -300,11 +300,8 @@ bool PlottingPositionHelper::isLogicVisible(
         && fZ >= m_aScales[2].Minimum && ( isStrongLowerRequested(2) ? fZ < m_aScales[2].Maximum : fZ <= m_aScales[2].Maximum );
 }
 
-void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ, bool bClip ) const
+void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ ) const
 {
-    if(bClip)
-        this->clipLogicValues( pX,pY,pZ );
-
     if(pX)
     {
         if( m_aScales[0].Scaling.is())

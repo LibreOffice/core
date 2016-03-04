@@ -105,10 +105,7 @@ namespace dbaui
 
         /** appends an error in the current environment.
         */
-        void appendError(
-                        const OUString& _rErrorMessage,
-                        const ::dbtools::StandardSQLState _eSQLState = ::dbtools::StandardSQLState::GENERAL_ERROR
-                     );
+        void appendError( const OUString& _rErrorMessage );
 
         /** clears the error state.
         */
