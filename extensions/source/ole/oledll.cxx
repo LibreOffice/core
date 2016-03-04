@@ -34,6 +34,7 @@
 #pragma clang diagnostic ignored "-Winvalid-noreturn"
 #pragma clang diagnostic ignored "-Wmicrosoft"
 #pragma clang diagnostic ignored "-Wnon-pod-varargs"
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
 
 #ifdef __MINGW32__
