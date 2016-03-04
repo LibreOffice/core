@@ -367,7 +367,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 nameValue.sValue = OStringToOUString(
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
-                SAL_INFO("sal.rtl", "pushing: name=" << nameValue.sName << " value= " << nameValue.sValue);
+                SAL_INFO("sal.rtl", "pushing: name=" << nameValue.sName << " value=" << nameValue.sValue);
 
                 _nameValueList.push_back(nameValue);
             }
@@ -776,7 +776,7 @@ void SAL_CALL rtl_bootstrap_set (
         }
     }
 
-    SAL_INFO("sal.rtl", "explicitly getting: name=" << name << " value= " <<value);
+    SAL_INFO("sal.rtl", "explicitly getting: name=" << name << " value=" <<value);
 
     r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
