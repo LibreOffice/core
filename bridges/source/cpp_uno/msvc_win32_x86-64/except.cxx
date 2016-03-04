@@ -625,8 +625,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     for (pCompTD = (typelib_CompoundTypeDescription*)pTD;
         pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
     {
-        typelib_TypeDescription * pTD = (typelib_TypeDescription *)pCompTD;
-        int typeInfoLen = mscx_getRTTI_len(pTD->pTypeName);
+        int typeInfoLen = mscx_getRTTI_len(pCompTD->aBase.pTypeName);
         // Mem has to be on 4-byte Boundary
         if (typeInfoLen % 4 != 0)
         {
