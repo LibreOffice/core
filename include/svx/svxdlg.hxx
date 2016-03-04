@@ -284,8 +284,7 @@ public:
                                         sal_uInt16 nAnchorTypes = 0 ) = 0;
 
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
-                                            const SfxItemSet& rAttr,
-                                            SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone)= 0;
+                                            const SfxItemSet& rAttr)= 0;
 
     virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( vcl::Window* pParent ) = 0;
 

@@ -190,7 +190,7 @@ public:
     virtual void SetChanged() override;
 
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true) override;
+    virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual SdrTableObj* Clone() const override;

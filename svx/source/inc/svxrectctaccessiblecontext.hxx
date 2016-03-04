@@ -214,7 +214,7 @@ protected:
         @param nIndexOfChild
             Index of the new child which should be selected.
     */
-    void selectChild( long nIndexOfChild, bool bFireFocus = true);
+    void selectChild( long nIndexOfChild );
 
 public:
     /** Selects a new child by point.

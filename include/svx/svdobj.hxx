@@ -380,7 +380,7 @@ protected:
     void ImpForcePlusData();
 
     OUString GetAngleStr(long nAngle) const;
-    OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM) const;
+    OUString GetMetrStr(long nVal) const;
 
     /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
     ///

@@ -566,14 +566,14 @@ void SvxLanguageComboBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
 }
 
 
-sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos( sal_Int32 nSelIndex ) const
+sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos() const
 {
-    return GetSelectEntryPos( nSelIndex);
+    return GetSelectEntryPos();
 }
 
-sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos( sal_Int32 nSelIndex ) const
+sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos() const
 {
-    return GetSelectEntryPos( nSelIndex);
+    return GetSelectEntryPos();
 }
 
 

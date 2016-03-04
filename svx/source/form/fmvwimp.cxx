@@ -813,15 +813,12 @@ FmFormShell* FmXFormView::GetFormShell() const
     return m_pView ? m_pView->GetFormShell() : nullptr;
 }
 
-void FmXFormView::AutoFocus( bool _bSync )
+void FmXFormView::AutoFocus()
 {
     if (m_nAutoFocusEvent)
         Application::RemoveUserEvent(m_nAutoFocusEvent);
 
-    if ( _bSync )
-        OnAutoFocus( nullptr );
-    else
-        m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
+    m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
 }
 
 

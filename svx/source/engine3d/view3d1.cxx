@@ -96,7 +96,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
     }
 }
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene) const
+SfxItemSet E3dView::Get3DAttributes() const
 {
     // Creating itemset with corresponding field
     SfxItemSet aSet(
@@ -107,32 +107,24 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene) const
 
     sal_uInt32 nSelectedItems(0L);
 
-    if(pInScene)
-    {
-        // special scene
-        aSet.Put(pInScene->GetMergedItemSet());
-    }
-    else
-    {
-        // get attributes from all selected objects
-        MergeAttrFromMarked(aSet, false);
+    // get attributes from all selected objects
+    MergeAttrFromMarked(aSet, false);
 
-        // calc flags for SID_ATTR_3D_INTERN
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        const size_t nMarkCnt(rMarkList.GetMarkCount());
+    // calc flags for SID_ATTR_3D_INTERN
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCnt(rMarkList.GetMarkCount());
 
-        for(size_t a = 0; a < nMarkCnt; ++a)
-        {
-            SdrObject* pObj = GetMarkedObjectByIndex(a);
-            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
-        }
+    for(size_t a = 0; a < nMarkCnt; ++a)
+    {
+        SdrObject* pObj = GetMarkedObjectByIndex(a);
+        Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
     }
 
     // Set SID_ATTR_3D_INTERN on the status of the selected objects
     aSet.Put(SfxUInt32Item(SID_ATTR_3D_INTERN, nSelectedItems));
 
     // maintain default values
-    if(!nSelectedItems  && !pInScene)
+    if(!nSelectedItems)
     {
         // Get defaults and apply
         SfxItemSet aDefaultSet(mpModel->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
@@ -151,41 +143,33 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene) const
     return aSet;
 }
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
 {
     sal_uInt32 nSelectedItems(0L);
 
-    if(pInScene)
+    // #i94832# removed usage of E3DModifySceneSnapRectUpdater here.
+    // They are not needed here, they are already handled in SetAttrToMarked
+
+    // set at selected objects
+    SetAttrToMarked(rAttr, false/*bReplaceAll*/);
+
+    // old run
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCnt(rMarkList.GetMarkCount());
+
+    for(size_t a = 0; a < nMarkCnt; ++a)
     {
-        pInScene->SetMergedItemSetAndBroadcast(rAttr);
-    }
-    else
-    {
-        // #i94832# removed usage of E3DModifySceneSnapRectUpdater here.
-        // They are not needed here, they are already handled in SetAttrToMarked
-
-        // set at selected objects
-        SetAttrToMarked(rAttr, false/*bReplaceAll*/);
-
-        // old run
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        const size_t nMarkCnt(rMarkList.GetMarkCount());
-
-        for(size_t a = 0; a < nMarkCnt; ++a)
-        {
-            SdrObject* pObj = GetMarkedObjectByIndex(a);
-            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
-        }
+        SdrObject* pObj = GetMarkedObjectByIndex(a);
+        Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
     }
 
     // Maintain default values
-    if(!nSelectedItems && !pInScene)
+    if(!nSelectedItems)
     {
         // Set defaults
         SfxItemSet aDefaultSet(mpModel->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);
-
     }
 }
 

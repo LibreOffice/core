@@ -167,7 +167,7 @@ struct ArrayImpl
     long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
 
     double              GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
-    double              GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
 };
 
 ArrayImpl::ArrayImpl( size_t nWidth, size_t nHeight, bool bDiagDblClip ) :
@@ -323,9 +323,9 @@ double ArrayImpl::GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple ) cons
     return fAngle;
 }
 
-double ArrayImpl::GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple ) const
+double ArrayImpl::GetVerDiagAngle( size_t nCol, size_t nRow ) const
 {
-    double fAngle = GetHorDiagAngle( nCol, nRow, bSimple );
+    double fAngle = GetHorDiagAngle( nCol, nRow );
     return (fAngle > 0.0) ? (F_PI2 - fAngle) : 0.0;
 }
 
@@ -806,19 +806,19 @@ long Array::GetHeight() const
     return GetRowPosition( mxImpl->mnHeight ) - GetRowPosition( 0 );
 }
 
-Point Array::GetCellPosition( size_t nCol, size_t nRow, bool bSimple ) const
+Point Array::GetCellPosition( size_t nCol, size_t nRow ) const
 {
-    size_t nFirstCol = bSimple ? nCol : mxImpl->GetMergedFirstCol( nCol, nRow );
-    size_t nFirstRow = bSimple ? nRow : mxImpl->GetMergedFirstRow( nCol, nRow );
+    size_t nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
+    size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
     return Point( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
 }
 
-Size Array::GetCellSize( size_t nCol, size_t nRow, bool bSimple ) const
+Size Array::GetCellSize( size_t nCol, size_t nRow ) const
 {
-    size_t nFirstCol = bSimple ? nCol : mxImpl->GetMergedFirstCol( nCol, nRow );
-    size_t nFirstRow = bSimple ? nRow : mxImpl->GetMergedFirstRow( nCol, nRow );
-    size_t nLastCol = bSimple ? nCol : mxImpl->GetMergedLastCol( nCol, nRow );
-    size_t nLastRow = bSimple ? nRow : mxImpl->GetMergedLastRow( nCol, nRow );
+    size_t nFirstCol =  mxImpl->GetMergedFirstCol( nCol, nRow );
+    size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
+    size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
+    size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
     return Size( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
 }
 
@@ -1095,8 +1095,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
 }
 
 void Array::DrawRange( OutputDevice& rDev,
-        size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
-        const Color* pForceColor ) const
+        size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow ) const
 {
     DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "DrawRange" );
     DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "DrawRange" );
@@ -1134,7 +1133,7 @@ void Array::DrawRange( OutputDevice& rDev,
                         GetCellStyleRight( _nLastCol, _nLastRow ), GetCellStyleBottom( _nLastCol, _nLastRow ),
                         GetCellStyleLeft( _nFirstCol, _nLastRow ), GetCellStyleBottom( _nFirstCol, _nLastRow ),
                         GetCellStyleRight( _nLastCol, _nFirstRow ), GetCellStyleTop( _nLastCol, _nFirstRow ),
-                        pForceColor, mxImpl->mbDiagDblClip );
+                        nullptr, mxImpl->mbDiagDblClip );
                 }
             }
         }
@@ -1192,7 +1191,7 @@ void Array::DrawRange( OutputDevice& rDev,
                 if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
                     DrawHorFrameBorder( rDev, aStartPos, aEndPos, *pStart,
                         aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                        aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor );
+                        aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL );
 
                 // re-init "*Start***" variables
                 aStartPos = aEndPos;
@@ -1217,7 +1216,7 @@ void Array::DrawRange( OutputDevice& rDev,
         if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
             DrawHorFrameBorder( rDev, aStartPos, aEndPos, *pStart,
                 aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor );
+                aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL );
     }
 
     // *** vertical frame borders ***
@@ -1271,7 +1270,7 @@ void Array::DrawRange( OutputDevice& rDev,
                 if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
                     DrawVerFrameBorder( rDev, aStartPos, aEndPos, *pStart,
                         aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR,
-                        aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR, pForceColor );
+                        aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR );
 
                 // re-init "*Start***" variables
                 aStartPos = aEndPos;
@@ -1296,7 +1295,7 @@ void Array::DrawRange( OutputDevice& rDev,
         if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
             DrawVerFrameBorder( rDev, aStartPos, aEndPos, *pStart,
                 aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR,
-                aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR, pForceColor );
+                aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR );
     }
 }
 

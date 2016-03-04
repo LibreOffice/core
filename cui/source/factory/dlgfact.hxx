@@ -508,8 +508,7 @@ public:
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes = 0 ) override;
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
-                                            const SfxItemSet& rAttr,
-                                            SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone) override;
+                                            const SfxItemSet& rAttr) override;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = nullptr ) override;

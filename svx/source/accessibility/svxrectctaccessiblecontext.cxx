@@ -599,7 +599,7 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RECT_POINT eButton )
     else
         mnSelectedChild = NOCHILDSELECTED;
 }
-void SvxRectCtlAccessibleContext::selectChild( long nNew, bool bFireFocus )
+void SvxRectCtlAccessibleContext::selectChild( long nNew )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     if( nNew != mnSelectedChild )
@@ -612,7 +612,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew, bool bFireFocus )
             {   // deselect old selected child if one is selected
                 pChild = mpChildren[ mnSelectedChild ];
                 if( pChild )
-                    pChild->setStateChecked( false, bFireFocus );
+                    pChild->setStateChecked( false );
             }
 
             // select new child
@@ -622,7 +622,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew, bool bFireFocus )
             {
                 pChild = mpChildren[ nNew ];
                 if( pChild )
-                    pChild->setStateChecked( true, bFireFocus );
+                    pChild->setStateChecked( true );
             }
         }
         else

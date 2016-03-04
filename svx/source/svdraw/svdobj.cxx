@@ -1050,7 +1050,7 @@ OUString SdrObject::GetAngleStr(long nAngle) const
     return aStr;
 }
 
-OUString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/) const
+OUString SdrObject::GetMetrStr(long nVal) const
 {
     OUString aStr;
     if (pModel!=nullptr) {

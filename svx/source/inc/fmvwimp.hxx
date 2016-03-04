@@ -292,7 +292,7 @@ private:
     void cancelEvents();
 
     /// the auto focus to the first (in terms of the tab order) control
-    void AutoFocus( bool _bSync = false );
+    void AutoFocus();
     DECL_LINK_TYPED( OnActivate, void*, void );
     DECL_LINK_TYPED( OnAutoFocus, void*, void );
     DECL_LINK_TYPED( OnDelayedErrorMessage, void*, void );

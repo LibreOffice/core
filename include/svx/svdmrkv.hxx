@@ -272,8 +272,7 @@ public:
     bool IsMarkedHit(const Point& rPnt, short nTol=-2) const { return IsMarkedObjHit(rPnt,nTol); }
     bool IsMarkedObjHit(const Point& rPnt, short nTol=-2) const;
 
-    // Pick: Supported options for nOptions are SEARCH_NEXT, SEARCH_BACKWARD (ni)
-    SdrHdl* PickHandle(const Point& rPnt, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
+    SdrHdl* PickHandle(const Point& rPnt) const;
 
     // Pick: Supported options for nOptions are:
     // SdrSearchOptions::DEEP SdrSearchOptions::ALSOONMASTER SdrSearchOptions::TESTMARKABLE SdrSearchOptions::TESTTEXTEDIT

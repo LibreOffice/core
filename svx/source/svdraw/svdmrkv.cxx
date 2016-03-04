@@ -1338,15 +1338,13 @@ bool SdrMarkView::IsMarkedObjHit(const Point& rPnt, short nTol) const
     return bRet;
 }
 
-SdrHdl* SdrMarkView::PickHandle(const Point& rPnt, SdrSearchOptions nOptions) const
+SdrHdl* SdrMarkView::PickHandle(const Point& rPnt) const
 {
     if (mbSomeObjChgdFlag) { // recalculate handles, if necessary
         FlushComeBackTimer();
     }
-    bool bBack(nOptions & SdrSearchOptions::BACKWARD);
-    bool bNext(nOptions & SdrSearchOptions::NEXT);
     Point aPt(rPnt);
-    return maHdlList.IsHdlListHit(aPt,bBack,bNext);
+    return maHdlList.IsHdlListHit(aPt);
 }
 
 bool SdrMarkView::MarkObj(const Point& rPnt, short nTol, bool bToggle, bool bDeep)

@@ -87,8 +87,7 @@ public:
     void                InsertTextEncoding( const rtl_TextEncoding nEnc );
 
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
-                            const OUString& rEntry,
-                            sal_Int32  nPos = LISTBOX_APPEND );
+                            const OUString& rEntry );
 
     void                SelectTextEncoding( const rtl_TextEncoding nEnc );
 

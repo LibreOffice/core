@@ -296,16 +296,12 @@ public:
     long                GetHeight() const;
 
     /** Returns the top-left output position of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns output position of top-left corner of merged ranges. */
-    Point               GetCellPosition( size_t nCol, size_t nRow, bool bSimple = false ) const;
+        Returns output position of top-left corner of merged ranges. */
+    Point               GetCellPosition( size_t nCol, size_t nRow ) const;
 
     /** Returns the output size of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns total output size of merged ranges. */
-    Size                GetCellSize( size_t nCol, size_t nRow, bool bSimple = false ) const;
+        Returns total output size of merged ranges. */
+    Size                GetCellSize( size_t nCol, size_t nRow ) const;
 
     /** Returns the output rectangle of the cell (nCol,nRow).
         Returns total output rectangle of merged ranges. */
@@ -353,8 +349,7 @@ public:
             If not NULL, only this color will be used to draw all frame borders. */
     void                DrawRange( OutputDevice& rDev,
                             size_t nFirstCol, size_t nFirstRow,
-                            size_t nLastCol, size_t nLastRow,
-                            const Color* pForceColor = nullptr ) const;
+                            size_t nLastCol, size_t nLastRow ) const;
 
     /** Draws the part of the array, that is inside the clipping range. */
     void                DrawArray( OutputDevice& rDev ) const;

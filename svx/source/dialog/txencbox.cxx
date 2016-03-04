@@ -194,9 +194,9 @@ void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
-            const OUString& rEntry, sal_Int32 nPos )
+            const OUString& rEntry )
 {
-    sal_Int32 nAt = InsertEntry( rEntry, nPos );
+    sal_Int32 nAt = InsertEntry( rEntry );
     SetEntryData( nAt, reinterpret_cast<void*>(nEnc) );
 }
 

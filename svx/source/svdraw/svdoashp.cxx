@@ -2513,9 +2513,9 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     }
     return bRet;
 }
-bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt)
+bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
 {
-    Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, true/*bWdt*/ );
+    Rectangle aNewTextRect = ImpCalculateTextFrame( true/*bHgt*/, true/*bWdt*/ );
     bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != maRect );
     if ( bRet )
     {

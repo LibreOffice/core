@@ -230,7 +230,7 @@ public:
     void SuggestTextFrameSize(Size aSuggestedTextFrameSize);
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) override;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true) override;
+    virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual bool IsAutoGrowHeight() const override;
     virtual bool IsAutoGrowWidth() const override;
     virtual void SetVerticalWriting( bool bVertical ) override;

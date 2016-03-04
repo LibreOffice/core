@@ -943,10 +943,9 @@ AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog(
 }
 
 AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(vcl::Window* pParent,
-                                            const SfxItemSet& rAttr,
-                                            SvxDistributeHorizontal eHor)
+                                            const SfxItemSet& rAttr)
 {
-    VclPtrInstance<SvxDistributeDialog> pDlg( pParent, rAttr, eHor, SvxDistributeVerticalNone);
+    VclPtrInstance<SvxDistributeDialog> pDlg( pParent, rAttr, SvxDistributeHorizontalNone, SvxDistributeVerticalNone);
     return new AbstractSvxDistributeDialog_Impl( pDlg );
 }
 

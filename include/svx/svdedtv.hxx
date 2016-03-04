@@ -209,15 +209,15 @@ public:
     // Set a logical enclosing rectangle for all marked objects.
     // It is not guaranteed if this succeeds, as a horizontal
     // line has always a height of 0
-    void SetMarkedObjRect(const Rectangle& rRect, bool bCopy=false);
+    void SetMarkedObjRect(const Rectangle& rRect);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
     long GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy=false);
     void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
-    void MirrorMarkedObjHorizontal(bool bCopy=false);
-    void MirrorMarkedObjVertical(bool bCopy=false);
+    void MirrorMarkedObjHorizontal();
+    void MirrorMarkedObjVertical();
     long GetMarkedObjShear() const;
     void ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
     void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false);
