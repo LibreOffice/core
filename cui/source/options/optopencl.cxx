@@ -25,6 +25,7 @@
 #include <opencl/openclconfig.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/simptabl.hxx>
+#include <rtl/ustring.hxx>
 #include "optHeaderTabListbox.hxx"
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -179,11 +180,12 @@ namespace {
 
 OUString format(const OpenCLConfig::ImplMatcher& rImpl)
 {
-    return (rImpl.maOS + "\t" +
-            rImpl.maOSVersion + "\t" +
-            rImpl.maPlatformVendor + "\t" +
-            rImpl.maDevice + "\t" +
-            rImpl.maDriverVersion);
+    return (rImpl.maOS.replaceAll("\\","") + "\t" +
+            rImpl.maOSVersion.replaceAll("\\","") + "\t" +
+            rImpl.maPlatformVendor.replaceAll("\\","") + "\t" +
+            rImpl.maDevice.replaceAll("\\","") + "\t" +
+            rImpl.maDriverVersion.replaceAll("\\","")
+            );
 }
 
 void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rSet)
