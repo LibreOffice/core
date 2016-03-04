@@ -1209,6 +1209,47 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         m_refMutex, *this, statics.tablesRowNames, vec, m_pSettings->tc );
 }
 
+namespace
+{
+    // sort no schema first, then "public", then normal schemas, then internal schemas
+    int compare_schema(const OUString &nsA, const OUString &nsB)
+    {
+        if (nsA.isEmpty())
+        {
+            return nsB.isEmpty() ? 0 : -1;
+        }
+        else if (nsB.isEmpty())
+        {
+            assert(!nsA.isEmpty());
+            return 1;
+        }
+        else if(nsA == "public")
+        {
+            return (nsB == "public") ? 0 : -1;
+        }
+        else if(nsB == "public")
+        {
+            assert(nsA != "public");
+            return 1;
+        }
+        else if(nsA.startsWith("pg_"))
+        {
+            if(nsB.startsWith("pg_"))
+                return nsA.compareTo(nsB);
+            else
+                return 1;
+        }
+        else if(nsB.startsWith("pg_"))
+        {
+            return -1;
+        }
+        else
+        {
+            return nsA.compareTo(nsB);
+        }
+    }
+}
+
 struct SortInternalSchemasLastAndPublicFirst
 {
     bool operator () ( const std::vector< Any >  & a, const std::vector< Any >  & b )
@@ -1217,33 +1258,7 @@ struct SortInternalSchemasLastAndPublicFirst
         OUString valueB;
         a[0] >>= valueA;
         b[0] >>= valueB;
-        bool ret = false;
-        if( valueA==  "public" )
-        {
-            ret = true;
-        }
-        else if( valueB == "public" )
-        {
-            ret = false;
-        }
-        else if( valueA.startsWith( "pg_" ) &&
-            valueB.startsWith( "pg_" ) )
-        {
-            ret = valueA.compareTo( valueB ) < 0; // sorts equal !
-        }
-        else if( valueA.startsWith( "pg_" ))
-        {
-            ret = false; // sorts last !
-        }
-        else if( valueB.startsWith( "pg_" ) )
-        {
-            ret = true; // sorts first !
-        }
-        else
-        {
-            ret = (valueA.compareTo( valueB ) < 0);
-        }
-        return ret;
+        return compare_schema(valueA, valueB);
     }
 };
 
@@ -2171,8 +2186,8 @@ struct TypeInfoByDataTypeSorter
                 assert(nIndex < 0);
             }
 
-            // sort no schema first, then "public", then normal schemas, then internal schemas
-            if(nsA == nsB)
+            const int ns_comp = compare_schema(nsA, nsB);
+            if(ns_comp == 0)
             {
                 if(nsA.isEmpty())
                 {
@@ -2185,40 +2200,9 @@ struct TypeInfoByDataTypeSorter
                 }
                 return nameA.compareTo( nameB ) < 0;
             }
-            else if (nsA.isEmpty())
-            {
-                assert(!nsB.isEmpty());
-                return true;
-            }
-            else if (nsB.isEmpty())
-            {
-                assert(!nsA.isEmpty());
-                return false;
-            }
-            else if(nsA == "public")
-            {
-                assert(nsB != "public");
-                return true;
-            }
-            else if(nsB == "public")
-            {
-                assert(nsA != "public");
-                return false;
-            }
-            else if(nsA.startsWith("pg_"))
-            {
-                if(nsB.startsWith("pg_"))
-                    return nsA.compareTo(nsB) < 0;
-                else
-                    return false;
-            }
-            else if(nsB.startsWith("pg_"))
-            {
-                return true;
-            }
             else
             {
-                return nsA.compareTo(nsB) < 0;
+                return ns_comp < 0;
             }
         }
 
