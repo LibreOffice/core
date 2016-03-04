@@ -320,19 +320,17 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 
 static bool writeProfileImpl(osl_TFile* pFile)
 {
-#if OSL_DEBUG_LEVEL > 0
-    unsigned int nLen=0;
-#endif
-
     if ( !( pFile != nullptr && pFile->m_Handle >= 0 ) || ( pFile->m_pWriteBuf == nullptr ) )
     {
         return false;
     }
 
-#if OSL_DEBUG_LEVEL > 0
-    nLen=strlen(pFile->m_pWriteBuf);
-    SAL_WARN_IF(nLen != (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree), "sal.osl", "nLen != (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree)");
-#endif
+    SAL_WARN_IF(
+        (strlen(pFile->m_pWriteBuf)
+         != pFile->m_nWriteBufLen - pFile->m_nWriteBufFree),
+        "sal.osl",
+        strlen(pFile->m_pWriteBuf) << " != "
+            << (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree));
 
     if ( !safeWrite(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree) )
     {
