@@ -103,6 +103,8 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
         if(bSuccess)
         {
+            if( mpAlphaVDev )
+                mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
             return;
         }
     }
