@@ -176,7 +176,7 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
     std::set<ScDPObject*> aRefs;
     bool bSuccess = pDPs->ReloadGroupsInCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload group data in cache.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("There should be only one table linked to this cache.", aRefs.size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one table linked to this cache.", size_t(1), aRefs.size());
     pDPObj->ReloadGroupTableData();
 
     return refresh(pDPObj);
@@ -219,8 +219,8 @@ void Test::testPivotTable()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     bool bOverflow = false;
@@ -246,7 +246,7 @@ void Test::testPivotTable()
         bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
-    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
 
     // Update the cell values.
     double aData2[] = { 100, 200, 300, 400, 500, 600 };
@@ -285,21 +285,21 @@ void Test::testPivotTable()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
 
     // Free the first datapilot object after the 2nd one gets reloaded, to
     // prevent the data cache from being deleted before the reload.
     pDPs->FreeTable(pDPObj);
 
-    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
     std::set<ScDPObject*> aRefs;
     sal_uLong nErrId = pDPs->ReloadCache(pDPObj2, aRefs);
-    CPPUNIT_ASSERT_MESSAGE("Cache reload failed.", nErrId == 0);
-    CPPUNIT_ASSERT_MESSAGE("Reloading a cache shouldn't remove any cache.",
-                           pDPs->GetSheetCaches().size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cache reload failed.", sal_uLong(0), nErrId);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Reloading a cache shouldn't remove any cache.",
+                           static_cast<size_t>(1), pDPs->GetSheetCaches().size());
 
     pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
@@ -326,19 +326,19 @@ void Test::testPivotTable()
 
     // Swap the two sheets.
     m_pDoc->MoveTab(1, 0);
-    CPPUNIT_ASSERT_MESSAGE("Swapping the sheets shouldn't remove the cache.",
-                           pDPs->GetSheetCaches().size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Swapping the sheets shouldn't remove the cache.",
+                           size_t(1), pDPs->GetSheetCaches().size());
     CPPUNIT_ASSERT_MESSAGE("Cache should have moved.", !pDPs->GetSheetCaches().hasCache(aSrcRange));
     aSrcRange.aStart.SetTab(1);
     aSrcRange.aEnd.SetTab(1);
     CPPUNIT_ASSERT_MESSAGE("Cache should be here.", pDPs->GetSheetCaches().hasCache(aSrcRange));
 
     pDPs->FreeTable(pDPObj2);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
-                           pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any data pilot table stored with the document.",
+                           size_t(0), pDPs->GetCount());
 
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more data cache.",
-                           pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more data cache.",
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     // Insert a brand new pivot table object once again, but this time, don't
     // create the output to avoid creating a data cache.
@@ -349,11 +349,11 @@ void Test::testPivotTable()
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
     bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
-    CPPUNIT_ASSERT_MESSAGE("Data cache shouldn't exist yet before creating the table output.",
-                           pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data cache shouldn't exist yet before creating the table output.",
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     // Now, "refresh" the table.  This should still return a reference to self
     // even with the absence of data cache.
@@ -400,8 +400,8 @@ void Test::testPivotTableLabels()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -456,8 +456,8 @@ void Test::testPivotTableDateLabels()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -539,8 +539,8 @@ void Test::testPivotTableFilters()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -566,7 +566,7 @@ void Test::testPivotTableFilters()
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
                       "=B6");
     double fTest = m_pDoc->GetValue(aFormulaAddr);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 80.0, fTest);
 
     // Set current page of 'Group2' to 'A'.
     pDPObj->BuildAllDimensionMembers();
@@ -594,7 +594,7 @@ void Test::testPivotTableFilters()
     }
 
     fTest = m_pDoc->GetValue(aFormulaAddr);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 40.0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 40.0, fTest);
 
     // Set query filter.
     ScSheetSourceDesc aDesc(*pDPObj->GetSheetDesc());
@@ -623,7 +623,7 @@ void Test::testPivotTableFilters()
     }
 
     fTest = m_pDoc->GetValue(aFormulaAddr);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 20.0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 20.0, fTest);
 
     // Set the current page of 'Group2' back to '- all -'. The query filter
     // should still be in effect.
@@ -646,8 +646,8 @@ void Test::testPivotTableFilters()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
-                           pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any data pilot table stored with the document.",
+                           size_t(0), pDPs->GetCount());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -699,8 +699,8 @@ void Test::testPivotTableNamedSource()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -729,7 +729,7 @@ void Test::testPivotTableNamedSource()
     m_pDoc->MoveTab(1, 0);
     OUString aTabName;
     m_pDoc->GetName(0, aTabName);
-    CPPUNIT_ASSERT_MESSAGE( "Wrong sheet name.", aTabName == "Table" );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong sheet name.", OUString("Table"), aTabName);
     CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
                            pDPObj->GetOutRange().aStart.Tab() == 0);
 
@@ -744,9 +744,9 @@ void Test::testPivotTableNamedSource()
     CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().hasCache(aRangeName));
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetNameCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           size_t(0), pDPs->GetNameCaches().size());
 
     pNames->clear();
     m_pDoc->DeleteTab(1);
@@ -770,18 +770,18 @@ void Test::testPivotTableCache()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPCache aCache(m_pDoc);
     aCache.InitFromDoc(m_pDoc, aDataRange);
     long nDimCount = aCache.GetColumnCount();
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension count.", nDimCount == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension count.", 3L, nDimCount);
     OUString aDimName = aCache.GetDimensionName(0);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName == "F1");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F1"), aDimName);
     aDimName = aCache.GetDimensionName(1);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName == "F2");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F2"), aDimName);
     aDimName = aCache.GetDimensionName(2);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName == "F3");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F3"), aDimName);
 
     // In each dimension, member ID values also represent their sort order (in
     // source dimensions only, not in group dimensions). Value items are
@@ -790,7 +790,7 @@ void Test::testPivotTableCache()
 
     // Dimension 0 - a mix of strings and values.
     long nMemCount = aCache.GetDimMemberCount(0);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 6L, nMemCount);
     const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::Value &&
@@ -820,7 +820,7 @@ void Test::testPivotTableCache()
 
     // Dimension 1 - duplicate values in source.
     nMemCount = aCache.GetDimMemberCount(1);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 3L, nMemCount);
     pItem = aCache.GetItemDataById(1, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
@@ -838,7 +838,7 @@ void Test::testPivotTableCache()
 
     // Dimension 2 - values only.
     nMemCount = aCache.GetDimMemberCount(2);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 6L, nMemCount);
     pItem = aCache.GetItemDataById(2, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::Value &&
@@ -967,7 +967,7 @@ void Test::testPivotTableDuplicateDataFields()
 
     ScAddress aPos(2,2,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -977,7 +977,7 @@ void Test::testPivotTableDuplicateDataFields()
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount(), static_cast<size_t>(1));
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1024,12 +1024,12 @@ void Test::testPivotTableDuplicateDataFields()
     ScPivotParam aParam;
     pDPObj->FillLabelData(aParam);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
-                           aParam.maLabelArray.size(), static_cast<size_t>(4));
+                           size_t(4), aParam.maLabelArray.size());
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1060,7 +1060,7 @@ void Test::testPivotTableNormalGrouping()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -1070,7 +1070,7 @@ void Test::testPivotTableNormalGrouping()
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount(), static_cast<size_t>(1));
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1106,7 +1106,7 @@ void Test::testPivotTableNormalGrouping()
         // Group A, B and C together.
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
         OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
-        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName == "Group1");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected group name", OUString("Group1"), aGroupName);
 
         ScDPSaveGroupItem aGroup(aGroupName);
         aGroup.AddElement("A");
@@ -1148,7 +1148,7 @@ void Test::testPivotTableNormalGrouping()
         ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
         CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
         OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
-        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName == "Group2");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected group name", OUString("Group2"), aGroupName);
 
         ScDPSaveGroupItem aGroup(aGroupName);
         aGroup.AddElement("D");
@@ -1178,9 +1178,9 @@ void Test::testPivotTableNormalGrouping()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1222,7 +1222,7 @@ void Test::testPivotTableNumberGrouping()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -1232,7 +1232,7 @@ void Test::testPivotTableNumberGrouping()
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount(), static_cast<size_t>(1));
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -1273,9 +1273,9 @@ void Test::testPivotTableNumberGrouping()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1307,7 +1307,7 @@ void Test::testPivotTableDateGrouping()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -1316,8 +1316,8 @@ void Test::testPivotTableDateGrouping()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -1447,9 +1447,9 @@ void Test::testPivotTableDateGrouping()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1477,7 +1477,7 @@ void Test::testPivotTableEmptyRows()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     // Extend the range downward to include some trailing empty rows.
     aDataRange.aEnd.IncRow(2);
@@ -1489,8 +1489,8 @@ void Test::testPivotTableEmptyRows()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1560,9 +1560,9 @@ void Test::testPivotTableEmptyRows()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1617,8 +1617,8 @@ void Test::testPivotTableTextNumber()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1664,9 +1664,9 @@ void Test::testPivotTableTextNumber()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                                 pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                                 size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1692,7 +1692,7 @@ void Test::testPivotTableCaseInsensitiveStrings()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -1701,8 +1701,8 @@ void Test::testPivotTableCaseInsensitiveStrings()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1720,9 +1720,9 @@ void Test::testPivotTableCaseInsensitiveStrings()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1793,7 +1793,7 @@ void Test::testPivotTableNumStability()
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount(), static_cast<size_t>(1));
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1825,9 +1825,9 @@ void Test::testPivotTableNumStability()
     CPPUNIT_ASSERT_MESSAGE("Incorrect value for Sam.", rtl::math::approxEqual(fTest, fSamTotal));
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1855,7 +1855,7 @@ void Test::testPivotTableFieldReference()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -1864,8 +1864,8 @@ void Test::testPivotTableFieldReference()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1993,9 +1993,9 @@ void Test::testPivotTableFieldReference()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2025,7 +2025,7 @@ void Test::testPivotTableDocFunc()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2087,7 +2087,7 @@ void Test::testFuncGETPIVOTDATA()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = nullptr;
 
@@ -2105,8 +2105,8 @@ void Test::testFuncGETPIVOTDATA()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -2222,9 +2222,9 @@ void Test::testFuncGETPIVOTDATA()
 
     pDPs->FreeTable(pDPObj);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2246,7 +2246,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = nullptr;
 
@@ -2264,8 +2264,8 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
     ScRange aOutRange = refresh(pDPObj);
 
@@ -2315,9 +2315,9 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     pDPs->FreeTable(pDPObj);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2361,8 +2361,8 @@ void Test::testPivotTableRepeatItemLabels()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     bool bOverflow = false;
@@ -2390,12 +2390,12 @@ void Test::testPivotTableRepeatItemLabels()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                                 pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+                                 size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
