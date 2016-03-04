@@ -1218,11 +1218,11 @@ struct SortInternalSchemasLastAndPublicFirst
         a[0] >>= valueA;
         b[0] >>= valueB;
         bool ret = false;
-        if( valueA.startsWith( "public" ) )
+        if( valueA==  "public" )
         {
             ret = true;
         }
-        else if( valueB.startsWith( "public" ) )
+        else if( valueB == "public" )
         {
             ret = false;
         }
