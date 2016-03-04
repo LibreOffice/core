@@ -290,6 +290,23 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     return true;
 }
 
+void DocumentSignatureManager::remove(sal_uInt16 nPosition)
+{
+    maCurrentSignatureInformations.erase(maCurrentSignatureInformations.begin() + nPosition);
+
+    // Export all other signatures...
+    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE, /*bTempStream=*/true);
+    uno::Reference<io::XOutputStream> xOutputStream(aStreamHelper.xSignatureStream, uno::UNO_QUERY_THROW);
+    uno::Reference<xml::sax::XWriter> xSaxWriter = maSignatureHelper.CreateDocumentHandlerWithHeader(xOutputStream);
+
+    uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
+    size_t nInfos = maCurrentSignatureInformations.size();
+    for (size_t n = 0 ; n < nInfos ; ++n)
+        XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
+
+    XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);
+}
+
 void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignature)
 {
     maCurrentSignatureInformations.clear();
