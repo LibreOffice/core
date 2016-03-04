@@ -1248,19 +1248,19 @@ namespace
             return nsA.compareTo(nsB);
         }
     }
-}
 
-struct SortInternalSchemasLastAndPublicFirst
-{
-    bool operator () ( const std::vector< Any >  & a, const std::vector< Any >  & b )
+    struct SortInternalSchemasLastAndPublicFirst
     {
-        OUString valueA;
-        OUString valueB;
-        a[0] >>= valueA;
-        b[0] >>= valueB;
-        return compare_schema(valueA, valueB);
-    }
-};
+        bool operator () ( const std::vector< Any >  & a, const std::vector< Any >  & b )
+        {
+            OUString valueA;
+            OUString valueB;
+            a[0] >>= valueA;
+            b[0] >>= valueB;
+            return compare_schema(valueA, valueB);
+        }
+    };
+}
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
     throw (SQLException, RuntimeException, std::exception)
@@ -1357,65 +1357,65 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
 }
 
 namespace {
-inline bool isSystemColumn( sal_Int16 attnum )
-{
-    return attnum <= 0;
-}
-}
-
-// is not exported by the postgres header
-const static int PQ_VARHDRSZ = sizeof( sal_Int32 );
-
-// Oh, quelle horreur
-// LEM TODO: Need to severely rewrite that!
-// should probably just "do the same" as ODBC or JDBC drivers...
-static void extractPrecisionAndScale(
-    sal_Int32 dataType, sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
-{
-    if( atttypmod < PQ_VARHDRSZ )
+    inline bool isSystemColumn( sal_Int16 attnum )
     {
-        *precision = 0;
-        *scale = 0;
+        return attnum <= 0;
     }
-    else
+
+    // is not exported by the postgres header
+    const int PQ_VARHDRSZ = sizeof( sal_Int32 );
+
+    // Oh, quelle horreur
+    // LEM TODO: Need to severely rewrite that!
+    // should probably just "do the same" as ODBC or JDBC drivers...
+    static void extractPrecisionAndScale(
+        sal_Int32 dataType, sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
     {
-        switch( dataType )
+        if( atttypmod < PQ_VARHDRSZ )
         {
-        case com::sun::star::sdbc::DataType::NUMERIC:
-        case com::sun::star::sdbc::DataType::DECIMAL:
-        {
-            *precision = ( ( atttypmod - PQ_VARHDRSZ ) >> 16 ) & 0xffff;
-            *scale = (atttypmod - PQ_VARHDRSZ ) & 0xffff;
-            break;
-        }
-        default:
-            *precision = atttypmod - PQ_VARHDRSZ;
+            *precision = 0;
             *scale = 0;
         }
+        else
+        {
+            switch( dataType )
+            {
+            case com::sun::star::sdbc::DataType::NUMERIC:
+            case com::sun::star::sdbc::DataType::DECIMAL:
+            {
+                *precision = ( ( atttypmod - PQ_VARHDRSZ ) >> 16 ) & 0xffff;
+                *scale = (atttypmod - PQ_VARHDRSZ ) & 0xffff;
+                break;
+            }
+            default:
+                *precision = atttypmod - PQ_VARHDRSZ;
+                *scale = 0;
+            }
+        }
     }
-}
 
-struct DatabaseTypeDescription
-{
-    DatabaseTypeDescription()
-    {}
-    DatabaseTypeDescription( const OUString &name, const OUString & type ) :
-        typeName( name ),
-        typeType( type )
-    {}
-    DatabaseTypeDescription( const DatabaseTypeDescription &source ) :
-        typeName( source.typeName ),
-        typeType( source.typeType )
-    {}
-    DatabaseTypeDescription & operator = ( const DatabaseTypeDescription & source )
+    struct DatabaseTypeDescription
     {
-        typeName = source.typeName;
-        typeType = source.typeType;
-        return *this;
-    }
-    OUString typeName;
-    OUString typeType;
-};
+        DatabaseTypeDescription()
+        {}
+        DatabaseTypeDescription( const OUString &name, const OUString & type ) :
+            typeName( name ),
+            typeType( type )
+        {}
+        DatabaseTypeDescription( const DatabaseTypeDescription &source ) :
+            typeName( source.typeName ),
+            typeType( source.typeType )
+        {}
+        DatabaseTypeDescription & operator = ( const DatabaseTypeDescription & source )
+        {
+            typeName = source.typeName;
+            typeType = source.typeType;
+            return *this;
+        }
+        OUString typeName;
+        OUString typeType;
+    };
+}
 
 typedef std::unordered_map
 <
@@ -2142,114 +2142,99 @@ void DatabaseMetaData::init_getPrivs_stmt ()
     return getImportedExportedKeys( primaryCatalog, primarySchema, primaryTable, foreignCatalog, foreignSchema, foreignTable );
 }
 
-
-struct TypeInfoByDataTypeSorter
+namespace
 {
-    bool operator () ( const std::vector< Any > & a, const std::vector< Any > & b )
+    struct TypeInfoByDataTypeSorter
     {
-        OUString valueA;
-        OUString valueB;
-        a[1 /*DATA_TYPE*/] >>= valueA;
-        b[1 /*DATA_TYPE*/] >>= valueB;
-        if( valueB.toInt32() == valueA.toInt32() )
+        bool operator () ( const std::vector< Any > & a, const std::vector< Any > & b )
         {
-            OUString nameA;
-            OUString nameB;
-            a[0 /*TYPE_NAME*/] >>= nameA;
-            b[0 /*TYPE_NAME*/] >>= nameB;
-            OUString nsA, tnA, nsB, tnB;
+            OUString valueA;
+            OUString valueB;
+            a[1 /*DATA_TYPE*/] >>= valueA;
+            b[1 /*DATA_TYPE*/] >>= valueB;
+            if( valueB.toInt32() == valueA.toInt32() )
+            {
+                OUString nameA;
+                OUString nameB;
+                a[0 /*TYPE_NAME*/] >>= nameA;
+                b[0 /*TYPE_NAME*/] >>= nameB;
+                OUString nsA, tnA, nsB, tnB;
 
-            // parse typename into schema and typename
-            sal_Int32 nIndex=0;
-            nsA = nameA.getToken(0, '.', nIndex);
-            if (nIndex<0)
-            {
-                tnA = nsA;
-                nsA.clear();
-            }
-            else
-            {
-                tnA = nameA.getToken(0, '.', nIndex);
-                assert(nIndex < 0);
-            }
-
-            nIndex=0;
-            nsB = nameB.getToken(0, '.', nIndex);
-            if (nIndex<0)
-            {
-                tnB = nsB;
-                nsB.clear();
-            }
-            else
-            {
-                tnB = nameB.getToken(0, '.', nIndex);
-                assert(nIndex < 0);
-            }
-
-            const int ns_comp = compare_schema(nsA, nsB);
-            if(ns_comp == 0)
-            {
-                if(nsA.isEmpty())
+                // parse typename into schema and typename
+                sal_Int32 nIndex=0;
+                nsA = nameA.getToken(0, '.', nIndex);
+                if (nIndex<0)
                 {
-                    assert(nsB.isEmpty());
-                    // within each type category, sort privileged choice first
-                    if( tnA == "int4" || tnA == "varchar" || tnA == "char" || tnA == "text")
-                        return true;
-                    if( tnB == "int4" || tnB == "varchar" || tnB == "char" || tnB == "text")
-                        return false;
+                    tnA = nsA;
+                    nsA.clear();
                 }
-                return nameA.compareTo( nameB ) < 0;
+                else
+                {
+                    tnA = nameA.getToken(0, '.', nIndex);
+                    assert(nIndex < 0);
+                }
+
+                nIndex=0;
+                nsB = nameB.getToken(0, '.', nIndex);
+                if (nIndex<0)
+                {
+                    tnB = nsB;
+                    nsB.clear();
+                }
+                else
+                {
+                    tnB = nameB.getToken(0, '.', nIndex);
+                    assert(nIndex < 0);
+                }
+
+                const int ns_comp = compare_schema(nsA, nsB);
+                if(ns_comp == 0)
+                {
+                    if(nsA.isEmpty())
+                    {
+                        assert(nsB.isEmpty());
+                        // within each type category, sort privileged choice first
+                        if( tnA == "int4" || tnA == "varchar" || tnA == "char" || tnA == "text")
+                            return true;
+                        if( tnB == "int4" || tnB == "varchar" || tnB == "char" || tnB == "text")
+                            return false;
+                    }
+                    return nameA.compareTo( nameB ) < 0;
+                }
+                else
+                {
+                    return ns_comp < 0;
+                }
             }
-            else
-            {
-                return ns_comp < 0;
-            }
+
+            return valueA.toInt32() < valueB.toInt32();
         }
+    };
 
-        return valueA.toInt32() < valueB.toInt32();
-//         sal_Int32 valueA;
-//         sal_Int32 valueB;
-//         a[1 /*DATA_TYPE*/] >>= valueA;
-//         b[1 /*DATA_TYPE*/] >>= valueB;
-//         if( valueB == valueA )
-//         {
-//             OUString nameA;
-//             OUString nameB;
-//             a[0 /*TYPE_NAME*/] >>= nameA;
-//             b[0 /*TYPE_NAME*/] >>= nameB;
-//             return nameA.compareTo( nameB ) < 0;
-//         }
+    sal_Int32 calcSearchable( sal_Int32 dataType )
+    {
+        sal_Int32 ret = com::sun::star::sdbc::ColumnSearch::FULL;
+        if( com::sun::star::sdbc::DataType::BINARY == dataType ||
+            com::sun::star::sdbc::DataType::VARBINARY == dataType ||
+            com::sun::star::sdbc::DataType::LONGVARBINARY == dataType )
+            ret = com::sun::star::sdbc::ColumnSearch::NONE;
 
-//         return valueA < valueB;
+        return ret;
     }
-};
 
-static sal_Int32 calcSearchable( sal_Int32 dataType )
-{
-    sal_Int32 ret = com::sun::star::sdbc::ColumnSearch::FULL;
-    if( com::sun::star::sdbc::DataType::BINARY == dataType ||
-        com::sun::star::sdbc::DataType::VARBINARY == dataType ||
-        com::sun::star::sdbc::DataType::LONGVARBINARY == dataType )
-        ret = com::sun::star::sdbc::ColumnSearch::NONE;
-
-    return ret;
-}
-
-static sal_Int32 getMaxScale( sal_Int32 dataType )
-{
-    // LEM TODO: review, see where used, see JDBC, ...
-    sal_Int32 ret = 0;
-    if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
-        ret = 1000; // see pg-docs DataType/numeric
+    sal_Int32 getMaxScale( sal_Int32 dataType )
+    {
+        // LEM TODO: review, see where used, see JDBC, ...
+        sal_Int32 ret = 0;
+        if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
+            ret = 1000; // see pg-docs DataType/numeric
 //     else if( dataType == DataType::DOUBLE )
 //         ret = 308;
 //     else if( dataType == DataType::FLOAT )
 //         ret =
-    return ret;
-}
+        return ret;
+    }
 
-namespace
-{
     OUString construct_full_typename(const OUString &ns, const OUString &tn)
     {
         if(ns.isEmpty() || ns == "pg_catalog")
@@ -2257,93 +2242,92 @@ namespace
         else
             return ns + "." + tn;
     }
-}
 
-static void pgTypeInfo2ResultSet(
-     std::vector< std::vector<Any> > &vec,
-     const Reference< XResultSet > &rs )
-{
-    static const sal_Int32 TYPE_NAME = 0;  // string Type name
-    static const sal_Int32 DATA_TYPE = 1;  // short SQL data type from java.sql.Types
-    static const sal_Int32 PRECISION = 2;  // long maximum precision
-    static const sal_Int32 CREATE_PARAMS = 5; // string => parameters used in creating the type (may be NULL )
-    static const sal_Int32 NULLABLE  = 6;  // short ==> can you use NULL for this type?
-                                           // - NO_NULLS - does not allow NULL values
-                                           // - NULLABLE - allows NULL values
-                                           // - NULLABLE_UNKNOWN - nullability unknown
-
-    static const sal_Int32 CASE_SENSITIVE = 7; // boolean==> is it case sensitive
-    static const sal_Int32 SEARCHABLE = 8;  // short ==>; can you use
-                                            // "WHERE" based on this type:
-                                            //   - NONE - No support
-                                            //   - CHAR - Only supported with WHERE .. LIKE
-                                            //   - BASIC - Supported except for WHERE .. LIKE
-                                            //   - FULL - Supported for all WHERE ..
-    static const sal_Int32 UNSIGNED_ATTRIBUTE = 9; // boolean ==> is it unsigned?
-    static const sal_Int32 FIXED_PREC_SCALE = 10; // boolean ==> can it be a money value?
-    static const sal_Int32 AUTO_INCREMENT = 11; // boolean ==> can it be used for
-                                                // an auto-increment value?
-    static const sal_Int32 MINIMUM_SCALE = 13; // short ==> minimum scale supported
-    static const sal_Int32 MAXIMUM_SCALE = 14; // short ==> maximum scale supported
-    static const sal_Int32 NUM_PREC_RADIX = 17; // long ==> usually 2 or 10
-
-    /*  not filled so far
-        3. LITERAL_PREFIX string ==> prefix used to quote a literal
-                                     (may be <NULL/>)
-        4, LITERAL_SUFFIX string ==> suffix used to quote a literal
-                                    (may be <NULL/>)
-        5. CREATE_PARAMS string ==> parameters used in creating thw type (may be <NULL/>)
-        12. LOCAL_TYPE_NAME  string ==> localized version of type name (may be <NULL/>)
-        15, SQL_DATA_TYPE long ==> unused
-        16. SQL_DATETIME_SUB long ==> unused
-     */
-    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    while( rs->next() )
+    void pgTypeInfo2ResultSet(
+         std::vector< std::vector<Any> > &vec,
+         const Reference< XResultSet > &rs )
     {
-        std::vector< Any > row(18);
+        static const sal_Int32 TYPE_NAME = 0;  // string Type name
+        static const sal_Int32 DATA_TYPE = 1;  // short SQL data type from java.sql.Types
+        static const sal_Int32 PRECISION = 2;  // long maximum precision
+        static const sal_Int32 CREATE_PARAMS = 5; // string => parameters used in creating the type (may be NULL )
+        static const sal_Int32 NULLABLE  = 6;  // short ==> can you use NULL for this type?
+                                               // - NO_NULLS - does not allow NULL values
+                                               // - NULLABLE - allows NULL values
+                                               // - NULLABLE_UNKNOWN - nullability unknown
 
-        sal_Int32 dataType =typeNameToDataType(xRow->getString(5),xRow->getString(2));
-        sal_Int32 precision = xRow->getString(3).toInt32();
+        static const sal_Int32 CASE_SENSITIVE = 7; // boolean==> is it case sensitive
+        static const sal_Int32 SEARCHABLE = 8;  // short ==>; can you use
+                                                // "WHERE" based on this type:
+                                                //   - NONE - No support
+                                                //   - CHAR - Only supported with WHERE .. LIKE
+                                                //   - BASIC - Supported except for WHERE .. LIKE
+                                                //   - FULL - Supported for all WHERE ..
+        static const sal_Int32 UNSIGNED_ATTRIBUTE = 9; // boolean ==> is it unsigned?
+        static const sal_Int32 FIXED_PREC_SCALE = 10; // boolean ==> can it be a money value?
+        static const sal_Int32 AUTO_INCREMENT = 11; // boolean ==> can it be used for
+                                                    // an auto-increment value?
+        static const sal_Int32 MINIMUM_SCALE = 13; // short ==> minimum scale supported
+        static const sal_Int32 MAXIMUM_SCALE = 14; // short ==> maximum scale supported
+        static const sal_Int32 NUM_PREC_RADIX = 17; // long ==> usually 2 or 10
 
-        if( dataType == com::sun::star::sdbc::DataType::CHAR  ||
-            ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
-              xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCase("varchar") ) )
+        /*  not filled so far
+            3. LITERAL_PREFIX string ==> prefix used to quote a literal
+                                         (may be <NULL/>)
+            4. LITERAL_SUFFIX string ==> suffix used to quote a literal
+                                         (may be <NULL/>)
+            5. CREATE_PARAMS string ==> parameters used in creating thw type (may be <NULL/>)
+            12. LOCAL_TYPE_NAME  string ==> localized version of type name (may be <NULL/>)
+            15, SQL_DATA_TYPE long ==> unused
+            16. SQL_DATETIME_SUB long ==> unused
+         */
+        Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+        while( rs->next() )
         {
-            // reflect varchar as varchar with upper limit !
-            //NOTE: the sql spec requires varchar to have an upper limit, however
-            //      in postgresql the upper limit is optional, no limit means unlimited
-            //      length (=1GB).
-            precision = 0x40000000; // about 1 GB, see character type docs in postgresql
-            row[CREATE_PARAMS] <<= OUString("length");
-        }
-        else if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
-        {
-            precision = 1000;
-            row[CREATE_PARAMS] <<= OUString("length, scale");
-        }
+            std::vector< Any > row(18);
 
-        row[TYPE_NAME] <<= construct_full_typename(xRow->getString(6), xRow->getString(1));
-        row[DATA_TYPE] <<= OUString::number(dataType);
-        row[PRECISION] <<= OUString::number( precision );
-        sal_Int32 nullable = xRow->getBoolean(4) ?
-            com::sun::star::sdbc::ColumnValue::NO_NULLS :
-            com::sun::star::sdbc::ColumnValue::NULLABLE;
-        row[NULLABLE] <<= OUString::number(nullable);
-        row[CASE_SENSITIVE] <<= OUString::number(1);
-        row[SEARCHABLE] <<= OUString::number( calcSearchable( dataType ) );
-        row[UNSIGNED_ATTRIBUTE] <<= OUString("0");
-        if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
-            com::sun::star::sdbc::DataType::BIGINT == dataType )
-            row[AUTO_INCREMENT] <<= OUString("1");     // TODO
-        else
-            row[AUTO_INCREMENT] <<= OUString("0");     // TODO
-        row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
-        row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
-        row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
-        (void)FIXED_PREC_SCALE;
-        vec.push_back( row );
+            sal_Int32 dataType =typeNameToDataType(xRow->getString(5),xRow->getString(2));
+            sal_Int32 precision = xRow->getString(3).toInt32();
+
+            if( dataType == com::sun::star::sdbc::DataType::CHAR  ||
+                ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
+                  xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCase("varchar") ) )
+            {
+                // reflect varchar as varchar with upper limit !
+                //NOTE: the sql spec requires varchar to have an upper limit, however
+                //      in postgresql the upper limit is optional, no limit means unlimited
+                //      length (=1GB).
+                precision = 0x40000000; // about 1 GB, see character type docs in postgresql
+                row[CREATE_PARAMS] <<= OUString("length");
+            }
+            else if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
+            {
+                precision = 1000;
+                row[CREATE_PARAMS] <<= OUString("length, scale");
+            }
+
+            row[TYPE_NAME] <<= construct_full_typename(xRow->getString(6), xRow->getString(1));
+            row[DATA_TYPE] <<= OUString::number(dataType);
+            row[PRECISION] <<= OUString::number( precision );
+            sal_Int32 nullable = xRow->getBoolean(4) ?
+                com::sun::star::sdbc::ColumnValue::NO_NULLS :
+                com::sun::star::sdbc::ColumnValue::NULLABLE;
+            row[NULLABLE] <<= OUString::number(nullable);
+            row[CASE_SENSITIVE] <<= OUString::number(1);
+            row[SEARCHABLE] <<= OUString::number( calcSearchable( dataType ) );
+            row[UNSIGNED_ATTRIBUTE] <<= OUString("0");
+            if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
+                com::sun::star::sdbc::DataType::BIGINT == dataType )
+                row[AUTO_INCREMENT] <<= OUString("1");     // TODO
+            else
+                row[AUTO_INCREMENT] <<= OUString("0");     // TODO
+            row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
+            row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
+            row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
+            (void)FIXED_PREC_SCALE;
+            vec.push_back( row );
+        }
     }
-
 }
 
 
