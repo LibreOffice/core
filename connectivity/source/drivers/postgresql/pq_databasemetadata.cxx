@@ -2143,11 +2143,84 @@ struct TypeInfoByDataTypeSorter
             OUString nameB;
             a[0 /*TYPE_NAME*/] >>= nameA;
             b[0 /*TYPE_NAME*/] >>= nameB;
-            if( nameA.startsWith( "int4" ) )
+            OUString nsA, tnA, nsB, tnB;
+
+            // parse typename into schema and typename
+            sal_Int32 nIndex=0;
+            nsA = nameA.getToken(0, '.', nIndex);
+            if (nIndex<0)
+            {
+                tnA = nsA;
+                nsA.clear();
+            }
+            else
+            {
+                tnA = nameA.getToken(0, '.', nIndex);
+                assert(nIndex < 0);
+            }
+
+            nIndex=0;
+            nsB = nameB.getToken(0, '.', nIndex);
+            if (nIndex<0)
+            {
+                tnB = nsB;
+                nsB.clear();
+            }
+            else
+            {
+                tnB = nameB.getToken(0, '.', nIndex);
+                assert(nIndex < 0);
+            }
+
+            // sort no schema first, then "public", then normal schemas, then internal schemas
+            if(nsA == nsB)
+            {
+                if(nsA.isEmpty())
+                {
+                    assert(nsB.isEmpty());
+                    // within each type category, sort privileged choice first
+                    if( tnA == "int4" || tnA == "varchar" || tnA == "char" || tnA == "text")
+                        return true;
+                    if( tnB == "int4" || tnB == "varchar" || tnB == "char" || tnB == "text")
+                        return false;
+                }
+                return nameA.compareTo( nameB ) < 0;
+            }
+            else if (nsA.isEmpty())
+            {
+                assert(!nsB.isEmpty());
                 return true;
-            if( nameB.startsWith( "int4" ) )
+            }
+            else if (nsB.isEmpty())
+            {
+                assert(!nsA.isEmpty());
                 return false;
-            return nameA.compareTo( nameB ) < 0;
+            }
+            else if(nsA == "public")
+            {
+                assert(nsB != "public");
+                return true;
+            }
+            else if(nsB == "public")
+            {
+                assert(nsA != "public");
+                return false;
+            }
+            else if(nsA.startsWith("pg_"))
+            {
+                if(nsB.startsWith("pg_"))
+                    return nsA.compareTo(nsB) < 0;
+                else
+                    return false;
+            }
+            else if(nsB.startsWith("pg_"))
+            {
+                return true;
+            }
+            else
+            {
+                return nsA.compareTo(nsB) < 0;
+            }
         }
 
         return valueA.toInt32() < valueB.toInt32();
