@@ -93,8 +93,7 @@ void SvPasteObjectDialog::Insert( SotClipboardFormatId nFormat, const OUString& 
 }
 
 SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
-                                      const DataFlavorExVector* pFormats,
-                                      const TransferableObjectDescriptor* )
+                                      const DataFlavorExVector* pFormats )
 {
     //TODO/LATER: why is the Descriptor never used?!
     TransferableObjectDescriptor aDesc;

@@ -180,8 +180,7 @@ public:
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
-        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = nullptr /* NULL allowed*/,
-        bool bItemsOnDemand = false );
+        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = nullptr /* NULL allowed*/ );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16          GetCurPageId() const       { return mnCurrentPageId; }

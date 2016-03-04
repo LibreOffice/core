@@ -97,14 +97,9 @@ public:
     void GetName(OUString& rName) {rName = pEdtName->GetText(); }
 
     // set handler
-    void SetCheckNameHdl(const Link<SvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately = false)
+    void SetCheckNameHdl(const Link<SvxObjectNameDialog&,bool>& rLink)
     {
         aCheckNameHdl = rLink;
-
-        if(bCheckImmediately)
-        {
-            pBtnOK->Enable(rLink.Call(*this));
-        }
     }
 };
 
