@@ -20,7 +20,7 @@
 #include "stdafx2.h"
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
-                     OLECHAR* sFuncName,
+                     OLECHAR const * sFuncName,
                      CComVariant* params,
                      unsigned int count,
                      CComVariant* pResult );
@@ -37,7 +37,7 @@ HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
                               unsigned int count );
 
 HRESULT GetPropertiesFromIDisp( IDispatch* pdispObject,
-                                OLECHAR** sMemberNames,
+                                OLECHAR const ** sMemberNames,
                                 CComVariant* pVariant,
                                 unsigned int count );
 

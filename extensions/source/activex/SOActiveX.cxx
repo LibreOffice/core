@@ -60,7 +60,7 @@ void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 }
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
-                     OLECHAR* sFuncName,
+                     OLECHAR const * sFuncName,
                      CComVariant* params,
                      unsigned int count,
                      CComVariant* pResult )
@@ -69,7 +69,7 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
         return E_FAIL;
 
     DISPID id;
-    HRESULT hr = idispUnoObject->GetIDsOfNames( IID_NULL, &sFuncName, 1, LOCALE_USER_DEFAULT, &id);
+    HRESULT hr = idispUnoObject->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sFuncName), 1, LOCALE_USER_DEFAULT, &id);
     if( !SUCCEEDED( hr ) ) return hr;
 
     DISPPARAMS dispparams= { params, 0, count, 0};
@@ -88,7 +88,7 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
 }
 
 HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
-                          OLECHAR* sFuncName,
+                          OLECHAR const * sFuncName,
                           CComVariant* params,
                           unsigned int count,
                           CComPtr<IDispatch>& pdispResult )
@@ -109,14 +109,14 @@ HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
 }
 
 HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
-                              OLECHAR** sMemberNames,
+                              OLECHAR const ** sMemberNames,
                               CComVariant* pVariant,
                               unsigned int count )
 {
     for( unsigned int ind = 0; ind < count; ind++ )
     {
         DISPID id;
-        HRESULT hr = pdispObject->GetIDsOfNames( IID_NULL, &sMemberNames[ind], 1, LOCALE_USER_DEFAULT, &id );
+        HRESULT hr = pdispObject->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sMemberNames[ind]), 1, LOCALE_USER_DEFAULT, &id );
         if( !SUCCEEDED( hr ) ) return hr;
 
         hr = CComDispatchDriver::PutProperty( pdispObject, id, &pVariant[ind] );
@@ -127,14 +127,14 @@ HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
 }
 
 HRESULT GetPropertiesFromIDisp( IDispatch* pdispObject,
-                                OLECHAR** sMemberNames,
+                                OLECHAR const ** sMemberNames,
                                 CComVariant* pVariant,
                                 unsigned int count )
 {
     for( unsigned int ind = 0; ind < count; ind++ )
     {
         DISPID id;
-        HRESULT hr = pdispObject->GetIDsOfNames( IID_NULL, &sMemberNames[ind], 1, LOCALE_USER_DEFAULT, &id );
+        HRESULT hr = pdispObject->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sMemberNames[ind]), 1, LOCALE_USER_DEFAULT, &id );
         if( !SUCCEEDED( hr ) ) return hr;
 
         hr = CComDispatchDriver::GetProperty( pdispObject, id, &pVariant[ind] );
@@ -390,7 +390,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ 
         return hr;
 
     mbReadyForActivation = FALSE;
-    hr = CBindStatusCallback<CSOActiveX>::Download( this, &CSOActiveX::CallbackCreateXInputStream, mCurFileUrl, m_spClientSite, FALSE );
+    hr = CBindStatusCallback<CSOActiveX>::Download( this, &CSOActiveX::CallbackCreateXInputStream, const_cast<OLECHAR *>(mCurFileUrl), m_spClientSite, FALSE );
     if ( hr == MK_S_ASYNCHRONOUS )
         hr = S_OK;
 
@@ -406,20 +406,20 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ 
     return hr;
 }
 
-HRESULT CSOActiveX::GetUnoStruct( OLECHAR* sStructName, CComPtr<IDispatch>& pdispResult )
+HRESULT CSOActiveX::GetUnoStruct( OLECHAR const * sStructName, CComPtr<IDispatch>& pdispResult )
 {
     CComVariant aComStruct( sStructName );
     return GetIDispByFunc( mpDispFactory, L"Bridge_GetStruct", &aComStruct, 1, pdispResult );
 }
 
-HRESULT CSOActiveX::GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl )
+HRESULT CSOActiveX::GetUrlStruct( OLECHAR const * sUrl, CComPtr<IDispatch>& pdispUrl )
 {
     HRESULT hr = GetUnoStruct( L"com.sun.star.util.URL", pdispUrl );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR* sURLMemberName = L"Complete";
+    OLECHAR const * sURLMemberName = L"Complete";
     DISPID nURLID;
-    hr = pdispUrl->GetIDsOfNames( IID_NULL, &sURLMemberName, 1, LOCALE_USER_DEFAULT, &nURLID );
+    hr = pdispUrl->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sURLMemberName), 1, LOCALE_USER_DEFAULT, &nURLID );
     if( !SUCCEEDED( hr ) ) return hr;
     CComVariant aComUrl( sUrl );
     hr = CComDispatchDriver::PutProperty( pdispUrl, nURLID, &aComUrl );
@@ -452,7 +452,7 @@ HRESULT CSOActiveX::SetLayoutManagerProps()
         return E_FAIL;
 
     CComVariant pVarLayoutMgr;
-    OLECHAR* sLMPropName = L"LayoutManager";
+    OLECHAR const * sLMPropName = L"LayoutManager";
     HRESULT hr = GetPropertiesFromIDisp( mpDispFrame, &sLMPropName, &pVarLayoutMgr, 1 );
     if( pVarLayoutMgr.vt != VT_DISPATCH || pVarLayoutMgr.pdispVal == NULL )
         return E_FAIL;
@@ -463,7 +463,7 @@ HRESULT CSOActiveX::SetLayoutManagerProps()
     if( !SUCCEEDED( hr ) || !pdispLM )
         return E_FAIL;
 
-    OLECHAR* sATName = L"AutomaticToolbars";
+    OLECHAR const * sATName = L"AutomaticToolbars";
     CComVariant pATProp;
     pATProp.vt = VT_BOOL; pATProp.boolVal = VARIANT_FALSE ;
     hr = PutPropertiesToIDisp( pdispLM, &sATName, &pATProp, 1 );
@@ -486,7 +486,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     HRESULT hr = GetUnoStruct( L"com.sun.star.awt.Rectangle", pdispRectangle );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR* sRectMemberNames[4] = { L"X",
+    OLECHAR const * sRectMemberNames[4] = { L"X",
                                       L"Y",
                                       L"Width",
                                       L"Height" };
@@ -502,7 +502,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     if( !SUCCEEDED( hr ) ) return hr;
 
     // fill in descriptor with info
-    OLECHAR* sDescriptorMemberNames[6] = { L"Type",
+    OLECHAR const * sDescriptorMemberNames[6] = { L"Type",
                                  L"WindowServiceName",
                                  L"ParentIndex",
                                  L"Parent",
@@ -636,7 +636,7 @@ HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArg
     HRESULT hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
+    OLECHAR const * sPropMemberNames[2] = { L"Name", L"Value" };
     CComVariant pPropVar[2];
     pPropVar[0] = CComVariant( sArgName );
     pPropVar[1].vt = VT_BOOL; pPropVar[1].boolVal = sArgVal ? VARIANT_TRUE : VARIANT_FALSE ;
@@ -659,7 +659,7 @@ HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArg
     return S_OK;
 }
 
-HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
+HRESULT CSOActiveX::CallDispatchMethod( OLECHAR const * sUrl,
                                         CComVariant* aArgNames,
                                         CComVariant* aArgVals,
                                         unsigned int count )
@@ -687,7 +687,7 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
         hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
         if( !SUCCEEDED( hr ) ) return hr;
 
-        OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
+        OLECHAR const * sPropMemberNames[2] = { L"Name", L"Value" };
         CComVariant pPropVar[2];
         pPropVar[0] = aArgNames[ix];
         pPropVar[1] = aArgVals[ix];
@@ -822,7 +822,7 @@ HRESULT CSOActiveX::LoadURLToFrame( )
             {
                 // this is a presentation
                 // let the slide show be shown in the document window
-                OLECHAR* pPropName = L"IsFullScreen";
+                OLECHAR const * pPropName = L"IsFullScreen";
                 CComVariant pPresProp;
                 pPresProp.vt = VT_BOOL; pPresProp.boolVal = VARIANT_FALSE ;
                 hr = PutPropertiesToIDisp( pdispPres, &pPropName, &pPresProp, 1 );

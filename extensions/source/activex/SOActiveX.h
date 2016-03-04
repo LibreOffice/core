@@ -87,7 +87,7 @@ protected:
     CComPtr<IDispatch>      mpDispFrame;
     CComPtr<IDispatch>      mpInstanceLocker;
     CComPtr<IDispatch>      mpDispWin;
-    OLECHAR*                mCurFileUrl;
+    OLECHAR const *         mCurFileUrl;
     BOOL                    mbLoad;
     BOOL                    mbViewOnly;
     WNDCLASS                mPWinClass;
@@ -185,11 +185,11 @@ public:
 
     HRESULT SetLayoutManagerProps();
     HRESULT CreateFrameOldWay( HWND hwnd, int width, int height );
-    HRESULT GetUnoStruct( OLECHAR* sStructName, CComPtr<IDispatch>& pdispResult );
+    HRESULT GetUnoStruct( OLECHAR const * sStructName, CComPtr<IDispatch>& pdispResult );
     HRESULT LoadURLToFrame();
-    HRESULT CallDispatchMethod( OLECHAR* sUrl, CComVariant* sArgNames, CComVariant* sArgVal, unsigned int count );
+    HRESULT CallDispatchMethod( OLECHAR const * sUrl, CComVariant* sArgNames, CComVariant* sArgVal, unsigned int count );
     HRESULT CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal );
-    HRESULT GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl );
+    HRESULT GetUrlStruct( OLECHAR const * sUrl, CComPtr<IDispatch>& pdispUrl );
     HRESULT Cleanup();
     HRESULT TerminateOffice();
     HRESULT GetURL( const OLECHAR* url,

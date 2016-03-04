@@ -66,9 +66,9 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
     if ( !aURL || !retVal ) return E_FAIL;
 
     CComVariant aTargetUrl;
-    OLECHAR* sURLMemberName = L"Complete";
+    OLECHAR const * sURLMemberName = L"Complete";
     DISPID nURLID;
-    HRESULT hr = aURL->GetIDsOfNames( IID_NULL, &sURLMemberName, 1, LOCALE_USER_DEFAULT, &nURLID );
+    HRESULT hr = aURL->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sURLMemberName), 1, LOCALE_USER_DEFAULT, &nURLID );
     if( !SUCCEEDED( hr ) ) return hr;
 
     hr = CComDispatchDriver::GetProperty( aURL, nURLID, &aTargetUrl );
@@ -139,7 +139,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
         SafeArrayGetElement( aDescripts, &ind, pElem );
         if( pElem )
         {
-            OLECHAR* pMemberNames[3] = { L"FeatureURL", L"FrameName", L"SearchFlags" };
+            OLECHAR const * pMemberNames[3] = { L"FeatureURL", L"FrameName", L"SearchFlags" };
             CComVariant pValues[3];
             hr = GetPropertiesFromIDisp( pElem, pMemberNames, pValues, 3 );
             if( !SUCCEEDED( hr ) ) return hr;
@@ -160,7 +160,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* aArgs)
 {
     // get url from aURL
-    OLECHAR* pUrlName = L"Complete";
+    OLECHAR const * pUrlName = L"Complete";
     CComVariant pValue;
     HRESULT hr = GetPropertiesFromIDisp( aURL, &pUrlName, &pValue, 1 );
     if( !SUCCEEDED( hr ) ) return hr;
@@ -186,7 +186,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
             SafeArrayGetElement( aArgs, &ind, &pVarElem );
             if( pVarElem.vt == VT_DISPATCH && pVarElem.pdispVal != NULL )
             {
-                OLECHAR* pMemberNames[2] = { L"Name", L"Value" };
+                OLECHAR const * pMemberNames[2] = { L"Name", L"Value" };
                 CComVariant pValues[2];
                 hr = GetPropertiesFromIDisp( pVarElem.pdispVal, pMemberNames, pValues, 2 );
                 if( !SUCCEEDED( hr ) ) return hr;
