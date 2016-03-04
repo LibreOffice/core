@@ -87,6 +87,8 @@ public:
     OUString GetRealCommandForCommand( const OUString& rCommandName,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame );
 
+    OUString GetCommandPropertyFromModule( const sal_Char* pCommandURL, const OUString& rModuleName );
+
     Image GetImageForCommand(
         const OUString& rsCommandName,
         bool bLarge,
