@@ -549,8 +549,7 @@ bool ImplLayoutArgs::PrepareFallback()
     int nMin, nEnd;
 
     // get the individual fallback requests
-    typedef std::vector<int> IntVector;
-    IntVector aPosVector;
+    std::vector<int> aPosVector;
     aPosVector.reserve(mrStr.getLength());
     maFallbackRuns.ResetPos();
     for(; maFallbackRuns.GetRun( &nMin, &nEnd, &bRTL ); maFallbackRuns.NextRun() )
@@ -567,11 +566,11 @@ bool ImplLayoutArgs::PrepareFallback()
     for(; maRuns.GetRun( &nMin, &nEnd, &bRTL ); maRuns.NextRun() )
     {
         if( !bRTL) {
-            IntVector::const_iterator it = std::lower_bound( aPosVector.begin(), aPosVector.end(), nMin );
+            auto it = std::lower_bound( aPosVector.begin(), aPosVector.end(), nMin );
             for(; (it != aPosVector.end()) && (*it < nEnd); ++it )
                 aNewRuns.AddPos( *it, bRTL );
         } else {
-            IntVector::const_iterator it = std::upper_bound( aPosVector.begin(), aPosVector.end(), nEnd );
+            auto it = std::upper_bound( aPosVector.begin(), aPosVector.end(), nEnd );
             while( (it != aPosVector.begin()) && (*--it >= nMin) )
                 aNewRuns.AddPos( *it, bRTL );
         }
