@@ -47,8 +47,14 @@ CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_SOActiveX, CSOActiveX)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-field-initializers"
+#endif
 END_OBJECT_MAP()
-
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 #define X64_LIB_NAME "so_activex_x64.dll"
 #define X32_LIB_NAME "so_activex.dll"
