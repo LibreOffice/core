@@ -10094,7 +10094,7 @@ AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
 
 ENABLE_GTK=""
-if test "x$enable_gtk" = "xyes"; then
+if test "x$enable_gtk" = "xyes" -o "x$enable_gtk3" = "xyes"; then
     if test "$with_system_cairo" = no; then
         AC_MSG_ERROR([System cairo required for gtk support, do not use --without-system-cairo or use --disable-gtk])
     fi
