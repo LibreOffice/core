@@ -224,7 +224,7 @@ private:
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
-    SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev = true);
+    SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                                              DayOfWeek eDayOfWeek, bool bBack = true,
@@ -289,7 +289,7 @@ public:
 
     bool            IsTravelSelect() const { return mbTravelSelect; }
 
-    Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1 ) const;
+    Size            CalcWindowSizePixel() const;
 
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
 };

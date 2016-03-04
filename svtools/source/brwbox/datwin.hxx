@@ -81,7 +81,7 @@ public:
     OUString&           Title() { return _aTitle; }
 
     bool                IsFrozen() const { return _bFrozen; }
-    void                Freeze( bool bFreeze = true ) { _bFrozen = bFreeze; }
+    void                Freeze() { _bFrozen = true; }
 
     void                Draw( BrowseBox& rBox, OutputDevice& rDev,
                               const Point& rPos, bool bCurs  );

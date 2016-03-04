@@ -653,20 +653,17 @@ static void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangl
 
 } //end anonymous namespace
 
-void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev )
+void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
 {
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
-    if (bDrawPrev)
-    {
-        Rectangle aOutRect = maPrevRect;
-        aOutRect.Left()   += 3;
-        aOutRect.Top()    += 3;
-        aOutRect.Right()  -= 3;
-        aOutRect.Bottom() -= 3;
-        ImplDrawSpinArrow(rRenderContext, aOutRect, true);
-    }
-    Rectangle aOutRect = maNextRect;
+    Rectangle aOutRect = maPrevRect;
+    aOutRect.Left()   += 3;
+    aOutRect.Top()    += 3;
+    aOutRect.Right()  -= 3;
+    aOutRect.Bottom() -= 3;
+    ImplDrawSpinArrow(rRenderContext, aOutRect, true);
+    aOutRect = maNextRect;
     aOutRect.Left()   += 3;
     aOutRect.Top()    += 3;
     aOutRect.Right()  -= 3;
@@ -1976,7 +1973,7 @@ void Calendar::EndSelection()
     }
 }
 
-Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine ) const
+Size Calendar::CalcWindowSizePixel() const
 {
     OUString  a99Text("99");
     vcl::Font aOldFont = GetFont();
@@ -2013,7 +2010,6 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine ) const
 
     aSize.Width()  += ((n99TextWidth+DAY_OFFX)*7) + nWeekWidth;
     aSize.Width()  += MONTH_BORDERX*2;
-    aSize.Width()  *= nCalcMonthPerLine;
 
     aSize.Height()  = nTextHeight + TITLE_OFFY + (TITLE_BORDERY*2);
     aSize.Height() += nTextHeight + WEEKDAY_OFFY;

@@ -305,8 +305,8 @@ public:
     static const Image& GetDefaultCollapsedNodeImage( );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
-    void                KeyUp( bool bPageUp, bool bNotifyScroll = true );
-    void                KeyDown( bool bPageDown, bool bNotifyScroll = true );
+    void                KeyUp( bool bPageUp );
+    void                KeyDown( bool bPageDown );
     void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();

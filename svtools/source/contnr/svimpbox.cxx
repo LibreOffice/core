@@ -466,7 +466,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     ShowCursor( true );
 }
 
-void SvImpLBox::KeyUp( bool bPageUp, bool bNotifyScroll )
+void SvImpLBox::KeyUp( bool bPageUp )
 {
     if( !aVerSBar->IsVisible() )
         return;
@@ -486,8 +486,7 @@ void SvImpLBox::KeyUp( bool bPageUp, bool bNotifyScroll )
         return;
 
     nFlags &= (~F_FILLING);
-    if( bNotifyScroll )
-        BeginScroll();
+    BeginScroll();
 
     aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
@@ -495,12 +494,11 @@ void SvImpLBox::KeyUp( bool bPageUp, bool bNotifyScroll )
     else
         CursorUp();
 
-    if( bNotifyScroll )
-        EndScroll();
+    EndScroll();
 }
 
 
-void SvImpLBox::KeyDown( bool bPageDown, bool bNotifyScroll )
+void SvImpLBox::KeyDown( bool bPageDown )
 {
     if( !aVerSBar->IsVisible() )
         return;
@@ -523,8 +521,7 @@ void SvImpLBox::KeyDown( bool bPageDown, bool bNotifyScroll )
         return;
 
     nFlags &= (~F_FILLING);
-    if( bNotifyScroll )
-        BeginScroll();
+    BeginScroll();
 
     aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
@@ -532,8 +529,7 @@ void SvImpLBox::KeyDown( bool bPageDown, bool bNotifyScroll )
     else
         CursorDown();
 
-    if( bNotifyScroll )
-        EndScroll();
+    EndScroll();
 }
 
 

@@ -525,11 +525,10 @@ bool TransferDataContainer::HasAnyData() const
 
 void TransferDataContainer::StartDrag(
         vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-        const Link<sal_Int8,void>& rLnk, sal_Int32 nDragPointer )
+        const Link<sal_Int8,void>& rLnk )
 {
     pImpl->aFinshedLnk = rLnk;
-    TransferableHelper::StartDrag( pWindow, nDragSourceActions,
-                                    nDragPointer );
+    TransferableHelper::StartDrag( pWindow, nDragSourceActions );
 }
 
 

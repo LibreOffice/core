@@ -321,14 +321,14 @@ public:
                         SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pView, WinBits nWinStyle );
                         ~SvxIconChoiceCtrl_Impl();
 
-    bool                SetChoiceWithCursor ( bool bDo = true ) { bool bOld = bChooseWithCursor; bChooseWithCursor = bDo; return bOld; }
+    bool                SetChoiceWithCursor() { bool bOld = bChooseWithCursor; bChooseWithCursor = true; return bOld; }
     void                Clear( bool bInCtor = false );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
     void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=nullptr );
     void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = nullptr );
     void                FontModified();
-    void                SelectAll( bool bSelect = true );
+    void                SelectAll();
     void                SelectEntry(
                             SvxIconChoiceCtrlEntry*,
                             bool bSelect,
@@ -369,11 +369,7 @@ public:
     void                SetNoSelection();
 
     SvxIconChoiceCtrlEntry* GetCurEntry() const { return pCursor; }
-    void                SetCursor(
-                            SvxIconChoiceCtrlEntry*,
-                            // true == carry selection when single-selecting
-                            bool bSyncSingleSelection = true
-                        );
+    void                SetCursor( SvxIconChoiceCtrlEntry* );
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, bool bHit = false );
 
@@ -418,7 +414,7 @@ public:
                                       bool bIsBackgroundPainted = false);
 
     void                PaintItem(const Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
-                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext, const OUString* pStr = nullptr);
+                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
@@ -595,11 +591,11 @@ public:
     GridId              GetUnoccupiedGrid();
 
     void                OccupyGrids( const SvxIconChoiceCtrlEntry* );
-    void                OccupyGrid( GridId nId, bool bOccupy = true )
+    void                OccupyGrid( GridId nId )
                         {
                             DBG_ASSERT(!_pGridMap || nId<(sal_uLong)(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
                             if(_pGridMap && nId < (sal_uLong)(_nGridCols *_nGridRows) )
-                                _pGridMap[ nId ] = bOccupy;
+                                _pGridMap[ nId ] = true;
                         }
 
     Rectangle           GetGridRect( GridId );

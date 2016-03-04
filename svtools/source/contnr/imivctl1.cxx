@@ -1572,15 +1572,11 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rec
 
 void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
-    vcl::RenderContext& rRenderContext, const OUString* pStr )
+    vcl::RenderContext& rRenderContext )
 {
     if (eItem == IcnViewFieldTypeText)
     {
-        OUString aText;
-        if (!pStr)
-            aText = SvtIconChoiceCtrl::GetEntryText(pEntry, false);
-        else
-            aText = *pStr;
+        OUString aText = SvtIconChoiceCtrl::GetEntryText(pEntry, false);
 
         Color aOldFontColor = rRenderContext.GetTextColor();
         if (pView->AutoFontColor())
@@ -2044,11 +2040,11 @@ void SvxIconChoiceCtrl_Impl::SetBoundingRect_Impl( SvxIconChoiceCtrlEntry* pEntr
 }
 
 
-void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSyncSingleSelection )
+void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry )
 {
     if( pEntry == pCursor )
     {
-        if( pCursor && eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection &&
+        if( pCursor && eSelectionMode == SINGLE_SELECTION &&
                 !pCursor->IsSelected() )
             SelectEntry( pCursor, true );
         return;
@@ -2059,14 +2055,14 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSy
     if( pOldCursor )
     {
         pOldCursor->ClearFlags( SvxIconViewFlags::FOCUSED );
-        if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
+        if( eSelectionMode == SINGLE_SELECTION )
             SelectEntry( pOldCursor, false ); // deselect old cursor
     }
     if( pCursor )
     {
         ToTop( pCursor );
         pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
-        if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
+        if( eSelectionMode == SINGLE_SELECTION )
             SelectEntry( pCursor, true );
         ShowCursor( true );
     }
@@ -3089,15 +3085,15 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
     return nullptr;
 }
 
-void SvxIconChoiceCtrl_Impl::SelectAll( bool bSelect )
+void SvxIconChoiceCtrl_Impl::SelectAll()
 {
     bool bPaint = true;
 
     size_t nCount = aEntries.size();
-    for( size_t nCur = 0; nCur < nCount && (bSelect || GetSelectionCount() ); nCur++ )
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
-        SelectEntry( pEntry, bSelect, true, true, bPaint );
+        SelectEntry( pEntry, true/*bSelect*/, true, true, bPaint );
     }
     nFlags &= (~F_ADD_MODE);
     pAnchor = nullptr;

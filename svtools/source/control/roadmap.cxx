@@ -437,13 +437,13 @@ void ORoadmap::ChangeRoadmapItemID(ItemId _nID, ItemId _NewID)
         pItem->SetID( _NewID );
 }
 
-RoadmapItem* ORoadmap::GetByID(ItemId _nID, ItemIndex _nStartIndex)
+RoadmapItem* ORoadmap::GetByID(ItemId _nID)
 {
     ItemId nLocID = 0;
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    for (   HL_Vector::const_iterator i = rItems.begin() + _nStartIndex;
-            i != rItems.end();
-            ++i
+    for ( HL_Vector::const_iterator i = rItems.begin();
+          i != rItems.end();
+          ++i
         )
     {
         nLocID = (*i)->GetID();

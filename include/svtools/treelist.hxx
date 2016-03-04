@@ -83,8 +83,8 @@ class SVT_DLLPUBLIC SvTreeList
 
     SvTreeListEntry*        FirstVisible() const { return First(); }
     SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
-    SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
-    SvTreeListEntry*        LastVisible( const SvListView*,sal_uInt16* pDepth=nullptr ) const;
+    SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*        LastVisible( const SvListView* ) const;
     SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
     SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
 
@@ -159,7 +159,7 @@ public:
     sal_uLong           GetEntryCount() const { return nEntryCount; }
     SvTreeListEntry*    First() const;
     SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
-    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
+    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    Last() const;
 
     SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;

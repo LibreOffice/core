@@ -94,7 +94,7 @@ private:
     RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
     const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
 
-    RoadmapItem*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
+    RoadmapItem*         GetByID( ItemId _nID  );
     const RoadmapItem*   GetByID( ItemId _nID  ) const;
     RoadmapItem*         GetPreviousHyperLabel( ItemIndex _Index);
 

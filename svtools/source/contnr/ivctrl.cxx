@@ -101,11 +101,11 @@ void SvtIconChoiceCtrl::dispose()
     Control::dispose();
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, const Image& rImage, sal_uLong nPos, const Point* pPos  )
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, const Image& rImage, sal_uLong nPos  )
 {
     SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, SvxIconViewFlags::NONE);
 
-    _pImp->InsertEntry( pEntry, nPos, pPos );
+    _pImp->InsertEntry( pEntry, nPos );
 
     return pEntry;
 }

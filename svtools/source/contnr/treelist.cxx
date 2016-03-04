@@ -562,17 +562,11 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
     return nullptr;
 }
 
-SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry, sal_uInt16* pDepth ) const
+SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
 {
     DBG_ASSERT(pActEntry!=nullptr,"Entry?");
 
     sal_uInt16 nDepth = 0;
-    bool bWithDepth = false;
-    if ( pDepth )
-    {
-        nDepth = *pDepth;
-        bWithDepth = true;
-    }
 
     SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
     sal_uLong nActualPos = pActEntry->GetChildListPos();
@@ -586,8 +580,6 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry, sal_uInt16* pDept
             nDepth++;
             pActEntry = pActualList->back().get();
         }
-        if ( bWithDepth )
-            *pDepth = nDepth;
         return pActEntry;
     }
     if ( pActEntry->pParent == pRootItem )
@@ -598,8 +590,6 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry, sal_uInt16* pDept
     if ( pActEntry )
     {
         nDepth--;
-        if ( bWithDepth )
-            *pDepth = nDepth;
         return pActEntry;
     }
     return nullptr;
@@ -723,17 +713,11 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry
 // For performance reasons, this function assumes that the passed entry is
 // already visible.
 
-SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntry* pActEntry, sal_uInt16* pActDepth) const
+SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntry* pActEntry) const
 {
     DBG_ASSERT(pView&&pActEntry,"PrevVis:View/Entry?");
 
     sal_uInt16 nDepth = 0;
-    bool bWithDepth = false;
-    if ( pActDepth )
-    {
-        nDepth = *pActDepth;
-        bWithDepth = true;
-    }
 
     SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
     sal_uLong nActualPos = pActEntry->GetChildListPos();
@@ -747,8 +731,6 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntr
             nDepth++;
             pActEntry = pActualList->back().get();
         }
-        if ( bWithDepth )
-            *pActDepth = nDepth;
         return pActEntry;
     }
 
@@ -759,21 +741,17 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntr
     if ( pActEntry )
     {
         nDepth--;
-        if ( bWithDepth )
-            *pActDepth = nDepth;
         return pActEntry;
     }
     return nullptr;
 }
 
-SvTreeListEntry* SvTreeList::LastVisible( const SvListView* pView, sal_uInt16* pDepth) const
+SvTreeListEntry* SvTreeList::LastVisible( const SvListView* pView) const
 {
     DBG_ASSERT(pView,"LastVis:No View");
     SvTreeListEntry* pEntry = Last();
     while( pEntry && !IsEntryVisible( pView, pEntry ) )
         pEntry = PrevVisible( pView, pEntry );
-    if ( pEntry && pDepth )
-        *pDepth = GetDepth( pEntry );
     return pEntry;
 }
 
