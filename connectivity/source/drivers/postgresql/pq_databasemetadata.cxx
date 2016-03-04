@@ -2194,7 +2194,7 @@ static sal_Int32 getMaxScale( sal_Int32 dataType )
 
 namespace
 {
-    OUString construct_full_typename(OUString ns, OUString tn)
+    OUString construct_full_typename(const OUString &ns, const OUString &tn)
     {
         if(ns.isEmpty() || ns == "pg_catalog")
             return tn;
