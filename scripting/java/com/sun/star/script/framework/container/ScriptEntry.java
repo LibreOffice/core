@@ -23,13 +23,13 @@ import java.util.Map;
 
 public class ScriptEntry implements Cloneable {
 
-    private String language;
-    private String languagename;
-    private String location;
-    private String logicalname;
-    private String description;
+    private final String language;
+    private final String languagename;
+    private final String location;
+    private final String logicalname;
+    private final String description;
 
-    private Map<String, String> languagedepprops;
+    private final Map<String, String> languagedepprops;
 
     protected ScriptEntry(ScriptEntry entry) {
         this.language = entry.language;
