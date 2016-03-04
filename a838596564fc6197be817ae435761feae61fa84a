@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_0d0c8893",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1001222
+      },
+      "writtenOn": "2016-03-04T00:26:32Z",
+      "side": 1,
+      "message": "Yes, expecting FillStyle_NONE at the end.\n\nUnless a variable gets assigned a value at the next line, I always manually initialize.  It\u0027s a good programming practice.  Can you guarantee it\u0027s going to be initialized on all target platforms?  Is it of type integer?  If you manage to access an uninitialized variable, then magic happens. :)",
+      "parentUuid": "1aa78d24_4df8507d",
+      "revId": "a838596564fc6197be817ae435761feae61fa84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_54f9fdc7",
         "filename": "sd/qa/unit/import-tests.cxx",
         "patchSetId": 3
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Although it doesn\u0027t look like that,\n\ngetPropertyValue(\"someproperty\") \u003e\u003e\u003d somevar;\n\nis a boolean function (returning false e.g. when the object doesn\u0027t have the queried property, or it does, but it\u0027s of a different type). It\u0027s just that hardly anyone bothers to check its return value. That\u0027s what I meant",
       "parentUuid": "1aa78d24_9477e501",
+      "revId": "a838596564fc6197be817ae435761feae61fa84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ad7d74e9",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1001222
+      },
+      "writtenOn": "2016-03-04T00:26:32Z",
+      "side": 1,
+      "message": "Good point.  I did not check the return value because the property is always going to be present.  All office apps define fill style in a default graphic style (it must not be present in input document).  But it\u0027s not an explicit knowledge.",
+      "parentUuid": "1aa78d24_6d69cc8b",
       "revId": "a838596564fc6197be817ae435761feae61fa84a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
