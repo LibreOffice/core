@@ -286,7 +286,7 @@ public:
     sal_Int32       GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
     void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
-    sal_uInt32      GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
+    sal_uInt32      GetLineHeight( sal_Int32 nParagraph );
     ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
     sal_Int32       FindParagraph( long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
@@ -558,8 +558,7 @@ public:
     EditPaM CursorRight(
         const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL);
 
-    void SeekCursor(
-        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = nullptr);
+    void SeekCursor(ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont);
 
     EditPaM DeleteSelection(const EditSelection& rSel);
 

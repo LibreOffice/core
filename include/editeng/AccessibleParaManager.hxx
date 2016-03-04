@@ -130,8 +130,7 @@ namespace accessibility
         void SetFocus( sal_Int32 nChild );
 
         void FireEvent( sal_Int32 nPara,
-                        const sal_Int16 nEventId,
-                        const css::uno::Any& rNewValue = css::uno::Any() ) const;
+                        const sal_Int16 nEventId ) const;
 
         static bool IsReferencable(rtl::Reference<AccessibleEditableTextPara> const & aChild);
         bool IsReferencable( sal_Int32 nChild ) const;

@@ -595,12 +595,12 @@ sal_Int32 EditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) 
     return pImpEditEngine->GetLineNumberAtIndex( nPara, nIndex );
 }
 
-sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
+sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph )
 {
     // If someone calls GetLineHeight() with an empty Engine.
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
-    return pImpEditEngine->GetLineHeight( nParagraph, nLine );
+    return pImpEditEngine->GetLineHeight( nParagraph, 0 );
 }
 
 sal_uInt32 EditEngine::GetTextHeight( sal_Int32 nParagraph ) const
@@ -872,10 +872,9 @@ const ParaPortionList& EditEngine::GetParaPortions() const
     return pImpEditEngine->GetParaPortions();
 }
 
-void EditEngine::SeekCursor(
-        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut)
+void EditEngine::SeekCursor(ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont)
 {
-    pImpEditEngine->SeekCursor(pNode, nPos, rFont, pOut);
+    pImpEditEngine->SeekCursor(pNode, nPos, rFont);
 }
 
 EditPaM EditEngine::DeleteSelection(const EditSelection& rSel)

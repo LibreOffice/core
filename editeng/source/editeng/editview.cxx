@@ -737,13 +737,13 @@ sal_Int32 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
     return pImpEditView->pEditEngine->pImpEditEngine->StartSearchAndReplace( this, rSearchItem );
 }
 
-bool EditView::IsCursorAtWrongSpelledWord( bool bMarkIfWrong )
+bool EditView::IsCursorAtWrongSpelledWord()
 {
     bool bIsWrong = false;
     if ( !HasSelection() )
     {
         EditPaM aPaM = pImpEditView->GetEditSelection().Max();
-        bIsWrong = pImpEditView->IsWrongSpelledWord( aPaM, bMarkIfWrong );
+        bIsWrong = pImpEditView->IsWrongSpelledWord( aPaM, false/*bMarkIfWrong*/ );
     }
     return bIsWrong;
 }

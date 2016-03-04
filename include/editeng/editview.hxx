@@ -215,7 +215,7 @@ public:
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
-    bool            IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
+    bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
     void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
 

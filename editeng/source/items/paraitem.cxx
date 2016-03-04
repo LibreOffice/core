@@ -1130,16 +1130,16 @@ bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
     return maTabStops.insert( rTab ).second;
 }
 
-void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart )
+void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs )
 {
-    for( sal_uInt16 i = nStart; i < pTabs->Count(); i++ )
+    for( sal_uInt16 i = 0; i < pTabs->Count(); i++ )
     {
         const SvxTabStop& rTab = (*pTabs)[i];
         sal_uInt16 nTabPos = GetPos(rTab);
         if(SVX_TAB_NOTFOUND != nTabPos)
             Remove(nTabPos);
     }
-    for( sal_uInt16 i = nStart; i < pTabs->Count(); i++ )
+    for( sal_uInt16 i = 0; i < pTabs->Count(); i++ )
     {
         maTabStops.insert( (*pTabs)[i] );
     }

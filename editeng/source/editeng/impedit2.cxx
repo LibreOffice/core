@@ -268,13 +268,13 @@ EditPaM ImpEditEngine::DeleteSelected(const EditSelection& rSel)
     return aPaM;
 }
 
-OUString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd eEnd  ) const
+OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
 {
     OUString aText;
     if ( !rSel.HasRange() )
         return aText;
 
-    OUString aSep = EditDoc::GetSepStr( eEnd );
+    OUString aSep = EditDoc::GetSepStr( LINEEND_LF );
 
     EditSelection aSel( rSel );
     aSel.Adjust( aEditDoc );
@@ -1483,7 +1483,7 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM )
     return aNewPaM;
 }
 
-EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
+EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM )
 {
     EditPaM aNewPaM( rPaM );
 
@@ -1496,7 +1496,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     i18n::Boundary aBoundary = _xBI->getWordBoundary(
-        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, nWordType, true);
+        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
 
     aNewPaM.SetIndex( aBoundary.endPos );
     return aNewPaM;
@@ -2773,7 +2773,7 @@ EditPaM ImpEditEngine::ImpInsertFeature(const EditSelection& rCurSel, const SfxP
     return aPaM;
 }
 
-EditPaM ImpEditEngine::ImpInsertParaBreak( const EditSelection& rCurSel, bool bKeepEndingAttribs )
+EditPaM ImpEditEngine::ImpInsertParaBreak( const EditSelection& rCurSel )
 {
     EditPaM aPaM;
     if ( rCurSel.HasRange() )
@@ -2781,7 +2781,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditSelection& rCurSel, bool bK
     else
         aPaM = rCurSel.Max();
 
-    return ImpInsertParaBreak( aPaM, bKeepEndingAttribs );
+    return ImpInsertParaBreak( aPaM );
 }
 
 EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs )
