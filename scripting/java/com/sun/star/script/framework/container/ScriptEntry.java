@@ -26,24 +26,10 @@ public class ScriptEntry implements Cloneable {
     private String language;
     private String languagename;
     private String location;
-    private String logicalname = "";
-    private String description = "";
+    private String logicalname;
+    private String description;
 
     private Map<String, String> languagedepprops;
-
-    private ScriptEntry(String language, String languagename,
-                       String location) {
-
-        this.language = language;
-        this.languagename = languagename;
-        // logical name/ function name concept
-        // needs to be reworked, in meantime
-        // function name ( from xml ) will be used
-        // as logical name also
-        this.logicalname = languagename;
-        this.location = location;
-        this.languagedepprops =  new HashMap<String, String>();
-    }
 
     protected ScriptEntry(ScriptEntry entry) {
         this.language = entry.language;
@@ -56,14 +42,20 @@ public class ScriptEntry implements Cloneable {
 
     public ScriptEntry(String language, String languagename,
                        String location, Map<String, String> languagedepprops) {
-        this(language, languagename, location);
-        this.languagedepprops = languagedepprops;
+        this(language, languagename, location, languagedepprops, "");
     }
 
     public ScriptEntry(String language, String languagename,
                        String location, Map<String, String> languagedepprops,
                        String description) {
-        this(language, languagename, location);
+        this.language = language;
+        this.languagename = languagename;
+        // logical name/ function name concept
+        // needs to be reworked, in meantime
+        // function name ( from xml ) will be used
+        // as logical name also
+        this.logicalname = languagename;
+        this.location = location;
         this.languagedepprops = languagedepprops;
         this.description = description;
     }
