@@ -458,6 +458,8 @@ void RemoteFilesDialog::InitSize()
             }
         }
     }
+    else
+        m_pFileView->SetConfigString( "" );
 }
 
 void RemoteFilesDialog::FillServicesListbox()
