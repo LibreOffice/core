@@ -511,7 +511,8 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 }
 
-namespace {
+namespace
+{
 
 std::vector<OUString> getCurrentParts(SdXImpressDocument* pDocument)
 {
@@ -537,12 +538,14 @@ void SdTiledRenderingTest::testInsertDeletePage()
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    std::vector<OUString> aInserted = {
+    std::vector<OUString> aInserted =
+    {
         "Slide 1", "Slide 2", "Slide 3", "Slide 4", "Slide 5",
         "Slide 6", "Slide 7", "Slide 8", "Slide 9", "Slide 10", "Slide 11"
     };
 
-    std::vector<OUString> aDeleted = {
+    std::vector<OUString> aDeleted =
+    {
         "Slide 1"
     };
 

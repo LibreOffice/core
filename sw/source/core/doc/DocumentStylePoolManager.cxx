@@ -1270,7 +1270,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             ::lcl_SetDfltFont( DefaultFontType::FIXED, aSet );
         }
         break;
-   case RES_POOLCHR_VERT_NUM:
+    case RES_POOLCHR_VERT_NUM:
             aSet.Put( SvxCharRotateItem( 900, false, RES_CHRATR_ROTATE ) );
     break;
 
