@@ -59,6 +59,9 @@ public:
 
     virtual sal_Bool registerClass() = 0;
     virtual sal_Bool deregisterClass() = 0;
+
+protected:
+    ~IClassFactoryWrapper() {}
 };
 
 /*****************************************************************************
