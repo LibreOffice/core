@@ -66,6 +66,8 @@ public:
     void testOOXMLDescription();
     /// Test appending a new signature next to an existing one.
     void testOOXMLAppend();
+    /// Test removing a signature from existing ones.
+    void testOOXMLRemove();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -73,6 +75,7 @@ public:
     CPPUNIT_TEST(testOOXMLBroken);
     CPPUNIT_TEST(testOOXMLDescription);
     CPPUNIT_TEST(testOOXMLAppend);
+    CPPUNIT_TEST(testOOXMLRemove);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -218,6 +221,31 @@ void SigningTest::testOOXMLAppend()
     aManager.read(/*bUseTempStream=*/true);
     // This was 1: the original signature was lost.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rInformations.size());
+}
+
+void SigningTest::testOOXMLRemove()
+{
+    // Load the test document as a storage and read its signatures: purpose1 and purpose2.
+    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    OUString aURL = getURLFromSrc(DATA_DIRECTORY) + "multi.docx";
+    uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.read(/*bUseTempStream=*/false);
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rInformations.size());
+
+    // Then remove the last added signature.
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    CPPUNIT_ASSERT(xCertificate.is());
+    aManager.remove(0);
+
+    // Read back the signatures and make sure that only purpose1 is left.
+    aManager.read(/*bUseTempStream=*/true);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("purpose1"), rInformations[0].ouDescription);
 }
 
 void SigningTest::testOOXMLPartial()
