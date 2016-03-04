@@ -3700,8 +3700,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                                OUString const & rThePassword,
                                OUString const & rTheHost,
                                sal_uInt32 nThePort,
-                               OUString const & rThePath,
-                               EncodeMechanism eMechanism)
+                               OUString const & rThePath)
 {
     setInvalid();
     m_eScheme = eTheScheme;
@@ -3720,7 +3719,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             {
                 m_aUser.set(m_aAbsURIRef,
                             encodeText(rTheUser, false, PART_USER_PASSWORD,
-                                       eMechanism, RTL_TEXTENCODING_UTF8, false),
+                                       WAS_ENCODED, RTL_TEXTENCODING_UTF8, false),
                             m_aAbsURIRef.getLength());
                 bUserInfo = true;
             }
@@ -3737,7 +3736,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 m_aAbsURIRef.append(':');
                 m_aAuth.set(m_aAbsURIRef,
                             encodeText(rThePassword, false, PART_USER_PASSWORD,
-                                       eMechanism, RTL_TEXTENCODING_UTF8, false),
+                                       WAS_ENCODED, RTL_TEXTENCODING_UTF8, false),
                             m_aAbsURIRef.getLength());
                 bUserInfo = true;
             }
@@ -3784,7 +3783,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             }
             if (!parseHostOrNetBiosName(
                     aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
-                    false, eMechanism, RTL_TEXTENCODING_UTF8, bNetBiosName, &aSynHost))
+                    false, WAS_ENCODED, RTL_TEXTENCODING_UTF8, bNetBiosName, &aSynHost))
             {
                 setInvalid();
                 return false;
@@ -3816,7 +3815,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
     OUStringBuffer aSynPath;
     sal_Unicode const * p = rThePath.getStr();
     sal_Unicode const * pEnd = p + rThePath.getLength();
-    if (!parsePath(m_eScheme, &p, pEnd, false, eMechanism, RTL_TEXTENCODING_UTF8, false, '/',
+    if (!parsePath(m_eScheme, &p, pEnd, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8, false, '/',
                    0x80000000, 0x80000000, 0x80000000, aSynPath)
         || p != pEnd)
     {
@@ -3854,11 +3853,11 @@ OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
                rTheRelURIRef;
 }
 
-OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism) const
+OUString INetURLObject::getExternalURL() const
 {
     OUString aTheExtURIRef;
     translateToExternal(
-        m_aAbsURIRef.toString(), aTheExtURIRef, eMechanism);
+        m_aAbsURIRef.toString(), aTheExtURIRef);
     return aTheExtURIRef;
 }
 
@@ -4012,8 +4011,7 @@ OUString INetURLObject::getName(sal_Int32 nIndex, bool bIgnoreFinalSlash,
 }
 
 bool INetURLObject::setName(OUString const & rTheName, sal_Int32 nIndex,
-                            bool bIgnoreFinalSlash,
-                            EncodeMechanism eMechanism)
+                            bool bIgnoreFinalSlash)
 {
     SubString aSegment(getSegment(nIndex, bIgnoreFinalSlash));
     if (!aSegment.isPresent())
@@ -4035,17 +4033,17 @@ bool INetURLObject::setName(OUString const & rTheName, sal_Int32 nIndex,
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
     aNewPath.append(encodeText(rTheName, false, PART_PCHAR,
-        eMechanism, RTL_TEXTENCODING_UTF8, true));
+        WAS_ENCODED, RTL_TEXTENCODING_UTF8, true));
     aNewPath.append(p, pPathEnd - p);
 
     return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
-bool INetURLObject::hasExtension(sal_Int32 nIndex)
+bool INetURLObject::hasExtension()
     const
 {
-    SubString aSegment(getSegment(nIndex, true/*bIgnoreFinalSlash*/));
+    SubString aSegment(getSegment(LAST_SEGMENT, true/*bIgnoreFinalSlash*/));
     if (!aSegment.isPresent())
         return false;
 
@@ -4862,7 +4860,7 @@ bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
     return false;
 }
 
-OUString INetURLObject::GetPartBeforeLastName(DecodeMechanism eMechanism)
+OUString INetURLObject::GetPartBeforeLastName()
     const
 {
     if (!checkHierarchical())
@@ -4872,7 +4870,7 @@ OUString INetURLObject::GetPartBeforeLastName(DecodeMechanism eMechanism)
     aTemp.clearQuery();
     aTemp.removeSegment(LAST_SEGMENT, false);
     aTemp.setFinalSlash();
-    return aTemp.GetMainURL(eMechanism);
+    return aTemp.GetMainURL(DECODE_TO_IURI);
 }
 
 OUString INetURLObject::GetLastName(DecodeMechanism eMechanism,
@@ -4948,15 +4946,14 @@ void INetURLObject::SetName(OUString const & rTheName,
         *this = aTemp;
 }
 
-void INetURLObject::SetExtension(OUString const & rTheExtension,
-                                 EncodeMechanism eMechanism)
+void INetURLObject::SetExtension(OUString const & rTheExtension)
 {
-    setExtension(rTheExtension, LAST_SEGMENT, false, eMechanism);
+    setExtension(rTheExtension, LAST_SEGMENT, false);
 }
 
-OUString INetURLObject::CutExtension(DecodeMechanism eMechanism)
+OUString INetURLObject::CutExtension()
 {
-    OUString aTheExtension(getExtension(LAST_SEGMENT, false, eMechanism));
+    OUString aTheExtension(getExtension(LAST_SEGMENT, false));
     return removeExtension(LAST_SEGMENT, false)
         ? aTheExtension : OUString();
 }

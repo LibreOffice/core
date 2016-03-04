@@ -68,7 +68,7 @@ public:
     void            Remove( long nIndex );
 
     const Range&    GetTotalRange() const { return aTotRange; }
-    long            FirstSelected( bool bInverse = false );
+    long            FirstSelected();
     long            LastSelected();
     long            NextSelected();
 

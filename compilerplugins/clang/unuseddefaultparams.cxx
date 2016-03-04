@@ -240,7 +240,7 @@ bool UnusedDefaultParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-loplugin::Plugin::Registration< UnusedDefaultParams > X("unuseddefaultparams", false);
+loplugin::Plugin::Registration< UnusedDefaultParams > X("unuseddefaultparams", true);
 
 }
 

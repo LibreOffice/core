@@ -203,8 +203,7 @@ public:
     bool ConcatData(INetProtocol eTheScheme, OUString const & rTheUser,
                     OUString const & rThePassword,
                     OUString const & rTheHost, sal_uInt32 nThePort,
-                    OUString const & rThePath,
-                    EncodeMechanism eMechanism = WAS_ENCODED);
+                    OUString const & rThePath);
 
     // Smart Parsing:
 
@@ -330,8 +329,7 @@ public:
     GetNewAbsURL(OUString const & rTheRelURIRef,
                  INetURLObject * pTheAbsURIRef,
                  EncodeMechanism eMechanism = WAS_ENCODED,
-                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-                 FSysStyle eStyle = FSYS_DETECT)
+                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
     /** @descr  If rTheRelURIRef cannot be converted to an absolute URL
@@ -359,7 +357,7 @@ public:
 
     // External URLs:
 
-    OUString getExternalURL(DecodeMechanism eMechanism = DECODE_TO_IURI) const;
+    OUString getExternalURL() const;
 
     static inline bool translateToExternal(OUString const & rTheIntURIRef,
                                            OUString & rTheExtURIRef,
@@ -425,16 +423,13 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAuth, eMechanism, eCharset); }
 
-    inline bool SetUser(OUString const & rTheUser,
-                        EncodeMechanism eMechanism = WAS_ENCODED)
-    { return setUser(rTheUser, false, eMechanism, RTL_TEXTENCODING_UTF8); }
+    inline bool SetUser(OUString const & rTheUser)
+    { return setUser(rTheUser, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
 
-    inline bool SetPass(OUString const & rThePassword,
-                        EncodeMechanism eMechanism = WAS_ENCODED);
+    inline bool SetPass(OUString const & rThePassword);
 
     inline bool SetUserAndPass(OUString const & rTheUser,
-                               OUString const & rThePassword,
-                               EncodeMechanism eMechanism = WAS_ENCODED);
+                               OUString const & rThePassword);
 
     // Host and Port:
 
@@ -450,9 +445,8 @@ public:
 
     sal_uInt32 GetPort() const;
 
-    inline bool SetHost(OUString const & rTheHost,
-                        EncodeMechanism eMechanism = WAS_ENCODED)
-    { return setHost(rTheHost, false, eMechanism, RTL_TEXTENCODING_UTF8); }
+    inline bool SetHost(OUString const & rTheHost)
+    { return setHost(rTheHost, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
 
     bool SetPort(sal_uInt32 nThePort);
 
@@ -588,8 +582,6 @@ public:
         @param bIgnoreFinalSlash  If true, a final slash at the end of the
         hierarchical path does not denote an empty segment, but is ignored.
 
-        @param eMechanism  See the general discussion for set-methods.
-
         @return  True if the name has successfully been modified (and the
         resulting URI is still valid).  If the path is not hierarchical, or
         the specified segment does not exist, false is returned.  If false is
@@ -597,8 +589,7 @@ public:
      */
     bool setName(OUString const & rTheName,
                  sal_Int32 nIndex = LAST_SEGMENT,
-                 bool bIgnoreFinalSlash = true,
-                 EncodeMechanism eMechanism = WAS_ENCODED);
+                 bool bIgnoreFinalSlash = true);
 
     /** Get the base of the name of a segment.
 
@@ -647,16 +638,13 @@ public:
                  EncodeMechanism eMechanism = WAS_ENCODED,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    /** Determine whether the name of a segment has an extension.
-
-        @param nIndex  The non-negative index of the segment, or LAST_SEGMENT
-        if addressing the last segment.
+    /** Determine whether the name of the last segment has an extension.
 
         @return  True if the name of the specified segment has an extension.
         If the path is not hierarchical, or the specified segment does not
         exist, false is returned.
      */
-    bool hasExtension(sal_Int32 nIndex = LAST_SEGMENT) const;
+    bool hasExtension() const;
 
     /** Get the extension of the name of a segment.
 
@@ -916,8 +904,7 @@ public:
 
     // OBSOLETE Hierarchical Path:
 
-    OUString GetPartBeforeLastName(DecodeMechanism eMechanism
-                                        = DECODE_TO_IURI) const;
+    OUString GetPartBeforeLastName() const;
 
     /** Get the last segment in the path.
 
@@ -976,13 +963,12 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return GetLastName(eMechanism, eCharset); }
 
-    void SetExtension(OUString const & rTheExtension,
-                      EncodeMechanism eMechanism = WAS_ENCODED);
+    void SetExtension(OUString const & rTheExtension);
 
-    inline OUString GetExtension( DecodeMechanism eMechanism = DECODE_TO_IURI ) const
-    { return GetFileExtension(eMechanism); }
+    inline OUString GetExtension() const
+    { return GetFileExtension(); }
 
-    OUString CutExtension(DecodeMechanism eMechanism = DECODE_TO_IURI);
+    OUString CutExtension();
 
     static bool IsCaseSensitive() { return true; }
 
@@ -1280,15 +1266,14 @@ INetURLObject::smartRel2Abs(OUString const & rTheRelURIRef,
 inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
                                         INetURLObject * pTheAbsURIRef,
                                         EncodeMechanism eMechanism,
-                                        rtl_TextEncoding eCharset,
-                                        FSysStyle eStyle)
+                                        rtl_TextEncoding eCharset)
     const
 {
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
     if (!convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef, bWasAbsolute,
                          eMechanism, eCharset, false/*bIgnoreFragment*/, false, false,
-                         eStyle))
+                         FSYS_DETECT))
         return false;
     if (pTheAbsURIRef)
         *pTheAbsURIRef = aTheAbsURIRef;
@@ -1334,22 +1319,20 @@ inline bool INetURLObject::translateToInternal(OUString const &
                            eDecodeMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetPass(OUString const & rThePassword,
-                                   EncodeMechanism eMechanism)
+inline bool INetURLObject::SetPass(OUString const & rThePassword)
 {
     return rThePassword.isEmpty() ?
                clearPassword() :
-               setPassword(rThePassword, false, eMechanism, RTL_TEXTENCODING_UTF8);
+               setPassword(rThePassword, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8);
 }
 
 inline bool INetURLObject::SetUserAndPass(OUString const & rTheUser,
-                                          OUString const & rThePassword,
-                                          EncodeMechanism eMechanism)
+                                          OUString const & rThePassword)
 {
-    return setUser(rTheUser, false, eMechanism, RTL_TEXTENCODING_UTF8)
+    return setUser(rTheUser, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8)
            && (rThePassword.isEmpty() ?
                    clearPassword() :
-                   setPassword(rThePassword, false, eMechanism, RTL_TEXTENCODING_UTF8));
+                   setPassword(rThePassword, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8));
 }
 
 inline bool INetURLObject::insertName(OUString const & rTheName,
