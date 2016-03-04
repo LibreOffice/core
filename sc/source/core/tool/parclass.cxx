@@ -28,7 +28,7 @@
 #include <sal/macros.h>
 #include <string.h>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_PARCLASSDOC
 // the documentation thingy
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <rtl/strbuf.hxx>
@@ -245,11 +245,8 @@ void ScParameterClassification::Init()
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-#if OSL_DEBUG_LEVEL > 1
-            if ( pRun->aData.nParam[0] != Unknown )
-            {
-                OSL_TRACE( "already assigned: %d", pRaw->eOp);
-            }
+#if OSL_DEBUG_LEVEL > 0
+            SAL_WARN_IF(pRun->aData.nParam[0] != Unknown,  "sc.core", "already assigned: " << (int)pRaw->eOp);
 #endif
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));
             // fill 0-initialized fields with real values
@@ -298,7 +295,7 @@ void ScParameterClassification::Init()
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_PARCLASSDOC
     GenerateDocumentation();
 #endif
 }
@@ -422,7 +419,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
     return eRet;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_PARCLASSDOC
 
 // add remaining functions, all Value parameters
 void ScParameterClassification::MergeArgumentsFromFunctionResource()

@@ -99,7 +99,7 @@ bool ScCTB::Read( SvStream &rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
 void ScCTB::Print( FILE* fp )
 {
     Indent a;
@@ -196,7 +196,7 @@ bool CTBS::Read( SvStream &rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
 void CTBS::Print( FILE* fp )
 {
     Indent a;
@@ -243,7 +243,7 @@ ScTBC::Read(SvStream &rS)
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
 void
 ScTBC::Print(FILE* fp)
 {
@@ -308,7 +308,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
 void
 TBCCmd::Print(FILE* fp)
 {
@@ -372,7 +372,7 @@ ScCTBWrapper::Read( SvStream &rS)
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_EXCEL
 void
 ScCTBWrapper::Print( FILE* fp )
 {
