@@ -48,8 +48,7 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
 void* UniqueIndexImpl::Remove( Index nIndex )
 {
     // Check for valid index
-    if ( (nIndex >= nStartIndex) &&
-         (nIndex < (maMap.size() + nStartIndex)) )
+    if ( nIndex >= nStartIndex )
     {
         // insert index as empty entry, and reduce indexcount,
         // if this entry was used
@@ -68,8 +67,7 @@ void* UniqueIndexImpl::Remove( Index nIndex )
 void* UniqueIndexImpl::Get( Index nIndex ) const
 {
     // check for valid index
-    if ( (nIndex >= nStartIndex) &&
-         (nIndex < (maMap.size() + nStartIndex)) )
+    if ( nIndex >= nStartIndex )
     {
         std::map<Index, void*>::const_iterator it = maMap.find( nIndex - nStartIndex );
         if( it != maMap.end() )
