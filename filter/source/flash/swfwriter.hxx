@@ -284,7 +284,7 @@ public:
         A character id of a flash sprite is returned that contains all geometry
         from the metafile.
     */
-    sal_uInt16 defineShape( const GDIMetaFile& rMtf, sal_Int16 x = 0 );
+    sal_uInt16 defineShape( const GDIMetaFile& rMtf );
 
     /** defines a bitmap and returns its flash id.
     */
@@ -293,7 +293,7 @@ public:
     // control tags
 
     /** inserts a place shape tag into the movie stream or the current sprite */
-    void placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClipDepth = 0 );
+    void placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y );
 
     /** inserts a remove shape tag into the movie stream or the current sprite */
     void removeShape( sal_uInt16 nDepth );

@@ -56,8 +56,8 @@ public:
     bool ImplGetPropertyValue( const sal_Unicode* pString );
     bool ImplGetPropertyValue( const OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
 
-    sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, sal_uInt32 nDef = 0 )
-    { return ImplGetPropertyValue( pStr ) ? *static_cast<sal_Int32 const *>(mAny.getValue()) : nDef; }
+    sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr )
+    { return ImplGetPropertyValue( pStr ) ? *static_cast<sal_Int32 const *>(mAny.getValue()) : 0; }
     sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr )
     { return ImplGetInt32PropertyValue(rStr.getStr()); }
 

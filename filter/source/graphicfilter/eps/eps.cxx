@@ -167,7 +167,7 @@ private:
     void                ImplWriteF( sal_Int32 nNumb, sal_uLong nCount = 3, sal_uLong nMode = PS_SPACE );
 
                         // writes a double in ASCII format to stream
-    void                ImplWriteDouble( double, sal_uLong nMode = PS_SPACE );
+    void                ImplWriteDouble( double );
 
                         // writes a long in ASCII format to stream
     void                ImplWriteLong( sal_Int32 nNumb, sal_uLong nMode = PS_SPACE );
@@ -2342,7 +2342,7 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
     ImplExecMode(nMode);
 }
 
-void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
+void PSWriter::ImplWriteDouble( double fNumber )
 {
     sal_Int32   nPTemp = (sal_Int32)fNumber;
     sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
@@ -2381,7 +2381,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
         if ( zCount )
             mpPS->SeekRel( zCount );
     }
-    ImplExecMode( nMode );
+    ImplExecMode( PS_SPACE );
 }
 
 /// Writes the number to stream: nNumber / ( 10^nCount )

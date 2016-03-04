@@ -3290,7 +3290,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     return bRet;
 }
 
-bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd ) const
+bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos ) const
 {
     bool bRet = false;
     sal_uLong nFPosMerk = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
@@ -3302,16 +3302,11 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
         if ( aHd.nRecType == nRecId1 || aHd.nRecType == nRecId2 )
         {
             bRet = true;
-            if ( pRecHd )
-                *pRecHd = aHd;
-            else
+            bool bSeekSuccess = aHd.SeekToBegOfRecord(rStCtrl);
+            if (!bSeekSuccess)
             {
-                bool bSeekSuccess = aHd.SeekToBegOfRecord(rStCtrl);
-                if (!bSeekSuccess)
-                {
-                    bRet = false;
-                    break;
-                }
+                bRet = false;
+                break;
             }
         }
         if ( !bRet )

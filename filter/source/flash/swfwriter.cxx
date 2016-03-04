@@ -206,13 +206,13 @@ void Writer::endSprite()
 }
 
 
-void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClip )
+void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
 {
     startTag( TAG_PLACEOBJECT2 );
 
     BitStream aBits;
 
-    aBits.writeUB( sal_uInt32(nClip != 0), 1 ); // Has Clip Actions?
+    aBits.writeUB( sal_uInt32(0), 1 ); // Has Clip Actions?
     aBits.writeUB( 0, 1 );              // reserved
     aBits.writeUB( sal_uInt32(0), 1 );  // has a name
     aBits.writeUB( 0, 1 );              // no ratio
@@ -230,9 +230,6 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
         _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)),
         _Int16(static_cast<long>(map100thmm(y)*mnDocYScale))));
     mpTag->addMatrix( aMatrix );        // transformation matrix
-
-    if( nClip != 0 )
-        mpTag->addUI16( nClip );
 
     endTag();
 }
@@ -282,7 +279,7 @@ void Writer::showFrame()
 }
 
 
-sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x )
+sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf )
 {
     mpVDev->SetMapMode( rMtf.GetPrefMapMode() );
     Impl_writeActions( rMtf );
@@ -301,7 +298,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x )
             sal_uInt16 iDepth = 1;
             for(; aIter != aEnd; ++aIter)
             {
-                placeShape( *aIter, iDepth++, x, 0 );
+                placeShape( *aIter, iDepth++, 0, 0 );
             }
 
             endSprite();
