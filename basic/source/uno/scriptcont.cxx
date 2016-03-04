@@ -94,6 +94,11 @@ void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName
             pImplLib->mbDoc50Password = true;
             pImplLib->mbPasswordProtected = true;
             pImplLib->maPassword = rPassword;
+            SfxScriptLibrary *const pSL(dynamic_cast<SfxScriptLibrary *>(pImplLib));
+            if (pSL && pSL->mbLoaded)
+            {
+                pSL->mbLoadedSource = true; // must store source code now!
+            }
         }
     }
     catch(const NoSuchElementException& ) {}
@@ -486,6 +491,11 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
         pImplLib->mbPasswordProtected = true;
         pImplLib->mbPasswordVerified = true;
         pImplLib->maPassword = NewPassword;
+        SfxScriptLibrary *const pSL(dynamic_cast<SfxScriptLibrary *>(pImplLib));
+        if (pSL && pSL->mbLoaded)
+        {
+            pSL->mbLoadedSource = true; // must store source code now!
+        }
 
         maModifiable.setModified( true );
         pImplLib->implSetModified( true );
