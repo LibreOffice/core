@@ -81,7 +81,7 @@ public class LocalOfficeWindow
      *
      * @param source The event object.
      */
-    public void disposing(EventObject source)
+    public synchronized void disposing(EventObject source)
     {
         // the window will be disposed by the framework
         mWindow = null;
