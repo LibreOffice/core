@@ -68,10 +68,6 @@ public class ScriptEntry implements Cloneable {
         this.description = description;
     }
 
-    public ScriptEntry(String languagename, String location) {
-        this("Java", languagename, location);
-    }
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
