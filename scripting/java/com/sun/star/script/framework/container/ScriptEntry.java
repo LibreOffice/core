@@ -45,7 +45,7 @@ public class ScriptEntry implements Cloneable {
         this.languagedepprops =  new HashMap<String, String>();
     }
 
-    public ScriptEntry(ScriptEntry entry) {
+    protected ScriptEntry(ScriptEntry entry) {
         this.language = entry.language;
         this.languagename = entry.languagename;
         this.logicalname = entry.languagename;
