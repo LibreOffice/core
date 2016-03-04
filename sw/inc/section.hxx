@@ -314,7 +314,7 @@ public:
     // Query whether section is in Nodes-array or in UndoNodes-array.
     bool IsInNodesArr() const;
 
-          SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
+          SwSectionNode* GetSectionNode();
     const SwSectionNode* GetSectionNode() const
         { return const_cast<SwSectionFormat *>(this)
                 ->GetSectionNode(); }

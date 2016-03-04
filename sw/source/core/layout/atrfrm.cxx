@@ -3041,9 +3041,9 @@ SwFlyFrame* SwFlyFrameFormat::GetFrame( const Point* pPoint, const bool bCalcFra
                                             pPoint, nullptr, bCalcFrame ));
 }
 
-SwAnchoredObject* SwFlyFrameFormat::GetAnchoredObj( const Point* pPoint ) const
+SwAnchoredObject* SwFlyFrameFormat::GetAnchoredObj() const
 {
-    SwFlyFrame* pFlyFrame( GetFrame( pPoint ) );
+    SwFlyFrame* pFlyFrame( GetFrame() );
     if ( pFlyFrame )
     {
         return dynamic_cast<SwAnchoredObject*>(pFlyFrame);

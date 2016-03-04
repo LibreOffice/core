@@ -1124,13 +1124,13 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
     return aRet;
 }
 
-SwRect SwContentNode::FindPageFrameRect( const bool bPrtArea, const Point* pPoint ) const
+SwRect SwContentNode::FindPageFrameRect() const
 {
     SwRect aRet;
     SwFrame* pFrame = ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
-                                            FRM_CNTNT, pPoint );
+                                            FRM_CNTNT );
     if( pFrame && nullptr != ( pFrame = pFrame->FindPageFrame() ))
-        aRet = bPrtArea ? pFrame->Prt() : pFrame->Frame();
+        aRet = pFrame->Frame();
     return aRet;
 }
 

@@ -775,9 +775,9 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     EndAllAction();
 }
 
-OUString SwEditShell::GetUniqueNumRuleName( const OUString* pChkStr ) const
+OUString SwEditShell::GetUniqueNumRuleName() const
 {
-    return GetDoc()->GetUniqueNumRuleName( pChkStr );
+    return GetDoc()->GetUniqueNumRuleName();
 }
 
 void SwEditShell::ChgNumRuleFormats( const SwNumRule& rRule )

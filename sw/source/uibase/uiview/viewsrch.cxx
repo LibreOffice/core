@@ -144,7 +144,7 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell
     }
 }
 
-void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
+void SwView::ExecSearch(SfxRequest& rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
@@ -152,12 +152,10 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
     if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_SEARCH_QUIET, false, &pItem))
         bQuiet = static_cast<const SfxBoolItem*>( pItem)->GetValue();
 
-    bool bApi = bQuiet || bNoMessage;
-
     sal_uInt16 nSlot = rReq.GetSlot();
     if (nSlot == FN_REPEAT_SEARCH && !m_pSrchItem)
     {
-        if(bApi)
+        if(bQuiet)
         {
             rReq.SetReturnValue(SfxBoolItem(nSlot, false));
             nSlot = 0;
@@ -248,7 +246,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             {
             case SvxSearchCmd::FIND:
             {
-                bool bRet = SearchAndWrap(bApi);
+                bool bRet = SearchAndWrap(bQuiet);
                 if( bRet )
                 {
                     Scroll(m_pWrtShell->GetCharRect().SVRect());
@@ -281,7 +279,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 if( !bRet )
                 {
 #if HAVE_FEATURE_DESKTOP
-                    if( !bApi )
+                    if( !bQuiet )
                     {
                         m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
                                 m_pSrchItem->GetSearchString().toUtf8().getStr());
@@ -345,7 +343,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
 
                     SvxSearchCmd nOldCmd = m_pSrchItem->GetCommand();
                     m_pSrchItem->SetCommand( nCmd );
-                    bool bRet = SearchAndWrap(bApi);
+                    bool bRet = SearchAndWrap(bQuiet);
                     if( bRet )
                         Scroll( m_pWrtShell->GetCharRect().SVRect());
                     m_pSrchItem->SetCommand( nOldCmd );
@@ -403,7 +401,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if( !nFound )
                     {
 #if HAVE_FEATURE_DESKTOP
-                        if( !bApi )
+                        if( !bQuiet )
                         {
                             m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
                                     m_pSrchItem->GetSearchString().toUtf8().getStr());
@@ -414,7 +412,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                         return;
                     }
 
-                    if( !bApi && ULONG_MAX != nFound)
+                    if( !bQuiet && ULONG_MAX != nFound)
                     {
                         OUString aText( SW_RES( STR_NB_REPLACED ) );
                         aText = aText.replaceFirst("XX", OUString::number( nFound ));

@@ -409,8 +409,7 @@ public:
     SwRect FindLayoutRect( const bool bPrtArea = false,
                             const Point* pPoint = nullptr,
                             const bool bCalcFrame = false  ) const;
-    SwRect FindPageFrameRect( const bool bPrtArea = false,
-                            const Point* pPoint = nullptr  ) const;
+    SwRect FindPageFrameRect() const;
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */

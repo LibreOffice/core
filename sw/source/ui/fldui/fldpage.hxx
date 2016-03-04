@@ -60,9 +60,8 @@ protected:
     void                InsertHdl(void *);
 
     void                Init();
-    void                SavePos( const ListBox* pLst1,
-                                 const ListBox* pLst2 = nullptr);
-    void                RestorePos( ListBox* pLst1, ListBox* pLst2 = nullptr );
+    void                SavePos( const ListBox* pLst1);
+    void                RestorePos( ListBox* pLst1 );
     void                EnableInsert(bool bEnable = true);
     inline bool         IsFieldEdit() const   { return m_bFieldEdit; }
 

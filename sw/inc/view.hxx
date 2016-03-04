@@ -504,7 +504,7 @@ public:
     void            ExecTabWin(SfxRequest&);
     void            ExecuteStatusLine(SfxRequest&);
     DECL_LINK_TYPED( ExecRulerClick, Ruler *, void );
-    void            ExecSearch(SfxRequest&, bool bNoMessage = false);
+    void            ExecSearch(SfxRequest&);
     void            ExecViewOptions(SfxRequest &);
 
     void            StateViewOptions(SfxItemSet &);

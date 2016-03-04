@@ -204,8 +204,7 @@ public:
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
     SwTextNode *MakeTextNode( const SwNodeIndex & rWhere,
-                            SwTextFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = nullptr ); ///< in ndtxt.cxx
+                            SwTextFormatColl *pColl ); ///< in ndtxt.cxx
     SwStartNode* MakeTextSection( const SwNodeIndex & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTextFormatColl *pColl );

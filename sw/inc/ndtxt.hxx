@@ -694,8 +694,7 @@ public:
                            bool bReplaceTabsWithSpaces = false ) const;
 
     OUString GetRedlineText( sal_Int32 nIdx = 0,
-                          sal_Int32 nLen = SAL_MAX_INT32,
-                          bool bExpandFields = false ) const;
+                          sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     /** @return actual count of initial chars for initial-function.
        If nWishLen == 0 that of first word. */
@@ -795,8 +794,7 @@ public:
     sal_uInt32 GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const;
     sal_uInt32 GetParRsid() const;
 
-    bool CompareRsid( const SwTextNode &rTextNode, sal_Int32 nStt1, sal_Int32 nStt2,
-            sal_Int32 nEnd1 = 0 ) const;
+    bool CompareRsid( const SwTextNode &rTextNode, sal_Int32 nStt1, sal_Int32 nStt2 ) const;
     bool CompareParRsid( const SwTextNode &rTextNode ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextNode)

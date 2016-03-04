@@ -115,7 +115,7 @@ size_t SwEditShell::GetSectionFormatCount() const
     return GetDoc()->GetSections().size();
 }
 
-bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden ) const
+bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly ) const
 {
     const SwSectionFormats& rFormats = GetDoc()->GetSections();
 
@@ -127,9 +127,8 @@ bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden ) const
                && TOX_HEADER_SECTION != eTmpType ) )
         {
             const SwSection& rSect = *pFormat->GetSection();
-            if( (!bChkReadOnly && !bChkHidden ) ||
-                (bChkReadOnly && rSect.IsProtectFlag() ) ||
-                (bChkHidden && rSect.IsHiddenFlag() ) )
+            if( !bChkReadOnly ||
+                (bChkReadOnly && rSect.IsProtectFlag() ) )
                 return true;
         }
     }

@@ -366,8 +366,7 @@ public:
                                     const OUString& rTableOrQuery, bool bMergeShell);
 
     /// open the source while fields are updated - for the calculator only!
-    bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
-                        sal_Int32 nCommandType = -1);
+    bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery);
     sal_uInt32      GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
     bool            GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
                             const OUString& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,

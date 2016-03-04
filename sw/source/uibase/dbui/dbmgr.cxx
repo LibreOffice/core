@@ -2368,13 +2368,12 @@ bool SwDBManager::ToRecordId(sal_Int32 nSet)
     return bRet;
 }
 
-bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
-            sal_Int32 nCommandType)
+bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery)
 {
     SwDBData aData;
     aData.sDataSource = rDataSource;
     aData.sCommand = rTableOrQuery;
-    aData.nCommandType = nCommandType;
+    aData.nCommandType = -1;
 
     SwDSParam* pFound = FindDSData(aData, true);
     uno::Reference< sdbc::XDataSource> xSource;

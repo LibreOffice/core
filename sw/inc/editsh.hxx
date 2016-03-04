@@ -523,7 +523,7 @@ public:
     bool SelectionHasNumber() const;
     bool SelectionHasBullet() const;
 
-    OUString GetUniqueNumRuleName( const OUString* pChkStr = nullptr ) const;
+    OUString GetUniqueNumRuleName() const;
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
@@ -829,8 +829,7 @@ public:
     void DelSectionFormat( size_t nFormat);
     void UpdateSection( size_t const nSect, SwSectionData &,
             SfxItemSet const*const  = nullptr);
-    bool IsAnySectionInDoc( bool bChkReadOnly = false,
-                            bool bChkHidden = false ) const;
+    bool IsAnySectionInDoc( bool bChkReadOnly = false ) const;
 
     OUString GetUniqueSectionName( const OUString* pChkStr = nullptr ) const;
 

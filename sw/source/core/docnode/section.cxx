@@ -1014,10 +1014,10 @@ void SwSectionFormat::UpdateParent()
     }
 }
 
-SwSectionNode* SwSectionFormat::GetSectionNode(bool const bAlways)
+SwSectionNode* SwSectionFormat::GetSectionNode()
 {
     const SwNodeIndex* pIdx = GetContent(false).GetContentIdx();
-    if( pIdx && ( bAlways || &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
+    if( pIdx && ( &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
         return pIdx->GetNode().GetSectionNode();
     return nullptr;
 }

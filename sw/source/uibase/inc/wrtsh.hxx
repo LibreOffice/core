@@ -122,7 +122,7 @@ public:
     void    SttSelect();
     void    EndSelect();
     bool    IsInSelect() const { return m_bInSelect; }
-    void    SetInSelect(bool bSel = true) { m_bInSelect = bSel; }
+    void    SetInSelect() { m_bInSelect = true; }
         // is there a text- or frameselection?
     bool    HasSelection() const { return SwCursorShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrameMode() || IsObjSelected(); }
@@ -160,7 +160,7 @@ public:
     void    Invalidate();
 
     // select table cells for editing of formulas in the ribbonbar
-    inline void SelTableCells( const Link<SwWrtShell&,void> &rLink, bool bMark = true );
+    inline void SelTableCells( const Link<SwWrtShell&,void> &rLink );
     inline void EndSelTableCells();
 
     // leave per word or per line selection mode. Is usually called in MB-Up.
@@ -210,10 +210,10 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool EndPg      ( bool bSelect = false );
     bool SttPara    ( bool bSelect = false );
     void EndPara    ( bool bSelect = false );
-    bool FwdPara    ( bool bSelect = false )
-                { return SimpleMove( &SwWrtShell::_FwdPara, bSelect ); }
-    void BwdPara    ( bool bSelect = false )
-                { SimpleMove( &SwWrtShell::_BwdPara, bSelect ); }
+    bool FwdPara    ()
+                { return SimpleMove( &SwWrtShell::_FwdPara, false/*bSelect*/ ); }
+    void BwdPara    ()
+                { SimpleMove( &SwWrtShell::_BwdPara, false/*bSelect*/ ); }
     void FwdSentence( bool bSelect = false )
                 { SimpleMove( &SwWrtShell::_FwdSentence, bSelect ); }
     void BwdSentence( bool bSelect = false )
@@ -228,12 +228,12 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool SelectTextAttr( sal_uInt16 nWhich, const SwTextAttr* pAttr = nullptr );
 
     // per column jumps
-    void StartOfColumn      ( bool bSelect = false );
-    void EndOfColumn        ( bool bSelect = false );
-    void StartOfNextColumn  ( bool bSelect = false );
-    void EndOfNextColumn    ( bool bSelect = false );
-    void StartOfPrevColumn  ( bool bSelect = false );
-    void EndOfPrevColumn    ( bool bSelect = false );
+    void StartOfColumn      ();
+    void EndOfColumn        ();
+    void StartOfNextColumn  ();
+    void EndOfNextColumn    ();
+    void StartOfPrevColumn  ();
+    void EndOfPrevColumn    ();
 
     // set the cursor to page "nPage" at the beginning
     // additionally to a identically named implementation in crsrsh.hxx
@@ -580,8 +580,8 @@ private:
     // after SSize/Move of a frame update; Point is destination.
     SAL_DLLPRIVATE long  UpdateLayoutFrame(const Point *, bool bProp=false );
 
-    SAL_DLLPRIVATE void  SttLeaveSelect(const Point *, bool bProp=false );
-    SAL_DLLPRIVATE void  AddLeaveSelect(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE void  SttLeaveSelect();
+    SAL_DLLPRIVATE void  AddLeaveSelect();
     SAL_DLLPRIVATE long  Ignore(const Point *, bool bProp=false );
 
     SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
@@ -607,10 +607,10 @@ inline void SwWrtShell::ResetCursorStack()
         _ResetCursorStack();
 }
 
-inline void SwWrtShell::SelTableCells(const Link<SwWrtShell&,void> &rLink, bool bMark )
+inline void SwWrtShell::SelTableCells(const Link<SwWrtShell&,void> &rLink )
 {
     SetSelTableCells( true );
-    m_bClearMark = bMark;
+    m_bClearMark = true;
     m_aSelTableLink = rLink;
 }
 inline void SwWrtShell::EndSelTableCells()

@@ -355,39 +355,39 @@ void SwWrtShell::EndPara( bool bSelect )
 // SSelection with or without
 // returns success or failure
 
-void SwWrtShell::StartOfColumn( bool bSelect )
+void SwWrtShell::StartOfColumn()
 {
-    ShellMoveCursor aTmp( this, bSelect);
+    ShellMoveCursor aTmp( this, false/*bSelect*/);
     MoveColumn(fnColumnCurr, fnColumnStart);
 }
 
-void SwWrtShell::EndOfColumn( bool bSelect )
+void SwWrtShell::EndOfColumn()
 {
-    ShellMoveCursor aTmp( this, bSelect);
+    ShellMoveCursor aTmp( this, false/*bSelect*/);
     MoveColumn(fnColumnCurr, fnColumnEnd);
 }
 
-void SwWrtShell::StartOfNextColumn( bool bSelect )
+void SwWrtShell::StartOfNextColumn()
 {
-    ShellMoveCursor aTmp( this, bSelect);
+    ShellMoveCursor aTmp( this, false/*bSelect*/);
     MoveColumn( fnColumnNext, fnColumnStart);
 }
 
-void SwWrtShell::EndOfNextColumn( bool bSelect )
+void SwWrtShell::EndOfNextColumn()
 {
-    ShellMoveCursor aTmp( this, bSelect);
+    ShellMoveCursor aTmp( this, false/*bSelect*/);
     MoveColumn(fnColumnNext, fnColumnEnd);
 }
 
-void SwWrtShell::StartOfPrevColumn( bool bSelect )
+void SwWrtShell::StartOfPrevColumn()
 {
-    ShellMoveCursor aTmp( this, bSelect);
+    ShellMoveCursor aTmp( this, false/*bSelect*/);
     MoveColumn(fnColumnPrev, fnColumnStart);
 }
 
-void SwWrtShell::EndOfPrevColumn( bool bSelect )
+void SwWrtShell::EndOfPrevColumn()
 {
-    ShellMoveCursor aTmp( this, bSelect);
+    ShellMoveCursor aTmp( this, false/*bSelect*/);
     MoveColumn(fnColumnPrev, fnColumnEnd);
 }
 

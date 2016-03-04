@@ -400,11 +400,11 @@ void SwWrtShell::EndSelect()
         m_bInSelect = false;
         if (m_bAddMode)
         {
-            AddLeaveSelect(nullptr);
+            AddLeaveSelect();
         }
         else
         {
-            SttLeaveSelect(nullptr);
+            SttLeaveSelect();
             m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
             m_fnKillSel = &SwWrtShell::ResetSelect;
         }
@@ -576,7 +576,7 @@ void SwWrtShell::LeaveExtMode()
 // End of a selection; if the selection is empty,
 // ClearMark().
 
-void SwWrtShell::SttLeaveSelect(const Point *, bool )
+void SwWrtShell::SttLeaveSelect()
 {
     if(SwCursorShell::HasSelection() && !IsSelTableCells() && m_bClearMark) {
         return;
@@ -586,7 +586,7 @@ void SwWrtShell::SttLeaveSelect(const Point *, bool )
 
 // Leaving of the selection mode in additional mode
 
-void SwWrtShell::AddLeaveSelect(const Point *, bool )
+void SwWrtShell::AddLeaveSelect()
 {
     if(IsTableMode()) LeaveAddMode();
     else if(SwCursorShell::HasSelection())
