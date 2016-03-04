@@ -26,10 +26,6 @@
 #include <rschash.hxx>
 #include <rsckey.hxx>
 
-#ifdef _MSC_VER
-#define _cdecl __cdecl
-#endif
-
 extern "C" {
     int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond );
 }
