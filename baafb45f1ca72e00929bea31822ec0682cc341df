@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_e88e4a26",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-04T17:17:21Z",
+      "side": 1,
+      "message": "Should be ASSERT_DOUBLES_EQUAL.",
+      "revId": "baafb45f1ca72e00929bea31822ec0682cc341df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c8938e4e",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2843,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-04T17:17:21Z",
+      "side": 1,
+      "message": "Would it not be easier to make aOrigRect const?",
+      "revId": "baafb45f1ca72e00929bea31822ec0682cc341df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2899726f",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2880,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-04T17:17:21Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "baafb45f1ca72e00929bea31822ec0682cc341df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_089e3656",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2910,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-04T17:17:21Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "baafb45f1ca72e00929bea31822ec0682cc341df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_68a37a9f",
+        "filename": "sc/qa/unit/ucalc_column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-04T17:17:21Z",
+      "side": 1,
+      "message": "I think we need to cast the expected values to make sure that it compiles everywhere. It is right now a int and a SCROW parameter and I think we are not using int everywhere for SCROW.",
+      "revId": "baafb45f1ca72e00929bea31822ec0682cc341df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
