@@ -44,6 +44,8 @@ namespace editeng { class SvxBorderLine; }
 
 #define SC_ATTRARRAY_DELTA      4
 
+#define DEBUG_SC_TESTATTRARRAY 0
+
 struct ScLineFlags
 {
     sal_uInt8   nLeft;
@@ -104,7 +106,7 @@ public:
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
-#if OSL_DEBUG_LEVEL > 1
+#if DEBUG_SC_TESTATTRARRAY
     void    TestData() const;
 #endif
     void    Reset( const ScPatternAttr* pPattern);

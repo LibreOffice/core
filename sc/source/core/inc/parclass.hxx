@@ -23,6 +23,8 @@
 #include <formula/opcode.hxx>
 #include <sys/types.h>
 
+#define DEBUG_SC_PARCLASSDOC 0
+
 namespace formula
 {
     class FormulaToken;
@@ -123,7 +125,7 @@ private:
     static  Type                GetExternalParameterType(
                                     const formula::FormulaToken* pToken, sal_uInt16 nParameter);
 
-#if OSL_DEBUG_LEVEL > 1
+#if DEBUG_SC_PARCLASSDOC
     // Generate documentation to stdout if environment variable
     // OOO_CALC_GENPARCLASSDOC is set.
     static  void                GenerateDocumentation();
@@ -161,7 +163,7 @@ private:
                                         return eOp <= SC_OPCODE_LAST_OPCODE_ID
                                             && pData[eOp].aData.nRepeatLast > 0;
                                     }
-#endif // OSL_DEBUG_LEVEL
+#endif // DEBUG_SC_PARCLASSDOC
 };
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_PARCLASS_HXX

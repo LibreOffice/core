@@ -894,9 +894,6 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     sal_Int32 nColumns = 0;
     while (aItr != aEndItr && nColumns < nTotalColumns)
     {
-#if OSL_DEBUG_LEVEL > 1
-        table::CellRangeAddress aTempRangeAddress((*aItr).aRangeAddress);
-#endif
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
             ((*aItr).aRangeAddress.EndRow >= nRow))
         {
