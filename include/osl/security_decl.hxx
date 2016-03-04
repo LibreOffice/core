@@ -76,9 +76,10 @@ public:
 
     /** get the name of the logged in user.
         @param[out] strName is the OUString which returns the name
+        @param[in] bIncludeDomain Include the Domain name (like "ORG\username"). Affects Windows only.
         @return True, if any user is successfully logged in, otherwise False
     */
-    inline bool SAL_CALL getUserName( rtl::OUString& strName) const;
+    inline bool SAL_CALL getUserName( rtl::OUString& strName, bool bIncludeDomain ) const;
 
     /** get the home directory of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
