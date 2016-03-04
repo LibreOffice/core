@@ -184,12 +184,16 @@ public final class Driver {
                     Document convertedFile = (Document)mergeDocEnum.next();
 
                     merger.merge(convertedFile);
-              mergeIS.close();
+                    mergeIS.close();
 
-                    FileOutputStream fos = new FileOutputStream(mergeFile);
-                    mergeDoc.write(fos);
-                    fos.flush();
-                    fos.close();
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(mergeFile);
+                        mergeDoc.write(fos);
+                        fos.flush();
+                    } finally {
+                        close(fos);
+                    }
                 } catch (Exception mergeExcept) {
                     System.out.println("\nThere was an error in the merge");
                     mergeExcept.printStackTrace();
