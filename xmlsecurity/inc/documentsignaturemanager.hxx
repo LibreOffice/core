@@ -54,7 +54,7 @@ public:
     /// Add a new signature, using xCert as a signing certificate, and rDescription as description.
     bool add(const css::uno::Reference<css::security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId);
     /// Read signatures from either a temp stream or the real storage.
-    void read(bool bUseTempStream);
+    void read(bool bUseTempStream, bool bCacheLastSignature = true);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_DOCUMENTSIGNATUREMANAGER_HXX

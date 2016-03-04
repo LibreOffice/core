@@ -91,7 +91,7 @@ private:
     DECL_LINK_TYPED(StartVerifySignatureHdl, LinkParamNone*, bool );
     DECL_LINK_TYPED(OKButtonHdl, Button*, void );
 
-    void                ImplGetSignatureInformations(bool bUseTempStream);
+    void                ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature = true);
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
 

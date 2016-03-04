@@ -290,7 +290,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     return true;
 }
 
-void DocumentSignatureManager::read(bool bUseTempStream)
+void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignature)
 {
     maCurrentSignatureInformations.clear();
 
@@ -303,7 +303,7 @@ void DocumentSignatureManager::read(bool bUseTempStream)
         maSignatureHelper.ReadAndVerifySignature(xInputStream);
     }
     else if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStorage.is())
-        maSignatureHelper.ReadAndVerifySignatureStorage(aStreamHelper.xSignatureStorage);
+        maSignatureHelper.ReadAndVerifySignatureStorage(aStreamHelper.xSignatureStorage, bCacheLastSignature);
     maSignatureHelper.EndMission();
 
     maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
