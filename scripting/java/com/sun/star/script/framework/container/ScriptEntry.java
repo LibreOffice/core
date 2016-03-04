@@ -21,7 +21,7 @@ package com.sun.star.script.framework.container;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScriptEntry implements Cloneable {
+public class ScriptEntry {
 
     private final String language;
     private final String languagename;
@@ -54,23 +54,6 @@ public class ScriptEntry implements Cloneable {
         this.logicalname = languagename;
         this.languagedepprops = languagedepprops;
         this.description = description;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    public boolean equals(ScriptEntry other) {
-        return language.equals(other.getLanguage()) &&
-               languagename.equals(other.getLanguageName()) &&
-               logicalname.equals(other.getLogicalName()) &&
-               languagedepprops.equals(other.getLanguageProperties());
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
     }
 
     public Map<String, String> getLanguageProperties() {

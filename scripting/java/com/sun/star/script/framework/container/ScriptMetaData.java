@@ -66,15 +66,6 @@ public class ScriptMetaData extends ScriptEntry {
         return (source != null && hasSource) ? source.getBytes() : null;
     }
 
-    public boolean equals(ScriptMetaData other) {
-        return super.equals(other) && hasSource == other.hasSource();
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
     public String getScriptFullURL() {
         String url = "vnd.sun.star.script:" + parent.getName() + "."
                      + getLanguageName() + "?" + "language=" + getLanguage()
