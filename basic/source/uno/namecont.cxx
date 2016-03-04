@@ -1946,8 +1946,21 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 // fdo#68983: If there's a password and the password is not known, only
 // copying the storage works!
             // Can we simply copy the storage?
-            if (!mbOldInfoFormat && !pImplLib->isLoadedStorable() &&
-                !mbOasis2OOoFormat && xSourceLibrariesStor.is())
+            bool isCopyStorage = !mbOldInfoFormat && !mbOasis2OOoFormat
+                    && !pImplLib->isLoadedStorable()
+                    && xSourceLibrariesStor.is() /* null for user profile */;
+            if (isCopyStorage)
+            {
+                try
+                {
+                    xSourceLibrariesStor->isStorageElement(rLib.aName);
+                }
+                catch (container::NoSuchElementException const&)
+                {
+                    isCopyStorage = false;
+                }
+            }
+            if (isCopyStorage)
             {
                 try
                 {

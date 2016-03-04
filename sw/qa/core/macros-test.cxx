@@ -86,6 +86,7 @@ public:
 #endif
     void testFdo55289();
     void testFdo68983();
+    void testFdo87530();
     void testFindReplace();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
 #if !defined(MACOSX) && !defined(_WIN32)
@@ -101,6 +102,7 @@ public:
 #endif
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
+    CPPUNIT_TEST(testFdo87530);
     CPPUNIT_TEST(testFindReplace);
 
     CPPUNIT_TEST_SUITE_END();
@@ -430,6 +432,51 @@ void SwMacrosTest::testFdo68983()
     Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
     xDocCloseable->close(false);
 }
+
+void SwMacrosTest::testFdo87530()
+{
+    Reference<css::lang::XComponent> xComponent =
+        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    {
+        Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+        Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
+        Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
+        Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
+        xBasLib->createLibrary("Library1");
+        xBasLibPwd->changeLibraryPassword("Library1", "", "foo");
+    }
+
+    Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDocStorable.is());
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    Sequence<beans::PropertyValue> desc(1);
+    desc[0].Name = "FilterName";
+    desc[0].Value <<= OUString("writer8");
+    xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
+
+    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
+
+    // re-load
+    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+    // check that password-protected library survived store and re-load
+    Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
+    Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
+    Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("Library1"));
+    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("Library1", "foo"));
+    xBasLib->loadLibrary("Library1");
+    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("Library1"));
+
+    // close
+    Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
+    xDocCloseable->close(false);
+}
+
 
 void SwMacrosTest::testFindReplace()
 {
