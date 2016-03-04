@@ -54,8 +54,6 @@ using css::system::XSimpleMailMessage2;
 using css::system::SimpleMailClientFlags::NO_USER_INTERFACE;
 using css::system::SimpleMailClientFlags::NO_LOGON_DIALOG;
 
-typedef std::vector<OUString> StringList_t;
-
 const OUString TO("--to");
 const OUString CC("--cc");
 const OUString BCC("--bcc");
@@ -118,7 +116,7 @@ namespace /* private */
         @returns
         <TRUE/> on success.
     */
-    bool executeSenddoc(const StringList_t& rCommandArgs)
+    bool executeSenddoc(const std::vector<OUString>& rCommandArgs)
     {
         OUString senddocUrl = getSenddocUrl();
         if (senddocUrl.getLength() == 0)
@@ -176,7 +174,7 @@ Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage(
 */
 void CSmplMailClient::assembleCommandLine(
     const Reference<XSimpleMailMessage>& xSimpleMailMessage,
-    sal_Int32 aFlag, StringList_t& rCommandArgs)
+    sal_Int32 aFlag, std::vector<OUString>& rCommandArgs)
 {
     OSL_ENSURE(rCommandArgs.empty(), "Provided command argument buffer not empty");
 
@@ -254,7 +252,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
 {
     validateParameter(xSimpleMailMessage, aFlag);
 
-    StringList_t senddocParams;
+    std::vector<OUString> senddocParams;
     assembleCommandLine(xSimpleMailMessage, aFlag, senddocParams);
 
     if (!executeSenddoc(senddocParams))
