@@ -96,7 +96,7 @@ UniqueIndexImpl::Index UniqueIndexImpl::LastIndex() const
 
 UniqueIndexImpl::Index UniqueIndexImpl::NextIndex(Index aIndex) const
 {
-    std::map<sal_uInt32, void*>::const_iterator it = maMap.find( aIndex );
+    std::map<Index, void*>::const_iterator it = maMap.find( aIndex );
     if ( it == maMap.end() )
         return IndexNotFound;
     ++it;
@@ -107,7 +107,7 @@ UniqueIndexImpl::Index UniqueIndexImpl::NextIndex(Index aIndex) const
 
 UniqueIndexImpl::Index UniqueIndexImpl::GetIndexOf(void* p) const
 {
-    for( std::map<sal_uInt32, void*>::const_iterator it = maMap.begin(); it != maMap.end(); ++it )
+    for( std::map<Index, void*>::const_iterator it = maMap.begin(); it != maMap.end(); ++it )
         if( it->second == p )
             return it->first;
     return IndexNotFound;
