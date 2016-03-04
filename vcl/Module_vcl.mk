@@ -27,8 +27,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
 		Package_opengl_blacklist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-		$(if $(ENABLE_HEADLESS),, \
-			Executable_ui-previewer) \
+		$(if $(ENABLE_MACOSX_SANDBOX),, \
+			$(if $(ENABLE_HEADLESS),, \
+				Executable_ui-previewer)) \
 		$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
 			Executable_outdevgrind \
 			$(if $(ENABLE_HEADLESS),, \
