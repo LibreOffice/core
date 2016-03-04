@@ -34,6 +34,24 @@
       "revId": "824aeb432cf0ca03ece6a7c894b931bef33542b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_081116ad",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:39:20Z",
+      "side": 1,
+      "message": "This wouldn\u0027t recalculate the current cell, but since it is done (only) during CompileXML() it sets all cells and their dependents dirty that have no specific number format applied. Actually it would not set a cell dirty that already has a number format applied. Calling SetDirtyVar() here is only meant to recalculate cells to determine a number format that was not stored in earlier versions.\n\nI still think that \"fixing\" this during import is not the correct approach. We do have the \"recalculate after load\" (or some such) setting in Options, which does exactly that.\n\nIf we wanted F9 to recalculate the current cell, regardless of whether it is in the FormulaTree, then we should intercept the F9 handling and call SetDirty() at the current cell or selected cells before calculating the tree.",
+      "parentUuid": "1aa78d24_7473594e",
+      "revId": "824aeb432cf0ca03ece6a7c894b931bef33542b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
