@@ -2149,6 +2149,7 @@ bool SVGReader::parseAndConvert()
     xAttrs->AddAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML");
     xAttrs->AddAttribute( "xmlns:form", OASIS_STR "form:1.0" );
     xAttrs->AddAttribute( "xmlns:script", OASIS_STR "script:1.0" );
+    xAttrs->AddAttribute( "xmlns:config", OASIS_STR "config:1.0" );
     xAttrs->AddAttribute( "xmlns:dom", "http://www.w3.org/2001/xml-events");
     xAttrs->AddAttribute( "xmlns:xforms", "http://www.w3.org/2002/xforms");
     xAttrs->AddAttribute( "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
