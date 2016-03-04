@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_288332ce",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T19:07:32Z",
+      "side": 1,
+      "message": "nPos is guaranteed to be \u003e 0 here if we already checked !rText.isEmpty(), so no need to check it again.",
+      "range": {
+        "startLine": 3421,
+        "startChar": 20,
+        "endLine": 3421,
+        "endChar": 33
+      },
+      "revId": "1d5bb1dc28bdb47ad1f053e1b85a15e6b2291c27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_8874e6fd",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T19:07:32Z",
+      "side": 1,
+      "message": "However, this still triggers a RangeFinder update on every digit that was entered, e.g. also when entering numeric constants or digits in a string literal or names ending in digits, but would not update in R1C1 reference style if the reference was relative. Also that the ranges are cleared as soon as a non-digit was typed and reappear if a digit is typed even if no range was modified looks odd and confusing.\n\nI think the RangeFinder and its handling need to be modified to be more sensitive about string changes and whether an update of the ranges is needed or not. Simply redrawing the ranges on some conditions will not solve it.",
+      "range": {
+        "startLine": 3421,
+        "startChar": 33,
+        "endLine": 3421,
+        "endChar": 73
+      },
+      "revId": "1d5bb1dc28bdb47ad1f053e1b85a15e6b2291c27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_0888f6e6",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T19:07:32Z",
+      "side": 1,
+      "message": "For readability please use \u00270\u0027 and \u00279\u0027 instead of 48 and 57.",
+      "range": {
+        "startLine": 3421,
+        "startChar": 49,
+        "endLine": 3421,
+        "endChar": 51
+      },
+      "revId": "1d5bb1dc28bdb47ad1f053e1b85a15e6b2291c27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
