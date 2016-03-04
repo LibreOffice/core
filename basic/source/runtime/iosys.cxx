@@ -715,7 +715,7 @@ namespace
     }
 }
 
-SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
+SbError SbiStream::Write( const OString& rBuf )
 {
     ExpandFile();
     if( IsAppend() )
@@ -741,15 +741,11 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
     }
     else
     {
-        if( !n )
-        {
-            n = nLen;
-        }
-        if( !n )
+        if( !nLen )
         {
             return nError = ERRCODE_BASIC_BAD_RECORD_LENGTH;
         }
-        pStrm->Write(rBuf.getStr(), n);
+        pStrm->Write(rBuf.getStr(), nLen);
         MapError();
     }
     return nError;

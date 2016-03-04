@@ -146,7 +146,7 @@ public:
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
-    void                        Load( SvStream &, bool bDirect = false );
+    void                        Load( SvStream & );
     void                        Store( SvStream &, bool bDirect = false ) const;
 
     bool                        operator==(const SfxItemSet &) const;

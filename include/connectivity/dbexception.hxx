@@ -91,10 +91,8 @@ public:
     /** prepends a plain error message to the chain of exceptions
         @param  _rSimpleErrorMessage
             the error message to prepend
-        @param  _rSQLState
-            the SQLState of the to-be-constructed SQLException, or NULL if this should be defaulted to HY000
     */
-    void    prepend( const OUString& _rErrorMessage, const OUString& _rSQLState = OUString() );
+    void    prepend( const OUString& _rErrorMessage );
 
     /** appends a plain message to the chain of exceptions
         @param  _eType

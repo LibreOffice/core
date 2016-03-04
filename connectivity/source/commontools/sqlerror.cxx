@@ -293,9 +293,9 @@ namespace connectivity
     }
 
 
-    OUString SQLError::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2 ) const
+    OUString SQLError::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1 ) const
     {
-        return m_pImpl->getErrorMessage( _eCondition, _rParamValue1, _rParamValue2, ParamValue() );
+        return m_pImpl->getErrorMessage( _eCondition, _rParamValue1, ParamValue(), ParamValue() );
     }
 
 
@@ -311,16 +311,16 @@ namespace connectivity
     }
 
 
-    void SQLError::raiseException( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2 ) const
+    void SQLError::raiseException( const ErrorCondition _eCondition, const ParamValue& _rParamValue1 ) const
     {
-        m_pImpl->raiseException( _eCondition, _rParamValue1, _rParamValue2, ParamValue() );
+        m_pImpl->raiseException( _eCondition, _rParamValue1, ParamValue(), ParamValue() );
     }
 
 
     void SQLError::raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
-        const Type& _rExceptionType, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2 ) const
+        const Type& _rExceptionType, const ParamValue& _rParamValue1 ) const
     {
-        m_pImpl->raiseTypedException( _eCondition, _rxContext, _rExceptionType, _rParamValue1, _rParamValue2, ParamValue() );
+        m_pImpl->raiseTypedException( _eCondition, _rxContext, _rExceptionType, _rParamValue1, ParamValue(), ParamValue() );
     }
 
 

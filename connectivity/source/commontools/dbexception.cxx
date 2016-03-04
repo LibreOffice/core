@@ -185,12 +185,12 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 }
 
 
-void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& _rSQLState )
+void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
 {
     SQLException aException;
     aException.Message = _rErrorMessage;
     aException.ErrorCode = 0;
-    aException.SQLState = !_rSQLState.isEmpty() ? _rSQLState : "S1000";
+    aException.SQLState = "S1000";
     aException.NextException = m_aContent;
     m_aContent <<= aException;
 

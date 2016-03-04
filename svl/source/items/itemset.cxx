@@ -1314,14 +1314,7 @@ void SfxItemSet::Store
  */
 void SfxItemSet::Load
 (
-    SvStream&           rStream,    //  Stream we're loading from
-
-    bool                bDirect     /*  true
-                                        Items are directly read form the stream
-                                        and not via Surrogates
-
-                                        false (default)
-                                        Items are read via Surrogates */
+    SvStream&           rStream    //  Stream we're loading from
 )
 {
     assert(m_pPool);
@@ -1346,7 +1339,7 @@ void SfxItemSet::Load
     {
         // Load Surrogate/Item and resolve Surrogate
         const SfxPoolItem *pItem =
-                m_pPool->LoadItem( rStream, bDirect, pRefPool );
+                m_pPool->LoadItem( rStream, false/*bDirect*/, pRefPool );
 
         // Did we load an Item or resolve a Surrogate?
         if ( pItem )

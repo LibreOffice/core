@@ -1092,8 +1092,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 }
 
 bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
-                                      sal_Int32 nIndex, sal_Int32 nLen,
-                                      long* pDXAry ) const
+                                      sal_Int32 nIndex, sal_Int32 nLen ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1102,8 +1101,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
         nLen = rStr.getLength() - nIndex;
 
     // layout complex text
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen,
-                                        Point(0,0), 0, pDXAry );
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     if( !pSalLayout )
         return false;
 
@@ -2282,10 +2280,10 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
-long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
-                                     sal_Int32 nIndex ) const
+long OutputDevice::GetCtrlTextWidth( const OUString& rStr ) const
 {
-    sal_Int32 nLen = rStr.getLength() - nIndex;
+    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nIndex = 0;
 
     sal_Int32  nMnemonicPos;
     OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );

@@ -527,8 +527,7 @@ void Menu::InsertItem( const ResId& rResId )
     mpLayoutData = nullptr;
 }
 
-void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame,
-                      MenuItemBits nBits)
+void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
     OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
     OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
@@ -536,7 +535,7 @@ void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::f
 
     sal_uInt16 nItemId = GetItemCount() + 1;
 
-    InsertItem(nItemId, aLabel, aImage, nBits, OString());
+    InsertItem(nItemId, aLabel, aImage, MenuItemBits::NONE, OString());
     SetItemCommand(nItemId, rCommand);
     SetHelpText(nItemId, aTooltip);
 }

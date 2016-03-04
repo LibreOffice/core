@@ -10,7 +10,9 @@ callSet = set()
 
 # things we need to exclude for reasons like :
 # - it's a weird template thingy that confuses the plugin
-exclusionSet = set()
+exclusionSet = set([
+    "class boost::intrusive_ptr<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)"
+])
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.

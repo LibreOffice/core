@@ -64,7 +64,7 @@ public:
     SbError Close();
     SbError Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     SbError Read( char& );
-    SbError Write( const OString&, sal_uInt16 = 0 );
+    SbError Write( const OString& );
 
     bool IsText() const     { return !bool(nMode & SbiStreamFlags::Binary); }
     bool IsRandom() const   { return bool(nMode & SbiStreamFlags::Random); }
