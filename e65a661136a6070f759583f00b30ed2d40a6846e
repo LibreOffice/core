@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_080e3634",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-04T10:52:19Z",
+      "side": 1,
+      "message": "This property doesn\u0027t exist for Writer fields and that\u0027s why one of the Writer test fails",
+      "revId": "e65a661136a6070f759583f00b30ed2d40a6846e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_68137a5d",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-04T10:52:19Z",
+      "side": 1,
+      "message": "Due to the above, an Impress field having the given property shouldn\u0027t be exported as FIELD_ID_AUTHOR ...",
+      "revId": "e65a661136a6070f759583f00b30ed2d40a6846e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_48103e4f",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-04T10:52:19Z",
+      "side": 1,
+      "message": "... but as FIELD_ID_SENDER",
+      "revId": "e65a661136a6070f759583f00b30ed2d40a6846e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
