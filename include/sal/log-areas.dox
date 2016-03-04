@@ -32,7 +32,6 @@ certain functionality.
 @li @c sal.textenc - the textencoding SAL library
 @li @c sal.w32
 @li @c sal.test
-@li @c sal.process
 @li @c sal.doublelock
 
 @section basctl
