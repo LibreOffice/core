@@ -69,7 +69,7 @@
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
+            <property name="halign">center</property>
             <child>
               <object class="GtkButton" id="add_effect">
                 <property name="visible">True</property>
