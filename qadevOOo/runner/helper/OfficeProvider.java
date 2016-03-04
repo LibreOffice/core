@@ -434,7 +434,7 @@ public class OfficeProvider implements AppProvider
         return msf;
     }
 
-    private synchronized boolean disposeOffice(XMultiServiceFactory msf,
+    private boolean disposeOffice(XMultiServiceFactory msf,
             TestParameters param)
     {
         XDesktop desk = null;
