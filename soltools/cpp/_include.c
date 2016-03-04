@@ -23,9 +23,6 @@
 #   include <unistd.h>
 #endif
 
-#ifdef _MSC_VER
-#   define _POSIX_
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

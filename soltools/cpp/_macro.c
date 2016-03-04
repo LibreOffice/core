@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#   define _POSIX_
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
