@@ -40,6 +40,7 @@ public:
     STDMETHOD(put_XSubInterface)(hyper);
 
 protected:
+    ~CUNOXWrapper() {}
 
     css::accessibility::XAccessible* pUNOInterface;
 };
