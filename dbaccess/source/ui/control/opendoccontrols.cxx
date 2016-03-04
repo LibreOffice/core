@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/help.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <unotools/historyoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
@@ -58,55 +59,6 @@ namespace dbaui
         using ::com::sun::star::ui::XImageManager;
         using ::com::sun::star::frame::theUICommandDescription;
         using ::com::sun::star::graphic::XGraphic;
-
-        OUString GetCommandText( const sal_Char* _pCommandURL, const OUString& _rModuleName )
-        {
-            OUString sLabel;
-            if ( !_pCommandURL || !*_pCommandURL )
-                return sLabel;
-
-            Reference< XNameAccess > xUICommandLabels;
-            OUString sCommandURL = OUString::createFromAscii( _pCommandURL );
-
-            try
-            {
-                do
-                {
-                    // Retrieve popup menu labels
-                    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                    if ( !xContext.is() )
-                        break;
-
-                    Reference< XNameAccess> xNameAccess( theUICommandDescription::get(xContext) );
-
-                    xNameAccess->getByName( _rModuleName ) >>= xUICommandLabels;
-                    if ( !xUICommandLabels.is() )
-                        break;
-
-                    Sequence< PropertyValue > aProperties;
-                    if ( !( xUICommandLabels->getByName(sCommandURL) >>= aProperties ) )
-                        break;
-
-                    sal_Int32 nCount( aProperties.getLength() );
-                    for ( sal_Int32 i=0; i<nCount; ++i )
-                    {
-                        OUString sPropertyName( aProperties[i].Name );
-                        if ( sPropertyName == "Label" )
-                        {
-                            aProperties[i].Value >>= sLabel;
-                            break;
-                        }
-                    }
-                }
-                while ( false );
-            }
-            catch( Exception& rException )
-            {
-                (void)rException;
-            }
-
-            return sLabel;
-        }
 
         Image GetCommandIcon( const sal_Char* _pCommandURL, const OUString& _rModuleName )
         {
@@ -170,7 +122,7 @@ namespace dbaui
         m_sModule = OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
-        OUString sLabel(GetCommandText(".uno:Open", m_sModule));
+        OUString sLabel(vcl::CommandInfoProvider::Instance().GetCommandPropertyFromModule(".uno:Open", m_sModule));
         SetText(" " + sLabel.replaceAll("~", ""));
 
         // Place icon left of text and both centered in the button.
