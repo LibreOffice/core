@@ -16,6 +16,24 @@
       "revId": "1198a258e1e6673e29befe40bcafee7e0cd6c545",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ed3f7cd4",
+        "filename": "external/nss/UnpackedTarball_nss.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-03-04T09:52:21Z",
+      "side": 1,
+      "message": "No. Another patch is added on line 20/21. You may argue, that it should go in the same patch, though.",
+      "parentUuid": "1aa78d24_8d587858",
+      "revId": "1198a258e1e6673e29befe40bcafee7e0cd6c545",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
