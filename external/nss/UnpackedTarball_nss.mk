@@ -29,6 +29,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss-ios.patch) \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
 		external/nss/nss.cygwin64.in32bit.patch) \
+	$(if $(filter WNTMSC,$(OS)$(COM)), \
+		external/nss/nss.vs2015.pdb.patch) \
 ))
 
 # nss-pem is only needed for internal curl to read the NSS CA database
