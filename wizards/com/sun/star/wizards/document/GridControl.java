@@ -57,6 +57,11 @@ public class GridControl extends Shape
                     "Error: GridModel does not export XControlModel interface");
             }
 
+            if (xControlShape == null) {
+                throw new Exception(
+                    "Error: GridModel does not have a XControlShape");
+            }
+
             xControlShape.setControl(xControlModel);
             xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oGridModel );
             oFormHandler.xDrawPage.add(xShape);
