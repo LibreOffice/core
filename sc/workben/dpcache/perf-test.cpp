@@ -57,8 +57,6 @@ private:
     double mfStartTime;
 };
 
-typedef std::vector<int> values_type;
-typedef std::vector<size_t> indices_type;
 
 #if 1
 size_t val_count = 6000000;
@@ -72,9 +70,9 @@ bool dump_values = true;
 
 struct field : boost::noncopyable
 {
-    values_type items;   /// unique values
-    indices_type data;   /// original value series as indices into unique values.
-    indices_type order;  /// ascending order of the values as indices.
+    std::vector<int> items;   /// unique values
+    std::vector<size_t> data;   /// original value series as indices into unique values.
+    std::vector<size_t> order;  /// ascending order of the values as indices.
 };
 
 long compare(int left, int right)
@@ -86,7 +84,7 @@ long compare(int left, int right)
     return 1;
 }
 
-bool has_item(const values_type& items, const indices_type& order, int val, long& index)
+bool has_item(const std::vector<int>& items, const std::vector<size_t>& order, int val, long& index)
 {
     index = items.size();
     bool found = false;
@@ -112,19 +110,19 @@ bool has_item(const values_type& items, const indices_type& order, int val, long
     return found;
 }
 
-bool check_items(const values_type& items)
+bool check_items(const std::vector<int>& items)
 {
     if (items.empty())
         return false;
 
     // Items are supposed to be all unique values.
-    values_type copied(items);
+    std::vector<int> copied(items);
     sort(copied.begin(), copied.end());
     copied.erase(unique(copied.begin(), copied.end()), copied.end());
     return copied.size() == items.size();
 }
 
-bool check_order(const values_type& items, const indices_type& order)
+bool check_order(const std::vector<int>& items, const std::vector<size_t>& order)
 {
     // Ensure that the order is truly in ascending order.
     if (items.size() != order.size())
@@ -133,11 +131,11 @@ bool check_order(const values_type& items, const indices_type& order)
     if (items.empty())
         return false;
 
-    indices_type::const_iterator it = order.begin();
-    values_type::value_type prev = items[*it];
+    auto it = order.cbegin();
+    std::vector<int>::value_type prev = items[*it];
     for (++it; it != order.end(); ++it)
     {
-        values_type::value_type val = items[*it];
+        std::vector<int>::value_type val = items[*it];
         if (prev >= val)
             return false;
 
@@ -147,7 +145,7 @@ bool check_order(const values_type& items, const indices_type& order)
     return true;
 }
 
-bool check_data(const values_type& items, const indices_type& data, const values_type& original)
+bool check_data(const std::vector<int>& items, const std::vector<size_t>& data, const std::vector<int>& original)
 {
     if (items.empty() || data.empty() || original.empty())
         return false;
@@ -164,7 +162,7 @@ bool check_data(const values_type& items, const indices_type& data, const values
     return true;
 }
 
-bool dump_and_check(const field& fld, const values_type& original, bool dump_values)
+bool dump_and_check(const field& fld, const std::vector<int>& original, bool dump_values)
 {
     cout << "unique item count:   " << fld.items.size() << endl;
     cout << "original data count: " << fld.data.size() << endl;
@@ -175,7 +173,7 @@ bool dump_and_check(const field& fld, const values_type& original, bool dump_val
         copy(fld.items.begin(), fld.items.end(), ostream_iterator<int>(cout, "\n"));
         cout << "--- sorted items" << endl;
         {
-            indices_type::const_iterator it = fld.order.begin(), it_end = fld.order.end();
+            auto it = fld.order.cbegin(), it_end = fld.order.cend();
             for (; it != it_end; ++it)
             {
                 cout << fld.items[*it] << endl;
@@ -204,12 +202,12 @@ bool dump_and_check(const field& fld, const values_type& original, bool dump_val
     return true;
 }
 
-void run1(const values_type& vals, bool dump_values)
+void run1(const std::vector<int>& vals, bool dump_values)
 {
     field fld;
     {
         stack_printer __stack_printer__("::run1 (existing algorithm)");
-        values_type::const_iterator it = vals.begin(), it_end = vals.end();
+        auto it = vals.cbegin(), it_end = vals.cend();
         for (; it != it_end; ++it)
         {
             long index = 0;
@@ -281,9 +279,9 @@ struct equal_by_value : std::binary_function<bucket, bucket, bool>
 
 class push_back_value : std::unary_function<bucket, void>
 {
-    values_type& items;
+    std::vector<int>& items;
 public:
-    explicit push_back_value(values_type& _items) : items(_items) {}
+    explicit push_back_value(std::vector<int>& _items) : items(_items) {}
     void operator() (const bucket& v)
     {
         items.push_back(v.value);
@@ -292,16 +290,16 @@ public:
 
 class push_back_order_index : std::unary_function<bucket, void>
 {
-    indices_type& data_indices;
+    std::vector<size_t>& data_indices;
 public:
-    explicit push_back_order_index(indices_type& _items) : data_indices(_items) {}
+    explicit push_back_order_index(std::vector<size_t>& _items) : data_indices(_items) {}
     void operator() (const bucket& v)
     {
         data_indices.push_back(v.order_index);
     }
 };
 
-void run2(const values_type& vals, bool dump_values)
+void run2(const std::vector<int>& vals, bool dump_values)
 {
     field fld;
     {
@@ -310,7 +308,7 @@ void run2(const values_type& vals, bool dump_values)
         buckets.reserve(vals.size());
         {
             // Push back all original values.
-            values_type::const_iterator it = vals.begin(), it_end = vals.end();
+            auto it = vals.cbegin(), it_end = vals.cend();
             for (size_t i = 0; it != it_end; ++it, ++i)
                 buckets.push_back(bucket(*it, 0, i));
         }
@@ -384,7 +382,7 @@ void run2(const values_type& vals, bool dump_values)
 
 int main()
 {
-    values_type vals;
+    std::vector<int> vals;
     vals.reserve(val_count);
 
     if (dump_values)
@@ -395,7 +393,7 @@ int main()
         double v = rand();
         v /= RAND_MAX;
         v *= multiplier;
-        values_type::value_type v2 = v;
+        std::vector<int>::value_type v2 = v;
         vals.push_back(v2);
 
         if (dump_values)

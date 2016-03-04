@@ -1661,8 +1661,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     // for a base layout only the context glyphs have to be dropped
     // => when the whole string is involved there is no extra context
-    typedef std::vector<int> TIntVector;
-    TIntVector aDropChars;
+    std::vector<int> aDropChars;
     if( rArgs.mnFlags & SalLayoutFlags::ForFallback )
     {
         // calculate superfluous context char positions
@@ -2003,8 +2002,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         //pVI->mnEndGlyphPos = nEndGlyphPos;
 
         // drop the superfluous context glyphs
-        TIntVector::const_iterator it = aDropChars.begin();
-        while( it != aDropChars.end() )
+        auto it = aDropChars.cbegin();
+        while( it != aDropChars.cend() )
         {
             // find matching "drop range"
             int nMinDropPos = *(it++); // begin of drop range
