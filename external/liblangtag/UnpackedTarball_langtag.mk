@@ -30,4 +30,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 ))
 endif
 endif
+
+$(eval $(call gb_UnpackedTarball_add_patches,langtag, \
+    external/liblangtag/clang-cl.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
