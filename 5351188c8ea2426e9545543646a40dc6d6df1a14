@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_0db6488a",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-04T07:31:26Z",
+      "side": 1,
+      "message": "Oh, something I overlooked: Members should always be prefixed with \"m\" + the prefix for their type (see https://wiki.openoffice.org/wiki/Writer/Code_Conventions#local_variables).\n\nSo effectName should be msEffectName. You can also change maDescription to msDescription since its a string.",
+      "revId": "5351188c8ea2426e9545543646a40dc6d6df1a14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
