@@ -44,6 +44,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -207,14 +208,21 @@ void XMLSignatureHelper::ExportOOXMLSignature(uno::Reference<embed::XStorage> xR
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
-    uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
-    xSaxWriter->setOutputStream(xOutputStream);
-    xSaxWriter->startDocument();
 
-    uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
-    mpXSecController->exportOOXMLSignature(xRootStorage, xDocumentHandler, rInformation);
+    if (rInformation.aSignatureBytes.hasElements())
+        // This is a signature roundtrip, just write back the signature as-is.
+        xOutputStream->writeBytes(rInformation.aSignatureBytes);
+    else
+    {
+        uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
+        xSaxWriter->setOutputStream(xOutputStream);
+        xSaxWriter->startDocument();
 
-    xSaxWriter->endDocument();
+        uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
+        mpXSecController->exportOOXMLSignature(xRootStorage, xDocumentHandler, rInformation);
+
+        xSaxWriter->endDocument();
+    }
 }
 
 bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler )
@@ -403,6 +411,19 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
                 uno::Reference<io::XInputStream> xInputStream(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
                 if (!ReadAndVerifySignatureStorageStream(xInputStream))
                     return false;
+
+                // Store the contents of the stream as is, in case we need to write it back later.
+                xInputStream.clear();
+                xInputStream.set(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
+                if (xPropertySet.is())
+                {
+                    sal_Int64 nSize = 0;
+                    xPropertySet->getPropertyValue("Size") >>= nSize;
+                    uno::Sequence<sal_Int8> aData;
+                    xInputStream->readBytes(aData, nSize);
+                    mpXSecController->setSignatureBytes(aData);
+                }
             }
         }
     }

@@ -390,7 +390,10 @@ private:
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);
     void setCertDigest(const OUString& rCertDigest);
+public:
+    void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);
 
+private:
     void setId( OUString& ouId );
     void setPropertyId( OUString& ouPropertyId );
 
