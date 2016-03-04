@@ -215,13 +215,12 @@ void SfxProgress::Stop()
 bool SfxProgress::SetStateText
 (
     sal_uLong       nNewVal,     /* New value for the progress-bar */
-    const OUString& rNewVal,     /* Status as Text */
-    sal_uLong       nNewRange    /* new maximum value, 0 for retaining the old */
+    const OUString& rNewVal     /* Status as Text */
 )
 
 {
     pImp->aStateText = rNewVal;
-    return SetState( nNewVal, nNewRange );
+    return SetState( nNewVal );
 }
 
 bool SfxProgress::SetState

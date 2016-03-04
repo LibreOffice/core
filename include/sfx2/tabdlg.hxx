@@ -140,8 +140,7 @@ public:
                                     sal_uInt16 nPos = TAB_APPEND);
 
     void                AddTabPage( sal_uInt16 nId,
-                                    const OUString &rRiderText,
-                                    bool bItemsOnDemand = false);
+                                    const OUString &rRiderText);
 
     void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
     void                RemoveTabPage( sal_uInt16 nId );
@@ -188,7 +187,7 @@ public:
 
     short               Execute() override;
     void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
-    void                Start( bool bShow = true );
+    void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
     SfxItemSet*         GetExampleSet() { return pExampleSet; }

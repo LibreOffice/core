@@ -369,10 +369,9 @@ void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const OU
     pDlg->SetObjName( rClass, rObjName );
 }
 
-SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper,
-                        const DataFlavorExVector* pFormats )
+SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper )
 {
-    return pDlg->GetFormat( aHelper, pFormats );
+    return pDlg->GetFormat( aHelper );
 }
 
 void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::container::XIndexContainer>& xCols)
@@ -878,8 +877,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
                                                 vcl::Window* pParent,
                                                 const SfxItemSet* pAttrSet,
-                                                SfxViewFrame* ,
-                                                bool /*bEditFmt*/ )
+                                                SfxViewFrame* )
 {
     SfxTabDialog* pDlg=nullptr;
     switch ( nResId )
@@ -902,8 +900,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
                                                 vcl::Window* pParent,
                                                 const SfxItemSet* pAttrSet,
-                                                const Reference< frame::XFrame >& xViewFrame,
-                                                bool /*bEditFmt*/ )
+                                                const Reference< frame::XFrame >& xViewFrame )
 {
     VclPtr<SfxTabDialog> pDlg;
     switch ( nResId )

@@ -432,8 +432,7 @@ public:
     DECL_ABSTDLG_BASE(AbstractPasteDialog_Impl, SvPasteObjectDialog )
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) override;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) override;
-    virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper,
-                        const DataFlavorExVector* pFormats=nullptr ) override;
+    virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper ) override;
 };
 
 class AbstractLinksDialog_Impl : public SfxAbstractLinksDialog
@@ -495,13 +494,11 @@ public:
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            SfxViewFrame* pViewFrame,
-                                            bool bEditFmt=false ) override;
+                                            SfxViewFrame* pViewFrame ) override;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame,
-                                            bool bEditFmt=false ) override;
+                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame ) override;
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) override;

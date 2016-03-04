@@ -520,13 +520,12 @@ void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 }
 
 
-void SfxTabDialog::Start( bool bShow )
+void SfxTabDialog::Start()
 {
     pImpl->bModal = false;
     Start_Impl();
 
-    if ( bShow )
-        Show();
+    Show();
 
     if ( IsVisible() && ( !HasChildPathFocus() || HasFocus() ) )
         GrabFocusToFirstControl();
@@ -575,9 +574,9 @@ void SfxTabDialog::Start_Impl()
     ActivatePageHdl( m_pTabCtrl );
 }
 
-void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, bool bItemsOnDemand )
+void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText )
 {
-    AddTabPage( nId, rRiderText, nullptr, nullptr, bItemsOnDemand );
+    AddTabPage( nId, rRiderText, nullptr, nullptr );
 }
 
 /*

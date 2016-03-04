@@ -95,8 +95,7 @@ class SfxAbstractPasteDialog : virtual public VclAbstractDialog
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const rtl::OUString & rFormatName ) = 0;
     virtual void SetObjName( const SvGlobalName & rClass, const rtl::OUString & rObjName ) = 0;
-    virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper,
-                        const DataFlavorExVector* pFormats=nullptr ) = 0;
+    virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper ) = 0;
 };
 
 class SfxAbstractLinksDialog : virtual public VclAbstractDialog
@@ -121,13 +120,11 @@ public:
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            SfxViewFrame* pViewFrame,
-                                            bool bEditFmt=false ) = 0;
+                                            SfxViewFrame* pViewFrame ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame,
-                                            bool bEditFmt=false ) = 0;
+                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,

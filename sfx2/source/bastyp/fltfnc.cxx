@@ -374,8 +374,7 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
 
 sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxMedium& rMedium,
-    const SfxFilter**ppFilter,
-    SfxFilterFlags nMust ) const
+    const SfxFilter**ppFilter ) const
 {
     uno::Reference<document::XTypeDetection> xDetection(
         comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
@@ -394,7 +393,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     {
         // make sure filter list is initialized
         m_rImpl.InitForIterating();
-        *ppFilter = GetFilter4EA( sTypeName, nMust );
+        *ppFilter = GetFilter4EA( sTypeName );
     }
 
     return *ppFilter ? ERRCODE_NONE : ERRCODE_ABORT;

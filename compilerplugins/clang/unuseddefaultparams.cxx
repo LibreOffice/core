@@ -129,10 +129,17 @@ bool UnusedDefaultParams::VisitCallExpr(CallExpr * callExpr) {
     if (ignoreLocation(callExpr)) {
         return true;
     }
-    if (callExpr->getDirectCallee() == nullptr) {
+    const FunctionDecl* functionDecl;
+    if (isa<CXXMemberCallExpr>(callExpr)) {
+        functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
+    }
+    else {
+        functionDecl = callExpr->getDirectCallee();
+    }
+    if (functionDecl == nullptr) {
         return true;
     }
-    const FunctionDecl* functionDecl = callExpr->getDirectCallee()->getCanonicalDecl();
+    functionDecl = functionDecl->getCanonicalDecl();
     // method overrides don't always specify the same default params (althogh they probably should)
     // so we need to work our way up to the root method
     while (isa<CXXMethodDecl>(functionDecl)) {
@@ -141,6 +148,16 @@ bool UnusedDefaultParams::VisitCallExpr(CallExpr * callExpr) {
             break;
         functionDecl = *methodDecl->begin_overridden_methods();
     }
+    // work our way back to the root definition for template methods
+    if (functionDecl->getInstantiatedFromMemberFunction())
+        functionDecl = functionDecl->getInstantiatedFromMemberFunction();
+    else if (functionDecl->getClassScopeSpecializationPattern())
+        functionDecl = functionDecl->getClassScopeSpecializationPattern();
+// workaround clang-3.5 issue
+#if CLANG_VERSION >= 30600
+    else if (functionDecl->getTemplateInstantiationPattern())
+        functionDecl = functionDecl->getTemplateInstantiationPattern();
+#endif
     auto n = functionDecl->getNumParams();
     if (n == 0 || !functionDecl->getParamDecl(n - 1)->hasDefaultArg()) {
         return true;
