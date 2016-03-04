@@ -692,7 +692,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="allsheets">
-                                        <property name="label" translatable="yes">Search in all sheets</property>
+                                        <property name="label" translatable="yes">All sheets</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -937,7 +937,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="searchformatted">
-                        <property name="label" translatable="yes">Search formatted display string</property>
+                        <property name="label" translatable="yes">Formatted display</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
