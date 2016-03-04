@@ -102,10 +102,6 @@ public class ScriptEntry implements Cloneable {
         return logicalname;
     }
 
-    public void setLogicalName(String name) {
-        logicalname = name;
-    }
-
     public String getLanguage() {
         return language;
     }
