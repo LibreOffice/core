@@ -390,6 +390,10 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
     {
         try
         {
+            if (xNameAccess->hasByName("_xmlsignatures") && (nOpenMode & embed::ElementModes::TRUNCATE))
+                // Truncate, then all signatures will be written -> remove previous ones.
+                rxStore->removeElement("_xmlsignatures");
+
             aHelper.xSignatureStorage = rxStore->openStorageElement("_xmlsignatures", nSubStorageOpenMode);
             aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
         }
