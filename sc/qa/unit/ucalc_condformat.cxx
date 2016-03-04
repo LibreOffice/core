@@ -106,7 +106,7 @@ void Test::testCondFormatINSDEL()
 
     m_pDoc->InsertCol(0,0,MAXROW,0,0,2);
     const ScRangeList& rRange = pFormat->GetRange();
-    CPPUNIT_ASSERT(rRange == ScRange(2,0,0,2,3,0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<const ScRangeList&>(ScRange(2,0,0,2,3,0)), rRange);
 
     OUString aExpr = pEntry->GetExpression(ScAddress(2,0,0), 0);
     CPPUNIT_ASSERT_EQUAL(aExpr, OUString("D2"));
@@ -131,7 +131,7 @@ void Test::testCondFormatInsertCol()
 
     m_pDoc->InsertCol(0,0,MAXROW,0,4,2);
     const ScRangeList& rRange = pFormat->GetRange();
-    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,5,3,0)), rRange);
+    CPPUNIT_ASSERT_EQUAL(static_cast<const ScRangeList&>(ScRangeList(ScRange(0,0,0,5,3,0))), rRange);
 
     m_pDoc->DeleteTab(0);
 }
@@ -180,14 +180,14 @@ void Test::testCondFormatInsertDeleteSheets()
     ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
     const ScConditionalFormat* pCheck = pList->GetFormat(nKey);
-    CPPUNIT_ASSERT_MESSAGE("Wrong conditional format instance.", pCheck == pFormat);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong conditional format instance.", pCheck, const_cast<const ScConditionalFormat*>(pFormat));
 
     // ... and its range is B2:B4.
     ScRangeList aCheckRange = pCheck->GetRange();
-    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
     const ScRange* pRange = aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
-    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4.", *pRange == ScRange(1,1,0,1,3,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4.", ScRange(1,1,0,1,3,0), *pRange);
 
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
 
@@ -202,10 +202,10 @@ void Test::testCondFormatInsertDeleteSheets()
 
     // Make sure the range also got shifted.
     aCheckRange = pCheck->GetRange();
-    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
     pRange = aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
-    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the sheet insertion.", *pRange == ScRange(1,1,1,1,3,1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the sheet insertion.", ScRange(1,1,1,1,3,1), *pRange);
 
     // Delete the sheet to the left.
     bool bDeleted = rFunc.DeleteTable(0, true, true);
@@ -218,10 +218,10 @@ void Test::testCondFormatInsertDeleteSheets()
 
     // Make sure the range got shifted back.
     aCheckRange = pCheck->GetRange();
-    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
     pRange = aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
-    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the sheet removal.", *pRange == ScRange(1,1,0,1,3,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the sheet removal.", ScRange(1,1,0,1,3,0), *pRange);
 
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
@@ -235,10 +235,10 @@ void Test::testCondFormatInsertDeleteSheets()
     CPPUNIT_ASSERT(pCheck);
 
     aCheckRange = pCheck->GetRange();
-    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
     pRange = aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
-    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the undo of the sheet removal.", *pRange == ScRange(1,1,1,1,3,1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the undo of the sheet removal.", ScRange(1,1,1,1,3,1), *pRange);
 
 #if 0 // TODO : Undo of sheet insertion currently depends on the presence of
       // view shell, and crashes when executed during cppunit run.
@@ -423,7 +423,7 @@ void Test::testCondCopyPasteSheet()
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT( nKey == pCondFormatItem->GetCondFormatData().at(0) );
+    CPPUNIT_ASSERT_EQUAL( nKey, pCondFormatItem->GetCondFormatData().at(0) );
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
