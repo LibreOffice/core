@@ -355,7 +355,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             if (nSlot == FN_DRAW_WRAP_DLG)
                 pDlg->SetCurPageId("wrap");
 
-            if( pDlg->Execute() )
+            if (pDlg->Execute() == RET_OK)
             {
                 rSh.StartAllAction();
                 rSh.StartUndo(UNDO_START);
