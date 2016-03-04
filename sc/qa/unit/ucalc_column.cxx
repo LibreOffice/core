@@ -19,11 +19,11 @@ void Test::testColumnFindEditCells()
     // Test the basics with real edit cells, using Column A.
 
     SCROW nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,MAXROW,0));
-    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no edit cells.", SCROW(-1), nResRow);
     nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,0,0));
-    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no edit cells.", SCROW(-1), nResRow);
     nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,10,0));
-    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no edit cells.", SCROW(-1), nResRow);
 
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
     rEE.SetText("Test");
@@ -33,39 +33,39 @@ void Test::testColumnFindEditCells()
 
     ScRange aRange(0,0,0,0,0,0);
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There is an edit cell here.", nResRow == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There is an edit cell here.", SCROW(0), nResRow);
 
     aRange.aStart.SetRow(1);
     aRange.aEnd.SetRow(1);
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be an edit cell in specified range.", SCROW(-1), nResRow);
 
     aRange.aStart.SetRow(2);
     aRange.aEnd.SetRow(4);
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be an edit cell in specified range.", SCROW(-1), nResRow);
 
     aRange.aStart.SetRow(0);
     aRange.aEnd.SetRow(MAXROW);
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in specified range.", nResRow == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an edit cell in specified range.", SCROW(0), nResRow);
 
     m_pDoc->SetString(ScAddress(0,0,0), "Test");
     m_pDoc->SetValue(ScAddress(0,2,0), 1.0);
     ScRefCellValue aCell;
     aCell.assign(*m_pDoc, ScAddress(0,0,0));
-    CPPUNIT_ASSERT_MESSAGE("This should be a string cell.", aCell.meType == CELLTYPE_STRING);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a string cell.", CELLTYPE_STRING, aCell.meType);
     aCell.assign(*m_pDoc, ScAddress(0,1,0));
-    CPPUNIT_ASSERT_MESSAGE("This should be an empty cell.", aCell.meType == CELLTYPE_NONE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be an empty cell.", CELLTYPE_NONE, aCell.meType);
     aCell.assign(*m_pDoc, ScAddress(0,2,0));
-    CPPUNIT_ASSERT_MESSAGE("This should be a numeric cell.", aCell.meType == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a numeric cell.", CELLTYPE_VALUE, aCell.meType);
     aCell.assign(*m_pDoc, ScAddress(0,3,0));
-    CPPUNIT_ASSERT_MESSAGE("This should be an empty cell.", aCell.meType == CELLTYPE_NONE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be an empty cell.", CELLTYPE_NONE, aCell.meType);
 
     aRange.aStart.SetRow(1);
     aRange.aEnd.SetRow(1);
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be an edit cell in specified range.", SCROW(-1), nResRow);
 
     // Test with non-edit cell but with ambiguous script type.
 
