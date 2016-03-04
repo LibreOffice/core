@@ -69,7 +69,7 @@ public class Parcel implements XNameContainer {
         return name;
     }
 
-    public java.lang.Object getByName(String aName) throws
+    public ScriptMetaData getByName(String aName) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
 
@@ -126,7 +126,7 @@ public class Parcel implements XNameContainer {
     public boolean hasByName(String aName) {
 
         boolean result = true;
-        Object containee  = null;
+        ScriptMetaData containee  = null;
 
         try {
             containee = getByName(aName);
@@ -162,7 +162,7 @@ public class Parcel implements XNameContainer {
         // if not ok, throw IllegalArgument
         if (m_descriptor != null) {
             try {
-                ScriptEntry script = (ScriptEntry)getByName(aName);
+                ScriptMetaData script = getByName(aName);
 
                 if (script != null) {
                     //m_descriptor.removeScriptEntry( script );
@@ -253,7 +253,7 @@ public class Parcel implements XNameContainer {
         com.sun.star.lang.WrappedTargetException {
 
         try {
-            ScriptMetaData script = (ScriptMetaData)getByName(Name);
+            ScriptMetaData script = getByName(Name);
 
             if (script != null) {
                 if (!script.removeSourceFile()) {

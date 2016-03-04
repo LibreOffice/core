@@ -75,7 +75,7 @@ public class ScriptBrowseNode extends PropertySet implements
         XMultiComponentFactory xFac = xCtx.getServiceManager();
 
         try {
-            data = (ScriptMetaData)parent.getByName( name );
+            data = parent.getByName( name );
             XSimpleFileAccess xSFA = UnoRuntime.queryInterface(
                                          XSimpleFileAccess.class,
                                          xFac.createInstanceWithContext(
@@ -146,7 +146,7 @@ public class ScriptBrowseNode extends PropertySet implements
         parent = p;
 
         try {
-            ScriptMetaData data = (ScriptMetaData)parent.getByName(name);
+            ScriptMetaData data = parent.getByName(name);
             uri = data.getShortFormScriptURL();
         }
         // TODO fix exception types to be caught here, should we rethrow?
@@ -189,7 +189,7 @@ public class ScriptBrowseNode extends PropertySet implements
             ScriptMetaData data = null;
 
             try {
-                data = (ScriptMetaData)parent.getByName(name);
+                data = parent.getByName(name);
             } catch (NoSuchElementException nse) {
                 throw new com.sun.star.lang.IllegalArgumentException(nse,
                     name + " does not exist or can't be found ");
@@ -236,7 +236,7 @@ public class ScriptBrowseNode extends PropertySet implements
 
             try {
                 String newName = AnyConverter.toString(aParams[0]);
-                ScriptMetaData oldData = (ScriptMetaData)parent.getByName(name);
+                ScriptMetaData oldData = parent.getByName(name);
                 oldData.loadSource();
                 String oldSource = oldData.getSource();
 
