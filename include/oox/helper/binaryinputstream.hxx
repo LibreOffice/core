@@ -186,9 +186,9 @@ public:
      */
     OUString     readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars = false );
 
-    /** Copies nBytes bytes from the current position to the passed output stream.
+    /** Copies bytes from the current position to the passed output stream.
      */
-    void         copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64 );
+    void         copyToStream( BinaryOutputStream& rOutStrm );
 
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base

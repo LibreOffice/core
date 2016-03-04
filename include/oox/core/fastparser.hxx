@@ -66,7 +66,7 @@ public:
         @param bCloseStream  True = closes the passed stream after parsing. */
     void                parseStream(
                             const css::uno::Reference< css::io::XInputStream >& rxInStream,
-                            const OUString& rStreamName, bool bCloseStream = false )
+                            const OUString& rStreamName )
                             throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
     /** Parses a stream from the passed storage with the specified name.

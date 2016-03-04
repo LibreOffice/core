@@ -99,20 +99,18 @@ void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_
 }
 
 void
-BinaryOutputStream::writeCharArrayUC( const OUString& rString, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
+BinaryOutputStream::writeCharArrayUC( const OUString& rString, rtl_TextEncoding eTextEnc )
 {
     OString sBuf( OUStringToOString( rString, eTextEnc ) );
-    if( !bAllowNulChars )
-        sBuf = sBuf.replace( '\0', '?' );
+    sBuf = sBuf.replace( '\0', '?' );
     writeMemory( static_cast< const void* >( sBuf.getStr() ), sBuf.getLength() );
 }
 
 void
-BinaryOutputStream::writeUnicodeArray( const OUString& rString, bool bAllowNulChars )
+BinaryOutputStream::writeUnicodeArray( const OUString& rString )
 {
     OUString sBuf( rString );
-    if( !bAllowNulChars )
-        sBuf = sBuf.replace( '\0', '?' );
+    sBuf = sBuf.replace( '\0', '?' );
 #ifdef OSL_BIGENDIAN
     // need a non-const buffer for swapping byte order
     sal_Unicode notConst[sBuf.getLength()];

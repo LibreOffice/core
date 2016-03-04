@@ -347,9 +347,9 @@ bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
     return OScrollWindowHelper_BASE::Notify(rNEvt);
 }
 
-void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
+void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
-    m_aReportWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
+    m_aReportWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection);
 }
 
 void OScrollWindowHelper::ImplInitSettings()

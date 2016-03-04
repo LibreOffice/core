@@ -66,7 +66,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maGradientProps.assignUsed( rSourceProps.maGradientProps );
 }
 
-void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, bool bUseOptional ) const
+void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter ) const
 {
     OUString aFontName;
     sal_Int16 nFontPitch = 0;
@@ -140,19 +140,15 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharEscapementHeight, sal_Int8(100)); // 100%
     }
 
-    if( !bUseOptional || moBold.has() ) {
-        float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
-        rPropMap.setProperty( PROP_CharWeight, fWeight);
-        rPropMap.setProperty( PROP_CharWeightAsian, fWeight);
-        rPropMap.setProperty( PROP_CharWeightComplex, fWeight);
-    }
+    float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
+    rPropMap.setProperty( PROP_CharWeight, fWeight);
+    rPropMap.setProperty( PROP_CharWeightAsian, fWeight);
+    rPropMap.setProperty( PROP_CharWeightComplex, fWeight);
 
-    if( !bUseOptional || moItalic.has() ) {
-        awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
-        rPropMap.setProperty( PROP_CharPosture, eSlant);
-        rPropMap.setProperty( PROP_CharPostureAsian, eSlant);
-        rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
-    }
+    awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
+    rPropMap.setProperty( PROP_CharPosture, eSlant);
+    rPropMap.setProperty( PROP_CharPostureAsian, eSlant);
+    rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
 
     bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )

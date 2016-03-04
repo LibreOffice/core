@@ -102,23 +102,20 @@ OUString BinaryInputStream::readCompressedUnicodeArray( sal_Int32 nChars, bool b
         readUnicodeArray( nChars, bAllowNulChars );
 }
 
-void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes )
+void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm )
 {
-    if( nBytes > 0 )
+    sal_Int64 nBytes = SAL_MAX_INT64;
+    sal_Int32 nBufferSize = INPUTSTREAM_BUFFERSIZE;
+    StreamDataSequence aBuffer( nBufferSize );
+    while( nBytes > 0 )
     {
-        // make buffer size a multiple of the passed atom size
-        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, INPUTSTREAM_BUFFERSIZE );
-        StreamDataSequence aBuffer( nBufferSize );
-        while( nBytes > 0 )
-        {
-            sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, nBufferSize );
-            sal_Int32 nBytesRead = readData( aBuffer, nReadSize );
-            rOutStrm.writeData( aBuffer );
-            if( nReadSize == nBytesRead )
-                nBytes -= nReadSize;
-            else
-                nBytes = 0;
-        }
+        sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, nBufferSize );
+        sal_Int32 nBytesRead = readData( aBuffer, nReadSize );
+        rOutStrm.writeData( aBuffer );
+        if( nReadSize == nBytesRead )
+            nBytes -= nReadSize;
+        else
+            nBytes = 0;
     }
 }
 

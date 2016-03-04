@@ -225,7 +225,7 @@ void Clipboard::DoCut ()
     }
 }
 
-void Clipboard::DoDelete (vcl::Window* )
+void Clipboard::DoDelete()
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 1)
     {
@@ -233,9 +233,9 @@ void Clipboard::DoDelete (vcl::Window* )
     }
 }
 
-void Clipboard::DoCopy (vcl::Window* pWindow )
+void Clipboard::DoCopy ()
 {
-    CreateSlideTransferable( pWindow, false );
+    CreateSlideTransferable( nullptr, false );
 }
 
 void Clipboard::DoPaste ()

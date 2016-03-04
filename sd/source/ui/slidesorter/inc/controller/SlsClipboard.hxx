@@ -74,10 +74,10 @@ public:
 
     void DoCut ();
     // Exported for unit test
-    SD_DLLPUBLIC void DoCopy(vcl::Window* pWindow = nullptr);
+    SD_DLLPUBLIC void DoCopy();
     // Exported for unit test
     SD_DLLPUBLIC void DoPaste();
-    void DoDelete (vcl::Window* pWindow = nullptr);
+    void DoDelete ();
 
     void StartDrag (
         const Point& rDragPt,
