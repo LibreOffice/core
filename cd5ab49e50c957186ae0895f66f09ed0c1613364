@@ -1,0 +1,231 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_88d8661f",
+        "filename": "sc/inc/attarray.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be 0, otherwise the code would be always activated.",
+      "range": {
+        "startLine": 47,
+        "startChar": 31,
+        "endLine": 47,
+        "endChar": 32
+      },
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_e803ea74",
+        "filename": "sc/inc/attarray.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c808ae94",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_28fe926b",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_0803d674",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_68f89a7d",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_48f5de81",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_a8f28298",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "This should be\n\n #if DEBUG_SC_TESTATTRARRAY\n\notherwise with #ifdef the code would be always activated, no matter if DEBUG_SC_TESTATTRARRAY was defined to 0 or 1 or any other value.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_e82acae6",
+        "filename": "sc/source/core/inc/parclass.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "For consistency we could add\n\n #define DEBUG_SC_PARCLASSDOC 0\n\nnear the top of the file and then change all #ifdef DEBUG_SC_PARCLASSDOC to\n\n #if DEBUG_SC_PARCLASSDOC",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c82f0ef5",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "As mentioned in the .hxx\n\n #if DEBUG_SC_PARCLASSDOC\n\nif we have #define DEBUG_SC_PARCLASSDOC 0 there.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_88efc6af",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "With SAL_WARN_IF() being the only statement the #if... can be removed.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2835f245",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "As mentioned in the .hxx\n\n #if DEBUG_SC_PARCLASSDOC\n\nif we have #define DEBUG_SC_PARCLASSDOC 0 there.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_083ab636",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-04T18:17:20Z",
+      "side": 1,
+      "message": "As mentioned in the .hxx\n\n #if DEBUG_SC_PARCLASSDOC\n\nif we have #define DEBUG_SC_PARCLASSDOC 0 there.",
+      "revId": "cd5ab49e50c957186ae0895f66f09ed0c1613364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
