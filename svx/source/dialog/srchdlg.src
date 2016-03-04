@@ -28,11 +28,11 @@ String RID_SVXSTR_SEARCH_STYLES
 };
 String RID_SVXSTR_WRITER_STYLES
 {
-    Text [ en-US ] = "Search for Paragraph St~yles" ;
+    Text [ en-US ] = "Paragraph St~yles" ;
 };
 String RID_SVXSTR_CALC_STYLES
 {
-    Text [ en-US ] = "Search for Cell St~yles" ;
+    Text [ en-US ] = "Cell St~yles" ;
 };
 String RID_SVXSTR_SEARCH
 {
