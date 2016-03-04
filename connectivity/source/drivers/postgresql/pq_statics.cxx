@@ -571,7 +571,7 @@ Statics & getStatics()
 //                 { "serial", com::sun::star::sdbc::DataType::INTEGER },
 //                 { "serial4", com::sun::star::sdbc::DataType::INTEGER },
 
-                { "text", com::sun::star::sdbc::DataType::VARCHAR },
+                { "text", com::sun::star::sdbc::DataType::LONGVARCHAR },
                 { "bpchar", com::sun::star::sdbc::DataType::CHAR },
                 { "varchar", com::sun::star::sdbc::DataType::VARCHAR },
 
