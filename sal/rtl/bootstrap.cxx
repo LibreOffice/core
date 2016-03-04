@@ -677,12 +677,7 @@ void SAL_CALL rtl_bootstrap_args_close (
     --that->_nRefCount;
     if (that->_nRefCount == 0)
     {
-        ::std::size_t nLeaking = 8; // only hold up to 8 files statically
-
-#if OSL_DEBUG_LEVEL > 0 // debug
-        nLeaking = 0;
-#endif /* OSL_DEBUG_LEVEL */
-
+        std::size_t const nLeaking = 8; // only hold up to 8 files statically
         if (p_bootstrap_map->size() > nLeaking)
         {
             ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
