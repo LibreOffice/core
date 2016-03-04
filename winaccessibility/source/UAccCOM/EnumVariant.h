@@ -23,9 +23,16 @@
 #include "resource.h"       // main symbols
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include "UAccCOM.h"
 #include <AccObjectManagerAgent.hxx>
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#endif
+#include  "UAccCOM.h"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 /**
  * CEnumVariant implements IEnumVARIANT interface.

@@ -21,8 +21,16 @@
  * AccComponent.cpp : Implementation of CUAccCOMApp and DLL registration.
  */
 #include "stdafx.h"
-#include "UAccCOM.h"
 #include "AccComponent.h"
+
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#endif
+#include  "UAccCOM.h"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 /**
  * Returns the location of the upper left corner of the object's bounding
