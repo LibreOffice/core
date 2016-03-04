@@ -1,3 +1,14 @@
+--- a/nss.orig/nspr/pr/src/misc/prnetdb.c	2016-02-12 14:51:25.000000000 +0100
++++ b/nss/nspr/pr/src/misc/prnetdb.c	2016-03-04 19:23:00.462892600 +0100
+@@ -438,7 +438,7 @@
+ 	char *buf = *bufp;
+ 	PRIntn buflen = *buflenp;
+ 
+-	if (align && ((long)buf & (align - 1))) {
++	if (align && ((ptrdiff_t)buf & (align - 1))) {
+ 		PRIntn skip = align - ((ptrdiff_t)buf & (align - 1));
+ 		if (buflen < skip) {
+ 			return 0;
 diff -ru a/nspr/configure b/nspr/configure
 --- a/a/nspr/configure	2014-09-29 16:46:38.427423757 +0100
 +++ b/b/nspr/configure	2014-09-29 16:47:42.984012225 +0100
