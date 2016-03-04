@@ -30,7 +30,6 @@ certain functionality.
 @li @c sal.rtl - SAL RTL library
 @li @c sal.rtl.xub - SAL RTL warnings related to possible String->OUString conversion issues.
 @li @c sal.textenc - the textencoding SAL library
-@li @c sal.w32
 
 @section basctl
 

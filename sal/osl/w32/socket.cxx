@@ -412,8 +412,8 @@ struct LeakWarning
 {
     ~LeakWarning()
     {
-        SAL_WARN_IF( g_nSocketImpl, "sal.w32", "sal_socket: " << g_nSocketImpl << " socket instances leak" );
-        SAL_WARN_IF( g_nSocketAddr, "sal.w32", "sal_socket: " << g_nSocketAddr << " socket address instances leak" );
+        SAL_WARN_IF( g_nSocketImpl, "sal.osl", "sal_socket: " << g_nSocketImpl << " socket instances leak" );
+        SAL_WARN_IF( g_nSocketAddr, "sal.osl", "sal_socket: " << g_nSocketAddr << " socket address instances leak" );
     }
 };
 LeakWarning socketWarning;
