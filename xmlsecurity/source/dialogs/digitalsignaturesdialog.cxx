@@ -436,25 +436,9 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
         try
         {
             sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
-            maSignatureManager.maCurrentSignatureInformations.erase( maSignatureManager.maCurrentSignatureInformations.begin()+nSelected );
-
-            // Export all other signatures...
-            SignatureStreamHelper aStreamHelper = maSignatureManager.ImplOpenSignatureStream(css::embed::ElementModes::WRITE | css::embed::ElementModes::TRUNCATE, true);
-            Reference< css::io::XOutputStream > xOutputStream(
-                aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
-            Reference< css::xml::sax::XWriter> xSaxWriter =
-                maSignatureManager.maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
-
-            uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
-            size_t nInfos = maSignatureManager.maCurrentSignatureInformations.size();
-            for( size_t n = 0 ; n < nInfos ; ++n )
-                XMLSignatureHelper::ExportSignature( xDocumentHandler, maSignatureManager.maCurrentSignatureInformations[ n ] );
-
-            XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
+            maSignatureManager.remove(nSelected);
 
             mbSignaturesChanged = true;
-
-            aStreamHelper = SignatureStreamHelper();    // release objects...
 
             ImplFillSignaturesBox();
         }
