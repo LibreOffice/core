@@ -61,9 +61,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
         typedef std::unordered_map<
                     long,
-                    TNumberedItem,
-                    ::std::hash<long>,
-                    ::std::equal_to< long > > TNumberedItemHash;
+                    TNumberedItem  > TNumberedItemHash;
 
         typedef ::std::vector< long > TDeadItemList;
 
