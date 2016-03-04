@@ -3822,8 +3822,8 @@ void Test::testMoveRefBetweenSheets()
     CPPUNIT_ASSERT(bMoved);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This cell should be empty after the move.", CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,1,1)));
-    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0,2,1)));
+    ASSERT_DOUBLES_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,1,1)));
+    ASSERT_DOUBLES_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0,2,1)));
 
     // The reference in the pasted formula should display sheet name after the move.
     if (!checkFormula(*m_pDoc, ScAddress(0,1,1), "Test1.A1"))
@@ -3860,9 +3860,9 @@ void Test::testUndoCut()
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0 ,0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, pUndoDoc);
-    CPPUNIT_ASSERT_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0,2,0)));
+    ASSERT_DOUBLES_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
+    ASSERT_DOUBLES_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
+    ASSERT_DOUBLES_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0,2,0)));
     ScUndoCut aUndo(&getDocShell(), aRange, aRange.aEnd, aMark, pUndoDoc);
 
     // "Cut" the selection.
@@ -3871,18 +3871,18 @@ void Test::testUndoCut()
 
     // Undo it, and check the result.
     aUndo.Undo();
-    CPPUNIT_ASSERT_EQUAL(  1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 10.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(100.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0,3,0)); // The SUM value should be back to the original.
+    ASSERT_DOUBLES_EQUAL(  1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    ASSERT_DOUBLES_EQUAL( 10.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    ASSERT_DOUBLES_EQUAL(100.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    ASSERT_DOUBLES_EQUAL(111.0, m_pDoc->GetValue(0,3,0)); // The SUM value should be back to the original.
 
     // Redo it and check.
     aUndo.Redo();
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0,3,0));
+    ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(0,3,0));
 
     // Undo again.
     aUndo.Undo();
-    CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0,3,0));
+    ASSERT_DOUBLES_EQUAL(111.0, m_pDoc->GetValue(0,3,0));
 
     m_pDoc->DeleteTab(0);
 }
