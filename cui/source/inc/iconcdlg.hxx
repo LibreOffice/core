@@ -31,9 +31,6 @@
 #include <vcl/layout.hxx>
 #include <vector>
 
-#define RET_USER        100
-#define RET_USER_CANCEL 101
-
 // forward-declarations
 struct IconChoicePageData;
 class IconChoiceDialog;
