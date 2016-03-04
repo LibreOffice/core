@@ -70,7 +70,7 @@ void ScMetricInputDlg::dispose()
     ModalDialog::dispose();
 }
 
-long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
+long ScMetricInputDlg::GetInputValue() const
 {
 /*
     with decimal digits
@@ -91,7 +91,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 */
     // first cut off the decimal digits - not that great...
 
-    return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( eUnit ) ) );
+    return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( FUNIT_TWIP ) ) );
 }
 
 // Handler:

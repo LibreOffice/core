@@ -1407,12 +1407,11 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     pChartListenerCollection->UpdateDirtyCharts();
 }
 
-void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
+void ScDocument::DeleteRow( const ScRange& rRange )
 {
     DeleteRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                rRange.aEnd.Col(),   rRange.aEnd.Tab(),
-               rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1),
-               pRefUndoDoc );
+               rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1) );
 }
 
 bool ScDocument::CanInsertCol( const ScRange& rRange ) const
@@ -1599,12 +1598,11 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     pChartListenerCollection->UpdateDirtyCharts();
 }
 
-void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
+void ScDocument::DeleteCol( const ScRange& rRange )
 {
     DeleteCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                rRange.aEnd.Row(),   rRange.aEnd.Tab(),
-               rRange.aStart.Col(), static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1),
-               pRefUndoDoc );
+               rRange.aStart.Col(), static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1) );
 }
 
 //  for Area-Links: Insert/delete cells, when the range is changed.
@@ -4389,12 +4387,12 @@ bool ScDocument::HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) con
     return maTabs[nTab]->HasFilteredRows(nStartRow, nEndRow);
 }
 
-bool ScDocument::ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol) const
+bool ScDocument::ColFiltered(SCCOL nCol, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return false;
 
-    return maTabs[nTab]->ColFiltered(nCol, pFirstCol);
+    return maTabs[nTab]->ColFiltered(nCol);
 }
 
 void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered)

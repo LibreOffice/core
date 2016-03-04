@@ -36,8 +36,7 @@ public:
 
     void    Draw( const Point&  rAt,
                   const Size&   rSize,
-                  bool          bState,
-                  bool          bBtnIn = false );
+                  bool          bState );
     void    Draw( bool          bState )
                 { Draw( aBtnPos, aBtnSize, bState ); }
 

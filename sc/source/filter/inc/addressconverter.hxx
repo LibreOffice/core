@@ -94,7 +94,7 @@ struct BinAddress
     inline explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, bool bCol16Bit = true );
+    void                read( BiffInputStream& rStrm );
 };
 
 inline bool operator<( const BinAddress& rL, const BinAddress& rR )
@@ -130,7 +130,7 @@ struct BinRange
     inline explicit     BinRange( const css::table::CellRangeAddress& rRange ) : maFirst( rRange.StartColumn, rRange.StartRow ), maLast( rRange.EndColumn, rRange.EndRow ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, bool bCol16Bit = true );
+    void                read( BiffInputStream& rStrm );
 };
 
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& orRange )

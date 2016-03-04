@@ -323,7 +323,7 @@ public:
     inline size_t hash() const;
 
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
-    OUString GetColRowString( bool bAbsolute = false ) const;
+    OUString GetColRowString() const;
 };
 
 inline void ScAddress::PutInOrder( ScAddress& rAddress )

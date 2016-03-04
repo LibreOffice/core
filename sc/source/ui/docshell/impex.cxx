@@ -2223,7 +2223,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
 
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) override { return eERR_INTERN; }
     virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding ) override {}
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding, sal_uInt32 ) override { return eERR_INTERN; }
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) override { return eERR_INTERN; }
     virtual void ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const rtl_TextEncoding, bool,
                   const OUString&, OUString&, const OUString& ) override {}
     virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) override {}

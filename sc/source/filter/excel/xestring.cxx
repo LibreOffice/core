@@ -113,9 +113,9 @@ void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt
     Build( rString.getStr(), rString.getLength(), nFlags, nMaxLen );
 }
 
-void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags )
+void XclExpString::Assign( sal_Unicode cChar )
 {
-    Build( &cChar, 1, nFlags, EXC_STR_MAXLEN );
+    Build( &cChar, 1, EXC_STR_DEFAULT, EXC_STR_MAXLEN );
 }
 
 void XclExpString::AssignByte(

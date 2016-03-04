@@ -325,8 +325,7 @@ void PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList );
 void PopDoubleRef( ScRange&, bool bDontCheckForTableOp = false );
 void DoubleRefToVars( const formula::FormulaToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
-        SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-        bool bDontCheckForTableOp = false );
+        SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 );
 ScDBRangeBase* PopDBDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 );

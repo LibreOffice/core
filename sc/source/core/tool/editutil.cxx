@@ -507,12 +507,12 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
         EnableUndo( true );
 }
 
-void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, bool bTakeOwnership )
+void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet )
 {
     if ( bDeleteDefaults )
         delete pDefaults;
     pDefaults = pSet;
-    bDeleteDefaults = bTakeOwnership;
+    bDeleteDefaults = true;
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
 }

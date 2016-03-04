@@ -425,7 +425,7 @@ void ScViewFunc::DoHangulHanjaConversion()
     DoSheetConversion( aConvParam );
 }
 
-void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bRecord )
+void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -437,7 +437,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     ScSplitPos eWhich = rViewData.GetActivePart();
     EditView* pEditView = nullptr;
     bool bIsEditMode = rViewData.HasEditView(eWhich);
-    if (bRecord && !rDoc.IsUndoEnabled())
+    bool bRecord = true;
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
     if (bIsEditMode)                                            // edit mode active
     {

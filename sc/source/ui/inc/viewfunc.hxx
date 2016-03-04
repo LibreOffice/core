@@ -164,7 +164,7 @@ public:
                                             bool bCursorOnly = false );
     void            ApplyPatternLines( const ScPatternAttr& rAttr,
                                         const SvxBoxItem* pNewOuter,
-                                        const SvxBoxInfoItem* pNewInner, bool bRecord = true );
+                                        const SvxBoxInfoItem* pNewInner );
 
     void            ApplyUserItemSet( const SfxItemSet& rItemSet );
 
@@ -189,7 +189,7 @@ public:
 
     void            DeleteCells( DelCellCmd eCmd );
     bool            InsertCells( InsCellCmd eCmd, bool bRecord = true, bool bPartOfPaste = false );
-    void            DeleteMulti( bool bRows, bool bRecord = true );
+    void            DeleteMulti( bool bRows );
 
     void            DeleteContents( InsertDeleteFlags nFlags );
 
@@ -197,8 +197,7 @@ public:
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
         sal_uInt16 nSizeTwips, bool bRecord = true, bool bPaint = true, ScMarkData* pMarkData = nullptr );
 
-    void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        bool bRecord = true );
+    void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips );
 
     bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr );
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow );
@@ -290,7 +289,7 @@ public:
     void            DoThesaurus();
 
     /** Generic implementation of sheet conversion functions. */
-    void            DoSheetConversion( const ScConversionParam& rParam, bool bRecord = true );
+    void            DoSheetConversion( const ScConversionParam& rParam );
 
     void            SetPrintRanges( bool bEntireSheet,
                                     const OUString* pPrint,

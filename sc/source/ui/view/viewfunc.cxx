@@ -998,12 +998,13 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
 //  patterns and borders
 
 void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem* pNewOuter,
-                                    const SvxBoxInfoItem* pNewInner, bool bRecord )
+                                    const SvxBoxInfoItem* pNewInner )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
-    if (bRecord && !pDoc->IsUndoEnabled())
+    bool bRecord = true;
+    if (!pDoc->IsUndoEnabled())
         bRecord = false;
 
     bool bRemoveAdjCellBorder = false;
@@ -1546,7 +1547,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
     Unmark();
 }
 
-void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
+void ScViewFunc::DeleteMulti( bool bRows )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
@@ -1555,6 +1556,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
 
+    bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
@@ -2107,8 +2109,7 @@ void ScViewFunc::SetWidthOrHeight(
 
 //  column width/row height (via marked range)
 
-void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        bool bRecord)
+void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips )
 {
     ScMarkData& rMark = GetViewData().GetMarkData();
 
@@ -2127,7 +2128,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
     std::vector<sc::ColRowSpan> aRanges =
         bWidth ? rMark.GetMarkedColSpans() : rMark.GetMarkedRowSpans();
 
-    SetWidthOrHeight(bWidth, aRanges, eMode, nSizeTwips, bRecord);
+    SetWidthOrHeight(bWidth, aRanges, eMode, nSizeTwips);
 
     rMark.MarkToSimple();
 }

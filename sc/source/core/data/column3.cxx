@@ -2393,7 +2393,7 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr )
     SetRawString(nRow, aSS);
 }
 
-void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast )
+void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr )
 {
     if (!ValidRow(nRow))
         return;
@@ -2404,8 +2404,7 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBr
 
     CellStorageModified();
 
-    if (bBroadcast)
-        BroadcastNewCell(nRow);
+    BroadcastNewCell(nRow);
 }
 
 void ScColumn::SetRawString(

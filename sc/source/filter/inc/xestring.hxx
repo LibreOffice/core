@@ -70,11 +70,8 @@ public:
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
-    /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string.
-        @param nFlags  Modifiers for string export. */
-    void                Assign(
-                            sal_Unicode cChar,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT );
+    /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string. */
+    void                Assign( sal_Unicode cChar );
 
     /** Assigns an unformatted string, converts this object to a BIFF2-BIFF7 byte string.
         @param nFlags  Modifiers for string export.

@@ -421,7 +421,7 @@ private:
     void                AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nSpaces = 0 );
     void                AppendMissingNameToken( const OUString& rName, sal_uInt8 nSpaces = 0 );
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nSpaces = 0 );
-    void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces = 0 );
+    void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData );
     void                AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData );
     void                AppendEuroToolCallToken( const XclExpExtFuncData& rExtFuncData );
 
@@ -2352,10 +2352,10 @@ void XclExpFmlaCompImpl::AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExt
     Append( 0, (meBiff <= EXC_BIFF5) ? 12 : 2 );
 }
 
-void XclExpFmlaCompImpl::AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces )
+void XclExpFmlaCompImpl::AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData )
 {
     sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rExtFuncData.maFuncName, rExtFuncData.mbVBasic, true, rExtFuncData.mbHidden );
-    AppendNameToken( nNameIdx, nSpaces );
+    AppendNameToken( nNameIdx );
 }
 
 void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData )

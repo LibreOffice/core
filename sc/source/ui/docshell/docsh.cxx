@@ -2826,11 +2826,11 @@ void ScDocShell::SetDocumentModified()
  * Drawing also needs to be updated for the normal SetDocumentModified
  * e.g.: when deleting tables etc.
  */
-void ScDocShell::SetDrawModified( bool bIsModified /* = true */ )
+void ScDocShell::SetDrawModified()
 {
-    bool bUpdate = bIsModified != IsModified();
+    bool bUpdate = !IsModified();
 
-    SetModified( bIsModified );
+    SetModified();
 
     SfxBindings* pBindings = GetViewBindings();
     if (bUpdate)
@@ -2842,25 +2842,22 @@ void ScDocShell::SetDrawModified( bool bIsModified /* = true */ )
         }
     }
 
-    if (bIsModified)
+    if (pBindings)
     {
-        if (pBindings)
-        {
-            // #i105960# Undo etc used to be volatile.
-            // They always have to be invalidated, including drawing layer or row height changes
-            // (but not while pPaintLockData is set).
-            pBindings->Invalidate( SID_UNDO );
-            pBindings->Invalidate( SID_REDO );
-            pBindings->Invalidate( SID_REPEAT );
-        }
-
-        if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
-        {
-            aDocument.UpdateChartListenerCollection();
-            SfxGetpApp()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));    // Navigator
-        }
-        SC_MOD()->AnythingChanged();
+        // #i105960# Undo etc used to be volatile.
+        // They always have to be invalidated, including drawing layer or row height changes
+        // (but not while pPaintLockData is set).
+        pBindings->Invalidate( SID_UNDO );
+        pBindings->Invalidate( SID_REDO );
+        pBindings->Invalidate( SID_REPEAT );
     }
+
+    if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
+    {
+        aDocument.UpdateChartListenerCollection();
+        SfxGetpApp()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));    // Navigator
+    }
+    SC_MOD()->AnythingChanged();
 }
 
 void ScDocShell::SetInUndo(bool bSet)

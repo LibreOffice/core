@@ -2235,7 +2235,7 @@ void ScRange::IncEndRowSticky( SCsROW nDelta )
         aEnd.IncRow( nDelta);   // was greater than MAXROW, caller should know..
 }
 
-OUString ScAddress::GetColRowString( bool bAbsolute ) const
+OUString ScAddress::GetColRowString() const
 {
     OUStringBuffer aString;
 
@@ -2245,20 +2245,13 @@ OUString ScAddress::GetColRowString( bool bAbsolute ) const
     case formula::FormulaGrammar::CONV_OOO:
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        if (bAbsolute)
-            aString.append("$");
-
         lcl_ScColToAlpha( aString, nCol);
-
-        if ( bAbsolute )
-            aString.append("$");
-
         aString.append(OUString::number(nRow+1));
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
-        lcl_r1c1_append_r ( aString, nRow, bAbsolute, detailsOOOa1 );
-        lcl_r1c1_append_c ( aString, nCol, bAbsolute, detailsOOOa1 );
+        lcl_r1c1_append_r ( aString, nRow, false/*bAbsolute*/, detailsOOOa1 );
+        lcl_r1c1_append_c ( aString, nCol, false/*bAbsolute*/, detailsOOOa1 );
         break;
     }
 

@@ -332,7 +332,7 @@ public:
     void            UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange );
 
     void            SetDocumentModified();
-    void            SetDrawModified( bool bIsModified = true );
+    void            SetDrawModified();
 
     void            LockPaint();
     void            UnlockPaint();

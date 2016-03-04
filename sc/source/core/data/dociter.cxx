@@ -1277,7 +1277,7 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
 }
 
 bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
-        SCROW& nFoundRow, bool bSearchForEqualAfterMismatch )
+        SCROW& nFoundRow )
 {
     // Set and automatically reset mpParam->mbRangeLookup when returning. We
     // could use comphelper::FlagRestorationGuard, but really, that one is
@@ -1412,7 +1412,7 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         maCurPos = aPosSave;
         return true;
     }
-    if ( (bSearchForEqualAfterMismatch || mpParam->eSearchType != utl::SearchParam::SRCH_NORMAL) &&
+    if ( (mpParam->eSearchType != utl::SearchParam::SRCH_NORMAL) &&
             StoppedOnMismatch() )
     {
         // Assume found entry to be the last value less than respectively

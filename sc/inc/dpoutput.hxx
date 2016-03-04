@@ -109,7 +109,7 @@ public:
 
     void            Output();           //! Refresh?
     ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
-    ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE ) const;
+    ScRange GetOutputRange() const;
     long            GetHeaderRows();
     bool            HasError();         // range overflow or exception from source
 

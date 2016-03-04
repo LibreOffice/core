@@ -1174,7 +1174,7 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
     return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
 }
 
-ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType ) const
+ScRange ScDPOutput::GetOutputRange() const
 {
     using namespace ::com::sun::star::sheet;
 
@@ -1182,16 +1182,6 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType ) const
         return ScRange(ScAddress::INITIALIZE_INVALID);
 
     SCTAB nTab = aStartPos.Tab();
-    switch (nRegionType)
-    {
-        case DataPilotOutputRangeType::RESULT:
-            return ScRange(nDataStartCol, nDataStartRow, nTab, nTabEndCol, nTabEndRow, nTab);
-        case DataPilotOutputRangeType::TABLE:
-            return ScRange(aStartPos.Col(), nTabStartRow, nTab, nTabEndCol, nTabEndRow, nTab);
-        default:
-            OSL_ENSURE(nRegionType == DataPilotOutputRangeType::WHOLE, "ScDPOutput::GetOutputRange: unknown region type");
-        break;
-    }
     return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
 }
 

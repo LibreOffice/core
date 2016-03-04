@@ -285,11 +285,11 @@ void ScFormulaReferenceHelper::ShowReference(const OUString& rStr)
     }
 }
 
-void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
 {
     if( !pRefEdit && pEdit )
     {
-        m_pDlg->RefInputStart( pEdit, pButton );
+        m_pDlg->RefInputStart( pEdit );
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

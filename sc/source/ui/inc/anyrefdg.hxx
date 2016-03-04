@@ -82,7 +82,7 @@ public:
     void                Init();
 
     void                ShowReference(const OUString& rStr);
-    void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
+    void                ReleaseFocus( formula::RefEdit* pEdit );
     void                HideReference( bool bDoneRefMode = true );
     void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
     void                RefInputDone( bool bForced = false );

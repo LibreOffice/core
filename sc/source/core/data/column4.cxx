@@ -1255,10 +1255,6 @@ public:
         }
     }
 
-    SCROW getStartRow() const
-    {
-        return mnStartRow;
-    }
 };
 
 class EndListeningFormulaCellsHandler
@@ -1346,15 +1342,10 @@ public:
 
 void ScColumn::StartListeningFormulaCells(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
-    SCROW nRow1, SCROW nRow2, SCROW* pStartRow )
+    SCROW nRow1, SCROW nRow2 )
 {
     StartListeningFormulaCellsHandler aFunc(rStartCxt, rEndCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
-
-    if (pStartRow)
-        // start row position may be smaller than nRow1 in case the formula
-        // group starts before nRow1 position.
-        *pStartRow = aFunc.getStartRow();
 }
 
 void ScColumn::EndListeningFormulaCells(

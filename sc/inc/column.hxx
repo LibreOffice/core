@@ -234,7 +234,7 @@ public:
     bool    HasSelectionMatrixFragment(const ScMarkData& rMark) const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
-    bool    GetLastVisibleAttr( SCROW& rLastRow, bool bFullFormattedArea = false ) const;
+    bool    GetLastVisibleAttr( SCROW& rLastRow ) const;
     bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     bool    IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow = 0,
                                     SCROW nEndRow = MAXROW ) const;
@@ -346,7 +346,7 @@ public:
     svl::SharedString GetSharedString( SCROW nRow ) const;
 
     void SetRawString( SCROW nRow, const OUString& rStr );
-    void SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
+    void SetRawString( SCROW nRow, const svl::SharedString& rStr );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetValue( SCROW nRow, double fVal );
     void SetValues( SCROW nRow, const std::vector<double>& rVals );
@@ -517,8 +517,7 @@ public:
     bool    GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const;
 
     void StartListeningFormulaCells(
-        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2,
-        SCROW* pStartRow = nullptr );
+        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2 );
 
     void EndListeningFormulaCells(
         sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,

@@ -351,12 +351,6 @@ public:
                         row position of the found entry are returned, otherwise
                         invalid.
 
-                        @param bSearchForEqualAfterMismatch
-                            Continue searching for an equal entry even if the
-                            last entry matching the range was found, in case
-                            the data is not sorted. Is always done if regular
-                            expressions are involved.
-
                         The search does not stop when encountering a string and does not
                         assume that no values follow anymore.
                         If querying for a string a mismatch on the first
@@ -368,8 +362,7 @@ public:
                         iterator is not usable anymore except for obtaining the
                         number format!
                       */
-    bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
-                        SCROW& nFoundRow, bool bSearchForEqualAfterMismatch = false );
+    bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow );
 };
 
 class ScDocAttrIterator             // all attribute areas

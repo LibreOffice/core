@@ -87,10 +87,10 @@ void BinAddress::read( SequenceInputStream& rStrm )
     mnCol = rStrm.readInt32();
 }
 
-void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit )
+void BinAddress::read( BiffInputStream& rStrm )
 {
     mnRow = rStrm.readuInt16();
-    mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
+    mnCol = rStrm.readuInt16();
 }
 
 void BinRange::read( SequenceInputStream& rStrm )
@@ -101,12 +101,12 @@ void BinRange::read( SequenceInputStream& rStrm )
     maLast.mnCol = rStrm.readInt32();
 }
 
-void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit )
+void BinRange::read( BiffInputStream& rStrm )
 {
     maFirst.mnRow =  rStrm.readuInt16();
     maLast.mnRow = rStrm.readuInt16();
-    maFirst.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
-    maLast.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
+    maFirst.mnCol = rStrm.readuInt16();
+    maLast.mnCol = rStrm.readuInt16();
 }
 
 void BinRangeList::read( SequenceInputStream& rStrm )

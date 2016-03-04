@@ -134,8 +134,8 @@ public:
                     /// Creates a copy of SfxItemSet if bRememberCopy set
     void            SetDefaults( const SfxItemSet& rDefaults, bool bRememberCopy = true );
 
-                    /// Becomes the owner of the SfxItemSet if bTakeOwnership set
-    void            SetDefaults( SfxItemSet* pDefaults, bool bTakeOwnership = true );
+                    /// Becomes the owner of the SfxItemSet
+    void            SetDefaults( SfxItemSet* pDefaults );
 
                     /// Set the item in the default ItemSet which is created
                     /// if it doesn't exist yet.

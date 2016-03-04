@@ -47,8 +47,9 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
 }
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
-    const ScRange&rRange, const rtl_TextEncoding eCharSet, sal_uInt32 nDifOption )
+    const ScRange&rRange, const rtl_TextEncoding eCharSet )
 {
+    sal_uInt32 nDifOption = SC_DIFOPT_EXCEL;
     OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
         "ScExportDif(): only one table please!" );

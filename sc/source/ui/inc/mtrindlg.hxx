@@ -41,7 +41,7 @@ public:
     virtual ~ScMetricInputDlg();
     virtual void dispose() override;
 
-    long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
+    long GetInputValue() const;
 
 private:
     VclPtr<MetricField>    m_pEdValue;

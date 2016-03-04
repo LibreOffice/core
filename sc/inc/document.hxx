@@ -1199,8 +1199,7 @@ public:
                                SCROW nStartRow, SCSIZE nSize,
                                ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
                                const ScMarkData* pTabMark = nullptr );
-    SC_DLLPUBLIC void   DeleteRow( const ScRange& rRange,
-                               ScDocument* pRefUndoDoc = nullptr );
+    SC_DLLPUBLIC void   DeleteRow( const ScRange& rRange );
     bool            InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow,   SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
@@ -1211,8 +1210,7 @@ public:
                                SCCOL nStartCol, SCSIZE nSize,
                                ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
                                const ScMarkData* pTabMark = nullptr );
-    void            DeleteCol( const ScRange& rRange,
-                               ScDocument* pRefUndoDoc = nullptr );
+    void            DeleteCol( const ScRange& rRange );
 
     bool            CanInsertRow( const ScRange& rRange ) const;
     bool            CanInsertCol( const ScRange& rRange ) const;
@@ -1615,7 +1613,7 @@ public:
 
     bool                        RowFiltered(SCROW nRow, SCTAB nTab, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
     bool                        HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
-    bool                        ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol = nullptr) const;
+    bool                        ColFiltered(SCCOL nCol, SCTAB nTab) const;
     SC_DLLPUBLIC void           SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered);
     SCROW                       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
     SCROW                       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;

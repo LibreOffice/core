@@ -50,8 +50,7 @@ void ScDDComboBoxButton::SetOptSizePixel()
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize,
-                               bool         bState,
-                               bool         bBtnIn  /* = false */ )
+                               bool         bState )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
         return;
@@ -70,13 +69,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 
     DecorationView aDecoView( pOut);
 
-    DrawButtonFlags nButtonStyle = DrawButtonFlags::Default;
-    if( bBtnIn )    // gedrueckt?
-    {
-        nButtonStyle = DrawButtonFlags::Pressed;
-    }
-
-    aInnerRect=aDecoView.DrawButton( aBtnRect, nButtonStyle );
+    aInnerRect=aDecoView.DrawButton( aBtnRect, DrawButtonFlags::Default );
 
     aInnerRect.Left()   += 1;
     aInnerRect.Top()    += 1;

@@ -969,13 +969,12 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 
 void ScInterpreter::DoubleRefToVars( const formula::FormulaToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
-        SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-        bool bDontCheckForTableOp )
+        SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 )
 {
     const ScComplexRefData& rCRef = *p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
-    if (!pDok->m_TableOpList.empty() && !bDontCheckForTableOp)
+    if (!pDok->m_TableOpList.empty())
     {
         ScRange aRange( rCol1, rRow1, rTab1, rCol2, rRow2, rTab2 );
         if ( IsTableOpInRange( aRange ) )

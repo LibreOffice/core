@@ -1194,7 +1194,7 @@ void ScTable::CopyToTable(
 
 void ScTable::UndoToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData )
+    InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab )
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -1204,7 +1204,7 @@ void ScTable::UndoToTable(
         for ( SCCOL i = 0; i <= MAXCOL; i++)
         {
             if ( i >= nCol1 && i <= nCol2 )
-                aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i], pMarkData);
+                aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i]);
             else
                 aCol[i].CopyToColumn(rCxt, 0, MAXROW, InsertDeleteFlags::FORMULA, false, pDestTab->aCol[i]);
         }
@@ -2834,7 +2834,7 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
         return (sal_uInt16) STD_COL_WIDTH;
 }
 
-sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, bool bHiddenAsZero ) const
+sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
 {
     if (!ValidCol(nStartCol) || !ValidCol(nEndCol) || nStartCol > nEndCol)
         return 0;
@@ -2844,7 +2844,7 @@ sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, bool bHiddenAsZe
     SCCOL nLastHiddenCol = -1;
     for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        if (bHiddenAsZero && nCol > nLastHiddenCol)
+        if (nCol > nLastHiddenCol)
             bHidden = ColHidden(nCol, nullptr, &nLastHiddenCol);
 
         if (bHidden)
