@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_c886ee64",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1001223
+      },
+      "writtenOn": "2016-03-04T13:01:27Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be:\n\n( nStyle \u0026 PS_STYLE_MASK )",
+      "range": {
+        "startLine": 917,
+        "startChar": 41,
+        "endLine": 917,
+        "endChar": 45
+      },
+      "revId": "7c3066b534d2a419236175e6abcc1ee920c0c42c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
