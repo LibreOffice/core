@@ -230,7 +230,7 @@ void WinBlocklistParser::handleEntry(wgl::DriverInfo& rDriver, xmlreader::XmlRea
     {
         if (name.equals("os"))
         {
-            xmlreader::Span name = rReader.getAttributeValue(false);
+            name = rReader.getAttributeValue(false);
             OString sOS(name.begin, name.length);
             rDriver.meOperatingSystem = getOperatingSystem(sOS);
         }
