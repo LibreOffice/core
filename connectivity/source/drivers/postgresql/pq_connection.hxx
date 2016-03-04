@@ -156,9 +156,7 @@ typedef ::std::vector< OString > OStringVector;
 typedef std::unordered_map
 <
     sal_Int32,
-    OUString,
-    ::std::hash< sal_Int32 >,
-    ::std::equal_to< sal_Int32 >
+    OUString
 > Int2StringMap;
 
 class Connection : public ConnectionBase

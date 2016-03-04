@@ -1405,9 +1405,7 @@ struct DatabaseTypeDescription
 typedef std::unordered_map
 <
     sal_Int32,
-    DatabaseTypeDescription,
-    ::std::hash< sal_Int32 >,
-    ::std::equal_to< sal_Int32 >
+    DatabaseTypeDescription
 > Oid2DatabaseTypeDescriptionMap;
 
 static void columnMetaData2DatabaseTypeDescription(
