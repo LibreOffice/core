@@ -76,10 +76,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
         formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
         OUString aVer( rImport.GetODFVersion());
         sal_Int32 nLen = aVer.getLength();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "\n ScXMLBodyContext ODFVersion: nLen: %d, str: %s\n",
-                (int)nLen, OUStringToOString( aVer, RTL_TEXTENCODING_UTF8).getStr());
-#endif
+        SAL_INFO("sc.filter", "ScXMLBodyContext ODFVersion: nLen: " << nLen << " str : " << aVer);
         if (!nLen)
             eGrammar = formula::FormulaGrammar::GRAM_PODF;
         else

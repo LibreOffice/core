@@ -21,7 +21,7 @@
 #include <string.h>
 #include <math.h>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_LUP_DECOMPOSITION
 #include <stdio.h>
 #endif
 
@@ -716,7 +716,7 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
                             fNum * mA->GetDouble( j, k) ) / fDen, j, i);
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_LUP_DECOMPOSITION
     fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): LU");
     for (SCSIZE i=0; i < n; ++i)
     {
@@ -953,7 +953,7 @@ void ScInterpreter::ScMatInv()
                         for (SCSIZE i=0; i < nR; ++i)
                             xY->PutDouble( X[i], j, i);
                     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_LUP_DECOMPOSITION
                     /* Possible checks for ill-condition:
                      * 1. Scale matrix, invert scaled matrix. If there are
                      *    elements of the inverted matrix that are several
