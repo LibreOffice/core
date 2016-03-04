@@ -25,10 +25,17 @@
 
 #include "stdafx2.h"
 
-#include "so_activex.h"
 #include "SOActionsApproval.h"
 #include <sal/macros.h>
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#endif
+#include "so_activex.h"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
 {

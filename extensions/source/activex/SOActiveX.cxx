@@ -23,11 +23,19 @@
 #pragma warning (disable:4265)
 
 #include "stdafx2.h"
-#include "so_activex.h"
 #include "SOActiveX.h"
 #include "SOComWindowPeer.h"
 #include "SODispatchInterceptor.h"
 #include "SOActionsApproval.h"
+
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#endif
+#include "so_activex.h"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 #pragma warning (pop)
 
