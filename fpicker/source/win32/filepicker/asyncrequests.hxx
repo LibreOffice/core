@@ -120,6 +120,7 @@ typedef std::queue< RequestRef >  RequestQueue;
 class RequestHandler
 {
     public:
+        virtual ~RequestHandler() {}
         virtual void before() = 0;
         virtual void doRequest(const RequestRef& rRequest) = 0;
         virtual void after() = 0;
