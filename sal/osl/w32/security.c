@@ -419,9 +419,9 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
     return sal_False;
 }
 
-sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
+sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName, sal_Bool bIncludeDomain)
 {
-    return getUserNameImpl(Security, strName, sal_True);
+    return getUserNameImpl(Security, strName, bIncludeDomain);
 }
 
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
