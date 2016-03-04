@@ -1937,7 +1937,7 @@ void SvMemoryStream::FreeMemory()
     delete[] pBuf;
 }
 
-void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize)
+void* SvMemoryStream::SwitchBuffer()
 {
     Flush();
     if( !bOwnsData )
@@ -1955,7 +1955,8 @@ void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize)
 
     ResetError();
 
-    if( nInitSize && !AllocateMemory(nInitSize) )
+    sal_Size nInitSize = 512;
+    if( !AllocateMemory(nInitSize) )
     {
         SetError( SVSTREAM_OUTOFMEMORY );
         nSize = 0;

@@ -432,26 +432,14 @@ long MultiSelection::ImplFwdUnselected()
         return SFX_ENDOFSELECTION;
 }
 
-long MultiSelection::FirstSelected( bool bInverse )
+long MultiSelection::FirstSelected()
 {
-    bInverseCur = bInverse;
+    bInverseCur = false;
     nCurSubSel = 0;
 
-    if ( bInverseCur )
-    {
-        bCurValid = nSelCount < sal_uIntPtr(aTotRange.Len());
-        if ( bCurValid )
-        {
-            nCurIndex = 0;
-            return ImplFwdUnselected();
-        }
-    }
-    else
-    {
-        bCurValid = !aSels.empty();
-        if ( bCurValid )
-            return nCurIndex = aSels[ 0 ]->Min();
-    }
+    bCurValid = !aSels.empty();
+    if ( bCurValid )
+        return nCurIndex = aSels[ 0 ]->Min();
 
     return SFX_ENDOFSELECTION;
 }
