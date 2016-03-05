@@ -479,7 +479,7 @@ void VDiagram::createShapes_3d()
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
     //create additional group to manipulate the aspect ratio of the whole diagram:
-    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, OUString() );
+    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes );
 
     m_xAspectRatio3D.set( xOuterGroup_Shapes, uno::UNO_QUERY );
 

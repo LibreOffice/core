@@ -1603,9 +1603,7 @@ void UpdateRequiredDialogService::setTitle( OUString const & ) throw ( uno::Runt
 sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException, std::exception )
 {
     ::rtl::Reference< ::dp_gui::TheExtensionManager > xManager( TheExtensionManager::get(
-                                                              m_xComponentContext,
-                                                              uno::Reference< awt::XWindow >(),
-                                                              OUString() ) );
+                                                              m_xComponentContext) );
     xManager->createDialog( true );
     sal_Int16 nRet = xManager->execute();
 

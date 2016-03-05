@@ -197,8 +197,7 @@ void XMLTextMarkImportContext::EndElement()
                     CreateAndInsertMark(GetImport(),
                         sAPI_reference_mark,
                         m_sBookmarkName,
-                        m_rHelper.GetCursorAsRange()->getStart(),
-                        OUString());
+                        m_rHelper.GetCursorAsRange()->getStart());
                     break;
 
                 case TypeBookmark:

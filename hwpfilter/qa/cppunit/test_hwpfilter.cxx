@@ -60,8 +60,7 @@ namespace
     void HwpFilterTest::test()
     {
         testDir(OUString(),
-            getURLFromSrc("/hwpfilter/qa/cppunit/data/"),
-            OUString());
+            getURLFromSrc("/hwpfilter/qa/cppunit/data/"));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(HwpFilterTest);

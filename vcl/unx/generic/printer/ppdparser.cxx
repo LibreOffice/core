@@ -1482,7 +1482,7 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
 
 OUString PPDParser::translateKey( const OUString& i_rKey ) const
 {
-    OUString aResult( m_pTranslator->translateKey( i_rKey, css::lang::Locale() ) );
+    OUString aResult( m_pTranslator->translateKey( i_rKey ) );
     if( aResult.isEmpty() )
         aResult = i_rKey;
     return aResult;
@@ -1491,7 +1491,7 @@ OUString PPDParser::translateKey( const OUString& i_rKey ) const
 OUString PPDParser::translateOption( const OUString& i_rKey,
                                           const OUString& i_rOption ) const
 {
-    OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption, css::lang::Locale() ) );
+    OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption ) );
     if( aResult.isEmpty() )
         aResult = i_rOption;
     return aResult;

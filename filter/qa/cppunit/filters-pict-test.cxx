@@ -74,8 +74,7 @@ bool PictFilterTest::load(const OUString &,
 void PictFilterTest::testCVEs()
 {
     testDir(OUString(),
-        pictURL(),
-        OUString());
+        pictURL());
 }
 
 void PictFilterTest::testDontClipTooMuch()

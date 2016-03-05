@@ -118,8 +118,7 @@ namespace
     void SotTest::test()
     {
         testDir(OUString(),
-            getURLFromSrc("/sot/qa/cppunit/data/"),
-            OUString());
+            getURLFromSrc("/sot/qa/cppunit/data/"));
     }
 
     void SotTest::testSize()

@@ -385,7 +385,7 @@ Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
     if (m_xResultSet.get().is())  // if resultset already retrieved,
     {
         // throw exception to avoid sequence error
-        ::dbtools::throwFunctionSequenceException(*this,Any());
+        ::dbtools::throwFunctionSequenceException(*this);
     }
 
     OResultSet* pRs = nullptr;

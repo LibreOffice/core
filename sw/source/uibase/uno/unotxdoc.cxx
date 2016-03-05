@@ -2979,7 +2979,7 @@ void SAL_CALL SwXTextDocument::render(
 
                 if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
                 {
-                    const OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
+                    const OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange" );
                     const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage" );
                     bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 

@@ -397,8 +397,7 @@ namespace cmis
                     ucbhelper::cancelCommandExecution(
                         ucb::IOErrorCode_INVALID_DEVICE,
                         generateErrorArguments(m_aURL),
-                        xEnv,
-                        OUString());
+                        xEnv);
                 }
                 else if ( m_pSession->getRepository() == nullptr )
                 {
@@ -420,8 +419,7 @@ namespace cmis
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_ABORT,
                                     uno::Sequence< uno::Any >( 0 ),
-                                    xEnv,
-                                    OUString( ) );
+                                    xEnv );
                 throw uno::RuntimeException( );
             }
         }

@@ -456,16 +456,16 @@ void Menu::InsertItem( const ResId& rResId )
             Bitmap aBmp( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
             Image const aImg(aBmp);
             if ( !aText.isEmpty() )
-                InsertItem( nItemId, aText, aImg, nStatus, OString() );
+                InsertItem( nItemId, aText, aImg, nStatus );
             else
-                InsertItem( nItemId, aImg, nStatus, OString() );
+                InsertItem( nItemId, aImg, nStatus );
         }
         IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
     else if ( !bSep )
-        InsertItem(nItemId, aText, nStatus, OString());
+        InsertItem(nItemId, aText, nStatus);
     if ( bSep )
-        InsertSeparator(OString());
+        InsertSeparator();
 
     OUString aHelpText;
     if ( nObjMask & RSC_MENUITEM_HELPTEXT )
@@ -535,7 +535,7 @@ void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::f
 
     sal_uInt16 nItemId = GetItemCount() + 1;
 
-    InsertItem(nItemId, aLabel, aImage, MenuItemBits::NONE, OString());
+    InsertItem(nItemId, aLabel, aImage);
     SetItemCommand(nItemId, rCommand);
     SetHelpText(nItemId, aTooltip);
 }
