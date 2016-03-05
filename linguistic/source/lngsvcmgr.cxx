@@ -782,12 +782,7 @@ void LngSvcMgr::UpdateAll()
             {
                 // add new or replace existing entries.
                 bool bRes = aCfg.ReplaceSetProperties( aSubNodeName, aNewValues );
-                if (!bRes)
-                {
-#if OSL_DEBUG_LEVEL > 1
-                    SAL_WARN( "linguistic", "failed to set new configuration values" );
-#endif
-                }
+                SAL_WARN_IF(!bRes, "linguistic", "failed to set new configuration values");
             }
         }
     }
@@ -1428,8 +1423,8 @@ uno::Reference< linguistic2::XSpellChecker > SAL_CALL
         throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-#if OSL_DEBUG_LEVEL > 1
-    getAvailableLocales( SN_SPELLCHECKER );
+#if OSL_DEBUG_LEVEL > 0
+    getAvailableLocales(SN_SPELLCHECKER);
 #endif
 
     uno::Reference< linguistic2::XSpellChecker > xRes;
@@ -1448,10 +1443,9 @@ uno::Reference< linguistic2::XHyphenator > SAL_CALL
         throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-#if OSL_DEBUG_LEVEL > 1
-    getAvailableLocales( SN_HYPHENATOR );
+#if OSL_DEBUG_LEVEL > 0
+    getAvailableLocales(SN_HYPHENATOR);
 #endif
-
     uno::Reference< linguistic2::XHyphenator >   xRes;
     if (!bDisposing)
     {
@@ -1468,10 +1462,9 @@ uno::Reference< linguistic2::XThesaurus > SAL_CALL
         throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-#if OSL_DEBUG_LEVEL > 1
-    getAvailableLocales( SN_THESAURUS );
+#if OSL_DEBUG_LEVEL > 0
+    getAvailableLocales(SN_THESAURUS);
 #endif
-
     uno::Reference< linguistic2::XThesaurus >    xRes;
     if (!bDisposing)
     {
@@ -1645,9 +1638,6 @@ void SAL_CALL
 
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-#if OSL_DEBUG_LEVEL > 1
-#endif
-
     LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     if (!LinguIsUnspecified( nLanguage))
     {
@@ -1814,15 +1804,14 @@ static uno::Sequence< OUString > GetLangSvcList( const uno::Any &rVal )
     if (rVal.hasValue())
     {
         rVal >>= aRes;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         sal_Int32 nSvcs = aRes.getLength();
         if (nSvcs)
         {
             const OUString *pSvcName = aRes.getConstArray();
             for (sal_Int32 j = 0;  j < nSvcs;  ++j)
             {
-                OUString aImplName( pSvcName[j] );
-                SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "service impl-name missing" );
+                SAL_WARN_IF( pSvcName[j].isEmpty(), "linguistic", "service impl-name missing" );
             }
         }
 #endif
@@ -1930,10 +1919,6 @@ uno::Sequence< OUString > SAL_CALL
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    const OUString *pImplNames = aSvcImplNames.getConstArray();
-    (void) pImplNames;
-#endif
     return aSvcImplNames;
 }
 
