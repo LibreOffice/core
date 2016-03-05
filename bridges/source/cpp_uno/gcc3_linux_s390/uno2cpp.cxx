@@ -494,9 +494,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "unoInterfaceProxyDispatch\n");
-#endif
+    SAL_WARN("bridges", "unoInterfaceProxyDispatch");
 
 
     // is my surrogate

@@ -99,7 +99,7 @@ void callVirtualMethod(
         memcpy( stack, pStack, nStackBytes );
     }
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
         // Let's figure out what is really going on here
         {
                 fprintf( stderr, "\nStack (%d): ", nStack );
@@ -218,17 +218,13 @@ static void cpp_call(
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
-#endif
+                SAL_WARN("bridges", "hyper is " << std::hex << pCppArgs[nPos]);
                 INSERT_INT64( pCppArgs[nPos], pStack );
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
-#endif
+                SAL_WARN("bridges", "long is " << pCppArgs[nPos]);
                 INSERT_INT32( pCppArgs[nPos], pStack );
                 break;
             case typelib_TypeClass_SHORT:

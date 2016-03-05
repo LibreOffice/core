@@ -109,9 +109,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
+                SAL_WARN("bridges", "generated rtti for " << rttiName);
                 switch (pTypeDescr.eTypeClass) {
                 case typelib_TypeClass_EXCEPTION:
                     {

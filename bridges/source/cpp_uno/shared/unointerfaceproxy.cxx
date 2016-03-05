@@ -43,7 +43,7 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
     ::typelib_typedescription_release(&pThis->pTypeDescr->aBase);
     pThis->pBridge->release();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
@@ -56,7 +56,7 @@ void acquireProxy(uno_Interface * pUnoI)
     {
         // rebirth of proxy zombie
         // register at uno env
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         void * pThis = pUnoI;
 #endif
         (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
@@ -65,7 +65,7 @@ void acquireProxy(uno_Interface * pUnoI)
              reinterpret_cast< void ** >( &pUnoI ), freeUnoInterfaceProxy,
              static_cast< UnoInterfaceProxy * >( pUnoI )->oid.pData,
              static_cast< UnoInterfaceProxy * >( pUnoI )->pTypeDescr );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         assert(pThis == pUnoI);
 #endif
     }

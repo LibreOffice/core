@@ -238,17 +238,14 @@ static void cpp_call(
             {
                 case typelib_TypeClass_HYPER:
                 case typelib_TypeClass_UNSIGNED_HYPER:
-#if OSL_DEBUG_LEVEL > 2
-                    fprintf(stderr, "hyper is %llx\n", *((long long*)pCppArgs[nPos]));
-#endif
+                    SAL_WARN("bridges", "hyper is " << std::hex <<
+                            *((long long *)pCppArgs[nPos]));
                     INSERT_INT64( pCppArgs[nPos], nRegs, pGPR, pStack, pStackStart, bOverflow );
                 break;
                 case typelib_TypeClass_LONG:
                 case typelib_TypeClass_UNSIGNED_LONG:
                 case typelib_TypeClass_ENUM:
-#if OSL_DEBUG_LEVEL > 2
-                    fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
-#endif
+                    SAL_WARN("bridges", "long is " << std::hex << pCppArgs[nPos]);
                     INSERT_INT32( pCppArgs[nPos], nRegs, pGPR, pStack, bOverflow );
                 break;
                 case typelib_TypeClass_SHORT:

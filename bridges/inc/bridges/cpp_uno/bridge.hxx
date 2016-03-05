@@ -43,7 +43,7 @@ inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
     ::typelib_typedescription_release( (typelib_TypeDescription *)pThis->pTypeDescr );
     pThis->pBridge->release();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
@@ -147,7 +147,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
     ::typelib_typedescription_release( (typelib_TypeDescription *)pThis->pTypeDescr );
     pThis->pBridge->release();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
@@ -159,7 +159,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
     {
         // rebirth of proxy zombie
         // register at uno env
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         void * pThis = pUnoI;
 #endif
         (*static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pBridge->pUnoEnv->registerProxyInterface)(
@@ -168,7 +168,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
             (uno_freeProxyFunc)cppu_unoInterfaceProxy_free,
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->oid.pData,
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pTypeDescr );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ASSERT( pThis == pUnoI );
 #endif
     }

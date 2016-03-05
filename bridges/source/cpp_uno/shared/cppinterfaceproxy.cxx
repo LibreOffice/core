@@ -89,7 +89,7 @@ void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
         &pThis->pTypeDescr->aBase );
     pThis->pBridge->release();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     *(int *)pInterface = 0xdeadbabe;
 #endif
     pThis->~CppInterfaceProxy();

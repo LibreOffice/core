@@ -487,19 +487,19 @@ static sal_uInt64 cpp_vtable_call(sal_Int32 r3, sal_Int32 r4, sal_Int32 r5,
     register double d11 asm("fr12"); fpreg[11] = d11;
     register double d12 asm("fr13"); fpreg[12] = d12;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     for(int i = 0; i < 8; ++i)
     {
-        fprintf(stderr, "general reg %d is %x\n", i, gpreg[i]);
+        SAL_WARN("bridges", "general reg " << i << " is " << gpreg[i]);
     }
     for(int i = 0; i < 13; ++i)
     {
-        fprintf(stderr, "sse reg %d is %f\n", i, fpreg[i]);
-        fprintf(stderr, "sse reg %d is %llx\n", i, fpreg[i]);
+        SAL_WARN("bridges", "sse reg " << i << " is " << fpreg[i]);
+        SAL_WARN("bridges", "sse reg " << i << " is " << std::hex << (long long)fpreg[i]);
     }
     for(int i = -8; i < 8; ++i)
     {
-        fprintf(stderr, "overflow arg %d is %x\n", i, ovrflw[i]);
+        SAL_WARN("bridges", "overflow arg " << i << " is " << ovrflw[i]);
     }
 #endif
         sal_uInt64 nRegReturn=0;

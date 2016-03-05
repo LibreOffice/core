@@ -52,9 +52,7 @@ static typelib_TypeClass cpp2uno_call(
         void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "as far as cpp2uno_call\n");
-#endif
+    SAL_WARN("bridges", "as far as cpp2uno_call");
 
     int ng = 0; //number of gpr registers used
     int nf = 0; //number of fpr regsiters used
@@ -110,15 +108,11 @@ static typelib_TypeClass cpp2uno_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "arg %d of %d\n", nPos, nParams);
-#endif
+        SAL_WARN("bridges", "arg " << nPos << " of " << nParams);
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "simple\n");
-#endif
+            SAL_INFO("bridges", "simple");
 
             switch (pParamTypeDescr->eTypeClass)
             {
@@ -214,9 +208,7 @@ static typelib_TypeClass cpp2uno_call(
         }
         else // ptr to complex value | ref
         {
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "complex, ng is %d\n", ng);
-#endif
+            SAL_WARN("bridges", "complex, ng is " << ng);
             void *pCppStack; //temporary stack pointer
 
             if (ng < ppc64::MAX_GPR_REGS)
@@ -258,9 +250,7 @@ static typelib_TypeClass cpp2uno_call(
         }
     }
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "end of params\n");
-#endif
+    SAL_WARN("bridges", "end of params");
 
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
@@ -361,27 +351,19 @@ static typelib_TypeClass cpp_mediate(
     {
     nFunctionIndex &= 0x7fffffff;
     pThis = gpreg[1];
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "pThis is gpreg[1]\n");
-#endif
+    SAL_WARN("bridges", "pThis is gpreg[1]");
     }
     else
     {
     pThis = gpreg[0];
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "pThis is gpreg[0]\n");
-#endif
+    SAL_WARN("bridges", "pThis is gpreg[0]");
     }
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "pThis is %lx\n", pThis);
-#endif
+    SAL_WARN("bridges", "pThis is " << pThis);
 
     pThis = static_cast< char * >(pThis) - nVtableOffset;
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "pThis is now %lx\n", pThis);
-#endif
+    SAL_WARN("bridges", "pThis is now " << pThis);
 
     bridges::cpp_uno::shared::CppInterfaceProxy * pCppI
         = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(
@@ -389,9 +371,8 @@ static typelib_TypeClass cpp_mediate(
 
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "indexes are %d %d\n", nFunctionIndex, pTypeDescr->nMapFunctionIndexToMemberIndex);
-#endif
+    SAL_WARN("bridges", "indexes are " << nFunctionIndex << " " <<
+            pTypeDescr->nMapFunctionIndexToMemberIndex);
 
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -411,9 +392,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     assert(nMemberPos < pTypeDescr->nAllMembers);
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "members are %d %d\n", nMemberPos, pTypeDescr->nAllMembers);
-#endif
+    SAL_WARN("bridges", "members are " << nMemberPos << " " << pTypeDescr->nAllMembers);
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
@@ -499,17 +478,13 @@ static typelib_TypeClass cpp_mediate(
     }
     default:
     {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "screwed\n");
-#endif
+        SAL_WARN("bridges", "screwed");
 
         throw RuntimeException( "no member description found!", (XInterface *)pThis );
     }
     }
 
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "end of cpp_mediate\n");
-#endif
+        SAL_WARN("bridges", "end of cpp_mediate");
     return eRet;
 }
 
@@ -617,10 +592,8 @@ const int codeSnippetSize = 24;
 unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
                               bool bHasHiddenParam)
 {
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr,"in codeSnippet functionIndex is %x\n", nFunctionIndex);
-    fprintf(stderr,"in codeSnippet vtableOffset is %x\n", nVtableOffset);
-#endif
+    SAL_WARN("bridges", "in codeSnippet functionIndex is " << std::hex << nFunctionIndex);
+    SAL_WARN("bridges", "in codeSnippet vtableOffset is "<< std::hex << nVtableOffset);
 
     sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
 
@@ -642,10 +615,8 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
     memcpy(raw, (char*) privateSnippetExecutor, 16);
     raw[2] = (void*) nOffsetAndIndex;
 #endif
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "in: offset/index is %x %x %d, %lx\n",
-    nFunctionIndex, nVtableOffset, bHasHiddenParam, raw[2]);
-#endif
+    SAL_WARN("bridges", "in: offset/index is " << std::hex << nFunctionIndex << " "
+            << " " << nVtableOffset << " " << bHasHiddenParam << " " << raw[2]);
     return (code + codeSnippetSize);
 }
 
@@ -696,10 +667,8 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 {
      (*slots) -= functionCount;
      Slot * s = *slots;
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
-    fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
-#endif
+    SAL_WARN("bridges", "in addLocalFunctions functionOffset is " << std::hex << functionOffset);
+    SAL_WARN("bridges", "in addLocalFunctions vtableOffset is " << std::hex << vtableOffset);
 
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
