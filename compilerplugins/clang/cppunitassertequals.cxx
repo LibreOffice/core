@@ -76,19 +76,19 @@ void CppunitAssertEquals::checkExpr(const Stmt* stmt)
         return;
     }
     parent = parentStmt(parent);
-    if (!isa<UnaryOperator>(parent)) {
+    if (!parent || !isa<UnaryOperator>(parent)) {
         return;
     }
     parent = parentStmt(parent);
-    if (!isa<CallExpr>(parent)) {
+    if (!parent || !isa<CallExpr>(parent)) {
         return;
     }
     const CallExpr* callExpr = dyn_cast<CallExpr>(parent);
-    if (callExpr->getDirectCallee() == nullptr) {
+    if (!callExpr || callExpr->getDirectCallee() == nullptr) {
         return;
     }
     const FunctionDecl* functionDecl = callExpr->getDirectCallee()->getCanonicalDecl();
-    if (functionDecl->getQualifiedNameAsString().find("Asserter::failIf") == std::string::npos) {
+    if (!functionDecl || functionDecl->getQualifiedNameAsString().find("Asserter::failIf") == std::string::npos) {
         return;
     }
     report(
