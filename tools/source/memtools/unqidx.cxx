@@ -25,14 +25,10 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
     if ( !p )
         return IndexNotFound;
 
-    const Index nTmp = static_cast<Index>(maMap.size()) + 1;
-
-    // Avoid overflow of UniqIndex upon deletion
-    nUniqIndex = nUniqIndex % nTmp;
-
-    // Search next empty index
+    // Search next unused index, may be needed after
+    // a removal followed by multiple insertions
     while ( maMap.find( nUniqIndex ) != maMap.end() )
-        nUniqIndex = (nUniqIndex+1) % nTmp;
+        ++nUniqIndex;
 
     maMap[ nUniqIndex ] = p;
 
@@ -48,6 +44,13 @@ void* UniqueIndexImpl::Remove( Index nIndex )
         std::map<Index, void*>::iterator it = maMap.find( nIndex - nStartIndex );
         if( it != maMap.end() )
         {
+            // Allow to recycle freed indexes, as was done by
+            // original implementation based on a vector
+            // This is not really needed when using a map, and
+            // really unique indexes might be better/safer?
+            if ( nIndex < nUniqIndex )
+                nUniqIndex = nIndex;
+
             void* p = it->second;
             maMap.erase( it );
             return p;
