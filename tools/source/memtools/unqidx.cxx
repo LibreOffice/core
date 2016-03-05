@@ -25,7 +25,6 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
     if ( !p )
         return IndexNotFound;
 
-   // Expend array if full
     const Index nTmp = static_cast<Index>(maMap.size()) + 1;
 
     // Avoid overflow of UniqIndex upon deletion
@@ -35,7 +34,6 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
     while ( maMap.find( nUniqIndex ) != maMap.end() )
         nUniqIndex = (nUniqIndex+1) % nTmp;
 
-    // Insert object to array
     maMap[ nUniqIndex ] = p;
 
     nUniqIndex++;
@@ -47,8 +45,6 @@ void* UniqueIndexImpl::Remove( Index nIndex )
     // Check for valid index
     if ( nIndex >= nStartIndex )
     {
-        // insert index as empty entry, and reduce indexcount,
-        // if this entry was used
         std::map<Index, void*>::iterator it = maMap.find( nIndex - nStartIndex );
         if( it != maMap.end() )
         {
