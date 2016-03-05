@@ -26,9 +26,7 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
         return IndexNotFound;
 
    // Expend array if full
-    Index nTmp = static_cast<Index>(maMap.size());
-    if( nTmp == nCount )
-        nTmp++;
+    const Index nTmp = static_cast<Index>(maMap.size()) + 1;
 
     // Avoid overflow of UniqIndex upon deletion
     nUniqIndex = nUniqIndex % nTmp;
@@ -40,7 +38,6 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
     // Insert object to array
     maMap[ nUniqIndex ] = p;
 
-    nCount++;
     nUniqIndex++;
     return ( nUniqIndex + nStartIndex - 1 );
 }
@@ -57,7 +54,6 @@ void* UniqueIndexImpl::Remove( Index nIndex )
         {
             void* p = it->second;
             maMap.erase( it );
-            nCount--;
             return p;
         }
     }

@@ -33,12 +33,11 @@ private:
     std::map<Index, void*> maMap;
     const Index nStartIndex;
     Index nUniqIndex;
-    Index nCount;
 
 public:
     UniqueIndexImpl( Index _nStartIndex = 0 )
         : maMap(),
-          nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex), nCount(0) {}
+          nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex) {}
 
     Index Insert( void* p );
     // insert value with key, replacing existing entry if necessary
