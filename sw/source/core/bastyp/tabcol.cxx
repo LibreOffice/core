@@ -74,8 +74,7 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
     aEntry.nMax = LONG_MAX;
     aEntry.bHidden = bValue;
     aData.insert( aData.begin() + nPos, aEntry );
-
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SwTabColsEntries::iterator aPos = aData.begin();
     for ( ; aPos != aData.end(); ++aPos )
     {

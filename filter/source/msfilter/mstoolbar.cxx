@@ -160,7 +160,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
     return bRes;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void
 TBBase::indent_printf( FILE* fp, const char* format, ... )
 {
@@ -206,7 +206,7 @@ bool TBCHeader::Read( SvStream &rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBCHeader::Print( FILE* fp )
 {
     Indent a;
@@ -356,7 +356,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     return true; // just ignore
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBCData::Print( FILE* fp )
 {
     Indent a;
@@ -407,7 +407,7 @@ TBCExtraInfo::Read( SvStream &rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void
 TBCExtraInfo::Print( FILE* fp )
 {
@@ -452,7 +452,7 @@ bool TBCGeneralInfo::Read( SvStream &rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void
 TBCGeneralInfo::Print( FILE* fp )
 {
@@ -531,7 +531,7 @@ TBCMenuSpecific::Read( SvStream &rS)
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void
 TBCMenuSpecific::Print( FILE* fp )
 {
@@ -586,7 +586,7 @@ bool TBCBSpecific::Read( SvStream &rS)
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBCBSpecific::Print( FILE* fp )
 {
     Indent a;
@@ -643,7 +643,7 @@ bool TBCComboDropdownSpecific::Read( SvStream &rS)
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBCComboDropdownSpecific::Print( FILE* fp)
 {
     Indent a;
@@ -690,7 +690,7 @@ bool TBCCDData::Read( SvStream &rS)
     return wstrEdit.Read( rS );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBCCDData::Print( FILE* fp)
 {
     Indent a;
@@ -726,7 +726,7 @@ bool TBCBitMap::Read( SvStream& rS)
     return ReadDIB(mBitMap, rS, false, true);
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBCBitMap::Print( FILE* fp )
 {
     Indent a;
@@ -760,7 +760,7 @@ bool TB::IsEnabled()
     return ( bFlags & 0x01 ) != 0x01;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TB::Print( FILE* fp )
 {
     Indent a;
@@ -790,7 +790,7 @@ bool TBVisualData::Read( SvStream& rS )
     return true;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void SRECT::Print( FILE* fp )
 {
     Indent a;
@@ -801,7 +801,7 @@ void SRECT::Print( FILE* fp )
 }
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBVisualData::Print( FILE* fp )
 {
     Indent a;

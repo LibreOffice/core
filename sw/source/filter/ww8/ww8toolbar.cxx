@@ -181,7 +181,7 @@ SwTBC* SwCTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
     return nullptr;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void SwCTBWrapper::Print( FILE* fp )
 {
     Indent a;
@@ -294,7 +294,7 @@ bool Customization::Read( SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Customization::Print( FILE* fp )
 {
     Indent a;
@@ -454,7 +454,7 @@ bool TBDelta::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TBDelta::Print( FILE* fp )
 {
     // Like most of the debug output, it's raw and little ( no )
@@ -524,9 +524,8 @@ bool SwCTB::Read( SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void
-SwCTB::Print( FILE* fp )
+#if OSL_DEBUG_LEVEL > 0
+void SwCTB::Print( FILE* fp )
 {
     Indent a;
     indent_printf(fp, "[ 0x%x ] SwCTB - dump\n", nOffSet );
@@ -637,7 +636,7 @@ bool SwTBC::Read( SvStream &rS )
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void SwTBC::Print( FILE* fp )
 {
     Indent a;
@@ -771,7 +770,7 @@ Xst::Read( SvStream& rS )
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void
 Xst::Print( FILE* fp )
 {
@@ -796,7 +795,7 @@ bool Tcg::Read(SvStream &rS)
     return tcg->Read( rS );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Tcg::Print( FILE* fp )
 {
     Indent a(true);
@@ -908,7 +907,7 @@ bool Tcg255::Read(SvStream &rS)
     // Peek at
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Tcg255::Print( FILE* fp)
 {
     Indent a;
@@ -963,7 +962,7 @@ bool PlfMcd::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void PlfMcd::Print( FILE* fp )
 {
     Indent a;
@@ -1015,7 +1014,7 @@ bool PlfAcd::Read( SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void PlfAcd::Print( FILE* fp )
 {
     Indent a;
@@ -1059,7 +1058,7 @@ bool PlfKme::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void PlfKme::Print( FILE* fp )
 {
     Indent a;
@@ -1086,7 +1085,7 @@ bool TcgSttbf::Read( SvStream &rS)
     return sttbf.Read( rS );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TcgSttbf::Print( FILE* fp )
 {
     Indent a;
@@ -1127,7 +1126,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void TcgSttbfCore::Print( FILE* fp )
 {
     Indent a;
@@ -1177,7 +1176,7 @@ bool MacroNames::Read( SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void MacroNames::Print( FILE* fp )
 {
     Indent a;
@@ -1204,7 +1203,7 @@ bool MacroName::Read(SvStream &rS)
     return xstz.Read( rS );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void MacroName::Print( FILE* fp )
 {
     Indent a;
@@ -1231,7 +1230,7 @@ Xstz::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Xstz::Print( FILE* fp )
 {
     Indent a;
@@ -1264,7 +1263,7 @@ Kme::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Kme::Print( FILE* fp )
 {
    Indent a;
@@ -1292,7 +1291,7 @@ bool Acd::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Acd::Print( FILE* fp )
 {
     Indent a;
@@ -1355,7 +1354,7 @@ bool MCD::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void MCD::Print( FILE* fp )
 {
     Indent a;

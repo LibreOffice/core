@@ -89,7 +89,7 @@ FrameTagIdMap SwEnhancedPDFExportHelper::aFrameTagIdMap;
 
 LanguageType SwEnhancedPDFExportHelper::eLanguageDefault = 0;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 
 static std::vector< sal_uInt16 > aStructStack;
 
@@ -275,7 +275,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
 
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -288,7 +288,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
         else
             BeginTag( vcl::PDFWriter::NonStructElement, OUString() );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
         (void)nCurrentStruct;
@@ -300,13 +300,13 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
 {
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
         EndStructureElements();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
         (void)nCurrentStruct;
@@ -373,7 +373,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
         OSL_ENSURE( bSuccess, "Failed to reopen tag" );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         aStructStack.push_back( 99 );
 #endif
 
@@ -392,7 +392,7 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
         (void)bSuccess;
         OSL_ENSURE( bSuccess, "Failed to restore reopened tag" );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         aStructStack.pop_back();
 #endif
 
@@ -408,7 +408,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rString );
     ++nEndStructureElement;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     aStructStack.push_back( static_cast<sal_uInt16>(eType) );
 #endif
 
@@ -464,7 +464,7 @@ void SwTaggedPDFHelper::EndTag()
 {
     mpPDFExtOutDevData->EndStructureElement();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     aStructStack.pop_back();
 #endif
 }
@@ -935,7 +935,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
             nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
             mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             aStructStack.push_back( 99 );
 #endif
         }
@@ -1485,7 +1485,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     aNumListBodyIdMap.clear();
     aFrameTagIdMap.clear();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     aStructStack.clear();
 #endif
 

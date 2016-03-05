@@ -1154,13 +1154,13 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 {
     rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     const sal_uInt16 nIndex =
 #endif
     rDoc.MakeNumRule( m_sCreatedNumRuleName, nullptr, false,
                       // #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     (void)nIndex;
 #endif
 }

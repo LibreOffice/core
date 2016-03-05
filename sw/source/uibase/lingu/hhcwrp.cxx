@@ -445,8 +445,7 @@ void SwHHCWrapper::ReplaceUnit(
 
         pRuby->SetPosition( static_cast<sal_uInt16>(bRubyBelow) );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
-
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         SwPaM *pPaM = m_rWrtShell.GetCursor();
         (void)pPaM;
 #endif

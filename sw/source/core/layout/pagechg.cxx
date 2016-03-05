@@ -1488,12 +1488,10 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
                         static_cast<SwPageFrame*>(pPage->GetPrev())->IsEmptyPage()) )
                     {
                         // It can move by itself. Just send a modify to its anchor attribute.
-#if OSL_DEBUG_LEVEL > 1
-                        const size_t nCnt = pPage->GetSortedObjs()->size();
-                        rFormat.NotifyClients( 0, (SwFormatAnchor*)&rAnch );
-                        OSL_ENSURE( !pPage->GetSortedObjs() ||
-                                nCnt != pPage->GetSortedObjs()->size(),
-                                "Object couldn't be reattached!" );
+#if OSL_DEBUG_LEVEL > 0
+                       const size_t nCnt = pPage->GetSortedObjs()->size();
+                       SAL_WARN_IF((!pPage->GetSortedObjs() || nCnt != pPage->GetSortedObjs()->size()),
+                                        "sw.layout", "Object couldn't be reattached!");
 #else
                         rFormat.NotifyClients( nullptr, &rAnch );
 #endif

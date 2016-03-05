@@ -29,11 +29,11 @@
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
 #include <ndindex.hxx>
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
 // Pure debug help function to have a quick look at the header/footer attributes.
 void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
 {
@@ -106,7 +106,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
 {
     OSL_ENSURE(nullptr != pDoc, "no document?");
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
     DebugHeaderFooterContent( aOld.m_PageDesc );
     DebugHeaderFooterContent( aNew.m_PageDesc );
 #endif
@@ -183,7 +183,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         // After this exchange method the old page description will point to zero,
         // the new one will point to the node position of the original content nodes.
         ExchangeContentNodes( aOld.m_PageDesc, aNew.m_PageDesc );
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
         DebugHeaderFooterContent( aOld.m_PageDesc );
         DebugHeaderFooterContent( aNew.m_PageDesc );
 #endif
@@ -207,7 +207,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrameFormat* pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
         const SwFormatContent& rSourceContent = rSourceHead.GetHeaderFormat()->GetContent();
         (void)rSourceContent;
         const SwFormatContent& rDestContent = rDestHead.GetHeaderFormat()->GetContent();
@@ -231,7 +231,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
             const SwFormatContent& rSourceContent1 = rSourceLeftHead.GetHeaderFormat()->GetContent();
             (void)rSourceContent1;
             const SwFormatContent& rDestContent1 = rDest.GetLeft().GetHeader().GetHeaderFormat()->GetContent();
@@ -252,7 +252,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
             const SwFormatContent& rSourceContent1 = rSourceFirstMasterHead.GetHeaderFormat()->GetContent();
             (void)rSourceContent1;
             const SwFormatContent& rDestContent1 = rDest.GetFirstMaster().GetHeader().GetHeaderFormat()->GetContent();
@@ -279,7 +279,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         pNewFormat->SetFormatAttr( rSourceFoot.GetFooterFormat()->GetContent() );
         delete pNewItem;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
         const SwFormatContent& rFooterSourceContent = rSourceFoot.GetFooterFormat()->GetContent();
         (void)rFooterSourceContent;
         const SwFormatContent& rFooterDestContent = rDestFoot.GetFooterFormat()->GetContent();
@@ -294,7 +294,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         if( !rDest.IsFooterShared() )
         {
             const SwFormatFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
             const SwFormatContent& rFooterSourceContent2 = rSourceLeftFoot.GetFooterFormat()->GetContent();
             const SwFormatContent& rFooterDestContent2 =
                 rDest.GetLeft().GetFooter().GetFooterFormat()->GetContent();
@@ -315,7 +315,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         if (!rDest.IsFirstShared())
         {
             const SwFormatFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SW_UNDO
             const SwFormatContent& rFooterSourceContent2 = rSourceFirstMasterFoot.GetFooterFormat()->GetContent();
             const SwFormatContent& rFooterDestContent2 =
                 rDest.GetFirstMaster().GetFooter().GetFooterFormat()->GetContent();

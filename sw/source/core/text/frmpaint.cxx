@@ -403,7 +403,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 
 SwRect SwTextFrame::Paint()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     const SwTwips nDbgY = Frame().Top();
     (void)nDbgY;
 #endif
@@ -588,7 +588,7 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         const SwTwips nDbgY = Frame().Top();
         (void)nDbgY;
 #endif

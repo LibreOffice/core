@@ -711,7 +711,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
           ( ++nIndex < pImpl->size() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
         bFirst = false;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
     (void)nBreakIndex;
@@ -726,7 +726,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         {
             if( pImpl || bLongTab )
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
                 (void)nBrkIndex;

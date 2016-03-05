@@ -343,8 +343,14 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 
     // #i91133#
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
-
-#if OSL_DEBUG_LEVEL > 1
+/*
+    I have a doubt here, whenever i enable this code by OSL_DEBUG_LEVEL > 0, I get error that
+    bOneBlock, bLastBlock, bLastCenter are not defined. i tried to find these variables and found
+    that these are private variables of SvxAdjustItem class declared in include/editeng/adjustitem.hxx.
+    but this class is not inheriting from that class. I also tried to find the inheritance hierarchy:
+    SwAttrIter=>SwTextIter=>SwTextMargin.
+*/
+#if 0
     static bool bOne = false;
     static bool bLast = false;
     static bool bCenter = false;

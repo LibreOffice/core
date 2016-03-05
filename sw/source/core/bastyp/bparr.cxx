@@ -26,7 +26,7 @@
     As a result there are approx. 20 * MAXENTRY == 20000 entries available */
 static const sal_uInt16 nBlockGrowSize = 20;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
 #define CHECKIDX( p, n, i, c ) CheckIdx( p, n, i, c );
 void CheckIdx( BlockInfo** ppInf, sal_uInt16 nBlock, sal_uLong nSize, sal_uInt16 nCur )
 {

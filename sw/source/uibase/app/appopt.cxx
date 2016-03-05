@@ -113,7 +113,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
                                     SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
                                     0);

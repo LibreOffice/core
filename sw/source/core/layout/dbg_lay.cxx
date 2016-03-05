@@ -108,7 +108,7 @@ SwImplProtocol* SwProtocol::pImpl = nullptr;
 
 static sal_uLong lcl_GetFrameId( const SwFrame* pFrame )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static bool bFrameId = false;
     if( bFrameId )
         return pFrame->GetFrameId();

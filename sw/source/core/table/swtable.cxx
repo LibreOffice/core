@@ -1178,10 +1178,11 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const SwTabCols &rOld, const SwTableBox *pStart, bool bCurRowOnly )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static int nCallCount = 0;
     ++nCallCount;
 #endif
+
     // First step: evaluate which lines have been moved/which widths changed
     ChangeList aOldNew;
     const long nNewWidth = rParm.rNew.GetRight() - rParm.rNew.GetLeft();

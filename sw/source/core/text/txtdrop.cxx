@@ -737,7 +737,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         // for growing control
         long nMax = USHRT_MAX;
         long nMin = 0;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         long nGrow = 0;
 #endif
 
@@ -885,7 +885,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 
                 nFactor = ( nFactor * nWishedHeight ) / nHght;
                 bGrow = ( nFactor > nMin ) && ( nFactor < nMax );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 if ( bGrow )
                     nGrow++;
 #endif

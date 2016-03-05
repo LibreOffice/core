@@ -62,12 +62,6 @@ class SwWrongList;
 #define DIR_RIGHT2LEFT 2
 #define DIR_TOP2BOTTOM 3
 
-#ifdef DBG_UTIL
-#define OPTDBG( rInf )   (rInf).IsOptDbg()
-#else
-#define OPTDBG( rInf )   false
-#endif
-
 // Respects the attribute LineSpace when calculating the Height/Ascent
 class SwLineInfo
 {

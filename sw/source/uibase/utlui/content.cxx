@@ -2820,14 +2820,14 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     break;
                     case ContentTypeId::GRAPHIC:
                         sEntry = static_cast<SwGraphicContent*>(pUserData)->GetLink();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                         sEntry += " ";
                         sEntry += OUString::number(
                                     ((SwGraphicContent*)pUserData)->GetYPos());
 #endif
                         bRet = true;
                     break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     case ContentTypeId::TABLE:
                     case ContentTypeId::FRAME:
                         sEntry = OUString::number(

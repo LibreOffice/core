@@ -494,8 +494,8 @@ void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTex
     pGrammarCheckList = nullptr;
     pSmartTags = nullptr;
 
-#if OSL_DEBUG_LEVEL > 1
-    pBrushItem = reinterpret_cast<SvxBrushItem*>(-1);
+#if OSL_DEBUG_LEVEL > 0
+    pBrushItem = reinterpret_cast<SvxBrushItem *>(-1);
 #else
     pBrushItem = nullptr;
 #endif

@@ -45,8 +45,8 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     bool    bOneBlock : 1;
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
-
 public:
+
     static SfxPoolItem* CreateDefault();
 
     SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,

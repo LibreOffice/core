@@ -743,8 +743,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // Upper. If it moves, its size can grow or decrease...
     if( !mbValidPos && ToMaximize( false ) )
         mbValidSize = false;
-
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     const SwFormatCol &rCol = GetFormat()->GetCol();
     (void)rCol;
 #endif

@@ -2599,11 +2599,10 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
         aCollAlg = aSeq.getConstArray()[0];
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     const OUString *pText = aSeq.getConstArray();
     (void)pText;
 #endif
-
     pFields[0].Field = 1;
     pFields[0].IsAscending = sal_True;
     pFields[0].IsCaseSensitive = sal_False;
