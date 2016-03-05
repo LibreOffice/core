@@ -2880,11 +2880,9 @@ void ScDPResultDimension::LateInitFrom(
     {
         ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
         bLateInitAllMembers = pMembers->IsHasHideDetailsMembers();
-#if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("sc.core", aDimensionName);
-        if ( pMembers->IsHasHideDetailsMembers() )
-            SAL_INFO("sc.core", "HasHideDetailsMembers");
-#endif
+
+        SAL_INFO("sc.core", aDimensionName << (pMembers->IsHasHideDetailsMembers() ? " HasHideDetailsMembers" : ""));
+
         pMembers->SetHasHideDetailsMembers( false );
     }
 
