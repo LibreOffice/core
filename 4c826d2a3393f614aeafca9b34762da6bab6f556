@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_238355ce",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_m68k/except.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-05T20:29:13Z",
+      "side": 1,
+      "message": "In no way is this a warning... I\u0027d say random prints to stderr like this that were behind OSL_DEBUG_LEVEL\u003e1 should just be removed. If/when some bug is suspected here, the developer doing the debugging will want to add temporary debugging printouts that are specific to the bug details anyway.",
+      "revId": "4c826d2a3393f614aeafca9b34762da6bab6f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
