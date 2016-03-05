@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_83e4c93b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-05T09:05:54Z",
+      "side": 1,
+      "message": "Could you be a little more verbose, please? The commit message is supposed to say what changed (http://who-t.blogspot.de/2009/12/on-commit-messages.html). Also, please prepend tdf#\u003cnumber\u003e for commits related to a bugzilla bug.",
+      "revId": "508bfcdf36ef9468e0af870341d86c9371c6dd9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
