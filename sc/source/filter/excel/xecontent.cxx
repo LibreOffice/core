@@ -1226,7 +1226,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                 else if(pFormatEntry->GetType() == condformat::DATE)
                     maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
             }
-        aScRanges.Format( msSeqRef, SCA_VALID, nullptr, formula::FormulaGrammar::CONV_XL_A1 );
+        aScRanges.Format( msSeqRef, ScAddr::VALID, nullptr, formula::FormulaGrammar::CONV_XL_A1 );
 
         if(!aExtEntries.empty() && xExtLst.get())
         {

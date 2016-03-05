@@ -66,12 +66,12 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
     bool bSuccess = false;
     if ( bIsRange )
     {
-        sal_uInt16 nResult = aRange.ParseAny( rUIString, &rDoc, eConv );
-        if ( nResult & SCA_VALID )
+        ScAddr nResult = aRange.ParseAny( rUIString, &rDoc, eConv );
+        if ( nResult & ScAddr::VALID )
         {
-            if ( ( nResult & SCA_TAB_3D ) == 0 )
+            if ( !( nResult & ScAddr::TAB_3D ) )
                 aRange.aStart.SetTab( static_cast<SCTAB>(nRefSheet) );
-            if ( ( nResult & SCA_TAB2_3D ) == 0 )
+            if ( !( nResult & ScAddr::TAB2_3D ) )
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             // different sheets are not supported in CellRangeAddress
             if ( aRange.aStart.Tab() == aRange.aEnd.Tab() )
@@ -80,10 +80,10 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
     }
     else
     {
-        sal_uInt16 nResult = aRange.aStart.Parse( rUIString, &rDoc, eConv );
-        if ( nResult & SCA_VALID )
+        ScAddr nResult = aRange.aStart.Parse( rUIString, &rDoc, eConv );
+        if ( nResult & ScAddr::VALID )
         {
-            if ( ( nResult & SCA_TAB_3D ) == 0 )
+            if ( !( nResult & ScAddr::TAB_3D ) )
                 aRange.aStart.SetTab( static_cast<SCTAB>(nRefSheet) );
             bSuccess = true;
         }
@@ -251,9 +251,9 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
     {
         //  generate UI representation string - include sheet only if different from ref sheet
         OUString aFormatStr;
-        sal_uInt16 nFlags = SCA_VALID;
+        ScAddr nFlags = ScAddr::VALID;
         if ( aRange.aStart.Tab() != nRefSheet )
-            nFlags |= SCA_TAB_3D;
+            nFlags |= ScAddr::TAB_3D;
         if ( bIsRange )
             aFormatStr = aRange.Format(nFlags, &rDoc);
         else
@@ -266,14 +266,14 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet
-        OUString aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, &rDoc, eConv));
+        OUString aFormatStr(aRange.aStart.Format(ScAddr::VALID | ScAddr::TAB_3D, &rDoc, eConv));
         if ( bIsRange )
         {
             //  manually concatenate range so both parts always have the sheet name
             aFormatStr += ":";
-            sal_uInt16 nFlags = SCA_VALID;
+            ScAddr nFlags = ScAddr::VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
-                nFlags |= SCA_TAB_3D;
+                nFlags |= ScAddr::TAB_3D;
             OUString aSecond(aRange.aEnd.Format(nFlags, &rDoc, eConv));
             aFormatStr += aSecond ;
         }

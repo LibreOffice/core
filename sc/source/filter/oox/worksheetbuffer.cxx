@@ -129,7 +129,7 @@ void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
             {
                 ScRange aRange;
                 if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), nullptr,
-                                formula::FormulaGrammar::CONV_XL_R1C1) & SCA_VALID) != SCA_VALID)
+                                formula::FormulaGrammar::CONV_XL_R1C1) & ScAddr::VALID) != ScAddr::VALID)
                     sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
             }
             // #i66592# convert sheet names that have been renamed on import

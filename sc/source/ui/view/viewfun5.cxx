@@ -398,7 +398,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             else
             {
                 ScAddress aCellPos( nPosX,nPosY,nTab );
-                sTarget = aCellPos.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
+                sTarget = aCellPos.Format(ScAddr::ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention());
             }
             SfxStringItem aTarget(FN_PARAM_1, sTarget);
 

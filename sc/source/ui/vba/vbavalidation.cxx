@@ -299,7 +299,7 @@ ScVbaValidation::getFormula1() throw (uno::RuntimeException, std::exception)
     uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
     OUString sString = xCond->getFormula1();
 
-    sal_uInt16 nFlags = 0;
+    ScAddr nFlags = ScAddr::ZERO;
     ScRangeList aCellRanges;
     formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1;
 

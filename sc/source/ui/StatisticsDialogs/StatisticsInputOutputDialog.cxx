@@ -141,7 +141,7 @@ void ScStatisticsInputOutputDialog::Init()
 void ScStatisticsInputOutputDialog::GetRangeFromSelection()
 {
     mViewData->GetSimpleArea(mInputRange);
-    OUString aCurrentString(mInputRange.Format(SCR_ABS_3D, mDocument, mAddressDetails));
+    OUString aCurrentString(mInputRange.Format(ScAddr::RANGE_ABS_3D, mDocument, mAddressDetails));
     mpInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -172,14 +172,14 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         if ( mpActiveEdit == mpInputRangeEdit )
         {
             mInputRange = rReferenceRange;
-            aReferenceString = mInputRange.Format(SCR_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mInputRange.Format(ScAddr::RANGE_ABS_3D, pDocument, mAddressDetails);
             mpInputRangeEdit->SetRefString( aReferenceString );
         }
         else if ( mpActiveEdit == mpOutputRangeEdit )
         {
             mOutputAddress = rReferenceRange.aStart;
 
-            sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+            ScAddr nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? ScAddr::ADDR_ABS : ScAddr::ADDR_ABS_3D;
             aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
             mpOutputRangeEdit->SetRefString( aReferenceString );
         }
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edi
                 // Crop output range to top left address for Edit field.
                 if (pRange->aStart != pRange->aEnd)
                 {
-                    sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+                    ScAddr nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? ScAddr::ADDR_ABS : ScAddr::ADDR_ABS_3D;
                     OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
                     mpOutputRangeEdit->SetRefString( aReferenceString );
                 }
