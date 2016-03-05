@@ -18,10 +18,9 @@
  */
 
 
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -190,7 +189,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 OUString SAL_CALL OInstanceLocker::getImplementationName(  )
     throw (uno::RuntimeException, std::exception)
 {
-    return getImplementationName_static();
+    return OUString( "com.sun.star.comp.embed.InstanceLocker" );
 }
 
 sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
@@ -202,30 +201,9 @@ sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName 
 uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
-}
-
-// Static methods
-
-uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames_static()
-{
     const OUString aServiceName( "com.sun.star.embed.InstanceLocker" );
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
-
-
-OUString SAL_CALL OInstanceLocker::getImplementationName_static()
-{
-    return OUString( "com.sun.star.comp.embed.InstanceLocker" );
-}
-
-
-uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
-                                const uno::Reference< uno::XComponentContext >&  )
-{
-    return static_cast< cppu::OWeakObject * >( new OInstanceLocker );
-}
-
 
 // OLockListener
 
@@ -478,9 +456,12 @@ void OLockListener::Init()
     m_bInitialized = true;
 }
 
-void createRegistryInfo_OInstanceLocker()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_embed_InstanceLocker(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OAutoRegistration< OInstanceLocker > aAutoRegistration;
+    return cppu::acquire(new OInstanceLocker());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
