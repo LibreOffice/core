@@ -70,6 +70,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/oleobjectbar \
 	sw/uiconfig/swriter/toolbar/optimizetablebar \
 	sw/uiconfig/swriter/toolbar/previewobjectbar \
+	sw/uiconfig/swriter/toolbar/singlemode \
 	sw/uiconfig/swriter/toolbar/standardbar \
 	sw/uiconfig/swriter/toolbar/starshapes \
 	sw/uiconfig/swriter/toolbar/symbolshapes \
