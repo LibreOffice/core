@@ -45,6 +45,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <basic/sbxdef.hxx>
 #include <unotools/tempfile.hxx>
@@ -436,6 +437,10 @@ void SwMacrosTest::testFindReplace()
     // we need a full document with view and layout etc. because ::GetNode()
     Reference<lang::XComponent> const xComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    const ::comphelper::ScopeGuard xComponentScopeGuard(
+        [&xComponent]() { xComponent->dispose(); } );
+
     SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
