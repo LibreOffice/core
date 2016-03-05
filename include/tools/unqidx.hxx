@@ -31,13 +31,11 @@ public:
 
 private:
     std::map<Index, void*> maMap;
-    const Index nStartIndex;
     Index nUniqIndex;
 
 public:
-    UniqueIndexImpl( Index _nStartIndex = 0 )
-        : maMap(),
-          nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex) {}
+    UniqueIndexImpl( Index nStartIndex = 0 )
+        : maMap(), nUniqIndex(nStartIndex) {}
 
     Index Insert( void* p );
     // insert value with key, replacing existing entry if necessary
