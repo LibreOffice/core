@@ -1004,6 +1004,8 @@ void SwUiWriterTest::testMergeDoc()
     getParagraph(5, "Para Six: One Three Four Five");
     getParagraph(6, "");
     getParagraph(7, "");
+
+    xDoc2Component->dispose();
 }
 
 void SwUiWriterTest::testCreatePortions()

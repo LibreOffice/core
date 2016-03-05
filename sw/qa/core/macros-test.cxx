@@ -491,6 +491,8 @@ void SwMacrosTest::testFindReplace()
     pPaM->Move(fnMoveForward, fnGoNode);
     CPPUNIT_ASSERT_EQUAL(OUString("baz"),
             pPaM->End()->nNode.GetNode().GetTextNode()->GetText());
+
+    xComponent->dispose();
 }
 
 SwMacrosTest::SwMacrosTest()
