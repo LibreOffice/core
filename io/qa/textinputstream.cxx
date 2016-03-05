@@ -112,8 +112,8 @@ private:
         }
     }
 
-    static sal_Int32 const SIZE = 9;
-    static char const data[SIZE];
+    sal_Int32 const SIZE = 9;
+    char const data[SIZE];
 
     osl::Mutex mutex_;
     bool open_;
