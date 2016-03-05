@@ -56,14 +56,6 @@ public:
     explicit OInstanceLocker();
     virtual ~OInstanceLocker();
 
-    static css::uno::Sequence< OUString > SAL_CALL
-            getSupportedServiceNames_static();
-
-    static OUString SAL_CALL getImplementationName_static();
-
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        Create(const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
 // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;

@@ -43,7 +43,8 @@
   <implementation name="com.sun.star.comp.comphelper.OPropertyBag">
     <service name="com.sun.star.beans.PropertyBag"/>
   </implementation>
-  <implementation name="com.sun.star.comp.embed.InstanceLocker">
+  <implementation name="com.sun.star.comp.embed.InstanceLocker"
+      constructor="com_sun_star_comp_embed_InstanceLocker">
     <service name="com.sun.star.embed.InstanceLocker"/>
   </implementation>
   <implementation name="com.sun.star.comp.logging.SimpleLogRing"
