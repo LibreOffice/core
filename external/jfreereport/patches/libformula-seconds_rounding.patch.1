@@ -1,0 +1,37 @@
+diff -ur jfreereport_libformula.org/source/org/pentaho/reporting/libraries/formula/function/datetime/SecondFunction.java jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/function/datetime/SecondFunction.java
+--- jfreereport_libformula.org/source/org/pentaho/reporting/libraries/formula/function/datetime/SecondFunction.java	2016-03-05 09:43:06.121774691 +0100
++++ jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/function/datetime/SecondFunction.java	2016-03-05 09:51:04.810488511 +0100
+@@ -29,7 +29,7 @@
+ import org.pentaho.reporting.libraries.formula.util.NumberUtil;
+ 
+ /**
+- * This function extracts the minute (0 through 59) from a time.
++ * This function extracts the seconds (0 through 59) from a time.
+  *
+  * @author Cedric Pronzato
+  */
+@@ -67,14 +67,15 @@
+ 
+     // time * 24 so that we get the full hours (which we remove later)
+     final BigDecimal bd = NumberUtil.getAsBigDecimal(n);
+-    final BigDecimal hours = bd.multiply(MINUTES_PER_DAY);
+-    final BigDecimal dayAndHoursAsInt = NumberUtil.performIntRounding(hours);
+-    final BigDecimal minutesFraction = hours.subtract(dayAndHoursAsInt);
+-
+-    // Multiply the minutes with 60 to get the minutes as ints
+-    final BigDecimal seconds = minutesFraction.multiply(SECONDS);
+-    final BigDecimal secondsAsInt = NumberUtil.performIntRounding(seconds);
++    final BigDecimal minutes = bd.multiply(MINUTES_PER_DAY);
++    final BigDecimal dayHoursAndMinutesAsInt = NumberUtil.performIntRounding(minutes);
++    final BigDecimal secondsFraction = minutes.subtract(dayHoursAndMinutesAsInt);
++
++    // Multiply the minutes with 60 to get the seconds as ints
++    final BigDecimal seconds = secondsFraction.multiply(SECONDS);
++    final BigDecimal nanoSeconds = seconds.setScale(9, BigDecimal.ROUND_HALF_UP);
++    final BigDecimal secondsAsInt = NumberUtil.performIntRounding(nanoSeconds);
+ 
+     return new TypeValuePair(NumberType.GENERIC_NUMBER, secondsAsInt);
+   }
+-}
+\ No newline at end of file
++}
