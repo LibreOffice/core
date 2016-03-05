@@ -262,7 +262,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "English (Ghana)" ; LANGUAGE_USER_ENGLISH_GHANA ; > ;
         < "Sango" ; LANGUAGE_USER_SANGO ; > ;
         < "Tagalog" ; LANGUAGE_USER_TAGALOG ; > ;
-        < "Ganda" ; LANGUAGE_USER_GANDA ; > ;
+        < "Ugandan" ; LANGUAGE_USER_GANDA ; > ;
         < "Lingala" ; LANGUAGE_USER_LINGALA_DRCONGO ; > ;
         < "Low German" ; LANGUAGE_USER_LOW_GERMAN ; > ;
         < "Hiligaynon" ; LANGUAGE_USER_HILIGAYNON ; > ;
