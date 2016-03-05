@@ -373,7 +373,7 @@ bool ScRawToken::IsValidReference() const
 FormulaToken* ScRawToken::CreateToken() const
 {
 #if OSL_DEBUG_LEVEL > 0
-#define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) SAL_INFO( "sc.tool", #c "::ctor: OpCode " << (int)eOp << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
+#define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) SAL_INFO( "sc.core", #c "::ctor: OpCode " << (int)eOp << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
 #else
 #define IF_NOT_OPCODE_ERROR(o,c)
 #endif
