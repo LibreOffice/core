@@ -25,13 +25,13 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
     if ( !p )
         return IndexNotFound;
 
-    // Search next unused index, may be needed after
-    // a removal followed by multiple insertions
-    while ( maMap.find( nUniqIndex ) != maMap.end() )
+    // Insert the pointer, starting from the current nUniqIndex "hint"
+    // and increasing it until a free one is found (this may happen
+    // after removals followed by multiple insertions).
+    while ( !maMap.emplace(nUniqIndex, p).second )
         ++nUniqIndex;
 
-    maMap[ nUniqIndex ] = p;
-
+    // Take care of updating hint key for next insertion
     return nUniqIndex++;
 }
 
