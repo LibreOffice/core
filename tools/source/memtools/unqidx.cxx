@@ -32,42 +32,33 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
 
     maMap[ nUniqIndex ] = p;
 
-    nUniqIndex++;
-    return ( nUniqIndex + nStartIndex - 1 );
+    return nUniqIndex++;
 }
 
 void* UniqueIndexImpl::Remove( Index nIndex )
 {
-    // Check for valid index
-    if ( nIndex >= nStartIndex )
+    std::map<Index, void*>::iterator it = maMap.find( nIndex );
+    if ( it != maMap.end() )
     {
-        std::map<Index, void*>::iterator it = maMap.find( nIndex - nStartIndex );
-        if( it != maMap.end() )
-        {
-            // Allow to recycle freed indexes, as was done by
-            // original implementation based on a vector
-            // This is not really needed when using a map, and
-            // really unique indexes might be better/safer?
-            if ( nIndex < nUniqIndex )
-                nUniqIndex = nIndex;
+        // Allow to recycle freed indexes, as was done by
+        // original implementation based on a vector
+        // This is not really needed when using a map, and
+        // really unique indexes might be better/safer?
+        if ( nIndex < nUniqIndex )
+            nUniqIndex = nIndex;
 
-            void* p = it->second;
-            maMap.erase( it );
-            return p;
-        }
+        void* p = it->second;
+        maMap.erase( it );
+        return p;
     }
     return nullptr;
 }
 
 void* UniqueIndexImpl::Get( Index nIndex ) const
 {
-    // check for valid index
-    if ( nIndex >= nStartIndex )
-    {
-        std::map<Index, void*>::const_iterator it = maMap.find( nIndex - nStartIndex );
-        if( it != maMap.end() )
-            return it->second;
-    }
+    std::map<Index, void*>::const_iterator it = maMap.find( nIndex );
+    if ( it != maMap.end() )
+        return it->second;
     return nullptr;
 }
 
