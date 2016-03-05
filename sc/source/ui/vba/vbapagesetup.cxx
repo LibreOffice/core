@@ -72,8 +72,8 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeExcepti
     if( nCount )
     {
         ScAddress::Details aDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
-        sal_uInt16 nFlags = SCA_VALID;
-        nFlags |= ( SCA_TAB_ABSOLUTE | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE );
+        ScAddr nFlags = ScAddr::VALID;
+        nFlags |= ( ScAddr::TAB_ABSOLUTE | ScAddr::COL_ABSOLUTE | ScAddr::ROW_ABSOLUTE | ScAddr::TAB2_ABSOLUTE | ScAddr::COL2_ABSOLUTE | ScAddr::ROW2_ABSOLUTE );
         ScRangeList aRangeList;
         for( sal_Int32 i=0; i<nCount; i++ )
         {

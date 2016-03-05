@@ -168,7 +168,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     if(( rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col() ) ||
         ( rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row() ) )
     {
-        sal_uInt16 nFmt = SCA_VALID;
+        ScAddr nFmt = ScAddr::VALID;
 
         pTabViewShell->AddHighlightRange( aExternalRange,Color( COL_LIGHTBLUE ) );
         ScRange rExtendRange( aExternalRange.aStart.Col(), aExternalRange.aStart.Row(), nTab, aExternalRange.aEnd.Col(), aExternalRange.aEnd.Row(), nTab );

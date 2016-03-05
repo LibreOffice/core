@@ -2151,7 +2151,7 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType == "ADDRESS" )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
-                sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
+                ScAddr nFlags = (aCellPos.Tab() == aPos.Tab()) ? (ScAddr::ADDR_ABS) : (ScAddr::ADDR_ABS_3D);
                 OUString aStr(aCellPos.Format(nFlags, pDok, pDok->GetAddressConvention()));
                 PushString(aStr);
             }
@@ -2188,10 +2188,10 @@ void ScInterpreter::ScCell()
                 OUStringBuffer aFuncResult;
                 OUString aCellStr =
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
-                    (SCA_COL_ABSOLUTE|SCA_VALID_COL), nullptr, pDok->GetAddressConvention() );
+                    (ScAddr::COL_ABSOLUTE|ScAddr::COL_VALID), nullptr, pDok->GetAddressConvention() );
                 aFuncResult.append(aCellStr);
                 aFuncResult.append(':');
-                aCellStr = aCellPos.Format((SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
+                aCellStr = aCellPos.Format((ScAddr::COL_ABSOLUTE|ScAddr::COL_VALID|ScAddr::ROW_ABSOLUTE|ScAddr::ROW_VALID),
                                  nullptr, pDok->GetAddressConvention());
                 aFuncResult.append(aCellStr);
                 PushString( aFuncResult.makeStringAndClear() );
@@ -7236,7 +7236,7 @@ void ScInterpreter::ScAddressFunc()
     if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
         eConv = FormulaGrammar::CONV_XL_R1C1;
 
-    sal_uInt16  nFlags = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;   // default
+    ScAddr  nFlags = ScAddr::COL_ABSOLUTE | ScAddr::ROW_ABSOLUTE;   // default
     if( nParamCount >= 3 )
     {
         sal_uInt16 n = (sal_uInt16) ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0));
@@ -7249,14 +7249,14 @@ void ScInterpreter::ScAddressFunc()
             case 5:
             case 1 : break; // default
             case 6:
-            case 2 : nFlags = SCA_ROW_ABSOLUTE; break;
+            case 2 : nFlags = ScAddr::ROW_ABSOLUTE; break;
             case 7:
-            case 3 : nFlags = SCA_COL_ABSOLUTE; break;
+            case 3 : nFlags = ScAddr::COL_ABSOLUTE; break;
             case 8:
-            case 4 : nFlags = 0; break; // both relative
+            case 4 : nFlags = ScAddr::ZERO; break; // both relative
         }
     }
-    nFlags |= SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
+    nFlags |= ScAddr::VALID | ScAddr::ROW_VALID | ScAddr::COL_VALID;
 
     SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
     SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
@@ -7264,9 +7264,9 @@ void ScInterpreter::ScAddressFunc()
     {
         // YUCK!  The XL interface actually treats rel R1C1 refs differently
         // than A1
-        if( !(nFlags & SCA_COL_ABSOLUTE) )
+        if( !(nFlags & ScAddr::COL_ABSOLUTE) )
             nCol += aPos.Col() + 1;
-        if( !(nFlags & SCA_ROW_ABSOLUTE) )
+        if( !(nFlags & ScAddr::ROW_ABSOLUTE) )
             nRow += aPos.Row() + 1;
     }
 

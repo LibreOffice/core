@@ -181,7 +181,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdAssign);
-        OUString aRefStr(rRef.Format(SCR_ABS_3D, pDocP,
+        OUString aRefStr(rRef.Format(ScAddr::RANGE_ABS_3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
         m_pEdAssign->SetRefString( aRefStr );
     }

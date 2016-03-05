@@ -619,7 +619,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     ScRange aRange;
                     if ( pData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                     {
-                        sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;
+                        ScAddr nFlags = ScAddr::VALID | ScAddr::TAB_3D;
                         OUString aStr(aRange.Format(nFlags,pDoc));
                         rSet.Put( SfxStringItem( nWhich, aStr ) );
                     }

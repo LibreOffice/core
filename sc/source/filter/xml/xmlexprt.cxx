@@ -4026,7 +4026,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         OUString sBaseCellAddress;
         it->second->ValidateTabRefs();
         ScRangeStringConverter::GetStringFromAddress( sBaseCellAddress, it->second->GetPos(), pDoc,
-                            FormulaGrammar::CONV_OOO, ' ', false, SCA_ABS_3D);
+                            FormulaGrammar::CONV_OOO, ' ', false, ScAddr::ADDR_ABS_3D);
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
         OUString sSymbol;
