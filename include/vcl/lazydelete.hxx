@@ -28,10 +28,7 @@
 #include <vector>
 #include <algorithm>
 
-#if OSL_DEBUG_LEVEL > 2
 #include <typeinfo>
-#include <stdio.h>
-#endif
 
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -128,10 +125,7 @@ namespace vcl
         LazyDeletor()  { LazyDelete::addDeletor( this ); }
         virtual ~LazyDeletor()
         {
-            #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "%s %p deleted\n",
-                     typeid(*this).name(), this );
-            #endif
+            SAL_INFO("include.vcl", typeid(*this).name() << std::hex << this << " deleted");
             if( s_pOneInstance == this ) // sanity check
                 s_pOneInstance = nullptr;
 
@@ -151,12 +145,8 @@ namespace vcl
             nCount = aRealDelete.size();
             for( unsigned int n = 0; n < nCount; n++ )
             {
-                #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "%s deletes object %p of type %s\n",
-                         typeid(*this).name(),
-                         aRealDelete[n],
-                         typeid(*aRealDelete[n]).name() );
-                #endif
+                SAL_INFO("include.vcl", typeid(*this).name() << " deletes object " << aRealDelete[n] << " of type "
+                         << typeid(*aRealDelete[n]).name());
                 // check if the object to be deleted is not already destroyed
                 // as a side effect of a previous lazily destroyed object
                 if( ! m_aObjects[ m_aPtrToIndex[ reinterpret_cast<sal_IntPtr>(aRealDelete[n].get()) ] ].m_bDeleted )
@@ -296,5 +286,4 @@ namespace vcl
 }
 
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
