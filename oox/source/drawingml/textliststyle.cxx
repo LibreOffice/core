@@ -86,12 +86,12 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
     applyStyleList( rTextListStyle.getListStyle(), getListStyle() );
 }
 
-#if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 void TextListStyle::dump() const
 {
     for ( int i = 0; i < 9; i++ )
     {
-        OSL_TRACE("text list style level: %d", i);
+        SAL_INFO("oox.drawingml", "text list style level: " << i);
         maListStyle[i]->dump();
     }
 }
