@@ -503,14 +503,13 @@ Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
     return rPolygon;
 }
 
-Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
+void WinMtfOutput::ImplScale( Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     for ( sal_uInt16 i = 0; i < nPoints; i++ )
     {
         rPolygon[ i ] = ImplScale( rPolygon[ i ] );
     }
-    return rPolygon;
 }
 
 tools::PolyPolygon& WinMtfOutput::ImplScale( tools::PolyPolygon& rPolyPolygon )
