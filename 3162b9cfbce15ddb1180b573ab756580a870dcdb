@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_431dc10e",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-05T12:13:59Z",
+      "side": 1,
+      "message": "better names for type and flags are welcome\nScAddressFlag would be most descriptive but is way to long",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_a31aa515",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-05T12:13:59Z",
+      "side": 1,
+      "message": "think i\u0027ll shorten these to *_ABS",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_6320bd4a",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-05T12:13:59Z",
+      "side": 1,
+      "message": "had to replace CPPUNIT_ASSERT_EQUAL because both side would need to be serializable into a std::strstream using operator \u003c\u003c\ntyped_flags aren\u0027t",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_8317a9ec",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-05T12:13:59Z",
+      "side": 1,
+      "message": "no idea why ~(ScAddr::TAB_VALID | ScAddr::TAB2_VALID)\nwon\u0027t compile",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_e3d2ed33",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-05T12:13:59Z",
+      "side": 1,
+      "message": "these operations should go\nthink a helper in address.hxx is needed\nsmart ideas welcome",
+      "range": {
+        "startLine": 737,
+        "startChar": 26,
+        "endLine": 737,
+        "endChar": 83
+      },
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_c3d7f121",
+        "filename": "sc/source/ui/vba/vbarange.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-05T12:13:59Z",
+      "side": 1,
+      "message": "only include I had to add, see comments above getCellRangeForAddress :-)",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
