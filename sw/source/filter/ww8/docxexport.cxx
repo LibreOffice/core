@@ -268,9 +268,7 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // Turn OFF flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( false );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
-#endif
+    SAL_WARN("sw.ww8", "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n");
 }
 
 void DocxExport::OutputField( const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, sal_uInt8 nMode )
@@ -285,9 +283,7 @@ void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
-#endif
+    SAL_WARN("sw.ww8", "TOTO DocxExport::WriteHyperlinkData()\n");
 }
 
 void DocxExport::DoComboBox(const OUString& rName,

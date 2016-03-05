@@ -60,7 +60,7 @@ namespace ww
         {
             OSL_ENSURE(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
             std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             bool bBroken=false;
             OUString sError;
             const C *pIter = mpWwSprmTab;

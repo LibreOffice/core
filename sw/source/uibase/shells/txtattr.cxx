@@ -730,12 +730,11 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_CHAR_KERNING:
             case RES_PARATR_DROP:
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), true);
                 rSet.Put(rItem);
-#else
-                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot)));
 #endif
+                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot)));
                 nSlot = 0;
             }
             break;

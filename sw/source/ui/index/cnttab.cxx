@@ -3288,7 +3288,7 @@ IMPL_LINK_TYPED(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
         return;
 
     const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     //find all start/end positions and print it
     OUString sMessage("Space: " + OUString::number(nSpace) + " | ");
 

@@ -580,7 +580,7 @@ void SwTextFrame::_AdjustFollow( SwTextFormatter &rLine,
     // The Offset moved
     if( GetFollow() )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         static bool bTest = false;
         if( !bTest || ( nMode & 1 ) )
 #endif

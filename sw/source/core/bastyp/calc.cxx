@@ -635,7 +635,7 @@ void SwCalc::Pop()
 
 SwCalcOper SwCalc::GetToken()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // static for switch back to the "old" implementation of the calculator
     // which doesn't use the I18N routines.
     static int nUseOld = 0;
@@ -854,7 +854,7 @@ SwCalcOper SwCalc::GetToken()
         nCommandPos = aRes.EndPos;
     };
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #define NextCh( s, n )  (nCommandPos < sCommand.getLength() ? sCommand[nCommandPos++] : 0)
 
     }
@@ -954,7 +954,7 @@ SwCalcOper SwCalc::GetToken()
             {
                 double nVal;
                 --nCommandPos; //  back to the first char
-                if( Str2Double( sCommand, nCommandPos, nVal, pLclData ))
+                if( Str2Double( sCommand, nCommandPos, nVal))
                 {
                     nNumberValue.PutDouble( nVal );
                     eCurrOper = CALC_NUMBER;

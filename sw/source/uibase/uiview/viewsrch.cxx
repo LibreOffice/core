@@ -513,7 +513,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
         }
         break;
         default:
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             if(nSlot)
             {
                 OString sStr("nSlot: " + OString::number(nSlot) + " wrong Dispatcher (viewsrch.cxx)");
