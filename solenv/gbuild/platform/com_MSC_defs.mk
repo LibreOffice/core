@@ -164,7 +164,7 @@ gb_CFLAGS := \
 	-wd4706 \
 	-wd4800 \
 	-Zc:wchar_t- \
-	$(if $(filter-out 120,$(VCVER)), -Wv:18) \
+	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
 
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CFLAGS += \
@@ -207,7 +207,7 @@ gb_CXXFLAGS := \
 	-wd4800 \
 	-wd4913 \
 	-Zc:wchar_t- \
-	$(if $(filter-out 120,$(VCVER)), -Wv:18) \
+	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
 
 ifeq ($(CPUNAME),X86_64)
 
