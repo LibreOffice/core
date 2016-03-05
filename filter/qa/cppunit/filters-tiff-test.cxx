@@ -60,8 +60,7 @@ bool TiffFilterTest::load(const OUString &,
 void TiffFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/tiff/"),
-        OUString());
+        getURLFromSrc("/filter/qa/cppunit/data/tiff/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiffFilterTest);

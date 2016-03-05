@@ -703,7 +703,7 @@ void SwDoc::CalculatePagesForPrinting(
         // 1 -> print range according to PageRange
         // 2 -> print selection
         if (1 == nContent)
-            aPageRange = rOptions.getStringValue( "PageRange", OUString() );
+            aPageRange = rOptions.getStringValue( "PageRange" );
         if (2 == nContent)
         {
             // note that printing selections is actually implemented by copying
@@ -930,7 +930,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // 2 -> print selection
     const sal_Int64 nContent = rOptions.getIntValue( "PrintContent", 0 );
     if (nContent == 1)
-        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
+        aPageRange = rOptions.getStringValue( "PageRange" );
     if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'

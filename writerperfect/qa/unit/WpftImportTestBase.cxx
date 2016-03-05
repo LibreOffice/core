@@ -172,14 +172,14 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
 void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
-    testDir(OUString(), getURLFromSrc(rPath), OUString());
+    testDir(OUString(), getURLFromSrc(rPath));
 }
 
 void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath, const WpftOptionalMap_t &rOptionalMap)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     m_pOptionalMap = &rOptionalMap;
-    testDir(OUString(), getURLFromSrc(rPath), OUString());
+    testDir(OUString(), getURLFromSrc(rPath));
     m_pOptionalMap = nullptr;
 }
 

@@ -651,13 +651,13 @@ void AreaChart::createShapes()
 
     //therefore create an own group for the texts and the error bars to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
-    m_xSeriesTarget   = createGroupShape( m_xLogicTarget,OUString() );
+    m_xSeriesTarget   = createGroupShape( m_xLogicTarget );
     if( m_bArea )
-        m_xErrorBarTarget = createGroupShape( m_xLogicTarget,OUString() );
+        m_xErrorBarTarget = createGroupShape( m_xLogicTarget );
     else
         m_xErrorBarTarget = m_xSeriesTarget;
-    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
-    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
+    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget );
+    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget );
 
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 

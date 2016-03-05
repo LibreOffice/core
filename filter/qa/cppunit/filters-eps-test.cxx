@@ -60,8 +60,7 @@ bool EpsFilterTest::load(const OUString &,
 void EpsFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/eps/"),
-        OUString());
+        getURLFromSrc("/filter/qa/cppunit/data/eps/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EpsFilterTest);

@@ -104,7 +104,7 @@ namespace accessibility
         {
             auto maChild( GetChild( nPara ).first.get() );
             if( maChild.is() )
-                maChild->FireEvent( nEventId, css::uno::Any(), css::uno::Any() );
+                maChild->FireEvent( nEventId );
         }
     }
 

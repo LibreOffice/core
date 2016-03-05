@@ -195,8 +195,7 @@ namespace cmis
                         ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,
                                             uno::Sequence< uno::Any >( 0 ),
-                                            xEnv,
-                                            OUString( ) );
+                                            xEnv );
                     m_aRepositories = session->getRepositories( );
                 }
                 catch (const libcmis::Exception& e)
@@ -205,8 +204,7 @@ namespace cmis
                     ucbhelper::cancelCommandExecution(
                                         ucb::IOErrorCode_INVALID_DEVICE,
                                         uno::Sequence< uno::Any >( 0 ),
-                                        xEnv,
-                                        OUString( ) );
+                                        xEnv );
                 }
             }
             else

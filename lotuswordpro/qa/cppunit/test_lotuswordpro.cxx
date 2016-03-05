@@ -62,8 +62,7 @@ namespace
     void LotusWordProTest::test()
     {
         testDir(OUString(),
-            getURLFromSrc("/lotuswordpro/qa/cppunit/data/"),
-            OUString());
+            getURLFromSrc("/lotuswordpro/qa/cppunit/data/"));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(LotusWordProTest);

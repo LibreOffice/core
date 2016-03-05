@@ -60,17 +60,40 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
         if (!defaultArgExpr) {
             break;
         }
-        APSInt x1, x2;
-        if (!((defaultArgExpr->isNullPointerConstant(
-                   compiler.getASTContext(), Expr::NPC_NeverValueDependent)
-               && arg->isNullPointerConstant(
-                   compiler.getASTContext(), Expr::NPC_NeverValueDependent))
-              || (defaultArgExpr->EvaluateAsInt(x1, compiler.getASTContext())
-                  && arg->EvaluateAsInt(x2, compiler.getASTContext())
-                  && x1 == x2)))
+        bool found = false;
+        if (defaultArgExpr->isNullPointerConstant(compiler.getASTContext(), Expr::NPC_NeverValueDependent)
+            && arg->isNullPointerConstant(compiler.getASTContext(), Expr::NPC_NeverValueDependent))
         {
-            break;
+            found = true;
         }
+        if (!found)
+        {
+            APSInt x1, x2;
+            if (defaultArgExpr->EvaluateAsInt(x1, compiler.getASTContext())
+                && arg->EvaluateAsInt(x2, compiler.getASTContext())
+                && x1 == x2)
+            {
+                found = true;
+            }
+        }
+        // catch params with defaults like "= OUString()"
+        if (!found
+            && isa<MaterializeTemporaryExpr>(arg)
+            && isa<MaterializeTemporaryExpr>(defaultArgExpr))
+        {
+            const CXXBindTemporaryExpr* strippedArg = dyn_cast_or_null<CXXBindTemporaryExpr>(arg->IgnoreParenCasts());
+            if (strippedArg && isa<CXXTemporaryObjectExpr>(strippedArg->getSubExpr())
+                && dyn_cast<CXXTemporaryObjectExpr>(strippedArg->getSubExpr())->getNumArgs() == 0)
+            {
+                found = true;
+            }
+        }
+        if (!found)
+            break;
+        // Ignore CPPUNIT, it's macros contain some stuff that triggers us
+        StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(parmVarDecl->getLocStart()));
+        if (aFileName.find("include/cppunit") != std::string::npos)
+            break;
         report(
             DiagnosticsEngine::Warning,
             "not necessary to pass this argument, it defaults to the same value",

@@ -1261,7 +1261,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const svx::ODataAccessDesc
     bool bEscapeProcessing = true;
     extractDescriptorProps(_rDescriptor, sDataSource, sCommand, nCommandType, bEscapeProcessing);
 
-    return getObjectEntry( sDataSource, sCommand, nCommandType, _ppDataSourceEntry, _ppContainerEntry, _bExpandAncestors, SharedConnection() );
+    return getObjectEntry( sDataSource, sCommand, nCommandType, _ppDataSourceEntry, _ppContainerEntry, _bExpandAncestors );
 }
 
 void SbaTableQueryBrowser::connectExternalDispatches()
@@ -3678,7 +3678,7 @@ bool SbaTableQueryBrowser::preReloadForm()
         {
             SvTreeListEntry* pDataSource = nullptr;
             SvTreeListEntry* pCommandType = nullptr;
-            m_pCurrentlyDisplayed = getObjectEntry( sDataSource, sCommand, nCommandType, &pDataSource, &pCommandType, true, SharedConnection() );
+            m_pCurrentlyDisplayed = getObjectEntry( sDataSource, sCommand, nCommandType, &pDataSource, &pCommandType );
             bIni = true;
         }
     }

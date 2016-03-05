@@ -455,7 +455,7 @@ uno::Reference<drawing::XShape>
     if( !xTarget.is() )
         return nullptr;
 
-    Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, OUString() ) );
+    Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget ) );
 
     bool bDoubleSided = false;
     short nRotatedTexture = 0;
