@@ -2889,14 +2889,14 @@ RTLFUNC(Dir)
                         sal_uInt16 nFlags = 0;
                         if ( nParCount > 2 )
                         {
-                            pRTLData->nDirFlags = nFlags = rPar.Get(2)->GetInteger();
+                            pRTLData->nDirFlags = nFlags = rPar.Get(2)->GetUShort();
                         }
                         else
                         {
                             pRTLData->nDirFlags = 0;
                         }
                         // Read directory
-                        bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
+                        bool bIncludeFolders = (nFlags & (sal_uInt16)SbAttributes::DIRECTORY);
                         pRTLData->aDirSeq = xSFI->getFolderContents( aDirURLStr, bIncludeFolders );
                         pRTLData->nCurDirPos = 0;
 
@@ -2923,7 +2923,7 @@ RTLFUNC(Dir)
 
                 if( pRTLData->aDirSeq.getLength() > 0 )
                 {
-                    bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+                    bool bFolderFlag = ((pRTLData->nDirFlags & (sal_uInt16)SbAttributes::DIRECTORY));
 
                     SbiInstance* pInst = GetSbData()->pInst;
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
@@ -3011,7 +3011,7 @@ RTLFUNC(Dir)
                 }
 
                 // Read directory
-                bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
+                bool bIncludeFolders = ((nFlags & (sal_uInt16)SbAttributes::DIRECTORY));
                 pRTLData->pDir = new Directory( aDirURL );
                 FileBase::RC nRet = pRTLData->pDir->open();
                 if( nRet != FileBase::E_None )
@@ -3042,7 +3042,7 @@ RTLFUNC(Dir)
 
             if( pRTLData->pDir )
             {
-                bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+                bool bFolderFlag = (pRTLData->nDirFlags & (sal_uInt16)SbAttributes::DIRECTORY);
                 for( ;; )
                 {
                     if( pRTLData->nCurDirPos < 0 )
@@ -3165,15 +3165,15 @@ RTLFUNC(GetAttr)
                     bool bDirectory = xSFI->isFolder( aPath );
                     if( bReadOnly )
                     {
-                        nFlags |= Sb_ATTR_READONLY;
+                        nFlags |= (sal_uInt16)SbAttributes::READONLY;
                     }
                     if( bHidden )
                     {
-                        nFlags |= Sb_ATTR_HIDDEN;
+                        nFlags |= (sal_uInt16)SbAttributes::HIDDEN;
                     }
                     if( bDirectory )
                     {
-                        nFlags |= Sb_ATTR_DIRECTORY;
+                        nFlags |= (sal_uInt16)SbAttributes::DIRECTORY;
                     }
                 }
                 catch(const Exception & )
@@ -3195,11 +3195,11 @@ RTLFUNC(GetAttr)
             bool bDirectory = isFolder( aType );
             if( bReadOnly )
             {
-                nFlags |= Sb_ATTR_READONLY;
+                nFlags |= (sal_uInt16)SbAttributes::READONLY;
             }
             if( bDirectory )
             {
-                nFlags |= Sb_ATTR_DIRECTORY;
+                nFlags |= (sal_uInt16)SbAttributes::DIRECTORY;
             }
         }
         rPar.Get(0)->PutInteger( nFlags );
@@ -4696,9 +4696,9 @@ RTLFUNC(SetAttr)
             {
                 try
                 {
-                    bool bReadOnly = (nFlags & Sb_ATTR_READONLY) != 0;
+                    bool bReadOnly = (nFlags & (sal_uInt16)SbAttributes::READONLY) != 0;
                     xSFI->setReadOnly( aStr, bReadOnly );
-                    bool bHidden   = (nFlags & Sb_ATTR_HIDDEN) != 0;
+                    bool bHidden   = (nFlags & (sal_uInt16)SbAttributes::HIDDEN) != 0;
                     xSFI->setHidden( aStr, bHidden );
                 }
                 catch(const Exception & )
