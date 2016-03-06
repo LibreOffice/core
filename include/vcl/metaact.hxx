@@ -29,7 +29,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/region.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>

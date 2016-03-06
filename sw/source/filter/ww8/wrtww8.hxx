@@ -40,7 +40,7 @@
 #include "../inc/msfilter.hxx"
 #include <expfld.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 class SvxBrushItem;
 
 // einige Forward Deklarationen

@@ -25,7 +25,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/field.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <com/sun/star/uno/Sequence.h>

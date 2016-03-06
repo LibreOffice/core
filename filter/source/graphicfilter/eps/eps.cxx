@@ -23,7 +23,7 @@
 #include <tools/fract.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/region.hxx>
 #include <vcl/metric.hxx>

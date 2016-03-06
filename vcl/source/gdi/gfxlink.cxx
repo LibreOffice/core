@@ -23,7 +23,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>

@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/svapp.hxx>
 #include <boost/scoped_ptr.hpp>
 

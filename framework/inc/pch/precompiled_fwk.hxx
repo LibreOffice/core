@@ -383,7 +383,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/evntpost.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>

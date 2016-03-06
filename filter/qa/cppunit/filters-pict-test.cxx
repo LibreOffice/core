@@ -13,7 +13,7 @@
 #include <test/mtfxmldump.hxx>
 #include <test/xmltesttools.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/metaactiontypes.hxx>
 
 #include <osl/file.hxx>

@@ -277,7 +277,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/font.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/salbtype.hxx>

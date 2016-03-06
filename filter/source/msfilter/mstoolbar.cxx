@@ -16,7 +16,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <fstream>
 #include <vcl/dibtools.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
 #include <map>

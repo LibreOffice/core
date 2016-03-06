@@ -37,7 +37,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/dibtools.hxx>
 

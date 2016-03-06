@@ -19,7 +19,7 @@
 
 
 #include <vcl/svapp.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>

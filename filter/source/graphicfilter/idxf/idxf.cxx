@@ -20,7 +20,7 @@
 
 #include <string.h>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/virdev.hxx>
 #include "dxf2mtf.hxx"
 #include <math.h>

@@ -32,7 +32,7 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

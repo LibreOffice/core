@@ -22,7 +22,7 @@
 #include <hintids.hxx>
 #include <swerror.h>
 #include <vcl/wrkwin.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/svdobj.hxx>

@@ -421,7 +421,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
