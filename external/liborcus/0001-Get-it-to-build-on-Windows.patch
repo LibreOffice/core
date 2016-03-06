@@ -1,0 +1,212 @@
+From c5d7282214727bcc28b6ec7e2b8016b40872cd3b Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Mon, 7 Mar 2016 18:35:23 -0500
+Subject: [PATCH] Get it to build on Windows.
+
+---
+ include/orcus/json_parser.hpp       | 32 +++++++++++++-------------------
+ include/orcus/parser_global.hpp     |  4 ++--
+ src/liborcus/json_document_tree.cpp |  2 +-
+ src/liborcus/json_util.cpp          |  4 ++--
+ src/liborcus/yaml_document_tree.cpp |  4 +++-
+ src/parser/parser_global.cpp        |  3 +++
+ src/parser/pstring.cpp              |  1 +
+ src/parser/stream.cpp               |  4 ++--
+ src/parser/yaml_parser_base.cpp     | 17 ++++++-----------
+ 9 files changed, 33 insertions(+), 38 deletions(-)
+
+diff --git a/include/orcus/json_parser.hpp b/include/orcus/json_parser.hpp
+index 5d733fb..183b831 100644
+--- a/include/orcus/json_parser.hpp
++++ b/include/orcus/json_parser.hpp
+@@ -204,16 +204,13 @@ void json_parser<_Handler>::object()
+         if (!res.str)
+         {
+             // Parsing was unsuccessful.
+-            switch (res.length)
+-            {
+-                case parse_quoted_string_state::error_no_closing_quote:
+-                    throw json::parse_error("object: stream ended prematurely before reaching the closing quote of a key.", offset());
+-                case parse_quoted_string_state::error_illegal_escape_char:
+-                    json::parse_error::throw_with(
+-                        "object: illegal escape character '", cur_char(), "' in key value.", offset());
+-                default:
+-                    throw json::parse_error("object: unknown error while parsing a key value.", offset());
+-            }
++            if (res.length == parse_quoted_string_state::error_no_closing_quote)
++                throw json::parse_error("object: stream ended prematurely before reaching the closing quote of a key.", offset());
++            else if (res.length == parse_quoted_string_state::error_illegal_escape_char)
++                json::parse_error::throw_with(
++                    "object: illegal escape character '", cur_char(), "' in key value.", offset());
++            else
++                throw json::parse_error("object: unknown error while parsing a key value.", offset());
+         }
+ 
+         m_handler.object_key(res.str, res.length, res.transient);
+@@ -297,15 +294,12 @@ void json_parser<_Handler>::string()
+     }
+ 
+     // Parsing was unsuccessful.
+-    switch (res.length)
+-    {
+-        case parse_quoted_string_state::error_no_closing_quote:
+-            throw json::parse_error("string: stream ended prematurely before reaching the closing quote.", offset());
+-        case parse_quoted_string_state::error_illegal_escape_char:
+-            json::parse_error::throw_with("string: illegal escape character '", cur_char(), "'.", offset());
+-        default:
+-            throw json::parse_error("string: unknown error.", offset());
+-    }
++    if (res.length == parse_quoted_string_state::error_no_closing_quote)
++        throw json::parse_error("string: stream ended prematurely before reaching the closing quote.", offset());
++    else if (res.length == parse_quoted_string_state::error_illegal_escape_char)
++        json::parse_error::throw_with("string: illegal escape character '", cur_char(), "'.", offset());
++    else
++        throw json::parse_error("string: unknown error.", offset());
+ }
+ 
+ }
+diff --git a/include/orcus/parser_global.hpp b/include/orcus/parser_global.hpp
+index 6fab254..b76aec4 100644
+--- a/include/orcus/parser_global.hpp
++++ b/include/orcus/parser_global.hpp
+@@ -31,8 +31,8 @@ enum class string_escape_char_t
+  */
+ struct parse_quoted_string_state
+ {
+-    static constexpr size_t error_no_closing_quote    = 1;
+-    static constexpr size_t error_illegal_escape_char = 2;
++    ORCUS_PSR_DLLPUBLIC static const size_t error_no_closing_quote;
++    ORCUS_PSR_DLLPUBLIC static const size_t error_illegal_escape_char;
+ 
+     const char* str;
+     size_t length;
+diff --git a/src/liborcus/json_document_tree.cpp b/src/liborcus/json_document_tree.cpp
+index 81289e1..2fb8a41 100644
+--- a/src/liborcus/json_document_tree.cpp
++++ b/src/liborcus/json_document_tree.cpp
+@@ -54,7 +54,7 @@ using json_value = json::detail::json_value;
+ using node_t = json::detail::node_t;
+ 
+ const char* tab = "    ";
+-constexpr char quote = '"';
++const char quote = '"';
+ 
+ const xmlns_id_t NS_orcus_json_xml = "http://schemas.kohei.us/orcus/2015/json";
+ 
+diff --git a/src/liborcus/json_util.cpp b/src/liborcus/json_util.cpp
+index 37bd2b0..8f593cd 100644
+--- a/src/liborcus/json_util.cpp
++++ b/src/liborcus/json_util.cpp
+@@ -11,8 +11,8 @@ namespace orcus { namespace json {
+ 
+ namespace {
+ 
+-constexpr char quote = '"';
+-constexpr char backslash = '\\';
++const char quote = '"';
++const char backslash = '\\';
+ 
+ }
+ 
+diff --git a/src/liborcus/yaml_document_tree.cpp b/src/liborcus/yaml_document_tree.cpp
+index 5aad4f2..27bb7e8 100644
+--- a/src/liborcus/yaml_document_tree.cpp
++++ b/src/liborcus/yaml_document_tree.cpp
+@@ -155,6 +155,8 @@ struct parser_stack
+     yaml_value* node;
+ 
+     parser_stack(yaml_value* _node) : node(_node) {}
++    parser_stack(const parser_stack&) = delete;
++    parser_stack(parser_stack&& r) : key(std::move(r.key)), node(r.node) {}
+ };
+ 
+ typedef std::unique_ptr<yaml_value> document_root_type;
+@@ -577,7 +579,7 @@ const char* kw_false = "false";
+ const char* kw_tilde = "~";
+ const char* kw_null = "null";
+ 
+-constexpr char quote = '"';
++const char quote = '"';
+ 
+ void dump_indent(std::ostringstream& os, size_t scope)
+ {
+diff --git a/src/parser/parser_global.cpp b/src/parser/parser_global.cpp
+index 6e6b656..4023689 100644
+--- a/src/parser/parser_global.cpp
++++ b/src/parser/parser_global.cpp
+@@ -12,6 +12,9 @@
+ 
+ namespace orcus {
+ 
++const size_t parse_quoted_string_state::error_no_closing_quote = 1;
++const size_t parse_quoted_string_state::error_illegal_escape_char = 2;
++
+ bool is_blank(char c)
+ {
+     return is_in(c, " \t\n\r");
+diff --git a/src/parser/pstring.cpp b/src/parser/pstring.cpp
+index 303e88e..50ab2ca 100644
+--- a/src/parser/pstring.cpp
++++ b/src/parser/pstring.cpp
+@@ -12,6 +12,7 @@
+ #include <cassert>
+ #include <iostream>
+ #include <vector>
++#include <algorithm>
+ 
+ using namespace std;
+ 
+diff --git a/src/parser/stream.cpp b/src/parser/stream.cpp
+index 00a24a0..eb73dcc 100644
+--- a/src/parser/stream.cpp
++++ b/src/parser/stream.cpp
+@@ -85,7 +85,7 @@ std::string create_parse_error_output(const std::string& strm, std::ptrdiff_t of
+     if (offset < 0)
+         return std::string();
+ 
+-    constexpr size_t max_line_length = 60;
++    const size_t max_line_length = 60;
+ 
+     auto line_info = find_line_with_offset(strm, offset);
+     pstring line = std::get<0>(line_info);
+@@ -113,7 +113,7 @@ std::string create_parse_error_output(const std::string& strm, std::ptrdiff_t of
+     // The error line is too long.  Only show a segment of the line where the
+     // error occurred.
+ 
+-    constexpr size_t fixed_offset = 20;
++    const size_t fixed_offset = 20;
+ 
+     size_t line_start = offset_on_line - fixed_offset;
+     size_t line_end = line_start + max_line_length;
+diff --git a/src/parser/yaml_parser_base.cpp b/src/parser/yaml_parser_base.cpp
+index 3c93266..c6e7939 100644
+--- a/src/parser/yaml_parser_base.cpp
++++ b/src/parser/yaml_parser_base.cpp
+@@ -289,18 +289,13 @@ void throw_quoted_string_parse_error(const char* func_name, const parse_quoted_s
+ {
+     std::ostringstream os;
+     os << func_name << ": failed to parse ";
+-    switch (ret.length)
+-    {
+-        case parse_quoted_string_state::error_illegal_escape_char:
+-            os << "due to the presence of illegal escape character.";
+-        break;
+-        case parse_quoted_string_state::error_no_closing_quote:
+-            os << "because the closing quote was not found.";
+-        break;
+-        default:
+-            os << "due to unknown reason.";
++    if (ret.length == parse_quoted_string_state::error_illegal_escape_char)
++        os << "due to the presence of illegal escape character.";
++    else if (ret.length == parse_quoted_string_state::error_no_closing_quote)
++        os << "because the closing quote was not found.";
++    else
++        os << "due to unknown reason.";
+ 
+-    }
+     throw parse_error(os.str());
+ }
+ 
+-- 
+1.8.1.msysgit.1
+
