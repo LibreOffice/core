@@ -23,7 +23,7 @@
 #include <vector>
 #include <map>
 #include <filter/msfilter/msdffimp.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"

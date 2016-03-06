@@ -425,7 +425,7 @@
 #include <vcl/font.hxx>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/helper.hxx>

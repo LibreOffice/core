@@ -34,7 +34,7 @@
 
 #include <osl/thread.h>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

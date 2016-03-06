@@ -20,7 +20,7 @@
 #include <osl/thread.h>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>

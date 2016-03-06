@@ -51,7 +51,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bmpacc.hxx>
 #include <sot/exchange.hxx>
 

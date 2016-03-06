@@ -50,7 +50,7 @@
 #include <IDocumentLinksAdministration.hxx>
 
 #include <comphelper/classids.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>

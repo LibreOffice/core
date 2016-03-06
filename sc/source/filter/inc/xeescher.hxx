@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEESCHER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XEESCHER_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"

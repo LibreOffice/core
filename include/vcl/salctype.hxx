@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #define CVT_UNKNOWN (0x00000000UL)
 #define CVT_BMP     (0x00000001UL)

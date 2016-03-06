@@ -160,7 +160,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/metaact.hxx>

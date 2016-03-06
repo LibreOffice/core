@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include "hintids.hxx"
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>

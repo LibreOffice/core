@@ -1094,7 +1094,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>

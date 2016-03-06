@@ -54,7 +54,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/opengl/IOpenGLRenderer.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/openglwin.hxx>

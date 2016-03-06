@@ -19,7 +19,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <fstream>
 #include <comphelper/processfactory.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <map>
 using namespace com::sun::star;
 

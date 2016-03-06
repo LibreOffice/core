@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_GALCTRL_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>

@@ -22,7 +22,7 @@
 
 #include <osl/endian.h>
 #include <vcl/virdev.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <tools/stream.hxx>
 #include <chart.hxx>
 #include <main.hxx>

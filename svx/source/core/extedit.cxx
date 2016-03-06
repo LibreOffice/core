@@ -10,7 +10,7 @@
 #include <svx/extedit.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>

@@ -31,7 +31,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/valueset.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/colrdlg.hxx>
 #include <editeng/colritem.hxx>

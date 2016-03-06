@@ -42,7 +42,7 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>

@@ -46,7 +46,7 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/awt/Toolkit.hpp>
