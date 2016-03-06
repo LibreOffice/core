@@ -69,33 +69,6 @@ public class MultiPropertyTest extends MultiMethodTest
      * in MultiMethodTest code.
      */
     public XPropertySet oObj;
-    protected boolean optionalService = false;
-
-    /**
-     * Overrides super.before() to check the service is supported by the object.
-     */
-    @Override
-    protected void before()
-    {
-        XServiceInfo xInfo = UnoRuntime.queryInterface(
-                XServiceInfo.class, oObj);
-
-        optionalService = entry.isOptional;
-
-        String theService = getTestedClassName();
-        if (xInfo != null && !xInfo.supportsService(theService))
-        {
-            log.println("Service " + theService + " not available");
-            if (optionalService)
-            {
-                log.println("This is OK since it is optional");
-            }
-            else
-            {
-                Status.failed(theService + " is not supported");
-            }
-        }
-    }
 
     /**
      * Overrides MultiMethodTest.invokeTestMethod(). If the test for the
@@ -154,7 +127,7 @@ public class MultiPropertyTest extends MultiMethodTest
                 final boolean bHasProperty = info.hasPropertyByName(propName);
                 if (!bHasProperty)
                 {
-                    if (isOptional(propName) || optionalService)
+                    if (isOptional(propName) || entry.isOptional)
                     {
                         // skipping optional property test
                         log.println("Property '" + propName + "' is optional and not supported");
