@@ -264,6 +264,18 @@
           <value xml:lang="en-US">.uno:Undo</value>
         </prop>
       </node>
+      <node oor:name="COMMA_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US" install:module="macosx">.uno:OptionsTreeDialog</value>
+        </prop>
+      </node>
+      <node oor:name="F12_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US" install:module="unxwnt">.uno:OptionsTreeDialog</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Modules">
       <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
@@ -801,7 +813,14 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:InsertCurrentTime</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -912,7 +931,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
@@ -1099,12 +1124,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertCurrentDate</value>
-          </prop>
-        </node>
-        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:InsertCurrentTime</value>
           </prop>
         </node>
         <node oor:name="POINT_MOD1" oor:op="replace">
@@ -1522,7 +1541,7 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -2122,7 +2141,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellingAndGrammarDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellingAndGrammarDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellingAndGrammarDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -2793,7 +2818,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -3491,7 +3522,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellingAndGrammarDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellingAndGrammarDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellingAndGrammarDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -4252,7 +4289,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellingAndGrammarDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellingAndGrammarDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellingAndGrammarDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -5013,7 +5056,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellingAndGrammarDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellingAndGrammarDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellingAndGrammarDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -5786,7 +5835,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellingAndGrammarDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellingAndGrammarDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellingAndGrammarDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -6559,7 +6614,13 @@
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SpellingAndGrammarDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SpellingAndGrammarDialog</value>
+          </prop>
+        </node>
+        <node oor:name="SEMICOLON_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:SpellingAndGrammarDialog</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
