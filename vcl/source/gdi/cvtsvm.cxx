@@ -26,7 +26,7 @@
 #include <tools/helpers.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/lineinfo.hxx>
 #include <rtl/strbuf.hxx>
 

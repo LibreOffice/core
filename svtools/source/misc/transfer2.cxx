@@ -23,7 +23,7 @@
 #include <sot/storage.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>

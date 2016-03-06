@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <unotools/pathoptions.hxx>
