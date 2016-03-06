@@ -22,7 +22,7 @@
 
 #include <filter/msfilter/msdffimp.hxx>
 #include <svx/svdobj.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"

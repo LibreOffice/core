@@ -42,7 +42,7 @@
 #include <svl/stritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/ilstitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <svx/tabline.hxx>

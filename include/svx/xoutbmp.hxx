@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_XOUTBMP_HXX
 #define INCLUDED_SVX_XOUTBMP_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/svxdllapi.h>

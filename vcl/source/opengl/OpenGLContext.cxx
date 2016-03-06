@@ -17,7 +17,7 @@
 
 #include <vcl/pngwrite.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <osl/thread.hxx>
 

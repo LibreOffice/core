@@ -22,7 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
