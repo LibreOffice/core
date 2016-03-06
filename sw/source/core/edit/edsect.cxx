@@ -127,8 +127,7 @@ bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly ) const
                && TOX_HEADER_SECTION != eTmpType ) )
         {
             const SwSection& rSect = *pFormat->GetSection();
-            if( !bChkReadOnly ||
-                (bChkReadOnly && rSect.IsProtectFlag() ) )
+            if( !bChkReadOnly || rSect.IsProtectFlag() )
                 return true;
         }
     }
