@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_rangelst_test, \
 	mdds_headers \
 	orcus \
 	orcus-parser \
+    boost_filesystem \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_rangelst_test, \
