@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bacf61ea_a8fe1b03",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-06T06:34:37Z",
+      "side": 1,
+      "message": "ScRefFlags?",
+      "parentUuid": "1aa78d24_431dc10e",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_a31aa515",
         "filename": "sc/inc/address.hxx",
         "patchSetId": 9
@@ -64,6 +82,24 @@
       "writtenOn": "2016-03-05T12:13:59Z",
       "side": 1,
       "message": "no idea why ~(ScAddr::TAB_VALID | ScAddr::TAB2_VALID)\nwon\u0027t compile",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_8803570d",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-06T06:34:37Z",
+      "side": 1,
+      "message": "the typed_flags stuff runs into some compiler issues.Surround the problematic part with a constructor e.g.\n  ~ScAddr(ScAddr::TAB_VALID | ScAddr::TAB2_VALID)",
+      "parentUuid": "1aa78d24_8317a9ec",
       "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
