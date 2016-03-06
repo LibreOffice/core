@@ -53,8 +53,8 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT( xTargetFrame.is() );
 
     // 1. Open the document
-    ScDocShellRef xDocSh = loadDoc("chartx.", XLS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load chartx.xls.", xDocSh.Is());
+    ScDocShellRef xDocSh = loadDoc("chartx2.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load chartx2.xls.", xDocSh.Is());
 
     uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
     CPPUNIT_ASSERT( xModel2.is() );
