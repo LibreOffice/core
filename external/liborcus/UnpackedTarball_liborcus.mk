@@ -16,8 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
-	external/liborcus/fix-crash-ooo55043-1.patch.0 \
-	external/liborcus/unusedheader.patch.0 \
+	external/liborcus/0001-Fix-for-OSX-build-inside-LibreOffice.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
