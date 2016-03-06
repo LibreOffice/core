@@ -81,7 +81,7 @@
 #include <sot/exchange.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/grfmgr.hxx>
 #include <rtl/strbuf.hxx>

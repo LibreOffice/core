@@ -34,7 +34,7 @@
 #include <vcl/imgctrl.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <tools/stream.hxx>
 

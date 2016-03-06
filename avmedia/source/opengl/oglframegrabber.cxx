@@ -11,7 +11,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 

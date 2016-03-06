@@ -25,7 +25,7 @@
 #include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>

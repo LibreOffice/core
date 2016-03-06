@@ -40,7 +40,7 @@
 #include <svl/urlbmk.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>

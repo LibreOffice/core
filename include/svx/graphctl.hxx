@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_GRAPHCTL_HXX
 
 #include <vcl/ctrl.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/svdview.hxx>

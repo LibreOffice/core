@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_DRWLAYER_HXX
 #define INCLUDED_SC_INC_DRWLAYER_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/svdundo.hxx>
 #include "global.hxx"

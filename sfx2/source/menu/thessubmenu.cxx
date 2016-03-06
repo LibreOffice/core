@@ -26,7 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 
 

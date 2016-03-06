@@ -30,7 +30,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <tgrditem.hxx>

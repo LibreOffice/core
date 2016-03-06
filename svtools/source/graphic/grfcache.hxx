@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRFCACHE_HXX
 #define INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRFCACHE_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/timer.hxx>
 #include <list>
 

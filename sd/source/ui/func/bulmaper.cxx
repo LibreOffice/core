@@ -33,7 +33,7 @@
 //<- Fonts & Items
 #include <editeng/bulletitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/numitem.hxx>

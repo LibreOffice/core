@@ -36,7 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graphicfilter.hxx>

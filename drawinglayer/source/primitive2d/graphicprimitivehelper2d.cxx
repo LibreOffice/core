@@ -32,7 +32,7 @@
 // helper class for animated graphics
 
 #include <vcl/animate.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>

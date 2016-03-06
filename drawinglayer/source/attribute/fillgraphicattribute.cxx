@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 namespace drawinglayer
 {

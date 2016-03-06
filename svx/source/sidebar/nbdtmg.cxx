@@ -32,7 +32,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/settings.hxx>
 
 #include <unotools/streamwrap.hxx>

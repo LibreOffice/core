@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 
 #include <sot/object.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bmpacc.hxx>

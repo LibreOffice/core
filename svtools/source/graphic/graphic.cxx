@@ -22,7 +22,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <vcl/dibtools.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include "graphic.hxx"
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

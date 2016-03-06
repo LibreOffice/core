@@ -71,7 +71,7 @@
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/grfmgr.hxx>
 #include <rtl/strbuf.hxx>

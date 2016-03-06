@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BMPWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BMPWIN_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/window.hxx>
 

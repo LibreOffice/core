@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDOGRAF_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/svdorect.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/svxdllapi.h>
