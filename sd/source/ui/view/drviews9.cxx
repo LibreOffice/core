@@ -39,7 +39,7 @@
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
