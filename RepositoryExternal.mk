@@ -743,6 +743,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
+define gb_LinkTarget__use_boost_filesystem
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	boost_filesystem \
+)
+
+endef
+
+define gb_ExternalProject__use_boost_filesystem
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_filesystem)
+endef
+
 define gb_ExternalProject__use_boost_headers
 $(call gb_ExternalProject_use_unpacked,$(1),boost)
 
@@ -3129,7 +3144,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs -lorcus-0.10 \
+       -L$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs -lorcus-0.11 \
 )
 
 $(if $(SYSTEM_BOOST), \
@@ -3148,7 +3163,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs -lorcus-parser-0.10 \
+	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs -lorcus-parser-0.11 \
 )
 
 endef
