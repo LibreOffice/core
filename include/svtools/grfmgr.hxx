@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_GRFMGR_HXX
 #define INCLUDED_SVTOOLS_GRFMGR_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svtools/svtdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 

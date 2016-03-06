@@ -19,7 +19,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #define SUBTITLE_SCALE_FACTOR 0.85
 

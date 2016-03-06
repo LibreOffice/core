@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 class SdrObject;
 

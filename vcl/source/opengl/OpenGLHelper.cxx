@@ -20,7 +20,7 @@
 #include <vcl/bmpacc.hxx>
 #include <memory>
 #include <vcl/pngwrite.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/util/XFlushable.hpp>

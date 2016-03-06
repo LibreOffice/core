@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 
 #include <osl/endian.h>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/fltcall.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

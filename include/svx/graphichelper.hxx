@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_GRAPHICHELPER_HXX
 #define INCLUDED_SVX_GRAPHICHELPER_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/svxdllapi.h>
 
 #include <com/sun/star/drawing/XShape.hpp>
