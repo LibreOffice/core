@@ -218,6 +218,8 @@ void ScConditionalFormatTest::testUndoAnchor()
     CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), newType == ScDrawLayer::GetAnchorType(*pObject) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
+    xComponent->dispose();
 }
 
 void ScConditionalFormatTest::setUp()

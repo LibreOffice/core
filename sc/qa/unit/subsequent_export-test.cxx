@@ -3075,6 +3075,8 @@ void ScExportTest::testRefStringConfigXLSX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_OOO,
                             aConfig.meStringRefAddressSyntax);
 
+    xDocSh->DoClose();
+
     // this doc has no entry for ref syntax
     xDocSh = loadDoc("empty-noconf.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open 2nd doc", xDocSh.Is());
@@ -3142,6 +3144,8 @@ void ScExportTest::testHeaderImage()
     OUString aURL;
     xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
     CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTextDirection()

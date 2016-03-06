@@ -25,7 +25,10 @@ using namespace css;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 5
+// tearDown checks this value before disposing mxCompnent
+// if NUMBER_OF_TESTS is less than the number of tests that call init(),
+// then the component is created again but not disposed, resulting in temp file leak
+#define NUMBER_OF_TESTS 7
 
 class ScConditionalFormatTest : public CalcUnoApiTest
 {
