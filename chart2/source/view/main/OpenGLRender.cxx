@@ -10,7 +10,7 @@
 #include <GL/glew.h>
 #include <vector>
 #include "OpenGLRender.hxx"
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

@@ -26,7 +26,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <svtools/svtdllapi.h>
 

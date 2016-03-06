@@ -59,7 +59,7 @@
 #include <vcl/dibtools.hxx>
 
 // for PDFExtOutDevData Graphic support
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/formpdfexport.hxx>
 

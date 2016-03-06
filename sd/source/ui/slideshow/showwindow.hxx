@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <vcl/timer.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include "Window.hxx"
 

@@ -215,7 +215,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>

@@ -527,7 +527,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/font.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/msgbox.hxx>

@@ -16,7 +16,7 @@
 #include <boost/make_shared.hpp>
 #include <vcl/pngwrite.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #if defined(MACOSX)
 #include <premac.h>

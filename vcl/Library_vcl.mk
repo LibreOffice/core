@@ -273,7 +273,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/gdimetafiletools \
     vcl/source/gdi/gfxlink \
     vcl/source/gdi/gradient \
-    vcl/source/gdi/graph \
+    vcl/source/gdi/graphic \
     vcl/source/gdi/graphictools \
     vcl/source/gdi/hatch \
     vcl/source/gdi/image \

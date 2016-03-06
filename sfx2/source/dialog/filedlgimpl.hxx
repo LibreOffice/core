@@ -21,7 +21,7 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

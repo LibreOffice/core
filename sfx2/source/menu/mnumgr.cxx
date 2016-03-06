@@ -41,7 +41,7 @@
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/file.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/lngmisc.hxx>
 

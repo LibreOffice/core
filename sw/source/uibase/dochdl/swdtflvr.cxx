@@ -47,7 +47,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <sot/storage.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xexch.hxx>

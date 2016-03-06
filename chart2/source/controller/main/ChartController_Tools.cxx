@@ -55,7 +55,7 @@
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svtools/transfer.hxx>
 #include <sot/storage.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/streamwrap.hxx>

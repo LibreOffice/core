@@ -42,7 +42,7 @@
 #include <UndoInsert.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <viscrs.hxx>
 
 using namespace com::sun::star;
