@@ -128,6 +128,10 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const basegfx::B2DRange aB2DRange(aB2DPolyPolygon.getB2DRange());
                 rWriter.attribute("height", aB2DRange.getHeight());
                 rWriter.attribute("width", aB2DRange.getWidth());
+                rWriter.attribute("minx", aB2DRange.getMinX());
+                rWriter.attribute("miny", aB2DRange.getMinY());
+                rWriter.attribute("maxx", aB2DRange.getMaxX());
+                rWriter.attribute("maxy", aB2DRange.getMaxY());
                 rWriter.startElement("polypolygon");
                 rWriter.content(basegfx::tools::exportToSvgD(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), true, true, false));
                 rWriter.endElement();
