@@ -96,12 +96,13 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
-			--disable-spreadsheet-model \
-			--without-tools \
-			--disable-werror \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-			$(if $(SYSTEM_BOOST),,\
+                       $(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
+                       --disable-spreadsheet-model \
+                       --without-tools \
+                       --disable-python \
+                       --disable-werror \
+                       $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+                       $(if $(SYSTEM_BOOST),,\
 				--with-boost=$(WORKDIR)/UnpackedTarball/boost \
 				boost_cv_lib_iostreams=yes \
 				boost_cv_lib_system=yes \
