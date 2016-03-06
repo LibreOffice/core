@@ -813,31 +813,20 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     aLineInfo.SetStyle( LINE_DASH );
                     aLineInfo.SetDashCount( 1 );
                     aLineInfo.SetDotCount( 2 );
-                    aLineInfo.SetDashLen( 150 );
-                    aLineInfo.SetDotLen( 30 );
-                    aLineInfo.SetDistance( 50 );
                 break;
                 case PS_DASHDOT :
                     aLineInfo.SetStyle( LINE_DASH );
                     aLineInfo.SetDashCount( 1 );
                     aLineInfo.SetDotCount( 1 );
-                    aLineInfo.SetDashLen( 150 );
-                    aLineInfo.SetDotLen( 30 );
-                    aLineInfo.SetDistance( 90 );
                 break;
                 case PS_DOT :
                     aLineInfo.SetStyle( LINE_DASH );
                     aLineInfo.SetDashCount( 0 );
-                    aLineInfo.SetDotCount( 1 );
-                    aLineInfo.SetDotLen( 30 );
-                    aLineInfo.SetDistance( 50 );
                 break;
                 case PS_DASH :
                     aLineInfo.SetStyle( LINE_DASH );
                     aLineInfo.SetDashCount( 1 );
                     aLineInfo.SetDotCount( 0 );
-                    aLineInfo.SetDashLen( 225 );
-                    aLineInfo.SetDistance( 100 );
                 break;
                 case PS_NULL :
                     bTransparent = true;
