@@ -838,6 +838,10 @@ public:
         const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
+    void Shuffle(
+        ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        ScProgress* pProgress, sc::ReorderParam* pUndo );
+
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
 
     bool ValidQuery(

@@ -1746,6 +1746,91 @@ void ScTable::Sort(
     DestroySortCollator();
 }
 
+namespace
+{
+
+// Shuffle - swap every cell with a random cell
+void lclShuffleArray(ScSortInfoArray* pArray, SCsCOLROW nLow, SCsCOLROW nHigh)
+{
+    for (SCsCOLROW i = nHigh - nLow; i > 0; --i)
+    {
+        int nRandom = comphelper::rng::uniform_int_distribution(0, i);
+        pArray->Swap(nLow + i, nLow + nRandom);
+    }
+}
+
+} // anonymous namespace
+
+void ScTable::Shuffle(
+    ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+    ScProgress* pProgress, sc::ReorderParam* pUndo )
+{
+    bGlobalKeepQuery = bKeepQuery;
+
+    if (pUndo)
+    {
+        // Copy over the basic sort parameters.
+        pUndo->mbByRow = rSortParam.bByRow;
+        pUndo->mbPattern = rSortParam.bIncludePattern;
+        pUndo->mbHiddenFiltered = bKeepQuery;
+        pUndo->mbUpdateRefs = bUpdateRefs;
+        pUndo->mbHasHeaders = rSortParam.bHasHeader;
+    }
+
+    if (rSortParam.bByRow)
+    {
+        SCROW nLastRow = 0;
+        for (SCCOL nCol = rSortParam.nCol1; nCol <= rSortParam.nCol2; nCol++)
+        {
+            nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
+        }
+        rSortParam.nRow2 = nLastRow = std::min(nLastRow, rSortParam.nRow2);
+        SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
+        aSortParam = rSortParam;
+
+        if (pProgress)
+        {
+            pProgress->SetState(0, nLastRow - nRow1);
+        }
+
+        std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
+        lclShuffleArray(pArray.get(), nRow1, nLastRow);
+
+        if (pArray->IsUpdateRefs())
+            SortReorderByRowRefUpdate(pArray.get(), aSortParam.nCol1, aSortParam.nCol2, pProgress);
+        else
+            SortReorderByRow(pArray.get(), aSortParam.nCol1, aSortParam.nCol2, pProgress);
+
+        if (pUndo)
+        {
+            pUndo->maSortRange = ScRange(rSortParam.nCol1, nRow1, nTab, rSortParam.nCol2, nLastRow, nTab);
+            pUndo->maOrderIndices = pArray->GetOrderIndices();
+        }
+    }
+    else // by column
+    {
+        SCCOL nLastCol = rSortParam.nCol2;
+        SCCOL nCol1 = (rSortParam.bHasHeader ? rSortParam.nCol1 + 1 : rSortParam.nCol1);
+        aSortParam = rSortParam;
+
+        if (pProgress)
+        {
+            pProgress->SetState(0, nLastCol - nCol1);
+        }
+
+        std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
+        lclShuffleArray(pArray.get(), nCol1, nLastCol);
+
+        SortReorderByColumn(pArray.get(), aSortParam.nRow1, aSortParam.nRow2, aSortParam.bIncludePattern, pProgress);
+
+        if (pUndo)
+        {
+            pUndo->maSortRange = ScRange(nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab);
+            pUndo->maOrderIndices = pArray->GetOrderIndices();
+        }
+    }
+}
+
 void ScTable::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
 {
     if (rParam.maOrderIndices.empty())

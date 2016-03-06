@@ -480,6 +480,7 @@
             <menu:menuitem menu:id=".uno:DataSort"/>
             <menu:menuitem menu:id=".uno:SortAscending"/>
             <menu:menuitem menu:id=".uno:SortDescending"/>
+            <menu:menuitem menu:id=".uno:Shuffle"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DataFilterAutoFilter"/>
             <menu:menu menu:id=".uno:FilterMenu">

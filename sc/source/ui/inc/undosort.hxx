@@ -30,6 +30,13 @@ private:
     void Execute( bool bUndo );
 };
 
+class UndoShuffle : public UndoSort
+{
+public:
+    UndoShuffle( ScDocShell* pDocSh, const ReorderParam& rParam );
+    virtual OUString GetComment() const override;
+};
+
 }
 
 #endif
