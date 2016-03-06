@@ -43,15 +43,6 @@ namespace tools_urlobj
     {
 
       public:
-        // initialise your test code values here.
-        void setUp(  ) override
-        {
-        }
-
-        void tearDown(  ) override
-        {
-        }
-
         // insert your test code here.
         // this is only demonstration code
         void urlobjTest_001(  )

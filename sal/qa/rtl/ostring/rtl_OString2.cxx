@@ -53,15 +53,6 @@ class valueOf : public CppUnit::TestFixture
         }
 
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     void valueOf_float_test_001()
     {
@@ -209,15 +200,6 @@ public:
             // testPrecision a;
         }
 
-    // initialise your test code values here.
-    void setUp()
-        {
-        }
-
-    void tearDown()
-        {
-        }
-
     void toDouble_test_impl(rtl::OString const& _sValue)
         {
             double nValueATOF = atof( _sValue.getStr() );
@@ -353,16 +335,6 @@ class getToken : public CppUnit::TestFixture
 {
 
 public:
-
-    // initialise your test code values here.
-    void setUp()
-        {
-        }
-
-    void tearDown()
-        {
-        }
-
     void getToken_000()
         {
             rtl::OString sTokenStr;
@@ -465,14 +437,6 @@ class replaceAt : public CppUnit::TestFixture
 {
 
 public:
-    // initialise your test code values here.
-    void setUp()
-        {
-        }
-
-    void tearDown()
-        {
-        }
     sal_Bool check_replaceAt( const rtl::OString* expVal, const rtl::OString* input,
         const rtl::OString* newStr, sal_Int32  index, sal_Int32 count)
     {

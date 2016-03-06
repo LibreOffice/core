@@ -254,10 +254,6 @@ namespace osl_Mutex
             m_Res.data2 = 0;
         }
 
-        void tearDown() override
-        {
-        }
-
         /** Create two threads to write data to the same buffer, use Mutex to assure
             during one thread write data five times, the other thread should not begin writing.
             the two threads wrote two different datas: their thread ID, so we can check the datas

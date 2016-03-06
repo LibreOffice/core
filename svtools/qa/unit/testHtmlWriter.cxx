@@ -34,7 +34,6 @@ class Test: public CppUnit::TestFixture
 {
 
 public:
-    virtual void setUp() override;
     void testSingleElement();
     void testSingleElementWithAttributes();
     void testSingleElementWithContent();
@@ -52,9 +51,6 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 };
-
-void Test::setUp()
-{}
 
 void Test::testSingleElement()
 {

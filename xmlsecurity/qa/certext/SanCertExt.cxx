@@ -65,10 +65,6 @@ namespace {
 
         ~Test();
 
-        virtual void setUp();
-
-        virtual void tearDown();
-
         void test_Others();
 
         void test_RFC822();
@@ -163,12 +159,6 @@ namespace {
         return certB64;
     }
 
-
-    void Test::setUp() {
-    }
-
-    void Test::tearDown() {
-    }
 
     void Test::test_Others() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
