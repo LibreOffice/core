@@ -93,7 +93,7 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     }
 
     orcus::format_t eFormat = orcus::detect(reinterpret_cast<const unsigned char*>(aContent.getStr()), aContent.getLength());
-    if (eFormat == orcus::format_gnumeric)
+    if (eFormat == orcus::format_t::gnumeric)
         return OUString("Gnumeric XML");
 
     return OUString();
