@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <unotools/localedatawrapper.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SbiInstance;                  // active StarBASIC process
 class SbiRuntime;                   // active StarBASIC procedure instance
@@ -94,11 +95,17 @@ struct SbiGosubStack {              // GOSUB-Stack:
     sal_uInt16 nStartForLvl;        // #118235: For Level in moment of gosub
 };
 
+enum class SbAttributes {
+    NONE          = 0x0000,
+    READONLY      = 0x0001,
+    HIDDEN        = 0x0002,
+    DIRECTORY     = 0x0010
+};
 
-#define Sb_ATTR_READONLY    0x0001
-#define Sb_ATTR_HIDDEN      0x0002
-#define Sb_ATTR_DIRECTORY   0x0010
-
+namespace o3tl
+{
+    template<> struct typed_flags<SbAttributes> : is_typed_flags<SbAttributes, 0x13> {};
+}
 
 class WildCard;
 
@@ -107,7 +114,7 @@ class SbiRTLData
 public:
 
     ::osl::Directory* pDir;
-    sal_Int16   nDirFlags;
+    SbAttributes nDirFlags;
     short   nCurDirPos;
 
     OUString sFullNameToBeChecked;
