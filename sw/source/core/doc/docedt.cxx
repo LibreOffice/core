@@ -327,8 +327,8 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
                 rJoinPrev = rPam.GetPoint() == pStt;
                 OSL_ENSURE( !pStt->nContent.GetIndex() &&
                     pEndNd->GetText().getLength() != pEnd->nContent.GetIndex()
-                    ? rPam.GetPoint()->nNode < rPam.GetMark()->nNode
-                    : rPam.GetPoint()->nNode > rPam.GetMark()->nNode,
+                    ? (rPam.GetPoint()->nNode < rPam.GetMark()->nNode)
+                    : (rPam.GetPoint()->nNode > rPam.GetMark()->nNode),
                     "sw_GetJoinFlags");
             }
         }
