@@ -48,7 +48,7 @@ void dummy_can_throw_anything( char const * )
 
 static OUString toUNOname( char const * p )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     char const * start = p;
 #endif
 
@@ -72,15 +72,11 @@ static OUString toUNOname( char const * p )
         if ('E' != *p)
             buf.append( '.' );
     }
-
-#if OSL_DEBUG_LEVEL > 1
-    OUString ret( buf.makeStringAndClear() );
-    OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
-    return ret;
-#else
-    return buf.makeStringAndClear();
+    OUString res(buf.makeStringAndClear());
+#if OSL_DEBUG_LEVEL > 0
+    SAL_WARN("bridges", "> toUNOname(): " << start << " => " << res);
 #endif
+    return res;
 }
 
 class RTTI
@@ -154,9 +150,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
@@ -164,6 +157,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
                     rtti = new __si_class_type_info(
                         strdup( rttiName ), (__class_type_info *)base_rtti );
+
                 }
                 else
                 {

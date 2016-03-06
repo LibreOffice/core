@@ -165,7 +165,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     if ( nGPR > ia64::MAX_GPR_REGS )
         nGPR = ia64::MAX_GPR_REGS;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
         // Let's figure out what is really going on here
         {
                 fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
@@ -324,37 +324,25 @@ static void cpp_call(
     bool bSimpleReturn = true;
     if (pReturnTypeDescr)
     {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "return type is %d\n", pReturnTypeDescr->eTypeClass);
-#endif
         if ( ia64::return_in_hidden_param(pReturnTypeRef) || ia64::return_via_r8_buffer(pReturnTypeRef) )
                         bSimpleReturn = false;
 
                 if ( bSimpleReturn )
         {
             pCppReturn = pUnoReturn; // direct way for simple types
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "simple return\n");
-#endif
         }
         else
         {
             // complex return via ptr
             pCppReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                    ? alloca( pReturnTypeDescr->nSize ) : pUnoReturn);
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "pCppReturn/pUnoReturn is %lx/%lx", pCppReturn, pUnoReturn);
-#endif
-                        if (!ia64::return_via_r8_buffer(pReturnTypeRef))
+            if (!ia64::return_via_r8_buffer(pReturnTypeRef))
                 INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverflow );
         }
     }
     // push "this" pointer
         void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "this pointer is %p\n", pAdjustedThisPtr);
-#endif
     INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverflow );
 
         // Args
@@ -366,9 +354,6 @@ static void cpp_call(
 
     sal_Int32 nTempIndices   = 0;
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "n params is %d\n", nParams);
-#endif
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -376,10 +361,8 @@ static void cpp_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "param %d is %d %d %d\n", nPos, rParam.bOut, bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ),
-            pParamTypeDescr->eTypeClass);
-#endif
+        SAL_INFO("bridges", "param " << nPos << " is " << rParam.bOut << " " <<
+                bridges::cpp_uno::shared::isSimpleType(pParamTypeDescr) << " " << pParamTypeDescr->eTypeClass);
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
@@ -390,45 +373,26 @@ static void cpp_call(
                         {
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "hyper is %lx\n", *(unsigned long*)(pCppArgs[nPos]));
-#endif
                                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_LONG:
                         case typelib_TypeClass_UNSIGNED_LONG:
                         case typelib_TypeClass_ENUM:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "long is %lx\n", *(unsigned int*)(pCppArgs[nPos]));
-#endif
                                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_SHORT:
                         case typelib_TypeClass_CHAR:
                         case typelib_TypeClass_UNSIGNED_SHORT:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "short is %x\n", *(unsigned short*)(pCppArgs[nPos]));
-#endif
                                 INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_BOOLEAN:
                         case typelib_TypeClass_BYTE:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "byte is %x\n", *(unsigned char*)(pCppArgs[nPos]));
-#endif
                                 INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_FLOAT:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "a float is %f\n", *(float*)(pCppArgs[nPos]));
-                fprintf(stderr, "b float is %f\n", *(double*)(pCppArgs[nPos]));
-#endif
                                 INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, nGPR, pGPR, pStack, bOverflow );
                 break;
                         case typelib_TypeClass_DOUBLE:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "double is %f\n", *(double*)(pCppArgs[nPos]));
-#endif
                                 INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, nGPR, pGPR, pStack, bOverflow );
                                 break;
             default:
@@ -441,14 +405,8 @@ static void cpp_call(
         }
         else // ptr to complex value | ref
         {
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "complex type again %d\n", rParam.bIn);
-#endif
                         if (! rParam.bIn) // is pure out
                         {
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "complex size is %d\n", pParamTypeDescr->nSize );
-#endif
                                 // cpp out is constructed mem, uno out is not!
                                 uno_constructData(
                                         pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
@@ -460,9 +418,6 @@ static void cpp_call(
                         // is in/inout
                         else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
                         {
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "this one\n");
-#endif
                                 uno_copyAndConvertData(
                                         pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                                         pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
@@ -473,9 +428,6 @@ static void cpp_call(
                         }
                         else // direct way
                         {
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "that one, passing %lx through\n", pUnoArgs[nPos]);
-#endif
                                 pCppArgs[nPos] = pUnoArgs[nPos];
                                 // no longer needed
                                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );

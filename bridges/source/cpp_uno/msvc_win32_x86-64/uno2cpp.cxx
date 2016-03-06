@@ -33,7 +33,7 @@
 
 #include "mscx.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 

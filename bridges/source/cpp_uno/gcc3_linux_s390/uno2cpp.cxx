@@ -494,11 +494,6 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "unoInterfaceProxyDispatch\n");
-#endif
-
-
     // is my surrogate
         bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
             = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
