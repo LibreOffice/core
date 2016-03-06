@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bmpacc.hxx>
 
 #ifdef _GIFPRIVATE
