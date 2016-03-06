@@ -777,7 +777,6 @@ bool Outliner::Expand( Paragraph* pPara )
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
         pHdlParagraph = pPara;
-        bIsExpanding = true;
         pParaList->Expand( pPara );
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
@@ -808,7 +807,6 @@ bool Outliner::Collapse( Paragraph* pPara )
         }
 
         pHdlParagraph = pPara;
-        bIsExpanding = false;
         pParaList->Collapse( pPara );
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
@@ -1263,7 +1261,6 @@ Outliner::Outliner(SfxItemPool* pPool, sal_uInt16 nMode)
     , nMaxDepth(9)
     , nMinDepth(-1)
     , nFirstPage(1)
-    , bIsExpanding(false)
     , bFirstParaIsEmpty(true)
     , nBlockInsCallback(0)
     , bStrippingPortions(false)

@@ -615,7 +615,6 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     sal_uInt16          nOutlinerMode;
 
-    bool                bIsExpanding; // Only valid in Expand/Collaps-Hdl, reset
     bool                bFirstParaIsEmpty;
     sal_uInt8           nBlockInsCallback;
     bool                bStrippingPortions;
