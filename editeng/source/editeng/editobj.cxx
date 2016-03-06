@@ -42,7 +42,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/brushitem.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/intitem.hxx>
 #include "svl/sharedstringpool.hxx"
 #include <unotools/fontcvt.hxx>

@@ -23,7 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/xtable.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

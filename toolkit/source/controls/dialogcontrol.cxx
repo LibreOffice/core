@@ -41,7 +41,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <algorithm>

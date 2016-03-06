@@ -30,7 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

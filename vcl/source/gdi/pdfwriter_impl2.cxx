@@ -24,7 +24,7 @@
 #include "vcl/gdimtf.hxx"
 #include "vcl/metaact.hxx"
 #include "vcl/bmpacc.hxx"
-#include "vcl/graph.hxx"
+#include <vcl/graphic.hxx>
 
 #include "svdata.hxx"
 

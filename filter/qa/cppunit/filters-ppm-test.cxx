@@ -11,7 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>

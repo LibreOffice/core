@@ -26,7 +26,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/xexch.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

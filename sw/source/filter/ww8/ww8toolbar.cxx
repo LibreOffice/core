@@ -23,7 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/configmgr.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <map>
 #include <sal/log.hxx>
 

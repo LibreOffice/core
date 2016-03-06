@@ -33,7 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>

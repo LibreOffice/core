@@ -23,7 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
 {

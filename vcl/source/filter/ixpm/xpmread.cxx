@@ -18,7 +18,7 @@
  */
 
 #include <vcl/bmpacc.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include "rgbtable.hxx"
 #define _XPMPRIVATE
 #include "xpmread.hxx"

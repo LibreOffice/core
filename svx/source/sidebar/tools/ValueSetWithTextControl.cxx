@@ -25,7 +25,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <editeng/brushitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {

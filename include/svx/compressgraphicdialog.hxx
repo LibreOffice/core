@@ -22,7 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/slider.hxx>

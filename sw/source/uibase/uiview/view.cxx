@@ -24,7 +24,7 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
 #include <svl/eitem.hxx>

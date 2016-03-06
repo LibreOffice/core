@@ -21,7 +21,7 @@
 #include <iostream>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngread.hxx>
 #include <avmedia/mediawindow.hxx>

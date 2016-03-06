@@ -21,7 +21,7 @@
 #define INCLUDED_BASIC_INC_SBSTDOBJ_HXX
 
 #include <basic/sbxobj.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/basicdllapi.h>
 

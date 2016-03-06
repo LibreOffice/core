@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 

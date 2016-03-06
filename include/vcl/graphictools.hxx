@@ -25,7 +25,7 @@
 #include <rtl/string.hxx>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <memory>
 #include <vector>

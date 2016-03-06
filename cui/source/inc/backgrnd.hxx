@@ -21,7 +21,7 @@
 
 #include <vcl/group.hxx>
 #include <svtools/stdctrl.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/dlgctrl.hxx>
 #include <editeng/brushitem.hxx>

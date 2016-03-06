@@ -29,7 +29,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <unotools/pathoptions.hxx>

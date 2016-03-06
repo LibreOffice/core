@@ -21,7 +21,7 @@
 #include "player.hxx"
 
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/localfilehelper.hxx>
 
