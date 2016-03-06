@@ -3543,7 +3543,7 @@ void Test::testCopyPasteSkipEmpty()
         bool checkRange( const ScAddress& rPos, const Check* p, const Check* pEnd )
         {
             ScAddress aPos(rPos);
-            OUString aPosStr = aPos.Format(SCA_VALID);
+            OUString aPosStr = aPos.Format(ScRefFlags::VALID);
             for (; p != pEnd; ++p, aPos.IncRow())
             {
                 if (!mpDoc->GetString(aPos).equalsAscii(p->mpStr))

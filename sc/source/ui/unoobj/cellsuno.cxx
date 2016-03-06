@@ -2616,7 +2616,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_ABSNAME:
                     {
                         OUString sRet;
-                        aRanges.Format(sRet, SCR_ABS_3D, &pDocShell->GetDocument());
+                        aRanges.Format(sRet, ScRefFlags::RANGE_ABS_3D, &pDocShell->GetDocument());
                         rAny <<= sRet;
                     }
             }
@@ -4292,7 +4292,7 @@ OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     if (pDocSh)
-        rRanges.Format( aString, SCA_VALID | SCA_TAB_3D, &pDocSh->GetDocument() );
+        rRanges.Format( aString, ScRefFlags::VALID | ScRefFlags::TAB_3D, &pDocSh->GetDocument() );
     return aString;
 }
 
@@ -4480,7 +4480,7 @@ static bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
         ScDocument& rDoc = pDocSh->GetDocument();
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
-            aRangeStr = rRanges[ i ]->Format(SCA_VALID | SCA_TAB_3D, &rDoc);
+            aRangeStr = rRanges[ i ]->Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc);
             if ( aRangeStr == rName )
             {
                 rIndex = i;
@@ -4507,8 +4507,8 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
     //  range contained in selection? (sheet must be specified)
 
     ScRange aCellRange;
-    sal_uInt16 nParse = aCellRange.ParseAny( rName, &pDocSh->GetDocument() );
-    if ( ( nParse & ( SCA_VALID | SCA_TAB_3D ) ) == ( SCA_VALID | SCA_TAB_3D ) )
+    ScRefFlags nParse = aCellRange.ParseAny( rName, &pDocSh->GetDocument() );
+    if ( nParse & ( ScRefFlags::VALID | ScRefFlags::TAB_3D ) )
     {
         ScMarkData aMarkData;
         aMarkData.MarkFromRangeList( rRanges, false );
@@ -4568,7 +4568,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
     {
         //  deselect any ranges (parsed or named entry)
         ScRangeList aDiff;
-        bool bValid = ( aDiff.Parse( aNameStr, &pDocSh->GetDocument() ) & SCA_VALID ) != 0;
+        bool bValid = (bool)( aDiff.Parse( aNameStr, &pDocSh->GetDocument() ) & ScRefFlags::VALID );
         if (!bValid && !m_pImpl->m_aNamedEntries.empty())
         {
             sal_uInt16 nCount = m_pImpl->m_aNamedEntries.size();
@@ -4682,7 +4682,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
             if (m_pImpl->m_aNamedEntries.empty() ||
                 !lcl_FindEntryName(m_pImpl->m_aNamedEntries, aRange, aRangeStr))
             {
-                aRangeStr = aRange.Format(SCA_VALID | SCA_TAB_3D, &rDoc);
+                aRangeStr = aRange.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc);
             }
             pAry[i] = aRangeStr;
         }
@@ -4969,10 +4969,10 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         ScRange aCellRange;
         bool bFound = false;
         OUString aString(aName);
-        sal_uInt16 nParse = aCellRange.ParseAny( aString, &rDoc, rDetails );
-        if ( nParse & SCA_VALID )
+        ScRefFlags nParse = aCellRange.ParseAny( aString, &rDoc, rDetails );
+        if ( nParse & ScRefFlags::VALID )
         {
-            if ( !(nParse & SCA_TAB_3D) )   // keine Tabelle angegeben -> auf dieser Tabelle
+            if ( !(nParse & ScRefFlags::TAB_3D) )   // keine Tabelle angegeben -> auf dieser Tabelle
             {
                 aCellRange.aStart.SetTab(nTab);
                 aCellRange.aEnd.SetTab(nTab);

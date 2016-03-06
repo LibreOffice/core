@@ -2466,7 +2466,7 @@ void ScOutputData::AddPDFNotes()
 
                         // Note title is the cell address (as on printed note pages)
                         ScAddress aAddress( nMergeX, nMergeY, nTab );
-                        OUString aTitle(aAddress.Format(SCA_VALID, mpDoc, mpDoc->GetAddressConvention()));
+                        OUString aTitle(aAddress.Format(ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention()));
 
                         // Content has to be a simple string without line breaks
                         OUString aContent = pNote->GetText();

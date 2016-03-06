@@ -211,7 +211,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
         aParams[0] = css::uno::makeAny( OUString( aValStr ) );
 
     //  2) Position of the cell
-    OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
+    OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument, pDocument->GetAddressConvention()));
     aParams[1] = css::uno::makeAny(aPosStr);
 
     //  use link-update flag to prevent closing the document
@@ -328,7 +328,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
             refPar->Get(1)->PutString( aValStr );
 
         //  2) Position of the cell
-        OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
+        OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument, pDocument->GetAddressConvention()));
         refPar->Get(2)->PutString( aPosStr );
 
         //  use link-update flag to prevent closing the document

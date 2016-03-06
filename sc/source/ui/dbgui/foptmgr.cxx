@@ -102,7 +102,7 @@ void ScFilterOptionsMgr::Init()
         OUString   theDbName(STR_DB_LOCAL_NONAME);
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        theAreaStr = theCurArea.Format(SCR_ABS_3D, pDoc, eConv);
+        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
 
         // Zielbereichsliste fuellen
 
@@ -116,7 +116,7 @@ void ScFilterOptionsMgr::Init()
         {
             const sal_Int32 nInsert = pLbCopyArea->InsertEntry( aName );
 
-            OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
+            OUString aRefStr(aRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
             pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
@@ -170,7 +170,7 @@ void ScFilterOptionsMgr::Init()
                 ScAddress( rQueryData.nDestCol,
                            rQueryData.nDestRow,
                            rQueryData.nDestTab
-                         ).Format(SCA_ABS_3D, pDoc, eConv);
+                         ).Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv);
 
             pBtnCopyResult->Check();
             pEdCopyArea->SetText( aString );
@@ -202,9 +202,9 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
     if ( -1 != nColonPos )
         aPosStr = aPosStr.copy( 0, nColonPos );
 
-    sal_uInt16 nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
+    ScRefFlags nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
 
-    return ( SCA_VALID == (nResult & SCA_VALID) );
+    return (bool)(nResult & ScRefFlags::VALID);
 }
 
 // Handler:
@@ -228,9 +228,9 @@ IMPL_LINK_TYPED( ScFilterOptionsMgr, EdAreaModifyHdl, Edit&, rEd, void )
     if ( &rEd == pEdCopyArea )
     {
         OUString  theCurPosStr = rEd.GetText();
-        sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+        ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
-        if ( SCA_VALID == (nResult & SCA_VALID) )
+        if ( nResult & ScRefFlags::VALID )
         {
             const sal_Int32 nCount = pLbCopyArea->GetEntryCount();
 

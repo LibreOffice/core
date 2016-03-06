@@ -99,10 +99,10 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( bSingleCell )
         {
             ScAddress aAdr = rRef.aStart;
-            aRefStr = aAdr.Format(SCA_ABS_3D, pDocP, pDocP->GetAddressConvention());
+            aRefStr = aAdr.Format(ScRefFlags::ADDR_ABS_3D, pDocP, pDocP->GetAddressConvention());
         }
         else
-            aRefStr = theCurArea.Format(SCR_ABS_3D, pDocP, pDocP->GetAddressConvention());
+            aRefStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDocP, pDocP->GetAddressConvention());
 
         if ( bMultiSelection )
         {

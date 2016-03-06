@@ -598,7 +598,7 @@ void ScTabPageSortOptions::Init()
         {
             const sal_Int32 nInsert = m_pLbOutPos->InsertEntry( aName );
 
-            OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
+            OUString aRefStr(aRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
             m_pLbOutPos->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
@@ -611,7 +611,7 @@ void ScTabPageSortOptions::Init()
         OUString theArea =
             ScRange( aScAddress,
                  ScAddress( aSortData.nCol2, aSortData.nRow2, nCurTab )
-               ).Format(SCR_ABS, pDoc, eConv);
+               ).Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
 
         if ( pDBColl )
         {
@@ -686,9 +686,9 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 
     if ( pDoc && !aSortData.bInplace )
     {
-        sal_uInt16 nFormat = (aSortData.nDestTab != pViewData->GetTabNo())
-                            ? SCR_ABS_3D
-                            : SCR_ABS;
+        ScRefFlags nFormat = (aSortData.nDestTab != pViewData->GetTabNo())
+                            ? ScRefFlags::RANGE_ABS_3D
+                            : ScRefFlags::RANGE_ABS;
 
         theOutPos.Set( aSortData.nDestCol,
                        aSortData.nDestRow,
@@ -803,9 +803,9 @@ SfxTabPage::sfxpg ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
             thePos.SetTab( pViewData->GetTabNo() );
         }
 
-        sal_uInt16 nResult = thePos.Parse( thePosStr, pDoc, pDoc->GetAddressConvention() );
+        ScRefFlags nResult = thePos.Parse( thePosStr, pDoc, pDoc->GetAddressConvention() );
 
-        bPosInputOk = ( SCA_VALID == (nResult & SCA_VALID) );
+        bPosInputOk = (bool)(nResult & ScRefFlags::VALID);
 
         if ( !bPosInputOk )
         {
@@ -909,9 +909,9 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     if (pEd == m_pEdOutPos)
     {
         OUString  theCurPosStr = m_pEdOutPos->GetText();
-        sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+        ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
-        if ( SCA_VALID == (nResult & SCA_VALID) )
+        if ( nResult & ScRefFlags::VALID )
         {
             bool    bFound  = false;
             sal_Int32 i = 0;

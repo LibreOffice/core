@@ -199,7 +199,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pDBColl || !pDBColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(sTarget)) )
                     {
                         ScAddress aPos;
-                        if ( aPos.Parse( sTarget, &aDocument, aDocument.GetAddressConvention() ) & SCA_VALID )
+                        if ( aPos.Parse( sTarget, &aDocument, aDocument.GetAddressConvention() ) & ScRefFlags::VALID )
                         {
                             bMakeArea = true;
                             if (bUndo)
@@ -284,7 +284,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
-                bool bValid = ( aSingleRange.ParseAny( aRangeName, &rDoc, aDetails ) & SCA_VALID ) != 0;
+                bool bValid = (bool)( aSingleRange.ParseAny( aRangeName, &rDoc, aDetails ) & ScRefFlags::VALID );
                 if (!bValid)
                 {
                     aRangeListRef = new ScRangeList;
@@ -2202,8 +2202,8 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     // because the address item in a DDE entry is *not* normalized when saved
     // into ODF.
     ScRange aRange;
-    bool bValid = ( (aRange.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO ) & SCA_VALID) ||
-                    (aRange.aStart.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO) & SCA_VALID) );
+    bool bValid = ( (aRange.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID) ||
+                    (aRange.aStart.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO) & ScRefFlags::VALID) );
 
     ScServerObject* pObj = nullptr;            // NULL = error
     if ( bValid )

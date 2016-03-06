@@ -219,7 +219,7 @@ void ScDbNameDlg::Init()
         theCurArea = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
                               ScAddress( nEndCol,   nEndRow,   nEndTab ) );
 
-        theAreaStr = theCurArea.Format(SCR_ABS_3D, pDoc, aAddrDetails);
+        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aAddrDetails);
 
         if ( pDBColl )
         {
@@ -295,7 +295,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         theCurArea = rRef;
 
-        OUString aRefStr(theCurArea.Format(SCR_ABS_3D, pDocP, aAddrDetails));
+        OUString aRefStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDocP, aAddrDetails));
         m_pEdAssign->SetRefString( aRefStr );
         m_pOptions->Enable();
         m_pBtnAdd->Enable();
@@ -364,7 +364,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        OUString theArea(theCurArea.Format(SCR_ABS_3D, pDoc, aAddrDetails));
+        OUString theArea(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aAddrDetails));
         m_pEdAssign->SetText( theArea );
         m_pBtnAdd->SetText( aStrModify );
         m_pBtnHeader->Check( pData->HasHeader() );
@@ -421,7 +421,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AddBtnHdl, Button*, void)
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;
             OUString aText = m_pEdAssign->GetText();
-            if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
+            if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & ScRefFlags::VALID )
             {
                 theCurArea = aTmpRange;
                 ScAddress aStart = theCurArea.aStart;
@@ -628,7 +628,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AssModifyHdl, Edit&, void)
 
     ScRange aTmpRange;
     OUString aText = m_pEdAssign->GetText();
-    if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
+    if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & ScRefFlags::VALID )
         theCurArea = aTmpRange;
 
     if (!aText.isEmpty() && !m_pEdName->GetText().isEmpty())

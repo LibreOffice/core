@@ -352,21 +352,21 @@ handle_r1c1:
         {
             OUString aTest = rFormula.copy( nStart, nPos-nStart );
             const ScAddress::Details aAddrDetails( &rDoc, aCursorPos );
-            sal_uInt16 nFlags = aRange.ParseAny( aTest, &rDoc, aAddrDetails );
-            if ( nFlags & SCA_VALID )
+            ScRefFlags nFlags = aRange.ParseAny( aTest, &rDoc, aAddrDetails );
+            if ( nFlags & ScRefFlags::VALID )
             {
                 //  Set tables if not specified
-                if ( (nFlags & SCA_TAB_3D) == 0 )
+                if ( !(nFlags & ScRefFlags::TAB_3D) )
                     aRange.aStart.SetTab( pActiveViewSh->GetViewData().GetTabNo() );
-                if ( (nFlags & SCA_TAB2_3D) == 0 )
+                if ( !(nFlags & ScRefFlags::TAB2_3D) )
                     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 
-                if ( ( nFlags & ( SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2 ) ) == 0 )
+                if ( !( nFlags & (ScRefFlags::COL2_VALID|ScRefFlags::ROW2_VALID|ScRefFlags::TAB2_VALID) ) )
                 {
                     // #i73766# if a single ref was parsed, set the same "abs" flags for ref2,
                     // so Format doesn't output a double ref because of different flags.
-                    sal_uInt16 nAbsFlags = nFlags & ( SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
-                    nFlags |= nAbsFlags << 4;
+                    ScRefFlags nAbsFlags = nFlags & (ScRefFlags::COL_ABS|ScRefFlags::ROW_ABS|ScRefFlags::TAB_ABS);
+                    applyStartToEndFlags(nFlags, nAbsFlags);
                 }
 
                 if (!nCount)
@@ -1455,7 +1455,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     }
 
     ScRange aTestRange;
-    if ( bColRowName || (aTestRange.Parse(rFormula) & SCA_VALID) )
+    if ( bColRowName || (aTestRange.Parse(rFormula) & ScRefFlags::VALID) )
         aValue = aValue + " ...";
 
     return aValue;
@@ -3049,7 +3049,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
         // Reference to other document
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-        OUString aTmp(rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails)); // Always 3D
+        OUString aTmp(rRef.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pDoc, aAddrDetails)); // Always 3D
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
@@ -3077,9 +3077,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
         if ( rRef.aStart.Tab() != aCursorPos.Tab() ||
              rRef.aStart.Tab() != rRef.aEnd.Tab() )
-            aRefStr = rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails);
+            aRefStr = rRef.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pDoc, aAddrDetails);
         else
-            aRefStr = rRef.Format(SCA_VALID, pDoc, aAddrDetails);
+            aRefStr = rRef.Format(ScRefFlags::VALID, pDoc, aAddrDetails);
     }
 
     if (pTableView || pTopView)
@@ -3653,17 +3653,17 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         if ( aPosStr.isEmpty() )           // Not a name -> format
                         {
-                            sal_uInt16 nFlags = 0;
+                            ScRefFlags nFlags = ScRefFlags::ZERO;
                             if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )
-                                nFlags |= SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;
+                                nFlags |= ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS;
                             if ( rSPos != rEPos )
                             {
                                 ScRange r(rSPos, rEPos);
-                                nFlags |= (nFlags << 4);
-                                aPosStr = r.Format(SCA_VALID | nFlags, &rDoc, aAddrDetails);
+                                applyStartToEndFlags(nFlags);
+                                aPosStr = r.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
                             }
                             else
-                                aPosStr = aCursorPos.Format(SCA_VALID | nFlags, &rDoc, aAddrDetails);
+                                aPosStr = aCursorPos.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
                         }
 
                         // Disable the accessible VALUE_CHANGE event
