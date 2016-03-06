@@ -1145,16 +1145,11 @@ namespace svgio
                     aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                 }
 
-                if(!getClipPathXLink().isEmpty())
+                const SvgClipPathNode* mpClip = accessClipPathXLink();
+                if(mpClip)
                 {
-                    // try to access linked ClipPath
-                    const SvgClipPathNode* mpClip = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(getClipPathXLink()));
-
-                    if(mpClip)
-                    {
-                        // #i124852# transform may be needed when userSpaceOnUse
-                        mpClip->apply(aSource, pTransform);
-                    }
+                    // #i124852# transform may be needed when userSpaceOnUse
+                    mpClip->apply(aSource, pTransform);
                 }
 
                 if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
@@ -1215,6 +1210,7 @@ namespace svgio
             maTitle(),
             maDesc(),
             maClipPathXLink(),
+            mpClipPathXLink(nullptr),
             maMaskXLink(),
             maMarkerStartXLink(),
             mpMarkerStartXLink(nullptr),
@@ -2657,6 +2653,38 @@ namespace svgio
             }
 
             return nullptr;
+        }
+
+        OUString SvgStyleAttributes::getClipPathXLink() const
+        {
+            if(!maClipPathXLink.isEmpty())
+            {
+                return maClipPathXLink;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if(pSvgStyleAttributes && !pSvgStyleAttributes->maClipPathXLink.isEmpty())
+            {
+                return pSvgStyleAttributes->getClipPathXLink();
+            }
+
+            return OUString();
+        }
+
+        const SvgClipPathNode* SvgStyleAttributes::accessClipPathXLink() const
+        {
+            if(!mpClipPathXLink)
+            {
+                const OUString aClipPath(getClipPathXLink());
+
+                if(!aClipPath.isEmpty())
+                {
+                    const_cast< SvgStyleAttributes* >(this)->mpClipPathXLink = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(getClipPathXLink()));
+                }
+            }
+
+            return mpClipPathXLink;
         }
 
         OUString SvgStyleAttributes::getMarkerStartXLink() const
