@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_888cf736",
+        "filename": "sc/source/core/tool/reffind.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-06T18:46:14Z",
+      "side": 1,
+      "message": "I want to get rid of the minus operation in this helper.\nBut need to know what\u0027s its purpose and why things are done this way. \n\nhere is what it does: manipulates the first 3 bits of the flags\nCOL_ABS, ROW_ABS, TAB_ABS\nit seems to help iterate through possible flag combinations\n0000000000000000-\u003e0000000000000011\n0000000000000001-\u003e0000000000000000\n0000000000000010-\u003e0000000000000001\n0000000000000011-\u003e0000000000000010\n0000000000000100-\u003e0000000000000011\n0000000000000101-\u003e0000000000000000\n0000000000000110-\u003e0000000000000001\n0000000000000111-\u003e0000000000000010\n0000000000001000-\u003e0000000000001111\n0000000000001001-\u003e0000000000001000\n0000000000001010-\u003e0000000000001001\n0000000000001011-\u003e0000000000001010\n0000000000001100-\u003e0000000000001011\n0000000000001101-\u003e0000000000001100\n0000000000001110-\u003e0000000000001101\n0000000000001111-\u003e0000000000001110\n\ndoes the order matter? why minus 1 and not plus 1?\nhow is this even useful?",
+      "revId": "8a9914d89402aee39f378d6cd89847a80ec1f48b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
