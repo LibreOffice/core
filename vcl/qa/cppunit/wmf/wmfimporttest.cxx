@@ -150,7 +150,7 @@ void WmfTest::testEmfLineStyles()
     assertXPath(pDoc, "/metafile/line[1]", "dashcount", "1");
     assertXPath(pDoc, "/metafile/line[1]", "dotlen", "0");
     assertXPath(pDoc, "/metafile/line[1]", "dotcount", "0");
-    assertXPath(pDoc, "/metafile/line[1]", "distance", "176");
+    assertXPath(pDoc, "/metafile/line[1]", "distance", "100");
     assertXPath(pDoc, "/metafile/line[1]", "join", "miter");
     assertXPath(pDoc, "/metafile/line[1]", "cap", "butt");
 
