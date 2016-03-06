@@ -26,7 +26,7 @@
 #include <vcl/salbtype.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/metric.hxx>

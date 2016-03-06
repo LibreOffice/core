@@ -29,7 +29,7 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>

@@ -83,7 +83,7 @@
 
 #include <unotools/useroptions.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>

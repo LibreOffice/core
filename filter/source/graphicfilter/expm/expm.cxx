@@ -18,7 +18,7 @@
  */
 
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/fltcall.hxx>
 

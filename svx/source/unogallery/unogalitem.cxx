@@ -25,7 +25,7 @@
 #include <svx/fmmodel.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
 #include <comphelper/servicehelper.hxx>

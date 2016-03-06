@@ -37,7 +37,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <svx/msdffdef.hxx>
 #include <filter/msfilter/dffpropset.hxx>
