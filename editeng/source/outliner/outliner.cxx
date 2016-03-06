@@ -1255,23 +1255,25 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView )
     return RemovingPagesHdl( pCurView );
 }
 
-Outliner::Outliner( SfxItemPool* pPool, sal_uInt16 nMode )
-: nMinDepth( -1 )
+Outliner::Outliner(SfxItemPool* pPool, sal_uInt16 nMode)
+    : pHdlParagraph(nullptr)
+    , mnFirstSelPage(0)
+    , nDepthChangedHdlPrevDepth(0)
+    , mnDepthChangeHdlPrevFlags(ParaFlag::NONE)
+    , nMaxDepth(9)
+    , nMinDepth(-1)
+    , nFirstPage(1)
+    , bIsExpanding(false)
+    , bFirstParaIsEmpty(true)
+    , nBlockInsCallback(0)
+    , bStrippingPortions(false)
+    , bPasting(false)
 {
-
-    bStrippingPortions  = false;
-    bPasting            = false;
-
-    nFirstPage          = 1;
-    nBlockInsCallback   = 0;
-
-    nMaxDepth           = 9;
 
     pParaList = new ParagraphList;
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
     Paragraph* pPara = new Paragraph( 0 );
     pParaList->Append(pPara);
-    bFirstParaIsEmpty = true;
 
     pEditEngine = new OutlinerEditEng( this, pPool );
     pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
