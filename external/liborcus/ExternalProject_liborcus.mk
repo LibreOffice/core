@@ -38,9 +38,9 @@ ifneq ($(SYSTEM_ZLIB),)
 liborcus_LIBS+=-lz
 endif
 ifneq ($(SYSTEM_BOOST),)
-liborcus_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_IOSTREAMS_LIB)
+liborcus_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_IOSTREAMS_LIB) $(BOOST_FILESYSTEM_LIB)
 else
-liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams
+liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams -lboost_filesystem
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm
@@ -96,12 +96,13 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
-			--disable-spreadsheet-model \
-			--without-tools \
-			--disable-werror \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-			$(if $(SYSTEM_BOOST),,\
+                       $(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
+                       --disable-spreadsheet-model \
+                       --without-tools \
+                       --disable-python \
+                       --disable-werror \
+                       $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+                       $(if $(SYSTEM_BOOST),,\
 				--with-boost=$(WORKDIR)/UnpackedTarball/boost \
 				boost_cv_lib_iostreams=yes \
 				boost_cv_lib_system=yes \
@@ -111,8 +112,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_liborcus)/src/liborcus/.libs/liborcus-0.10.0.dylib \
-				$(gb_Package_SOURCEDIR_liborcus)/src/parser/.libs/liborcus-parser-0.10.0.dylib \
+				$(gb_Package_SOURCEDIR_liborcus)/src/liborcus/.libs/liborcus-0.11.0.dylib \
+				$(gb_Package_SOURCEDIR_liborcus)/src/parser/.libs/liborcus-parser-0.11.0.dylib \
 		) \
 	)
 
