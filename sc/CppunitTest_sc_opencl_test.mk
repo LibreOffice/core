@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_opencl_test, \
 	mdds_headers \
 	orcus \
 	orcus-parser \
+    boost_filesystem \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_opencl_test, \

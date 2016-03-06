@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_export_test, \
 	orcus \
 	orcus-parser \
 	libxml2 \
+    boost_filesystem \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_export_test, \
