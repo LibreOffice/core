@@ -1934,7 +1934,8 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window *pWin, c
     xPopupController->setPopupMenu( xPopupMenu );
     VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( xPopupMenu );
     PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
-    if ( pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception( *pVCLMenu, rResName, aEvent ) )
+    OUString aMenuURL = "private:resource/popupmenu/" + rResName;
+    if ( pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception( *pVCLMenu, aMenuURL, aEvent ) )
         pVCLMenu->Execute( pWindow, aPos );
 
     css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
