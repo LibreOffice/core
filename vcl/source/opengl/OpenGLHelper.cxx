@@ -157,8 +157,8 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
         if (nVersionStrEndPos == -1)
             nVersionStrEndPos = nVersionStrStartPos + 8;
 
-        OString aVersionLine = rShaderSource.copy(0, nVersionStrEndPos - nVersionStrStartPos);
-        OString aShaderBody = rShaderSource.copy(nVersionStrEndPos - nVersionStrStartPos);
+        OString aVersionLine = rShaderSource.copy(0, nVersionStrEndPos);
+        OString aShaderBody = rShaderSource.copy(nVersionStrEndPos + 1);
 
         rShaderSource = aVersionLine + "\n" + rPreamble + "\n" + aShaderBody;
     }
