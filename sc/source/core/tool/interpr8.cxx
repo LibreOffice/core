@@ -1349,7 +1349,6 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 }
             }
             break;
-            break;
         case etsStatAdd  :
         case etsStatMult :
             {
