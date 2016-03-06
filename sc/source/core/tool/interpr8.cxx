@@ -125,15 +125,28 @@ public:
     bool GetETSPredictionIntervals( ScMatrixRef rTMat, ScMatrixRef rPIMat, double fPILevel );
 };
 
-ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter ):
-    mpFormatter(pFormatter),
-    mpBase(nullptr),
-    mpTrend(nullptr),
-    mpPerIdx(nullptr),
-    mpForecast(nullptr),
-    mnCount(nSize),
-    mbInitialised(false),
-    mnMonthDay(0)
+ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter )
+    : mpFormatter(pFormatter)
+    , mpBase(nullptr)
+    , mpTrend(nullptr)
+    , mpPerIdx(nullptr)
+    , mpForecast(nullptr)
+    , mnSmplInPrd(0)
+    , mfStepSize(0.0)
+    , mfAlpha(0.0)
+    , mfBeta(0.0)
+    , mfGamma(0.0)
+    , mnCount(nSize)
+    , mbInitialised(false)
+    , mnMonthDay(0)
+    , mfMAE(0.0)
+    , mfMASE(0.0)
+    , mfMSE(0.0)
+    , mfRMSE(0.0)
+    , mfSMAPE(0.0)
+    , mnErrorValue(0)
+    , bAdditive(false)
+    , bEDS(false)
 {
     maRange.reserve( mnCount );
 }
