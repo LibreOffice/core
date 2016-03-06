@@ -22,7 +22,7 @@
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <unotools/streamwrap.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>

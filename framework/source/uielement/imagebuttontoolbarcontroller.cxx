@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>

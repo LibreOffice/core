@@ -19,7 +19,7 @@
 
 #include "xipage.hxx"
 #include <svl/itemset.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include "scitems.hxx"
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

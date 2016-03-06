@@ -20,7 +20,7 @@
 #include <fstream>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <map>
 
 using namespace com::sun::star;

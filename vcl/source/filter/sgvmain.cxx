@@ -19,7 +19,7 @@
 
 #include <rtl/math.hxx>
 #include <osl/endian.h>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>

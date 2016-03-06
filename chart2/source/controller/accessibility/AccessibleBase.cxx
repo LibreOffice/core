@@ -46,7 +46,7 @@
 #include <vcl/unohelp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/functional.hxx>
 

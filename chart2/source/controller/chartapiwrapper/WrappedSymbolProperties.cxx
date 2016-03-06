@@ -32,7 +32,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 #include <editeng/unoprnms.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svtools/grfmgr.hxx>
 #include <vcl/outdev.hxx>
 
