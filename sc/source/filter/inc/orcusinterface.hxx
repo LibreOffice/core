@@ -375,6 +375,7 @@ public:
 
     virtual void set_border_count(size_t n) override;
     virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, const char* s, size_t n) override;
+    virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, orcus::spreadsheet::border_style_t style) override;
     virtual void set_border_color(orcus::spreadsheet::border_direction_t dir,
             orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
@@ -425,6 +426,7 @@ public:
     virtual void set_cell_style_name(const char* s, size_t n) override;
     virtual void set_cell_style_xf(size_t index) override;
     virtual void set_cell_style_builtin(size_t index) override;
+    virtual void set_cell_style_parent_name(const char* s, size_t n) override;
     virtual size_t commit_cell_style() override;
 };
 

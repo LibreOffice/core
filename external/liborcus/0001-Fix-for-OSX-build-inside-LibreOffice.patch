@@ -1,0 +1,1175 @@
+From a1df2d984d527931c6cbbe6547856283bdbf6a9b Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Sun, 6 Mar 2016 21:21:31 -0500
+Subject: [PATCH] Fix for OSX build inside LibreOffice.
+
+---
+ include/orcus/sax_ns_parser.hpp          |   2 +-
+ slickedit/orcus.vpj                      | 178 ++++---------------------------
+ src/liborcus/dom_tree.cpp                |  12 +--
+ src/liborcus/json_document_tree.cpp      |  29 +++--
+ src/liborcus/json_document_tree_test.cpp |   2 +-
+ src/liborcus/ods_content_xml_context.cpp |   2 +-
+ src/liborcus/opc_reader.cpp              |   2 +-
+ src/liborcus/orcus_gnumeric.cpp          |   2 +-
+ src/liborcus/orcus_import_ods.cpp        |   2 +-
+ src/liborcus/orcus_import_xlsx.cpp       |   2 +-
+ src/liborcus/orcus_xls_xml.cpp           |   2 +-
+ src/liborcus/orcus_xlsx.cpp              |  20 ++--
+ src/liborcus/orcus_xml.cpp               |   4 +-
+ src/liborcus/xlsx_sheet_context.cpp      |   8 +-
+ src/liborcus/xml_map_tree.cpp            |   6 +-
+ src/liborcus/xml_structure_tree.cpp      |   4 +-
+ src/liborcus/yaml_document_tree.cpp      |  34 +++---
+ src/mso/encryption_info.cpp              |   3 +-
+ src/orcus_filter_global.cpp              |   2 +-
+ src/orcus_json_main.cpp                  |   2 +-
+ src/orcus_yaml_main.cpp                  |   2 +-
+ src/parser/json_parser_base.cpp          |   2 +-
+ src/parser/sax_parser_base.cpp           |   2 +-
+ src/parser/string_pool.cpp               |   4 +-
+ src/parser/yaml_parser_base.cpp          |   2 +-
+ src/spreadsheet/document.cpp             |   2 +-
+ 26 files changed, 95 insertions(+), 237 deletions(-)
+
+diff --git a/include/orcus/sax_ns_parser.hpp b/include/orcus/sax_ns_parser.hpp
+index 680f39d..49a2b48 100644
+--- a/include/orcus/sax_ns_parser.hpp
++++ b/include/orcus/sax_ns_parser.hpp
+@@ -142,7 +142,7 @@ private:
+ 
+         void start_element(const sax::parser_element& elem)
+         {
+-            m_scopes.push_back(make_unique<__sax::elem_scope>());
++            m_scopes.push_back(orcus::make_unique<__sax::elem_scope>());
+             __sax::elem_scope& scope = *m_scopes.back();
+             scope.ns = m_ns_cxt.get(elem.ns);
+             scope.name = elem.name;
+diff --git a/slickedit/orcus.vpj b/slickedit/orcus.vpj
+index 23c6d42..bbc89ec 100644
+--- a/slickedit/orcus.vpj
++++ b/slickedit/orcus.vpj
+@@ -145,6 +145,10 @@
+             Filters=""></Folder>
+     </CustomFolders>
+     <Files AutoFolders="DirectoryView">
++        <Folder Name="../example">
++            <F N="../example/json.cpp"/>
++            <F N="../example/json_parser.cpp"/>
++        </Folder>
+         <Folder Name="../include">
+             <Folder Name="orcus">
+                 <Folder Name="mso">
+@@ -186,6 +190,7 @@
+                 <F N="../include/orcus/measurement.hpp"/>
+                 <F N="../include/orcus/orcus_csv.hpp"/>
+                 <F N="../include/orcus/orcus_gnumeric.hpp"/>
++                <F N="../include/orcus/orcus_import_ods.hpp"/>
+                 <F N="../include/orcus/orcus_import_xlsx.hpp"/>
+                 <F N="../include/orcus/orcus_ods.hpp"/>
+                 <F N="../include/orcus/orcus_xls_xml.hpp"/>
+@@ -193,43 +198,34 @@
+                 <F N="../include/orcus/orcus_xml.hpp"/>
+                 <F N="../include/orcus/parser_base.hpp"/>
+                 <F N="../include/orcus/parser_global.hpp"/>
+-                <F N="../include/orcus/parser_global.hpp"/>
+-                <F N="../include/orcus/pstring.hpp"/>
+                 <F N="../include/orcus/pstring.hpp"/>
+                 <F N="../include/orcus/sax_ns_parser.hpp"/>
+-                <F N="../include/orcus/sax_ns_parser.hpp"/>
+-                <F N="../include/orcus/sax_parser.hpp"/>
+                 <F N="../include/orcus/sax_parser.hpp"/>
+                 <F N="../include/orcus/sax_parser_base.hpp"/>
+-                <F N="../include/orcus/sax_parser_base.hpp"/>
+-                <F N="../include/orcus/sax_token_parser.hpp"/>
+                 <F N="../include/orcus/sax_token_parser.hpp"/>
+                 <F N="../include/orcus/stream.hpp"/>
+-                <F N="../include/orcus/stream.hpp"/>
+                 <F N="../include/orcus/string_pool.hpp"/>
+-                <F N="../include/orcus/string_pool.hpp"/>
+-                <F N="../include/orcus/tokens.hpp"/>
+                 <F N="../include/orcus/tokens.hpp"/>
+                 <F N="../include/orcus/types.hpp"/>
+-                <F N="../include/orcus/types.hpp"/>
+-                <F N="../include/orcus/xml_namespace.hpp"/>
+                 <F N="../include/orcus/xml_namespace.hpp"/>
+                 <F N="../include/orcus/xml_structure_tree.hpp"/>
+-                <F N="../include/orcus/xml_structure_tree.hpp"/>
+                 <F N="../include/orcus/yaml_document_tree.hpp"/>
+                 <F N="../include/orcus/yaml_parser.hpp"/>
+                 <F N="../include/orcus/yaml_parser_base.hpp"/>
+                 <F N="../include/orcus/zip_archive.hpp"/>
+-                <F N="../include/orcus/zip_archive.hpp"/>
+-                <F N="../include/orcus/zip_archive_stream.hpp"/>
+                 <F N="../include/orcus/zip_archive_stream.hpp"/>
+             </Folder>
+         </Folder>
++        <Folder Name="../misc">
++            <F N="../misc/sorted_string_map_perf.cpp"/>
++        </Folder>
+         <Folder Name="../parser_handlers">
+             <F N="../parser_handlers/css.hpp"/>
+             <F N="../parser_handlers/css_test.cpp"/>
+             <F N="../parser_handlers/csv.hpp"/>
+             <F N="../parser_handlers/csv_test.cpp"/>
++            <F N="../parser_handlers/json.hpp"/>
++            <F N="../parser_handlers/json_test.cpp"/>
+             <F N="../parser_handlers/sax.hpp"/>
+             <F N="../parser_handlers/sax_ns.hpp"/>
+             <F N="../parser_handlers/sax_ns_test.cpp"/>
+@@ -240,308 +236,172 @@
+         <Folder Name="../src">
+             <Folder Name="liborcus">
+                 <F N="../src/liborcus/common_test.cpp"/>
+-                <F N="../src/liborcus/common_test.cpp"/>
+-                <F N="../src/liborcus/config.cpp"/>
+                 <F N="../src/liborcus/config.cpp"/>
++                <F N="../src/liborcus/constants.inl"/>
+                 <F N="../src/liborcus/css_document_tree.cpp"/>
+-                <F N="../src/liborcus/css_document_tree.cpp"/>
+-                <F N="../src/liborcus/css_document_tree_test.cpp"/>
+                 <F N="../src/liborcus/css_document_tree_test.cpp"/>
+                 <F N="../src/liborcus/css_selector.cpp"/>
+-                <F N="../src/liborcus/css_selector.cpp"/>
+-                <F N="../src/liborcus/detection_result.cpp"/>
+                 <F N="../src/liborcus/detection_result.cpp"/>
+                 <F N="../src/liborcus/detection_result.hpp"/>
+-                <F N="../src/liborcus/detection_result.hpp"/>
+                 <F N="../src/liborcus/dom_tree.cpp"/>
+-                <F N="../src/liborcus/dom_tree.cpp"/>
+-                <F N="../src/liborcus/format_detection.cpp"/>
+                 <F N="../src/liborcus/format_detection.cpp"/>
+                 <F N="../src/liborcus/format_detection_test.cpp"/>
+-                <F N="../src/liborcus/format_detection_test.cpp"/>
+-                <F N="../src/liborcus/global.cpp"/>
+                 <F N="../src/liborcus/global.cpp"/>
+                 <F N="../src/liborcus/gnumeric_cell_context.cpp"/>
+-                <F N="../src/liborcus/gnumeric_cell_context.cpp"/>
+                 <F N="../src/liborcus/gnumeric_cell_context.hpp"/>
+-                <F N="../src/liborcus/gnumeric_cell_context.hpp"/>
+-                <F N="../src/liborcus/gnumeric_cell_context_test.cpp"/>
+                 <F N="../src/liborcus/gnumeric_cell_context_test.cpp"/>
+                 <F N="../src/liborcus/gnumeric_context.cpp"/>
+-                <F N="../src/liborcus/gnumeric_context.cpp"/>
+-                <F N="../src/liborcus/gnumeric_context.hpp"/>
+                 <F N="../src/liborcus/gnumeric_context.hpp"/>
+                 <F N="../src/liborcus/gnumeric_detection_handler.cpp"/>
+-                <F N="../src/liborcus/gnumeric_detection_handler.cpp"/>
+                 <F N="../src/liborcus/gnumeric_detection_handler.hpp"/>
+-                <F N="../src/liborcus/gnumeric_detection_handler.hpp"/>
+-                <F N="../src/liborcus/gnumeric_handler.cpp"/>
+                 <F N="../src/liborcus/gnumeric_handler.cpp"/>
+                 <F N="../src/liborcus/gnumeric_handler.hpp"/>
+-                <F N="../src/liborcus/gnumeric_handler.hpp"/>
+-                <F N="../src/liborcus/gnumeric_helper.cpp"/>
+                 <F N="../src/liborcus/gnumeric_helper.cpp"/>
+                 <F N="../src/liborcus/gnumeric_helper.hpp"/>
+-                <F N="../src/liborcus/gnumeric_helper.hpp"/>
+                 <F N="../src/liborcus/gnumeric_helper_test.cpp"/>
+                 <F N="../src/liborcus/gnumeric_namespace_types.cpp"/>
+-                <F N="../src/liborcus/gnumeric_namespace_types.cpp"/>
+-                <F N="../src/liborcus/gnumeric_namespace_types.hpp"/>
+                 <F N="../src/liborcus/gnumeric_namespace_types.hpp"/>
+                 <F N="../src/liborcus/gnumeric_sheet_context.cpp"/>
+-                <F N="../src/liborcus/gnumeric_sheet_context.cpp"/>
+-                <F N="../src/liborcus/gnumeric_sheet_context.hpp"/>
+                 <F N="../src/liborcus/gnumeric_sheet_context.hpp"/>
+                 <F N="../src/liborcus/gnumeric_sheet_context_test.cpp"/>
+-                <F N="../src/liborcus/gnumeric_sheet_context_test.cpp"/>
+                 <F N="../src/liborcus/gnumeric_token_constants.hpp"/>
+-                <F N="../src/liborcus/gnumeric_token_constants.hpp"/>
+-                <F N="../src/liborcus/gnumeric_token_constants.inl"/>
+                 <F N="../src/liborcus/gnumeric_token_constants.inl"/>
+                 <F N="../src/liborcus/gnumeric_tokens.cpp"/>
+-                <F N="../src/liborcus/gnumeric_tokens.cpp"/>
+-                <F N="../src/liborcus/gnumeric_tokens.hpp"/>
+                 <F N="../src/liborcus/gnumeric_tokens.hpp"/>
+                 <F N="../src/liborcus/gnumeric_tokens.inl"/>
+-                <F N="../src/liborcus/gnumeric_tokens.inl"/>
+                 <F N="../src/liborcus/info.cpp"/>
+                 <F N="../src/liborcus/interface.cpp"/>
+-                <F N="../src/liborcus/interface.cpp"/>
+                 <F N="../src/liborcus/json_document_tree.cpp"/>
+                 <F N="../src/liborcus/json_document_tree_test.cpp"/>
+                 <F N="../src/liborcus/json_util.cpp"/>
+                 <F N="../src/liborcus/json_util.hpp"/>
+                 <F N="../src/liborcus/measurement.cpp"/>
+-                <F N="../src/liborcus/measurement.cpp"/>
+                 <F N="../src/liborcus/mock_spreadsheet.cpp"/>
+-                <F N="../src/liborcus/mock_spreadsheet.cpp"/>
+-                <F N="../src/liborcus/mock_spreadsheet.hpp"/>
+                 <F N="../src/liborcus/mock_spreadsheet.hpp"/>
+-                <F N="../src/liborcus/odf_namespace_types.cpp"/>
++                <F N="../src/liborcus/odf_helper.cpp"/>
++                <F N="../src/liborcus/odf_helper.hpp"/>
++                <F N="../src/liborcus/odf_helper_test.cpp"/>
+                 <F N="../src/liborcus/odf_namespace_types.cpp"/>
+                 <F N="../src/liborcus/odf_namespace_types.hpp"/>
+-                <F N="../src/liborcus/odf_namespace_types.hpp"/>
+-                <F N="../src/liborcus/odf_namespace_types_cpp.inl"/>
+                 <F N="../src/liborcus/odf_namespace_types_cpp.inl"/>
+                 <F N="../src/liborcus/odf_namespace_types_hpp.inl"/>
+-                <F N="../src/liborcus/odf_namespace_types_hpp.inl"/>
+-                <F N="../src/liborcus/odf_para_context.cpp"/>
+                 <F N="../src/liborcus/odf_para_context.cpp"/>
+                 <F N="../src/liborcus/odf_para_context.hpp"/>
+-                <F N="../src/liborcus/odf_para_context.hpp"/>
+                 <F N="../src/liborcus/odf_styles.cpp"/>
+-                <F N="../src/liborcus/odf_styles.cpp"/>
+-                <F N="../src/liborcus/odf_styles.hpp"/>
+                 <F N="../src/liborcus/odf_styles.hpp"/>
+                 <F N="../src/liborcus/odf_styles_context.cpp"/>
+-                <F N="../src/liborcus/odf_styles_context.cpp"/>
+-                <F N="../src/liborcus/odf_styles_context.hpp"/>
+                 <F N="../src/liborcus/odf_styles_context.hpp"/>
+-                <F N="../src/liborcus/odf_token_constants.hpp"/>
++                <F N="../src/liborcus/odf_styles_context_test.cpp"/>
+                 <F N="../src/liborcus/odf_token_constants.hpp"/>
+                 <F N="../src/liborcus/odf_token_constants.inl"/>
+-                <F N="../src/liborcus/odf_token_constants.inl"/>
+-                <F N="../src/liborcus/odf_tokens.cpp"/>
+                 <F N="../src/liborcus/odf_tokens.cpp"/>
+                 <F N="../src/liborcus/odf_tokens.hpp"/>
+-                <F N="../src/liborcus/odf_tokens.hpp"/>
+-                <F N="../src/liborcus/odf_tokens.inl"/>
+                 <F N="../src/liborcus/odf_tokens.inl"/>
+                 <F N="../src/liborcus/ods_content_xml_context.cpp"/>
+-                <F N="../src/liborcus/ods_content_xml_context.cpp"/>
+                 <F N="../src/liborcus/ods_content_xml_context.hpp"/>
+-                <F N="../src/liborcus/ods_content_xml_context.hpp"/>
+-                <F N="../src/liborcus/ods_content_xml_handler.cpp"/>
+                 <F N="../src/liborcus/ods_content_xml_handler.cpp"/>
+                 <F N="../src/liborcus/ods_content_xml_handler.hpp"/>
+-                <F N="../src/liborcus/ods_content_xml_handler.hpp"/>
+-                <F N="../src/liborcus/ods_session_data.cpp"/>
+                 <F N="../src/liborcus/ods_session_data.cpp"/>
+                 <F N="../src/liborcus/ods_session_data.hpp"/>
+-                <F N="../src/liborcus/ods_session_data.hpp"/>
+                 <F N="../src/liborcus/ooxml_content_types.cpp"/>
+-                <F N="../src/liborcus/ooxml_content_types.cpp"/>
+-                <F N="../src/liborcus/ooxml_content_types.hpp"/>
+                 <F N="../src/liborcus/ooxml_content_types.hpp"/>
+                 <F N="../src/liborcus/ooxml_global.cpp"/>
+-                <F N="../src/liborcus/ooxml_global.cpp"/>
+-                <F N="../src/liborcus/ooxml_global.hpp"/>
+                 <F N="../src/liborcus/ooxml_global.hpp"/>
+                 <F N="../src/liborcus/ooxml_namespace_types.cpp"/>
+-                <F N="../src/liborcus/ooxml_namespace_types.cpp"/>
+                 <F N="../src/liborcus/ooxml_namespace_types.hpp"/>
+-                <F N="../src/liborcus/ooxml_namespace_types.hpp"/>
+-                <F N="../src/liborcus/ooxml_schemas.cpp"/>
+                 <F N="../src/liborcus/ooxml_schemas.cpp"/>
+                 <F N="../src/liborcus/ooxml_schemas.hpp"/>
+-                <F N="../src/liborcus/ooxml_schemas.hpp"/>
+-                <F N="../src/liborcus/ooxml_token_constants.hpp"/>
+                 <F N="../src/liborcus/ooxml_token_constants.hpp"/>
+                 <F N="../src/liborcus/ooxml_token_constants.inl"/>
+-                <F N="../src/liborcus/ooxml_token_constants.inl"/>
+                 <F N="../src/liborcus/ooxml_tokens.cpp"/>
+-                <F N="../src/liborcus/ooxml_tokens.cpp"/>
+-                <F N="../src/liborcus/ooxml_tokens.hpp"/>
+                 <F N="../src/liborcus/ooxml_tokens.hpp"/>
+                 <F N="../src/liborcus/ooxml_tokens.inl"/>
+-                <F N="../src/liborcus/ooxml_tokens.inl"/>
+-                <F N="../src/liborcus/ooxml_types.cpp"/>
+                 <F N="../src/liborcus/ooxml_types.cpp"/>
+                 <F N="../src/liborcus/ooxml_types.hpp"/>
+-                <F N="../src/liborcus/ooxml_types.hpp"/>
+                 <F N="../src/liborcus/opc_context.cpp"/>
+-                <F N="../src/liborcus/opc_context.cpp"/>
+-                <F N="../src/liborcus/opc_context.hpp"/>
+                 <F N="../src/liborcus/opc_context.hpp"/>
+                 <F N="../src/liborcus/opc_reader.cpp"/>
+-                <F N="../src/liborcus/opc_reader.cpp"/>
+-                <F N="../src/liborcus/opc_reader.hpp"/>
+                 <F N="../src/liborcus/opc_reader.hpp"/>
+                 <F N="../src/liborcus/opc_token_constants.hpp"/>
+-                <F N="../src/liborcus/opc_token_constants.hpp"/>
+                 <F N="../src/liborcus/opc_token_constants.inl"/>
+-                <F N="../src/liborcus/opc_token_constants.inl"/>
+-                <F N="../src/liborcus/opc_tokens.inl"/>
+                 <F N="../src/liborcus/opc_tokens.inl"/>
+                 <F N="../src/liborcus/orcus_csv.cpp"/>
+-                <F N="../src/liborcus/orcus_csv.cpp"/>
+-                <F N="../src/liborcus/orcus_gnumeric.cpp"/>
+                 <F N="../src/liborcus/orcus_gnumeric.cpp"/>
+-                <F N="../src/liborcus/orcus_import_xlsx.cpp"/>
++                <F N="../src/liborcus/orcus_import_ods.cpp"/>
+                 <F N="../src/liborcus/orcus_import_xlsx.cpp"/>
+                 <F N="../src/liborcus/orcus_ods.cpp"/>
+-                <F N="../src/liborcus/orcus_ods.cpp"/>
+-                <F N="../src/liborcus/orcus_xls_xml.cpp"/>
+                 <F N="../src/liborcus/orcus_xls_xml.cpp"/>
+                 <F N="../src/liborcus/orcus_xlsx.cpp"/>
+-                <F N="../src/liborcus/orcus_xlsx.cpp"/>
+-                <F N="../src/liborcus/orcus_xml.cpp"/>
+                 <F N="../src/liborcus/orcus_xml.cpp"/>
+                 <F N="../src/liborcus/session_context.cpp"/>
+-                <F N="../src/liborcus/session_context.cpp"/>
+                 <F N="../src/liborcus/session_context.hpp"/>
+-                <F N="../src/liborcus/session_context.hpp"/>
+-                <F N="../src/liborcus/spreadsheet_interface.cpp"/>
+                 <F N="../src/liborcus/spreadsheet_interface.cpp"/>
+                 <F N="../src/liborcus/spreadsheet_types.cpp"/>
+-                <F N="../src/liborcus/spreadsheet_types.cpp"/>
+-                <F N="../src/liborcus/xls_xml_context.cpp"/>
++                <F N="../src/liborcus/string_helper.cpp"/>
++                <F N="../src/liborcus/string_helper.hpp"/>
+                 <F N="../src/liborcus/xls_xml_context.cpp"/>
+                 <F N="../src/liborcus/xls_xml_context.hpp"/>
+-                <F N="../src/liborcus/xls_xml_context.hpp"/>
+                 <F N="../src/liborcus/xls_xml_detection_handler.cpp"/>
+-                <F N="../src/liborcus/xls_xml_detection_handler.cpp"/>
+-                <F N="../src/liborcus/xls_xml_detection_handler.hpp"/>
+                 <F N="../src/liborcus/xls_xml_detection_handler.hpp"/>
+                 <F N="../src/liborcus/xls_xml_handler.cpp"/>
+-                <F N="../src/liborcus/xls_xml_handler.cpp"/>
+-                <F N="../src/liborcus/xls_xml_handler.hpp"/>
+                 <F N="../src/liborcus/xls_xml_handler.hpp"/>
+                 <F N="../src/liborcus/xls_xml_namespace_types.cpp"/>
+-                <F N="../src/liborcus/xls_xml_namespace_types.cpp"/>
+                 <F N="../src/liborcus/xls_xml_namespace_types.hpp"/>
+-                <F N="../src/liborcus/xls_xml_namespace_types.hpp"/>
+-                <F N="../src/liborcus/xls_xml_token_constants.hpp"/>
+                 <F N="../src/liborcus/xls_xml_token_constants.hpp"/>
+                 <F N="../src/liborcus/xls_xml_token_constants.inl"/>
+-                <F N="../src/liborcus/xls_xml_token_constants.inl"/>
+-                <F N="../src/liborcus/xls_xml_tokens.cpp"/>
+                 <F N="../src/liborcus/xls_xml_tokens.cpp"/>
+                 <F N="../src/liborcus/xls_xml_tokens.hpp"/>
+-                <F N="../src/liborcus/xls_xml_tokens.hpp"/>
+                 <F N="../src/liborcus/xls_xml_tokens.inl"/>
+-                <F N="../src/liborcus/xls_xml_tokens.inl"/>
+-                <F N="../src/liborcus/xlsx_autofilter_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_autofilter_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_autofilter_context.hpp"/>
+-                <F N="../src/liborcus/xlsx_autofilter_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_conditional_format_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_conditional_format_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_handler.cpp"/>
+-                <F N="../src/liborcus/xlsx_handler.cpp"/>
+-                <F N="../src/liborcus/xlsx_handler.hpp"/>
+                 <F N="../src/liborcus/xlsx_handler.hpp"/>
+                 <F N="../src/liborcus/xlsx_helper.cpp"/>
+                 <F N="../src/liborcus/xlsx_helper.hpp"/>
+                 <F N="../src/liborcus/xlsx_pivot_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_pivot_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_pivot_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_pivot_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_revision_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_revision_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_revision_context.hpp"/>
+-                <F N="../src/liborcus/xlsx_revision_context.hpp"/>
+-                <F N="../src/liborcus/xlsx_session_data.cpp"/>
+                 <F N="../src/liborcus/xlsx_session_data.cpp"/>
+                 <F N="../src/liborcus/xlsx_session_data.hpp"/>
+-                <F N="../src/liborcus/xlsx_session_data.hpp"/>
+-                <F N="../src/liborcus/xlsx_sheet_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_sheet_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_sheet_context.hpp"/>
+-                <F N="../src/liborcus/xlsx_sheet_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_sheet_context_test.cpp"/>
+-                <F N="../src/liborcus/xlsx_sheet_context_test.cpp"/>
+-                <F N="../src/liborcus/xlsx_table_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_table_context.cpp"/>
+                 <F N="../src/liborcus/xlsx_table_context.hpp"/>
+-                <F N="../src/liborcus/xlsx_table_context.hpp"/>
+-                <F N="../src/liborcus/xlsx_types.cpp"/>
+                 <F N="../src/liborcus/xlsx_types.cpp"/>
+                 <F N="../src/liborcus/xlsx_types.hpp"/>
+-                <F N="../src/liborcus/xlsx_types.hpp"/>
+                 <F N="../src/liborcus/xlsx_workbook_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_workbook_context.cpp"/>
+-                <F N="../src/liborcus/xlsx_workbook_context.hpp"/>
+                 <F N="../src/liborcus/xlsx_workbook_context.hpp"/>
+                 <F N="../src/liborcus/xml_context_base.cpp"/>
+-                <F N="../src/liborcus/xml_context_base.cpp"/>
+-                <F N="../src/liborcus/xml_context_base.hpp"/>
+                 <F N="../src/liborcus/xml_context_base.hpp"/>
+                 <F N="../src/liborcus/xml_context_global.cpp"/>
+-                <F N="../src/liborcus/xml_context_global.cpp"/>
+                 <F N="../src/liborcus/xml_context_global.hpp"/>
+-                <F N="../src/liborcus/xml_context_global.hpp"/>
+-                <F N="../src/liborcus/xml_map_tree.cpp"/>
+                 <F N="../src/liborcus/xml_map_tree.cpp"/>
+                 <F N="../src/liborcus/xml_map_tree.hpp"/>
+-                <F N="../src/liborcus/xml_map_tree.hpp"/>
+-                <F N="../src/liborcus/xml_map_tree_test.cpp"/>
+                 <F N="../src/liborcus/xml_map_tree_test.cpp"/>
+                 <F N="../src/liborcus/xml_simple_stream_handler.cpp"/>
+-                <F N="../src/liborcus/xml_simple_stream_handler.cpp"/>
+                 <F N="../src/liborcus/xml_simple_stream_handler.hpp"/>
+-                <F N="../src/liborcus/xml_simple_stream_handler.hpp"/>
+-                <F N="../src/liborcus/xml_stream_handler.cpp"/>
+                 <F N="../src/liborcus/xml_stream_handler.cpp"/>
+                 <F N="../src/liborcus/xml_stream_handler.hpp"/>
+-                <F N="../src/liborcus/xml_stream_handler.hpp"/>
+-                <F N="../src/liborcus/xml_stream_parser.cpp"/>
+                 <F N="../src/liborcus/xml_stream_parser.cpp"/>
+                 <F N="../src/liborcus/xml_stream_parser.hpp"/>
+-                <F N="../src/liborcus/xml_stream_parser.hpp"/>
+                 <F N="../src/liborcus/xml_structure_tree.cpp"/>
+-                <F N="../src/liborcus/xml_structure_tree.cpp"/>
+-                <F N="../src/liborcus/xml_structure_tree_test.cpp"/>
+                 <F N="../src/liborcus/xml_structure_tree_test.cpp"/>
+                 <F N="../src/liborcus/yaml_document_tree.cpp"/>
+                 <F N="../src/liborcus/yaml_document_tree_test.cpp"/>
+             </Folder>
+             <Folder Name="mso">
+                 <F N="../src/mso/encryption_info.cpp"/>
+-                <F N="../src/mso/encryption_info.cpp"/>
+             </Folder>
+             <Folder Name="parser">
+                 <F N="../src/parser/base64.cpp"/>
+-                <F N="../src/parser/base64.cpp"/>
+-                <F N="../src/parser/base64_test.cpp"/>
+                 <F N="../src/parser/base64_test.cpp"/>
+                 <F N="../src/parser/cell_buffer.cpp"/>
+-                <F N="../src/parser/cell_buffer.cpp"/>
+-                <F N="../src/parser/css_parser_base.cpp"/>
+                 <F N="../src/parser/css_parser_base.cpp"/>
+                 <F N="../src/parser/css_types.cpp"/>
+                 <F N="../src/parser/csv_parser_base.cpp"/>
+@@ -565,6 +425,7 @@
+                 <F N="../src/parser/yaml_parser_base.cpp"/>
+                 <F N="../src/parser/zip_archive.cpp"/>
+                 <F N="../src/parser/zip_archive_stream.cpp"/>
++                <F N="../src/parser/zip_archive_test.cpp"/>
+             </Folder>
+             <Folder Name="python">
+                 <F N="../src/python/json.cpp"/>
+@@ -597,7 +458,6 @@
+             <F N="../src/orcus_json_main.cpp"/>
+             <F N="../src/orcus_mso_encryption.cpp"/>
+             <F N="../src/orcus_ods_main.cpp"/>
+-            <F N="../src/orcus_test_common.cpp"/>
+             <F N="../src/orcus_test_csv.cpp"/>
+             <F N="../src/orcus_test_ods.cpp"/>
+             <F N="../src/orcus_test_xls_xml.cpp"/>
+diff --git a/src/liborcus/dom_tree.cpp b/src/liborcus/dom_tree.cpp
+index 255a7d7..1b4588b 100644
+--- a/src/liborcus/dom_tree.cpp
++++ b/src/liborcus/dom_tree.cpp
+@@ -177,7 +177,7 @@ void dom_tree::content::print(ostream& os, const xmlns_context& /*cxt*/) const
+ dom_tree::content::~content() {}
+ 
+ dom_tree::dom_tree(xmlns_context& cxt) :
+-    mp_impl(make_unique<dom_tree_impl>(cxt)) {}
++    mp_impl(orcus::make_unique<dom_tree_impl>(cxt)) {}
+ 
+ dom_tree::~dom_tree() {}
+ 
+@@ -242,7 +242,7 @@ void dom_tree::start_element(xmlns_id_t ns, const pstring& name)
+ 
+     // Append new element as a child element of the current element.
+     p = mp_impl->m_elem_stack.back();
+-    p->child_nodes.push_back(make_unique<element>(ns, name_safe));
++    p->child_nodes.push_back(orcus::make_unique<element>(ns, name_safe));
+     p = static_cast<element*>(p->child_nodes.back().get());
+     p->attrs.swap(mp_impl->m_cur_attrs);
+     mp_impl->m_elem_stack.push_back(p);
+@@ -269,7 +269,7 @@ void dom_tree::set_characters(const pstring& val)
+ 
+     element* p = mp_impl->m_elem_stack.back();
+     val2 = mp_impl->m_pool.intern(val2).first; // Make sure the string is persistent.
+-    p->child_nodes.push_back(make_unique<content>(val2));
++    p->child_nodes.push_back(orcus::make_unique<content>(val2));
+ }
+ 
+ void dom_tree::set_attribute(xmlns_id_t ns, const pstring& name, const pstring& val)
+@@ -283,7 +283,7 @@ void dom_tree::set_attribute(xmlns_id_t ns, const pstring& name, const pstring&
+ 
+ void dom_tree::set_doctype(const sax::doctype_declaration& dtd)
+ {
+-    mp_impl->m_doctype = make_unique<sax::doctype_declaration>(dtd);  // make a copy.
++    mp_impl->m_doctype = orcus::make_unique<sax::doctype_declaration>(dtd);  // make a copy.
+ 
+     sax::doctype_declaration& this_dtd = *mp_impl->m_doctype;
+     string_pool& pool = mp_impl->m_pool;
+@@ -360,7 +360,7 @@ void dom_tree::dump_compact(ostream& os) const
+ 
+     scopes_type scopes;
+ 
+-    scopes.push_back(make_unique<scope>(string(), mp_impl->m_root));
++    scopes.push_back(orcus::make_unique<scope>(string(), mp_impl->m_root));
+     while (!scopes.empty())
+     {
+         bool new_scope = false;
+@@ -418,7 +418,7 @@ void dom_tree::dump_compact(ostream& os) const
+             ++cur_scope.current_pos;
+             ostringstream elem_name;
+             elem->print(elem_name, mp_impl->m_ns_cxt);
+-            scopes.push_back(make_unique<scope>(elem_name.str()));
++            scopes.push_back(orcus::make_unique<scope>(elem_name.str()));
+             scope& child_scope = *scopes.back();
+             child_scope.nodes.swap(nodes);
+             child_scope.current_pos = child_scope.nodes.begin();
+diff --git a/src/liborcus/json_document_tree.cpp b/src/liborcus/json_document_tree.cpp
+index adafcbf..81289e1 100644
+--- a/src/liborcus/json_document_tree.cpp
++++ b/src/liborcus/json_document_tree.cpp
+@@ -55,7 +55,6 @@ using node_t = json::detail::node_t;
+ 
+ const char* tab = "    ";
+ constexpr char quote = '"';
+-constexpr char backslash = '\\';
+ 
+ const xmlns_id_t NS_orcus_json_xml = "http://schemas.kohei.us/orcus/2015/json";
+ 
+@@ -455,13 +454,13 @@ public:
+     {
+         if (m_root)
+         {
+-            json_value* jv = push_value(make_unique<json_value_array>());
++            json_value* jv = push_value(orcus::make_unique<json_value_array>());
+             assert(jv && jv->type == node_t::array);
+             m_stack.push_back(parser_stack(jv));
+         }
+         else
+         {
+-            m_root = make_unique<json_value_array>();
++            m_root = orcus::make_unique<json_value_array>();
+             m_stack.push_back(parser_stack(m_root.get()));
+         }
+     }
+@@ -476,13 +475,13 @@ public:
+     {
+         if (m_root)
+         {
+-            json_value* jv = push_value(make_unique<json_value_object>());
++            json_value* jv = push_value(orcus::make_unique<json_value_object>());
+             assert(jv && jv->type == node_t::object);
+             m_stack.push_back(parser_stack(jv));
+         }
+         else
+         {
+-            m_root = make_unique<json_value_object>();
++            m_root = orcus::make_unique<json_value_object>();
+             m_stack.push_back(parser_stack(m_root.get()));
+         }
+     }
+@@ -504,17 +503,17 @@ public:
+ 
+     void boolean_true()
+     {
+-        push_value(make_unique<json_value>(node_t::boolean_true));
++        push_value(orcus::make_unique<json_value>(node_t::boolean_true));
+     }
+ 
+     void boolean_false()
+     {
+-        push_value(make_unique<json_value>(node_t::boolean_false));
++        push_value(orcus::make_unique<json_value>(node_t::boolean_false));
+     }
+ 
+     void null()
+     {
+-        push_value(make_unique<json_value>(node_t::null));
++        push_value(orcus::make_unique<json_value>(node_t::null));
+     }
+ 
+     void string(const char* p, size_t len, bool transient)
+@@ -524,12 +523,12 @@ public:
+             // The tree manages the life cycle of this string value.
+             s = m_pool.intern(s).first;
+ 
+-        push_value(make_unique<json_value_string>(s));
++        push_value(orcus::make_unique<json_value_string>(s));
+     }
+ 
+     void number(double val)
+     {
+-        push_value(make_unique<json_value_number>(val));
++        push_value(orcus::make_unique<json_value_number>(val));
+     }
+ 
+     void swap(std::unique_ptr<json_value>& other_root)
+@@ -554,8 +553,8 @@ struct node::impl
+     impl(const json_value* jv) : m_node(jv) {}
+ };
+ 
+-node::node(const json_value* jv) : mp_impl(make_unique<impl>(jv)) {}
+-node::node(const node& other) : mp_impl(make_unique<impl>(other.mp_impl->m_node)) {}
++node::node(const json_value* jv) : mp_impl(orcus::make_unique<impl>(jv)) {}
++node::node(const node& other) : mp_impl(orcus::make_unique<impl>(other.mp_impl->m_node)) {}
+ node::node(node&& rhs) : mp_impl(std::move(rhs.mp_impl)) {}
+ node::~node() {}
+ 
+@@ -720,12 +719,12 @@ struct json_document_tree::impl
+     std::unique_ptr<string_pool> m_own_pool;
+     string_pool& m_pool;
+ 
+-    impl() : m_own_pool(make_unique<string_pool>()), m_pool(*m_own_pool) {}
++    impl() : m_own_pool(orcus::make_unique<string_pool>()), m_pool(*m_own_pool) {}
+     impl(string_pool& pool) : m_pool(pool) {}
+ };
+ 
+-json_document_tree::json_document_tree() : mp_impl(make_unique<impl>()) {}
+-json_document_tree::json_document_tree(string_pool& pool) : mp_impl(make_unique<impl>(pool)) {}
++json_document_tree::json_document_tree() : mp_impl(orcus::make_unique<impl>()) {}
++json_document_tree::json_document_tree(string_pool& pool) : mp_impl(orcus::make_unique<impl>(pool)) {}
+ json_document_tree::~json_document_tree() {}
+ 
+ void json_document_tree::load(const std::string& strm, const json_config& config)
+diff --git a/src/liborcus/json_document_tree_test.cpp b/src/liborcus/json_document_tree_test.cpp
+index da16150..4b4fcbd 100644
+--- a/src/liborcus/json_document_tree_test.cpp
++++ b/src/liborcus/json_document_tree_test.cpp
+@@ -193,7 +193,7 @@ std::unique_ptr<json_document_tree> get_doc_tree(const char* filepath)
+     cout << "--- original" << endl;
+     cout << strm << endl;
+ 
+-    auto doc = make_unique<json_document_tree>();
++    auto doc = orcus::make_unique<json_document_tree>();
+     doc->load(strm, test_config);
+ 
+     return doc;
+diff --git a/src/liborcus/ods_content_xml_context.cpp b/src/liborcus/ods_content_xml_context.cpp
+index f496353..c4e706d 100644
+--- a/src/liborcus/ods_content_xml_context.cpp
++++ b/src/liborcus/ods_content_xml_context.cpp
+@@ -588,7 +588,7 @@ void ods_content_xml_context::push_cell_value()
+         ods_session_data& ods_data =
+             static_cast<ods_session_data&>(*get_session_context().mp_data);
+         ods_data.m_formulas.push_back(
+-            make_unique<ods_session_data::formula>(
++            orcus::make_unique<ods_session_data::formula>(
+                 m_tables.size()-1, m_row, m_col, m_cell_attr.formula_grammar, m_cell_attr.formula));
+ 
+         ods_session_data::formula& formula_data = *ods_data.m_formulas.back();
+diff --git a/src/liborcus/opc_reader.cpp b/src/liborcus/opc_reader.cpp
+index 814b2cf..666530e 100644
+--- a/src/liborcus/opc_reader.cpp
++++ b/src/liborcus/opc_reader.cpp
+@@ -244,7 +244,7 @@ void opc_reader::read_content_types()
+         m_config, m_ns_repo, opc_tokens,
+         reinterpret_cast<const char*>(&buffer[0]), buffer.size());
+ 
+-    auto handler = make_unique<xml_simple_stream_handler>(
++    auto handler = orcus::make_unique<xml_simple_stream_handler>(
+         new opc_content_types_context(m_session_cxt, opc_tokens));
+ 
+     parser.set_handler(handler.get());
+diff --git a/src/liborcus/orcus_gnumeric.cpp b/src/liborcus/orcus_gnumeric.cpp
+index 1873c0e..c29bef9 100644
+--- a/src/liborcus/orcus_gnumeric.cpp
++++ b/src/liborcus/orcus_gnumeric.cpp
+@@ -82,7 +82,7 @@ void orcus_gnumeric::read_content_xml(const char* p, size_t size)
+ {
+     xml_stream_parser parser(get_config(), mp_impl->m_ns_repo, gnumeric_tokens, p, size);
+ 
+-    auto handler = make_unique<gnumeric_content_xml_handler>(
++    auto handler = orcus::make_unique<gnumeric_content_xml_handler>(
+         mp_impl->m_cxt, gnumeric_tokens, mp_impl->mp_factory);
+ 
+     parser.set_handler(handler.get());
+diff --git a/src/liborcus/orcus_import_ods.cpp b/src/liborcus/orcus_import_ods.cpp
+index af1135e..2d76dbb 100644
+--- a/src/liborcus/orcus_import_ods.cpp
++++ b/src/liborcus/orcus_import_ods.cpp
+@@ -32,7 +32,7 @@ void import_ods::read_styles(const char* p, size_t n, spreadsheet::iface::import
+ 
+     session_context cxt;
+     odf_styles_map_type styles_map;
+-    auto context = make_unique<styles_context>(cxt, odf_tokens, styles_map, styles);
++    auto context = orcus::make_unique<styles_context>(cxt, odf_tokens, styles_map, styles);
+ 
+     xml_simple_stream_handler stream_handler(context.release());
+ 
+diff --git a/src/liborcus/orcus_import_xlsx.cpp b/src/liborcus/orcus_import_xlsx.cpp
+index 2f9f172..0d4a933 100644
+--- a/src/liborcus/orcus_import_xlsx.cpp
++++ b/src/liborcus/orcus_import_xlsx.cpp
+@@ -33,7 +33,7 @@ void import_xlsx::read_table(const char* p, size_t n, spreadsheet::iface::import
+         return;
+ 
+     session_context cxt;
+-    auto handler = make_unique<xlsx_table_xml_handler>(cxt, ooxml_tokens, *table);
++    auto handler = orcus::make_unique<xlsx_table_xml_handler>(cxt, ooxml_tokens, *table);
+ 
+     xmlns_repository ns_repo;
+     ns_repo.add_predefined_values(NS_ooxml_all);
+diff --git a/src/liborcus/orcus_xls_xml.cpp b/src/liborcus/orcus_xls_xml.cpp
+index 2849219..22ffeab 100644
+--- a/src/liborcus/orcus_xls_xml.cpp
++++ b/src/liborcus/orcus_xls_xml.cpp
+@@ -92,7 +92,7 @@ void orcus_xls_xml::read_stream(const char* content, size_t len)
+     xml_stream_parser parser(
+         get_config(), mp_impl->m_ns_repo, xls_xml_tokens, content, len);
+ 
+-    auto handler = make_unique<xls_xml_handler>(
++    auto handler = orcus::make_unique<xls_xml_handler>(
+         mp_impl->m_cxt, xls_xml_tokens, mp_impl->mp_factory);
+ 
+     parser.set_handler(handler.get());
+diff --git a/src/liborcus/orcus_xlsx.cpp b/src/liborcus/orcus_xlsx.cpp
+index 8c578e6..7c1e46c 100644
+--- a/src/liborcus/orcus_xlsx.cpp
++++ b/src/liborcus/orcus_xlsx.cpp
+@@ -286,7 +286,7 @@ void orcus_xlsx::read_workbook(const string& dir_path, const string& file_name)
+     if (buffer.empty())
+         return;
+ 
+-    auto handler = make_unique<xml_simple_stream_handler>(
++    auto handler = orcus::make_unique<xml_simple_stream_handler>(
+         new xlsx_workbook_context(mp_impl->m_cxt, ooxml_tokens));
+ 
+     xml_stream_parser parser(
+@@ -341,7 +341,7 @@ void orcus_xlsx::read_sheet(const string& dir_path, const string& file_name, xls
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+         reinterpret_cast<const char*>(&buffer[0]), buffer.size());
+ 
+-    auto handler = make_unique<xlsx_sheet_xml_handler>(
++    auto handler = orcus::make_unique<xlsx_sheet_xml_handler>(
+         mp_impl->m_cxt, ooxml_tokens, data->id-1, sheet);
+ 
+     parser.set_handler(handler.get());
+@@ -373,7 +373,7 @@ void orcus_xlsx::read_shared_strings(const string& dir_path, const string& file_
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+         reinterpret_cast<const char*>(&buffer[0]), buffer.size());
+ 
+-    auto handler = make_unique<xml_simple_stream_handler>(
++    auto handler = orcus::make_unique<xml_simple_stream_handler>(
+         new xlsx_shared_strings_context(
+             mp_impl->m_cxt, ooxml_tokens, mp_impl->mp_factory->get_shared_strings()));
+ 
+@@ -406,7 +406,7 @@ void orcus_xlsx::read_styles(const string& dir_path, const string& file_name)
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+         reinterpret_cast<const char*>(&buffer[0]), buffer.size());
+ 
+-    auto handler = make_unique<xml_simple_stream_handler>(
++    auto handler = orcus::make_unique<xml_simple_stream_handler>(
+         new xlsx_styles_context(
+             mp_impl->m_cxt, ooxml_tokens, mp_impl->mp_factory->get_styles()));
+ 
+@@ -441,7 +441,7 @@ void orcus_xlsx::read_table(const std::string& dir_path, const std::string& file
+     if (buffer.empty())
+         return;
+ 
+-    auto handler = make_unique<xlsx_table_xml_handler>(mp_impl->m_cxt, ooxml_tokens, *table);
++    auto handler = orcus::make_unique<xlsx_table_xml_handler>(mp_impl->m_cxt, ooxml_tokens, *table);
+ 
+     xml_stream_parser parser(
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+@@ -471,7 +471,7 @@ void orcus_xlsx::read_pivot_cache_def(const std::string& dir_path, const std::st
+     if (buffer.empty())
+         return;
+ 
+-    auto handler = make_unique<xlsx_pivot_cache_def_xml_handler>(mp_impl->m_cxt, ooxml_tokens);
++    auto handler = orcus::make_unique<xlsx_pivot_cache_def_xml_handler>(mp_impl->m_cxt, ooxml_tokens);
+ 
+     xml_stream_parser parser(
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+@@ -502,7 +502,7 @@ void orcus_xlsx::read_pivot_cache_rec(const std::string& dir_path, const std::st
+     if (buffer.empty())
+         return;
+ 
+-    auto handler = make_unique<xlsx_pivot_cache_rec_xml_handler>(mp_impl->m_cxt, ooxml_tokens);
++    auto handler = orcus::make_unique<xlsx_pivot_cache_rec_xml_handler>(mp_impl->m_cxt, ooxml_tokens);
+ 
+     xml_stream_parser parser(
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+@@ -532,7 +532,7 @@ void orcus_xlsx::read_pivot_table(const std::string& dir_path, const std::string
+     if (buffer.empty())
+         return;
+ 
+-    auto handler = make_unique<xlsx_pivot_table_xml_handler>(mp_impl->m_cxt, ooxml_tokens);
++    auto handler = orcus::make_unique<xlsx_pivot_table_xml_handler>(mp_impl->m_cxt, ooxml_tokens);
+ 
+     xml_stream_parser parser(
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+@@ -567,7 +567,7 @@ void orcus_xlsx::read_rev_headers(const std::string& dir_path, const std::string
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+         reinterpret_cast<const char*>(&buffer[0]), buffer.size());
+ 
+-    auto handler = make_unique<xml_simple_stream_handler>(
++    auto handler = orcus::make_unique<xml_simple_stream_handler>(
+         new xlsx_revheaders_context(mp_impl->m_cxt, ooxml_tokens));
+ 
+     parser.set_handler(handler.get());
+@@ -600,7 +600,7 @@ void orcus_xlsx::read_rev_log(const std::string& dir_path, const std::string& fi
+         get_config(), mp_impl->m_ns_repo, ooxml_tokens,
+         reinterpret_cast<const char*>(&buffer[0]), buffer.size());
+ 
+-    auto handler = make_unique<xml_simple_stream_handler>(
++    auto handler = orcus::make_unique<xml_simple_stream_handler>(
+         new xlsx_revlog_context(mp_impl->m_cxt, ooxml_tokens));
+ 
+     parser.set_handler(handler.get());
+diff --git a/src/liborcus/orcus_xml.cpp b/src/liborcus/orcus_xml.cpp
+index 2cb7fa3..f97c4f9 100644
+--- a/src/liborcus/orcus_xml.cpp
++++ b/src/liborcus/orcus_xml.cpp
+@@ -343,7 +343,7 @@ void write_range_reference_group(
+     scopes_type scopes;
+     for (spreadsheet::row_t current_row = 0; current_row < ref.row_size; ++current_row)
+     {
+-        scopes.push_back(make_unique<scope>(root)); // root element
++        scopes.push_back(orcus::make_unique<scope>(root)); // root element
+ 
+         while (!scopes.empty())
+         {
+@@ -378,7 +378,7 @@ void write_range_reference_group(
+                     // This is a non-leaf element.  Push a new scope with this
+                     // element and re-start the loop.
+                     ++cur_scope.current_child_pos;
+-                    scopes.push_back(make_unique<scope>(child_elem));
++                    scopes.push_back(orcus::make_unique<scope>(child_elem));
+                     new_scope = true;
+                     break;
+                 }
+diff --git a/src/liborcus/xlsx_sheet_context.cpp b/src/liborcus/xlsx_sheet_context.cpp
+index f350049..720319a 100644
+--- a/src/liborcus/xlsx_sheet_context.cpp
++++ b/src/liborcus/xlsx_sheet_context.cpp
+@@ -547,7 +547,7 @@ void xlsx_sheet_context::end_element_cell()
+         {
+             // shared formula expression
+             session_data.m_shared_formulas.push_back(
+-                make_unique<xlsx_session_data::shared_formula>(
++                orcus::make_unique<xlsx_session_data::shared_formula>(
+                     m_sheet_id, m_cur_row, m_cur_col, m_cur_formula.shared_id,
+                     m_cur_formula.str.str(), m_cur_formula.ref.str()));
+         }
+@@ -555,14 +555,14 @@ void xlsx_sheet_context::end_element_cell()
+         {
+             // array formula expression
+             session_data.m_formulas.push_back(
+-                make_unique<xlsx_session_data::formula>(
++                orcus::make_unique<xlsx_session_data::formula>(
+                     m_sheet_id, m_cur_row, m_cur_col, m_cur_formula.str.str(), m_cur_formula.ref.str()));
+         }
+         else
+         {
+             // normal (non-shared) formula expression
+             session_data.m_formulas.push_back(
+-                make_unique<xlsx_session_data::formula>(
++                orcus::make_unique<xlsx_session_data::formula>(
+                     m_sheet_id, m_cur_row, m_cur_col, m_cur_formula.str.str()));
+         }
+     }
+@@ -570,7 +570,7 @@ void xlsx_sheet_context::end_element_cell()
+     {
+         // shared formula without formula expression
+         session_data.m_shared_formulas.push_back(
+-            make_unique<xlsx_session_data::shared_formula>(
++            orcus::make_unique<xlsx_session_data::shared_formula>(
+                 m_sheet_id, m_cur_row, m_cur_col, m_cur_formula.shared_id));
+     }
+     else if (m_cur_formula.type == spreadsheet::formula_t::data_table)
+diff --git a/src/liborcus/xml_map_tree.cpp b/src/liborcus/xml_map_tree.cpp
+index 132ccb9..69fbc75 100644
+--- a/src/liborcus/xml_map_tree.cpp
++++ b/src/liborcus/xml_map_tree.cpp
+@@ -666,7 +666,7 @@ xml_map_tree::linkable* xml_map_tree::get_element_stack(
+         {
+             // Insert a new element of this name.
+             children.push_back(
+-                make_unique<element>(
++                orcus::make_unique<element>(
+                     token.ns, m_names.intern(token.name.get(), token.name.size()).first,
+                     element_unlinked, reference_unknown));
+             cur_element = children.back().get();
+@@ -695,7 +695,7 @@ xml_map_tree::linkable* xml_map_tree::get_element_stack(
+             throw xpath_error("This attribute is already linked.  You can't link the same attribute twice.");
+ 
+         attrs.push_back(
+-            make_unique<attribute>(
++            orcus::make_unique<attribute>(
+                 token.ns, m_names.intern(token.name.get(), token.name.size()).first, ref_type));
+ 
+         ret = attrs.back().get();
+@@ -710,7 +710,7 @@ xml_map_tree::linkable* xml_map_tree::get_element_stack(
+         {
+             // No element of that name exists.
+             children.push_back(
+-                make_unique<element>(
++                orcus::make_unique<element>(
+                     token.ns, m_names.intern(token.name.get(), token.name.size()).first,
+                     element_linked, ref_type));
+ 
+diff --git a/src/liborcus/xml_structure_tree.cpp b/src/liborcus/xml_structure_tree.cpp
+index f2d62bd..3a08c64 100644
+--- a/src/liborcus/xml_structure_tree.cpp
++++ b/src/liborcus/xml_structure_tree.cpp
+@@ -451,7 +451,7 @@ void xml_structure_tree::dump_compact(ostream& os) const
+     cxt.dump(os);
+ 
+     element_ref ref(mp_impl->mp_root->name, &mp_impl->mp_root->prop);
+-    scopes.push_back(make_unique<scope>(entity_name(), false, ref));
++    scopes.push_back(orcus::make_unique<scope>(entity_name(), false, ref));
+     while (!scopes.empty())
+     {
+         bool new_scope = false;
+@@ -505,7 +505,7 @@ void xml_structure_tree::dump_compact(ostream& os) const
+ 
+             // Push a new scope, and restart the loop with the new scope.
+             ++cur_scope.current_pos;
+-            scopes.push_back(make_unique<scope>(this_elem.name, this_elem.prop->repeat));
++            scopes.push_back(orcus::make_unique<scope>(this_elem.name, this_elem.prop->repeat));
+             scope& child_scope = *scopes.back();
+             child_scope.elements.swap(elems);
+             child_scope.current_pos = child_scope.elements.begin();
+diff --git a/src/liborcus/yaml_document_tree.cpp b/src/liborcus/yaml_document_tree.cpp
+index b7cc4bc..5aad4f2 100644
+--- a/src/liborcus/yaml_document_tree.cpp
++++ b/src/liborcus/yaml_document_tree.cpp
+@@ -254,13 +254,13 @@ public:
+ 
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value_sequence>());
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value_sequence>());
+             assert(yv && yv->type == node_t::sequence);
+             m_stack.push_back(parser_stack(yv));
+         }
+         else
+         {
+-            m_root = make_unique<yaml_value_sequence>();
++            m_root = orcus::make_unique<yaml_value_sequence>();
+             m_stack.push_back(parser_stack(m_root.get()));
+         }
+     }
+@@ -276,13 +276,13 @@ public:
+         assert(m_in_document);
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value_map>());
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value_map>());
+             assert(yv && yv->type == node_t::map);
+             m_stack.push_back(parser_stack(yv));
+         }
+         else
+         {
+-            m_root = make_unique<yaml_value_map>();
++            m_root = orcus::make_unique<yaml_value_map>();
+             m_stack.push_back(parser_stack(m_root.get()));
+         }
+     }
+@@ -319,11 +319,11 @@ public:
+ 
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value_string>(p, n));
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value_string>(p, n));
+             assert(yv && yv->type == node_t::string);
+         }
+         else
+-            m_root = make_unique<yaml_value_string>(p, n);
++            m_root = orcus::make_unique<yaml_value_string>(p, n);
+     }
+ 
+     void number(double val)
+@@ -331,11 +331,11 @@ public:
+         assert(m_in_document);
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value_number>(val));
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value_number>(val));
+             assert(yv && yv->type == node_t::number);
+         }
+         else
+-            m_root = make_unique<yaml_value_number>(val);
++            m_root = orcus::make_unique<yaml_value_number>(val);
+     }
+ 
+     void boolean_true()
+@@ -343,11 +343,11 @@ public:
+         assert(m_in_document);
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value>(node_t::boolean_true));
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value>(node_t::boolean_true));
+             assert(yv && yv->type == node_t::boolean_true);
+         }
+         else
+-            m_root = make_unique<yaml_value>(node_t::boolean_true);
++            m_root = orcus::make_unique<yaml_value>(node_t::boolean_true);
+     }
+ 
+     void boolean_false()
+@@ -355,11 +355,11 @@ public:
+         assert(m_in_document);
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value>(node_t::boolean_false));
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value>(node_t::boolean_false));
+             assert(yv && yv->type == node_t::boolean_false);
+         }
+         else
+-            m_root = make_unique<yaml_value>(node_t::boolean_false);
++            m_root = orcus::make_unique<yaml_value>(node_t::boolean_false);
+     }
+ 
+     void null()
+@@ -367,11 +367,11 @@ public:
+         assert(m_in_document);
+         if (m_root)
+         {
+-            yaml_value* yv = push_value(make_unique<yaml_value>(node_t::null));
++            yaml_value* yv = push_value(orcus::make_unique<yaml_value>(node_t::null));
+             assert(yv && yv->type == node_t::null);
+         }
+         else
+-            m_root = make_unique<yaml_value>(node_t::null);
++            m_root = orcus::make_unique<yaml_value>(node_t::null);
+     }
+ 
+     void swap(std::vector<document_root_type>& docs)
+@@ -396,8 +396,8 @@ struct node::impl
+     impl(const yaml_value* yv) : m_node(yv) {}
+ };
+ 
+-node::node(const yaml_value* yv) : mp_impl(make_unique<impl>(yv)) {}
+-node::node(const node& other) : mp_impl(make_unique<impl>(other.mp_impl->m_node)) {}
++node::node(const yaml_value* yv) : mp_impl(orcus::make_unique<impl>(yv)) {}
++node::node(const node& other) : mp_impl(orcus::make_unique<impl>(other.mp_impl->m_node)) {}
+ node::node(node&& rhs) : mp_impl(std::move(rhs.mp_impl)) {}
+ node::~node() {}
+ 
+@@ -548,7 +548,7 @@ double node::numeric_value() const
+ 
+ }}
+ 
+-yaml_document_tree::yaml_document_tree() : mp_impl(make_unique<impl>()) {}
++yaml_document_tree::yaml_document_tree() : mp_impl(orcus::make_unique<impl>()) {}
+ yaml_document_tree::~yaml_document_tree() {}
+ 
+ void yaml_document_tree::load(const std::string& strm)
+diff --git a/src/mso/encryption_info.cpp b/src/mso/encryption_info.cpp
+index 1d428fc..e9bc3ad 100644
+--- a/src/mso/encryption_info.cpp
++++ b/src/mso/encryption_info.cpp
+@@ -143,11 +143,10 @@ public:
+ 
+ class sax_handler
+ {
+-    xmlns_context& m_ns_cxt;
+     vector<sax_ns_parser_attribute> m_attrs;
+ 
+ public:
+-    sax_handler(xmlns_context& ns_cxt) : m_ns_cxt(ns_cxt) {}
++    sax_handler(xmlns_context& /*ns_cxt*/) {}
+     void doctype(const sax::doctype_declaration&) {}
+     void start_declaration(const pstring&) {}
+     void end_declaration(const pstring&) {}
+diff --git a/src/orcus_filter_global.cpp b/src/orcus_filter_global.cpp
+index 09c2ab6..df50496 100644
+--- a/src/orcus_filter_global.cpp
++++ b/src/orcus_filter_global.cpp
+@@ -239,7 +239,7 @@ std::unique_ptr<json_config> parse_json_args(int argc, char** argv)
+         return nullptr;
+     }
+ 
+-    std::unique_ptr<json_config> config = make_unique<json_config>();
++    std::unique_ptr<json_config> config = orcus::make_unique<json_config>();
+ 
+     if (vm.count("input"))
+         config->input_path = vm["input"].as<string>();
+diff --git a/src/orcus_json_main.cpp b/src/orcus_json_main.cpp
+index edca63a..6a739b2 100644
+--- a/src/orcus_json_main.cpp
++++ b/src/orcus_json_main.cpp
+@@ -25,7 +25,7 @@ using namespace orcus;
+ 
+ std::unique_ptr<json_document_tree> load_doc(const std::string& strm, const json_config& config)
+ {
+-    std::unique_ptr<json_document_tree> doc(make_unique<json_document_tree>());
++    std::unique_ptr<json_document_tree> doc(orcus::make_unique<json_document_tree>());
+     try
+     {
+         doc->load(strm, config);
+diff --git a/src/orcus_yaml_main.cpp b/src/orcus_yaml_main.cpp
+index 3d15742..c028f64 100644
+--- a/src/orcus_yaml_main.cpp
++++ b/src/orcus_yaml_main.cpp
+@@ -76,7 +76,7 @@ std::unique_ptr<yaml_config> parse_yaml_args(int argc, char** argv)
+         return nullptr;
+     }
+ 
+-    std::unique_ptr<yaml_config> config = make_unique<yaml_config>();
++    std::unique_ptr<yaml_config> config = orcus::make_unique<yaml_config>();
+ 
+     if (vm.count("input"))
+         config->input_path = vm["input"].as<string>();
+diff --git a/src/parser/json_parser_base.cpp b/src/parser/json_parser_base.cpp
+index 50e3f36..eff27b7 100644
+--- a/src/parser/json_parser_base.cpp
++++ b/src/parser/json_parser_base.cpp
+@@ -35,7 +35,7 @@ struct parser_base::impl
+ };
+ 
+ parser_base::parser_base(const char* p, size_t n) :
+-    ::orcus::parser_base(p, n), mp_impl(make_unique<impl>()) {}
++    ::orcus::parser_base(p, n), mp_impl(orcus::make_unique<impl>()) {}
+ 
+ parser_base::~parser_base() {}
+ 
+diff --git a/src/parser/sax_parser_base.cpp b/src/parser/sax_parser_base.cpp
+index 51d56a4..3cd4f25 100644
+--- a/src/parser/sax_parser_base.cpp
++++ b/src/parser/sax_parser_base.cpp
+@@ -57,7 +57,7 @@ struct parser_base::impl
+ 
+ parser_base::parser_base(const char* content, size_t size) :
+     ::orcus::parser_base(content, size),
+-    mp_impl(make_unique<impl>()),
++    mp_impl(orcus::make_unique<impl>()),
+     m_nest_level(0),
+     m_buffer_pos(0),
+     m_root_elem_open(true)
+diff --git a/src/parser/string_pool.cpp b/src/parser/string_pool.cpp
+index 83c0501..baba88a 100644
+--- a/src/parser/string_pool.cpp
++++ b/src/parser/string_pool.cpp
+@@ -61,7 +61,7 @@ struct string_pool::impl
+     string_store_type m_store;
+ };
+ 
+-string_pool::string_pool() : mp_impl(make_unique<impl>()) {}
++string_pool::string_pool() : mp_impl(orcus::make_unique<impl>()) {}
+ 
+ string_pool::~string_pool()
+ {
+@@ -82,7 +82,7 @@ pair<pstring, bool> string_pool::intern(const char* str, size_t n)
+     if (itr == mp_impl->m_set.end())
+     {
+         // This string has not been interned.  Intern it.
+-        mp_impl->m_store.push_back(make_unique<string>(str, n));
++        mp_impl->m_store.push_back(orcus::make_unique<string>(str, n));
+         pair<string_set_type::iterator,bool> r = mp_impl->m_set.insert(pstring(mp_impl->m_store.back()->data(), n));
+         if (!r.second)
+             throw general_error("failed to intern a new string instance.");
+diff --git a/src/parser/yaml_parser_base.cpp b/src/parser/yaml_parser_base.cpp
+index 656dfdc..3c93266 100644
+--- a/src/parser/yaml_parser_base.cpp
++++ b/src/parser/yaml_parser_base.cpp
+@@ -59,7 +59,7 @@ const size_t parser_base::parse_indent_end_of_stream = std::numeric_limits<size_
+ const size_t parser_base::scope_empty = std::numeric_limits<size_t>::max() - 2;
+ 
+ parser_base::parser_base(const char* p, size_t n) :
+-    ::orcus::parser_base(p, n), mp_impl(make_unique<impl>()) {}
++    ::orcus::parser_base(p, n), mp_impl(orcus::make_unique<impl>()) {}
+ 
+ parser_base::~parser_base() {}
+ 
+diff --git a/src/spreadsheet/document.cpp b/src/spreadsheet/document.cpp
+index a80646c..17cc113 100644
+--- a/src/spreadsheet/document.cpp
++++ b/src/spreadsheet/document.cpp
+@@ -448,7 +448,7 @@ sheet* document::append_sheet(const pstring& sheet_name, row_t row_size, col_t c
+     sheet_t sheet_index = static_cast<sheet_t>(mp_impl->m_sheets.size());
+ 
+     mp_impl->m_sheets.push_back(
+-        make_unique<sheet_item>(
++        orcus::make_unique<sheet_item>(
+             *this, sheet_name_safe, sheet_index, row_size, col_size));
+ 
+     mp_impl->m_context.append_sheet(
+-- 
+2.4.5
+

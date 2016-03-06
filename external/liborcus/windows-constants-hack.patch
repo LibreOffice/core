@@ -1,0 +1,15 @@
+diff --git a/src/liborcus/info.cpp b/src/liborcus/info.cpp
+index ae571f5..539ce18 100644
+--- a/src/liborcus/info.cpp
++++ b/src/liborcus/info.cpp
+@@ -7,7 +7,9 @@
+ 
+ #include "orcus/info.hpp"
+ 
+-#include "constants.inl"
++#define ORCUS_MAJOR_VERSION 0
++#define ORCUS_MINOR_VERSION 11
++#define ORCUS_MICRO_VERSION 0
+ 
+ namespace orcus {
+ 
