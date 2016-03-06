@@ -18,7 +18,6 @@
 class Test: public CppUnit::TestFixture
 {
 public:
-    virtual void setUp() override;
     void testSingleElement();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -26,10 +25,6 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 };
-
-void Test::setUp()
-{
-}
 
 void Test::testSingleElement()
 {

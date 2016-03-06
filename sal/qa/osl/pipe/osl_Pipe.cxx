@@ -122,14 +122,6 @@ namespace osl_Pipe
     public:
         bool bRes, bRes1;
 
-        void setUp( ) override
-            {
-            }
-
-        void tearDown( ) override
-            {
-            }
-
         void ctors_none( )
             {
                 ::osl::Pipe aPipe;
