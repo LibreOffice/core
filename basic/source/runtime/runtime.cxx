@@ -252,7 +252,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
 SbiRTLData::SbiRTLData()
 {
     pDir        = nullptr;
-    nDirFlags   = 0;
+    nDirFlags   = SbAttributes::NONE;
     nCurDirPos  = 0;
     pWildCard   = nullptr;
 }
