@@ -1139,15 +1139,14 @@ public:
 };
 
 bool
-ScVbaRange::getCellRangesForAddress( sal_uInt16& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter )
+ScVbaRange::getCellRangesForAddress( ScAddr& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter )
 {
 
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
-        sal_uInt16 nMask = SCA_VALID;
-        rResFlags = rCellRanges.Parse( sAddress, &rDoc, nMask, eConv, 0, cDelimiter );
-        if ( rResFlags & SCA_VALID )
+        rResFlags = rCellRanges.Parse( sAddress, &rDoc, ScAddr::VALID, eConv, 0, cDelimiter );
+        if ( rResFlags & ScAddr::VALID )
         {
             return true;
         }
@@ -1207,11 +1206,11 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             aChar = ';';
         }
 
-        sal_uInt16 nFlags = 0;
+        ScAddr nFlags = ScAddr::ZERO;
         if ( !ScVbaRange::getCellRangesForAddress( nFlags, sAddress, pDocSh, aCellRanges, eConv, aChar ) )
             return false;
 
-        bool bTabFromReferrer = !( nFlags & SCA_TAB_3D );
+        bool bTabFromReferrer = !( nFlags & ScAddr::TAB_3D );
 
         for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
         {
@@ -2061,17 +2060,17 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         if ( refStyle == excel::XlReferenceStyle::xlR1C1 )
             dDetails = ScAddress::Details( formula::FormulaGrammar::CONV_XL_R1C1, 0, 0 );
     }
-    sal_uInt16 nFlags = SCA_VALID;
+    // default
+    ScAddr nFlags = ScAddr::RANGE_ABS;
     ScDocShell* pDocShell =  getScDocShell();
     ScDocument& rDoc =  pDocShell->GetDocument();
 
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
-    sal_uInt16 ROW_ABSOLUTE = ( SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE );
-    sal_uInt16 COL_ABSOLUTE = ( SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE );
-    // default
-    nFlags |= ( SCA_TAB_ABSOLUTE | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE );
+    ScAddr ROW_ABSOLUTE = ( ScAddr::ROW_ABSOLUTE | ScAddr::ROW2_ABSOLUTE );
+    ScAddr COL_ABSOLUTE = ( ScAddr::COL_ABSOLUTE | ScAddr::COL2_ABSOLUTE );
+
     if ( RowAbsolute.hasValue() )
     {
         bool bVal = true;
@@ -2091,7 +2090,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         bool bLocal = false;
         External >>= bLocal;
         if (  bLocal )
-            nFlags |= SCA_TAB_3D | SCA_FORCE_DOC;
+            nFlags |= ScAddr::TAB_3D | ScAddr::FORCE_DOC;
     }
     if ( RelativeTo.hasValue() )
     {
@@ -2182,8 +2181,8 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            sal_uInt16 flags = tmpRange.ParseCols( sCol, &getDocumentFromRange( xRange ), dDetails );
-            if ( ( flags & 0x200 ) != 0x200 )
+            ScAddr flags = tmpRange.ParseCols( sCol, &getDocumentFromRange( xRange ), dDetails );
+            if ( !(flags & ScAddr::COL_VALID) )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
         }

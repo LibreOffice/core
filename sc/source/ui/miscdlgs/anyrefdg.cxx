@@ -167,12 +167,12 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
         ScRange aRange;
         OUString aRangeStr( rStr.getToken( nToken, ';' ) );
 
-        sal_uInt16 nFlags = aRange.ParseAny( aRangeStr, pDoc, aDetails );
-        if ( nFlags & SCA_VALID )
+        ScAddr nFlags = aRange.ParseAny( aRangeStr, pDoc, aDetails );
+        if ( nFlags & ScAddr::VALID )
         {
-            if ( (nFlags & SCA_TAB_3D) == 0 )
+            if ( !(nFlags & ScAddr::TAB_3D) )
                 aRange.aStart.SetTab( nRefTab );
-            if ( (nFlags & SCA_TAB2_3D) == 0 )
+            if ( !(nFlags & ScAddr::TAB2_3D) )
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             rRanges.Append( aRange );
         }

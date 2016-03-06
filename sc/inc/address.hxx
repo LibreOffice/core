@@ -29,6 +29,7 @@
 #include "types.hxx"
 #include <formula/grammar.hxx>
 
+#include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -140,35 +141,43 @@ SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
 // not using gcc -fno-strict-aliasing
 
 // The result of ConvertRef() is a bit group of the following:
+enum class ScAddr : sal_uInt16
+{
+    ZERO          = 0x00u,
+    COL_ABSOLUTE  = 0x01u,
+    ROW_ABSOLUTE  = 0x02u,
+    TAB_ABSOLUTE  = 0x04u,
+    TAB_3D        = 0x08u,
+    COL2_ABSOLUTE = 0x10u,
+    ROW2_ABSOLUTE = 0x20u,
+    TAB2_ABSOLUTE = 0x40u,
+    TAB2_3D       = 0x80u,
+    ROW_VALID     = 0x0100u,
+    COL_VALID     = 0x0200u,
+    TAB_VALID     = 0x0400u,
+    // BITS for convience
+    BITS          = COL_ABSOLUTE | ROW_ABSOLUTE | TAB_ABSOLUTE | TAB_3D \
+                  | ROW_VALID | COL_VALID | TAB_VALID,
+    // somewhat cheesy kludge to force the display of the document name even for
+    // local references.  Requires TAB_3D to be valid
+    FORCE_DOC     = 0x0800u,
+    ROW2_VALID    = 0x1000u,
+    COL2_VALID    = 0x2000u,
+    TAB2_VALID    = 0x4000u,
+    VALID         = 0x8000u,
 
-#define SCA_COL_ABSOLUTE    0x01
-#define SCA_ROW_ABSOLUTE    0x02
-#define SCA_TAB_ABSOLUTE    0x04
-#define SCA_TAB_3D          0x08
-#define SCA_COL2_ABSOLUTE   0x10
-#define SCA_ROW2_ABSOLUTE   0x20
-#define SCA_TAB2_ABSOLUTE   0x40
-#define SCA_TAB2_3D         0x80
-#define SCA_VALID_ROW       0x0100
-#define SCA_VALID_COL       0x0200
-#define SCA_VALID_TAB       0x0400
-// SCA_BITS is a convience for
-// (SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE)
-#define SCA_BITS            0x070F
-// somewhat cheesy kludge to force the display of the document name even for
-// local references.  Requires TAB_3D to be valid
-#define SCA_FORCE_DOC       0x0800
-#define SCA_VALID_ROW2      0x1000
-#define SCA_VALID_COL2      0x2000
-#define SCA_VALID_TAB2      0x4000
-#define SCA_VALID           0x8000
+    ADDR_ABS      = VALID | COL_ABSOLUTE | ROW_ABSOLUTE | TAB_ABSOLUTE,
 
-#define SCA_ABS    SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
+    RANGE_ABS     = ADDR_ABS | COL2_ABSOLUTE | ROW2_ABSOLUTE | TAB2_ABSOLUTE,
 
-#define SCR_ABS    SCA_ABS | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
+    ADDR_ABS_3D   = ADDR_ABS | TAB_3D,
+    RANGE_ABS_3D  = RANGE_ABS | TAB_3D
+};
 
-#define SCA_ABS_3D SCA_ABS | SCA_TAB_3D
-#define SCR_ABS_3D SCR_ABS | SCA_TAB_3D
+namespace o3tl
+{
+    template<> struct typed_flags<ScAddr> : is_typed_flags<ScAddr, 0xffff> {};
+}
 
 //  ScAddress
 class ScAddress
@@ -291,17 +300,17 @@ public:
         nTabP = nTab;
     }
 
-    SC_DLLPUBLIC sal_uInt16 Parse(
+    SC_DLLPUBLIC ScAddr Parse(
                     const OUString&, ScDocument* = nullptr,
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
 
-    SC_DLLPUBLIC void Format( OStringBuffer& r, sal_uInt16 nFlags = 0,
+    SC_DLLPUBLIC void Format( OStringBuffer& r, ScAddr nFlags = ScAddr::ZERO,
                                   const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
-    SC_DLLPUBLIC OUString Format( sal_uInt16 nFlags = 0,
+    SC_DLLPUBLIC OUString Format( ScAddr nFlags = ScAddr::ZERO,
                                   const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
@@ -476,14 +485,14 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScAddr Parse( const OUString&, ScDocument* = nullptr,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                    ScAddress::ExternalInfo* pExtInfo = nullptr,
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
 
-    SC_DLLPUBLIC sal_uInt16 ParseAny( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScAddr ParseAny( const OUString&, ScDocument* = nullptr,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScAddr ParseCols( const OUString&, ScDocument* = nullptr,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC void ParseRows( const OUString&, ScDocument* = nullptr,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
@@ -502,7 +511,7 @@ public:
         @returns
             Pointer to the position after '!' if successfully parsed, and
             rExternDocName, rStartTabName and/or rEndTabName filled if
-            applicable. SCA_... flags set in nFlags.
+            applicable. ScAddr::... flags set in nFlags.
             Or if no valid document and/or sheet header could be parsed the start
             position passed with pString.
             Or NULL if a 3D sheet header could be parsed but
@@ -510,11 +519,11 @@ public:
      */
     const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDocument,
                                         OUString& rExternDocName, OUString& rStartTabName,
-                                        OUString& rEndTabName, sal_uInt16& nFlags,
+                                        OUString& rEndTabName, ScAddr& nFlags,
                                         bool bOnlyAcceptSingle,
                                         const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
 
-    SC_DLLPUBLIC OUString Format(sal_uInt16 nFlags= 0, const ScDocument* pDocument = nullptr,
+    SC_DLLPUBLIC OUString Format(ScAddr nFlags = ScAddr::ZERO, const ScDocument* pDocument = nullptr,
                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,

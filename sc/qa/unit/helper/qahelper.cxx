@@ -392,8 +392,8 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
     for (size_t i = 0, n = aRangeReps.size(); i < n; ++i)
     {
         ScRange aRange;
-        sal_uInt16 nRes = aRange.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
-        if (nRes & SCA_VALID)
+        ScAddr nRes = aRange.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
+        if (nRes & ScAddr::VALID)
             // This is a range address.
             aRanges.Append(aRange);
         else
@@ -401,7 +401,7 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
             // Parse it as a single cell address.
             ScAddress aAddr;
             nRes = aAddr.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
-            CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & SCA_VALID));
+            CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & ScAddr::VALID));
             aRanges.Append(aAddr);
         }
     }
@@ -416,7 +416,7 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
     ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
     if (!pCell)
     {
-        OUString aStr = rPos.Format(SCA_VALID);
+        OUString aStr = rPos.Format(ScAddr::VALID);
         cerr << aStr << " is not a formula cell." << endl;
         return nullptr;
     }
@@ -447,7 +447,7 @@ bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected
 
 bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
 {
-    OUString aStr(rPos.Format(SCA_VALID));
+    OUString aStr(rPos.Format(ScAddr::VALID));
     const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
     {
@@ -457,7 +457,7 @@ bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
 
     if (pFC->aPos != rPos)
     {
-        OUString aStr2(pFC->aPos.Format(SCA_VALID));
+        OUString aStr2(pFC->aPos.Format(ScAddr::VALID));
         cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
         return false;
     }
@@ -476,7 +476,7 @@ bool checkFormulaPositions(
 
         if (!checkFormulaPosition(rDoc, aPos))
         {
-            OUString aStr(aPos.Format(SCA_VALID));
+            OUString aStr(aPos.Format(ScAddr::VALID));
             cerr << "Formula cell position failed at " << aStr << "." << endl;
             return false;
         }

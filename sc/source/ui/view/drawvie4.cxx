@@ -273,12 +273,12 @@ void getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vecto
     {
         ScRangeList aRange;
         ScAddress aAddr;
-        if (aRange.Parse(*it, pDoc, pDoc->GetAddressConvention()) & SCA_VALID)
+        if (aRange.Parse(*it, pDoc, ScAddr::VALID, pDoc->GetAddressConvention()) & ScAddr::VALID)
         {
             for(size_t i = 0; i < aRange.size(); ++i)
                 rRanges.push_back(*aRange[i]);
         }
-        else if (aAddr.Parse(*it, pDoc, pDoc->GetAddressConvention()) & SCA_VALID)
+        else if (aAddr.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScAddr::VALID)
             rRanges.push_back(aAddr);
     }
 }

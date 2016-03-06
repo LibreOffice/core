@@ -1050,44 +1050,44 @@ GetEditAs( XclObjAny& rObj )
 
 namespace {
 
-sal_uInt16 parseRange(const OUString& rString, ScRange& rRange, ScDocument* pDoc)
+ScAddr parseRange(const OUString& rString, ScRange& rRange, ScDocument* pDoc)
 {
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    sal_uInt16 nResult = rRange.Parse(rString, pDoc, eConv);
-    if ( (nResult & SCA_VALID) )
+    ScAddr nResult = rRange.Parse(rString, pDoc, eConv);
+    if ( nResult & ScAddr::VALID )
         return nResult;
 
     // try the default calc address convention
     nResult = rRange.Parse(rString, pDoc);
-    if ( (nResult & SCA_VALID) )
+    if ( nResult & ScAddr::VALID )
         return nResult;
 
     // try excel a1
     nResult = rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
-    if (nResult & SCA_VALID)
+    if ( nResult & ScAddr::VALID )
         return nResult;
 
     // try r1c1
     return rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-sal_uInt16 parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument* pDoc)
+ScAddr parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument* pDoc)
 {
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    sal_uInt16 nResult = rAddress.Parse(rString, pDoc, eConv);
-    if ( (nResult & SCA_VALID) )
+    ScAddr nResult = rAddress.Parse(rString, pDoc, eConv);
+    if ( nResult & ScAddr::VALID )
         return nResult;
 
     // try the default calc address convention
     nResult = rAddress.Parse(rString, pDoc);
-    if ( (nResult & SCA_VALID) )
+    if ( nResult & ScAddr::VALID )
         return nResult;
 
     // try excel a1
     nResult = rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
-    if ( (nResult & SCA_VALID) )
+    if ( nResult & ScAddr::VALID )
         return nResult;
 
     // try r1c1
@@ -1105,8 +1105,8 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
 
         ScRange aRange;
         ScAddress aAddress;
-        sal_uInt16 nResult = parseRange(aAddressString, aRange, pDoc);
-        if (nResult & SCA_VALID)
+        ScAddr nResult = parseRange(aAddressString, aRange, pDoc);
+        if ( nResult & ScAddr::VALID )
         {
             OUString aString = aRange.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
             rNewURL = "#" + aString;
@@ -1115,7 +1115,7 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
         else
         {
             nResult = parseAddress(aAddressString, aAddress, pDoc);
-            if(nResult & SCA_VALID)
+            if( nResult & ScAddr::VALID )
             {
                 OUString aString = aAddress.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
                 rNewURL = "#" + aString;

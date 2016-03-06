@@ -241,7 +241,7 @@ void ScPivotLayoutDialog::SetupSource()
         }
         else
         {
-            OUString aSourceRangeName = aSourceRange.Format(SCR_ABS_3D, mpDocument, maAddressDetails);
+            OUString aSourceRangeName = aSourceRange.Format(ScAddr::RANGE_ABS_3D, mpDocument, maAddressDetails);
             mpSourceEdit->SetText(aSourceRangeName);
         }
     }
@@ -324,7 +324,7 @@ void ScPivotLayoutDialog::SetupDestination()
         if (maPivotParameters.nTab != MAXTAB + 1)
         {
             ScAddress aAddress(maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
-            OUString aAddressString = aAddress.Format(SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE, mpDocument, maAddressDetails);
+            OUString aAddressString = aAddress.Format(ScAddr::ADDR_ABS_3D, mpDocument, maAddressDetails);
             mpDestinationEdit->SetText(aAddressString);
             mpDestinationRadioSelection->Check();
         }
@@ -373,7 +373,7 @@ void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocumen
     if (rReferenceRange.aStart != rReferenceRange.aEnd)
         RefInputStart(mpActiveEdit);
 
-    OUString aReferenceString = rReferenceRange.Format(SCR_ABS_3D, pDocument, maAddressDetails);
+    OUString aReferenceString = rReferenceRange.Format(ScAddr::RANGE_ABS_3D, pDocument, maAddressDetails);
 
     if (mpActiveEdit == mpSourceEdit)
     {
@@ -437,9 +437,9 @@ void ScPivotLayoutDialog::UpdateSourceRange()
     {
         OUString aSourceString = mpSourceEdit->GetText();
         ScRange aSourceRange;
-        sal_uInt16 nResult = aSourceRange.Parse(aSourceString, mpDocument, maAddressDetails);
+        ScAddr nResult = aSourceRange.Parse(aSourceString, mpDocument, maAddressDetails);
 
-        bool bIsValid = (nResult & SCA_VALID) == SCA_VALID; // aSourceString is valid
+        bool bIsValid = (bool)(nResult & ScAddr::VALID); // aSourceString is valid
 
         mpSourceEdit->SetRefValid(true);
 

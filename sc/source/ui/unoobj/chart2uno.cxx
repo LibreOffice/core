@@ -2468,7 +2468,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
 
     // BM: don't use names of named ranges but the UI range strings
 //  String  aStr;
-//  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
+//  rRangeList->Format( aStr, ScAddr::RANGE_ABS_3D, m_pDocument );
 //    m_aIdentifier = aStr;
 
 //      m_aIdentifier = "ID_";
@@ -3140,7 +3140,7 @@ public:
                     OUString aString = ScGlobal::GetRscString(STR_COLUMN);
                     aString += " ";
                     ScAddress aPos( nCol, 0, 0 );
-                    OUString aColStr(aPos.Format(SCA_VALID_COL));
+                    OUString aColStr(aPos.Format(ScAddr::COL_VALID));
                     aString += aColStr;
                     pArr[mnCount] = aString;
                 }

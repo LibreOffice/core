@@ -37,7 +37,7 @@ OUString ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat&
 {
     ScRangeList aRange = rFormat.GetRange();
     OUString aStr;
-    aRange.Format(aStr, SCA_VALID, mpDoc, mpDoc->GetAddressConvention());
+    aRange.Format(aStr, ScAddr::VALID, mpDoc, mpDoc->GetAddressConvention());
     aStr += "\t";
     aStr += ScCondFormatHelper::GetExpression(rFormat, aRange.GetTopLeftCorner());
     return aStr;

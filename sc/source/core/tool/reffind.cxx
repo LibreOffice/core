@@ -215,15 +215,16 @@ ScRefFinder::~ScRefFinder()
 {
 }
 
-static sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
+static ScAddr lcl_NextFlags( ScAddr nOld )
 {
-    sal_uInt16 nNew = nOld & 7;                 // die drei Abs-Flags
-    nNew = ( nNew - 1 ) & 7;                // weiterzaehlen
+    const ScAddr Mask_ABS = (ScAddr::COL_ABSOLUTE | ScAddr::ROW_ABSOLUTE | ScAddr::TAB_ABSOLUTE);
+    ScAddr nNew = nOld & Mask_ABS;
+    nNew = static_cast<ScAddr>( static_cast<sal_uInt16>(nNew) - 1 ) & Mask_ABS; // weiterzaehlen
 
-    if (!(nOld & SCA_TAB_3D))
-        nNew &= ~SCA_TAB_ABSOLUTE;          // not 3D -> never absolute!
+    if (!(nOld & ScAddr::TAB_3D))
+        nNew &= ~ScAddr::TAB_ABSOLUTE; // not 3D -> never absolute!
 
-    return ( nOld & 0xfff8 ) | nNew;
+    return (nOld & ~Mask_ABS) | nNew;
 }
 
 void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
@@ -264,10 +265,10 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         // Check the validity of the expression, and toggle the relative flag.
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
         ScAddress::ExternalInfo aExtInfo;
-        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
-        if ( nResult & SCA_VALID )
+        ScAddr nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
+        if ( nResult & ScAddr::VALID )
         {
-            sal_uInt16 nFlags = lcl_NextFlags( nResult );
+            ScAddr nFlags = lcl_NextFlags( nResult );
             if( aExtInfo.mbExternal )
             {    // retain external doc name and tab name before toggle relative flag
                 sal_Int32 nSep;

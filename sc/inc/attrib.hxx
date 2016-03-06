@@ -144,9 +144,6 @@ public:
 };
 
 // ScRangeItem: manages an area of a table
-
-#define SCR_INVALID     0x01
-
 class ScRangeItem : public SfxPoolItem
 {
 public:

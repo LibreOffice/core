@@ -341,7 +341,7 @@ struct OpenCLTester
         mpDoc->SetString(ScAddress(1,0,0),
                         "=IF(SUM(" +
                         ScRange(ScAddress(1,1,0),
-                                ScAddress(1,1+mnTestAreas-1,0)).Format(SCA_VALID|SCA_VALID_COL|SCA_VALID_ROW) +
+                                ScAddress(1,1+mnTestAreas-1,0)).Format(ScAddr::VALID|ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                         ")=0,\"PASS\",\"FAIL\")");
     }
 };
@@ -409,7 +409,7 @@ struct UnOp : Op
         pDoc->SetValue(ScAddress(0,1+nRow,nTab), nArg);
 
         pDoc->SetString(ScAddress(1,1+nRow,nTab),
-                        "=" + msOp + "(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) + ")");
+                        "=" + msOp + "(" + ScAddress(0,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) + ")");
 
         pDoc->SetValue(ScAddress(2,1+nRow,nTab), mpFun(nArg));
 
@@ -417,9 +417,9 @@ struct UnOp : Op
         {
             // relative epsilon
             pDoc->SetString(ScAddress(3,1+nRow,nTab),
-                            "=IF(ABS((" + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                            "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                            ")/" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "=IF(ABS((" + ScAddress(1,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                            "-" + ScAddress(2,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                            ")/" + ScAddress(2,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                             ")<=" + OUString::number(-mnEpsilon) +
                             ",0,1)");
         }
@@ -427,8 +427,8 @@ struct UnOp : Op
         {
             // absolute epsilon
             pDoc->SetString(ScAddress(3,1+nRow,nTab),
-                            "=IF(ABS(" + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                            "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "=IF(ABS(" + ScAddress(1,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                            "-" + ScAddress(2,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                             ")<=" + OUString::number(mnEpsilon) +
                             ",0,1)");
         }
@@ -438,7 +438,7 @@ struct UnOp : Op
     {
         return "=SUM(" +
             ScRange(ScAddress(3,1,nTab),
-                    ScAddress(3,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+                    ScAddress(3,1+mnRows-1,nTab)).Format(ScAddr::VALID|ScAddr::TAB_3D|ScAddr::COL_VALID|ScAddr::ROW_VALID|ScAddr::TAB_VALID, pDoc) +
             ")";
     }
 };
@@ -485,14 +485,14 @@ struct BinOp : Op
         pDoc->SetValue(ScAddress(1,1+nRow,nTab), nRhs);
 
         pDoc->SetString(ScAddress(2,1+nRow,nTab),
-                        "=" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        msOp + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW));
+                        "=" + ScAddress(0,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        msOp + ScAddress(1,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID));
 
         pDoc->SetValue(ScAddress(3,1+nRow,nTab), mpFun(nLhs, nRhs));
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
-                        "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "-" + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "-" + ScAddress(3,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                         ")<=" + OUString::number(mnEpsilon) +
                         ",0,1)");
     }
@@ -501,7 +501,7 @@ struct BinOp : Op
     {
         return "=SUM(" +
             ScRange(ScAddress(4,1,nTab),
-                    ScAddress(4,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+                    ScAddress(4,1+mnRows-1,nTab)).Format(ScAddr::VALID|ScAddr::TAB_3D|ScAddr::COL_VALID|ScAddr::ROW_VALID|ScAddr::TAB_VALID, pDoc) +
             ")";
     }
 };
@@ -534,15 +534,15 @@ struct Round : Area
         pDoc->SetValue(ScAddress(1,1+nRow,nTab), nN);
 
         pDoc->SetString(ScAddress(2,1+nRow,nTab),
-                        "=ROUND(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "," + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=ROUND(" + ScAddress(0,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "," + ScAddress(1,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                         ")");
 
         pDoc->SetValue(ScAddress(3,1+nRow,nTab), ::rtl::math::round(nX, (short) nN));
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
-                        "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "-" + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "-" + ScAddress(3,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                         ")<=3e-10"
                         ",0,1)");
     }
@@ -551,7 +551,7 @@ struct Round : Area
     {
         return "=SUM(" +
             ScRange(ScAddress(4,1,nTab),
-                    ScAddress(4,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+                    ScAddress(4,1+mnRows-1,nTab)).Format(ScAddr::VALID|ScAddr::TAB_3D|ScAddr::COL_VALID|ScAddr::ROW_VALID|ScAddr::TAB_VALID, pDoc) +
             ")";
     }
 
@@ -591,10 +591,10 @@ struct Normdist : Area
         pDoc->SetValue(ScAddress(3,1+nRow,nTab), nType);
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
-                        "=NORMDIST(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "," + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "," + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "," + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=NORMDIST(" + ScAddress(0,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "," + ScAddress(1,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "," + ScAddress(2,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "," + ScAddress(3,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                         ")");
 
         if (nType == 1)
@@ -603,8 +603,8 @@ struct Normdist : Area
             pDoc->SetValue(ScAddress(5,1+nRow,nTab), ScInterpreter::phi((nNum-nAvg)/nStDev)/nStDev);
 
         pDoc->SetString(ScAddress(6,1+nRow,nTab),
-                        "=IF(ABS(" + ScAddress(4,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                        "-" + ScAddress(5,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=IF(ABS(" + ScAddress(4,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                        "-" + ScAddress(5,1+nRow,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                         ")<=3e-10"
                         ",0,1)");
     }
@@ -613,7 +613,7 @@ struct Normdist : Area
     {
         return "=SUM(" +
             ScRange(ScAddress(6,1,nTab),
-                    ScAddress(6,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+                    ScAddress(6,1+mnRows-1,nTab)).Format(ScAddr::VALID|ScAddr::TAB_3D|ScAddr::COL_VALID|ScAddr::ROW_VALID|ScAddr::TAB_VALID, pDoc) +
             ")";
     }
 
@@ -665,7 +665,7 @@ struct Reduction : Op
             pDoc->SetString(ScAddress(1,1+nRow-mnRows/2+1,nTab),
                             "=" + msOp + "(" +
                             ScRange(ScAddress(0,1+nRow-mnRows/2+1,nTab),
-                                    ScAddress(0,1+nRow,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW) +
+                                    ScAddress(0,1+nRow,nTab)).Format(ScAddr::VALID|ScAddr::TAB_3D|ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                             ")");
 
             double nAccum(mnAccumInitial);
@@ -676,14 +676,14 @@ struct Reduction : Op
 
             if (mnEpsilon != 0)
                 pDoc->SetString(ScAddress(3,1+nRow-mnRows/2+1,nTab),
-                                "=IF(ABS(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                                "-" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "=IF(ABS(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                                "-" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                                 ")<=" + OUString::number(mnEpsilon) +
                                 ",0,1)");
             else
                 pDoc->SetString(ScAddress(3,1+nRow-mnRows/2+1,nTab),
-                                "=IF(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                                "=" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "=IF(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
+                                "=" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(ScAddr::COL_VALID|ScAddr::ROW_VALID) +
                                 ",0,1)");
         }
     }
@@ -692,7 +692,7 @@ struct Reduction : Op
     {
         return "=SUM(" +
             ScRange(ScAddress(3,1+0,nTab),
-                    ScAddress(3,1+mnRows-mnRows/2-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+                    ScAddress(3,1+mnRows-mnRows/2-1,nTab)).Format(ScAddr::VALID|ScAddr::TAB_3D|ScAddr::COL_VALID|ScAddr::ROW_VALID|ScAddr::TAB_VALID, pDoc) +
             ")";
     }
 };
