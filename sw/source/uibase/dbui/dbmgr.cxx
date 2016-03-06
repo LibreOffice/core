@@ -2634,8 +2634,8 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     xFltMgr->appendFilter( sFilterTXT, "*.txt" );
     xFltMgr->appendFilter( sFilterCSV, "*.csv" );
 #ifdef _WIN32
-    xFltMgr->appendFilter( sFilterMDB, "*.mdb" );
-    xFltMgr->appendFilter( sFilterACCDB, "*.accdb" );
+    xFltMgr->appendFilter(sFilterMDB, "*.mdb;*.mde");
+    xFltMgr->appendFilter(sFilterACCDB, "*.accdb;*.accde");
 #endif
 
     xFltMgr->setCurrentFilter( sFilterAll ) ;
@@ -2698,14 +2698,14 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         type = DBCONN_FLAT;
     }
 #ifdef _WIN32
-    else if(sExt.equalsIgnoreAsciiCase("mdb"))
+    else if (sExt.equalsIgnoreAsciiCase("mdb") || sExt.equalsIgnoreAsciiCase("mde"))
     {
         OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
         sDBURL += aURL.PathToFileName();
         aURLAny <<= sDBURL;
         type = DBCONN_MSJET;
     }
-    else if(sExt.equalsIgnoreAsciiCase("accdb"))
+    else if (sExt.equalsIgnoreAsciiCase("accdb") || sExt.equalsIgnoreAsciiCase("accde"))
     {
         OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
         sDBURL += aURL.PathToFileName();
