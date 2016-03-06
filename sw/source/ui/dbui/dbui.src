@@ -78,11 +78,11 @@ String STR_FILTER_CSV
 };
 String STR_FILTER_MDB
 {
-    Text [ en-US ] = "Microsoft Access (*.mdb)" ;
+    Text [ en-US ] = "Microsoft Access (*.mdb;*.mde)" ;
 };
 String STR_FILTER_ACCDB
 {
-    Text [ en-US ] = "Microsoft Access 2007 (*.accdb)" ;
+    Text [ en-US ] = "Microsoft Access 2007 (*.accdb,*.accde)" ;
 };
 
 String      ST_SAVESTART
