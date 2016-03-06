@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "bacf61ea_e88133fd",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-06T18:38:02Z",
+      "side": 1,
+      "message": "Done, thank you",
+      "parentUuid": "bacf61ea_a8fe1b03",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_a31aa515",
         "filename": "sc/inc/address.hxx",
         "patchSetId": 9
@@ -100,6 +118,24 @@
       "side": 1,
       "message": "the typed_flags stuff runs into some compiler issues.Surround the problematic part with a constructor e.g.\n  ~ScAddr(ScAddr::TAB_VALID | ScAddr::TAB2_VALID)",
       "parentUuid": "1aa78d24_8317a9ec",
+      "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_c886ef12",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-06T18:38:02Z",
+      "side": 1,
+      "message": "Done, thank you. That works.",
+      "parentUuid": "bacf61ea_8803570d",
       "revId": "3162b9cfbce15ddb1180b573ab756580a870dcdb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
