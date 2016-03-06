@@ -975,11 +975,13 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 {
-    ScModule*           pScMod      = SC_MOD();
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    sal_uInt16              nSlot   = rReq.GetSlot();
-    SfxBindings& rBindings          = pTabViewShell->GetViewFrame()->GetBindings();
+    ScModule*           pScMod          = SC_MOD();
+    ScDocument*         pDoc            = pViewData->GetDocument();
+    SvNumberFormatter*  pFormatter      = pDoc->GetFormatTable();
+    ScTabViewShell*     pTabViewShell   = GetViewData()->GetViewShell();
+    const SfxItemSet*   pReqArgs        = rReq.GetArgs();
+    sal_uInt16          nSlot           = rReq.GetSlot();
+    SfxBindings&        rBindings       = pTabViewShell->GetViewFrame()->GetBindings();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
@@ -1049,11 +1051,25 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_CURRENCY:
+        if (!pReqArgs)
+        {
             if ((nType & css::util::NumberFormat::CURRENCY))
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::CURRENCY)) );
+        aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::CURRENCY)) );
+        }
+        else
+        {
+            const SfxPoolItem* pItem;
+            if (pReqArgs->HasItem(SID_NUMBER_CURRENCY, &pItem))
+                //TODO: use aCurrencyListPos value to set the the currency type for the selected cell(s)
+                sal_Int32 aCurrencyListPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+            pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
+            aSet.Put( SfxBoolItem(nSlot, false) );
+        }
+
+
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
@@ -1084,8 +1100,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             if(pReqArgs)
             {
                 const SfxPoolItem* pItem;
-                ScDocument* pDoc = pViewData->GetDocument();
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 LanguageType eLanguage = ScGlobal::eLnge;
                 sal_Int16 eType = -1;
                 sal_uInt32 nCurrentNumberFormat;

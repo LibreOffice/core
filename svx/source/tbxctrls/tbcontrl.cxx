@@ -92,6 +92,9 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svl/currencytable.hxx>
+#include <svtools/langtab.hxx>
+
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
@@ -113,6 +116,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxCurrencyToolBoxControl, SfxStringItem );
 
 class SvxStyleBox_Impl : public ComboBox
 {
@@ -288,6 +292,19 @@ public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~SvxLineWindow_Impl() { disposeOnce(); }
     virtual void dispose() override { m_aLineStyleLb.disposeAndClear(); SfxPopupWindow::dispose(); }
+};
+
+class SvxCurrencyList_Impl : public SfxPopupWindow
+{
+private:
+    VclPtr<ListBox> m_aCurrencyLb;
+    sal_Int32       m_aCurrencyListPos;
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+
+public:
+    SvxCurrencyList_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
+    virtual ~SvxCurrencyList_Impl() { disposeOnce(); }
+    virtual void dispose() override { m_aCurrencyLb.disposeAndClear(); SfxPopupWindow::dispose(); }
 };
 
 class SvxStyleToolBoxControl;
@@ -1840,6 +1857,99 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
     return SvxBorderLine::threeDMediumColor( aMain );
 }
 
+SvxCurrencyList_Impl::SvxCurrencyList_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
+    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
+    m_aCurrencyLb( VclPtr<ListBox>::Create(this) ), m_aCurrencyListPos(0)
+{
+    try
+    {
+        Reference< lang::XServiceInfo > xServices( rFrame->getController()->getModel(), UNO_QUERY_THROW );
+    }
+    catch(const uno::Exception& )
+    {
+    }
+
+    m_aCurrencyLb->setPosSizePixel( 2, 2, 300, 140 );
+    SetOutputSizePixel( Size( 304, 144 ) );
+
+    std::vector<OUString> rList;
+    std::vector<sal_uInt16> aCurCurrencyList;
+    const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
+
+    bool bFlag=(pTmpCurrencyEntry==nullptr);
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
+    sal_uInt16 nCount=rCurrencyTable.size();
+
+    sal_uInt16 nStart=1;
+
+    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol()));
+    aString += " ";
+    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( rCurrencyTable[0].GetLanguage()));
+
+    rList.push_back(aString);
+    sal_uInt16 nAuto=(sal_uInt16)-1;
+    aCurCurrencyList.push_back(nAuto);
+
+    if(bFlag)
+    {
+        rList.push_back(aString);
+        aCurCurrencyList.push_back(0);
+        ++nStart;
+    }
+
+    CollatorWrapper aCollator( ::comphelper::getProcessComponentContext());
+    aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0);
+
+    const OUString aTwoSpace("  ");
+
+    for(sal_uInt16 i = 1; i < nCount; ++i)
+    {
+        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol()));
+        aStr += aTwoSpace;
+        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol());
+        aStr += aTwoSpace;
+        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( rCurrencyTable[i].GetLanguage()));
+
+        sal_uInt16 j = nStart;
+        for(; j < rList.size(); ++j)
+            if (aCollator.compareString(aStr, rList[j]) < 0)
+                break;
+
+        rList.insert(rList.begin() + j, aStr);
+        aCurCurrencyList.insert(aCurCurrencyList.begin() + j, i);
+    }
+
+    sal_uInt16 nCont = rList.size();
+
+    for(sal_uInt16 i = 1; i < nCount; ++i)
+    {
+        bool bInsert = true;
+        OUString aStr(ApplyLreOrRleEmbedding(rCurrencyTable[i].GetBankSymbol()));
+
+        sal_uInt16 j = nCont;
+        for(; j < rList.size() && bInsert; ++j)
+        {
+            if(rList[j] == aStr)
+                bInsert = false;
+            else if (aCollator.compareString(aStr, rList[j]) < 0)
+                break;
+        }
+        if(bInsert)
+        {
+            rList.insert(rList.begin() + j, aStr);
+            aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
+        }
+    }
+
+    for(std::vector<OUString>::iterator i = rList.begin() + 1;i != rList.end(); ++i)
+    {
+        m_aCurrencyLb->InsertEntry (*i);
+    }
+    //TODO: set text for the drop-down
+    m_aCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
+    m_aCurrencyLb->Show();
+}
+
 SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
@@ -1894,6 +2004,20 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     SetHelpId( HID_POPUP_LINE );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
     m_aLineStyleLb->Show();
+}
+
+IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
+{
+  m_aCurrencyListPos = m_aCurrencyLb->GetSelectEntryPos();
+    if ( IsInPopupMode() )
+        EndPopupMode();
+
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "NumberFormatCurrency";
+    aArgs[0].Value = makeAny( sal_Int16( m_aCurrencyListPos + 1 ));
+    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
+                                 ".uno:NumberFormatCurrency",
+                                 aArgs );
 }
 
 IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
@@ -2902,6 +3026,37 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
     if ( eState == SfxItemState::DISABLED )
         rBox.SetQuickHelpText( GetId(), aDefaultText );
     rBox.EnableItem( GetId(), eState != SfxItemState::DISABLED );
+}
+
+SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox ) : SfxToolBoxControl( nSlotId, nId, rBox )
+{
+    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN );
+}
+
+SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
+
+VclPtr<SfxPopupWindow> SvxCurrencyToolBoxControl::CreatePopupWindow()
+{
+    VclPtr<SvxCurrencyList_Impl> pLineWin = VclPtr<SvxCurrencyList_Impl>::Create( GetSlotId(), m_xFrame, &GetToolBox() );
+    pLineWin->StartPopupMode( &GetToolBox(),
+                              FloatWinPopupFlags::GrabFocus |
+                              FloatWinPopupFlags::AllowTearOff |
+                              FloatWinPopupFlags::NoAppFocusClose );
+    SetPopupWindow( pLineWin );
+
+    return pLineWin;
+}
+
+void SvxCurrencyToolBoxControl::StateChanged(
+    sal_uInt16, SfxItemState eState, const SfxPoolItem* )
+{
+    sal_uInt16                  nId     = GetId();
+    ToolBox&                    rTbx    = GetToolBox();
+
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    rTbx.SetItemState( nId, (SfxItemState::DONTCARE == eState)
+                            ? TRISTATE_INDET
+                            : TRISTATE_FALSE );
 }
 
 
