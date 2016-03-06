@@ -13,6 +13,7 @@ $(eval $(call gb_Library_use_unpacked,orcus,liborcus))
 
 $(eval $(call gb_Library_use_externals,orcus,\
 	boost_headers \
+	boost_filesystem \
 	boost_iostreams \
 	boost_system \
 	mdds_headers \
