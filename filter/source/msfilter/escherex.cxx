@@ -30,7 +30,7 @@
 #include <svx/svdmodel.hxx>
 #include <editeng/outlobj.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

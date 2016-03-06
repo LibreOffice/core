@@ -22,7 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svtools/grfmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

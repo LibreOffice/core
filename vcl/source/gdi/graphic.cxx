@@ -19,7 +19,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
 #include <comphelper/processfactory.hxx>

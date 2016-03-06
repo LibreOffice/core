@@ -21,7 +21,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <vcl/button.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;

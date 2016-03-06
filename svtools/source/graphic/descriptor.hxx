@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/propertysetinfo.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #define MIMETYPE_BMP        "image/x-MS-bmp"
 #define MIMETYPE_GIF        "image/gif"

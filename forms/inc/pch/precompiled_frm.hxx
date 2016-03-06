@@ -66,7 +66,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/image.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/keycodes.hxx>
