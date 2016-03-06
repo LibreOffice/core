@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svtools/langtab.hxx>
 #include <config_features.h>
 
 #include "scitems.hxx"

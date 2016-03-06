@@ -3734,8 +3734,7 @@ SfxStringItem NumberFormat SID_NUMBER_FORMAT
 ]
 
 
-SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
-()
+SfxStringItem NumberFormatCurrency SID_NUMBER_CURRENCY
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -3744,6 +3743,7 @@ SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,

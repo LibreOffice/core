@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svtools/langtab.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -975,11 +976,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 {
-    ScModule*           pScMod      = SC_MOD();
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    sal_uInt16              nSlot   = rReq.GetSlot();
-    SfxBindings& rBindings          = pTabViewShell->GetViewFrame()->GetBindings();
+    ScModule*           pScMod          = SC_MOD();
+    ScTabViewShell*     pTabViewShell   = GetViewData()->GetViewShell();
+    const SfxItemSet*   pReqArgs        = rReq.GetArgs();
+    sal_uInt16          nSlot           = rReq.GetSlot();
+    SfxBindings&        rBindings       = pTabViewShell->GetViewFrame()->GetBindings();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
@@ -1049,13 +1050,53 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_CURRENCY:
-            if ((nType & css::util::NumberFormat::CURRENCY))
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if(pReqArgs)
+            {
+                const SfxPoolItem* pItem;
+                if (pReqArgs->HasItem(SID_NUMBER_CURRENCY, &pItem))
+                {
+                    OUString sCurrencyString = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    sal_uInt16 nLen = sCurrencyString.getLength();
+                    OUString* pFormatStrings = new OUString[3];
+                    OUString sTmpStr = "";
+                    sal_uInt16 nCount(0);
+                    sal_uInt16 nStrCount(0);
+
+                    while(nCount < nLen)
+                    {
+                        sal_Unicode cChar = sCurrencyString[nCount];
+
+                        if(cChar == ',')
+                        {
+                            pFormatStrings[nStrCount] = sTmpStr;
+                            sTmpStr.clear();
+                            nStrCount++;
+                        }
+                        else
+                        {
+                            sTmpStr += OUString(cChar);
+                        }
+
+                        nCount++;
+
+                        if(nStrCount > 2)
+                            break;
+                    }
+                    SvNumberFormatter* pFormatter = pViewData->GetDocument()->GetFormatTable();
+                    const NfCurrencyEntry* pCurrencyEntry = pFormatter->GetCurrencyEntry( pFormatStrings[0], SvtLanguageTable::GetLanguageType( pFormatStrings[2] ) );
+                    NfWSStringsDtor aStringsDtor;
+                    sal_uInt16 nDefaultFormat = pFormatter->GetCurrencyFormatStrings( aStringsDtor, *pCurrencyEntry, false );
+                    pTabViewShell->SetNumFmtByStr( aStringsDtor[nDefaultFormat] );
+                    delete[] pFormatStrings;
+                }
+            }
             else
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::CURRENCY)) );
-            rBindings.Invalidate( nSlot );
-            rReq.Done();
+            {
+                if ((nType & css::util::NumberFormat::CURRENCY))
+                    pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+                else
+                    pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
+            }
             break;
         case SID_NUMBER_PERCENT:
             if ((nType & css::util::NumberFormat::PERCENT))
@@ -1962,7 +2003,6 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             case SID_BACKGROUND_COLOR:
             {
                 rSet.Put( SvxColorItem( rBrushItem.GetColor(), SID_BACKGROUND_COLOR ) );
-
                 if(SfxItemState::DONTCARE == rAttrSet.GetItemState(ATTR_BACKGROUND))
                 {
                     rSet.InvalidateItem(SID_BACKGROUND_COLOR);
@@ -2531,14 +2571,20 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 
                 }
                 break;
+            case SID_NUMBER_CURRENCY:
+                {
+                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
+                    if(SfxItemState::DONTCARE == rAttrSet.GetItemState(ATTR_VALUE_FORMAT))
+                    {
+                        rSet.InvalidateItem( nWhich );
+                    }
+                }
+                break;
             case SID_NUMBER_SCIENTIFIC:
                 rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::SCIENTIFIC)) );
                 break;
             case SID_NUMBER_DATE:
                 rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::DATE)) );
-                break;
-            case SID_NUMBER_CURRENCY:
-                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::CURRENCY)) );
                 break;
             case SID_NUMBER_PERCENT:
                 rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::PERCENT)) );
