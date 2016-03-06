@@ -290,6 +290,24 @@ public:
                               const SfxPoolItem* pState) override;
 };
 
+class SVX_DLLPUBLIC SvxCurrencyToolBoxControl : public SfxToolBoxControl
+{
+private:
+    OUString     m_aFormatString;
+    LanguageType m_eLanguage;
+    sal_uInt32   m_nFormatKey;
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+    virtual ~SvxCurrencyToolBoxControl();
+    virtual void Select( sal_uInt16 nSelectModifier ) override;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+};
+
+
+
 #endif // INCLUDED_SVX_TBCONTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
