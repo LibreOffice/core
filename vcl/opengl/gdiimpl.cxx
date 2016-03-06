@@ -1384,8 +1384,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     if( nDestHeight == 0 || nDestWidth == 0 )
         return;
 
-    const double ixscale = rTexture.GetWidth()  / nDestWidth;
-    const double iyscale = rTexture.GetHeight() / nDestHeight;
+    const double ixscale = rTexture.GetWidth()  / double(nDestWidth);
+    const double iyscale = rTexture.GetHeight() / double(nDestHeight);
 
     bool areaScaling = false;
     bool fastAreaScaling = false;
