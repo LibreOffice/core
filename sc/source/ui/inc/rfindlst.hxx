@@ -27,12 +27,12 @@
 struct ScRangeFindData
 {
     ScRange    aRef;
-    sal_uInt16 nFlags;
+    ScRefFlags nFlags;
     sal_Int32  nSelStart;
     sal_Int32  nSelEnd;
     ColorData nColorData;
 
-    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, sal_Int32 nS, sal_Int32 nE ) :
+    ScRangeFindData( const ScRange& rR, ScRefFlags nF, sal_Int32 nS, sal_Int32 nE ) :
         aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE), nColorData(0) {}
 };
 

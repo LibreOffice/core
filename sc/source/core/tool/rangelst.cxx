@@ -115,7 +115,7 @@ private:
 class FormatString : public ::std::unary_function<const ScRange*, void>
 {
 public:
-    FormatString(OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
+    FormatString(OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
         mrStr(rStr),
         mnFlags(nFlags),
         mpDoc(pDoc),
@@ -142,7 +142,7 @@ public:
     }
 private:
     OUString& mrStr;
-    sal_uInt16 mnFlags;
+    ScRefFlags mnFlags;
     ScDocument* mpDoc;
     FormulaGrammar::AddressConvention meConv;
     sal_Unicode mcDelim;
@@ -157,7 +157,7 @@ ScRangeList::~ScRangeList()
     RemoveAll();
 }
 
-sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt16 nMask,
+ScRefFlags ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, ScRefFlags nMask,
                            formula::FormulaGrammar::AddressConvention eConv,
                            SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
@@ -166,8 +166,8 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         if (!cDelimiter)
             cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
-        nMask |= SCA_VALID;             // falls das jemand vergessen sollte
-        sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
+        nMask |= ScRefFlags::VALID;             // falls das jemand vergessen sollte
+        ScRefFlags nResult = ~ScRefFlags::ZERO;    // alle Bits setzen
         ScRange aRange;
         const SCTAB nTab = pDoc ? nDefaultTab : 0;
 
@@ -176,15 +176,15 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         {
             const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
-            sal_uInt16 nRes = aRange.ParseAny( aOne, pDoc, eConv );
-            sal_uInt16 nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
-            sal_uInt16 nTmp1 = ( nRes & SCA_BITS );
-            sal_uInt16 nTmp2 = ( nRes & nEndRangeBits );
+            ScRefFlags nRes = aRange.ParseAny( aOne, pDoc, eConv );
+            ScRefFlags nEndRangeBits = ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;
+            ScRefFlags nTmp1 = ( nRes & ScRefFlags::BITS );
+            ScRefFlags nTmp2 = ( nRes & nEndRangeBits );
             // If we have a valid single range with
             // any of the address bits we are interested in
             // set - set the equiv end range bits
-            if ( (nRes & SCA_VALID ) && nTmp1 && ( nTmp2 != nEndRangeBits ) )
-                    nRes |= ( nTmp1 << 4 );
+            if ( (nRes & ScRefFlags::VALID ) && (nTmp1 != ScRefFlags::ZERO) && ( nTmp2 != nEndRangeBits ) )
+                    nRes |= ( static_cast<ScRefFlags>(static_cast<sal_uInt16>(nTmp1) << 4) );
 
             if ( (nRes & nMask) == nMask )
                 Append( aRange );
@@ -192,13 +192,13 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         }
         while (nPos >= 0);
 
-        return nResult;             // SCA_VALID gesetzt wenn alle ok
+        return nResult;             // ScRefFlags::VALID gesetzt wenn alle ok
     }
     else
-        return 0;
+        return ScRefFlags::ZERO;
 }
 
-void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
+void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter ) const
 {

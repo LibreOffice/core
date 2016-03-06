@@ -126,7 +126,7 @@ void ScHighlightChgDlg::Init()
     if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        OUString aRefStr(pRangeEntry->Format(SCR_ABS_3D, pDoc));
+        OUString aRefStr(pRangeEntry->Format(ScRefFlags::RANGE_ABS_3D, pDoc));
         m_pFilterCtr->SetRange(aRefStr);
     }
     m_pFilterCtr->Enable();
@@ -142,7 +142,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdAssign);
-        OUString aRefStr(rRef.Format(SCR_ABS_3D, pDocP, pDocP->GetAddressConvention()));
+        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP, pDocP->GetAddressConvention()));
         m_pEdAssign->SetRefString( aRefStr );
         m_pFilterCtr->SetRange(aRefStr);
     }

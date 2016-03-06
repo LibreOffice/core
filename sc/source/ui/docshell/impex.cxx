@@ -159,10 +159,10 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     }
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     // Range?
-    if (aRange.Parse(aPos, pDoc, eConv) & SCA_VALID)
+    if (aRange.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
         bSingle = false;
     // Cell?
-    else if (aRange.aStart.Parse(aPos, pDoc, eConv) & SCA_VALID)
+    else if (aRange.aStart.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
         aRange.aEnd = aRange.aStart;
     else
         bAll = true;
@@ -433,13 +433,13 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
         {
             // Always use Calc A1 syntax for paste link.
             OUString aRefName;
-            sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;
+            ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_3D;
             if( bSingle )
                 aRefName = aRange.aStart.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
             else
             {
                 if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
-                    nFlags |= SCA_TAB2_3D;
+                    nFlags |= ScRefFlags::TAB2_3D;
                 aRefName = aRange.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
             }
             OUString aAppName = Application::GetAppName();

@@ -266,7 +266,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             aBuf.append(' ');
 
             ScAddress aPos( aCols[ nCol ], 0, 0 );
-            aBuf.append(aPos.Format(SCA_VALID_COL));
+            aBuf.append(aPos.Format(ScRefFlags::COL_VALID));
 
             aString = aBuf.makeStringAndClear();
         }
@@ -379,7 +379,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             else
                 nPosCol++;
             ScAddress aPos( nPosCol - 1, 0, 0 );
-            aBuf.append(aPos.Format(SCA_VALID_COL));
+            aBuf.append(aPos.Format(ScRefFlags::COL_VALID));
             aString = aBuf.makeStringAndClear();
         }
         pMemChart->SetColText( nCol, aString);

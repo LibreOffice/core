@@ -114,7 +114,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
                 ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                aRangeString = aRange.Format(SCR_ABS_3D, &rScDoc);
+                aRangeString = aRange.Format(ScRefFlags::RANGE_ABS_3D, &rScDoc);
             }
         }
     }
@@ -143,14 +143,14 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
             // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
             ScRangeListRef aRangeListRef( new ScRangeList );
-            aRangeListRef->Parse( aRangeString, &rScDoc, SCA_VALID, rScDoc.GetAddressConvention() );
+            aRangeListRef->Parse( aRangeString, &rScDoc, ScRefFlags::VALID, rScDoc.GetAddressConvention() );
             if ( !aRangeListRef->empty() )
             {
                 rScDoc.LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
 
                 // update string from modified ranges.  The ranges must be in the current formula syntax.
                 OUString aTmpStr;
-                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, &rScDoc, rScDoc.GetAddressConvention() );
+                aRangeListRef->Format( aTmpStr, ScRefFlags::RANGE_ABS_3D, &rScDoc, rScDoc.GetAddressConvention() );
                 aRangeString = aTmpStr;
 
                 ScChartPositioner aChartPositioner( &rScDoc, aRangeListRef );
@@ -429,7 +429,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         aMultiMark.FillRangeListWithMarks( &aRanges, false );
         OUString aStr;
         ScDocument* pDocument = pViewSh->GetViewData().GetDocument();
-        aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
+        aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, pDocument, pDocument->GetAddressConvention() );
         aRangeString = aStr;
 
         // get "total" range for positioning

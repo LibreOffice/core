@@ -196,7 +196,7 @@ public:
 
     void appendAddress( const ScAddress &rPos )
     {
-        aMessage.append( rPos.Format( SCA_VALID ) );
+        aMessage.append( rPos.Format( ScRefFlags::VALID ) );
         appendSeparator();
     }
 
