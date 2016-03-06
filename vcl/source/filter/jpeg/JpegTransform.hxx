@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 class JpegTransform
 {

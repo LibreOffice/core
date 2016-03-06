@@ -23,7 +23,7 @@
 #include "escherex.hxx"
 #include <sal/types.h>
 #include <sot/storage.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <unotools/fontcvt.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>

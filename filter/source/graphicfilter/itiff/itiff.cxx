@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <vcl/FilterConfigItem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/animate.hxx>
 #include <tools/fract.hxx>

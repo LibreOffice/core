@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapaccess.hxx>
 
 #ifdef _XBMPRIVATE

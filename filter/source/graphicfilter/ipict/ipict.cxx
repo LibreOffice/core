@@ -20,7 +20,7 @@
 #include <string.h>
 #include <osl/thread.h>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>

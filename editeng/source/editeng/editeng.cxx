@@ -37,7 +37,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
 #include <editeng/cmapitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include <editeng/autokernitem.hxx>
 #include <editeng/contouritem.hxx>

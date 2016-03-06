@@ -43,7 +43,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/builderfactory.hxx>
 #include <osl/file.hxx>
 #include <cuires.hrc>

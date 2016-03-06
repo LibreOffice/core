@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 
 using namespace com::sun::star;

@@ -25,7 +25,7 @@
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>

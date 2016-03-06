@@ -32,7 +32,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include <vcl/help.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>

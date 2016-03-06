@@ -113,7 +113,7 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/inputtypes.hxx>

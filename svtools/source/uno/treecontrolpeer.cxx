@@ -31,7 +31,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>

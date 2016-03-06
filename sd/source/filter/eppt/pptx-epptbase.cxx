@@ -24,7 +24,7 @@
 #include <tools/datetime.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/virdev.hxx>

@@ -25,7 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 
 namespace drawinglayer

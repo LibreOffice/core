@@ -19,7 +19,7 @@
 
 
 #include "rtl/alloc.h"
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fltcall.hxx>

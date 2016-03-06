@@ -18,7 +18,7 @@
  */
 
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>

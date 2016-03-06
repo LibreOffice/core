@@ -77,7 +77,7 @@
 #include <svx/svdtrans.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 

@@ -21,7 +21,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <tools/resary.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/languageoptions.hxx>

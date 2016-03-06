@@ -20,7 +20,7 @@
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <rtl/instance.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 
 namespace drawinglayer

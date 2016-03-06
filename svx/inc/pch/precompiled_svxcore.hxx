@@ -123,7 +123,7 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>

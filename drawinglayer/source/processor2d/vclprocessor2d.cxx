@@ -48,7 +48,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 
 #include "getdigitlanguage.hxx"
 

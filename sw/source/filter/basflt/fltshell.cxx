@@ -22,7 +22,7 @@
 #include <hints.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>

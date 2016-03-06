@@ -22,7 +22,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <svtools/transfer.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 

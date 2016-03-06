@@ -21,7 +21,7 @@
 #include "epptdef.hxx"
 #include <tools/globname.hxx>
 #include <tools/poly.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gradient.hxx>
 #include <rtl/ustring.hxx>

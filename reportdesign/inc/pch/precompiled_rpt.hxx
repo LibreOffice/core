@@ -127,7 +127,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
