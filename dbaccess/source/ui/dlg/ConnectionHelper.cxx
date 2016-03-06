@@ -230,7 +230,7 @@ namespace dbaui
             break;
             case  ::dbaccess::DST_MSACCESS:
             {
-                const OUString sExt("*.mdb");
+                const OUString sExt("*.mdb;*.mde");
                 OUString sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
@@ -242,7 +242,7 @@ namespace dbaui
             break;
             case  ::dbaccess::DST_MSACCESS_2007:
             {
-                const OUString sAccdb("*.accdb");
+                const OUString sAccdb("*.accdb;*.accde");
                 OUString sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
