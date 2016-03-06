@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_c8e1cf00",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-03-06T17:17:18Z",
+      "side": 0,
+      "message": "Why mnCount initialization was moved later in code where other vars are initialized to thei default values? That\u0027s the reason you assigned 0 to it instead of mnCount: the wrong order.",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 20
+      },
+      "revId": "7afe51975e21e99a8aa08183c77c0b2774a62b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
