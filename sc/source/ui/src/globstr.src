@@ -165,6 +165,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Sort" ;
     };
+    String STR_UNDO_SHUFFLE
+    {
+        Text [ en-US ] = "Shuffle" ;
+    };
     String STR_UNDO_QUERY
     {
         Text [ en-US ] = "Filter" ;

@@ -1733,6 +1733,10 @@ public:
         SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
+    void Shuffle(
+        SCTAB nTab, ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        ScProgress* pProgress, sc::ReorderParam* pUndo );
+
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
 
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );

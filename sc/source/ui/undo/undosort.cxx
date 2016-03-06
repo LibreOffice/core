@@ -72,6 +72,17 @@ void UndoSort::Execute( bool bUndo )
     pDocShell->PostDataChanged();
 }
 
+
+
+UndoShuffle::UndoShuffle( ScDocShell* pDocSh, const ReorderParam& rParam ) :
+    UndoSort(pDocSh, rParam)
+{}
+
+OUString UndoShuffle::GetComment() const
+{
+    return ScGlobal::GetRscString(STR_UNDO_SHUFFLE);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

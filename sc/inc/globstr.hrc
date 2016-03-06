@@ -708,7 +708,9 @@
 
 #define STR_FILTER_SELCOUNT             533
 
-#define SC_GLOBSTR_STR_COUNT            534     /**< the count of permanently resident strings */
+#define STR_UNDO_SHUFFLE                534
+
+#define SC_GLOBSTR_STR_COUNT            535     /**< the count of permanently resident strings */
 
 #endif
 

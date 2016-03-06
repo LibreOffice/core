@@ -1394,6 +1394,19 @@ void ScDocument::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress 
     EnableIdle(bOldEnableIdle);
 }
 
+void ScDocument::Shuffle(
+    SCTAB nTab, ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+    ScProgress* pProgress, sc::ReorderParam* pUndo )
+{
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    {
+        bool bOldEnableIdle = IsIdleEnabled();
+        EnableIdle(false);
+        maTabs[nTab]->Shuffle(rSortParam, bKeepQuery, bUpdateRefs, pProgress, pUndo);
+        EnableIdle(bOldEnableIdle);
+    }
+}
+
 SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )

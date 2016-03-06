@@ -55,6 +55,7 @@
 #include "validat.hxx"
 #include "validate.hxx"
 #include "scresid.hxx"
+#include "undosort.hxx"
 
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
@@ -396,7 +397,35 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
             }
             break;
+        case SID_SHUFFLE:
+            {
+                ScSortParam aCurrentSortParam;
+                SCCOL nTab = GetViewData()->GetTabNo();
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                ScDocShell* pDocShell = GetViewData()->GetDocShell();
 
+                pTabViewShell->GetDBData()->GetSortParam(aCurrentSortParam);
+
+                ScSortParam aSortData;
+                aSortData.nCol1 = aCurrentSortParam.nCol1;
+                aSortData.nCol2 = aCurrentSortParam.nCol2;
+                aSortData.nRow1 = aCurrentSortParam.nRow1;
+                aSortData.nRow2 = aCurrentSortParam.nRow2;
+                aSortData.bByRow = true;
+
+                sc::ReorderParam aUndoParam;
+
+                pDoc->Shuffle(nTab, aSortData, false, true, NULL, &aUndoParam);
+
+                sc::UndoShuffle* pUndoAction = new sc::UndoShuffle(pDocShell, aUndoParam);
+
+                pDocShell->GetUndoManager()->AddUndoAction(pUndoAction);
+
+                pDocShell->PostPaint( ScRange(aCurrentSortParam.nCol1, aCurrentSortParam.nRow1, nTab,
+                                              aCurrentSortParam.nCol2, aCurrentSortParam.nRow2, nTab), PAINT_GRID );
+
+            }
+            break;
         case SID_SORT:
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
