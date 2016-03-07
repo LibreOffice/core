@@ -112,10 +112,10 @@ void TextParagraph::insertAt(
 
             // bullets have same color as following texts by default
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && maRuns.size() > 0
-                && (*maRuns.begin())->getTextCharacterProperties().maCharColor.isUsed() )
-                aioBulletList.setProperty( PROP_BulletColor, (*maRuns.begin())->getTextCharacterProperties().maCharColor.getColor( rFilterBase.getGraphicHelper() ));
-            if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maCharColor.isUsed() )
-                aioBulletList.setProperty( PROP_BulletColor, aTextCharacterStyle.maCharColor.getColor( rFilterBase.getGraphicHelper() ));
+                && (*maRuns.begin())->getTextCharacterProperties().maFillProperties.moFillType.has() )
+                aioBulletList.setProperty( PROP_BulletColor, (*maRuns.begin())->getTextCharacterProperties().maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
+            if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maFillProperties.moFillType.has() )
+                aioBulletList.setProperty( PROP_BulletColor, aTextCharacterStyle.maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
 
             float fCharacterSize = nCharHeight > 0 ? GetFontHeight ( nCharHeight ) : pTextParagraphStyle->getCharHeightPoints( 12 );
             aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), true, fCharacterSize, true );

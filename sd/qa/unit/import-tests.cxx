@@ -109,6 +109,7 @@ public:
     void testTdf93830();
     void testTdf93097();
     void testTdf62255();
+    void testTdf89927();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testTdf93830);
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
+    CPPUNIT_TEST(testTdf89927);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1190,6 +1192,21 @@ void SdImportTest::testTdf62255()
         aAny >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, aFillStyle);
     }
+}
+
+void SdImportTest::testTdf89927()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf89927.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference< text::XTextRange > xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference< text::XTextRange > xRun( getRunFromParagraph( 0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    sal_Int32 nCharColor;
+    xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFFFFFF), nCharColor );
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
