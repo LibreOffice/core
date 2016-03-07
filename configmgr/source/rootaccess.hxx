@@ -37,7 +37,6 @@
 
 #include "access.hxx"
 #include "modifications.hxx"
-#include "path.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace uno {

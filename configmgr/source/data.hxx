@@ -34,7 +34,6 @@
 #include "additions.hxx"
 #include "modifications.hxx"
 #include "nodemap.hxx"
-#include "path.hxx"
 
 namespace configmgr {
 

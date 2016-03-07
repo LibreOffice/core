@@ -33,7 +33,6 @@
 #include "additions.hxx"
 #include "data.hxx"
 #include "modifications.hxx"
-#include "path.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }

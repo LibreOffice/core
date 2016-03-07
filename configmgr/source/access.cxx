@@ -96,7 +96,6 @@
 #include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
-#include "path.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"

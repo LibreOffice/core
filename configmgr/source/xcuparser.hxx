@@ -33,7 +33,6 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "parser.hxx"
-#include "path.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
 #include "xmldata.hxx"

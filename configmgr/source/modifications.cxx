@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 
 #include "modifications.hxx"
-#include "path.hxx"
 
 namespace configmgr {
 

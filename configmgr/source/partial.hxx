@@ -25,7 +25,6 @@
 #include <set>
 #include <boost/unordered_map.hpp>
 
-#include "path.hxx"
 #include <rtl/ustring.hxx>
 
 namespace configmgr {

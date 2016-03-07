@@ -53,7 +53,6 @@
 #include "lock.hxx"
 #include "modifications.hxx"
 #include "node.hxx"
-#include "path.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"

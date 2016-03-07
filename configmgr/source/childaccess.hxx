@@ -35,7 +35,6 @@
 #include <sal/types.h>
 
 #include "access.hxx"
-#include "path.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;

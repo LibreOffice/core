@@ -26,8 +26,6 @@
 
 #include <config_dconf.h>
 
-#include "path.hxx"
-
 namespace configmgr {
 
 class Modifications {

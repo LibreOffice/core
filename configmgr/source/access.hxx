@@ -62,7 +62,6 @@
 #include <sal/types.h>
 
 #include "modifications.hxx"
-#include "path.hxx"
 #include "type.hxx"
 
 namespace com { namespace sun { namespace star {

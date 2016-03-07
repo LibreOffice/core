@@ -22,9 +22,8 @@
 
 #include <sal/config.h>
 
+#include <vector>
 #include <list>
-
-#include "path.hxx"
 
 namespace configmgr {
 
