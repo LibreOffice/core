@@ -2157,25 +2157,52 @@ void ScMatrix::DecRef() const
         delete this;
 }
 
-ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR) :
-    pImpl(new ScMatrixImpl(nC, nR)), nRefCnt(0)
+bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
 {
     SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
     SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    // 0-size matrix is valid, it could be resized later.
+    if ((nC && !nR) || (!nC && nR))
+    {
+        SAL_WARN( "sc", "ScMatrix one-dimensional zero: " << nC << " columns * " << nR << " rows");
+        return false;
+    }
+    if (nC && nR && (nC > (ScMatrix::GetElementsMax() / nR)))
+    {
+        SAL_WARN( "sc", "ScMatrix overflow: " << nC << " columns * " << nR << " rows");
+        return false;
+    }
+    return true;
+}
+
+ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR) :
+    pImpl(nullptr), nRefCnt(0)
+{
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+        pImpl = new ScMatrixImpl( nC, nR);
+    else
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        pImpl = new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow));
 }
 
 ScMatrix::ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
-    pImpl(new ScMatrixImpl(nC, nR, fInitVal)), nRefCnt(0)
+    pImpl(nullptr), nRefCnt(0)
 {
-    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
-    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+        pImpl = new ScMatrixImpl( nC, nR, fInitVal);
+    else
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        pImpl = new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow));
 }
 
 ScMatrix::ScMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
-    pImpl(new ScMatrixImpl(nC, nR, rInitVals)), nRefCnt(0)
+    pImpl(nullptr), nRefCnt(0)
 {
-    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
-    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+        pImpl = new ScMatrixImpl( nC, nR, rInitVals);
+    else
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        pImpl = new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow));
 }
 
 ScMatrix::~ScMatrix()
