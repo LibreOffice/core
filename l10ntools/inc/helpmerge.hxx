@@ -31,7 +31,7 @@ class HelpParser
 private:
     OString sHelpFile;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     /// Debugmethod, prints the content of the map to stdout
     static void Dump(LangHashMap* rElem_in , const OString & sKey_in);
 
