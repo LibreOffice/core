@@ -20,9 +20,8 @@
 #include "sal/log.hxx"
 #include "CFStringUtilities.hxx"
 
-rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
-    //DBG_PRINT_ENTRY("CFStringUtilities", __func__, "sOrig", sOrig);
-
+rtl::OUString CFStringToOUString(const CFStringRef sOrig)
+{
     if (nullptr == sOrig) {
         return rtl::OUString();
     }
@@ -39,25 +38,18 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
     //we no longer need the original string
     CFRelease(sOrig);
 
-    //DBG_PRINT_EXIT("CFStringUtilities", __func__, unichars);
-
     return rtl::OUString(reinterpret_cast<sal_Unicode *>(unichars));
 }
 
-CFStringRef CFStringCreateWithOUString(const rtl::OUString& aString) {
-    //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
-
+CFStringRef CFStringCreateWithOUString(const rtl::OUString& aString)
+{
     CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(aString.getStr()), aString.getLength());
-
-    //DBG_PRINT_EXIT("CFStringUtilities", __func__, ref);
 
     return ref;
 }
 
 rtl::OUString FSRefToOUString(FSRef const & fsRef, InfoType info)
 {
-    //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
-
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 CFURLCreateFromFSRef
     CFURLRef aUrlRef = CFURLCreateFromFSRef(nullptr, &fsRef);
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -67,15 +59,11 @@ rtl::OUString FSRefToOUString(FSRef const & fsRef, InfoType info)
     //we no longer need the CFURLRef
     CFRelease(aUrlRef);
 
-    //DBG_PRINT_EXIT("CFStringUtilities", __func__, OUStringToOString(sResult, RTL_TEXTENCODING_UTF8).getStr());
-
     return sResult;
 }
 
 rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
 {
-    //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
-
     CFStringRef sURLString = nullptr;
 
     switch(info) {
@@ -112,8 +100,6 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
     rtl::OUString sResult = CFStringToOUString(sURLString);
 
     CFRelease(sURLString);
-
-    //DBG_PRINT_EXIT("CFStringUtilities", __func__, OUStringToOString(sResult, RTL_TEXTENCODING_UTF8).getStr());
 
     return sResult;
 }

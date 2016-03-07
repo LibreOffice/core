@@ -43,7 +43,6 @@ void fillSuffixList(OUStringList& aSuffixList, const ::rtl::OUString& suffixStri
 }
 
 #pragma mark DEFINES
-#define CLASS_NAME "FilterEntry"
 
 #pragma mark FilterEntry
 
@@ -51,8 +50,6 @@ FilterEntry::FilterEntry( const rtl::OUString& _rTitle, const UnoFilterList& _rS
 :m_sTitle( _rTitle )
 ,m_aSubFilters( _rSubFilters )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", _rTitle);
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 
@@ -67,12 +64,8 @@ bool FilterEntry::hasSubFilters() const
 
 sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     _rSubFilterList = m_aSubFilters;
     sal_Int32 nReturn = m_aSubFilters.getLength();
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn);
 
     return nReturn;
 }
@@ -106,8 +99,6 @@ isFilterString( const rtl::OUString& rFilterString, const char *pMatch )
 static rtl::OUString
 shrinkFilterName( const rtl::OUString& aFilterName, bool bAllowNoStar = false )
 {
-    // DBG_PRINT_ENTRY(CLASS_NAME, "shrinkFilterName", "filterName", aFilterName);
-
     sal_Int32 nBracketEnd = -1;
     rtl::OUString aRealName(aFilterName);
 
@@ -178,21 +169,14 @@ public:
     };
 }
 
-#undef CLASS_NAME
-#define CLASS_NAME "FilterHelper"
-
 FilterHelper::FilterHelper()
 : m_pFilterList(nullptr)
 , m_pFilterNames(nullptr)
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 FilterHelper::~FilterHelper()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
     if (nullptr != m_pFilterList) {
@@ -208,8 +192,6 @@ FilterHelper::~FilterHelper()
     }
 
     [pool release];
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 
@@ -264,8 +246,6 @@ void FilterHelper::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilt
 
 void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "filter", rFilter);
-
     SolarMutexGuard aGuard;
 
     if(!m_aCurrentFilter.equals(rFilter))
@@ -290,14 +270,10 @@ void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
         OSL_TRACE("No filter entry was found for that name!");
     }
 #endif
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 void FilterHelper::SetFilters()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     // set the default filter
     if( m_aCurrentFilter.getLength() > 0 )
     {
@@ -305,14 +281,11 @@ void FilterHelper::SetFilters()
 
         SetCurFilter( m_aCurrentFilter );
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 void FilterHelper::appendFilter(const ::rtl::OUString& aTitle, const ::rtl::OUString& aFilterString)
-throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle, "filter", aFilterString);
-
+throw( css::lang::IllegalArgumentException, css::uno::RuntimeException )
+{
     SolarMutexGuard aGuard;
 
     if( FilterNameExists( aTitle ) ) {
@@ -326,35 +299,25 @@ throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) {
     OUStringList suffixList;
     fillSuffixList(suffixList, aFilterString);
     m_pFilterList->push_back(FilterEntry( aTitle, suffixList ) );
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 void FilterHelper::setCurrentFilter( const ::rtl::OUString& aTitle )
-throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "aTitle", OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8).getStr());
-
+throw( css::lang::IllegalArgumentException, css::uno::RuntimeException )
+{
     SetCurFilter(aTitle);
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 ::rtl::OUString SAL_CALL FilterHelper::getCurrentFilter(  )
-throw( css::uno::RuntimeException ) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+throw( css::uno::RuntimeException )
+{
     ::rtl::OUString sReturn = (m_aCurrentFilter);
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, OUStringToOString(sReturn, RTL_TEXTENCODING_UTF8).getStr());
 
     return sReturn;
 }
 
-void SAL_CALL FilterHelper::appendFilterGroup( const ::rtl::OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters )
-throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) {
-
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", OUStringToOString(sGroupTitle, RTL_TEXTENCODING_UTF8).getStr());
-
+void SAL_CALL FilterHelper::appendFilterGroup( const ::rtl::OUString& /* sGroupTitle */, const css::uno::Sequence< css::beans::StringPair >& aFilters )
+throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+{
     SolarMutexGuard aGuard;
 
     //add a separator if this is not the first group to be added
@@ -378,14 +341,10 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) {
     for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters ) {
         appendFilter(pSubFilters->First, pSubFilters->Second);
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     if (m_aCurrentFilter == nullptr) {
         OSL_TRACE("filter name is null");
         return true;
@@ -433,21 +392,16 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
             return true;
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
     return false;
 }
 
-FilterList* FilterHelper::getFilterList() {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
+FilterList* FilterHelper::getFilterList()
+{
     return m_pFilterList;
 }
 
-NSStringList* FilterHelper::getFilterNames() {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+NSStringList* FilterHelper::getFilterNames()
+{
     if (nullptr == m_pFilterList)
         return nullptr;
     if (nullptr == m_pFilterNames) {
@@ -458,26 +412,20 @@ NSStringList* FilterHelper::getFilterNames() {
         }
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
     return m_pFilterNames;
 }
 
-void FilterHelper::SetFilterAtIndex(unsigned index) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "index", index);
-
+void FilterHelper::SetFilterAtIndex(unsigned index)
+{
     if (m_pFilterList->size() <= index) {
         index = 0;
     }
     FilterEntry entry = m_pFilterList->at(index);
     SetCurFilter(entry.getTitle());
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-int FilterHelper::getCurrentFilterIndex() {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+int FilterHelper::getCurrentFilterIndex()
+{
     int result = 0;//default to first filter
     if (m_aCurrentFilter.getLength() > 0) {
         int i = 0;
@@ -496,14 +444,11 @@ int FilterHelper::getCurrentFilterIndex() {
         }
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, result);
-
     return result;
 }
 
-OUStringList FilterHelper::getCurrentFilterSuffixList() {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+OUStringList FilterHelper::getCurrentFilterSuffixList()
+{
     OUStringList retVal;
     if (m_aCurrentFilter.getLength() > 0) {
         for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); iter++) {
@@ -520,8 +465,6 @@ OUStringList FilterHelper::getCurrentFilterSuffixList() {
             }
         }
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 
     return retVal;
 }

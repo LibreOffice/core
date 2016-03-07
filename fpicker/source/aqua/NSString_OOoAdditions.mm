@@ -20,17 +20,12 @@
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 
-#define CLASS_NAME "NSString"
-
 @implementation NSString (OOoAdditions) 
 
 + (id) stringWithOUString:(const rtl::OUString&)ouString
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "ouString", ouString);
-
     NSString *string = [[NSString alloc] initWithCharacters:reinterpret_cast<unichar const *>(ouString.getStr()) length:ouString.getLength()];
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, string);
     return [string autorelease];
 }
 

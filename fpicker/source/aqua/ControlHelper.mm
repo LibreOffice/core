@@ -31,7 +31,6 @@
 #include "ControlHelper.hxx"
 
 #pragma mark DEFINES
-#define CLASS_NAME "ControlHelper"
 #define POPUP_WIDTH_MIN 200
 #define POPUP_WIDTH_MAX 350
 
@@ -44,13 +43,10 @@ namespace {
 
 uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction)
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
-
     uno::Any aAny;
 
     if ([pControl class] != [NSPopUpButton class]) {
         SAL_INFO("fpicker.aqua","not a popup button");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return aAny;
     }
 
@@ -58,7 +54,6 @@ uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlA
     NSMenu *rMenu = [pButton menu];
     if (nil == rMenu) {
         SAL_INFO("fpicker.aqua","button has no menu");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return aAny;
     }
 
@@ -108,14 +103,11 @@ uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlA
             break;
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
     return aAny;
 }
 
-NSTextField* createLabelWithString(NSString* labelString) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "label", labelString);
-
+NSTextField* createLabelWithString(NSString* labelString)
+{
     NSTextField *textField = [NSTextField new];
     [textField setEditable:NO];
     [textField setSelectable:NO];
@@ -125,7 +117,6 @@ NSTextField* createLabelWithString(NSString* labelString) {
     [[textField cell] setTitle:labelString];
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
     return textField;
 }
 
@@ -143,8 +134,6 @@ ControlHelper::ControlHelper()
 , m_bIsFilterControlNeeded(false)
 , m_pFilterHelper(nullptr)
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     int i;
 
     for( i = 0; i < TOGGLE_LAST; i++ ) {
@@ -154,14 +143,10 @@ ControlHelper::ControlHelper()
     for( i = 0; i < LIST_LAST; i++ ) {
         m_bListVisibility[i] = false;
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 ControlHelper::~ControlHelper()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
     if (nullptr != m_pUserPane) {
@@ -188,8 +173,6 @@ ControlHelper::~ControlHelper()
     }
 
     [pool release];
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 #pragma mark XInitialization delegate
@@ -198,8 +181,6 @@ ControlHelper::~ControlHelper()
 
 void ControlHelper::initialize( sal_Int16 nTemplateId )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "templateId", nTemplateId);
-
     switch( nTemplateId )
     {
         case FILESAVE_AUTOEXTENSION_PASSWORD:
@@ -238,8 +219,6 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
     }
 
     createControls();
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 #pragma mark XFilePickerControlAccess delegates
@@ -249,13 +228,10 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
 
 void ControlHelper::enableControl( const sal_Int16 nControlId, const bool bEnable ) const
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "enable", int(bEnable));
-
     SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         SAL_INFO("fpicker.aqua"," preview checkbox cannot be changed");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -271,14 +247,10 @@ void ControlHelper::enableControl( const sal_Int16 nControlId, const bool bEnabl
     } else {
         SAL_INFO("fpicker.aqua","enable unknown control " << nControlId );
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 OUString ControlHelper::getLabel( sal_Int16 nControlId )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId);
-
     SolarMutexGuard aGuard;
 
     NSControl* pControl = getControl( nControlId );
@@ -301,15 +273,11 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
         retVal = [sLabel OUString];
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
-
     return retVal;
 }
 
 void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "label", aLabel);
-
     SolarMutexGuard aGuard;
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
@@ -336,14 +304,10 @@ void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
     layoutControls();
 
     [pool release];
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
-
     SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
@@ -368,14 +332,10 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
             }
         }
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
-
     SolarMutexGuard aGuard;
     uno::Any aRetval;
 
@@ -395,24 +355,18 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
         }
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
     return aRetval;
 }
 
 void ControlHelper::createUserPane()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     if (!m_bUserPaneNeeded) {
         SAL_INFO("fpicker.aqua","no user pane needed");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
     if (nil != m_pUserPane) {
         SAL_INFO("fpicker.aqua","user pane already exists");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -555,8 +509,6 @@ void ControlHelper::createUserPane()
     [m_pUserPane setFrame:upRect];
 
     layoutControls();
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 #pragma mark Private / Misc
@@ -565,8 +517,6 @@ void ControlHelper::createUserPane()
 
 void ControlHelper::createControls()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     CResourceProvider aResProvider;
     for (int i = 0; i < LIST_LAST; i++) {
         if (m_bListVisibility[i]) {
@@ -627,25 +577,19 @@ void ControlHelper::createControls()
         [pPreviewBox setEnabled:NO];
         [(NSButton*)pPreviewBox setState:NSOnState];
     }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 #define TOGGLE_ELEMENT( elem ) \
 case elem: \
     nReturn = CHECKBOX_##elem; \
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn); \
     return nReturn
 #define LIST_ELEMENT( elem ) \
 case elem: \
     nReturn = LISTBOX_##elem##_LABEL; \
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn); \
     return nReturn
 
 int ControlHelper::getControlElementName(const Class aClazz, const int nControlId)
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "aClazz", [[aClazz description] UTF8String], "controlId", nControlId);
-
     int nReturn = -1;
     if (aClazz == [NSButton class])
     {
@@ -668,18 +612,13 @@ int ControlHelper::getControlElementName(const Class aClazz, const int nControlI
         }
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn);
-
     return nReturn;
 }
 
 void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const uno::Any& rValue)
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
-
     if ([pControl class] != [NSPopUpButton class]) {
         SAL_INFO("fpicker.aqua","not a popup menu");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -687,7 +626,6 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
     NSMenu *rMenu = [pButton menu];
     if (nil == rMenu) {
         SAL_INFO("fpicker.aqua","button has no menu");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -733,7 +671,6 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
             int nItems = [rMenu numberOfItems];
             if (nItems == 0) {
                 SAL_INFO("fpicker.aqua","no menu items to delete");
-                DBG_PRINT_EXIT(CLASS_NAME, __func__);
                 return;
             }
             for(sal_Int32 i = 0; i < nItems; i++) {
@@ -755,15 +692,11 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
     }
 
     layoutControls();
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 // cf. offapi/com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.idl
 NSControl* ControlHelper::getControl( const sal_Int16 nControlId ) const
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId);
-
     NSControl* pWidget = nil;
 
 #define MAP_TOGGLE( elem ) \
@@ -803,26 +736,20 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
     }
 #undef MAP
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
     return pWidget;
 }
 
 void ControlHelper::layoutControls()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     SolarMutexGuard aGuard;
 
     if (nil == m_pUserPane) {
         SAL_INFO("fpicker.aqua","no user pane to layout");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
     if (m_bIsUserPaneLaidOut) {
         SAL_INFO("fpicker.aqua","user pane already laid out");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -931,13 +858,10 @@ void ControlHelper::layoutControls()
     }
 
     m_bIsUserPaneLaidOut = true;
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-void ControlHelper::createFilterControl() {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+void ControlHelper::createFilterControl()
+{
     CResourceProvider aResProvider;
     NSString* sLabel = aResProvider.getResString(CommonFilePickerElementIds::LISTBOX_FILTER_LABEL);
 
@@ -962,8 +886,6 @@ void ControlHelper::createFilterControl() {
     // always add the filter as first item
     m_aActiveControls.push_front(m_pFilterControl);
     m_aMapListLabels[m_pFilterControl] = [sLabel retain];
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 int ControlHelper::getVerticalDistance(const NSControl* first, const NSControl* second)
@@ -993,11 +915,8 @@ int ControlHelper::getVerticalDistance(const NSControl* first, const NSControl* 
 
 void ControlHelper::updateFilterUI()
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
     if (!m_bIsFilterControlNeeded || m_pFilterHelper == nullptr) {
         SAL_INFO("fpicker.aqua","no filter control needed or no filter helper present");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -1008,8 +927,6 @@ void ControlHelper::updateFilterUI()
     }
 
     [m_pFilterControl selectItemAtIndex:index];
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
