@@ -24,7 +24,6 @@
 #include "globals.hrc"
 #include "helpid.h"
 #include "popup.hrc"
-#include "redline.hrc"
 
 #define SEPARATOR       MenuItem { Separator = TRUE; }
 /*------------------------------------------------------------------------
