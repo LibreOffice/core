@@ -20,7 +20,7 @@ xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch
 xmlsec_patches += xmlsec1-android.patch
 # Partial backport of <https://github.com/lsh123/xmlsec/commit/6a4968bc33f83aaf61efc0a80333350ce9c372f5>.
 xmlsec_patches += xmlsec1-1.2.14-ansi.patch
-xmlsec_patches += xmlsec1-customkeymanage.patch
+xmlsec_patches += xmlsec1-customkeymanage.patch.1
 xmlsec_patches += xmlsec1-update-config.guess.patch.1
 # Upstreamed as <https://github.com/lsh123/xmlsec/commit/7069e2b0ab49679008abedd6d223fb95538b0684>.
 xmlsec_patches += xmlsec1-ooxml.patch.1
@@ -35,15 +35,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL),,libxml
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 	$(foreach patch,$(xmlsec_patches),external/libxmlsec/$(patch)) \
 ))
-
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/mscrypto/akmngr.h,external/libxmlsec/include/akmngr_mscrypto.h))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,src/mscrypto/akmngr.c,external/libxmlsec/src/akmngr_mscrypto.c))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/nss/akmngr.h,external/libxmlsec/include/akmngr_nss.h))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/nss/ciphers.h,external/libxmlsec/include/ciphers.h))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/nss/tokens.h,external/libxmlsec/include/tokens.h))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,src/nss/akmngr.c,external/libxmlsec/src/akmngr_nss.c))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,src/nss/keywrapers.c,external/libxmlsec/src/keywrapers.c))
-$(eval $(call gb_UnpackedTarball_add_file,xmlsec,src/nss/tokens.c,external/libxmlsec/src/tokens.c))
 
 ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
