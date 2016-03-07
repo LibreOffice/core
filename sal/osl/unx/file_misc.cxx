@@ -802,7 +802,8 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     if ( DestFileExists )
     {
         //TODO: better pick a temp file name instead of adding .osl-tmp:
-        tmpDestFile = rtl::OString(pszSourceFileName) + ".osl-tmp";
+        // use the destination file to avoid EXDEV /* Cross-device link */
+        tmpDestFile = rtl::OString(pszDestFileName) + ".osl-tmp";
         if (rename(pszDestFileName, tmpDestFile.getStr()) != 0)
         {
             if (errno == ENOENT)
