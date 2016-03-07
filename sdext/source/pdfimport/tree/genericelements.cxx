@@ -90,7 +90,7 @@ void Element::updateGeometryWith( const Element* pMergeFrom )
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
 void Element::emitStructure( int nLevel)
 {
@@ -166,7 +166,7 @@ void PolyPolyElement::visitedBy( ElementTreeVisitor&                          rV
     rVisitor.visit( *this, rParentIt);
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void PolyPolyElement::emitStructure( int nLevel)
 {
     OSL_TRACE( "%*s<%s %p>", nLevel, "", typeid( *this ).name(), this  );

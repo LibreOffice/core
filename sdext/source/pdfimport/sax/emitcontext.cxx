@@ -27,7 +27,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <osl/file.hxx>
 static osl::File* pStream = NULL;
 static int nIndent = 0;
@@ -49,7 +49,7 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
     catch( xml::sax::SAXException& )
     {
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static const char* pDir = getenv( "DBG_PDFIMPORT_DIR" );
     if( pDir )
     {
@@ -80,7 +80,7 @@ SaxEmitter::~SaxEmitter()
     catch( xml::sax::SAXException& )
     {
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pStream )
     {
         pStream->close();
@@ -102,7 +102,7 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     catch( xml::sax::SAXException& )
     {
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pStream )
     {
         sal_uInt64 nWritten = 0;
@@ -136,7 +136,7 @@ void SaxEmitter::write( const OUString& rText )
     catch( xml::sax::SAXException& )
     {
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pStream )
     {
         OString aStr( OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ) );
@@ -156,7 +156,7 @@ void SaxEmitter::endTag( const char* pTag )
     catch( xml::sax::SAXException& )
     {
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pStream )
     {
         sal_uInt64 nWritten = 0;

@@ -1302,7 +1302,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                     PDFString* pStr = dynamic_cast<PDFString*>(pArr->m_aSubElements[0]);
                     if( pStr )
                         m_pData->m_aDocID = pStr->getFilteredString();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     OUString aTmp;
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
                         aTmp += OUString::number((unsigned int)sal_uInt8(m_pData->m_aDocID[i]), 16);
@@ -1364,7 +1364,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 OString aEnt = pString->getFilteredString();
                                 if( aEnt.getLength() == 32 )
                                     memcpy( m_pData->m_aOEntry, aEnt.getStr(), 32 );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                                 else
                                 {
                                     OUString aTmp;
@@ -1384,7 +1384,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 OString aEnt = pString->getFilteredString();
                                 if( aEnt.getLength() == 32 )
                                     memcpy( m_pData->m_aUEntry, aEnt.getStr(), 32 );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                                 else
                                 {
                                     OUString aTmp;
