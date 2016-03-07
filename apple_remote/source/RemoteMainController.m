@@ -153,9 +153,9 @@
 }
 
 - (void) dealloc {
-    [remoteControl autorelease];
-	[remoteControlBehavior autorelease];
-	[super dealloc];
+    [ remoteControl release ]; remoteControl = nil;
+    [ remoteControlBehavior release ]; remoteControlBehavior = nil;
+    [super dealloc];
 }
 
 // for bindings access
