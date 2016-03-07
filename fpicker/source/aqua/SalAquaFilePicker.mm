@@ -165,14 +165,8 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
                         if (m_sSaveFileName.getLength() > 0) {
                             setDefaultName(m_sSaveFileName);
                         }
-                    } else {
-                        OSL_TRACE("no dash present in window title");
                     }
-                } else {
-                    OSL_TRACE("couldn't get window title");
                 }
-            } else {
-                OSL_TRACE("no front window found");
             }
         }
     }
@@ -197,7 +191,6 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 #else
         case NSOKButton:
 #endif
-            OSL_TRACE("The dialog returned OK");
             retVal = ExecutableDialogResults::OK;
             break;
 
@@ -206,7 +199,6 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 #else
         case NSCancelButton:
 #endif
-            OSL_TRACE("The dialog was cancelled by the user!");
             retVal = ExecutableDialogResults::CANCEL;
             break;
 
@@ -232,7 +224,6 @@ void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( sal_Bool /* bMode */ ) t
 
     if (m_nDialogType == NAVIGATIONSERVICES_OPEN) {
         [(NSOpenPanel*)m_pDialog setAllowsMultipleSelection:YES];
-        OSL_TRACE("dialog allows multi-selection? %d", [(NSOpenPanel*)m_pDialog allowsMultipleSelection]);
     }
 }
 
@@ -285,7 +276,6 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles() thro
     }
 #endif
 
-    // OSL_TRACE("starting work");
     NSArray *files = nil;
     if (m_nDialogType == NAVIGATIONSERVICES_OPEN) {
         files = [(NSOpenPanel*)m_pDialog URLs];
@@ -325,14 +315,11 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles() thro
         }
 #endif
 
-        OSL_TRACE("handling %s", [[url description] UTF8String]);
         InfoType info = FULLPATH;
 
         OUString sFileOrDirURL = [url OUStringForInfo:info];
 
         aSelectedFiles[nIndex] = sFileOrDirURL;
-
-        OSL_TRACE("Returned file in getFiles: \"%s\".", OUStringToOString(sFileOrDirURL, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return aSelectedFiles;
@@ -356,9 +343,6 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 void SAL_CALL SalAquaFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
 throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    OSL_TRACE( "Setting current filter to %s",
-               OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
-
     SolarMutexGuard aGuard;
 
     ensureFilterHelper();
@@ -468,47 +452,36 @@ throw( uno::Exception, uno::RuntimeException )
     {
         case FILEOPEN_SIMPLE:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
-            OSL_TRACE( "Template: FILEOPEN_SIMPLE" );
             break;
         case FILESAVE_SIMPLE:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
-            OSL_TRACE( "Template: FILESAVE_SIMPLE" );
             break;
         case FILESAVE_AUTOEXTENSION_PASSWORD:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
-            OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION_PASSWORD" );
             break;
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
-            OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS" );
             break;
         case FILESAVE_AUTOEXTENSION_SELECTION:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
-            OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION_SELECTION" );
             break;
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
-            OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION_TEMPLATE" );
             break;
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
-            OSL_TRACE( "Template: FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE" );
             break;
         case FILEOPEN_PLAY:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
-            OSL_TRACE( "Template: FILEOPEN_PLAY" );
             break;
         case FILEOPEN_READONLY_VERSION:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
-            OSL_TRACE( "Template: FILEOPEN_READONLY_VERSION" );
             break;
         case FILEOPEN_LINK_PREVIEW:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
-            OSL_TRACE( "Template: FILEOPEN_LINK_PREVIEW" );
             break;
         case FILESAVE_AUTOEXTENSION:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
-            OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION" );
             break;
         default:
             throw lang::IllegalArgumentException("Unknown template",
@@ -582,28 +555,24 @@ throw( uno::RuntimeException )
 
 void SAL_CALL SalAquaFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {
-    OSL_TRACE( "file selection changed");
     if (m_xListener.is())
         m_xListener->fileSelectionChanged( aEvent );
 }
 
 void SAL_CALL SalAquaFilePicker::directoryChanged( FilePickerEvent aEvent )
 {
-    OSL_TRACE("directory changed");
     if (m_xListener.is())
         m_xListener->directoryChanged( aEvent );
 }
 
 void SAL_CALL SalAquaFilePicker::controlStateChanged( FilePickerEvent aEvent )
 {
-    OSL_TRACE("control state changed");
     if (m_xListener.is())
         m_xListener->controlStateChanged( aEvent );
 }
 
 void SAL_CALL SalAquaFilePicker::dialogSizeChanged()
 {
-    OSL_TRACE("dialog size changed");
     if (m_xListener.is())
         m_xListener->dialogSizeChanged();
 }
@@ -645,7 +614,6 @@ void SalAquaFilePicker::updateSaveFileNameExtension()
     SolarMutexGuard aGuard;
 
     if (!m_pControlHelper->isAutoExtensionEnabled()) {
-        OSL_TRACE("allowing other file types");
         [m_pDialog setAllowedFileTypes:nil];
         [m_pDialog setAllowsOtherFileTypes:YES];
     } else {
@@ -660,7 +628,6 @@ void SalAquaFilePicker::updateSaveFileNameExtension()
 
         [m_pDialog setAllowedFileTypes:[NSArray arrayWithObjects:requiredFileType, nil]];
 
-        OSL_TRACE("disallowing other file types");
         [m_pDialog setAllowsOtherFileTypes:NO];
     }
 }

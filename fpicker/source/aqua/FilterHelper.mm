@@ -55,9 +55,8 @@ FilterEntry::FilterEntry( const rtl::OUString& _rTitle, const UnoFilterList& _rS
 
 bool FilterEntry::hasSubFilters() const
 {
-//    OSL_TRACE(">>> FilterEntry::%s", __func__);
     bool bReturn = ( 0 < m_aSubFilters.getLength() );
-//    OSL_TRACE("<<< FilterEntry::%s retVal: %d", __func__, bReturn);
+
     return bReturn;
 }
 
@@ -232,7 +231,6 @@ bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 
 void FilterHelper::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter )
 {
-    //OSL_TRACE(">>> FilterHelper::%s", __func__);
     if( nullptr == m_pFilterList )
     {
         m_pFilterList = new FilterList;
@@ -241,7 +239,6 @@ void FilterHelper::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilt
         m_aCurrentFilter = _rInitialCurrentFilter;
         OSL_TRACE("ensureFilterList filter:%s", OUStringToOString(m_aCurrentFilter, RTL_TEXTENCODING_UTF8).getStr());
     }
-    //OSL_TRACE("<<< FilterHelper::%s", __func__);
 }
 
 void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )

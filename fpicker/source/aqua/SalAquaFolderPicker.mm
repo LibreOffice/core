@@ -102,7 +102,6 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 #else
     case NSOKButton:
 #endif
-        OSL_TRACE("Dialog returned with OK");
         retVal = ExecutableDialogResults::OK;
         break;
 
@@ -111,7 +110,6 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 #else
     case NSCancelButton:
 #endif
-        OSL_TRACE("Dialog was cancelled!");
         retVal = ExecutableDialogResults::CANCEL;
         break;
 
@@ -163,13 +161,10 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     rtl::OUString aDirectory;
 
     NSURL *url = [files objectAtIndex:0];
-    OSL_TRACE("handling %s", [[url description] UTF8String]);
 
     aDirectory = [url OUStringForInfo:FULLPATH];
 
     implsetDisplayDirectory(aDirectory);
-
-    OSL_TRACE("dir url: %s", OUStringToOString(aDirectory, RTL_TEXTENCODING_UTF8).getStr());
 
     return aDirectory;
 }

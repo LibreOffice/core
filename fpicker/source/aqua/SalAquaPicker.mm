@@ -82,14 +82,12 @@ void SAL_CALL SalAquaPicker::implInitialize()
     switch (m_nDialogType)
     {
         case NAVIGATIONSERVICES_OPEN:
-            OSL_TRACE("NAVIGATIONSERVICES_OPEN");
             m_pDialog = [NSOpenPanel openPanel];
             [(NSOpenPanel*)m_pDialog setCanChooseDirectories:NO];
             [(NSOpenPanel*)m_pDialog setCanChooseFiles:YES];
             break;
 
         case NAVIGATIONSERVICES_SAVE:
-            OSL_TRACE("NAVIGATIONSERVICES_SAVE");
             m_pDialog = [NSSavePanel savePanel];
             [(NSSavePanel*)m_pDialog setCanSelectHiddenExtension:NO]; //changed for issue #102102
             /* I would have loved to use
@@ -105,28 +103,22 @@ void SAL_CALL SalAquaPicker::implInitialize()
                 NSUserDefaults *pDefaults = [NSUserDefaults standardUserDefaults];
                 NSNumber *pExtn = [pDefaults objectForKey:kSetHideExtensionStateKey];
                 if(pExtn == nil || [pExtn boolValue] == NO) {
-                    OSL_TRACE("Hiding extension");
                     [pDefaults setBool:YES forKey:kSetHideExtensionStateKey];
                 }
             }
             break;
 
         case NAVIGATIONSERVICES_DIRECTORY:
-            OSL_TRACE("NAVIGATIONSERVICES_DIRECTORY");
             m_pDialog = [NSOpenPanel openPanel];
             [(NSOpenPanel*)m_pDialog setCanChooseDirectories:YES];
             [(NSOpenPanel*)m_pDialog setCanChooseFiles:NO];
             break;
 
         default:
-            OSL_TRACE("m_nDialogType is UNKNOWN: %d", m_nDialogType);
             break;
     }
 
-    if (m_pDialog == nil) {
-        OSL_TRACE("An error occurred while creating the dialog!");
-    }
-    else {
+    if (m_pDialog != nil) {
         [(NSOpenPanel*)m_pDialog setCanCreateDirectories:YES];
         //Retain the dialog instance or it will go away immediately
         [m_pDialog retain];
