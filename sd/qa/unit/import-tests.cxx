@@ -476,6 +476,8 @@ void SdImportTest::testGradientAngle()
 
     CPPUNIT_ASSERT(xTranspGradients->getByName("Transparency 4") >>= gradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), gradient.Angle); // 1000grad
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testN778859()
@@ -595,6 +597,8 @@ void SdImportTest::testTdf97808()
     CPPUNIT_ASSERT_EQUAL(xStyle, xParent);
     CPPUNIT_ASSERT(xLine->getPropertyValue("LineEndName") >>= lineend);
     CPPUNIT_ASSERT_EQUAL(OUString(), lineend);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testFdo64512()
@@ -1122,6 +1126,8 @@ void SdImportTest::testBnc910045()
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5210557), nColor);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testRowHeight()
@@ -1139,6 +1145,8 @@ void SdImportTest::testRowHeight()
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
     xRefRow->getPropertyValue( sHeight ) >>= nHeight;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(507), nHeight);
+
+    xDocShRef->DoClose();
 }
 void SdImportTest::testTdf93830()
 {
@@ -1190,6 +1198,8 @@ void SdImportTest::testTdf62255()
         aAny >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, aFillStyle);
     }
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
