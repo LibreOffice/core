@@ -36,6 +36,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <osl/file.hxx>
+#include <comphelper/ofopxmlhelper.hxx>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
@@ -69,6 +70,8 @@ public:
     void testOOXMLAppend();
     /// Test removing a signature from existing ones.
     void testOOXMLRemove();
+    /// Test removing all signatures from a document.
+    void testOOXMLRemoveAll();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -77,6 +80,7 @@ public:
     CPPUNIT_TEST(testOOXMLDescription);
     CPPUNIT_TEST(testOOXMLAppend);
     CPPUNIT_TEST(testOOXMLRemove);
+    CPPUNIT_TEST(testOOXMLRemoveAll);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -251,6 +255,48 @@ void SigningTest::testOOXMLRemove()
     aManager.read(/*bUseTempStream=*/true);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(OUString("purpose1"), rInformations[0].ouDescription);
+}
+
+void SigningTest::testOOXMLRemoveAll()
+{
+    // Copy the test document to a temporary file, as it'll be modified.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    OUString aURL = aTempFile.GetURL();
+    osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL);
+    // Load the test document as a storage and read its single signature.
+    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.read(/*bUseTempStream=*/false);
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+
+    // Then remove the only signature in the document.
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    CPPUNIT_ASSERT(xCertificate.is());
+    aManager.remove(0);
+    aManager.read(/*bUseTempStream=*/true);
+    aManager.write();
+
+    // Make sure that the signature count is zero and the whole signature storage is removed completely.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rInformations.size());
+    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!xNameAccess->hasByName("_xmlsignatures"));
+
+    // And that content types no longer contains signature types.
+    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
+    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
+    uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxComponentContext);
+    uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+    CPPUNIT_ASSERT_EQUAL(rOverrides.end(), std::find_if(rOverrides.begin(), rOverrides.end(), [](const beans::StringPair& rPair)
+    {
+        return rPair.First.startsWith("/_xmlsignatures/sig");
+    }));
 }
 
 void SigningTest::testOOXMLPartial()
