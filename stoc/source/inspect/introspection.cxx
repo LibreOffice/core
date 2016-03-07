@@ -293,7 +293,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getPropertyIndex( const OUString& aPro
     sal_Int32 iHashResult = -1;
     IntrospectionAccessStatic_Impl* pThis = const_cast<IntrospectionAccessStatic_Impl*>(this);
     IntrospectionNameMap::iterator aIt = pThis->maPropertyNameMap.find( aPropertyName );
-    if( !( aIt == pThis->maPropertyNameMap.end() ) )
+    if (aIt != pThis->maPropertyNameMap.end())
         iHashResult = (*aIt).second;
     return iHashResult;
 }
@@ -303,7 +303,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
     sal_Int32 iHashResult = -1;
     IntrospectionAccessStatic_Impl* pThis = const_cast<IntrospectionAccessStatic_Impl*>(this);
     IntrospectionNameMap::iterator aIt = pThis->maMethodNameMap.find( aMethodName );
-    if( !( aIt == pThis->maMethodNameMap.end() ) )
+    if (aIt != pThis->maMethodNameMap.end())
     {
         iHashResult = (*aIt).second;
     }
@@ -321,7 +321,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
             OUString aPureMethodName = aMethodName.copy( nFound + 1 );
 
             aIt = pThis->maMethodNameMap.find( aPureMethodName );
-            if( !( aIt == pThis->maMethodNameMap.end() ) )
+            if (aIt != pThis->maMethodNameMap.end())
             {
                 // Check if it can be a type?
                 // Problem: Does not work if package names contain _ ?!
@@ -1539,7 +1539,7 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
     OUString aRetStr;
     LowerToExactNameMap::iterator aIt =
         mpStaticImpl->maLowerToExactNameMap.find( rApproximateName.toAsciiLowerCase() );
-    if( !( aIt == mpStaticImpl->maLowerToExactNameMap.end() ) )
+    if (aIt != mpStaticImpl->maLowerToExactNameMap.end())
         aRetStr = (*aIt).second;
     return aRetStr;
 }
@@ -1923,7 +1923,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                         // Do we have the name already?
                         IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
-                        if( !( aIt == rPropNameMap.end() ) )
+                        if (aIt != rPropNameMap.end())
                             continue;
 
                         // New entry in the hash table
@@ -2097,7 +2097,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                             // Do we have the name already?
                             IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
-                            if( !( aIt == rPropNameMap.end() ) )
+                            if (aIt != rPropNameMap.end())
                             {
                                 /* TODO
                                    OSL_TRACE(
@@ -2286,7 +2286,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                             // Do we have the name already?
                             IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
-                            if( !( aIt == rPropNameMap.end() ) )
+                            if (aIt != rPropNameMap.end())
                             {
                                 /* TODO:
                                    OSL_TRACE(
