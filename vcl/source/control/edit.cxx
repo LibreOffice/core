@@ -2633,7 +2633,7 @@ void Edit::Copy()
 
 void Edit::Paste()
 {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
     ImplPaste( aClipboard );
 }
 

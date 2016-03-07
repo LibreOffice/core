@@ -524,6 +524,8 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
 void VclGtkClipboard::flushClipboard()
   throw (RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+
     if (GDK_SELECTION_CLIPBOARD != m_nSelection)
         return;
 
