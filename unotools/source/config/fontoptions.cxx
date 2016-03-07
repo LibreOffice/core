@@ -182,9 +182,9 @@ void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtFontOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Font\\View\\ShowFontBoxWYSIWYG\"?" );
             seqValues[nProperty] >>= m_bFontWYSIWYG;
         }
-        #if OSL_DEBUG_LEVEL > 1
-        else DBG_ASSERT( sal_False, "SvtFontOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
-        #endif
+#if OSL_DEBUG_LEVEL > 0
+        else assert(sal_False && "SvtFontOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n");
+#endif
     }
 }
 

@@ -166,10 +166,10 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\DialogScale\"?" );
             seqValues[nProperty] >>= m_nDialogScale;
         }
-        #if OSL_DEBUG_LEVEL > 1
-        else DBG_ASSERT( sal_False, "SvtLocalisationOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
-        #endif
-    }
+#if OSL_DEBUG_LEVEL > 0
+        else assert(sal_False && "SvtLocalisationOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n");
+#endif
+        }
 
     NotifyListeners(0);
 }
