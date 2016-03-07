@@ -859,7 +859,7 @@ namespace sdr { namespace contact {
         const OutputDevice& rPageViewDevice( impl_getOutputDevice_throw() );
         m_aZoomLevelNormalization = rPageViewDevice.GetInverseViewTransformation();
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
@@ -871,7 +871,7 @@ namespace sdr { namespace contact {
         aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
         m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
    }
@@ -1550,7 +1550,7 @@ namespace sdr { namespace contact {
 
     ::drawinglayer::primitive2d::Primitive2DContainer LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
@@ -1563,7 +1563,7 @@ namespace sdr { namespace contact {
 
     ::drawinglayer::primitive2d::Primitive2DContainer LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
@@ -1715,7 +1715,7 @@ namespace sdr { namespace contact {
         if ( m_pImpl->hasControl() )
         {
             const ::drawinglayer::geometry::ViewInformation2D& rViewInformation( GetObjectContact().getViewInformation2D() );
-        #if OSL_DEBUG_LEVEL > 1
+        #if OSL_DEBUG_LEVEL > 0
             ::basegfx::B2DVector aScale, aTranslate;
             double fRotate, fShearX;
             rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );

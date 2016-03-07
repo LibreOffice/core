@@ -985,13 +985,13 @@ namespace svxform
 
                 // copy properties form old control to new one
                 Reference< XPropertySet >  xCurrent(pControls[i], UNO_QUERY);
-#if (OSL_DEBUG_LEVEL > 1)
+#if (OSL_DEBUG_LEVEL > 0)
                 // check whether it is a hidden control
                 sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
                 OSL_ENSURE(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::implExecuteDataTransfer: invalid control in drop list !");
                     // if SVX_FM_HIDDEN_CONTROLS-format exists, the sequence
                     // should only contain hidden controls
-#endif // (OSL_DEBUG_LEVEL > 1)
+#endif // (OSL_DEBUG_LEVEL > 0)
                 Reference< XPropertySetInfo >  xPropInfo( xCurrent->getPropertySetInfo());
                 Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
                 Property* pAllCurrentProps = seqAllCurrentProps.getArray();

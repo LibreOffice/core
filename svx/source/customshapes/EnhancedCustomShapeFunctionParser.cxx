@@ -248,7 +248,7 @@ public:
     }
     virtual double operator()() const override
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         const char *funcName;
 
         switch (meFunct) {
@@ -268,7 +268,8 @@ public:
             default:                    funcName = "???"; break;
         }
 
-        OSL_TRACE("  %s --> %f (angle: %f)", funcName, getValue( mrCustoShape, meFunct ), 180.0*getValue( mrCustoShape, meFunct )/10800000.0);
+        SAL_INFO("svx", funcName << " --> " << getValue(mrCustoShape, meFunct) << "(angle: " <<
+                 180.0*getValue(mrCustoShape, meFunct)/10800000.0 << ")");
 #endif
 
         return getValue( mrCustoShape, meFunct );

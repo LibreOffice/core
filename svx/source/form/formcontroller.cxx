@@ -1652,10 +1652,10 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
             )
         {
             // check the old control if the content is ok
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             Reference< XBoundControl >  xLockingTest(m_xCurrentControl, UNO_QUERY);
             sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
-            OSL_ENSURE(!bControlIsLocked, "FormController::Gained: I'm modified and the current control is locked ? How this ?");
+            assert(!bControlIsLocked && "FormController::Gained: I'm modified and the current control is locked ? How this ?");
             // normalerweise sollte ein gelocktes Control nicht modified sein, also muss wohl mein bModified aus einem anderen Kontext
             // gesetzt worden sein, was ich nicht verstehen wuerde ...
 #endif
