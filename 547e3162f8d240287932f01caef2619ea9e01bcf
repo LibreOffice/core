@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_cb2429b1",
+        "filename": "bridges/source/cpp_uno/gcc3_aix_powerpc/cpp2uno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-07T05:45:45Z",
+      "side": 1,
+      "message": "These are not warnings, and possibly this whole subdirectory is pointless anyway. Does LO run on AIX on PowerPC?",
+      "revId": "547e3162f8d240287932f01caef2619ea9e01bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_eb1f6d59",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_alpha/cpp2uno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-07T05:45:45Z",
+      "side": 1,
+      "message": "These are not warnings in any sense of the word, but detailed debugging information that is useful only when somebody actually is developing and debugging this code. As that probably will not happen ever (does LibreOffice even run on Linux on Alpha?), I really don\u0027t see the point in even touching this code. Probably this whole subdirectory could be removed. But I\u0027ll defer to Stephan.",
+      "revId": "547e3162f8d240287932f01caef2619ea9e01bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
