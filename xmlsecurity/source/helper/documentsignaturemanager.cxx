@@ -374,11 +374,9 @@ void DocumentSignatureManager::write()
     {
         // OOXML
         size_t nSignatureCount = maCurrentSignatureInformations.size();
+        maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
         if (nSignatureCount > 0)
-        {
-            maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
             maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
-        }
         else
         {
             // Removing all signatures: then need to remove the signature relation as well.
