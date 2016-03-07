@@ -850,13 +850,13 @@ double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) c
 double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex ) const
 {
     double fNumber = 0.0;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static sal_uInt32 nLevel = 0;
 #endif
     if ( nIndex < (sal_Int32)vNodesSharedPtr.size() )
     {
         if ( vNodesSharedPtr[ nIndex ].get() ) {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             nLevel ++;
 #endif
             try
@@ -873,10 +873,9 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
 
                     if ( !rtl::math::isFinite( fNumber ) )
                         fNumber = 0.0;
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_TRACE("equation %d (level: %d): %s --> %f (angle: %f)", nIndex,
-                              nLevel, OUStringToOString( seqEquations[ nIndex ],
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr(), fNumber, 180.0*fNumber/10800000.0);
+#if OSL_DEBUG_LEVEL > 0
+                    SAL_INFO("svx", "equation " << nLevel << " (level: " << seqEquations[nIndex] << "): "
+                             << fNumber << " --> " << 180.0*fNumber/10800000.0);
 #endif
                 }
             }
@@ -884,7 +883,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
             {
                 OSL_TRACE("error: EnhancedCustomShape2d::GetEquationValueAsDouble failed");
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         nLevel --;
 #endif
         }
