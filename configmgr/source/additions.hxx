@@ -23,12 +23,11 @@
 #include <sal/config.h>
 
 #include <list>
-
-#include "path.hxx"
+#include <vector>
 
 namespace configmgr {
-
-typedef std::list< Path > Additions;
+// Additions is a list of configuration node paths
+typedef std::list< std::vector<OUString> > Additions;
 
 }
 

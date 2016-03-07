@@ -33,7 +33,6 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "parser.hxx"
-#include "path.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
 #include "xmldata.hxx"
@@ -147,7 +146,7 @@ private:
     bool trackPath_;
     OUString componentName_;
     StateStack state_;
-    Path path_;
+    std::vector<OUString> path_;
 };
 
 }
