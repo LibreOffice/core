@@ -333,14 +333,32 @@ void ScMatrixImpl::Clear()
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
-    maMat.resize(nR, nC);
-    maMatFlag.resize(nR, nC);
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+    {
+        maMat.resize(nR, nC);
+        maMatFlag.resize(nR, nC);
+    }
+    else
+    {
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        maMat.resize(1, 1, CreateDoubleError( errStackOverflow));
+        maMatFlag.resize(1, 1);
+    }
 }
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR, double fVal)
 {
-    maMat.resize(nR, nC, fVal);
-    maMatFlag.resize(nR, nC);
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+    {
+        maMat.resize(nR, nC, fVal);
+        maMatFlag.resize(nR, nC);
+    }
+    else
+    {
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        maMat.resize(1, 1, CreateDoubleError( errStackOverflow));
+        maMatFlag.resize(1, 1);
+    }
 }
 
 void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)
@@ -2225,28 +2243,52 @@ void ScMatrix::DecRef() const
         delete this;
 }
 
-ScFullMatrix::ScFullMatrix( SCSIZE nC, SCSIZE nR) :
-    ScMatrix(),
-    pImpl(new ScMatrixImpl(nC, nR))
+bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
 {
     SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
     SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    // 0-size matrix is valid, it could be resized later.
+    if ((nC && !nR) || (!nC && nR))
+    {
+        SAL_WARN( "sc", "ScMatrix one-dimensional zero: " << nC << " columns * " << nR << " rows");
+        return false;
+    }
+    if (nC && nR && (nC > (ScMatrix::GetElementsMax() / nR)))
+    {
+        SAL_WARN( "sc", "ScMatrix overflow: " << nC << " columns * " << nR << " rows");
+        return false;
+    }
+    return true;
+}
+
+ScFullMatrix::ScFullMatrix( SCSIZE nC, SCSIZE nR) :
+    ScMatrix()
+{
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+        pImpl.reset( new ScMatrixImpl( nC, nR));
+    else
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow)));
 }
 
 ScFullMatrix::ScFullMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
-    ScMatrix(),
-    pImpl(new ScMatrixImpl(nC, nR, fInitVal))
+    ScMatrix()
 {
-    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
-    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+        pImpl.reset( new ScMatrixImpl( nC, nR, fInitVal));
+    else
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow)));
 }
 
 ScFullMatrix::ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
-    ScMatrix(),
-    pImpl(new ScMatrixImpl(nC, nR, rInitVals))
+    ScMatrix()
 {
-    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
-    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    if (ScMatrix::IsSizeAllocatable( nC, nR))
+        pImpl.reset( new ScMatrixImpl( nC, nR, rInitVals));
+    else
+        // Invalid matrix size, allocate 1x1 matrix with error value.
+        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow)));
 }
 
 ScFullMatrix::~ScFullMatrix()
