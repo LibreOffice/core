@@ -22,7 +22,6 @@
 #include "dbaccess_slotid.hrc"
 #include "browserids.hxx"
 #include <svx/globlmn.hrc>
-#include "toolbox.hrc"
 
 String STR_TABLEDESIGN_DBFIELDTYPES
 {

@@ -20,7 +20,6 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
 #include "browserids.hxx"
-#include "toolbox.hrc"
 
 String STR_ENTER_CONNECTION_PASSWORD
 {

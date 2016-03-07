@@ -20,7 +20,6 @@
 #include "dbu_brw.hrc"
 #include "browserids.hxx"
 #include <svx/globlmn.hrc>
-#include "toolbox.hrc"
 
 String STR_QUERY_BRW_DELETE_ROWS
 {

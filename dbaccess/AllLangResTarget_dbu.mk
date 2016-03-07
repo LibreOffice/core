@@ -23,7 +23,6 @@ $(eval $(call gb_SrsTarget_use_srstargets,dbaccess/dbu,\
 
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbu,\
     $$(INCLUDE) \
-	-I$(call gb_SrsTemplateTarget_get_include_dir,dbaccess) \
     -I$(SRCDIR)/dbaccess/inc \
     -I$(SRCDIR)/dbaccess/source/ui/inc \
     -I$(call gb_SrsTemplateTarget_get_include_dir,) \
@@ -58,10 +57,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,dbaccess/dbu,\
     dbaccess/source/ui/imagelists/dbimagelists.src \
-))
-
-$(eval $(call gb_SrsTarget_add_templates,dbaccess/dbu,\
-    dbaccess/source/ui/inc/toolbox_tmpl.hrc \
 ))
 
 # vim: set noet sw=4 ts=4:

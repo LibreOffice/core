@@ -86,8 +86,6 @@ bool passesNegativeList(const OUString& rUrl) {
 
 bool passesPositiveList(const OUString& rUrl) {
     static const AsciiString list[] = {
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/dbaccess/source/ui/inc/toolbox_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") }
     };

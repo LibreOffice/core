@@ -22,7 +22,6 @@
 #include <sfx2/cntids.hrc>
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
-#include "toolbox.hrc"
 
 Menu RID_MENU_JOINVIEW_CONNECTION
 {
@@ -58,7 +57,9 @@ Menu RID_QUERYCOLPOPUPMENU
     {
         MenuItem
         {
-            MID_COLUMN_WIDTH
+            Identifier = ID_BROWSER_COLWIDTH ;
+            HelpID = HID_BROWSER_COLUMNWIDTH ;
+            Text [ en-US ] = "Column ~Width..." ;
         };
         MenuItem
         {

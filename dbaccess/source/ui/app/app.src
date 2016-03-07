@@ -21,7 +21,6 @@
 #include <sfx2/cntids.hrc>
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
-#include "toolbox.hrc"
 
 #define MN_PROPS    25
 

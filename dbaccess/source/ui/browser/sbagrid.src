@@ -19,7 +19,6 @@
 #include "dbu_brw.hrc"
 #include "dbaccess_helpid.hrc"
 #include "browserids.hxx"
-#include "toolbox.hrc"
 #include <svx/globlmn.hrc>
 
 Menu RID_SBA_GRID_COLCTXMENU
@@ -34,7 +33,9 @@ Menu RID_SBA_GRID_COLCTXMENU
         };
         MenuItem
         {
-            MID_COLUMN_WIDTH
+            Identifier = ID_BROWSER_COLWIDTH ;
+            HelpID = HID_BROWSER_COLUMNWIDTH ;
+            Text [ en-US ] = "Column ~Width..." ;
             HelpID = HID_BROWSER_COLUMNWIDTH;
         };
         MenuItem
