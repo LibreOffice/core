@@ -60,13 +60,6 @@ public:
     */
     IAccessibleParent* mpChildrenManager;
 
-    /** This index is used to disambiguate names of accessible objects. A
-        value of (the default) -1 leads to the use of the object's z-order
-        instead.  Because that is not a good substitute, better pass an ever
-        increasing counter.
-    */
-    sal_Int32 mnIndex;
-
     /** Copy the given values into the members described above.
     */
     AccessibleShapeInfo (
@@ -74,8 +67,7 @@ public:
             css::drawing::XShape>& rxShape,
         const css::uno::Reference<
             css::accessibility::XAccessible>& rxParent,
-        IAccessibleParent* pChildrenManager,
-        sal_Int32 nIndex = -1);
+        IAccessibleParent* pChildrenManager);
 
     /** Copy the given values into the members described above.
         The accessible parent implementation object is set to NULL.
@@ -84,8 +76,7 @@ public:
         const css::uno::Reference<
             css::drawing::XShape>& rxShape,
         const css::uno::Reference<
-            css::accessibility::XAccessible>& rxParent,
-        sal_Int32 nIndex = -1);
+            css::accessibility::XAccessible>& rxParent);
 
     ~AccessibleShapeInfo();
 

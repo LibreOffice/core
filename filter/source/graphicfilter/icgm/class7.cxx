@@ -119,48 +119,20 @@ void CGM::ImplDoClass7()
                         memcpy( pTextEntry->pText, pAppData, nLen );
                         pAppData += nLen;
 
-                        TextAttribute* pTextOld = nullptr;
-                        for ( sal_uInt16 i = 0; i < nAttributes; i++ )
-                        {
-                            TextAttribute* pTextAttr = new TextAttribute;
-
-                            *pTextAttr = *reinterpret_cast<TextAttribute*>( pAppData );
-
-                            pTextAttr->pNextAttribute = nullptr;
-                            if ( i == 0 )
-                                pTextEntry->pAttribute = pTextAttr;
-                            else
-                                pTextOld->pNextAttribute = pTextAttr;
-
-                            pAppData += sizeof( TextAttribute ) - 4;
-                            pTextOld = pTextAttr;
-                        }
                         mpChart->InsertTextEntry( pTextEntry );
                     }
                     break;
                     case 0x321 : /*AppData - IOC_TABS */break;
                     case 0x322 : /*AppData - CHARTZONE*/
-                    {
-                        mpChart->mChartZone = *reinterpret_cast<ChartZone*>( pAppData );
-                    }
                     break;
                     case 0x324 : /*AppData - TITLEZONE */break;
                     case 0x328 : /*AppData - FOOTNOTEZONE */break;
                     case 0x32A : /*AppData - LEGENDZONE */break;
                     case 0x330 : /*AppData - PAGEORIENTDIM*/
-                    {
-                        mpChart->mPageOrientDim = *reinterpret_cast<PageOrientDim*>( pAppData );
-                    }
                     break;
                     case 0x334 : /*AppData - CHTZONEOPTN*/
-                    {
-                        mpChart->mZoneOption = *reinterpret_cast<ZoneOption*>( pAppData );
-                    }
                     break;
                     case 0x336 : /*AppData - CHTINTL*/
-                    {
-                        mpChart->mIntSettings = *reinterpret_cast<IntSettings*>( pAppData );
-                    }
                     break;
                     case 0x338 : /*AppData - CHTLINESPC */break;
                     case 0x384 : /*AppData - ORGGRIDSTATE */break;
@@ -174,9 +146,6 @@ void CGM::ImplDoClass7()
                     case 0x3EE : /*AppData - TTLAUTOBUILD */break;
                     case 0x44E : /*AppData - BULTEXTOPTN */break;
                     case 0x452 : /*AppData - BULLETOPTN*/
-                    {
-                        mpChart->mBulletOption = *reinterpret_cast<BulletOption*>( pAppData );
-                    }
                     break;
                     case 0x454 : /*AppData - BULLETLINES*/break;
                     case 0x456 : /*AppData - BULAUTOBUILD */break;

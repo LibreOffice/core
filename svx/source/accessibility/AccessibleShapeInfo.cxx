@@ -25,12 +25,10 @@ namespace accessibility {
 AccessibleShapeInfo::AccessibleShapeInfo (
         const css::uno::Reference<css::drawing::XShape>& rxShape,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        IAccessibleParent* pChildrenManager,
-        sal_Int32 nIndex)
+        IAccessibleParent* pChildrenManager)
     : mxShape (rxShape),
       mxParent (rxParent),
-      mpChildrenManager (pChildrenManager),
-      mnIndex (nIndex)
+      mpChildrenManager (pChildrenManager)
 {
     // empty.
 }
@@ -38,12 +36,10 @@ AccessibleShapeInfo::AccessibleShapeInfo (
 
 AccessibleShapeInfo::AccessibleShapeInfo (
         const css::uno::Reference<css::drawing::XShape>& rxShape,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        sal_Int32 nIndex)
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
     : mxShape (rxShape),
       mxParent (rxParent),
-      mpChildrenManager (nullptr),
-      mnIndex (nIndex)
+      mpChildrenManager (nullptr)
 {
     // empty.
 }
@@ -51,8 +47,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (
 AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
     : mxShape (rOther.mxShape),
       mxParent (rOther.mxParent),
-      mpChildrenManager (rOther.mpChildrenManager),
-      mnIndex (rOther.mnIndex)
+      mpChildrenManager (rOther.mpChildrenManager)
 {
     // empty.
 }

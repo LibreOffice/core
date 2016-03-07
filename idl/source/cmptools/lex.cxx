@@ -85,7 +85,6 @@ void SvTokenStream::InitCtor()
 
 SvTokenStream::SvTokenStream( const OUString & rFileName )
     : pInStream( new SvFileStream( rFileName, STREAM_STD_READ | StreamMode::NOCREATE ) )
-    , rInStream( *pInStream )
     , aFileName( rFileName )
 {
     InitCtor();
@@ -133,7 +132,7 @@ int SvTokenStream::GetNextChar()
     int nChar;
     while (aBufStr.getLength() <= nBufPos)
     {
-        if (rInStream.ReadLine(aBufStr))
+        if (pInStream->ReadLine(aBufStr))
         {
             nLine++;
             nColumn = 0;
@@ -203,7 +202,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
             nColumn += c == '\t' ? nTabSize : 1;
         }
     }
-    while( 0 == c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
+    while( 0 == c && !IsEof() && ( SVSTREAM_OK == pInStream->GetError() ) );
 
     sal_uLong nLastLine     = nLine;
     sal_uLong nLastColumn   = nColumn;
@@ -240,8 +239,8 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
                 }
                 c = GetFastNextChar();
             }
-            while( '/' != c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
-            if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
+            while( '/' != c && !IsEof() && ( SVSTREAM_OK == pInStream->GetError() ) );
+            if( IsEof() || ( SVSTREAM_OK != pInStream->GetError() ) )
                 return false;
             c = GetNextChar();
             rToken.nType = SVTOKENTYPE::Comment;
@@ -276,7 +275,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
             else
                 aStr.append(static_cast<char>(c));
         }
-        if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
+        if( IsEof() || ( SVSTREAM_OK != pInStream->GetError() ) )
             return false;
         rToken.nType   = SVTOKENTYPE::String;
         rToken.aString = aStr.makeStringAndClear();
@@ -330,7 +329,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     rToken.SetLine( nLastLine );
     rToken.SetColumn( nLastColumn );
-    return rInStream.GetError() == SVSTREAM_OK;
+    return pInStream->GetError() == SVSTREAM_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

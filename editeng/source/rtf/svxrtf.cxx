@@ -68,7 +68,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     , pAttrPool( &rPool )
     , m_xDocProps( i_xDocProps )
     , pRTFDefaults( nullptr )
-    , nVersionNo( 0 )
     , nDfltFont( 0)
     , bNewDoc( bReadNewDoc )
     , bNewGroup( false)

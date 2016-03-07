@@ -110,7 +110,6 @@ class SvTokenStream
     sal_uLong       nMaxPos;
 
     SvFileStream *  pInStream;
-    SvStream &      rInStream;
     OUString        aFileName;
     std::vector<std::unique_ptr<SvToken> > aTokList;
     std::vector<std::unique_ptr<SvToken> >::iterator pCurToken;
@@ -130,7 +129,7 @@ class SvTokenStream
     void            FillTokenList();
     sal_uLong       GetNumber();
     bool            MakeToken( SvToken & );
-    bool            IsEof() const { return rInStream.IsEof(); }
+    bool            IsEof() const { return pInStream->IsEof(); }
     void            SetMax()
                     {
                         sal_uLong n = Tell();
@@ -153,7 +152,7 @@ public:
                     ~SvTokenStream();
 
     const OUString &  GetFileName() const { return aFileName; }
-    SvStream &        GetStream() { return rInStream; }
+    SvStream &        GetStream() { return *pInStream; }
 
     SvToken& GetToken_PrevAll()
     {

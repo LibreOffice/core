@@ -59,17 +59,6 @@ enum PrinterSupport
 };
 
 
-class VCL_DLLPUBLIC PrinterPage
-{
-    GDIMetaFile*    mpMtf;
-
-public:
-
-                    PrinterPage( GDIMetaFile* pMtf ) : mpMtf( pMtf ) {}
-                    ~PrinterPage() { delete mpMtf; }
-};
-
-
 class VCL_DLLPUBLIC QueueInfo
 {
     friend class               Printer;

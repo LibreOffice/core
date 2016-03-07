@@ -32,17 +32,9 @@ namespace svt
 
     //= WizardPageImplData
 
-    struct WizardPageImplData
-    {
-        WizardPageImplData()
-        {
-        }
-    };
-
     OWizardPage::OWizardPage(vcl::Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription)
         : TabPage(pParent, rID, rUIXMLDescription)
-        , m_pImpl(new WizardPageImplData)
     {
     }
 
@@ -53,7 +45,6 @@ namespace svt
 
     void OWizardPage::dispose()
     {
-        delete m_pImpl;
         TabPage::dispose();
     }
 

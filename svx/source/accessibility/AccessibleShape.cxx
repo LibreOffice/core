@@ -105,7 +105,6 @@ AccessibleShape::AccessibleShape (
       mpChildrenManager(nullptr),
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
-      mnIndex (rShapeInfo.mnIndex),
       m_nIndexInParent(-1),
       mpText (nullptr),
       mpParent (rShapeInfo.mpChildrenManager)

@@ -154,7 +154,6 @@ class ScPosWnd : public ComboBox, public SfxListener        // Display position
 {
 private:
     OUString        aPosStr;
-    Accelerator*    pAccel;
     sal_uLong       nTipVisible;
     bool            bFormulaMode;
 

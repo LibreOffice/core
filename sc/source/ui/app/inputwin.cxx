@@ -1886,7 +1886,6 @@ void ScTextWnd::TextGrabFocus()
 
 ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),
-    pAccel      ( nullptr ),
     nTipVisible ( 0 ),
     bFormulaMode( false )
 {
@@ -1912,7 +1911,6 @@ void ScPosWnd::dispose()
 
     HideTip();
 
-    delete pAccel;
     ComboBox::dispose();
 }
 

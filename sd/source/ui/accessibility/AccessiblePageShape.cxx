@@ -41,9 +41,8 @@ namespace accessibility {
 AccessiblePageShape::AccessiblePageShape (
     const uno::Reference<drawing::XDrawPage>& rxPage,
     const uno::Reference<XAccessible>& rxParent,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo,
-    long nIndex)
-    : AccessibleShape (AccessibleShapeInfo (nullptr, rxParent, nIndex), rShapeTreeInfo),
+    const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleShape (AccessibleShapeInfo (nullptr, rxParent), rShapeTreeInfo),
       mxPage (rxPage)
 {
     // The main part of the initialization is done in the init method which

@@ -202,7 +202,6 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     css::uno::Reference< css::document::XDocumentProperties> m_xDocProps;
     SfxItemSet *pRTFDefaults;
 
-    long    nVersionNo;
     int     nDfltFont;
 
     bool    bNewDoc : 1;            // sal_False - Reading in an existing

@@ -44,7 +44,6 @@ class SwChangeDBDlg: public SvxStandardDialog
     ImageList       aImageList;
 
     SwWrtShell      *pSh;
-    SwFieldMgr        *pMgr;
 
     DECL_LINK_TYPED(TreeSelectHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(ButtonHdl, Button*, void);

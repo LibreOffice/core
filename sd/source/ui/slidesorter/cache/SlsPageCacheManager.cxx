@@ -60,15 +60,13 @@ public:
 class RecentlyUsedCacheDescriptor
 {
 public:
-    ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
     Size maPreviewSize;
     std::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache> mpCache;
 
     RecentlyUsedCacheDescriptor(
-        ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
         const Size& rPreviewSize,
         const std::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache>& rpCache)
-        :mpDocument(pDocument),maPreviewSize(rPreviewSize),mpCache(rpCache)
+        :maPreviewSize(rPreviewSize),mpCache(rpCache)
     {}
 };
 
@@ -425,7 +423,7 @@ void PageCacheManager::PutRecentlyUsedCache(
 
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
-        iQueue->second.push_front(RecentlyUsedCacheDescriptor(pDocument,rPreviewSize,rpCache));
+        iQueue->second.push_front(RecentlyUsedCacheDescriptor(rPreviewSize,rpCache));
         // Shorten the list of recently used caches to the allowed maximal length.
         while (iQueue->second.size() > mnMaximalRecentlyCacheCount)
             iQueue->second.pop_back();

@@ -983,7 +983,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf.get(),
-                        aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
+                        aSvxFont, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
                 }
                 else
                 {
@@ -1702,7 +1702,7 @@ void Outliner::StripPortions()
 
 void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
                             sal_Int32 nTextLen, const long* pDXArray,const SvxFont& rFont,
-                            sal_Int32 nPara, sal_uInt8 nRightToLeft,
+                            sal_uInt8 nRightToLeft,
                             const EEngineData::WrongSpellVector* pWrongSpellVector,
                             const SvxFieldData* pFieldData,
                             bool bEndOfLine,
@@ -1714,7 +1714,7 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, pDXArray, pWrongSpellVector,
+        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, pDXArray, pWrongSpellVector,
             pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, false, 0, bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
         aDrawPortionHdl.Call( &aInfo );
@@ -1722,12 +1722,12 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
 }
 
 void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar, const SvxFont& rFont,
-    sal_Int32 nPara, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
+    sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, nullptr, nullptr,
+        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nullptr, nullptr,
             nullptr, nullptr, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
 
         aDrawPortionHdl.Call( &aInfo );

@@ -47,11 +47,6 @@ public:
             the <member>getIndexInParent</member> method is called.
         @param rShapeTreeInfo
             Bundel of information passed to this shape and all of its desendants.
-        @param nIndex
-            Index used to disambiguate between objects that have the same
-            name.  Passing a value of -1 leads to the use of the object's
-            z-order instead.  Because that is not a good substitute, better
-            pass an ever increasing counter.
         @attention
             Always call the <member>init</member> method after creating a
             new accessible shape.  This is one way to overcome the potential
@@ -62,8 +57,7 @@ public:
     AccessiblePageShape (
         const css::uno::Reference<css::drawing::XDrawPage>& rxPage,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        const AccessibleShapeTreeInfo& rShapeTreeInfo,
-        long nIndex = -1);
+        const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
     virtual ~AccessiblePageShape();
 

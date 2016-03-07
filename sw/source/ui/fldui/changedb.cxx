@@ -56,7 +56,6 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
         "modules/swriter/ui/exchangedatabases.ui")
     , aImageList(SW_RES(ILIST_DB_DLG))
     , pSh(rVw.GetWrtShellPtr())
-    , pMgr( new SwFieldMgr() )
 {
     get(m_pUsedDBTLB, "inuselb");
     get(m_pAvailDBTLB, "availablelb");
@@ -169,7 +168,6 @@ SwChangeDBDlg::~SwChangeDBDlg()
 
 void SwChangeDBDlg::dispose()
 {
-    delete pMgr;
     m_pUsedDBTLB.clear();
     m_pAvailDBTLB.clear();
     m_pAddDBPB.clear();

@@ -53,7 +53,7 @@ AccessibleChartShape::AccessibleChartShape(
         {
             nIndex = rAccInfo.m_spObjectHierarchy->getIndexInParent( rAccInfo.m_aOID );
         }
-        ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent, nIndex );
+        ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent );
 
         m_aShapeTreeInfo.SetSdrView( rAccInfo.m_pSdrView );
         m_aShapeTreeInfo.SetController( nullptr );

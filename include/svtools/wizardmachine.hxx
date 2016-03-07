@@ -93,12 +93,9 @@ namespace svt
     //= OWizardPage
 
     class OWizardMachine;
-    struct WizardPageImplData;
 
     class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
-    private:
-        WizardPageImplData*     m_pImpl;
 
     public:
         /** @param _pParent
