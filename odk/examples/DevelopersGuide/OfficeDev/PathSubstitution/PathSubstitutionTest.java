@@ -44,7 +44,7 @@ public class PathSubstitutionTest {
      * the path substitution service.
      */
     private static String[] predefinedPathVariables = {
-        "$(home)","$(inst)","$(prog)","$(temp)","$(user)",
+        "$(home)","$(inst)","$(prog)","$(temp)","$(user)", "$(username)",
         "$(work)","$(path)","$(langid)","$(vlang)"
     };
 
