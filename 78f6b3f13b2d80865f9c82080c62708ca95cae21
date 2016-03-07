@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_8be191d3",
+        "filename": "io/qa/textinputstream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T12:33:48Z",
+      "side": 1,
+      "message": "this initializes the static member that you converted to non-static; that won\u0027t compile.",
+      "revId": "78f6b3f13b2d80865f9c82080c62708ca95cae21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
