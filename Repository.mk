@@ -67,13 +67,13 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svptest \
         svpclient \
         pixelctl ) \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX,$(OS))), tilebench) \
 	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest \
 	    outdevgrind) \
 	vcldemo \
 	tiledrendering \
     mtfdemo \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX,$(OS))), gtktiledviewer) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
