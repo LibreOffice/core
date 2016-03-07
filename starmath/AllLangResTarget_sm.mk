@@ -24,7 +24,6 @@ $(eval $(call gb_SrsTarget_use_srstargets,sm/res,\
 
 $(eval $(call gb_SrsTarget_set_include,sm/res,\
 	-I$(SRCDIR)/starmath/inc \
-    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 	$$(INCLUDE) \
 ))
 

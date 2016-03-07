@@ -30,7 +30,6 @@ $(eval $(call gb_SrsTarget_use_srstargets,basctl/res,\
 ))
 
 $(eval $(call gb_SrsTarget_set_include,basctl/res,\
-    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 	-I$(SRCDIR)/basctl/inc \
 	-I$(SRCDIR)/basctl/source/inc \
 	-I$(SRCDIR)/basctl/source/basicide \
