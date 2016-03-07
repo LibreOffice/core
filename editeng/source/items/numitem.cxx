@@ -151,7 +151,6 @@ SvxNumberFormat::SvxNumberFormat( sal_Int16 eType,
                                   SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
     : SvxNumberType(eType),
       eNumAdjust(SVX_ADJUST_LEFT),
-      mbNumAdjustChanged(false),
       nInclUpperLevels(0),
       nStart(1),
       cBullet(SVX_DEF_BULLET),
@@ -244,25 +243,6 @@ SvxNumberFormat::~SvxNumberFormat()
     delete pBulletFont;
 }
 
-void SvxNumberFormat::SetNumberingType(sal_Int16 nSet)
-{
-    if(!mbNumAdjustChanged)
-    {//Romain numbers alignment to right, issue-42788
-        if(nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER)
-            eNumAdjust = SVX_ADJUST_RIGHT;
-        else if (eNumAdjust == SVX_ADJUST_RIGHT && (GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER))
-            eNumAdjust = SVX_ADJUST_LEFT;
-    }
-
-    SvxNumberType::SetNumberingType(nSet);
-}
-
-void SvxNumberFormat::SetNumAdjust(SvxAdjust eSet)
-{
-    eNumAdjust = eSet;
-    mbNumAdjustChanged = true;
-}
-
 void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
 {
     if(pConverter && pBulletFont)
@@ -336,7 +316,6 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
 
     SetNumberingType(rFormat.GetNumberingType());
         eNumAdjust          = rFormat.eNumAdjust ;
-        mbNumAdjustChanged  = rFormat.mbNumAdjustChanged;
         nInclUpperLevels    = rFormat.nInclUpperLevels ;
         nStart              = rFormat.nStart ;
         cBullet             = rFormat.cBullet ;
