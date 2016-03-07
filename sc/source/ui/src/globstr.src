@@ -910,6 +910,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Error: Internal overflow" ;
     };
+    String STR_LONG_ERR_MATRIX_SIZE
+    {
+        Text [ en-US ] = "Error: Array or matrix size" ;
+    };
     String STR_LONG_ERR_CIRC_REF
     {
         Text [ en-US ] = "Error: Circular reference" ;

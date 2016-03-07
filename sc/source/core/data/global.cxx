@@ -428,6 +428,9 @@ OUString ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
         case errStackOverflow:
             nErrNumber = STR_LONG_ERR_STACK_OVF;
         break;
+        case errMatrixSize:
+            nErrNumber = STR_LONG_ERR_MATRIX_SIZE;
+        break;
         case errIllegalJump:
         case errUnknownState:
         case errUnknownVariable:
