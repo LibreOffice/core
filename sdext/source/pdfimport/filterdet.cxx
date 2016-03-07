@@ -468,7 +468,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
 
     // compare the contents
     bRet = (0 == memcmp( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "test checksum: " );
     for( unsigned int i = 0; i < sizeof(nTestChecksum); i++ )
         OSL_TRACE( "%.2X", int(nTestChecksum[i]) );

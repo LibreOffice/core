@@ -93,7 +93,7 @@ namespace pdfi
         /// Union element geometry with given element
         void updateGeometryWith( const Element* pMergeFrom );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // xxx refac TODO: move code to visitor
         virtual void emitStructure( int nLevel );
 #endif
@@ -217,7 +217,7 @@ namespace pdfi
 
         void updateGeometry();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         virtual void emitStructure( int nLevel );
 #endif
 

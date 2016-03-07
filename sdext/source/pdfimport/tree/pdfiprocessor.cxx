@@ -542,7 +542,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
 void PDFIProcessor::emit( XmlEmitter&               rEmitter,
                           const TreeVisitorFactory& rVisitorFactory )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     m_pDocument->emitStructure( 0 );
 #endif
 
@@ -552,7 +552,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     startIndicator( " " );
     m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::const_iterator());
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     m_pDocument->emitStructure( 0 );
 #endif
 
