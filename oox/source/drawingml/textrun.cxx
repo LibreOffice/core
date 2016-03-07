@@ -151,7 +151,8 @@ sal_Int32 TextRun::insertAt(
 
                 xTextFieldCursor->gotoEnd( sal_True );
 
-                aTextCharacterProps.maCharColor.setSchemeClr( XML_hlink );
+                aTextCharacterProps.maFillProperties.maFillColor.setSchemeClr( XML_hlink );
+                aTextCharacterProps.maFillProperties.moFillType.set(XML_solidFill);
                 if ( !maTextCharacterProperties.moUnderline.has() )
                     aTextCharacterProps.moUnderline.set( XML_sng );
 

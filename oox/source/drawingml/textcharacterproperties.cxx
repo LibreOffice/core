@@ -48,7 +48,6 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maComplexFont.assignIfUsed( rSourceProps.maComplexFont );
     maComplexThemeFont.assignIfUsed( rSourceProps.maComplexThemeFont );
     maSymbolFont.assignIfUsed( rSourceProps.maSymbolFont );
-    maCharColor.assignIfUsed( rSourceProps.maCharColor );
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     moHeight.assignIfUsed( rSourceProps.moHeight );
@@ -63,7 +62,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
 
     maTextEffectsProperties = rSourceProps.maTextEffectsProperties;
-    maGradientProps.assignUsed( rSourceProps.maGradientProps );
+    maFillProperties.assignUsed( rSourceProps.maFillProperties );
 }
 
 void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter ) const
@@ -103,12 +102,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharFontFamilyComplex, nFontFamily);
     }
 
-    // symbolfont, will now be ... textrun.cxx ... ausgewertet !!!i#113673
-
-    if( maCharColor.isUsed() )
-        rPropMap.setProperty( PROP_CharColor, maCharColor.getColor( rFilter.getGraphicHelper() ));
-    if( maGradientProps.maGradientStops.size() > 0 )
-        rPropMap.setProperty( PROP_CharColor, maGradientProps.maGradientStops.begin()->second.getColor( rFilter.getGraphicHelper() ));
+    if ( maFillProperties.moFillType.has() )
+        rPropMap.setProperty( PROP_CharColor, maFillProperties.getBestSolidColor().getColor( rFilter.getGraphicHelper() ));
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {

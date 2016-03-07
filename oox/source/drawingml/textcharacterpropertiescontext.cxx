@@ -88,10 +88,12 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
 // TODO unsupported yet
 //        case A_TOKEN( ln ):         // CT_LineProperties
 //            return new LinePropertiesContext( getHandler(), rAttribs, maTextOutlineProperties );
-
-        case A_TOKEN( solidFill ):  // EG_FillProperties
-            return new ColorContext( *this, mrTextCharacterProperties.maCharColor );
-
+        // EG_FillProperties
+        case A_TOKEN( noFill ):
+        case A_TOKEN( solidFill ):
+        case A_TOKEN( gradFill ):
+        case A_TOKEN( pattFill ):
+            return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrTextCharacterProperties.maFillProperties );
         // EG_EffectProperties
         case A_TOKEN( effectDag ):  // CT_EffectContainer 5.1.10.25
         case A_TOKEN( effectLst ):  // CT_EffectList 5.1.10.26
@@ -132,10 +134,6 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( hlinkClick ):     // CT_Hyperlink
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             return new HyperLinkContext( *this, rAttribs,  mrTextCharacterProperties.maHyperlinkPropertyMap );
-
-        case A_TOKEN( gradFill ):
-            return new GradientFillContext( *this, rAttribs, mrTextCharacterProperties.maGradientProps );
-
         case W_TOKEN( rFonts ):
             if( rAttribs.hasAttribute(W_TOKEN(ascii)) )
             {
@@ -173,7 +171,8 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( color ):
             if (rAttribs.getInteger(W_TOKEN(val)).has())
             {
-                mrTextCharacterProperties.maCharColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).get());
+                mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).get());
+                mrTextCharacterProperties.maFillProperties.moFillType.set(XML_solidFill);
             }
             break;
         case W_TOKEN(  sz ):
