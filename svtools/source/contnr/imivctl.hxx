@@ -358,8 +358,7 @@ public:
 
     void                SetEntryPos(
                             SvxIconChoiceCtrlEntry* pEntry,
-                            const Point& rPos,
-                            bool bAdjustRow = false
+                            const Point& rPos
                         );
 
     void                InvalidateEntry( SvxIconChoiceCtrlEntry* );

@@ -1687,8 +1687,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         rRenderContext.SetClipRegion();
 }
 
-void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos,
-    bool bAdjustAtGrid )
+void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos )
 {
     ShowCursor( false );
     Rectangle aBoundRect( GetEntryBoundRect( pEntry ));
@@ -1707,27 +1706,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const 
             pEntry->aRect = aBoundRect;
             pEntry->aGridRect.SetPos( rPos + aGridOffs );
             bAdjustVirtSize = true;
-        }
-        if( bAdjustAtGrid )
-        {
-            if( bAdjustVirtSize )
-            {
-                // By aligning the (in some cases newly positioned) entry, it
-                // can become completely visible again, so that maybe we don't
-                // need a scrollbar after all. To avoid suddenly turning the
-                // scrollbar(s) on and then off again, we use the aligned
-                // bounding rectangle of the entry to enlarge the virtual
-                // output size. The virtual size has to be adapted, because
-                // AdjustEntryAtGrid depends on it.
-                const Rectangle& rBoundRect = GetEntryBoundRect( pEntry );
-                Rectangle aCenterRect( CalcBmpRect( pEntry ));
-                Point aNewPos( AdjustAtGrid( aCenterRect, rBoundRect ) );
-                Rectangle aNewBoundRect( aNewPos, pEntry->aRect.GetSize());
-                AdjustVirtSize( aNewBoundRect );
-                bAdjustVirtSize = false;
-            }
-            AdjustEntryAtGrid( pEntry );
-            ToTop( pEntry );
         }
         if( bAdjustVirtSize )
             AdjustVirtSize( pEntry->aRect );
