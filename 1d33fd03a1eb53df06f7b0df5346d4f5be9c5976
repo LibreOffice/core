@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bacf61ea_eb980d6d",
+        "filename": "basic/source/runtime/dllmgr-x86.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T12:01:16Z",
+      "side": 1,
+      "message": "sberg says you need to add \"MarshalData() \u003d default;\"",
+      "parentUuid": "bacf61ea_eb812dfd",
+      "revId": "1d33fd03a1eb53df06f7b0df5346d4f5be9c5976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bacf61ea_ab873511",
         "filename": "basic/source/runtime/dllmgr-x86.cxx",
         "patchSetId": 1
