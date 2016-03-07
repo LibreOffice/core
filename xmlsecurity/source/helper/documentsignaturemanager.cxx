@@ -374,8 +374,11 @@ void DocumentSignatureManager::write()
     {
         // OOXML
         size_t nSignatureCount = maCurrentSignatureInformations.size();
-        maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
-        maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+        if (nSignatureCount > 0)
+        {
+            maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
+            maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+        }
 
         for (size_t i = 0; i < nSignatureCount; ++i)
             maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);

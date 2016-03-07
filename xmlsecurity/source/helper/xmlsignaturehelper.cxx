@@ -388,6 +388,13 @@ bool lcl_isSignatureOriginType(const beans::StringPair& rPair)
 bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embed::XStorage>& xStorage, bool bCacheLastSignature)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READ;
+    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    if (xNameAccess.is() && !xNameAccess->hasByName("_rels"))
+    {
+        SAL_WARN("xmlsecurity.helper", "expected stream, in signature storage but not found: _rels");
+        return false;
+    }
+
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
     uno::Reference<io::XInputStream> xRelStream(xSubStorage->openStreamElement("origin.sigs.rels", nOpenMode), uno::UNO_QUERY);
     uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo;
@@ -402,7 +409,6 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
             std::vector<beans::StringPair>::iterator it = std::find_if(aRelation.begin(), aRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
             if (it != aRelation.end())
             {
-                uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
                 if (xNameAccess.is() && !xNameAccess->hasByName(it->Second))
                 {
                     SAL_WARN("xmlsecurity.helper", "expected stream, but not found: " << it->Second);
