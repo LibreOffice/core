@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_6bad3d88",
+        "filename": "sw/qa/core/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T12:10:37Z",
+      "side": 1,
+      "message": "this causes an assert failure on debug builds, see the Linux buildbot.\n\nthe problem is that there is something pointing into the document that isn\u0027t deleted before the document is disposed.\n\nthe local variables aIdx and pPaM need to be deleted before dispose.\n\nyou could solve that problem by moving most of the test into a nested scope or adding a RAII class that calls dispose() from its dtor.",
+      "revId": "9140e51c250a89caa31d91984e3b73c2ccb484af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
