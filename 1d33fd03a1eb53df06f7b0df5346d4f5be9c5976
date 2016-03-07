@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_eb812dfd",
+        "filename": "basic/source/runtime/dllmgr-x86.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T11:56:41Z",
+      "side": 1,
+      "message": "i don\u0027t understand why adding these causes the failure:\n\ndllmgr-x86.cxx(486) : error C2512: \u0027`anonymous-namespace\u0027::MarshalData\u0027 : no appropriate default constructor available\n\n\n... but maybe that can be worked around by adding an empty default ctor too...",
+      "revId": "1d33fd03a1eb53df06f7b0df5346d4f5be9c5976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_ab873511",
+        "filename": "basic/source/runtime/dllmgr-x86.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T11:56:41Z",
+      "side": 1,
+      "message": "i think you need to remove the \"SbiDllMgr::\" prefix here",
+      "revId": "1d33fd03a1eb53df06f7b0df5346d4f5be9c5976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
