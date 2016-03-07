@@ -94,7 +94,7 @@ SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
 //       frame and its insert in the layout.
 void SwSectionFrame::Init()
 {
-    OSL_ENSURE( GetUpper(), "SwSectionFrame::Init before insertion?!" );
+    assert(GetUpper() && "SwSectionFrame::Init before insertion?!");
     SWRECTFN( this )
     long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
     (Frame().*fnRect->fnSetWidth)( nWidth );
@@ -467,7 +467,7 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
 |*/
 bool SwSectionFrame::SplitSect( SwFrame* pFrame, bool bApres )
 {
-    OSL_ENSURE( pFrame, "SplitSect: Why?" );
+    assert(pFrame && "SplitSect: Why?");
     SwFrame* pOther = bApres ? pFrame->FindNext() : pFrame->FindPrev();
     if( !pOther )
         return false;
@@ -1446,7 +1446,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
 
     SwSectionFrame *pSect = FindSctFrame();
     bool bWrongPage = false;
-    OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrame" );
+    assert(pSect && "GetNextSctLeaf: Missing SectionFrame");
 
     // Shortcut for sections with Follows. That's ok,
     // if no columns or pages (except dummy pages) lie in between.
@@ -2555,7 +2555,7 @@ void SwRootFrame::InsertEmptySct( SwSectionFrame* pDel )
 
 void SwRootFrame::_DeleteEmptySct()
 {
-    OSL_ENSURE( mpDestroy, "Keine Liste, keine Kekse" );
+    assert(mpDestroy && "Keine Liste, keine Kekse");
     while( !mpDestroy->empty() )
     {
         SwSectionFrame* pSect = *mpDestroy->begin();
@@ -2587,7 +2587,7 @@ void SwRootFrame::_DeleteEmptySct()
 
 void SwRootFrame::_RemoveFromList( SwSectionFrame* pSct )
 {
-    OSL_ENSURE( mpDestroy, "Where's my list?" );
+    assert(mpDestroy && "Where's my list?");
     mpDestroy->erase( pSct );
 }
 
