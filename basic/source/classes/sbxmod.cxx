@@ -71,7 +71,6 @@
 #include <ooo/vba/VbQueryClose.hpp>
 #include <list>
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include "sbxmod.hxx"
 #include "parser.hxx"
 
@@ -446,11 +445,13 @@ bool getDefaultVBAMode( StarBASIC* pb )
     return xVBACompat.is() && xVBACompat->getVBACompatibilityMode();
 }
 
-class AsyncQuitHandler: private boost::noncopyable
+class AsyncQuitHandler
 {
     AsyncQuitHandler() {}
 
 public:
+    AsyncQuitHandler(const AsyncQuitHandler&) = delete;
+    const AsyncQuitHandler& operator=(const AsyncQuitHandler&) = delete;
     static AsyncQuitHandler& instance()
     {
         static AsyncQuitHandler dInst;
@@ -2242,7 +2243,7 @@ typedef ::cppu::WeakImplHelper<
     document::XDocumentEventListener > FormObjEventListener_BASE;
 
 class FormObjEventListenerImpl:
-    public FormObjEventListener_BASE, private boost::noncopyable
+    public FormObjEventListener_BASE
 {
     SbUserFormModule* mpUserForm;
     uno::Reference< lang::XComponent > mxComponent;
@@ -2253,6 +2254,8 @@ class FormObjEventListenerImpl:
     bool mbShowing;
 
 public:
+    FormObjEventListenerImpl(const FormObjEventListenerImpl&) = delete;
+    const FormObjEventListenerImpl& operator=(const FormObjEventListenerImpl&) = delete;
     FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent, const uno::Reference< frame::XModel >& xModel ) :
         mpUserForm( pUserForm ), mxComponent( xComponent), mxModel( xModel ),
         mbDisposed( false ), mbOpened( false ), mbActivated( false ), mbShowing( false )
