@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
+#include <sal/log.hxx>
 
 #include "thread.hxx"
 #include "jobqueue.hxx"
@@ -38,12 +39,7 @@ namespace cppu_threadpool {
 
     ThreadAdmin::~ThreadAdmin()
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( m_lst.size() )
-        {
-            fprintf( stderr, "%lu Threads left\n" , static_cast<unsigned long>(m_lst.size()) );
-        }
-#endif
+        SAL_WARN_IF(m_lst.size(), "cppu.threadpool", m_lst.size() << "Threads left");
     }
 
     bool ThreadAdmin::add( rtl::Reference< ORequestThread > const & p )

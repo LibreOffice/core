@@ -321,8 +321,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
+#if OSL_DEBUG_LEVEL > 0
 namespace cppu {
 
 #if defined( SAL_W32)
@@ -343,27 +342,12 @@ namespace cppu {
 
 #define OFFSET_OF( s, m ) reinterpret_cast< size_t >((char *)&((s *)16)->m -16)
 
-#define BINTEST_VERIFY( c ) \
-    if (! (c))      \
-    {               \
-        fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); \
-        abort();    \
-    }
-
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     if (OFFSET_OF(s, m) != static_cast<size_t>(n))  \
     {                                               \
         fprintf(stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", \
             OFFSET_OF(s, m), static_cast<size_t>(n));                    \
         abort();                                    \
-    }
-
-#define BINTEST_VERIFYSIZE( s, n ) \
-    if (sizeof(s) != static_cast<size_t>(n))        \
-    {                                               \
-        fprintf(stderr, "### sizeof(" #s ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", \
-            sizeof(s), static_cast<size_t>(n));    \
-        abort(); \
     }
 
 struct C1
@@ -471,10 +455,6 @@ struct Char4
     Char3 chars;
     char c;
 };
-class Ref
-{
-    void * p;
-};
 enum Enum
 {
     v = SAL_MAX_ENUM
@@ -494,93 +474,92 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
                          (1 == 0) == sal_False, "must be binary compatible" );
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
-    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 4 );
-    BINTEST_VERIFYSIZE( AlignSize_Impl, 12 );
+    static_assert(offsetof(AlignSize_Impl, dDouble) == static_cast<size_t>(4), "offsetof(AlignSize_Impl, dDouble) != 4");
+    static_assert(sizeof(AlignSize_Impl) == static_cast<size_t>(12), "sizeof(AlignSize_Impl) != 12");
 #else
     // max alignment is 8
-    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 8 );
-    BINTEST_VERIFYSIZE( AlignSize_Impl, 16 );
+    static_assert(offsetof(AlignSize_Impl, dDouble) == static_cast<size_t>(8), "offsetof(AlignSize_Impl, dDouble) != 8");
+    static_assert(sizeof(AlignSize_Impl) == static_cast<size_t>(16), "sizeof(AlignSize_Impl) != 12");
 #endif
 
     // sequence
-    BINTEST_VERIFY( (SAL_SEQUENCE_HEADER_SIZE % 8) == 0 );
+    static_assert((SAL_SEQUENCE_HEADER_SIZE % 8) == 0, "binary compatibility test failed: (SAL_SEQUENCE_HEADER_SIZE % 8) == 0!!!");
     // enum
-    BINTEST_VERIFY( sizeof( Enum ) == sizeof( sal_Int32 ) );
+    static_assert(sizeof(Enum) == sizeof(sal_Int32), "binary compatibility test failed: (sizeof(Enum) == sizeof(sal_Int32))");
     // any
-    BINTEST_VERIFY( sizeof(void *) >= sizeof(sal_Int32) );
-    BINTEST_VERIFY( sizeof( uno_Any ) == sizeof( void * ) * 3 );
-    BINTEST_VERIFYOFFSET( uno_Any, pType, 0 );
-    BINTEST_VERIFYOFFSET( uno_Any, pData, 1 * sizeof (void *) );
-    BINTEST_VERIFYOFFSET( uno_Any, pReserved, 2 * sizeof (void *) );
-    // interface
-    BINTEST_VERIFY( sizeof( Ref ) == sizeof( void * ) );
+    static_assert(sizeof(void *) >= sizeof(sal_Int32), "binary compatibility test failed: (sizeof(void *) >= sizeof(sal_Int32))");
+    static_assert(sizeof(uno_Any) == sizeof(void *) * 3, "binary compatibility test failed: (sizeof(uno_Any) == sizeof(void *) * 3");
+    static_assert(offsetof(uno_Any, pType) == 0, "offsetof(uno_Any, pType) != 0");
+    static_assert(offsetof(uno_Any, pData) == 1 * sizeof(void *), "offsetof(uno_Any, pTData) != (1 * sizeof(void *))");
+    static_assert(offsetof(uno_Any, pReserved) == 2 * sizeof(void *), "offsetof(uno_Any, pReserved) != (2 * sizeof(void *))");
     // string
-    BINTEST_VERIFY( sizeof( OUString ) == sizeof( rtl_uString * ) );
+    static_assert(sizeof(OUString) == sizeof(rtl_uString *), "binary compatibility test failed: sizeof(OUString) != sizeof(rtl_uString *)");
     // struct
-    BINTEST_VERIFYSIZE( M, 8 );
-    BINTEST_VERIFYOFFSET( M, o, 4 );
-    BINTEST_VERIFYSIZE( N, 12 );
-    BINTEST_VERIFYOFFSET( N, p, 8 );
-    BINTEST_VERIFYSIZE( N2, 12 );
-    BINTEST_VERIFYOFFSET( N2, p, 8 );
+    static_assert(sizeof(M) == 8, "sizeof(M) != 8");
+    static_assert(offsetof(M, o) == 4, "offsetof(M, o) != 4");
+    static_assert(sizeof(N) == 12, "sizeof(N) != 12");
+    BINTEST_VERIFYOFFSET(N, p, 8);
+    static_assert(sizeof(N2) == 12, "sizeof(N2) != 12");
+
+    static_assert(offsetof(N2, p) == 8, "offsetof(N2, p) != 8");
 #ifdef MAX_ALIGNMENT_4
-    BINTEST_VERIFYSIZE( O, 20 );
+    static_assert(sizeof(O) == 20, "sizeof(O) != 20");
 #else
-    BINTEST_VERIFYSIZE( O, 24 );
+    static_assert(sizeof(O) == 24, "sizeof(O) != 24");
 #endif
-    BINTEST_VERIFYSIZE( D, 8 );
-    BINTEST_VERIFYOFFSET( D, e, 4 );
-    BINTEST_VERIFYOFFSET( E, d, 4 );
-    BINTEST_VERIFYOFFSET( E, e, 8 );
+    static_assert(sizeof(D) == 8, "sizeof(D) != 8");
+    static_assert(offsetof(D, e) == 4, "offsetof(D, e) != 4");
+    static_assert(offsetof(E, d) == 4, "offsetof(E, d) != 4");
+    static_assert(offsetof(E, e) == 8, "offsetof(E, e) != 8");
 
-    BINTEST_VERIFYSIZE( C1, 2 );
-    BINTEST_VERIFYSIZE( C2, 8 );
-    BINTEST_VERIFYOFFSET( C2, n2, 4 );
+    static_assert(sizeof(C1) == 2, "sizeof(C1) != 2");
+    static_assert(sizeof(C2) == 8, "sizeof(C2) != 8");
+    BINTEST_VERIFYOFFSET(C2, n2, 4);
 
 #ifdef MAX_ALIGNMENT_4
-    BINTEST_VERIFYSIZE( C3, 20 );
-    BINTEST_VERIFYOFFSET( C3, d3, 8 );
-    BINTEST_VERIFYOFFSET( C3, n3, 16 );
-    BINTEST_VERIFYSIZE( C4, 32 );
-    BINTEST_VERIFYOFFSET( C4, n4, 20 );
-    BINTEST_VERIFYOFFSET( C4, d4, 24 );
-    BINTEST_VERIFYSIZE( C5, 44 );
-    BINTEST_VERIFYOFFSET( C5, n5, 32 );
-    BINTEST_VERIFYOFFSET( C5, b5, 40 );
-    BINTEST_VERIFYSIZE( C6, 52 );
-    BINTEST_VERIFYOFFSET( C6, c6, 4 );
-    BINTEST_VERIFYOFFSET( C6, b6, 48 );
+    static_assert(sizeof(C3) == 20, "sizeof(C3) != 20");
+    BINTEST_VERIFYOFFSET(C3, d3, 8);
+    BINTEST_VERIFYOFFSET(C3, n3, 16);
+    static_assert(sizeof(C4) == 32, "sizeof(C4) != 32");
+    BINTEST_VERIFYOFFSET(C4, n4, 20);
+    BINTEST_VERIFYOFFSET(C4, d4, 24);
+    static_assert(sizeof(C5) == 44, "sizeof(C5) != 44");
+    BINTEST_VERIFYOFFSET(C5, n5, 32);
+    BINTEST_VERIFYOFFSET(C5, b5, 40);
+    static_assert(sizeof(C6) == 52, "sizeof(C6) != 52");
+    BINTEST_VERIFYOFFSET(C6, c6, 4);
+    BINTEST_VERIFYOFFSET(C6, b6, 48);
 
-    BINTEST_VERIFYSIZE( O2, 24 );
-    BINTEST_VERIFYOFFSET( O2, p2, 20 );
+    static_assert(sizeof(O2) == 24, "sizeof(O2) != 24");
+    BINTEST_VERIFYOFFSET(O2, p2, 20);
 #else
-    BINTEST_VERIFYSIZE( C3, 24 );
-    BINTEST_VERIFYOFFSET( C3, d3, 8 );
-    BINTEST_VERIFYOFFSET( C3, n3, 16 );
-    BINTEST_VERIFYSIZE( C4, 40 );
-    BINTEST_VERIFYOFFSET( C4, n4, 24 );
-    BINTEST_VERIFYOFFSET( C4, d4, 32 );
-    BINTEST_VERIFYSIZE( C5, 56 );
-    BINTEST_VERIFYOFFSET( C5, n5, 40 );
-    BINTEST_VERIFYOFFSET( C5, b5, 48 );
-    BINTEST_VERIFYSIZE( C6, 72 );
-    BINTEST_VERIFYOFFSET( C6, c6, 8 );
-    BINTEST_VERIFYOFFSET( C6, b6, 64 );
+    static_assert(sizeof(C3) == 24, "sizeof(C3) != 24");
+    BINTEST_VERIFYOFFSET(C3, d3, 8);
+    BINTEST_VERIFYOFFSET(C3, n3, 16);
+    static_assert(sizeof(C4) == 40, "sizeof(C4) != 40");
+    BINTEST_VERIFYOFFSET(C4, n4, 24);
+    BINTEST_VERIFYOFFSET(C4, d4, 32);
+    static_assert(sizeof(C5) == 56, "sizeof(C5) != 56");
+    BINTEST_VERIFYOFFSET(C5, n5, 40);
+    BINTEST_VERIFYOFFSET(C5, b5, 48);
+    static_assert(sizeof(C6) == 72, "sizeof(C6) != 72");
+    BINTEST_VERIFYOFFSET(C6, c6, 8);
+    BINTEST_VERIFYOFFSET(C6, b6, 64);
 
-    BINTEST_VERIFYSIZE( O2, 32 );
-    BINTEST_VERIFYOFFSET( O2, p2, 24 );
+    static_assert(sizeof(O2) == 32, "sizeof(O2) != 32");
+    BINTEST_VERIFYOFFSET(O2, p2, 24);
 #endif
 
-    BINTEST_VERIFYSIZE( Char3, 3 );
+    static_assert(sizeof(Char3) == 3, "sizeof(Char3) != 3");
     BINTEST_VERIFYOFFSET( Char4, c, 3 );
 
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
-    BINTEST_VERIFYSIZE( P, 20 );
+    static_assert(sizeof(P) == 20, "sizeof(P) != 20");
 #else
     // alignment of P is 8, because of P[] ...
-    BINTEST_VERIFYSIZE( P, 24 );
-    BINTEST_VERIFYSIZE( second, sizeof( int ) );
+    static_assert(sizeof(P) == 24, "sizeof(P) != 24");
+    static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
 #endif
 }
 
@@ -593,5 +572,4 @@ static BinaryCompatible_Impl aTest;
 }
 
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

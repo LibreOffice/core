@@ -18,10 +18,6 @@
  */
 
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <unordered_map>
 #include <cassert>
 #include <list>
@@ -188,7 +184,7 @@ struct TypeDescriptor_Init_Impl
 
     inline void callChain( typelib_TypeDescription ** ppRet, rtl_uString * pName );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // only for debugging
     sal_Int32           nTypeDescriptionCount;
     sal_Int32           nCompoundTypeDescriptionCount;
@@ -202,7 +198,7 @@ struct TypeDescriptor_Init_Impl
 
     TypeDescriptor_Init_Impl():
         pWeakMap(nullptr), pCallbacks(nullptr), pCache(nullptr), pMutex(nullptr)
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         , nTypeDescriptionCount(0), nCompoundTypeDescriptionCount(0),
         nIndirectTypeDescriptionCount(0),
         nEnumTypeDescriptionCount(0),
@@ -290,41 +286,38 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
             typelib_typedescriptionreference_release( pTDR );
         }
 
-#if OSL_DEBUG_LEVEL > 1
         aIt = pWeakMap->begin();
+#if defined SAL_LOG_INFO
         while( aIt != pWeakMap->end() )
         {
             typelib_TypeDescriptionReference * pTDR = (*aIt).second;
             if (pTDR)
             {
                 OString aTypeName( rtl::OUStringToOString( pTDR->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE(
-                    "### remaining type: %s; ref count = %d", aTypeName.getStr(), pTDR->nRefCount );
+                SAL_INFO("cppu.typelib", "remaining type: " << aTypeName << "; ref count = " << pTDR->nRefCount);
             }
             else
             {
-                OSL_TRACE( "### remaining null type entry!?" );
+                SAL_INFO("cppu.typelib", "remaining null type entry!?");
             }
             ++aIt;
         }
 #endif
-
         delete pWeakMap;
         pWeakMap = nullptr;
     }
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( !nTypeDescriptionCount, "### nTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nCompoundTypeDescriptionCount, "### nCompoundTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nIndirectTypeDescriptionCount, "### nIndirectTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nEnumTypeDescriptionCount, "### nEnumTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nInterfaceMethodTypeDescriptionCount, "### nInterfaceMethodTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nInterfaceAttributeTypeDescriptionCount, "### nInterfaceAttributeTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nInterfaceTypeDescriptionCount, "### nInterfaceTypeDescriptionCount is not zero" );
-    OSL_ENSURE( !nTypeDescriptionReferenceCount, "### nTypeDescriptionReferenceCount is not zero" );
-
-    OSL_ENSURE( !pCallbacks || pCallbacks->empty(), "### pCallbacks is not NULL or empty" );
+#if OSL_DEBUG_LEVEL > 0
+    SAL_WARN_IF( (!nTypeDescriptionCount), "cppu.typelib", "nTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nCompoundTypeDescriptionCount), "cppu.typelib", "nCompoundTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nIndirectTypeDescriptionCount), "cppu.typelib", "nIndirectTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nEnumTypeDescriptionCount), "cppu.typelib", "nEnumTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nInterfaceMethodTypeDescriptionCount), "cppu.typelib", "nInterfaceMethodTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nInterfaceAttributeTypeDescriptionCount), "cppu.typelib", "nInterfaceAttributeTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nInterfaceTypeDescriptionCount), "cppu.typelib", "nInterfaceTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( (!nTypeDescriptionReferenceCount), "cppu.typelib", "nTypeDescriptionReferenceCount is not zero" );
 #endif
 
+    SAL_WARN_IF( (!pCallbacks || pCallbacks->empty()), "cppu.typelib", "pCallbacks is not NULL or empty" );
     delete pCallbacks;
     pCallbacks = nullptr;
 
@@ -395,13 +388,10 @@ static inline void typelib_typedescription_initTables(
                 aReadWriteAttributes[i] = !reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(pM)->bReadOnly;
                 TYPELIB_DANGER_RELEASE( pM );
             }
-#if OSL_DEBUG_LEVEL > 1
             else
             {
-                OString aStr( rtl::OUStringToOString( pITD->ppAllMembers[i]->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( "\n### cannot get attribute type description: %s", aStr.getStr() );
+                SAL_INFO( "cppu.typelib", "cannot get attribute type description: " <<  pITD->ppAllMembers[i]->pTypeName );
             }
-#endif
         }
     }
 
@@ -541,11 +531,9 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
         }
         else
         {
-#if OSL_DEBUG_LEVEL > 1
             OString aStr(
                 rtl::OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "\n### type cannot be completed: %s", aStr.getStr() );
-#endif
+            SAL_INFO( "cppu.typelib", "type cannot be completed: " <<  aStr.getStr() );
             return false;
         }
     }
@@ -575,7 +563,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         {
             auto pTmp = allocTypeDescription<typelib_IndirectTypeDescription>();
             pRet = &pTmp->aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nIndirectTypeDescriptionCount );
 #endif
             pTmp->pType = nullptr;
@@ -587,7 +575,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             // FEATURE_EMPTYCLASS
             auto pTmp = allocTypeDescription<typelib_StructTypeDescription>();
             pRet = &pTmp->aBase.aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->aBase.pBaseTypeDescription = nullptr;
@@ -604,7 +592,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             // FEATURE_EMPTYCLASS
             auto pTmp = allocTypeDescription<typelib_CompoundTypeDescription>();
             pRet = &pTmp->aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = nullptr;
@@ -619,7 +607,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         {
             auto pTmp = allocTypeDescription<typelib_EnumTypeDescription>();
             pRet = &pTmp->aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nEnumTypeDescriptionCount );
 #endif
             pTmp->nDefaultEnumValue = 0;
@@ -634,7 +622,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             auto pTmp = allocTypeDescription<
                 typelib_InterfaceTypeDescription>();
             pRet = &pTmp->aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nInterfaceTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = nullptr;
@@ -655,7 +643,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             auto pTmp = allocTypeDescription<
                 typelib_InterfaceMethodTypeDescription>();
             pRet = &pTmp->aBase.aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nInterfaceMethodTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = nullptr;
@@ -675,7 +663,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             auto * pTmp = allocTypeDescription<
                 typelib_InterfaceAttributeTypeDescription>();
             pRet = &pTmp->aBase.aBase;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nInterfaceAttributeTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = nullptr;
@@ -693,7 +681,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         default:
         {
             pRet = allocTypeDescription<typelib_TypeDescription>();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_increment( &Init::get().nTypeDescriptionCount );
 #endif
         }
@@ -1438,7 +1426,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
         typelib_typedescription_destructExtendedMembers( pTD );
         rtl_uString_release( pTD->pTypeName );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         switch( pTD->eTypeClass )
         {
         case typelib_TypeClass_SEQUENCE:
@@ -2117,10 +2105,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
         }
         else if (*ppTDR)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OString aStr( rtl::OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( !"### typedef not found: ", aStr.getStr() );
-#endif
+            SAL_INFO("cppu.typelib", "typedef not found : " << pTypeName);
             typelib_typedescriptionreference_release( *ppTDR );
             *ppTDR = nullptr;
         }
@@ -2135,7 +2120,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
     if( reallyWeak( eTypeClass ) )
     {
         typelib_TypeDescriptionReference * pTDR = new typelib_TypeDescriptionReference();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         osl_atomic_increment( &rInit.nTypeDescriptionReferenceCount );
 #endif
         pTDR->nRefCount = 1;
@@ -2194,7 +2179,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
 
             rtl_uString_release( pRef->pTypeName );
             OSL_ASSERT( pRef->pType == nullptr );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             osl_atomic_decrement( &rInit.nTypeDescriptionReferenceCount );
 #endif
             delete pRef;
