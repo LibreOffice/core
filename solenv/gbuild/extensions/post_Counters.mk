@@ -8,8 +8,6 @@
 
 ifneq ($(filter countoutdated,$(MAKECMDGOALS)),)
 
-gb_SrsTarget_add_template=
-gb_SrsTarget_add_templates=
 gb_Output_announce=
 
 ifneq ($(strip $(filter-out countoutdated,$(MAKECMDGOALS))),)

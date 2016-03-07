@@ -153,9 +153,6 @@ gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_headers_target = $(WORKDIR)/SrsTarget/$(1).headers
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
-gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
-gb_SrsTemplateTarget_get_include_dir = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))
-gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
 gb_UIConfig_get_imagelist_target = $(WORKDIR)/UIConfig/$(1).ilst
 gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1).done
@@ -277,7 +274,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ScpTemplateTarget \
 	SdiTarget \
 	SrsTarget \
-	SrsTemplateTarget \
 	StaticLibrary \
 	ThesaurusIndexTarget \
 	CppunitTest \
