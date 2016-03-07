@@ -183,7 +183,7 @@ Data::Data(): root_(new RootNode) {}
 
 rtl::Reference< Node > Data::resolvePathRepresentation(
     OUString const & pathRepresentation,
-    OUString * canonicRepresentation, Path * path, int * finalizedLayer)
+    OUString * canonicRepresentation, std::vector<OUString> * path, int * finalizedLayer)
     const
 {
     if (pathRepresentation.isEmpty() || pathRepresentation[0] != '/') {

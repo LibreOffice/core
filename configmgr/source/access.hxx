@@ -62,7 +62,6 @@
 #include <sal/types.h>
 
 #include "modifications.hxx"
-#include "path.hxx"
 #include "type.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -120,8 +119,8 @@ public:
     void markChildAsModified(rtl::Reference< ChildAccess > const & child);
     void releaseChild(OUString const & name);
 
-    virtual Path getAbsolutePath() = 0;
-    virtual Path getRelativePath() = 0;
+    virtual std::vector<OUString> getAbsolutePath() = 0;
+    virtual std::vector<OUString> getRelativePath() = 0;
 
     virtual OUString getRelativePathRepresentation() = 0;
     virtual rtl::Reference< Node > getNode() = 0;
@@ -438,7 +437,7 @@ protected:
         const = 0;
 
     virtual void addSupportedServiceNames(
-        std::vector< OUString > * services) = 0;
+        std::vector<OUString> * services) = 0;
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
     virtual void clearListeners() throw ();

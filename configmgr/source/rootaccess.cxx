@@ -52,7 +52,6 @@
 #include "lock.hxx"
 #include "modifications.hxx"
 #include "node.hxx"
-#include "path.hxx"
 #include "rootaccess.hxx"
 
 namespace configmgr {
@@ -67,7 +66,7 @@ RootAccess::RootAccess(
 {
 }
 
-Path RootAccess::getAbsolutePath() {
+std::vector<OUString> RootAccess::getAbsolutePath() {
     getNode();
     return path_;
 }
@@ -205,8 +204,8 @@ RootAccess::~RootAccess()
         getComponents().removeRootAccess(this);
 }
 
-Path RootAccess::getRelativePath() {
-    return Path();
+std::vector<OUString> RootAccess::getRelativePath() {
+    return std::vector<OUString>();
 }
 
 OUString RootAccess::getRelativePathRepresentation() {
@@ -263,7 +262,7 @@ void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
 }
 
 void RootAccess::addSupportedServiceNames(
-    std::vector< OUString > * services)
+    std::vector<OUString> * services)
 {
     assert(services != nullptr);
     services->push_back("com.sun.star.configuration.AccessRootElement");
