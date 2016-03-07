@@ -64,7 +64,6 @@
 #include "bibview.hxx"
 #include "bibprop.hrc"
 #include "toolbar.hxx"
-#include "toolbar.hrc"
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"
@@ -1562,8 +1561,8 @@ OUString BibDataManager::CreateDBChangeDialog(vcl::Window* pParent)
 
 void BibDataManager::DispatchDBChangeDialog()
 {
-    if(pToolbar)
-        pToolbar->SendDispatch(TBC_BT_CHANGESOURCE, Sequence< PropertyValue >());
+    if (pToolbar)
+        pToolbar->SendDispatch(pToolbar->GetChangeSourceId(), Sequence< PropertyValue >());
 }
 
 const OUString& BibDataManager::GetIdentifierMapping()

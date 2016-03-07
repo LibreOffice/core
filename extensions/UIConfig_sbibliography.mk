@@ -17,6 +17,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sbibliography,\
 	extensions/uiconfig/sbibliography/ui/choosedatasourcedialog \
 	extensions/uiconfig/sbibliography/ui/generalpage \
 	extensions/uiconfig/sbibliography/ui/mappingdialog \
+	extensions/uiconfig/sbibliography/ui/toolbar \
 ))
 
 # vim: set noet sw=4 ts=4:

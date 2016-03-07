@@ -247,8 +247,10 @@ protected:
     }
 
 public:
-                        ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
-                        ToolBox( vcl::Window* pParent, const ResId& rResId );
+    ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    ToolBox( vcl::Window* pParent, const ResId& rResId );
+    ToolBox(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual             ~ToolBox();
     virtual void        dispose() override;
 
@@ -283,6 +285,7 @@ public:
     virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) override;
     virtual void        Resizing( Size& rSize ) override;
     virtual Size        GetOptimalSize() const override;
+    virtual void        doDeferredInit(WinBits nBits) override;
 
     void                InsertItem( const ResId& rResId );
     /// Insert a command (like '.uno:Save').

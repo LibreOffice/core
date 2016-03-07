@@ -124,6 +124,16 @@ class BibToolBar:   public ToolBox
         sal_Int16               nSymbolsSize;
         sal_Int16               nOutStyle;
 
+        sal_uInt16              nTBC_FT_SOURCE;
+        sal_uInt16              nTBC_LB_SOURCE;
+        sal_uInt16              nTBC_FT_QUERY;
+        sal_uInt16              nTBC_ED_QUERY;
+        sal_uInt16              nTBC_BT_AUTOFILTER;
+        sal_uInt16              nTBC_BT_COL_ASSIGN;
+        sal_uInt16              nTBC_BT_CHANGESOURCE;
+        sal_uInt16              nTBC_BT_FILTERCRIT;
+        sal_uInt16              nTBC_BT_REMOVEFILTER;
+
         BibDataManager*         pDatMan;
         DECL_LINK_TYPED( SelHdl, ListBox&, void );
         DECL_LINK_TYPED( SendSelHdl, Idle*, void );
@@ -145,9 +155,11 @@ class BibToolBar:   public ToolBox
 
     public:
 
-        BibToolBar(vcl::Window* pParent, Link<void*,void> aLink, WinBits nStyle = WB_3DLOOK );
+        BibToolBar(vcl::Window* pParent, Link<void*,void> aLink);
         virtual ~BibToolBar();
         virtual void dispose() override;
+
+        sal_uInt16  GetChangeSourceId() const { return nTBC_BT_CHANGESOURCE; }
 
         void    SetXController(const css::uno::Reference< css::frame::XController > &);
 

@@ -20,11 +20,6 @@
 #ifndef EXTENSIONS_BIBLIOGRAPHY_HRC
 #define EXTENSIONS_BIBLIOGRAPHY_HRC
 
-#define HID_BIB_CHANGESOURCE                            "EXTENSIONS_HID_BIB_CHANGESOURCE"
-#define HID_BIB_MAPPINGDLG                              "EXTENSIONS_HID_BIB_MAPPINGDLG"
-#define HID_BIB_TBX_TABLE                               "EXTENSIONS_HID_BIB_TBX_TABLE"
-#define HID_BIB_TBX_SEARCH                              "EXTENSIONS_HID_BIB_TBX_SEARCH"
-#define HID_BIB_TBX_AUTOFILTER                          "EXTENSIONS_HID_BIB_TBX_AUTOFILTER"
 #define HID_BIB_IDENTIFIER_POS                          "EXTENSIONS_HID_BIB_IDENTIFIER_POS"
 #define HID_BIB_AUTHORITYTYPE_POS                       "EXTENSIONS_HID_BIB_AUTHORITYTYPE_POS"
 #define HID_BIB_AUTHOR_POS                              "EXTENSIONS_HID_BIB_AUTHOR_POS"
@@ -56,7 +51,6 @@
 #define HID_BIB_CUSTOM3_POS                             "EXTENSIONS_HID_BIB_CUSTOM3_POS"
 #define HID_BIB_CUSTOM4_POS                             "EXTENSIONS_HID_BIB_CUSTOM4_POS"
 #define HID_BIB_CUSTOM5_POS                             "EXTENSIONS_HID_BIB_CUSTOM5_POS"
-#define HID_BIB_DB_TBX                                  "EXTENSIONS_HID_BIB_DB_TBX"
 #define HID_BIB_CONTROL_PARENT                          "EXTENSIONS_HID_BIB_CONTROL_PARENT"
 #define UID_BIB_FRAME_WINDOW                            "EXTENSIONS_UID_BIB_FRAME_WINDOW"
 #define HID_BIB_DB_GRIDCTRL                             "EXTENSIONS_HID_BIB_DB_GRIDCTRL"

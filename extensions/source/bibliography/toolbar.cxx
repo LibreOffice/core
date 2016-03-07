@@ -32,8 +32,8 @@
 #include <vcl/mnemonic.hxx>
 #include "bibbeam.hxx"
 #include "bibview.hxx"
-#include "toolbar.hrc"
 #include "bibresid.hxx"
+#include "bib.hrc"
 
 #include "bibtools.hxx"
 #include <osl/mutex.hxx>
@@ -176,9 +176,9 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
     }
 }
 
-BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink, WinBits nStyle):
-    ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
-    aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
+BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
+    : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui")
+    , aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
     aFtSource(VclPtr<FixedText>::Create(this,WB_VCENTER)),
     aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN)),
@@ -194,8 +194,6 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink, WinBits nSt
     nSymbolsSize = aSvtMiscOptions.GetCurrentSymbolsSize();
     nOutStyle  = aSvtMiscOptions.GetToolboxStyle();
 
-    ApplyImageList();
-    SetStyle(GetStyle()|nStyle);
     SetOutStyle(TOOLBOX_STYLE_FLAT);
     Size a2Size(GetOutputSizePixel());
     a2Size.Width()=100;
@@ -215,20 +213,32 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink, WinBits nSt
     aEdQuery->SetSizePixel(aLBSource->GetSizePixel());
     aEdQuery->Show();
 
-    OUString aStr=GetItemText(TBC_FT_SOURCE);
+    nTBC_FT_SOURCE = GetItemId("TBC_FT_SOURCE");
+    nTBC_LB_SOURCE = GetItemId(".uno:Bib/source");
+    nTBC_FT_QUERY = GetItemId("TBC_FT_QUERY");
+    nTBC_ED_QUERY = GetItemId(".uno:Bib/query");
+    nTBC_BT_AUTOFILTER = GetItemId(".uno:Bib/autoFilter");
+    nTBC_BT_COL_ASSIGN = GetItemId("TBC_BT_COL_ASSIGN");
+    nTBC_BT_CHANGESOURCE = GetItemId(".uno:Bib/sdbsource");
+    nTBC_BT_FILTERCRIT = GetItemId(".uno:Bib/standardFilter");
+    nTBC_BT_REMOVEFILTER = GetItemId(".uno:Bib/removeFilter");
+
+    OUString aStr = GetItemText(nTBC_FT_SOURCE);
     aFtSource->SetText(aStr);
     aFtSource->SetSizePixel(aFtSource->get_preferred_size());
     aFtSource->SetBackground(Wallpaper( COL_TRANSPARENT ));
 
-    aStr=GetItemText(TBC_FT_QUERY);
+    aStr=GetItemText(nTBC_FT_QUERY);
     aFtQuery->SetText(aStr);
     aFtQuery->SetSizePixel(aFtQuery->get_preferred_size());
     aFtQuery->SetBackground(Wallpaper( COL_TRANSPARENT ));
 
-    SetItemWindow(TBC_FT_SOURCE, aFtSource.get());
-    SetItemWindow(TBC_LB_SOURCE, aLBSource.get());
-    SetItemWindow(TBC_FT_QUERY , aFtQuery.get());
-    SetItemWindow(TBC_ED_QUERY , aEdQuery.get());
+    SetItemWindow(nTBC_FT_SOURCE, aFtSource.get());
+    SetItemWindow(nTBC_LB_SOURCE, aLBSource.get());
+    SetItemWindow(nTBC_FT_QUERY , aFtQuery.get());
+    SetItemWindow(nTBC_ED_QUERY , aEdQuery.get());
+
+    ApplyImageList();
 
     ::bib::AddToTaskPaneList( this );
 }
@@ -261,13 +271,13 @@ void BibToolBar::InitListener()
         util::URL aQueryURL;
         aQueryURL.Complete = ".uno:Bib/MenuFilter";
         xTrans->parseStrict( aQueryURL);
-        BibToolBarListener* pQuery=new BibTBQueryMenuListener(this,aQueryURL.Complete,TBC_BT_AUTOFILTER);
+        BibToolBarListener* pQuery=new BibTBQueryMenuListener(this, aQueryURL.Complete, nTBC_BT_AUTOFILTER);
         xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pQuery),aQueryURL);
 
         for(sal_uInt16 nPos=0;nPos<nCount;nPos++)
         {
             sal_uInt16 nId=GetItemId(nPos);
-            if(!nId || nId==TBC_FT_SOURCE || nId==TBC_FT_QUERY)
+            if(!nId || nId== nTBC_FT_SOURCE || nId == nTBC_FT_QUERY)
                 continue;
 
             util::URL aURL;
@@ -278,11 +288,11 @@ void BibToolBar::InitListener()
             xTrans->parseStrict( aURL );
 
             css::uno::Reference< css::frame::XStatusListener> xListener;
-            if(nId==TBC_LB_SOURCE)
+            if (nId == nTBC_LB_SOURCE)
             {
                 xListener=new BibTBListBoxListener(this,aURL.Complete,nId);
             }
-            else if(nId==TBC_ED_QUERY)
+            else if (nId == nTBC_ED_QUERY)
             {
                 xListener=new BibTBEditListener(this,aURL.Complete,nId);
             }
@@ -308,7 +318,7 @@ void BibToolBar::Select()
 {
     sal_uInt16  nId=GetCurItemId();
 
-    if(nId!=TBC_BT_AUTOFILTER)
+    if (nId != nTBC_BT_AUTOFILTER)
     {
         SendDispatch(nId,Sequence<PropertyValue>() );
     }
@@ -354,15 +364,15 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
 void BibToolBar::Click()
 {
-    sal_uInt16  nId=GetCurItemId();
+    sal_uInt16 nId = GetCurItemId();
 
-    if(nId == TBC_BT_COL_ASSIGN )
+    if (nId == nTBC_BT_COL_ASSIGN )
     {
         if(pDatMan)
             pDatMan->CreateMappingDialog(GetParent());
         CheckItem( nId, false );
     }
-    else if(nId == TBC_BT_CHANGESOURCE)
+    else if (nId == nTBC_BT_CHANGESOURCE)
     {
         if(pDatMan)
         {
@@ -449,7 +459,7 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
             pPropertyVal[0].Value <<= aSelection;
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
-            SendDispatch(TBC_BT_AUTOFILTER,aPropVal);
+            SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
             return bResult;
         }
 
@@ -473,18 +483,18 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
     OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource->GetSelectEntry() ) );
     OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
-    SendDispatch(TBC_LB_SOURCE,aPropVal);
+    SendDispatch(nTBC_LB_SOURCE, aPropVal);
 }
 
 IMPL_LINK_NOARG_TYPED( BibToolBar, MenuHdl, ToolBox*, void)
 {
     sal_uInt16  nId=GetCurItemId();
-    if(nId==TBC_BT_AUTOFILTER)
+    if (nId == nTBC_BT_AUTOFILTER)
     {
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
-        SetItemDown(TBC_BT_AUTOFILTER,true);
-        nId = aPopupMenu.Execute(this, GetItemRect(TBC_BT_AUTOFILTER));
+        SetItemDown(nTBC_BT_AUTOFILTER, true);
+        nId = aPopupMenu.Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));
 
 
         if(nId>0)
@@ -500,13 +510,13 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, MenuHdl, ToolBox*, void)
             pPropertyVal[0].Value <<= aSelection;
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
-            SendDispatch(TBC_BT_AUTOFILTER,aPropVal);
+            SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
         }
 
         Point aPoint;
         MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
         MouseMove( aLeave );
-        SetItemDown(TBC_BT_AUTOFILTER,false);
+        SetItemDown(nTBC_BT_AUTOFILTER, false);
 
 
     }
@@ -577,9 +587,9 @@ void BibToolBar::ApplyImageList()
                        ( aImgLst ) :
                        ( aBigImgLst );
 
-    SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
-    SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
-    SetItemImage(TBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));
+    SetItemImage(nTBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
+    SetItemImage(nTBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
+    SetItemImage(nTBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));
     AdjustToolBox();
 }
 

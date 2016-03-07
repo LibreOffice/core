@@ -1593,6 +1593,14 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
     }
 }
 
+void ToolBox::doDeferredInit(WinBits nBits)
+{
+    VclPtr<vcl::Window> pParent = mpDialogParent;
+    mpDialogParent = nullptr;
+    ImplInit(pParent, nBits);
+    mbIsDefferedInit = false;
+}
+
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
@@ -1617,6 +1625,23 @@ ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId ) :
         Resize();
 
     if ( !(nStyle & WB_HIDE) )
+        Show();
+}
+
+ToolBox::ToolBox(vcl::Window* pParent, const OString& rID,
+    const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
+    : DockingWindow(WINDOW_TOOLBOX)
+{
+    loadUI(pParent, rID, rUIXMLDescription, rFrame);
+
+    // calculate size of floating windows and switch if the
+    // toolbox is initially in floating mode
+    if ( ImplIsFloatingMode() )
+        mbHorz = true;
+    else
+        Resize();
+
+    if (!(GetStyle() & WB_HIDE))
         Show();
 }
 

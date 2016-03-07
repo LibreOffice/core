@@ -30,7 +30,6 @@
 #include <tools/debug.hxx>
 #include "bibbeam.hxx"
 #include "bibview.hxx"
-#include "toolbar.hrc"
 #include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibtools.hxx"
@@ -222,7 +221,7 @@ namespace bib
     void BibBeamer::createToolBar()
     {
         pToolBar= VclPtr<BibToolBar>::Create(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
-        ::Size aSize=pToolBar->GetSizePixel();
+        ::Size aSize=pToolBar->get_preferred_size();
         InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SplitWindowItemFlags::Fixed );
         if ( m_xController.is() )
             pToolBar->SetXController( m_xController );
@@ -270,7 +269,7 @@ namespace bib
 
     IMPL_LINK_NOARG_TYPED( BibBeamer, RecalcLayout_Impl, void*, void )
     {
-        long nHeight = pToolBar->GetSizePixel().Height();
+        long nHeight = pToolBar->get_preferred_size().Height();
         SetItemSize( ID_TOOLBAR, nHeight );
     }
 

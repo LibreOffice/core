@@ -247,11 +247,13 @@ private:
                     mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1,
-                    mbIsDefferedInit:1,
                     mbIsCalculatingInitialLayoutSize:1,
                     mbInitialLayoutDone:1;
 
+protected:
+    bool mbIsDefferedInit;
     VclPtr<vcl::Window>  mpDialogParent;
+private:
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
@@ -279,7 +281,7 @@ public:
     SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDefferedInit; }
     SAL_DLLPRIVATE bool    hasPendingLayout() const { return maLayoutIdle.IsActive(); }
-    void                   doDeferredInit(WinBits nBits);
+    virtual        void    doDeferredInit(WinBits nBits);
 protected:
                     DockingWindow( WindowType nType );
     DockingWindow(vcl::Window* pParent, const ResId& rResId);

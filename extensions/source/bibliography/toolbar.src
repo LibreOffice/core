@@ -18,95 +18,11 @@
  */
 #include <svx/svxids.hrc>
 #include "bibliography.hrc"
-#include "toolbar.hrc"
 #include "svx/svxcommands.h"
+#include "bib.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
-ToolBox RID_BIB_TOOLBAR
-{
-    HelpId = HID_BIB_DB_TBX;
-    Sizeable = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 200 , 16 ) ;
-    ButtonType = BUTTON_SYMBOL ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = TBC_FT_SOURCE;
-            Text [ en-US ] = "Table";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_LB_SOURCE;
-            HelpID = HID_BIB_TBX_TABLE;
-            Command = ".uno:Bib/source" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_FT_QUERY;
-            Text [ en-US ] = "Search Key";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_ED_QUERY;
-            HelpID = HID_BIB_TBX_SEARCH;
-            Command = ".uno:Bib/query" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_AUTOFILTER ;
-            HelpID = HID_BIB_TBX_AUTOFILTER;
-            DropDown = TRUE ;
-            Command = ".uno:Bib/autoFilter" ;
-            Text [ en-US ] = "AutoFilter";
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_FILTERCRIT ;
-            Command = ".uno:Bib/standardFilter" ;
-            Text [ en-US ] = "Standard Filter";
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_REMOVEFILTER ;
-            Command = ".uno:Bib/removeFilter" ;
-            Text [ en-US ] = "Reset Filter";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_COL_ASSIGN ;
-            HelpId = HID_BIB_MAPPINGDLG;
-            Text [ en-US ] = "Column Arrangement";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_CHANGESOURCE ;
-            HelpId = HID_BIB_CHANGESOURCE;
-            Command = ".uno:Bib/sdbsource" ;
-            Checkable=TRUE;
-            Text [ en-US ] = "Data Source";
-        };
-    };
-    Scroll = TRUE ;
-};
 #define BIB_IMAGES \
     IdList =                                \
     {                                       \
