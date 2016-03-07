@@ -48,11 +48,6 @@ AccessibleChartShape::AccessibleChartShape(
         {
             xParent.set( rAccInfo.m_pParent );
         }
-        sal_Int32 nIndex = -1;
-        if ( rAccInfo.m_spObjectHierarchy )
-        {
-            nIndex = rAccInfo.m_spObjectHierarchy->getIndexInParent( rAccInfo.m_aOID );
-        }
         ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent );
 
         m_aShapeTreeInfo.SetSdrView( rAccInfo.m_pSdrView );
