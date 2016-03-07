@@ -1581,7 +1581,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
         // We have found the suitable layout sheet. If there (in the sheet) is
         // already a Follow of our section, we take its first layout sheet,
         // otherwise it is time to create a section follow
-        SwSectionFrame* pNew;
+        SwSectionFrame* pNew = nullptr;
 
         // This can be omitted if existing Follows were cut short
         SwFrame* pFirst = pLayLeaf->Lower();
@@ -1592,7 +1592,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             pNew = pSect->GetFollow();
         else if( MAKEPAGE_NOSECTION == eMakePage )
             return pLayLeaf;
-        else
+        else if (pSect->GetSection())
         {
             pNew = new SwSectionFrame( *pSect, false );
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
@@ -1647,7 +1647,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                 pNew->SimpleFormat();
         }
         // The wanted layout sheet is now the first of the determined SctFrames:
-        pLayLeaf = FirstLeaf( pNew );
+        pLayLeaf = pNew ? FirstLeaf(pNew) : nullptr;
     }
     return pLayLeaf;
 }
