@@ -290,90 +290,88 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
 
 sal_Int32 IntrospectionAccessStatic_Impl::getPropertyIndex( const OUString& aPropertyName ) const
 {
-    sal_Int32 iHashResult = -1;
     IntrospectionAccessStatic_Impl* pThis = const_cast<IntrospectionAccessStatic_Impl*>(this);
     IntrospectionNameMap::iterator aIt = pThis->maPropertyNameMap.find( aPropertyName );
     if (aIt != pThis->maPropertyNameMap.end())
-        iHashResult = (*aIt).second;
-    return iHashResult;
+        return aIt->second;
+
+    return -1;
 }
 
 sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMethodName ) const
 {
-    sal_Int32 iHashResult = -1;
     IntrospectionAccessStatic_Impl* pThis = const_cast<IntrospectionAccessStatic_Impl*>(this);
     IntrospectionNameMap::iterator aIt = pThis->maMethodNameMap.find( aMethodName );
     if (aIt != pThis->maMethodNameMap.end())
     {
-        iHashResult = (*aIt).second;
+        return aIt->second;
     }
+
     // #95159 Check if full qualified name matches
-    else
+    sal_Int32 iHashResult = -1;
+    sal_Int32 nSearchFrom = aMethodName.getLength();
+    while( true )
     {
-        sal_Int32 nSearchFrom = aMethodName.getLength();
-        while( true )
+        // Strategy: Search back until the first '_' is found
+        sal_Int32 nFound = aMethodName.lastIndexOf( '_', nSearchFrom );
+        if( nFound == -1 )
+            break;
+
+        OUString aPureMethodName = aMethodName.copy( nFound + 1 );
+
+        aIt = pThis->maMethodNameMap.find( aPureMethodName );
+        if (aIt != pThis->maMethodNameMap.end())
         {
-            // Strategy: Search back until the first '_' is found
-            sal_Int32 nFound = aMethodName.lastIndexOf( '_', nSearchFrom );
-            if( nFound == -1 )
-                break;
-
-            OUString aPureMethodName = aMethodName.copy( nFound + 1 );
-
-            aIt = pThis->maMethodNameMap.find( aPureMethodName );
-            if (aIt != pThis->maMethodNameMap.end())
+            // Check if it can be a type?
+            // Problem: Does not work if package names contain _ ?!
+            OUString aStr = aMethodName.copy( 0, nFound );
+            OUString aTypeName = aStr.replace( '_', '.' );
+            Reference< XIdlClass > xClass = mxCoreReflection->forName( aTypeName );
+            if( xClass.is() )
             {
-                // Check if it can be a type?
-                // Problem: Does not work if package names contain _ ?!
-                OUString aStr = aMethodName.copy( 0, nFound );
-                OUString aTypeName = aStr.replace( '_', '.' );
-                Reference< XIdlClass > xClass = mxCoreReflection->forName( aTypeName );
-                if( xClass.is() )
+                // If this is a valid class it could be the right method
+
+                // Could be the right method, type has to be checked
+                iHashResult = aIt->second;
+
+                const Reference<XIdlMethod> xMethod = maAllMethodSeq.at(iHashResult);
+
+                Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
+                if( xClass->equals( xMethClass ) )
                 {
-                    // If this is a valid class it could be the right method
+                    break;
+                }
+                else
+                {
+                    iHashResult = -1;
 
-                    // Could be the right method, type has to be checked
-                    iHashResult = (*aIt).second;
-
-                    const Reference<XIdlMethod> xMethod = maAllMethodSeq.at(iHashResult);
-
-                    Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
-                    if( xClass->equals( xMethClass ) )
+                    // Could also be another method with the same name
+                    // Iterate over all methods
+                    size_t nLen = maAllMethodSeq.size();
+                    for (size_t i = 0; i < nLen; ++i)
                     {
-                        break;
-                    }
-                    else
-                    {
-                        iHashResult = -1;
-
-                        // Could also be another method with the same name
-                        // Iterate over all methods
-                        size_t nLen = maAllMethodSeq.size();
-                        for (size_t i = 0; i < nLen; ++i)
+                        const Reference<XIdlMethod> xMethod2 = maAllMethodSeq[ i ];
+                        if( xMethod2->getName() == aPureMethodName )
                         {
-                            const Reference<XIdlMethod> xMethod2 = maAllMethodSeq[ i ];
-                            if( xMethod2->getName() == aPureMethodName )
-                            {
-                                Reference< XIdlClass > xMethClass2 = xMethod2->getDeclaringClass();
+                            Reference< XIdlClass > xMethClass2 = xMethod2->getDeclaringClass();
 
-                                if( xClass->equals( xMethClass2 ) )
-                                {
-                                    iHashResult = i;
-                                    break;
-                                }
+                            if( xClass->equals( xMethClass2 ) )
+                            {
+                                iHashResult = i;
+                                break;
                             }
                         }
-
-                        if( iHashResult != -1 )
-                            break;
                     }
+
+                    if( iHashResult != -1 )
+                        break;
                 }
             }
-
-            nSearchFrom = nFound - 1;
-            if( nSearchFrom < 0 )
-                break;
         }
+
+        nSearchFrom = nFound - 1;
+        if( nSearchFrom < 0 )
+            break;
     }
     return iHashResult;
 }
@@ -2378,7 +2376,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             }
                             else
                             {
-                                sal_Int32 iHashResult = (*aIt).second;
+                                sal_Int32 iHashResult = aIt->second;
 
                                 Reference<XIdlMethod> xExistingMethod = pAccess->maAllMethodSeq.at(iHashResult);
 
