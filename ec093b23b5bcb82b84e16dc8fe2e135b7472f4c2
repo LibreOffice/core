@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_abb575d1",
+        "filename": "unotools/source/config/fontcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-07T12:21:57Z",
+      "side": 1,
+      "message": "is this ternary conditional even needed these days?\n (m_xConfigProvider.is() ? \"true\" : \"false\")\nm_xConfigProvider.is() is a sal_Bool, so doing:\n static_cast\u003cbool\u003e(m_xConfigProvider.is())\nshould print \"true\"/\"false\" just as well via bools stream operators.\nI dunno if even the more simple:\n m_xConfigProvider.is()\nwork, but I assume not as sal_Bool is really a unsigned char, not a boolean.",
+      "revId": "ec093b23b5bcb82b84e16dc8fe2e135b7472f4c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_cbb429d3",
+        "filename": "unotools/source/config/localisationoptions.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-07T12:21:57Z",
+      "side": 1,
+      "message": "sal_False isnt needed here, a plain C++ false should do.",
+      "revId": "ec093b23b5bcb82b84e16dc8fe2e135b7472f4c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
