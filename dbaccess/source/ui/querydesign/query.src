@@ -34,7 +34,9 @@ Menu RID_MENU_JOINVIEW_CONNECTION
         };
         MenuItem
         {
-            MID_DBUI_QUERY_EDIT_JOINCONNECTION
+            Identifier = ID_QUERY_EDIT_JOINCONNECTION;
+            HelpId = HID_QUERY_EDIT_JOINCONNECTION ;
+            Text [ en-US ] = "Edit...";
         };
     };
 };
