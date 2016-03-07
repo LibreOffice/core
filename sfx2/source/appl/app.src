@@ -208,11 +208,6 @@ String STR_ISMODIFIED
     Text [ en-US ] = "Do you want to save the changes to %1?" ;
 };
 
-String RID_FULLSCREENTOOLBOX
-{
-    Text  = "" ;
-};
-
 String STR_QUITAPP
 {
     Text [ en-US ] = "E~xit %PRODUCTNAME" ;
