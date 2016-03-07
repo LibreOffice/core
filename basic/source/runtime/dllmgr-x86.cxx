@@ -38,7 +38,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <boost/noncopyable.hpp>
 
 #undef max
 
@@ -110,8 +109,12 @@ struct StringData: public UnmarshalData {
     bool special;
 };
 
-class MarshalData: private boost::noncopyable {
+class MarshalData {
 public:
+    MarshalData() = default;
+    MarshalData(const MarshalData&) = delete;
+    const MarshalData& operator=(const MarshalData&) = delete;
+    
     std::vector< char > * newBlob() {
         blobs_.push_front(std::vector< char >());
         return &blobs_.front();
@@ -668,11 +671,14 @@ OUString fullDllName(OUString const & name) {
 
 }
 
-struct SbiDllMgr::Impl: private boost::noncopyable {
+struct SbiDllMgr::Impl {
 private:
     typedef std::map< OUString, rtl::Reference< Dll > > Dlls;
 
 public:
+    Impl(const Impl&) = delete;
+    const Impl& operator=(const Impl&) = delete;
+    
     Dll * getDll(OUString const & name);
 
     Dlls dlls;
