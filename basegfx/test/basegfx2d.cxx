@@ -132,10 +132,6 @@ public:
             "31-24 33-22 34-20 35-18 36-16 37-15 39-12 40-11z";
     }
 
-    void tearDown() override
-    {
-    }
-
     void impex()
     {
         B2DPolyPolygon  aPoly;
@@ -367,10 +363,6 @@ public:
         maPerspective.set(2,0, 7.0);
         maPerspective.set(2,1, 8.0);
         maPerspective.set(2,2, 9.0);
-    }
-
-    void tearDown() override
-    {
     }
 
     void equal()

@@ -323,14 +323,6 @@ namespace rtl_OStringBuffer
     class  remove : public CppUnit::TestFixture
     {
     public:
-        void setUp() override
-        {
-        }
-
-        void tearDown() override
-        {
-        }
-
         void remove_001()
         {
             ::rtl::OStringBuffer sb(

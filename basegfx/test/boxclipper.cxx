@@ -169,10 +169,6 @@ public:
 #endif
     }
 
-    void tearDown() override
-    {
-    }
-
     B2DPolyPolygon normalizePoly( const B2DPolyPolygon& rPoly )
     {
         B2DPolyPolygon aRes;

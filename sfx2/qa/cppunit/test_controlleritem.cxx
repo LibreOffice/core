@@ -22,9 +22,6 @@ class ControllerItemTest
     : public ::CppUnit::TestFixture
 {
 public:
-    virtual void setUp() override {}
-    virtual void tearDown() override {}
-
     void test();
 
     CPPUNIT_TEST_SUITE(ControllerItemTest);
