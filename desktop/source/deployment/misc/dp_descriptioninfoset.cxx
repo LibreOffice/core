@@ -462,7 +462,7 @@ OUString DescriptionInfoset::getVersion() const
     return getNodeValueFromExpression( "desc:version/@value" );
 }
 
-css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlaforms() const
+css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
 {
     //When there is no description.xml then we assume that we support all platforms
     if (! m_element.is())
