@@ -1486,7 +1486,7 @@
             objects.</desc>
             <label>Total Graphic Cache Size</label>
           </info>
-          <value>22000000</value>
+          <value>67110000</value>
         </prop>
         <prop oor:name="ObjectCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
@@ -1494,7 +1494,7 @@
             object.</desc>
             <label>Graphic Object Cache Size</label>
           </info>
-          <value>5500000</value>
+          <value>12600000</value>
         </prop>
         <prop oor:name="ObjectReleaseTime" oor:type="xs:int" oor:nillable="false">
           <info>
