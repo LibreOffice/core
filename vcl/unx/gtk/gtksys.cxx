@@ -195,7 +195,7 @@ bool GtkSalSystem::IsUnifiedDisplay()
 }
 
 namespace {
-static int _fallback_get_primary_monitor (GdkScreen *pScreen)
+int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
     // Use monitor name as primacy heuristic
     int max = gdk_screen_get_n_monitors (pScreen);
@@ -210,7 +210,7 @@ static int _fallback_get_primary_monitor (GdkScreen *pScreen)
     return 0;
 }
 
-static int _get_primary_monitor (GdkScreen *pScreen)
+int _get_primary_monitor (GdkScreen *pScreen)
 {
     static int (*get_fn) (GdkScreen *) = nullptr;
 #if GTK_CHECK_VERSION(3,0,0)
