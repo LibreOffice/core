@@ -28,7 +28,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #define RETURN_DEBUG_STRING ("return from transliterationImpl");
 #define RETURN_DEBUG_NUMBER 'TRAN'
 #else
