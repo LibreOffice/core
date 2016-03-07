@@ -27,14 +27,6 @@
 namespace unodevtools {
 
 
-#if OSL_DEBUG_LEVEL > 1
-static void out( const sal_Char * pText )
-{
-    fprintf( stderr, pText );
-}
-#endif
-
-
 bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
@@ -58,25 +50,13 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
             throw CannotDumpException(
                 "incomplete option \"-" + aOpt + "\" given!");
         } else {
-#if OSL_DEBUG_LEVEL > 1
-            out( "\n> identified option -" );
-            out( pOpt );
-            out( " = " );
-            OString tmp = OUStringToOString(*pValue, RTL_TEXTENCODING_ASCII_US);
-              out( tmp.getStr() );
-#endif
+            SAL_INFO("unodevtools", "> identified option -" << pOpt << " = " << *pValue);
             ++(*pnIndex);
             return true;
         }
     } else if (aArg.indexOf(aOpt) == 1) {
         *pValue = aArg.copy(1 + aOpt.getLength());
-#if OSL_DEBUG_LEVEL > 1
-        out( "\n> identified option -" );
-        out( pOpt );
-        out( " = " );
-        OString tmp = OUStringToOString(*pValue, RTL_TEXTENCODING_ASCII_US);
-        out( tmp.getStr() );
-#endif
+        SAL_INFO("unodevtools", "> identified option -" << pOpt << " = " << *pValue);
         ++(*pnIndex);
 
         return true;
@@ -95,10 +75,7 @@ bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
-#if OSL_DEBUG_LEVEL > 1
-        out( "\n> identified option --" );
-        out( pOpt );
-#endif
+        SAL_INFO("unodevtools", "> identified option --" << pOpt);
         return true;
     }
     return false;

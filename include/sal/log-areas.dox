@@ -386,6 +386,10 @@ certain functionality.
 @li @c unotools.misc
 @li @c unotools.ucbhelper
 
+@section unodevtools
+
+@li @c unodevtools
+
 @section URE
 
 @li @c rtl.string - ::rtl::OString, ::rtl::OUString, and related functionality
