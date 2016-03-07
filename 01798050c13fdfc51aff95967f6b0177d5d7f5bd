@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_ae3623b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T21:35:47Z",
+      "side": 1,
+      "message": "can somebody explain to me how it can be that i\u0027ve got a workdir/UnpackedTarball/openssl/include directory that\u0027s completely empty on Windows?  all windows tinderboxes too, apparently...",
+      "revId": "01798050c13fdfc51aff95967f6b0177d5d7f5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
