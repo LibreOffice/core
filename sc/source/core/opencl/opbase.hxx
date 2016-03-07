@@ -171,12 +171,10 @@ protected:
 class OpBase
 {
 public:
-    typedef std::vector<std::string> ArgVector;
-    typedef std::vector<std::string>::iterator ArgVectorIter;
     virtual std::string GetBottom() { return "";};
     virtual std::string Gen2( const std::string&/*lhs*/,
         const std::string&/*rhs*/ ) const { return "";}
-    static std::string Gen( ArgVector& /*argVector*/ ) { return "";};
+    static std::string Gen( std::vector<std::string>& /*argVector*/ ) { return "";};
     virtual std::string BinFuncName() const { return "";};
     virtual void BinInlineFun( std::set<std::string>&,
         std::set<std::string>& ) { }
