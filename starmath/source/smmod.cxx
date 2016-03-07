@@ -155,7 +155,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule)
 
 void SmModule::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(SmResId(RID_STATUSBAR));
+    GetStaticInterface()->RegisterStatusBar(RID_STATUSBAR);
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :

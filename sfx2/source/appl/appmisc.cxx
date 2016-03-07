@@ -92,7 +92,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell)
 
 void SfxApplication::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(SfxResId(SFX_ITEMTYPE_STATBAR));
+    GetStaticInterface()->RegisterStatusBar(SFX_ITEMTYPE_STATBAR);
 
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_0);
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_1);

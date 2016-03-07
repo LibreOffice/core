@@ -141,7 +141,7 @@ SFX_IMPL_INTERFACE(SwModule, SfxModule)
 
 void SwModule::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(SW_RES(CFG_STATUSBAR));
+    GetStaticInterface()->RegisterStatusBar(CFG_STATUSBAR);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
                                             RID_MODULE_TOOLBOX);

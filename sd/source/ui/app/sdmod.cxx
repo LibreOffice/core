@@ -62,7 +62,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule)
 
 void SdModule::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(SdResId(RID_DRAW_STATUSBAR));
+    GetStaticInterface()->RegisterStatusBar(RID_DRAW_STATUSBAR);
 }
 
 // Ctor

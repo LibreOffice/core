@@ -1368,7 +1368,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
         if ( bIsMDIApp || bIsIPOwner )
         {
-            sal_uInt32 nId = pIFace->GetStatusBarResId().GetId();
+            sal_uInt32 nId = pIFace->GetStatusBarId();
             if ( nId )
             {
                 nStatBarId = nId;
