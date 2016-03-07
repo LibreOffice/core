@@ -6390,11 +6390,6 @@ fi
 AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-if test "$ENABLE_DEBUG" != TRUE -a "$ENABLE_DBGUTIL" != TRUE \
-    -a "$ASSERT_ALWAYS_ABORT" != TRUE
-then
-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
-fi
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     // A somewhat over-complicated way of checking for
