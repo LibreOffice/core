@@ -19,7 +19,6 @@
 #include "CondFormat.hrc"
 #include "RptResId.hrc"
 #include "helpids.hrc"
-#include <svx/globlmn.hrc>
 #include "rptui_slotid.hrc"
 
 String STR_NUMBERED_CONDITION

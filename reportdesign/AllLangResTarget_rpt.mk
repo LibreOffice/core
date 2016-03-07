@@ -24,7 +24,6 @@ $(eval $(call gb_SrsTarget_use_srstargets,reportdesign/res,\
 $(eval $(call gb_SrsTarget_set_include,reportdesign/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/reportdesign/source/core/inc \
-    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,reportdesign/res,\

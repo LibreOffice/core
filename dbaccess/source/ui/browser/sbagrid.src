@@ -19,7 +19,6 @@
 #include "dbu_brw.hrc"
 #include "dbaccess_helpid.hrc"
 #include "browserids.hxx"
-#include <svx/globlmn.hrc>
 
 Menu RID_SBA_GRID_COLCTXMENU
 {
@@ -65,7 +64,9 @@ Menu RID_SBA_GRID_ROWCTXMENU
         };
         MenuItem
         {
-            ITEM_EDIT_COPY
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
         };
     };
 };

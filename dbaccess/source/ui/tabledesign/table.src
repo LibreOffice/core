@@ -21,7 +21,6 @@
 #include "dbaccess_helpid.hrc"
 #include "dbaccess_slotid.hrc"
 #include "browserids.hxx"
-#include <svx/globlmn.hrc>
 
 String STR_TABLEDESIGN_DBFIELDTYPES
 {
@@ -140,19 +139,27 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
     {
         MenuItem
         {
-            ITEM_EDIT_CUT
+            Identifier = SID_CUT ;
+            Command = ".uno:Cut" ;
+            Text [ en-US ] = "Cu~t" ;
         };
         MenuItem
         {
-            ITEM_EDIT_COPY
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
-            ITEM_EDIT_PASTE
+            Identifier = SID_PASTE ;
+            Command = ".uno:Paste" ;
+            Text [ en-US ] = "~Paste" ;
         };
         MenuItem
         {
-            ITEM_EDIT_DELETE
+            Identifier = SID_DELETE ;
+            Command = ".uno:Delete" ;
+            Text [ en-US ] = "~Delete" ;
         };
         MenuItem
         {

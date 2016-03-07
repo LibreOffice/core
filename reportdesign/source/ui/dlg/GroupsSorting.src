@@ -18,7 +18,6 @@
  */
 #include "RptResId.hrc"
 #include "helpids.hrc"
-#include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 
 String STR_RPT_EXPRESSION
@@ -117,7 +116,9 @@ Menu RID_GROUPSROWPOPUPMENU
     {
         MenuItem
         {
-            ITEM_EDIT_DELETE
+            Identifier = SID_DELETE ;
+            Command = ".uno:Delete" ;
+            Text [ en-US ] = "~Delete" ;
         };
     };
 };

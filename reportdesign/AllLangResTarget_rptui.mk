@@ -33,7 +33,6 @@ $(eval $(call gb_SrsTarget_set_include,reportdesign/rptui,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/reportdesign/source/ui/inc \
 	-I$(SRCDIR)/reportdesign/inc \
-    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 ))
 
 

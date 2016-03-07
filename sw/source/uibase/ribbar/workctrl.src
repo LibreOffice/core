@@ -18,7 +18,6 @@
  */
 
 #include <svx/svxids.hrc>
-#include <svx/globlmn.hrc>
 #include "globals.hrc"
 #include "workctrl.hrc"
 #include "helpid.h"

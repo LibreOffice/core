@@ -18,7 +18,6 @@
  */
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"
-#include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 #include "helpids.hrc"
 
@@ -525,15 +524,21 @@ Menu RID_MENU_REPORT
         };
         MenuItem
         {
-            ITEM_EDIT_CUT
+            Identifier = SID_CUT ;
+            Command = ".uno:Cut" ;
+            Text [ en-US ] = "Cu~t" ;
         };
         MenuItem
         {
-            ITEM_EDIT_COPY
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
-            ITEM_EDIT_PASTE
+            Identifier = SID_PASTE ;
+            Command = ".uno:Paste" ;
+            Text [ en-US ] = "~Paste" ;
         };
     };
 };

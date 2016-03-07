@@ -18,7 +18,6 @@
  */
 
 #include "datanavi.hrc"
-#include "globlmn.hrc"
 #include "svx/dialogs.hrc"
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"

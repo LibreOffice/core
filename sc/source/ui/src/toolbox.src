@@ -18,7 +18,6 @@
  */
 
 #include "sc.hrc"
-#include <svx/globlmn.hrc>
 
 String SCSTR_QHELP_POSWND
 {

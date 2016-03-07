@@ -19,7 +19,6 @@
 
 #include <svx/svxids.hrc>
 #include "svx/fmresids.hrc"
-#include "globlmn.hrc"
 #include <svx/svxcommands.h>
 #include "fmhelp.hrc"
 
@@ -57,9 +56,21 @@ Menu RID_FMEXPLORER_POPUPMENU
             HelpId = CMD_SID_FM_CHANGECONTROLTYPE ;
             Text [ en-US ] = "Replace with";
         };
-        MenuItem { ITEM_EDIT_CUT };
-        MenuItem { ITEM_EDIT_COPY };
-        MenuItem { ITEM_EDIT_PASTE };
+        MenuItem {
+            Identifier = SID_CUT ;
+            Command = ".uno:Cut" ;
+            Text [ en-US ] = "Cu~t" ;
+        };
+        MenuItem {
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
+        };
+        MenuItem {
+            Identifier = SID_PASTE ;
+            Command = ".uno:Paste" ;
+            Text [ en-US ] = "~Paste" ;
+        };
         MenuItem
         {
             Identifier = SID_FM_DELETE ;

@@ -19,7 +19,6 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_brw.hrc"
 #include "browserids.hxx"
-#include <svx/globlmn.hrc>
 
 String STR_QUERY_BRW_DELETE_ROWS
 {
@@ -87,7 +86,11 @@ Menu MENU_BROWSER_DEFAULTCONTEXT
         {   \
             Separator = TRUE;   \
         };  \
-        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem {
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
+        };
         MenuItem    \
         {   \
             Separator = TRUE;   \

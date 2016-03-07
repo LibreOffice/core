@@ -19,7 +19,6 @@
 
 #include "svx/fmresids.hrc"
 #include <svx/svxids.hrc>
-#include "globlmn.hrc"
 #include "fmhelp.hrc"
 #include <svx/svxcommands.h>
 
@@ -192,7 +191,9 @@ Menu RID_SVXMNU_CELL
     {
         MenuItem
         {
-            ITEM_EDIT_COPY
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
         };
     };
 };

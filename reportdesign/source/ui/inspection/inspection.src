@@ -18,7 +18,6 @@
  */
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"
-#include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 
 String RID_STR_PROPPAGE_DEFAULT

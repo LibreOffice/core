@@ -61,7 +61,6 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     -I$(SRCDIR)/sw/source/ui/utlui \
     -I$(SRCDIR)/sw/source/ui/web \
     -I$(SRCDIR)/sw/source/ui/wrtsh \
-    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
     -I$(call gb_SrsTemplateTarget_get_include_dir,sw) \
 ))
 

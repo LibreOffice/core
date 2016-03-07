@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <svx/svxids.hrc>
-#include <svx/globlmn.hrc>
 #include "helpid.h"
 #include "shells.hrc"
 #include "globals.hrc"

@@ -86,8 +86,7 @@ bool passesNegativeList(const OUString& rUrl) {
 
 bool passesPositiveList(const OUString& rUrl) {
     static const AsciiString list[] = {
-        { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
-        { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") }
+        { RTL_CONSTASCII_STRINGPARAM("/description.xml") }
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }

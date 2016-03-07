@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "dbu_app.hrc"
-#include <svx/globlmn.hrc>
 #include <sfx2/cntids.hrc>
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
@@ -153,11 +152,15 @@ Menu RID_MENU_APP_EDIT
     {
         MenuItem
         {
-            ITEM_EDIT_COPY
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
-            ITEM_EDIT_PASTE
+            Identifier = SID_PASTE ;
+            Command = ".uno:Paste" ;
+            Text [ en-US ] = "~Paste" ;
         };
         MenuItem
         {

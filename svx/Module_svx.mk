@@ -55,6 +55,5 @@ endif
 #todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
 #todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
 #todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
-#todo: globlmn.hrc
 #todo: component file
 # vim: set noet sw=4 ts=4:

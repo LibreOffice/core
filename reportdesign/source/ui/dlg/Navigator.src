@@ -19,7 +19,6 @@
 #include "RptResId.hrc"
 #include "helpids.hrc"
 #include "rptui_slotid.hrc"
-#include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 #include <svl/solar.hrc>
 
@@ -119,7 +118,9 @@ Menu RID_MENU_NAVIGATOR
         };
         MenuItem
         {
-            ITEM_EDIT_DELETE
+            Identifier = SID_DELETE ;
+            Command = ".uno:Delete" ;
+            Text [ en-US ] = "~Delete" ;
         };
     };
 };
