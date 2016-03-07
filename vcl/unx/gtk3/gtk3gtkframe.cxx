@@ -2468,6 +2468,33 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpA
     return true;
 }
 
+namespace
+{
+    void set_pointing_to(GtkPopover *pPopOver, const Rectangle& rHelpArea)
+    {
+        GdkRectangle aRect;
+        aRect.x = rHelpArea.Left();
+        aRect.y = rHelpArea.Top();
+        aRect.width = 1;
+        aRect.height = 1;
+
+        GtkPositionType ePos = gtk_popover_get_position(pPopOver);
+        switch (ePos)
+        {
+            case GTK_POS_BOTTOM:
+            case GTK_POS_TOP:
+                aRect.width = rHelpArea.GetWidth();
+                break;
+            case GTK_POS_RIGHT:
+            case GTK_POS_LEFT:
+                aRect.height = rHelpArea.GetHeight();
+                break;
+        }
+
+        gtk_popover_set_pointing_to(pPopOver, &aRect);
+    }
+}
+
 sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags)
 {
 #if GTK_CHECK_VERSION(3,12,0)
@@ -2475,14 +2502,6 @@ sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle&
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
     GtkWidget *pLabel =  gtk_label_new(sUTF.getStr());
     gtk_container_add(GTK_CONTAINER(pWidget), pLabel);
-
-    GdkRectangle aRect;
-    aRect.x = rHelpArea.Left();
-    aRect.y = rHelpArea.Top();
-    aRect.width = rHelpArea.GetWidth();
-    aRect.height = rHelpArea.GetHeight();
-
-    gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &aRect);
 
     if (nFlags & QuickHelpFlags::Top)
         gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_BOTTOM);
@@ -2492,6 +2511,8 @@ sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle&
         gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_RIGHT);
     else if (nFlags & QuickHelpFlags::Right)
         gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_LEFT);
+
+    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea);
 
     gtk_popover_set_modal(GTK_POPOVER(pWidget), false);
 
@@ -2511,13 +2532,7 @@ bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, cons
 #if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
 
-    GdkRectangle aRect;
-    aRect.x = rHelpArea.Left();
-    aRect.y = rHelpArea.Top();
-    aRect.width = rHelpArea.GetWidth();
-    aRect.height = rHelpArea.GetHeight();
-
-    gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &aRect);
+    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea);
 
     GtkWidget *pLabel = gtk_bin_get_child(GTK_BIN(pWidget));
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
