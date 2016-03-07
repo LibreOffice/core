@@ -68,6 +68,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 		&& cmd /c "ms\do_ms.bat $(PERL) $(OPENSSL_PLATFORM)" \
 		&& unset MAKEFLAGS \
 		&& nmake -f "ms\ntdll.mak" \
+		&& mv inc32/* include/ \
 	)
 
 else
@@ -90,4 +91,5 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 			-fvisibility=hidden))" \
 	)
 endif
+
 # vim: set noet sw=4 ts=4:
