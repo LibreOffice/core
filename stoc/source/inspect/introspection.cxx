@@ -308,7 +308,6 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
     }
 
     // #95159 Check if full qualified name matches
-    sal_Int32 iHashResult = -1;
     sal_Int32 nSearchFrom = aMethodName.getLength();
     while( true )
     {
@@ -332,19 +331,17 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
                 // If this is a valid class it could be the right method
 
                 // Could be the right method, type has to be checked
-                iHashResult = aIt->second;
+                const sal_Int32 iHashResult = aIt->second;
 
-                const Reference<XIdlMethod> xMethod = maAllMethodSeq.at(iHashResult);
+                const Reference<XIdlMethod> xMethod = maAllMethodSeq[iHashResult];
 
                 Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
                 if( xClass->equals( xMethClass ) )
                 {
-                    break;
+                    return iHashResult;
                 }
                 else
                 {
-                    iHashResult = -1;
-
                     // Could also be another method with the same name
                     // Iterate over all methods
                     size_t nLen = maAllMethodSeq.size();
@@ -357,14 +354,10 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
 
                             if( xClass->equals( xMethClass2 ) )
                             {
-                                iHashResult = i;
-                                break;
+                                return i;
                             }
                         }
                     }
-
-                    if( iHashResult != -1 )
-                        break;
                 }
             }
         }
@@ -373,7 +366,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
         if( nSearchFrom < 0 )
             break;
     }
-    return iHashResult;
+    return -1;
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUString& aPropertyName, const Any& aValue ) const
@@ -2378,7 +2371,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             {
                                 sal_Int32 iHashResult = aIt->second;
 
-                                Reference<XIdlMethod> xExistingMethod = pAccess->maAllMethodSeq.at(iHashResult);
+                                Reference<XIdlMethod> xExistingMethod = pAccess->maAllMethodSeq[iHashResult];
 
                                 Reference< XIdlClass > xExistingMethClass =
                                     xExistingMethod->getDeclaringClass();
@@ -2387,7 +2380,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                     continue;
                             }
 
-                            pAccess->maAllMethodSeq.at(iAllExportedMethod) = rxMethod;
+                            pAccess->maAllMethodSeq[iAllExportedMethod] = rxMethod;
 
                             // If a concept has been set, is the method "normal"?
                             sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
