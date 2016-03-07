@@ -138,7 +138,7 @@ extern "C" void SAL_CALL createRegistryInfo_OViewControl()
 namespace dbaui
 {
     using namespace ::connectivity;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     namespace
     {
         void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = NULL)
@@ -541,7 +541,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = true;
             aReturn.bChecked = getContainer() && getContainer()->getPreviewFrame().is();
             break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         case ID_EDIT_QUERY_SQL:
             break;
         case ID_EDIT_QUERY_DESIGN:
@@ -749,7 +749,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             {
             }
             break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         case ID_EDIT_QUERY_DESIGN:
         case ID_EDIT_QUERY_SQL:
             {
@@ -1137,7 +1137,7 @@ void OQueryController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBLimit",           SID_QUERY_LIMIT,            CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:DBQueryPropertiesDialog", SID_QUERY_PROP_DLG,         CommandGroup::FORMAT );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     implDescribeSupportedFeature( ".uno:DBShowParseTree",   ID_EDIT_QUERY_SQL );
     implDescribeSupportedFeature( ".uno:DBMakeDisjunct",    ID_EDIT_QUERY_DESIGN );
 #endif

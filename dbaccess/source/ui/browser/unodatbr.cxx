@@ -3006,7 +3006,7 @@ void SbaTableQueryBrowser::unloadAndCleanup( bool _bDisposeConnection )
         Reference< XPropertySet > xRowSetProps(getRowSet(),UNO_QUERY);
         Reference< XConnection > xConn;
         xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION) >>= xConn;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         {
             Reference< XComponent > xComp(
                 xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),
