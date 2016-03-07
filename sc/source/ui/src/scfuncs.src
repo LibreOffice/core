@@ -10078,7 +10078,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "date" ;
+            Text [ en-US ] = "target" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10086,7 +10086,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10094,7 +10094,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10102,7 +10102,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "period length" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10110,7 +10110,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 10 // Name of Parameter 5
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 11 // Description of Parameter 5
         {
@@ -10118,7 +10118,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 12 // Name of Parameter 6
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 13 // Description of Parameter 6
         {
@@ -10142,7 +10142,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "date" ;
+            Text [ en-US ] = "target" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10150,7 +10150,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10158,7 +10158,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10166,7 +10166,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "period length" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10174,7 +10174,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 10 // Name of Parameter 5
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 11 // Description of Parameter 5
         {
@@ -10182,7 +10182,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 12 // Name of Parameter 6
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 13 // Description of Parameter 6
         {
@@ -10206,7 +10206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "date" ;
+            Text [ en-US ] = "target" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10214,7 +10214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10222,7 +10222,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10230,7 +10230,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "confidence level" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10238,7 +10238,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 10 // Name of Parameter 5
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "period length" ;
         };
         String 11 // Description of Parameter 5
         {
@@ -10246,7 +10246,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 12 // Name of Parameter 6
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 13 // Description of Parameter 6
         {
@@ -10254,7 +10254,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 14 // Name of Parameter 7
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 15 // Description of Parameter 7
         {
@@ -10278,7 +10278,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "date" ;
+            Text [ en-US ] = "target" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10286,7 +10286,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10294,7 +10294,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10302,7 +10302,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "confidence level" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10310,7 +10310,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 10 // Name of Parameter 5
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "period length" ;
         };
         String 11 // Description of Parameter 5
         {
@@ -10318,7 +10318,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 12 // Name of Parameter 6
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 13 // Description of Parameter 6
         {
@@ -10326,7 +10326,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 14 // Name of Parameter 7
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 15 // Description of Parameter 7
         {
@@ -10350,7 +10350,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10358,7 +10358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10366,7 +10366,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10374,7 +10374,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10398,7 +10398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10406,7 +10406,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10414,7 +10414,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "statistic type" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10422,7 +10422,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "period length" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10430,7 +10430,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 10 // Name of Parameter 5
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 11 // Description of Parameter 5
         {
@@ -10438,7 +10438,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 12 // Name of Parameter 6
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 13 // Description of Parameter 6
         {
@@ -10462,7 +10462,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "data_Y" ;
+            Text [ en-US ] = "values" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -10470,7 +10470,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "data_X" ;
+            Text [ en-US ] = "timeline" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -10478,7 +10478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "statistic type" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -10486,7 +10486,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "period length" ;
         };
         String 9 // Description of Parameter 4
         {
@@ -10494,7 +10494,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 10 // Name of Parameter 5
         {
-            Text [ en-US ] = "boolean" ;
+            Text [ en-US ] = "data completion" ;
         };
         String 11 // Description of Parameter 5
         {
@@ -10502,7 +10502,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 12 // Name of Parameter 6
         {
-            Text [ en-US ] = "value" ;
+            Text [ en-US ] = "aggregation" ;
         };
         String 13 // Description of Parameter 6
         {
