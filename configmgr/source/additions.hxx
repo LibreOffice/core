@@ -28,7 +28,7 @@
 
 namespace configmgr {
 
-typedef std::list< Path > Additions;
+typedef std::list< std::vector<OUString> > Additions;
 
 }
 

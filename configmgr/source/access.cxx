@@ -253,7 +253,7 @@ css::uno::Sequence< OUString > Access::getSupportedServiceNames()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    std::vector< OUString > services;
+    std::vector<OUString> services;
     services.push_back("com.sun.star.configuration.ConfigurationAccess");
     if (getRootAccess()->isUpdate()) {
         services.push_back(
@@ -424,7 +424,7 @@ css::uno::Sequence< OUString > Access::getElementNames()
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
-    std::vector< OUString > names;
+    std::vector<OUString> names;
     for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
              children.begin());
          i != children.end(); ++i)
@@ -1673,7 +1673,7 @@ void Access::commitChildChanges(
             }
         }
         if (childValid && i->second.directlyModified) {
-            Path path(getAbsolutePath());
+            std::vector<OUString> path(getAbsolutePath());
             path.push_back(i->first);
             components_.addModification(path);
             globalModifications->add(path);
@@ -2100,8 +2100,8 @@ rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
         if (!getRootAccess().is()) {
             return rtl::Reference< ChildAccess >();
         }
-        Path abs(getAbsolutePath());
-        for (Path::iterator j(abs.begin()); j != abs.end(); ++j) {
+        std::vector<OUString> abs(getAbsolutePath());
+        for (auto j(abs.begin()); j != abs.end(); ++j) {
             OUString name1;
             bool setElement1;
             OUString templateName1;

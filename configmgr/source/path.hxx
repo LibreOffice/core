@@ -27,7 +27,7 @@
 
 namespace configmgr {
 
-typedef std::vector< OUString > Path;
+//typedef std::vector< OUString > Path;
 
 }
 

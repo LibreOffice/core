@@ -66,8 +66,8 @@ public:
         Components & components, rtl::Reference< RootAccess > const & root,
         rtl::Reference< Node > const & node);
 
-    virtual Path getAbsolutePath() override;
-    virtual Path getRelativePath() override;
+    virtual std::vector<OUString> getAbsolutePath() override;
+    virtual std::vector<OUString> getRelativePath() override;
 
     virtual OUString getRelativePathRepresentation() override;
     virtual rtl::Reference< Node > getNode() override;
@@ -125,7 +125,7 @@ private:
         std::vector< css::uno::Type > * types) const override;
 
     virtual void addSupportedServiceNames(
-        std::vector< OUString > * services) override;
+        std::vector<OUString> * services) override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType)

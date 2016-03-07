@@ -40,7 +40,7 @@ public:
 
     ~Partial();
 
-    Containment contains(Path const & path) const;
+    Containment contains(std::vector<OUString> const & path) const;
 
 private:
     Partial(const Partial&) = delete;

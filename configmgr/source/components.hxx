@@ -59,7 +59,7 @@ public:
 
     rtl::Reference< Node > resolvePathRepresentation(
         OUString const & pathRepresentation,
-        OUString * canonicRepresenation, Path * path, int * finalizedLayer)
+        OUString * canonicRepresenation, std::vector<OUString> * path, int * finalizedLayer)
         const;
 
     rtl::Reference< Node > getTemplate(
@@ -74,7 +74,7 @@ public:
         rtl::Reference< RootAccess > const & exclude,
         Broadcaster * broadcaster);
 
-    void addModification(Path const & path);
+    void addModification(std::vector<OUString> const & path);
 
     void writeModifications();
 

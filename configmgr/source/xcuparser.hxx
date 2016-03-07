@@ -147,7 +147,7 @@ private:
     bool trackPath_;
     OUString componentName_;
     StateStack state_;
-    Path path_;
+    std::vector<OUString> path_;
 };
 
 }

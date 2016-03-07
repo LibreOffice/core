@@ -62,7 +62,7 @@ public:
         Components & components, OUString const & pathRepresenation,
         OUString const & locale, bool update);
 
-    virtual Path getAbsolutePath() override;
+    virtual std::vector<OUString> getAbsolutePath() override;
 
     virtual void initBroadcaster(
         Modifications::Node const & modifications, Broadcaster * broadcaster) override;
@@ -104,7 +104,7 @@ public:
 private:
     virtual ~RootAccess();
 
-    virtual Path getRelativePath() override;
+    virtual std::vector<OUString> getRelativePath() override;
 
     virtual OUString getRelativePathRepresentation() override;
 
@@ -122,7 +122,7 @@ private:
         const override;
 
     virtual void addSupportedServiceNames(
-        std::vector< OUString > * services) override;
+        std::vector<OUString> * services) override;
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster) override;
 
@@ -143,7 +143,7 @@ private:
 
     OUString pathRepresentation_;
     OUString locale_;
-    Path path_;
+    std::vector<OUString> path_;
     rtl::Reference< Node > node_;
     OUString name_;
     ChangesListeners changesListeners_;

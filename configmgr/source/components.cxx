@@ -217,7 +217,7 @@ bool Components::allLocales(OUString const & locale) {
 
 rtl::Reference< Node > Components::resolvePathRepresentation(
     OUString const & pathRepresentation,
-    OUString * canonicRepresentation, Path * path, int * finalizedLayer)
+    OUString * canonicRepresentation, std::vector<OUString> * path, int * finalizedLayer)
     const
 {
     return data_.resolvePathRepresentation(
@@ -251,9 +251,9 @@ void Components::initGlobalBroadcaster(
         (*i)->releaseNondeleting();
         if (root.is()) {
             if (root != exclude) {
-                Path path(root->getAbsolutePath());
+                std::vector<OUString> path(root->getAbsolutePath());
                 Modifications::Node const * mods = &modifications.getRoot();
-                for (Path::iterator j(path.begin()); j != path.end(); ++j) {
+                for (auto j(path.begin()); j != path.end(); ++j) {
                     Modifications::Node::Children::const_iterator k(
                         mods->children.find(*j));
                     if (k == mods->children.end()) {
@@ -273,7 +273,7 @@ void Components::initGlobalBroadcaster(
     }
 }
 
-void Components::addModification(Path const & path) {
+void Components::addModification(std::vector<OUString> const & path) {
     data_.modifications.add(path);
 }
 
@@ -364,7 +364,7 @@ void Components::removeExtensionXcuFile(
             rtl::Reference< Node > parent;
             NodeMap const * map = &data_.getComponents();
             rtl::Reference< Node > node;
-            for (Path::const_iterator j(i->begin()); j != i->end(); ++j) {
+            for (auto j(i->begin()); j != i->end(); ++j) {
                 parent = node;
                 node = map->findNode(Data::NO_LAYER, *j);
                 if (!node.is()) {
