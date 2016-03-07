@@ -383,6 +383,9 @@ void DocumentSignatureManager::write()
         {
             // Removing all signatures: then need to remove the signature relation as well.
             maSignatureHelper.EnsureSignaturesRelation(mxStore, /*bAdd=*/false);
+            // Also remove the whole signature sub-storage: release our read-write reference + remove the element.
+            aStreamHelper = SignatureStreamHelper();
+            mxStore->removeElement("_xmlsignatures");
         }
 
         for (size_t i = 0; i < nSignatureCount; ++i)
@@ -390,7 +393,7 @@ void DocumentSignatureManager::write()
     }
 
     // If stream was not provided, we are responsible for committing it....
-    if (!mxSignatureStream.is())
+    if (!mxSignatureStream.is() && aStreamHelper.xSignatureStorage.is())
     {
         uno::Reference<embed::XTransactedObject> xTrans(aStreamHelper.xSignatureStorage, uno::UNO_QUERY);
         xTrans->commit();
