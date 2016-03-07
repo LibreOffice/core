@@ -1133,7 +1133,11 @@ Reference< XShape > Shape::createAndInsert(
                             if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                                 aCharStyleProperties.assignUsed( *pCharProps );
                         SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "use font color");
-                        aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
+                        if ( pFontRef->maPhClr.isUsed() )
+                        {
+                            aCharStyleProperties.maFillProperties.maFillColor = pFontRef->maPhClr;
+                            aCharStyleProperties.maFillProperties.moFillType.set(XML_solidFill);;
+                        }
                     }
                 }
 
