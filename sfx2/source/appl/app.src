@@ -228,11 +228,6 @@ String RID_STR_HLPFILENOTEXIST
     Text [ en-US ] = "The help file for this topic is not installed." ;
 };
 
-String RID_ENVTOOLBOX
-{
-    Text [ en-US ] = "Function Bar" ;
-};
-
 String STR_QUICKSTART_EXIT
 {
     Text [ en-US ] = "Exit Quickstarter" ;
