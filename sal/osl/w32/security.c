@@ -424,6 +424,11 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
     return getUserNameImpl(Security, strName, sal_True);
 }
 
+sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **strName)
+{
+    return getUserNameImpl(Security, strName, sal_False);
+}
+
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     rtl_uString *ustrSysDir = NULL;
