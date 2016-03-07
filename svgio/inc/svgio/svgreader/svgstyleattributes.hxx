@@ -33,6 +33,7 @@ namespace svgio { namespace svgreader {
     class SvgPatternNode;
     class SvgMarkerNode;
     class SvgClipPathNode;
+    class SvgMaskNode;
 }}
 
 
@@ -218,6 +219,7 @@ namespace svgio
             OUString               maClipPathXLink;
             const SvgClipPathNode* mpClipPathXLink;
             OUString               maMaskXLink;
+            const SvgMaskNode*     mpMaskXLink;
 
             /// link to markers. If set, the node can be fetched on demand
             OUString               maMarkerStartXLink;
@@ -447,7 +449,8 @@ namespace svgio
             const SvgClipPathNode* accessClipPathXLink() const;
 
             // MaskXLink content
-            const OUString getMaskXLink() const { return maMaskXLink; }
+            OUString getMaskXLink() const;
+            const SvgMaskNode* accessMaskXLink() const;
 
             // MarkerStartXLink content
             OUString getMarkerStartXLink() const;

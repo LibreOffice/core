@@ -1154,16 +1154,11 @@ namespace svgio
 
                 if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
                 {
-                    if(!getMaskXLink().isEmpty())
+                    const SvgMaskNode* mpMask = accessMaskXLink();
+                    if(mpMask)
                     {
-                        // try to access linked Mask
-                        const SvgMaskNode* mpMask = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(getMaskXLink()));
-
-                        if(mpMask)
-                        {
-                            // #i124852# transform may be needed when userSpaceOnUse
-                            mpMask->apply(aSource, pTransform);
-                        }
+                        // #i124852# transform may be needed when userSpaceOnUse
+                        mpMask->apply(aSource, pTransform);
                     }
 
                     if(!aSource.empty()) // test again, applied mask may have lead to empty geometry
@@ -1212,6 +1207,7 @@ namespace svgio
             maClipPathXLink(),
             mpClipPathXLink(nullptr),
             maMaskXLink(),
+            mpMaskXLink(nullptr),
             maMarkerStartXLink(),
             mpMarkerStartXLink(nullptr),
             maMarkerMidXLink(),
@@ -2685,6 +2681,38 @@ namespace svgio
             }
 
             return mpClipPathXLink;
+        }
+
+        OUString SvgStyleAttributes::getMaskXLink() const
+        {
+            if(!maMaskXLink.isEmpty())
+            {
+                return maMaskXLink;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if(pSvgStyleAttributes && !pSvgStyleAttributes->maMaskXLink.isEmpty())
+            {
+                return pSvgStyleAttributes->getMaskXLink();
+            }
+
+            return OUString();
+        }
+
+        const SvgMaskNode* SvgStyleAttributes::accessMaskXLink() const
+        {
+            if(!mpMaskXLink)
+            {
+                const OUString aMask(getMaskXLink());
+
+                if(!aMask.isEmpty())
+                {
+                    const_cast< SvgStyleAttributes* >(this)->mpMaskXLink = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(getMaskXLink()));
+                }
+            }
+
+            return mpMaskXLink;
         }
 
         OUString SvgStyleAttributes::getMarkerStartXLink() const
