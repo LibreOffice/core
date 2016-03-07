@@ -108,7 +108,7 @@ public:
         The value attribute can contain various platform tokens. They must be separated by
         commas.Each token will be stripped from leading and trailing white space (trim()).
     */
-    css::uno::Sequence< OUString > getSupportedPlaforms() const;
+    css::uno::Sequence< OUString > getSupportedPlatforms() const;
 
     /**
         Returns the localized publisher name and the corresponding URL.

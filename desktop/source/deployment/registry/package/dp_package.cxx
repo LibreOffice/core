@@ -601,7 +601,7 @@ bool BackendImpl::PackageImpl::checkPlatform(
 {
     bool ret = false;
     DescriptionInfoset info(getDescriptionInfoset());
-    Sequence<OUString> platforms(info.getSupportedPlaforms());
+    Sequence<OUString> platforms(info.getSupportedPlatforms());
     if (hasValidPlatform(platforms))
     {
         ret = true;
