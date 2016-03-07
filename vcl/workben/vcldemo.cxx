@@ -193,7 +193,7 @@ public:
         std::vector<Rectangle> aRegions;
 
         // Make small cleared area for these guys
-        long nBorderSize = aSize.Width() / 32;
+        long nBorderSize = std::min(aSize.Height() / 32, aSize.Width() / 32);
         long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
         long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
         for (int y = 0; y < nY; y++)
@@ -333,36 +333,41 @@ public:
         {
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
-                std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx, 4, 2));
-                DemoRenderer::clearRects(rDev, aRegions);
+                std::vector<Rectangle> aToplevelRegions(
+                    DemoRenderer::partition(rCtx, 1, 3));
+                std::vector<Rectangle> aSubRegions(
+                    DemoRenderer::partition(aToplevelRegions[0], 4, 2));
+                Rectangle aBottom(aToplevelRegions[1].TopLeft(),
+                                  aToplevelRegions[2].BottomRight());
+                DemoRenderer::clearRects(rDev,aSubRegions);
+                struct {
+                    bool mbClip;
+                    bool mbArabicText;
+                    bool mbRotate;
+                } aRenderData[] = {
+                    { false, false, false },
+                    { false, true,  false },
+                    { false, true,  true },
+                    { false, false, true },
+                    { true,  false, true },
+                    { true,  true,  true },
+                    { true,  true,  false },
+                    { true,  false, false },
+                };
 
-                bool bClip=true, bArabicText=true, bRotate=true;
-
-                int nRegions=0;
-
-                for (int nClipRow=0; nClipRow < 2; nClipRow++)
+                size_t i = 0;
+                for (int y = 0; y < 2; y++)
                 {
-                    if (!bArabicText)
-                        bArabicText=true;
-
-                    for (int nArabicRow=0; nArabicRow < 2; nArabicRow++)
+                    for (int x = 0; x < 4; x++)
                     {
-                        if (!bRotate)
-                            bRotate=true;
-
-                        for (int nRotateRow=0; nRotateRow < 2; nRotateRow++)
-                        {
-                            drawText( rDev, aRegions[nRegions], bClip, bArabicText, bRotate );
-
-                            nRegions++;
-                            bRotate=false;
-                        }
-
-                        bArabicText=false;
+                        assert(i < SAL_N_ELEMENTS(aRenderData));
+                        drawText(rDev, aSubRegions[i], aRenderData[i].mbClip,
+                                 aRenderData[i].mbArabicText, aRenderData[i].mbRotate);
+                        i++;
                     }
-
-                    bClip=false;
                 }
+
+                drawComplex(rDev, aBottom);
             }
             else
             {
@@ -453,7 +458,7 @@ public:
                     int nHeight = r.GetHeight();
 
                     // move the text to the bottom of the bounding rect before rotating
-                    aFontRect.Top() += nHeight;
+                    aFontRect.Top() += nHeight/2;
                     aFontRect.Bottom() += nHeight;
 
                     int nDegrees = 45;
@@ -479,6 +484,171 @@ public:
             }
 
             rDev.SetClipRegion();
+        }
+
+        void drawComplex (OutputDevice &rDev, Rectangle r)
+        {
+            const unsigned char pInvalid[] = { 0xfe, 0x1f };
+            const unsigned char pDiacritic1[] = { 0x61, 0xcc, 0x8a, 0xcc, 0x8c };
+            const unsigned char pDiacritic2[] = { 0x61, 0xcc, 0x88, 0xcc, 0x86 };
+            const unsigned char pDiacritic3[] = { 0x61, 0xcc, 0x8b, 0xcc, 0x87 };
+            const unsigned char pJustification[] = {
+                0x64, 0x20, 0xc3, 0xa1, 0xc3, 0xa9, 0x77, 0xc4, 0x8d,
+                0xc5, 0xa1, 0xc3, 0xbd, 0xc5, 0x99, 0x20, 0xc4, 0x9b
+            };
+            const unsigned char pEmojis[] = {
+                0xf0, 0x9f, 0x8d, 0x80, 0xf0, 0x9f, 0x91, 0x98,
+                0xf0, 0x9f, 0x92, 0x8a, 0xf0, 0x9f, 0x92, 0x99,
+                0xf0, 0x9f, 0x92, 0xa4, 0xf0, 0x9f, 0x94, 0x90
+            };
+            const unsigned char pThreeBowlG[] = {
+                0xe2, 0x9a, 0x82, 0xe2, 0x99, 0xa8, 0xc4, 0x9e
+            };
+            const unsigned char pWavesAndDomino[] = {
+                0xe2, 0x99, 0x92, 0xf0, 0x9f, 0x81, 0xa0,
+                0xf0, 0x9f, 0x82, 0x93
+            };
+            const unsigned char pSpadesAndBits[] = {
+                0xf0, 0x9f, 0x82, 0xa1, 0xc2, 0xa2, 0xc2, 0xa2
+            };
+
+            struct {
+                const char *mpFont;
+                const char *mpString;
+            } aRuns[] = {
+#define SET(font,string) { font, reinterpret_cast<const char *>(string) }
+                SET("sans", "a"),           // logical font - no 'sans' font.
+                SET("opensymbol", "#$%"),   // font fallback - $ is missing.
+                SET("sans", pInvalid),      // unicode invalid character character
+                // tdf#96266 - stacking diacritics
+                SET("carlito", pDiacritic1),
+                SET("carlito", pDiacritic2),
+                SET("carlito", pDiacritic3),
+                SET("liberation sans", pDiacritic1),
+                SET("liberation sans", pDiacritic2),
+                SET("liberation sans", pDiacritic3),
+                SET("liberation sans", pDiacritic3),
+
+                // tdf#95222 - justification issue
+                // - FIXME: replicate justification
+                SET("gentium basic", pJustification),
+
+                // tdf#97319 - Unicode beyond BMP; SEP & Plane 2
+                SET("symbola", pEmojis),
+                SET("symbola", pThreeBowlG),
+                SET("symbola", pWavesAndDomino),
+                SET("symbola", pSpadesAndBits),
+            };
+
+            // Nice clean white background
+            rDev.DrawWallpaper(r, Wallpaper(COL_WHITE));
+            rDev.SetClipRegion(vcl::Region(r));
+
+            Point aPos(r.Left(), r.Top()+20);
+
+            long nMaxTextHeight = 0;
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aRuns); ++i)
+            {
+                // Legend
+                vcl::Font aIndexFont("sans", Size(0,20));
+                aIndexFont.SetColor(COL_BLACK);
+                Rectangle aTextRect;
+                rDev.SetFont(aIndexFont);
+                OUString aText = OUString::number(i) + ".";
+                rDev.DrawText(aPos, aText);
+                if (rDev.GetTextBoundRect(aTextRect, aText))
+                    aPos.Move(aTextRect.GetWidth() + 8, 0);
+
+                // Text
+                FontWeight aWeights[] = { WEIGHT_NORMAL,
+                                          WEIGHT_BOLD,
+                                          WEIGHT_NORMAL };
+                FontItalic aItalics[] = { ITALIC_NONE,
+                                          ITALIC_NONE,
+                                          ITALIC_NORMAL };
+                vcl::Font aFont(OUString::createFromAscii(
+                                    aRuns[i].mpFont),
+                                Size(0,42));
+                aFont.SetColor(COL_BLACK);
+                for (size_t j = 0; j < SAL_N_ELEMENTS(aWeights); ++j)
+                {
+                    aFont.SetItalic(aItalics[j]);
+                    aFont.SetWeight(aWeights[j]);
+                    rDev.SetFont(aFont);
+
+                    OUString aString(aRuns[i].mpString,
+                                     strlen(aRuns[i].mpString),
+                                     RTL_TEXTENCODING_UTF8);
+                    long nNewX = drawStringBox(rDev, aPos, aString,
+                                               nMaxTextHeight);
+
+                    aPos.X() = nNewX;
+
+                    if (aPos.X() >= r.Right())
+                    {
+                        aPos = Point(r.Left(), aPos.Y() + nMaxTextHeight + 15);
+                        nMaxTextHeight = 0;
+                        if(j>0)
+                            j--; // re-render the last point.
+                    }
+                    if (aPos.Y() > r.Bottom())
+                        break;
+                }
+                if (aPos.Y() > r.Bottom())
+                    break;
+            }
+
+            rDev.SetClipRegion();
+        }
+        // render text, bbox, DX arrays etc.
+        long drawStringBox(OutputDevice &rDev, Point aPos,
+                           const OUString &aText,
+                           long &nMaxTextHeight)
+        {
+            rDev.Push();
+            {
+                Rectangle aTextRect;
+
+                rDev.DrawText(aPos,aText);
+
+                if (rDev.GetTextBoundRect(aTextRect, aText))
+                {
+                    aTextRect.Move(aPos.X(), aPos.Y());
+                    rDev.SetFillColor();
+                    rDev.SetLineColor(COL_BLACK);
+                    rDev.DrawRect(aTextRect);
+                    if (aTextRect.GetHeight() > nMaxTextHeight)
+                        nMaxTextHeight = aTextRect.GetHeight();
+                    // This should intersect with the text
+                    Rectangle aInnerRect(
+                        aTextRect.Left()+1, aTextRect.Top()+1,
+                        aTextRect.Right()-1, aTextRect.Bottom()-1);
+                    rDev.SetLineColor(COL_WHITE);
+                    rDev.SetRasterOp(ROP_XOR);
+                    rDev.DrawRect(aInnerRect);
+                    rDev.SetRasterOp(ROP_OVERPAINT);
+                }
+
+                // DX array rendering
+                long *pItems = new long[aText.getLength()+10];
+                rDev.GetTextArray(aText, pItems);
+                for (long j = 0; j < aText.getLength(); ++j)
+                {
+                    Point aTop = aTextRect.TopLeft();
+                    Point aBottom = aTop;
+                    aTop.Move(pItems[j], 0);
+                    aBottom.Move(pItems[j], aTextRect.GetHeight());
+                    rDev.SetLineColor(COL_RED);
+                    rDev.SetRasterOp(ROP_XOR);
+                    rDev.DrawLine(aTop,aBottom);
+                    rDev.SetRasterOp(ROP_OVERPAINT);
+                }
+                delete pItems;
+
+                aPos.Move(aTextRect.GetWidth() + 16, 0);
+            }
+            rDev.Pop();
+            return aPos.X();
         }
     };
 
@@ -1933,6 +2103,64 @@ public:
     }
 };
 
+namespace {
+    void renderFonts(const std::vector<OUString> &aFontNames)
+    {
+        ScopedVclPtrInstance<VirtualDevice> xDevice;
+        Size aSize(1024, 1024);
+        xDevice->SetOutputSizePixel(aSize);
+
+        for (auto aFontName : aFontNames)
+        {
+            vcl::Font aFont(aFontName, Size(0,96));
+#if 0
+            aFont.SetColor(COL_BLACK);
+            xDevice->SetFont(aFont);
+            xDevice->Erase();
+
+            FontMetric aMetric = xDevice->GetFontMetric(aFont);
+
+            FontCharMapPtr xMap;
+            if (xDevice->GetFontCharMap(xMap))
+            {
+                ... iterate through glyphs ...
+            }
+
+
+    bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
+                                                    int nLen, int nBase, MetricVector& rVector );
+
+include/vcl/outdev.hxx:typedef std::vector< Rectangle > MetricVector;
+include/vcl/outdev.hxx:                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
+include/vcl/outdev.hxx:                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+include/vcl/outdev.hxx:                                              MetricVector* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
+include/vcl/outdev.hxx:                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = nullp
+
+    bool                        GetTextBoundRect( Rectangle& rRect,
+                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
+
+
+    void                        DrawText( const Point& rStartPt, const OUString& rStr,
+                                          sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
+
+    void                        DrawText( const Rectangle& rRect,
+                                          const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
+                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                          vcl::ITextLayout* _pTextLayout = nullptr );
+
+    Rectangle                   GetTextRect( const Rectangle& rRect,
+                                             const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
+                                             TextRectInfo* pInfo = nullptr,
+                                             const vcl::ITextLayout* _pTextLayout = nullptr ) const;
+
+#endif
+        }
+
+    }
+};
+
 class DemoApp : public Application
 {
     static int showHelp(DemoRenderer &rRenderer)
@@ -1961,6 +2189,7 @@ public:
             bool bWidgets = false, bThreads = false;
             bool bPopup = false, bGLTest = false;
             DemoRenderer aRenderer;
+            std::vector<OUString> aFontNames;
 
             for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
             {
@@ -1990,6 +2219,8 @@ public:
                     bGLTest = true;
                 else if (aArg == "--threads")
                     bThreads = true;
+                else if (aArg == "--font" && !bLast)
+                    aFontNames.push_back(GetCommandLineParam(++i));
                 else if (aArg.startsWith("--"))
                 {
                     fprintf(stderr,"Unknown argument '%s'\n",
@@ -2013,6 +2244,8 @@ public:
                 xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();
+            else if (aFontNames.size() > 0)
+                renderFonts(aFontNames);
             else
                 aMainWin->Show();
 
