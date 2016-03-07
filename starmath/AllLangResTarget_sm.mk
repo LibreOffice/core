@@ -18,10 +18,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sm,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sm/res))
 
-$(eval $(call gb_SrsTarget_use_srstargets,sm/res,\
-	svx/res \
-))
-
 $(eval $(call gb_SrsTarget_set_include,sm/res,\
 	-I$(SRCDIR)/starmath/inc \
 	$$(INCLUDE) \

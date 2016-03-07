@@ -17,10 +17,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,dbu,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbu))
 
-$(eval $(call gb_SrsTarget_use_srstargets,dbaccess/dbu,\
-	svx/res \
-))
-
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbu,\
     $$(INCLUDE) \
     -I$(SRCDIR)/dbaccess/inc \
