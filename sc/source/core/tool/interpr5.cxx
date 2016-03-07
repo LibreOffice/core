@@ -351,7 +351,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
     SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
 
-    if (nMatRows * nMatCols > ScMatrix::GetElementsMax())
+    if (!ScMatrix::IsSizeAllocatable( nMatCols, nMatRows))
     {
         SetError(errStackOverflow);
         return nullptr;
@@ -601,7 +601,7 @@ void ScInterpreter::ScEMat()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         SCSIZE nDim = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
-        if ( nDim * nDim > ScMatrix::GetElementsMax() || nDim == 0)
+        if (nDim == 0 || !ScMatrix::IsSizeAllocatable( nDim, nDim))
             PushIllegalArgument();
         else
         {
@@ -800,7 +800,7 @@ void ScInterpreter::ScMatDet()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        if ( nC != nR || nC == 0 || (sal_uLong) nC * nC > ScMatrix::GetElementsMax() )
+        if ( nC != nR || nC == 0 || !ScMatrix::IsSizeAllocatable( nC, nR) )
             PushIllegalArgument();
         else
         {
@@ -923,7 +923,7 @@ void ScInterpreter::ScMatInv()
             }
         }
 
-        if ( nC != nR || nC == 0 || (sal_uLong) nC * nC > ScMatrix::GetElementsMax() )
+        if ( nC != nR || nC == 0 || !ScMatrix::IsSizeAllocatable( nC, nR) )
             PushIllegalArgument();
         else
         {
