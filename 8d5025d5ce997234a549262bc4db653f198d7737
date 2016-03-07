@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_2bafc5e4",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-07T08:15:48Z",
+      "side": 1,
+      "message": "it doesn\u0027t make sense to have these TypeDescriptor_Init_Impl::n*TypeDescriptionCount controlled sometimes by OSL_DEBUG_LEVEL\u003e0 and sometimes by defined(DBG_UTIL)",
+      "revId": "8d5025d5ce997234a549262bc4db653f198d7737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_6bb9bd2e",
+        "filename": "cppu/source/uno/data.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-07T08:15:48Z",
+      "side": 1,
+      "message": "So some of the checks unfortunately still need to be runtime checks (triggered by that \"static BinaryCompatible_Impl aTest;\" below), so at least that part should still be debug-only.",
+      "revId": "8d5025d5ce997234a549262bc4db653f198d7737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_4bb6793e",
+        "filename": "include/sal/log-areas.dox",
+        "patchSetId": 13
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-07T08:15:48Z",
+      "side": 1,
+      "message": "???",
+      "revId": "8d5025d5ce997234a549262bc4db653f198d7737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
