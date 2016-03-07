@@ -579,9 +579,15 @@ static SwContentFrame* lcl_GetNextContentFrame( const SwLayoutFrame* pLay, bool 
     return pContentFrame;
 }
 
-#define FIRSTLEAF( pLayFrame ) ( ( pLayFrame->Lower() && pLayFrame->Lower()->IsColumnFrame() )\
-                    ? pLayFrame->GetNextLayoutLeaf() \
-                    : pLayFrame )
+namespace
+{
+    SwLayoutFrame* FirstLeaf(SwSectionFrame* pLayFrame)
+    {
+        if (pLayFrame->Lower() && pLayFrame->Lower()->IsColumnFrame())
+            return pLayFrame->GetNextLayoutLeaf();
+        return pLayFrame;
+    }
+}
 
 void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
 {
@@ -633,7 +639,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
     {   // Search for the appropriate insert position
         if( pNxtSct && pNxtSct->GetFormat() == pParent )
         {   // Here we can insert outselves at the beginning
-            pUp = FIRSTLEAF( pNxtSct );
+            pUp = FirstLeaf( pNxtSct );
             pPrv = nullptr;
             if( pPrvSct && !( pPrvSct->GetFormat() == pParent ) )
                 pPrvSct = nullptr; // In order that nothing is merged
@@ -665,7 +671,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
                 pPrvSct->Init();
                 SWRECTFN( pUp )
                 (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, true );
-                pUp = FIRSTLEAF( pPrvSct );
+                pUp = FirstLeaf( pPrvSct );
                 pPrv = nullptr;
             }
             pPrvSct = nullptr; // Such that nothing will be merged
@@ -1460,7 +1466,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             if( WrongPageDesc( pPg ) )
                 bWrongPage = true;
             else
-                return FIRSTLEAF( pSect->GetFollow() );
+                return FirstLeaf( pSect->GetFollow() );
         }
         else
         {
@@ -1488,7 +1494,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                     if( WrongPageDesc( pNxtPg ) )
                         bWrongPage = true;
                     else
-                        return FIRSTLEAF( pSect->GetFollow() );
+                        return FirstLeaf( pSect->GetFollow() );
                 }
             }
         }
@@ -1641,7 +1647,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                 pNew->SimpleFormat();
         }
         // The wanted layout sheet is now the first of the determined SctFrames:
-        pLayLeaf = FIRSTLEAF( pNew );
+        pLayLeaf = FirstLeaf( pNew );
     }
     return pLayLeaf;
 }
@@ -1802,7 +1808,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf( MakePageType )
         SWRECTFN( pNew )
         (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), true );
 
-        pLayLeaf = FIRSTLEAF( pNew );
+        pLayLeaf = FirstLeaf( pNew );
         if( !pNew->Lower() )    // Format single column sections
         {
             pNew->MakePos();
@@ -1813,7 +1819,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf( MakePageType )
     }
     else
     {
-        pLayLeaf = FIRSTLEAF( pNew );
+        pLayLeaf = FirstLeaf( pNew );
         if( pLayLeaf->IsColBodyFrame() )
         {
             // In existent section columns we're looking for the last not empty
