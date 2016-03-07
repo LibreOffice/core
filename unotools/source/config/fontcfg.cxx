@@ -32,10 +32,6 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <string.h>
 #include <list>
 #include <algorithm>
@@ -143,12 +139,8 @@ DefaultFontConfiguration::DefaultFontConfiguration()
     catch (const WrappedTargetException&)
     {
     }
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "config provider: %s, config access: %s\n",
-             m_xConfigProvider.is() ? "true" : "false",
-             m_xConfigAccess.is() ? "true" : "false"
-             );
-    #endif
+    SAL_INFO("unotools.config", "config provider: " << static_cast<bool>(m_xConfigProvider.is())
+            << ", config access: " << static_cast<bool>(m_xConfigAccess.is()));
 }
 
 DefaultFontConfiguration::~DefaultFontConfiguration()
@@ -400,12 +392,8 @@ FontSubstConfiguration::FontSubstConfiguration() :
         m_xConfigProvider.clear();
         m_xConfigAccess.clear();
     }
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "config provider: %s, config access: %s\n",
-             m_xConfigProvider.is() ? "true" : "false",
-             m_xConfigAccess.is() ? "true" : "false"
-             );
-    #endif
+    SAL_WARN("unotools.config", "config provider: " << static_cast<bool>(m_xConfigProvider.is())
+            << ", config access: " << static_cast<bool>(m_xConfigAccess.is()));
 }
 
 /*
@@ -937,11 +925,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XN
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ) )
                         break;
             }
-#if OSL_DEBUG_LEVEL > 1
-            if( weight < 0 )
-                fprintf( stderr, "Error: invalid weight %s\n",
-                         OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+            SAL_WARN_IF(weight < 0, "unotools.config", "Error: invalid weight " << *pLine);
         }
     }
     catch (const NoSuchElementException&)
@@ -969,11 +953,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ) )
                         break;
             }
-#if OSL_DEBUG_LEVEL > 1
-            if( width < 0 )
-                fprintf( stderr, "Error: invalid width %s\n",
-                         OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+            SAL_WARN_IF( width < 0, "unotools.config", "Error: invalid width " << *pLine);
         }
     }
     catch (const NoSuchElementException&)
@@ -1072,10 +1052,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                     }
                     if( ! xFont.is() )
                     {
-                        #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "did not get font attributes for %s\n",
-                                 OUStringToOString( pFontNames[i], RTL_TEXTENCODING_UTF8 ).getStr() );
-                        #endif
+                        SAL_WARN("unotools.config", "did not get font attributes for " << pFontNames[i]);
                         continue;
                     }
 
