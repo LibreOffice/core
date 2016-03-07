@@ -51,7 +51,6 @@ const sal_uInt16 errNoConvergence        = 523;
 const sal_uInt16 errNoRef                = 524; // #REF!
 const sal_uInt16 errNoName               = 525; // #NAME?
 const sal_uInt16 errDoubleRef            = 526;
-const sal_uInt16 errInterpOverflow       = 527;
 // Not displayed, temporary for TrackFormulas,
 // Cell depends on another cell that has errCircularReference
 const sal_uInt16 errTrackFromCircRef     = 528;

@@ -426,7 +426,6 @@ OUString ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
             nErrNumber = STR_LONG_ERR_STR_OVF;
         break;
         case errStackOverflow:
-        case errInterpOverflow:
             nErrNumber = STR_LONG_ERR_STACK_OVF;
         break;
         case errIllegalJump:
