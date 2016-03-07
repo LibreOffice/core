@@ -196,7 +196,7 @@ namespace connectivity
         // TokenIDToStr: token name belonging to a token number.
         static OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = nullptr);
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // (empty string if not found)
         static OUString RuleIDToStr(sal_uInt32 nRuleID);
 #endif

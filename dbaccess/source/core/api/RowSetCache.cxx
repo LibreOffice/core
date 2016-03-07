@@ -1133,10 +1133,10 @@ bool ORowSetCache::last(  )
         OSL_ENSURE(m_bBeforeFirst,"ORowSetCache::last return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if(bRet)
     {
-        OSL_ENSURE((*m_aMatrixIter).is(),"ORowSetCache::last: Row not valid!");
+        assert((*m_aMatrixIter).is() && "ORowSetCache::last: Row not valid!");
     }
 #endif
 

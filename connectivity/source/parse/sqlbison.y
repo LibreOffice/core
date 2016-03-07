@@ -4651,7 +4651,7 @@ OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pCont
 	return aStr;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
 	OSL_ENSURE(nRuleID < SAL_N_ELEMENTS(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");

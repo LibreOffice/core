@@ -685,9 +685,7 @@ Reference< XInterface > ODatabaseContext::getObject( const OUString& _rURL )
 void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl )
 {
     OUString sURL( _rModelImpl.getURL() );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DatabaseContext: registering %s", OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    SAL_INFO("dbaccess.core", "DatabaseContext: registering " << sURL);
     if ( m_aDatabaseObjects.find( sURL ) == m_aDatabaseObjects.end() )
     {
         m_aDatabaseObjects[ sURL ] = &_rModelImpl;
@@ -700,19 +698,14 @@ void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl
 void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )
 {
     OUString sURL( _rModelImpl.getURL() );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DatabaseContext: deregistering %s", OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    SAL_INFO("dbaccess.core", "DatabaseContext: deregistering " << sURL);
     m_aDatabaseObjects.erase( sURL );
 }
 
 void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, const OUString& _rNewURL )
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DatabaseContext: changing registration from %s to %s",
-        OUStringToOString( _rOldURL, RTL_TEXTENCODING_UTF8 ).getStr(),
-        OUStringToOString( _rNewURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    SAL_INFO("dbaccess.core", "DatabaseContext: changing registrations from " << _rOldURL <<
+             " to " << _rNewURL);
     ObjectCache::iterator oldPos = m_aDatabaseObjects.find( _rOldURL );
     ENSURE_OR_THROW( oldPos != m_aDatabaseObjects.end(), "illegal old database document URL" );
     ObjectCache::iterator newPos = m_aDatabaseObjects.find( _rNewURL );
