@@ -24,8 +24,6 @@
 #include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 #include <vector>
 
@@ -35,7 +33,6 @@ class SbxBasicFormater;
 
 // AppData structure for SBX:
 struct SbxAppData
-    : private ::boost::noncopyable
 {
     SbxError            eSbxError;  // Error code
     std::vector<std::unique_ptr<SbxFactory>>
@@ -46,6 +43,8 @@ struct SbxAppData
     // It might be useful to store this class 'global' because some string resources are saved here
 
     SbxAppData();
+    SbxAppData(const SbxAppData&) = delete;
+    const SbxAppData& operator=(const SbxAppData&) = delete;
     ~SbxAppData();
 };
 
