@@ -28,7 +28,7 @@
 /* in cpp1.c: file-pointer auf stdout oder file */
 extern FILE* pCppOut;                                   /* BP */
 #define PUTCHAR( d )   fprintf( pCppOut, "%c", (d) )    /* BP */
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 extern FILE* pDefOut;                                   /* ER */
 #ifdef EVALDEFS
 #define NEVALBUF        2048
@@ -228,7 +228,7 @@ extern char*    magic[];                /* Magic predefined symbols     */
 extern FILEINFO* infile;                /* Current input file           */
 extern char     work[NWORK + 1];        /* #define scratch              */
 extern char*    workp;                  /* Free space in work           */
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 extern int      debug;                  /* Debug level                  */
 /* ER dump & evaluate #define's */
 extern int      bDumpDefs;              /* TRUE if #define's dump req.  */
@@ -269,7 +269,7 @@ void InitCpp6( void );
 void output( int c );
 void sharp( void );
 void cppmain( void );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #ifdef EVALDEFS
 int outputEval( int c );
 #endif
@@ -300,7 +300,7 @@ int expcollect( void );
 void expstuff( DEFBUF* dp );
 
 void stparmscan( int delim );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void dumpparm( char* why );
 #endif
 
@@ -342,7 +342,7 @@ void cwarn( char* format, char* sarg );
 void cfatal( char* format, char* sarg );
 void cierror( char* format, int n );
 void ciwarn( char* format, int n );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void dumpdef( char* why );
 void dumpadef( char* why, DEFBUF *dp );
 #endif
