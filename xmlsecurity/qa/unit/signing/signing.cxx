@@ -35,6 +35,7 @@
 #include <tools/time.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
+#include <osl/file.hxx>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
@@ -199,10 +200,14 @@ void SigningTest::testOOXMLDescription()
 
 void SigningTest::testOOXMLAppend()
 {
+    // Copy the test document to a temporary file, as it'll be modified.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    OUString aURL = aTempFile.GetURL();
+    osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL);
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
-    OUString aURL = getURLFromSrc(DATA_DIRECTORY) + "partial.docx";
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
