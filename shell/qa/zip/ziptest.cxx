@@ -43,8 +43,6 @@ private:
     LPSTREAM pStream;
 public:
     Test();
-    void setUp() {}
-    void tearDown() {}
     void test_file_directory();
     void test_file_hasContentCaseInSensitive();
     void test_file_getContent();

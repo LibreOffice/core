@@ -33,10 +33,6 @@ namespace
     class testBestMime : public CppUnit::TestFixture
     {
     public:
-        void setUp() override
-        {
-        }
-
         void check(rtl_TextEncoding eIn, rtl_TextEncoding eOut)
         {
             const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding(eIn);
@@ -485,10 +481,6 @@ namespace
     class testBestUnix : public CppUnit::TestFixture
     {
     public:
-        void setUp() override
-        {
-        }
-
         void check(rtl_TextEncoding eIn, rtl_TextEncoding eOut)
         {
             const sal_Char *pCharSet = rtl_getBestUnixCharsetFromTextEncoding(eIn);
@@ -1017,10 +1009,6 @@ namespace
     class testBestWindows : public CppUnit::TestFixture
     {
     public:
-        void setUp() override
-            {
-            }
-
         void check(rtl_TextEncoding nIn, rtl_TextEncoding nOut)
         {
             const sal_uInt8 nCharSet = rtl_getBestWindowsCharsetFromTextEncoding(nIn);
@@ -1580,15 +1568,6 @@ namespace
     class testTextEncodingInfo: public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() override
-            {
-            }
-
-        void tearDown() override
-            {
-            }
-
         // not implemented encoding test
         void testTextEncodingInfo_001()
             {

@@ -44,9 +44,6 @@ class MetadatableTest
     : public ::CppUnit::TestFixture
 {
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void test();
 
     CPPUNIT_TEST_SUITE(MetadatableTest);
@@ -55,15 +52,6 @@ public:
 
 private:
 };
-
-void MetadatableTest::setUp()
-{
-}
-
-void MetadatableTest::tearDown()
-{
-}
-
 
 class MockMetadatable
     : public ::sfx2::Metadatable

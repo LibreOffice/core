@@ -1086,10 +1086,6 @@ namespace osl_FileBase
              nError = FileBase::getTempDirURL( aUStr );
         }
 
-        void tearDown() override
-        {
-        }
-
         // test code.
         void getTempDirURL_001()
         {

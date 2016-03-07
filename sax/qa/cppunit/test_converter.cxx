@@ -48,8 +48,6 @@ class ConverterTest
     : public ::CppUnit::TestFixture
 {
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
 
     void testDuration();
     void testDateTime();
@@ -77,14 +75,6 @@ public:
 
 private:
 };
-
-void ConverterTest::setUp()
-{
-}
-
-void ConverterTest::tearDown()
-{
-}
 
 static void doTest(util::Duration const & rid, char const*const pis,
         char const*const i_pos = nullptr)

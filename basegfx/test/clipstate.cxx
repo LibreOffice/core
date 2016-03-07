@@ -86,9 +86,6 @@ public:
         aSubtract.subtractRange(aEast);
     }
 
-    void tearDown() override
-    {}
-
     void verifyPoly(const char* sName, const char* sSvg, const tools::B2DClipState& toTest)
     {
 #if OSL_DEBUG_LEVEL > 2

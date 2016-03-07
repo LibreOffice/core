@@ -28,9 +28,6 @@ class WriterfilterMiscTest
     : public ::CppUnit::TestFixture
 {
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testTwipConversions();
     void testFieldParameters();
 
@@ -39,14 +36,6 @@ public:
     CPPUNIT_TEST(testFieldParameters);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void WriterfilterMiscTest::setUp()
-{
-}
-
-void WriterfilterMiscTest::tearDown()
-{
-}
 
 void WriterfilterMiscTest::testTwipConversions()
 {

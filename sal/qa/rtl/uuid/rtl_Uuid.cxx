@@ -44,15 +44,6 @@ namespace rtl_Uuid
 class createUuid : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
 #define TEST_UUID 20
     void createUuid_001()
     {
@@ -115,15 +106,6 @@ public:
 class createNamedUuid : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
     void createNamedUuid_001()
     {
         sal_uInt8 NameSpace_DNS[16] = RTL_UUID_NAMESPACE_DNS;

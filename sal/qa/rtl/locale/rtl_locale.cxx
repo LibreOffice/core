@@ -44,10 +44,6 @@ public:
         rtl_locale::setDefaultLocale();
     }
 
-    void tearDown() override
-    {
-    }
-
     void getDefault_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
@@ -107,10 +103,6 @@ public:
         rtl_locale::setDefaultLocale();
     }
 
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     void getLanguage_001()
     {
@@ -143,10 +135,6 @@ public:
     {
         // start message
         rtl_locale::setDefaultLocale();
-    }
-
-    void tearDown() override
-    {
     }
 
     // insert your test code here.
@@ -183,10 +171,6 @@ public:
         rtl_locale::setDefaultLocale();
     }
 
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     void getVariant_001()
     {
@@ -221,10 +205,6 @@ public:
         rtl_locale::setDefaultLocale();
     }
 
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     void hashCode_001()
     {
@@ -257,10 +237,6 @@ public:
     {
         // start message
         rtl_locale::setDefaultLocale();
-    }
-
-    void tearDown() override
-    {
     }
 
     // insert your test code here.

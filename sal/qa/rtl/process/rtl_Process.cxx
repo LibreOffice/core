@@ -71,15 +71,6 @@ namespace rtl_Process
 class getAppCommandArg : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
     void getAppCommandArg_001()
     {
 #if defined(_WIN32)
@@ -196,14 +187,6 @@ void printUuidtoBuffer( sal_uInt8 *pNode, sal_Char * pBuffer )
 class getGlobalProcessId : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
     //gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.
     void getGlobalProcessId_001()
     {

@@ -36,15 +36,6 @@ namespace rtl_random
 class createPool : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     // this is only demonstration code
     void createPool_001()
@@ -71,15 +62,6 @@ public:
 class destroyPool : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     void destroyPool_000()
     {
@@ -109,15 +91,6 @@ public:
 class addBytes : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     // this is only demonstration code
     void addBytes_000()
@@ -242,15 +215,6 @@ public:
 class getBytes : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
-
     // insert your test code here.
     void getBytes_000()
     {
