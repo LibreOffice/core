@@ -57,6 +57,8 @@ public:
     void remove(sal_uInt16 nPosition);
     /// Read signatures from either a temp stream or the real storage.
     void read(bool bUseTempStream, bool bCacheLastSignature = true);
+    /// Write signatures back to the persistent storage.
+    void write();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_DOCUMENTSIGNATUREMANAGER_HXX

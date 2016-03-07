@@ -24,12 +24,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/security/NoPasswordException.hpp>
@@ -333,44 +328,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeList
 
 IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
 {
-    // Export all other signatures...
-    SignatureStreamHelper aStreamHelper = maSignatureManager.ImplOpenSignatureStream(embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false);
-
-    if (aStreamHelper.xSignatureStream.is() && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
-    {
-        // ODF
-        uno::Reference< io::XOutputStream > xOutputStream(
-            aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-        uno::Reference< com::sun::star::xml::sax::XWriter> xSaxWriter =
-            maSignatureManager.maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
-
-        uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
-        size_t nInfos = maSignatureManager.maCurrentSignatureInformations.size();
-        for( size_t n = 0 ; n < nInfos ; ++n )
-            XMLSignatureHelper::ExportSignature(
-            xDocumentHandler, maSignatureManager.maCurrentSignatureInformations[ n ] );
-
-        XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
-
-    }
-    else if (aStreamHelper.xSignatureStorage.is() && aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
-    {
-        // OOXML
-        size_t nSignatureCount = maSignatureManager.maCurrentSignatureInformations.size();
-        maSignatureManager.maSignatureHelper.ExportSignatureContentTypes(maSignatureManager.mxStore, nSignatureCount);
-        maSignatureManager.maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
-
-        for (size_t i = 0; i < nSignatureCount; ++i)
-            maSignatureManager.maSignatureHelper.ExportOOXMLSignature(maSignatureManager.mxStore, aStreamHelper.xSignatureStorage, maSignatureManager.maCurrentSignatureInformations[i], i + 1);
-    }
-
-    // If stream was not provided, we are responsible for committing it....
-    if ( !maSignatureManager.mxSignatureStream.is() )
-    {
-        uno::Reference< embed::XTransactedObject > xTrans(
-            aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-        xTrans->commit();
-    }
+    maSignatureManager.write();
 
     EndDialog(RET_OK);
 }
