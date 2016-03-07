@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_8b2fd1f5",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T13:40:07Z",
+      "side": 1,
+      "message": "it looks like this function can be called with either an already constructed UNO struct, which it will then just reference without copying it, or with arguments to create a new UNO struct.\n\nno idea why there aren\u0027t 2 different functions for that.",
+      "revId": "804c1a5959a22dfe57dd4a6be30df746da69906b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
