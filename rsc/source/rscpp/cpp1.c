@@ -27,7 +27,7 @@
 FILE* pCppOut = NULL;
 FILE* pCppIn  = NULL;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 FILE* pDefOut = NULL;       /* ER  evtl. #define's dump */
 #endif
 
@@ -59,7 +59,7 @@ int wrongline;              /* Force #line to compiler      */
 char token[IDMAX + 1];      /* Current input token          */
 int errors;                 /* cpp error counter            */
 FILEINFO* infile = NULL;    /* Current input file           */
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 int debug;                  /* TRUE if debugging now        */
 int bDumpDefs;              /* TRUE if #define's dump req.  */
 #ifdef EVALDEFS
@@ -168,7 +168,7 @@ char* preset[] =
 #ifdef  COMPILER
         COMPILER,
 #endif
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         "decus_cpp",                    /* Ourselves!                   */
 #endif
         NULL                            /* Must be last                 */
@@ -211,7 +211,7 @@ void InitCpp1()
 
     pCppOut = stdout;
     pCppIn  = stdin;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     debug = 0;
     bDumpDefs = 0;
     pDefOut = stdout;
@@ -260,7 +260,7 @@ int MAIN(int argc, char** argv)
     }
     switch (i)
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     case 4:
         if ( bDumpDefs )
         {
@@ -320,7 +320,7 @@ int MAIN(int argc, char** argv)
 
     setincdirs();                   /* Setup -I include directories */
     addfile( pCppIn, work);           /* "open" main input file       */
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if (debug > 0 || bDumpDefs)
         dumpdef("preset #define symbols");
 #endif
@@ -333,7 +333,7 @@ int MAIN(int argc, char** argv)
     {
         cierror("Inside #ifdef block at end of input, depth = %d", i);
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pDefOut != stdout && pDefOut != stderr )
         fclose( pDefOut );
 #endif
