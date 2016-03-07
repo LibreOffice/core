@@ -326,7 +326,9 @@ Menu RID_MENU_REPORT
                 {
                     MenuItem
                     {
-                        ITEM_FORMAT_FRAME_TO_TOP
+                        Identifier = SID_FRAME_TO_TOP ;
+                        Command = ".uno:BringToFront" ;
+                        Text [ en-US ] = "~Bring to Front" ;
                     };
                     MenuItem
                     {
@@ -342,7 +344,9 @@ Menu RID_MENU_REPORT
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_FRAME_TO_BOTTOM
+                        Identifier = SID_FRAME_TO_BOTTOM ;
+                        Command = ".uno:SendToBack" ;
+                        Text [ en-US ] = "~Send to Back" ;
                     };
                     MenuItem
                     {
@@ -350,33 +354,45 @@ Menu RID_MENU_REPORT
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_HEAVEN
+                        Identifier = SID_OBJECT_HEAVEN ;
+                        Command = ".uno:SetObjectToForeground" ;
+                        Text [ en-US ] = "~To Foreground" ;
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_HELL
+                        Identifier = SID_OBJECT_HELL ;
+                        Command = ".uno:SetObjectToBackground" ;
+                        Text [ en-US ] = "T~o Background" ;
                     };
                 };
             };
         };
         MenuItem
         {
-            ITEM_FORMAT_OBJECT_ALIGN
+            Identifier = SID_OBJECT_ALIGN ;
+            Command = ".uno:ObjectAlign" ;
+            Text [ en-US ] = "A~lignment" ;
             SubMenu = Menu
             {
                 ItemList =
                 {
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_ALIGN_LEFT
+                        Identifier = SID_OBJECT_ALIGN_LEFT ;
+                        Command = ".uno:ObjectAlignLeft" ;
+                        Text [ en-US ] = "~Left" ;
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_ALIGN_CENTER
+                        Identifier = SID_OBJECT_ALIGN_CENTER ;
+                        Command = ".uno:AlignCenter" ;
+                        Text [ en-US ] = "~Centered" ;
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_ALIGN_RIGHT
+                        Identifier = SID_OBJECT_ALIGN_RIGHT ;
+                        Command = ".uno:ObjectAlignRight" ;
+                        Text [ en-US ] = "~Right" ;
                     };
                     MenuItem
                     {
@@ -384,15 +400,21 @@ Menu RID_MENU_REPORT
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_ALIGN_UP
+                        Identifier = SID_OBJECT_ALIGN_UP ;
+                        Command = ".uno:AlignUp" ;
+                        Text [ en-US ] = "~Top" ;
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_ALIGN_MIDDLE
+                        Identifier = SID_OBJECT_ALIGN_MIDDLE ;
+                        Command = ".uno:AlignMiddle" ;
+                        Text [ en-US ] = "C~enter" ;
                     };
                     MenuItem
                     {
-                        ITEM_FORMAT_OBJECT_ALIGN_DOWN
+                        Identifier = SID_OBJECT_ALIGN_DOWN ;
+                        Command = ".uno:AlignDown" ;
+                        Text [ en-US ] = "~Bottom" ;
                     };
                 };
             };
