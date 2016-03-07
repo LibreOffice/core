@@ -487,7 +487,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     return !mbError;
 }
 
-void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage)
+void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage, bool bAdd)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
@@ -496,21 +496,40 @@ void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed
     aRelationsInfo = comphelper::sequenceToContainer< std::vector< uno::Sequence<beans::StringPair> > >(comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, ".rels", mxCtx));
 
     // Do we have a relation already?
+    bool bHaveRelation = false;
     int nCount = 0;
     for (const uno::Sequence<beans::StringPair>& rRelation : aRelationsInfo)
     {
         auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rRelation);
         if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType) != aRelation.end())
-            return;
+        {
+            bHaveRelation = true;
+            break;
+        }
         ++nCount;
     }
 
-    // No, then add one.
-    std::vector<beans::StringPair> aRelation;
-    aRelation.push_back(beans::StringPair("Id", "rId" + OUString::number(++nCount)));
-    aRelation.push_back(beans::StringPair("Type", OOXML_SIGNATURE_ORIGIN));
-    aRelation.push_back(beans::StringPair("Target", "_xmlsignatures/origin.sigs"));
-    aRelationsInfo.push_back(comphelper::containerToSequence(aRelation));
+    if (!bHaveRelation && bAdd)
+    {
+        // No, and have to add one.
+        std::vector<beans::StringPair> aRelation;
+        aRelation.push_back(beans::StringPair("Id", "rId" + OUString::number(++nCount)));
+        aRelation.push_back(beans::StringPair("Type", OOXML_SIGNATURE_ORIGIN));
+        aRelation.push_back(beans::StringPair("Target", "_xmlsignatures/origin.sigs"));
+        aRelationsInfo.push_back(comphelper::containerToSequence(aRelation));
+    }
+    else if (bHaveRelation && !bAdd)
+    {
+        // Yes, and need to remove it.
+        for (std::vector< uno::Sequence<beans::StringPair> >::iterator it = aRelationsInfo.begin(); it != aRelationsInfo.end();)
+        {
+            auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(*it);
+            if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType) != aRelation.end())
+                it = aRelationsInfo.erase(it);
+            else
+                ++it;
+        }
+    }
 
     // Write it back.
     uno::Reference<io::XTruncate> xTruncate(xRelStream, uno::UNO_QUERY);
