@@ -16,6 +16,24 @@
       "revId": "9140e51c250a89caa31d91984e3b73c2ccb484af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_cb8709d6",
+        "filename": "sw/qa/core/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-07T14:34:01Z",
+      "side": 1,
+      "message": "oh, why didn\u0027t i think of it earlier:\n\nthere is comphelper::ScopeGuard, which basically takes a lambda as parameter which it calls from the dtor, so passing a lambda that calls dispose() should fix the problem nicely",
+      "parentUuid": "bacf61ea_6bad3d88",
+      "revId": "9140e51c250a89caa31d91984e3b73c2ccb484af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
