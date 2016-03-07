@@ -580,9 +580,9 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
     const ScAddress& s = rRange.aStart;
     const ScAddress& e = rRange.aEnd;
 
-    SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
-    SCCOL nCol1 = s.Col(), nCol2 = e.Col();
-    SCROW nRow1 = s.Row(), nRow2 = e.Row();
+    const SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
+    const SCCOL nCol1 = s.Col(), nCol2 = e.Col();
+    const SCROW nRow1 = s.Row(), nRow2 = e.Row();
 
     // Make sure I have all the tables cached.
     size_t nTabFirstId = itrTabId->second;
@@ -616,58 +616,120 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
             return TokenArrayRef();
         }
 
-        ScMatrixRef xMat = new ScFullMatrix(
-            static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
+        SCSIZE nMatrixColumns = static_cast<SCSIZE>(nDataCol2-nDataCol1+1);
+        SCSIZE nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
+        ScMatrixRef xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
 
-        // Only fill non-empty cells, for better performance.
+        // Needed in shrink and fill.
         vector<SCROW> aRows;
         pTab->getAllRows(aRows, nDataRow1, nDataRow2);
-        for (vector<SCROW>::const_iterator itr = aRows.begin(), itrEnd = aRows.end(); itr != itrEnd; ++itr)
-        {
-            SCROW nRow = *itr;
-            vector<SCCOL> aCols;
-            pTab->getAllCols(nRow, aCols, nDataCol1, nDataCol2);
-            for (vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end(); itrCol != itrColEnd; ++itrCol)
-            {
-                SCCOL nCol = *itrCol;
-                TokenRef pToken = pTab->getCell(nCol, nRow);
-                if (!pToken)
-                    // This should never happen!
-                    return TokenArrayRef();
+        bool bFill = true;
 
-                SCSIZE nC = nCol - nDataCol1, nR = nRow - nDataRow1;
-                switch (pToken->GetType())
+        // Check if size could be allocated and if not skip the fill, there's
+        // one error element instead. But retry first with the actual data area
+        // if that is smaller than the original range, which works for most
+        // functions just not some that operate/compare with the original size
+        // and expect empty values in non-data areas.
+        // Restrict this though to ranges of entire columns or rows, other
+        // ranges might be on purpose. (Other special cases to handle?)
+        /* TODO: sparse matrix could help */
+        SCSIZE nMatCols, nMatRows;
+        xMat->GetDimensions( nMatCols, nMatRows);
+        if (nMatCols != nMatrixColumns || nMatRows != nMatrixRows)
+        {
+            bFill = false;
+            if (aRows.empty())
+            {
+                // There's no data at all. Set the one matrix element to empty
+                // for column-repeated and row-repeated access.
+                xMat->PutEmpty(0,0);
+            }
+            else if ((nCol1 == 0 && nCol2 == MAXCOL) || (nRow1 == 0 && nRow2 == MAXROW))
+            {
+                nDataRow1 = aRows.front();
+                nDataRow2 = aRows.back();
+                SCCOL nMinCol = std::numeric_limits<SCCOL>::max();
+                SCCOL nMaxCol = std::numeric_limits<SCCOL>::min();
+                for (vector<SCROW>::const_iterator itr = aRows.begin(), itrEnd = aRows.end(); itr != itrEnd; ++itr)
                 {
-                    case svDouble:
-                        xMat->PutDouble(pToken->GetDouble(), nC, nR);
-                    break;
-                    case svString:
-                        xMat->PutString(pToken->GetString(), nC, nR);
-                    break;
-                    default:
-                        ;
+                    vector<SCCOL> aCols;
+                    pTab->getAllCols(*itr, aCols, nDataCol1, nDataCol2);
+                    if (!aCols.empty())
+                    {
+                        nMinCol = std::min( nMinCol, aCols.front());
+                        nMaxCol = std::max( nMaxCol, aCols.back());
+                    }
+                }
+
+                if (nMinCol <= nMaxCol && ((static_cast<SCSIZE>(nMaxCol-nMinCol+1) < nMatrixColumns) ||
+                            (static_cast<SCSIZE>(nDataRow2-nDataRow1+1) < nMatrixRows)))
+                {
+                    nMatrixColumns = static_cast<SCSIZE>(nMaxCol-nMinCol+1);
+                    nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
+                    xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
+                    xMat->GetDimensions( nMatCols, nMatRows);
+                    if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
+                    {
+                        nDataCol1 = nMinCol;
+                        nDataCol2 = nMaxCol;
+                        bFill = true;
+                    }
                 }
             }
         }
 
-        if (!bFirstTab)
-            pArray->AddOpCode(ocSep);
+        if (bFill)
+        {
+            // Only fill non-empty cells, for better performance.
+            for (vector<SCROW>::const_iterator itr = aRows.begin(), itrEnd = aRows.end(); itr != itrEnd; ++itr)
+            {
+                SCROW nRow = *itr;
+                vector<SCCOL> aCols;
+                pTab->getAllCols(nRow, aCols, nDataCol1, nDataCol2);
+                for (vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end(); itrCol != itrColEnd; ++itrCol)
+                {
+                    SCCOL nCol = *itrCol;
+                    TokenRef pToken = pTab->getCell(nCol, nRow);
+                    if (!pToken)
+                        // This should never happen!
+                        return TokenArrayRef();
 
-        ScMatrixToken aToken(xMat);
-        if (!pArray)
-            pArray.reset(new ScTokenArray);
-        pArray->AddToken(aToken);
+                    SCSIZE nC = nCol - nDataCol1, nR = nRow - nDataRow1;
+                    switch (pToken->GetType())
+                    {
+                        case svDouble:
+                            xMat->PutDouble(pToken->GetDouble(), nC, nR);
+                            break;
+                        case svString:
+                            xMat->PutString(pToken->GetString(), nC, nR);
+                            break;
+                        default:
+                            ;
+                    }
+                }
+            }
 
-        bFirstTab = false;
+            if (!bFirstTab)
+                pArray->AddOpCode(ocSep);
 
-        if (!pNewRange)
-            pNewRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
-        else
-            pNewRange->ExtendTo(ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
+            ScMatrixToken aToken(xMat);
+            if (!pArray)
+                pArray.reset(new ScTokenArray);
+            pArray->AddToken(aToken);
+
+            bFirstTab = false;
+
+            if (!pNewRange)
+                pNewRange.reset(new ScRange(nDataCol1, nDataRow1, nTab, nDataCol2, nDataRow2, nTab));
+            else
+                pNewRange->ExtendTo(ScRange(nDataCol1, nDataRow1, nTab, nDataCol2, nDataRow2, nTab));
+        }
     }
 
-    if (pNewRange)
+    rDoc.maRangeArrays.insert( RangeArrayMap::value_type(aCacheRange, pArray));
+    if (pNewRange && *pNewRange != aCacheRange)
         rDoc.maRangeArrays.insert( RangeArrayMap::value_type(*pNewRange, pArray));
+
     return pArray;
 }
 
@@ -1453,9 +1515,9 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
 
-    SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
-    SCCOL nCol1 = s.Col(), nCol2 = e.Col();
-    SCROW nRow1 = s.Row(), nRow2 = e.Row();
+    const SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
+    const SCCOL nCol1 = s.Col(), nCol2 = e.Col();
+    const SCROW nRow1 = s.Row(), nRow2 = e.Row();
 
     if (nTab2 != nTab1)
         // For now, we don't support multi-sheet ranges intentionally because
@@ -1488,10 +1550,38 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         else
             pUsedRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
 
-        ScMatrixRef xMat = new ScFullMatrix(
-            static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
+        SCSIZE nMatrixColumns = static_cast<SCSIZE>(nCol2-nCol1+1);
+        SCSIZE nMatrixRows = static_cast<SCSIZE>(nRow2-nRow1+1);
+        ScMatrixRef xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
 
-        pSrcDoc->FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &pHostDoc->GetSharedStringPool());
+        // Check if size could be allocated and if not skip the fill, there's
+        // one error element instead. But retry first with the actual data area
+        // if that is smaller than the original range, which works for most
+        // functions just not some that operate/compare with the original size
+        // and expect empty values in non-data areas.
+        // Restrict this though to ranges of entire columns or rows, other
+        // ranges might be on purpose. (Other special cases to handle?)
+        /* TODO: sparse matrix could help */
+        SCSIZE nMatCols, nMatRows;
+        xMat->GetDimensions( nMatCols, nMatRows);
+        if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
+        {
+            pSrcDoc->FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &pHostDoc->GetSharedStringPool());
+        }
+        else if ((nCol1 == 0 && nCol2 == MAXCOL) || (nRow1 == 0 && nRow2 == MAXROW))
+        {
+            if ((static_cast<SCSIZE>(nDataCol2-nDataCol1+1) < nMatrixColumns) ||
+                (static_cast<SCSIZE>(nDataRow2-nDataRow1+1) < nMatrixRows))
+            {
+                nMatrixColumns = static_cast<SCSIZE>(nDataCol2-nDataCol1+1);
+                nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
+                xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
+                xMat->GetDimensions( nMatCols, nMatRows);
+                if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
+                    pSrcDoc->FillMatrix(*xMat, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, &pHostDoc->GetSharedStringPool());
+            }
+        }
+
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
