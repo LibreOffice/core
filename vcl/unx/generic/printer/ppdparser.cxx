@@ -105,21 +105,18 @@ namespace psp
         OUString translateValue(
             const OUString& i_rKey,
             const OUString& i_rOption,
-            const OUString& i_rValue,
-            const css::lang::Locale& i_rLocale = css::lang::Locale()
+            const OUString& i_rValue
             ) const;
 
         OUString translateOption( const OUString& i_rKey,
-                                       const OUString& i_rOption,
-                                       const css::lang::Locale& i_rLocale = css::lang::Locale() ) const
+                                       const OUString& i_rOption ) const
         {
-            return translateValue( i_rKey, i_rOption, OUString(), i_rLocale );
+            return translateValue( i_rKey, i_rOption, OUString()  );
         }
 
-        OUString translateKey( const OUString& i_rKey,
-                                    const css::lang::Locale& i_rLocale = css::lang::Locale() ) const
+        OUString translateKey( const OUString& i_rKey ) const
         {
-            return translateValue( i_rKey, OUString(), OUString(), i_rLocale );
+            return translateValue( i_rKey, OUString(), OUString() );
         }
     };
 
@@ -192,8 +189,7 @@ namespace psp
     OUString PPDTranslator::translateValue(
         const OUString& i_rKey,
         const OUString& i_rOption,
-        const OUString& i_rValue,
-        const css::lang::Locale& i_rLocale
+        const OUString& i_rValue
         ) const
     {
         OUString aResult;
@@ -218,7 +214,7 @@ namespace psp
             {
                 const translation_map& rMap( it->second );
 
-                css::lang::Locale aLoc( normalizeInputLocale( i_rLocale, true ) );
+                css::lang::Locale aLoc( normalizeInputLocale( css::lang::Locale(), true ) );
                 /* FIXME-BCP47: use LanguageTag::getFallbackStrings()? */
                 for( int nTry = 0; nTry < 4; nTry++ )
                 {

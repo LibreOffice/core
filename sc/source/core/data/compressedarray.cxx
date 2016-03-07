@@ -238,16 +238,15 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
 
 template< typename A, typename D >
 void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A nStart,
-        A nEnd, long nSourceDy )
+        A nEnd )
 {
     size_t nIndex = 0;
     A nRegionEnd;
     for (A j=nStart; j<=nEnd; ++j)
     {
         const D& rValue = (j==nStart ?
-                rArray.GetValue( j+nSourceDy, nIndex, nRegionEnd) :
+                rArray.GetValue( j, nIndex, nRegionEnd) :
                 rArray.GetNextValue( nIndex, nRegionEnd));
-        nRegionEnd -= nSourceDy;
         if (nRegionEnd > nEnd)
             nRegionEnd = nEnd;
         this->SetValue( j, nRegionEnd, rValue);
@@ -370,16 +369,15 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
         const ScBitMaskCompressedArray<A,D>& rArray, A nStart, A nEnd,
-        const D& rValueToAnd, long nSourceDy )
+        const D& rValueToAnd )
 {
     size_t nIndex = 0;
     A nRegionEnd;
     for (A j=nStart; j<=nEnd; ++j)
     {
         const D& rValue = (j==nStart ?
-                rArray.GetValue( j+nSourceDy, nIndex, nRegionEnd) :
+                rArray.GetValue( j, nIndex, nRegionEnd) :
                 rArray.GetNextValue( nIndex, nRegionEnd));
-        nRegionEnd -= nSourceDy;
         if (nRegionEnd > nEnd)
             nRegionEnd = nEnd;
         this->SetValue( j, nRegionEnd, rValue & rValueToAnd);

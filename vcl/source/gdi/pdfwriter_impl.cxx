@@ -1382,7 +1382,7 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 }
 }
 
-void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg ) const
+void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const
 {
     Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                m_pWriter->m_aMapMode,
@@ -1390,16 +1390,12 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
                                rPoint ) );
 
     sal_Int32 nValue    = aPoint.X();
-    if( bNeg )
-        nValue = -nValue;
 
     appendFixedInt( nValue, rBuffer );
 
     rBuffer.append( ' ' );
 
     nValue      = pointToPixel(getHeight()) - aPoint.Y();
-    if( bNeg )
-        nValue = -nValue;
 
     appendFixedInt( nValue, rBuffer );
 }

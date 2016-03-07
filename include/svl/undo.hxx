@@ -199,7 +199,7 @@ namespace svl
 
         virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
-        virtual SfxUndoAction*  GetRedoAction( size_t nNo=0 ) const = 0;
+        virtual SfxUndoAction*  GetRedoAction() const = 0;
 
         virtual bool            Undo() = 0;
         virtual bool            Redo() = 0;
@@ -317,7 +317,7 @@ public:
     virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const override;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const override;
     virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const override;
-    virtual SfxUndoAction*  GetRedoAction( size_t nNo=0 ) const override;
+    virtual SfxUndoAction*  GetRedoAction() const override;
     virtual bool            Undo() override;
     virtual bool            Redo() override;
     virtual void            Clear() override;

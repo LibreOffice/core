@@ -297,7 +297,7 @@ public:
 
     void UndoToColumn(
         sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,
-        ScColumn& rColumn, const ScMarkData* pMarkData = nullptr) const;
+        ScColumn& rColumn) const;
 
     void        CopyScenarioFrom( const ScColumn& rSrcCol );
     void        CopyScenarioTo( ScColumn& rDestCol ) const;

@@ -325,7 +325,7 @@ public:
     void                Clear( bool bInCtor = false );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
-    void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=nullptr );
+    void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos );
     void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = nullptr );
     void                FontModified();
     void                SelectAll();
@@ -359,9 +359,7 @@ public:
     void                SetEntryPos(
                             SvxIconChoiceCtrlEntry* pEntry,
                             const Point& rPos,
-                            bool bAdjustRow = false,
-                            bool bCheckScrollBars = false,
-                            bool bKeepGridMap = false
+                            bool bAdjustRow = false
                         );
 
     void                InvalidateEntry( SvxIconChoiceCtrlEntry* );

@@ -166,7 +166,7 @@ struct ArrayImpl
     long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
     long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
 
-    double              GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    double              GetHorDiagAngle( size_t nCol, size_t nRow ) const;
     double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
 };
 
@@ -300,12 +300,12 @@ long ArrayImpl::GetRowHeight( size_t nFirstRow, size_t nLastRow ) const
     return GetRowPosition( nLastRow + 1 ) - GetRowPosition( nFirstRow );
 }
 
-double ArrayImpl::GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple ) const
+double ArrayImpl::GetHorDiagAngle( size_t nCol, size_t nRow ) const
 {
     double fAngle = 0.0;
     if( IsValidPos( nCol, nRow ) )
     {
-        if( bSimple || !GetCell( nCol, nRow ).IsMerged() )
+        if( !GetCell( nCol, nRow ).IsMerged() )
         {
             fAngle = frame::GetHorDiagAngle( maWidths[ nCol ] + 1, maHeights[ nRow ] + 1 );
         }

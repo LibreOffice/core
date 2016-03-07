@@ -1693,12 +1693,12 @@ void ScColumn::CopyToColumn(
 
 void ScColumn::UndoToColumn(
     sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,
-    ScColumn& rColumn, const ScMarkData* pMarkData ) const
+    ScColumn& rColumn ) const
 {
     if (nRow1 > 0)
         CopyToColumn(rCxt, 0, nRow1-1, InsertDeleteFlags::FORMULA, false, rColumn);
 
-    CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //TODO: bMarked ????
+    CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn);      //TODO: bMarked ????
 
     if (nRow2 < MAXROW)
         CopyToColumn(rCxt, nRow2+1, MAXROW, InsertDeleteFlags::FORMULA, false, rColumn);

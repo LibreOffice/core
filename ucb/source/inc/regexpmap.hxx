@@ -394,9 +394,7 @@ public:
 
     size_type size() const;
 
-    Val const * map(OUString const & rString,
-                    OUString * pTranslation = nullptr)
-        const;
+    Val const * map(OUString const & rString) const;
 
 private:
     RegexpMapImpl< Val > * m_pImpl;
@@ -545,8 +543,7 @@ typename RegexpMap< Val >::size_type RegexpMap< Val >::size() const
 }
 
 template< typename Val >
-Val const * RegexpMap< Val >::map(rtl::OUString const & rString,
-                                  rtl::OUString * pTranslation) const
+Val const * RegexpMap< Val >::map(rtl::OUString const & rString) const
 {
     for (int n = Regexp::KIND_DOMAIN; n >= Regexp::KIND_PREFIX; --n)
     {
@@ -555,12 +552,11 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString,
         typename List< Val >::const_iterator aEnd(rTheList.end());
         for (typename List< Val >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
              ++aIt)
-            if (aIt->m_aRegexp.matches(rString, pTranslation, nullptr))
+            if (aIt->m_aRegexp.matches(rString, nullptr, nullptr))
                 return &aIt->m_aValue;
     }
     if (m_pImpl->m_pDefault
-        && m_pImpl->m_pDefault->m_aRegexp.matches(rString, pTranslation,
-                                                  nullptr))
+        && m_pImpl->m_pDefault->m_aRegexp.matches(rString, nullptr, nullptr))
         return &m_pImpl->m_pDefault->m_aValue;
     return 0;
 }

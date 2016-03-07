@@ -829,7 +829,7 @@ public:
     void DelSectionFormat( size_t nFormat);
     void UpdateSection( size_t const nSect, SwSectionData &,
             SfxItemSet const*const  = nullptr);
-    bool IsAnySectionInDoc( bool bChkReadOnly = false ) const;
+    bool IsAnySectionInDoc() const;
 
     OUString GetUniqueSectionName( const OUString* pChkStr = nullptr ) const;
 

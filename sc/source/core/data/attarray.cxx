@@ -1825,7 +1825,7 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 
 const SCROW SC_VISATTR_STOP = 84;
 
-bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFullFormattedArea ) const
+bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
 {
     OSL_ENSURE( nCount, "nCount == 0" );
 
@@ -1845,18 +1845,10 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
     SCROW nStartRow = (nPos ? pData[nPos-1].nRow + 1 : 0);
     if (nStartRow <= nLastData + 1)
     {
-        if (bFullFormattedArea && pData[nPos].pPattern->IsVisible())
-        {
-            rLastRow = pData[nPos].nRow;
-            return true;
-        }
-        else
-        {
-            // Ignore here a few rows if data happens to end within
-            // SC_VISATTR_STOP rows before MAXROW.
-            rLastRow = nLastData;
-            return false;
-        }
+        // Ignore here a few rows if data happens to end within
+        // SC_VISATTR_STOP rows before MAXROW.
+        rLastRow = nLastData;
+        return false;
     }
 
     // Find a run below last data row.
@@ -1873,7 +1865,7 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
         if ( nAttrStartRow <= nLastData )
             nAttrStartRow = nLastData + 1;
         SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
-        if ( nAttrSize >= SC_VISATTR_STOP && !bFullFormattedArea )
+        if ( nAttrSize >= SC_VISATTR_STOP )
             break;  // while, ignore this range and below
         else if ( pData[nEndPos].pPattern->IsVisible() )
         {

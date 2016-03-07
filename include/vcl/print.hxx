@@ -628,10 +628,10 @@ public:
     sal_Int64            getIntValue( const char* i_pPropName, sal_Int64 i_nDefault ) const
                              { return getIntValue( OUString::createFromAscii( i_pPropName ), i_nDefault ); }
 
-    OUString             getStringValue( const OUString& i_rPropertyName, const OUString& i_rDefault = OUString() ) const;
+    OUString             getStringValue( const OUString& i_rPropertyName ) const;
     // convenience for fixed strings
-    OUString             getStringValue( const char* i_pPropName, const OUString& i_rDefault = OUString() ) const
-                             { return getStringValue( OUString::createFromAscii( i_pPropName ), i_rDefault ); }
+    OUString             getStringValue( const char* i_pPropName ) const
+                             { return getStringValue( OUString::createFromAscii( i_pPropName ) ); }
 
     // helper functions for user to create a single control
     struct UIControlOptions

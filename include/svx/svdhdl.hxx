@@ -470,7 +470,7 @@ public:
     void RemoveAllByKind(SdrHdlKind eKind);
 
     // Last inserted handles are likely hit (if the handles are above each other)
-    SdrHdl* IsHdlListHit(const Point& rPnt, bool bBack=false, bool bNext=false, SdrHdl* pHdl0=nullptr) const;
+    SdrHdl* IsHdlListHit(const Point& rPnt) const;
     SdrHdl* GetHdl(SdrHdlKind eKind1) const;
 };
 

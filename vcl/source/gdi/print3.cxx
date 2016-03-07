@@ -1781,11 +1781,11 @@ sal_Int64 PrinterOptionsHelper::getIntValue( const OUString& i_rPropertyName, sa
     return (aVal >>= nRet) ? nRet : i_nDefault;
 }
 
-OUString PrinterOptionsHelper::getStringValue( const OUString& i_rPropertyName, const OUString& i_rDefault ) const
+OUString PrinterOptionsHelper::getStringValue( const OUString& i_rPropertyName ) const
 {
     OUString aRet;
     css::uno::Any aVal( getValue( i_rPropertyName ) );
-    return (aVal >>= aRet) ? aRet : i_rDefault;
+    return (aVal >>= aRet) ? aRet : OUString();
 }
 
 bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp )

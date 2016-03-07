@@ -85,7 +85,7 @@ public:
 
     /** Copy rArray.nStart+nSourceDy to this.nStart */
     void                        CopyFrom( const ScCompressedArray& rArray,
-                                    A nStart, A nEnd, long nSourceDy = 0 );
+                                    A nStart, A nEnd );
 
     // methods public for the coupled array sum methods
     /** Obtain index into entries for nPos */
@@ -168,8 +168,7 @@ public:
     /** Copy values from rArray and bitwise AND them with rValueToAnd. */
     void                        CopyFromAnded(
                                     const ScBitMaskCompressedArray& rArray,
-                                    A nStart, A nEnd, const D& rValueToAnd,
-                                    long nSourceDy = 0 );
+                                    A nStart, A nEnd, const D& rValueToAnd );
 
     /** Return the last row where an entry meets the condition:
         ((aValue & rBitMask) != 0), start searching at nStart. If no entry

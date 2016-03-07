@@ -21,7 +21,7 @@
 
  The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check
+  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unuseddefaultparams' check
   $ ./compilerplugins/clang/unuseddefaultparams.py unuseddefaultparams.log
 */
 

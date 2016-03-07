@@ -135,11 +135,9 @@ public:
 
         // converts point from ref device coordinates to
         // page coordinates and appends the point to the buffer
-        // if bNeg is true, the coordinates are inverted AFTER transformation
-        // to page (useful for transformation matrices
         // if pOutPoint is set it will be updated to the emitted point
         // (in PDF map mode, that is 10th of point)
-        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg = false ) const;
+        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const;
         // appends a B2DPoint without further transformation
         void appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const;
         // appends a rectangle

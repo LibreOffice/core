@@ -247,7 +247,7 @@ protected:
     virtual void    LoseFocus() override;
 
     bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
-    void            ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase = false);
+    void            ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos);
     void            ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     void            ImplCalcMetrics();
     void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );

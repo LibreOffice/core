@@ -353,10 +353,10 @@ void OReportWindow::collapseSections(const uno::Sequence< css::beans::PropertyVa
     m_aViewsWindow->collapseSections(_aCollpasedSections);
 }
 
-void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
+void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
 
-    m_aViewsWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
+    m_aViewsWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection);
 }
 
 void OReportWindow::setGridSnap(bool bOn)

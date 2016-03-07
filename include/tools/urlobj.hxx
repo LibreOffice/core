@@ -327,9 +327,7 @@ public:
 
     inline bool
     GetNewAbsURL(OUString const & rTheRelURIRef,
-                 INetURLObject * pTheAbsURIRef,
-                 EncodeMechanism eMechanism = WAS_ENCODED,
-                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
+                 INetURLObject * pTheAbsURIRef)
         const;
 
     /** @descr  If rTheRelURIRef cannot be converted to an absolute URL
@@ -576,20 +574,12 @@ public:
 
         @param rTheName  The new name.
 
-        @param nIndex  The non-negative index of the segment, or LAST_SEGMENT
-        if addressing the last segment.
-
-        @param bIgnoreFinalSlash  If true, a final slash at the end of the
-        hierarchical path does not denote an empty segment, but is ignored.
-
         @return  True if the name has successfully been modified (and the
         resulting URI is still valid).  If the path is not hierarchical, or
         the specified segment does not exist, false is returned.  If false is
         returned, the object is not modified.
      */
-    bool setName(OUString const & rTheName,
-                 sal_Int32 nIndex = LAST_SEGMENT,
-                 bool bIgnoreFinalSlash = true);
+    bool setName(OUString const & rTheName);
 
     /** Get the base of the name of a segment.
 
@@ -922,18 +912,12 @@ public:
 
     /** Get the 'extension' of the last segment in the path.
 
-        @param eMechanism  See the general discussion for get-methods.
-
-        @param eCharset  See the general discussion for get-methods.
-
         @return  For a hierarchical URL, everything after the first unencoded
         '.' in the last segment of the path.  Note that this 'extension' may
         be empty.  If the URL is not hierarchical, or if the last segment does
         not contain an unencoded '.', an empty string is returned.
      */
-    OUString GetFileExtension(DecodeMechanism eMechanism = DECODE_TO_IURI,
-                               rtl_TextEncoding eCharset
-                                   = RTL_TEXTENCODING_UTF8) const;
+    OUString GetFileExtension() const;
 
     inline bool Append(OUString const & rTheSegment,
                        EncodeMechanism eMechanism = WAS_ENCODED,
@@ -1264,15 +1248,13 @@ INetURLObject::smartRel2Abs(OUString const & rTheRelURIRef,
 }
 
 inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
-                                        INetURLObject * pTheAbsURIRef,
-                                        EncodeMechanism eMechanism,
-                                        rtl_TextEncoding eCharset)
+                                        INetURLObject * pTheAbsURIRef)
     const
 {
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
     if (!convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef, bWasAbsolute,
-                         eMechanism, eCharset, false/*bIgnoreFragment*/, false, false,
+                         WAS_ENCODED, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
                          FSYS_DETECT))
         return false;
     if (pTheAbsURIRef)

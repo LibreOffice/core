@@ -197,12 +197,8 @@ namespace rptui
         void collapseSections(const css::uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections);
 
         /** align all marked objects in all sections
-        *
-        * \param eHor
-        * \param eVert
-        * \param bBoundRects
         */
-        void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
+        void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection);
 
         sal_uInt32 getMarkedObjectCount() const;
 

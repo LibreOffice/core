@@ -97,17 +97,10 @@ namespace connectivity
             error messages thrown by core components of OpenOffice.org Base will contain
             a standardized prefix &quot;[OOoBase]&quot; in every message.
 
-            @param _rParamValue1
-                the value which the placeholder $1$ should be replaced with. If this value is
-                not present (see <code>::boost::optional::operator !</code>), then no replacement
-                will happen, and <code>_rParamValue2</code> and <code>_rParamValue3</code> will be
-                ignored.
-
             @see css::sdb::ErrorCondition
         */
         OUString getErrorMessage(
-                            const ErrorCondition _eCondition,
-                            const ParamValue& _rParamValue1 = ParamValue()
+                            const ErrorCondition _eCondition
                         ) const;
 
         /** returns the error code associated with a given error condition
@@ -182,17 +175,11 @@ namespace connectivity
             @param  _eCondition
                 the ErrorCondition which hit you
 
-            @param _rParamValue1
-                a runtime-dependent value which should be filled into the error message
-                which is associated with <arg>_eCondition</arg>, replacing the first placeholder
-                in this message.
-
             @see getErrorMessage
             @see getErrorCode
         */
         void            raiseException(
-                            const ErrorCondition _eCondition,
-                            const ParamValue& _rParamValue1 = ParamValue()
+                            const ErrorCondition _eCondition
                         ) const;
 
         /** raises a typed exception, that is, a UNO exception which is derived from
@@ -209,11 +196,6 @@ namespace connectivity
                 the type of the exception to throw. This type <em>must</em> specify
                 an exception class derived from css::sdbc::SQLException.
 
-            @param _rParamValue1
-                a runtime-dependent value which should be filled into the error message
-                which is associated with <arg>_eCondition</arg>, replacing the first placeholder
-                in this message.
-
             @throws ::std::bad_cast
                 if <arg>_rExceptionType</arg> does not specify an exception class derived from
                 css::sdbc::SQLException.
@@ -224,8 +206,7 @@ namespace connectivity
         void            raiseTypedException(
                             const ErrorCondition _eCondition,
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-                            const css::uno::Type& _rExceptionType,
-                            const ParamValue& _rParamValue1 = ParamValue()
+                            const css::uno::Type& _rExceptionType
                         ) const;
 
         /** retrieves an <code>SQLException</code> object which contains information about

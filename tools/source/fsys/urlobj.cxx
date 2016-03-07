@@ -4010,10 +4010,9 @@ OUString INetURLObject::getName(sal_Int32 nIndex, bool bIgnoreFinalSlash,
     return decode(pSegBegin, p, eMechanism, eCharset);
 }
 
-bool INetURLObject::setName(OUString const & rTheName, sal_Int32 nIndex,
-                            bool bIgnoreFinalSlash)
+bool INetURLObject::setName(OUString const & rTheName)
 {
-    SubString aSegment(getSegment(nIndex, bIgnoreFinalSlash));
+    SubString aSegment(getSegment(LAST_SEGMENT, true));
     if (!aSegment.isPresent())
         return false;
 
@@ -4879,10 +4878,9 @@ OUString INetURLObject::GetLastName(DecodeMechanism eMechanism,
     return getName(LAST_SEGMENT, true, eMechanism, eCharset);
 }
 
-OUString INetURLObject::GetFileExtension(DecodeMechanism eMechanism,
-                                          rtl_TextEncoding eCharset) const
+OUString INetURLObject::GetFileExtension() const
 {
-    return getExtension(LAST_SEGMENT, false, eMechanism, eCharset);
+    return getExtension(LAST_SEGMENT, false);
 }
 
 void INetURLObject::CutLastName()

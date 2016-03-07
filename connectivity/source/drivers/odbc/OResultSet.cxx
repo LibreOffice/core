@@ -1275,9 +1275,9 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
     return aRet;
 }
 
-template < typename T, SQLINTEGER BufferLength > T OResultSet::getStmtOption (SQLINTEGER fOption, T dflt) const
+template < typename T, SQLINTEGER BufferLength > T OResultSet::getStmtOption (SQLINTEGER fOption) const
 {
-    T result (dflt);
+    T result (0);
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLGetStmtAttr(m_aStatementHandle, fOption, &result, BufferLength, nullptr);
     return result;

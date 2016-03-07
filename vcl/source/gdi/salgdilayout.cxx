@@ -234,7 +234,7 @@ void SalGraphics::mirror( Rectangle& rRect, const OutputDevice *pOutDev, bool bB
     rRect.Move( x - x_org, 0 );
 }
 
-basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *i_pOutDev, bool i_bBack ) const
+basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *i_pOutDev ) const
 {
     long w;
     if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -252,10 +252,7 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
             OutputDevice *pOutDevRef = const_cast<OutputDevice*>(i_pOutDev);
             // mirror this window back
             double devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-            if( i_bBack )
-                aRet.setX( i_rPoint.getX() - devX + pOutDevRef->GetOutOffXPixel() );
-            else
-                aRet.setX( devX + (i_rPoint.getX() - pOutDevRef->GetOutOffXPixel()) );
+            aRet.setX( devX + (i_rPoint.getX() - pOutDevRef->GetOutOffXPixel()) );
         }
         else
             aRet.setX( w-1-i_rPoint.getX() );
@@ -263,7 +260,7 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
     return aRet;
 }
 
-basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *i_pOutDev, bool i_bBack ) const
+basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *i_pOutDev ) const
 {
     long w;
     if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -279,11 +276,11 @@ basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, con
         sal_Int32 nPoints = i_rPoly.count();
         for( sal_Int32 i = 0; i < nPoints; i++ )
         {
-            aRet.append( mirror( i_rPoly.getB2DPoint( i ), i_pOutDev, i_bBack ) );
+            aRet.append( mirror( i_rPoly.getB2DPoint( i ), i_pOutDev ) );
             if( i_rPoly.isPrevControlPointUsed( i ) )
-                aRet.setPrevControlPoint( i, mirror( i_rPoly.getPrevControlPoint( i ), i_pOutDev, i_bBack ) );
+                aRet.setPrevControlPoint( i, mirror( i_rPoly.getPrevControlPoint( i ), i_pOutDev ) );
             if( i_rPoly.isNextControlPointUsed( i ) )
-                aRet.setNextControlPoint( i, mirror( i_rPoly.getNextControlPoint( i ), i_pOutDev, i_bBack ) );
+                aRet.setNextControlPoint( i, mirror( i_rPoly.getNextControlPoint( i ), i_pOutDev ) );
         }
         aRet.setClosed( i_rPoly.isClosed() );
         aRet.flip();

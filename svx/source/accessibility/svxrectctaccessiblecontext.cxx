@@ -1081,7 +1081,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox() throw( RuntimeExcep
     return *mpBoundingBox;
 }
 
-void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked, bool bFireFocus )
+void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )
 {
     if( mbIsChecked != bChecked )
     {
@@ -1093,12 +1093,10 @@ void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked, bool bFir
         Any                             aNew;
         Any&                            rMod = bChecked? aNew : aOld;
 
-        if( bFireFocus )
-        {
-            //Send the STATE_CHANGED(Focused) event to accessible
-            rMod <<= AccessibleStateType::FOCUSED;
-            CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
-        }
+        //Send the STATE_CHANGED(Focused) event to accessible
+        rMod <<= AccessibleStateType::FOCUSED;
+        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
+
         rMod <<= AccessibleStateType::CHECKED;
 
         CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
