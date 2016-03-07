@@ -69,12 +69,12 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
 
     for (int i = 0; i < m_manifest.getLength(); i++)
     {
-        const uno::Sequence<css::beans::PropertyValue>& entry = m_manifest[i];
+        const uno::Sequence<beans::PropertyValue>& entry = m_manifest[i];
         OUString sPath, sMediaType;
         bool bEncrypted = false;
         for (int j = 0; j < entry.getLength(); j++)
         {
-            const css::beans::PropertyValue& prop = entry[j];
+            const beans::PropertyValue& prop = entry[j];
 
             if (prop.Name.equals(sPropFullPath))
                 prop.Value >>= sPath;
@@ -127,10 +127,10 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
 
     if (bTempStream)
     {
-        if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
+        if (nStreamOpenMode & embed::ElementModes::TRUNCATE)
         {
             //We write always into a new temporary stream.
-            mxTempSignatureStream.set(css::io::TempFile::create(mxContext), uno::UNO_QUERY_THROW);
+            mxTempSignatureStream.set(io::TempFile::create(mxContext), uno::UNO_QUERY_THROW);
             if (aHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
                 aHelper.xSignatureStream = mxTempSignatureStream;
             else
@@ -167,11 +167,11 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
         }
     }
 
-    if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
+    if (nStreamOpenMode & embed::ElementModes::TRUNCATE)
     {
         if (aHelper.xSignatureStream.is() && aHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
         {
-            css::uno::Reference<css::io::XTruncate> xTruncate(aHelper.xSignatureStream, uno::UNO_QUERY_THROW);
+            uno::Reference<io::XTruncate> xTruncate(aHelper.xSignatureStream, uno::UNO_QUERY_THROW);
             xTruncate->truncate();
         }
     }
@@ -338,7 +338,7 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
 
     maSignatureHelper.StartMission();
 
-    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(css::embed::ElementModes::READ, bUseTempStream);
+    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::READ, bUseTempStream);
     if (aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStream.is())
     {
         uno::Reference< io::XInputStream > xInputStream(aStreamHelper.xSignatureStream, uno::UNO_QUERY);
@@ -349,6 +349,44 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
     maSignatureHelper.EndMission();
 
     maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
+}
+
+void DocumentSignatureManager::write()
+{
+    // Export all other signatures...
+    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false);
+
+    if (aStreamHelper.xSignatureStream.is() && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
+    {
+        // ODF
+        uno::Reference< io::XOutputStream > xOutputStream(aStreamHelper.xSignatureStream, uno::UNO_QUERY);
+        uno::Reference<xml::sax::XWriter> xSaxWriter = maSignatureHelper.CreateDocumentHandlerWithHeader(xOutputStream);
+
+        uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
+        size_t nInfos = maCurrentSignatureInformations.size();
+        for (size_t n = 0 ; n < nInfos ; ++n)
+            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
+
+        XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);
+
+    }
+    else if (aStreamHelper.xSignatureStorage.is() && aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+    {
+        // OOXML
+        size_t nSignatureCount = maCurrentSignatureInformations.size();
+        maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
+        maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+
+        for (size_t i = 0; i < nSignatureCount; ++i)
+            maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);
+    }
+
+    // If stream was not provided, we are responsible for committing it....
+    if (!mxSignatureStream.is())
+    {
+        uno::Reference<embed::XTransactedObject> xTrans(aStreamHelper.xSignatureStorage, uno::UNO_QUERY);
+        xTrans->commit();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
