@@ -95,7 +95,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
 
     if(aField == nullptr)
     {
-        ::dbtools::throwInvalidIndexException(*this,Any());
+        ::dbtools::throwInvalidIndexException(*this);
         return -1;
     }
 
