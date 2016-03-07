@@ -53,7 +53,6 @@
 #include "lock.hxx"
 #include "modifications.hxx"
 #include "node.hxx"
-#include "path.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
@@ -91,16 +90,16 @@ ChildAccess::ChildAccess(
     assert(root.is() && node.is());
 }
 
-Path ChildAccess::getAbsolutePath() {
+std::vector<OUString> ChildAccess::getAbsolutePath() {
     rtl::Reference< Access > parent(getParentAccess());
     assert(parent.is());
-    Path path(parent->getAbsolutePath());
+    std::vector<OUString> path(parent->getAbsolutePath());
     path.push_back(name_);
     return path;
 }
 
-Path ChildAccess::getRelativePath() {
-    Path path;
+std::vector<OUString> ChildAccess::getRelativePath() {
+    std::vector<OUString> path;
     rtl::Reference< Access > parent(getParentAccess());
     if (parent.is()) {
         path = parent->getRelativePath();
@@ -301,7 +300,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
     assert(globalModifications != nullptr);
     commitChildChanges(valid, globalModifications);
     if (valid && changedValue_.get() != nullptr) {
-        Path path(getAbsolutePath());
+        std::vector<OUString> path(getAbsolutePath());
         getComponents().addModification(path);
         globalModifications->add(path);
         switch (node_->kind()) {
@@ -335,7 +334,7 @@ void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
 }
 
 void ChildAccess::addSupportedServiceNames(
-    std::vector< OUString > * services)
+    std::vector<OUString> * services)
 {
     assert(services != nullptr);
     services->push_back(

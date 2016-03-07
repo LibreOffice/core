@@ -50,7 +50,7 @@ public:
 
     OUString const & getDefaultTemplateName() const { return defaultTemplateName_;}
 
-    std::vector< OUString > & getAdditionalTemplateNames() { return additionalTemplateNames_;}
+    std::vector<OUString> & getAdditionalTemplateNames() { return additionalTemplateNames_;}
 
     bool isValidTemplate(OUString const & templateName) const;
 
@@ -62,7 +62,7 @@ private:
     virtual Kind kind() const override;
 
     OUString defaultTemplateName_;
-    std::vector< OUString > additionalTemplateNames_;
+    std::vector<OUString> additionalTemplateNames_;
     NodeMap members_;
     OUString templateName_;
         // non-empty if this node is a template, free node, or set member

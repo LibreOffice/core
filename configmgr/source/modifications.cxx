@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 
 #include "modifications.hxx"
-#include "path.hxx"
 
 namespace configmgr {
 
@@ -32,10 +31,10 @@ Modifications::Modifications() {}
 
 Modifications::~Modifications() {}
 
-void Modifications::add(Path const & path) {
+void Modifications::add(std::vector<OUString> const & path) {
     Node * p = &root_;
     bool wasPresent = false;
-    for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
+    for (auto i(path.begin()); i != path.end(); ++i) {
         Node::Children::iterator j(p->children.find(*i));
         if (j == p->children.end()) {
             if (wasPresent && p->children.empty()) {
@@ -52,10 +51,10 @@ void Modifications::add(Path const & path) {
     p->children.clear();
 }
 
-void Modifications::remove(Path const & path) {
+void Modifications::remove(std::vector<OUString> const & path) {
     assert(!path.empty());
     Node * p = &root_;
-    for (Path::const_iterator i(path.begin());;) {
+    for (auto i(path.begin());;) {
         Node::Children::iterator j(p->children.find(*i));
         if (j == p->children.end()) {
             break;
@@ -63,7 +62,7 @@ void Modifications::remove(Path const & path) {
         if (++i == path.end()) {
             p->children.erase(j);
             if (p->children.empty()) {
-                Path parent(path);
+                std::vector<OUString> parent(path);
                 parent.pop_back();
                 remove(parent);
             }

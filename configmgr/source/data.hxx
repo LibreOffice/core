@@ -34,7 +34,6 @@
 #include "additions.hxx"
 #include "modifications.hxx"
 #include "nodemap.hxx"
-#include "path.hxx"
 
 namespace configmgr {
 
@@ -70,7 +69,7 @@ struct Data {
 
     rtl::Reference< Node > resolvePathRepresentation(
         OUString const & pathRepresentation,
-        OUString * canonicRepresenation, Path * path, int * finalizedLayer)
+        OUString * canonicRepresenation, std::vector<OUString> * path, int * finalizedLayer)
         const;
 
     rtl::Reference< Node > getTemplate(
