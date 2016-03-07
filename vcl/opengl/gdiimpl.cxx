@@ -147,6 +147,9 @@ void OpenGLSalGraphicsImpl::Init()
     if( maOffscreenTex.GetWidth()  != GetWidth() ||
         maOffscreenTex.GetHeight() != GetHeight() )
     {
+        // We don't want to be swapping before we've painted.
+        mpFlush->SetPriority( SchedulerPriority::POST_PAINT );
+
         if( maOffscreenTex && // don't work to release empty textures
             mpContext.is() )  // valid context
         {
