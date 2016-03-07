@@ -1,6 +1,47 @@
---- misc/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.am	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.am	2009-09-21 14:02:48.563253008 +0200
-@@ -3,6 +3,7 @@
+From a74ad2cada3cd652f08679d65cb6e1ef3acad21c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:19:12 +0100
+Subject: [PATCH] xmlsec1-customkeymanage.patch
+
+---
+ include/xmlsec/mscrypto/Makefile.am |    1 +
+ include/xmlsec/mscrypto/Makefile.in |    1 +
+ include/xmlsec/mscrypto/akmngr.h    |   71 ++
+ include/xmlsec/nss/Makefile.am      |    3 +
+ include/xmlsec/nss/Makefile.in      |    3 +
+ include/xmlsec/nss/akmngr.h         |   56 ++
+ include/xmlsec/nss/app.h            |    5 +
+ include/xmlsec/nss/ciphers.h        |   35 +
+ include/xmlsec/nss/keysstore.h      |    4 +
+ include/xmlsec/nss/tokens.h         |  182 ++++++
+ src/mscrypto/akmngr.c               |  236 +++++++
+ src/nss/Makefile.am                 |    3 +
+ src/nss/Makefile.in                 |   30 +-
+ src/nss/akmngr.c                    |  384 +++++++++++
+ src/nss/hmac.c                      |    8 +-
+ src/nss/keysstore.c                 |  830 ++++++++++++++++--------
+ src/nss/keywrapers.c                | 1213 +++++++++++++++++++++++++++++++++++
+ src/nss/pkikeys.c                   |   51 +-
+ src/nss/symkeys.c                   |  717 ++++++++++++++++++++-
+ src/nss/tokens.c                    |  548 ++++++++++++++++
+ src/nss/x509.c                      |  547 ++++------------
+ src/nss/x509vfy.c                   |  303 +++------
+ win32/Makefile.msvc                 |    4 +
+ 23 files changed, 4275 insertions(+), 960 deletions(-)
+ create mode 100644 include/xmlsec/mscrypto/akmngr.h
+ create mode 100644 include/xmlsec/nss/akmngr.h
+ create mode 100644 include/xmlsec/nss/ciphers.h
+ create mode 100644 include/xmlsec/nss/tokens.h
+ create mode 100644 src/mscrypto/akmngr.c
+ create mode 100644 src/nss/akmngr.c
+ create mode 100644 src/nss/keywrapers.c
+ create mode 100644 src/nss/tokens.c
+
+diff --git a/include/xmlsec/mscrypto/Makefile.am b/include/xmlsec/mscrypto/Makefile.am
+index 18dff94..44837b6 100644
+--- a/include/xmlsec/mscrypto/Makefile.am
++++ b/include/xmlsec/mscrypto/Makefile.am
+@@ -3,6 +3,7 @@ NULL =
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  
  xmlsecmscryptoinc_HEADERS = \
@@ -8,9 +49,11 @@
  app.h \
  certkeys.h \
  crypto.h \
---- misc/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.in	2009-06-25 22:53:30.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.in	2009-09-21 14:02:48.571021349 +0200
-@@ -281,6 +281,7 @@
+diff --git a/include/xmlsec/mscrypto/Makefile.in b/include/xmlsec/mscrypto/Makefile.in
+index 1570c0f..1d02a06 100644
+--- a/include/xmlsec/mscrypto/Makefile.in
++++ b/include/xmlsec/mscrypto/Makefile.in
+@@ -281,6 +281,7 @@ top_srcdir = @top_srcdir@
  NULL = 
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  xmlsecmscryptoinc_HEADERS = \
@@ -18,9 +61,88 @@
  app.h \
  certkeys.h \
  crypto.h \
---- misc/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.am	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.am	2009-09-21 14:02:48.577933031 +0200
-@@ -10,6 +10,9 @@
+diff --git a/include/xmlsec/mscrypto/akmngr.h b/include/xmlsec/mscrypto/akmngr.h
+new file mode 100644
+index 0000000..4858192
+--- /dev/null
++++ b/include/xmlsec/mscrypto/akmngr.h
+@@ -0,0 +1,71 @@
++/** 
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright ..........................
++ */
++#ifndef __XMLSEC_MSCRYPTO_AKMNGR_H__
++#define __XMLSEC_MSCRYPTO_AKMNGR_H__    
++
++#include <windows.h>
++#include <wincrypt.h>
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/keys.h>
++#include <xmlsec/transforms.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */ 
++
++XMLSEC_CRYPTO_EXPORT xmlSecKeysMngrPtr
++xmlSecMSCryptoAppliedKeysMngrCreate(
++    HCERTSTORE keyStore ,
++    HCERTSTORE certStore
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecMSCryptoAppliedKeysMngrSymKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	HCRYPTKEY	symKey
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecMSCryptoAppliedKeysMngrPubKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	HCRYPTKEY	pubKey
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecMSCryptoAppliedKeysMngrPriKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	HCRYPTKEY	priKey
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore (
++	xmlSecKeysMngrPtr	mngr ,
++	HCERTSTORE keyStore
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore (
++	xmlSecKeysMngrPtr	mngr ,
++	HCERTSTORE trustedStore
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore (
++	xmlSecKeysMngrPtr	mngr ,
++	HCERTSTORE untrustedStore
++) ;
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
++
++#endif /* __XMLSEC_MSCRYPTO_AKMNGR_H__ */
++
++
+diff --git a/include/xmlsec/nss/Makefile.am b/include/xmlsec/nss/Makefile.am
+index e352162..997ca7f 100644
+--- a/include/xmlsec/nss/Makefile.am
++++ b/include/xmlsec/nss/Makefile.am
+@@ -10,6 +10,9 @@ bignum.h \
  keysstore.h \
  pkikeys.h \
  x509.h \
@@ -30,9 +152,11 @@
  $(NULL)
  
  install-exec-hook:
---- misc/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.in	2009-06-25 22:53:31.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.in	2009-09-21 14:02:48.585376325 +0200
-@@ -288,6 +288,9 @@
+diff --git a/include/xmlsec/nss/Makefile.in b/include/xmlsec/nss/Makefile.in
+index cd99f9d..3fb47cf 100644
+--- a/include/xmlsec/nss/Makefile.in
++++ b/include/xmlsec/nss/Makefile.in
+@@ -288,6 +288,9 @@ bignum.h \
  keysstore.h \
  pkikeys.h \
  x509.h \
@@ -42,9 +166,73 @@
  $(NULL)
  
  all: all-am
---- misc/xmlsec1-1.2.14/include/xmlsec/nss/app.h	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/app.h	2009-09-21 14:02:48.612847068 +0200
-@@ -22,6 +22,9 @@
+diff --git a/include/xmlsec/nss/akmngr.h b/include/xmlsec/nss/akmngr.h
+new file mode 100644
+index 0000000..8053511
+--- /dev/null
++++ b/include/xmlsec/nss/akmngr.h
+@@ -0,0 +1,56 @@
++/** 
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright ..........................
++ */
++#ifndef __XMLSEC_NSS_AKMNGR_H__
++#define __XMLSEC_NSS_AKMNGR_H__    
++
++#include <nss.h>
++#include <nspr.h>
++#include <pk11func.h>
++#include <cert.h>
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/keys.h>
++#include <xmlsec/transforms.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */ 
++
++XMLSEC_CRYPTO_EXPORT xmlSecKeysMngrPtr
++xmlSecNssAppliedKeysMngrCreate(
++    PK11SlotInfo** slots,
++	int cSlots,
++    CERTCertDBHandle* handler
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssAppliedKeysMngrSymKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	PK11SymKey*			symKey
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssAppliedKeysMngrPubKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	SECKEYPublicKey*	pubKey
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssAppliedKeysMngrPriKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	SECKEYPrivateKey*	priKey
++) ;
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
++
++#endif /* __XMLSEC_NSS_AKMNGR_H__ */
++
++
+diff --git a/include/xmlsec/nss/app.h b/include/xmlsec/nss/app.h
+index b78492f..1d85eae 100644
+--- a/include/xmlsec/nss/app.h
++++ b/include/xmlsec/nss/app.h
+@@ -22,6 +22,9 @@ extern "C" {
  #include <xmlsec/keysmngr.h>
  #include <xmlsec/transforms.h>
  
@@ -54,7 +242,7 @@
  /**
   * Init/shutdown
   */
-@@ -36,6 +39,8 @@
+@@ -36,6 +39,8 @@ XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrAdoptKey(xmlSecKeysMngrPtr
  									    xmlSecKeyPtr key);
  XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrLoad	(xmlSecKeysMngrPtr mngr,
  									 const char* uri);
@@ -63,9 +251,52 @@
  XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
  									 const char* filename,
  									 xmlSecKeyDataType type);
---- misc/xmlsec1-1.2.14/include/xmlsec/nss/keysstore.h	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/keysstore.h	2009-09-21 14:02:48.626261748 +0200
-@@ -16,6 +16,8 @@
+diff --git a/include/xmlsec/nss/ciphers.h b/include/xmlsec/nss/ciphers.h
+new file mode 100644
+index 0000000..607eb1e
+--- /dev/null
++++ b/include/xmlsec/nss/ciphers.h
+@@ -0,0 +1,35 @@
++/** 
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright ..........................
++ */
++#ifndef __XMLSEC_NSS_CIPHERS_H__
++#define __XMLSEC_NSS_CIPHERS_H__    
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */ 
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/keys.h>
++#include <xmlsec/transforms.h>
++
++
++XMLSEC_CRYPTO_EXPORT int xmlSecNssSymKeyDataAdoptKey( xmlSecKeyDataPtr data,
++									PK11SymKey* symkey ) ;
++
++XMLSEC_CRYPTO_EXPORT xmlSecKeyDataPtr xmlSecNssSymKeyDataKeyAdopt( PK11SymKey* symKey ) ;
++
++XMLSEC_CRYPTO_EXPORT PK11SymKey*   xmlSecNssSymKeyDataGetKey(xmlSecKeyDataPtr data);
++
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
++
++#endif /* __XMLSEC_NSS_CIPHERS_H__ */
++
++
+diff --git a/include/xmlsec/nss/keysstore.h b/include/xmlsec/nss/keysstore.h
+index 10e6bb3..126f2fb 100644
+--- a/include/xmlsec/nss/keysstore.h
++++ b/include/xmlsec/nss/keysstore.h
+@@ -16,6 +16,8 @@ extern "C" {
  #endif /* __cplusplus */ 
  
  #include <xmlsec/xmlsec.h>
@@ -74,7 +305,7 @@
  
  /****************************************************************************
   *
-@@ -31,6 +33,8 @@
+@@ -31,6 +33,8 @@ extern "C" {
  XMLSEC_CRYPTO_EXPORT xmlSecKeyStoreId	xmlSecNssKeysStoreGetKlass	(void);
  XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreAdoptKey	(xmlSecKeyStorePtr store,
  									 xmlSecKeyPtr key);
@@ -83,9 +314,441 @@
  XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
  								 const char *uri,
  								 xmlSecKeysMngrPtr keysMngr);
---- misc/xmlsec1-1.2.14/src/nss/Makefile.am	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/Makefile.am	2009-09-21 14:02:48.591560472 +0200
-@@ -35,6 +35,9 @@
+diff --git a/include/xmlsec/nss/tokens.h b/include/xmlsec/nss/tokens.h
+new file mode 100644
+index 0000000..444c561
+--- /dev/null
++++ b/include/xmlsec/nss/tokens.h
+@@ -0,0 +1,182 @@
++/**
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright (c) 2003 Sun Microsystems, Inc.  All rights reserved.
++ * 
++ * Contributor(s): _____________________________
++ * 
++ */
++#ifndef __XMLSEC_NSS_TOKENS_H__
++#define __XMLSEC_NSS_TOKENS_H__
++
++#include <string.h>
++
++#include <nss.h>
++#include <pk11func.h>
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/list.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */ 
++
++/**
++ * xmlSecNssKeySlotListId
++ *
++ * The crypto mechanism list klass
++ */
++#define xmlSecNssKeySlotListId xmlSecNssKeySlotListGetKlass()
++XMLSEC_CRYPTO_EXPORT xmlSecPtrListId xmlSecNssKeySlotListGetKlass( void ) ;
++
++/*******************************************
++ * KeySlot interfaces
++ *******************************************/ 
++/**
++ * Internal NSS key slot data
++ * @mechanismList:		the mechanisms that the slot bound with.
++ * @slot:				the pkcs slot
++ *
++ * This context is located after xmlSecPtrList
++ */
++typedef struct _xmlSecNssKeySlot	xmlSecNssKeySlot ;
++typedef struct _xmlSecNssKeySlot*	xmlSecNssKeySlotPtr ;
++
++struct _xmlSecNssKeySlot {
++	CK_MECHANISM_TYPE_PTR	mechanismList ; /* mech. array, NULL ternimated */
++	PK11SlotInfo*			slot ;
++} ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotSetMechList(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE_PTR mechanismList
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotEnableMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE mechanism
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotDisableMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE mechanism
++) ;
++
++XMLSEC_CRYPTO_EXPORT CK_MECHANISM_TYPE_PTR
++xmlSecNssKeySlotGetMechList(
++    xmlSecNssKeySlotPtr keySlot
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotSetSlot(
++    xmlSecNssKeySlotPtr keySlot ,
++	PK11SlotInfo* slot
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotInitialize(
++    xmlSecNssKeySlotPtr keySlot ,
++	PK11SlotInfo* slot
++) ;
++
++XMLSEC_CRYPTO_EXPORT void
++xmlSecNssKeySlotFinalize(
++    xmlSecNssKeySlotPtr keySlot
++) ;
++
++XMLSEC_CRYPTO_EXPORT PK11SlotInfo*
++xmlSecNssKeySlotGetSlot(
++	xmlSecNssKeySlotPtr keySlot
++) ;
++
++XMLSEC_CRYPTO_EXPORT xmlSecNssKeySlotPtr
++xmlSecNssKeySlotCreate() ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotCopy(
++	xmlSecNssKeySlotPtr newKeySlot ,
++	xmlSecNssKeySlotPtr keySlot
++) ;
++
++XMLSEC_CRYPTO_EXPORT xmlSecNssKeySlotPtr
++xmlSecNssKeySlotDuplicate(
++	xmlSecNssKeySlotPtr keySlot
++) ;
++
++XMLSEC_CRYPTO_EXPORT void
++xmlSecNssKeySlotDestroy(
++	    xmlSecNssKeySlotPtr keySlot
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotBindMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE type
++) ;
++
++XMLSEC_CRYPTO_EXPORT int
++xmlSecNssKeySlotSupportMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE type
++) ;
++
++
++/************************************************************************
++ * PKCS#11 crypto token interfaces
++ *
++ * A PKCS#11 slot repository will be defined internally. From the
++ * repository, a user can specify a particular slot for a certain crypto
++ * mechanism.
++ *
++ * In some situation, some cryptographic operation should act in a user
++ * designated devices. The interfaces defined here provide the way. If 
++ * the user do not initialize the repository distinctly, the interfaces
++ * use the default functions provided by NSS itself.
++ *
++ ************************************************************************/
++/**
++ * Initialize NSS pkcs#11 slot repository
++ *
++ * Returns 0 if success or -1 if an error occurs.
++ */
++XMLSEC_CRYPTO_EXPORT int xmlSecNssSlotInitialize( void ) ;
++
++/**
++ * Shutdown and destroy NSS pkcs#11 slot repository
++ */
++XMLSEC_CRYPTO_EXPORT void xmlSecNssSlotShutdown() ;
++
++/**
++ * Get PKCS#11 slot handler
++ * @type	the mechanism that the slot must support.
++ *
++ * Returns a pointer to PKCS#11 slot or NULL if an error occurs.
++ *
++ * Notes: The returned handler must be destroied distinctly.
++ */
++XMLSEC_CRYPTO_EXPORT PK11SlotInfo* xmlSecNssSlotGet( CK_MECHANISM_TYPE type ) ;
++
++/**
++ * Adopt a pkcs#11 slot with a mechanism into the repository
++ * @slot:	the pkcs#11 slot.
++ * @mech:	the mechanism.
++ *
++ * If @mech is available( @mech != CKM_INVALID_MECHANISM ), every operation with
++ * this mechanism only can perform on the @slot.
++ * 
++ * Returns 0 if success or -1 if an error occurs.
++ */
++XMLSEC_CRYPTO_EXPORT int xmlSecNssSlotAdopt( PK11SlotInfo* slot, CK_MECHANISM_TYPE mech ) ;
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
++
++#endif	/* __XMLSEC_NSS_TOKENS_H__ */
++
+diff --git a/src/mscrypto/akmngr.c b/src/mscrypto/akmngr.c
+new file mode 100644
+index 0000000..3bbd124
+--- /dev/null
++++ b/src/mscrypto/akmngr.c
+@@ -0,0 +1,236 @@
++/** 
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright.........................
++ */
++#include "globals.h"
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/keys.h>
++#include <xmlsec/keysmngr.h>
++#include <xmlsec/transforms.h>
++#include <xmlsec/errors.h>
++
++#include <xmlsec/mscrypto/crypto.h>
++#include <xmlsec/mscrypto/keysstore.h>
++#include <xmlsec/mscrypto/akmngr.h>
++#include <xmlsec/mscrypto/x509.h>
++
++/**
++ * xmlSecMSCryptoAppliedKeysMngrCreate:
++ * @hKeyStore:		the pointer to key store.
++ * @hCertStore:		the pointer to certificate database.
++ *
++ * Create and load key store and certificate database into keys manager
++ *
++ * Returns keys manager pointer on success or NULL otherwise.
++ */
++xmlSecKeysMngrPtr
++xmlSecMSCryptoAppliedKeysMngrCreate(
++    HCERTSTORE hKeyStore ,
++    HCERTSTORE hCertStore
++) {
++	xmlSecKeyDataStorePtr	certStore = NULL ;
++	xmlSecKeysMngrPtr		keyMngr = NULL ;
++	xmlSecKeyStorePtr		keyStore = NULL ;
++
++	keyStore = xmlSecKeyStoreCreate( xmlSecMSCryptoKeysStoreId ) ;
++	if( keyStore == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeyStoreCreate" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * At present, MS Crypto engine do not provide a way to setup a key store.
++	 */
++	if( keyStore != NULL ) {
++		/*TODO: binding key store.*/
++	}
++
++	keyMngr = xmlSecKeysMngrCreate() ;
++	if( keyMngr == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrCreate" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeyStoreDestroy( keyStore ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * Add key store to manager, from now on keys manager destroys the store if
++	 * needed
++	 */
++	if( xmlSecKeysMngrAdoptKeysStore( keyMngr, keyStore ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++			"xmlSecKeysMngrAdoptKeyStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeyStoreDestroy( keyStore ) ;
++		xmlSecKeysMngrDestroy( keyMngr ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * Initialize crypto library specific data in keys manager
++	 */
++	if( xmlSecMSCryptoKeysMngrInit( keyMngr ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecMSCryptoKeysMngrInit" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeysMngrDestroy( keyMngr ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * Set certificate databse to X509 key data store
++	 */
++	/*-
++	 * At present, MS Crypto engine do not provide a way to setup a cert store.
++	 */
++
++	/*-
++	 * Set the getKey callback
++	 */
++	keyMngr->getKey = xmlSecKeysMngrGetKey ;
++
++	return keyMngr ;
++}
++
++int
++xmlSecMSCryptoAppliedKeysMngrSymKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	HCRYPTKEY			symKey
++) {
++	/*TODO: import the key into keys manager.*/
++	return(0) ;
++}
++
++int
++xmlSecMSCryptoAppliedKeysMngrPubKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	HCRYPTKEY	pubKey
++) {
++	/*TODO: import the key into keys manager.*/
++	return(0) ;
++}
++
++int
++xmlSecMSCryptoAppliedKeysMngrPriKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	HCRYPTKEY	priKey
++) {
++	/*TODO: import the key into keys manager.*/
++	return(0) ;
++}
++
++int
++xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore (
++	xmlSecKeysMngrPtr	mngr ,
++	HCERTSTORE keyStore
++) {
++	xmlSecKeyDataStorePtr x509Store ;
++
++	xmlSecAssert2( mngr != NULL, -1 ) ;
++	xmlSecAssert2( keyStore != NULL, -1 ) ;
++
++    x509Store = xmlSecKeysMngrGetDataStore( mngr, xmlSecMSCryptoX509StoreId ) ;
++	if( x509Store == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrGetDataStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 ) ;
++	}
++
++	if( xmlSecMSCryptoX509StoreAdoptKeyStore( x509Store, keyStore ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyDataStoreGetName( x509Store ) ) ,
++			"xmlSecMSCryptoX509StoreAdoptKeyStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 ) ;
++	}
++
++	return( 0 ) ;
++}
++
++int
++xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore (
++	xmlSecKeysMngrPtr	mngr ,
++	HCERTSTORE trustedStore
++) {
++	xmlSecKeyDataStorePtr x509Store ;
++
++	xmlSecAssert2( mngr != NULL, -1 ) ;
++	xmlSecAssert2( trustedStore != NULL, -1 ) ;
++
++    x509Store = xmlSecKeysMngrGetDataStore( mngr, xmlSecMSCryptoX509StoreId ) ;
++	if( x509Store == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrGetDataStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 ) ;
++	}
++
++	if( xmlSecMSCryptoX509StoreAdoptTrustedStore( x509Store, trustedStore ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyDataStoreGetName( x509Store ) ) ,
++			"xmlSecMSCryptoX509StoreAdoptKeyStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 ) ;
++	}
++
++	return( 0 ) ;
++}
++
++int
++xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore (
++	xmlSecKeysMngrPtr	mngr ,
++	HCERTSTORE untrustedStore
++) {
++	xmlSecKeyDataStorePtr x509Store ;
++
++	xmlSecAssert2( mngr != NULL, -1 ) ;
++	xmlSecAssert2( untrustedStore != NULL, -1 ) ;
++
++    x509Store = xmlSecKeysMngrGetDataStore( mngr, xmlSecMSCryptoX509StoreId ) ;
++	if( x509Store == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrGetDataStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 ) ;
++	}
++
++	if( xmlSecMSCryptoX509StoreAdoptUntrustedStore( x509Store, untrustedStore ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyDataStoreGetName( x509Store ) ) ,
++			"xmlSecMSCryptoX509StoreAdoptKeyStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 ) ;
++	}
++
++	return( 0 ) ;
++}
++
+diff --git a/src/nss/Makefile.am b/src/nss/Makefile.am
+index 5209533..d8d3bdc 100644
+--- a/src/nss/Makefile.am
++++ b/src/nss/Makefile.am
+@@ -35,6 +35,9 @@ libxmlsec1_nss_la_SOURCES =\
  	kw_des.c \
  	kw_aes.c \
  	globals.h \
@@ -95,9 +758,11 @@
  	$(NULL)
  
  if SHAREDLIB_HACK
---- misc/xmlsec1-1.2.14/src/nss/Makefile.in	2009-06-25 22:53:33.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/Makefile.in	2009-09-21 14:02:48.599339718 +0200
-@@ -72,7 +72,8 @@
+diff --git a/src/nss/Makefile.in b/src/nss/Makefile.in
+index d6bc31e..50a2cb8 100644
+--- a/src/nss/Makefile.in
++++ b/src/nss/Makefile.in
+@@ -72,7 +72,8 @@ am__DEPENDENCIES_1 =
  am__libxmlsec1_nss_la_SOURCES_DIST = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -107,7 +772,7 @@
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 = libxmlsec1_nss_la-strings.lo
  am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
-@@ -83,6 +84,8 @@
+@@ -83,6 +84,8 @@ am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
  	libxmlsec1_nss_la-x509.lo libxmlsec1_nss_la-x509vfy.lo \
  	libxmlsec1_nss_la-keysstore.lo libxmlsec1_nss_la-keytrans.lo \
  	libxmlsec1_nss_la-kw_des.lo libxmlsec1_nss_la-kw_aes.lo \
@@ -116,7 +781,7 @@
  	$(am__objects_1) $(am__objects_2)
  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
  libxmlsec1_nss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-@@ -333,6 +336,7 @@
+@@ -333,6 +336,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
  libxmlsec1_nss_la_SOURCES = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -124,7 +789,7 @@
  	$(NULL) $(am__append_1)
  libxmlsec1_nss_la_LIBADD = \
  	../libxmlsec1.la \
-@@ -439,6 +443,9 @@
+@@ -439,6 +443,9 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509vfy.Plo@am__quote@
@@ -134,7 +799,7 @@
  
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -468,6 +475,27 @@
+@@ -468,6 +475,27 @@ libxmlsec1_nss_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
@@ -162,8 +827,400 @@
  libxmlsec1_nss_la-bignum.lo: bignum.c
  @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-bignum.lo -MD -MP -MF $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo -c -o libxmlsec1_nss_la-bignum.lo `test -f 'bignum.c' || echo '$(srcdir)/'`bignum.c
  @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo $(DEPDIR)/libxmlsec1_nss_la-bignum.Plo
---- misc/xmlsec1-1.2.14/src/nss/hmac.c	2009-06-26 06:18:13.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/hmac.c	2009-09-21 14:02:48.649065288 +0200
+diff --git a/src/nss/akmngr.c b/src/nss/akmngr.c
+new file mode 100644
+index 0000000..65b94ac
+--- /dev/null
++++ b/src/nss/akmngr.c
+@@ -0,0 +1,384 @@
++/** 
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright.........................
++ */
++#include "globals.h"
++
++#include <nspr.h>
++#include <nss.h>
++#include <pk11func.h>
++#include <cert.h>
++#include <keyhi.h>
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/keys.h>
++#include <xmlsec/transforms.h>
++#include <xmlsec/errors.h>
++
++#include <xmlsec/nss/crypto.h>
++#include <xmlsec/nss/tokens.h>
++#include <xmlsec/nss/akmngr.h>
++#include <xmlsec/nss/pkikeys.h>
++#include <xmlsec/nss/ciphers.h>
++#include <xmlsec/nss/keysstore.h>
++
++/**
++ * xmlSecNssAppliedKeysMngrCreate:
++ * @slot:			array of pointers to NSS PKCS#11 slot information.
++ * @cSlots:			number of slots in the array
++ * @handler:		the pointer to NSS certificate database.
++ *
++ * Create and load NSS crypto slot and certificate database into keys manager
++ *
++ * Returns keys manager pointer on success or NULL otherwise.
++ */
++xmlSecKeysMngrPtr
++xmlSecNssAppliedKeysMngrCreate(
++	PK11SlotInfo** slots, 
++	int cSlots,
++	CERTCertDBHandle* handler
++) {
++	xmlSecKeyDataStorePtr	certStore = NULL ;
++	xmlSecKeysMngrPtr		keyMngr = NULL ;
++	xmlSecKeyStorePtr		keyStore = NULL ;
++	int islot = 0;
++	keyStore = xmlSecKeyStoreCreate( xmlSecNssKeysStoreId ) ;
++	if( keyStore == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeyStoreCreate" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return NULL ;
++	}
++
++	for (islot = 0; islot < cSlots; islot++)
++	{
++		xmlSecNssKeySlotPtr		keySlot ;
++
++		/* Create a key slot */
++		keySlot = xmlSecNssKeySlotCreate() ;
++		if( keySlot == NULL ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++				"xmlSecNssKeySlotCreate" ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++			xmlSecKeyStoreDestroy( keyStore ) ;
++			return NULL ;
++		}
++
++		/* Set slot */
++		if( xmlSecNssKeySlotSetSlot( keySlot , slots[islot] ) < 0 ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++				"xmlSecNssKeySlotSetSlot" ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++			xmlSecKeyStoreDestroy( keyStore ) ;
++			xmlSecNssKeySlotDestroy( keySlot ) ;
++			return NULL ;
++		}
++
++		/* Adopt keySlot */
++		if( xmlSecNssKeysStoreAdoptKeySlot( keyStore , keySlot ) < 0 ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++				"xmlSecNssKeysStoreAdoptKeySlot" ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++			xmlSecKeyStoreDestroy( keyStore ) ;
++			xmlSecNssKeySlotDestroy( keySlot ) ;
++			return NULL ;
++		}
++	}
++
++	keyMngr = xmlSecKeysMngrCreate() ;
++	if( keyMngr == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrCreate" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeyStoreDestroy( keyStore ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * Add key store to manager, from now on keys manager destroys the store if
++	 * needed
++	 */
++	if( xmlSecKeysMngrAdoptKeysStore( keyMngr, keyStore ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++			"xmlSecKeysMngrAdoptKeyStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeyStoreDestroy( keyStore ) ;
++		xmlSecKeysMngrDestroy( keyMngr ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * Initialize crypto library specific data in keys manager
++	 */
++	if( xmlSecNssKeysMngrInit( keyMngr ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrCreate" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeysMngrDestroy( keyMngr ) ;
++		return NULL ;
++	}
++
++	/*-
++	 * Set certificate databse to X509 key data store
++	 */
++	/**
++	 * Because Tej's implementation of certDB use the default DB, so I ignore
++	 * the certDB handler at present. I'll modify the cert store sources to
++	 * accept particular certDB instead of default ones.
++	certStore = xmlSecKeysMngrGetDataStore( keyMngr , xmlSecNssKeyDataStoreX509Id ) ;
++	if( certStore == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++			"xmlSecKeysMngrGetDataStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeysMngrDestroy( keyMngr ) ;
++		return NULL ;
++	}
++
++	if( xmlSecNssKeyDataStoreX509SetCertDb( certStore , handler ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
++			"xmlSecNssKeyDataStoreX509SetCertDb" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++
++		xmlSecKeysMngrDestroy( keyMngr ) ;
++		return NULL ;
++	}
++	*/
++
++	/*-
++	 * Set the getKey callback
++	 */
++	keyMngr->getKey = xmlSecKeysMngrGetKey ;
++
++	return keyMngr ;
++}
++
++int
++xmlSecNssAppliedKeysMngrSymKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	PK11SymKey*			symKey
++) {
++	xmlSecKeyPtr		key ;
++	xmlSecKeyDataPtr	data ;
++	xmlSecKeyStorePtr	keyStore ;
++
++	xmlSecAssert2( mngr != NULL , -1 ) ;
++	xmlSecAssert2( symKey != NULL , -1 ) ;
++
++	keyStore = xmlSecKeysMngrGetKeysStore( mngr ) ;
++	if( keyStore == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrGetKeysStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1) ;
++	}
++	xmlSecAssert2( xmlSecKeyStoreCheckId( keyStore , xmlSecNssKeysStoreId ) , -1 ) ;
++
++	data = xmlSecNssSymKeyDataKeyAdopt( symKey ) ;
++	if( data == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1) ;
++	}
++
++	key = xmlSecKeyCreate() ;
++	if( key == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDataDestroy( data ) ;
++		return(-1) ;
++	}
++
++	if( xmlSecKeySetValue( key , data ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDataDestroy( data ) ;
++		return(-1) ;
++	}
++
++	if( xmlSecNssKeysStoreAdoptKey( keyStore, key ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDestroy( key ) ;
++		return(-1) ;
++	}
++
++	return(0) ;
++}
++
++int
++xmlSecNssAppliedKeysMngrPubKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	SECKEYPublicKey*	pubKey
++) {
++	xmlSecKeyPtr		key ;
++	xmlSecKeyDataPtr	data ;
++	xmlSecKeyStorePtr	keyStore ;
++
++	xmlSecAssert2( mngr != NULL , -1 ) ;
++	xmlSecAssert2( pubKey != NULL , -1 ) ;
++
++	keyStore = xmlSecKeysMngrGetKeysStore( mngr ) ;
++	if( keyStore == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrGetKeysStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1) ;
++	}
++	xmlSecAssert2( xmlSecKeyStoreCheckId( keyStore , xmlSecNssKeysStoreId ) , -1 ) ;
++
++	data = xmlSecNssPKIAdoptKey( NULL, pubKey ) ;
++	if( data == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssPKIAdoptKey" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1) ;
++	}
++
++	key = xmlSecKeyCreate() ;
++	if( key == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDataDestroy( data ) ;
++		return(-1) ;
++	}
++
++	if( xmlSecKeySetValue( key , data ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDataDestroy( data ) ;
++		return(-1) ;
++	}
++
++	if( xmlSecNssKeysStoreAdoptKey( keyStore, key ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDestroy( key ) ;
++		return(-1) ;
++	}
++
++	return(0) ;
++}
++
++int
++xmlSecNssAppliedKeysMngrPriKeyLoad(
++	xmlSecKeysMngrPtr	mngr ,
++	SECKEYPrivateKey*	priKey
++) {
++	xmlSecKeyPtr		key ;
++	xmlSecKeyDataPtr	data ;
++	xmlSecKeyStorePtr	keyStore ;
++
++	xmlSecAssert2( mngr != NULL , -1 ) ;
++	xmlSecAssert2( priKey != NULL , -1 ) ;
++
++	keyStore = xmlSecKeysMngrGetKeysStore( mngr ) ;
++	if( keyStore == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecKeysMngrGetKeysStore" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1) ;
++	}
++	xmlSecAssert2( xmlSecKeyStoreCheckId( keyStore , xmlSecNssKeysStoreId ) , -1 ) ;
++
++	data = xmlSecNssPKIAdoptKey( priKey, NULL ) ;
++	if( data == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssPKIAdoptKey" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1) ;
++	}
++
++	key = xmlSecKeyCreate() ;
++	if( key == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDataDestroy( data ) ;
++		return(-1) ;
++	}
++
++	if( xmlSecKeySetValue( key , data ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDataDestroy( data ) ;
++		return(-1) ;
++	}
++
++	if( xmlSecNssKeysStoreAdoptKey( keyStore, key ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecNssSymKeyDataKeyAdopt" ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecKeyDestroy( key ) ;
++		return(-1) ;
++	}
++
++	return(0) ;
++}
++
+diff --git a/src/nss/hmac.c b/src/nss/hmac.c
+index 98bf0c1..97dce9d 100644
+--- a/src/nss/hmac.c
++++ b/src/nss/hmac.c
 @@ -23,8 +23,8 @@
  #include <xmlsec/transforms.h>
  #include <xmlsec/errors.h>
@@ -174,7 +1231,7 @@
  
  /* sizes in bits */
  #define XMLSEC_NSS_MIN_HMAC_SIZE		80
-@@ -286,13 +286,13 @@
+@@ -286,13 +286,13 @@ xmlSecNssHmacSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
      keyItem.data = xmlSecBufferGetData(buffer);
      keyItem.len  = xmlSecBufferGetSize(buffer); 
  
@@ -191,8 +1248,10 @@
  	return(-1);
      }
  	
---- misc/xmlsec1-1.2.14/src/nss/keysstore.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/keysstore.c	2009-09-21 14:02:48.633533885 +0200
+diff --git a/src/nss/keysstore.c b/src/nss/keysstore.c
+index a583f60..41a6d93 100644
+--- a/src/nss/keysstore.c
++++ b/src/nss/keysstore.c
 @@ -1,36 +1,56 @@
  /** 
   * XMLSec library
@@ -265,7 +1324,7 @@
  #include <xmlsec/errors.h>
  #include <xmlsec/xmltree.h>
  
-@@ -38,82 +58,461 @@
+@@ -38,81 +58,460 @@
  
  #include <xmlsec/nss/crypto.h>
  #include <xmlsec/nss/keysstore.h>
@@ -294,23 +1353,10 @@
  #define xmlSecNssKeysStoreSize \
 -	(sizeof(xmlSecKeyStore) + sizeof(xmlSecKeyStorePtr))
 +	( sizeof( xmlSecKeyStore ) + sizeof( xmlSecNssKeysStoreCtx ) )
- 
--#define xmlSecNssKeysStoreGetSS(store) \
--    ((xmlSecKeyStoreCheckSize((store), xmlSecNssKeysStoreSize)) ? \
--     (xmlSecKeyStorePtr*)(((xmlSecByte*)(store)) + sizeof(xmlSecKeyStore)) : \
--     (xmlSecKeyStorePtr*)NULL)
--
--static int			xmlSecNssKeysStoreInitialize	(xmlSecKeyStorePtr store);
--static void			xmlSecNssKeysStoreFinalize	(xmlSecKeyStorePtr store);
--static xmlSecKeyPtr 		xmlSecNssKeysStoreFindKey	(xmlSecKeyStorePtr store, 
--								 const xmlChar* name, 
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
++
 +#define xmlSecNssKeysStoreGetCtx( data ) \
 +       ( ( xmlSecNssKeysStoreCtxPtr )( ( ( xmlSecByte* )( data ) ) + sizeof( xmlSecKeyStore ) ) )
- 
--static xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
--    sizeof(xmlSecKeyStoreKlass),
--    xmlSecNssKeysStoreSize,
++
 +int xmlSecNssKeysStoreAdoptKeySlot(
 +       xmlSecKeyStorePtr               store ,
 +       xmlSecNssKeySlotPtr             keySlot
@@ -360,18 +1406,10 @@
 +       return 0 ;
 +}
  
--    /* data */
--    BAD_CAST "NSS-keys-store",		/* const xmlChar* name; */ 
--        
--    /* constructors/destructor */
--    xmlSecNssKeysStoreInitialize,	/* xmlSecKeyStoreInitializeMethod initialize; */
--    xmlSecNssKeysStoreFinalize,		/* xmlSecKeyStoreFinalizeMethod finalize; */
--    xmlSecNssKeysStoreFindKey,		/* xmlSecKeyStoreFindKeyMethod findKey; */
--
--    /* reserved for the future */
--    NULL,				/* void* reserved0; */
--    NULL,				/* void* reserved1; */
--};
+-#define xmlSecNssKeysStoreGetSS(store) \
+-    ((xmlSecKeyStoreCheckSize((store), xmlSecNssKeysStoreSize)) ? \
+-     (xmlSecKeyStorePtr*)(((xmlSecByte*)(store)) + sizeof(xmlSecKeyStore)) : \
+-     (xmlSecKeyStorePtr*)NULL)
 +int xmlSecNssKeysStoreAdoptKey(
 +       xmlSecKeyStorePtr       store ,
 +       xmlSecKeyPtr            key
@@ -419,11 +1457,7 @@
 +                       XMLSEC_ERRORS_NO_MESSAGE ) ;
 +               return -1 ;
 +       }
- 
--/**
-- * xmlSecNssKeysStoreGetKlass:
-- * 
-- * The Nss list based keys store klass.
++
 +       return 0 ;
 +}
 +
@@ -432,13 +1466,9 @@
 + * @store:             the store.
 + *
 + * Keys store specific initialization method.
-  *
-- * Returns: Nss list based keys store klass.
++ *
 + * Returns 0 on success or a negative value if an error occurs.
-  */
--xmlSecKeyStoreId 
--xmlSecNssKeysStoreGetKlass(void) {
--    return(&xmlSecNssKeysStoreKlass);
++ */
 +static int
 +xmlSecNssKeysStoreInitialize(
 +       xmlSecKeyStorePtr store
@@ -462,27 +1492,20 @@
 +       context->slotList = NULL ;
 +
 +       return 0 ;
- }
++}
  
- /**
-- * xmlSecNssKeysStoreAdoptKey:
-- * @store:		the pointer to Nss keys store.
-- * @key:		the pointer to key.
-- * 
-- * Adds @key to the @store. 
-  *
-- * Returns: 0 on success or a negative value if an error occurs.
+-static int			xmlSecNssKeysStoreInitialize	(xmlSecKeyStorePtr store);
+-static void			xmlSecNssKeysStoreFinalize	(xmlSecKeyStorePtr store);
+-static xmlSecKeyPtr 		xmlSecNssKeysStoreFindKey	(xmlSecKeyStorePtr store, 
+-								 const xmlChar* name, 
+-								 xmlSecKeyInfoCtxPtr keyInfoCtx);
++/**
++ *
 + * xmlSecKeyStoreFinalizeMethod:
 + * @store:             the store.
 + *
 + * Keys store specific finalization (destroy) method.
-  */
--int 
--xmlSecNssKeysStoreAdoptKey(xmlSecKeyStorePtr store, xmlSecKeyPtr key) {
--    xmlSecKeyStorePtr *ss;
--    
--    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
--    xmlSecAssert2((key != NULL), -1);
++ */
 +void
 +xmlSecNssKeysStoreFinalize(
 +       xmlSecKeyStorePtr store
@@ -512,7 +1535,10 @@
 +               context->slotList = NULL ;
 +       }
 +}
-+
+ 
+-static xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
+-    sizeof(xmlSecKeyStoreKlass),
+-    xmlSecNssKeysStoreSize,
 +xmlSecKeyPtr
 +xmlSecNssKeysStoreFindKeyFromSlot(
 +       PK11SlotInfo* slot,
@@ -647,13 +1673,17 @@
 +                       return NULL ;
 +               }
 +       }
- 
--    ss = xmlSecNssKeysStoreGetSS(store);
--    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
--		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
++
 +    return(key);
 +}
-+
+ 
+-    /* data */
+-    BAD_CAST "NSS-keys-store",		/* const xmlChar* name; */ 
+-        
+-    /* constructors/destructor */
+-    xmlSecNssKeysStoreInitialize,	/* xmlSecKeyStoreInitializeMethod initialize; */
+-    xmlSecNssKeysStoreFinalize,		/* xmlSecKeyStoreFinalizeMethod finalize; */
+-    xmlSecNssKeysStoreFindKey,		/* xmlSecKeyStoreFindKeyMethod findKey; */
 +/** 
 + * xmlSecKeyStoreFindKeyMethod:
 + * @store:             the store.
@@ -703,7 +1733,11 @@
 +                    }
 +            }
 +    }
-+
+ 
+-    /* reserved for the future */
+-    NULL,				/* void* reserved0; */
+-    NULL,				/* void* reserved1; */
+-};
 +    /*-
 +     * Find the key from slotList
 +     */
@@ -761,26 +1795,49 @@
 +       NULL
 +} ;
  
--    return (xmlSecSimpleKeysStoreAdoptKey(*ss, key));
-+/**
-+ * xmlSecNssKeysStoreGetKlass:
-+ * 
+ /**
+  * xmlSecNssKeysStoreGetKlass:
+  * 
+- * The Nss list based keys store klass.
 + * The simple list based keys store klass.
-+ *
-+ */
-+xmlSecKeyStoreId 
+  *
+- * Returns: Nss list based keys store klass.
+  */
+ xmlSecKeyStoreId 
+-xmlSecNssKeysStoreGetKlass(void) {
+-    return(&xmlSecNssKeysStoreKlass);
 +xmlSecNssKeysStoreGetKlass( void ) {
 +    return &xmlSecNssKeysStoreKlass ;
  }
  
+-/**
+- * xmlSecNssKeysStoreAdoptKey:
+- * @store:		the pointer to Nss keys store.
+- * @key:		the pointer to key.
+- * 
+- * Adds @key to the @store. 
+- *
+- * Returns: 0 on success or a negative value if an error occurs.
 +/**************************
 + * Application routines
-+ */
-+
+  */
+-int 
+-xmlSecNssKeysStoreAdoptKey(xmlSecKeyStorePtr store, xmlSecKeyPtr key) {
+-    xmlSecKeyStorePtr *ss;
+-    
+-    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
+-    xmlSecAssert2((key != NULL), -1);
+-
+-    ss = xmlSecNssKeysStoreGetSS(store);
+-    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
+-		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
+-
+-    return (xmlSecSimpleKeysStoreAdoptKey(*ss, key));
+-}
+ 
  /** 
   * xmlSecNssKeysStoreLoad:
-  * @store:		the pointer to Nss keys store.
-@@ -252,234 +651,147 @@
+@@ -252,234 +651,147 @@ xmlSecNssKeysStoreLoad(xmlSecKeyStorePtr store, const char *uri,
   */
  int
  xmlSecNssKeysStoreSave(xmlSecKeyStorePtr store, const char *filename, xmlSecKeyDataType type) {
@@ -804,20 +1861,20 @@
 -    ss = xmlSecNssKeysStoreGetSS(store);
 -    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
 -		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
--
--    return (xmlSecSimpleKeysStoreSave(*ss, filename, type));
--}
--
--static int
--xmlSecNssKeysStoreInitialize(xmlSecKeyStorePtr store) {
--    xmlSecKeyStorePtr *ss;
 +    xmlSecAssert2( xmlSecKeyStoreCheckSize( store , xmlSecNssKeysStoreSize ), -1 ) ;
 +    xmlSecAssert2(filename != NULL, -1);   
  
--    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
+-    return (xmlSecSimpleKeysStoreSave(*ss, filename, type));
+-}
 +    context = xmlSecNssKeysStoreGetCtx( store ) ;
 +    xmlSecAssert2( context != NULL, -1 );
  
+-static int
+-xmlSecNssKeysStoreInitialize(xmlSecKeyStorePtr store) {
+-    xmlSecKeyStorePtr *ss;
+-
+-    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
+-
 -    ss = xmlSecNssKeysStoreGetSS(store);
 -    xmlSecAssert2((*ss == NULL), -1);
 +    list = context->keyList ;
@@ -961,7 +2018,11 @@
 -	}    
 -	privkey = NULL;
 -	pubkey = NULL;
--
++        /* create nodes for other keys data */
++        for(j = 0; j < idsSize; ++j) {
++            dataId = (xmlSecKeyDataId)xmlSecPtrListGetItem(idsList, j);
++            xmlSecAssert2(dataId != xmlSecKeyDataIdUnknown, -1);
+ 
 -        key = xmlSecKeyCreate();
 -        if (key == NULL) {
 -	    xmlSecError(XMLSEC_ERRORS_HERE,
@@ -971,7 +2032,10 @@
 -			XMLSEC_ERRORS_NO_MESSAGE);
 -	    return (NULL);
 -        }
--
++            if(dataId->dataNodeName == NULL) {
++                continue;
++            }
+ 
 -	x509Data = xmlSecKeyDataCreate(xmlSecNssKeyDataX509Id);
 -	if(x509Data == NULL) {
 -	    xmlSecError(XMLSEC_ERRORS_HERE,
@@ -982,15 +2046,6 @@
 -			xmlSecErrorsSafeString(xmlSecTransformKlassGetName(xmlSecNssKeyDataX509Id)));
 -	    goto done;
 -	}
-+        /* create nodes for other keys data */
-+        for(j = 0; j < idsSize; ++j) {
-+            dataId = (xmlSecKeyDataId)xmlSecPtrListGetItem(idsList, j);
-+            xmlSecAssert2(dataId != xmlSecKeyDataIdUnknown, -1);
-+
-+            if(dataId->dataNodeName == NULL) {
-+                continue;
-+            }
-+
 +            data = xmlSecKeyGetData(key, dataId);
 +            if(data == NULL) {
 +                continue;
@@ -1122,8 +2177,1229 @@
 +    xmlFreeDoc(doc);
 +    return(0);
  }
---- misc/xmlsec1-1.2.14/src/nss/pkikeys.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/pkikeys.c	2009-09-21 14:02:48.657352624 +0200
+diff --git a/src/nss/keywrapers.c b/src/nss/keywrapers.c
+new file mode 100644
+index 0000000..ab91f2c
+--- /dev/null
++++ b/src/nss/keywrapers.c
+@@ -0,0 +1,1213 @@
++/** 
++ *
++ * XMLSec library
++ * 
++ * AES Algorithm support
++ * 
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ * 
++ * Copyright .................................
++ */
++#include "globals.h"
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++
++#include <nss.h>
++#include <pk11func.h>
++#include <hasht.h>
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/xmltree.h>
++#include <xmlsec/keys.h>
++#include <xmlsec/transforms.h>
++#include <xmlsec/errors.h>
++
++#include <xmlsec/nss/crypto.h>
++#include <xmlsec/nss/ciphers.h>
++
++#define XMLSEC_NSS_AES128_KEY_SIZE		16
++#define XMLSEC_NSS_AES192_KEY_SIZE		24
++#define XMLSEC_NSS_AES256_KEY_SIZE		32
++#define XMLSEC_NSS_DES3_KEY_SIZE		24
++#define XMLSEC_NSS_DES3_KEY_LENGTH      24
++#define XMLSEC_NSS_DES3_IV_LENGTH       8
++#define XMLSEC_NSS_DES3_BLOCK_LENGTH    8
++
++static xmlSecByte xmlSecNssKWDes3Iv[XMLSEC_NSS_DES3_IV_LENGTH] = { 
++    0x4a, 0xdd, 0xa2, 0x2c, 0x79, 0xe8, 0x21, 0x05 
++};
++
++/*********************************************************************
++ *
++ * key wrap transforms
++ *
++ ********************************************************************/
++typedef struct _xmlSecNssKeyWrapCtx			xmlSecNssKeyWrapCtx ;
++typedef struct _xmlSecNssKeyWrapCtx*		xmlSecNssKeyWrapCtxPtr ;
++
++#define xmlSecNssKeyWrapSize	\
++	( sizeof( xmlSecTransform ) + sizeof( xmlSecNssKeyWrapCtx ) )
++
++#define xmlSecNssKeyWrapGetCtx( transform ) \
++	( ( xmlSecNssKeyWrapCtxPtr )( ( ( xmlSecByte* )( transform ) ) + sizeof( xmlSecTransform ) ) )
++
++struct _xmlSecNssKeyWrapCtx {
++	CK_MECHANISM_TYPE		cipher ;
++	PK11SymKey*				symkey ;
++	xmlSecKeyDataId			keyId ;
++	xmlSecBufferPtr			material ; /* to be encrypted/decrypted key material */
++} ;
++
++static int 		xmlSecNssKeyWrapInitialize(xmlSecTransformPtr transform);
++static void 	xmlSecNssKeyWrapFinalize(xmlSecTransformPtr transform);
++static int  	xmlSecNssKeyWrapSetKeyReq(xmlSecTransformPtr transform, 
++							 xmlSecKeyReqPtr keyReq);
++static int  	xmlSecNssKeyWrapSetKey(xmlSecTransformPtr transform, 
++							 xmlSecKeyPtr key);
++static int  	xmlSecNssKeyWrapExecute(xmlSecTransformPtr transform, 
++							 int last,
++							 xmlSecTransformCtxPtr transformCtx);
++static xmlSecSize  	xmlSecNssKeyWrapGetKeySize(xmlSecTransformPtr transform);
++
++static int
++xmlSecNssKeyWrapCheckId(
++	xmlSecTransformPtr transform
++) {
++	#ifndef XMLSEC_NO_DES
++	if( xmlSecTransformCheckId( transform, xmlSecNssTransformKWDes3Id ) ) {
++		return(1);
++	}
++	#endif /* XMLSEC_NO_DES */
++
++	#ifndef XMLSEC_NO_AES
++	if( xmlSecTransformCheckId( transform, xmlSecNssTransformKWAes128Id ) ||
++		xmlSecTransformCheckId( transform, xmlSecNssTransformKWAes192Id ) ||
++		xmlSecTransformCheckId( transform, xmlSecNssTransformKWAes256Id ) ) {
++
++		return(1);
++    }
++	#endif /* XMLSEC_NO_AES */
++    
++    return(0);
++}
++
++static xmlSecSize  
++xmlSecNssKeyWrapGetKeySize(xmlSecTransformPtr transform) {
++#ifndef XMLSEC_NO_DES
++	if( xmlSecTransformCheckId( transform, xmlSecNssTransformKWDes3Id ) ) {
++		return(XMLSEC_NSS_DES3_KEY_SIZE);
++	} else
++#endif /* XMLSEC_NO_DES */
++
++#ifndef XMLSEC_NO_AES
++    if(xmlSecTransformCheckId(transform, xmlSecNssTransformKWAes128Id)) {
++		return(XMLSEC_NSS_AES128_KEY_SIZE);
++    } else if(xmlSecTransformCheckId(transform, xmlSecNssTransformKWAes192Id)) {
++		return(XMLSEC_NSS_AES192_KEY_SIZE);
++    } else if(xmlSecTransformCheckId(transform, xmlSecNssTransformKWAes256Id)) {
++		return(XMLSEC_NSS_AES256_KEY_SIZE);
++    } else if(xmlSecTransformCheckId(transform, xmlSecNssTransformKWAes256Id)) {
++		return(XMLSEC_NSS_AES256_KEY_SIZE);
++    } else
++#endif /* XMLSEC_NO_AES */
++
++	if(1)
++   		return(0);
++}
++
++
++static int 
++xmlSecNssKeyWrapInitialize(xmlSecTransformPtr transform) {
++	xmlSecNssKeyWrapCtxPtr context ;
++    int ret;
++    
++    xmlSecAssert2(xmlSecNssKeyWrapCheckId(transform), -1);
++    xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecNssKeyWrapSize), -1);
++    
++	context = xmlSecNssKeyWrapGetCtx( transform ) ;
++	xmlSecAssert2( context != NULL , -1 ) ;
++
++	#ifndef XMLSEC_NO_DES
++	if( transform->id == xmlSecNssTransformKWDes3Id ) {
++		context->cipher = CKM_DES3_CBC ;
++		context->keyId = xmlSecNssKeyDataDesId ;
++	} else
++	#endif		/* XMLSEC_NO_DES */
++
++	#ifndef XMLSEC_NO_AES
++	if( transform->id == xmlSecNssTransformKWAes128Id ) {
++	/*	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;*/
++		context->cipher = CKM_AES_CBC ;
++		context->keyId = xmlSecNssKeyDataAesId ;
++	} else
++	if( transform->id == xmlSecNssTransformKWAes192Id ) {
++	/*	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;*/
++		context->cipher = CKM_AES_CBC ;
++		context->keyId = xmlSecNssKeyDataAesId ;
++	} else
++	if( transform->id == xmlSecNssTransformKWAes256Id ) {
++	/*	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;*/
++		context->cipher = CKM_AES_CBC ;
++		context->keyId = xmlSecNssKeyDataAesId ;
++	} else
++	#endif		/* XMLSEC_NO_AES */
++
++
++	if( 1 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++		    xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++		    NULL ,
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++		    XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	context->symkey = NULL ;
++	context->material = NULL ;
++
++    return(0);
++}
++
++static void 
++xmlSecNssKeyWrapFinalize(xmlSecTransformPtr transform) {
++	xmlSecNssKeyWrapCtxPtr context ;
++    
++    xmlSecAssert(xmlSecNssKeyWrapCheckId(transform));
++    xmlSecAssert(xmlSecTransformCheckSize(transform, xmlSecNssKeyWrapSize));
++    
++	context = xmlSecNssKeyWrapGetCtx( transform ) ;
++	xmlSecAssert( context != NULL ) ;
++
++	if( context->symkey != NULL ) {
++		PK11_FreeSymKey( context->symkey ) ;
++		context->symkey = NULL ;
++	}
++
++	if( context->material != NULL ) {
++		xmlSecBufferDestroy(context->material);
++		context->material = NULL ;
++	}
++}
++
++static int  
++xmlSecNssKeyWrapSetKeyReq(xmlSecTransformPtr transform,  xmlSecKeyReqPtr keyReq) {
++	xmlSecNssKeyWrapCtxPtr context ;
++	xmlSecSize cipherSize = 0 ;
++
++    
++    xmlSecAssert2(xmlSecNssKeyWrapCheckId(transform), -1);
++    xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecNssKeyWrapSize), -1);
++    xmlSecAssert2((transform->operation == xmlSecTransformOperationEncrypt) || (transform->operation == xmlSecTransformOperationDecrypt), -1);
++    xmlSecAssert2(keyReq != NULL, -1);
++    
++	context = xmlSecNssKeyWrapGetCtx( transform ) ;
++	xmlSecAssert2( context != NULL , -1 ) ;
++
++    keyReq->keyId 	 = context->keyId;
++    keyReq->keyType  = xmlSecKeyDataTypeSymmetric;
++    if(transform->operation == xmlSecTransformOperationEncrypt) {
++		keyReq->keyUsage = xmlSecKeyUsageEncrypt;
++    } else {
++		keyReq->keyUsage = xmlSecKeyUsageDecrypt;
++    }
++
++	keyReq->keyBitsSize = xmlSecNssKeyWrapGetKeySize( transform ) ;
++
++    return(0);
++}
++
++static int  	
++xmlSecNssKeyWrapSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
++	xmlSecNssKeyWrapCtxPtr context = NULL ;
++	xmlSecKeyDataPtr	keyData = NULL ;
++	PK11SymKey*			symkey = NULL ;
++
++    xmlSecAssert2(xmlSecNssKeyWrapCheckId(transform), -1);
++    xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecNssKeyWrapSize), -1);
++    xmlSecAssert2((transform->operation == xmlSecTransformOperationEncrypt) || (transform->operation == xmlSecTransformOperationDecrypt), -1);
++    xmlSecAssert2(key != NULL, -1);
++
++	context = xmlSecNssKeyWrapGetCtx( transform ) ;
++	if( context == NULL || context->keyId == NULL || context->symkey != NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++		    xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++		    "xmlSecNssKeyWrapGetCtx" ,
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++		    XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++	xmlSecAssert2( xmlSecKeyCheckId( key, context->keyId ), -1 ) ;
++
++	keyData = xmlSecKeyGetValue( key ) ;
++	if( keyData == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++		    xmlSecErrorsSafeString( xmlSecKeyGetName( key ) ) ,
++		    "xmlSecKeyGetValue" ,
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++		    XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	if( ( symkey = xmlSecNssSymKeyDataGetKey( keyData ) ) == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++		    xmlSecErrorsSafeString( xmlSecKeyDataGetName( keyData ) ) ,
++		    "xmlSecNssSymKeyDataGetKey" ,
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++		    XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	context->symkey = symkey ;
++
++	return(0) ;
++}
++
++/**
++ * key wrap transform
++ */
++static int 
++xmlSecNssKeyWrapCtxInit(
++	xmlSecNssKeyWrapCtxPtr		ctx ,
++	xmlSecBufferPtr 			in ,
++	xmlSecBufferPtr 			out ,
++	int 						encrypt ,
++	xmlSecTransformCtxPtr 		transformCtx
++) {
++	xmlSecSize			blockSize ;
++
++	xmlSecAssert2( ctx != NULL , -1 ) ;
++	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
++	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
++	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
++	xmlSecAssert2( in != NULL , -1 ) ;
++	xmlSecAssert2( out != NULL , -1 ) ;
++	xmlSecAssert2( transformCtx != NULL , -1 ) ;
++
++	if( ctx->material != NULL ) {
++		xmlSecBufferDestroy( ctx->material ) ;
++		ctx->material = NULL ;
++	}
++
++	if( ( blockSize = PK11_GetBlockSize( ctx->cipher , NULL ) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_GetBlockSize" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	ctx->material = xmlSecBufferCreate( blockSize ) ;
++	if( ctx->material == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferCreate" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	/* read raw key material into context */
++	if( xmlSecBufferSetData( ctx->material, xmlSecBufferGetData(in), xmlSecBufferGetSize(in) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferSetData" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	if( xmlSecBufferRemoveHead( in , xmlSecBufferGetSize(in) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferRemoveHead" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	return(0);
++}
++
++/**
++ * key wrap transform update
++ */
++static int 
++xmlSecNssKeyWrapCtxUpdate(
++	xmlSecNssKeyWrapCtxPtr		ctx ,
++	xmlSecBufferPtr 			in ,
++	xmlSecBufferPtr 			out ,
++	int 						encrypt ,
++	xmlSecTransformCtxPtr 		transformCtx
++) {
++	xmlSecAssert2( ctx != NULL , -1 ) ;
++	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
++	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
++	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
++	xmlSecAssert2( ctx->material != NULL , -1 ) ;
++	xmlSecAssert2( in != NULL , -1 ) ;
++	xmlSecAssert2( out != NULL , -1 ) ;
++	xmlSecAssert2( transformCtx != NULL , -1 ) ;
++
++	/* read raw key material and append into context */
++	if( xmlSecBufferAppend( ctx->material, xmlSecBufferGetData(in), xmlSecBufferGetSize(in) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferAppend" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	if( xmlSecBufferRemoveHead( in , xmlSecBufferGetSize(in) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferRemoveHead" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	return(0);
++}
++
++static int 
++xmlSecNssKWDes3BufferReverse(xmlSecByte *buf, xmlSecSize size) {
++    xmlSecSize s;
++    xmlSecSize i;
++    xmlSecByte c;
++    
++    xmlSecAssert2(buf != NULL, -1);
++    
++    s = size / 2;
++    --size;
++    for(i = 0; i < s; ++i) {
++	c = buf[i];
++	buf[i] = buf[size - i];
++	buf[size - i] = c;
++    }
++    return(0);
++}
++
++static xmlSecByte *
++xmlSecNssComputeSHA1(const xmlSecByte *in, xmlSecSize inSize, 
++		     xmlSecByte *out, xmlSecSize outSize)
++{
++    PK11Context *context = NULL;
++    SECStatus s;
++    xmlSecByte *digest = NULL;
++    unsigned int len;
++
++    xmlSecAssert2(in != NULL, NULL);
++    xmlSecAssert2(out != NULL, NULL);
++    xmlSecAssert2(outSize >= SHA1_LENGTH, NULL);
++
++    /* Create a context for hashing (digesting) */
++    context = PK11_CreateDigestContext(SEC_OID_SHA1);
++    if (context == NULL) {
++	xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_CreateDigestContext",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "error code = %d", PORT_GetError());
++	goto done;
++    }
++
++    s = PK11_DigestBegin(context);
++    if (s != SECSuccess) { 
++	xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_DigestBegin",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "error code = %d", PORT_GetError());
++	goto done;
++    }
++
++    s = PK11_DigestOp(context, in, inSize);
++    if (s != SECSuccess) {
++	xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_DigestOp",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "error code = %d", PORT_GetError());
++	goto done;
++    }
++
++    s = PK11_DigestFinal(context, out, &len, outSize);
++    if (s != SECSuccess) {
++	xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_DigestFinal",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "error code = %d", PORT_GetError());
++	goto done;
++    }
++    xmlSecAssert2(len == SHA1_LENGTH, NULL);
++
++    digest = out;
++
++done:
++    if (context != NULL) {
++	PK11_DestroyContext(context, PR_TRUE);
++    }
++    return (digest);
++}
++
++static int
++xmlSecNssKWDes3Encrypt(
++	PK11SymKey*					symKey ,
++	CK_MECHANISM_TYPE			cipherMech ,
++    const xmlSecByte*			iv ,
++	xmlSecSize					ivSize ,
++    const xmlSecByte*			in ,
++	xmlSecSize					inSize ,
++    xmlSecByte*     			out ,
++	xmlSecSize					outSize ,
++	int							enc
++) {
++    PK11Context*        EncContext = NULL;
++	SECItem				ivItem ;
++	SECItem*			secParam = NULL ;
++    int					tmp1_outlen;
++    unsigned int		tmp2_outlen;
++	int                 result_len = -1;
++	SECStatus           rv;
++
++	xmlSecAssert2( cipherMech != CKM_INVALID_MECHANISM , -1 ) ;
++	xmlSecAssert2( symKey != NULL , -1 ) ;
++    xmlSecAssert2(iv != NULL, -1);
++    xmlSecAssert2(ivSize == XMLSEC_NSS_DES3_IV_LENGTH, -1);
++    xmlSecAssert2(in != NULL, -1);
++    xmlSecAssert2(inSize > 0, -1);
++    xmlSecAssert2(out != NULL, -1);
++    xmlSecAssert2(outSize >= inSize, -1);
++ 
++	/* Prepare IV */
++	ivItem.data = ( unsigned char* )iv ;
++	ivItem.len = ivSize ;
++
++    secParam = PK11_ParamFromIV(cipherMech, &ivItem);
++    if (secParam == NULL) {
++		xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_ParamFromIV",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "Error code = %d", PORT_GetError());
++		goto done;
++    }
++
++    EncContext = PK11_CreateContextBySymKey(cipherMech, 
++		    			    enc ? CKA_ENCRYPT : CKA_DECRYPT,
++					    symKey, secParam);
++    if (EncContext == NULL) {
++		xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_CreateContextBySymKey",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "Error code = %d", PORT_GetError());
++		goto done;
++    }
++
++    tmp1_outlen = tmp2_outlen = 0;
++    rv = PK11_CipherOp(EncContext, out, &tmp1_outlen, outSize,
++		       (unsigned char *)in, inSize);
++    if (rv != SECSuccess) {
++		xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_CipherOp",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "Error code = %d", PORT_GetError());
++		goto done;
++    }
++
++    rv = PK11_DigestFinal(EncContext, out+tmp1_outlen, 
++		    	  &tmp2_outlen, outSize-tmp1_outlen);
++    if (rv != SECSuccess) {
++		xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "PK11_DigestFinal",
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    "Error code = %d", PORT_GetError());
++		goto done;
++    }
++
++    result_len = tmp1_outlen + tmp2_outlen;
++
++done:
++    if (secParam) {
++		SECITEM_FreeItem(secParam, PR_TRUE);
++    }
++    if (EncContext) {
++	PK11_DestroyContext(EncContext, PR_TRUE);
++    }
++
++    return(result_len);
++}
++
++static int
++xmlSecNssKeyWrapDesOp(
++	xmlSecNssKeyWrapCtxPtr		ctx ,
++	int 						encrypt ,
++	xmlSecBufferPtr 			result
++) {
++    xmlSecByte sha1[SHA1_LENGTH];    
++    xmlSecByte iv[XMLSEC_NSS_DES3_IV_LENGTH];
++    xmlSecByte* in;    
++    xmlSecSize inSize;    
++    xmlSecByte* out;    
++    xmlSecSize outSize;    
++    xmlSecSize s;    
++    int ret;
++    SECStatus status;
++
++	xmlSecAssert2( ctx != NULL , -1 ) ;
++	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
++	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
++	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
++	xmlSecAssert2( ctx->material != NULL , -1 ) ;
++	xmlSecAssert2( result != NULL , -1 ) ;
++
++	in = xmlSecBufferGetData(ctx->material);
++	inSize = xmlSecBufferGetSize(ctx->material) ;
++	out = xmlSecBufferGetData(result);
++	outSize = xmlSecBufferGetMaxSize(result) ;
++	if( encrypt ) {
++    	/* step 2: calculate sha1 and CMS */
++    	if(xmlSecNssComputeSHA1(in, inSize, sha1, SHA1_LENGTH) == NULL) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++			    NULL,
++			    "xmlSecNssComputeSHA1",
++			    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++			    XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++
++	    /* step 3: construct WKCKS */
++    	memcpy(out, in, inSize);
++	    memcpy(out + inSize, sha1, XMLSEC_NSS_DES3_BLOCK_LENGTH);
++
++    	/* step 4: generate random iv */
++    	status = PK11_GenerateRandom(iv, XMLSEC_NSS_DES3_IV_LENGTH);
++    	if(status != SECSuccess) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++		    	NULL,
++		    	"PK11_GenerateRandom",
++		    	XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    	"error code = %d", PORT_GetError());
++			return(-1);    
++    	}	
++
++    	/* step 5: first encryption, result is TEMP1 */
++    	ret = xmlSecNssKWDes3Encrypt( ctx->symkey, ctx->cipher,
++				    iv, XMLSEC_NSS_DES3_IV_LENGTH, 
++					out, inSize + XMLSEC_NSS_DES3_IV_LENGTH,
++					out, outSize, 1);
++    	if(ret < 0) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++		    	NULL,
++		    	"xmlSecNssKWDes3Encrypt",
++		    	XMLSEC_ERRORS_R_XMLSEC_FAILED,
++		    	XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++
++    	/* step 6: construct TEMP2=IV || TEMP1 */
++    	memmove(out + XMLSEC_NSS_DES3_IV_LENGTH, out, 
++	    	inSize + XMLSEC_NSS_DES3_IV_LENGTH);
++    	memcpy(out, iv, XMLSEC_NSS_DES3_IV_LENGTH);
++    		s = ret + XMLSEC_NSS_DES3_IV_LENGTH; 
++    
++    	/* step 7: reverse octets order, result is TEMP3 */
++	    ret = xmlSecNssKWDes3BufferReverse(out, s);
++   	 	if(ret < 0) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++			    NULL,
++			    "xmlSecNssKWDes3BufferReverse",
++			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++			    XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++
++    	/* step 8: second encryption with static IV */
++    	ret = xmlSecNssKWDes3Encrypt( ctx->symkey, ctx->cipher,
++				    xmlSecNssKWDes3Iv, XMLSEC_NSS_DES3_IV_LENGTH, 
++					out, s,
++					out, outSize, 1);
++    	if(ret < 0) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++			    NULL,
++			    "xmlSecNssKWDes3Encrypt",
++			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++			    XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++		s = ret;
++
++		if( xmlSecBufferSetSize( result , s ) < 0 ) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++			    NULL,
++			    "xmlSecBufferSetSize",
++			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++			    XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++		}
++	} else {
++    	/* step 2: first decryption with static IV, result is TEMP3 */
++    	ret = xmlSecNssKWDes3Encrypt( ctx->symkey, ctx->cipher,
++				    xmlSecNssKWDes3Iv, XMLSEC_NSS_DES3_IV_LENGTH, 
++					in, inSize,
++					out, outSize, 0);
++    	if((ret < 0) || (ret < XMLSEC_NSS_DES3_IV_LENGTH)) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++		    	NULL,
++		    	"xmlSecNssKWDes3Encrypt",
++		    	XMLSEC_ERRORS_R_XMLSEC_FAILED,
++		    	XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++    	s = ret; 
++    
++    	/* step 3: reverse octets order in TEMP3, result is TEMP2 */
++    	ret = xmlSecNssKWDes3BufferReverse(out, s);
++    	if(ret < 0) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++		    	NULL,
++		    	"xmlSecNssKWDes3BufferReverse",
++		    	XMLSEC_ERRORS_R_XMLSEC_FAILED,
++		    	XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++
++    	/* steps 4 and 5: get IV and decrypt second time, result is WKCKS */
++    	ret = xmlSecNssKWDes3Encrypt( ctx->symkey, ctx->cipher,
++				    out, XMLSEC_NSS_DES3_IV_LENGTH, 
++					out+XMLSEC_NSS_DES3_IV_LENGTH, s-XMLSEC_NSS_DES3_IV_LENGTH,
++					out, outSize, 0);
++    	if((ret < 0) || (ret < XMLSEC_NSS_DES3_BLOCK_LENGTH)) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++		    	NULL,
++		    	"xmlSecNssKWDes3Encrypt",
++		    	XMLSEC_ERRORS_R_XMLSEC_FAILED,
++		    	XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++    	}
++		s = ret - XMLSEC_NSS_DES3_IV_LENGTH;
++    
++    	/* steps 6 and 7: calculate SHA1 and validate it */
++    	if(xmlSecNssComputeSHA1(out, s, sha1, SHA1_LENGTH) == NULL) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++		    	NULL,
++		    	"xmlSecNssComputeSHA1",
++		    	XMLSEC_ERRORS_R_CRYPTO_FAILED,
++		    	XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++   		 }
++
++		if(memcmp(sha1, out + s, XMLSEC_NSS_DES3_BLOCK_LENGTH) != 0) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++			    NULL,
++		   		 NULL,
++			    XMLSEC_ERRORS_R_INVALID_DATA,
++			    "SHA1 does not match");
++			return(-1);	    
++		}
++
++		if( xmlSecBufferSetSize( result , s ) < 0 ) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++			    NULL,
++			    "xmlSecBufferSetSize",
++			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++			    XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);	    
++		}
++	}
++
++	return(0);
++}
++
++static int
++xmlSecNssKeyWrapAesOp(
++	xmlSecNssKeyWrapCtxPtr		ctx ,
++	int 						encrypt ,
++	xmlSecBufferPtr 			result
++) {
++    PK11Context*        cipherCtx = NULL;
++	SECItem				ivItem ;
++	SECItem*			secParam = NULL ;
++	xmlSecSize			inSize ;
++	xmlSecSize			inBlocks ;
++	int					blockSize ;
++	int					midSize ;
++	int					finSize ;
++	xmlSecByte*			out ;
++    xmlSecSize			outSize;    
++
++	xmlSecAssert2( ctx != NULL , -1 ) ;
++	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
++	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
++	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
++	xmlSecAssert2( ctx->material != NULL , -1 ) ;
++	xmlSecAssert2( result != NULL , -1 ) ;
++
++	/* Do not set any IV */
++    memset(&ivItem, 0, sizeof(ivItem));
++
++	/* Get block size */
++	if( ( blockSize = PK11_GetBlockSize( ctx->cipher , NULL ) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_GetBlockSize" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	inSize = xmlSecBufferGetSize( ctx->material ) ;
++	if( xmlSecBufferSetMaxSize( result , inSize + blockSize ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferSetMaxSize" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	/* Get Param for context initialization */
++	if( ( secParam = PK11_ParamFromIV( ctx->cipher , &ivItem ) ) == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_ParamFromIV" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	cipherCtx = PK11_CreateContextBySymKey( ctx->cipher , encrypt ? CKA_ENCRYPT : CKA_DECRYPT , ctx->symkey , secParam ) ;
++	if( cipherCtx == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_CreateContextBySymKey" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		SECITEM_FreeItem( secParam , PR_TRUE ) ;
++		return(-1);    
++	}
++
++	out = xmlSecBufferGetData(result) ;
++	outSize = xmlSecBufferGetMaxSize(result) ;
++	if( PK11_CipherOp( cipherCtx , out, &midSize , outSize , xmlSecBufferGetData( ctx->material ) , inSize ) != SECSuccess ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_CipherOp" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	if( PK11_DigestFinal( cipherCtx , out + midSize , &finSize , outSize - midSize ) != SECSuccess ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_DigestFinal" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	if( xmlSecBufferSetSize( result , midSize + finSize ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferSetSize" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	return 0 ;
++}
++
++/**
++ * Block cipher transform final
++ */
++static int 
++xmlSecNssKeyWrapCtxFinal(
++	xmlSecNssKeyWrapCtxPtr		ctx ,
++	xmlSecBufferPtr 			in ,
++	xmlSecBufferPtr 			out ,
++	int 						encrypt ,
++	xmlSecTransformCtxPtr 		transformCtx
++) {
++	PK11SymKey*			targetKey ;
++	xmlSecSize			blockSize ;
++	xmlSecBufferPtr		result ;
++
++	xmlSecAssert2( ctx != NULL , -1 ) ;
++	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
++	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
++	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
++	xmlSecAssert2( ctx->material != NULL , -1 ) ;
++	xmlSecAssert2( in != NULL , -1 ) ;
++	xmlSecAssert2( out != NULL , -1 ) ;
++	xmlSecAssert2( transformCtx != NULL , -1 ) ;
++
++	/* read raw key material and append into context */
++	if( xmlSecBufferAppend( ctx->material, xmlSecBufferGetData(in), xmlSecBufferGetSize(in) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferAppend" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	if( xmlSecBufferRemoveHead( in , xmlSecBufferGetSize(in) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferRemoveHead" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	/* Now we get all of the key materail */
++	/* from now on we will wrap or unwrap the key */
++	if( ( blockSize = PK11_GetBlockSize( ctx->cipher , NULL ) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"PK11_GetBlockSize" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	result = xmlSecBufferCreate( blockSize ) ;
++	if( result == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferCreate" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	switch( ctx->cipher ) {
++		case CKM_DES3_CBC :
++			if( xmlSecNssKeyWrapDesOp(ctx, encrypt, result) < 0 ) {
++				xmlSecError( XMLSEC_ERRORS_HERE ,
++					NULL ,
++					"xmlSecNssKeyWrapDesOp" ,
++					XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++					XMLSEC_ERRORS_NO_MESSAGE ) ;
++				xmlSecBufferDestroy(result);
++				return(-1);    
++			}
++			break ;
++	/*	case CKM_NETSCAPE_AES_KEY_WRAP :*/
++		case CKM_AES_CBC :
++			if( xmlSecNssKeyWrapAesOp(ctx, encrypt, result) < 0 ) {
++				xmlSecError( XMLSEC_ERRORS_HERE ,
++					NULL ,
++					"xmlSecNssKeyWrapAesOp" ,
++					XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++					XMLSEC_ERRORS_NO_MESSAGE ) ;
++				xmlSecBufferDestroy(result);
++				return(-1);    
++			}
++			break ;
++	}
++
++	/* Write output */
++	if( xmlSecBufferAppend( out, xmlSecBufferGetData(result), xmlSecBufferGetSize(result) ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			"xmlSecBufferAppend" ,
++			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		xmlSecBufferDestroy(result);
++		return(-1);    
++	}
++	xmlSecBufferDestroy(result);
++
++	return(0);
++}
++
++static int 
++xmlSecNssKeyWrapExecute(xmlSecTransformPtr transform, int last, xmlSecTransformCtxPtr transformCtx) {
++	xmlSecNssKeyWrapCtxPtr 	context = NULL ;
++	xmlSecBufferPtr			inBuf, outBuf ; 
++	int						operation ;
++	int						rtv ;
++
++	xmlSecAssert2( xmlSecNssKeyWrapCheckId( transform ), -1 ) ;
++	xmlSecAssert2( xmlSecTransformCheckSize( transform, xmlSecNssKeyWrapSize ), -1 ) ;
++    xmlSecAssert2( ( transform->operation == xmlSecTransformOperationEncrypt ) || ( transform->operation == xmlSecTransformOperationDecrypt ), -1 ) ;
++	xmlSecAssert2( transformCtx != NULL , -1 ) ;
++
++	context = xmlSecNssKeyWrapGetCtx( transform ) ;
++	if( context == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++		    xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++		    "xmlSecNssKeyWrapGetCtx" ,
++		    XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++		    XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return(-1);    
++	}
++
++	inBuf = &( transform->inBuf ) ;
++	outBuf = &( transform->outBuf ) ;
++
++	if( transform->status == xmlSecTransformStatusNone ) {
++		transform->status = xmlSecTransformStatusWorking ;
++	}
++
++	operation = ( transform->operation == xmlSecTransformOperationEncrypt ) ? 1 : 0 ;
++	if( transform->status == xmlSecTransformStatusWorking ) {
++		if( context->material == NULL ) {
++			rtv = xmlSecNssKeyWrapCtxInit( context, inBuf , outBuf , operation , transformCtx ) ;
++			if( rtv < 0 ) {
++				xmlSecError( XMLSEC_ERRORS_HERE , 
++					xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++					"xmlSecNssKeyWrapCtxInit" ,
++					XMLSEC_ERRORS_R_INVALID_STATUS ,
++					XMLSEC_ERRORS_NO_MESSAGE ) ;
++				return(-1);
++			}
++		}
++
++		if( context->material == NULL && last != 0 ) {
++			xmlSecError( XMLSEC_ERRORS_HERE , 
++				xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++				NULL ,
++				XMLSEC_ERRORS_R_INVALID_STATUS ,
++				"No enough data to intialize transform" ) ;
++			return(-1);
++		}
++
++		if( context->material != NULL ) {
++			rtv = xmlSecNssKeyWrapCtxUpdate( context, inBuf , outBuf , operation , transformCtx ) ;
++			if( rtv < 0 ) {
++				xmlSecError( XMLSEC_ERRORS_HERE , 
++					xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++					"xmlSecNssKeyWrapCtxUpdate" ,
++					XMLSEC_ERRORS_R_INVALID_STATUS ,
++					XMLSEC_ERRORS_NO_MESSAGE ) ;
++				return(-1);
++			}
++		}
++		
++		if( last ) {
++			rtv = xmlSecNssKeyWrapCtxFinal( context, inBuf , outBuf , operation , transformCtx ) ;
++			if( rtv < 0 ) {
++				xmlSecError( XMLSEC_ERRORS_HERE , 
++					xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++					"xmlSecNssKeyWrapCtxFinal" ,
++					XMLSEC_ERRORS_R_INVALID_STATUS ,
++					XMLSEC_ERRORS_NO_MESSAGE ) ;
++				return(-1);
++			}
++			transform->status = xmlSecTransformStatusFinished ;
++		}
++	} else if( transform->status == xmlSecTransformStatusFinished ) {
++		if( xmlSecBufferGetSize( inBuf ) != 0 ) {
++			xmlSecError( XMLSEC_ERRORS_HERE , 
++				xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++				NULL ,
++				XMLSEC_ERRORS_R_INVALID_STATUS ,
++				"status=%d", transform->status ) ;
++			return(-1);
++		}
++	} else {
++		xmlSecError( XMLSEC_ERRORS_HERE , 
++			xmlSecErrorsSafeString( xmlSecTransformGetName( transform ) ) ,
++			NULL ,
++			XMLSEC_ERRORS_R_INVALID_STATUS ,
++			"status=%d", transform->status ) ;
++		return(-1);
++	}
++
++	return(0);
++}
++
++#ifndef XMLSEC_NO_AES
++
++
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssKWAes128Klass = {
++#else
++static xmlSecTransformKlass xmlSecNssKWAes128Klass = {
++#endif
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
++    xmlSecNssKeyWrapSize,				/* xmlSecSize objSize */
++
++    xmlSecNameKWAes128,				/* const xmlChar* name; */
++    xmlSecHrefKWAes128,				/* const xmlChar* href; */
++    xmlSecTransformUsageEncryptionMethod,	/* xmlSecAlgorithmUsage usage; */
++
++    xmlSecNssKeyWrapInitialize, 			/* xmlSecTransformInitializeMethod initialize; */
++    xmlSecNssKeyWrapFinalize,			/* xmlSecTransformFinalizeMethod finalize; */
++    NULL,					/* xmlSecTransformNodeReadMethod readNode; */
++    NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
++    xmlSecNssKeyWrapSetKeyReq,			/* xmlSecTransformSetKeyMethod setKeyReq; */
++    xmlSecNssKeyWrapSetKey,			/* xmlSecTransformSetKeyMethod setKey; */
++    NULL,					/* xmlSecTransformValidateMethod validate; */
++    xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
++    NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
++    NULL,					/* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecNssKeyWrapExecute,			/* xmlSecTransformExecuteMethod execute; */
++    
++    NULL,					/* void* reserved0; */
++    NULL,					/* void* reserved1; */
++};
++
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssKWAes192Klass = {
++#else
++static xmlSecTransformKlass xmlSecNssKWAes192Klass = {
++#endif
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
++    xmlSecNssKeyWrapSize,				/* xmlSecSize objSize */
++
++    xmlSecNameKWAes192,				/* const xmlChar* name; */
++    xmlSecHrefKWAes192,				/* const xmlChar* href; */
++    xmlSecTransformUsageEncryptionMethod,	/* xmlSecAlgorithmUsage usage; */
++
++    xmlSecNssKeyWrapInitialize, 			/* xmlSecTransformInitializeMethod initialize; */
++    xmlSecNssKeyWrapFinalize,			/* xmlSecTransformFinalizeMethod finalize; */
++    NULL,					/* xmlSecTransformNodeReadMethod readNode; */
++    NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
++    xmlSecNssKeyWrapSetKeyReq,			/* xmlSecTransformSetKeyMethod setKeyReq; */
++    xmlSecNssKeyWrapSetKey,			/* xmlSecTransformSetKeyMethod setKey; */
++    NULL,					/* xmlSecTransformValidateMethod validate; */
++    xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
++    NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
++    NULL,					/* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecNssKeyWrapExecute,			/* xmlSecTransformExecuteMethod execute; */
++    
++    NULL,					/* void* reserved0; */
++    NULL,					/* void* reserved1; */
++};
++
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssKWAes256Klass = {
++#else
++static xmlSecTransformKlass xmlSecNssKWAes256Klass = {
++#endif
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
++    xmlSecNssKeyWrapSize,				/* xmlSecSize objSize */
++
++    xmlSecNameKWAes256,				/* const xmlChar* name; */
++    xmlSecHrefKWAes256,				/* const xmlChar* href; */
++    xmlSecTransformUsageEncryptionMethod,	/* xmlSecAlgorithmUsage usage; */
++
++    xmlSecNssKeyWrapInitialize, 			/* xmlSecTransformInitializeMethod initialize; */
++    xmlSecNssKeyWrapFinalize,			/* xmlSecTransformFinalizeMethod finalize; */
++    NULL,					/* xmlSecTransformNodeReadMethod readNode; */
++    NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
++    xmlSecNssKeyWrapSetKeyReq,			/* xmlSecTransformSetKeyMethod setKeyReq; */
++    xmlSecNssKeyWrapSetKey,			/* xmlSecTransformSetKeyMethod setKey; */
++    NULL,					/* xmlSecTransformValidateMethod validate; */
++    xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
++    NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
++    NULL,					/* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecNssKeyWrapExecute,			/* xmlSecTransformExecuteMethod execute; */
++    
++    NULL,					/* void* reserved0; */
++    NULL,					/* void* reserved1; */
++};
++
++/** 
++ * xmlSecNssTransformKWAes128GetKlass:
++ *
++ * The AES-128 key wrapper transform klass.
++ *
++ * Returns AES-128 key wrapper transform klass.
++ */
++xmlSecTransformId 
++xmlSecNssTransformKWAes128GetKlass(void) {
++    return(&xmlSecNssKWAes128Klass);
++}
++
++/** 
++ * xmlSecNssTransformKWAes192GetKlass:
++ *
++ * The AES-192 key wrapper transform klass.
++ *
++ * Returns AES-192 key wrapper transform klass.
++ */
++xmlSecTransformId 
++xmlSecNssTransformKWAes192GetKlass(void) {
++    return(&xmlSecNssKWAes192Klass);
++}
++
++/** 
++ *
++ * The AES-256 key wrapper transform klass.
++ *
++ * Returns AES-256 key wrapper transform klass.
++ */
++xmlSecTransformId 
++xmlSecNssTransformKWAes256GetKlass(void) {
++    return(&xmlSecNssKWAes256Klass);
++}
++
++#endif /* XMLSEC_NO_AES */
++
++
++#ifndef XMLSEC_NO_DES
++
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssKWDes3Klass = {
++#else
++static xmlSecTransformKlass xmlSecNssKWDes3Klass = {
++#endif
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
++    xmlSecNssKeyWrapSize,			/* xmlSecSize objSize */
++
++    xmlSecNameKWDes3,				/* const xmlChar* name; */
++    xmlSecHrefKWDes3, 				/* const xmlChar* href; */
++    xmlSecTransformUsageEncryptionMethod,	/* xmlSecAlgorithmUsage usage; */
++
++    xmlSecNssKeyWrapInitialize, 			/* xmlSecTransformInitializeMethod initialize; */
++    xmlSecNssKeyWrapFinalize,			/* xmlSecTransformFinalizeMethod finalize; */
++    NULL,					/* xmlSecTransformNodeReadMethod readNode; */
++    NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
++    xmlSecNssKeyWrapSetKeyReq,			/* xmlSecTransformSetKeyMethod setKeyReq; */
++    xmlSecNssKeyWrapSetKey,			/* xmlSecTransformSetKeyMethod setKey; */
++    NULL,					/* xmlSecTransformValidateMethod validate; */
++    xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
++    NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
++    NULL,					/* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecNssKeyWrapExecute,			/* xmlSecTransformExecuteMethod execute; */
++    
++    NULL,					/* void* reserved0; */
++    NULL,					/* void* reserved1; */
++};
++
++/** 
++ * xmlSecNssTransformKWDes3GetKlass:
++ * 
++ * The Triple DES key wrapper transform klass.
++ *
++ * Returns Triple DES key wrapper transform klass.
++ */
++xmlSecTransformId 
++xmlSecNssTransformKWDes3GetKlass(void) {
++    return(&xmlSecNssKWDes3Klass);
++}
++
++#endif /* XMLSEC_NO_DES */
++
+diff --git a/src/nss/pkikeys.c b/src/nss/pkikeys.c
+index f854935..2e58afa 100644
+--- a/src/nss/pkikeys.c
++++ b/src/nss/pkikeys.c
 @@ -24,6 +24,7 @@
  #include <xmlsec/nss/crypto.h>
  #include <xmlsec/nss/bignum.h>
@@ -1132,7 +3408,7 @@
  
  /**************************************************************************
   *
-@@ -115,6 +116,8 @@
+@@ -115,6 +116,8 @@ xmlSecNSSPKIKeyDataCtxDup(xmlSecNssPKIKeyDataCtxPtr ctxDst,
                            xmlSecNssPKIKeyDataCtxPtr ctxSrc)
  {
      xmlSecNSSPKIKeyDataCtxFree(ctxDst);
@@ -1141,7 +3417,7 @@
      if (ctxSrc->privkey != NULL) {
  	ctxDst->privkey = SECKEY_CopyPrivateKey(ctxSrc->privkey);
  	if(ctxDst->privkey == NULL) {
-@@ -588,13 +591,13 @@
+@@ -588,13 +591,13 @@ xmlSecNssKeyDataDsaXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
  	goto done;
      }
  
@@ -1158,7 +3434,7 @@
  	ret = -1;
  	goto done;
      }
-@@ -792,14 +795,14 @@
+@@ -792,14 +795,14 @@ done:
      if (slot != NULL) {
  	PK11_FreeSlot(slot);
      }
@@ -1175,7 +3451,7 @@
      return(ret);
  }
  
-@@ -818,7 +821,7 @@
+@@ -818,7 +821,7 @@ xmlSecNssKeyDataDsaXmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
  
      ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
      xmlSecAssert2(ctx != NULL, -1);
@@ -1184,7 +3460,7 @@
  
      if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
  	/* we can have only private key or public key */
-@@ -940,7 +943,8 @@
+@@ -940,7 +943,8 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
  		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
  		    "PK11_PQG_ParamGen",
  		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -1194,7 +3470,7 @@
  	goto done;
      }
  
-@@ -950,11 +954,12 @@
+@@ -950,11 +954,12 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
  		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
  		    "PK11_PQG_VerifyParams",
  		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -1209,7 +3485,7 @@
      PK11_Authenticate(slot, PR_TRUE, NULL /* default pwd callback */);
      privkey = PK11_GenerateKeyPair(slot, CKM_DSA_KEY_PAIR_GEN, pqgParams,
  				   &pubkey, PR_FALSE, PR_TRUE, NULL);
-@@ -964,8 +969,9 @@
+@@ -964,8 +969,9 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
  		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
  		    "PK11_GenerateKeyPair",
  		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -1220,7 +3496,7 @@
  	goto done;
      }
  
-@@ -979,6 +985,8 @@
+@@ -979,6 +985,8 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
  	goto done;
      }
  
@@ -1229,7 +3505,7 @@
      ret = 0;
  
  done:
-@@ -991,16 +999,13 @@
+@@ -991,16 +999,13 @@ done:
      if (pqgVerify != NULL) {
  	PK11_PQG_DestroyVerify(pqgVerify);
      }
@@ -1247,7 +3523,7 @@
  }
  
  static xmlSecKeyDataType
-@@ -1010,10 +1015,10 @@
+@@ -1010,10 +1015,10 @@ xmlSecNssKeyDataDsaGetType(xmlSecKeyDataPtr data) {
      xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), xmlSecKeyDataTypeUnknown);
      ctx = xmlSecNssPKIKeyDataGetCtx(data);
      xmlSecAssert2(ctx != NULL, -1);
@@ -1260,7 +3536,7 @@
  	return(xmlSecKeyDataTypePublic);
      }
         
-@@ -1027,7 +1032,7 @@
+@@ -1027,7 +1032,7 @@ xmlSecNssKeyDataDsaGetSize(xmlSecKeyDataPtr data) {
      xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), 0);
      ctx = xmlSecNssPKIKeyDataGetCtx(data);
      xmlSecAssert2(ctx != NULL, -1);
@@ -1269,7 +3545,7 @@
  
      return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
  }
-@@ -1216,13 +1221,13 @@
+@@ -1216,13 +1221,13 @@ xmlSecNssKeyDataRsaXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
  	goto done;
      }
  
@@ -1286,7 +3562,7 @@
          ret = -1;
          goto done;
      }
-@@ -1384,7 +1389,7 @@
+@@ -1384,7 +1389,7 @@ xmlSecNssKeyDataRsaXmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
  
      ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
      xmlSecAssert2(ctx != NULL, -1);
@@ -1295,7 +3571,7 @@
  
  
      if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
-@@ -1455,7 +1460,7 @@
+@@ -1455,7 +1460,7 @@ xmlSecNssKeyDataRsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
      params.keySizeInBits = sizeBits;
      params.pe = 65537;
  
@@ -1304,7 +3580,7 @@
      PK11_Authenticate(slot, PR_TRUE, NULL /* default pwd callback */);
      privkey = PK11_GenerateKeyPair(slot, CKM_RSA_PKCS_KEY_PAIR_GEN, &params,
  				   &pubkey, PR_FALSE, PR_TRUE, NULL);
-@@ -1525,7 +1530,7 @@
+@@ -1525,7 +1530,7 @@ xmlSecNssKeyDataRsaGetSize(xmlSecKeyDataPtr data) {
  
      ctx = xmlSecNssPKIKeyDataGetCtx(data);
      xmlSecAssert2(ctx != NULL, -1);
@@ -1313,8 +3589,10 @@
  
      return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
  }
---- misc/xmlsec1-1.2.14/src/nss/symkeys.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/symkeys.c	2009-09-21 14:02:48.620574832 +0200
+diff --git a/src/nss/symkeys.c b/src/nss/symkeys.c
+index fb23f4f..8e5000f 100644
+--- a/src/nss/symkeys.c
++++ b/src/nss/symkeys.c
 @@ -15,20 +15,41 @@
  #include <stdio.h>
  #include <string.h>
@@ -1358,7 +3636,7 @@
  static int	xmlSecNssSymKeyDataInitialize		(xmlSecKeyDataPtr data);
  static int	xmlSecNssSymKeyDataDuplicate		(xmlSecKeyDataPtr dst,
  							 xmlSecKeyDataPtr src);
-@@ -67,107 +88,743 @@
+@@ -67,107 +88,743 @@ static int	xmlSecNssSymKeyDataKlassCheck	(xmlSecKeyDataKlass* klass);
      (xmlSecKeyDataIsValid((data)) && \
       xmlSecNssSymKeyDataKlassCheck((data)->id))
  
@@ -2069,14 +4347,14 @@
 +                XMLSEC_ERRORS_NO_MESSAGE ) ;
 +            return xmlSecKeyDataTypeUnknown ;
 +    }
- 
--    return((xmlSecBufferGetSize(buffer) > 0) ? xmlSecKeyDataTypeSymmetric : xmlSecKeyDataTypeUnknown);
++
 +    if( context->symkey != NULL ) {
 +            type |= xmlSecKeyDataTypeSymmetric ;
 +    } else {
 +            type |= xmlSecKeyDataTypeUnknown ;
 +    }
-+
+ 
+-    return((xmlSecBufferGetSize(buffer) > 0) ? xmlSecKeyDataTypeSymmetric : xmlSecKeyDataTypeUnknown);
 +    return type ;
  }
  
@@ -2128,7 +4406,7 @@
  }
  
  static int 
-@@ -201,7 +858,7 @@
+@@ -201,7 +858,7 @@ xmlSecNssSymKeyDataKlassCheck(xmlSecKeyDataKlass* klass) {
   *************************************************************************/
  static xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
      sizeof(xmlSecKeyDataKlass),
@@ -2137,7 +4415,7 @@
  
      /* data */
      xmlSecNameAESKeyValue,
-@@ -282,7 +939,7 @@
+@@ -282,7 +939,7 @@ xmlSecNssKeyDataAesSet(xmlSecKeyDataPtr data, const xmlSecByte* buf, xmlSecSize
   *************************************************************************/
  static xmlSecKeyDataKlass xmlSecNssKeyDataDesKlass = {
      sizeof(xmlSecKeyDataKlass),
@@ -2146,7 +4424,7 @@
  
      /* data */
      xmlSecNameDESKeyValue,
-@@ -364,7 +1021,7 @@
+@@ -364,7 +1021,7 @@ xmlSecNssKeyDataDesSet(xmlSecKeyDataPtr data, const xmlSecByte* buf, xmlSecSize
   *************************************************************************/
  static xmlSecKeyDataKlass xmlSecNssKeyDataHmacKlass = {
      sizeof(xmlSecKeyDataKlass),
@@ -2155,8 +4433,564 @@
  
      /* data */
      xmlSecNameHMACKeyValue,
---- misc/xmlsec1-1.2.14/src/nss/x509.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/x509.c	2009-09-21 14:02:48.642312431 +0200
+diff --git a/src/nss/tokens.c b/src/nss/tokens.c
+new file mode 100644
+index 0000000..e27d1e4
+--- /dev/null
++++ b/src/nss/tokens.c
+@@ -0,0 +1,548 @@
++/**
++ * XMLSec library
++ *
++ * This is free software; see Copyright file in the source
++ * distribution for preciese wording.
++ *
++ * Copyright..................................
++ *
++ * Contributor(s): _____________________________
++ *
++ */
++
++/**
++ * In order to ensure that particular crypto operation is performed on
++ * particular crypto device, a subclass of xmlSecList is used to store slot and 
++ * mechanism information.
++ *
++ * In the list, a slot is bound with a mechanism. If the mechanism is available,
++ * this mechanism only can perform on the slot; otherwise, it can perform on
++ * every eligibl slot in the list.
++ *
++ * When try to find a slot for a particular mechanism, the slot bound with
++ * avaliable mechanism will be looked up firstly.
++ */
++#include "globals.h"
++#include <string.h>
++
++#include <xmlsec/xmlsec.h>
++#include <xmlsec/errors.h>
++#include <xmlsec/list.h>
++
++#include <xmlsec/nss/tokens.h>
++
++int
++xmlSecNssKeySlotSetMechList(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE_PTR mechanismList
++) {
++	int counter ;
++
++	xmlSecAssert2( keySlot != NULL , -1 ) ;
++
++	if( keySlot->mechanismList != CK_NULL_PTR ) {
++		xmlFree( keySlot->mechanismList ) ;
++
++		for( counter = 0 ; *( mechanismList + counter ) != CKM_INVALID_MECHANISM ; counter ++ ) ;
++		keySlot->mechanismList = ( CK_MECHANISM_TYPE_PTR )xmlMalloc( ( counter + 1 ) * sizeof( CK_MECHANISM_TYPE ) ) ;
++		if( keySlot->mechanismList == NULL ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			return( -1 );
++		}
++		for( ; counter >= 0 ; counter -- )
++			*( keySlot->mechanismList + counter ) = *(  mechanismList + counter ) ;
++	}
++
++	return( 0 );
++}
++
++int
++xmlSecNssKeySlotEnableMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE mechanism
++) {
++	int counter ;
++	CK_MECHANISM_TYPE_PTR newList ;
++
++	xmlSecAssert2( keySlot != NULL , -1 ) ;
++
++	if( mechanism != CKM_INVALID_MECHANISM ) {
++		for( counter = 0 ; *( keySlot->mechanismList + counter ) != CKM_INVALID_MECHANISM ; counter ++ ) ;
++		newList = ( CK_MECHANISM_TYPE_PTR )xmlMalloc( ( counter + 1 + 1 ) * sizeof( CK_MECHANISM_TYPE ) ) ;
++		if( newList == NULL ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			return( -1 );
++		}
++		*( newList + counter + 1 ) = CKM_INVALID_MECHANISM ;
++		*( newList + counter ) = mechanism ;
++		for( counter -= 1 ; counter >= 0 ; counter -- )
++			*( newList + counter ) = *(  keySlot->mechanismList + counter ) ;
++
++		xmlFree( keySlot->mechanismList ) ;
++		keySlot->mechanismList = newList ;
++	}
++
++	return(0);
++}
++
++int
++xmlSecNssKeySlotDisableMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE mechanism
++) {
++	int counter ;
++
++	xmlSecAssert2( keySlot != NULL , -1 ) ;
++
++	for( counter = 0 ; *( keySlot->mechanismList + counter ) != CKM_INVALID_MECHANISM ; counter ++ ) {
++		if( *( keySlot->mechanismList + counter ) == mechanism ) {
++			for( ; *( keySlot->mechanismList + counter ) != CKM_INVALID_MECHANISM ; counter ++ ) {
++				*( keySlot->mechanismList + counter ) = *( keySlot->mechanismList + counter + 1 ) ;
++			}
++
++			break ;
++		}
++	}
++
++	return(0); 
++}
++
++CK_MECHANISM_TYPE_PTR
++xmlSecNssKeySlotGetMechList(
++    xmlSecNssKeySlotPtr keySlot
++) {
++	if( keySlot != NULL )
++		return keySlot->mechanismList ;
++	else
++		return NULL ;
++}
++
++int
++xmlSecNssKeySlotSetSlot(
++    xmlSecNssKeySlotPtr keySlot ,
++	PK11SlotInfo* slot
++) {
++	xmlSecAssert2( keySlot != NULL , -1 ) ;
++
++	if( slot != NULL && keySlot->slot != slot ) {
++		if( keySlot->slot != NULL )
++			PK11_FreeSlot( keySlot->slot ) ;
++
++		if( keySlot->mechanismList != NULL ) {
++			xmlFree( keySlot->mechanismList ) ;
++			keySlot->mechanismList = NULL ;
++		}
++
++		keySlot->slot = PK11_ReferenceSlot( slot ) ;
++	}
++
++	return(0);
++}
++
++int
++xmlSecNssKeySlotInitialize(
++    xmlSecNssKeySlotPtr keySlot ,
++	PK11SlotInfo* slot
++) {
++	xmlSecAssert2( keySlot != NULL , -1 ) ;
++	xmlSecAssert2( keySlot->slot == NULL , -1 ) ;
++	xmlSecAssert2( keySlot->mechanismList == NULL , -1 ) ;
++
++	if( slot != NULL ) {
++		keySlot->slot = PK11_ReferenceSlot( slot ) ;
++	}
++
++	return(0);
++}
++
++void
++xmlSecNssKeySlotFinalize(
++    xmlSecNssKeySlotPtr keySlot
++) {
++	xmlSecAssert( keySlot != NULL ) ;
++
++	if( keySlot->mechanismList != NULL ) {
++		xmlFree( keySlot->mechanismList ) ;
++		keySlot->mechanismList = NULL ;
++	}
++
++	if( keySlot->slot != NULL ) {
++		PK11_FreeSlot( keySlot->slot ) ;
++		keySlot->slot = NULL ;
++	}
++		
++}
++
++PK11SlotInfo*
++xmlSecNssKeySlotGetSlot(
++	xmlSecNssKeySlotPtr keySlot
++) {
++	if( keySlot != NULL )
++		return keySlot->slot ;
++	else
++		return NULL ;
++}
++
++xmlSecNssKeySlotPtr
++xmlSecNssKeySlotCreate() {
++	xmlSecNssKeySlotPtr keySlot ;
++
++	/* Allocates a new xmlSecNssKeySlot and fill the fields */
++	keySlot = ( xmlSecNssKeySlotPtr )xmlMalloc( sizeof( xmlSecNssKeySlot ) ) ;
++	if( keySlot == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			NULL ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( NULL );
++	}
++	memset( keySlot, 0, sizeof( xmlSecNssKeySlot ) ) ;
++
++	return( keySlot ) ;
++}
++
++int
++xmlSecNssKeySlotCopy(
++	xmlSecNssKeySlotPtr newKeySlot ,
++	xmlSecNssKeySlotPtr keySlot
++) {
++	CK_MECHANISM_TYPE_PTR mech ;
++	int counter ;
++
++	xmlSecAssert2( newKeySlot != NULL , -1 ) ;
++	xmlSecAssert2( keySlot != NULL , -1 ) ;
++
++	if( keySlot->slot != NULL && newKeySlot->slot != keySlot->slot ) {
++		if( newKeySlot->slot != NULL )
++			PK11_FreeSlot( newKeySlot->slot ) ;
++
++		newKeySlot->slot = PK11_ReferenceSlot( keySlot->slot ) ;
++	}
++
++	if( keySlot->mechanismList != CK_NULL_PTR ) {
++		xmlFree( newKeySlot->mechanismList ) ;
++
++		for( counter = 0 ; *( keySlot->mechanismList + counter ) != CKM_INVALID_MECHANISM ; counter ++ ) ;
++		newKeySlot->mechanismList = ( CK_MECHANISM_TYPE_PTR )xmlMalloc( ( counter + 1 ) * sizeof( CK_MECHANISM_TYPE ) ) ;
++		if( newKeySlot->mechanismList == NULL ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			return( -1 );
++		}
++		for( ; counter >= 0 ; counter -- )
++			*( newKeySlot->mechanismList + counter ) = *(  keySlot->mechanismList + counter ) ;
++	}
++
++	return( 0 );
++}
++
++xmlSecNssKeySlotPtr
++xmlSecNssKeySlotDuplicate(
++	xmlSecNssKeySlotPtr keySlot
++) {
++	xmlSecNssKeySlotPtr newKeySlot ;
++	int ret ;
++
++	xmlSecAssert2( keySlot != NULL , NULL ) ;
++
++	newKeySlot = xmlSecNssKeySlotCreate() ;
++	if( newKeySlot == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			NULL ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( NULL );
++	}
++
++	if( xmlSecNssKeySlotCopy( newKeySlot, keySlot ) < 0 ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			NULL ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( NULL );
++	}
++
++	return( newKeySlot );
++}
++
++void
++xmlSecNssKeySlotDestroy(
++	    xmlSecNssKeySlotPtr keySlot
++) {
++	xmlSecAssert( keySlot != NULL ) ;
++
++	if( keySlot->mechanismList != NULL )
++		xmlFree( keySlot->mechanismList ) ;
++
++	if( keySlot->slot != NULL )
++		PK11_FreeSlot( keySlot->slot ) ;
++		
++	xmlFree( keySlot ) ;
++}
++
++int
++xmlSecNssKeySlotBindMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE type
++) {
++	int counter ;
++
++	xmlSecAssert2( keySlot != NULL , 0 ) ;
++	xmlSecAssert2( keySlot->slot != NULL , 0 ) ;
++	xmlSecAssert2( type != CKM_INVALID_MECHANISM , 0 ) ;
++
++	for( counter = 0 ; *( keySlot->mechanismList + counter ) != CKM_INVALID_MECHANISM ; counter ++ ) {
++		if( *( keySlot->mechanismList + counter ) == type )
++			return(1) ;
++	}
++
++	return( 0 ) ;
++}
++
++int
++xmlSecNssKeySlotSupportMech(
++	xmlSecNssKeySlotPtr keySlot ,
++	CK_MECHANISM_TYPE type
++) {
++	xmlSecAssert2( keySlot != NULL , 0 ) ;
++	xmlSecAssert2( keySlot->slot != NULL , 0 ) ;
++	xmlSecAssert2( type != CKM_INVALID_MECHANISM , 0 ) ;
++
++	if( PK11_DoesMechanism( keySlot->slot , type ) == PR_TRUE ) {
++		return(1);
++	} else
++		return(0);
++}
++
++void
++xmlSecNssKeySlotDebugDump(
++	xmlSecNssKeySlotPtr keySlot ,
++	FILE* output
++) {
++	xmlSecAssert( keySlot != NULL ) ;
++	xmlSecAssert( output != NULL ) ;
++
++	fprintf( output, "== KEY SLOT\n" );
++}
++
++void
++xmlSecNssKeySlotDebugXmlDump(
++	xmlSecNssKeySlotPtr keySlot ,
++	FILE* output
++) {
++}
++
++/**
++ * Key Slot List
++ */
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecPtrListKlass xmlSecNssKeySlotPtrListKlass = {
++#else
++static xmlSecPtrListKlass xmlSecNssKeySlotPtrListKlass = {
++#endif
++    BAD_CAST "mechanism-list",
++    (xmlSecPtrDuplicateItemMethod)xmlSecNssKeySlotDuplicate,
++    (xmlSecPtrDestroyItemMethod)xmlSecNssKeySlotDestroy,
++    (xmlSecPtrDebugDumpItemMethod)xmlSecNssKeySlotDebugDump,
++    (xmlSecPtrDebugDumpItemMethod)xmlSecNssKeySlotDebugXmlDump,
++};
++
++xmlSecPtrListId 
++xmlSecNssKeySlotListGetKlass(void) {
++    return(&xmlSecNssKeySlotPtrListKlass);
++}
++
++
++/*-
++ * Global PKCS#11 crypto token repository -- Key slot list
++ */
++static xmlSecPtrListPtr _xmlSecNssKeySlotList = NULL ;
++
++PK11SlotInfo*
++xmlSecNssSlotGet(
++	CK_MECHANISM_TYPE type
++) {
++	PK11SlotInfo*			slot = NULL ;
++	xmlSecNssKeySlotPtr		keySlot ;
++	xmlSecSize				ksSize ;
++	xmlSecSize				ksPos ;
++	char					flag ;
++
++	if( _xmlSecNssKeySlotList == NULL ) {
++		slot = PK11_GetBestSlot( type , NULL ) ;
++	} else {
++		ksSize = xmlSecPtrListGetSize( _xmlSecNssKeySlotList ) ;
++
++		/*-
++		 * Firstly, checking whether the mechanism is bound with a special slot.
++		 * If no bound slot, we try to find the first eligible slot in the list.
++		 */
++		for( flag = 0, ksPos = 0 ; ksPos < ksSize ; ksPos ++ ) {
++			keySlot = ( xmlSecNssKeySlotPtr )xmlSecPtrListGetItem( _xmlSecNssKeySlotList, ksPos ) ;
++			if( keySlot != NULL && xmlSecNssKeySlotBindMech( keySlot, type ) ) {
++				slot = xmlSecNssKeySlotGetSlot( keySlot ) ;
++				flag = 2 ;
++			} else if( flag == 0 && xmlSecNssKeySlotSupportMech( keySlot, type ) ) {
++				slot = xmlSecNssKeySlotGetSlot( keySlot ) ;
++				flag = 1 ;
++			}
++
++			if( flag == 2 )
++				break ;
++		}
++		if( slot != NULL )
++			slot = PK11_ReferenceSlot( slot ) ;
++	}
++
++	if( slot != NULL && PK11_NeedLogin( slot ) ) {
++		if( PK11_Authenticate( slot , PR_TRUE , NULL ) != SECSuccess ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			PK11_FreeSlot( slot ) ;
++			return( NULL );
++		}
++	}
++
++	return slot ;
++}
++
++int
++xmlSecNssSlotInitialize(
++	void
++) {
++	if( _xmlSecNssKeySlotList != NULL ) {
++		xmlSecPtrListDestroy( _xmlSecNssKeySlotList ) ;
++		_xmlSecNssKeySlotList = NULL ;
++	}
++
++	_xmlSecNssKeySlotList = xmlSecPtrListCreate( xmlSecNssKeySlotListId ) ;
++	if( _xmlSecNssKeySlotList == NULL ) {
++		xmlSecError( XMLSEC_ERRORS_HERE ,
++			NULL ,
++			NULL ,
++			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++			XMLSEC_ERRORS_NO_MESSAGE ) ;
++		return( -1 );
++	}
++
++	return(0);
++}
++
++void
++xmlSecNssSlotShutdown(
++	void
++) {
++	if( _xmlSecNssKeySlotList != NULL ) {
++		xmlSecPtrListDestroy( _xmlSecNssKeySlotList ) ;
++		_xmlSecNssKeySlotList = NULL ;
++	}
++}
++
++int
++xmlSecNssSlotAdopt(
++	PK11SlotInfo* slot,
++	CK_MECHANISM_TYPE type
++) {
++	xmlSecNssKeySlotPtr		keySlot ;
++	xmlSecSize				ksSize ;
++	xmlSecSize				ksPos ;
++	char					flag ;
++
++	xmlSecAssert2( _xmlSecNssKeySlotList != NULL, -1 ) ;
++	xmlSecAssert2( slot != NULL, -1 ) ;
++
++	ksSize = xmlSecPtrListGetSize( _xmlSecNssKeySlotList ) ;
++
++	/*-
++	 * Firstly, checking whether the slot is in the repository already.
++	 */
++	flag = 0 ;
++	for( ksPos = 0 ; ksPos < ksSize ; ksPos ++ ) {
++		keySlot = ( xmlSecNssKeySlotPtr )xmlSecPtrListGetItem( _xmlSecNssKeySlotList, ksPos ) ;
++		/* If find the slot in the list */
++		if( keySlot != NULL && xmlSecNssKeySlotGetSlot( keySlot ) == slot ) {
++			/* If mechnism type is valid, bind the slot with the mechanism */
++			if( type != CKM_INVALID_MECHANISM ) {
++				if( xmlSecNssKeySlotEnableMech( keySlot, type ) < 0 ) {
++					xmlSecError( XMLSEC_ERRORS_HERE ,
++						NULL ,
++						NULL ,
++						XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++						XMLSEC_ERRORS_NO_MESSAGE ) ;
++					return(-1);
++				}
++			}
++
++			flag = 1 ;
++		}
++	}
++
++	/* If the slot do not in the list, add a new item to the list */
++	if( flag == 0 ) {
++		/* Create a new KeySlot */
++		keySlot = xmlSecNssKeySlotCreate() ;
++		if( keySlot == NULL ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			return(-1);
++		}
++
++		/* Initialize the keySlot with a slot */
++		if( xmlSecNssKeySlotInitialize( keySlot, slot ) < 0 ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			xmlSecNssKeySlotDestroy( keySlot ) ;
++			return(-1);
++		}
++
++		/* If mechnism type is valid, bind the slot with the mechanism */
++		if( type != CKM_INVALID_MECHANISM ) {
++			if( xmlSecNssKeySlotEnableMech( keySlot, type ) < 0 ) {
++				xmlSecError( XMLSEC_ERRORS_HERE ,
++					NULL ,
++					NULL ,
++					XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++					XMLSEC_ERRORS_NO_MESSAGE ) ;
++				xmlSecNssKeySlotDestroy( keySlot ) ;
++				return(-1);
++			}
++		}
++
++		/* Add keySlot into the list */
++		if( xmlSecPtrListAdd( _xmlSecNssKeySlotList, keySlot ) < 0 ) {
++			xmlSecError( XMLSEC_ERRORS_HERE ,
++				NULL ,
++				NULL ,
++				XMLSEC_ERRORS_R_XMLSEC_FAILED ,
++				XMLSEC_ERRORS_NO_MESSAGE ) ;
++			xmlSecNssKeySlotDestroy( keySlot ) ;
++			return(-1);
++		}
++	}
++
++	return(0);
++}
++
+diff --git a/src/nss/x509.c b/src/nss/x509.c
+index aea4012..347c8dd 100644
+--- a/src/nss/x509.c
++++ b/src/nss/x509.c
 @@ -34,7 +34,6 @@
  #include <xmlsec/keys.h>
  #include <xmlsec/keyinfo.h>
@@ -2165,7 +4999,7 @@
  #include <xmlsec/base64.h>
  #include <xmlsec/errors.h>
  
-@@ -61,33 +60,18 @@
+@@ -61,33 +60,18 @@ static int		xmlSecNssX509DataNodeRead		(xmlSecKeyDataPtr data,
  static int		xmlSecNssX509CertificateNodeRead	(xmlSecKeyDataPtr data,
  								 xmlNodePtr node,
  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
@@ -2199,7 +5033,7 @@
  static int		xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, 
  								xmlSecKeyPtr key,
  								xmlSecKeyInfoCtxPtr keyInfoCtx);
-@@ -104,9 +88,6 @@
+@@ -104,9 +88,6 @@ static CERTSignedCrl*	xmlSecNssX509CrlBase64DerRead		(xmlChar* buf,
  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
  static xmlChar*		xmlSecNssX509CrlBase64DerWrite		(CERTSignedCrl* crl, 
  								 int base64LineWrap);
@@ -2209,7 +5043,7 @@
  static void		xmlSecNssX509CertDebugDump		(CERTCertificate* cert, 
  								 FILE* output);
  static void		xmlSecNssX509CertDebugXmlDump		(CERTCertificate* cert, 
-@@ -752,31 +733,22 @@
+@@ -752,31 +733,22 @@ static int
  xmlSecNssKeyDataX509XmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
  				xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataPtr data;
@@ -2246,7 +5080,7 @@
      data = xmlSecKeyGetData(key, id);
      if(data == NULL) {
  	/* no x509 data in the key */
-@@ -796,79 +768,74 @@
+@@ -796,79 +768,74 @@ xmlSecNssKeyDataX509XmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
  	    return(-1);
  	}
  
@@ -2378,7 +5212,7 @@
      }
  
      return(0);
-@@ -1057,46 +1024,6 @@
+@@ -1057,46 +1024,6 @@ xmlSecNssX509CertificateNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
      return(0);
  }
  
@@ -2425,7 +5259,7 @@
  static int		
  xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {	
      xmlSecKeyDataStorePtr x509Store;
-@@ -1120,19 +1047,13 @@
+@@ -1120,19 +1047,13 @@ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
      }
  
      subject = xmlNodeGetContent(node);
@@ -2446,7 +5280,7 @@
      }
  
      cert = xmlSecNssX509StoreFindCert(x509Store, subject, NULL, NULL, NULL, keyInfoCtx);
-@@ -1169,40 +1090,6 @@
+@@ -1169,40 +1090,6 @@ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
      return(0);
  }
  
@@ -2487,7 +5321,7 @@
  static int 
  xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataStorePtr x509Store;
-@@ -1228,21 +1115,9 @@
+@@ -1228,21 +1115,9 @@ xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSec
      }
  
      cur = xmlSecGetNextElementNode(node->children);
@@ -2510,7 +5344,7 @@
  	xmlSecError(XMLSEC_ERRORS_HERE,
  		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
  		    xmlSecErrorsSafeString(xmlSecNodeX509IssuerName),
-@@ -1336,78 +1211,6 @@
+@@ -1336,78 +1211,6 @@ xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSec
      return(0);
  }
  
@@ -2589,7 +5423,7 @@
  static int 
  xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataStorePtr x509Store;
-@@ -1431,11 +1234,7 @@
+@@ -1431,11 +1234,7 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
      }
      
      ski = xmlNodeGetContent(node);
@@ -2602,7 +5436,7 @@
  	    xmlSecError(XMLSEC_ERRORS_HERE,
  			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
  			xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
-@@ -1443,8 +1242,6 @@
+@@ -1443,8 +1242,6 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
  			"node=%s",
  			xmlSecErrorsSafeString(xmlSecNodeX509SKI));
  	    return(-1);
@@ -2611,7 +5445,7 @@
      }
  
      cert = xmlSecNssX509StoreFindCert(x509Store, NULL, NULL, NULL, ski, keyInfoCtx);
-@@ -1479,41 +1276,6 @@
+@@ -1479,41 +1276,6 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
      return(0);
  }
  
@@ -2653,7 +5487,7 @@
  static int 
  xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlChar *content;
-@@ -1524,19 +1286,13 @@
+@@ -1524,19 +1286,13 @@ xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
      xmlSecAssert2(keyInfoCtx != NULL, -1);
  
      content = xmlNodeGetContent(node);
@@ -2674,7 +5508,7 @@
      }
  
      crl = xmlSecNssX509CrlBase64DerRead(content, keyInfoCtx);
-@@ -1556,47 +1312,6 @@
+@@ -1556,47 +1312,6 @@ xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
  }
  
  static int
@@ -2722,7 +5556,7 @@
  xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
  				    xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecNssX509DataCtxPtr ctx;
-@@ -1604,6 +1319,10 @@
+@@ -1604,6 +1319,10 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
      int ret;
      SECStatus status;
      PRTime notBefore, notAfter;
@@ -2733,7 +5567,7 @@
      
      xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataX509Id), -1);
      xmlSecAssert2(key != NULL, -1);
-@@ -1636,10 +1355,14 @@
+@@ -1636,10 +1355,14 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
  			    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
  			    "CERT_DupCertificate",
  			    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -2750,7 +5584,7 @@
  	    keyValue = xmlSecNssX509CertGetKey(ctx->keyCert);
  	    if(keyValue == NULL) {
  		xmlSecError(XMLSEC_ERRORS_HERE,
-@@ -1649,6 +1372,54 @@
+@@ -1649,6 +1372,54 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
  			    XMLSEC_ERRORS_NO_MESSAGE);
  		return(-1);
  	    }
@@ -2805,7 +5639,7 @@
  	    
  	    /* verify that the key matches our expectations */
  	    if(xmlSecKeyReqMatchKeyValue(&(keyInfoCtx->keyReq), keyValue) != 1) {
-@@ -1950,86 +1721,6 @@
+@@ -1950,86 +1721,6 @@ xmlSecNssX509CrlBase64DerWrite(CERTSignedCrl* crl, int base64LineWrap) {
      return(res);
  }
  
@@ -2892,8 +5726,10 @@
  static void 
  xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
      SECItem *sn;
---- misc/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-09-21 14:02:48.669245207 +0200
+diff --git a/src/nss/x509vfy.c b/src/nss/x509vfy.c
+index cfbcaca..63ed439 100644
+--- a/src/nss/x509vfy.c
++++ b/src/nss/x509vfy.c
 @@ -30,6 +30,7 @@
  #include <xmlsec/keyinfo.h>
  #include <xmlsec/keysmngr.h>
@@ -2902,7 +5738,7 @@
  #include <xmlsec/errors.h>
  
  #include <xmlsec/nss/crypto.h>
-@@ -61,17 +62,7 @@
+@@ -61,17 +62,7 @@ struct _xmlSecNssX509StoreCtx {
   
  static int		xmlSecNssX509StoreInitialize	(xmlSecKeyDataStorePtr store);
  static void		xmlSecNssX509StoreFinalize	(xmlSecKeyDataStorePtr store);
@@ -2921,7 +5757,7 @@
  
  static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
      sizeof(xmlSecKeyDataStoreKlass),
-@@ -339,40 +330,28 @@
+@@ -353,40 +344,28 @@ static CERTCertificate*
  xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName, 
  		      xmlChar *issuerSerial, xmlChar *ski) {
      CERTCertificate *cert = NULL;
@@ -2965,7 +5801,7 @@
  	    goto done;
  	}
  
-@@ -394,34 +373,23 @@
+@@ -408,34 +387,23 @@ xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName,
      if((issuerName != NULL) && (issuerSerial != NULL)) {
  	CERTIssuerAndSN issuerAndSN;
  
@@ -3003,7 +5839,7 @@
  	    goto done;
  	}
  
-@@ -441,8 +409,15 @@
+@@ -455,8 +423,15 @@ xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName,
  	issuerAndSN.derIssuer.data = nameitem->data;
  	issuerAndSN.derIssuer.len = nameitem->len;
  
@@ -3021,7 +5857,7 @@
  
  	cert = CERT_FindCertByIssuerAndSN(CERT_GetDefaultCertDB(), 
  					  &issuerAndSN);
-@@ -473,9 +448,6 @@
+@@ -487,9 +462,6 @@ xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName,
      }
  
  done:
@@ -3031,7 +5867,7 @@
      if (arena != NULL) {
  	PORT_FreeArena(arena, PR_FALSE);
      }
-@@ -486,176 +458,6 @@
+@@ -500,176 +472,6 @@ done:
      return(cert);
  }
  
@@ -3208,7 +6044,7 @@
  /* code lifted from NSS */
  static void
  xmlSecNssNumToItem(SECItem *it, unsigned long ui)
-@@ -699,6 +501,77 @@
+@@ -713,6 +515,77 @@ xmlSecNssNumToItem(SECItem *it, unsigned long ui)
      it->len = len;
      PORT_Memcpy(it->data, bb + (sizeof(bb) - len), len);
  }
@@ -3286,9 +6122,11 @@
  #endif /* XMLSEC_NO_X509 */
  
  
---- misc/xmlsec1-1.2.14/win32/Makefile.msvc	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.14/win32/Makefile.msvc	2009-09-21 14:02:48.607277908 +0200
-@@ -218,6 +218,9 @@
+diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
+index 9a733d3..c2ab75c 100644
+--- a/win32/Makefile.msvc
++++ b/win32/Makefile.msvc
+@@ -218,6 +218,9 @@ XMLSEC_OPENSSL_OBJS_A = \
  	$(XMLSEC_OPENSSL_INTDIR_A)\x509vfy.obj 
  
  XMLSEC_NSS_OBJS = \
@@ -3298,7 +6136,7 @@
  	$(XMLSEC_NSS_INTDIR)\app.obj\
  	$(XMLSEC_NSS_INTDIR)\bignum.obj\
  	$(XMLSEC_NSS_INTDIR)\ciphers.obj \
-@@ -253,6 +256,7 @@
+@@ -253,6 +256,7 @@ XMLSEC_NSS_OBJS_A = \
  	$(XMLSEC_NSS_INTDIR_A)\strings.obj
  
  XMLSEC_MSCRYPTO_OBJS = \
@@ -3306,3 +6144,6 @@
  	$(XMLSEC_MSCRYPTO_INTDIR)\app.obj\
  	$(XMLSEC_MSCRYPTO_INTDIR)\crypto.obj \
  	$(XMLSEC_MSCRYPTO_INTDIR)\ciphers.obj \
+-- 
+2.6.2
+
