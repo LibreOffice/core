@@ -42,7 +42,6 @@ struct TextCharacterProperties
     TextFont            maComplexFont;
     TextFont            maComplexThemeFont;
     TextFont            maSymbolFont;
-    Color               maCharColor;
     Color               maUnderlineColor;
     Color               maHighlightColor;
     OptValue< OUString > moLang;
@@ -56,7 +55,7 @@ struct TextCharacterProperties
     OptValue< bool >    moItalic;
     OptValue< bool >    moUnderlineLineFollowText;
     OptValue< bool >    moUnderlineFillFollowText;
-    GradientFillProperties      maGradientProps; /// Properties for gradient text colors
+    FillProperties      maFillProperties;
 
     std::vector<css::beans::PropertyValue> maTextEffectsProperties;
 

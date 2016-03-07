@@ -148,8 +148,11 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
     aTextCharProps.maAsianFont = rTableStylePart.getAsianFont();
     aTextCharProps.maComplexFont = rTableStylePart.getComplexFont();
     aTextCharProps.maSymbolFont = rTableStylePart.getSymbolFont();
-    if (rTableStylePart.getTextColor().isUsed())
-        aTextCharProps.maCharColor = rTableStylePart.getTextColor();
+    if ( rTableStylePart.getTextColor().isUsed() )
+    {
+        aTextCharProps.maFillProperties.maFillColor = rTableStylePart.getTextColor();
+        aTextCharProps.maFillProperties.moFillType.set(XML_solidFill);
+    }
     if( rTableStylePart.getTextBoldStyle().is_initialized() )
         aTextCharProps.moBold = *rTableStylePart.getTextBoldStyle();
     if( rTableStylePart.getTextItalicStyle().is_initialized() )
