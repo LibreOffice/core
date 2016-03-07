@@ -319,51 +319,10 @@
  /*   3x */ DG, DG, DG, DG, DG, DG, DG, DG, DG, DG, CL, SD, OT, SD, OT, QU,
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
---- src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
-+++ src/ne_utils.c	2011-02-03 10:26:21.000000000 +0100
-@@ -118,6 +118,9 @@
- #ifdef HAVE_GNUTLS
-     ", GNU TLS " LIBGNUTLS_VERSION
- #endif /* HAVE_GNUTLS */
-+#ifdef HAVE_SSPI
-+    ", SSPI"
-+#endif /* HAVE_SSPI */
-    "."
- ;
- 
-@@ -137,7 +140,7 @@
-     switch (feature) {
- #if defined(NE_HAVE_SSL) || defined(NE_HAVE_ZLIB) || defined(NE_HAVE_IPV6) \
-     || defined(NE_HAVE_SOCKS) || defined(NE_HAVE_LFS) \
--    || defined(NE_HAVE_TS_SSL) || defined(NE_HAVE_I18N)
-+    || defined(NE_HAVE_TS_SSL) || defined(NE_HAVE_I18N) || defined(HAVE_SSPI)
- #ifdef NE_HAVE_SSL
-     case NE_FEATURE_SSL:
- #endif
-@@ -159,6 +162,9 @@
- #ifdef NE_HAVE_I18N
-     case NE_FEATURE_I18N:
- #endif
-+#ifdef HAVE_SSPI
-+    case NE_FEATURE_SSPI:
-+#endif
-         return 1;
- #endif /* NE_HAVE_* */
-     default:
---- src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
-+++ src/ne_utils.h	2011-02-03 10:26:21.000000000 +0100
-@@ -54,6 +54,7 @@
- #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
- #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */
- #define NE_FEATURE_I18N (7) /* i18n error message support */
-+#define NE_FEATURE_SSPI (8) /* NTLM/Negotiate authentication protocol via SSPI */
- 
- /* Returns non-zero if library is built with support for the given
-  * NE_FEATURE_* feature code 'code'. */
 --- src/ne_openssl.c
 +++ src/ne_openssl.c
-@@ -41,6 +41,13 @@
- #include <pthread.h>
+@@ -43,6 +43,13 @@
+ #endif
  #endif
  
 +#ifdef _WIN32
@@ -376,7 +335,7 @@
  #include "ne_ssl.h"
  #include "ne_string.h"
  #include "ne_session.h"
-@@ -798,6 +798,31 @@
+@@ -798,6 +805,31 @@
      X509_STORE_load_locations(store, NE_SSL_CA_BUNDLE, NULL);
  #else
      X509_STORE_set_default_paths(store);
