@@ -431,6 +431,8 @@ void SdExportTest::testTransparentBackground()
 
     const SdrTextObj *pObj2 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
     checkFontAttributes<Color, SvxBackgroundColorItem>( pObj2, Color(COL_YELLOW));
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testMediaEmbedding()
@@ -474,6 +476,8 @@ void SdExportTest::testFdo84043()
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrObject const* pShape = pPage->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testFdo71961()
@@ -743,6 +747,8 @@ void SdExportTest::testTdf80020()
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testLinkedGraphicRT()
@@ -1009,6 +1015,8 @@ void SdExportTest::testBulletColor()
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor().GetColor());
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testTdf62176()
@@ -1052,6 +1060,8 @@ void SdExportTest::testTdf62176()
     //Checking the *Text* in TextBox
     uno::Reference<text::XTextRange> xParagraph2( getParagraphFromShape( 0, xShape2 ) );
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testBulletCharAndFont()
@@ -1262,6 +1272,8 @@ void SdExportTest::testBulletMarginAndIndentation()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's left margin is wrong!", sal_uInt32(1000),sal_uInt32(pNumFmt->GetNumRule()->GetLevel(0).GetAbsLSpace()) ); // left margin is 0.79 cm
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's indentation is wrong!", sal_Int32(-998),sal_Int32(pNumFmt->GetNumRule()->GetLevel(0). GetFirstLineOffset()));
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testParaMarginAndindentation()
@@ -1464,6 +1476,8 @@ void SdExportTest::testExportTransitionsPPTX()
 
     // NEWSFLASH
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 74, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testTdf92527()
