@@ -66,7 +66,7 @@ static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
            way and always set EINVAL, so be resilient here: */
         return false;
     } else {
-        SAL_WARN_IF( m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max(), "sal.osl", 
+        SAL_WARN_IF( m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max(), "sal.osl",
                 "m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max()");
         *value = (std::size_t) m;
         return true;
@@ -259,6 +259,11 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     SAL_WARN_IF(*ustrName == nullptr, "sal.osl", "ustrName == NULL");
 
     return bRet;
+}
+
+sal_Bool SAL_CALL osl_getUserNameWithoutDomain(oslSecurity Security, rtl_uString **ustrName)
+{
+    return osl_getUserName(Security, ustrName); // No domain name on unix
 }
 
 static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)

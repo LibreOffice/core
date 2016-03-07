@@ -167,6 +167,7 @@ enum PreDefVariable
     PREDEFVAR_HOME,
     PREDEFVAR_TEMP,
     PREDEFVAR_PATH,
+    PREDEFVAR_USERNAME,
     PREDEFVAR_LANGID,
     PREDEFVAR_VLANG,
     PREDEFVAR_INSTPATH,
@@ -350,6 +351,7 @@ static const FixedVariable aFixedVarTable[] =
     { "$(home)",        PREDEFVAR_HOME,         true  },
     { "$(temp)",        PREDEFVAR_TEMP,         true  },
     { "$(path)",        PREDEFVAR_PATH,         true  },
+    { "$(username)",    PREDEFVAR_USERNAME,     false },
     { "$(langid)",      PREDEFVAR_LANGID,       false },
     { "$(vlang)",       PREDEFVAR_VLANG,        false },
     { "$(instpath)",    PREDEFVAR_INSTPATH,     true  },
@@ -1238,6 +1240,12 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGURL ]  = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROG ]     = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];
     }
+
+    // Set $(username)
+    OUString aSystemUser;
+    ::osl::Security aSecurity;
+    aSecurity.getUserName( aSystemUser, false );
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERNAME ]   = aSystemUser;
 
     // Detect the language type of the current office
     m_aPreDefVars.m_eLanguageType = LANGUAGE_ENGLISH_US;
