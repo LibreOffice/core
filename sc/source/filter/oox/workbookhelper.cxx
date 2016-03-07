@@ -604,7 +604,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         // #i76026# disable Undo while loading the document
         mpDoc->EnableUndo(false);
         // #i79826# disable calculating automatic row height while loading the document
-        mpDoc->EnableAdjustHeight(true);
+        mpDoc->EnableAdjustHeight(false);
         // disable automatic update of linked sheets and DDE links
         mpDoc->EnableExecuteLink(false);
 
