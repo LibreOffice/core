@@ -3775,7 +3775,7 @@ void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortAr
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
-        SetError( errStackOverflow);
+        SetError( errMatrixSize);
     else if ( rSortArray.empty() )
     {
         if ( bAllowEmptyArray )

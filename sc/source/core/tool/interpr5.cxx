@@ -331,7 +331,7 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
     pMat->GetDimensions( nCols, nRows);
     if ( nCols != nC || nRows != nR )
     {   // arbitray limit of elements exceeded
-        SetError( errStackOverflow);
+        SetError( errMatrixSize);
         pMat.reset();
     }
     return pMat;
@@ -2994,7 +2994,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         ScMatrixRef pCopyY = pMatY->CloneIfConst();
         if (!pCopyX || !pCopyY)
         {
-            PushError(errStackOverflow);
+            PushError(errMatrixSize);
             return;
         }
         pMatX = pCopyX;
