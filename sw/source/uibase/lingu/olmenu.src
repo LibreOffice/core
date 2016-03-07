@@ -19,6 +19,7 @@
 /* StarView resource file */
 
 #include "olmenu.hrc"
+#include "cmdid.h"
 #include "helpid.h"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
