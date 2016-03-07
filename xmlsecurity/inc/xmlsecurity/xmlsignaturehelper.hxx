@@ -181,8 +181,8 @@ public:
     bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bCacheLastSignature = true);
     /// Read and verify a single OOXML signature.
     bool ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
-    /// Adds an OOXML digital signature relation to _rels/.rels if there wasn't any before.
-    void EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage);
+    /// Adds or removes an OOXML digital signature relation to _rels/.rels if there wasn't any before.
+    void EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage, bool bAdd);
     /// Given that xStorage is an OOXML _xmlsignatures storage, create origin.sigs and its relations.
     void ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount);
     /// Given that xSignatureStorage is an OOXML _xmlsignatures storage, create and write a new signature.

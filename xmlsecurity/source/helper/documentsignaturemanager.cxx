@@ -264,7 +264,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         // OOXML
 
         // Handle relations.
-        maSignatureHelper.EnsureSignaturesRelation(mxStore);
+        maSignatureHelper.EnsureSignaturesRelation(mxStore, /*bAdd=*/true);
         // Old signatures + the new one.
         int nSignatureCount = maCurrentSignatureInformations.size() + 1;
         maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
@@ -378,6 +378,11 @@ void DocumentSignatureManager::write()
         {
             maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
             maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+        }
+        else
+        {
+            // Removing all signatures: then need to remove the signature relation as well.
+            maSignatureHelper.EnsureSignaturesRelation(mxStore, /*bAdd=*/false);
         }
 
         for (size_t i = 0; i < nSignatureCount; ++i)
