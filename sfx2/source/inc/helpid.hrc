@@ -26,7 +26,6 @@
 #define HID_TEMPLDLG_NEWBYEXAMPLE                             "SFX2_HID_TEMPLDLG_NEWBYEXAMPLE"
 #define HID_TEMPLDLG_UPDATEBYEXAMPLE                          "SFX2_HID_TEMPLDLG_UPDATEBYEXAMPLE"
 #define HID_TEMPLDLG_WATERCAN                                 "SFX2_HID_TEMPLDLG_WATERCAN"
-#define HID_FULLSCREENTOOLBOX                                 "SFX2_HID_FULLSCREENTOOLBOX"
 #define HID_NAVIGATOR_WINDOW                                  "SFX2_HID_NAVIGATOR_WINDOW"
 #define HID_TABDLG_RESET_BTN                                  "SFX2_HID_TABDLG_RESET_BTN"
 #define HID_TABDLG_STANDARD_BTN                               "SFX2_HID_TABDLG_STANDARD_BTN"
