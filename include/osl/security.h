@@ -118,6 +118,16 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserIdent(
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserName(
         oslSecurity Security, rtl_uString **strName);
 
+/** Get the login name for the user of this security handle,
+    excluding the domain name on Windows.
+    @param[in] Security the security handle.
+    @param[out] strName the string that receives the user name on success.
+    @return True, if the security handle is valid, otherwise False.
+    @since LibreOffice 5.2
+*/
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getShortUserName(
+        oslSecurity Security, rtl_uString **strName);
+
 /** Get the home directory of the user of this security handle.
     @param[in] Security the security handle.
     @param[out] strDirectory the string that receives the directory path on success.

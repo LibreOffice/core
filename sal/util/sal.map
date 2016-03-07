@@ -690,6 +690,11 @@ LIBO_UDK_5.1 { # symbols available in >= LibO 5.1
         rtl_uString_newReplaceFirstToAsciiL;
 } LIBO_UDK_5.0;
 
+LIBO_UDK_5.2 { # symbols available in >= LibO 5.2
+    global:
+        osl_getShortUserName;
+} LIBO_UDK_5.1;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;
