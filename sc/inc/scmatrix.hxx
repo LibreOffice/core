@@ -160,6 +160,12 @@ public:
 #endif
     }
 
+    /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
+        the size of nC*nR could be allocated. A zero size (both nC and nR zero)
+        matrix is allowed for later resize.
+     */
+    bool static IsSizeAllocatable( SCSIZE nC, SCSIZE nR );
+
     /// Value or boolean.
     inline static bool IsValueType( ScMatValType nType )
     {
