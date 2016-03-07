@@ -53,7 +53,6 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testRGBColor();
     void testRGBAColor();
     void testTdf97936();
-    void testTdf97538();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -77,7 +76,6 @@ public:
     CPPUNIT_TEST(testRGBColor);
     CPPUNIT_TEST(testRGBAColor);
     CPPUNIT_TEST(testTdf97936);
-    CPPUNIT_TEST(testTdf97538);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -404,40 +402,6 @@ void Test::testTdf97936()
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]", "miny", "50");
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]", "maxx", "60");
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]", "maxy", "100");
-}
-
-void Test::testTdf97538()
-{
-    // check that both rectangles are rendered in the viewBox
-    Primitive2DSequence aSequenceTdf97538 = parseSvg("/svgio/qa/cppunit/data/tdf97538.svg");
-    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf97538.getLength());
-
-    Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97538));
-
-    CPPUNIT_ASSERT (pDocument);
-
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "color", "#ff0000");
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "height", "200");
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "width", "199");
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "minx", "145");
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "miny", "-24");
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "maxx", "345");
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygoncolor", "maxy", "175");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "color", "#0000ff");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "height", "200");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "width", "199");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "minx", "145");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "miny", "-24");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "maxx", "345");
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/polypolygoncolor", "maxy", "175");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "color", "#008000");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "height", "200");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "width", "199");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "minx", "145");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "miny", "-24");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "maxx", "345");
-    assertXPath(pDocument, "/primitive2D/transform/transform[3]/polypolygoncolor", "maxy", "175");
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
