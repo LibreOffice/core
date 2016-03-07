@@ -156,7 +156,7 @@ namespace connectivity
             static sal_Int32 getFetchDirection() { return css::sdbc::FetchDirection::FORWARD; }
             sal_Int32 getFetchSize()            const;
             OUString getCursorName()     const;
-            template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;
+            template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption) const;
 
             void setFetchDirection(sal_Int32 _par0);
             void setFetchSize(sal_Int32 _par0);

@@ -3211,7 +3211,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
     return true;
 }
 
-OUString SwTextNode::GetRedlineText( sal_Int32 nIdx, sal_Int32 nLen ) const
+OUString SwTextNode::GetRedlineText() const
 {
     std::vector<sal_Int32> aRedlArr;
     const SwDoc* pDoc = GetDoc();
@@ -3256,20 +3256,18 @@ OUString SwTextNode::GetRedlineText( sal_Int32 nIdx, sal_Int32 nLen ) const
         }
     }
 
-    OUStringBuffer aText((nLen > GetText().getLength())
-                ? GetText().copy(nIdx)
-                : GetText().copy(nIdx, nLen));
+    OUStringBuffer aText(GetText());
 
-    sal_Int32 nTextStt = nIdx;
-    sal_Int32 nIdxEnd = nIdx + aText.getLength();
+    sal_Int32 nTextStt = 0;
+    sal_Int32 nIdxEnd = aText.getLength();
     for( size_t n = 0; n < aRedlArr.size(); n += 2 )
     {
         sal_Int32 nStt = aRedlArr[ n ];
         sal_Int32 nEnd = aRedlArr[ n+1 ];
-        if( ( nIdx <= nStt && nStt <= nIdxEnd ) ||
-            ( nIdx <= nEnd && nEnd <= nIdxEnd ))
+        if( ( 0 <= nStt && nStt <= nIdxEnd ) ||
+            ( 0 <= nEnd && nEnd <= nIdxEnd ))
         {
-            if( nStt < nIdx ) nStt = nIdx;
+            if( nStt < 0 ) nStt = 0;
             if( nIdxEnd < nEnd ) nEnd = nIdxEnd;
             const sal_Int32 nDelCnt = nEnd - nStt;
             aText.remove(nStt - nTextStt, nDelCnt);

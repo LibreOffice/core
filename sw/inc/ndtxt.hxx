@@ -693,8 +693,7 @@ public:
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 
-    OUString GetRedlineText( sal_Int32 nIdx = 0,
-                          sal_Int32 nLen = SAL_MAX_INT32 ) const;
+    OUString GetRedlineText() const;
 
     /** @return actual count of initial chars for initial-function.
        If nWishLen == 0 that of first word. */

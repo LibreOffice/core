@@ -92,8 +92,7 @@ void SvPasteObjectDialog::Insert( SotClipboardFormatId nFormat, const OUString& 
     aSupplementMap.insert( ::std::make_pair( nFormat, rFormatName ) );
 }
 
-SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
-                                      const DataFlavorExVector* pFormats )
+SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper)
 {
     //TODO/LATER: why is the Descriptor never used?!
     TransferableObjectDescriptor aDesc;
@@ -102,8 +101,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
         (void)const_cast<TransferableDataHelper&>(rHelper).GetTransferableObjectDescriptor(
                                 SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
     }
-    if ( !pFormats )
-        pFormats = &rHelper.GetDataFlavorExVector();
+    const DataFlavorExVector* pFormats = &rHelper.GetDataFlavorExVector();
 
     // create and fill dialog box
     OUString aSourceName, aTypeName;

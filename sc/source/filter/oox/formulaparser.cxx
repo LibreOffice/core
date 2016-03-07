@@ -478,8 +478,8 @@ protected:
     template< typename Type >
     bool                pushValueOperandToken( const Type& rValue, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     template< typename Type >
-    inline bool         pushValueOperandToken( const Type& rValue, const WhiteSpaceVec* pSpaces = nullptr )
-                            { return pushValueOperandToken( rValue, OPCODE_PUSH, pSpaces ); }
+    inline bool         pushValueOperandToken( const Type& rValue )
+                            { return pushValueOperandToken( rValue, OPCODE_PUSH, nullptr ); }
     bool                pushParenthesesOperandToken( const WhiteSpaceVec* pOpeningSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
     bool                pushUnaryPreOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     bool                pushUnaryPostOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );

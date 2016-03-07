@@ -260,8 +260,7 @@ void SvxIconChoiceCtrl_Impl::FontModified()
     ShowCursor( true );
 }
 
-void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t nPos,
-    const Point* pPos )
+void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t nPos)
 {
     StopEditTimer();
     aEntries.insert( nPos, pEntry );
@@ -272,32 +271,22 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t
 
     pZOrderList->push_back( pEntry );
     pImpCursor->Clear();
-    if( pPos )
+
+    // If the UpdateMode is true, don't set all bounding rectangles to
+    // 'to be checked', but only the bounding rectangle of the new entry.
+    // Thus, don't call InvalidateBoundingRect!
+    pEntry->aRect.Right() = LONG_MAX;
+    if( bUpdateMode )
     {
-        Size aSize( CalcBoundingSize( pEntry ) );
-        SetBoundingRect_Impl( pEntry, *pPos, aSize );
-        SetEntryPos( pEntry, *pPos, false, true, true /*keep grid map*/ );
-        pEntry->nFlags |= SvxIconViewFlags::POS_MOVED;
-        SetEntriesMoved( true );
+        FindBoundingRect( pEntry );
+        Rectangle aOutputArea( GetOutputRect() );
+        pGridMap->OccupyGrids( pEntry );
+        if( !aOutputArea.IsOver( pEntry->aRect ) )
+            return; // is invisible
+        pView->Invalidate( pEntry->aRect );
     }
     else
-    {
-        // If the UpdateMode is true, don't set all bounding rectangles to
-        // 'to be checked', but only the bounding rectangle of the new entry.
-        // Thus, don't call InvalidateBoundingRect!
-        pEntry->aRect.Right() = LONG_MAX;
-        if( bUpdateMode )
-        {
-            FindBoundingRect( pEntry );
-            Rectangle aOutputArea( GetOutputRect() );
-            pGridMap->OccupyGrids( pEntry );
-            if( !aOutputArea.IsOver( pEntry->aRect ) )
-                return; // is invisible
-            pView->Invalidate( pEntry->aRect );
-        }
-        else
-            InvalidateBoundingRect( pEntry->aRect );
-    }
+        InvalidateBoundingRect( pEntry->aRect );
 }
 
 void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator )
@@ -1699,7 +1688,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 }
 
 void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos,
-    bool bAdjustAtGrid, bool bCheckScrollBars, bool bKeepGridMap )
+    bool bAdjustAtGrid )
 {
     ShowCursor( false );
     Rectangle aBoundRect( GetEntryBoundRect( pEntry ));
@@ -1713,8 +1702,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const 
             Point aGridOffs(
                 pEntry->aGridRect.TopLeft() - pEntry->aRect.TopLeft() );
             pImpCursor->Clear();
-            if( !bKeepGridMap )
-                pGridMap->Clear();
+            pGridMap->Clear();
             aBoundRect.SetPos( rPos );
             pEntry->aRect = aBoundRect;
             pEntry->aGridRect.SetPos( rPos + aGridOffs );
@@ -1743,9 +1731,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const 
         }
         if( bAdjustVirtSize )
             AdjustVirtSize( pEntry->aRect );
-
-        if( bCheckScrollBars && bUpdateMode )
-            CheckScrollBars();
 
         pView->Invalidate( pEntry->aRect );
         pGridMap->OccupyGrids( pEntry );

@@ -175,7 +175,7 @@ void SwFormat::SetName( const OUString& rNewName, bool bBroadcast )
     in which <this> is defined. Currently this is important for DropCaps
     because that contains data that needs to be copied deeply.
 */
-void SwFormat::CopyAttrs( const SwFormat& rFormat, bool bReplace )
+void SwFormat::CopyAttrs( const SwFormat& rFormat )
 {
     // copy only array with attributes delta
     if ( IsInCache() )
@@ -187,13 +187,6 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat, bool bReplace )
 
     // special treatments for some attributes
     SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFormat.m_aSet);
-
-    if( !bReplace )     // refresh only those that are not set?
-    {
-        if( pChgSet == &rFormat.m_aSet )
-            pChgSet = new SwAttrSet( rFormat.m_aSet );
-        pChgSet->Differentiate( m_aSet );
-    }
 
     // copy only array with attributes delta
     if( pChgSet->GetPool() != m_aSet.GetPool() )
@@ -450,7 +443,7 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
     return m_aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
-SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
+SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -463,7 +456,7 @@ SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParen
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
             // to and return as state that it is set
-            rItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bSrchInParent);
+            rItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND);
             return SfxItemState::SET;
         }
 
@@ -472,7 +465,7 @@ SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParen
     }
 
     const SfxPoolItem* pItem = nullptr;
-    SfxItemState eRet = m_aSet.GetItemState(RES_BACKGROUND, bSrchInParent, &pItem);
+    SfxItemState eRet = m_aSet.GetItemState(RES_BACKGROUND, true, &pItem);
     if (pItem)
         rItem = *static_cast<const SvxBrushItem*>(pItem);
     return eRet;

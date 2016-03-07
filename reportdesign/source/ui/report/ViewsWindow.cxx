@@ -752,7 +752,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
     }
 }
 
-void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool _bBoundRects)
+void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
     if ( _nControlModification == ControlModification::NONE )
         return;
@@ -780,11 +780,11 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
     }
     RectangleLess aCompare(eCompareMode,aRefPoint);
     TRectangleMap aSortRectangles(aCompare);
-    collectRectangles(aSortRectangles,_bBoundRects);
+    collectRectangles(aSortRectangles,false);
 
     Rectangle aBound;
     Rectangle aResize;
-    collectBoundResizeRect(aSortRectangles,_nControlModification,_bAlignAtSection,_bBoundRects,aBound,aResize);
+    collectBoundResizeRect(aSortRectangles,_nControlModification,_bAlignAtSection,false,aBound,aResize);
 
     bool bMove = true;
 
@@ -847,7 +847,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                     if ( pView == aInterSectRectIter->second.second && (dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) || dynamic_cast<OOle2Obj*>(aInterSectRectIter->second.first)))
                     {
                         SdrObject* pPreviousObj = aInterSectRectIter->second.first;
-                        Rectangle aIntersectRect = aTest.GetIntersection(_bBoundRects ? pPreviousObj->GetCurrentBoundRect() : pPreviousObj->GetSnapRect());
+                        Rectangle aIntersectRect = aTest.GetIntersection( pPreviousObj->GetSnapRect());
                         if ( !aIntersectRect.IsEmpty() && (aIntersectRect.Left() != aIntersectRect.Right() && aIntersectRect.Top() != aIntersectRect.Bottom() ) )
                         {
                             *pValue = aRefFun(&aIntersectRect) - aGetFun(&aObjRect);
@@ -859,12 +859,12 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                     *pValue = aGetFun(&aBound) - aGetFun(&aObjRect);
             }
 
-            if ( lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification,_bBoundRects) )
+            if ( lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification,false) )
             {
                 const Size aSize(nXMov,nYMov);
                 pView->AddUndo(pView->GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pObj,aSize));
                 pObj->Move(aSize);
-                aObjRect = (_bBoundRects ? pObj->GetCurrentBoundRect() : pObj->GetSnapRect());
+                aObjRect =   pObj->GetSnapRect();
             }
 
             // resizing control
@@ -880,7 +880,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                             nXMov = aObjRect.getWidth();
                         else if ( _nControlModification == ControlModification::WIDTH_GREATEST )
                             nYMov = aObjRect.getHeight();
-                        lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification,_bBoundRects);
+                        lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification,false);
                         // run through
                     case ControlModification::WIDTH_SMALLEST:
                     case ControlModification::HEIGHT_SMALLEST:

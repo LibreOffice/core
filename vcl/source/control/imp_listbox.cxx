@@ -1696,7 +1696,7 @@ void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
     }
 }
 
-void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase)
+void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1721,8 +1721,6 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         if (!IsEnabled())
             rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
         rRenderContext.SetTextFillColor();
-        if (bErase)
-            rRenderContext.Erase(aRect);
     }
 
     if (IsUserDrawEnabled())

@@ -849,16 +849,16 @@ size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) 
 }
 
 
-SfxUndoAction* SfxUndoManager::GetRedoAction( size_t nNo ) const
+SfxUndoAction* SfxUndoManager::GetRedoAction() const
 {
     UndoManagerGuard aGuard( *m_xData );
 
     const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
-    if ( (pUndoArray->nCurUndoAction + nNo) > pUndoArray->aUndoActions.size() )
+    if ( (pUndoArray->nCurUndoAction) > pUndoArray->aUndoActions.size() )
     {
         return nullptr;
     }
-    return pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ].pAction;
+    return pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction ].pAction;
 }
 
 

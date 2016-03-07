@@ -81,7 +81,7 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Copy attributes even among documents.
-    void CopyAttrs( const SwFormat&, bool bReplace=true );
+    void CopyAttrs( const SwFormat& );
 
     /// Delete all attributes that are not in rFormat.
     void DelDiffs( const SfxItemSet& rSet );
@@ -97,8 +97,7 @@ public:
     //UUUUinline
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = nullptr ) const;
-    SfxItemState GetBackgroundState(SvxBrushItem &rItem,
-                                    bool bSrchInParent = true) const;
+    SfxItemState GetBackgroundState(SvxBrushItem &rItem) const;
     virtual bool SetFormatAttr( const SfxPoolItem& rAttr );
     virtual bool SetFormatAttr( const SfxItemSet& rSet );
     virtual bool ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );

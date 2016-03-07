@@ -263,8 +263,7 @@ public:
 
 
     SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
-                                         const Image& rImage,
-                                         sal_uLong nPos = CONTAINER_APPEND );
+                                         const Image& rImage);
 
     /** creates automatic mnemonics for all icon texts in the control
 

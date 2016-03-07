@@ -277,16 +277,15 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     sal_uInt16          nId,
     const OUString&   rIconText,
     const Image&    rChoiceIcon,
-    CreatePage      pCreateFunc /* != 0 */,
-    GetPageRanges   pRangesFunc /* darf 0 sein */
+    CreatePage      pCreateFunc /* != 0 */
 )
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
-                                                         pRangesFunc,
+                                                         nullptr,
                                                          false/*bItemsOnDemand*/ );
     maPageList.push_back( pData );
 
-    pData->fnGetRanges = pRangesFunc;
+    pData->fnGetRanges = nullptr;
     pData->bOnDemand = false;
 
     sal_uInt16 *pId = new sal_uInt16 ( nId );

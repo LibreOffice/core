@@ -177,7 +177,7 @@ public:
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
-        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = nullptr /* NULL allowed*/ );
+        CreatePage pCreateFunc /* != NULL */ );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16          GetCurPageId() const       { return mnCurrentPageId; }

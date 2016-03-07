@@ -421,7 +421,7 @@ public:
 
     // internal
     /// Sets the checked status
-    void setStateChecked(bool bChecked, bool bFireFocus = true);
+    void setStateChecked(bool bChecked);
     void FireFocusEvent();
 
 protected:

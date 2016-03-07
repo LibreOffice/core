@@ -420,9 +420,9 @@ Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
 // Invoke SQLGetStmtOption with the given option.
 
 
-template < typename T, SQLINTEGER BufferLength > T OStatement_Base::getStmtOption (SQLINTEGER fOption, T dflt) const
+template < typename T, SQLINTEGER BufferLength > T OStatement_Base::getStmtOption (SQLINTEGER fOption) const
 {
-    T result (dflt);
+    T result (0);
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLGetStmtAttr(m_aStatementHandle, fOption, &result, BufferLength, nullptr);
     return result;

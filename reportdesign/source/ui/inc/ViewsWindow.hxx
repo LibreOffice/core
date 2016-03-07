@@ -242,7 +242,7 @@ namespace rptui
 
         /** align all marked objects in all sections
         */
-        void alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects = false);
+        void alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection);
 
         /** creates a default object
         *
