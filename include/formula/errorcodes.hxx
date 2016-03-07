@@ -81,6 +81,8 @@ const sal_uInt16 errElementNaN           = 536;
 // ScInterpreter/ScFormulaCell internal:  keep dirty, retry interpreting next
 // round.
 const sal_uInt16 errRetryCircular        = 537;
+// If matrix could not be allocated.
+const sal_uInt16 errMatrixSize           = 538;
 
 // Interpreter: NA() not available condition, not a real error
 const sal_uInt16 NOTAVAILABLE            = 0x7fff;

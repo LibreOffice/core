@@ -353,7 +353,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
     if (!ScMatrix::IsSizeAllocatable( nMatCols, nMatRows))
     {
-        SetError(errStackOverflow);
+        SetError(errMatrixSize);
         return nullptr;
     }
 
@@ -601,8 +601,10 @@ void ScInterpreter::ScEMat()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         SCSIZE nDim = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
-        if (nDim == 0 || !ScMatrix::IsSizeAllocatable( nDim, nDim))
+        if (nDim == 0)
             PushIllegalArgument();
+        else if (!ScMatrix::IsSizeAllocatable( nDim, nDim))
+            PushError( errMatrixSize);
         else
         {
             ScMatrixRef pRMat = GetNewMat(nDim, nDim);
@@ -800,8 +802,10 @@ void ScInterpreter::ScMatDet()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        if ( nC != nR || nC == 0 || !ScMatrix::IsSizeAllocatable( nC, nR) )
+        if ( nC != nR || nC == 0 )
             PushIllegalArgument();
+        else if (!ScMatrix::IsSizeAllocatable( nC, nR))
+            PushError( errMatrixSize);
         else
         {
             // LUP decomposition is done inplace, use copy.
@@ -923,8 +927,10 @@ void ScInterpreter::ScMatInv()
             }
         }
 
-        if ( nC != nR || nC == 0 || !ScMatrix::IsSizeAllocatable( nC, nR) )
+        if ( nC != nR || nC == 0 )
             PushIllegalArgument();
+        else if (!ScMatrix::IsSizeAllocatable( nC, nR))
+            PushError( errMatrixSize);
         else
         {
             // LUP decomposition is done inplace, use copy.

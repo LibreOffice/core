@@ -345,7 +345,7 @@ void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
     else
     {
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        maMat.resize(1, 1, CreateDoubleError( errStackOverflow));
+        maMat.resize(1, 1, CreateDoubleError( errMatrixSize));
         maMatFlag.resize(1, 1);
     }
 }
@@ -2399,7 +2399,7 @@ ScFullMatrix::ScFullMatrix( SCSIZE nC, SCSIZE nR) :
         pImpl.reset( new ScMatrixImpl( nC, nR));
     else
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow)));
+        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errMatrixSize)));
 }
 
 ScFullMatrix::ScFullMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
@@ -2409,7 +2409,7 @@ ScFullMatrix::ScFullMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
         pImpl.reset( new ScMatrixImpl( nC, nR, fInitVal));
     else
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow)));
+        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errMatrixSize)));
 }
 
 ScFullMatrix::ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
@@ -2419,7 +2419,7 @@ ScFullMatrix::ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rIn
         pImpl.reset( new ScMatrixImpl( nC, nR, rInitVals));
     else
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errStackOverflow)));
+        pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( errMatrixSize)));
 }
 
 ScFullMatrix::~ScFullMatrix()
