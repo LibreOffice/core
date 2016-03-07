@@ -399,11 +399,11 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         break;
         // xmlsec05 deprecated
 
-        #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         default:
-            DBG_ASSERT( false, "SvtSecurityOptions_Impl::SetProperty()\nUnknown property!\n" );
-        #endif
-    }
+            assert(false && "SvtSecurityOptions_Impl::SetProperty()\nUnknown property!\n");
+#endif
+        }
 }
 
 void SvtSecurityOptions_Impl::LoadAuthors()
