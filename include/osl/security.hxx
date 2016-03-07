@@ -69,9 +69,9 @@ inline bool Security::getUserIdent( rtl::OUString& strIdent) const
 }
 
 
-inline bool Security::getUserName( rtl::OUString& strName ) const
+inline bool Security::getUserName( rtl::OUString& strName, sal_Bool bIncludeDomain=true ) const
 {
-    return osl_getUserName( m_handle, &strName.pData );
+    return osl_getUserName( m_handle, &strName.pData, bIncludeDomain );
 }
 
 

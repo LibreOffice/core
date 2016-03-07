@@ -113,10 +113,11 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserIdent(
 /** Get the login name for the user of this security handle.
     @param[in] Security the security handle.
     @param[out] strName the string that receives the user name on success.
+    @param[in] bIncludeDomain Include the Domain name (like "ORG\username"). Affects Windows only.
     @return True, if the security handle is valid, otherwise False.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserName(
-        oslSecurity Security, rtl_uString **strName);
+        oslSecurity Security, rtl_uString **strName, sal_Bool bIncludeDomain);
 
 /** Get the home directory of the user of this security handle.
     @param[in] Security the security handle.

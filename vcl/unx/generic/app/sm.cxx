@@ -206,7 +206,7 @@ static void BuildSmPropertyList()
         oslSecurity aSec = osl_getCurrentSecurity();
         if( aSec )
         {
-            osl_getUserName( aSec, &aUserName.pData );
+            osl_getUserName( aSec, &aUserName.pData, true );
             aUser = OUStringToOString( aUserName, osl_getThreadTextEncoding() );
             osl_freeSecurityHandle( aSec );
         }

@@ -219,7 +219,7 @@ bool needSecurityRestrictions()
         // Get system user to compare to portal user
         oslSecurity aSecurity = osl_getCurrentSecurity();
         OUString aSystemUser;
-        bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData );
+        bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData, true );
         osl_freeSecurityHandle(aSecurity);
         if( !bRet )
         {

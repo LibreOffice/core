@@ -54,6 +54,7 @@ public class PathSubstitutionTest
         substVars.add("$(home)", true, true);
         substVars.add("$(temp)", true, true);
         substVars.add("$(lang)", false, false);
+        substVars.add("$(username)", false, false);
         substVars.add("$(langid)", false, false);
         substVars.add("$(vlang)", false, false);
         // path won't resubstitute
