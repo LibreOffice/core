@@ -500,24 +500,14 @@ void initVMConfiguration(
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: can not get INetProps cause of >%s<", message.getStr());
-#else
-        (void) exception; // unused
-#endif
+        SAL_INFO("stoc", " can not get INETProps because of >" << exception.Message << "<");
     }
 
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
     catch(const css::uno::Exception & exception) {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: can not get locale cause of >%s<", message.getStr());
-#else
-        (void) exception; // unused
-#endif
+        SAL_INFO("stoc", "can not get locale because of >" << exception.Message << "<");
     }
 
     try
@@ -525,12 +515,7 @@ void initVMConfiguration(
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
-#else
-        (void) exception; // unused
-#endif
+        SAL_INFO("stoc", "couldn't get safety settings because of >" << exception.Message << "<");
     }
 
     *pjvm= jvm;
@@ -1385,12 +1370,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
         }
     }catch(const css::uno::Exception & e)
     {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: could not set up listener for Configuration because of >%s<", message.getStr());
-#else
-        (void) e; // unused
-#endif
+        SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e.Message << "<");
     }
 }
 

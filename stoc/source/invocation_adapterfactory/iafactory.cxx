@@ -756,8 +756,8 @@ FactoryImpl::~FactoryImpl()
 
     (*m_pConverter->release)( m_pConverter );
 
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( m_receiver2adapters.empty(), "### still adapters out there!?" );
+#if OSL_DEBUG_LEVEL > 0
+    assert(m_receiver2adapters.empty() && " still adapters out there!?");
 #endif
 }
 

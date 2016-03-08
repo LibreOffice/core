@@ -698,12 +698,7 @@ void OServiceManager::disposing()
         }
         catch (const RuntimeException & exc)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### RuntimeException occurred upon disposing factory: %s", str.getStr() );
-#else
-            (void) exc; // unused
-#endif
+            SAL_INFO("stoc", "RuntimeException occurred upon disposing factory: " << exc.Message);
         }
     }
 
@@ -896,10 +891,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                     Reference< XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
                     if (xFac2.is())
                     {
-#if OSL_DEBUG_LEVEL > 1
-                        OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
-                        OSL_TRACE( "### ignoring given context raising service %s !!!", aStr.getStr() );
-#endif
+                        SAL_INFO("stoc", " ignoring given context raising service " << rServiceSpecifier << "!!!");
                         return xFac2->createInstance();
                     }
                 }
@@ -907,12 +899,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         }
         catch (const lang::DisposedException & exc)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
-#else
-            (void) exc; // unused
-#endif
+            SAL_INFO("stoc", " DisposedException occurred: " << exc.Message);
         }
     }
 
@@ -959,10 +946,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                     Reference< XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
                     if (xFac2.is())
                     {
-#if OSL_DEBUG_LEVEL > 1
-                        OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
-                        OSL_TRACE( "### ignoring given context raising service %s !!!", aStr.getStr() );
-#endif
+                        SAL_INFO("stoc", " ignoring given context raising service " << rServiceSpecifier << "!!!");
                         return xFac2->createInstanceWithArguments( rArguments );
                     }
                 }
@@ -970,12 +954,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         }
         catch (const lang::DisposedException & exc)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
-#else
-            (void) exc; // unused
-#endif
+            SAL_INFO("stoc", " DisposedException occurred: " << exc.Message);
         }
     }
 
