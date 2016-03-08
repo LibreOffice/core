@@ -45,7 +45,7 @@ public:
     bool matches(OUString const & rString, OUString * pTranslation,
                  bool * pTranslated) const;
 
-    OUString getRegexp(bool bReverse) const;
+    OUString getRegexp() const;
 
     static Regexp parse(OUString const & rRegexp);
 

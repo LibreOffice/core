@@ -150,7 +150,7 @@ void RegexpMapIterImpl< Val >::setEntry() const
         Entry< Val > const & rTheEntry
             = m_nList == -1 ? *m_pMap->m_pDefault : *m_aIndex;
         m_aEntry
-            = RegexpMapEntry< Val >(rTheEntry.m_aRegexp.getRegexp(false),
+            = RegexpMapEntry< Val >(rTheEntry.m_aRegexp.getRegexp(),
                                     const_cast< Val * >(&rTheEntry.m_aValue));
         m_bEntrySet = true;
     }

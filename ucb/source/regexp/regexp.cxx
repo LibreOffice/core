@@ -210,21 +210,13 @@ void appendStringLiteral(OUStringBuffer * pBuffer,
 
 }
 
-OUString Regexp::getRegexp(bool bReverse) const
+OUString Regexp::getRegexp() const
 {
     if (m_bTranslation)
     {
         OUStringBuffer aBuffer;
-        if (bReverse)
-        {
-            if (!m_aReversePrefix.isEmpty())
-                appendStringLiteral(&aBuffer, m_aReversePrefix);
-        }
-        else
-        {
-            if (!m_aPrefix.isEmpty())
-                appendStringLiteral(&aBuffer, m_aPrefix);
-        }
+        if (!m_aPrefix.isEmpty())
+            appendStringLiteral(&aBuffer, m_aPrefix);
         switch (m_eKind)
         {
             case KIND_PREFIX:
@@ -244,16 +236,8 @@ OUString Regexp::getRegexp(bool bReverse) const
                 break;
         }
         aBuffer.append("->");
-        if (bReverse)
-        {
-            if (!m_aPrefix.isEmpty())
-                appendStringLiteral(&aBuffer, m_aPrefix);
-        }
-        else
-        {
-            if (!m_aReversePrefix.isEmpty())
-                appendStringLiteral(&aBuffer, m_aReversePrefix);
-        }
+        if (!m_aReversePrefix.isEmpty())
+            appendStringLiteral(&aBuffer, m_aReversePrefix);
         aBuffer.append("\\1");
         return aBuffer.makeStringAndClear();
     }
