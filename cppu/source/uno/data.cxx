@@ -468,10 +468,10 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
-    static_assert( ((sal_Bool) true) == sal_True &&
-                         (1 != 0) == sal_True, "must be binary compatible" );
-    static_assert( ((sal_Bool) false) == sal_False &&
-                         (1 == 0) == sal_False, "must be binary compatible" );
+    static_assert( static_cast<sal_Bool>(true) == sal_True,
+                   "must be binary compatible" );
+    static_assert( static_cast<sal_Bool>(false) == sal_False,
+                   "must be binary compatible" );
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
     static_assert(offsetof(AlignSize_Impl, dDouble) == 4, "offsetof(AlignSize_Impl, dDouble) != 4");
