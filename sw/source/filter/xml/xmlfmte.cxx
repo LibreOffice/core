@@ -199,7 +199,7 @@ void SwXMLExport::_ExportAutoStyles()
     // in single-stream case), then we can save ourselves a bit of
     // work and memory by not collecting field masters
     if( !(getExportFlags() & SvXMLExportFlags::STYLES) )
-        GetTextParagraphExport()->exportUsedDeclarations( false );
+        GetTextParagraphExport()->exportUsedDeclarations();
 
     // exported in _ExportContent
     if( getExportFlags() & SvXMLExportFlags::CONTENT )

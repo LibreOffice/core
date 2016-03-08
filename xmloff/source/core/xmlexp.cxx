@@ -1136,7 +1136,7 @@ void SvXMLExport::ImplExportSettings()
     }
 }
 
-void SvXMLExport::ImplExportStyles( bool )
+void SvXMLExport::ImplExportStyles()
 {
     CheckAttrList();
 
@@ -1166,7 +1166,7 @@ void SvXMLExport::ImplExportStyles( bool )
     }
 }
 
-void SvXMLExport::ImplExportAutoStyles( bool )
+void SvXMLExport::ImplExportAutoStyles()
 {
     // transfer style names (+ families) FROM other components (if appropriate)
     OUString sStyleNames( "StyleNames" );
@@ -1192,7 +1192,7 @@ void SvXMLExport::ImplExportAutoStyles( bool )
     }
 }
 
-void SvXMLExport::ImplExportMasterStyles( bool )
+void SvXMLExport::ImplExportMasterStyles()
 {
     {
         // <style:master-styles>
@@ -1443,15 +1443,15 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
         // styles
         if( mnExportFlags & SvXMLExportFlags::STYLES )
-            ImplExportStyles( false );
+            ImplExportStyles();
 
         // autostyles
         if( mnExportFlags & SvXMLExportFlags::AUTOSTYLES )
-            ImplExportAutoStyles( false );
+            ImplExportAutoStyles();
 
         // masterstyles
         if( mnExportFlags & SvXMLExportFlags::MASTERSTYLES )
-            ImplExportMasterStyles( false );
+            ImplExportMasterStyles();
 
         // content
         if( mnExportFlags & SvXMLExportFlags::CONTENT )
