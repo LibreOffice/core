@@ -6247,6 +6247,12 @@
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
+        <node oor:name="F4_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:ViewDataSourceBrowser</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="com.sun.star.xforms.XMLFormDocument" oor:op="replace">
         <node oor:name="0_MOD1" oor:op="replace">
