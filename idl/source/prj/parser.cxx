@@ -26,7 +26,7 @@
 #include <globals.hxx>
 #include <osl/file.hxx>
 
-void SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
+void SvIdlParser::ReadSvIdl( const OUString & rPath )
 {
     rBase.SetPath(rPath); // only valid for this iteration
     SvToken& rTok = rInStm.GetToken();
@@ -38,7 +38,7 @@ void SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
             return;
 
         Read( SvHash_module() );
-        tools::SvRef<SvMetaModule> aModule = new SvMetaModule( bImported );
+        tools::SvRef<SvMetaModule> aModule = new SvMetaModule( false/*bImported*/ );
         ReadModuleHeader(*aModule);
         rBase.GetModuleList().push_back( aModule );
     }

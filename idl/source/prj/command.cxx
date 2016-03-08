@@ -126,7 +126,7 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         SvTokenStream aTokStm( aFileName );
         try {
             SvIdlParser aParser(*pDataBase, aTokStm);
-            aParser.ReadSvIdl( false, rCommand.aPath );
+            aParser.ReadSvIdl( rCommand.aPath );
         } catch (const SvParseException& ex) {
             pDataBase->SetError(ex.aError);
             pDataBase->WriteError(aTokStm);
