@@ -110,10 +110,7 @@ ModuleElement::~ModuleElement()
         _pParent->release();
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    SAL_INFO("xmlscript.xmlmod", "ModuleElement::~ModuleElement(): " << aStr.getStr() );
-#endif
+    SAL_INFO("xmlscript.xmlmod", "ModuleElement::~ModuleElement(): " << _aLocalName );
 }
 
 // XRoot
@@ -171,9 +168,7 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
 
 ModuleImport::~ModuleImport()
 {
-#if OSL_DEBUG_LEVEL > 1
     SAL_INFO("xmlscript.xmlmod", "ModuleImport::~ModuleImport()." );
-#endif
 }
 
 Reference< xml::sax::XDocumentHandler >

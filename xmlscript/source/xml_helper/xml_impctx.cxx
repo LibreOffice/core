@@ -497,11 +497,7 @@ void DocumentHandlerImpl::startElement(
     if (m_nSkipElements > 0)
     {
         ++m_nSkipElements; // wait for another end tag
-#if OSL_DEBUG_LEVEL > 1
-        OString aQName(
-            OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
-        SAL_INFO("xmlscript.xmlhelper", "### no context given on createChildElement() => ignoring element \"" << aQName.getStr() << "\" ...");
-#endif
+        SAL_INFO("xmlscript.xmlhelper", " no context given on createChildElement() => ignoring element \"" << rQElementName << "\" ...");
         return;
     }
 
@@ -608,11 +604,9 @@ void DocumentHandlerImpl::startElement(
     else
     {
         ++m_nSkipElements;
-#if OSL_DEBUG_LEVEL > 1
         OString aQName(
             OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
-        SAL_INFO("xmlscript.xmlhelper", "### no context given on createChildElement() => ignoring element \"" << aQName.getStr() << "\" ...");
-#endif
+        SAL_INFO("xmlscript.xmlhelper", " no context given on createChildElement() => ignoring element \"" << rQElementName << "\" ...");
     }
     }
 }
@@ -627,11 +621,7 @@ void DocumentHandlerImpl::endElement(
     if (m_nSkipElements)
     {
         --m_nSkipElements;
-#if OSL_DEBUG_LEVEL > 1
-        OString aQName(
-            OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
-        SAL_INFO("xmlscript.xmlhelper", "### received endElement() for \"" << aQName.getStr() << "\".");
-#endif
+        SAL_INFO("xmlscript.xmlhelper", "### received endElement() for \"" << rQElementName << "\".");
         static_cast<void>(rQElementName);
         return;
     }
