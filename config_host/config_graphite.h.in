@@ -3,4 +3,6 @@
 
 #define ENABLE_GRAPHITE 0
 
+#define ENABLE_GRAPHITE_DWRITE 1
+
 #endif
