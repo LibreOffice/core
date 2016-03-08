@@ -857,6 +857,22 @@ static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, S
     }
 }
 
+static void lcl_DoFormulaAnnotation( OutputDevice* pDev, const Rectangle& rRect, ScRefCellValue& rCell )
+{
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
+
+    OUString aAnnotation;
+    ScFormulaCell* pFCell = rCell.mpFormula;
+    pFCell->GetFormula( aAnnotation );
+
+    if ( !aAnnotation.isEmpty() && pPDFData )
+    {
+        vcl::PDFNote aBubliNote;
+        aBubliNote.Contents = aAnnotation;
+        pPDFData->CreateBubliNote( rRect, aBubliNote);
+    }
+}
+
 void ScOutputData::SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell )
 {
     switch (rCell.meType)
@@ -2114,11 +2130,15 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         }
 
                         // PDF: whole-cell hyperlink from formula?
-                        bool bHasURL = pPDFData && aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
-                        if (bPaint && bHasURL)
+                        bool bHasFormula = pPDFData && aCell.meType == CELLTYPE_FORMULA;
+                        bool bHasURL = bHasFormula && aCell.mpFormula->IsHyperLinkCell();
+                        if (bPaint && bHasFormula)
                         {
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
-                            lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
+                            if (bHasURL)
+                                lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
+                            else
+                                lcl_DoFormulaAnnotation(mpDev, aURLRect, aCell);
                         }
                     }
                 }

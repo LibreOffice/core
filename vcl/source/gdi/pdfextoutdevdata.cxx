@@ -36,6 +36,7 @@ struct PDFExtOutDevDataSync
     enum Action{    CreateNamedDest,
                     CreateDest,
                     CreateLink,
+                    CreateBubliNote,
                     SetLinkDest,
                     SetLinkURL,
                     RegisterDest,
@@ -83,6 +84,7 @@ struct GlobalSyncData
     std::deque< OUString >                 mParaOUStrings;
     std::deque< PDFWriter::DestAreaType >       mParaDestAreaTypes;
     std::deque< PDFNote >                       mParaPDFNotes;
+    std::deque< PDFNote >                       mParaBubliNotes;
     std::deque< PDFWriter::PageTransition >     mParaPageTransitions;
     ::std::map< sal_Int32, PDFLinkDestination > mFutureDestinations;
 
@@ -249,6 +251,16 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 mParaMapModes.pop_front();
                 mParaRects.pop_front();
                 mParaPDFNotes.pop_front();
+                mParaInts.pop_front();
+            }
+            case PDFExtOutDevDataSync::CreateBubliNote :
+            {
+                rWriter.Push( PushFlags::MAPMODE );
+                rWriter.SetMapMode( mParaMapModes.front() );
+                rWriter.CreateBubliNote( mParaRects.front(), mParaBubliNotes.front(), mParaInts.front() );
+                mParaMapModes.pop_front();
+                mParaRects.pop_front();
+                mParaBubliNotes.pop_front();
                 mParaInts.pop_front();
             }
             break;
@@ -492,6 +504,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             case PDFExtOutDevDataSync::SetOutlineItemText:
             case PDFExtOutDevDataSync::SetOutlineItemDest:
             case PDFExtOutDevDataSync::CreateNote:
+            case PDFExtOutDevDataSync::CreateBubliNote:
             case PDFExtOutDevDataSync::SetAutoAdvanceTime:
             case PDFExtOutDevDataSync::SetPageTransition:
                 break;
@@ -690,6 +703,14 @@ void PDFExtOutDevData::CreateNote( const Rectangle& rRect, const PDFNote& rNote,
     mpGlobalSyncData->mParaRects.push_back( rRect );
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
     mpGlobalSyncData->mParaPDFNotes.push_back( rNote );
+    mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
+}
+void PDFExtOutDevData::CreateBubliNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+{
+    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateBubliNote );
+    mpGlobalSyncData->mParaRects.push_back( rRect );
+    mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
+    mpGlobalSyncData->mParaBubliNotes.push_back( rNote );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
 }
 void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec )
