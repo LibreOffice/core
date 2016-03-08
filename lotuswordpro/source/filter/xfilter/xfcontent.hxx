@@ -64,6 +64,7 @@
 
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <stdexcept>
 
 #include "xfdefs.hxx"
 
