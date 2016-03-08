@@ -490,7 +490,7 @@ void ScCsvGrid::SetSelColumnType( sal_Int32 nType )
     }
 }
 
-void ScCsvGrid::SetTypeNames( const StringVec& rTypeNames )
+void ScCsvGrid::SetTypeNames( const std::vector<OUString>& rTypeNames )
 {
     OSL_ENSURE( !rTypeNames.empty(), "ScCsvGrid::SetTypeNames - vector is empty" );
     maTypeNames = rTypeNames;
@@ -727,8 +727,8 @@ void ScCsvGrid::ImplSetTextLineSep(
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
     while( maTexts.size() <= nLineIx )
-        maTexts.push_back( StringVec() );
-    StringVec& rStrVec = maTexts[ nLineIx ];
+        maTexts.push_back( std::vector<OUString>() );
+    std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
 
     // scan for separators
@@ -790,9 +790,9 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
     while( maTexts.size() <= nLineIx )
-        maTexts.push_back( StringVec() );
+        maTexts.push_back( std::vector<OUString>() );
 
-    StringVec& rStrVec = maTexts[ nLineIx ];
+    std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
     sal_uInt32 nColCount = GetColumnCount();
     sal_Int32 nStrLen = rTextLine.getLength();
@@ -814,7 +814,7 @@ const OUString& ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
     if( nLineIx >= maTexts.size() ) return EMPTY_OUSTRING;
 
-    const StringVec& rStrVec = maTexts[ nLineIx ];
+    const std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     if( nColIndex >= rStrVec.size() ) return EMPTY_OUSTRING;
 
     return rStrVec[ nColIndex ];
@@ -1158,7 +1158,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     sal_Int32 nStrX = GetX( nFirstVisPos );
     for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
-        StringVec& rStrVec = maTexts[ nLine ];
+        std::vector<OUString>& rStrVec = maTexts[ nLine ];
         if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
             const OUString& rStr = rStrVec[ nColIndex ];

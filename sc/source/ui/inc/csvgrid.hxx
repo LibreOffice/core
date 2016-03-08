@@ -98,8 +98,8 @@ private:
 
     ScCsvSplits                 maSplits;           /// Vector with split positions.
     ScCsvColStateVec            maColStates;        /// State of each column.
-    StringVec                   maTypeNames;        /// UI names of data types.
-    StringVecVec                maTexts;            /// 2D-vector for cell texts.
+    std::vector<OUString>       maTypeNames;        /// UI names of data types.
+    std::vector< std::vector<OUString> > maTexts;   /// 2D-vector for cell texts.
 
     sal_Int32                   mnFirstImpLine;     /// First imported line (0-based).
     sal_uInt32                  mnRecentSelCol;     /// Index of most recently selected column.
@@ -192,7 +192,7 @@ public:
     /** Changes the data type of all selected columns. */
     void                        SetSelColumnType( sal_Int32 nType );
     /** Sets new UI data type names. */
-    void                        SetTypeNames( const StringVec& rTypeNames );
+    void                        SetTypeNames( const std::vector<OUString>& rTypeNames );
     /** Returns the UI type name of the specified column. */
     const OUString&             GetColumnTypeName( sal_uInt32 nColIndex ) const;
 
