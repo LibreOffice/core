@@ -1356,8 +1356,7 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaDefaultExtPropMappe
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
-void XMLTextParagraphExport::exportPageFrames( bool bAutoStyles,
-                                               bool bIsProgress )
+void XMLTextParagraphExport::exportPageFrames( bool bIsProgress )
 {
     const TextContentSet& rTexts = pBoundFrameSets->GetTexts()->GetPageBoundContents();
     const TextContentSet& rGraphics = pBoundFrameSets->GetGraphics()->GetPageBoundContents();
@@ -1366,19 +1365,19 @@ void XMLTextParagraphExport::exportPageFrames( bool bAutoStyles,
     for(TextContentSet::const_iterator_t it = rTexts.getBegin();
         it != rTexts.getEnd();
         ++it)
-        exportTextFrame(*it, bAutoStyles, bIsProgress, true);
+        exportTextFrame(*it, false/*bAutoStyles*/, bIsProgress, true);
     for(TextContentSet::const_iterator_t it = rGraphics.getBegin();
         it != rGraphics.getEnd();
         ++it)
-        exportTextGraphic(*it, bAutoStyles);
+        exportTextGraphic(*it, false/*bAutoStyles*/);
     for(TextContentSet::const_iterator_t it = rEmbeddeds.getBegin();
         it != rEmbeddeds.getEnd();
         ++it)
-        exportTextEmbedded(*it, bAutoStyles);
+        exportTextEmbedded(*it, false/*bAutoStyles*/);
     for(TextContentSet::const_iterator_t it = rShapes.getBegin();
         it != rShapes.getEnd();
         ++it)
-        exportShape(*it, bAutoStyles);
+        exportShape(*it, false/*bAutoStyles*/);
 }
 
 void XMLTextParagraphExport::exportFrameFrames(
@@ -3557,9 +3556,9 @@ void XMLTextParagraphExport::exportTextDeclarations(
     pFieldExport->ExportFieldDeclarations(rText);
 }
 
-void XMLTextParagraphExport::exportUsedDeclarations( bool bOnlyUsed )
+void XMLTextParagraphExport::exportUsedDeclarations()
 {
-    pFieldExport->SetExportOnlyUsedFieldDeclarations( bOnlyUsed );
+    pFieldExport->SetExportOnlyUsedFieldDeclarations( false/*bOnlyUsed*/ );
 }
 
 void XMLTextParagraphExport::exportTrackedChanges(bool bAutoStyles)

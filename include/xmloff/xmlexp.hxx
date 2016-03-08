@@ -172,10 +172,10 @@ private:
 
     SAL_DLLPRIVATE void ImplExportMeta(); // <office:meta>
     SAL_DLLPRIVATE void ImplExportSettings(); // <office:settings>
-    SAL_DLLPRIVATE void ImplExportStyles( bool bUsed ); // <office:styles>
-    SAL_DLLPRIVATE void ImplExportAutoStyles( bool bUsed );
+    SAL_DLLPRIVATE void ImplExportStyles(); // <office:styles>
+    SAL_DLLPRIVATE void ImplExportAutoStyles();
         // <office:automatic-styles>
-    SAL_DLLPRIVATE void ImplExportMasterStyles( bool bUsed );
+    SAL_DLLPRIVATE void ImplExportMasterStyles();
         // <office:master-styles>
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
