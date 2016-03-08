@@ -661,7 +661,7 @@ AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilo
 }
 
 AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const css::uno::Sequence<OUString>& rServices,
+                                                                        const std::vector<OUString>& rServices,
                                                             int nId )
 {
     VclPtr<ScDataPilotServiceDlg> pDlg;

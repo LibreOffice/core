@@ -417,7 +417,7 @@ public:
         bool bEnableExternal) override;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const css::uno::Sequence<OUString>& rServices,
+                                                                        const std::vector<OUString>& rServices,
                                                                         int nId ) override;
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false ) override;
 

@@ -235,7 +235,7 @@ public:
     bool SyncAllDimensionMembers();
 
     static bool         HasRegisteredSources();
-    static css::uno::Sequence<OUString> GetRegisteredSources();
+    static std::vector<OUString> GetRegisteredSources();
     static css::uno::Reference<css::sheet::XDimensionsSupplier>
                         CreateSource( const ScDPServiceDesc& rDesc );
 

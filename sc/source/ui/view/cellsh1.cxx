@@ -2652,7 +2652,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         {
             if ( pTypeDlg->IsExternal() )
             {
-                uno::Sequence<OUString> aSources = ScDPObject::GetRegisteredSources();
+                std::vector<OUString> aSources = ScDPObject::GetRegisteredSources();
                 std::unique_ptr<AbstractScDataPilotServiceDlg> pServDlg(
                     pFact->CreateScDataPilotServiceDlg(
                         pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE));
