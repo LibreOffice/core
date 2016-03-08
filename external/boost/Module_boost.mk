@@ -17,10 +17,4 @@ $(eval $(call gb_Module_add_targets,boost,\
 	UnpackedTarball_boost \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,boost,\
-	StaticLibrary_boostthread \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
