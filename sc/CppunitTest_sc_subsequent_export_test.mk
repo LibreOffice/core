@@ -16,8 +16,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_subsequent_export_test, \
 $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_export_test, \
 	boost_headers \
 	mdds_headers \
-	orcus \
-	orcus-parser \
 	libxml2 \
 ))
 
