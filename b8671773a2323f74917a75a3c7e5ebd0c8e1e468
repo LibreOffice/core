@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_d11056ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-08T22:25:08Z",
+      "side": 1,
+      "message": "for this bug, it\u0027s not necessary to mention this in the commit message - this is obvious to any potential reviewer from the nature of the bug",
+      "revId": "b8671773a2323f74917a75a3c7e5ebd0c8e1e468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
