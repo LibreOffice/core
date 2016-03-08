@@ -164,6 +164,15 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         // that ODF rotation is oriented the other way
 
         // build transformation string
+        if (rElem.MirrorVertical)
+        {
+            // At some point, rElem.h may start arriving positive,
+            // so use robust adjusting math
+            rel_y -= std::abs(rElem.h);
+            if (!aBuf.isEmpty())
+                aBuf.append(' ');
+            aBuf.append("scale( 1.0 -1.0 )");
+        }
         if( fShearX != 0.0 )
         {
             aBuf.append( "skewX( " );
