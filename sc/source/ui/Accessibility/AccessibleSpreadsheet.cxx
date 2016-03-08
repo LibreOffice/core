@@ -848,29 +848,23 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
+    if (IsFormulaMode() || !mpViewShell)
+        return uno::Sequence<sal_Int32>();
+
     uno::Sequence<sal_Int32> aSequence;
-    if (IsFormulaMode())
+    aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+    sal_Int32* pSequence = aSequence.getArray();
+    sal_Int32 nCount(0);
+    const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
+    for (SCCOL i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
     {
-        return aSequence;
-    }
-    if (mpViewShell)
-    {
-        aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-        const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
-        sal_Int32* pSequence = aSequence.getArray();
-        sal_Int32 nCount(0);
-        for (SCCOL i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
+        if (rMarkdata.IsColumnMarked(i))
         {
-            if (rMarkdata.IsColumnMarked(i))
-            {
-                pSequence[nCount] = i;
-                ++nCount;
-            }
+            pSequence[nCount] = i;
+            ++nCount;
         }
-        aSequence.realloc(nCount);
     }
-    else
-        aSequence.realloc(0);
+    aSequence.realloc(nCount);
     return aSequence;
 }
 
