@@ -620,6 +620,7 @@ private:
     /* contains all notes set during PDF creation
      */
     std::vector<PDFNoteEntry>           m_aNotes;
+    std::vector<PDFNoteEntry>           m_aFormulaNotes;
     /* the root of the structure tree
      */
     std::vector<PDFStructureElement>    m_aStructure;
@@ -872,6 +873,8 @@ i12626
     bool emitLinkAnnotations();
     // write all notes
     bool emitNoteAnnotations();
+    // write cell formulas as annotations
+    bool emitFormulaAnnotations();
     // write the appearance streams of a widget
     bool emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDict );
     // clean up radio button "On" values
@@ -1215,6 +1218,7 @@ public:
 
     // notes
     void createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
+    void createFormulaAnnotation( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
     // structure elements
     sal_Int32 beginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias );
     void endStructureElement();

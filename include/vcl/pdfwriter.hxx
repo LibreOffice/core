@@ -1058,6 +1058,7 @@ The following structure describes the permissions used in PDF security
     or -1 in which case the current page is used
     */
     void CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
+    void CreateFormulaAnnotation( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
 
     /** begin a new logical structure element
 
