@@ -1193,11 +1193,6 @@ bool Outliner::ShowWrapArroundDialog()
         const SvxSearchCmd nCommand(mpSearchItem->GetCommand());
         if (nCommand == SvxSearchCmd::REPLACE || nCommand == SvxSearchCmd::FIND)
         {
-            if (mbDirectionIsForward)
-                SvxSearchDialogWrapper::SetSearchLabel(SL_End);
-            else
-                SvxSearchDialogWrapper::SetSearchLabel(SL_Start);
-
             return true;
         }
         else

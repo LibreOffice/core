@@ -1765,11 +1765,6 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                if ( nStartTab == nEndTab )
-                    SvxSearchDialogWrapper::SetSearchLabel(SL_EndSheet);
-                else
-                    SvxSearchDialogWrapper::SetSearchLabel(SL_End);
-
                 ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 if (pSearchItem->GetBackward())
                     nTab = nEndTab;
