@@ -20,7 +20,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
     mesa_headers \
 ))
 ifeq ($(ENABLE_OPENGL),TRUE)
-$(eval $(call gb_Library_use_externals,vcl_bitmap_test,\
+$(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
      glew \
  ))
 endif
