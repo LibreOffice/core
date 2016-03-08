@@ -121,22 +121,22 @@ namespace
     };
     static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
     // these should really be constexprs, but MSVC still is apparently too stupid for them
-    #define nPoolChrNormalRange (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN)
-    #define nPoolChrHtmlRange   (RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN)
-    #define nPoolCollTextRange     ( RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN)
-    #define nPoolCollListsRange    ( RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN)
-    #define nPoolCollExtraRange    ( RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN)
-    #define nPoolCollRegisterRange ( RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN)
-    #define nPoolCollDocRange      ( RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN)
-    #define nPoolCollHtmlRange     ( RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN)
-    #define nPoolFrameRange ( RES_POOLFRM_END - RES_POOLFRM_BEGIN)
-    #define nPoolPageRange  ( RES_POOLPAGE_END - RES_POOLPAGE_BEGIN)
-    #define nPoolNumRange   ( RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN)
-    #define nPoolCollListsStackedStart    ( nPoolCollTextRange)
-    #define nPoolCollExtraStackedStart    ( nPoolCollListsStackedStart    + nPoolCollListsRange)
-    #define nPoolCollRegisterStackedStart ( nPoolCollExtraStackedStart    + nPoolCollExtraRange)
-    #define nPoolCollDocStackedStart      ( nPoolCollRegisterStackedStart + nPoolCollRegisterRange)
-    #define nPoolCollHtmlStackedStart     ( nPoolCollDocStackedStart      + nPoolCollDocRange)
+    SAL_CONSTEXPR  sal_uInt16 nPoolChrNormalRange   = (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolChrHtmlRange     = (RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollTextRange    = (RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollListsRange   = (RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollExtraRange   = (RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollRegisterRange= (RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollDocRange     = (RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollHtmlRange    = (RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolFrameRange = (RES_POOLFRM_END - RES_POOLFRM_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolPageRange  = (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolNumRange   = (RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollListsStackedStart    = (nPoolCollTextRange);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollExtraStackedStart    = (nPoolCollListsStackedStart    + nPoolCollListsRange);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollRegisterStackedStart = (nPoolCollExtraStackedStart    + nPoolCollExtraRange);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollDocStackedStart      = (nPoolCollRegisterStackedStart + nPoolCollRegisterRange);
+    SAL_CONSTEXPR sal_uInt16 nPoolCollHtmlStackedStart     = (nPoolCollDocStackedStart      + nPoolCollDocRange);
 }
 static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries();
 
