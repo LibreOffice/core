@@ -1957,7 +1957,7 @@ namespace svgio
 
         const basegfx::BColor* SvgStyleAttributes::getFill() const
         {
-            if(mbIsClipPathContent)
+            if(mbIsClipPathContent || ((SVGTokenMarker == mrOwner.getType()) && !maFill.isSet()))
             {
                 static basegfx::BColor aBlack(0.0, 0.0, 0.0);
                 return &aBlack;
