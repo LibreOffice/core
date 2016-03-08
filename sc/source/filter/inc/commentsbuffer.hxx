@@ -84,10 +84,9 @@ public:
     void                finalizeImport();
 
 private:
-    typedef ::std::vector< OUString >    OUStringVector;
     typedef RefVector< Comment >                CommentVector;
 
-    OUStringVector      maAuthors;
+    ::std::vector< OUString > maAuthors;
     CommentVector       maComments;
 };
 

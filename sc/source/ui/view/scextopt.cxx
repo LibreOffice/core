@@ -120,11 +120,9 @@ void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
 /** Implementation struct for ScExtDocOptions containing all members. */
 struct ScExtDocOptionsImpl
 {
-    typedef ::std::vector< OUString > StringVec;
-
     ScExtDocSettings    maDocSett;          /// Global document settings.
     ScExtTabSettingsCont maTabSett;         /// Settings for all sheets.
-    StringVec           maCodeNames;        /// Codenames for all sheets (VBA module names).
+    ::std::vector< OUString > maCodeNames;        /// Codenames for all sheets (VBA module names).
     bool                mbChanged;          /// Use only if something has been changed.
 
     explicit            ScExtDocOptionsImpl();
