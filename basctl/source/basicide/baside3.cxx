@@ -80,7 +80,7 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
                                             : Reference<frame::XModel>(), xDialogModel))
     ,pUndoMgr(new SfxUndoManager)
 {
-    InitSettings( true, true, true );
+    InitSettings( true );
 
     pEditor->GetModel().SetNotifyUndoActionHdl(
         LINK(this, DialogWindow, NotifyUndoActionHdl)
@@ -1325,29 +1325,23 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        InitSettings( true, true, true );
+        InitSettings( true );
         Invalidate();
     }
     else
         BaseWindow::DataChanged( rDCEvt );
 }
 
-void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
+void DialogWindow::InitSettings(bool bBackground)
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( bFont )
-    {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
-        SetPointFont(*this, aFont);
-    }
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    SetPointFont(*this, aFont);
 
-    if( bForeground || bFont )
-    {
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        SetTextFillColor();
-    }
+    SetTextColor( rStyleSettings.GetFieldTextColor() );
+    SetTextFillColor();
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
