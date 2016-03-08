@@ -237,11 +237,11 @@ protected:
     virtual void ClearFamilyList() = 0;
     virtual void ReplaceUpdateButtonByMenu();
 
-    void NewHdl( void* );
-    void EditHdl( void* );
-    void DeleteHdl( void* );
-    void HideHdl( void* );
-    void ShowHdl( void* );
+    void NewHdl();
+    void EditHdl();
+    void DeleteHdl();
+    void HideHdl();
+    void ShowHdl();
 
     bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                       sal_uInt16 nFamily, sal_uInt16 nMask = 0,

@@ -1531,7 +1531,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         std::unique_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
         if ( pFact )
-            pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( nullptr, aException ) );
+            pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( aException ) );
         OSL_ENSURE( pScriptErrDlg.get(), "SfxObjectShell::CallXScript: no script error dialog!" );
 
         if ( pScriptErrDlg.get() )

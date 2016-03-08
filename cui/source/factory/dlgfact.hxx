@@ -487,8 +487,7 @@ public:
                                                              const SfxItemSet& rAttr,
                                                              const css::uno::Reference< css::frame::XFrame >& _rxFrame,
                                                              sal_uInt32 nResId ) override;
-    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent,
-                                                           const css::uno::Reference< css::frame::XFrame >& rxFrame,
+    virtual VclAbstractDialog*          CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId,
                                                            const OUString& rParameter ) override;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
@@ -511,7 +510,7 @@ public:
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = nullptr ) override;
-    virtual VclAbstractDialog*          CreateEditObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( const OUString& rCommmand,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) override;
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( vcl::Window* pParent ) override;
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p=nullptr  ) override;
@@ -634,8 +633,7 @@ public:
             const css::uno::Reference< css::frame::XFrame >& _rxFrame
         ) override;
 
-    virtual VclAbstractDialog* CreateScriptErrorDialog(
-            vcl::Window* pParent, const css::uno::Any& rException) override;
+    virtual VclAbstractDialog* CreateScriptErrorDialog(const css::uno::Any& rException) override;
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
                 vcl::Window* _pParent,

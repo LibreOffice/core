@@ -1905,7 +1905,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     InitToolBoxImages();
     aToolBox->Show();
-    InitOnStartupBox( false );
+    InitOnStartupBox();
     aOnStartupCB->SetClickHdl( LINK( this, SfxHelpTextWindow_Impl, CheckHdl ) );
 
     aSelectIdle.SetIdleHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
@@ -2001,7 +2001,7 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
 }
 
 
-void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
+void SfxHelpTextWindow_Impl::InitOnStartupBox()
 {
     sCurrentFactory = SfxHelp::GetCurrentModuleIdentifier();
 
@@ -2078,18 +2078,15 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
             SetOnStartupBoxPosition();
         }
 
-        if ( !bOnlyText )
-        {
-            // set position of the checkbox
-            Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
-            Size aTBSize = aToolBox->GetSizePixel();
-            Size aCBSize = aOnStartupCB->GetSizePixel();
-            Point aPnt = aToolBox->GetPosPixel();
-            aPnt.X() += aTBSize.Width() + a3Size.Width();
-            aPnt.Y() += ( ( aTBSize.Height() - aCBSize.Height() ) / 2 );
-            aOnStartupCB->SetPosPixel( aPnt );
-            nMinPos = aPnt.X();
-        }
+        // set position of the checkbox
+        Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+        Size aTBSize = aToolBox->GetSizePixel();
+        Size aCBSize = aOnStartupCB->GetSizePixel();
+        Point aPnt = aToolBox->GetPosPixel();
+        aPnt.X() += aTBSize.Width() + a3Size.Width();
+        aPnt.Y() += ( ( aTBSize.Height() - aCBSize.Height() ) / 2 );
+        aOnStartupCB->SetPosPixel( aPnt );
+        nMinPos = aPnt.X();
     }
 }
 

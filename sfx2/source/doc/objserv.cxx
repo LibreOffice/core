@@ -490,7 +490,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(nullptr, aSet));
+                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(aSet));
                 if ( RET_OK == pDlg->Execute() )
                 {
                     const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(pDlg->GetOutputItemSet(), SID_DOCINFO, false);

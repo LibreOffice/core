@@ -116,7 +116,7 @@ class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialog
 public:
                                         virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
-    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
+    virtual VclAbstractDialog*          CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
@@ -130,7 +130,7 @@ public:
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = nullptr )=0;
-    virtual VclAbstractDialog*          CreateEditObjectDialog( vcl::Window* pParent, const OUString& rCommand,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( const OUString& rCommand,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*    CreatePasteDialog( vcl::Window* pParent )=0;
     virtual  SfxAbstractLinksDialog*    CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=nullptr )=0;
@@ -143,8 +143,7 @@ public:
             const css::uno::Reference< css::frame::XFrame >& _rxFrame
         ) = 0;
 
-    virtual VclAbstractDialog* CreateScriptErrorDialog(
-        vcl::Window* pParent, const css::uno::Any& rException ) = 0;
+    virtual VclAbstractDialog* CreateScriptErrorDialog( const css::uno::Any& rException ) = 0;
 
     virtual VclAbstractDialog*  CreateOptionsDialog(
         vcl::Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) = 0;

@@ -206,14 +206,14 @@ public:
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
     SAL_DLLPRIVATE void AddVersion_Impl( css::util::RevisionTag& rVersion );
     SAL_DLLPRIVATE bool TransferVersionList_Impl( SfxMedium& rMedium );
-    SAL_DLLPRIVATE void SaveVersionList_Impl( bool bUseXML );
+    SAL_DLLPRIVATE void SaveVersionList_Impl();
     SAL_DLLPRIVATE void RemoveVersion_Impl( const OUString& rVersion );
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
 
     SAL_DLLPRIVATE void Init_Impl();
-    SAL_DLLPRIVATE void ForceSynchronStream_Impl( bool bSynchron );
+    SAL_DLLPRIVATE void ForceSynchronStream_Impl();
 
     SAL_DLLPRIVATE void GetLockingStream_Impl();
     SAL_DLLPRIVATE void GetMedium_Impl();

@@ -637,7 +637,7 @@ const OUString& SfxMedium::GetPhysicalName() const
 
 void SfxMedium::CreateFileStream()
 {
-    ForceSynchronStream_Impl( true );
+    ForceSynchronStream_Impl();
     GetInStream();
     if( pImp->m_pInStream )
     {
@@ -3131,13 +3131,13 @@ bool SfxMedium::IsExpired() const
 }
 
 
-void SfxMedium::ForceSynchronStream_Impl( bool bForce )
+void SfxMedium::ForceSynchronStream_Impl()
 {
     if( pImp->m_pInStream )
     {
         SvLockBytes* pBytes = pImp->m_pInStream->GetLockBytes();
         if( pBytes )
-            pBytes->SetSynchronMode( bForce );
+            pBytes->SetSynchronMode( true/*bForce*/ );
     }
 }
 
@@ -3303,7 +3303,7 @@ bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
     return false;
 }
 
-void SfxMedium::SaveVersionList_Impl( bool /*bUseXML*/ )
+void SfxMedium::SaveVersionList_Impl()
 {
     if ( GetStorage().is() )
     {

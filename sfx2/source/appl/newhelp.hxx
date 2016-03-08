@@ -444,7 +444,7 @@ private:
 
     bool                    HasSelection() const;
     void                    InitToolBoxImages();
-    void                    InitOnStartupBox( bool bOnlyText );
+    void                    InitOnStartupBox();
     void                    SetOnStartupBoxPosition();
 
     css::uno::Reference< css::i18n::XBreakIterator >

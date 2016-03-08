@@ -295,7 +295,7 @@ bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
         {
             if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
             {
-                pDialog->DeleteHdl( nullptr );
+                pDialog->DeleteHdl();
                 bRet =  true;
             }
             else if( KEY_RETURN == rKeyCode.GetCode())
@@ -1857,7 +1857,7 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl&, 
 }
 
 // Handler for the New-Buttons
-void SfxCommonTemplateDialog_Impl::NewHdl(void *)
+void SfxCommonTemplateDialog_Impl::NewHdl()
 {
     if ( nActFamily != 0xffff && (pTreeBox || aFmtLb->GetSelectionCount() <= 1))
     {
@@ -1892,7 +1892,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
 }
 
 // Handler for the edit-Buttons
-void SfxCommonTemplateDialog_Impl::EditHdl(void *)
+void SfxCommonTemplateDialog_Impl::EditHdl()
 {
     if(IsInitialized() && HasSelectedStyle())
     {
@@ -1915,7 +1915,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
 }
 
 // Handler for the Delete-Buttons
-void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
+void SfxCommonTemplateDialog_Impl::DeleteHdl()
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
@@ -1986,7 +1986,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
     }
 }
 
-void SfxCommonTemplateDialog_Impl::HideHdl(void *)
+void SfxCommonTemplateDialog_Impl::HideHdl()
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
@@ -2004,7 +2004,7 @@ void SfxCommonTemplateDialog_Impl::HideHdl(void *)
     }
 }
 
-void SfxCommonTemplateDialog_Impl::ShowHdl(void *)
+void SfxCommonTemplateDialog_Impl::ShowHdl()
 {
 
     if ( IsInitialized() && HasSelectedStyle() )
@@ -2145,11 +2145,11 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool
 IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
 {
     switch(nLastItemId) {
-    case ID_NEW: NewHdl(nullptr); break;
-    case ID_EDIT: EditHdl(nullptr); break;
-    case ID_DELETE: DeleteHdl(nullptr); break;
-    case ID_HIDE: HideHdl(nullptr); break;
-    case ID_SHOW: ShowHdl(nullptr); break;
+    case ID_NEW: NewHdl(); break;
+    case ID_EDIT: EditHdl(); break;
+    case ID_DELETE: DeleteHdl(); break;
+    case ID_HIDE: HideHdl(); break;
+    case ID_SHOW: ShowHdl(); break;
     }
 }
 

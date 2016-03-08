@@ -1519,13 +1519,13 @@ bool SfxObjectShell::SaveTo_Impl
                     // add new version information into the versionlist and save the versionlist
                     // the version list must have been transferred from the "old" medium before
                     rMedium.AddVersion_Impl( aInfo );
-                    rMedium.SaveVersionList_Impl( true );
+                    rMedium.SaveVersionList_Impl();
                     bOk = PutURLContentsToVersionStream_Impl( aTmpVersionURL, xMedStorage, aInfo.Identifier );
                 }
             }
             else if ( bOk && ( pImp->bIsSaving || pImp->bPreserveVersions ) )
             {
-                rMedium.SaveVersionList_Impl( true );
+                rMedium.SaveVersionList_Impl();
             }
         }
 
@@ -2035,7 +2035,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             if( pFilter && !IsPackageStorageFormat_Impl( *pMedium ) && (pMedium->GetOpenMode() & StreamMode::WRITE ))
             {
                 pMedium->ReOpen();
-                bOk = SaveCompletedChildren( false );
+                bOk = SaveCompletedChildren();
             }
             else
                 bOk = SaveCompleted( nullptr );
@@ -3144,7 +3144,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
     return bResult;
 }
 
-bool SfxObjectShell::SaveCompletedChildren( bool bSuccess )
+bool SfxObjectShell::SaveCompletedChildren()
 {
     bool bResult = true;
 
@@ -3162,7 +3162,7 @@ bool SfxObjectShell::SaveCompletedChildren( bool bSuccess )
                 {
                     try
                     {
-                        xPersist->saveCompleted( bSuccess );
+                        xPersist->saveCompleted( false/*bSuccess*/ );
                     }
                     catch( uno::Exception& )
                     {
@@ -3208,7 +3208,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     if ( !xStorage.is() || xStorage == GetStorage() )
     {
         // no persistence change
-        bResult = SaveCompletedChildren( false );
+        bResult = SaveCompletedChildren();
     }
     else
     {

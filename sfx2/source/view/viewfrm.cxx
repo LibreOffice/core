@@ -1611,10 +1611,10 @@ SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
     return nullptr;
 }
 
-void SfxViewFrame::ForceOuterResize_Impl(bool bOn)
+void SfxViewFrame::ForceOuterResize_Impl()
 {
     if ( !pImp->bDontOverwriteResizeInToOut )
-        pImp->bResizeInToOut = !bOn;
+        pImp->bResizeInToOut = true;
 }
 
 bool SfxViewFrame::IsResizeInToOut_Impl() const

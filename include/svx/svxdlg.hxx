@@ -409,8 +409,7 @@ public:
             const css::uno::Reference< css::frame::XFrame >& _rxFrame
         ) override = 0;
 
-    virtual VclAbstractDialog* CreateScriptErrorDialog(
-            vcl::Window* pParent, const css::uno::Any& rException) override = 0;
+    virtual VclAbstractDialog* CreateScriptErrorDialog(const css::uno::Any& rException) override = 0;
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
                 vcl::Window* _pParent,

@@ -850,8 +850,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pPa
     return nullptr;
 }
 
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
-    vcl::Window* pParent, const Reference< frame::XFrame >& rxFrame,
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog( const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const OUString& rParameter )
 {
     VclPtr<Dialog> pDlg;
@@ -859,7 +858,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     {
         // only activate last page if we don't want to activate a special page
         bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
-        VclPtrInstance<OfaTreeOptionsDialog> pOptDlg( pParent, rxFrame, bActivateLastSelection );
+        VclPtrInstance<OfaTreeOptionsDialog> pOptDlg( nullptr, rxFrame, bActivateLastSelection );
         if ( nResId == SID_OPTIONS_DATABASES )
             pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
         else if ( !rParameter.isEmpty() )
@@ -1000,10 +999,9 @@ VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgre
 }
 
 VclAbstractDialog*
-AbstractDialogFactory_Impl::CreateScriptErrorDialog(
-    vcl::Window* pParent, const css::uno::Any& rException)
+AbstractDialogFactory_Impl::CreateScriptErrorDialog(const css::uno::Any& rException)
 {
-    return new SvxScriptErrorDialog(pParent, rException);
+    return new SvxScriptErrorDialog(nullptr, rException);
 }
 
 AbstractScriptSelectorDialog*
@@ -1551,12 +1549,12 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
     return nullptr;
 }
 
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Window* pParent,  const OUString& rCommand,
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( const OUString& rCommand,
             const Reference < css::embed::XEmbeddedObject >& xObj )
 {
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {
-        VclPtrInstance<SfxInsertFloatingFrameDialog> pDlg( pParent, xObj );
+        VclPtrInstance<SfxInsertFloatingFrameDialog> pDlg( nullptr, xObj );
         pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new CuiVclAbstractDialog_Impl( pDlg );
     }

@@ -302,7 +302,7 @@ public:
     bool                        renameGroup( const OUString& rOldName,
                                              const OUString& rNewName );
 
-    void                        update( bool bUpdateNow );
+    void                        update();
     void                        doUpdate();
     void                        finished() { mpUpdater = nullptr; }
 };
@@ -465,7 +465,7 @@ void SfxDocTplService_Impl::init_Impl()
             aSolarGuard.clear();
             ::osl::ClearableMutexGuard anotherGuard( maMutex );
 
-            update( true );
+            update();
 
             anotherGuard.clear();
             SolarMutexGuard aSecondSolarGuard;
@@ -474,7 +474,7 @@ void SfxDocTplService_Impl::init_Impl()
         }
         else if ( needsUpdate() )
             // the UI should be shown only on the first update
-            update( true );
+            update();
     }
     else
     {
@@ -1146,17 +1146,11 @@ void SfxDocTplService_Impl::setLocale( const lang::Locale &rLocale )
 }
 
 
-void SfxDocTplService_Impl::update( bool bUpdateNow )
+void SfxDocTplService_Impl::update()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    if ( bUpdateNow )
-        doUpdate();
-    else
-    {
-        mpUpdater = new Updater_Impl( this );
-        mpUpdater->create();
-    }
+    doUpdate();
 }
 
 
@@ -2378,7 +2372,7 @@ void SAL_CALL SfxDocTplService::update()
     throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
-        pImp->update( true );
+        pImp->update();
 }
 
 

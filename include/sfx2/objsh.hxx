@@ -359,7 +359,7 @@ public:
     bool                        SwitchChildrenPersistance(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     bool bForceNonModified = false );
-    bool                        SaveCompletedChildren( bool bSuccess );
+    bool                        SaveCompletedChildren();
 
     /** a very special case to insert at a position in Writer from UNO,
         via OwnSubFilterService */
@@ -375,8 +375,7 @@ public:
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
 
-    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(
-                                        vcl::Window *pParent, const SfxItemSet& );
+    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet& );
 
     ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
                                     SbxArray* pArgs = nullptr, SbxValue* pRet = nullptr );

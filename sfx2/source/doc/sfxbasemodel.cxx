@@ -4304,7 +4304,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
     {
-        pViewFrame->ForceOuterResize_Impl( false );
+        pViewFrame->ForceOuterResize_Impl();
         pViewFrame->GetBindings().HidePopups();
 
         SfxFrame& rFrame = pViewFrame->GetFrame();

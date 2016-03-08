@@ -109,8 +109,7 @@ class SW_DLLPUBLIC SwDocShell
         override;
 
     /// Make DocInfo known to the Doc.
-    SAL_DLLPRIVATE virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(
-                                    vcl::Window *pParent, const SfxItemSet &) override;
+    SAL_DLLPRIVATE virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(const SfxItemSet &) override;
     /// OLE-stuff
     SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16) override;
 

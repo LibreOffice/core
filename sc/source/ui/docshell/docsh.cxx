@@ -2878,10 +2878,9 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
                 (sal_uInt16) ScPrintFunc( this, pPrinter, i ).GetTotalPages() );
 }
 
-VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(
-                                         vcl::Window *pParent, const SfxItemSet &rSet )
+VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxItemSet &rSet )
 {
-    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
+    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( nullptr, rSet );
     ScDocShell*            pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
 
     // Only for statistics, if this Doc is shown; not from the Doc Manager
