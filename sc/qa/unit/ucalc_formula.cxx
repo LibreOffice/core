@@ -24,6 +24,7 @@
 #include "paramisc.hxx"
 #include "tokenstringcontext.hxx"
 #include "dbdata.hxx"
+#include "scmatrix.hxx"
 #include <validat.hxx>
 #include <scitems.hxx>
 #include <patattr.hxx>
@@ -5578,7 +5579,10 @@ void Test::testExternalRefFunctions()
         { "=AVERAGE('file:///extdata.fake'#Data.A1:A4)", 2.5 },
         { "=AVERAGE('file:///extdata.fake'#Data.B1:B4)", 3 },
         { "=COUNT('file:///extdata.fake'#Data.A1:A4)",   4 },
-        { "=COUNT('file:///extdata.fake'#Data.B1:B4)",   3 }
+        { "=COUNT('file:///extdata.fake'#Data.B1:B4)",   3 },
+        // Should not crash, MUST be 0,MAXROW and/or 0,MAXCOL range (here both)
+        // to yield a result instead of 1x1 error matrix.
+        { "=SUM('file:///extdata.fake'#Data.1:1048576)", 19 }
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -5587,6 +5591,27 @@ void Test::testExternalRefFunctions()
         m_pDoc->GetValue(0, 0, 0, val);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected result involving external ranges.", aChecks[i].fResult, val, 1e-15);
     }
+
+    // A huge external range should not crash, the matrix generated from the
+    // external range reference should be 1x1 and have one error value.
+    // XXX NOTE: in case we supported sparse matrix that can hold this large
+    // areas these tests may be adapted.
+    m_pDoc->SetString(0, 0, 0, "=SUM('file:///extdata.fake'#Data.B1:AMJ1048575)");
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
+    sal_uInt16 nErr = pFC->GetErrCode();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield errMatrixSize", errMatrixSize, nErr);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0,0,0,0, aMark, "'file:///extdata.fake'#Data.B1:AMJ1048575");
+    pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
+    nErr = pFC->GetErrCode();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield errMatrixSize", errMatrixSize, nErr);
+    SCSIZE nMatCols, nMatRows;
+    const ScMatrix* pMat = pFC->GetMatrix();
+    CPPUNIT_ASSERT_MESSAGE("matrix expected", pMat != nullptr);
+    pMat->GetDimensions( nMatCols, nMatRows);
+    CPPUNIT_ASSERT_MESSAGE("1x1 matrix expected", nMatCols == 1 && nMatRows == 1);
 
     pRefMgr->clearCache(nFileId);
     testExtRefFuncT(m_pDoc, rExtDoc);
