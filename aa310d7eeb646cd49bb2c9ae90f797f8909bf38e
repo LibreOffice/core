@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_b1e84218",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T15:37:32Z",
+      "side": 1,
+      "message": "This cast jungle is ugly.. it can be rewritten as\n\n InsertDeleteFlags nTempFlags( nFlags \u0026 ~InsertDeleteFlags( InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES));\n\nI\u0027ll do in an amended commit.",
+      "range": {
+        "startLine": 1085,
+        "startChar": 0,
+        "endLine": 1087,
+        "endChar": 105
+      },
+      "revId": "aa310d7eeb646cd49bb2c9ae90f797f8909bf38e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
