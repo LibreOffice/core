@@ -536,14 +536,14 @@ namespace svgio
                                     const double fLeft(aChildRange.getMinX());
                                     const double fTop(aChildRange.getMinY());
                                     if ( fChildWidth / fViewBoxWidth > fChildHeight / fViewBoxHeight )
-                                    {  // expand y
-                                        fW = fChildWidth;
-                                        fH = fChildWidth / fViewBoxRatio;
+                                    {  // viewport = viewBox * fChildWidth / fViewBoxWidth
+                                        fW = fChildWidth; // fVW * (fChW / fVW) = fChW
+                                        fH = fChildWidth / fViewBoxRatio; // fVH * (fChW / fVW) = fChW / (fVW/fVH)
                                     }
                                     else
-                                    {  // expand x
-                                        fH = fChildHeight;
-                                        fW = fChildHeight / fViewBoxRatio;
+                                    {  // viewport = viewBox * fChildHeight / fViewBoxHeight
+                                        fH = fChildHeight; // fVH * (fChH / fVH) = fChH
+                                        fW = fChildHeight * fViewBoxRatio; // fVW * (fChH / fVH) = fChH * (fVW/fVH)
                                     }
                                     aSvgCanvasRange = basegfx::B2DRange(fLeft, fTop, fLeft + fW, fTop + fH);
                                 }
