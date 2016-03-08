@@ -42,7 +42,7 @@ public:
     static void UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const SCTAB nDestTab );
     static css::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( SdrObject* pObject );
     static void GetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
-            css::uno::Sequence< OUString >& rRanges );
+            std::vector< OUString >& rRanges );
     static void SetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             const css::uno::Sequence< OUString >& rRanges );
 
