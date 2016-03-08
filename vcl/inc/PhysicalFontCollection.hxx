@@ -62,7 +62,7 @@ public:
     void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
 
     // misc utilities
-    PhysicalFontCollection* Clone( bool bScalable, bool bEmbeddable ) const;
+    PhysicalFontCollection* Clone( bool bEmbeddable ) const;
     ImplDeviceFontList*     GetDeviceFontList() const;
     ImplDeviceFontSizeList* GetDeviceFontSizeList( const OUString& rFontName ) const;
 

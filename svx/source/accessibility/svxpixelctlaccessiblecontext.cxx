@@ -597,8 +597,8 @@ awt::Rectangle SAL_CALL SvxPixelCtlAccessibleChild::getBounds() throw( RuntimeEx
     //Modified by lq, 09/26
     //return AWTRectangle( GetBoundingBox() );
     awt::Rectangle rect = AWTRectangle( GetBoundingBox() );
-    rect.X = rect.X + mrParentWindow.GetClientWindowExtentsRelative(nullptr).Left()-mrParentWindow.GetWindowExtentsRelative(nullptr).Left();
-    rect.Y = rect.Y + mrParentWindow.GetClientWindowExtentsRelative(nullptr).Top()-mrParentWindow.GetWindowExtentsRelative(nullptr).Top();
+    rect.X = rect.X + mrParentWindow.GetClientWindowExtentsRelative().Left()-mrParentWindow.GetWindowExtentsRelative(nullptr).Left();
+    rect.Y = rect.Y + mrParentWindow.GetClientWindowExtentsRelative().Top()-mrParentWindow.GetWindowExtentsRelative(nullptr).Top();
     return rect;
     // End
 }

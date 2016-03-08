@@ -923,7 +923,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     return pFoundData;
 }
 
-PhysicalFontCollection* PhysicalFontCollection::Clone( bool bScalable, bool bEmbeddable ) const
+PhysicalFontCollection* PhysicalFontCollection::Clone( bool bEmbeddable ) const
 {
     PhysicalFontCollection* pClonedCollection = new PhysicalFontCollection;
     pClonedCollection->mbMapNames     = mbMapNames;
@@ -937,7 +937,7 @@ PhysicalFontCollection* PhysicalFontCollection::Clone( bool bScalable, bool bEmb
     for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFace = (*it).second;
-        pFontFace->UpdateCloneFontList( *pClonedCollection, bScalable, bEmbeddable );
+        pFontFace->UpdateCloneFontList( *pClonedCollection, true/*bScalable*/, bEmbeddable );
     }
 
     return pClonedCollection;

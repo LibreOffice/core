@@ -155,9 +155,9 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     }
 }
 
-void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags )
+void WorkWindow::StartPresentationMode( PresentationFlags nFlags )
 {
-    return StartPresentationMode( bPresentation, nFlags, GetScreenNumber());
+    return StartPresentationMode( false/*bPresentation*/, nFlags, GetScreenNumber());
 }
 
 void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags, sal_uInt32 nDisplayScreen )

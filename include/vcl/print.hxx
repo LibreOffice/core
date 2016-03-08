@@ -209,7 +209,7 @@ private:
 
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
-    SAL_DLLPRIVATE void         ImplInitDisplay( const vcl::Window* pWindow );
+    SAL_DLLPRIVATE void         ImplInitDisplay();
     SAL_DLLPRIVATE static SalPrinterQueueInfo*
                                 ImplGetQueueInfo( const OUString& rPrinterName, const OUString* pDriver );
     SAL_DLLPRIVATE void         ImplUpdatePageData();
@@ -323,8 +323,8 @@ public:
     Paper                       GetPaper() const;
     static OUString             GetPaperName( Paper ePaper );
 
-    /** @return A UI string for the current paper; i_bPaperUser == false means an empty string for PAPER_USER */
-    OUString                    GetPaperName( bool i_bPaperUser = true ) const;
+    /** @return A UI string for the current paper; an empty string for PAPER_USER */
+    OUString                    GetPaperName() const;
 
     /** @return Number of available paper formats */
     int                         GetPaperInfoCount() const;

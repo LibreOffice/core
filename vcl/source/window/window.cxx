@@ -413,7 +413,7 @@ void Window::dispose()
     // EndExtTextInputMode
     if ( pSVData->maWinData.mpExtTextInputWin == this )
     {
-        EndExtTextInput( EndExtTextInputFlags::Complete );
+        EndExtTextInput();
         if ( pSVData->maWinData.mpExtTextInputWin == this )
             pSVData->maWinData.mpExtTextInputWin = nullptr;
     }
@@ -1970,20 +1970,17 @@ void Window::StateChanged(StateChangedType eType)
     }
 }
 
-bool Window::IsLocked( bool bChildren ) const
+bool Window::IsLocked() const
 {
     if ( mpWindowImpl->mnLockCount != 0 )
         return true;
 
-    if ( bChildren || mpWindowImpl->mbChildNotify )
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
     {
-        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
-        while ( pChild )
-        {
-            if ( pChild->IsLocked( true ) )
-                return true;
-            pChild = pChild->mpWindowImpl->mpNext;
-        }
+        if ( pChild->IsLocked() )
+            return true;
+        pChild = pChild->mpWindowImpl->mpNext;
     }
 
     return false;
@@ -2113,11 +2110,11 @@ void Window::SetInputContext( const InputContext& rInputContext )
         ImplNewInputContext();
 }
 
-void Window::EndExtTextInput( EndExtTextInputFlags nFlags )
+void Window::EndExtTextInput()
 {
 
     if ( mpWindowImpl->mbExtTextInput )
-        ImplGetFrame()->EndExtTextInput( nFlags );
+        ImplGetFrame()->EndExtTextInput( EndExtTextInputFlags::Complete );
 }
 
 void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
@@ -2967,10 +2964,10 @@ Rectangle Window::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
     return ImplGetWindowExtentsRelative( pRelativeWindow, false );
 }
 
-Rectangle Window::GetClientWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+Rectangle Window::GetClientWindowExtentsRelative() const
 {
     // without decoration
-    return ImplGetWindowExtentsRelative( pRelativeWindow, true );
+    return ImplGetWindowExtentsRelative( nullptr, true );
 }
 
 Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const

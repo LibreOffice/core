@@ -945,10 +945,10 @@ void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, ValidateFlags 
     }
 }
 
-void Window::ImplValidate( const vcl::Region* pRegion, ValidateFlags nFlags )
+void Window::ImplValidate( ValidateFlags nFlags )
 {
     // assemble region
-    bool    bValidateAll = !pRegion;
+    bool    bValidateAll = true;
     ValidateFlags nOrgFlags = nFlags;
     if ( !(nFlags & (ValidateFlags::Children | ValidateFlags::NoChildren)) )
     {
@@ -965,8 +965,6 @@ void Window::ImplValidate( const vcl::Region* pRegion, ValidateFlags nFlags )
     {
         Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
         vcl::Region      aRegion( aRect );
-        if ( pRegion )
-            aRegion.Intersect( *pRegion );
         ImplClipBoundaries( aRegion, true, true );
         if ( nFlags & ValidateFlags::NoChildren )
         {
@@ -1225,7 +1223,7 @@ void Window::Validate()
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
-    ImplValidate( nullptr, ValidateFlags::NONE );
+    ImplValidate( ValidateFlags::NONE );
 }
 
 bool Window::HasPaintEvent() const

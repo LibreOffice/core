@@ -124,7 +124,7 @@ short basis()              /* calculate BASE machine independence     */
 
 /*----------------------   MODULE tridiagonal  -----------------------*/
 
-sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
+sal_uInt16 TriDiagGS(sal_uInt16 n, double* lower,
                  double* diag, double* upper, double* b)
                                              /*************************/
                                              /* Gaussian methods for  */
@@ -212,11 +212,10 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 
  if ( n < 2 ) return 1;                    /*  n at least 2          */
 
-                                            /*  if rep = false,       */
                                             /*  determine the         */
                                             /*  triangular            */
                                             /*  decomposition of      */
- if (!rep)                                  /*  matrix and determinant*/
+                                           /*  matrix and determinant*/
    {
      for (i = 1; i < n; i++)
        { if ( fabs(diag[i-1]) < MACH_EPS )  /*  do not decompose      */
@@ -248,7 +247,7 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 
 /*----------------  Module cyclic tridiagonal  -----------------------*/
 
-sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
+sal_uInt16 ZyklTriDiagGS(sal_uInt16 n, double* lower, double* diag,
                      double* upper, double* lowrow, double* ricol, double* b)
                                         /******************************/
                                         /* Systems with cyclic        */
@@ -335,7 +334,6 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
  if ( n < 3 ) return 1;
 
- if (!rep)                               /*  If rep = false,          */
    {                                     /*  calculate decomposition  */
      lower[0] = upper[n-1] = 0.0;        /*  of the matrix.           */
 
@@ -449,7 +447,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
     if (n==2) {
         c[1]=a[0]/d[0];
     } else {
-        error=TriDiagGS(false,n-1,b,d,c,a.get());
+        error=TriDiagGS(n-1,b,d,c,a.get());
         if (error!=0) return error+2;
         for (i=0;i<n-1;i++) c[i+1]=a[i];
     }
@@ -528,7 +526,7 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
         lowrow[0]=hr;
         ricol[0]=hr;
         a[nm1]=3.0*((y[1]-y[0])/hr-(y[n]-y[nm1])/hl);
-        Error=ZyklTriDiagGS(false,n,b,d,c,lowrow.get(),ricol.get(),a.get());
+        Error=ZyklTriDiagGS(n,b,d,c,lowrow.get(),ricol.get(),a.get());
         if ( Error != 0 )
         {
             return Error+4;

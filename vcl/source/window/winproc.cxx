@@ -407,7 +407,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         if ( pSVData->maWinData.mpExtTextInputWin &&
              ((nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) ||
               (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP)) )
-            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EndExtTextInputFlags::Complete );
+            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput();
     }
 
     // determine mouse event data
@@ -1807,7 +1807,7 @@ IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
                 // TrackingMode is ended in ImplHandleLoseFocus
 #ifdef _WIN32
                 // To avoid problems with the Unix IME
-                pFocusWin->EndExtTextInput( EndExtTextInputFlags::Complete );
+                pFocusWin->EndExtTextInput();
 #endif
 
                 // XXX #102010# hack for accessibility: do not close the menu,
