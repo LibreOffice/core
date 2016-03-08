@@ -212,6 +212,8 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
 
         if(bSuccess)
         {
+            if( mpAlphaVDev )
+                mpAlphaVDev->DrawPolygon( rPoly );
             return;
         }
     }
