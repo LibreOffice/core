@@ -33,7 +33,6 @@
 
 #include "sft.hxx"
 #include "sallayout.hxx"
-#include "glyphy/demo.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -54,7 +53,15 @@ typedef std::unordered_map<int,int> IntMap;
 #if ENABLE_GRAPHITE
 #include <i18nlangtag/languagetag.hxx>
 #include <graphite_features.hxx>
+#if ENABLE_GRAPHITE_DWRITE
+#include <d2d1.h>
+#include <dwrite.h>
 #endif
+#endif
+
+// This needs to come after any includes for d2d1.h, otherwise we get lots of errors
+#include "glyphy/demo.hxx"
+
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
@@ -3562,6 +3569,346 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
     return mrFont.GetMinKashidaGlyph();
 }
 
+class TextOutRenderer
+{
+protected:
+    explicit TextOutRenderer() = default;
+    TextOutRenderer(const TextOutRenderer &) = delete;
+    TextOutRenderer & operator = (const TextOutRenderer &) = delete;
+
+public:
+    static TextOutRenderer & get();
+
+    virtual ~TextOutRenderer() = default;
+
+
+    virtual bool operator ()(WinLayout const &rLayout, HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) = 0;
+};
+
+class ExTextOutRenderer : public TextOutRenderer
+{
+    ExTextOutRenderer(const ExTextOutRenderer &) = delete;
+    ExTextOutRenderer & operator = (const ExTextOutRenderer &) = delete;
+
+public:
+    explicit ExTextOutRenderer() = default;
+    virtual ~ExTextOutRenderer() override = default;
+
+    bool operator ()(WinLayout const &rLayout, HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) override;
+};
+
+#if ENABLE_GRAPHITE_DWRITE
+
+class D2DWriteTextOutRenderer : public TextOutRenderer
+{
+    typedef HRESULT(WINAPI *pD2D1CreateFactory_t)(D2D1_FACTORY_TYPE,
+        REFIID, const D2D1_FACTORY_OPTIONS *, void **);
+    typedef HRESULT(WINAPI *pDWriteCreateFactory_t)(DWRITE_FACTORY_TYPE,
+        REFIID, IUnknown **);
+
+    static HINSTANCE mmD2d1, mmDWrite;
+    static pD2D1CreateFactory_t     D2D1CreateFactory;
+    static pDWriteCreateFactory_t   DWriteCreateFactory;
+
+public:
+    static bool InitModules();
+
+    explicit D2DWriteTextOutRenderer();
+    virtual ~D2DWriteTextOutRenderer() override;
+
+    bool operator ()(WinLayout const &rLayout, HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) override;
+
+private:
+    static void CleanupModules();
+
+    // This is a singleton object disable copy ctor and assignemnt operator
+    D2DWriteTextOutRenderer(const D2DWriteTextOutRenderer &) = delete;
+    D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
+
+    bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
+    bool GetDWriteInkBox(IDWriteFontFace & rFontFace, WinLayout const &rLayout, float const lfEmHeight, Rectangle &) const;
+
+    inline
+    HRESULT CreateRenderTarget() {
+        if (mpRT) mpRT->Release(); mpRT = NULL;
+        return mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT);
+    }
+
+    inline
+    bool Ready() const { return mpGdiInterop && mpRT; }
+
+    inline
+    bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0,0,0,0)) {
+        RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
+        return SUCCEEDED(mpRT->BindDC(hDC, &rc));
+    }
+
+    ID2D1Factory        * mpD2DFactory;
+    IDWriteFactory      * mpDWriteFactory;
+    IDWriteGdiInterop   * mpGdiInterop;
+    ID2D1DCRenderTarget * mpRT;
+    const D2D1_RENDER_TARGET_PROPERTIES mRTProps;
+};
+
+HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
+          D2DWriteTextOutRenderer::mmDWrite = nullptr;
+D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
+D2DWriteTextOutRenderer::pDWriteCreateFactory_t D2DWriteTextOutRenderer::DWriteCreateFactory = nullptr;
+
+bool D2DWriteTextOutRenderer::InitModules()
+{
+    mmD2d1 = LoadLibrary("D2d1.dll");
+    mmDWrite = LoadLibrary("dwrite.dll");
+    if (mmD2d1 && mmDWrite)
+    {
+        D2D1CreateFactory = pD2D1CreateFactory_t(GetProcAddress(mmD2d1, "D2D1CreateFactory"));
+        DWriteCreateFactory = pDWriteCreateFactory_t(GetProcAddress(mmDWrite, "DWriteCreateFactory"));
+    }
+
+    if (!D2D1CreateFactory || !DWriteCreateFactory)
+    {
+        CleanupModules();
+        return false;
+    }
+
+    return true;
+}
+
+void D2DWriteTextOutRenderer::CleanupModules()
+{
+    if (mmD2d1)     FreeLibrary(mmD2d1);
+    if (mmDWrite)   FreeLibrary(mmDWrite);
+
+    mmD2d1 = nullptr;
+    mmDWrite = nullptr;
+    D2D1CreateFactory = nullptr;
+    DWriteCreateFactory = nullptr;
+}
+#endif // ENABLE_GRAPHITE_DWRITE
+
+TextOutRenderer & TextOutRenderer::get()
+{
+#if ENABLE_GRAPHITE_DWRITE
+    static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
+        ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
+        : static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
+#else // ENABLE_GRAPHITE_DWRITE
+    static std::unique_ptr<TextOutRenderer> _impl(static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
+#endif // ENABLE_GRAPHITE_DWRITE
+
+    return *_impl;
+}
+
+
+bool ExTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
+    const Rectangle* pRectToErase,
+    Point* pPos, int* pGetNextGlypInfo)
+{
+    if (pRectToErase)
+    {
+        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left() + pRectToErase->GetWidth(), pRectToErase->Top() + pRectToErase->GetHeight() };
+        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
+    }
+
+    const int MAX_GLYPHS = 2;
+    sal_GlyphId glyphIntStr[MAX_GLYPHS];
+    int nGlyphs = 0;
+    WORD glyphWStr[MAX_GLYPHS];
+    do
+    {
+        nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo);
+        if (nGlyphs < 1)
+            break;
+
+        std::copy_n(glyphIntStr, nGlyphs, glyphWStr);
+        ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, NULL, LPCWSTR(&glyphWStr), nGlyphs, NULL);
+    } while (!pRectToErase);
+
+    return (pRectToErase && nGlyphs >= 1);
+}
+
+#if ENABLE_GRAPHITE_DWRITE
+
+D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
+    : mpD2DFactory(NULL),
+    mpDWriteFactory(NULL),
+    mpGdiInterop(NULL),
+    mpRT(NULL),
+    mRTProps(D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
+    D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+    0, 0, D2D1_RENDER_TARGET_USAGE_NONE, D2D1_FEATURE_LEVEL_DEFAULT))
+{
+    HRESULT hr = S_OK;
+    hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), NULL, reinterpret_cast<void **>(&mpD2DFactory));
+    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&mpDWriteFactory));
+    if (SUCCEEDED(hr))
+    {
+        hr = mpDWriteFactory->GetGdiInterop(&mpGdiInterop);
+        hr = CreateRenderTarget();
+    }
+}
+
+D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
+{
+    if (mpRT)            mpRT->Release();
+    if (mpGdiInterop)    mpGdiInterop->Release();
+    if (mpDWriteFactory) mpDWriteFactory->Release();
+    if (mpD2DFactory)    mpD2DFactory->Release();
+
+    CleanupModules();
+}
+
+bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
+    const Rectangle* pRectToErase,
+    Point* pPos, int* pGetNextGlypInfo)
+{
+    if (!Ready())
+        return false;
+
+    // Initially bind to an empty rectangle to get access to the font face,
+    //  we'll update it once we've calculated a bounding rect.
+    if (!BindDC(hDC))
+        return false;
+
+    IDWriteFontFace * pFontFace = NULL;
+    float lfEmHeight = 0;
+    if (!GetDWriteFaceFromHDC(hDC, &pFontFace, &lfEmHeight))
+        return false;
+
+    Rectangle bounds;
+    bool succeeded = GetDWriteInkBox(*pFontFace, rLayout, lfEmHeight, bounds);
+    if (pRectToErase)
+    {
+        bounds.Intersection(*pRectToErase);
+        bounds.Union(*pRectToErase);
+    }
+    succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
+
+    ID2D1SolidColorBrush* pBlackBrush = NULL;
+    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetTextColor(hDC)), &pBlackBrush));
+
+    HRESULT hr = S_OK;
+    if (succeeded)
+    {
+        if (pRectToErase)
+            mpRT->Clear(D2D1::ColorF(D2D1::ColorF::White));
+
+        const int MAX_GLYPHS = 2;
+        sal_GlyphId glyphIntStr[MAX_GLYPHS];
+        UINT16 glyphIndices[MAX_GLYPHS];
+        long   glyphIntAdv[MAX_GLYPHS];
+        FLOAT  glyphAdvances[MAX_GLYPHS];
+        DWRITE_GLYPH_OFFSET glyphOffsets[MAX_GLYPHS] = { { 0.0f, 0.0f }, };
+        int nGlyphs = 0;
+
+        mpRT->BeginDraw();
+        do
+        {
+            nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo, glyphIntAdv);
+            if (nGlyphs < 1)
+                break;
+
+            std::copy_n(glyphIntStr, nGlyphs, glyphIndices);
+            std::copy_n(glyphIntAdv, nGlyphs, glyphAdvances);
+
+            D2D1_POINT_2F baseline = { pPos->X() - bounds.Left(), pPos->Y() - bounds.Top() };
+            DWRITE_GLYPH_RUN glyphs = {
+                pFontFace,
+                lfEmHeight,
+                nGlyphs,
+                glyphIndices,
+                glyphAdvances,
+                glyphOffsets,
+                false,
+                0
+            };
+
+            mpRT->DrawGlyphRun(baseline, &glyphs, pBlackBrush);
+        } while (!pRectToErase);
+
+        hr = mpRT->EndDraw();
+    }
+
+    if (pBlackBrush)
+        pBlackBrush->Release();
+
+    if (pFontFace)
+        pFontFace->Release();
+
+    if (hr == D2DERR_RECREATE_TARGET)
+        CreateRenderTarget();
+
+    return (SUCCEEDED(hr) && succeeded && pRectToErase);
+}
+
+bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
+{
+    bool const succeeded = SUCCEEDED(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace));
+
+    if (succeeded)
+    {
+        LOGFONTW aLogFont;
+        HFONT hFont = (HFONT)::GetCurrentObject(hDC, OBJ_FONT);
+
+        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
+        float dpix, dpiy;
+        mpRT->GetDpi(&dpix, &dpiy);
+        *lfSize = aLogFont.lfHeight * 96.0f / dpiy;
+
+        assert(*lfSize < 0);
+        *lfSize *= -1;
+    }
+
+    return succeeded;
+}
+
+bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, WinLayout const &rLayout, float const lfEmHeight, Rectangle & rOut) const
+{
+    rOut.SetEmpty();
+
+    DWRITE_FONT_METRICS aFontMetrics;
+    rFontFace.GetMetrics(&aFontMetrics);
+
+    Point aPos;
+    for (int nStart = 0;;)
+    {
+        sal_GlyphId nLGlyph;
+        if (rLayout.GetNextGlyphs(1, &nLGlyph, aPos, nStart) < 1)
+            break;
+
+        // get bounding rectangle of individual glyph
+        UINT16  indices[1] = { nLGlyph };
+        DWRITE_GLYPH_METRICS metrics[1];
+        if (!SUCCEEDED(rFontFace.GetDesignGlyphMetrics(indices, 1, metrics, false)))
+            return false;
+
+        // We accumulate glyph boxes design unit space
+        Rectangle aGlyphInkBox(
+            metrics->leftSideBearing,
+            metrics->topSideBearing - metrics->verticalOriginY,
+            metrics->advanceWidth - metrics->rightSideBearing,
+            INT32(metrics->advanceHeight) - metrics->verticalOriginY - metrics->bottomSideBearing);
+        aGlyphInkBox += aPos * aFontMetrics.designUnitsPerEm / lfEmHeight;
+        rOut.Union(aGlyphInkBox);
+    }
+
+    // Scale to screen space.
+    rOut.Left() = std::lround(rOut.Left()*lfEmHeight / aFontMetrics.designUnitsPerEm);
+    rOut.Top() = std::lround(rOut.Top()*lfEmHeight / aFontMetrics.designUnitsPerEm);
+    rOut.Right() = 1+std::lround(rOut.Right()*lfEmHeight / aFontMetrics.designUnitsPerEm);
+    rOut.Bottom() = 1+std::lround(rOut.Bottom()*lfEmHeight / aFontMetrics.designUnitsPerEm);
+
+    return true;
+}
+
+#endif // ENABLE_GRAPHITE_DWRITE
+
 float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
     HDC hDC = reinterpret_cast<HDC>(const_cast<void*>(appFontHandle));
@@ -3650,30 +3997,15 @@ bool GraphiteWinLayout::DrawTextImpl(HDC hDC,
                                      Point* pPos,
                                      int* pGetNextGlypInfo) const
 {
-    if (pRectToErase)
-    {
-        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left()+pRectToErase->GetWidth(), pRectToErase->Top()+pRectToErase->GetHeight() };
-        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
-    }
-
     HFONT hOrigFont = DisableFontScaling();
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
-    const int MAX_GLYPHS = 2;
-    sal_GlyphId glyphIntStr[MAX_GLYPHS];
-    WORD glyphWStr[MAX_GLYPHS];
-    int nGlyphs = 0;
-    do
-    {
-        nGlyphs = maImpl.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo);
-        if (nGlyphs < 1)
-            break;
-        std::copy(glyphIntStr, glyphIntStr + nGlyphs, glyphWStr);
-        ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
-    } while (!pRectToErase);
+
+    TextOutRenderer & render = TextOutRenderer::get();
+    bool const ok = render(*this, hDC, pRectToErase, pPos, pGetNextGlypInfo);
     if( hOrigFont )
         DeleteFont(SelectFont(hDC, hOrigFont));
-    return (pRectToErase && nGlyphs >= 1);
+    return ok;
 }
 
 bool GraphiteWinLayout::CacheGlyphs(SalGraphics& /*rGraphics*/) const
