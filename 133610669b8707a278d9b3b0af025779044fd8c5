@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_f1af5a7b",
+        "filename": "solenv/gbuild/platform/com_MSC_defs.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-03-08T20:16:11Z",
+      "side": 1,
+      "message": "This warning and the one below spamms build output with very annoying warnings: [1]. Should be fixed in: [2].\n\n* [1] warning: unknown warning option \u0027-Wv:18\u0027; did you mean \u0027-Wvla\u0027? [-Wunknown-warning-option]\n* [2] https://gerrit.libreoffice.org/23038",
+      "revId": "133610669b8707a278d9b3b0af025779044fd8c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
