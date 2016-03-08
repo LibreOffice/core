@@ -591,9 +591,9 @@ namespace basic
     }
 
 
-    BasicManager* BasicManagerRepository::getApplicationBasicManager( bool _bCreate )
+    BasicManager* BasicManagerRepository::getApplicationBasicManager()
     {
-        return ImplRepository::Instance().getApplicationBasicManager( _bCreate );
+        return ImplRepository::Instance().getApplicationBasicManager( true/*_bCreate*/ );
     }
 
 

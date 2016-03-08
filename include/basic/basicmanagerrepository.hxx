@@ -96,16 +96,12 @@ namespace basic
 
         /** returns the application-wide BasicManager
 
-        @param _bCreate
-            determines whether the BasicManager should be created (<TRUE/>) if it
-            does not yet exist.
-
         @attention
             If the BasicManager is newly created, then it is still owned by the repository.
             In particular, you are not allowed to delete it. Instead, call resetApplicationBasicManager
             to release the BasicManager.
         */
-        static BasicManager* getApplicationBasicManager( bool _bCreate );
+        static BasicManager* getApplicationBasicManager();
 
         /** resets the application-wide BasicManager to <NULL/>
         */

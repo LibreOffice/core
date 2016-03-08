@@ -101,7 +101,7 @@ BasicManager* SfxApplication::GetBasicManager()
 #else
     if (utl::ConfigManager::IsAvoidConfig())
         return nullptr;
-    return BasicManagerRepository::getApplicationBasicManager( true );
+    return BasicManagerRepository::getApplicationBasicManager();
 #endif
 }
 
