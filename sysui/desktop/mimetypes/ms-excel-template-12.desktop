@@ -22,5 +22,6 @@ Hidden=false
 Icon=
 Type=MimeType
 Patterns=*.xltm
+Patterns=*.ett
 MimeType=application/vnd.ms-excel.template.macroenabled.12
 Comment=Microsoft Excel Worksheet Template

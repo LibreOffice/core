@@ -22,5 +22,6 @@ Hidden=false
 Icon=
 Type=MimeType
 Patterns=*.ppt
+Patterns=*.dps
 MimeType=application/vnd.ms-powerpoint
 Comment=Microsoft PowerPoint Presentation
