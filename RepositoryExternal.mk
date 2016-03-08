@@ -704,6 +704,21 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
+define gb_LinkTarget__use_boost_filesystem
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	boost_filesystem \
+)
+
+endef
+
+define gb_ExternalProject__use_boost_filesystem
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_filesystem)
+endef
+
 define gb_LinkTarget__use_boost_iostreams
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DBOOST_ALL_NO_LIB \
@@ -743,25 +758,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-define gb_LinkTarget__use_boost_filesystem
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DBOOST_ALL_NO_LIB \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	boost_filesystem \
-)
-
-endef
-
-define gb_ExternalProject__use_boost_filesystem
-$(call gb_ExternalProject_use_static_libraries,$(1),boost_filesystem)
-endef
-
 define gb_ExternalProject__use_boost_headers
 $(call gb_ExternalProject_use_unpacked,$(1),boost)
 
 endef
+
 endif # SYSTEM_BOOST
 
 
