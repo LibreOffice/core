@@ -293,7 +293,10 @@ bool SalBool::VisitCXXStaticCastExpr(CXXStaticCastExpr * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (isSalBool(expr->getType())) {
+    if (isSalBool(expr->getType())
+        && !isInSpecialMainFile(
+            compiler.getSourceManager().getSpellingLoc(expr->getLocStart())))
+    {
         report(
             DiagnosticsEngine::Warning,
             "CXXStaticCastExpr, suspicious cast from %0 to %1",
@@ -440,7 +443,10 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (isSalBool(decl->getType())) {
+    if (isSalBool(decl->getType())
+        && !isInSpecialMainFile(
+            compiler.getSourceManager().getSpellingLoc(decl->getLocStart())))
+    {
         TagDecl const * td = dyn_cast<TagDecl>(decl->getDeclContext());
         assert(td != nullptr);
         if (!(((td->isStruct() || td->isUnion())
@@ -573,9 +579,12 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
 }
 
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
-    return compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        && (compiler.getSourceManager().getFilename(spellingLocation)
-            == SRCDIR "/cppu/qa/test_any.cxx");
+    if (!compat::isInMainFile(compiler.getSourceManager(), spellingLocation)) {
+        return false;
+    }
+    auto f = compiler.getSourceManager().getFilename(spellingLocation);
+    return f == SRCDIR "/cppu/qa/test_any.cxx"
+        || f == SRCDIR "/cppu/source/uno/data.cxx"; // TODO: the offset checks
 }
 
 bool SalBool::rewrite(SourceLocation location) {
