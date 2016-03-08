@@ -92,8 +92,9 @@
 #define STR_WRONG_TABLENAME             (RC_APP_BEGIN + 138)
 #define STR_SRTERR                      (RC_APP_BEGIN + 139)
 #define STR_TARGET_DOC_NOT_CLASSIFIED   (RC_APP_BEGIN + 140)
+#define STR_DOC_CLASSIFICATION_TOO_LOW  (RC_APP_BEGIN + 141)
 
-#define APP_ACT_END                     STR_TARGET_DOC_NOT_CLASSIFIED
+#define APP_ACT_END                     STR_DOC_CLASSIFICATION_TOO_LOW
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line
