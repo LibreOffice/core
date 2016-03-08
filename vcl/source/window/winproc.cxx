@@ -39,7 +39,6 @@
 #include <touch/touch.h>
 
 #include <svdata.hxx>
-#include <dbggui.hxx>
 #include <salwtype.hxx>
 #include <salframe.hxx>
 #include <accmgr.hxx>

@@ -49,7 +49,6 @@
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
-#include <dbggui.hxx>
 #include <window.h>
 #include <toolbox.h>
 #include <outdev.h>

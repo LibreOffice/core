@@ -62,7 +62,6 @@
 #include "salinst.hxx"
 #include "salgdi.hxx"
 #include "svdata.hxx"
-#include "dbggui.hxx"
 #include "fontinstance.hxx"
 #include "window.h"
 #include "toolbox.h"
