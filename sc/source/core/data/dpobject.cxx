@@ -2669,9 +2669,9 @@ bool ScDPObject::HasRegisteredSources()
     return bFound;
 }
 
-uno::Sequence<OUString> ScDPObject::GetRegisteredSources()
+std::vector<OUString> ScDPObject::GetRegisteredSources()
 {
-    uno::Sequence<OUString> aSeq(0);
+    std::vector<OUString> aVec;
 
     //  use implementation names...
 
@@ -2683,7 +2683,6 @@ uno::Sequence<OUString> ScDPObject::GetRegisteredSources()
                                         SCDPSOURCE_SERVICE );
         if ( xEnum.is() )
         {
-            long nCount = 0;
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAddInAny = xEnum->nextElement();
@@ -2697,10 +2696,7 @@ uno::Sequence<OUString> ScDPObject::GetRegisteredSources()
                         if ( xInfo.is() )
                         {
                             OUString sName = xInfo->getImplementationName();
-
-                            aSeq.realloc( nCount+1 );
-                            aSeq.getArray()[nCount] = sName;
-                            ++nCount;
+                            aVec.push_back( sName );
                         }
                     }
                 }
@@ -2708,7 +2704,7 @@ uno::Sequence<OUString> ScDPObject::GetRegisteredSources()
         }
     }
 
-    return aSeq;
+    return aVec;
 }
 
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )

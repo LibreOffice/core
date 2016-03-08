@@ -104,7 +104,7 @@ IMPL_LINK_TYPED( ScDataPilotSourceTypeDlg, RadioClickHdl, Button*, pBtn, void )
 }
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( vcl::Window* pParent,
-                                const uno::Sequence<OUString>& rServices ) :
+                                const std::vector<OUString>& rServices ) :
     ModalDialog     ( pParent, "DapiserviceDialog", "modules/scalc/ui/dapiservicedialog.ui" )
 {
     get(m_pLbService, "service");
@@ -113,11 +113,8 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( vcl::Window* pParent,
     get(m_pEdUser, "user");
     get(m_pEdPasswd, "password");
 
-    long nCount = rServices.getLength();
-    const OUString* pArray = rServices.getConstArray();
-    for (long i=0; i<nCount; i++)
+    for (const OUString& aName : rServices)
     {
-        OUString aName = pArray[i];
         m_pLbService->InsertEntry( aName );
     }
     m_pLbService->SelectEntryPos( 0 );

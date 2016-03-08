@@ -351,7 +351,7 @@ public:
         bool bEnableExternal) = 0;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const css::uno::Sequence<OUString>& rServices,
+                                                                        const std::vector<OUString>& rServices,
                                                                         int nId ) = 0;
 
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false) = 0 ;
