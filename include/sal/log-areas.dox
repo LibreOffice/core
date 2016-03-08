@@ -386,10 +386,6 @@ certain functionality.
 @li @c unotools.misc
 @li @c unotools.ucbhelper
 
-@section unodevtools
-
-@li @c unodevtools
-
 @section URE
 
 @li @c rtl.string - ::rtl::OString, ::rtl::OUString, and related functionality
@@ -552,6 +548,7 @@ certain functionality.
 @li @c svg
 @li @c test
 @li @c ucbhelper
+@li @c unodevtools
 @li @c unoidl
 @li @c unoxml
 @li @c uui
