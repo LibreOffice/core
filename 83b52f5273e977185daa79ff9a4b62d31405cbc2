@@ -16,6 +16,24 @@
       "revId": "83b52f5273e977185daa79ff9a4b62d31405cbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_0e5bef55",
+        "filename": "avmedia/source/framework/soundhandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-08T12:30:44Z",
+      "side": 1,
+      "message": "huh. Thats perfectly valid C++11 using an initializer list!",
+      "parentUuid": "3aaa91ec_cf02816f",
+      "revId": "83b52f5273e977185daa79ff9a4b62d31405cbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
