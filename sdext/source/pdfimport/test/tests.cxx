@@ -496,10 +496,41 @@ namespace
             osl::File::remove( tempFileURL );
         }
 
+        void testTdf96993()
+        {
+            uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
+                xAdaptor->odfConvert(getURLFromSrc("/sdext/source/pdfimport/test/testTdf96993.pdf"),
+                new OutputWrapString(aOutput),
+                nullptr));
+            // This ensures that the imported image arrives properly flipped
+            CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"matrix(18520.8333333333 0 0 26281.9444444444 0 0)\"") != -1);
+        }
+
+        void testTdf98421()
+        {
+            uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
+                xAdaptor->odfConvert(getURLFromSrc("/sdext/source/pdfimport/test/testTdf96993.pdf"),
+                new OutputWrapString(aOutput),
+                nullptr));
+            // This ensures that the imported image arrives properly flipped
+            CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"scale( 1.0 -1.0 ) translate( 0mm 0mm )\"") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("svg:height=\"-262.82mm\"") != -1);
+        }
+
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
         CPPUNIT_TEST(testOdfWriterExport);
         CPPUNIT_TEST(testOdfDrawExport);
+        CPPUNIT_TEST(testTdf96993);
+        CPPUNIT_TEST(testTdf98421);
         CPPUNIT_TEST_SUITE_END();
     };
 
