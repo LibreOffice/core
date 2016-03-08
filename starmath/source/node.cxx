@@ -770,8 +770,8 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pExtra   = GetSubNode(0),
            *pRootSym = GetSubNode(1),
            *pBody    = GetSubNode(2);
-    OSL_ENSURE(pRootSym, "Sm: NULL pointer");
-    OSL_ENSURE(pBody,    "Sm: NULL pointer");
+    assert(pRootSym);
+    assert(pBody);
 
     pBody->Arrange(rDev, rFormat);
 
@@ -835,8 +835,8 @@ void SmDynIntegralNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode  *pDynIntegralSym = Symbol(),
            *pBody    = Body();
-    OSL_ENSURE(pDynIntegralSym, "Sm: NULL pointer");
-    OSL_ENSURE(pBody,    "Sm: NULL pointer");
+    assert(pDynIntegralSym);
+    assert(pBody);
 
     pBody->Arrange(rDev, rFormat);
 
@@ -883,9 +883,9 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pLeft  = GetSubNode(0),
            *pOper  = GetSubNode(1),
            *pRight = GetSubNode(2);
-    OSL_ENSURE(pLeft  != nullptr, "Sm: NULL pointer");
-    OSL_ENSURE(pOper  != nullptr, "Sm: NULL pointer");
-    OSL_ENSURE(pRight != nullptr, "Sm: NULL pointer");
+    assert(pLeft);
+    assert(pOper);
+    assert(pRight);
 
     pOper->SetSize(Fraction (rFormat.GetRelSize(SIZ_OPERATOR), 100));
 
@@ -922,9 +922,9 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pNum   = GetSubNode(0),
            *pLine  = GetSubNode(1),
            *pDenom = GetSubNode(2);
-    OSL_ENSURE(pNum,   "Sm : NULL pointer");
-    OSL_ENSURE(pLine,  "Sm : NULL pointer");
-    OSL_ENSURE(pDenom, "Sm : NULL pointer");
+    assert(pNum);
+    assert(pLine);
+    assert(pDenom);
 
     bool  bIsTextmode = rFormat.IsTextmode();
     if (bIsTextmode)
@@ -1187,12 +1187,12 @@ void SmBinDiagonalNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // within the GraphicWindow sets the FormulaCursor correctly (cf. SmRootNode)
     SmNode *pLeft  = GetSubNode(0),
            *pRight = GetSubNode(1);
-    OSL_ENSURE(pLeft, "Sm : NULL pointer");
-    OSL_ENSURE(pRight, "Sm : NULL pointer");
+    assert(pLeft);
+    assert(pRight);
 
     OSL_ENSURE(GetSubNode(2)->GetType() == NPOLYLINE, "Sm : wrong node type");
     SmPolyLineNode *pOper = static_cast<SmPolyLineNode *>(GetSubNode(2));
-    OSL_ENSURE(pOper, "Sm : NULL pointer");
+    assert(pOper);
 
     //! some routines being called extract some info from the OutputDevice's
     //! font (eg the space to be used for borders OR the font name(!!)).
@@ -1253,7 +1253,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                "Sm: wrong number of subnodes");
 
     SmNode *pBody = GetBody();
-    OSL_ENSURE(pBody, "Sm: NULL pointer");
+    assert(pBody);
 
     long  nOrigHeight = pBody->GetFont().GetFontSize().Height();
 
@@ -1455,9 +1455,9 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pLeft  = GetSubNode(0),
            *pBody  = GetSubNode(1),
            *pRight = GetSubNode(2);
-    OSL_ENSURE(pLeft,  "Sm: NULL pointer");
-    OSL_ENSURE(pBody,  "Sm: NULL pointer");
-    OSL_ENSURE(pRight, "Sm: NULL pointer");
+    assert(pLeft);
+    assert(pBody);
+    assert(pRight);
 
     pBody->Arrange(rDev, rFormat);
 
@@ -1613,9 +1613,9 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pBody   = GetSubNode(0),
            *pBrace  = GetSubNode(1),
            *pScript = GetSubNode(2);
-    OSL_ENSURE(pBody,   "Sm: NULL pointer!");
-    OSL_ENSURE(pBrace,  "Sm: NULL pointer!");
-    OSL_ENSURE(pScript, "Sm: NULL pointer!");
+    assert(pBody);
+    assert(pBrace);
+    assert(pScript);
 
     SmTmpDevice aTmpDev (rDev, true);
     aTmpDev.SetFont(GetFont());
@@ -1672,7 +1672,7 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 SmNode * SmOperNode::GetSymbol()
 {
     SmNode *pNode = GetSubNode(0);
-    OSL_ENSURE(pNode, "Sm: NULL pointer!");
+    assert(pNode);
 
     if (pNode->GetType() == NSUBSUP)
         pNode = static_cast<SmSubSupNode *>(pNode)->GetBody();
@@ -1715,8 +1715,8 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pOper = GetSubNode(0);
     SmNode *pBody = GetSubNode(1);
 
-    OSL_ENSURE(pOper, "Sm: missing subnode");
-    OSL_ENSURE(pBody, "Sm: missing subnode");
+    assert(pOper);
+    assert(pBody);
 
     pBody->Arrange(rDev,rFormat);
     long nHeight = pBody->GetHeight();
@@ -1768,8 +1768,8 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pAttr = GetSubNode(0),
            *pBody = GetSubNode(1);
-    OSL_ENSURE(pBody, "Sm: body missing");
-    OSL_ENSURE(pAttr, "Sm: attribute missing");
+    assert(pBody);
+    assert(pAttr);
 
     pBody->Arrange(rDev, rFormat);
 
@@ -1945,7 +1945,7 @@ void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode = GetSubNode(1);
-    OSL_ENSURE(pNode, "Sm: missing subnode");
+    assert(pNode);
 
     switch (GetToken().eType)
     {   case TSIZE :
