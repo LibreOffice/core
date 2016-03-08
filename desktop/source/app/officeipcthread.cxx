@@ -249,10 +249,7 @@ rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
 // Into a hex string of well known length ff132a86...
 OUString CreateMD5FromString( const OUString& aMsg )
 {
-#if (OSL_DEBUG_LEVEL > 2)
-    fprintf( stderr, "create md5 from '%s'\n",
-             OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8).getStr() );
-#endif
+    SAL_WARN("desktop.app", "create md5 from '" << aMsg << "'");
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle )
@@ -750,8 +747,8 @@ void OfficeIPCThread::execute()
             }
             catch ( const CommandLineArgs::Supplier::Exception & )
             {
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-                fprintf( stderr, "Error in received command line arguments\n" );
+#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
+                SAL_WARN("desktop.app", "Error in received command line arguments");
 #endif
                 continue;
             }
@@ -955,7 +952,7 @@ void OfficeIPCThread::execute()
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
                 // incl. terminating NUL
             if (n != SAL_N_ELEMENTS(PROCESSING_DONE)) {
-                SAL_WARN("desktop", "short write: " << n);
+                SAL_WARN("desktop" , "short write: " << n);
                 continue;
             }
         }
@@ -969,8 +966,8 @@ void OfficeIPCThread::execute()
                 }
             }
 
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-            fprintf( stderr, "Error on accept: %d\n", (int)nError );
+#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
+            SAL_WARN( "desktop.app", "Error on accept: " << (int)nError);
 #endif
             TimeValue tval;
             tval.Seconds = 1;
