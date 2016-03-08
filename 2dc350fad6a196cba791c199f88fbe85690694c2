@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_4e2cc7ab",
+        "filename": "include/osl/security.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T13:14:30Z",
+      "side": 1,
+      "message": "missing @since LibreOffice 5.2",
+      "revId": "2dc350fad6a196cba791c199f88fbe85690694c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_8e1cff78",
+        "filename": "include/osl/security_decl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T13:14:30Z",
+      "side": 1,
+      "message": "document that this parameter is only available since LibreOffice 5.2",
+      "revId": "2dc350fad6a196cba791c199f88fbe85690694c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_ee113b5f",
+        "filename": "include/osl/security_decl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T13:14:30Z",
+      "side": 1,
+      "message": "should be plain bool",
+      "range": {
+        "startLine": 82,
+        "startChar": 62,
+        "endLine": 82,
+        "endChar": 70
+      },
+      "revId": "2dc350fad6a196cba791c199f88fbe85690694c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_ce16f754",
+        "filename": "include/osl/security_decl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T13:14:30Z",
+      "side": 1,
+      "message": "better specify the default argument here in the original function declaration than later in the function definition",
+      "range": {
+        "startLine": 82,
+        "startChar": 62,
+        "endLine": 82,
+        "endChar": 85
+      },
+      "revId": "2dc350fad6a196cba791c199f88fbe85690694c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
