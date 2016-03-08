@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_ce3f17d5",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-08T12:56:33Z",
+      "side": 1,
+      "message": "whats with the glyphy include?",
+      "revId": "96b86b94893aec1360d419da30f7104ded85bd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
