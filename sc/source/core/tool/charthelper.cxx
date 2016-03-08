@@ -206,15 +206,15 @@ uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( S
 }
 
 void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
-            uno::Sequence< OUString >& rRanges )
+            std::vector< OUString >& rRanges )
 {
-    rRanges.realloc(0);
+    rRanges.clear();
     uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
     if( !xDataSource.is() )
         return;
 
     uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
-    rRanges.realloc(2*aLabeledDataSequences.getLength());
+    rRanges.resize(2*aLabeledDataSequences.getLength());
     sal_Int32 nRealCount=0;
     for( sal_Int32 nN=0;nN<aLabeledDataSequences.getLength();nN++)
     {
@@ -229,7 +229,7 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
         if( xValues.is())
             rRanges[nRealCount++] = xValues->getSourceRangeRepresentation();
     }
-    rRanges.realloc(nRealCount);
+    rRanges.resize(nRealCount);
 }
 
 void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
