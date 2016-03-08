@@ -74,7 +74,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
     OSL_ENSURE( m_pToolBox, "invalid toolbox" );
     m_nItemId = m_pToolBox->GetItemId( (sal_uInt16)m_nIndexInParent );
-    m_sOldName = GetText( true );
+    m_sOldName = GetText();
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
     m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == TRISTATE_INDET );
     ToolBoxItemType eType = m_pToolBox->GetItemType( (sal_uInt16)m_nIndexInParent );
@@ -121,11 +121,11 @@ VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
     m_pExternalLock = nullptr;
 }
 
-OUString VCLXAccessibleToolBoxItem::GetText( bool _bAsName )
+OUString VCLXAccessibleToolBoxItem::GetText()
 {
     OUString sRet;
     // no text for separators and spaces
-    if ( m_pToolBox && m_nItemId > 0 && ( _bAsName || m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) )
+    if ( m_pToolBox && m_nItemId > 0 )
     {
         sRet = m_pToolBox->GetItemText( m_nItemId );
         if (sRet.isEmpty())
@@ -249,7 +249,7 @@ awt::Rectangle VCLXAccessibleToolBoxItem::implGetBounds(  ) throw (RuntimeExcept
 
 OUString VCLXAccessibleToolBoxItem::implGetText()
 {
-    return GetText (true);
+    return GetText();
 }
 
 Locale VCLXAccessibleToolBoxItem::implGetLocale()
@@ -383,7 +383,7 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleName(  ) throw (Runtim
     OExternalLockGuard aGuard( this );
 
     // entry text == accessible name
-    return GetText( true );
+    return GetText();
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)

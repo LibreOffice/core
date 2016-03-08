@@ -75,7 +75,7 @@ protected:
     virtual css::lang::Locale                           implGetLocale() override;
     virtual void                                        implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
-    OUString GetText( bool _bAsName );
+    OUString GetText();
 
 public:
     VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );

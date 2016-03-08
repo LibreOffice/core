@@ -41,7 +41,7 @@ namespace accessibility
         virtual OUString        GetEntry( sal_Int32  nPos ) const = 0;
         virtual Rectangle       GetDropDownPosSizePixel( ) const = 0;
         virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
-        virtual Rectangle       GetWindowExtentsRelative( vcl::Window* pRelativeWindow ) = 0;
+        virtual Rectangle       GetWindowExtentsRelative() = 0;
         virtual bool            IsEnabled() const = 0;
         virtual bool            IsEntryVisible( sal_Int32  nPos ) const = 0;
         virtual sal_uInt16      GetDisplayLineCount() const = 0;

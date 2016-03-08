@@ -76,9 +76,9 @@ public:
         return aRect;
     }
 
-    virtual Rectangle       GetWindowExtentsRelative( vcl::Window* pRelativeWindow ) override
+    virtual Rectangle       GetWindowExtentsRelative() override
     {
-        return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
+        return m_aComboListBox.GetWindowExtentsRelative( nullptr );
     }
 
     virtual bool            IsEnabled() const override

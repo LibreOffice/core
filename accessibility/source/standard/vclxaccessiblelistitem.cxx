@@ -377,7 +377,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  ) throw (Runti
     {
         Rectangle aRect = m_pListBoxHelper->GetBoundingRectangle( (sal_uInt16)m_nIndexInParent );
         aPoint = aRect.TopLeft();
-        aPoint += m_pListBoxHelper->GetWindowExtentsRelative( nullptr ).TopLeft();
+        aPoint += m_pListBoxHelper->GetWindowExtentsRelative().TopLeft();
     }
     return AWTPoint( aPoint );
 }
