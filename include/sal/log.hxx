@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
+#include <stdlib.h>
 #include <sstream>
 #include <string>
 
