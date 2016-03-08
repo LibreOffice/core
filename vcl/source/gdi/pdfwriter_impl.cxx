@@ -4662,6 +4662,65 @@ bool PDFWriterImpl::emitNoteAnnotations()
     return true;
 }
 
+bool PDFWriterImpl::emitFormulaAnnotations()
+{
+    int nFormulaNotes = m_aFormulaNotes.size();
+
+    for (int i = 0; i < nFormulaNotes; i++)
+    {
+        const PDFNoteEntry &rFormulaNote = m_aFormulaNotes[i];
+
+        OStringBuffer aLine( 1024 );
+        aLine.append( rFormulaNote.m_nObject );
+        aLine.append( " 0 obj\n" );
+
+        aLine.append( "<</Type/Annot" );
+        aLine.append( "/Rect[" );
+
+        appendFixedInt( rFormulaNote.m_aRect.Left(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Top(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Right(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Bottom(), aLine );
+        aLine.append( "]" );
+
+        aLine.append( "/Subtype/Highlight" );
+        aLine.append( "/QuadPoints[" );
+
+        appendFixedInt( rFormulaNote.m_aRect.Left(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Top(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Right(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Top(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Left(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Bottom(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Right(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( rFormulaNote.m_aRect.Bottom(), aLine );
+        aLine.append( ' ' );
+        aLine.append( "]" );
+
+        aLine.append( "/F 4" );
+        aLine.append( "/C [1 1 0]");
+        aLine.append( "/Border [0 0 1]");
+        aLine.append( "/Contents\n" );
+        appendLiteralStringEncrypt( rFormulaNote.m_aContents.Contents, rFormulaNote.m_nObject, aLine );
+        aLine.append( "\n" );
+
+        aLine.append( ">>\nendobj\n\n" );
+        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    }
+
+    return true;
+}
+
 Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&  rAppSetFont )
 {
     bool bAdjustSize = false;
@@ -5575,6 +5634,7 @@ bool PDFWriterImpl::emitAnnotations()
 
     CHECK_RETURN( emitLinkAnnotations() );
     CHECK_RETURN( emitNoteAnnotations() );
+    CHECK_RETURN( emitFormulaAnnotations() );
     CHECK_RETURN( emitWidgetAnnotations() );
 
     return true;
@@ -12184,6 +12244,27 @@ void PDFWriterImpl::createNote( const Rectangle& rRect, const PDFNote& rNote, sa
 
     // insert note to page's annotation list
     m_aPages[ nPageNr ].m_aAnnotations.push_back( m_aNotes.back().m_nObject );
+}
+
+void PDFWriterImpl::createFormulaAnnotation( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+{
+    if( nPageNr < 0 )
+        nPageNr = m_nCurrentPage;
+
+    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+        return;
+
+    m_aFormulaNotes.push_back( PDFNoteEntry() );
+    m_aFormulaNotes.back().m_nObject       = createObject();
+    m_aFormulaNotes.back().m_aContents     = rNote;
+    m_aFormulaNotes.back().m_aRect         = rRect;
+    // convert to default user space now, since the mapmode may change
+    m_aPages[nPageNr].convertRect( m_aFormulaNotes.back().m_aRect );
+
+    // insert note to page's annotation list
+    m_aPages[ nPageNr ].m_aAnnotations.push_back( m_aFormulaNotes.back().m_nObject );
+
+    return;
 }
 
 sal_Int32 PDFWriterImpl::createLink( const Rectangle& rRect, sal_Int32 nPageNr )

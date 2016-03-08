@@ -857,6 +857,33 @@ static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, S
     }
 }
 
+static void lcl_DoFormulaAnnotation( OutputDevice* pDev, const Rectangle& rRect, ScRefCellValue& rCell )
+{
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
+
+    ScFormulaCell* pFCell = rCell.mpFormula;
+
+    if (pFCell && pPDFData)
+    {
+        OUString aFormula;
+        pFCell->GetFormula( aFormula );
+
+        if ( !aFormula.isEmpty() )
+        {
+            const OUString aEquals("=");
+            OUString aAnnotation;
+            vcl::PDFNote aPDFNote;
+
+            // chop off leading '=', some PDF viewers don't like it
+            if ( aFormula.startsWith( aEquals ) )
+                 aAnnotation = aFormula.copy( 1, aFormula.getLength() - 1 );
+
+            aPDFNote.Contents = aAnnotation;
+            pPDFData->CreateFormulaAnnotation( rRect, aPDFNote);
+        }
+    }
+}
+
 void ScOutputData::SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell )
 {
     switch (rCell.meType)
@@ -2114,11 +2141,15 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         }
 
                         // PDF: whole-cell hyperlink from formula?
-                        bool bHasURL = pPDFData && aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
-                        if (bPaint && bHasURL)
+                        bool bHasFormula = pPDFData && aCell.meType == CELLTYPE_FORMULA;
+                        bool bHasURL = bHasFormula && aCell.mpFormula->IsHyperLinkCell();
+                        if (bPaint && bHasFormula)
                         {
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
-                            lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
+                            if (bHasURL)
+                                lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
+                            else
+                                lcl_DoFormulaAnnotation(mpDev, aURLRect, aCell);
                         }
                     }
                 }
