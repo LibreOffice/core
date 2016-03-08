@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_b15de2ee",
+        "filename": "unotools/source/config/fontcfg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T16:00:15Z",
+      "side": 1,
+      "message": "This means a warning is emitted upon every successful instantiation of a FontSubstConfiguration.  Why would that be an \"unusual event\" (cf. \u003chttps://wiki.documentfoundation.org/Development/GeneralProgrammingGuidelines#Assertions_and_Logging\u003e) that requires a SAL_WARN?",
+      "revId": "6326d76101857e94f241dc671c3e3a2a7bf9b031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_91625eac",
+        "filename": "unotools/source/config/fontoptions.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T16:00:15Z",
+      "side": 1,
+      "message": "no need to wrap that assert in any #if",
+      "revId": "6326d76101857e94f241dc671c3e3a2a7bf9b031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_f1575ac8",
+        "filename": "unotools/source/config/localisationoptions.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T16:00:15Z",
+      "side": 1,
+      "message": "no need to wrap that assert in any #if",
+      "revId": "6326d76101857e94f241dc671c3e3a2a7bf9b031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_d15cd6ef",
+        "filename": "unotools/source/config/securityoptions.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T16:00:15Z",
+      "side": 1,
+      "message": "no need to wrap that assert in any #if",
+      "revId": "6326d76101857e94f241dc671c3e3a2a7bf9b031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
