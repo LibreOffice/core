@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_eedc9b48",
+        "filename": "include/osl/security.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-03-08T00:14:29Z",
+      "side": 1,
+      "message": "That\u0027s an incompatible change we probably shouldn\u0027t make.\n\nBetter define a new function, osl_getShortUserName() or something. Also needs mention in sal/util/sal.map with the appropriate version.",
+      "revId": "184beb6fdfaa9fbb74973914027dd0bcc1fdb761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
