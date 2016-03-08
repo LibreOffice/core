@@ -407,7 +407,7 @@ IMPL_LINK_NOARG_TYPED( ODesignView, SplitHdl, SplitWindow*, void )
     if ( m_pPropWin && m_pPropWin->IsVisible() )
         nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
 
-    if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow->getMaxMarkerWidth(false) )
+    if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow->getMaxMarkerWidth() )
     {
         long nOldSplitPos = getController().getSplitPos();
         (void)nOldSplitPos;
@@ -420,9 +420,9 @@ void ODesignView::SelectAll(const sal_uInt16 _nObjectType)
      m_aScrollWindow->SelectAll(_nObjectType);
 }
 
-void ODesignView::unmarkAllObjects(OSectionView* _pSectionView)
+void ODesignView::unmarkAllObjects()
 {
-    m_aScrollWindow->unmarkAllObjects(_pSectionView);
+    m_aScrollWindow->unmarkAllObjects(nullptr);
 }
 
 void ODesignView::togglePropertyBrowser(bool _bToogleOn)

@@ -187,11 +187,9 @@ namespace rptui
         */
         void            showRuler(bool _bShow);
 
-        /** unmark all objects on the views without the given one.
-        *
-        * @param _pSectionView The view where the objects should not be unmarked.
+        /** unmark all objects on the views.
         */
-        void            unmarkAllObjects(OSectionView* _pSectionView);
+        void            unmarkAllObjects();
 
         /** triggers the property browser with the section
             @param  _xReportComponent the report component

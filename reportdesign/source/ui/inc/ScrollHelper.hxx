@@ -152,10 +152,10 @@ namespace rptui
 
         /** calculate the max width of the markers
         *
-        * @param _bWithEnd  if <TRUE/> the end marker will be used for calculation as well otherwise not.
+        * The end marker will not be used for calculation.
         * \return the max width
         */
-        sal_Int32               getMaxMarkerWidth(bool _bWithEnd) const;
+        sal_Int32               getMaxMarkerWidth() const;
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode

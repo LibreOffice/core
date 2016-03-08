@@ -1696,7 +1696,7 @@ void OReportController::impl_initialize( )
         getDesignView()->showRuler(m_bShowRuler);
         getDesignView()->togglePropertyBrowser(m_bShowProperties);
         getDesignView()->setCurrentPage(m_sLastActivePage);
-        getDesignView()->unmarkAllObjects(nullptr);
+        getDesignView()->unmarkAllObjects();
 
         if ( m_nPageNum != -1 )
         {
@@ -3066,7 +3066,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (Ille
     bool bRet = true;
     if ( getDesignView() )
     {
-        getDesignView()->unmarkAllObjects(nullptr);
+        getDesignView()->unmarkAllObjects();
         getDesignView()->SetMode(RPTUI_SELECT);
 
         uno::Sequence< uno::Reference<report::XReportComponent> > aElements;
@@ -3259,7 +3259,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 
 void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
 {
-    getDesignView()->unmarkAllObjects(nullptr);
+    getDesignView()->unmarkAllObjects();
 
     const OUString sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
@@ -3287,7 +3287,7 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
 
 void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs)
 {
-    getDesignView()->unmarkAllObjects(nullptr);
+    getDesignView()->unmarkAllObjects();
 
     const OUString sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
@@ -3317,7 +3317,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
 
 void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 {
-    getDesignView()->unmarkAllObjects(nullptr);
+    getDesignView()->unmarkAllObjects();
 
     // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
     OSectionWindow* pSectionWindow[2];
@@ -3375,7 +3375,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 }
             }
             // clear all selections
-            getDesignView()->unmarkAllObjects(nullptr);
+            getDesignView()->unmarkAllObjects();
 
             uno::Reference< beans::XPropertySet > xField( aDescriptor[ svx::daColumnObject ], uno::UNO_QUERY );
             uno::Reference< lang::XComponent > xHoldAlive;
@@ -3992,7 +3992,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
         {
             Sequence< PropertyValue > aCreateArgs;
-            getDesignView()->unmarkAllObjects(nullptr);
+            getDesignView()->unmarkAllObjects();
             createControl(aCreateArgs,xSection,OUString(),getDesignView()->GetInsertObj());
         }
     }
