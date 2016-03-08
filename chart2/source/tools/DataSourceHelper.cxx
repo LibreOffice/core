@@ -37,6 +37,8 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
+#include <iterator>
+
 namespace chart
 {
 using namespace ::com::sun::star;

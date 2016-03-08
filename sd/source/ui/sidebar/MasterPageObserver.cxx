@@ -20,6 +20,7 @@
 #include "MasterPageObserver.hxx"
 
 #include <algorithm>
+#include <iterator>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include <set>
