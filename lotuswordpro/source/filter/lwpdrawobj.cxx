@@ -1299,7 +1299,7 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     pRetObj = new XFDrawPath();
     XFDrawPath* pFWPath = static_cast<XFDrawPath*>(pRetObj);
     CreateFWPath(pFWPath);
-    pStyle->SetFontWorkStyle(0, enumXFFWSlantY, enumXFFWAdjustAutosize);
+    pStyle->SetFontWorkStyle(enumXFFWSlantY, enumXFFWAdjustAutosize);
 
     SetPosition(pRetObj);
 

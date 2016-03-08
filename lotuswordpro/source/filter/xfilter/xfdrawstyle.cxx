@@ -118,14 +118,14 @@ void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, int num1, int num2,
     pXFStyleManager->AddStyle(m_pLineStyle);
 }
 
-void XFDrawStyle::SetFontWorkStyle(sal_Int8 nForm, enumXFFWStyle eStyle, enumXFFWAdjust eAdjust)
+void XFDrawStyle::SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust)
 {
     if (!m_pFontWorkStyle)
     {
         m_pFontWorkStyle = new XFFontWorkStyle();
     }
 
-    m_pFontWorkStyle->SetButtonForm(nForm);
+    m_pFontWorkStyle->SetButtonForm(0);
     m_pFontWorkStyle->SetFWStyleType(eStyle);
     m_pFontWorkStyle->SetFWAdjustType(eAdjust);
 }

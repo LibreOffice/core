@@ -103,7 +103,7 @@ public:
 
     void    AddSecond( bool bLongFmt = true, sal_Int16 nDecimalPos = 2);
 
-    void    AddAmPm(bool bAmPm);
+    void    AddAmPm();
 
     void    AddText( const OUString& part );
 
@@ -196,7 +196,7 @@ inline void XFDateStyle::AddSecond( bool bLongFmt, sal_Int16 pos)
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddAmPm(bool /*bAmPm*/)
+inline void XFDateStyle::AddAmPm()
 {
     XFDatePart  *part = new XFDatePart();
     part->SetPartType(enumXFDateAmPm);

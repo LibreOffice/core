@@ -113,7 +113,7 @@ public:
      */
     void    SetArrowEnd(const OUString& end, double size=0.3, bool center = false);
 
-    void SetFontWorkStyle(sal_Int8 nForm, enumXFFWStyle eStyle, enumXFFWAdjust eAdjust);
+    void SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust);
 
     virtual enumXFStyle GetStyleFamily() override;
 

@@ -528,7 +528,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
                         break;
                     }
                 }
-                pDateStyle->AddAmPm(true);
+                pDateStyle->AddAmPm();
                 break;
             }
             case 'k':
