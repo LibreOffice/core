@@ -342,7 +342,7 @@ void LwpFormulaInfo::Read()
         }
         else
         {
-            assert(false);
+            SAL_WARN("lwp", "missing row list");
         }
     }
     m_pObjStrm->SeekRel(2);//flags, size in file: sal_uInt16
