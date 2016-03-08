@@ -53,6 +53,8 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
+#include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -97,6 +99,7 @@ public:
     void testCp1000115();
     void testTdf90003();
     void testSearchWithTransliterate();
+    void testTdf97601();
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
@@ -144,6 +147,7 @@ public:
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf97601);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
@@ -1003,6 +1007,31 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf97601()
+{
+    // Instructions from the bugreport to trigger an infinite loop.
+    createDoc("tdf97601.odt");
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEmbeddedObjects = xEmbeddedObjectsSupplier->getEmbeddedObjects();
+    uno::Reference<beans::XPropertySet> xChart;
+    xEmbeddedObjects->getByName("myChart") >>= xChart;
+    uno::Reference<chart2::data::XDataSource> xChartComponent;
+    xChart->getPropertyValue("Component") >>= xChartComponent;
+    uno::Sequence< uno::Reference<chart2::data::XLabeledDataSequence> > aDataSequences = xChartComponent->getDataSequences();
+    uno::Reference<document::XEmbeddedObjectSupplier2> xChartState(xChart, uno::UNO_QUERY);
+    xChartState->getExtendedControlOverEmbeddedObject()->changeState(1);
+    uno::Reference<util::XModifiable> xDataSequenceModifiable(aDataSequences[2]->getValues(), uno::UNO_QUERY);
+    xDataSequenceModifiable->setModified(true);
+
+    // Make sure that the chart is marked as modified.
+    uno::Reference<util::XModifiable> xModifiable(xChartComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xModifiable->isModified()));
+    calcLayout();
+    // This never returned.
+    Application::Reschedule(true);
+    Scheduler::ProcessTaskScheduling(false);
 }
 
 void SwUiWriterTest::testTdf90362()
