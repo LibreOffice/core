@@ -25,14 +25,6 @@
 void DbgGUIInitSolarMutexCheck();
 void DbgGUIDeInitSolarMutexCheck();
 
-#define DBGGUI_INIT_SOLARMUTEXCHECK() DbgGUIInitSolarMutexCheck()
-#define DBGGUI_DEINIT_SOLARMUTEXCHECK() DbgGUIDeInitSolarMutexCheck()
-
-#else
-
-#define DBGGUI_INIT_SOLARMUTEXCHECK()
-#define DBGGUI_DEINIT_SOLARMUTEXCHECK()
-
 #endif
 
 #endif // INCLUDED_VCL_INC_DBGGUI_HXX

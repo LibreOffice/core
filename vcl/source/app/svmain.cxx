@@ -301,7 +301,9 @@ bool InitVCL()
     // Set exception handler
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, nullptr);
 
-    DBGGUI_INIT_SOLARMUTEXCHECK();
+#ifdef DBG_UTIL
+    DbgGUIInitSolarMutexCheck();
+#endif
 
 #if OSL_DEBUG_LEVEL > 0
     DebugEventInjector::getCreate();
@@ -447,7 +449,9 @@ void DeInitVCL()
     }
     pSVData->mpDefaultWin.disposeAndClear();
 
-    DBGGUI_DEINIT_SOLARMUTEXCHECK();
+#ifdef DBG_UTIL
+    DbgGUIDeInitSolarMutexCheck();
+#endif
 
     if ( pSVData->mpUnoWrapper )
     {
