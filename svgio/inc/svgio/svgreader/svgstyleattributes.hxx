@@ -244,6 +244,8 @@ namespace svgio
             // values for fill, stroke, strokeWidth and others
             bool                        mbIsClipPathContent : 1;
 
+            bool                        mbIsMarkerContent : 1;
+
             // #121221# Defines if evtl. an empty array *is* set
             bool                        mbStrokeDasharraySet : 1;
 

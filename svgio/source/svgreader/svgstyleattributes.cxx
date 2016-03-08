@@ -1223,6 +1223,7 @@ namespace svgio
             maBaselineShift(BaselineShift_Baseline),
             maBaselineShiftNumber(0),
             mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType()),
+            mbIsMarkerContent(SVGTokenMarker == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
             const SvgStyleAttributes* pParentStyle = getParentStyle();
@@ -1957,7 +1958,7 @@ namespace svgio
 
         const basegfx::BColor* SvgStyleAttributes::getFill() const
         {
-            if(mbIsClipPathContent)
+            if(mbIsClipPathContent || (mbIsMarkerContent && !maFill.isSet()))
             {
                 static basegfx::BColor aBlack(0.0, 0.0, 0.0);
                 return &aBlack;
