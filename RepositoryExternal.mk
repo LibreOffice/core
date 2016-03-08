@@ -678,13 +678,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),$(2))
 
 endef
 
-ifeq ($(OS),WNT)
-define gb_LinkTarget__use_boostthread
-$(call gb_LinkTarget__use_boost_lib,$(1),boostthread)
-
-endef
-endif
-
 define gb_LinkTarget__use_boost_date_time
 $(call gb_LinkTarget__use_boost_lib,$(1),boost_date_time)
 
