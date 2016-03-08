@@ -23,7 +23,6 @@
 #include <vcl/button.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/security.h>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/mutex.hxx>
@@ -173,102 +172,6 @@ void SbiStream::MapError()
             break;
         }
     }
-}
-
-// TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
-
-OUString findUserInDescription( const OUString& aDescription )
-{
-    OUString user;
-
-    sal_Int32 index;
-    sal_Int32 lastIndex = 0;
-
-    do
-    {
-        index = aDescription.indexOf((sal_Unicode) ',', lastIndex);
-        OUString token = (index == -1) ? aDescription.copy(lastIndex) : aDescription.copy(lastIndex, index - lastIndex);
-
-        lastIndex = index + 1;
-
-        sal_Int32 eindex = token.indexOf((sal_Unicode)'=');
-        OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
-        OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(),
-                            INetURLObject::DECODE_WITH_CHARSET );
-
-        if( left == "user" )
-        {
-            user = right;
-            break;
-        }
-    }
-    while(index != -1);
-
-    return user;
-}
-
-bool needSecurityRestrictions()
-{
-    static bool bNeedInit = true;
-    static bool bRetVal = true;
-
-    if( bNeedInit )
-    {
-        bNeedInit = false;
-
-        // Get system user to compare to portal user
-        oslSecurity aSecurity = osl_getCurrentSecurity();
-        OUString aSystemUser;
-        bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData );
-        osl_freeSecurityHandle(aSecurity);
-        if( !bRet )
-        {
-            // No valid security! -> Secure mode!
-            return true;
-        }
-
-        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-        Reference< XBridgeFactory2 > xBridgeFac( BridgeFactory::create(xContext) );
-
-        Sequence< Reference< XBridge > > aBridgeSeq = xBridgeFac->getExistingBridges();
-        sal_Int32 nBridgeCount = aBridgeSeq.getLength();
-
-        if( nBridgeCount == 0 )
-        {
-            // No bridges -> local
-            bRetVal = false;
-            return bRetVal;
-        }
-
-        // Iterate through all bridges to find (portal) user property
-        const Reference< XBridge >* pBridges = aBridgeSeq.getConstArray();
-        bRetVal = false;    // Now only sal_True if user different from portal user is found
-        sal_Int32 i;
-        for( i = 0 ; i < nBridgeCount ; i++ )
-        {
-            const Reference< XBridge >& rxBridge = pBridges[ i ];
-            OUString aDescription = rxBridge->getDescription();
-            OUString aPortalUser = findUserInDescription( aDescription );
-            if( !aPortalUser.isEmpty() )
-            {
-                // User Found, compare to system user
-                if( aPortalUser == aSystemUser )
-                {
-                    // Same user -> system security is ok, bRetVal stays FALSE
-                    break;
-                }
-                else
-                {
-                    // Different user -> Secure mode!
-                    bRetVal = true;
-                    break;
-                }
-            }
-        }
-        // No user found or PortalUser != SystemUser -> Secure mode! (Keep default value)
-    }
-
-    return bRetVal;
 }
 
 // Returns sal_True if UNO is available, otherwise the old file

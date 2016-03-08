@@ -3602,13 +3602,6 @@ RTLFUNC(Shell)
     (void)pBasic;
     (void)bWrite;
 
-    // No shell command for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
-
     sal_Size nArgCount = rPar.Count();
     if ( nArgCount < 2 || nArgCount > 5 )
     {
@@ -3964,13 +3957,6 @@ RTLFUNC(DDEInitiate)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
-
     int nArgs = (int)rPar.Count();
     if ( nArgs != 3 )
     {
@@ -3998,13 +3984,6 @@ RTLFUNC(DDETerminate)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
-
     rPar.Get(0)->PutEmpty();
     int nArgs = (int)rPar.Count();
     if ( nArgs != 2 )
@@ -4026,13 +4005,6 @@ RTLFUNC(DDETerminateAll)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
-
     rPar.Get(0)->PutEmpty();
     int nArgs = (int)rPar.Count();
     if ( nArgs != 1 )
@@ -4053,13 +4025,6 @@ RTLFUNC(DDERequest)
 {
     (void)pBasic;
     (void)bWrite;
-
-    // No DDE for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
 
     int nArgs = (int)rPar.Count();
     if ( nArgs != 3 )
@@ -4087,13 +4052,6 @@ RTLFUNC(DDEExecute)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
-
     rPar.Get(0)->PutEmpty();
     int nArgs = (int)rPar.Count();
     if ( nArgs != 3 )
@@ -4115,13 +4073,6 @@ RTLFUNC(DDEPoke)
 {
     (void)pBasic;
     (void)bWrite;
-
-    // No DDE for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
 
     rPar.Get(0)->PutEmpty();
     int nArgs = (int)rPar.Count();

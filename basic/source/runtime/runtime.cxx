@@ -1285,13 +1285,6 @@ void SbiRuntime::DllCall
       SbxDataType eResType,     // return value
       bool bCDecl )         // true: according to C-conventions
 {
-    // No DllCall for "virtual" portal users
-    if( needSecurityRestrictions() )
-    {
-        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
-        return;
-    }
-
     // NOT YET IMPLEMENTED
 
     SbxVariable* pRes = new SbxVariable( eResType );

@@ -435,13 +435,6 @@ inline void checkArithmeticOverflow( SbxVariable* pVar )
 
 StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic );
 
-// Get information if security restrictions should be
-// used (File IO based on UCB, no RTL function SHELL
-// no DDE functionality, no DLLCALL) in basic because
-// of portal "virtual" users (portal user != UNIX user)
-// (Implemented in iosys.cxx)
-bool needSecurityRestrictions();
-
 // Returns true if UNO is available, otherwise the old
 // file system implementation has to be used
 // (Implemented in iosys.cxx)
