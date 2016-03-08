@@ -84,7 +84,7 @@ URLParameter::URLParameter( const OUString& aURL,
     : m_pDatabases( pDatabases ),
       m_aURL( aURL )
 {
-    init( false );
+    init();
     parse();
 }
 
@@ -196,10 +196,8 @@ OUString URLParameter::get_program()
 }
 
 
-void URLParameter::init( bool bDefaultLanguageIsInitialized )
+void URLParameter::init()
 {
-    (void)bDefaultLanguageIsInitialized;
-
     m_bHelpDataFileRead = false;
     m_bStart = false;
     m_bUseDB = true;

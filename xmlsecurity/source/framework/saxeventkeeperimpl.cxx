@@ -855,7 +855,6 @@ void SAXEventKeeperImpl::markElementMarkBuffer(sal_Int32 nId)
 }
 
 sal_Int32 SAXEventKeeperImpl::createElementCollector(
-    sal_Int32 nSecurityId,
     cssxc::sax::ElementMarkPriority nPriority,
     bool bModifyElement,
     const cssu::Reference< cssxc::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
@@ -875,7 +874,6 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
  *  Add the new created ElementCollector to the new ElementCollecotor list.
  *
  *   INPUTS
- *  nSecurityId -   the security Id of the new ElementCollector
  *  nPriority -     the priority of the new ElementCollector
  *  bModifyElement -whether this BufferNode will modify the content of
  *                  the corresponding element it works on
@@ -894,7 +892,7 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
 
     ElementCollector* pElementCollector
         = new ElementCollector(
-            nSecurityId,
+            cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
             nId,
             nPriority,
             bModifyElement,
@@ -911,7 +909,7 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
 }
 
 
-sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
+sal_Int32 SAXEventKeeperImpl::createBlocker()
 /****** SAXEventKeeperImpl/createBlocker *************************************
  *
  *   NAME
@@ -922,9 +920,6 @@ sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
  *
  *   FUNCTION
  *  see NAME.
- *
- *   INPUTS
- *  nSecurityId -   the security Id of the new Blocker
  *
  *   RESULT
  *  nId - the Id of the new Blocker
@@ -939,7 +934,7 @@ sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
 
     OSL_ASSERT(m_pNewBlocker == nullptr);
 
-    m_pNewBlocker = new ElementMark(nSecurityId, nId);
+    m_pNewBlocker = new ElementMark(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nId);
     m_vElementMarkBuffers.push_back( m_pNewBlocker );
 
     return nId;
@@ -950,7 +945,6 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addElementCollector(  )
     throw (cssu::RuntimeException, std::exception)
 {
     return createElementCollector(
-        cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
         cssxc::sax::ElementMarkPriority_AFTERMODIFY,
         false,
         nullptr);
@@ -965,7 +959,7 @@ void SAL_CALL SAXEventKeeperImpl::removeElementCollector( sal_Int32 id )
 sal_Int32 SAL_CALL SAXEventKeeperImpl::addBlocker(  )
     throw (cssu::RuntimeException, std::exception)
 {
-    return createBlocker(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID);
+    return createBlocker();
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeBlocker( sal_Int32 id )
@@ -1071,7 +1065,6 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addSecurityElementCollector(
     throw (cssu::RuntimeException, std::exception)
 {
     return createElementCollector(
-        cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
         priority,
         modifyElement,
         nullptr);

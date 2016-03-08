@@ -212,7 +212,7 @@ namespace chelp {
 
         // private methods
 
-        void init( bool bDefaultLanguageIsInitialized );
+        void init();
 
         OUString get_the_tag();
 

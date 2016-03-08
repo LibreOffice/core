@@ -213,14 +213,13 @@ private:
     void markElementMarkBuffer(sal_Int32 nId);
 
     sal_Int32 createElementCollector(
-        sal_Int32 nSecurityId,
         com::sun::star::xml::crypto::sax::ElementMarkPriority nPriority,
         bool bModifyElement,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XReferenceResolvedListener>&
             xReferenceResolvedListener);
 
-    sal_Int32 createBlocker(sal_Int32 nSecurityId);
+    sal_Int32 createBlocker();
 
 public:
     SAXEventKeeperImpl();
