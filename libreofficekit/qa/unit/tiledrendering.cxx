@@ -19,8 +19,14 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 
+#if defined __clang__ && defined __linux__
+#include <cxxabi.h>
 #include <config_options.h>
-    // see use of ENABLE_RUNTIME_OPTIMIZATIONS in LibreOfficeKintInit.h
+#if defined _LIBCPPABI_VERSION || !ENABLE_RUNTIME_OPTIMIZATIONS
+#define LOK_LOADLIB_GLOBAL
+#endif
+#endif
+
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

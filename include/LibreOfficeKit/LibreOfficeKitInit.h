@@ -45,11 +45,8 @@ extern "C"
     void *lok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
-#if defined __clang__ && defined __linux__ \
-    && defined ENABLE_RUNTIME_OPTIMIZATIONS
-#if !ENABLE_RUNTIME_OPTIMIZATIONS
+#if defined LOK_LOADLIB_GLOBAL
                       | RTLD_GLOBAL
-#endif
 #endif
                       );
     }
