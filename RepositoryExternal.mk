@@ -631,7 +631,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(2))
 
 endef
 
-define gb_LinkTarget__use_boostdatetime
+define gb_LinkTarget__use_boost_date_time
 $(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_DATE_TIME_LIB))
 
 endef
@@ -685,8 +685,8 @@ $(call gb_LinkTarget__use_boost_lib,$(1),boostthread)
 endef
 endif
 
-define gb_LinkTarget__use_boostdatetime
-$(call gb_LinkTarget__use_boost_lib,$(1),boostdatetime)
+define gb_LinkTarget__use_boost_date_time
+$(call gb_LinkTarget__use_boost_lib,$(1),boost_date_time)
 
 endef
 
