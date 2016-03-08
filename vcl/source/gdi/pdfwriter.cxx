@@ -386,6 +386,11 @@ void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_In
     xImplementation->createNote( rRect, rNote, nPageNr );
 }
 
+void PDFWriter::CreateFormulaAnnotation( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+{
+    xImplementation->createFormulaAnnotation( rRect, rNote, nPageNr );
+}
+
 sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {
     return xImplementation->beginStructureElement( eType, rAlias );
