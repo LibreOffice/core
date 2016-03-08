@@ -112,7 +112,7 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
     {
         XFContent *pContent = it->get();
         if( pContent )
-            pContent->ToXml(pStrm);
+            pContent->DoToXml(pStrm);
     }
 
     pStrm->EndElement( "text:span" );
@@ -135,7 +135,7 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
     {
         XFContent *pContent = it->get();
         if( pContent )
-            pContent->ToXml(pStrm);
+            pContent->DoToXml(pStrm);
     }
 }
 void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
@@ -145,7 +145,7 @@ void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
     {
         XFContent *pContent = it->get();
         if( pContent )
-            pContent->ToXml(pStrm);
+            pContent->DoToXml(pStrm);
     }
     pStrm->EndElement( "text:span" );
 }
