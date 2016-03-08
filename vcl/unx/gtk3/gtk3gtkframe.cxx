@@ -2468,6 +2468,7 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpA
     return true;
 }
 
+#if GTK_CHECK_VERSION(3,12,0)
 namespace
 {
     void set_pointing_to(GtkPopover *pPopOver, const Rectangle& rHelpArea)
@@ -2494,6 +2495,7 @@ namespace
         gtk_popover_set_pointing_to(pPopOver, &aRect);
     }
 }
+#endif
 
 sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags)
 {
