@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_31961295",
+        "filename": "dbaccess/source/core/api/RowSetCache.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T15:23:40Z",
+      "side": 1,
+      "message": "no need to wrap this in an #if at all",
+      "revId": "576ab772555ed9f06995d9b5d605c90191500a76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_9186de63",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T15:23:40Z",
+      "side": 1,
+      "message": "no need to wrap this SAL_WARN in an #if at all",
+      "revId": "576ab772555ed9f06995d9b5d605c90191500a76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_b1816250",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3010,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T15:23:40Z",
+      "side": 1,
+      "message": "what is this code good for? what are the implications of enabling in all debug builds?",
+      "revId": "576ab772555ed9f06995d9b5d605c90191500a76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_51b6263e",
+        "filename": "include/connectivity/sqlparse.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-08T15:23:40Z",
+      "side": 1,
+      "message": "this breaks \"partial debug builds\" (\"make dbaccess.clean \u0026\u0026 make dbaccess debug\u003dt\" in an implicitly --disable-debug build); I\u0027d suggest to make this function, and any code using it, conditional on \"#if defined DBG_UTIL\" instead",
+      "revId": "576ab772555ed9f06995d9b5d605c90191500a76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
