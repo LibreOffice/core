@@ -432,7 +432,7 @@ void SlideImpl::show( bool bSlideBackgoundPainted )
     // slide. Also enables LayerManager to record updates. Currently,
     // never let LayerManager render initial slide content, use
     // buffered slide bitmaps instead.
-    mpShapeManager->activate( true );
+    mpShapeManager->activate();
 
 
     // render slide to screen, if requested

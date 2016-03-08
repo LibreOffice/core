@@ -71,13 +71,11 @@ public:
 
     /** Enables event listening.
 
-        @param bSlideBackgoundPainted
-        When true, the initial slide content on the background layer
+        The initial slide content on the background layer
         is already rendered (e.g. from a previous slide
-        transition). When false, slide renders initial content of
-        slide.
+        transition).
      */
-    void activate( bool bSlideBackgoundPainted );
+    void activate();
 
     /** Disables event listening.
      */

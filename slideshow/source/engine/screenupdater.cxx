@@ -212,9 +212,9 @@ namespace internal
         }
     }
 
-    ::std::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock (const bool bStartLocked)
+    ::std::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock()
     {
-        return ::std::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this, bStartLocked));
+        return ::std::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this, false/*bStartLocked*/));
     }
 
 

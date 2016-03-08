@@ -110,12 +110,8 @@ namespace slideshow
 
             /** Call this method to create a lock instead of calling
                 lockUpdates() and unlockUpdates() directly.
-                @param bStartLocked
-                    When <TRUE/> then the UpdateLock is created already
-                    locked. When <FALSE/> then Activate() has to be called in order
-                    to lock the lock.
             */
-            ::std::shared_ptr<UpdateLock> createLock (const bool bStartLocked);
+            ::std::shared_ptr<UpdateLock> createLock();
 
             /** Lock updates to prevent intermediate repaints.
             */

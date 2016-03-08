@@ -50,7 +50,7 @@ ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
 {
 }
 
-void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
+void ShapeManagerImpl::activate()
 {
     if( !mbEnabled )
     {
@@ -72,7 +72,7 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
             this->cursorChanged( rListener.first, rListener.second );
 
         if( mpLayerManager )
-            mpLayerManager->activate( bSlideBackgoundPainted );
+            mpLayerManager->activate( true/*bSlideBackgoundPainted*/ );
     }
 }
 

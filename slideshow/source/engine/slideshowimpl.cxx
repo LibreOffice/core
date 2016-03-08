@@ -1240,7 +1240,7 @@ sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException, std::exce
     else
     {
         return maEffectRewinder.rewind(
-            maScreenUpdater.createLock(false),
+            maScreenUpdater.createLock(),
             [this]() { return this->redisplayCurrentSlide(); },
             [this]() { return this->rewindEffectToPreviousSlide(); } );
     }
