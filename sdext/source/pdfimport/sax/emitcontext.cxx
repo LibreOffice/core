@@ -29,7 +29,7 @@
 
 #if OSL_DEBUG_LEVEL > 0
 #include <osl/file.hxx>
-static osl::File* pStream = NULL;
+static osl::File* pStream = nullptr;
 static int nIndent = 0;
 #endif
 
@@ -58,7 +58,7 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
         osl_getFileURLFromSystemPath( aStr.pData, &aFileURL.pData );
         OUStringBuffer aBuf( 256 );
         aBuf.append( aFileURL );
-        aBuf.appendAscii( "/pdfimport.xml" );
+        aBuf.append( "/pdfimport.xml" );
         pStream = new osl::File( aBuf.makeStringAndClear() );
         if( pStream->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) )
         {
@@ -67,7 +67,7 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
         }
     }
     else
-        pStream = 0;
+        pStream = nullptr;
 #endif
 }
 
@@ -85,7 +85,7 @@ SaxEmitter::~SaxEmitter()
     {
         pStream->close();
         delete pStream;
-        pStream = 0;
+        pStream = nullptr;
     }
 #endif
 }

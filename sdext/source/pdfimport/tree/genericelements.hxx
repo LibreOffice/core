@@ -218,7 +218,7 @@ namespace pdfi
         void updateGeometry();
 
 #if OSL_DEBUG_LEVEL > 0
-        virtual void emitStructure( int nLevel );
+        virtual void emitStructure( int nLevel ) override;
 #endif
 
         basegfx::B2DPolyPolygon PolyPoly;
