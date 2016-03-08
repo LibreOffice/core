@@ -647,4 +647,9 @@ String STR_SRTERR
     Text [ en-US ] = "Cannot sort selection" ;
 };
 
+String STR_TARGET_DOC_NOT_CLASSIFIED
+{
+    Text [ en-US ] = "This document must be classified before the clipboard can be pasted." ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

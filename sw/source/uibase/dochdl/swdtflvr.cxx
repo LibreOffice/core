@@ -127,6 +127,7 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/classificationhelper.hxx>
 
 #include <memory>
 
@@ -3208,6 +3209,31 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
     m_pWrtShell->GetViewOptions()->SetIdle( m_bOldIdle );
 }
 
+namespace
+{
+
+bool lcl_checkClassification(SwDoc* pSourceDoc, SwDoc* pDestinationDoc)
+{
+    if (!pSourceDoc || !pDestinationDoc)
+        return true;
+
+    SwDocShell* pSourceShell = pSourceDoc->GetDocShell();
+    SwDocShell* pDestinationShell = pDestinationDoc->GetDocShell();
+    if (!pSourceShell || !pDestinationShell)
+        return true;
+
+    // Paste from a classified document to a non-classified one -> deny.
+    if (SfxClassificationHelper::IsClassified(*pSourceShell) && !SfxClassificationHelper::IsClassified(*pDestinationShell))
+    {
+        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RES(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
+        return false;
+    }
+
+    return true;
+}
+
+}
+
 bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 {
     // first, ask for the SelectionType, then action-bracketing !!!!
@@ -3265,7 +3291,9 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
             }
     }
 
-    bool bRet = rShell.Paste( m_pClpDocFac->GetDoc() );
+    bool bRet = true;
+    if (lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
+        bRet = rShell.Paste(m_pClpDocFac->GetDoc());
 
     if( bKillPaMs )
         rShell.KillPams();
