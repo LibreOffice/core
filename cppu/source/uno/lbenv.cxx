@@ -909,9 +909,6 @@ EnvironmentsData::~EnvironmentsData()
 
         if (pHard)
         {
-#if OSL_DEBUG_LEVEL > 1
-            ::uno_dumpEnvironment( 0, pHard, 0 );
-#endif
             (*pHard->dispose)( pHard ); // send explicit dispose
             (*pHard->release)( pHard );
         }
@@ -1039,9 +1036,7 @@ static bool loadEnv(OUString const  & cLibStem,
 #endif
     else
     {
-#if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "%s: Unhandled env: %s", __PRETTY_FUNCTION__, OUStringToOString( cLibStem, RTL_TEXTENCODING_ASCII_US).getStr() );
-#endif
+        SAL_INFO("cppu", ": Unhandled env: " << cLibStem);
         return false;
     }
 #else

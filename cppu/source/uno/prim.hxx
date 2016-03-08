@@ -32,12 +32,6 @@
 #include "rtl/ustring.hxx"
 #include "rtl/alloc.h"
 
-#if OSL_DEBUG_LEVEL > 1
-#include "rtl/ustrbuf.hxx"
-#include "rtl/string.hxx"
-#endif
-
-
 namespace cppu
 {
 
