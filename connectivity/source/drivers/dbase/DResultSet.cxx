@@ -167,7 +167,7 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
 
             if (pIter)
             {
-                sal_uIntPtr nRec = pIter->First();
+                sal_uInt32 nRec = pIter->First();
                 while (nRec != NODE_NOTFOUND)
                 {
                     if (m_aOrderbyAscending[0])
