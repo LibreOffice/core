@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_exception_objects,cppu,\
 	cppu/source/typelib/typelib \
 	cppu/source/uno/any \
 	cppu/source/uno/cascade_mapping \
+	cppu/source/uno/check \
 	cppu/source/uno/data \
 	cppu/source/uno/EnvStack \
 	cppu/source/uno/IdentityMapping \

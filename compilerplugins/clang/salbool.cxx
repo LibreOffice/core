@@ -584,7 +584,7 @@ bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
     }
     auto f = compiler.getSourceManager().getFilename(spellingLocation);
     return f == SRCDIR "/cppu/qa/test_any.cxx"
-        || f == SRCDIR "/cppu/source/uno/data.cxx"; // TODO: the offset checks
+        || f == SRCDIR "/cppu/source/uno/check.cxx"; // TODO: the offset checks
 }
 
 bool SalBool::rewrite(SourceLocation location) {
