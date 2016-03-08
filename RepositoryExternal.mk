@@ -636,6 +636,13 @@ $(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_DATE_TIME_LIB))
 
 endef
 
+define gb_LinkTarget__use_boost_filesystem
+$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_FILESYSTEM_LIB))
+
+endef
+
+gb_ExternalProject__use_boost_filesystem :=
+
 define gb_LinkTarget__use_boost_iostreams
 $(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_IOSTREAMS_LIB))
 
