@@ -439,24 +439,61 @@ void SwMacrosTest::testFdo87530()
     Reference<css::lang::XComponent> xComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    Sequence<beans::PropertyValue> desc(1);
+    desc[0].Name = "FilterName";
+    desc[0].Value <<= OUString("writer8");
+
     {
+        // insert initial password protected library
         Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-        xBasLib->createLibrary("Library1");
-        xBasLibPwd->changeLibraryPassword("Library1", "", "foo");
+        Reference<container::XNameContainer> xLibrary(xBasLib->createLibrary("BarLibrary"));
+        xLibrary->insertByName("BarModule",
+                uno::makeAny(OUString("Sub Main\nEnd Sub\n")));
+        xBasLibPwd->changeLibraryPassword("BarLibrary", "", "foo");
+
+        Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xDocStorable.is());
+
+        xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
     }
 
-    Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDocStorable.is());
+    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
 
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    Sequence<beans::PropertyValue> desc(1);
-    desc[0].Name = "FilterName";
-    desc[0].Value <<= OUString("writer8");
-    xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
+    // re-load
+    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+    {
+        // check that password-protected library survived store and re-load
+        Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+        Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
+        Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
+        Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("BarLibrary"));
+        CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("BarLibrary", "foo"));
+        xBasLib->loadLibrary("BarLibrary");
+        CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("BarLibrary"));
+        Reference<container::XNameContainer> xLibrary(xBasLib->getByName("BarLibrary"), UNO_QUERY);
+        Any module(xLibrary->getByName("BarModule"));
+        CPPUNIT_ASSERT_EQUAL(module.get<OUString>(), OUString("Sub Main\nEnd Sub\n"));
+
+        // add a second module now - tdf#87530 happened here
+        Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary("FooLibrary"));
+        xFooLib->insertByName("FooModule",
+                uno::makeAny(OUString("Sub Main\nEnd Sub\n")));
+        xBasLibPwd->changeLibraryPassword("FooLibrary", "", "foo");
+
+        // store again
+        Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xDocStorable.is());
+
+        xDocStorable->store();
+    }
 
     Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
 
@@ -468,14 +505,16 @@ void SwMacrosTest::testFdo87530()
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
     Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("Library1"));
-    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("Library1", "foo"));
-    xBasLib->loadLibrary("Library1");
-    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("Library1"));
+    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("FooLibrary"));
+    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("FooLibrary", "foo"));
+    xBasLib->loadLibrary("FooLibrary");
+    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("FooLibrary"));
+    Reference<container::XNameContainer> xLibrary(xBasLib->getByName("FooLibrary"), UNO_QUERY);
+    Any module(xLibrary->getByName("FooModule"));
+    CPPUNIT_ASSERT_EQUAL(module.get<OUString>(), OUString("Sub Main\nEnd Sub\n"));
 
     // close
-    Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
-    xDocCloseable->close(false);
+    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
 }
 
 
