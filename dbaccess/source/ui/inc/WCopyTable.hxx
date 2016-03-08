@@ -329,7 +329,7 @@ namespace dbaui
         virtual bool        DeactivatePage() override;
         OKButton&           GetOKButton() { return static_cast<OKButton&>(*m_pbFinish); }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
-        void                EnableButton(Wizard_Button_Style eStyle, bool bEnable);
+        void                EnableNextButton(bool bEnable);
         void                AddWizardPage(OWizardPage* pPage); // delete page from OCopyTableWizard
         void                CheckButtons(); // checks which button can be disabled, enabled
 

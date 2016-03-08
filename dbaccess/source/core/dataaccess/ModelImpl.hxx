@@ -341,16 +341,13 @@ public:
 
     /** returns a new ->ODatabaseDocument
 
-        @param _bInitializeIfNecessary
-            calls XLoadable::initNew on the newly created model, if necessary
-
         @precond
             No ->ODatabaseDocument exists so far
 
         @seealso
             getModel_noCreate
     */
-    css::uno::Reference< css::frame::XModel > createNewModel_deliverOwnership( bool _bInitialize );
+    css::uno::Reference< css::frame::XModel > createNewModel_deliverOwnership();
 
     struct ResetModelAccess { friend class ODatabaseDocument; private: ResetModelAccess() { } };
 

@@ -43,7 +43,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorde
     ,m_rBorderWin( _rBorderWindow )
 {
 
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 
     m_aIconControl->SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
     m_aIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
@@ -75,23 +75,17 @@ void OApplicationSwapWindow::Resize()
     m_aIconControl->ArrangeIcons();
 }
 
-void OApplicationSwapWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
+void OApplicationSwapWindow::ImplInitSettings( bool bBackground )
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( bFont )
-    {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont(*this, aFont);
-    }
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+    SetPointFont(*this, aFont);
 
-    if( bForeground || bFont )
-    {
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        SetTextFillColor();
-    }
+    SetTextColor( rStyleSettings.GetFieldTextColor() );
+    SetTextFillColor();
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
@@ -106,7 +100,7 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }

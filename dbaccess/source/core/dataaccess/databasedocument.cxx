@@ -2223,7 +2223,7 @@ com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
 
     rtl::Reference<dbaccess::ODatabaseModelImpl> pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));
-    css::uno::Reference<XInterface> inst(pImpl->createNewModel_deliverOwnership(false));
+    css::uno::Reference<XInterface> inst(pImpl->createNewModel_deliverOwnership());
     inst->acquire();
     return inst.get();
 }

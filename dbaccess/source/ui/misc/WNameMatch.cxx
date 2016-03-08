@@ -132,7 +132,7 @@ void OWizNameMatching::ActivatePage( )
     m_pColumn_up_right->Enable( m_pCTRL_RIGHT->GetEntryCount() > 1 );
     m_pColumn_down_right->Enable( m_pCTRL_RIGHT->GetEntryCount() > 1 );
 
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,false);
+    m_pParent->EnableNextButton(false);
     m_pCTRL_LEFT->GrabFocus();
 }
 

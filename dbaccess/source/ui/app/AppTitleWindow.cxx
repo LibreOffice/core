@@ -37,7 +37,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 
     setTitle(_nTitleId);
     SetBorderStyle(WindowBorderStyle::MONO);
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 
     const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
     vcl::Window* pWindows[] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
@@ -134,12 +134,12 @@ void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
 
-void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
+void OTitleWindow::ImplInitSettings( bool bBackground )
 {
     // FIXME RenderContext
     AllSettings aAllSettings = GetSettings();
@@ -149,19 +149,13 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     SetSettings(aAllSettings);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( bFont )
-    {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont(*this, aFont);
-    }
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+    SetPointFont(*this, aFont);
 
-    if( bForeground || bFont )
-    {
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        SetTextFillColor();
-    }
+    SetTextColor( rStyleSettings.GetFieldTextColor() );
+    SetTextFillColor();
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );

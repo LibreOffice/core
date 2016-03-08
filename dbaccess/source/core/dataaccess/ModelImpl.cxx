@@ -937,7 +937,7 @@ Reference< XModel> ODatabaseModelImpl::getModel_noCreate() const
     return m_xModel;
 }
 
-Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _bInitialize )
+Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership()
 {
     Reference< XModel > xModel( m_xModel );
     OSL_PRECOND( !xModel.is(), "ODatabaseModelImpl::createNewModel_deliverOwnership: not to be called if there already is a model!" );
@@ -967,20 +967,6 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // state, fires all events, and so on.
             // #i105505#
             xModel->attachResource( xModel->getURL(), m_aMediaDescriptor.getPropertyValues() );
-        }
-
-        if ( _bInitialize )
-        {
-            try
-            {
-                Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
-                xLoad->initNew();
-            }
-            catch( RuntimeException& ) { throw; }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
         }
     }
     return xModel;

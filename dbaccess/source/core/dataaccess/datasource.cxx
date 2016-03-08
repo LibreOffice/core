@@ -119,7 +119,7 @@ protected:
     FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener );
     virtual ~FlushNotificationAdapter();
 
-    void SAL_CALL impl_dispose( bool _bRevokeListener );
+    void SAL_CALL impl_dispose();
 
 protected:
     // XFlushListener
@@ -147,16 +147,13 @@ FlushNotificationAdapter::~FlushNotificationAdapter()
 {
 }
 
-void SAL_CALL FlushNotificationAdapter::impl_dispose( bool _bRevokeListener )
+void SAL_CALL FlushNotificationAdapter::impl_dispose()
 {
     Reference< XFlushListener > xKeepAlive( this );
 
-    if ( _bRevokeListener )
-    {
-        Reference< XFlushable > xFlushable( m_aBroadcaster );
-        if ( xFlushable.is() )
-            xFlushable->removeFlushListener( this );
-    }
+    Reference< XFlushable > xFlushable( m_aBroadcaster );
+    if ( xFlushable.is() )
+        xFlushable->removeFlushListener( this );
 
     m_aListener.clear();
     m_aBroadcaster.clear();
@@ -168,7 +165,7 @@ void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) thr
     if ( xListener.is() )
         xListener->flushed( rEvent );
     else
-        impl_dispose( true );
+        impl_dispose();
 }
 
 void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
@@ -177,7 +174,7 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
     if ( xListener.is() )
         xListener->disposing( Source );
 
-    impl_dispose( true );
+    impl_dispose();
 }
 
 OAuthenticationContinuation::OAuthenticationContinuation()
@@ -1225,7 +1222,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException, std::exception
             SharedModel xModel( m_pImpl->getModel_noCreate(), SharedModel::NoTakeOwnership );
 
             if ( !xModel.is() )
-                xModel.reset( m_pImpl->createNewModel_deliverOwnership( false ), SharedModel::TakeOwnership );
+                xModel.reset( m_pImpl->createNewModel_deliverOwnership(), SharedModel::TakeOwnership );
 
             Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY_THROW );
             xStorable->store();
@@ -1311,7 +1308,7 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
 
     Reference< XModel > xModel( m_pImpl->getModel_noCreate() );
     if ( !xModel.is() )
-        xModel = m_pImpl->createNewModel_deliverOwnership( false );
+        xModel = m_pImpl->createNewModel_deliverOwnership();
 
     return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY_THROW );
 }

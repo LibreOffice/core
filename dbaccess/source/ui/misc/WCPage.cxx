@@ -131,7 +131,7 @@ IMPL_LINK_NOARG_TYPED( OCopyTable, AppendDataClickHdl, Button*, void )
 
 void OCopyTable::SetAppendDataRadio()
 {
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,true);
+    m_pParent->EnableNextButton(true);
     m_pFT_KeyName->Enable(false);
     m_pCB_PrimaryColumn->Enable(false);
     m_pEdKeyName->Enable(false);
@@ -140,7 +140,7 @@ void OCopyTable::SetAppendDataRadio()
 
 IMPL_LINK_TYPED( OCopyTable, RadioChangeHdl, Button*, pButton, void )
 {
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,pButton != m_pRB_View);
+    m_pParent->EnableNextButton(pButton != m_pRB_View);
     bool bKey = m_bPKeyAllowed && pButton != m_pRB_View;
     m_pFT_KeyName->Enable(bKey && m_pCB_PrimaryColumn->IsChecked());
     m_pEdKeyName->Enable(bKey && m_pCB_PrimaryColumn->IsChecked());

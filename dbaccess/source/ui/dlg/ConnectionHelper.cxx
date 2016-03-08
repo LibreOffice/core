@@ -411,10 +411,10 @@ namespace dbaui
         implUpdateURLDependentStates();
     }
 
-    OUString OConnectionHelper::impl_getURL( bool _bPrefix ) const
+    OUString OConnectionHelper::impl_getURL() const
     {
         // get the pure text
-        OUString sURL = _bPrefix ? m_pConnectionURL->GetText() : OUString(m_pConnectionURL->GetTextNoPrefix());
+        OUString sURL = m_pConnectionURL->GetTextNoPrefix();
 
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
@@ -424,15 +424,7 @@ namespace dbaui
             {
                 // get the two parts: prefix and file URL
                 OUString sTypePrefix, sFileURLDecoded;
-                if ( _bPrefix )
-                {
-                    sTypePrefix = m_pCollection->getPrefix( m_eType );
-                    sFileURLDecoded = m_pCollection->cutPrefix( sURL );
-                }
-                else
-                {
-                    sFileURLDecoded = sURL;
-                }
+                sFileURLDecoded = sURL;
 
                 sURL = sTypePrefix;
                 if ( !sFileURLDecoded.isEmpty() )
@@ -456,7 +448,7 @@ namespace dbaui
 
     OUString OConnectionHelper::getURLNoPrefix( ) const
     {
-        return impl_getURL( false );
+        return impl_getURL();
     }
 
     void OConnectionHelper::setURLNoPrefix( const OUString& _rURL )

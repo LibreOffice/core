@@ -93,7 +93,7 @@ namespace dbaui
     private:
         DECL_LINK_TYPED(OnBrowseConnections, Button*, void);
         DECL_LINK_TYPED(OnCreateDatabase, Button*, void);
-        OUString    impl_getURL( bool _bPrefix ) const;
+        OUString    impl_getURL() const;
         void        impl_setURL( const OUString& _rURL, bool _bPrefix );
         void        implUpdateURLDependentStates() const;
     };

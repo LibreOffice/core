@@ -977,17 +977,9 @@ void OCopyTableWizard::CheckButtons()
     }
 }
 
-void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle, bool bEnable)
+void OCopyTableWizard::EnableNextButton(bool bEnable)
 {
-    Button* pButton;
-    if(eStyle == WIZARD_NEXT)
-        pButton = m_pbNext;
-    else if(eStyle == WIZARD_PREV)
-        pButton = m_pbPrev;
-    else
-        pButton = m_pbFinish;
-    pButton->Enable(bEnable);
-
+    m_pbNext->Enable(bEnable);
 }
 
 bool OCopyTableWizard::DeactivatePage()

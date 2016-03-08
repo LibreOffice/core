@@ -954,7 +954,7 @@ void OQueryController::impl_initialize()
         bForceInitialDesign = true;
     }
 
-    if ( !ensureConnected( false ) )
+    if ( !ensureConnected() )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = false;
         if ( editingView() )

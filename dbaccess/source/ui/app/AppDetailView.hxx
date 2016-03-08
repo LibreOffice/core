@@ -118,7 +118,7 @@ namespace dbaui
         VclPtr<OApplicationDetailView>      m_pDetailView;
 
         DECL_LINK_TYPED( OnEntrySelectHdl, SvTreeListBox*, void );
-        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+        void ImplInitSettings( bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
@@ -153,7 +153,7 @@ namespace dbaui
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
-        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+        void ImplInitSettings( bool bBackground );
 
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;

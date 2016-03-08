@@ -36,7 +36,7 @@ namespace dbaui
         VclPtr<OTableFieldDescWin>          m_pFieldDescWin;
         VclPtr<OTableEditorCtrl>            m_pEditorCtrl;
 
-        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+        void ImplInitSettings( bool bBackground );
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;

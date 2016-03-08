@@ -354,7 +354,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     {
         pModelImpl.set( new ODatabaseModelImpl( _rName, m_aContext, *this ) );
 
-        Reference< XModel > xModel( pModelImpl->createNewModel_deliverOwnership( false ), UNO_SET_THROW );
+        Reference< XModel > xModel( pModelImpl->createNewModel_deliverOwnership(), UNO_SET_THROW );
         Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
 
         ::comphelper::NamedValueCollection aArgs;

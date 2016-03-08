@@ -157,7 +157,7 @@ void OWizColumnSelect::ActivatePage( )
         m_pOrgColumnNames->RemoveEntry((*aIter)->first);
     }
     m_pParent->GetOKButton().Enable(m_pNewColumnNames->GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_pNewColumnNames->GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
+    m_pParent->EnableNextButton(m_pNewColumnNames->GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
     m_pColumns_RH->GrabFocus();
 }
 
@@ -416,7 +416,7 @@ void OWizColumnSelect::enableButtons()
         m_pParent->m_mNameMapping.clear();
 
     m_pParent->GetOKButton().Enable(bEntries);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,bEntries && m_pParent->getOperation() != CopyTableOperation::AppendData);
+    m_pParent->EnableNextButton(bEntries && m_pParent->getOperation() != CopyTableOperation::AppendData);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

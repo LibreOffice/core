@@ -163,8 +163,8 @@ namespace dbaui
 
         void                disconnect();
         virtual void        reconnect( bool _bUI );
-                bool        ensureConnected( bool _bUI ) {
-                    if ( !isConnected() ) reconnect( _bUI );
+                bool        ensureConnected() {
+                    if ( !isConnected() ) reconnect( false );
                     return isConnected();
                 }
 
