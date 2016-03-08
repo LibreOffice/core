@@ -33,6 +33,7 @@
 #endif
 
 #include <memory>
+#include <iterator>
 
 namespace vcl
 {

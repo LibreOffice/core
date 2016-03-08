@@ -49,6 +49,7 @@
 #include <boost/mem_fn.hpp>
 #include <cmath>
 #include <algorithm>
+#include <iterator>
 #include <functional>
 #include <limits>
 

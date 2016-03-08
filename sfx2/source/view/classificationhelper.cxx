@@ -11,6 +11,7 @@
 
 #include <map>
 #include <algorithm>
+#include <iterator>
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

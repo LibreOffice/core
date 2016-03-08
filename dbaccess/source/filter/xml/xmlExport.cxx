@@ -54,6 +54,7 @@
 
 #include <boost/optional.hpp>
 #include <memory>
+#include <iterator>
 
 namespace dbaxml
 {

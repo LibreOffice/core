@@ -109,6 +109,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 using namespace ::std;
 using namespace ::com::sun::star;
