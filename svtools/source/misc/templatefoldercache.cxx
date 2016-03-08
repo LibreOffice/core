@@ -417,8 +417,8 @@ namespace svt
         explicit TemplateFolderCacheImpl( bool _bAutoStoreState );
         ~TemplateFolderCacheImpl( );
 
-        bool        needsUpdate( bool _bForceCheck );
-        void        storeState( bool _bForceRetrieval );
+        bool        needsUpdate();
+        void        storeState();
 
     private:
         bool        openCacheStream( bool _bForRead );
@@ -459,7 +459,7 @@ namespace svt
     {
         // store the current state if possible and required
         if ( m_bValidCurrentState && m_bAutoStoreState )
-            storeState( false );
+            storeState();
 
         closeCacheStream( );
     }
@@ -507,9 +507,9 @@ namespace svt
     }
 
 
-    void TemplateFolderCacheImpl::storeState( bool _bForceRetrieval )
+    void TemplateFolderCacheImpl::storeState()
     {
-        if ( !m_bValidCurrentState || _bForceRetrieval )
+        if ( !m_bValidCurrentState )
             readCurrentState( );
 
         if ( m_bValidCurrentState && openCacheStream( false ) )
@@ -754,9 +754,9 @@ namespace svt
     }
 
 
-    bool TemplateFolderCacheImpl::needsUpdate( bool _bForceCheck )
+    bool TemplateFolderCacheImpl::needsUpdate()
     {
-        if ( m_bKnowState && !_bForceCheck )
+        if ( m_bKnowState )
             return m_bNeedsUpdate;
 
         m_bNeedsUpdate = true;
@@ -814,13 +814,13 @@ namespace svt
 
     bool TemplateFolderCache::needsUpdate()
     {
-        return m_pImpl->needsUpdate( false/*_bForceCheck*/ );
+        return m_pImpl->needsUpdate();
     }
 
 
     void TemplateFolderCache::storeState()
     {
-        m_pImpl->storeState( false/*_bForceRetrieval*/ );
+        m_pImpl->storeState();
     }
 
 

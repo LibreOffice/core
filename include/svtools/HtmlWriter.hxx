@@ -34,7 +34,7 @@ public:
     HtmlWriter(SvStream& rStream);
     virtual ~HtmlWriter();
 
-    void prettyPrint(bool bChoice);
+    void prettyPrint(bool b);
 
     void start(const OString& aElement);
 

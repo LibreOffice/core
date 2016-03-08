@@ -172,7 +172,7 @@ public:
     OUString                GetConfigString() const;
     void                    SetConfigString( const OUString& rCfgStr );
 
-    void                    EndInplaceEditing( bool _bCancel );
+    void                    EndInplaceEditing();
 
     ::std::vector< SvtContentEntry > GetContent();
 

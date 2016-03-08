@@ -22,9 +22,9 @@ HtmlWriter::HtmlWriter(SvStream& rStream) :
 HtmlWriter::~HtmlWriter()
 {}
 
-void HtmlWriter::prettyPrint(bool bChoice)
+void HtmlWriter::prettyPrint(bool b)
 {
-    mbPrettyPrint = bChoice;
+    mbPrettyPrint = b;
 }
 
 void HtmlWriter::start(const OString& aElement)

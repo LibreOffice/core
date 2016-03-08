@@ -566,7 +566,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
                 sFilter = m_aFilters[m_nCurrentFilter].second;
             }
 
-            m_pFileView->EndInplaceEditing( false );
+            m_pFileView->EndInplaceEditing();
 
             DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFileDialog::executeAsync: previous async action not yet finished!" );
 
@@ -1048,7 +1048,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr, voi
 
 IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, NewFolderHdl, Button*, void )
 {
-    m_pFileView->EndInplaceEditing( false );
+    m_pFileView->EndInplaceEditing();
 
     SmartContent aContent( m_pFileView->GetViewURL() );
     OUString aTitle;

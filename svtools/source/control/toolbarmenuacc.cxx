@@ -341,12 +341,12 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const aw
             if( pEntry->mpControl )
             {
                 awt::Point aChildPoint( aPoint.X - pEntry->maRect.Left(), aPoint.Y - pEntry->maRect.Top() );
-                Reference< XAccessibleComponent > xComp( pEntry->GetAccessible(true), UNO_QUERY_THROW );
+                Reference< XAccessibleComponent > xComp( pEntry->GetAccessible(), UNO_QUERY_THROW );
                 xRet = xComp->getAccessibleAtPoint(aChildPoint);
             }
             else
             {
-                xRet.set( pEntry->GetAccessible(true), UNO_QUERY );
+                xRet.set( pEntry->GetAccessible(), UNO_QUERY );
             }
         }
     }
@@ -470,11 +470,11 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getSelectedAccessibleChild( sa
         {
             if( pEntry->mpControl )
             {
-                Reference< XAccessibleSelection > xSel( pEntry->GetAccessible(true), UNO_QUERY_THROW );
+                Reference< XAccessibleSelection > xSel( pEntry->GetAccessible(), UNO_QUERY_THROW );
                 return xSel->getSelectedAccessibleChild(0);
             }
             else
-                return Reference< XAccessible >( pEntry->GetAccessible(true), UNO_QUERY );
+                return Reference< XAccessible >( pEntry->GetAccessible(), UNO_QUERY );
         }
     }
 

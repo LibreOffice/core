@@ -126,9 +126,9 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
 }
 
 
-const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible( bool bCreate /* = false */ )
+const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible()
 {
-    if( !mxAccContext.is() && bCreate )
+    if( !mxAccContext.is() )
     {
         if( mpControl )
         {
@@ -148,7 +148,7 @@ sal_Int32 ToolbarMenuEntry::getAccessibleChildCount() throw (RuntimeException)
 {
     if( mpControl )
     {
-        const Reference< XAccessibleContext >& xContext = GetAccessible( true );
+        const Reference< XAccessibleContext >& xContext = GetAccessible();
         if( xContext.is() )
         {
             return xContext->getAccessibleChildCount();
@@ -160,7 +160,7 @@ sal_Int32 ToolbarMenuEntry::getAccessibleChildCount() throw (RuntimeException)
 
 Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    const Reference< XAccessibleContext >& xContext = GetAccessible( true );
+    const Reference< XAccessibleContext >& xContext = GetAccessible();
     if( mpControl )
     {
         if( xContext.is() )
@@ -297,7 +297,7 @@ void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (Ind
             {
                 if( pEntry->mpControl )
                 {
-                    Reference< XAccessibleSelection > xSel( pEntry->GetAccessible(true), UNO_QUERY_THROW );
+                    Reference< XAccessibleSelection > xSel( pEntry->GetAccessible(), UNO_QUERY_THROW );
                     xSel->selectAccessibleChild(nChildIndex);
                 }
                 else if( pEntry->mnEntryId != TITLE_ID )
@@ -329,7 +329,7 @@ bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw 
                 {
                     if( pEntry->mpControl )
                     {
-                        Reference< XAccessibleSelection > xSel( pEntry->GetAccessible(true), UNO_QUERY_THROW );
+                        Reference< XAccessibleSelection > xSel( pEntry->GetAccessible(), UNO_QUERY_THROW );
                         xSel->isAccessibleChildSelected(nChildIndex);
                     }
                     return true;
@@ -381,7 +381,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
             }
             else
             {
-                aNew <<= pEntry->GetAccessible(true);
+                aNew <<= pEntry->GetAccessible();
             }
 
             fireAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOld, aNew );

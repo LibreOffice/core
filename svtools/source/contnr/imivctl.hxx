@@ -444,7 +444,7 @@ public:
                             bool bCallRectChangedHdl = true
                         );
 
-    void                AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart = nullptr );
+    void                AdjustEntryAtGrid();
 #ifdef DBG_UTIL
     void                SetEntryTextMode(
                             SvxIconChoiceCtrlTextMode,
@@ -454,7 +454,7 @@ public:
     bool                IsEntryEditingEnabled() const { return bEntryEditingEnabled; }
     bool                IsEntryEditing() const { return (pCurEditedEntry!=nullptr); }
     void                EditEntry( SvxIconChoiceCtrlEntry* pEntry );
-    void                StopEntryEditing( bool bCancel );
+    void                StopEntryEditing();
     size_t              GetEntryCount() const { return aEntries.size(); }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos )
                             {

@@ -598,7 +598,7 @@ protected:
     virtual void    PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void            InitSettings(bool bFont, bool bForeground, bool bBackground);
+    void            InitSettings(bool bBackground);
 
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 

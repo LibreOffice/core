@@ -1236,9 +1236,9 @@ void SvtFileView::EnableDelete( bool bEnable )
     mpImp->EnableDelete( bEnable );
 }
 
-void SvtFileView::EndInplaceEditing( bool _bCancel )
+void SvtFileView::EndInplaceEditing()
 {
-    return mpImp->EndEditing( _bCancel );
+    return mpImp->EndEditing( false/*_bCancel*/ );
 }
 
 IMPL_LINK_TYPED( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )

@@ -768,7 +768,7 @@ void SvtFileDialog::Init_Impl
 
 IMPL_LINK_NOARG_TYPED( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
 {
-    _pFileView->EndInplaceEditing( false );
+    _pFileView->EndInplaceEditing();
 
     SmartContent aContent( _pFileView->GetViewURL( ) );
     OUString aTitle;
@@ -1329,7 +1329,7 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, URLBoxModifiedHdl_Impl, SvtURLBox*, void )
 
 IMPL_LINK_NOARG_TYPED( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void )
 {
-    _pFileView->EndInplaceEditing( false );
+    _pFileView->EndInplaceEditing();
 
     ScopedVclPtrInstance< PlaceEditDialog > aDlg(this);
     short aRetCode = aDlg->Execute();
@@ -2155,7 +2155,7 @@ const OUString& SvtFileDialog::GetStandardDir() const
 
 void SvtFileDialog::PrevLevel_Impl()
 {
-    _pFileView->EndInplaceEditing( false );
+    _pFileView->EndInplaceEditing();
 
     OUString sDummy;
     executeAsync( AsyncPickerAction::ePrevLevel, sDummy, sDummy );
@@ -2164,7 +2164,7 @@ void SvtFileDialog::PrevLevel_Impl()
 
 void SvtFileDialog::OpenURL_Impl( const OUString& _rURL )
 {
-    _pFileView->EndInplaceEditing( false );
+    _pFileView->EndInplaceEditing();
 
     executeAsync( AsyncPickerAction::eOpenURL, _rURL, getMostCurrentFilter( _pImp ) );
 }

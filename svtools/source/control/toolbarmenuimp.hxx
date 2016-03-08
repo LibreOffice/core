@@ -85,7 +85,7 @@ public:
 
     void init( int nEntryId, MenuItemBits nBits );
 
-    const css::uno::Reference< css::accessibility::XAccessibleContext >& GetAccessible( bool bCreate = false );
+    const css::uno::Reference< css::accessibility::XAccessibleContext >& GetAccessible();
 
     sal_Int32 getAccessibleChildCount() throw (css::uno::RuntimeException);
     css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);

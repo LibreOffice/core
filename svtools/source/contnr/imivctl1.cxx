@@ -174,7 +174,7 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 
 void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
 {
-    StopEntryEditing( true );
+    StopEntryEditing();
     nSelectionCount = 0;
     pCurHighlightFrame = nullptr;
     StopEditTimer();
@@ -234,7 +234,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
 
 IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
 {
-    StopEntryEditing( true );
+    StopEntryEditing();
     // arrow up: delta=-1; arrow down: delta=+1
     Scroll( 0, pScrollBar->GetDelta(), true );
     bEndScrollInvalidate = true;
@@ -242,7 +242,7 @@ IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar
 
 IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, void )
 {
-    StopEntryEditing( true );
+    StopEntryEditing();
     // arrow left: delta=-1; arrow right: delta=+1
     Scroll( pScrollBar->GetDelta(), 0, true );
     bEndScrollInvalidate = true;
@@ -2723,14 +2723,14 @@ IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
 
 // pStart == 0: align all entries
 // else: align all entries of the row from pStart on (including pStart)
-void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart )
+void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid()
 {
     IconChoiceMap aLists;
-    pImpCursor->CreateGridAjustData( aLists, pStart );
+    pImpCursor->CreateGridAjustData( aLists, nullptr );
     for (IconChoiceMap::const_iterator iter = aLists.begin();
             iter != aLists.end(); ++iter)
     {
-        AdjustAtGrid(iter->second, pStart);
+        AdjustAtGrid(iter->second, nullptr);
     }
     IcnCursor_Impl::DestroyGridAdjustData( aLists );
     CheckScrollBars();
@@ -2943,7 +2943,7 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
     if( !pEntry )
         return;
 
-    StopEntryEditing( true );
+    StopEntryEditing();
     pEdit.disposeAndClear();
     SetNoSelection();
 
@@ -3000,10 +3000,10 @@ IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, TextEditEndedHdl, LinkParamNone*, 
     pCurEditedEntry = nullptr;
 }
 
-void SvxIconChoiceCtrl_Impl::StopEntryEditing( bool bCancel )
+void SvxIconChoiceCtrl_Impl::StopEntryEditing()
 {
     if( pEdit )
-        pEdit->StopEditing( bCancel );
+        pEdit->StopEditing( true/*bCancel*/ );
 }
 
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
