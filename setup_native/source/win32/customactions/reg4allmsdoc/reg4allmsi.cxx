@@ -35,6 +35,8 @@ static const CHAR* g_Extensions[] =
 {
     ".doc",     // Microsoft Word Text [0]
     ".dot",     // Microsoft Word Template
+    ".wps",     // Kingsoft Writer Document
+    ".wpt",     // Kingsoft Writer Template
     ".rtf",     // rtf text
     ".docx",    // Office Word 2007 XML document
     ".docm",    // Office Word 2007 XML macro-enabled document
@@ -48,6 +50,8 @@ static const CHAR* g_Extensions[] =
     ".xltx",    // Office Excel 2007 XML template
     ".xltm",    // Office Excel 2007 XML macro-enabled template
     ".xlsb",    // Office Excel 2007 binary workbook (BIFF12)
+    ".et",      // Kingsoft Spreadsheet
+    ".ett",     // Kingsoft SpreadSheet Template
     ".ppt",     // Microsoft Powerpoint
     ".pps",     // Microsoft Powerpoint
     ".pot",     // Microsoft Powerpoint Template
@@ -56,16 +60,18 @@ static const CHAR* g_Extensions[] =
     ".potx",    // Office PowerPoint 2007 XML template
     ".potm",    // Office PowerPoint 2007 macro-enabled XML template
     ".ppsx",    // Office PowerPoint 2007 XML show
+    ".dps",     // Kingsoft Presentation 
+    ".dpt",     // Kingsoft Presentation Template
     ".vsd",     // Visio 2000/XP/2003 document
     ".vst",     // Visio 2000/XP/2003 template
     0
 };
 
 static const int WORD_START = 0;
-static const int EXCEL_START = 7;
-static const int POWERPOINT_START = 15;
-static const int VISIO_START = 23;
-static const int VISIO_END = 25;
+static const int EXCEL_START = 9;
+static const int POWERPOINT_START = 19;
+static const int VISIO_START = 29;
+static const int VISIO_END = 31;
 
 //    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
