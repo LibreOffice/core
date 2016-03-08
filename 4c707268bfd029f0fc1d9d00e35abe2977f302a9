@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_9109bee0",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T16:39:31Z",
+      "side": 1,
+      "message": "It is unnecessary to obtain ScDocument* and SvNumberFormatter* already here if they are only used at a few places, or more exactly still only one place..",
+      "revId": "4c707268bfd029f0fc1d9d00e35abe2977f302a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_31f9f2c9",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T16:39:31Z",
+      "side": 1,
+      "message": "Please use sensible indentation, one level deeper within a switch case.",
+      "revId": "4c707268bfd029f0fc1d9d00e35abe2977f302a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_511746ed",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T16:39:31Z",
+      "side": 1,
+      "message": "What is this for?",
+      "revId": "4c707268bfd029f0fc1d9d00e35abe2977f302a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_5100e6aa",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T16:39:31Z",
+      "side": 1,
+      "message": "For readability, please have one blank on each side of the \u003d assignment operator. I know there\u0027s already code that doesn\u0027t do so, but it\u0027s ugly to read.",
+      "range": {
+        "startLine": 1877,
+        "startChar": 44,
+        "endLine": 1877,
+        "endChar": 45
+      },
+      "revId": "4c707268bfd029f0fc1d9d00e35abe2977f302a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_711a4a19",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T16:39:31Z",
+      "side": 1,
+      "message": "The entire SvxCurrencyList_Impl::SvxCurrencyList_Impl() except adding entries to m_aCurrencyLb and setting the handler is a copy\u0026paste duplication of SvxNumberFormatShell::GetCurrencySymbols() in svx/source/items/numfmtsh.cxx. I\u0027d rather like to see that the function would be factored out into some static function so that it can be used by both, SvxNumberFormatShell::GetCurrencySymbols() and this SvxCurrencyList_Impl ctor, instead of duplicating the code.",
+      "revId": "4c707268bfd029f0fc1d9d00e35abe2977f302a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
