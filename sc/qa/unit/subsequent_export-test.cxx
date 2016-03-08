@@ -1130,6 +1130,7 @@ void ScExportTest::testRichTextCellFormat()
     const OString xPath3("/x:styleSheet/x:fonts/x:font[" + nFontIdx + "]/x:b");
     assertXPath(pStyles, xPath3, "val", "true");
 
+    xNewDocSh->DoClose();
 }
 
 void ScExportTest::testFormulaRefSheetNameODS()
