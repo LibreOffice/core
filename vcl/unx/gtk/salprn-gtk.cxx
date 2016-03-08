@@ -404,7 +404,7 @@ void
 GtkPrintDialog::impl_initDialog()
 {
     //To-Do, like fpicker, set UI language
-    m_pDialog = m_xWrapper->print_unix_dialog_new(nullptr, nullptr);
+    m_pDialog = m_xWrapper->print_unix_dialog_new();
 
     vcl::Window* const pTopWindow(Application::GetActiveTopWindow());
     if (pTopWindow)

@@ -2211,7 +2211,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         pVDev->SetMapMode( MAP_MM );
 
         m_pReferenceDevice->mpPDFWriter = this;
-        m_pReferenceDevice->ImplUpdateFontData( true );
+        m_pReferenceDevice->ImplUpdateFontData();
     }
     return m_pReferenceDevice;
 }
@@ -6392,7 +6392,7 @@ OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
 // not exported from libsmime, so copy them here. Sigh.
 
 SECStatus
-my_SEC_StringToOID(PLArenaPool *pool, SECItem *to, const char *from, PRUint32 len)
+my_SEC_StringToOID(SECItem *to, const char *from, PRUint32 len)
 {
     PRUint32 decimal_numbers = 0;
     PRUint32 result_bytes = 0;
@@ -6478,7 +6478,7 @@ bad_data:
         SECItem result_item = {siBuffer, nullptr, 0 };
     result_item.data = result;
     result_item.len  = result_bytes;
-    rv = SECITEM_CopyItem(pool, to, &result_item);
+    rv = SECITEM_CopyItem(nullptr, to, &result_item);
     }
     return rv;
 }
@@ -7091,7 +7091,7 @@ bool PDFWriterImpl::finalizeSignature()
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
         // smime(16) aa(2) 14 }
-        if (my_SEC_StringToOID(nullptr, &typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
+        if (my_SEC_StringToOID(&typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_StringToOID failed");
             free(pass);

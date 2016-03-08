@@ -53,7 +53,7 @@ public:
     GtkPageRange* print_settings_get_page_ranges(GtkPrintSettings* settings, gint* num_ranges) const;
     void print_settings_set_print_pages(GtkPrintSettings* settings, GtkPrintPages pages) const;
 
-    GtkWidget* print_unix_dialog_new(const gchar* title, GtkWindow* parent) const;
+    GtkWidget* print_unix_dialog_new() const;
     void print_unix_dialog_add_custom_tab(GtkPrintUnixDialog* dialog, GtkWidget* child, GtkWidget* tab_label) const;
     GtkPrinter* print_unix_dialog_get_selected_printer(GtkPrintUnixDialog* dialog) const;
     void print_unix_dialog_set_manual_capabilities(GtkPrintUnixDialog* dialog, GtkPrintCapabilities capabilities) const;

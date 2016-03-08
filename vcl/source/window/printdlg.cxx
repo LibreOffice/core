@@ -1344,7 +1344,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         mpPreviewWindow->setPreview( aMtf, aCurPageSize,
-                                    aPrt->GetPaperName( false ),
+                                    aPrt->GetPaperName(),
                                     nPages > 0 ? OUString() : maNoPageStr,
                                     aPrt->GetDPIX(), aPrt->GetDPIY(),
                                     aPrt->GetPrinterOptions().IsConvertToGreyscales()

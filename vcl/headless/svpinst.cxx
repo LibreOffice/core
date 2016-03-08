@@ -291,7 +291,7 @@ SalYieldResult SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
                 {
                     // this would be a good time to post a paint
                     const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
-                    pSvpFrame->PostPaint(false);
+                    pSvpFrame->PostPaint();
                 }
             }
         }

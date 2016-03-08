@@ -64,7 +64,7 @@ public:
 
     void GetFocus();
     void LoseFocus();
-    void PostPaint(bool bImmediate) const;
+    void PostPaint() const;
 
     // SalFrame
     virtual SalGraphics*        AcquireGraphics() override;

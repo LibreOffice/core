@@ -408,7 +408,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         if ( pSVData->maWinData.mpExtTextInputWin &&
              ((nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) ||
               (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP)) )
-            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EndExtTextInputFlags::Complete );
+            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput();
     }
 
     // determine mouse event data

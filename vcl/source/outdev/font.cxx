@@ -554,7 +554,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
             {
                 if( mpPDFWriter )
                 {
-                    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( true, true );
+                    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( true );
                     mpFontCache = new ImplFontCache();
                 }
                 else
@@ -577,10 +577,10 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
     }
 }
 
-void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
+void OutputDevice::ImplUpdateFontData()
 {
-    ImplClearFontData( bNewFontLists );
-    ImplRefreshFontData( bNewFontLists );
+    ImplClearFontData( true/*bNewFontLists*/ );
+    ImplRefreshFontData( true/*bNewFontLists*/ );
 }
 
 void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
@@ -1021,7 +1021,7 @@ bool OutputDevice::ImplNewFont() const
         const ImplSVData* pSVData = ImplGetSVData();
         if( mpFontCollection == pSVData->maGDIData.mpScreenFontList
         ||  mpFontCache == pSVData->maGDIData.mpScreenFontCache )
-            const_cast<OutputDevice&>(*this).ImplUpdateFontData( true );
+            const_cast<OutputDevice&>(*this).ImplUpdateFontData();
     }
 
     if ( !mbNewFont )

@@ -163,12 +163,12 @@ bool SvpSalFrame::PostEvent(ImplSVEvent* pData)
     return true;
 }
 
-void SvpSalFrame::PostPaint(bool bImmediate) const
+void SvpSalFrame::PostPaint() const
 {
     if( m_bVisible )
     {
         SalPaintEvent aPEvt(0, 0, maGeometry.nWidth, maGeometry.nHeight);
-        aPEvt.mbImmediateUpdate = bImmediate;
+        aPEvt.mbImmediateUpdate = false;
         CallCallback( SALEVENT_PAINT, &aPEvt );
     }
 }
