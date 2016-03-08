@@ -28,9 +28,13 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/p
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 	glm_headers \
-	glew \
 	mesa_headers \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,chartcore,\
+    glew \
+))
+endif
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
 	officecfg/registry \
@@ -260,9 +264,12 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,chartcore,\
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,chartcore,\
 	-ldl \
-	-lGL \
-	-lX11 \
 ))
 endif
-
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_add_libs,chartcore,\
+    -lGL \
+    -lX11 \
+))
+endif
 # vim: set noet sw=4 ts=4:

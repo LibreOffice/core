@@ -10,8 +10,9 @@
 #include <config_features.h>
 
 #include <svdoopengl.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <sdr/contact/viewcontactofopenglobj.hxx>
-
+#endif
 #include <vcl/opengl/IOpenGLRenderer.hxx>
 
 SdrOpenGLObj::SdrOpenGLObj()
@@ -30,7 +31,11 @@ SdrOpenGLObj::~SdrOpenGLObj()
 
 sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
 {
+#if HAVE_FEATURE_OPENGL
     return new sdr::contact::ViewContactOfOpenGLObj(*this);
+#else
+    return nullptr;
+#endif
 }
 
 

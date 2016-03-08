@@ -242,6 +242,7 @@ endef
 
 endif # SYSTEM_CPPUNIT
 
+ifeq ($(ENABLE_OPENGL),TRUE)
 ifneq ($(SYSTEM_GLEW),)
 
 define gb_LinkTarget__use_glew
@@ -287,7 +288,7 @@ $(call gb_ExternalProject_use_external_project,$(1),glew)
 endef
 
 endif # SYSTEM_GLEW
-
+endif # ENABLE_OPENGL
 define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
 

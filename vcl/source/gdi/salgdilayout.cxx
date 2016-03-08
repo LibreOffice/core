@@ -27,13 +27,18 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/print.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
+#endif
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 
 #include <window.h>
+#if HAVE_FEATURE_OPENGL
 #include <openglgdiimpl.hxx>
+#endif
 #include <outdev.h>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -76,17 +81,16 @@ SalGraphics::SalGraphics()
 SalGraphics::~SalGraphics()
 {
 }
+#if HAVE_FEATURE_OPENGL
 
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
-#if HAVE_FEATURE_OPENGL
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
     if (pImpl)
         return pImpl->GetOpenGLContext();
-#endif
     return NULL;
 }
-
+#endif
 bool SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& /* rNull */,
     const basegfx::B2DPoint& /* rX */,

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALGDI_HXX
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
+#include <config_features.h>
 #include <tools/solar.h>
 #include <osl/thread.hxx>
 
@@ -87,9 +88,10 @@ public:
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
 
+#if HAVE_FEATURE_OPENGL
     /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
     rtl::Reference<OpenGLContext> GetOpenGLContext() const;
-
+#endif
     void                        setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
     bool                        getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
 

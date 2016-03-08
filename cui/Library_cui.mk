@@ -70,8 +70,12 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
     icuuc \
     icu_headers \
-    glew \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,cui,\
+     glew \
+ ))
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,cui,\

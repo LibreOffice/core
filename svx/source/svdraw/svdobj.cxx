@@ -132,7 +132,9 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdsob.hxx>
 #include <rtl/strbuf.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <svdoopengl.hxx>
+#endif
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
 

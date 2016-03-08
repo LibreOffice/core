@@ -51,7 +51,9 @@
 #include "svx/svdview.hxx"
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
+#if HAVE_FEATURE_OPENGL
 #include <svdoopengl.hxx>
+#endif
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 
@@ -1027,6 +1029,8 @@ void SvxOpenGLObject::setRenderer(IOpenGLRenderer* pRenderer)
 {
 #if HAVE_FEATURE_OPENGL
     static_cast<SdrOpenGLObj*>(GetSdrObject())->setRenderer(pRenderer);
+#else
+    (void)pRenderer;
 #endif
 }
 

@@ -24,8 +24,10 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapscalesuper.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
-
+#endif
 #include <boost/scoped_array.hpp>
 
 #include <impbmp.hxx>

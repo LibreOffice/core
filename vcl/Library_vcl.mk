@@ -114,7 +114,6 @@ endif
 $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
 	gio \
-	glew \
 	glm_headers \
 	harfbuzz \
 	icu_headers \
@@ -123,6 +122,11 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	mdds_headers \
 	mesa_headers \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,vcl,\
+     glew \
+ ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/cairo_cairo \

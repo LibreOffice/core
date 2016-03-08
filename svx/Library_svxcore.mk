@@ -85,10 +85,14 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	icuuc \
 	icu_headers \
 	mesa_headers \
-	glew \
 	libxml2 \
 ))
 
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,svxcore,\
+     glew \
+ ))
+endif
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,svxcore,\
@@ -176,7 +180,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewobjectcontactofpageobj \
     svx/source/sdr/contact/viewobjectcontactofe3dscene \
     svx/source/sdr/contact/viewcontactofgraphic \
-    svx/source/sdr/contact/viewcontactofopenglobj \
     svx/source/sdr/contact/viewobjectcontactredirector \
     svx/source/sdr/contact/viewcontactofsdrcircobj \
     svx/source/sdr/contact/viewcontactofgroup \
@@ -211,7 +214,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewcontactofsdrmeasureobj \
     svx/source/sdr/contact/objectcontactofobjlistpainter \
     svx/source/sdr/contact/viewobjectcontactofe3d \
-    svx/source/sdr/contact/viewobjectcontactofopenglobj \
     svx/source/sdr/event/eventhandler \
     svx/source/sdr/overlay/overlayline \
     svx/source/sdr/overlay/overlaycrosshair \
@@ -413,6 +415,8 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
 ifeq ($(ENABLE_OPENGL),TRUE)
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdoopengl \
+    svx/source/sdr/contact/viewobjectcontactofopenglobj \
+    svx/source/sdr/contact/viewcontactofopenglobj \
 ))
 endif
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
