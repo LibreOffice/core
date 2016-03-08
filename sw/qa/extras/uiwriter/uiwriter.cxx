@@ -81,6 +81,8 @@
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/text/XTextField.hpp"
 #include "com/sun/star/text/TextMarkupType.hpp"
+#include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <osl/file.hxx>
 #include <paratr.hxx>
 #include <drawfont.hxx>
@@ -154,6 +156,7 @@ public:
     void testTdf80663();
     void testTdf57197();
     void testTdf90808();
+    void testTdf97601();
     void testTdf75137();
     void testTdf83798();
     void testTdf89714();
@@ -243,6 +246,7 @@ public:
     CPPUNIT_TEST(testTdf80663);
     CPPUNIT_TEST(testTdf57197);
     CPPUNIT_TEST(testTdf90808);
+    CPPUNIT_TEST(testTdf97601);
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTdf89714);
@@ -2385,6 +2389,30 @@ void SwUiWriterTest::testTdf90808()
     //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
     xCursor->gotoEndOfParagraph(true);
     CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCursor, xNumBookmark2, true), css::lang::IllegalArgumentException);
+}
+
+void SwUiWriterTest::testTdf97601()
+{
+    // Instructions from the bugreport to trigger an infinite loop.
+    createDoc("tdf97601.odt");
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEmbeddedObjects = xEmbeddedObjectsSupplier->getEmbeddedObjects();
+    uno::Reference<beans::XPropertySet> xChart;
+    xEmbeddedObjects->getByName("myChart") >>= xChart;
+    uno::Reference<chart2::data::XDataSource> xChartComponent;
+    xChart->getPropertyValue("Component") >>= xChartComponent;
+    uno::Sequence< uno::Reference<chart2::data::XLabeledDataSequence> > aDataSequences = xChartComponent->getDataSequences();
+    uno::Reference<document::XEmbeddedObjectSupplier2> xChartState(xChart, uno::UNO_QUERY);
+    xChartState->getExtendedControlOverEmbeddedObject()->changeState(1);
+    uno::Reference<util::XModifiable> xDataSequenceModifiable(aDataSequences[2]->getValues(), uno::UNO_QUERY);
+    xDataSequenceModifiable->setModified(true);
+
+    // Make sure that the chart is marked as modified.
+    uno::Reference<util::XModifiable> xModifiable(xChartComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xModifiable->isModified()));
+    calcLayout();
+    // This never returned.
+    Scheduler::ProcessEventsToIdle();
 }
 
 void SwUiWriterTest::testTdf75137()

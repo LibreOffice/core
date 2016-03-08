@@ -656,7 +656,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
 
-                // Action 'setVisualAreaSize' doesn't have to change the
+                // Action 'setVisualAreaSize' doesn't have to turn on the
                 // modified state of the document, either.
                 bool bModified = false;
                 uno::Reference<util::XModifiable> xModifiable(xObj->getComponent(), uno::UNO_QUERY);
@@ -664,7 +664,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                     bModified = xModifiable->isModified();
                 xObj->setVisualAreaSize( nAspect, aSz );
                 xModifiable.set(xObj->getComponent(), uno::UNO_QUERY);
-                if (xModifiable.is())
+                if (xModifiable.is() && xModifiable->isModified() && !bModified)
                     xModifiable->setModified(bModified);
 
                 // #i48419# - action 'UpdateReplacement' doesn't
