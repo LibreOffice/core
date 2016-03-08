@@ -604,12 +604,10 @@ private:
     css::uno::Any maOrient;
 };
 
-typedef ::std::vector< OUString > ScFieldGroupMembers;
-
 struct ScFieldGroup
 {
     OUString     maName;
-    ScFieldGroupMembers maMembers;
+    std::vector<OUString> maMembers;
 };
 
 typedef ::std::vector< ScFieldGroup > ScFieldGroups;

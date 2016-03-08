@@ -1540,9 +1540,9 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl ) :
     ScExternalRefManager* pRefMgr = rRoot.GetDoc().GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId( rUrl );
     mnFileId = nFileId + 1;
-    ScfStringVec aTabNames;
+    std::vector<OUString> aTabNames;
     pRefMgr->getAllCachedTableNames( nFileId, aTabNames );
-    for( ScfStringVec::const_iterator aBeg = aTabNames.begin(), aIt = aBeg, aEnd = aTabNames.end(); aIt != aEnd; ++aIt )
+    for( auto aBeg = aTabNames.begin(), aIt = aBeg, aEnd = aTabNames.end(); aIt != aEnd; ++aIt )
         InsertTabName( *aIt, pRefMgr->getCacheTable( nFileId, aIt - aBeg ) );
 }
 

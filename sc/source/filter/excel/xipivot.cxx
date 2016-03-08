@@ -190,7 +190,7 @@ XclImpPCField::~XclImpPCField()
 
 // general field/item access --------------------------------------------------
 
-const OUString& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
+const OUString& XclImpPCField::GetFieldName( const std::vector<OUString>& rVisNames ) const
 {
     if( IsGroupChildField() && (mnFieldIdx < rVisNames.size()) )
     {
@@ -387,7 +387,7 @@ void XclImpPCField::ReadSxgroupinfo( XclImpStream& rStrm )
 
 // grouping -------------------------------------------------------------------
 
-void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
+void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const
 {
     if (!GetFieldName(rVisNames).isEmpty())
     {
@@ -402,7 +402,7 @@ void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringV
 
 // private --------------------------------------------------------------------
 
-void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
+void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const
 {
     if( const XclImpPCField* pBaseField = GetGroupBaseField() )
     {
@@ -434,14 +434,14 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
     }
 }
 
-void XclImpPCField::ConvertNumGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
+void XclImpPCField::ConvertNumGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const
 {
     ScDPNumGroupInfo aNumInfo( GetScNumGroupInfo() );
     ScDPSaveNumGroupDimension aNumGroupDim( GetFieldName( rVisNames ), aNumInfo );
     rSaveData.GetDimensionData()->AddNumGroupDimension( aNumGroupDim );
 }
 
-void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
+void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const
 {
     ScDPNumGroupInfo aDateInfo( GetScDateGroupInfo() );
     sal_Int32 nScDateType = maNumGroupInfo.GetScDateType();

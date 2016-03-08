@@ -73,7 +73,7 @@ public:
     // general field/item access ----------------------------------------------
 
     /** Returns the name of the field, uses the passed visible name if supported. */
-    const OUString& GetFieldName( const ScfStringVec& rVisNames ) const;
+    const OUString& GetFieldName( const std::vector<OUString>& rVisNames ) const;
 
     /** Returns the base field if this is a grouping field. */
     const XclImpPCField* GetGroupBaseField() const;
@@ -105,15 +105,15 @@ public:
     // grouping ---------------------------------------------------------------
 
     /** Inserts grouping information of this field into the passed ScDPSaveData. */
-    void                ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
+    void                ConvertGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const;
 
 private:
     /** Inserts standard grouping information of this field into the passed ScDPSaveData. */
-    void                ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
+    void                ConvertStdGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const;
     /** Inserts numeric grouping information of this field into the passed ScDPSaveData. */
-    void                ConvertNumGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
+    void                ConvertNumGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const;
     /** Inserts date grouping information of this field into the passed ScDPSaveData. */
-    void                ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
+    void                ConvertDateGroupField( ScDPSaveData& rSaveData, const std::vector<OUString>& rVisNames ) const;
 
     /** Returns a Calc struct with numeric grouping data. */
     ScDPNumGroupInfo    GetScNumGroupInfo() const;
@@ -302,7 +302,7 @@ public:
     // cache/field access, misc. ----------------------------------------------
 
     inline XclImpPivotCacheRef GetPivotCache() const { return mxPCache; }
-    inline const ScfStringVec& GetVisFieldNames() const { return maVisFieldNames; }
+    inline const std::vector<OUString>& GetVisFieldNames() const { return maVisFieldNames; }
 
     sal_uInt16          GetFieldCount() const;
     const XclImpPTField* GetField( sal_uInt16 nFieldIdx ) const;
@@ -350,7 +350,7 @@ private:
     XclPTViewEx9Info    maPTViewEx9Info;     /// (SXVIEWEX9 record)
     XclImpPTFieldVec    maFields;           /// Vector containing all fields.
     XclImpPTFieldRef    mxCurrField;        /// Current field for importing additional info.
-    ScfStringVec        maVisFieldNames;    /// Vector containing all visible field names.
+    std::vector<OUString> maVisFieldNames;    /// Vector containing all visible field names.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.
     ScfUInt16Vec        maPageFields;       /// Page field indexes.

@@ -82,9 +82,8 @@ public:
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
 
 private:
-    typedef ::std::vector< OUString > FilterValueVector;
 
-    FilterValueVector   maValues;
+    std::vector< OUString > maValues;
     sal_Int32           mnCalendarType;
     bool                mbShowBlank;
 };
