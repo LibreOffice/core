@@ -187,7 +187,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( aExcMsg.getStr() );
         printf( "]\n" );
         aRet = s_xConverter->convertTo( rVal, rDestType );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // for debugging, to trace again
         try
         {
@@ -206,7 +206,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( " to " );
         printValue( aRet );
         printf( " was successful, but was not expected to be!\n" );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // for debugging, to trace again
         aRet = s_xConverter->convertTo( rVal, rDestType );
 #endif
