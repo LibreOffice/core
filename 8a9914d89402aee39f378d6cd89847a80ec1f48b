@@ -16,6 +16,24 @@
       "revId": "8a9914d89402aee39f378d6cd89847a80ec1f48b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_f182bac7",
+        "filename": "sc/source/core/tool/reffind.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-08T22:51:18Z",
+      "side": 1,
+      "message": "It\u0027s used to cycle through the various relative/absolute address combinations. Usually a user writes something like A1:B2, then if s/he wants absolute addressing instead hits Shift-F4 and gets $A$1:$B$2 and each Shift-F4 another combination of absolute flags. So yes, order matters and minus operator is needed, unless you want to rewrite the series as a switch case state machine..",
+      "parentUuid": "bacf61ea_888cf736",
+      "revId": "8a9914d89402aee39f378d6cd89847a80ec1f48b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
