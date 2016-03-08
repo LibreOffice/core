@@ -28,14 +28,6 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#if OSL_DEBUG_LEVEL > 0
-#define RETURN_DEBUG_STRING ("return from transliterationImpl");
-#define RETURN_DEBUG_NUMBER 'TRAN'
-#else
-#define RETURN_DEBUG_STRING
-#define RETURN_DEBUG_NUMBER
-#endif
-
 class TransliterationImpl : public cppu::WeakImplHelper
 <
     css::i18n::XExtendedTransliteration,
