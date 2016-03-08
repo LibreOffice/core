@@ -108,6 +108,7 @@ public:
     void testRowHeight();
     void testTdf93830();
     void testTdf93097();
+    void testTdf93868();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -150,6 +151,7 @@ public:
     CPPUNIT_TEST(testRowHeight);
     CPPUNIT_TEST(testTdf93830);
     CPPUNIT_TEST(testTdf93097);
+    CPPUNIT_TEST(testTdf93868);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1306,6 +1308,19 @@ void SdImportTest::testTdf93097()
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     CPPUNIT_ASSERT_EQUAL(OUString("ss"), xDocumentProperties->getTitle());
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf93868()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf93868.pptx"), PPTX);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = &(pDoc->GetPage(1)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_EQUAL(size_t(5), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, dynamic_cast<const XFillStyleItem&>(pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, dynamic_cast<const XFillStyleItem&>(pPage->GetObj(1)->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
+
     xDocShRef->DoClose();
 }
 
