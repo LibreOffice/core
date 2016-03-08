@@ -295,7 +295,7 @@ protected:
                                            sal_uInt16 nTag, sal_uInt8 nCurVer );
 
 public:
-    sal_uInt32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close();
 };
 
 /**
@@ -588,7 +588,7 @@ inline void SfxMiniRecordReader::Skip()
 }
 
 /// @see SfxMiniRecordWriter::Close()
-inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
+inline sal_uInt32 SfxSingleRecordWriter::Close()
 {
     sal_uInt32 nRet = 0;
 
@@ -596,17 +596,16 @@ inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
     if ( !_bHeaderOk )
     {
         // write base class header
-        sal_uInt32 nEndPos = SfxMiniRecordWriter::Close( bSeekToEndOfRec );
+        sal_uInt32 nEndPos = SfxMiniRecordWriter::Close( false/*bSeekToEndOfRec*/ );
 
         // seek the end of the own header if needed or stay behind the record
-        if ( !bSeekToEndOfRec )
-            _pStream->SeekRel( SFX_REC_HEADERSIZE_SINGLE );
+        _pStream->SeekRel( SFX_REC_HEADERSIZE_SINGLE );
         nRet = nEndPos;
     }
 #ifdef DBG_UTIL
     else
         // check base class header
-        SfxMiniRecordWriter::Close( bSeekToEndOfRec );
+        SfxMiniRecordWriter::Close( false/*bSeekToEndOfRec*/ );
 #endif
 
     return nRet;

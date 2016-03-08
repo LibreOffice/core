@@ -313,7 +313,7 @@ sal_uInt32 SfxMultiFixRecordWriter::Close()
     if ( !_bHeaderOk )
     {
         // remember position after header, to be able to seek back to it
-        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( false );
+        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close();
 
         // write extended header after SfxSingleRecord
         _pStream->WriteUInt16( _nContentCount );
@@ -432,7 +432,7 @@ sal_uInt32 SfxMultiVarRecordWriter::Close()
             _pStream->WriteUInt32( _aContentOfs[n] );
 
         // skip SfxMultiFixRecordWriter::Close()!
-        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( false );
+        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close();
 
         // write own header
         _pStream->WriteUInt16( _nContentCount );

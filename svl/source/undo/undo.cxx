@@ -1254,26 +1254,21 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
 }
 
 
-void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
+void SfxUndoManager::RemoveOldestUndoAction()
 {
     UndoManagerGuard aGuard( *m_xData );
 
-    size_t nActionsToRemove = i_count;
-    while ( nActionsToRemove )
+    SfxUndoAction* pActionToRemove = m_xData->pUndoArray->aUndoActions[0].pAction;
+
+    if ( IsInListAction() && ( m_xData->pUndoArray->nCurUndoAction == 1 ) )
     {
-        SfxUndoAction* pActionToRemove = m_xData->pUndoArray->aUndoActions[0].pAction;
-
-        if ( IsInListAction() && ( m_xData->pUndoArray->nCurUndoAction == 1 ) )
-        {
-            assert(!"SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!");
-            return;
-        }
-
-        aGuard.markForDeletion( pActionToRemove );
-        m_xData->pUndoArray->aUndoActions.Remove( 0 );
-        --m_xData->pUndoArray->nCurUndoAction;
-        --nActionsToRemove;
+        assert(!"SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!");
+        return;
     }
+
+    aGuard.markForDeletion( pActionToRemove );
+    m_xData->pUndoArray->aUndoActions.Remove( 0 );
+    --m_xData->pUndoArray->nCurUndoAction;
 }
 
 void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const

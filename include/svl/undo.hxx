@@ -354,7 +354,7 @@ public:
 
     /** removes the oldest Undo actions from the stack
     */
-    void            RemoveOldestUndoActions( size_t const i_count );
+    void            RemoveOldestUndoAction();
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 

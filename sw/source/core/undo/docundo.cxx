@@ -424,7 +424,7 @@ void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
     // if the undo nodes array is too large, delete some actions
     while (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
     {
-        RemoveOldestUndoActions(1);
+        RemoveOldestUndoAction();
     }
 }
 
