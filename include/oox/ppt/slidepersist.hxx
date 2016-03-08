@@ -83,7 +83,7 @@ public:
     oox::drawingml::ClrMapPtr getClrMap() const { return mpClrMapPtr; }
 
     void setBackgroundProperties( const oox::drawingml::FillPropertiesPtr& rFillPropertiesPtr ){ mpBackgroundPropertiesPtr = rFillPropertiesPtr; }
-    oox::drawingml::Color& getBackgroundColor() { return maBackgroundColor; }
+    const oox::drawingml::FillPropertiesPtr getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
 
     bool isMasterPage() const { return mbMaster; }
     bool isNotesPage() const { return mbNotes; }
@@ -127,7 +127,6 @@ private:
     SlidePersistPtr                                                         mpMasterPagePtr;
 
     oox::drawingml::ShapePtr                                                maShapesPtr;
-    oox::drawingml::Color                                                   maBackgroundColor;
     oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
     ::std::list< std::shared_ptr< TimeNode > >                              maTimeNodeList;
 
