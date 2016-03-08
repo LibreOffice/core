@@ -389,7 +389,7 @@ void LwpFormulaInfo::Read()
         }
         else
         {
-            assert(false);
+            SAL_WARN("lwp", "missing row list");
         }
     }
 //  sal_uInt8 cFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as a sal_uInt16
