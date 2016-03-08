@@ -34,20 +34,20 @@ OIndexIterator::~OIndexIterator()
 }
 
 
-sal_uIntPtr OIndexIterator::First()
+sal_uInt32 OIndexIterator::First()
 {
     return Find(true);
 }
 
 
-sal_uIntPtr OIndexIterator::Next()
+sal_uInt32 OIndexIterator::Next()
 {
     return Find(false);
 }
 
-sal_uIntPtr OIndexIterator::Find(bool bFirst)
+sal_uInt32 OIndexIterator::Find(bool bFirst)
 {
-    sal_uIntPtr nRes = NODE_NOTFOUND;
+    sal_uInt32 nRes = NODE_NOTFOUND;
 
     if (bFirst)
     {
@@ -129,7 +129,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 }
 
 
-sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
+sal_uInt32 OIndexIterator::GetCompare(bool bFirst)
 {
     ONDXKey* pKey = nullptr;
     sal_Int32 ePredicateType = dynamic_cast<file::OOp_COMPARE&>(*m_pOperator).getPredicateType();
@@ -199,7 +199,7 @@ sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
 }
 
 
-sal_uIntPtr OIndexIterator::GetLike(bool bFirst)
+sal_uInt32 OIndexIterator::GetLike(bool bFirst)
 {
     if (bFirst)
     {
@@ -219,7 +219,7 @@ sal_uIntPtr OIndexIterator::GetLike(bool bFirst)
 }
 
 
-sal_uIntPtr OIndexIterator::GetNull(bool bFirst)
+sal_uInt32 OIndexIterator::GetNull(bool bFirst)
 {
     if (bFirst)
     {
@@ -241,13 +241,13 @@ sal_uIntPtr OIndexIterator::GetNull(bool bFirst)
 }
 
 
-sal_uIntPtr OIndexIterator::GetNotNull(bool bFirst)
+sal_uInt32 OIndexIterator::GetNotNull(bool bFirst)
 {
     ONDXKey* pKey;
     if (bFirst)
     {
         // go through all NULL values first
-        for (sal_uIntPtr nRec = GetNull(bFirst);
+        for (sal_uInt32 nRec = GetNull(bFirst);
              nRec != NODE_NOTFOUND;
              nRec = GetNull(false))
                  ;
