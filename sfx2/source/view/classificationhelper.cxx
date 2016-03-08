@@ -56,6 +56,18 @@ const OUString& PROP_NONE()
     return sProp;
 }
 
+const OUString& PROP_IMPACTSCALE()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:Impact:Scale");
+    return sProp;
+}
+
+const OUString& PROP_IMPACTLEVEL()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    return sProp;
+}
+
 /// Represents one category of a classification policy.
 class SfxClassificationCategory
 {
@@ -236,7 +248,7 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (
     {
         m_bInScale = false;
         if (m_pCategory)
-            m_pCategory->m_aLabels["urn:bails:IntellectualProperty:Impact:Scale"] = m_aScale;
+            m_pCategory->m_aLabels[PROP_IMPACTSCALE()] = m_aScale;
     }
     else if (rName == "baf:ConfidentalityValue")
     {
@@ -244,7 +256,7 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (
         if (m_pCategory)
         {
             std::map<OUString, OUString>& rLabels = m_pCategory->m_aLabels;
-            rLabels["urn:bails:IntellectualProperty:Impact:Level:Confidentiality"] = m_aConfidentalityValue;
+            rLabels[PROP_IMPACTLEVEL()] = m_aConfidentalityValue;
             // Set the two other type of levels as well, if they're not set
             // yet: they're optional in BAF, but not in BAILS.
             if (rLabels.find("urn:bails:IntellectualProperty:Impact:Level:Integrity") == rLabels.end())
@@ -451,11 +463,11 @@ const OUString& SfxClassificationHelper::GetBACName()
 
 bool SfxClassificationHelper::HasImpactLevel()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return false;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTLEVEL());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return false;
 
@@ -484,12 +496,12 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 {
     basegfx::BColor aRet;
 
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return aRet;
     OUString aScale = it->second;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTLEVEL());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return aRet;
     OUString aLevel = it->second;
@@ -528,6 +540,54 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
     }
 
     return aRet;
+}
+
+sal_Int32 SfxClassificationHelper::GetImpactLevel()
+{
+    sal_Int32 nRet = -1;
+
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
+    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+        return nRet;
+    OUString aScale = it->second;
+
+    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTLEVEL());
+    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+        return nRet;
+    OUString aLevel = it->second;
+
+    if (aScale == "UK-Cabinet")
+    {
+        sal_Int32 nValue = aLevel.toInt32();
+        if (nValue < 0 || nValue > 3)
+            return nRet;
+        nRet = nValue;
+    }
+    else if (aScale == "FIPS-199")
+    {
+        static std::map<OUString, sal_Int32> aValues;
+        if (aValues.empty())
+        {
+            aValues["Low"] = 0;
+            aValues["Moderate"] = 1;
+            aValues["High"] = 2;
+        }
+        std::map<OUString, sal_Int32>::iterator itValues = aValues.find(aLevel);
+        if (itValues == aValues.end())
+            return nRet;
+        nRet = itValues->second;
+    }
+
+    return nRet;
+}
+
+OUString SfxClassificationHelper::GetImpactScale()
+{
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
+    if (it != m_pImpl->m_aCategory.m_aLabels.end())
+        return it->second;
+
+    return OUString();
 }
 
 OUString SfxClassificationHelper::GetDocumentWatermark()

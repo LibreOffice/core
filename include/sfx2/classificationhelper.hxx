@@ -40,9 +40,13 @@ public:
     std::vector<OUString> GetBACNames();
     /// Setting this sets all the other properties, based on the policy.
     void SetBACName(const OUString& rName);
-    /// If GetImpactLevelColor() will return something meaningful.
+    /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
     bool HasImpactLevel();
     basegfx::BColor GetImpactLevelColor();
+    /// Larger value means more confidential.
+    sal_Int32 GetImpactLevel();
+    /// Comparing the GetImpactLevel() result is only meaningful when the impact scale is the same.
+    OUString GetImpactScale();
     OUString GetDocumentWatermark();
     /// The selected category has some content for the document header.
     bool HasDocumentHeader();
