@@ -98,6 +98,7 @@ public:
     virtual ~SvxSearchDialogWrapper ();
     SvxSearchDialog *getDialog () { return dialog;}
     static void SetSearchLabel(const SearchLabel& rSL);
+    static void SetSearchLabel(const OUString& rSL);
     SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
 };
 
@@ -161,7 +162,8 @@ private:
     VclPtr<ListBox>        m_pReplaceTmplLB;
     VclPtr<FixedText>      m_pReplaceAttrText;
 
-    VclPtr<PushButton>    m_pSearchBtn;
+    VclPtr<PushButton>     m_pSearchBtn;
+    VclPtr<PushButton>     m_pBackSearchBtn;
     VclPtr<PushButton>     m_pSearchAllBtn;
     VclPtr<PushButton>     m_pReplaceBtn;
     VclPtr<PushButton>     m_pReplaceAllBtn;
@@ -178,7 +180,6 @@ private:
     VclPtr<CheckBox>       m_pIgnoreDiacritics;
     VclPtr<CheckBox>       m_pIgnoreKashida;
     VclPtr<CheckBox>       m_pSelectionBtn;
-    VclPtr<CheckBox>       m_pBackwardsBtn;
     VclPtr<CheckBox>       m_pRegExpBtn;
     VclPtr<CheckBox>       m_pWildcardBtn;
     VclPtr<CheckBox>       m_pSimilarityBox;
