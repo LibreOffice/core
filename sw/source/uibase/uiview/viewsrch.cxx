@@ -85,11 +85,6 @@ struct SwSearchOptions
     SwSearchOptions( SwWrtShell* pSh, bool bBackward );
 };
 
-static vcl::Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
-{
-    return pSrchDlg && pSrchDlg->IsVisible() ? pSrchDlg : nullptr;
-}
-
 /// Adds rMatches using rKey as a key to the rTree tree.
 static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OString& rKey, const std::vector<OString>& rMatches)
 {
@@ -414,11 +409,9 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
                     if( !bQuiet && ULONG_MAX != nFound)
                     {
-                        OUString aText( SW_RES( STR_NB_REPLACED ) );
-                        aText = aText.replaceFirst("XX", OUString::number( nFound ));
-                        pSrchDlg = GetSearchDialog();
-                        vcl::Window* pParentWindow = GetParentWindow(pSrchDlg);
-                        ScopedVclPtr<InfoBox>::Create( pParentWindow, aText )->Execute();
+                        OUString sText( SW_RES( STR_NB_REPLACED ) );
+                        sText = sText.replaceFirst("XX", OUString::number( nFound ));
+                        SvxSearchDialogWrapper::SetSearchLabel(sText);
                     }
                 }
 #if HAVE_FEATURE_DESKTOP
