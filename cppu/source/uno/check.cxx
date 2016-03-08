@@ -28,7 +28,7 @@
 
 #if OSL_DEBUG_LEVEL > 0
 
-namespace cppu {
+namespace {
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
