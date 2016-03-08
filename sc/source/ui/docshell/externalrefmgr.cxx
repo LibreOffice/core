@@ -853,23 +853,42 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             pTabData.reset(new Table);
 
         const ScMatrixRef& pMat = itrData->mpRangeData;
-        ScFullMatrix::DoubleOpFunction aDoubleFunc = [=](size_t row, size_t col, double val) -> void
+        SCSIZE nMatCols, nMatRows;
+        pMat->GetDimensions( nMatCols, nMatRows);
+        if (nMatCols > static_cast<SCSIZE>(nCol2 - nCol1) && nMatRows > static_cast<SCSIZE>(nRow2 - nRow1))
         {
-            pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val), 0, false);
-        };
-        ScFullMatrix::BoolOpFunction aBoolFunc = [=](size_t row, size_t col, bool val) -> void
+            ScFullMatrix::DoubleOpFunction aDoubleFunc = [=](size_t row, size_t col, double val) -> void
+            {
+                pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val), 0, false);
+            };
+            ScFullMatrix::BoolOpFunction aBoolFunc = [=](size_t row, size_t col, bool val) -> void
+            {
+                pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val ? 1.0 : 0.0), 0, false);
+            };
+            ScFullMatrix::StringOpFunction aStringFunc = [=](size_t row, size_t col, svl::SharedString val) -> void
+            {
+                pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
+            };
+            pMat->ExecuteOperation(std::pair<size_t, size_t>(0, 0),
+                    std::pair<size_t, size_t>(nRow2-nRow1, nCol2-nCol1),
+                    aDoubleFunc, aBoolFunc, aStringFunc);
+            // Mark the whole range 'cached'.
+            pTabData->setCachedCellRange(nCol1, nRow1, nCol2, nRow2);
+        }
+        else
         {
-            pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val ? 1.0 : 0.0), 0, false);
-        };
-        ScFullMatrix::StringOpFunction aStringFunc = [=](size_t row, size_t col, svl::SharedString val) -> void
-        {
-            pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
-        };
-        pMat->ExecuteOperation(std::pair<size_t, size_t>(0, 0),
-                std::pair<size_t, size_t>(nRow2-nRow1, nCol2-nCol1),
-                aDoubleFunc, aBoolFunc, aStringFunc);
-        // Mark the whole range 'cached'.
-        pTabData->setCachedCellRange(nCol1, nRow1, nCol2, nRow2);
+            // This may happen due to a matrix not been allocated earlier, in
+            // which case it should have exactly one error element.
+            SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - matrix size mismatch");
+            if (nMatCols != 1 || nMatRows != 1)
+                SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - not a one element matrix");
+            else
+            {
+                sal_uInt16 nErr = GetDoubleErrorValue( pMat->GetDouble(0,0));
+                SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - matrix error value is " << nErr <<
+                        (nErr == errMatrixSize ? ", ok" : ", not ok"));
+            }
+        }
     }
 
     size_t nTabLastId = nTabFirstId + rRange.aEnd.Tab() - rRange.aStart.Tab();
