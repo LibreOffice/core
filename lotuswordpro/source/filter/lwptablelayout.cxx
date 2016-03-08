@@ -218,13 +218,13 @@ double LwpSuperTableLayout::GetTableWidth()
         LwpTableLayout* pTableLayout = GetTableLayout();
         if(!pTableLayout)
         {
-            assert(false);
+            SAL_WARN("lwp", "missing table layout, early return");
             return 0;
         }
         LwpTable *pTable = pTableLayout->GetTable();
         if(!pTable)
         {
-            assert(false);
+            SAL_WARN("lwp", "missing table, early return");
             return 0;
         }
         double dDefaultWidth = pTable->GetWidth();
