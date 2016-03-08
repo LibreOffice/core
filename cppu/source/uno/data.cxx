@@ -340,7 +340,7 @@ namespace cppu {
 #define MAX_ALIGNMENT_4
 #endif
 
-#define OFFSET_OF( s, m ) reinterpret_cast< size_t >((char *)&((s *)16)->m -16)
+#define OFFSET_OF( s, m ) reinterpret_cast< size_t >(reinterpret_cast<char *>(&reinterpret_cast<s *>(16)->m) -16)
 
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     if (OFFSET_OF(s, m) != static_cast<size_t>(n))  \
