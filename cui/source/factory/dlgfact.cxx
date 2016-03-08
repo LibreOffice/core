@@ -942,10 +942,9 @@ AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog(
     return new AbstractSvxCaptionDialog_Impl( pDlg );
 }
 
-AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(vcl::Window* pParent,
-                                            const SfxItemSet& rAttr)
+AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(const SfxItemSet& rAttr)
 {
-    VclPtrInstance<SvxDistributeDialog> pDlg( pParent, rAttr, SvxDistributeHorizontalNone, SvxDistributeVerticalNone);
+    VclPtrInstance<SvxDistributeDialog> pDlg( nullptr, rAttr, SvxDistributeHorizontalNone, SvxDistributeVerticalNone);
     return new AbstractSvxDistributeDialog_Impl( pDlg );
 }
 
@@ -973,9 +972,9 @@ AbstractHyphenWordDialog* AbstractDialogFactory_Impl::CreateHyphenWordDialog( vc
     return new AbstractHyphenWordDialog_Impl( pDlg );
 }
 
-AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog( vcl::Window* pParent )
+AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog()
 {
-    VclPtrInstance<FmShowColsDialog> pDlg( pParent);
+    VclPtrInstance<FmShowColsDialog> pDlg( nullptr );
     return new AbstractFmShowColsDialog_Impl( pDlg );
 }
 AbstractSvxZoomDialog * AbstractDialogFactory_Impl::CreateSvxZoomDialog( vcl::Window* pParent,
@@ -1050,11 +1049,11 @@ AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( vcl
    return new AbstractGalleryIdDialog_Impl( pDlg );
 }
 
-VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog( vcl::Window* pParent,
+VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
-    VclPtrInstance<GalleryThemeProperties> pDlg( pParent, pData, pItemSet);
+    VclPtrInstance<GalleryThemeProperties> pDlg( nullptr, pData, pItemSet);
     return new VclAbstractDialog2_Impl( pDlg );
 }
 
@@ -1158,9 +1157,9 @@ AbstractSvxJSearchOptionsDialog * AbstractDialogFactory_Impl::CreateSvxJSearchOp
     return new AbstractSvxJSearchOptionsDialog_Impl( pDlg );
 }
 
-AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog( vcl::Window* pParent )
+AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog( )
 {
-    VclPtrInstance<FmInputRecordNoDialog> pDlg( pParent );
+    VclPtrInstance<FmInputRecordNoDialog> pDlg( nullptr );
     return new AbstractFmInputRecordNoDialog_Impl( pDlg );
 }
 
@@ -1196,14 +1195,14 @@ AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( vcl::Wi
     return new AbstractSvxNameDialog_Impl( pDlg );
 }
 
-AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName )
+AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(const OUString& rName )
 {
-    return new AbstractSvxObjectNameDialog_Impl(VclPtr<SvxObjectNameDialog>::Create(pParent, rName));
+    return new AbstractSvxObjectNameDialog_Impl(VclPtr<SvxObjectNameDialog>::Create(nullptr, rName));
 }
 
-AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription)
+AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(const OUString& rTitle, const OUString& rDescription)
 {
-    return new AbstractSvxObjectTitleDescDialog_Impl(VclPtr<SvxObjectTitleDescDialog>::Create(pParent, rTitle, rDescription));
+    return new AbstractSvxObjectTitleDescDialog_Impl(VclPtr<SvxObjectTitleDescDialog>::Create(nullptr, rTitle, rDescription));
 }
 
 AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(vcl::Window* pParent)
@@ -1578,9 +1577,9 @@ SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( vcl::Wind
     return new AbstractLinksDialog_Impl( pLinkDlg );
 }
 
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* /*pObj*/ )
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* /*pObj*/ )
 {
-    return new CuiAbstractTabDialog_Impl( VclPtr<SvxFormatCellsDialog>::Create( pParent, pAttr, pModel ) );
+    return new CuiAbstractTabDialog_Impl( VclPtr<SvxFormatCellsDialog>::Create( nullptr, pAttr, pModel ) );
 }
 
 SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
@@ -1588,9 +1587,9 @@ SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDi
     return new SvxSplitTableDlg( pParent, bIsTableVertical, nMaxVertical, nMaxHorizontal );
 }
 
-SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( vcl::Window* pParent )
+SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog()
 {
-    return new SvxNewTableDialog( pParent );
+    return new SvxNewTableDialog( nullptr );
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(

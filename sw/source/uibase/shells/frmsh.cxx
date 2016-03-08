@@ -623,8 +623,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
                 std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
-                    pFact->CreateSvxObjectTitleDescDialog( nullptr,
-                                                           aTitle,
+                    pFact->CreateSvxObjectTitleDescDialog( aTitle,
                                                            aDescription ));
                 assert(pDlg);
 

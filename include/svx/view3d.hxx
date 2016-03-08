@@ -108,7 +108,7 @@ public:
 
     // Means to create all Extrudes in a certain depth order.
     static void DoDepthArrange(E3dScene* pScene, double fDepth);
-    void ConvertMarkedToPolyObj(bool bLineToArea);
+    void ConvertMarkedToPolyObj();
     E3dScene* SetCurrent3DObj(E3dObject* p3DObj);
     void Start3DCreation();
 

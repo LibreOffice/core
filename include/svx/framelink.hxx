@@ -320,9 +320,6 @@ long GetBLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
     bottom-right diagonal frame border, connected to the right end of a
     horizontal frame border.
 
-    @param nVerOffs
-        The vertical position of the point to be calculated, relative to the Y
-        coordinate of the reference point.
     @param nDiagOffs
         The width offset across the diagonal frame border (0 = middle),
         regardless of the gradient of the diagonal frame border (always
@@ -332,7 +329,7 @@ long GetBLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
     @param fAngle
         Inner (left) angle between diagonal and horizontal frame border.
  */
-long GetBRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
+long GetBRDiagOffset( long nDiagOffs, double fAngle );
 
 /** Returns an X coordinate for a diagonal frame border in the specified height.
 
@@ -340,9 +337,6 @@ long GetBRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
     top-right diagonal frame border, connected to the right end of a horizontal
     frame border.
 
-    @param nVerOffs
-        The vertical position of the point to be calculated, relative to the Y
-        coordinate of the reference point.
     @param nDiagOffs
         The width offset across the diagonal frame border (0 = middle),
         regardless of the gradient of the diagonal frame border (always
@@ -352,7 +346,7 @@ long GetBRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
     @param fAngle
         Inner (left) angle between diagonal and horizontal frame border.
  */
-long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
+long GetTRDiagOffset( long nDiagOffs, double fAngle );
 
 
 /** Checks whether two horizontal frame borders are "connectable".

@@ -261,7 +261,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
     }
 
-    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(false);
+    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible();
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
@@ -654,10 +654,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         return;
     }
 
-    if( !( mpDrawView->IsConvertToPolyObjPossible(false) || mpDrawView->IsVectorizeAllowed() ) )
+    if( !( mpDrawView->IsConvertToPolyObjPossible() || mpDrawView->IsVectorizeAllowed() ) )
         rSet.DisableItem(SID_CHANGEPOLYGON);
 
-    if( !( mpDrawView->IsConvertToPolyObjPossible(false) || mpDrawView->IsConvertToContourPossible() ) )
+    if( !( mpDrawView->IsConvertToPolyObjPossible() || mpDrawView->IsConvertToContourPossible() ) )
         rSet.DisableItem(SID_CONVERT_TO_CONTOUR);
 
     if ( !mpDrawView->IsConvertTo3DObjPossible() )

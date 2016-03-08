@@ -198,7 +198,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if ( nInv == E3dInventor                          ||
-                 (!mpDrawView->IsConvertToPathObjPossible(false) &&
+                 (!mpDrawView->IsConvertToPathObjPossible() &&
                   !mpDrawView->IsShearAllowed()                  &&
                   !mpDrawView->IsDistortAllowed()) )
             {
@@ -365,8 +365,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if (b3dObj                                        ||
-                 (!mpDrawView->IsConvertToPathObjPossible(false) &&
-                  !mpDrawView->IsShearAllowed()                  &&
+                 (!mpDrawView->IsConvertToPathObjPossible() &&
+                  !mpDrawView->IsShearAllowed()             &&
                   !mpDrawView->IsDistortAllowed()) )
             {
                 rSet.DisableItem( SID_OBJECT_SHEAR );

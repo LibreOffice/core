@@ -1115,7 +1115,7 @@ void ScDocument::FillInfo(
         2nd param = Do not swap diagonal lines.
      */
     if( bLayoutRTL )
-        rArray.MirrorSelfX( true, false );
+        rArray.MirrorSelfX( false );
 }
 
 ScTableInfo::ScTableInfo()

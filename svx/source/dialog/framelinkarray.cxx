@@ -857,7 +857,7 @@ void Array::SetUseDiagDoubleClipping( bool bSet )
 }
 
 // mirroring
-void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
+void Array::MirrorSelfX( bool bSwapDiag )
 {
     CellVec aNewCells;
     aNewCells.reserve( GetCellCount() );
@@ -868,7 +868,7 @@ void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
         for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
         {
             aNewCells.push_back( CELL( mxImpl->GetMirrorCol( nCol ), nRow ) );
-            aNewCells.back().MirrorSelfX( bMirrorStyles, bSwapDiag );
+            aNewCells.back().MirrorSelfX( true, bSwapDiag );
         }
     }
     for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )

@@ -451,7 +451,7 @@ public:
     // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
     // Funktionen laesst sich das abfragen/erzwingen
     SAL_DLLPRIVATE inline bool IsSelectionUpdatePending();
-    SAL_DLLPRIVATE void        ForceUpdateSelection(bool bLockInvalidation);
+    SAL_DLLPRIVATE void        ForceUpdateSelection();
 
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel>          getContextDocument() const;
     SAL_DLLPRIVATE css::uno::Reference< css::form::XForm>            getInternalForm(const css::uno::Reference< css::form::XForm>& _xForm) const;

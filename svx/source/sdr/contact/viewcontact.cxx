@@ -122,26 +122,18 @@ void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
 
 // Test if this ViewContact has ViewObjectContacts at all. This can
 // be used to test if this ViewContact is visualized ATM or not
-bool ViewContact::HasViewObjectContacts(bool bExcludePreviews) const
+bool ViewContact::HasViewObjectContacts() const
 {
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
-    if(bExcludePreviews)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        for(sal_uInt32 a(0); a < nCount; a++)
+        if(!maViewObjectContactVector[a]->GetObjectContact().IsPreviewRenderer())
         {
-            if(!maViewObjectContactVector[a]->GetObjectContact().IsPreviewRenderer())
-            {
-                return true;
-            }
+            return true;
         }
-
-        return false;
     }
-    else
-    {
-        return (0L != nCount);
-    }
+    return false;
 }
 
 // Test if this ViewContact has ViewObjectContacts at all. This can

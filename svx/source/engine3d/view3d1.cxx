@@ -42,7 +42,7 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
+void E3dView::ConvertMarkedToPolyObj()
 {
     SdrObject* pNewObj = nullptr;
 
@@ -53,7 +53,7 @@ void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
         if (pObj && dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr)
         {
             bool bBezier = false;
-            pNewObj = static_cast<E3dPolyScene*>(pObj)->ConvertToPolyObj(bBezier, bLineToArea);
+            pNewObj = static_cast<E3dPolyScene*>(pObj)->ConvertToPolyObj(bBezier, false/*bLineToArea*/);
 
             if (pNewObj)
             {
@@ -66,7 +66,7 @@ void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 
     if (!pNewObj)
     {
-        SdrView::ConvertMarkedToPolyObj(bLineToArea);
+        SdrView::ConvertMarkedToPolyObj(false/*bLineToArea*/);
     }
 }
 

@@ -621,8 +621,8 @@ bool E3dView::IsConvertTo3DObjPossible() const
 
     bRetval = !bAny3D
         && (
-           IsConvertToPolyObjPossible(false)
-        || IsConvertToPathObjPossible(false)
+           IsConvertToPolyObjPossible()
+        || IsConvertToPathObjPossible()
         || IsImportMtfPossible());
     return bRetval;
 }

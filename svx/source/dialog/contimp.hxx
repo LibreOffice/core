@@ -108,7 +108,7 @@ public:
     bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    tools::PolyPolygon  GetPolyPolygon( bool bRescaleToGraphic );
+    tools::PolyPolygon  GetPolyPolygon();
 
     void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }

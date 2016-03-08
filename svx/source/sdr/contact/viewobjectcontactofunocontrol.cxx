@@ -673,10 +673,6 @@ namespace sdr { namespace contact {
 
         /** adjusts the control visibility so it respects its layer's visibility
 
-            @param _bForce
-                set to <TRUE/> if you want to force a ->XWindow::setVisible call,
-                no matter if the control visibility is already correct
-
             @precond
                 ->m_aControl is not <NULL/>
 
@@ -688,7 +684,7 @@ namespace sdr { namespace contact {
                 might not be true, but those instances should never have a need to call
                 this method.
         */
-        void impl_adjustControlVisibilityToLayerVisibility_throw( bool _bForce );
+        void impl_adjustControlVisibilityToLayerVisibility_throw();
 
         /** adjusts the control visibility so it respects its layer's visibility
 
@@ -1177,7 +1173,7 @@ namespace sdr { namespace contact {
     }
 
 
-    void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( bool _bForce )
+    void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw()
     {
         OSL_PRECOND( m_aControl.is(),
             "ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw: only valid if we have a control!" );
@@ -1191,7 +1187,7 @@ namespace sdr { namespace contact {
             return;
 
         SdrPageViewAccess aPVAccess( *pPageView );
-        impl_adjustControlVisibilityToLayerVisibility_throw( m_aControl, *pUnoObject, aPVAccess, impl_isControlVisible_nofail(), _bForce );
+        impl_adjustControlVisibilityToLayerVisibility_throw( m_aControl, *pUnoObject, aPVAccess, impl_isControlVisible_nofail(), false/*_bForce*/ );
     }
 
 
@@ -1404,7 +1400,7 @@ namespace sdr { namespace contact {
         try
         {
             // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
-            impl_adjustControlVisibilityToLayerVisibility_throw( false );
+            impl_adjustControlVisibilityToLayerVisibility_throw();
         }
         catch( const Exception& )
         {

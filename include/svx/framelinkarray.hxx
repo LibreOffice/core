@@ -328,11 +328,9 @@ public:
     // mirroring --------------------------------------------------------------
 
     /** Mirrors the entire array horizontally.
-        @param bMirrorStyles
-            true = Swap primary and secondary line of all vertical double frame borders.
         @param bSwapDiag
             true = Swap top-left to bottom-right and bottom-left to top-right frame borders. */
-    void                MirrorSelfX( bool bMirrorStyles, bool bSwapDiag );
+    void                MirrorSelfX( bool bSwapDiag );
 
     // drawing ----------------------------------------------------------------
 

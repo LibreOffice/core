@@ -771,7 +771,7 @@ void SdrEditView::DistributeMarkedObjects()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(nullptr, aNewAttr));
+            std::unique_ptr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(aNewAttr));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
 
             sal_uInt16 nResult = pDlg->Execute();

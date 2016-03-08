@@ -1021,7 +1021,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormShell, OnInvalidateSlots, void*,void)
 }
 
 
-void FmXFormShell::ForceUpdateSelection(bool bAllowInvalidation)
+void FmXFormShell::ForceUpdateSelection()
 {
     if ( impl_checkDisposed() )
         return;
@@ -1031,13 +1031,11 @@ void FmXFormShell::ForceUpdateSelection(bool bAllowInvalidation)
         m_aMarkTimer.Stop();
 
         // die Invalidierung der Slots, die implizit von SetSelection besorgt wird, eventuell abschalten
-        if (!bAllowInvalidation)
-            LockSlotInvalidation(true);
+        LockSlotInvalidation(true);
 
         SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
 
-        if (!bAllowInvalidation)
-            LockSlotInvalidation(false);
+        LockSlotInvalidation(false);
     }
 }
 

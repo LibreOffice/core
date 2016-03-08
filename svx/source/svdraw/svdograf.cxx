@@ -1276,7 +1276,7 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
         {
             // test if this object is visualized from someone
             // ## test only if there are VOCs other than the preview renderer
-            if(!GetViewContact().HasViewObjectContacts(true))
+            if(!GetViewContact().HasViewObjectContacts())
             {
                 const SdrSwapGraphicsMode nSwapMode = pModel->GetSwapGraphicsMode();
 
@@ -1323,7 +1323,7 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
 
                     std::unique_ptr<css::uno::Sequence< css::beans::PropertyValue > > pFilterData;
 
-                    if(mbInsidePaint && !GetViewContact().HasViewObjectContacts(true))
+                    if(mbInsidePaint && !GetViewContact().HasViewObjectContacts())
                     {
                         pFilterData.reset(new css::uno::Sequence< css::beans::PropertyValue >( 3 ));
 

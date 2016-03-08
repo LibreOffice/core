@@ -283,10 +283,10 @@ public:
                                         const SdrView* pView,
                                         sal_uInt16 nAnchorTypes = 0 ) = 0;
 
-    virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
+    virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(
                                             const SfxItemSet& rAttr)= 0;
 
-    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( vcl::Window* pParent ) = 0;
+    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog() = 0;
 
     virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( vcl::Window* pParent,
                                             const SfxItemSet& rCoreSet )=0;
@@ -301,7 +301,7 @@ public:
                                              const OUString& rOldText ) = 0;
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm ) = 0;
-    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( vcl::Window* pParent,
+    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog(
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
     virtual AbstractURLDlg * CreateURLDialog( vcl::Window* pParent,
@@ -339,7 +339,7 @@ public:
     virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             sal_Int32 nInitialFlags )=0;
-    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( vcl::Window* pParent ) = 0;
+    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog() = 0;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent ) = 0;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
@@ -348,8 +348,8 @@ public:
                                             const OUString& rName, const OUString& rDesc ) = 0;
 
     // #i68101#
-    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName ) = 0;
-    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription) = 0;
+    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(const OUString& rName ) = 0;
+    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(const OUString& rTitle, const OUString& rDescription) = 0;
 
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(vcl::Window* pParent) = 0 ;
     virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(vcl::Window* pParent) = 0 ;
@@ -420,11 +420,11 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
 
-    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr )=0;
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr )=0;
 
     virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )=0;
 
-    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( vcl::Window* pParent ) = 0;
+    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog() = 0;
 
     virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId ) = 0;
 };

@@ -750,7 +750,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    std::unique_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( nullptr ) );
+                    std::unique_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog() );
                     DBG_ASSERT( dlg.get(), "Dialog creation failed!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
@@ -959,7 +959,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
                 if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection(false);
+                    GetImpl()->ForceUpdateSelection();
 
                 if ( !m_pFormView || !m_bDesignMode || !GetImpl()->onlyControlsAreMarked() )
                     rSet.DisableItem( nWhich );
@@ -978,7 +978,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
                 if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection(false);
+                    GetImpl()->ForceUpdateSelection();
 
                 if ( !m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
                     rSet.DisableItem( nWhich );
@@ -992,7 +992,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
                 if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection(false);
+                    GetImpl()->ForceUpdateSelection();
 
                 if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
                     rSet.DisableItem( nWhich );

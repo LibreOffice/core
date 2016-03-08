@@ -439,7 +439,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
                 if ( pFact )
                 {
                     std::unique_ptr< AbstractSvxObjectTitleDescDialog > pDlg(
-                        pFact->CreateSvxObjectTitleDescDialog( nullptr, aTitle, aDescription ) );
+                        pFact->CreateSvxObjectTitleDescDialog( aTitle, aDescription ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
                         pDlg->GetTitle( aTitle );
@@ -469,7 +469,7 @@ void ShapeController::executeDispatch_RenameObject()
                 if ( pFact )
                 {
                     std::unique_ptr< AbstractSvxObjectNameDialog > pDlg(
-                        pFact->CreateSvxObjectNameDialog( nullptr, aName ) );
+                        pFact->CreateSvxObjectNameDialog( aName ) );
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {

@@ -151,8 +151,8 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
     case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(true);
     case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible();
     case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(true);
-    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible(false);
-    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible(false);
+    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible();
+    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible();
     case SDRREPFUNC_OBJ_GROUP           :  return rView.IsGroupPossible();
     case SDRREPFUNC_OBJ_UNGROUP         :  return rView.IsUnGroupPossible();
     case SDRREPFUNC_OBJ_PUTTOTOP        :  return rView.IsToTopPossible();

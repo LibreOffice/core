@@ -507,8 +507,7 @@ public:
     virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( vcl::Window* pParent,
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes = 0 ) override;
-    virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
-                                            const SfxItemSet& rAttr) override;
+    virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(const SfxItemSet& rAttr) override;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = nullptr ) override;
@@ -527,7 +526,7 @@ public:
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper ) override;
 
-   virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( vcl::Window* pParent ) override;
+   virtual AbstractFmShowColsDialog * CreateFmShowColsDialog() override;
    virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( vcl::Window* pParent,
                                             const SfxItemSet& rCoreSet) override;
    //UUUU add for SvxBorderBackgroundDlg
@@ -557,7 +556,7 @@ public:
                                              const OUString& rOldText) override;
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm) override;
-    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( vcl::Window* pParent,
+    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog(
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet) override;
     virtual AbstractURLDlg * CreateURLDialog( vcl::Window* pParent,
@@ -576,7 +575,7 @@ public:
     virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             sal_Int32 nInitialFlags) override;
-    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( vcl::Window* pParent ) override;
+    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog() override;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent ) override;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
@@ -584,8 +583,8 @@ public:
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) override;
     // #i68101#
-    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName ) override;
-    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription) override;
+    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(const OUString& rName ) override;
+    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(const OUString& rTitle, const OUString& rDescription) override;
 
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(vcl::Window* pParent) override;
     virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(vcl::Window* pParent) override;
@@ -646,11 +645,11 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) override;
 
-    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr ) override;
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr ) override;
 
     virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal ) override;
 
-    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( vcl::Window* pParent ) override ;
+    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog() override ;
 
     virtual VclAbstractDialog*          CreateOptionsDialog(
         vcl::Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) override;

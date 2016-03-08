@@ -908,8 +908,8 @@ LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOff
     // vertical top-left to bottom-right borders are handled mirrored
     if( bVert && bTLBR )
         nDiagOffs = -nDiagOffs;
-    long nTOffs = bTLBR ? GetTLDiagOffset( 0, nDiagOffs, fAngle ) : GetTRDiagOffset( 0, nDiagOffs, fAngle );
-    long nBOffs = bTLBR ? GetBRDiagOffset( 0, nDiagOffs, fAngle ) : GetBLDiagOffset( 0, nDiagOffs, fAngle );
+    long nTOffs = bTLBR ? GetTLDiagOffset( 0, nDiagOffs, fAngle ) : GetTRDiagOffset( nDiagOffs, fAngle );
+    long nBOffs = bTLBR ? GetBRDiagOffset( nDiagOffs, fAngle ) : GetBLDiagOffset( 0, nDiagOffs, fAngle );
     // vertical bottom-left to top-right borders are handled with exchanged end points
     if( bVert && !bTLBR )
         std::swap( nTOffs, nBOffs );
@@ -1312,14 +1312,14 @@ long GetBLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
     return lclD2L( -nVerOffs / tan( fAngle ) + nDiagOffs / sin( fAngle ) );
 }
 
-long GetBRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
+long GetBRDiagOffset( long nDiagOffs, double fAngle )
 {
-    return -lclD2L( -nVerOffs / tan( fAngle ) - nDiagOffs / sin( fAngle ) );
+    return -lclD2L( - nDiagOffs / sin( fAngle ) );
 }
 
-long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
+long GetTRDiagOffset( long nDiagOffs, double fAngle )
 {
-    return -lclD2L( nVerOffs / tan( fAngle ) - nDiagOffs / sin( fAngle ) );
+    return -lclD2L( - nDiagOffs / sin( fAngle ) );
 }
 
 

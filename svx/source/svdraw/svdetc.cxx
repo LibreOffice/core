@@ -238,7 +238,7 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
         // The question is what will happen when i make it work now suddenly? I
         // will try it for 2.4.
         const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
-        const bool bVisible(rViewContact.HasViewObjectContacts(true));
+        const bool bVisible(rViewContact.HasViewObjectContacts());
 
         if(!bVisible)
         {

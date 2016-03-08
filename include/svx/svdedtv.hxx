@@ -339,8 +339,8 @@ public:
     // return sal_True, if at least one marked object could be converted.
     // Also member objects of group objects are converted.
     // For a better description see: SdrObj.HXX
-    bool IsConvertToPathObjPossible(bool bLineToArea) const { ForcePossibilities(); return bLineToArea ? bCanConvToPathLineToArea : bCanConvToPath; }
-    bool IsConvertToPolyObjPossible(bool bLineToArea) const { ForcePossibilities(); return bLineToArea ? bCanConvToPolyLineToArea : bCanConvToPoly; }
+    bool IsConvertToPathObjPossible() const { ForcePossibilities(); return bCanConvToPath; }
+    bool IsConvertToPolyObjPossible() const { ForcePossibilities(); return bCanConvToPoly; }
     bool IsConvertToContourPossible() const { ForcePossibilities(); return bCanConvToContour; }
     void ConvertMarkedToPathObj(bool bLineToArea);
     void ConvertMarkedToPolyObj(bool bLineToArea);

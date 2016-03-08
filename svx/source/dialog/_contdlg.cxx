@@ -195,7 +195,7 @@ bool SvxContourDlg::IsGraphicChanged() const
 
 tools::PolyPolygon SvxContourDlg::GetPolyPolygon()
 {
-    return pSuperClass->GetPolyPolygon(true);
+    return pSuperClass->GetPolyPolygon();
 }
 
 const void* SvxContourDlg::GetEditingObject() const
@@ -376,30 +376,27 @@ void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     m_pContourWnd->GetSdrModel()->SetChanged();
 }
 
-tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
+tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon()
 {
     tools::PolyPolygon aRetPolyPoly( m_pContourWnd->GetPolyPolygon() );
 
-    if ( bRescaleToGraphic )
+    const MapMode   aMap100( MAP_100TH_MM );
+    const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
+    OutputDevice*   pOutDev = Application::GetDefaultDevice();
+    bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+
+    for ( sal_uInt16 j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
     {
-        const MapMode   aMap100( MAP_100TH_MM );
-        const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
-        OutputDevice*   pOutDev = Application::GetDefaultDevice();
-        bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        tools::Polygon& rPoly = aRetPolyPoly[ j ];
 
-        for ( sal_uInt16 j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
+        for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
         {
-            tools::Polygon& rPoly = aRetPolyPoly[ j ];
+            Point& rPt = rPoly[ i ];
 
-            for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
-            {
-                Point& rPt = rPoly[ i ];
+            rPt = pOutDev->LogicToPixel( rPt, aMap100  );
 
-                rPt = pOutDev->LogicToPixel( rPt, aMap100  );
-
-                if ( !bPixelMap )
-                    rPt = pOutDev->PixelToLogic( rPt, aGrfMap  );
-            }
+            if ( !bPixelMap )
+                rPt = pOutDev->PixelToLogic( rPt, aGrfMap  );
         }
     }
 
