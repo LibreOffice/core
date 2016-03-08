@@ -19,6 +19,7 @@
 
 #include "XMLCodeNameProvider.hxx"
 #include "document.hxx"
+#include "comphelper/sequence.hxx"
 
 using namespace com::sun::star;
 
@@ -112,11 +113,11 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     throw (uno::RuntimeException, std::exception)
 {
     SCTAB nCount = mpDoc->GetTableCount() + 1;
-    uno::Sequence< OUString > aNames( nCount );
-    sal_Int32 nRealCount = 0;
+    std::vector< OUString > aNames;
+    aNames.reserve(nCount);
 
     if( !mpDoc->GetCodeName().isEmpty() )
-        aNames[nRealCount++] = msDocName;
+        aNames.push_back(msDocName);
 
     OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
@@ -125,14 +126,11 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
         if (!sCodeName.isEmpty())
         {
             if( mpDoc->GetName( i, sSheetName ) )
-                aNames[nRealCount++] = sSheetName;
+                aNames.push_back(sSheetName);
         }
     }
 
-    if( nCount != nRealCount )
-        aNames.realloc( nRealCount );
-
-    return aNames;
+    return comphelper::containerToSequence(aNames);
 }
 
 uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
