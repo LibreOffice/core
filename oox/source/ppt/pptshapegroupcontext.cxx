@@ -98,11 +98,10 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
             std::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
             if( rAttribs.getBool( XML_useBgFill, false ) )
             {
-                ::oox::drawingml::FillProperties &aFill = pShape->getFillProperties();
-                aFill.moFillType = XML_solidFill;
-                // This is supposed to fill with slide (background) color, but
-                // TODO: We are using white here, because thats the closest we can assume (?)
-                aFill.maFillColor.setSrgbClr( API_RGB_WHITE );
+                const oox::drawingml::FillPropertiesPtr pBackgroundPropertiesPtr = mpSlidePersistPtr->getBackgroundProperties();
+                if ( pBackgroundPropertiesPtr ) {
+                    pShape->getFillProperties().assignUsed( *pBackgroundPropertiesPtr );
+                }
             }
             pShape->setModelId(rAttribs.getString( XML_modelId ).get());
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );

@@ -112,6 +112,7 @@ public:
     void testTdf93830();
     void testTdf93097();
     void testTdf93124();
+    void testTdf93868();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -155,6 +156,7 @@ public:
     CPPUNIT_TEST(testTdf93830);
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf93124);
+    CPPUNIT_TEST(testTdf93868);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1216,6 +1218,18 @@ void SdImportTest::testTdf93124()
     CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>100);
     xDocShRef->DoClose();
 #endif
+}
+
+void SdImportTest::testTdf93868()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf93868.pptx"), PPTX);
+
+    const SdrPage *pPage = &(GetPage( 1, xDocShRef )->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_EQUAL(size_t(5), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, dynamic_cast<const XFillStyleItem&>(pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, dynamic_cast<const XFillStyleItem&>(pPage->GetObj(1)->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
