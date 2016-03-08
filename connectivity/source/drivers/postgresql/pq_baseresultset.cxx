@@ -386,7 +386,7 @@ sal_Bool BaseResultSet::getBoolean( sal_Int32 columnIndex ) throw (SQLException,
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
 
     OUString str = getString( columnIndex );
 
@@ -412,7 +412,7 @@ sal_Int8 BaseResultSet::getByte( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
     sal_Int8 b = 0;
     convertTo( getValue( columnIndex ), cppu::UnoType<decltype(b)>::get()) >>= b;
     return b;
@@ -424,7 +424,7 @@ sal_Int16 BaseResultSet::getShort( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
     sal_Int16 i = 0;
     convertTo( getValue( columnIndex ), cppu::UnoType<decltype(i)>::get()) >>= i;
     return i;
@@ -435,7 +435,7 @@ OUString BaseResultSet::getString( sal_Int32 columnIndex ) throw (SQLException, 
     MutexGuard guard(m_refMutex->mutex);
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
     OUString ret;
     convertTo( getValue(  columnIndex ), cppu::UnoType<decltype(ret)>::get() ) >>= ret;
 //     printf( "BaseResultSet::getString() %s\n" , OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -448,7 +448,7 @@ sal_Int32 BaseResultSet::getInt( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
     sal_Int32 i = 0;
     convertTo( getValue( columnIndex ), cppu::UnoType<decltype(i)>::get()) >>= i;
     return i;
@@ -460,7 +460,7 @@ sal_Int64 BaseResultSet::getLong( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
     sal_Int64 i = 0;
     convertTo( getValue( columnIndex ), cppu::UnoType<decltype(i)>::get()) >>= i;
     return i;
@@ -472,7 +472,7 @@ float BaseResultSet::getFloat( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
     float f = 0.;
     convertTo( getValue( columnIndex ), cppu::UnoType<decltype(f)>::get()) >>= f;
     return f;
@@ -495,7 +495,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( true /* must be on row */ );
+    checkRowIndex();
 
     Sequence< sal_Int8 > ret;
     OUString ustr;
@@ -666,31 +666,17 @@ void BaseResultSet::checkColumnIndex(sal_Int32 index ) throw ( SQLException, Run
 
 }
 
-void BaseResultSet::checkRowIndex( bool mustBeOnValidRow )
+void BaseResultSet::checkRowIndex()
 {
-    OUStringBuffer buf( 128 );
-    buf.append( "pq_baseresultset: row index out of range, allowed is " );
-    if( mustBeOnValidRow )
+    if( m_row < 0 || m_row >= m_rowCount )
     {
-        if( m_row < 0 || m_row >= m_rowCount )
-        {
-            buf.append( "0 to " );
-            buf.append( ((sal_Int32)(m_rowCount -1)) );
-            buf.append( ", got " );
-            buf.append( m_row );
-            throw SQLException( buf.makeStringAndClear(), *this, OUString(),1, Any() );
-        }
-    }
-    else
-    {
-        if( m_row < -1 || m_row > m_rowCount )
-        {
-            buf.append( "-1 to " );
-            buf.append( m_rowCount );
-            buf.append( ", got " );
-            buf.append( m_row );
-            throw SQLException( buf.makeStringAndClear(), *this, OUString(),1, Any() );
-        }
+        OUStringBuffer buf( 128 );
+        buf.append( "pq_baseresultset: row index out of range, allowed is " );
+        buf.append( "0 to " );
+        buf.append( ((sal_Int32)(m_rowCount -1)) );
+        buf.append( ", got " );
+        buf.append( m_row );
+        throw SQLException( buf.makeStringAndClear(), *this, OUString(),1, Any() );
     }
 }
 

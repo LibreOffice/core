@@ -105,7 +105,7 @@ namespace connectivity
 
             const ODbaseTable* getTable() const { return m_pTable; }
             const NDXHeader& getHeader() const { return m_aHeader; }
-            OIndexIterator* createIterator(OBoolOperator_BASE* pOp);
+            OIndexIterator* createIterator();
 
             void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
             void SetPageCount(sal_uInt32 nCount)    {m_nPageCount = nCount;}

@@ -92,7 +92,7 @@ namespace connectivity { namespace jdbc
     }
 
 
-    void ContextClassLoaderScope::pop( bool clearExceptions )
+    void ContextClassLoaderScope::pop()
     {
         if ( isActive() )
         {
@@ -101,10 +101,7 @@ namespace connectivity { namespace jdbc
             m_setContextClassLoaderMethod = nullptr;
 
             m_environment.CallObjectMethod( currentThread.get(), setContextClassLoaderMethod, m_oldContextClassLoader.get() );
-            if ( clearExceptions )
-            {
-                m_environment.ExceptionClear();
-            }
+            m_environment.ExceptionClear();
         }
     }
 
