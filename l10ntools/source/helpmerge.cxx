@@ -46,7 +46,7 @@
 #include "helper.hxx"
 #include "po.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 2
 void HelpParser::Dump(XMLHashMap* rElem_in)
 {
     for(XMLHashMap::iterator pos = rElem_in->begin();pos != rElem_in->end(); ++pos)
@@ -180,7 +180,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     {
         posm = aXMLStrHM->find( *pos );
         LangHashMap*  aLangHM = posm->second;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 2
         printf("*********************DUMPING HASHMAP***************************************");
         Dump(aXMLStrHM);
         printf("DBG: sHelpFile = %s\n",sHelpFile.getStr() );
