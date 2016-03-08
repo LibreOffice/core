@@ -704,8 +704,8 @@ ScFormatRangeStyles::ScFormatRangeStyles()
 
 ScFormatRangeStyles::~ScFormatRangeStyles()
 {
-    ScMyOUStringVec::iterator i(aStyleNames.begin());
-    ScMyOUStringVec::iterator endi(aStyleNames.end());
+    auto i(aStyleNames.begin());
+    auto endi(aStyleNames.end());
     while (i != endi)
     {
         delete *i;
@@ -983,8 +983,8 @@ ScColumnRowStylesBase::ScColumnRowStylesBase()
 
 ScColumnRowStylesBase::~ScColumnRowStylesBase()
 {
-    ScMyOUStringVec::iterator i(aStyleNames.begin());
-    ScMyOUStringVec::iterator endi(aStyleNames.end());
+    auto i(aStyleNames.begin());
+    auto endi(aStyleNames.end());
     while (i != endi)
     {
         delete *i;
