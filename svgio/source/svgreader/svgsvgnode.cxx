@@ -543,7 +543,7 @@ namespace svgio
                                     else
                                     {  // expand x
                                         fH = fChildHeight;
-                                        fW = fChildHeight / fViewBoxRatio;
+                                        fW = fChildHeight * fViewBoxRatio;
                                     }
                                     aSvgCanvasRange = basegfx::B2DRange(fLeft, fTop, fLeft + fW, fTop + fH);
                                 }
