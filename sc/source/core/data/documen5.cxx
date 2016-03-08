@@ -259,9 +259,9 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
     if ( xChartDoc.is() )
     {
-        uno::Sequence< OUString > aRangeStrings;
+        std::vector< OUString > aRangeStrings;
         ScChartHelper::GetChartRanges( xChartDoc, aRangeStrings );
-        for( sal_Int32 nN=0; nN<aRangeStrings.getLength(); nN++ )
+        for( size_t nN=0; nN<aRangeStrings.size(); nN++ )
         {
             ScRangeList aRanges;
             aRanges.Parse( aRangeStrings[nN], pSheetNameDoc, ScRefFlags::VALID, pSheetNameDoc->GetAddressConvention() );
