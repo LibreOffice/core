@@ -46,7 +46,7 @@ IMPL_LINK_NOARG_TYPED(SolarThreadExecutor, worker, void*, void)
     }
 }
 
-long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
+long SolarThreadExecutor::impl_execute()
 {
     if( ::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier() )
     {
@@ -60,7 +60,7 @@ long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
         osl_resetCondition( m_aFinish );
         SolarMutexReleaser aReleaser;
         ImplSVEvent * nEvent = Application::PostUserEvent( LINK( this, SolarThreadExecutor, worker ) );
-        if ( osl_cond_result_timeout == osl_waitCondition( m_aStart, _pTimeout ) )
+        if ( osl_cond_result_timeout == osl_waitCondition( m_aStart, nullptr ) )
         {
             m_bTimeout = true;
             Application::RemoveUserEvent( nEvent );

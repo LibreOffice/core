@@ -525,7 +525,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // get font list with scalable fonts only
     AcquireGraphics();
-    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( true, false );
+    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( false );
 
     // prepare to use new font lists
     mpFontCache = new ImplFontCache();

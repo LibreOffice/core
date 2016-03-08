@@ -1303,7 +1303,7 @@ public:
                                                 const OutputDevice* pOutDev = nullptr );
 
     SAL_DLLPRIVATE void         ImplInitFontList() const;
-    SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE void         ImplUpdateFontData();
 
     //drop font data for all outputdevices.
     //If bNewFontLists is true then empty lists of system fonts

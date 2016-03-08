@@ -712,14 +712,14 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 
     if ( !mpInfoPrinter )
     {
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
         return;
     }
 
     // we need a graphics
     if ( !AcquireGraphics() )
     {
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
         return;
     }
 
@@ -730,7 +730,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     mpGraphics->GetDevFontList( mpFontCollection );
 }
 
-void Printer::ImplInitDisplay( const vcl::Window* pWindow )
+void Printer::ImplInitDisplay()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -738,10 +738,7 @@ void Printer::ImplInitDisplay( const vcl::Window* pWindow )
     mpPrinter           = nullptr;
     mpJobGraphics       = nullptr;
 
-    if ( pWindow )
-        mpDisplayDev = VclPtr<VirtualDevice>::Create( *pWindow );
-    else
-        mpDisplayDev = VclPtr<VirtualDevice>::Create();
+    mpDisplayDev = VclPtr<VirtualDevice>::Create();
     mpFontCollection          = pSVData->maGDIData.mpScreenFontList;
     mpFontCache         = pSVData->maGDIData.mpScreenFontCache;
     mnDPIX              = mpDisplayDev->mnDPIX;
@@ -896,7 +893,7 @@ void Printer::ImplUpdatePageData()
 
 void Printer::ImplUpdateFontList()
 {
-    ImplUpdateFontData( true );
+    ImplUpdateFontData();
 }
 
 long Printer::GetGradientStepCount( long nMinRect )
@@ -918,7 +915,7 @@ Printer::Printer()
             mbDefPrinter = true;
     }
     else
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
 }
 
 Printer::Printer( const JobSetup& rJobSetup ) :
@@ -934,7 +931,7 @@ Printer::Printer( const JobSetup& rJobSetup ) :
     }
     else
     {
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
         maJobSetup = JobSetup();
     }
 }
@@ -947,7 +944,7 @@ Printer::Printer( const QueueInfo& rQueueInfo )
     if ( pInfo )
         ImplInit( pInfo );
     else
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
 }
 
 Printer::Printer( const OUString& rPrinterName )
@@ -957,7 +954,7 @@ Printer::Printer( const OUString& rPrinterName )
     if ( pInfo )
         ImplInit( pInfo );
     else
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
 }
 
 Printer::~Printer()
@@ -1164,7 +1161,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         }
 
         // Construct new printer
-        ImplInitDisplay( nullptr );
+        ImplInitDisplay();
         return true;
     }
 
@@ -1213,7 +1210,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             SetJobSetup( pPrinter->GetJobSetup() );
         }
         else
-            ImplInitDisplay( nullptr );
+            ImplInitDisplay();
     }
     else
         SetJobSetup( pPrinter->GetJobSetup() );
@@ -1537,13 +1534,13 @@ OUString Printer::GetPaperName( Paper ePaper )
     return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
 }
 
-OUString Printer::GetPaperName( bool i_bPaperUser ) const
+OUString Printer::GetPaperName() const
 {
     Size  aPageSize = PixelToLogic( GetPaperSizePixel(), MAP_100TH_MM );
     Paper ePaper    = ImplGetPaperFormat( aPageSize.Width(), aPageSize.Height() );
     if( ePaper == PAPER_USER )
         ePaper = ImplGetPaperFormat( aPageSize.Height(), aPageSize.Width() );
-    return (ePaper != PAPER_USER || i_bPaperUser ) ? GetPaperName( ePaper ) : OUString();
+    return (ePaper != PAPER_USER) ? GetPaperName( ePaper ) : OUString();
 }
 
 const PaperInfo& Printer::GetPaperInfo( int nPaper ) const

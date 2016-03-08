@@ -675,7 +675,7 @@ void SAL_CALL SlideShow::end()
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( false, isAlwaysOnTop() ? PresentationFlags::HideAllApps : PresentationFlags::NONE );
+                    pWorkWindow->StartPresentationMode( isAlwaysOnTop() ? PresentationFlags::HideAllApps : PresentationFlags::NONE );
                 }
             }
         }

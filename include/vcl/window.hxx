@@ -603,7 +603,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );
-    SAL_DLLPRIVATE void                 ImplValidate( const vcl::Region* rRegion, ValidateFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplValidate( ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
 
@@ -844,7 +844,7 @@ public:
 
     void                                IncrementLockCount();
     void                                DecrementLockCount();
-    bool                                IsLocked( bool bChildren = false ) const;
+    bool                                IsLocked() const;
 
                                         // returns the input language used for the last key stroke
                                         // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -905,7 +905,7 @@ public:
 
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
-    void                                EndExtTextInput( EndExtTextInputFlags nFlags );
+    void                                EndExtTextInput();
     void                                SetCursorRect( const Rectangle* pRect = nullptr, long nExtTextInputWidth = 0 );
     const Rectangle*                    GetCursorRect() const;
     long                                GetCursorExtTextInputWidth() const;
@@ -1074,7 +1074,7 @@ public:
     //  window extents including border and decoration
     Rectangle                           GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
     // window extents of the client window, coordinates to be used in SetPosPixel
-    Rectangle                           GetClientWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
+    Rectangle                           GetClientWindowExtentsRelative() const;
 
     bool                                IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,

@@ -252,14 +252,14 @@ void GtkPrintWrapper::print_settings_set_print_pages(GtkPrintSettings* settings,
 #endif
 }
 
-GtkWidget* GtkPrintWrapper::print_unix_dialog_new(const gchar* title, GtkWindow* parent) const
+GtkWidget* GtkPrintWrapper::print_unix_dialog_new() const
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_new);
-    return (*m_print_unix_dialog_new)(title, parent);
+    return (*m_print_unix_dialog_new)(nullptr, nullptr);
 #else
     (void) this; // loplugin:staticmethods
-    return gtk_print_unix_dialog_new(title, parent);
+    return gtk_print_unix_dialog_new(nullptr, nullptr);
 #endif
 }
 
