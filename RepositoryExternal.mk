@@ -617,7 +617,7 @@ endif # SYSTEM_HUNSPELL
 
 ifneq ($(SYSTEM_BOOST),)
 
-define gb_LinkTarget__use_boostdatetime
+define gb_LinkTarget__use_boost_lib
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(BOOST_CPPFLAGS) \
@@ -627,43 +627,24 @@ $(call gb_LinkTarget_add_ldflags,$(1),\
 	$(BOOST_LDFLAGS) \
 )
 
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(BOOST_DATE_TIME_LIB) \
-)
+$(call gb_LinkTarget_add_libs,$(1),$(2))
+
+endef
+
+define gb_LinkTarget__use_boostdatetime
+$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_DATE_TIME_LIB))
 
 endef
 
 define gb_LinkTarget__use_boost_iostreams
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(BOOST_CPPFLAGS) \
-)
-
-$(call gb_LinkTarget_add_ldflags,$(1),\
-	$(BOOST_LDFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(BOOST_IOSTREAMS_LIB) \
-)
+$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_IOSTREAMS_LIB))
 
 endef
 
 gb_ExternalProject__use_boost_iostreams :=
 
 define gb_LinkTarget__use_boost_system
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(BOOST_CPPFLAGS) \
-)
-
-$(call gb_LinkTarget_add_ldflags,$(1),\
-	$(BOOST_LDFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(BOOST_SYSTEM_LIB) \
-)
+$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_SYSTEM_LIB))
 
 endef
 
@@ -681,37 +662,29 @@ gb_ExternalProject__use_boost_headers:=
 
 else # !SYSTEM_BOOST
 
-ifeq ($(OS),WNT)
-define gb_LinkTarget__use_boostthread
+define gb_LinkTarget__use_boost_lib
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DBOOST_ALL_NO_LIB \
 )
 
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	boostthread \
-)
+$(call gb_LinkTarget_use_static_libraries,$(1),$(2))
+
+endef
+
+ifeq ($(OS),WNT)
+define gb_LinkTarget__use_boostthread
+$(call gb_LinkTarget__use_boost_lib,$(1),boostthread)
+
 endef
 endif
 
 define gb_LinkTarget__use_boostdatetime
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DBOOST_ALL_NO_LIB \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	boostdatetime \
-)
+$(call gb_LinkTarget__use_boost_lib,$(1),boostdatetime)
 
 endef
 
 define gb_LinkTarget__use_boost_filesystem
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DBOOST_ALL_NO_LIB \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	boost_filesystem \
-)
+$(call gb_LinkTarget__use_boost_lib,$(1),boost_filesystem)
 
 endef
 
@@ -720,13 +693,7 @@ $(call gb_ExternalProject_use_static_libraries,$(1),boost_filesystem)
 endef
 
 define gb_LinkTarget__use_boost_iostreams
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DBOOST_ALL_NO_LIB \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	boost_iostreams \
-)
+$(call gb_LinkTarget__use_boost_lib,$(1),boost_iostreams)
 
 endef
 
@@ -735,13 +702,7 @@ $(call gb_ExternalProject_use_static_libraries,$(1),boost_iostreams)
 endef
 
 define gb_LinkTarget__use_boost_system
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DBOOST_ALL_NO_LIB \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	boost_system \
-)
+$(call gb_LinkTarget__use_boost_lib,$(1),boost_system)
 
 endef
 
