@@ -50,7 +50,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="10287"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="10455"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatGroup" toolbar:helpid="10454"/>

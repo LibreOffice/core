@@ -333,6 +333,20 @@
           <value>insertfield</value>
         </prop>
       </node>
+      <node oor:name="c28" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AnchorMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>anchor</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">
@@ -1110,6 +1124,17 @@
       <node oor:name="InsertFieldController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:InsertFieldCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="AnchorController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AnchorMenu</value>
         </prop>
         <prop oor:name="Module">
           <value/>

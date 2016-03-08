@@ -32,7 +32,7 @@
  <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="10164"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="10129"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:visible="false" toolbar:helpid="20472"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:visible="false" toolbar:helpid="20473"/>

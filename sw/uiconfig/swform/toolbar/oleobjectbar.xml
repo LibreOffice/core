@@ -39,7 +39,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="10286"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="10287"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="10187"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="10200"/>

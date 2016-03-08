@@ -5869,6 +5869,9 @@
       </node>
       <node oor:name=".uno:AnchorMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Change Anchor</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Anc~hor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">

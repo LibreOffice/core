@@ -154,3 +154,6 @@ cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
 cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
 cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 
+# anchor menu
+cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
+cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png

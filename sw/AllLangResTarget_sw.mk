@@ -102,7 +102,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/misc/glossary.src \
     sw/source/ui/misc/numberingtypelistbox.src \
     sw/source/ui/misc/swruler.src \
-    sw/source/ui/ribbar/tbxanchr.src \
     sw/source/ui/shells/shells.src \
     sw/source/ui/sidebar/PagePropertyPanel.src \
     sw/source/ui/utlui/poolfmt.src \

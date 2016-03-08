@@ -20,6 +20,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/scalc,\
 endif
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
+	sc/uiconfig/scalc/popupmenu/anchor \
 	sc/uiconfig/scalc/popupmenu/audit \
 	sc/uiconfig/scalc/popupmenu/cell \
 	sc/uiconfig/scalc/popupmenu/celledit \

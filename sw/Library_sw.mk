@@ -645,7 +645,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/ribbar/drawbase \
     sw/source/uibase/ribbar/dselect \
     sw/source/uibase/ribbar/inputwin \
-    sw/source/uibase/ribbar/tbxanchr \
     sw/source/uibase/ribbar/workctrl \
     sw/source/uibase/shells/annotsh \
     sw/source/uibase/shells/basesh \

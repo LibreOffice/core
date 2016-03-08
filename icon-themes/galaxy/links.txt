@@ -50,6 +50,7 @@ cmd/sc_functiondialog.png cmd/sc_insertformula.png
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 cmd/sc_alignframemenu.png cmd/sc_objectalign.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
+cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/sc_savegraphic.png cmd/sc_save.png
 

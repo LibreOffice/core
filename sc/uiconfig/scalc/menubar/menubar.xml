@@ -371,12 +371,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:AnchorMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:SetAnchorToCell" menu:style="radio"/>
-                </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:AnchorMenu"/>
             <menu:menu menu:id=".uno:ArrangeMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:BringToFront"/>

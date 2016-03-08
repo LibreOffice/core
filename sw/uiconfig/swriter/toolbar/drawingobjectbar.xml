@@ -29,7 +29,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:helpid="20472"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:helpid="20473"/>

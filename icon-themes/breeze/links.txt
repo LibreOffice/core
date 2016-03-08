@@ -171,6 +171,7 @@ cmd/lc_optionstreedialog.png cmd/lc_controlproperties.png
 cmd/sc_optionstreedialog.png cmd/sc_controlproperties.png
 
 # Formatmenu
+cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/lc_conditionalformatmenu.png cmd/lc_conditionalformatdialog.png
 cmd/sc_conditionalformatmenu.png cmd/sc_conditionalformatdialog.png
 

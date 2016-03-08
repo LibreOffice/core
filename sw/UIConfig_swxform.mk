@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/swxform,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swxform,\
+	sw/uiconfig/swxform/popupmenu/anchor \
 	sw/uiconfig/swxform/popupmenu/annotation \
 	sw/uiconfig/swxform/popupmenu/draw \
 	sw/uiconfig/swxform/popupmenu/drawtext \

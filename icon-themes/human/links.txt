@@ -1,3 +1,5 @@
+cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
+cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 

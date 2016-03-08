@@ -44,7 +44,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>

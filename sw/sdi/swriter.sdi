@@ -5829,7 +5829,7 @@ SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem ToggleAnchorType FN_TOOL_ANCHOR
+SfxVoidItem AnchorMenu FN_TOOL_ANCHOR
 ()
 [
     AutoUpdate = FALSE,

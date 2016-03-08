@@ -49,15 +49,7 @@
       <menu:menuitem menu:id=".uno:TextWrap"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:AnchorMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:SetAnchorToPara" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:SetAnchorAtChar" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:SetAnchorToChar" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:SetAnchorToFrame" menu:style="radio"/>
-    </menu:menupopup>
-  </menu:menu>
+  <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:GroupMenu">
     <menu:menupopup>

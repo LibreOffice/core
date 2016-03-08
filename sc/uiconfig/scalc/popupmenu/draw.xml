@@ -48,12 +48,7 @@
       <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:AnchorMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:SetAnchorToCell" menu:style="radio"/>
-    </menu:menupopup>
-  </menu:menu>
+  <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menuitem menu:id=".uno:AssignMacro"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>

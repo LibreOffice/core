@@ -122,6 +122,8 @@ cmd/ko/sc_bold.png cmd/sc_bold.png
 cmd/ko/sc_italic.png cmd/sc_italic.png
 cmd/ko/sc_underline.png cmd/sc_underline.png
 cmd/ko/sc_underlinedouble.png cmd/sc_underlinedouble.png
+cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
+cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 cmd/lc_alignvcenter.png cmd/lc_alignverticalcenter.png
