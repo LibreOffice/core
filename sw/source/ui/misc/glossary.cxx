@@ -1079,7 +1079,7 @@ void SwGlossaryDlg::ShowAutoText(const OUString& rGroup, const OUString& rShortN
     {
         SetResumeData(rGroup, rShortName);
         //try to make an Undo()
-        pExampleFrame->ClearDocument( true );
+        pExampleFrame->ClearDocument();
     }
 }
 

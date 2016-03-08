@@ -50,7 +50,7 @@ void SwView::ExecColl(SfxRequest &rReq)
                     SfxItemState::SET == pArgs->GetItemState( nWhich , true, &pItem ))
                 {
                     if( static_cast<const SfxStringItem*>(pItem)->GetValue() !=
-                                            GetWrtShell().GetCurPageStyle(false) )
+                                            GetWrtShell().GetCurPageStyle() )
                     {
                         SfxStringItem aName(SID_STYLE_APPLY,
                                    static_cast<const SfxStringItem*>(pItem)->GetValue());

@@ -267,7 +267,7 @@ public:
     /** Search PageDesc with which this node is formatted. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
-    const SwPageDesc* FindPageDesc( bool bCalcLay, size_t* pPgDescNdIdx = nullptr ) const;
+    const SwPageDesc* FindPageDesc( size_t* pPgDescNdIdx = nullptr ) const;
 
     /// If node is in a fly return the respective format.
     SwFrameFormat* GetFlyFormat() const;

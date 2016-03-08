@@ -259,7 +259,7 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bNextButton, OStrin
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(nullptr, *this, pField, bNextButton));
+    std::unique_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);

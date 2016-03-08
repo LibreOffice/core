@@ -398,9 +398,9 @@ void SwEditShell::SetFieldUpdateFlags( SwFieldUpdateFlags eFlags )
     getIDocumentSettingAccess().setFieldUpdateFlags( eFlags );
 }
 
-SwFieldUpdateFlags SwEditShell::GetFieldUpdateFlags(bool bDocSettings) const
+SwFieldUpdateFlags SwEditShell::GetFieldUpdateFlags() const
 {
-    return getIDocumentSettingAccess().getFieldUpdateFlags( !bDocSettings );
+    return getIDocumentSettingAccess().getFieldUpdateFlags( false );
 }
 
 void SwEditShell::SetLabelDoc( bool bFlag )

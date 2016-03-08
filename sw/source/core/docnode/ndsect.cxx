@@ -190,7 +190,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
-    SwSectionFormat* const pFormat = MakeSectionFormat( nullptr );
+    SwSectionFormat* const pFormat = MakeSectionFormat();
     if ( pAttr )
     {
         pFormat->SetFormatAttr( *pAttr );
@@ -506,10 +506,9 @@ SwSection* SwDoc::GetCurrSection( const SwPosition& rPos )
     return nullptr;
 }
 
-SwSectionFormat* SwDoc::MakeSectionFormat( SwSectionFormat *pDerivedFrom )
+SwSectionFormat* SwDoc::MakeSectionFormat()
 {
-    SwSectionFormat* pNew = new SwSectionFormat(
-        pDerivedFrom == nullptr ? mpDfltFrameFormat : pDerivedFrom, this );
+    SwSectionFormat* pNew = new SwSectionFormat( mpDfltFrameFormat, this );
     mpSectionFormatTable->push_back( pNew );
     return pNew;
 }
@@ -1096,7 +1095,7 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
                         {
                             pViewShell->InvalidateAccessibleParaFlowRelation(
                                 dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                                dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt( true )) );
+                                dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
                         }
                     }
                     pNew = pSct;
@@ -1122,7 +1121,7 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
                     }
                 }
                 if ( bInitNewSect )
@@ -1196,7 +1195,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     const SwNodes& rNds = GetNodes();
 
     // Copy the SectionFrameFormat
-    SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat( nullptr );
+    SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();
     pSectFormat->CopyAttrs( *GetSection().GetFormat() );
 
     std::unique_ptr<SwTOXBase> pTOXBase;

@@ -592,7 +592,7 @@ public:
 
     /// Hide or show layout-selection and pass call to CursorSh.
     void ShellLoseFocus();
-    void ShellGetFocus( bool bUpdate = true );
+    void ShellGetFocus();
 
     /// PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );

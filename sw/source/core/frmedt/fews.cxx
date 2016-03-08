@@ -275,10 +275,10 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
     return nReturn;
 }
 
-void SwFEShell::ShellGetFocus( bool bUpdate )
+void SwFEShell::ShellGetFocus()
 {
     ::SetShell( this );
-    SwCursorShell::ShellGetFocus( bUpdate );
+    SwCursorShell::ShellGetFocus( false/*bUpdate*/ );
 
     if ( HasDrawView() )
     {

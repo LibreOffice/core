@@ -167,7 +167,7 @@ public:
     // access via TypeId from the dialog
     // Ids for a range of fields
     static const SwFieldGroupRgn& GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId);
-    static sal_uInt16           GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType = 0);
+    static sal_uInt16           GetGroup(sal_uInt16 nTypeId, sal_uInt16 nSubType = 0);
 
     // the current field's TypeId
     sal_uInt16          GetCurTypeId() const;

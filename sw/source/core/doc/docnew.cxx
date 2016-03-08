@@ -1155,7 +1155,7 @@ else
     this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, nullptr );
 
     getIDocumentFieldsAccess().UnlockExpFields();
-    getIDocumentFieldsAccess().UpdateFields(nullptr, false);
+    getIDocumentFieldsAccess().UpdateFields(false);
 
     if ( pTargetShell )
         pTargetShell->EndAllAction();

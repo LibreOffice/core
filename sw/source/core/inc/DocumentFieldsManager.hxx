@@ -41,7 +41,7 @@ public:
     virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const override;
     virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const override;
     virtual void RemoveFieldType(size_t nField) override;
-    virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) override;
+    virtual void UpdateFields(bool bCloseDB) override;
     virtual void InsDeletedFieldType(SwFieldType &) override;
     virtual bool PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) override;
     virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) override;
@@ -55,7 +55,7 @@ public:
     virtual bool IsExpFieldsLocked() const override;
     virtual SwDocUpdateField& GetUpdateFields() const override;
     virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) override;
-    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) override;
+    virtual void SetFixFields(const DateTime* pNewDateTime) override;
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) override;
     virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) override;
     virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const _SetGetExpField& rToThisField) override;

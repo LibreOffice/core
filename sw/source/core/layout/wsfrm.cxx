@@ -3744,7 +3744,7 @@ void SwRootFrame::InvalidateAllObjPos()
                 // #i28701# - special invalidation for anchored
                 // objects, whose wrapping style influence has to be considered.
                 if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
-                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
+                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                 else
                     pAnchoredObj->InvalidateObjPos();
             }

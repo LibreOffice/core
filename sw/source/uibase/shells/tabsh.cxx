@@ -170,7 +170,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     if(rSh.GetBoxDirection( aBoxDirection ))
         rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTORIENTATION);
 
-    bool bSelectAll = rSh.StartsWithTable() && rSh.ExtendedSelectedAll(/*bFootnotes=*/false);
+    bool bSelectAll = rSh.StartsWithTable() && rSh.ExtendedSelectedAll();
     bool bTableSel = rSh.IsTableMode() || bSelectAll;
     if(!bTableSel)
     {

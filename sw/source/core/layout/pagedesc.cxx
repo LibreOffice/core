@@ -124,9 +124,9 @@ void SwPageDesc::Mirror()
     m_Left.SetFormatAttr( aSet );
 }
 
-void SwPageDesc::ResetAllAttr( bool bLeft )
+void SwPageDesc::ResetAllAttr()
 {
-    SwFrameFormat& rFormat = bLeft ? GetLeft() : GetMaster();
+    SwFrameFormat& rFormat = GetMaster();
 
     // #i73790# - method renamed
     rFormat.ResetAllFormatAttr();

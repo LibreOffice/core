@@ -150,7 +150,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
             if (GetDocShell() && pGDoc->GetDocShell())
                 pGDoc->ReplaceDocumentProperties( *this );
-            pGDoc->getIDocumentFieldsAccess().SetFixFields(false, nullptr);
+            pGDoc->getIDocumentFieldsAccess().SetFixFields(nullptr);
 
             // StartAllAction();
             getIDocumentFieldsAccess().LockExpFields();

@@ -484,7 +484,7 @@ void SwObjectFormatterTextFrame::_InvalidatePrevObjs( SwAnchoredObject& _rAnchor
                             // #i35017# - constant name has changed
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
                 {
-                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
+                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                 }
             }
         }
@@ -496,7 +496,7 @@ void SwObjectFormatterTextFrame::_InvalidateFollowObjs( SwAnchoredObject& _rAnch
 {
     if ( _bInclObj )
     {
-        _rAnchoredObj.InvalidateObjPosForConsiderWrapInfluence( true );
+        _rAnchoredObj.InvalidateObjPosForConsiderWrapInfluence();
     }
 
     const SwSortedObjs* pObjs = GetPageFrame().GetSortedObjs();
@@ -506,7 +506,7 @@ void SwObjectFormatterTextFrame::_InvalidateFollowObjs( SwAnchoredObject& _rAnch
         for ( size_t i = pObjs->ListPosOf( _rAnchoredObj ) + 1; i < pObjs->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-            pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
+            pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
         }
     }
 }

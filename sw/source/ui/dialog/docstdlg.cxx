@@ -146,7 +146,7 @@ IMPL_LINK_NOARG_TYPED(SwDocStatPage, UpdateHdl, Button*, void)
     SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
-        m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount(false)));
+        m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount()));
     //pButton->Disable();
 }
 

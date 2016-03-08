@@ -359,7 +359,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
             SwSectionData headerData( TOX_HEADER_SECTION, pNewSection->GetTOXName()+"_Head" );
 
             SwNodeIndex aStt( *pHeadNd ); --aIdx;
-            SwSectionFormat* pSectFormat = MakeSectionFormat( nullptr );
+            SwSectionFormat* pSectFormat = MakeSectionFormat();
             GetNodes().InsertTextSection(
                     aStt, *pSectFormat, headerData, nullptr, &aIdx, true, false);
         }
@@ -390,7 +390,7 @@ void SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
 
     SwNodeIndex aStt( GetNodes(), nSttNd ), aEnd( GetNodes(), nEndNd );
-    SwSectionFormat* pFormat = MakeSectionFormat( nullptr );
+    SwSectionFormat* pFormat = MakeSectionFormat();
     if(pSet)
         pFormat->SetFormatAttr(*pSet);
 
@@ -769,7 +769,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of table-of-content
             size_t nPgDescNdIdx = pSectNd->GetIndex() + 1;
             size_t* pPgDescNdIdx = &nPgDescNdIdx;
-            pDefaultPageDesc = pSectNd->FindPageDesc( false, pPgDescNdIdx );
+            pDefaultPageDesc = pSectNd->FindPageDesc( pPgDescNdIdx );
             if ( nPgDescNdIdx < pSectNd->GetIndex() )
             {
                 pDefaultPageDesc = nullptr;
@@ -790,7 +790,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                     eBreak == SVX_BREAK_PAGE_BOTH )
                )
             {
-                pDefaultPageDesc = pNdAfterTOX->FindPageDesc( false );
+                pDefaultPageDesc = pNdAfterTOX->FindPageDesc();
             }
         }
         // consider start node of content section in the node array.
@@ -802,7 +802,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of content before table-of-content
             SwNodeIndex aIdx( *pSectNd );
             pDefaultPageDesc =
-                SwNodes::GoPrevious( &aIdx )->FindPageDesc( false );
+                SwNodes::GoPrevious( &aIdx )->FindPageDesc();
 
         }
         if ( !pDefaultPageDesc )
@@ -882,7 +882,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         SwSectionData headerData( TOX_HEADER_SECTION, GetTOXName()+"_Head" );
 
         SwNodeIndex aStt( *pHeadNd ); --aIdx;
-        SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat( nullptr );
+        SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();
         pDoc->GetNodes().InsertTextSection(
                 aStt, *pSectFormat, headerData, nullptr, &aIdx, true, false);
     }

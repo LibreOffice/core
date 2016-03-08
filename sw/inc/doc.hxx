@@ -1338,7 +1338,7 @@ public:
     static SwSection* GetCurrSection( const SwPosition& rPos );
     SwSectionFormats& GetSections() { return *mpSectionFormatTable; }
     const SwSectionFormats& GetSections() const { return *mpSectionFormatTable; }
-    SwSectionFormat *MakeSectionFormat( SwSectionFormat *pDerivedFrom );
+    SwSectionFormat *MakeSectionFormat();
     void DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes = false );
     void UpdateSection(size_t const nSect, SwSectionData &,
             SfxItemSet const*const = nullptr, bool const bPreventLinkUpdate = false);

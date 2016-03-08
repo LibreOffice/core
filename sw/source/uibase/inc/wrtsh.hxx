@@ -349,7 +349,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     void            SetPageStyle(const OUString &rCollName);
 
-    OUString        GetCurPageStyle( const bool bCalcFrame = true ) const;
+    OUString        GetCurPageStyle() const;
 
     // change current style using the attributes in effect
     void    QuickUpdateStyle();

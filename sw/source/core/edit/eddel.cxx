@@ -36,7 +36,7 @@
 
 void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
 {
-    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false);
+    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     // only for selections
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
         return;

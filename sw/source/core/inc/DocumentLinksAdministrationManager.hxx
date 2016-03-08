@@ -47,7 +47,7 @@ public:
 
     const sfx2::LinkManager& GetLinkManager() const override;
 
-    void UpdateLinks(bool bUI) override;
+    void UpdateLinks() override;
 
     bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const override;
 

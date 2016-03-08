@@ -406,7 +406,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     //section.
     bool bBreakSet = false;
 
-    const SwPageDesc * pPageDesc = rNd.FindPageDesc(false);
+    const SwPageDesc * pPageDesc = rNd.FindPageDesc();
 
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (m_pAktPageDesc != pPageDesc)

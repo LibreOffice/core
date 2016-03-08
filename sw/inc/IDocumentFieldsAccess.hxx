@@ -56,7 +56,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual void RemoveFieldType(size_t nField) = 0;
 
-    virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) = 0;
+    virtual void UpdateFields(bool bCloseDB) = 0;
 
     virtual void InsDeletedFieldType(SwFieldType &) = 0;
 
@@ -112,7 +112,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     */
     virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) = 0;
 
-    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) = 0;
+    virtual void SetFixFields(const DateTime* pNewDateTime) = 0;
 
     // In Calculator set all SetExpression fields that are valid up to the indicated position
     // (Node [ + css::ucb::Content]).

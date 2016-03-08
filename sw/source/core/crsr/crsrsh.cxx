@@ -230,7 +230,7 @@ void SwCursorShell::StartAction()
 
 void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
 {
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false));
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     bool bVis = m_bSVCursorVis;
 
     sal_uInt16 eFlags = SwCursorShell::CHKRANGE;
@@ -611,10 +611,10 @@ void SwCursorShell::ExtendedSelectAll(bool bFootnotes)
     pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 }
 
-bool SwCursorShell::ExtendedSelectedAll(bool bFootnotes)
+bool SwCursorShell::ExtendedSelectedAll()
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
-    SwNodeIndex nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfAutotext();
+    SwNodeIndex nNode = rNodes.GetEndOfAutotext();
     SwContentNode* pStart = rNodes.GoNext(&nNode);
 
     nNode = rNodes.GetEndOfContent();
@@ -1263,7 +1263,7 @@ bool SwCursorShell::GoPrevCursor()
 
 void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false));
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     SET_CURR_SHELL( this );
 
     // always switch off all cursors when painting

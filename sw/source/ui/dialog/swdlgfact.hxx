@@ -375,8 +375,8 @@ public:
                                                             ) override;
     virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
         SfxChildWindow* pChild, vcl::Window *pParent, SfxChildWinInfo* pInfo) override;
-    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(vcl::Window* pParent) override;
-    virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( vcl::Window* pParent, SwDocShell& rDocSh,
+    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg() override;
+    virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( SwDocShell& rDocSh,
                                                                 SvStream* pStream ) override;
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) override;
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
@@ -392,10 +392,10 @@ public:
         const SwDBData& rData) override;
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
 
-    virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (vcl::Window *pParent, SwWrtShell &rSh,
+    virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog(SwWrtShell &rSh,
         SwField* pField, bool bNextButton = false) override;
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) override;
-    virtual AbstractSwLabDlg* CreateSwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
+    virtual AbstractSwLabDlg* CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () override;
@@ -407,7 +407,7 @@ public:
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) override;
 
-    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName) override;
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(const OUString &rShortName) override;
     virtual VclAbstractDialog * CreateVclAbstractDialog ( vcl::Window * pParent, SwWrtShell &rSh, int nResId ) override;
     virtual AbstractSplitTableDialog * CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) override;
 
@@ -436,7 +436,6 @@ public:
                                                 const OString& sDefPage = OString(),
                                                 const OUString*   pFormatStr  = nullptr) override;
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
-                                                vcl::Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
                                                 const OString&      sPage = OString(),

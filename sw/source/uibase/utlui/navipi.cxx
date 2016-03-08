@@ -174,14 +174,11 @@ void SwNavigationPI::FillBox()
     }
 }
 
-void SwNavigationPI::UsePage(SwWrtShell *pSh)
+void SwNavigationPI::UsePage()
 {
-    if (!pSh)
-    {
-        SwView *pView = GetCreateView();
-        pSh = pView ? &pView->GetWrtShell() : nullptr;
-        GetPageEdit().SetValue(1);
-    }
+    SwView *pView = GetCreateView();
+    SwWrtShell *pSh = pView ? &pView->GetWrtShell() : nullptr;
+    GetPageEdit().SetValue(1);
     if (pSh)
     {
         const sal_uInt16 nPageCnt = pSh->GetPageCnt();
@@ -518,7 +515,7 @@ void SwNavigationPI::GotoPage()
         _ZoomIn();
     if(IsGlobalMode())
         ToggleTree();
-    UsePage(nullptr);
+    UsePage();
     GetPageEdit().GrabFocus();
 }
 
@@ -819,7 +816,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     }
     else
         m_aContentTree->GrabFocus();
-    UsePage(nullptr);
+    UsePage();
     m_aPageChgIdle.SetIdleHdl(LINK(this, SwNavigationPI, ChangePageHdl));
     m_aPageChgIdle.SetPriority(SchedulerPriority::LOWEST);
 

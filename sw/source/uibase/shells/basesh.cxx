@@ -1432,7 +1432,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     // If the swapping of the graphic is finished, the status
                     // must be determined asynchronously, until this the slot
                     // will be disabled.
-                    if ( bHas && bIsGraphicSelection && rSh.IsGrfSwapOut( true ) )
+                    if ( bHas && bIsGraphicSelection && rSh.IsLinkedGrfSwapOut() )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(false);  // start the loading
@@ -1466,7 +1466,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if(!bDisable && pVFrame->HasChildWindow( nId ))
                 {
                     if(rSh.GetSelectionType() == nsSelectionType::SEL_GRF
-                                    && rSh.IsGrfSwapOut(true))
+                                    && rSh.IsLinkedGrfSwapOut())
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(false);  // start the loading
@@ -1515,7 +1515,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     // must be determined asynchronously, until this the slot
                     // will be disabled.
                     else if ( bHas && (nSel & nsSelectionType::SEL_GRF) &&
-                              rSh.IsGrfSwapOut(true) )
+                              rSh.IsLinkedGrfSwapOut() )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(false);  // start the loading
@@ -1707,7 +1707,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             {
                                 int nSel = rSh.GetSelectionType();
                                 if( (nSel & nsSelectionType::SEL_GRF) &&
-                                            rSh.IsGrfSwapOut(true))
+                                            rSh.IsLinkedGrfSwapOut())
                                 {
                                     if( AddGrfUpdateSlot( nWhich ))
                                         rSh.GetGraphic(false);  // start the loading

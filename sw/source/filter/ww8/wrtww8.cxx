@@ -2643,7 +2643,7 @@ void MSWordExportBase::WriteText()
         {
             SwContentNode* pCNd = static_cast<SwContentNode*>(&rNd);
 
-            const SwPageDesc* pTemp = rNd.FindPageDesc(false);
+            const SwPageDesc* pTemp = rNd.FindPageDesc();
             if ( pTemp )
                 m_pAktPageDesc = pTemp;
 

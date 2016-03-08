@@ -1619,7 +1619,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
             if( !pItem )
             {
-                const SwPageDesc* pPgDsc = pNd->FindPageDesc( false );
+                const SwPageDesc* pPgDsc = pNd->FindPageDesc();
                 if( pPgDsc )
                     pItem = &pPgDsc->GetMaster().GetFrameDir();
             }

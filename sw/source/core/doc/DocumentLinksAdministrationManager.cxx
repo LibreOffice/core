@@ -197,7 +197,7 @@ const sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager() co
 
 // #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
 // to new SwDoc::UpdateLinks():
-void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
+void DocumentLinksAdministrationManager::UpdateLinks()
 {
     SfxObjectCreateMode eMode;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode( true );
@@ -228,7 +228,7 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
                     bAskUpdate = true;
                 }
             }
-            if( bUpdate && (bUI || !bAskUpdate) )
+            if( bUpdate )
             {
                 SfxMedium* pMedium = m_rDoc.GetDocShell()->GetMedium();
                 SfxFrame* pFrame = pMedium ? pMedium->GetLoadTargetFrame() : nullptr;

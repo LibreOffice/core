@@ -664,7 +664,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             pDestShell->StartAllAction();
     }
     pDestShell->GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
-    pDestShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
+    pDestShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
 
     pDestShell->EndAllAction();
     return bRet;
@@ -1102,7 +1102,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
             StartAllAction();
     }
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
-    GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
+    GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     EndAllAction();
 
     return bRet;
@@ -1187,7 +1187,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         }
     }
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
-    GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
+    GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     Pop(false);
     EndAllAction();
 

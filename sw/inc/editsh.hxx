@@ -196,7 +196,7 @@ public:
     void SetNumberingRestart();
 
     /// Embeds all local links (ranges/graphics).
-    sal_uInt16 GetLinkUpdMode(bool bDocSettings = false) const;
+    sal_uInt16 GetLinkUpdMode() const;
     void SetLinkUpdMode( sal_uInt16 nMode );
 
     /// Copy content of all ranges at current position of cursor to given Shell.
@@ -394,7 +394,7 @@ public:
     void UnlockExpFields();
     bool IsExpFieldsLocked() const;
 
-    SwFieldUpdateFlags GetFieldUpdateFlags(bool bDocSettings = false) const;
+    SwFieldUpdateFlags GetFieldUpdateFlags() const;
     void SetFieldUpdateFlags( SwFieldUpdateFlags eFlags );
 
     /// For evaluation of DB fields (new DB-manager).
@@ -538,8 +538,7 @@ public:
     /** Searches for a text node with a numbering rule.
      in case a list style is found, <sListId> holds the list id, to which the
      text node belongs, which applies the found list style. */
-    const SwNumRule * SearchNumRule(const bool bForward,
-                                    const bool bNum,
+    const SwNumRule * SearchNumRule(const bool bNum,
                                     const bool bOutline,
                                     int nNonEmptyAllowed,
                                     OUString& sListId );
@@ -602,7 +601,7 @@ public:
     const Graphic* GetGraphic( bool bWait = true ) const;
     const GraphicObject* GetGraphicObj() const;
 
-    bool IsGrfSwapOut( bool bOnlyLinked = false ) const;
+    bool IsLinkedGrfSwapOut() const;
     sal_uInt16 GetGraphicType() const;
 
     const tools::PolyPolygon *GetGraphicPolygon() const;
@@ -801,7 +800,7 @@ public:
     bool IsOutlineMovable( sal_uInt16 nIdx ) const;
     bool IsOutlineCopyable( sal_uInt16 nIdx ) const;
 
-    sal_uInt16 GetLineCount( bool bActPos = true );
+    sal_uInt16 GetLineCount();
 
     /// Query and set footnote-text/number. Set.. to current SSelection!
     bool GetCurFootnote( SwFormatFootnote* pToFillFootnote = nullptr );
@@ -926,7 +925,7 @@ public:
 
     /// Interface for TextInputData - (for input of Japanese/Chinese chars.)
     void CreateExtTextInput(LanguageType eInputLanguage);
-    OUString DeleteExtTextInput( SwExtTextInput* pDel = nullptr, bool bInsText = true);
+    OUString DeleteExtTextInput( bool bInsText = true);
     void SetExtTextInputData( const CommandExtTextInputData& );
 
     /// Interface for access to AutoComplete-list.

@@ -201,7 +201,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc )
         bool bColSel = _GetCursor()->IsColumnSelection();
         if( bColSel && pInsDoc->IsClipBoard() )
             pInsDoc->SetColumnSelection( true );
-        bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false);
+        bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
         {
             for(SwPaM& rPaM : GetCursor()->GetRingContainer())
             {

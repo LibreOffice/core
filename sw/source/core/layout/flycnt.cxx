@@ -524,7 +524,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             {
                 SetTmpConsiderWrapInfluence( true );
                 SetRestartLayoutProcess( true );
-                SetTmpConsiderWrapInfluenceOfOtherObjs( true );
+                SetTmpConsiderWrapInfluenceOfOtherObjs();
             }
             bSetCompletePaintOnInvalidate = false;
         }

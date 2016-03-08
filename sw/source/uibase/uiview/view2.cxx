@@ -1365,7 +1365,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case FN_STAT_TEMPLATE:
             {
                 rSet.Put(SfxStringItem( FN_STAT_TEMPLATE,
-                                        rShell.GetCurPageStyle(false)));
+                                        rShell.GetCurPageStyle()));
 
             }
             break;
@@ -1927,7 +1927,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         // For scrolling the FrameSet, the corresponding shell needs to have the focus.
         bool bHasShFocus = m_pWrtShell->HasShellFocus();
         if( !bHasShFocus )
-            m_pWrtShell->ShellGetFocus( false );
+            m_pWrtShell->ShellGetFocus();
 
         const SwFormatINetFormat* pINet;
         OUString sCmp;

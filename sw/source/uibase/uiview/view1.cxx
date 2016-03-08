@@ -71,7 +71,7 @@ void SwView::Activate(bool bMDIActivate)
 
     if ( bMDIActivate )
     {
-        m_pWrtShell->ShellGetFocus(false);     // Selections visible
+        m_pWrtShell->ShellGetFocus();     // Selections visible
 
         if( !m_sSwViewData.isEmpty() )
         {

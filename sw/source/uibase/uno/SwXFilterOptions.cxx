@@ -108,7 +108,7 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::excepti
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        std::unique_ptr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(nullptr, *pDocShell,
+        std::unique_ptr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(*pDocShell,
             pInStream.get()));
         OSL_ENSURE(pAsciiDlg, "Dialog creation failed!");
         if(RET_OK == pAsciiDlg->Execute())

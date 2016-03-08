@@ -703,7 +703,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(pDocSh->GetMedium()->GetItemSet(), SID_TEMPLATE, false);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
-                        pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(false, nullptr);
+                        pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(nullptr);
                     }
                 }
                 break;

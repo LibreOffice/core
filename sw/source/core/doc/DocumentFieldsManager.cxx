@@ -335,7 +335,7 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
 }
 
 // All have to be re-evaluated.
-void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
+void DocumentFieldsManager::UpdateFields( bool bCloseDB )
 {
     // Call Modify() for every field type,
     // dependent SwTextField get notified ...
@@ -355,13 +355,8 @@ void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
 
         case RES_DDEFLD:
         {
-            if( !pNewHt )
-            {
-                SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-                pFieldType->ModifyNotification( nullptr, &aUpdateDDE );
-            }
-            else
-                pFieldType->ModifyNotification( nullptr, pNewHt );
+            SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
+            pFieldType->ModifyNotification( nullptr, &aUpdateDDE );
             break;
         }
         case RES_GETEXPFLD:
@@ -369,10 +364,9 @@ void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
         case RES_HIDDENTXTFLD:
         case RES_HIDDENPARAFLD:
             // Expression fields are treated separately
-            if( !pNewHt )
-                break;
+            break;
         default:
-            pFieldType->ModifyNotification ( nullptr, pNewHt );
+            pFieldType->ModifyNotification ( nullptr, nullptr );
         }
     }
 
@@ -380,10 +374,10 @@ void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
         UpdateExpFields( nullptr, false );      // update expression fields
 
     // Tables
-    UpdateTableFields(pNewHt);
+    UpdateTableFields(nullptr);
 
     // References
-    UpdateRefFields(pNewHt);
+    UpdateRefFields(nullptr);
     if( bCloseDB )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -1281,7 +1275,7 @@ bool DocumentFieldsManager::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLon
     return bFieldsFnd;
 }
 
-void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
+void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
 {
     bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
@@ -1305,9 +1299,7 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
         /*3*/   RES_FILENAMEFLD,
         /*4*/   RES_DATETIMEFLD };  // MUST be at the end!
 
-    sal_uInt16 nStt = bOnlyTimeDate ? 4 : 0;
-
-    for( ; nStt < 5; ++nStt )
+    for( sal_uInt16 nStt = 0; nStt < 5; ++nStt )
     {
         SwFieldType* pFieldType = GetSysFieldType( aTypes[ nStt ] );
         SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );

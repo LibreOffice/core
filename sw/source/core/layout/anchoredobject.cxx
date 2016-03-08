@@ -389,8 +389,7 @@ void SwAnchoredObject::UpdateLayoutDir()
 
     #i28701#
 */
-void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence(
-                                                    const bool _bNotifyBackgrd )
+void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence()
 {
     if ( ConsiderObjWrapInfluenceOnObjPos() )
     {
@@ -400,11 +399,8 @@ void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence(
         UnlockPosition();
         // invalidate position
         InvalidateObjPos();
-        // invalidate 'background', if requested
-        if ( _bNotifyBackgrd )
-        {
-            NotifyBackground( GetPageFrame(), GetObjRectWithSpaces(), PREP_FLY_LEAVE );
-        }
+        // invalidate 'background'
+        NotifyBackground( GetPageFrame(), GetObjRectWithSpaces(), PREP_FLY_LEAVE );
     }
 }
 
@@ -638,7 +634,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                     if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
-                        pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
+                        pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                     else
                         pAnchoredObj->InvalidateObjPos();
                 }
@@ -652,7 +648,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                     if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
-                        pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
+                        pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                     else
                         pAnchoredObj->InvalidateObjPos();
                 }
@@ -756,7 +752,7 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrap
 }
 
 
-void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence )
+void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs()
 {
     const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
     if ( pObjs->size() > 1 )
@@ -766,7 +762,7 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpCo
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj != this )
             {
-                pAnchoredObj->SetTmpConsiderWrapInfluence( bTmpConsiderWrapInfluence );
+                pAnchoredObj->SetTmpConsiderWrapInfluence( true/*bTmpConsiderWrapInfluence*/ );
             }
         }
     }

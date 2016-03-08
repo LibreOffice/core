@@ -172,7 +172,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(nullptr, aSet,
+    std::unique_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(aSet,
 #if HAVE_FEATURE_DBCONNECTIVITY
                                                                             pDBManager.get(),
 #else

@@ -322,7 +322,7 @@ public:
     // only for usage in special cases allowed!
     void ExtendedSelectAll(bool bFootnotes = true);
     /// If ExtendedSelectAll() was called and selection didn't change since then.
-    bool ExtendedSelectedAll(bool bFootnotes = true);
+    bool ExtendedSelectedAll();
     /// If document body starts with a table.
     bool StartsWithTable();
 
@@ -735,7 +735,7 @@ public:
     bool IsEndOfDoc() const;
     bool IsInFrontOfLabel() const;
     bool IsAtLeftMargin()   const       { return IsAtLRMargin( true ); }
-    bool IsAtRightMargin(bool bAPI = false) const   { return IsAtLRMargin( false, bAPI ); }
+    bool IsAtRightMargin() const   { return IsAtLRMargin( false, true/*bAPI*/ ); }
 
     // delete all created cursors, set the table cursor and the last cursor to
     // its TextNode (or StartNode?)

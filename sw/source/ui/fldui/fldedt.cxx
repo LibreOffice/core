@@ -107,7 +107,7 @@ SwFieldEditDlg::SwFieldEditDlg(SwView& rVw)
 
     EnsureSelection(pCurField, aMgr);
 
-    sal_uInt16 nGroup = SwFieldMgr::GetGroup(false, pCurField->GetTypeId(), pCurField->GetSubType());
+    sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetSubType());
 
     CreatePage(nGroup);
 
@@ -282,7 +282,7 @@ IMPL_LINK_TYPED( SwFieldEditDlg, NextPrevHdl, Button *, pButton, void )
 
     EnsureSelection(pCurField, rMgr);
 
-    sal_uInt16 nGroup = SwFieldMgr::GetGroup(false, pCurField->GetTypeId(), pCurField->GetSubType());
+    sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
         pTabPage = static_cast<SwFieldPage*>(CreatePage(nGroup).get());

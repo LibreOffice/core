@@ -90,13 +90,13 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
     aTopWindow->Show();
 }
 
-void SwOneExampleFrame::CreateErrorMessage(vcl::Window* pParent)
+void SwOneExampleFrame::CreateErrorMessage()
 {
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
     {
         OUString sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
         sInfo += cFrameControl;
-        ScopedVclPtr<InfoBox>::Create(pParent, sInfo)->Execute();
+        ScopedVclPtr<InfoBox>::Create(nullptr, sInfo)->Execute();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
     }
 }
@@ -401,7 +401,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
         pTimer->Start();
 }
 
-void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )
+void SwOneExampleFrame::ClearDocument()
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )
@@ -419,13 +419,12 @@ void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )
             pDoc->ClearDoc();
             pSh->ClearUpCursors();
 
-            if( aLoadedIdle.IsActive() || !bStartUpdateTimer )
+            if( aLoadedIdle.IsActive())
             {
                 pSh->EndAllAction();
                 pSh->UnlockPaint();
             }
-            if( bStartUpdateTimer )
-                aLoadedIdle.Start();
+            aLoadedIdle.Start();
         }
         else
         {
@@ -550,7 +549,7 @@ Size SwFrameCtrlWindow::GetOptimalSize() const
 void SwFrameCtrlWindow::Resize()
 {
     VclEventBox::Resize();
-    pExampleFrame->ClearDocument(true);
+    pExampleFrame->ClearDocument();
 }
 
 MenuResource::MenuResource(const ResId& rResId) :

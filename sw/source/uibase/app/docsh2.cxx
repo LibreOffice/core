@@ -692,7 +692,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(nullptr));
+            std::unique_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg());
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(RET_OK == pDlg->Execute())
             {
@@ -832,7 +832,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             //pWrtShell is not set in page preview
             if (m_pWrtShell)
                 m_pWrtShell->StartAllAction();
-            m_pDoc->getIDocumentFieldsAccess().UpdateFields( nullptr, false );
+            m_pDoc->getIDocumentFieldsAccess().UpdateFields( false );
             m_pDoc->getIDocumentLinksAdministration().EmbedAllLinks();
             m_IsRemovedInvisibleContent
                 = officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get();

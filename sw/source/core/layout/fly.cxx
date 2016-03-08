@@ -146,7 +146,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     // First the Init, then the Content:
     // This is due to the fact that the Content may have Objects/Frames,
     // which are then registered
-    InitDrawObj( false );
+    InitDrawObj();
 
     Chain( pAnch );
 
@@ -397,7 +397,7 @@ SwVirtFlyDrawObj* SwFlyFrame::CreateNewRef( SwFlyDrawContact *pContact )
     return pDrawObj;
 }
 
-void SwFlyFrame::InitDrawObj( bool bNotify )
+void SwFlyFrame::InitDrawObj()
 {
     // Find ContactObject from the Format. If there's already one, we just
     // need to create a new Ref, else we create the Contact now.
@@ -422,8 +422,6 @@ void SwFlyFrame::InitDrawObj( bool bNotify )
     GetVirtDrawObj()->SetLayer( GetFormat()->GetOpaque().GetValue()
                                 ? nHeavenId
                                 : nHellId );
-    if ( bNotify )
-        NotifyDrawObj();
 }
 
 void SwFlyFrame::FinitDrawObj()
@@ -2180,8 +2178,7 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
     assert(!mpDrawObjs || mpDrawObjs->is_sorted());
 }
 
-void SwFrame::InvalidateObjs( const bool _bInvaPosOnly,
-                            const bool _bNoInvaOfAsCharAnchoredObjs )
+void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
 {
     if ( GetDrawObjs() )
     {
@@ -2236,8 +2233,6 @@ void SwFrame::InvalidateObjs( const bool _bInvaPosOnly,
                 SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                 pFly->_Invalidate();
                 pFly->_InvalidatePos();
-                if ( !_bInvaPosOnly )
-                    pFly->_InvalidateSize();
             }
             else
             {

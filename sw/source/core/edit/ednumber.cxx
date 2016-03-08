@@ -855,14 +855,13 @@ sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
     return USHRT_MAX;
 }
 
-const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
-                                              const bool bNum,
+const SwNumRule * SwEditShell::SearchNumRule( const bool bNum,
                                               const bool bOutline,
                                               int nNonEmptyAllowed,
                                               OUString& sListId )
 {
-    return GetDoc()->SearchNumRule( *(bForward ? GetCursor()->End() : GetCursor()->Start()),
-                                    bForward, bNum, bOutline, nNonEmptyAllowed,
+    return GetDoc()->SearchNumRule( *(GetCursor()->Start()),
+                                    false/*bForward*/, bNum, bOutline, nNonEmptyAllowed,
                                     sListId );
 }
 

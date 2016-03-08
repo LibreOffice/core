@@ -174,7 +174,7 @@ void SwSectionFrame::DelEmpty( bool bRemove )
             {
                 pViewShell->InvalidateAccessibleParaFlowRelation(
                                 dynamic_cast<SwTextFrame*>(FindNextCnt( true )),
-                                dynamic_cast<SwTextFrame*>(FindPrevCnt( true )) );
+                                dynamic_cast<SwTextFrame*>(FindPrevCnt()) );
             }
         }
         _Cut( bRemove );

@@ -200,7 +200,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @author OD
         */
-        void SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence );
+        void SetTmpConsiderWrapInfluenceOfOtherObjs();
 
         virtual bool _SetObjTop( const SwTwips _nTop) = 0;
         virtual bool _SetObjLeft( const SwTwips _nLeft) = 0;
@@ -339,7 +339,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @author OD
         */
-        void InvalidateObjPosForConsiderWrapInfluence( const bool _bNotifyBackgrd );
+        void InvalidateObjPosForConsiderWrapInfluence();
 
         /** method to trigger notification of 'background'
 

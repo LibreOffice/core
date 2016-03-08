@@ -5985,7 +5985,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
 void QuickHelpData::Stop( SwWrtShell& rSh )
 {
     if( !m_bIsTip )
-        rSh.DeleteExtTextInput( nullptr, false );
+        rSh.DeleteExtTextInput( false );
     else if( nTipId )
     {
         vcl::Window& rWin = rSh.GetView().GetEditWin();

@@ -280,8 +280,8 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_nOldLinkMode = GLOBALSETTING;
     if (m_pWrtShell)
     {
-        eFieldFlags = m_pWrtShell->GetFieldUpdateFlags(true);
-        m_nOldLinkMode = m_pWrtShell->GetLinkUpdMode(true);
+        eFieldFlags = m_pWrtShell->GetFieldUpdateFlags();
+        m_nOldLinkMode = m_pWrtShell->GetLinkUpdMode();
     }
     if(GLOBALSETTING == m_nOldLinkMode)
         m_nOldLinkMode = pUsrPref->GetUpdateLinkMode();

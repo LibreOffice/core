@@ -942,7 +942,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             SET_CURR_SHELL( m_pWrtShell );
             m_pWrtShell->StartAction();
             m_pWrtShell->CalcLayout();
-            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
+            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
             m_pWrtShell->EndAction();
         }
         m_pWrtShell->GetDoc()->getIDocumentState().SetUpdateExpFieldStat( false );

@@ -1514,9 +1514,9 @@ void SwWrtShell::SetPageStyle(const OUString &rCollName)
 
 // Access templates
 
-OUString SwWrtShell::GetCurPageStyle( const bool bCalcFrame ) const
+OUString SwWrtShell::GetCurPageStyle() const
 {
-    return GetPageDesc(GetCurPageDesc( bCalcFrame )).GetName();
+    return GetPageDesc(GetCurPageDesc( false/*bCalcFrame*/ )).GetName();
 }
 
 // Change the current template referring to the existing change.

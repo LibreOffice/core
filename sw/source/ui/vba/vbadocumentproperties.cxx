@@ -309,7 +309,7 @@ public:
                 SwFEShell* pFEShell = mpDocShell->GetFEShell();
                 if(pFEShell)
                 {
-                    aReturn <<= pFEShell->GetLineCount(false);
+                    aReturn <<= pFEShell->GetLineCount();
                 }
             }
         }

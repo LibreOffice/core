@@ -428,7 +428,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
 {
     if( _rLayoutFrame.IsFlyFrame() && _rLayoutFrame.GetDrawObjs() )
     {
-        _rLayoutFrame.InvalidateObjs( true, false );
+        _rLayoutFrame.InvalidateObjs( false );
     }
 
     SwFrame* pLowerFrame = _rLayoutFrame.Lower();
@@ -444,7 +444,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
             pLowerFrame->InvalidatePrt();
         }
 
-        pLowerFrame->InvalidateObjs( true, false );
+        pLowerFrame->InvalidateObjs( false );
 
         pLowerFrame = pLowerFrame->GetNext();
     }
@@ -1325,7 +1325,7 @@ void _InsertCnt( SwLayoutFrame *pLay, SwDoc *pDoc,
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
                         dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                        dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt( true )) );
+                        dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
                     // #i68958#
                     // The information flags of the text frame are validated
                     // in methods <FindNextCnt(..)> and <FindPrevCnt(..)>.
@@ -1375,7 +1375,7 @@ void _InsertCnt( SwLayoutFrame *pLay, SwDoc *pDoc,
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
                 }
             }
             if ( bObjsDirect && !pTable->empty() )
@@ -1450,7 +1450,7 @@ void _InsertCnt( SwLayoutFrame *pLay, SwDoc *pDoc,
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
                     }
                 }
                 pFrame->CheckDirChange();

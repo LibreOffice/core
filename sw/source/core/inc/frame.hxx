@@ -376,8 +376,7 @@ public:
     const SwSortedObjs *GetDrawObjs() const { return mpDrawObjs; }
           SwSortedObjs *GetDrawObjs()         { return mpDrawObjs; }
     // #i28701# - change purpose of method and adjust its name
-    void InvalidateObjs( const bool _bInvaPosOnly,
-                         const bool _bNoInvaOfAsCharAnchoredObjs = true );
+    void InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
     virtual void PaintBorder( const SwRect&, const SwPageFrame *pPage,
                               const SwBorderAttrs & ) const;
@@ -523,9 +522,9 @@ public:
     inline const SwFrame     *FindPrev() const;
            const SwFrame     *GetLower()  const;
 
-    SwContentFrame* FindPrevCnt( const bool _bInSameFootnote = false );
+    SwContentFrame* FindPrevCnt();
 
-    const SwContentFrame* FindPrevCnt( const bool _bInSameFootnote = false ) const;
+    const SwContentFrame* FindPrevCnt() const;
 
     // #i79774#
     SwFrame* _GetIndPrev() const;

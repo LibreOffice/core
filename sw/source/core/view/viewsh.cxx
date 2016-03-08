@@ -651,7 +651,7 @@ void SwViewShell::UpdateFields(bool bCloseDB)
     else
         StartAction();
 
-    GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, bCloseDB);
+    GetDoc()->getIDocumentFieldsAccess().UpdateFields(bCloseDB);
 
     if ( bCursor )
         static_cast<SwCursorShell*>(this)->EndAction();

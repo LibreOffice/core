@@ -166,20 +166,20 @@ SwFrame* SwFrame::GetLower()
     return IsLayoutFrame() ? static_cast<SwLayoutFrame*>(this)->Lower() : nullptr;
 }
 
-SwContentFrame* SwFrame::FindPrevCnt( const bool _bInSameFootnote )
+SwContentFrame* SwFrame::FindPrevCnt( )
 {
     if ( GetPrev() && GetPrev()->IsContentFrame() )
         return static_cast<SwContentFrame*>(GetPrev());
     else
-        return _FindPrevCnt( _bInSameFootnote );
+        return _FindPrevCnt( true );
 }
 
-const SwContentFrame* SwFrame::FindPrevCnt( const bool _bInSameFootnote ) const
+const SwContentFrame* SwFrame::FindPrevCnt() const
 {
     if ( GetPrev() && GetPrev()->IsContentFrame() )
         return static_cast<const SwContentFrame*>(GetPrev());
     else
-        return const_cast<SwFrame*>(this)->_FindPrevCnt( _bInSameFootnote );
+        return const_cast<SwFrame*>(this)->_FindPrevCnt( true );
 }
 
 SwContentFrame *SwFrame::FindNextCnt( const bool _bInSameFootnote )

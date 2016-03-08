@@ -781,7 +781,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 if (nWID == WID_PAGE_COUNT)
                     nCount = m_pView->GetWrtShell().GetPageCount();
                 else // WID_LINE_COUNT
-                    nCount = m_pView->GetWrtShell().GetLineCount( false /*of whole document*/ );
+                    nCount = m_pView->GetWrtShell().GetLineCount();
                 aRet <<= nCount;
             }
             break;
@@ -1673,7 +1673,7 @@ sal_Bool SwXTextViewCursor::isAtEndOfLine()
         if (!IsTextSelection( false ))
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
-        bRet = m_pView->GetWrtShell().IsAtRightMargin(true);
+        bRet = m_pView->GetWrtShell().IsAtRightMargin();
     }
     else
         throw uno::RuntimeException();

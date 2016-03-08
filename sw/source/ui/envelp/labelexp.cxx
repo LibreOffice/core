@@ -135,7 +135,7 @@ IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExamp
 IMPL_LINK_NOARG_TYPED( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void )
 {
     if(m_xAutoText.is() && pExampleFrame->IsInitialized())
-        pExampleFrame->ClearDocument( true );
+        pExampleFrame->ClearDocument();
 }
 IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectHdl, ListBox&, rBox, void )
 {
@@ -157,7 +157,7 @@ IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectHdl, ListBox&, rBox, void )
                         aBlockNames.getConstArray() );
         }
         if(pExampleFrame->IsInitialized())
-            pExampleFrame->ClearDocument( true );
+            pExampleFrame->ClearDocument();
     }
 }
 

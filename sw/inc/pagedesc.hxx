@@ -158,7 +158,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
        No adjustment at any other place. */
     SAL_DLLPRIVATE void Mirror();
 
-    SAL_DLLPRIVATE void ResetAllAttr( bool bLeft );
+    SAL_DLLPRIVATE void ResetAllAttr();
 
     SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrameFormat*, SwDoc *pDc );
 
@@ -307,7 +307,7 @@ inline UseOnPage SwPageDesc::GetUseOn() const
 
 inline void SwPageDesc::ResetAllMasterAttr()
 {
-    ResetAllAttr( false );
+    ResetAllAttr();
 }
 
 inline const SwFrameFormat *SwPageDesc::GetRightFormat(bool const bFirst) const

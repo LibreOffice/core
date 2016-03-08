@@ -799,7 +799,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                     const sal_uInt16 eGraphicType( rSh.GetGraphicType() );
                     if ( ( eGraphicType == GRAPHIC_NONE ||
                            eGraphicType == GRAPHIC_DEFAULT ) &&
-                         rSh.IsGrfSwapOut( true ) )
+                         rSh.IsLinkedGrfSwapOut() )
                     {
                         rSet.DisableItem( nWhich );
                         if( AddGrfUpdateSlot( nWhich ))

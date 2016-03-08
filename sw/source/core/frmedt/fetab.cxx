@@ -196,7 +196,7 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
 
     // search boxes via the layout
     SwSelBoxes aBoxes;
-    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes=*/false);
+    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     if (bSelectAll)
     {
         // Set the end of the selection to the last paragraph of the last cell of the table.

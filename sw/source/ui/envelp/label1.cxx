@@ -725,7 +725,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
             {
                 lcl_SelectBlock(*m_pAutoTextLB, aLabItem.m_sGlossaryBlockName);
                 if(m_xAutoText.is() && pExampleFrame->IsInitialized())
-                    pExampleFrame->ClearDocument( true );
+                    pExampleFrame->ClearDocument();
             }
         }
     }

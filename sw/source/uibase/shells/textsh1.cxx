@@ -1120,12 +1120,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             OUString sContinuedListId;
             const SwNumRule* pRule =
-                rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
+                rWrtSh.SearchNumRule( true, false, -1, sContinuedListId );
             // #i86492#
             // Search also for bullet list
             if ( !pRule )
             {
-                pRule = rWrtSh.SearchNumRule( false, false, false, -1, sContinuedListId );
+                pRule = rWrtSh.SearchNumRule( false, false, -1, sContinuedListId );
             }
             if ( pRule )
             {
@@ -1882,10 +1882,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     // Search also for bullet list
                     OUString aDummy;
                     const SwNumRule* pRule =
-                            rSh.SearchNumRule( false, true, false, -1, aDummy );
+                            rSh.SearchNumRule( true, false, -1, aDummy );
                     if ( !pRule )
                     {
-                        pRule = rSh.SearchNumRule( false, false, false, -1, aDummy );
+                        pRule = rSh.SearchNumRule( false, false, -1, aDummy );
                     }
                     if ( !pRule )
                         rSet.DisableItem(nWhich);

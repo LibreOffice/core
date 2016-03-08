@@ -332,7 +332,7 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
             const SwTextNode* pTextNode = static_cast< SwTextNode* >(&aNextIndex.GetNode());
             m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode);
             // Save the current page description for now, so later we will be able to access the previous one.
-            m_pPrevPageDesc = pTextNode->FindPageDesc(false);
+            m_pPrevPageDesc = pTextNode->FindPageDesc();
         }
         else if (aNextIndex.GetNode().IsTableNode())
         {

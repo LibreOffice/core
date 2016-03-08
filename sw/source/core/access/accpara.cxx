@@ -973,7 +973,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
             "<SwAccessibleParagraph::getAccessibleRelationSet()> - missing text frame");
     if ( pTextFrame )
     {
-        const SwContentFrame* pPrevContentFrame( pTextFrame->FindPrevCnt( true ) );
+        const SwContentFrame* pPrevContentFrame( pTextFrame->FindPrevCnt() );
         if ( pPrevContentFrame )
         {
             uno::Sequence< uno::Reference<XInterface> > aSequence { GetMap()->GetContext( pPrevContentFrame ) };

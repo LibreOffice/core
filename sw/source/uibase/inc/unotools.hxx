@@ -106,14 +106,14 @@ public:
     css::uno::Reference< css::frame::XController > &  GetController() {return _xController;}
     css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
 
-    void ClearDocument( bool bStartTimer = false );
+    void ClearDocument();
 
     bool IsInitialized() const {return bIsInitialized;}
     bool IsServiceAvailable() const {return bServiceAvailable;}
 
     void CreatePopup(const Point& rPt);
 
-    static void     CreateErrorMessage(vcl::Window* pParent);
+    static void     CreateErrorMessage();
 };
 
 #endif

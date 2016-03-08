@@ -440,7 +440,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(nullptr, aShortName));
+                std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(aShortName));
                 assert(pDlg && "Dialog creation failed!");
                 for(size_t i = 0; i < aFoundArr.size(); ++i)
                 {

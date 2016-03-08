@@ -95,7 +95,6 @@ public:
 
     uno::Reference< text::XTextRange >
         finishOrAppendParagraph(
-            const bool bFinish,
             const uno::Sequence< beans::PropertyValue >&
                 rCharacterAndParagraphProperties,
             const uno::Reference< text::XTextRange >& xInsertPosition)
@@ -1239,7 +1238,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
-    return m_pImpl->finishOrAppendParagraph(true, rProperties, uno::Reference< text::XTextRange >());
+    return m_pImpl->finishOrAppendParagraph(rProperties, uno::Reference< text::XTextRange >());
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1250,12 +1249,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
-    return m_pImpl->finishOrAppendParagraph(true, rProperties, xInsertPosition);
+    return m_pImpl->finishOrAppendParagraph(rProperties, xInsertPosition);
 }
 
 uno::Reference< text::XTextRange >
 SwXText::Impl::finishOrAppendParagraph(
-        const bool bFinish,
         const uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
     throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
@@ -1296,10 +1294,7 @@ SwXText::Impl::finishOrAppendParagraph(
     m_pDoc->ResetAttrs(aPam);
     // in case of finishParagraph the PaM needs to be moved to the
     // previous paragraph
-    if (bFinish)
-    {
-        aPam.Move( fnMoveBackward, fnGoNode );
-    }
+    aPam.Move( fnMoveBackward, fnGoNode );
 
     try
     {

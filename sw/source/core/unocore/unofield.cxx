@@ -2929,7 +2929,7 @@ void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException, std::ex
             throw uno::RuntimeException();
         UnoActionContext aContext(GetDoc());
         GetDoc()->getIDocumentStatistics().UpdateDocStat( false, true );
-        GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
+        GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     }
     // call refresh listeners (without SolarMutex locked)
     lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));

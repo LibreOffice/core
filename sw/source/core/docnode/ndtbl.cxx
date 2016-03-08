@@ -2422,7 +2422,7 @@ void SwTableNode::MakeFrames( SwNodeIndex* pIdxBehind )
             {
                 pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
             }
         }
         pNew->RegistFlys();
@@ -2457,7 +2457,7 @@ void SwTableNode::DelFrames()
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
                     }
                 }
                 pFrame->Cut();
