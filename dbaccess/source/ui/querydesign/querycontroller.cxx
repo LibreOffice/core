@@ -141,7 +141,7 @@ namespace dbaui
 #if OSL_DEBUG_LEVEL > 0
     namespace
     {
-        void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = NULL)
+        void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = nullptr)
         {
             OUString rString;
             if (!_pNode->isToken())
@@ -767,7 +767,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
 
                     if ( _nId == ID_EDIT_QUERY_DESIGN )
                     {
-                        ::connectivity::OSQLParseNode* pTemp = pNode ? pNode->getChild(3)->getChild(1) : NULL;
+                        ::connectivity::OSQLParseNode* pTemp = pNode ? pNode->getChild(3)->getChild(1) : nullptr;
                         // no where clause found
                         if ( pTemp && !pTemp->isLeaf() )
                         {
