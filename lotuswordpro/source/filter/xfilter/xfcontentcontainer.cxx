@@ -131,7 +131,7 @@ void    XFContentContainer::ToXml(IXFStream *pStrm)
     {
         XFContent *pContent = it->get();
         if( pContent )
-            pContent->ToXml(pStrm);
+            pContent->DoToXml(pStrm);
     }
 }
 

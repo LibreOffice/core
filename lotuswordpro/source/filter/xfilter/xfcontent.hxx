@@ -64,6 +64,7 @@
 
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <stdexcept>
 
 #include "xfdefs.hxx"
 
@@ -92,14 +93,28 @@ public:
      */
     OUString   GetStyleName() {return m_strStyleName;}
 
-    virtual void ToXml(IXFStream * stream) = 0;
+    void DoToXml(IXFStream* stream)
+    {
+        if (m_bDoingToXml)
+            throw std::runtime_error("recursion in content");
+        m_bDoingToXml = true;
+        ToXml(stream);
+        m_bDoingToXml = false;
+    }
 
 protected:
-    XFContent() {}
+    XFContent()
+        : m_bDoingToXml(false)
+    {
+    }
+
+    virtual void ToXml(IXFStream* stream) = 0;
 
     virtual ~XFContent() {}
 
-    OUString   m_strStyleName;
+    OUString m_strStyleName;
+private:
+    bool m_bDoingToXml;
 };
 
 #endif
