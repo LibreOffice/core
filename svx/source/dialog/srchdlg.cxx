@@ -85,7 +85,6 @@ using namespace comphelper;
 #define MODIFY_REPLACE      0x00000002
 #define MODIFY_WORD         0x00000004
 #define MODIFY_EXACT        0x00000008
-#define MODIFY_BACKWARDS    0x00000010
 #define MODIFY_SELECTION    0x00000020
 #define MODIFY_REGEXP       0x00000040
 #define MODIFY_LAYOUT       0x00000080
@@ -272,6 +271,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     get(m_pSearchTmplLB, "searchlist");
     m_pSearchTmplLB->SetStyle(m_pSearchTmplLB->GetStyle() | WB_SORT);
     get(m_pSearchBtn, "search");
+    get(m_pBackSearchBtn, "backsearch");
     get(m_pSearchAllBtn, "searchall");
     get(m_pSearchAttrText, "searchdesc");
     m_pSearchAttrText->SetStyle(m_pSearchAttrText->GetStyle() | WB_PATHELLIPSIS);
@@ -304,7 +304,6 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     get(m_pIgnoreDiacritics, "ignorediacritics");
     get(m_pIgnoreKashida, "ignorekashida");
     get(m_pSelectionBtn, "selection");
-    get(m_pBackwardsBtn, "backwards");
     get(m_pRegExpBtn, "regexp");
     get(m_pWildcardBtn, "wildcard");
     get(m_pSimilarityBox, "similarity");
@@ -372,6 +371,7 @@ void SvxSearchDialog::dispose()
     m_pReplaceTmplLB.clear();
     m_pReplaceAttrText.clear();
     m_pSearchBtn.clear();
+    m_pBackSearchBtn.clear();
     m_pSearchAllBtn.clear();
     m_pReplaceBtn.clear();
     m_pReplaceAllBtn.clear();
@@ -385,7 +385,6 @@ void SvxSearchDialog::dispose()
     m_pIgnoreDiacritics.clear();
     m_pIgnoreKashida.clear();
     m_pSelectionBtn.clear();
-    m_pBackwardsBtn.clear();
     m_pRegExpBtn.clear();
     m_pWildcardBtn.clear();
     m_pSimilarityBox.clear();
@@ -554,7 +553,7 @@ bool SvxSearchDialog::Close()
     // save settings to configuration
     SvtSearchOptions aOpt;
     aOpt.SetWholeWordsOnly          ( m_pWordBtn->IsChecked() );
-    aOpt.SetBackwards               ( m_pBackwardsBtn->IsChecked() );
+    aOpt.SetBackwards               ( false );
     aOpt.SetUseRegularExpression    ( m_pRegExpBtn->IsChecked() );
     aOpt.SetUseWildcard             ( m_pWildcardBtn->IsChecked() );
     aOpt.SetSearchForStyles         ( m_pLayoutBtn->IsChecked() );
@@ -642,6 +641,7 @@ void SvxSearchDialog::InitControls_Impl()
 
     Link<Button*,void> aLink2 = LINK( this, SvxSearchDialog, CommandHdl_Impl );
     m_pSearchBtn->SetClickHdl( aLink2 );
+    m_pBackSearchBtn->SetClickHdl( aLink2 );
     m_pSearchAllBtn->SetClickHdl( aLink2 );
     m_pReplaceBtn->SetClickHdl( aLink2 );
     m_pReplaceAllBtn->SetClickHdl( aLink2 );
@@ -657,7 +657,6 @@ void SvxSearchDialog::InitControls_Impl()
     m_pMatchCaseCB->SetClickHdl( aLink2 );
     m_pRegExpBtn->SetClickHdl( aLink2 );
     m_pWildcardBtn->SetClickHdl( aLink2 );
-    m_pBackwardsBtn->SetClickHdl( aLink2 );
     m_pNotesBtn->SetClickHdl( aLink2 );
     m_pSimilarityBox->SetClickHdl( aLink2 );
     m_pJapOptionsCB->SetClickHdl( aLink2 );
@@ -710,7 +709,6 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
 
     m_pLayoutBtn->Show(!bDrawApp);
     m_pNotesBtn->Show(bWriterApp);
-    m_pBackwardsBtn->Show();
     m_pRegExpBtn->Show(!bDrawApp);
     m_pWildcardBtn->Show(bCalcApp); /* TODO:WILDCARD enable for other apps if hey handle it */
     m_pSimilarityBox->Show();
@@ -779,8 +777,6 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
          m_pWordBtn->Check( pSearchItem->GetWordOnly() );
     if ( ( nModifyFlag & MODIFY_EXACT ) == 0 )
         m_pMatchCaseCB->Check( pSearchItem->GetExact() );
-    if ( ( nModifyFlag & MODIFY_BACKWARDS ) == 0 )
-        m_pBackwardsBtn->Check( pSearchItem->GetBackward() );
     if ( ( nModifyFlag & MODIFY_NOTES ) == 0 )
         m_pNotesBtn->Check( pSearchItem->GetNotes() );
     if ( ( nModifyFlag & MODIFY_SELECTION ) == 0 )
@@ -1009,6 +1005,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     if ( bDisableSearch )
     {
         m_pSearchBtn->Disable();
+        m_pBackSearchBtn->Disable();
         m_pSearchAllBtn->Disable();
         m_pReplaceBtn->Disable();
         m_pReplaceAllBtn->Disable();
@@ -1017,6 +1014,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     else
     {
         EnableControl_Impl(m_pSearchBtn);
+        EnableControl_Impl(m_pBackSearchBtn);
         EnableControl_Impl(m_pReplaceBtn);
         if (!bWriter || !m_pNotesBtn->IsChecked())
         {
@@ -1194,6 +1192,7 @@ void SvxSearchDialog::ClickHdl_Impl(void* pCtrl)
             if ( m_pSearchTmplLB->GetEntryCount() )
             {
                 EnableControl_Impl(m_pSearchBtn);
+                EnableControl_Impl(m_pBackSearchBtn);
                 EnableControl_Impl(m_pSearchAllBtn);
                 EnableControl_Impl(m_pReplaceBtn);
                 EnableControl_Impl(m_pReplaceAllBtn);
@@ -1260,6 +1259,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
     bool bInclusive = ( m_pLayoutBtn->GetText() == aLayoutStr );
 
     if ( ( pBtn == m_pSearchBtn )   ||
+        (pBtn == m_pBackSearchBtn)  ||
          ( pBtn == m_pSearchAllBtn )||
          ( pBtn == m_pReplaceBtn )  ||
          ( pBtn == m_pReplaceAllBtn ) )
@@ -1296,7 +1296,14 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
             pSearchItem->SetLevenshtein( true );
 
         pSearchItem->SetWordOnly(GetCheckBoxValue(m_pWordBtn));
-        pSearchItem->SetBackward(GetCheckBoxValue(m_pBackwardsBtn));
+        if( pBtn == m_pBackSearchBtn)
+        {
+            pSearchItem->SetBackward(true);
+        }
+        else
+        {
+            pSearchItem->SetBackward(false);
+        }
         pSearchItem->SetNotes(GetCheckBoxValue(m_pNotesBtn));
         pSearchItem->SetPattern(GetCheckBoxValue(m_pLayoutBtn));
         pSearchItem->SetSelection(GetCheckBoxValue(m_pSelectionBtn));
@@ -1321,7 +1328,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
             pSearchItem->SetSearchFormatted( m_pSearchFormattedCB->IsChecked() );
         }
 
-        if (pBtn == m_pSearchBtn)
+        if ((pBtn == m_pSearchBtn) ||  (pBtn == m_pBackSearchBtn))
             pSearchItem->SetCommand( SvxSearchCmd::FIND );
         else if ( pBtn == m_pSearchAllBtn )
             pSearchItem->SetCommand( SvxSearchCmd::FIND_ALL );
@@ -1442,6 +1449,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, ModifyHdl_Impl, Edit&, rEd, void )
         if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen)
         {
             EnableControl_Impl(m_pSearchBtn);
+            EnableControl_Impl(m_pBackSearchBtn);
             EnableControl_Impl(m_pReplaceBtn);
             if (!bWriter || !m_pNotesBtn->IsChecked())
             {
@@ -1453,6 +1461,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, ModifyHdl_Impl, Edit&, rEd, void )
         {
             m_pComponentFrame->Enable(false);
             m_pSearchBtn->Disable();
+            m_pBackSearchBtn->Disable();
             m_pSearchAllBtn->Disable();
             m_pReplaceBtn->Disable();
             m_pReplaceAllBtn->Disable();
@@ -1607,6 +1616,7 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
     if ( m_pSearchTmplLB->GetEntryCount() )
     {
         EnableControl_Impl(m_pSearchBtn);
+        EnableControl_Impl(m_pBackSearchBtn);
         EnableControl_Impl(m_pSearchAllBtn);
         EnableControl_Impl(m_pReplaceBtn);
         EnableControl_Impl(m_pReplaceAllBtn);
@@ -1635,6 +1645,7 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
 
     bool bEnableSearch = bool( SearchOptionFlags::SEARCH & nOptions );
     m_pSearchBtn->Enable(bEnableSearch);
+    m_pBackSearchBtn->Enable(bEnableSearch);
 
     if( bEnableSearch )
         bNoSearch = false;
@@ -1671,6 +1682,7 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
         m_pReplaceAllBtn->Disable();
     m_pComponentFrame->Enable(!bNoSearch);
     m_pSearchBtn->Enable( !bNoSearch );
+    m_pBackSearchBtn->Enable( !bNoSearch );
     m_pSearchFrame->get_label_widget()->Enable( !bNoSearch );
     m_pSearchLB->Enable( !bNoSearch );
     m_pNotesBtn->Enable();
@@ -1680,9 +1692,9 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
     else
         m_pWordBtn->Disable();
     if ( ( SearchOptionFlags::BACKWARDS & nOptions ) )
-        m_pBackwardsBtn->Enable();
+        m_pBackSearchBtn->Enable();
     else
-        m_pBackwardsBtn->Disable();
+        m_pBackSearchBtn->Disable();
     if ( ( SearchOptionFlags::REG_EXP & nOptions ) )
         m_pRegExpBtn->Enable();
     else
@@ -1763,9 +1775,9 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
         m_pWordBtn->Enable();
         return;
     }
-    if ( m_pBackwardsBtn == pCtrl && ( SearchOptionFlags::BACKWARDS & nOptions ) )
+    if ( m_pBackSearchBtn == pCtrl && ( SearchOptionFlags::BACKWARDS & nOptions ) )
     {
-        m_pBackwardsBtn->Enable();
+        m_pBackSearchBtn->Enable();
         return;
     }
     if (m_pNotesBtn == pCtrl)
@@ -2169,8 +2181,6 @@ void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
         nModifyFlag |= MODIFY_WORD;
     else if ( m_pMatchCaseCB == pCtrl )
         nModifyFlag |= MODIFY_EXACT;
-    else if ( m_pBackwardsBtn == pCtrl )
-        nModifyFlag |= MODIFY_BACKWARDS;
     else if ( m_pNotesBtn == pCtrl )
         nModifyFlag |= MODIFY_NOTES;
     else if ( m_pSelectionBtn == pCtrl )
@@ -2226,7 +2236,7 @@ void SvxSearchDialog::SaveToModule_Impl()
         pSearchItem->SetLevenshtein( true );
 
     pSearchItem->SetWordOnly(GetCheckBoxValue(m_pWordBtn));
-    pSearchItem->SetBackward(GetCheckBoxValue(m_pBackwardsBtn));
+    pSearchItem->SetBackward( false);
     pSearchItem->SetNotes(GetCheckBoxValue(m_pNotesBtn));
     pSearchItem->SetPattern(GetCheckBoxValue(m_pLayoutBtn));
     pSearchItem->SetSelection(GetCheckBoxValue(m_pSelectionBtn));
