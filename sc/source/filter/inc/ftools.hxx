@@ -259,7 +259,6 @@ typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
 typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
-typedef ::std::vector< OUString >            ScfStringVec;
 
 class ScFormatFilterPluginImpl : public ScFormatFilterPlugin
 {

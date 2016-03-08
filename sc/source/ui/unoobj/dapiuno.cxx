@@ -2812,7 +2812,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
 
 namespace {
 
-bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement )
+bool lclExtractGroupMembers( ::std::vector<OUString>& rMembers, const Any& rElement )
 {
     // allow empty value to create a new group
     if( !rElement.hasValue() )
@@ -2907,7 +2907,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
         throw NoSuchElementException();
 
     // read all item names provided by the passed object
-    ScFieldGroupMembers aMembers;
+    ::std::vector<OUString> aMembers;
     if( !lclExtractGroupMembers( aMembers, rElement ) )
         throw IllegalArgumentException();
 
@@ -2930,7 +2930,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
         throw ElementExistException();
 
     // read all item names provided by the passed object
-    ScFieldGroupMembers aMembers;
+    ::std::vector<OUString> aMembers;
     if( !lclExtractGroupMembers( aMembers, rElement ) )
         throw IllegalArgumentException();
 
@@ -3059,8 +3059,8 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+    ::std::vector<OUString>& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ::std::vector<OUString>::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
         throw NoSuchElementException();
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, *aIt ) ) );
@@ -3075,7 +3075,7 @@ Sequence< OUString > SAL_CALL ScDataPilotFieldGroupObj::getElementNames() throw(
 sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ::std::vector<OUString>& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     return ::std::find( rMembers.begin(), rMembers.end(), rName ) != rMembers.end();
 }
 
@@ -3093,9 +3093,9 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
     if( rName == aNewName )
         return;
 
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aOldIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
-    ScFieldGroupMembers::iterator aNewIt = ::std::find( rMembers.begin(), rMembers.end(), aNewName );
+    ::std::vector<OUString>& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ::std::vector<OUString>::iterator aOldIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+    ::std::vector<OUString>::iterator aNewIt = ::std::find( rMembers.begin(), rMembers.end(), aNewName );
     // throw if passed member name does not exist
     if( aOldIt == rMembers.end() )
         throw NoSuchElementException();
@@ -3116,8 +3116,8 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
     if( rName.isEmpty() )
         throw IllegalArgumentException();
 
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+    ::std::vector<OUString>& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ::std::vector<OUString>::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     // throw if passed name already exists
     if( aIt != rMembers.end() )
         throw IllegalArgumentException();
@@ -3131,8 +3131,8 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
 
     if( rName.isEmpty() )
         throw IllegalArgumentException();
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+     ::std::vector<OUString>& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+     ::std::vector<OUString>::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     // throw if passed name does not exist
     if( aIt == rMembers.end() )
         throw NoSuchElementException();
@@ -3151,7 +3151,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+     ::std::vector<OUString>& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( rMembers.size() )))
         throw IndexOutOfBoundsException();
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, rMembers[ nIndex ] ) ) );

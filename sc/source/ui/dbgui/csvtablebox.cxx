@@ -222,7 +222,7 @@ void ScCsvTableBox::SetUniStrings(
 void ScCsvTableBox::InitTypes( const ListBox& rListBox )
 {
     const sal_Int32 nTypeCount = rListBox.GetEntryCount();
-    StringVec aTypeNames( nTypeCount );
+    ::std::vector<OUString> aTypeNames( nTypeCount );
     for( sal_Int32 nIndex = 0; nIndex < nTypeCount; ++nIndex )
         aTypeNames[ nIndex ] = rListBox.GetEntry( nIndex );
     maGrid->SetTypeNames( aTypeNames );

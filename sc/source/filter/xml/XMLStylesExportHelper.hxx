@@ -158,7 +158,6 @@ public:
     void Sort();
 };
 
-typedef std::vector<OUString*>     ScMyOUStringVec;
 
 struct ScMyFormatRange
 {
@@ -178,8 +177,8 @@ class ScFormatRangeStyles
     typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
 
     ScMyFormatRangeListVec      aTables;
-    ScMyOUStringVec             aStyleNames;
-    ScMyOUStringVec             aAutoStyleNames;
+    std::vector<OUString*>      aStyleNames;
+    std::vector<OUString*>     aAutoStyleNames;
     const ScMyDefaultStyleList* pColDefaults;
 
 public:
@@ -206,7 +205,7 @@ public:
 
 class ScColumnRowStylesBase
 {
-    ScMyOUStringVec             aStyleNames;
+    std::vector<OUString*>   aStyleNames;
 
 public:
     ScColumnRowStylesBase();

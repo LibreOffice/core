@@ -704,8 +704,8 @@ ScFormatRangeStyles::ScFormatRangeStyles()
 
 ScFormatRangeStyles::~ScFormatRangeStyles()
 {
-    ScMyOUStringVec::iterator i(aStyleNames.begin());
-    ScMyOUStringVec::iterator endi(aStyleNames.end());
+    std::vector<OUString*>::iterator i(aStyleNames.begin());
+    std::vector<OUString*>::iterator endi(aStyleNames.end());
     while (i != endi)
     {
         delete *i;
@@ -983,8 +983,8 @@ ScColumnRowStylesBase::ScColumnRowStylesBase()
 
 ScColumnRowStylesBase::~ScColumnRowStylesBase()
 {
-    ScMyOUStringVec::iterator i(aStyleNames.begin());
-    ScMyOUStringVec::iterator endi(aStyleNames.end());
+    std::vector<OUString*>::iterator i(aStyleNames.begin());
+    std::vector<OUString*>::iterator endi(aStyleNames.end());
     while (i != endi)
     {
         delete *i;
