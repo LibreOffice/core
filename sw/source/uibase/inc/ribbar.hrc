@@ -99,9 +99,7 @@
 
 #define BTN_NAVI                    (STR_IMGBTN_START +40)
 
-#define MN_ANCHOR_POPUP             (STR_IMGBTN_START +41)
-
-#define RC_RIBBAR_ACT_END           MN_ANCHOR_POPUP
+#define RC_RIBBAR_ACT_END           BTN_NAVI
 
 #if  RC_RIBBAR_ACT_END   >  RC_RIBBAR_END
 #error Resource-Id Ueberlauf in #file, #line
