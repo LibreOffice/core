@@ -25,6 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <osl/file.hxx>
+#include <rtl/strbuf.hxx>
 
 namespace pdfi
 {
@@ -57,6 +58,32 @@ typedef ::cppu::WeakComponentImplHelper<
         virtual void SAL_CALL closeOutput() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
         {
             maFile.close();
+        }
+    };
+
+    class OutputWrapString : private cppu::BaseMutex, public OutputWrapBase
+    {
+        OString& maString;
+        OStringBuffer maBuffer;
+
+    public:
+
+        explicit OutputWrapString(OString& rString) : OutputWrapBase(m_aMutex), maString(rString), maBuffer(rString)
+        {
+        }
+
+        virtual void SAL_CALL writeBytes(const css::uno::Sequence< ::sal_Int8 >& aData) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        {
+            maBuffer.append(reinterpret_cast<const sal_Char *>(aData.getConstArray()), aData.getLength());
+        }
+
+        virtual void SAL_CALL flush() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        {
+        }
+
+        virtual void SAL_CALL closeOutput() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        {
+            maString = maBuffer.makeStringAndClear();
         }
     };
 }
