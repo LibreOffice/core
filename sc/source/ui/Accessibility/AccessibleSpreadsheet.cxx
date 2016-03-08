@@ -848,30 +848,19 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    uno::Sequence<sal_Int32> aSequence;
-    if (IsFormulaMode())
+    if (IsFormulaMode() || !mpViewShell)
+        return uno::Sequence<sal_Int32>();
+
+    std::vector<sal_Int32> aVec;
+    const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
+    for (SCCOL i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
     {
-        return aSequence;
-    }
-    if (mpViewShell)
-    {
-        aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-        const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
-        sal_Int32* pSequence = aSequence.getArray();
-        sal_Int32 nCount(0);
-        for (SCCOL i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
+        if (rMarkdata.IsColumnMarked(i))
         {
-            if (rMarkdata.IsColumnMarked(i))
-            {
-                pSequence[nCount] = i;
-                ++nCount;
-            }
+            aVec.push_back(i);
         }
-        aSequence.realloc(nCount);
     }
-    else
-        aSequence.realloc(0);
-    return aSequence;
+    return comphelper::containerToSequence(aVec);
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
