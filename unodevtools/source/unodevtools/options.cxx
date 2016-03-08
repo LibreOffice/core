@@ -50,13 +50,13 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
             throw CannotDumpException(
                 "incomplete option \"-" + aOpt + "\" given!");
         } else {
-            SAL_INFO("unodevtools", "> identified option -" << pOpt << " = " << *pValue);
+            SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);
             ++(*pnIndex);
             return true;
         }
     } else if (aArg.indexOf(aOpt) == 1) {
         *pValue = aArg.copy(1 + aOpt.getLength());
-        SAL_INFO("unodevtools", "> identified option -" << pOpt << " = " << *pValue);
+        SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);
         ++(*pnIndex);
 
         return true;
@@ -75,7 +75,7 @@ bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
-        SAL_INFO("unodevtools", "> identified option --" << pOpt);
+        SAL_INFO("unodevtools", "identified option --" << pOpt);
         return true;
     }
     return false;
