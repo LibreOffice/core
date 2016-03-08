@@ -41,11 +41,11 @@ namespace connectivity
                                     m_aCurLeaf;
             sal_uInt16              m_nCurNode;
 
-            sal_uIntPtr Find(bool bFirst);
-            sal_uIntPtr GetCompare(bool bFirst);
-            sal_uIntPtr GetLike(bool bFirst);
-            sal_uIntPtr GetNull(bool bFirst);
-            sal_uIntPtr GetNotNull(bool bFirst);
+            sal_uInt32 Find(bool bFirst);
+            sal_uInt32 GetCompare(bool bFirst);
+            sal_uInt32 GetLike(bool bFirst);
+            sal_uInt32 GetNull(bool bFirst);
+            sal_uInt32 GetNotNull(bool bFirst);
 
             ONDXKey* GetFirstKey(ONDXPage* pPage,
                                 const file::OOperand& rKey);
@@ -64,8 +64,8 @@ namespace connectivity
             }
 
             virtual ~OIndexIterator();
-            sal_uIntPtr First();
-            sal_uIntPtr Next();
+            sal_uInt32 First();
+            sal_uInt32 Next();
 
         };
     }
