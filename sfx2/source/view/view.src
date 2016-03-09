@@ -96,6 +96,16 @@ String STR_CLASSIFIED_DOCUMENT
     Text [ en-US ] = "The classification label of this document is %1." ;
 };
 
+String STR_TARGET_DOC_NOT_CLASSIFIED
+{
+    Text [ en-US ] = "This document must be classified before the clipboard can be pasted." ;
+};
+
+String STR_DOC_CLASSIFICATION_TOO_LOW
+{
+    Text [ en-US ] = "This document has a lower classificaton level than the clipboard." ;
+};
+
 PushButton BT_CHECKOUT
 {
     Pos = MAP_APPFONT( 0 , 0 );

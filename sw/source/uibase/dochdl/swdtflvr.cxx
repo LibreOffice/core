@@ -128,6 +128,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <sfx2/sfxresid.hxx>
 
 #include <memory>
 
@@ -3231,13 +3232,13 @@ bool lcl_checkClassification(SwDoc* pSourceDoc, SwDoc* pDestinationDoc)
     break;
     case SfxClassificationCheckPasteResult::TargetDocNotClassified:
     {
-        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RES(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
         return false;
     }
     break;
     case SfxClassificationCheckPasteResult::DocClassificationTooLow:
     {
-        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RES(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
         return false;
     }
     break;
