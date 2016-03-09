@@ -193,7 +193,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
             {
                 // We will remember the search-/replace items.
                 const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
-                if( pList && pList->Count() )
+                if( nullptr != pList && pList->Count() )
                     m_pSrchList = new SearchAttrItemList( *pList );
 
                 pList = pSrchDlg->GetReplaceItemList();
@@ -218,7 +218,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 DELETEZ( m_pReplList );
 
                 const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
-                if( pList && pList->Count() )
+                if( nullptr != pList && pList->Count() )
                     m_pSrchList = new SearchAttrItemList( *pList );
 
                 pList = pSrchDlg->GetReplaceItemList();
