@@ -19,17 +19,15 @@
 
 /** @HTML */
 
-#ifndef INCLUDED_JVMFWK_FRAMEWORK_H
-#define INCLUDED_JVMFWK_FRAMEWORK_H
+#ifndef INCLUDED_JVMFWK_FRAMEWORK_HXX
+#define INCLUDED_JVMFWK_FRAMEWORK_HXX
 
-#include <jvmfwk/jvmfwkdllapi.h>
+#include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/ustring.h>
 #include <osl/mutex.h>
 #include "jni.h"
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 
 /** @file
     <p>This library can operate in two modes, application mode and direct mode.</p>
@@ -770,11 +768,7 @@ JVMFWK_DLLPUBLIC void SAL_CALL jfw_lock();
 */
 JVMFWK_DLLPUBLIC void SAL_CALL jfw_unlock();
 
-
-#ifdef __cplusplus
 }
-#endif
-
 
 #endif
 

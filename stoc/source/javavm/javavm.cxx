@@ -70,7 +70,7 @@
 #include <sal/types.h>
 #include <uno/current_context.hxx>
 #include <uno/environment.h>
-#include <jvmfwk/framework.h>
+#include <jvmfwk/framework.hxx>
 #include "jni.h"
 
 #include <stack>

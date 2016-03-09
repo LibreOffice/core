@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_JVMFWK_JVMFWKDLLAPI_H
-#define INCLUDED_JVMFWK_JVMFWKDLLAPI_H
+#ifndef INCLUDED_JVMFWK_JVMFWKDLLAPI_HXX
+#define INCLUDED_JVMFWK_JVMFWKDLLAPI_HXX
 
 #include <sal/types.h>
 

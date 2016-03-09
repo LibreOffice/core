@@ -26,7 +26,7 @@
 #include "osl/thread.h"
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
-#include "jvmfwk/framework.h"
+#include "jvmfwk/framework.hxx"
 
 
 static bool hasOption(char const * szOption, int argc, char** argv);

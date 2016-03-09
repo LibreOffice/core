@@ -25,7 +25,7 @@
 #include "java/util/Property.hxx"
 #include "java/tools.hxx"
 #include <connectivity/dbexception.hxx>
-#include <jvmfwk/framework.h>
+#include <jvmfwk/framework.hxx>
 #include "resource/jdbc_log.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"

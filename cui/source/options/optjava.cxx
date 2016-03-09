@@ -47,7 +47,7 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #if HAVE_FEATURE_JAVA
-#include <jvmfwk/framework.h>
+#include <jvmfwk/framework.hxx>
 #endif
 
 // define ----------------------------------------------------------------

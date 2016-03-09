@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
-#include <jvmfwk/framework.h>
+#include <jvmfwk/framework.hxx>
 
 #include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
