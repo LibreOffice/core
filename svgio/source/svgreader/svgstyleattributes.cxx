@@ -1146,10 +1146,11 @@ namespace svgio
                 }
 
                 const SvgClipPathNode* mpClip = accessClipPathXLink();
-                if(mpClip)
+                while(mpClip)
                 {
                     // #i124852# transform may be needed when userSpaceOnUse
                     mpClip->apply(aSource, pTransform);
+                    mpClip = mpClip->getSvgStyleAttributes()->accessClipPathXLink();
                 }
 
                 if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
