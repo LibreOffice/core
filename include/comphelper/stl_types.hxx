@@ -130,21 +130,21 @@ struct OInterfaceCompare
     }
 };
 
-template <class _Tp, class _Arg>
-class mem_fun1_t : public ::std::binary_function<_Tp*,_Arg,void>
+template <class Tp, class Arg>
+class mem_fun1_t : public ::std::binary_function<Tp*,Arg,void>
 {
-    typedef void (_Tp::*_fun_type)(_Arg);
+    typedef void (Tp::*_fun_type)(Arg);
 public:
-    explicit mem_fun1_t(_fun_type __pf) : _M_f(__pf) {}
-    void operator()(_Tp* __p, _Arg __x) const { (__p->*_M_f)(__x); }
+    explicit mem_fun1_t(_fun_type pf) : M_f(pf) {}
+    void operator()(Tp* p, Arg x) const { (p->*M_f)(x); }
 private:
-    _fun_type _M_f;
+    _fun_type M_f;
 };
 
-template <class _Tp, class _Arg>
-inline mem_fun1_t<_Tp,_Arg> mem_fun(void (_Tp::*__f)(_Arg))
+template <class Tp, class Arg>
+inline mem_fun1_t<Tp,Arg> mem_fun(void (Tp::*f)(Arg))
 {
-    return mem_fun1_t<_Tp,_Arg>(__f);
+    return mem_fun1_t<Tp,Arg>(f);
 }
 
 /** output iterator that appends OUStrings into an OUStringBuffer.
