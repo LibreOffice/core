@@ -57,10 +57,10 @@ namespace svt
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-        void                SetID( sal_Int16 _ID );
+        void                SetID( sal_Int16 ID );
         sal_Int16           GetID() const;
 
-        void                SetIndex( sal_Int32 _Index );
+        void                SetIndex( sal_Int32 Index );
         sal_Int32           GetIndex() const;
 
         void                SetLabel( const OUString& _rText );
