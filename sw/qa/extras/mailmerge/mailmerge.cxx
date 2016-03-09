@@ -74,7 +74,7 @@ public:
 
         utl::TempFile aTempDir(nullptr, true);
         const OUString aWorkDir = aTempDir.GetURL();
-        const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
+        const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
         OUString aDBName = registerDBsource( aURI, aWorkDir );
         initMailMergeJobAndArgs( filename, tablename, aDBName, "LOMM_", aWorkDir, file );
 
@@ -118,7 +118,7 @@ public:
         seq_id = 0;
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DOCUMENT_URL ), uno::Any(
-                                        ( OUString(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
+                                        ( OUString(m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) );
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) );
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix ));

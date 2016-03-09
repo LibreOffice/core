@@ -54,7 +54,7 @@ void VBATest::testMiscVBAFunctions()
 #endif
         "win32compatb.vb" // same methods, different signatures.
     };
-    OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
+    OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
     // Some test data expects the uk locale
     LanguageTag aLocale(LANGUAGE_ENGLISH_UK);
     SvtSysLocaleOptions aLocalOptions;

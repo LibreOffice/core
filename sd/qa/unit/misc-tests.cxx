@@ -97,7 +97,7 @@ void SdMiscTest::testTdf96206()
 {
     // Copying/pasting slide referring to a non-default master with a text duplicated the master
 
-    sd::DrawDocShellRef xDocSh = Load(getURLFromSrc("/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& xSSController = pSSVS->GetSlideSorter().GetController();
@@ -114,7 +114,7 @@ void SdMiscTest::testTdf96206()
 
 void SdMiscTest::testTdf96708()
 {
-    sd::DrawDocShellRef xDocSh = Load(getURLFromSrc("/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& xSSController = pSSVS->GetSlideSorter().GetController();

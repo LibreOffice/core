@@ -123,7 +123,7 @@ uno::Reference<security::XCertificate> SigningTest::getCertificate(XMLSignatureH
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = rSignatureHelper.GetSecurityEnvironment();
     OUString aCertificate;
     {
-        SvFileStream aStream(getURLFromSrc(DATA_DIRECTORY) + "certificate.crt", StreamMode::READ);
+        SvFileStream aStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "certificate.crt", StreamMode::READ);
         OString aLine;
         bool bMore = aStream.ReadLine(aLine);
         while (bMore)
@@ -209,7 +209,7 @@ void SigningTest::testOOXMLAppend()
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-                         osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
+                         osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
@@ -238,7 +238,7 @@ void SigningTest::testOOXMLRemove()
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
-    OUString aURL = getURLFromSrc(DATA_DIRECTORY) + "multi.docx";
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "multi.docx";
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
@@ -265,7 +265,7 @@ void SigningTest::testOOXMLRemoveAll()
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-                         osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
+                         osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
@@ -303,7 +303,7 @@ void SigningTest::testOOXMLRemoveAll()
 
 void SigningTest::testOOXMLPartial()
 {
-    createDoc(getURLFromSrc(DATA_DIRECTORY) + "partial.docx");
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -321,7 +321,7 @@ void SigningTest::testOOXMLPartial()
 
 void SigningTest::testOOXMLBroken()
 {
-    createDoc(getURLFromSrc(DATA_DIRECTORY) + "bad.docx");
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
