@@ -725,7 +725,7 @@ void SfxObjectShell::SetTitle
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 OUString X(const OUString &rRet)
 {
     if ( rRet.isEmpty() )
