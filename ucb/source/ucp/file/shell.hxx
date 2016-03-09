@@ -88,14 +88,14 @@ namespace fileaccess {
             sal_Int16                   Attributes;
         public:
             MyProperty();
-            explicit MyProperty( const OUString&  __PropertyName );
-            MyProperty( const bool&                       __isNative,
-                        const OUString&                   __PropertyName,
-                        const sal_Int32&                  __Handle,
-                        const css::uno::Type&             __Typ,
-                        const css::uno::Any&              __Value,
-                        const css::beans::PropertyState&  __State,
-                        const sal_Int16&                  __Attributes );
+            explicit MyProperty( const OUString&  thePropertyName );
+            MyProperty( const bool&                       theIsNative,
+                        const OUString&                   thePropertyName,
+                        const sal_Int32&                  theHandle,
+                        const css::uno::Type&             theTyp,
+                        const css::uno::Any&              theValue,
+                        const css::beans::PropertyState&  theState,
+                        const sal_Int16&                  theAttributes );
 
             ~MyProperty();
             inline const bool& SAL_CALL IsNative() const;
@@ -107,8 +107,8 @@ namespace fileaccess {
             inline const sal_Int16& SAL_CALL getAttributes() const;
 
             // The set* functions are declared const, because the key of "this" stays intact
-            inline void SAL_CALL setValue( const css::uno::Any& __Value ) const;
-            inline void SAL_CALL setState( const css::beans::PropertyState& __State ) const;
+            inline void SAL_CALL setValue( const css::uno::Any& theValue ) const;
+            inline void SAL_CALL setState( const css::beans::PropertyState& theState ) const;
         };
 
         struct eMyProperty
