@@ -802,7 +802,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 ::Outliner* pOutl = mpDrawView->GetTextEditOutliner();
                 if (pOutl)
                 {
-                    pOutl->RemoveFields(true, checkSvxFieldData<SvxURLField>);
+                    pOutl->RemoveFields(checkSvxFieldData<SvxURLField>);
                 }
 
                 pSet.reset(new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END ));

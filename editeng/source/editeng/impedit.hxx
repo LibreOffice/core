@@ -373,7 +373,7 @@ public:
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
 
     bool            IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
-    OUString        SpellIgnoreOrAddWord( bool bAdd );
+    OUString        SpellIgnoreWord();
 
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const;
     void            DeleteSelected();

@@ -32,7 +32,7 @@ class Paragraph;
 class ParagraphList
 {
 public:
-    void            Clear( bool bDestroyParagraphs );
+    void            Clear();
 
     sal_Int32       GetParagraphCount() const
     {
