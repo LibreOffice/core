@@ -389,6 +389,27 @@ String STR_CUSTOMANIMATION_USERPATH
     Text [ en-US ] = "User paths";
 };
 
+String STR_CUSTOMANIMATION_ENTRANCE
+{
+    Text [ en-US ] = "Entrance: %1";
+};
+
+String STR_CUSTOMANIMATION_EMPHASIS
+{
+    Text [ en-US ] = "Emphasis: %1";
+};
+
+String STR_CUSTOMANIMATION_EXIT
+{
+    Text [ en-US ] = "Exit: %1";
+};
+
+String STR_CUSTOMANIMATION_MOTION_PATHS
+{
+    Text [ en-US ] = "Motion Paths: %1";
+};
+
+
 String STR_SLIDETRANSITION_NONE
 {
     Text [ en-US ] = "None";
