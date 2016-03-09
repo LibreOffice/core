@@ -43,10 +43,7 @@ static sal_Bool tryService(const char * serviceName)
     OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'.')); // cut the library extension
     iniName += SAL_CONFIGFILE(""); // add the rc file extension
 
-#if OSL_DEBUG_LEVEL > 1
-    OString sIniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
-    fprintf(stderr, "defbootstrap.cxx:tryService: using ini: %s\n", sIniName.getStr());
-#endif
+    SAL_INFO("cppuhelper", "using ini: " << iniName);
 
     sal_Bool result = sal_True;
 
@@ -57,9 +54,7 @@ static sal_Bool tryService(const char * serviceName)
         OUString arg = OUString::createFromAscii(serviceName);
         Reference<XInterface> xInterface = smgr->createInstance(arg);
 
-#if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "got the %s service %p\n", serviceName, xInterface.get());
-#endif
+        SAL_INFO("cppuhelper", "got the " << serviceName << " service " << xInterface.get());
         result = result && (xInterface.get() != 0);
     }
     catch(Exception & exception) {
@@ -68,9 +63,7 @@ static sal_Bool tryService(const char * serviceName)
         fprintf(stderr, "an exception occurred: %s\n", message.getStr());
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("---------------------------------- %i", result);
-#endif
+    SAL_INFO("cppuhelper", "---------------------------------- " << result);
 
     return result;
 }
