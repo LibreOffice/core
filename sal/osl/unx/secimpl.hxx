@@ -22,10 +22,10 @@
 
 #include <pwd.h>
 
-typedef struct _oslSecurityImpl {
+struct oslSecurityImpl {
     struct passwd m_pPasswd;
     char m_buffer[1]; /* should be a C99 flexible array member */
-} oslSecurityImpl;
+};
 
 bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 
