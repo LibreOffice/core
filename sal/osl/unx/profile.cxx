@@ -50,12 +50,12 @@
 
 typedef time_t  osl_TStamp;
 
-typedef enum _osl_TLockMode
+enum osl_TLockMode
 {
     un_lock, read_lock, write_lock
-} osl_TLockMode;
+};
 
-typedef struct _osl_TFile
+struct osl_TFile
 {
     int     m_Handle;
     sal_Char*   m_pReadPtr;
@@ -63,16 +63,16 @@ typedef struct _osl_TFile
     sal_Char*   m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
-} osl_TFile;
+};
 
-typedef struct _osl_TProfileEntry
+struct osl_TProfileEntry
 {
     sal_uInt32  m_Line;
     sal_uInt32  m_Offset;
     sal_uInt32  m_Len;
-} osl_TProfileEntry;
+};
 
-typedef struct _osl_TProfileSection
+struct osl_TProfileSection
 {
     sal_uInt32  m_Line;
     sal_uInt32  m_Offset;
@@ -80,10 +80,10 @@ typedef struct _osl_TProfileSection
     sal_uInt32  m_NoEntries;
     sal_uInt32  m_MaxEntries;
     osl_TProfileEntry*  m_Entries;
-} osl_TProfileSection;
+};
 
 /* Profile-data structure hidden behind oslProfile: */
-typedef struct _osl_TProfileImpl
+struct osl_TProfileImpl
 {
     sal_uInt32  m_Flags;
     osl_TFile*  m_pFile;
@@ -97,7 +97,7 @@ typedef struct _osl_TProfileImpl
     osl_TProfileSection* m_Sections;
     pthread_mutex_t m_AccessLock;
     bool        m_bIsValid;
-} osl_TProfileImpl;
+};
 
 static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption ProfileFlags);
 static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags);
