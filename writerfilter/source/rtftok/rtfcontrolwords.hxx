@@ -158,6 +158,7 @@ enum class Destination
     TOCENTRY,
     USERPROPS,
     PROPNAME,
+    STATICVAL,
 };
 
 enum RTFKeyword

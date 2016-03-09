@@ -1291,6 +1291,7 @@ void RTFDocumentImpl::text(OUString& rString)
     case Destination::INDEXENTRY:
     case Destination::TOCENTRY:
     case Destination::PROPNAME:
+    case Destination::STATICVAL:
         m_aStates.top().pDestinationText->append(rString);
         break;
     default:
@@ -2058,6 +2059,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_PROPNAME:
             m_aStates.top().eDestination = Destination::PROPNAME;
+            break;
+        case RTF_STATICVAL:
+            m_aStates.top().eDestination = Destination::STATICVAL;
             break;
         default:
         {
@@ -5108,6 +5112,14 @@ void RTFDocumentImpl::resetAttributes()
     m_aStates.top().aParagraphAttributes.clear();
 }
 
+bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
+{
+    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
+    {
+        return rProperty.Name == rName;
+    }) != rProperties.end();
+}
+
 RTFError RTFDocumentImpl::popState()
 {
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
@@ -5896,6 +5908,35 @@ RTFError RTFDocumentImpl::popState()
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
         aState.aPropName = m_aStates.top().pDestinationText->makeStringAndClear();
+        break;
+    case Destination::STATICVAL:
+        if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
+            break; // not for nested group
+        if (m_xDocumentProperties.is())
+        {
+            // Find out what is the key, value type and value we want to set.
+            uno::Reference<beans::XPropertyContainer> xPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
+            uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
+            uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+            const OUString& rKey = m_aStates.top().aPropName;
+            OUString aStaticVal = m_aStates.top().pDestinationText->makeStringAndClear();
+            uno::Any aAny;
+            if (m_aStates.top().aPropType == cppu::UnoType<OUString>::get())
+                aAny = uno::makeAny(aStaticVal);
+
+            // Set it.
+            try
+            {
+                if (lcl_containsProperty(aProperties, rKey))
+                    xPropertySet->setPropertyValue(rKey, aAny);
+                else
+                    xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
+            }
+            catch (const uno::Exception& rException)
+            {
+                SAL_WARN("writerfilter", "failed to set property " << rKey << ": " << rException.Message);
+            }
+        }
         break;
     default:
         break;
