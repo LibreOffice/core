@@ -391,7 +391,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     }
     while( pItem )
     {
-        if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SfxItemPoolFlags::POOLABLE ) )
+        if( !rSet.GetPool()->IsItemPoolable(pItem->Which() ) )
             bNonPoolable = true;
         if ( !xFoundIgnorableItems.get() ||
              (xFoundIgnorableItems->Put( *pItem ) == nullptr ) )
@@ -407,7 +407,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
         pItem = aIgnorableItemsIter.GetCurItem();
         while( pItem )
         {
-            if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SfxItemPoolFlags::POOLABLE ) )
+            if( !rSet.GetPool()->IsItemPoolable(pItem->Which() ) )
                 bNonPoolable = true;
             pCurNode = pCurNode->findChildNode( *pItem, true );
             pItem = aIgnorableItemsIter.NextItem();

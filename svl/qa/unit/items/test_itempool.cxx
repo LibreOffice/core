@@ -35,10 +35,10 @@ class PoolItemTest : public CppUnit::TestFixture
 void PoolItemTest::testPool()
 {
     SfxItemInfo aItems[] =
-        { { 0, SfxItemPoolFlags::POOLABLE },
-          { 1, SfxItemPoolFlags::NONE /* not poolable */ },
-          { 2, SfxItemPoolFlags::NOT_POOLABLE },
-          { 3, SfxItemPoolFlags::NONE /* not poolable */}
+        { { 0, true },
+          { 1, false /* not poolable */ },
+          { 2, false },
+          { 3, false /* not poolable */}
         };
 
     SfxItemPool *pPool = new SfxItemPool("testpool", 0, 3, aItems);
@@ -78,17 +78,6 @@ void PoolItemTest::testPool()
         const SfxPoolItem &rVal2 = pPool->Put(aNotherOne);
         CPPUNIT_ASSERT(rVal2 == rVal);
         CPPUNIT_ASSERT(&rVal2 != &rVal);
-    }
-
-    // not-poolable
-    SfxVoidItem aItemTwo( 2 );
-    SfxVoidItem aNotherTwo( 2 );
-    {
-        CPPUNIT_ASSERT(pImpl->maPoolItems[2] == nullptr);
-        const SfxPoolItem &rVal = pPool->Put(aItemTwo);
-        // those guys just don't go in ...
-        CPPUNIT_ASSERT(pImpl->maPoolItems[2] == nullptr);
-        CPPUNIT_ASSERT(rVal == aItemOne);
     }
 
     // Test rehash

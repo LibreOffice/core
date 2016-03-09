@@ -119,7 +119,7 @@ XOutdevItemPool::XOutdevItemPool(
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)
     {
         mpLocalItemInfos[i - XATTR_START]._nSID = 0;
-        mpLocalItemInfos[i - XATTR_START]._nFlags = SfxItemPoolFlags::POOLABLE;
+        mpLocalItemInfos[i - XATTR_START]._bPoolable = true;
     }
 
     mpLocalItemInfos[XATTR_LINESTYLE        -XATTR_START]._nSID = SID_ATTR_LINE_STYLE;

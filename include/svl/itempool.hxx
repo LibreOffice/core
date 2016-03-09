@@ -24,7 +24,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <tools/solar.h>
-#include <o3tl/typed_flags_set.hxx>
 
 class SvStream;
 class SfxBroadcaster;
@@ -32,21 +31,10 @@ struct SfxItemPool_Impl;
 
 #define SFX_WHICH_MAX 4999
 
-enum class SfxItemPoolFlags
-{
-    NONE               = 0x00,
-    POOLABLE           = 0x01,
-    NOT_POOLABLE       = 0x02,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<SfxItemPoolFlags> : is_typed_flags<SfxItemPoolFlags, 0x03> {};
-}
-
 struct SfxItemInfo
 {
     sal_uInt16       _nSID;
-    SfxItemPoolFlags _nFlags;
+    bool            _bPoolable;
 };
 
 class SfxStyleSheetIterator;
@@ -84,7 +72,7 @@ private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;
 
-    SVL_DLLPRIVATE bool             IsItemFlag_Impl( sal_uInt16 nWhich, SfxItemPoolFlags nFlag ) const;
+    SVL_DLLPRIVATE bool             IsItemPoolable_Impl( sal_uInt16 nWhich ) const;
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
@@ -197,9 +185,9 @@ public:
 
     void                            Delete();
 
-    bool                            IsItemFlag( sal_uInt16 nWhich, SfxItemPoolFlags nFlag ) const;
-    bool                            IsItemFlag( const SfxPoolItem &rItem, SfxItemPoolFlags nFlag ) const
-                                    { return IsItemFlag( rItem.Which(), nFlag ); }
+    bool                            IsItemPoolable( sal_uInt16 nWhich ) const;
+    bool                            IsItemPoolable( const SfxPoolItem &rItem ) const
+                                    { return IsItemPoolable( rItem.Which() ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;

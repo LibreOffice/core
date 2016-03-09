@@ -26,16 +26,16 @@
 
 static SfxItemInfo const aMsgItemInfos[] =
 {
-    { 0,                         SfxItemPoolFlags::POOLABLE },   // SCITEM_STRING
-    { 0,                         SfxItemPoolFlags::POOLABLE },   // SCITEM_SEARCHDATA - stop using this!
-    { SID_SORT,                  SfxItemPoolFlags::POOLABLE },   // SCITEM_SORTDATA
-    { SID_QUERY,                 SfxItemPoolFlags::POOLABLE },   // SCITEM_QUERYDATA
-    { SID_SUBTOTALS,             SfxItemPoolFlags::POOLABLE },   // SCITEM_SUBTDATA
-    { SID_CONSOLIDATE,           SfxItemPoolFlags::POOLABLE },   // SCITEM_CONSOLIDATEDATA
-    { SID_PIVOT_TABLE,           SfxItemPoolFlags::POOLABLE },   // SCITEM_PIVOTDATA
-    { SID_SOLVE,                 SfxItemPoolFlags::POOLABLE },   // SCITEM_SOLVEDATA
-    { SID_SCUSERLISTS,           SfxItemPoolFlags::POOLABLE },   // SCITEM_USERLIST
-    { SID_PRINTER_NOTFOUND_WARN, SfxItemPoolFlags::POOLABLE }    // SCITEM_PRINTWARN
+    { 0,                         true },   // SCITEM_STRING
+    { 0,                         true },   // SCITEM_SEARCHDATA - stop using this!
+    { SID_SORT,                  true },   // SCITEM_SORTDATA
+    { SID_QUERY,                 true },   // SCITEM_QUERYDATA
+    { SID_SUBTOTALS,             true },   // SCITEM_SUBTDATA
+    { SID_CONSOLIDATE,           true },   // SCITEM_CONSOLIDATEDATA
+    { SID_PIVOT_TABLE,           true },   // SCITEM_PIVOTDATA
+    { SID_SOLVE,                 true },   // SCITEM_SOLVEDATA
+    { SID_SCUSERLISTS,           true },   // SCITEM_USERLIST
+    { SID_PRINTER_NOTFOUND_WARN, true }    // SCITEM_PRINTWARN
 };
 
 ScMessagePool::ScMessagePool()
