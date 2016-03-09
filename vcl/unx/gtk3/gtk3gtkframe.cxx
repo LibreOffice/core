@@ -905,7 +905,16 @@ void GtkSalFrame::dragWindowTo(long nX, long nY)
     if (isChild(false))
         moveWindow(nX, nY);
     else
-        gtk_window_begin_move_drag(GTK_WINDOW(m_pWindow), 1, nX, nY, GDK_CURRENT_TIME);
+    {
+#if defined(GDK_WINDOWING_WAYLAND)
+        if (GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+        {
+            gtk_window_begin_move_drag(GTK_WINDOW(m_pWindow), 1, nX, nY, GDK_CURRENT_TIME);
+            return;
+        }
+#endif
+        gtk_window_move(GTK_WINDOW(m_pWindow), nX, nY);
+    }
 }
 
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
