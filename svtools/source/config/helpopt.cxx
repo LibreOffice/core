@@ -150,9 +150,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
     {
         for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
-#if OSL_DEBUG_LEVEL > 1
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
-#endif
+            assert(pValues[nProp].hasValue() && "property value missing");
             if ( pValues[nProp].hasValue() )
             {
                 bool bTmp;

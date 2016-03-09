@@ -276,10 +276,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\IsSystemIconsInMenus\"?" );
             bMenuSettingsChanged |= seqValues[nProperty] >>= bSystemMenuIcons;
         }
-
-        #if OSL_DEBUG_LEVEL > 1
-        else DBG_ASSERT( sal_False, "SvtMenuOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
-        #endif
+        else assert( false && "SvtMenuOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
     }
 
     if ( bMenuSettingsChanged )

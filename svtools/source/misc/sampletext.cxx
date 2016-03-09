@@ -742,7 +742,7 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 
 namespace
 {
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     void lcl_dump_unicode_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
     {
         if (rIn.none())
@@ -1277,7 +1277,7 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
         if (!rDevice.GetFontCapabilities(aFontCapabilities))
             return OUString();
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
         lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
         lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
 #endif
@@ -1631,7 +1631,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
         vcl::FontCapabilities aFontCapabilities;
         if (aDevice->GetFontCapabilities(aFontCapabilities))
         {
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
             lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
 #endif
 
@@ -1647,8 +1647,8 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
             if (nScriptType != css::i18n::ScriptType::COMPLEX)
                 aFontCapabilities.maUnicodeRange &= getCTLMask();
 
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "minimal\n");
+#if OSL_DEBUG_LEVEL > 0
+            SAL_INFO("svtools", "minimal");
             lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
             lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
 #endif
