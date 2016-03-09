@@ -74,8 +74,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::sdbc;
 using namespace ::ucbhelper;
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
+#if OSL_DEBUG_LEVEL > 0
 static int nOpenFiles=0;
 static int nOpenStreams=0;
 #endif
@@ -120,7 +119,7 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
     if ( m_pSvStream )
     {
         delete m_pSvStream;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         --nOpenFiles;
 #endif
     }
@@ -225,7 +224,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
     DELETEZ( m_pSvStream );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     --nOpenFiles;
 #endif
     ::utl::UCBContentHelper::Kill( m_aURL );
@@ -288,7 +287,7 @@ void FileStreamWrapper_Impl::checkConnected()
     if ( !m_pSvStream )
     {
         m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         ++nOpenFiles;
 #endif
     }
@@ -729,7 +728,7 @@ bool UCBStorageStream_Impl::Init()
             m_aTempURL = ::utl::TempFile().GetURL();
 
         m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_STD_READWRITE, true /* bFileExists */ );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         ++nOpenFiles;
 #endif
 
@@ -1206,7 +1205,7 @@ bool UCBStorageStream_Impl::Clear()
 
 void UCBStorageStream_Impl::Free()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if ( m_pStream )
     {
         if ( !m_aTempURL.isEmpty() )
@@ -2253,9 +2252,9 @@ sal_Int16 UCBStorage_Impl::Commit()
                     }
                     else
                     {
-#if OSL_DEBUG_LEVEL > 1
-                        fprintf ( stderr, "Files: %i\n", nOpenFiles );
-                        fprintf ( stderr, "Streams: %i\n", nOpenStreams );
+#if OSL_DEBUG_LEVEL > 0
+                        SAL_INFO("sot", "Files: " << nOpenFiles);
+                        SAL_INFO("sot", "Streams: " << nOpenStreams);
 #endif
                         // force writing
                         Any aAny;
