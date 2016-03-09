@@ -1102,7 +1102,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
         BtnHdl(m_pBtnBackward);
     }
 
-    pParaWin->SetEdFocus(0);
+    pParaWin->SetEdFocus();
     m_pBtnForward->Enable(false); //@New
 }
 
@@ -1756,9 +1756,9 @@ void FormulaModalDialog::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton 
 {
     m_pImpl->RefInputStartAfter( pEdit, pButton );
 }
-void FormulaModalDialog::RefInputDoneAfter( bool bForced )
+void FormulaModalDialog::RefInputDoneAfter()
 {
-    m_pImpl->RefInputDoneAfter( bForced );
+    m_pImpl->RefInputDoneAfter( true/*bForced*/ );
 }
 
 void FormulaModalDialog::SetFocusWin(vcl::Window *pWin,const OString& nUniqueId)
@@ -1854,9 +1854,9 @@ void FormulaDlg::Update()
     m_pImpl->aIdle.Start();
 }
 
-void FormulaDlg::DoEnter(bool _bOk)
+void FormulaDlg::DoEnter()
 {
-    m_pImpl->DoEnter(_bOk);
+    m_pImpl->DoEnter(false);
 }
 ::std::pair<RefButton*,RefEdit*> FormulaDlg::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {

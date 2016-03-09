@@ -420,11 +420,11 @@ void ParaWin::ShowParaLine(sal_uInt16 no)
     aArgInput[no].Show();
 }
 
-void ParaWin::SetEdFocus(sal_uInt16 no)
+void ParaWin::SetEdFocus()
 {
-    UpdateArgDesc(no);
-    if(no<4 && no<aParaArray.size())
-        aArgInput[no].GetArgEdPtr()->GrabFocus();
+    UpdateArgDesc(0);
+    if(0<aParaArray.size())
+        aArgInput[0].GetArgEdPtr()->GrabFocus();
 }
 
 

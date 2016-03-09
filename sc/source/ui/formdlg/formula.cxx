@@ -295,7 +295,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell, ScTabVi
 
 bool ScFormulaDlg::Close()
 {
-    DoEnter(false);
+    DoEnter();
     return true;
 }
 

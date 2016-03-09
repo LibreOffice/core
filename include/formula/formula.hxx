@@ -66,7 +66,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
-    void            RefInputDoneAfter( bool bForced = false );
+    void            RefInputDoneAfter();
     void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
 
     void            SetMeText(const OUString& _sText);
@@ -118,7 +118,7 @@ protected:
     bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
     OUString        GetMeText() const;
     void            Update(const OUString& _sExp);
-    void            DoEnter(bool _bOk);
+    void            DoEnter();
     const IFunctionDescription* getCurrentFunctionDescription() const;
     bool            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection, const OUString& _sRefStr);
