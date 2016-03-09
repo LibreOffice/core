@@ -497,7 +497,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     if ( !pEditView )   // Happens in Win95
         return;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     Range aRange = rModulWindow.GetHScrollBar()->GetRange(); (void)aRange;
     long nVisSz = rModulWindow.GetHScrollBar()->GetVisibleSize(); (void)nVisSz;
     long nPapSz = rModulWindow.GetHScrollBar()->GetPageSize(); (void)nPapSz;
