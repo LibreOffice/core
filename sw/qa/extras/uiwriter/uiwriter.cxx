@@ -53,8 +53,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
-#include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -69,7 +67,6 @@ public:
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
     void testRedlineFrame();
-    void testBookmarkCopy();
     void testFdo69893();
     void testFdo70807();
     void testImportRTF();
@@ -99,7 +96,6 @@ public:
     void testCp1000115();
     void testTdf90003();
     void testSearchWithTransliterate();
-    void testTdf97601();
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
@@ -107,17 +103,11 @@ public:
     void testDde();
     void testTdf89954();
     void testTdf89720();
-    void testTdf96479();
-    void testTdf88453();
-    void testTdf88453Table();
-    void testTdf98987();
-    void testTdf99004();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testRedlineFrame);
-    CPPUNIT_TEST(testBookmarkCopy);
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
@@ -147,19 +137,16 @@ public:
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testSearchWithTransliterate);
-    CPPUNIT_TEST(testTdf97601);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testDde);
     CPPUNIT_TEST(testTdf89954);
+#if 0
     CPPUNIT_TEST(testTdf89720);
-    CPPUNIT_TEST(testTdf96479);
-    CPPUNIT_TEST(testTdf88453);
-    CPPUNIT_TEST(testTdf88453Table);
-    CPPUNIT_TEST(testTdf98987);
-    CPPUNIT_TEST(testTdf99004);
+#endif
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -169,9 +156,8 @@ private:
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter", nullptr);
-    else
-        load(DATA_DIRECTORY, pName);
+        pName = "empty.odt";
+    load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -235,61 +221,6 @@ void SwUiWriterTest::testRedlineFrame()
 
     // there is still exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
-}
-
-void SwUiWriterTest::testBookmarkCopy()
-{
-    SwDoc * pDoc(createDoc());
-
-    // add text and bookmark
-    IDocumentMarkAccess & rIDMA(*pDoc->getIDocumentMarkAccess());
-    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
-    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwCursor aPaM(SwPosition(aIdx), nullptr, false);
-    rIDCO.InsertString(aPaM, OUString("foo"));
-    rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    rIDCO.InsertString(aPaM, OUString("bar"));
-    aPaM.SetMark();
-    aPaM.MovePara(GetfnParaCurr(), GetfnParaStart());
-    rIDMA.makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
-    aPaM.Exchange();
-    aPaM.DeleteMark();
-    rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    rIDCO.InsertString(aPaM, OUString("baz"));
-
-    // copy range
-    rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    SwPosition target(*aPaM.GetPoint());
-    aPaM.Move(fnMoveBackward, fnGoContent);
-    aPaM.SetMark();
-    aPaM.SttEndDoc(true/*start*/);
-    aPaM.Move(fnMoveForward, fnGoContent); // partially select 1st para
-
-    rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true);
-
-    // check bookmark was copied to correct position
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rIDMA.getBookmarksCount());
-    for (auto it(rIDMA.getBookmarksBegin()); it != rIDMA.getBookmarksEnd(); ++it)
-    {
-        OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
-    }
-
-    // copy 2nd time, such that bCanMoveBack is false in CopyImpl
-    SwPaM aCopyPaM(*aPaM.GetMark(), *aPaM.GetPoint());
-    aPaM.SttEndDoc(true/*start*/);
-    rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    aPaM.SttEndDoc(true/*start*/);
-
-    rIDCO.CopyRange(aCopyPaM, *aPaM.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true);
-
-    // check bookmark was copied to correct position
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getBookmarksCount());
-    for (auto it(rIDMA.getBookmarksBegin()); it != rIDMA.getBookmarksEnd(); ++it)
-    {
-        OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
-    }
 }
 
 void SwUiWriterTest::testFdo75110()
@@ -1009,31 +940,6 @@ void SwUiWriterTest::testSearchWithTransliterate()
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
 }
 
-void SwUiWriterTest::testTdf97601()
-{
-    // Instructions from the bugreport to trigger an infinite loop.
-    createDoc("tdf97601.odt");
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xEmbeddedObjects = xEmbeddedObjectsSupplier->getEmbeddedObjects();
-    uno::Reference<beans::XPropertySet> xChart;
-    xEmbeddedObjects->getByName("myChart") >>= xChart;
-    uno::Reference<chart2::data::XDataSource> xChartComponent;
-    xChart->getPropertyValue("Component") >>= xChartComponent;
-    uno::Sequence< uno::Reference<chart2::data::XLabeledDataSequence> > aDataSequences = xChartComponent->getDataSequences();
-    uno::Reference<document::XEmbeddedObjectSupplier2> xChartState(xChart, uno::UNO_QUERY);
-    xChartState->getExtendedControlOverEmbeddedObject()->changeState(1);
-    uno::Reference<util::XModifiable> xDataSequenceModifiable(aDataSequences[2]->getValues(), uno::UNO_QUERY);
-    xDataSequenceModifiable->setModified(true);
-
-    // Make sure that the chart is marked as modified.
-    uno::Reference<util::XModifiable> xModifiable(xChartComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xModifiable->isModified()));
-    calcLayout();
-    // This never returned.
-    Application::Reschedule(true);
-    Scheduler::ProcessTaskScheduling(false);
-}
-
 void SwUiWriterTest::testTdf90362()
 {
     // First check if the end of the second paragraph is indeed protected.
@@ -1171,7 +1077,7 @@ void SwUiWriterTest::testTdf89954()
     OUString aExpected("Tes\xef\xbf\xb9t. Test.", 14, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aNodeIndex.GetNode().GetTextNode()->GetText());
 }
-
+#if 0
 void SwUiWriterTest::testTdf89720()
 {
 #ifndef MACOSX
@@ -1188,152 +1094,7 @@ void SwUiWriterTest::testTdf89720()
 #endif
 }
 
-void SwUiWriterTest::testTdf96479()
-{
-    // We want to verify the empty input text field in the bookmark
-    static const OUString emptyInputTextField =
-        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>();
-
-    SwDoc* pDoc = createDoc();
-    SwXTextDocument *xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(xTextDoc);
-
-    // So we can clean up all references for reload
-    {
-        // Append bookmark
-        SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-        SwPaM aPaM(aIdx);
-        IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
-        sw::mark::IMark *pMark =
-            rIDMA.makeMark(aPaM, "original", IDocumentMarkAccess::MarkType::BOOKMARK);
-        CPPUNIT_ASSERT(!pMark->IsExpanded());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
-
-        // Get helper objects
-        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
-
-        // Create cursor from bookmark
-        uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("original"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-        uno::Reference<text::XTextCursor> xCursor(xRange->getText()->createTextCursorByRange(xRange), uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xCursor->isCollapsed());
-
-        // Remove bookmark
-        xRange->getText()->removeTextContent(xTextContent);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getBookmarksCount());
-
-        // Insert replacement bookmark
-        uno::Reference<text::XTextContent> xBookmarkNew(xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
-        uno::Reference<container::XNamed> xBookmarkName(xBookmarkNew, uno::UNO_QUERY);
-        xBookmarkName->setName("replacement");
-        CPPUNIT_ASSERT(xCursor->isCollapsed());
-        // Force bookmark expansion
-        xCursor->getText()->insertString(xCursor, ".", true);
-        xCursor->getText()->insertTextContent(xCursor, xBookmarkNew, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
-        auto mark = *(rIDMA.getBookmarksBegin());
-        CPPUNIT_ASSERT(mark->IsExpanded());
-
-        // Create and insert input textfield with some content
-        uno::Reference<text::XTextField> xTextField(xFactory->createInstance("com.sun.star.text.TextField.Input"), uno::UNO_QUERY);
-        uno::Reference<text::XTextCursor> xCursorNew(xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(xBookmarkNew->getAnchor()));
-        CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
-        xCursorNew->getText()->insertTextContent(xCursorNew, xTextField, true);
-        xBookmarkNew = uno::Reference<text::XTextContent>(xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
-        xCursorNew = uno::Reference<text::XTextCursor>(xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(xBookmarkNew->getAnchor()));
-        CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
-
-        // Can't check the actual content of the text node via UNO
-        mark = *(rIDMA.getBookmarksBegin());
-        CPPUNIT_ASSERT(mark->IsExpanded());
-        SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
-        // Check for the actual bug, which didn't include CH_TXT_ATR_INPUTFIELDEND in the bookmark
-        CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
-    }
-
-    {
-        // Save and load cycle
-        // Actually not needed, but the bug symptom of a missing bookmark
-        // occured because a broken bookmar was saved and loading silently
-        // dropped the broken bookmark!
-        utl::TempFile aTempFile;
-        save("writer8", aTempFile);
-        loadURL(aTempFile.GetURL(), nullptr);
-        xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(xTextDoc);
-        pDoc = xTextDoc->GetDocShell()->GetDoc();
-
-        // Lookup "replacement" bookmark
-        IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
-        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xBookmarksSupplier->getBookmarks()->hasByName("replacement"));
-
-        uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-        uno::Reference<text::XTextCursor> xCursor(xRange->getText()->createTextCursorByRange(xRange), uno::UNO_QUERY);
-        CPPUNIT_ASSERT(!xCursor->isCollapsed());
-
-        // Verify bookmark content via text node / PaM
-        auto mark = *(rIDMA.getBookmarksBegin());
-        CPPUNIT_ASSERT(mark->IsExpanded());
-        SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
-        CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
-    }
-}
-
-void SwUiWriterTest::testTdf88453()
-{
-    createDoc("tdf88453.odt");
-    calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
-    // This was 0: the table does not fit the first page, but it wasn't split
-    // to continue on the second page.
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
-}
-
-void SwUiWriterTest::testTdf88453Table()
-{
-    createDoc("tdf88453-table.odt");
-    calcLayout();
-    // This was 2: layout could not split the large outer table in the document
-    // into 3 pages.
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
-}
-
-void SwUiWriterTest::testTdf98987()
-{
-    createDoc("tdf98987.docx");
-    calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/sdrObject", "name", "Rectangle 1");
-    sal_Int32 nRectangle1 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32();
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
-    sal_Int32 nRectangle2 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
-    CPPUNIT_ASSERT(nRectangle1 < nRectangle2);
-
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/sdrObject", "name", "Rectangle 3");
-    sal_Int32 nRectangle3 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32();
-    // This failed: the 3rd rectangle had a smaller "top" value than the 2nd one, it even overlapped with the 1st one.
-    CPPUNIT_ASSERT(nRectangle2 < nRectangle3);
-}
-
-void SwUiWriterTest::testTdf99004()
-{
-    createDoc("tdf99004.docx");
-    calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nTextbox1Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "top").toInt32();
-    sal_Int32 nTextBox1Height = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
-    sal_Int32 nTextBox1Bottom = nTextbox1Top + nTextBox1Height;
-
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
-    sal_Int32 nRectangle2Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
-    // This was 3291 and 2531, should be now around 2472 and 2531, i.e. the two rectangles should not overlap anymore.
-    CPPUNIT_ASSERT(nTextBox1Bottom < nRectangle2Top);
-}
-
+#endif
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
