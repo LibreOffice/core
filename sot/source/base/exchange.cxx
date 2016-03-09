@@ -68,7 +68,7 @@ namespace
             /*  7 EMPTY*/                                   { "", "", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*  8 EMPTY*/                                   { "", "", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*  9 EMPTY*/                                   { "", "", &cppu::UnoType<Sequence<sal_Int8>>::get() },
-            /* 10 SotClipboardFormatId::RTF*/                          { "text/richtext", "Rich Text Format", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+            /* 10 SotClipboardFormatId::RTF*/                          { "text/rtf", "Rich Text Format", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /* 11 SotClipboardFormatId::DRAWING*/                { "application/x-openoffice-drawing;windows_formatname=\"Drawing Format\"", "Drawing Format", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /* 12 SotClipboardFormatId::SVXB*/                   { "application/x-openoffice-svxb;windows_formatname=\"SVXB (StarView Bitmap/Animation)\"", "SVXB (StarView Bitmap/Animation)", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /* 13 SotClipboardFormatId::SVIM*/                   { "application/x-openoffice-svim;windows_formatname=\"SVIM (StarView ImageMap)\"", "SVIM (StarView ImageMap)", &cppu::UnoType<Sequence<sal_Int8>>::get() },

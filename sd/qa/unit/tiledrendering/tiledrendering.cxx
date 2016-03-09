@@ -389,7 +389,7 @@ void SdTiledRenderingTest::testGetTextSelection()
     CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 
     // Make sure returned RTF is not empty.
-    CPPUNIT_ASSERT(!OString(pXImpressDocument->getTextSelection("text/richtext", aUsedFormat)).isEmpty());
+    CPPUNIT_ASSERT(!OString(pXImpressDocument->getTextSelection("text/rtf", aUsedFormat)).isEmpty());
 }
 
 void SdTiledRenderingTest::testSetGraphicSelection()
