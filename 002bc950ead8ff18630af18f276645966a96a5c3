@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_5cc11d2e",
+        "filename": "sc/inc/dapiuno.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-09T15:13:16Z",
+      "side": 1,
+      "message": "While touching these lines of code, please drop the initial :: from std::. (IMHO)",
+      "revId": "002bc950ead8ff18630af18f276645966a96a5c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_bcdc9919",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-09T15:13:16Z",
+      "side": 1,
+      "message": "Please use \u0027auto\u0027 instead of verbosely writing the const_iterator type, and then also use cbegin() and cend().",
+      "revId": "002bc950ead8ff18630af18f276645966a96a5c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_9ce1d5d3",
+        "filename": "sc/source/filter/inc/ftools.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-09T15:13:16Z",
+      "side": 1,
+      "message": "If we do this for std::vector\u003cOUString\u003e, we probably should do it for those other typedefs, too. But I will leave it to Eike to decide.",
+      "revId": "002bc950ead8ff18630af18f276645966a96a5c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
