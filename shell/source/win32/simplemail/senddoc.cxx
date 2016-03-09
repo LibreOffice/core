@@ -33,7 +33,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     void dumpParameter();
 #endif
 
@@ -248,7 +248,7 @@ int main(int argc, char* argv[])
 
     initParameter(argc, argv);
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     dumpParameter();
 #endif
 
@@ -300,7 +300,7 @@ int main(int argc, char* argv[])
     return ulRet;
 }
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     void dumpParameter()
     {
         std::ostringstream oss;
