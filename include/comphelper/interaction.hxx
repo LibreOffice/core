@@ -100,7 +100,7 @@ namespace comphelper
         }
 
         // XInteractionPassword
-        virtual void SAL_CALL setPassword( const OUString& _Password ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setPassword( const OUString& Password ) throw (css::uno::RuntimeException, std::exception) override;
         virtual OUString SAL_CALL getPassword(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
