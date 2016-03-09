@@ -2110,7 +2110,7 @@ namespace {
         Size aSize(1024, 1024);
         xDevice->SetOutputSizePixel(aSize);
 
-        for (auto aFontName : aFontNames)
+        for (auto & aFontName : aFontNames)
         {
             vcl::Font aFont(aFontName, Size(0,96));
 #if 0
