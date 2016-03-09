@@ -244,7 +244,7 @@ void Clipboard::DoPaste ()
 
     if (pClipTransferable!=nullptr && pClipTransferable->IsPageTransferable())
     {
-        sal_Int32 nInsertPosition = GetInsertionPosition(nullptr);
+        sal_Int32 nInsertPosition = GetInsertionPosition();
 
         if (nInsertPosition >= 0)
         {
@@ -258,7 +258,7 @@ void Clipboard::DoPaste ()
     }
 }
 
-sal_Int32 Clipboard::GetInsertionPosition (vcl::Window* pWindow)
+sal_Int32 Clipboard::GetInsertionPosition ()
 {
     sal_Int32 nInsertPosition = -1;
 
@@ -286,7 +286,7 @@ sal_Int32 Clipboard::GetInsertionPosition (vcl::Window* pWindow)
     else if (mrController.GetFocusManager().IsFocusShowing())
     {
         // Use the focus to determine the insertion position.
-        ScopedVclPtrInstance< SdInsertPasteDlg > aDialog(pWindow);
+        ScopedVclPtrInstance< SdInsertPasteDlg > aDialog(nullptr);
         if (aDialog->Execute() == RET_OK)
         {
             nInsertPosition = mrController.GetFocusManager().GetFocusedPageIndex();

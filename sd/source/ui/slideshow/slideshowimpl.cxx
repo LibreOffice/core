@@ -2947,10 +2947,10 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException, std::exc
                             if ( maPresSettings.mbShowPauseLogo )
                             {
                                 Graphic aGraphic(SfxApplication::GetApplicationLogo(360));
-                                mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, &aGraphic );
+                                mpShowWindow->SetPauseMode( maPresSettings.mnPauseTimeout, &aGraphic );
                             }
                             else
-                                mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout );
+                                mpShowWindow->SetPauseMode( maPresSettings.mnPauseTimeout );
                         }
                     }
                     else

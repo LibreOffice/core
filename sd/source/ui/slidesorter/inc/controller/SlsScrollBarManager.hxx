@@ -78,16 +78,12 @@ public:
         method when the content of the browser window changed, i.e. pages
         were inserted or deleted, the layout or the zoom factor has
         changed.
-        @param bResetThumbPosition
-            When <TRUE/> then set the thumb position to position 0.  This is
-            done when e.g. switching between master page mode and draw mode.
         @param bScrollToCurrentPosition
             When <TRUE/> then scroll the window to the new offset that is
             defined by the scroll bars.  Otherwise the new offset is simply
             set and the whole window is repainted.
     */
     void UpdateScrollBars (
-        bool bResetThumbPosition = false,
         bool bScrollToCurrentPosition = true);
 
     /** Place the scroll bars inside the given area.  When the available

@@ -56,7 +56,7 @@ rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window
 void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg( nullptr, *mpDoc ) : nullptr);
+    std::unique_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg( *mpDoc ) : nullptr);
     if( pDlg )
     {
         sal_uInt16 nRet = pDlg->Execute();

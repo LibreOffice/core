@@ -83,13 +83,13 @@ public:
 
     /** When the view in the center pane changes then this method sets up
         the initial set of tool bars for the new view.
-        The ToolBarManager listenes for view switching itself and then calls
+        The ToolBarManager listens for view switching itself and then calls
         MainViewShellChanged().  Calling this method from the outside should
         not be necessary.
         @param nShellType
             The type of the new main view shell.
     */
-    void MainViewShellChanged (ViewShell::ShellType nShellType);
+    void MainViewShellChanged ();
     void MainViewShellChanged (const ViewShell& rMainViewShell);
 
     /** Call this method when the selection has changed to update the more

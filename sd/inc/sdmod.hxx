@@ -151,7 +151,7 @@ private:
     SfxFrame* ExecuteNewDocument( SfxRequest& rReq );
 
     static void ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewFrame, const sal_Int32 eMedium );
-    static SfxFrame* CreateEmptyDocument( DocumentType eDocType, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
+    static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );
     static SfxFrame* CreateFromTemplate( const OUString& rTemplatePath, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
 
     /** The resource container controls the lifetime of some singletons.

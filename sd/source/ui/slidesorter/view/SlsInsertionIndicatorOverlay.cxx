@@ -113,8 +113,7 @@ void InsertionIndicatorOverlay::Create (
     std::shared_ptr<view::PageObjectLayouter> pPageObjectLayouter (
         rLayouter.GetPageObjectLayouter());
     std::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
-    const Size aOriginalPreviewSize (pPageObjectLayouter->GetPreviewSize(
-        PageObjectLayouter::WindowCoordinateSystem));
+    const Size aOriginalPreviewSize (pPageObjectLayouter->GetPreviewSize());
 
     const double nPreviewScale (0.5);
     const Size aPreviewSize (

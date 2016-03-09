@@ -88,7 +88,7 @@ void PageCache::InvalidatePreviewBitmap (
 
 void PageCache::InvalidateCache()
 {
-    mpImplementation->InvalidateCache(true);
+    mpImplementation->InvalidateCache();
 }
 
 void PageCache::SetPreciousFlag (

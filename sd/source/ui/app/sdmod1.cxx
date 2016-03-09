@@ -546,13 +546,13 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             else
             {
                 //create an empty document
-                pFrame = CreateEmptyDocument( DOCUMENT_TYPE_IMPRESS, xTargetFrame );
+                pFrame = CreateEmptyDocument( xTargetFrame );
             }
         }
         else
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( nullptr, !bNewDocDirect ) : nullptr );
+            std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( !bNewDocDirect ) : nullptr );
 
             // Open the Pilot
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
@@ -711,13 +711,13 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
     return pFrame;
 }
 
-SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference< XFrame >& i_rFrame )
+SfxFrame* SdModule::CreateEmptyDocument( const Reference< XFrame >& i_rFrame )
 {
     SfxFrame* pFrame = nullptr;
 
     SfxObjectShellLock xDocShell;
     ::sd::DrawDocShell* pNewDocSh;
-    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD,false,eDocType);
+    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD,false,DOCUMENT_TYPE_IMPRESS);
     pNewDocSh->DoInitNew();
     SdDrawDocument* pDoc = pNewDocSh->GetDoc();
     if (pDoc)

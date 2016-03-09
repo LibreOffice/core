@@ -226,7 +226,7 @@ bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
         return false;
 }
 
-void GenericPageCache::InvalidateCache (const bool bUpdateCache)
+void GenericPageCache::InvalidateCache ()
 {
     if (mpBitmapCache)
     {
@@ -240,8 +240,7 @@ void GenericPageCache::InvalidateCache (const bool bUpdateCache)
         // Depending on the given bUpdateCache flag we start to create new
         // preview bitmaps.
         mpBitmapCache->InvalidateCache();
-        if (bUpdateCache)
-            RequestFactory()(maRequestQueue, mpCacheContext);
+        RequestFactory()(maRequestQueue, mpCacheContext);
     }
 }
 

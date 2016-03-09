@@ -64,7 +64,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
 
 DragAndDropContext::~DragAndDropContext()
 {
-    SetTargetSlideSorter (nullptr, Point(0,0));
+    SetTargetSlideSorter (Point(0,0));
 }
 
 void DragAndDropContext::Dispose()
@@ -110,7 +110,6 @@ void DragAndDropContext::UpdatePosition (
 }
 
 void DragAndDropContext::SetTargetSlideSorter (
-    SlideSorter* pSlideSorter,
     const Point& rMousePosition,
     const InsertionIndicatorHandler::Mode eMode,
     const bool bIsOverSourceView)
@@ -122,7 +121,7 @@ void DragAndDropContext::SetTargetSlideSorter (
             Animator::AM_Animated);
     }
 
-    mpTargetSlideSorter = pSlideSorter;
+    mpTargetSlideSorter = nullptr;
 
     if (mpTargetSlideSorter != nullptr)
     {

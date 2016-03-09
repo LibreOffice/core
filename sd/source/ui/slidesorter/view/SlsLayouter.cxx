@@ -532,8 +532,7 @@ bool Layouter::Implementation::Rearrange (
             mpWindow,
             mnPageCount));
 
-    maPageObjectSize = mpPageObjectLayouter->GetGridMaxSize(
-        PageObjectLayouter::WindowCoordinateSystem);
+    maPageObjectSize = mpPageObjectLayouter->GetGridMaxSize();
 
     CalculateMaxRowAndColumnCount(rWindowSize);
 

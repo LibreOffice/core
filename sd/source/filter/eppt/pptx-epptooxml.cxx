@@ -1597,7 +1597,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
 
 void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 {
-    if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders( true ) )
+    if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders() )
         return;
 
     DBG(printf("write Notes %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));
@@ -2211,10 +2211,10 @@ bool PowerPointExport::ImplCreateDocument()
         if ( !GetPageByIndex( i, NOTICE ) )
             return false;
 
-    if( ContainsOtherShapeThanPlaceholders( true ) ) {
-        mbCreateNotes = true;
-        break;
-    }
+        if( ContainsOtherShapeThanPlaceholders() ) {
+            mbCreateNotes = true;
+            break;
+        }
     }
 
     return true;

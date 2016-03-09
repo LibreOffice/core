@@ -218,17 +218,16 @@ Rectangle PageObjectLayouter::GetBoundingBox (
         aBoundingBox.BottomRight() + aLocation);
 }
 
-Size PageObjectLayouter::GetPreviewSize (
-    const CoordinateSystem eCoordinateSystem)
+Size PageObjectLayouter::GetPreviewSize ()
 {
     return GetBoundingBox(Point(0,0), PageObjectLayouter::Preview,
-                          eCoordinateSystem).GetSize();
+                          WindowCoordinateSystem).GetSize();
 }
 
-Size PageObjectLayouter::GetGridMaxSize(const CoordinateSystem eCoordinateSystem)
+Size PageObjectLayouter::GetGridMaxSize()
 {
     return GetBoundingBox(Point(0,0), PageObjectLayouter::FocusIndicator,
-                          eCoordinateSystem).GetSize();
+                          WindowCoordinateSystem).GetSize();
 }
 
 Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)

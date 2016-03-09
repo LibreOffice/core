@@ -90,7 +90,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(nullptr, &aNewAttr ) : nullptr);
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg( &aNewAttr ) : nullptr);
         if (!pDlg)
             return;
 

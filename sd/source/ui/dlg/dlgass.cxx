@@ -209,7 +209,7 @@ public:
     static bool IsOwnFormat( const OUString& rPath );
 
     // dlg status
-    void EndDialog( long nResult = 0 );
+    void EndDialog();
 
     void SetStartType( StartType eType );
     StartType GetStartType();
@@ -689,7 +689,7 @@ void AssistentDlgImpl::CloseDocShell()
     }
 }
 
-void AssistentDlgImpl::EndDialog( long )
+void AssistentDlgImpl::EndDialog()
 {
     mpWindow = nullptr;
 }
@@ -1778,7 +1778,7 @@ void AssistentDlg::FinishHdl()
     }
 
     // end
-    mpImpl->EndDialog(RET_OK);
+    mpImpl->EndDialog();
     EndDialog(RET_OK);
 }
 

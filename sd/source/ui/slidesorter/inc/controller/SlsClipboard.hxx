@@ -148,14 +148,11 @@ private:
 
     /** Determine the position of where to insert the pages in the current
         transferable of the sd module.
-        @param pWindow
-            This window is used as parent for dialogs that have to be shown
-            to the user.
         @return
             The index in the range [0,n] (both inclusive) with n the number
             of pages is returned.
     */
-    sal_Int32 GetInsertionPosition (vcl::Window* pWindow);
+    sal_Int32 GetInsertionPosition ();
 
     /** Paste the pages of the transferable of the sd module at the given
         position.

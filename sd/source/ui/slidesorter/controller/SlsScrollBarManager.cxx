@@ -174,7 +174,7 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
             mpHorizontalScrollBar->GetSizePixel().Height()));
 }
 
-void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScrolling)
+void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
 {
     Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
     sd::Window *pWindow (mrSlideSorter.GetContentWindow());
@@ -187,13 +187,7 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
         mpHorizontalScrollBar->Show();
         mpHorizontalScrollBar->SetRange (
             Range(aModelArea.Left(), aModelArea.Right()));
-        if (bResetThumbPosition)
-        {
-            mpHorizontalScrollBar->SetThumbPos (0);
-            mnHorizontalPosition = 0;
-        }
-        else
-            mnHorizontalPosition =
+        mnHorizontalPosition =
                 double(mpHorizontalScrollBar->GetThumbPos())
                 / double(mpHorizontalScrollBar->GetRange().Len());
 
@@ -216,13 +210,7 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
     {
         mpVerticalScrollBar->SetRange (
             Range(aModelArea.Top(), aModelArea.Bottom()));
-        if (bResetThumbPosition)
-        {
-            mpVerticalScrollBar->SetThumbPos (0);
-            mnVerticalPosition = 0;
-        }
-        else
-            mnVerticalPosition =
+        mnVerticalPosition =
                 double(mpVerticalScrollBar->GetThumbPos())
                 / double(mpVerticalScrollBar->GetRange().Len());
 

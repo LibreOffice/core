@@ -305,7 +305,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
                 {
-                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg( nullptr, mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : nullptr);
+                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg( mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : nullptr);
                 }
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {

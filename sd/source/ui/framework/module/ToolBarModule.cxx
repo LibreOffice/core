@@ -171,7 +171,7 @@ void ToolBarModule::HandleUpdateEnd()
         }
         else
         {
-            pToolBarManager->MainViewShellChanged(ViewShell::ST_NONE);
+            pToolBarManager->MainViewShellChanged();
             pToolBarManager->PreUpdate();
         }
     }

@@ -327,7 +327,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( nullptr, mpDoc, pMedium, aFile ) : nullptr);
+    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( mpDoc, pMedium, aFile ) : nullptr);
 
     if( !pDlg )
         return false;
@@ -419,7 +419,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(nullptr, mpDoc, nullptr, aFile ) : nullptr);
+    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( mpDoc, nullptr, aFile ) : nullptr);
     if( !pDlg )
         return;
 

@@ -477,12 +477,12 @@ void ToolBarManager::UnlockUpdate()
         mpImpl->UnlockUpdate();
 }
 
-void ToolBarManager::MainViewShellChanged (ViewShell::ShellType nShellType)
+void ToolBarManager::MainViewShellChanged ()
 {
     if (mpImpl.get() != nullptr)
     {
         mpImpl->ReleaseAllToolBarShells();
-        mpImpl->GetToolBarRules().MainViewShellChanged(nShellType);
+        mpImpl->GetToolBarRules().MainViewShellChanged(ViewShell::ST_NONE);
     }
 }
 

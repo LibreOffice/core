@@ -61,7 +61,6 @@ public:
         const bool bAllowAutoScroll = true);
 
     void SetTargetSlideSorter (
-        SlideSorter* pSlideSorter = nullptr,
         const Point& rMousePosition = Point(0,0),
         const InsertionIndicatorHandler::Mode eMode = InsertionIndicatorHandler::UnknownMode,
         const bool bIsOverSourceView = false);

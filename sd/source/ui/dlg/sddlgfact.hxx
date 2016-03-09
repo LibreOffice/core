@@ -228,25 +228,25 @@ public:
     virtual ~SdAbstractDialogFactory_Impl() {}
 
     virtual VclAbstractDialog*          CreateBreakDlg(vcl::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) override;
-    virtual AbstractCopyDlg*            CreateCopyDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView ) override;
-    virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc ) override;
-    virtual SfxAbstractTabDialog*       CreateSdTabCharDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell ) override;
-    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true ) override;
-    virtual AbstractAssistentDlg*       CreateAssistentDlg( vcl::Window* pParent, bool bAutoPilot) override;
+    virtual AbstractCopyDlg*            CreateCopyDlg( const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView ) override;
+    virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg( SdDrawDocument& rDrawDoc ) override;
+    virtual SfxAbstractTabDialog*       CreateSdTabCharDialog( const SfxItemSet* pAttr, SfxObjectShell* pDocShell ) override;
+    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true ) override;
+    virtual AbstractAssistentDlg*       CreateAssistentDlg( bool bAutoPilot) override;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) override;
-    virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
-    virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr ) override;
-    virtual AbstractSdInsertPagesObjsDlg* CreateSdInsertPagesObjsDlg( vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) override;
+    virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( const SfxItemSet& rInAttrs, ::sd::View* pView) override;
+    virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr ) override;
+    virtual AbstractSdInsertPagesObjsDlg* CreateSdInsertPagesObjsDlg( const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) override;
     virtual AbstractMorphDlg*           CreateMorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
-    virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg ( vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView = nullptr ) override;
-    virtual SfxAbstractTabDialog*       CreateSdParagraphTabDlg ( vcl::Window* pParent, const SfxItemSet* pAttr ) override;
+    virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg ( const SfxItemSet* pAttr, ::sd::View* pView = nullptr ) override;
+    virtual SfxAbstractTabDialog*       CreateSdParagraphTabDlg ( const SfxItemSet* pAttr ) override;
     virtual AbstractSdStartPresDlg*     CreateSdStartPresentationDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
                                                                      const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) override;
     virtual VclAbstractDialog*          CreateRemoteDialog( vcl::Window* pWindow ) override; // ad for RemoteDialog
     virtual SfxAbstractTabDialog*       CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SdResId& DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool ) override;
     virtual AbstractSdPresLayoutDlg*    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, vcl::Window* pWindow, const SfxItemSet& rInAttrs) override;
-    virtual SfxAbstractTabDialog*       CreateSdTabTemplateDlg( vcl::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
-    virtual SfxAbstractDialog*          CreatSdActionDialog( vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView ) override;
+    virtual SfxAbstractTabDialog*       CreateSdTabTemplateDlg( const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
+    virtual SfxAbstractDialog*          CreatSdActionDialog( const SfxItemSet* pAttr, ::sd::View* pView ) override;
     virtual AbstractSdVectorizeDlg*     CreateSdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) override;
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( vcl::Window* pWindow, DocumentType eDocType) override;
 

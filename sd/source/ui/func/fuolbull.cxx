@@ -81,7 +81,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( nullptr, &aNewAttr, mpView ) : nullptr);
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( &aNewAttr, mpView ) : nullptr);
         if( pDlg )
         {
             if ( pPageItem )

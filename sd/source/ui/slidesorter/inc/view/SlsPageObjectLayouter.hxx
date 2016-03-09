@@ -109,11 +109,11 @@ public:
         const CoordinateSystem eCoordinateSystem,
         bool bIgnoreLocation = false);
 
-    /// the size of the embedded preview: position independent
-    Size GetPreviewSize(const CoordinateSystem eCoordinateSystem);
+    /// the size of the embedded preview: position independent, in window coordinate system
+    Size GetPreviewSize();
 
-    /// the maximum size of each tile, also position independent
-    Size GetGridMaxSize(const CoordinateSystem eCoordinateSystem);
+    /// the maximum size of each tile, also position independent, in window coordinate system
+    Size GetGridMaxSize();
 
     Image GetTransitionEffectIcon() const { return maTransitionEffectIcon;}
     Image GetCustomAnimationEffectIcon() const { return maCustomAnimationEffectIcon;}

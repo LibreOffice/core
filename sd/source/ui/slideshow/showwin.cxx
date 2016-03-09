@@ -324,7 +324,7 @@ void ShowWindow::SetEndMode()
     }
 }
 
-bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
+bool ShowWindow::SetPauseMode( sal_Int32 nTimeout, Graphic* pLogo )
 {
     rtl::Reference< SlideShow > xSlideShow;
 
@@ -333,13 +333,13 @@ bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
 
     if( xSlideShow.is() && !nTimeout )
     {
-        xSlideShow->jumpToPageIndex( nPageIndexToRestart );
+        xSlideShow->jumpToPageIndex( 0 );
     }
     else if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
         DeleteWindowFromPaintView();
         mnPauseTimeout = nTimeout;
-        mnRestartPageIndex = nPageIndexToRestart;
+        mnRestartPageIndex = 0;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 

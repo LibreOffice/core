@@ -717,7 +717,7 @@ void  SlideSorterController::Rearrange (bool bForce)
 
         // Adapt the scroll bars to the new zoom factor of the browser
         // window and the arrangement of the page objects.
-        GetScrollBarManager().UpdateScrollBars(false, !bForce);
+        GetScrollBarManager().UpdateScrollBars(!bForce);
 
         // Keep the current slide in the visible area.
         GetVisibleAreaManager().RequestCurrentSlideVisible();

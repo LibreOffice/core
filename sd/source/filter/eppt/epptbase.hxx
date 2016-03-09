@@ -380,7 +380,7 @@ protected:
     css::awt::Point  MapPoint( const css::awt::Point& );
     Rectangle        MapRectangle( const css::awt::Rectangle& );
 
-    bool ContainsOtherShapeThanPlaceholders( bool bForOOMLX );
+    bool ContainsOtherShapeThanPlaceholders();
 
 public:
     PPTWriterBase();

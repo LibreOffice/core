@@ -971,7 +971,7 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
     return nPPTTransitionType;
 }
 
-bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( bool bForOOMLX )
+bool PPTWriterBase::ContainsOtherShapeThanPlaceholders()
 {
     sal_uInt32 nShapes = mXShapes->getCount();
     bool bOtherThanPlaceHolders = false;
@@ -981,16 +981,15 @@ bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( bool bForOOMLX )
         {
             if ( GetShapeByIndex( nIndex ) && mType != "drawing.Page" )
             {
-                if( bForOOMLX &&
-                        ( mType == "presentation.Page" ||
-                        mType == "presentation.Notes" ) ) {
+                if( mType == "presentation.Page" || mType == "presentation.Notes" )
+                {
                     Reference< XSimpleText > rXText( mXShape, UNO_QUERY );
 
-                if( rXText.is() && !rXText->getString().isEmpty() )
+                    if( rXText.is() && !rXText->getString().isEmpty() )
+                        bOtherThanPlaceHolders = true;
+                }
+                else
                     bOtherThanPlaceHolders = true;
-            }
-            else
-                bOtherThanPlaceHolders = true;
         }
         DBG(printf("mType == %s\n", mType.getStr()));
     }
