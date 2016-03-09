@@ -823,7 +823,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
     return HTML_TEXTTOKEN;
 }
 
-int HTMLParser::_GetNextRawToken()
+int HTMLParser::GetNextRawToken()
 {
     OUStringBuffer sTmpBuffer( MAX_LEN );
 
@@ -1075,7 +1075,7 @@ int HTMLParser::GetNextToken_()
 
     if( bReadScript || bReadStyle || !aEndToken.isEmpty() )
     {
-        nRet = _GetNextRawToken();
+        nRet = GetNextRawToken();
         if( nRet || !IsParserWorking() )
             return nRet;
     }

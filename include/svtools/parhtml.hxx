@@ -151,7 +151,7 @@ protected:
 
     int ScanText( const sal_Unicode cBreak = 0U );
 
-    int _GetNextRawToken();
+    int GetNextRawToken();
 
     // scan next token
     virtual int GetNextToken_() override;
