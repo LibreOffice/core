@@ -1090,7 +1090,9 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
         Rectangle aPxPaintRect = pOutputDev->LogicToPixel( aPageRect );
         if ( aPxOutRect.IsOver( aPxPaintRect) )
         {
-            if ( (*aPageIter)->pPage->IsEmptyPage() )
+            const SwPageFrm* pPage = (*aPageIter)->pPage;
+
+            if (pPage->IsEmptyPage())
             {
                 const Color aRetouche( mrParentViewShell.Imp()->GetRetoucheColor() );
                 if( pOutputDev->GetFillColor() != aRetouche )
@@ -1118,16 +1120,20 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
             }
             else
             {
+                const bool bIsLeftShadowed = pPage->IsLeftShadowNeeded();
+                const bool bIsRightShadowed = pPage->IsRightShadowNeeded();
+
                 mrParentViewShell.maVisArea = aPageRect;
                 aPxPaintRect.Intersection( aPxOutRect );
                 Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
                 mrParentViewShell.Paint(rRenderContext, aPaintRect);
+
                 // --> OD 2007-08-15 #i80691#
                 // paint page border and shadow
                 {
                     SwRect aPageBorderRect;
                     SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, &rRenderContext, aPageBorderRect,
-                        (*aPageIter)->pPage->IsLeftShadowNeeded(), (*aPageIter)->pPage->IsRightShadowNeeded(), true );
+                        bIsLeftShadowed, bIsRightShadowed, true );
                     const vcl::Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
                     SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
@@ -1142,11 +1148,10 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 break;
             }
 
-            if ( (*aPageIter)->pPage->GetPhyPageNum() == mnSelectedPageNum )
+            if (pPage->GetPhyPageNum() == mnSelectedPageNum)
             {
                 _PaintSelectMarkAtPage(rRenderContext, *aPageIter);
             }
-
         }
     }
 
