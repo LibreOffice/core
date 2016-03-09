@@ -913,7 +913,7 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
             gtk_widget_path_iter_set_object_name(path, -1, "contents");
 #else
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CONTENTS);
+            gtk_widget_path_iter_add_class(path, -1, "contents");
 #endif
             break;
         case GtkControlPart::ScrollbarTrough:
