@@ -2726,11 +2726,11 @@ IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
 void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid()
 {
     IconChoiceMap aLists;
-    pImpCursor->CreateGridAjustData( aLists, nullptr );
+    pImpCursor->CreateGridAjustData( aLists );
     for (IconChoiceMap::const_iterator iter = aLists.begin();
             iter != aLists.end(); ++iter)
     {
-        AdjustAtGrid(iter->second, nullptr);
+        AdjustAtGrid(iter->second);
     }
     IcnCursor_Impl::DestroyGridAdjustData( aLists );
     CheckScrollBars();
