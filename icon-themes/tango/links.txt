@@ -536,3 +536,8 @@ cmd/lc_conditionalformatmenu.png cmd/lc_colorscaleformatdialog.png
 # anchor menu
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
+
+# insert table alias
+cmd/lc_inserttablealias.png cmd/lc_inserttable.png
+cmd/sc_inserttablealias.png cmd/sc_inserttable.png
+

@@ -91,3 +91,8 @@ svtools/res/folderop.png formula/res/fapopen.png
 
 # Calc conditional formatting group button
 cmd/lc_conditionalformatmenu.png cmd/lc_colorscaleformatdialog.png
+
+# insert table alias
+cmd/lc_inserttablealias.png cmd/lc_inserttable.png
+cmd/sc_inserttablealias.png cmd/sc_inserttable.png
+
