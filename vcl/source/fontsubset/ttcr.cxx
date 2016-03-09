@@ -42,7 +42,7 @@ namespace vcl
  * Private Data Types
  */
 
-    struct _TrueTypeCreator {
+    struct TrueTypeCreator {
         sal_uInt32 tag;                         /**< TrueType file tag */
         list   tables;                      /**< List of table tags and pointers */
     };

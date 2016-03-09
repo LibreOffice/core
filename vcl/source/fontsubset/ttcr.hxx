@@ -31,7 +31,7 @@
 
 namespace vcl
 {
-    typedef struct _TrueTypeCreator TrueTypeCreator;
+    struct TrueTypeCreator;
 
 /* TrueType data types */
     typedef struct {
