@@ -34,7 +34,7 @@ InputSequenceChecker_th::~InputSequenceChecker_th()
 }
 
 /* Table for Thai Cell Manipulation */
-sal_Char _TAC_celltype_inputcheck[17][17] = {
+sal_Char TAC_celltype_inputcheck[17][17] = {
 /* Cn */ /*  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   A,   B,   C,   D,   E,   F       */
 /* Cn-1 00 */{  'X', 'A', 'A', 'A', 'A', 'A', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
      /* 10 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
@@ -55,7 +55,7 @@ sal_Char _TAC_celltype_inputcheck[17][17] = {
          { 'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'C', 'R', 'R', 'R', 'R' }
 };
 
-sal_Bool _TAC_Composible[3][5] = {
+sal_Bool TAC_Composible[3][5] = {
         /*  'A',    'C',        'S',        'R',        'X'   */
 /* Mode 0 */    {sal_True,  sal_True,   sal_True,   sal_True,   sal_True}, // PASSTHROUGH = 0
 /* Mode 1 */    {sal_True,  sal_True,   sal_True,   sal_False,      sal_True}, // BASIC = 1
@@ -65,7 +65,7 @@ sal_Bool _TAC_Composible[3][5] = {
 static bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)
 {
     sal_Int16  composible_class;
-    switch (_TAC_celltype_inputcheck[getCharType(ch1)][getCharType(ch2)]) {
+    switch (TAC_celltype_inputcheck[getCharType(ch1)][getCharType(ch2)]) {
         case 'A': composible_class = 0; break;
         case 'C': composible_class = 1; break;
         case 'S': composible_class = 2; break;
@@ -73,7 +73,7 @@ static bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputChec
         case 'X': composible_class = 4; break;
         default:  composible_class = 0;
     }
-    return (_TAC_Composible[inputCheckMode][composible_class]);
+    return (TAC_Composible[inputCheckMode][composible_class]);
 }
 
 sal_Bool SAL_CALL
