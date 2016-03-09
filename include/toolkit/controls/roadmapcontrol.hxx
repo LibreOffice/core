@@ -81,7 +81,7 @@ namespace toolkit
 
         void                                MakeRMItemValidation( sal_Int32 Index, css::uno::Reference< XInterface > xRoadmapItem );
         css::container::ContainerEvent      GetContainerEvent(sal_Int32 Index, css::uno::Reference< XInterface > );
-        void                                SetRMItemDefaultProperties( const sal_Int32 _Index, css::uno::Reference< XInterface > );
+        void                                SetRMItemDefaultProperties( const sal_Int32 Index, css::uno::Reference< XInterface > );
         static sal_Int16                    GetCurrentItemID( css::uno::Reference< css::beans::XPropertySet > xPropertySet );
         sal_Int32                           GetUniqueID();
 
@@ -116,9 +116,9 @@ namespace toolkit
     sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any & _Element) throw    (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any & Element) throw    (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL removeByIndex( sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any & _Element) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any & Element) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;

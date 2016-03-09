@@ -274,13 +274,13 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& _Element)
+    void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& Element)
                                     throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
         if ( ( Index >= ( (sal_Int32)maRoadmapItems.size() + 1 ) ) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Reference< XInterface > xRoadmapItem;
-        _Element >>= xRoadmapItem;
+        Element >>= xRoadmapItem;
         MakeRMItemValidation( Index, xRoadmapItem);
         SetRMItemDefaultProperties( Index, xRoadmapItem );
         maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);
@@ -328,11 +328,11 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::replaceByIndex( const sal_Int32 Index, const Any& _Element)
+    void SAL_CALL UnoControlRoadmapModel::replaceByIndex( const sal_Int32 Index, const Any& Element)
                                 throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
         Reference< XInterface > xRoadmapItem;
-        _Element >>= xRoadmapItem;
+        Element >>= xRoadmapItem;
         MakeRMItemValidation( Index, xRoadmapItem);
         SetRMItemDefaultProperties( Index, xRoadmapItem );
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
