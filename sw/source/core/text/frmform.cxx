@@ -407,7 +407,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
                 {
                     // OD 2004-07-01 #i28701# - use new method <SwFrame::InvalidateObjs(..)>
                     // No format is performed for the floating screen objects.
-                    InvalidateObjs( true );
+                    InvalidateObjs();
                 }
             }
             nChgHeight = 0;
