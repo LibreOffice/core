@@ -1026,6 +1026,16 @@ DECLARE_RTFEXPORT_TEST(testPgndec, "pgndec.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
 }
 
+DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
+{
+    // Custom document properties were not improved, this resulted in a beans::UnknownPropertyException.
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = xDocumentProperties->getUserDefinedProperties();
+    CPPUNIT_ASSERT_EQUAL(OUString("2016-03-08T10:55:18,531376147"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StartValidity"));
+    CPPUNIT_ASSERT_EQUAL(OUString("None"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StopValidity"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

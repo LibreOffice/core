@@ -2603,16 +2603,6 @@ DECLARE_RTFIMPORT_TEST(testTdf50821, "tdf50821.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(191), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 }
 
-DECLARE_RTFIMPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
-{
-    // Custom document properties were not improved, this resulted in a beans::UnknownPropertyException.
-    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
-    uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = xDocumentProperties->getUserDefinedProperties();
-    CPPUNIT_ASSERT_EQUAL(OUString("2016-03-08T10:55:18,531376147"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StartValidity"));
-    CPPUNIT_ASSERT_EQUAL(OUString("None"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StopValidity"));
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
