@@ -146,8 +146,6 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     void PrepareAttributes();
 
-    sal_uInt16 FindIndex() const;
-
     void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
     RectHorAlign GetRectHorAlign() const { return meRectHorAlign; }
 

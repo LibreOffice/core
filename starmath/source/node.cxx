@@ -258,21 +258,6 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     ForEachNonNull(this, [&rFormat, &rDocShell](SmNode *pNode){pNode->Prepare(rFormat, rDocShell);});
 }
 
-sal_uInt16 SmNode::FindIndex() const
-{
-    assert(mpParentNode != nullptr && "FindIndex() requires this is a subnode.");
-
-    for (sal_uInt16 i = 0; i < mpParentNode->GetNumSubNodes(); ++i) {
-        if (mpParentNode->GetSubNode(i) == this) {
-            return i;
-        }
-    }
-
-    assert(false && "Connection between parent and child is inconsistent.");
-    return 0;
-}
-
-
 void SmNode::Move(const Point& rPosition)
 {
     if (rPosition.X() == 0  &&  rPosition.Y() == 0)
