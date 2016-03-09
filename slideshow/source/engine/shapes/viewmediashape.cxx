@@ -47,6 +47,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/modeltools.hxx>
+#include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
 #endif
