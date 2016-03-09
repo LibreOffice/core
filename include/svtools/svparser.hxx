@@ -97,10 +97,10 @@ protected:
     TokenStackType* GetStackPtr( short nCnt );
 
     // scan the next token:
-    //  work off Token stack and call _GetNextToken() if necessary.
+    //  work off Token stack and call GetNextToken_() if necessary.
     //  That one is responsible for the recognition of new Tokens.
     int GetNextToken();
-    virtual int _GetNextToken() = 0;
+    virtual int GetNextToken_() = 0;
 
     // is called for each Token that is recognized in CallParser
     virtual void NextToken( int nToken );

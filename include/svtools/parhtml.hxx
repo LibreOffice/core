@@ -154,7 +154,7 @@ protected:
     int _GetNextRawToken();
 
     // scan next token
-    virtual int _GetNextToken() override;
+    virtual int GetNextToken_() override;
 
     virtual ~HTMLParser();
 

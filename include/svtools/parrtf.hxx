@@ -51,7 +51,7 @@ protected:
     void SkipGroup();
 
     // scanne das naechste Token,
-    virtual int _GetNextToken() override;
+    virtual int GetNextToken_() override;
 
     void ReadUnknownData();
     virtual void ReadBitmapData();

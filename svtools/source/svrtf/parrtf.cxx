@@ -52,7 +52,7 @@ SvRTFParser::~SvRTFParser()
 }
 
 
-int SvRTFParser::_GetNextToken()
+int SvRTFParser::GetNextToken_()
 {
     int nRet = 0;
     do {
@@ -173,10 +173,10 @@ int SvRTFParser::_GetNextToken()
                             if (!_inSkipGroup) {
                             // UPR - overread the group with the ansi
                             //       information
-                            while( '{' != _GetNextToken() )
+                            while( '{' != GetNextToken_() )
                                 ;
                             SkipGroup();
-                            _GetNextToken();  // overread the last bracket
+                            GetNextToken_();  // overread the last bracket
                             nRet = 0;
                             }
                             break;
@@ -407,7 +407,7 @@ void SvRTFParser::ScanText()
 
                             OUString sSave( aToken );
                             nNextCh = '\\';
-                            int nToken = _GetNextToken();
+                            int nToken = GetNextToken_();
                             DBG_ASSERT( RTF_U == nToken, "doch kein UNI-Code Zeichen" );
                             // don't convert symbol chars
                             aStrBuffer.append(static_cast< sal_Unicode >(nTokenValue));
@@ -534,7 +534,7 @@ _inSkipGroup++;
                 }
                 break;
         }
-        int nToken = _GetNextToken();
+        int nToken = GetNextToken_();
         if (nToken == RTF_BIN)
         {
             rInput.SeekRel(-1);

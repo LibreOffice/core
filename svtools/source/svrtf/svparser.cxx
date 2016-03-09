@@ -427,7 +427,7 @@ int SvParser::GetNextToken()
         nTokenValue = -1;   // marker for no value read
         bTokenHasValue = false;
 
-        nRet = _GetNextToken();
+        nRet = GetNextToken_();
         if( SVPAR_PENDING == eState )
             return nRet;
     }

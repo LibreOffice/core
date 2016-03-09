@@ -729,7 +729,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case '\n':
             if( '>'==cBreak )
             {
-                // cr/lf in tag is handled in _GetNextToken()
+                // cr/lf in tag is handled in GetNextToken_()
                 sTmpBuffer.appendUtf32( nNextCh );
                 break;
             }
@@ -774,7 +774,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         }
                         else
                             // Only read blanks: no text must be returned
-                            // and _GetNextToken has to read until EOF
+                            // and GetNextToken_ has to read until EOF
                             return 0;
                     }
                 } while ( ' ' == nNextCh || '\t' == nNextCh ||
@@ -925,7 +925,7 @@ int HTMLParser::_GetNextRawToken()
 
                     bContinue = false;
 
-                    // nToken==0 means, _GetNextToken continues to read
+                    // nToken==0 means, GetNextToken_ continues to read
                     if( aToken.isEmpty() && (bReadStyle || bReadScript) )
                     {
                         // Immediately close environment (or context?)
@@ -1041,7 +1041,7 @@ int HTMLParser::_GetNextRawToken()
 }
 
 // Scan next token
-int HTMLParser::_GetNextToken()
+int HTMLParser::GetNextToken_()
 {
     int nRet = 0;
     sSaveToken.clear();
