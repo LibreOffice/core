@@ -76,7 +76,7 @@
 
 #include <vcl/sysdata.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <boost/date_time/posix_time/posix_time.hpp>
 using namespace ::boost::posix_time;
 
@@ -95,7 +95,7 @@ namespace
 
 typedef cppu::WeakComponentImplHelper<presentation::XTransition> OGLTransitionerImplBase;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 class TimerContext
 {
 public:
@@ -299,7 +299,7 @@ public:
     */
     bool mbHasTFPVisual;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ptime maUpdateStartTime;
     ptime maUpdateEndTime;
     ptime maStartTime;
@@ -350,7 +350,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     if( !mxView.is() )
         return false;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     TimerContext aTimerContext("initWindowFromSlideShowView");
 #endif
 
@@ -1155,7 +1155,7 @@ void OGLTransitionerImpl::GLInitSlides()
     if (isDisposed() || !mpTransition || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     TimerContext aTimerContext("texture creation");
 #endif
 
@@ -1191,7 +1191,7 @@ void OGLTransitionerImpl::GLInitSlides()
 
 void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeException, std::exception)
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     mnFrameCount ++;
     maUpdateStartTime = microsec_clock::local_time();
     if( mnFrameCount == 1 ) {
@@ -1223,7 +1223,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     mpContext->sync();
     CHECK_GL_ERROR();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     maUpdateEndTime = microsec_clock::local_time();
 
     SAL_INFO("slideshow.opengl", "update time: " << nTime);
@@ -1308,7 +1308,7 @@ void OGLTransitionerImpl::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SAL_INFO("slideshow.opengl", "dispose " << this);
     if( mnFrameCount ) {
         maEndTime = microsec_clock::local_time();
