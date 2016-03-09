@@ -118,7 +118,7 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
  * In contrast to @see SfxEnumItemInterface::GetPosByValue(sal_uInt16) const
  * this internal method returns the position the value would be for non-present values.
  */
-sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
+sal_uInt16 SfxAllEnumItem::GetPosByValue_( sal_uInt16 nVal ) const
 {
     if ( !pValues )
         return 0;
@@ -155,7 +155,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
         // remove when exists
         RemoveValue( nValue );
     // then insert
-    pValues->insert(pValues->begin() + _GetPosByValue(nValue), aVal); // FIXME: Duplicates?
+    pValues->insert(pValues->begin() + GetPosByValue_(nValue), aVal); // FIXME: Duplicates?
 }
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
@@ -166,7 +166,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;
 
-    pValues->insert(pValues->begin() + _GetPosByValue(nValue), aVal); // FIXME: Duplicates?
+    pValues->insert(pValues->begin() + GetPosByValue_(nValue), aVal); // FIXME: Duplicates?
 }
 
 void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )

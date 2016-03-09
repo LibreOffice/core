@@ -32,7 +32,7 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
     std::vector<sal_uInt16>* pDisabledValues;
 
 protected:
-    sal_uInt16                  _GetPosByValue( sal_uInt16 nValue ) const;
+    sal_uInt16                  GetPosByValue_( sal_uInt16 nValue ) const;
 
 public:
     static SfxPoolItem* CreateDefault();
