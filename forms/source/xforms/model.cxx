@@ -73,7 +73,7 @@ using namespace com::sun::star::xml::dom;
 using namespace xforms;
 
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #define DBG_INVARIANT_TYPE(TYPE) class DBG_##TYPE { const TYPE* mpT; void check() { mpT->dbg_assertInvariant(); } public: DBG_##TYPE(const TYPE* pT) : mpT(pT) { check(); } ~DBG_##TYPE() { check(); } } _DBG_##TYPE(this);
 
 #define DBG_INVARIANT() DBG_INVARIANT_TYPE(Model)
@@ -197,17 +197,17 @@ void Model::setExternalData( bool _bData )
     mbExternalData = _bData;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void Model::dbg_assertInvariant() const
 {
-    OSL_ENSURE( mpInstances != NULL, "no instances found" );
-    OSL_ENSURE( mxInstances.is(), "No instance container!" );
+    assert(mpInstances && "no instances found");
+    assert(mxInstances.is() && "No instance container!");
 
-    OSL_ENSURE( mpBindings != NULL, "no bindings element" );
-    OSL_ENSURE( mxBindings.is(), "No Bindings container" );
+    assert(mpBindings && "no bindings element");
+    assert(mxBindings.is() && "No Bindings container");
 
-    OSL_ENSURE( mpSubmissions != NULL, "no submissions element" );
-    OSL_ENSURE( mxSubmissions.is(), "No Submission container" );
+    assert(mpSubmissions && "no submissions element");
+    assert(mxSubmissions.is() && "No Submission container");
 }
 #endif
 
