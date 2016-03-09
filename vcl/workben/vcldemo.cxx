@@ -643,7 +643,7 @@ public:
                     rDev.DrawLine(aTop,aBottom);
                     rDev.SetRasterOp(ROP_OVERPAINT);
                 }
-                delete pItems;
+                delete[] pItems;
 
                 aPos.Move(aTextRect.GetWidth() + 16, 0);
             }
