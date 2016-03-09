@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_3c7c2920",
+        "filename": "unotest/source/cpp/directories.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-03-09T14:01:40Z",
+      "side": 1,
+      "message": "I think you can drop this branch, it\u0027s unused code. Tor initially experimented with compiling some unit tests for Android, but later we went with the usual cross-compilation route where simply no unit tests are executed, and the final .apk contains no test, just application code.\n\n(Of course no harm to keep it, can be removed in a follow-up commit as well.)",
+      "revId": "4dda91b1b685450941c8e7d8bad5295e27af5118",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
