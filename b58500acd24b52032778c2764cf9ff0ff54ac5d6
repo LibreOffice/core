@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_5ce2bda0",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2016-03-09T17:09:23Z",
+      "side": 1,
+      "message": "This line has to be deleted seeing as there is no sizegroup1 defined anymore",
+      "revId": "b58500acd24b52032778c2764cf9ff0ff54ac5d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
