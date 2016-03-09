@@ -501,8 +501,8 @@ OUString ScChangeAction::GetRefString(
     const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D ) const
 {
     OUStringBuffer aBuf;
-    sal_uInt16 nFlags = ( rRange.IsValid( pDoc ) ? SCA_VALID : 0 );
-    if ( !nFlags )
+    ScRefFlags nFlags = ( rRange.IsValid( pDoc ) ? ScRefFlags::VALID : ScRefFlags::ZERO );
+    if ( nFlags == ScRefFlags::ZERO )
         aBuf.append(ScGlobal::GetRscString(STR_NOREF_STR));
     else
     {
@@ -538,7 +538,7 @@ OUString ScChangeAction::GetRefString(
             default:
             {
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
-                    nFlags |= SCA_TAB_3D;
+                    nFlags |= ScRefFlags::TAB_3D;
 
                 aBuf.append(aTmpRange.Format(nFlags, pDoc, pDoc->GetAddressConvention()));
             }
@@ -1495,8 +1495,8 @@ void ScChangeActionContent::GetDescription(
 void ScChangeActionContent::GetRefString(
     OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
-    sal_uInt16 nFlags = ( GetBigRange().IsValid( pDoc ) ? SCA_VALID : 0 );
-    if ( nFlags )
+    ScRefFlags nFlags = ( GetBigRange().IsValid( pDoc ) ? ScRefFlags::VALID : ScRefFlags::ZERO );
+    if ( nFlags != ScRefFlags::ZERO )
     {
         const ScCellValue& rCell = GetNewCell();
         if ( GetContentCellType(rCell) == SC_CACCT_MATORG )
@@ -1514,7 +1514,7 @@ void ScChangeActionContent::GetRefString(
 
         ScAddress aTmpAddress( GetBigRange().aStart.MakeAddress() );
         if ( bFlag3D )
-            nFlags |= SCA_TAB_3D;
+            nFlags |= ScRefFlags::TAB_3D;
         rStr = aTmpAddress.Format(nFlags, pDoc, pDoc->GetAddressConvention());
         if ( IsDeletedIn() )
         {

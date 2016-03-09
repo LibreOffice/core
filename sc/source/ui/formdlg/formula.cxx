@@ -351,7 +351,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
         }
 
         ScRange aTestRange;
-        if ( bColRowName || (aTestRange.Parse(rStrExp) & SCA_VALID) )
+        if ( bColRowName || (aTestRange.Parse(rStrExp) & ScRefFlags::VALID) )
             rStrResult += " ...";
             // area
     }
@@ -397,7 +397,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 
             OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-            OUString aTmp(rRef.Format(SCA_VALID|SCA_TAB_3D, pRefDoc));     // immer 3d
+            OUString aTmp(rRef.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pRefDoc));     // immer 3d
 
             SfxObjectShell* pObjSh = pRefDoc->GetDocumentShell();
 

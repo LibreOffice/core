@@ -1882,7 +1882,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
                     {
                         pEditEngine->Draw( pDev, Point( nPosX, nPosY ) );
 
-                        OUString aMarkStr(rPos.Format(SCA_VALID, pDoc, pDoc->GetAddressConvention()));
+                        OUString aMarkStr(rPos.Format(ScRefFlags::VALID, pDoc, pDoc->GetAddressConvention()));
                         aMarkStr += ":";
 
                         //  cell position also via EditEngine, for correct positioning

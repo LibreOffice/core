@@ -68,7 +68,7 @@ OUString lclCreateMultiParameterFormula(
     OUString aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aRangeString(aRangeList[i]->Format(SCR_ABS, pDocument, aAddressDetails));
+        OUString aRangeString(aRangeList[i]->Format(ScRefFlags::RANGE_ABS, pDocument, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
         aResult += aFormulaString;
         if(i != aRangeList.size() - 1) // Not Last

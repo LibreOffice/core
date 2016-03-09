@@ -135,7 +135,7 @@ void ScTpUserLists::Init()
         PutInOrder( nStartTab, nEndTab );
 
         aStrSelectedArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab
-                ).Format(SCR_ABS_3D, pDoc);
+                ).Format(ScRefFlags::RANGE_ABS_3D, pDoc);
 
         mpBtnCopy->SetClickHdl ( LINK( this, ScTpUserLists, BtnClickHdl ) );
         mpBtnCopy->Enable();

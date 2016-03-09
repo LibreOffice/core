@@ -1139,15 +1139,14 @@ public:
 };
 
 bool
-ScVbaRange::getCellRangesForAddress( sal_uInt16& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter )
+ScVbaRange::getCellRangesForAddress( ScRefFlags& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter )
 {
 
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
-        sal_uInt16 nMask = SCA_VALID;
-        rResFlags = rCellRanges.Parse( sAddress, &rDoc, nMask, eConv, 0, cDelimiter );
-        if ( rResFlags & SCA_VALID )
+        rResFlags = rCellRanges.Parse( sAddress, &rDoc, ScRefFlags::VALID, eConv, 0, cDelimiter );
+        if ( rResFlags & ScRefFlags::VALID )
         {
             return true;
         }
@@ -1207,11 +1206,11 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             aChar = ';';
         }
 
-        sal_uInt16 nFlags = 0;
+        ScRefFlags nFlags = ScRefFlags::ZERO;
         if ( !ScVbaRange::getCellRangesForAddress( nFlags, sAddress, pDocSh, aCellRanges, eConv, aChar ) )
             return false;
 
-        bool bTabFromReferrer = !( nFlags & SCA_TAB_3D );
+        bool bTabFromReferrer = !( nFlags & ScRefFlags::TAB_3D );
 
         for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
         {
@@ -2061,37 +2060,37 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         if ( refStyle == excel::XlReferenceStyle::xlR1C1 )
             dDetails = ScAddress::Details( formula::FormulaGrammar::CONV_XL_R1C1, 0, 0 );
     }
-    sal_uInt16 nFlags = SCA_VALID;
+    // default
+    ScRefFlags nFlags = ScRefFlags::RANGE_ABS;
     ScDocShell* pDocShell =  getScDocShell();
     ScDocument& rDoc =  pDocShell->GetDocument();
 
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
-    sal_uInt16 ROW_ABSOLUTE = ( SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE );
-    sal_uInt16 COL_ABSOLUTE = ( SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE );
-    // default
-    nFlags |= ( SCA_TAB_ABSOLUTE | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE );
+    ScRefFlags ROW_ABS = ( ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS );
+    ScRefFlags COL_ABS = ( ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS );
+
     if ( RowAbsolute.hasValue() )
     {
         bool bVal = true;
         RowAbsolute >>= bVal;
         if ( !bVal )
-            nFlags &= ~ROW_ABSOLUTE;
+            nFlags &= ~ROW_ABS;
     }
     if ( ColumnAbsolute.hasValue() )
     {
         bool bVal = true;
         ColumnAbsolute >>= bVal;
         if ( !bVal )
-            nFlags &= ~COL_ABSOLUTE;
+            nFlags &= ~COL_ABS;
     }
     if ( External.hasValue() )
     {
         bool bLocal = false;
         External >>= bLocal;
         if (  bLocal )
-            nFlags |= SCA_TAB_3D | SCA_FORCE_DOC;
+            nFlags |= ScRefFlags::TAB_3D | ScRefFlags::FORCE_DOC;
     }
     if ( RelativeTo.hasValue() )
     {
@@ -2182,8 +2181,8 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            sal_uInt16 flags = tmpRange.ParseCols( sCol, &getDocumentFromRange( xRange ), dDetails );
-            if ( ( flags & 0x200 ) != 0x200 )
+            ScRefFlags flags = tmpRange.ParseCols( sCol, &getDocumentFromRange( xRange ), dDetails );
+            if ( (flags & ScRefFlags::COL_VALID) == ScRefFlags::ZERO )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
         }

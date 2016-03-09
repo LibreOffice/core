@@ -133,8 +133,8 @@ ScRange DataStreamDlg::GetStartRange()
     OUString aStr = m_pEdRange->GetText();
     ScDocument& rDoc = mpDocShell->GetDocument();
     ScRange aRange;
-    sal_uInt16 nRes = aRange.Parse(aStr, &rDoc, rDoc.GetAddressConvention());
-    if ((nRes & SCA_VALID) != SCA_VALID || !aRange.IsValid())
+    ScRefFlags nRes = aRange.Parse(aStr, &rDoc, rDoc.GetAddressConvention());
+    if ( ((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO) || !aRange.IsValid())
     {
         // Invalid range.
         aRange.SetInvalid();
@@ -156,7 +156,7 @@ void DataStreamDlg::Init( const DataStream& rStrm )
     ScRange aRange = rStrm.GetRange();
     ScRange aTopRange = aRange;
     aTopRange.aEnd.SetRow(aTopRange.aStart.Row());
-    OUString aStr = aTopRange.Format(SCR_ABS_3D, &rDoc, rDoc.GetAddressConvention());
+    OUString aStr = aTopRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention());
     m_pEdRange->SetText(aStr);
     SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
 

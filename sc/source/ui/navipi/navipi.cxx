@@ -916,7 +916,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
         ppBoundItems[0]->ClearCache();
 
         ScAddress aScAddress( nColNo, nRowNo, 0 );
-        OUString aAddr(aScAddress.Format(SCA_ABS));
+        OUString aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS));
 
         bool bUnmark = false;
         if ( GetViewData() )

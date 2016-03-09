@@ -136,18 +136,18 @@ void ScStatisticsTwoVariableDialog::GetRangeFromSelection()
     {
         mVariable1Range = aCurrentRange;
         mVariable1Range.aEnd.SetCol(mVariable1Range.aStart.Col());
-        aCurrentString = mVariable1Range.Format(SCR_ABS_3D, mDocument, mAddressDetails);
+        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails);
         mpVariable1RangeEdit->SetText(aCurrentString);
 
         mVariable2Range = aCurrentRange;
         mVariable2Range.aStart.SetCol(mVariable2Range.aEnd.Col());
-        aCurrentString = mVariable2Range.Format(SCR_ABS_3D, mDocument, mAddressDetails);
+        aCurrentString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails);
         mpVariable2RangeEdit->SetText(aCurrentString);
     }
     else
     {
         mVariable1Range = aCurrentRange;
-        aCurrentString = mVariable1Range.Format(SCR_ABS_3D, mDocument, mAddressDetails);
+        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails);
         mpVariable1RangeEdit->SetText(aCurrentString);
     }
 }
@@ -179,20 +179,22 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
         if ( mpActiveEdit == mpVariable1RangeEdit )
         {
             mVariable1Range = rReferenceRange;
-            aReferenceString = mVariable1Range.Format(SCR_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
             mpVariable1RangeEdit->SetRefString(aReferenceString);
         }
         else if ( mpActiveEdit == mpVariable2RangeEdit )
         {
             mVariable2Range = rReferenceRange;
-            aReferenceString = mVariable2Range.Format(SCR_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
             mpVariable2RangeEdit->SetRefString(aReferenceString);
         }
         else if ( mpActiveEdit == mpOutputRangeEdit )
         {
             mOutputAddress = rReferenceRange.aStart;
 
-            sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+            ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
+                                                             ScRefFlags::ADDR_ABS :
+                                                             ScRefFlags::ADDR_ABS_3D;
             aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
             mpOutputRangeEdit->SetRefString( aReferenceString );
         }
@@ -295,7 +297,9 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edi
                 // Crop output range to top left address for Edit field.
                 if (pRange->aStart != pRange->aEnd)
                 {
-                    sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+                    ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
+                                                                     ScRefFlags::ADDR_ABS :
+                                                                     ScRefFlags::ADDR_ABS_3D;
                     OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
                     mpOutputRangeEdit->SetRefString( aReferenceString );
                 }
