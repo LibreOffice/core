@@ -27,7 +27,7 @@ $(eval $(call gb_Library_add_libs,clew,\
 endif
 
 $(eval $(call gb_Library_add_cobjects,clew,\
-    clew/source/clew \
+    external/clew/source/clew \
 ))
 
 # This is required for module-deps.pl to produce correct dependencies.

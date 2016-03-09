@@ -1,0 +1,5 @@
+CLEW is the OpenCL Extension Wrangler - similar to GLEW but for OpenCL
+
+This project doesn't appear to have an obvious upstream, so
+the source files are in our git repo and there is no option
+to use a system library.
