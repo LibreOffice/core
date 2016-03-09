@@ -31,13 +31,13 @@
 #include "list.h"
 
 /*- private data types */
-typedef struct _lnode {
-    struct _lnode *next;
-    struct _lnode *prev;
+struct lnode {
+    struct lnode *next;
+    struct lnode *prev;
 
     void *value;
 
-} lnode;
+};
 
 struct list_ {
     lnode *head, *tail, *cptr;
