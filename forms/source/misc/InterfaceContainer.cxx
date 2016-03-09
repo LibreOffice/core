@@ -565,7 +565,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             {
                 // Clear the map
                 while (!m_aItems.empty())
-                    removeElementsNoEvents(0);
+                    removeElementsNoEvents();
 
                 // Rethrow the exception
                 throw;
@@ -890,9 +890,9 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
 }
 
 
-void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
+void OInterfaceContainer::removeElementsNoEvents()
 {
-    OInterfaceArray::iterator i = m_aItems.begin() + nIndex;
+    OInterfaceArray::iterator i = m_aItems.begin();
     css::uno::Reference<css::uno::XInterface>  xElement(*i);
 
     OInterfaceMap::iterator j = m_aMap.begin();
