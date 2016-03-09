@@ -704,7 +704,7 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
  */
 
 /* wrap around different interfaces to reentrant gethostbyname */
-static struct hostent* _osl_gethostbyname_r (
+static struct hostent* osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
@@ -723,7 +723,7 @@ static struct hostent* _osl_gethostbyname_r (
 #endif
 }
 
-static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
+static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
 {
     struct hostent  aHostByName;
     struct hostent *pHostByName;
@@ -731,7 +731,7 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
     sal_Char  *pFullQualifiedName = nullptr;
     int     nErrorNo;
 
-    pHostByName = _osl_gethostbyname_r (
+    pHostByName = osl_gethostbyname_r (
         pHostName,
         &aHostByName, pQualifiedHostBuffer,
         sizeof(pQualifiedHostBuffer), &nErrorNo );
@@ -742,7 +742,7 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
     return pFullQualifiedName;
 }
 
-static bool _osl_isFullQualifiedDomainName (const sal_Char *pHostName)
+static bool isFullQualifiedDomainName (const sal_Char *pHostName)
 {
     /* a FQDN (aka 'hostname.domain.top_level_domain' )
      * is a name which contains a dot '.' in it ( would
@@ -757,7 +757,7 @@ struct oslHostAddrImpl
     oslSocketAddr   pSockAddr;
 };
 
-static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
+static oslHostAddr hostentToHostAddr (const struct hostent *he)
 {
     oslHostAddr pAddr= nullptr;
     oslSocketAddr pSockAddr = nullptr;
@@ -767,7 +767,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     if ((he == nullptr) || (he->h_name == nullptr) || (he->h_addr_list[0] == nullptr))
         return nullptr;
 
-    if (_osl_isFullQualifiedDomainName(he->h_name))
+    if (isFullQualifiedDomainName(he->h_name))
     {
         cn= strdup(he->h_name);
         SAL_WARN_IF( !cn, "sal.osl", "insufficient memory" );
@@ -776,7 +776,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     }
     else
     {
-        cn =_osl_getFullQualifiedDomainName (he->h_name);
+        cn = getFullQualifiedDomainName (he->h_name);
         SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
         if (cn == nullptr)
             return nullptr;
@@ -918,12 +918,12 @@ oslHostAddr SAL_CALL osl_psz_createHostAddrByName (const sal_Char *pszHostname)
     sal_Char    heBuffer[ MAX_HOSTBUFFER_SIZE ];
     int         nErrorNo;
 
-    pHe = _osl_gethostbyname_r (
+    pHe = osl_gethostbyname_r (
         pszHostname,
         &aHe, heBuffer,
         sizeof(heBuffer), &nErrorNo );
 
-    return _osl_hostentToHostAddr (pHe);
+    return hostentToHostAddr (pHe);
 }
 
 oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
@@ -947,7 +947,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         he= gethostbyaddr(addr,
                           sizeof (sin->sin_addr),
                           sin->sin_family);
-        return _osl_hostentToHostAddr (he);
+        return hostentToHostAddr (he);
     }
 
     return nullptr;
