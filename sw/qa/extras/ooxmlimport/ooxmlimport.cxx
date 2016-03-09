@@ -254,7 +254,7 @@ DECLARE_OOXMLIMPORT_TEST(testN750935, "n750935.docx")
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     bool bValue = false;
     xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(true, bValue);
@@ -527,7 +527,7 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     uno::Reference<container::XNameAccess> pageStyles;
     styleFamilies->getByName("PageStyles") >>= pageStyles;
     uno::Reference<uno::XInterface> defaultStyle;
-    pageStyles->getByName(DEFAULT_STYLE) >>= defaultStyle;
+    pageStyles->getByName("Standard") >>= defaultStyle;
     uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
     sal_Int32 width = 0;
     styleProperties->getPropertyValue( "Width" ) >>= width;
@@ -571,7 +571,7 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(847), nValue);
@@ -659,7 +659,7 @@ DECLARE_OOXMLIMPORT_TEST(testN693238, "n693238.docx")
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nValue);
@@ -1220,7 +1220,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testN793262, "n793262.docx")
 {
-    uno::Reference<container::XEnumerationAccess> xHeaderText = getProperty< uno::Reference<container::XEnumerationAccess> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference<container::XEnumerationAccess> xHeaderText = getProperty< uno::Reference<container::XEnumerationAccess> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     uno::Reference<container::XEnumeration> xHeaderParagraphs(xHeaderText->createEnumeration());
     xHeaderParagraphs->nextElement();
     // Font size of the last empty paragraph in the header was ignored, this was 11.
@@ -1470,7 +1470,7 @@ DECLARE_OOXMLIMPORT_TEST(testIndentation, "indentation.docx")
 DECLARE_OOXMLIMPORT_TEST(testPageBorderShadow, "page-border-shadow.docx")
 {
     // The problem was that in w:pgBorders, child elements had a w:shadow attribute, but that was ignored.
-    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "ShadowFormat");
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName("Standard"), "ShadowFormat");
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
@@ -1680,7 +1680,7 @@ DECLARE_OOXMLIMPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
 
     // Second problem: the page style had two columns, while it shouldn't have any.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
@@ -2150,7 +2150,7 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.doc
 
 DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "BottomMargin"));
     // This was only 1397, same issue
@@ -2515,7 +2515,7 @@ DECLARE_OOXMLIMPORT_TEST(testHidemark, "hidemark.docx")
 DECLARE_OOXMLIMPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaks.docx")
 {
     // Check that all the normal styles are not set as right-only, those should be only those used after odd page breaks.
-    uno::Reference<beans::XPropertySet> defaultStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> defaultStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), defaultStyle->getPropertyValue("PageStyleLayout"));
     uno::Reference<beans::XPropertySet> firstPage( getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY );
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), firstPage->getPropertyValue("PageStyleLayout"));

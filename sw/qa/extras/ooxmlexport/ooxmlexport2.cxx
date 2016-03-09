@@ -101,7 +101,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
     // color shouldn't be black.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
@@ -667,7 +667,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
 DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 {
     // 'Document Background' wasn't exported.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
@@ -687,7 +687,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65655, "fdo65655.docx")
     // The 'Different Odd & Even Pages' was turned on
     // However - LO assumed that because the 'even' footer is blank - it should ignore the 'Different Odd & Even Pages' flag
     // So it did not import it and did not export it
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     bool bValue = false;
     xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
@@ -772,7 +772,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64238_a, "fdo64238_a.docx")
     // This case specifically is for :
     // 'Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be blank, but instead was the 'even' footer
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "FooterText");
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -792,7 +792,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64238_b, "fdo64238_b.docx")
     // This case specifically is for :
     // 'Non-Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be just the odd footer, but instead was the 'odd' and 'even' footers concatenated
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "FooterText");
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -1007,7 +1007,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo64350, "fdo64350.docx")
 {
     // The problem was that page border shadows were not exported
-    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "ShadowFormat");
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName("Standard"), "ShadowFormat");
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 }
 
@@ -1027,7 +1027,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67013, "fdo67013.docx")
      * xFooterFirstParagraph = xFooterEnum.nextElement()
      * xFooterTopBorder = xFooterFirstParagraph.TopBorder
      */
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     uno::Reference< text::XTextRange > xHeaderParagraph = getParagraphOfText( 1, xHeaderText );
     table::BorderLine2 aHeaderBottomBorder = getProperty<table::BorderLine2>(xHeaderParagraph, "BottomBorder");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aHeaderBottomBorder.Color);
@@ -1037,7 +1037,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67013, "fdo67013.docx")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(159), aHeaderBottomBorder.LineWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(26), aHeaderBottomBorder.OuterLineWidth);
 
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "FooterText");
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
     table::BorderLine2 aFooterTopBorder = getProperty<table::BorderLine2>(xFooterParagraph, "TopBorder");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aFooterTopBorder.Color);

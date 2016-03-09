@@ -308,7 +308,7 @@ DECLARE_ODFIMPORT_TEST(testFdo79269, "fdo79269.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 
     // The problem was that the first-footer was shared.
-    uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
 
     uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "FooterTextFirst");
@@ -325,7 +325,7 @@ DECLARE_ODFIMPORT_TEST(testFdo79269_header, "fdo79269_header.odt")
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 
-    uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
 
     uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "HeaderTextFirst");

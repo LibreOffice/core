@@ -54,8 +54,6 @@
 
 using namespace css;
 
-#define DEFAULT_STYLE "Default Style"
-
 /**
  * Macro to declare a new test (with full round-trip. To test
  * import only use the DECLARE_SW_IMPORT_TEST macro instead).

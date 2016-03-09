@@ -364,7 +364,7 @@ DECLARE_RTFIMPORT_TEST(testFdo81892, "fdo81892.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo45394, "fdo45394.rtf")
 {
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
     OUString aExpected("\xd0\x9f\xd0\x9a \xd0\xa0\xd0\x98\xd0\x9a", 11, RTL_TEXTENCODING_UTF8);
@@ -402,7 +402,7 @@ DECLARE_RTFIMPORT_TEST(testFdo44176, "fdo44176.rtf")
 {
     uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
     uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
     sal_Int32 nFirstTop = 0, nDefaultTop = 0, nDefaultHeader = 0;
     xFirstPage->getPropertyValue("TopMargin") >>= nFirstTop;
     xDefault->getPropertyValue("TopMargin") >>= nDefaultTop;
@@ -566,7 +566,7 @@ DECLARE_RTFIMPORT_TEST(testN757651, "n757651.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo49501, "fdo49501.rtf")
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStyle, "IsLandscape"));
     sal_Int32 nExpected(convertTwipToMm100(567));
@@ -650,7 +650,7 @@ DECLARE_RTFIMPORT_TEST(testFdo46966, "fdo46966.rtf")
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.TopMargin
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(720)), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
 }
 
@@ -858,7 +858,7 @@ DECLARE_RTFIMPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
     // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
     paste("copypaste-pagestyle-paste.rtf");
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
 }
 
@@ -915,7 +915,7 @@ DECLARE_RTFIMPORT_TEST(testDplinehollow, "dplinehollow.rtf")
 DECLARE_RTFIMPORT_TEST(testLeftmarginDefault, "leftmargin-default.rtf")
 {
     // The default left/right margin was incorrect when the top margin was set to zero.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(getStyles("PageStyles")->getByName("Standard"), "LeftMargin"));
 }
 
 DECLARE_RTFIMPORT_TEST(testDppolyline, "dppolyline.rtf")
@@ -1012,7 +1012,7 @@ DECLARE_RTFIMPORT_TEST(testFdo57886, "fdo57886.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo58076, "fdo58076.rtf")
 {
     // An additional section was created, so the default page style didn't have the custom margins.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2251), getProperty<sal_Int32>(xStyle, "LeftMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1752), getProperty<sal_Int32>(xStyle, "RightMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "TopMargin"));
@@ -1208,7 +1208,7 @@ DECLARE_RTFIMPORT_TEST(testFdo51916, "fdo51916.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo63023, "fdo63023.rtf")
 {
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     // Back color was black (0) in the header, due to missing color table in the substream.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFF99), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xHeaderText), 1), "CharBackColor"));
 }
@@ -1506,7 +1506,7 @@ DECLARE_RTFIMPORT_TEST(testFdo67365, "fdo67365.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo67498, "fdo67498.rtf")
 {
     // Left margin of the default page style wasn't set (was 2000).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName("Standard"), "LeftMargin"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo47440, "fdo47440.rtf")
@@ -1845,7 +1845,7 @@ DECLARE_RTFIMPORT_TEST(testFdo76628, "fdo76628.rtf")
     // Should be 'SAMPLE' in Russian, was garbage.
     getParagraph(1, aExpected);
 
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     OUString aExpectedHeader("\xd0\x9f\xd0\xbe\xd0\xb4\xd0\xb3\xd0\xbe\xd1\x82\xd0\xbe\xd0\xb2\xd0\xbb\xd0\xb5\xd0\xbd\xd0\xbe", 24, RTL_TEXTENCODING_UTF8);
     // Should be 'prepared' in Russian, was garbage.
     getParagraphOfText(1, xHeaderText, aExpectedHeader);

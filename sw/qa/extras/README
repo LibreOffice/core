@@ -124,7 +124,7 @@ when later this test fails for some reason. In cpp, you typically need to be
 more verbose, so the code will look like:
 
 ----
-uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
 CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 ----
 
@@ -269,5 +269,5 @@ ThisComponent.StyleFamilies.PageStyles.getByName("Default Style").Width
 
 C++:
 
-getStyles("PageStyles")->getByName(DEFAULT_STYLE) >>= defaultStyle;
+getStyles("PageStyles")->getByName("Standard") >>= defaultStyle;
 sal_Int32 width = getProperty< sal_Int32 >( defaultStyle, "Width" );

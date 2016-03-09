@@ -84,7 +84,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
     // This check is correct if both have headers or both don't have headers.
     // However - if one has a header, and the other one has an empty header (no header) - it is not correct to compare
     // between them (same goes for 'footer').
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "FooterText");
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
 
     // First page footer is empty, second page footer is 'aaaa'
@@ -98,14 +98,14 @@ DECLARE_OOXMLEXPORT_TEST(testA4AndBorders, "a4andborders.docx")
      * was exported as a child of pgBorders, thus being ignored on reload.
      * We assert dimension against A4 size in mm (to avoid minor rounding errors)
      */
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Width (mm)", sal_Int32(210), getProperty<sal_Int32>(xPageStyle, "Width") / 100);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Height (mm)", sal_Int32(297), getProperty<sal_Int32>(xPageStyle, "Height") / 100);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68787, "fdo68787.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was 25, the 'lack of w:separator' <-> '0 line width' mapping was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }

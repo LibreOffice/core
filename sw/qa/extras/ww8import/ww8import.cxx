@@ -222,14 +222,14 @@ DECLARE_WW8IMPORT_TEST(testN816593, "n816593.doc")
 DECLARE_WW8IMPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
-    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "TopBorder");
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName("Standard"), "TopBorder");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(convertTwipToMm100(6 * 20)), aBorder.LineWidth);
 }
 
 DECLARE_WW8IMPORT_TEST(testN823651, "n823651.doc")
 {
     // Character height was 10pt instead of 7.5pt in the header.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
 }

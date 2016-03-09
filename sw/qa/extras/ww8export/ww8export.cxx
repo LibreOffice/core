@@ -215,7 +215,7 @@ DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 {
     // Footer wasn't disabled -- instead empty footer was exported.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xStyle, "FooterIsOn")));
 }
 

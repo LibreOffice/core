@@ -664,7 +664,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo68787, "fdo68787.rtf")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was 0, the 'lack of \chftnsep' <-> '0 line width' mapping was missing in the RTF tokenizer / exporter.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
@@ -969,7 +969,7 @@ DECLARE_RTFEXPORT_TEST(testTdf94377, "tdf94377.rtf")
 DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
 {
     // The problem was that \background was ignored.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
