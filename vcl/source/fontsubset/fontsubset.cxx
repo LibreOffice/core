@@ -59,7 +59,7 @@ bool FontSubsetInfo::LoadFont(
 }
 
 // prepare subsetting for fonts that are known to the SFT-parser
-bool FontSubsetInfo::LoadFont( vcl::_TrueTypeFont* pSftTTFont )
+bool FontSubsetInfo::LoadFont( vcl::TrueTypeFont* pSftTTFont )
 {
     DBG_ASSERT( (mpInFontBytes == nullptr), "Subset from SFT and from mapped font-file requested");
     mpSftTTFont = pSftTTFont;

@@ -50,7 +50,7 @@ inline sal_uInt16 NEXT_UShort( const unsigned char* &p )
 
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
-bool ReadGSUB( struct _TrueTypeFont* pTTFile,
+bool ReadGSUB( struct TrueTypeFont* pTTFile,
     int nRequestedScript, int nRequestedLangsys )
 {
     const FT_Byte* pGsubBase = pTTFile->tables[ O_gsub ];
@@ -315,13 +315,13 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
     return true;
 }
 
-void ReleaseGSUB(struct _TrueTypeFont* pTTFile)
+void ReleaseGSUB(struct TrueTypeFont* pTTFile)
 {
     GlyphSubstitution* pGlyphSubstitution = static_cast<GlyphSubstitution*>(pTTFile->pGSubstitution);
     delete pGlyphSubstitution;
 }
 
-int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph )
+int UseGSUB( struct TrueTypeFont* pTTFile, int nGlyph )
 {
     GlyphSubstitution* pGlyphSubstitution = static_cast<GlyphSubstitution*>(pTTFile->pGSubstitution);
     if( pGlyphSubstitution != nullptr )
@@ -334,7 +334,7 @@ int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph )
     return nGlyph;
 }
 
-int HasVerticalGSUB( struct _TrueTypeFont* pTTFile )
+int HasVerticalGSUB( struct TrueTypeFont* pTTFile )
 {
     GlyphSubstitution* pGlyphSubstitution = static_cast<GlyphSubstitution*>(pTTFile->pGSubstitution);
     return pGlyphSubstitution ? +1 : 0;

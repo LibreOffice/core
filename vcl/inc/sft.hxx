@@ -100,7 +100,7 @@ namespace vcl
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
 
-/** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */
+/** Type of the 'kern' table, stored in TrueTypeFont::kerntype */
     enum KernType {
         KT_NONE         = 0,                /**< no kern table                      */
         KT_APPLE_NEW    = 1,                /**< new Apple kern table               */
@@ -226,7 +226,7 @@ namespace vcl
         sal_Int16 y;                  /**< Y coordinate in EmSquare units      */
     } ControlPoint;
 
-    typedef struct _TrueTypeFont TrueTypeFont;
+    struct TrueTypeFont;
 
 /**
  * @defgroup sft Sun Font Tools Exported Functions
@@ -520,7 +520,7 @@ namespace vcl
 
 /*- private definitions */
 
-    struct _TrueTypeFont {
+    struct TrueTypeFont {
         sal_uInt32 tag;
 
         char        *fname;
@@ -550,7 +550,7 @@ namespace vcl
         void        *pGSubstitution;                       /* info provided by GSUB for UseGSUB()                                */
     };
 
-/* indexes into _TrueTypeFont::tables[] and _TrueTypeFont::tlens[] */
+/* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */
 #define O_maxp 0     /* 'maxp' */
 #define O_glyf 1     /* 'glyf' */
 #define O_head 2     /* 'head' */

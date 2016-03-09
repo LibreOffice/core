@@ -25,7 +25,7 @@
 
 #include "salglyphid.hxx"
 
-namespace vcl { struct _TrueTypeFont; }         ///< SFT's idea of a TTF font
+namespace vcl { struct TrueTypeFont; }         ///< SFT's idea of a TTF font
 
 class FontSubsetInfo
 {
@@ -49,7 +49,7 @@ public:
 
     bool        LoadFont( FontType eInFontType,
                     const unsigned char* pFontBytes, int nByteLength );
-    bool        LoadFont( vcl::_TrueTypeFont* pSftTrueTypeFont );
+    bool        LoadFont( vcl::TrueTypeFont* pSftTrueTypeFont );
 
     bool        CreateFontSubset( int nOutFontTypeMask,
                     FILE* pOutFile, const char* pOutFontName,
@@ -70,7 +70,7 @@ private:
     unsigned const char*    mpInFontBytes;
     int                     mnInByteLength;
     FontType                meInFontType;       ///< allowed mask of input font-types
-    vcl::_TrueTypeFont*     mpSftTTFont;
+    vcl::TrueTypeFont*      mpSftTTFont;
 
     // subset-request details
     int                     mnReqFontTypeMask;  ///< allowed subset-target font types

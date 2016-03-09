@@ -23,13 +23,13 @@
 namespace vcl
 {
 
-int HasVerticalGSUB( struct vcl::_TrueTypeFont* pTTFile );
+int HasVerticalGSUB( struct vcl::TrueTypeFont* pTTFile );
 
-int UseGSUB( struct vcl::_TrueTypeFont* pTTFile, int nGlyph );
+int UseGSUB( struct vcl::TrueTypeFont* pTTFile, int nGlyph );
 
-bool ReadGSUB( struct vcl::_TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
+bool ReadGSUB( struct vcl::TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
 
-void ReleaseGSUB( struct vcl::_TrueTypeFont* pTTFile );
+void ReleaseGSUB( struct vcl::TrueTypeFont* pTTFile );
 
 }
 
