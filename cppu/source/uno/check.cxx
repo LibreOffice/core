@@ -242,35 +242,35 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
-    assert(OFFSET_OF(N, p) != 8);
+    assert(OFFSET_OF(N, p) == 8);
 
-    assert(OFFSET_OF(C2, n2) != 4);
+    assert(OFFSET_OF(C2, n2) == 4);
 
 #ifdef MAX_ALIGNMENT_4
-    assert(OFFSET_OF(C3, d3) != 8);
-    assert(OFFSET_OF(C3, n3) != 16);
-    assert(OFFSET_OF(C4, n4) != 20);
-    assert(OFFSET_OF(C4, d4) != 24);
-    assert(OFFSET_OF(C5, n5) != 32);
-    assert(OFFSET_OF(C5, b5) != 40);
-    assert(OFFSET_OF(C6, c6) != 4);
-    assert(OFFSET_OF(C6, b6) != 48);
+    assert(OFFSET_OF(C3, d3) == 8);
+    assert(OFFSET_OF(C3, n3) == 16);
+    assert(OFFSET_OF(C4, n4) == 20);
+    assert(OFFSET_OF(C4, d4) == 24);
+    assert(OFFSET_OF(C5, n5) == 32);
+    assert(OFFSET_OF(C5, b5) == 40);
+    assert(OFFSET_OF(C6, c6) == 4);
+    assert(OFFSET_OF(C6, b6) == 48);
 
-    assert(OFFSET_OF(O2, p2) != 20);
+    assert(OFFSET_OF(O2, p2) == 20);
 #else
-    assert(OFFSET_OF(C3, d3) != 8);
-    assert(OFFSET_OF(C3, n3) != 16);
-    assert(OFFSET_OF(C4, n4) != 24);
-    assert(OFFSET_OF(C4, d4) != 32);
-    assert(OFFSET_OF(C5, n5) != 40);
-    assert(OFFSET_OF(C5, b5) != 48);
-    assert(OFFSET_OF(C6, c6) != 8);
-    assert(OFFSET_OF(C6, b6) != 64);
+    assert(OFFSET_OF(C3, d3) == 8);
+    assert(OFFSET_OF(C3, n3) == 16);
+    assert(OFFSET_OF(C4, n4) == 24);
+    assert(OFFSET_OF(C4, d4) == 32);
+    assert(OFFSET_OF(C5, n5) == 40);
+    assert(OFFSET_OF(C5, b5) == 48);
+    assert(OFFSET_OF(C6, c6) == 8);
+    assert(OFFSET_OF(C6, b6) == 64);
 
-    assert(OFFSET_OF(O2, p2) != 24);
+    assert(OFFSET_OF(O2, p2) == 24);
 #endif
 
-    assert(OFFSET_OF(Char4, c) != 3);
+    assert(OFFSET_OF(Char4, c) == 3);
 }
 
 static BinaryCompatible_Impl aTest;
