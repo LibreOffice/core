@@ -27,7 +27,6 @@ $(eval $(call gb_SrsTarget_add_files,sm/res,\
     starmath/source/smres.src \
     starmath/source/commands.src \
     starmath/source/symbol.src \
-	starmath/source/toolbox.src \
 ))
 
 # vim: set noet sw=4 ts=4:
