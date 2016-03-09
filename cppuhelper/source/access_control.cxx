@@ -69,11 +69,13 @@ AccessControl::AccessControl( AccessControl const & ac )
     }
 }
 
+namespace {
+
 #ifdef SAL_W32
 #pragma pack(push, 8)
 #endif
     // binary comp. to all Permission structs
-    struct __permission
+    struct permission
     {
         rtl_uString * m_str1;
         rtl_uString * m_str2;
@@ -82,12 +84,11 @@ AccessControl::AccessControl( AccessControl const & ac )
 #pragma pack(pop)
 #endif
 
-
-inline void __checkPermission(
+inline void checkPermission(
     Reference< security::XAccessController > const & xController,
     Type const & type, rtl_uString * str1, rtl_uString * str2 )
 {
-    __permission perm;
+    permission perm;
     perm.m_str1 = str1;
     perm.m_str2 = str2;
 
@@ -98,10 +99,12 @@ inline void __checkPermission(
     xController->checkPermission( * static_cast< Any * >( &a ) );
 }
 
+}
+
 void AccessControl::checkRuntimePermission(
     OUString const & name )
 {
-    __checkPermission(
+    checkPermission(
         m_xController,
         cppu::UnoType<security::RuntimePermission>::get(), name.pData, nullptr );
 }
@@ -110,7 +113,7 @@ void AccessControl::checkFilePermission(
     OUString const & url,
     OUString const & actions )
 {
-    __checkPermission(
+    checkPermission(
         m_xController,
         cppu::UnoType<io::FilePermission>::get(), url.pData, actions.pData );
 }
@@ -119,7 +122,7 @@ void AccessControl::checkSocketPermission(
     OUString const & host,
     OUString const & actions )
 {
-    __checkPermission(
+    checkPermission(
         m_xController,
         cppu::UnoType<connection::SocketPermission>::get(), host.pData, actions.pData );
 }
