@@ -1,0 +1,39 @@
+From 4acfcb9acf87b4e6e6ee4d68875255b198b0fa0c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:12:48 +0100
+Subject: [PATCH 09/14] xmlsec1-1.2.14_fix_extern_c.patch
+
+Conflicts:
+	include/xmlsec/xmlsec.h
+---
+ include/xmlsec/xmlsec.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/xmlsec/xmlsec.h b/include/xmlsec/xmlsec.h
+index 9ab4cea..a6c09f2 100644
+--- a/include/xmlsec/xmlsec.h
++++ b/include/xmlsec/xmlsec.h
+@@ -11,16 +11,16 @@
+ #ifndef __XMLSEC_H__
+ #define __XMLSEC_H__
+ 
+-#ifdef __cplusplus
+-extern "C" {
+-#endif /* __cplusplus */
+-
+ #include <libxml/tree.h>
+ 
+ #include <xmlsec/version.h>
+ #include <xmlsec/exports.h>
+ #include <xmlsec/strings.h>
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */
++
+ /***********************************************************************
+  *
+  * Basic types to make ports to exotic platforms easier
+-- 
+2.6.2
+
