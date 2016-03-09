@@ -2352,35 +2352,35 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { SID_ATTR_LRSPACE,     SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_ULSPACE,     SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_PAGE,        SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_PAGE_SIZE,   SfxItemPoolFlags::POOLABLE },
-        { SID_ENUM_PAGE_MODE,   SfxItemPoolFlags::POOLABLE },
-        { SID_PAPER_START,      SfxItemPoolFlags::POOLABLE },
-        { SID_PAPER_END,        SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_BRUSH,       SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLSTYLE,      SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLCOLOR,      SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLGRADIENT,       SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLHATCH,      SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBITMAP,     SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLTRANSPARENCE,       SfxItemPoolFlags::POOLABLE },
-        { XATTR_GRADIENTSTEPCOUNT,      SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_TILE,       SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_POS,        SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_SIZEX,      SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_SIZEY,      SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_SIZELOG,        SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_TILEOFFSETX,    SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_TILEOFFSETY,    SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_STRETCH,        SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_POSOFFSETX,     SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBMP_POSOFFSETY,     SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLFLOATTRANSPARENCE,  SfxItemPoolFlags::POOLABLE },
-        { XATTR_SECONDARYFILLCOLOR,     SfxItemPoolFlags::POOLABLE },
-        { XATTR_FILLBACKGROUND,     SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_METRIC,      SfxItemPoolFlags::POOLABLE }
+        { SID_ATTR_LRSPACE,     true },
+        { SID_ATTR_ULSPACE,     true },
+        { SID_ATTR_PAGE,        true },
+        { SID_ATTR_PAGE_SIZE,   true },
+        { SID_ENUM_PAGE_MODE,   true },
+        { SID_PAPER_START,      true },
+        { SID_PAPER_END,        true },
+        { SID_ATTR_BRUSH,       true },
+        { XATTR_FILLSTYLE,      true },
+        { XATTR_FILLCOLOR,      true },
+        { XATTR_FILLGRADIENT,       true },
+        { XATTR_FILLHATCH,      true },
+        { XATTR_FILLBITMAP,     true },
+        { XATTR_FILLTRANSPARENCE,       true },
+        { XATTR_GRADIENTSTEPCOUNT,      true },
+        { XATTR_FILLBMP_TILE,       true },
+        { XATTR_FILLBMP_POS,        true },
+        { XATTR_FILLBMP_SIZEX,      true },
+        { XATTR_FILLBMP_SIZEY,      true },
+        { XATTR_FILLBMP_SIZELOG,        true },
+        { XATTR_FILLBMP_TILEOFFSETX,    true },
+        { XATTR_FILLBMP_TILEOFFSETY,    true },
+        { XATTR_FILLBMP_STRETCH,        true },
+        { XATTR_FILLBMP_POSOFFSETX,     true },
+        { XATTR_FILLBMP_POSOFFSETY,     true },
+        { XATTR_FILLFLOATTRANSPARENCE,  true },
+        { XATTR_SECONDARYFILLCOLOR,     true },
+        { XATTR_FILLBACKGROUND,     true },
+        { SID_ATTR_METRIC,      true }
     };
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
@@ -4221,7 +4221,7 @@ void OReportController::openZoomDialog()
     {
         static SfxItemInfo aItemInfos[] =
         {
-            { SID_ATTR_ZOOM, SfxItemPoolFlags::POOLABLE }
+            { SID_ATTR_ZOOM, true }
         };
         SfxPoolItem* pDefaults[] =
         {

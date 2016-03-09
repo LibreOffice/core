@@ -89,99 +89,99 @@ sal_uInt16* ScDocumentPool::pVersionMap12 = nullptr;
 
 static SfxItemInfo const  aItemInfos[] =
 {
-    { SID_ATTR_CHAR_FONT,           SfxItemPoolFlags::POOLABLE },    // ATTR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT,     SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_HEIGHT
-    { SID_ATTR_CHAR_WEIGHT,         SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_WEIGHT
-    { SID_ATTR_CHAR_POSTURE,        SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_POSTURE
-    { SID_ATTR_CHAR_UNDERLINE,      SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_UNDERLINE
-    { SID_ATTR_CHAR_OVERLINE,       SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_OVERLINE
-    { SID_ATTR_CHAR_STRIKEOUT,      SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_CROSSEDOUT
-    { SID_ATTR_CHAR_CONTOUR,        SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_CONTOUR
-    { SID_ATTR_CHAR_SHADOWED,       SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_SHADOWED
-    { SID_ATTR_CHAR_COLOR,          SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_COLOR
-    { SID_ATTR_CHAR_LANGUAGE,       SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_LANGUAGE
-    { SID_ATTR_CHAR_CJK_FONT,       SfxItemPoolFlags::POOLABLE },    // ATTR_CJK_FONT            from 614
-    { SID_ATTR_CHAR_CJK_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },    // ATTR_CJK_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_WEIGHT,     SfxItemPoolFlags::POOLABLE },    // ATTR_CJK_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_POSTURE,    SfxItemPoolFlags::POOLABLE },    // ATTR_CJK_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CJK_LANGUAGE,   SfxItemPoolFlags::POOLABLE },    // ATTR_CJK_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_CTL_FONT,       SfxItemPoolFlags::POOLABLE },    // ATTR_CTL_FONT            from 614
-    { SID_ATTR_CHAR_CTL_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },    // ATTR_CTL_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_WEIGHT,     SfxItemPoolFlags::POOLABLE },    // ATTR_CTL_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_POSTURE,    SfxItemPoolFlags::POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CTL_LANGUAGE,   SfxItemPoolFlags::POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_EMPHASISMARK,   SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_USERDEF             from 614 / 641c
-    { SID_ATTR_CHAR_WORDLINEMODE,   SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_WORDLINE       from 632b
-    { SID_ATTR_CHAR_RELIEF,         SfxItemPoolFlags::POOLABLE },    // ATTR_FONT_RELIEF         from 632b
-    { SID_ATTR_ALIGN_HYPHENATION,   SfxItemPoolFlags::POOLABLE },    // ATTR_HYPHENATE           from 632b
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_SCRIPTSPACE         from 614d
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d
-    { SID_ATTR_PARA_FORBIDDEN_RULES,SfxItemPoolFlags::POOLABLE },    // ATTR_FORBIDDEN_RULES     from 614d
-    { SID_ATTR_ALIGN_HOR_JUSTIFY,   SfxItemPoolFlags::POOLABLE },    // ATTR_HOR_JUSTIFY
-    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SfxItemPoolFlags::POOLABLE }, // ATTR_HOR_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_INDENT,        SfxItemPoolFlags::POOLABLE },    // ATTR_INDENT          from 350
-    { SID_ATTR_ALIGN_VER_JUSTIFY,   SfxItemPoolFlags::POOLABLE },    // ATTR_VER_JUSTIFY
-    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, SfxItemPoolFlags::POOLABLE }, // ATTR_VER_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_STACKED,       SfxItemPoolFlags::POOLABLE },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
-    { SID_ATTR_ALIGN_DEGREES,       SfxItemPoolFlags::POOLABLE },    // ATTR_ROTATE_VALUE    from 367
-    { SID_ATTR_ALIGN_LOCKPOS,       SfxItemPoolFlags::POOLABLE },    // ATTR_ROTATE_MODE     from 367
-    { SID_ATTR_ALIGN_ASIANVERTICAL, SfxItemPoolFlags::POOLABLE },    // ATTR_VERTICAL_ASIAN  from 642
-    { SID_ATTR_FRAMEDIRECTION,      SfxItemPoolFlags::POOLABLE },    // ATTR_WRITINGDIR      from 643
-    { SID_ATTR_ALIGN_LINEBREAK,     SfxItemPoolFlags::POOLABLE },    // ATTR_LINEBREAK
-    { SID_ATTR_ALIGN_SHRINKTOFIT,   SfxItemPoolFlags::POOLABLE },    // ATTR_SHRINKTOFIT     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_TLBR,    SfxItemPoolFlags::POOLABLE },    // ATTR_BORDER_TLBR     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_BLTR,    SfxItemPoolFlags::POOLABLE },    // ATTR_BORDER_BLTR     from 680/dr14
-    { SID_ATTR_ALIGN_MARGIN,        SfxItemPoolFlags::POOLABLE },    // ATTR_MARGIN
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_MERGE
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_MERGE_FLAG
-    { SID_ATTR_NUMBERFORMAT_VALUE,  SfxItemPoolFlags::POOLABLE },    // ATTR_VALUE_FORMAT
-    { ATTR_LANGUAGE_FORMAT,         SfxItemPoolFlags::POOLABLE },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
-    { SID_ATTR_BRUSH,               SfxItemPoolFlags::POOLABLE },    // ATTR_BACKGROUND
-    { SID_SCATTR_PROTECTION,        SfxItemPoolFlags::POOLABLE },    // ATTR_PROTECTION
-    { SID_ATTR_BORDER_OUTER,        SfxItemPoolFlags::POOLABLE },    // ATTR_BORDER
-    { SID_ATTR_BORDER_INNER,        SfxItemPoolFlags::POOLABLE },    // ATTR_BORDER_INNER
-    { SID_ATTR_BORDER_SHADOW,       SfxItemPoolFlags::POOLABLE },    // ATTR_SHADOW
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_VALIDDATA
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_CONDITIONAL
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_HYPERLINK
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_PATTERN
-    { SID_ATTR_LRSPACE,             SfxItemPoolFlags::POOLABLE },    // ATTR_LRSPACE
-    { SID_ATTR_ULSPACE,             SfxItemPoolFlags::POOLABLE },    // ATTR_ULSPACE
-    { SID_ATTR_PAGE,                SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE
-    { 0,                            SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_PAPERTRAY, since 303 just a dummy
-    { SID_ATTR_PAGE_PAPERBIN,       SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_PAPERBIN
-    { SID_ATTR_PAGE_SIZE,           SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_SIZE
-    { SID_ATTR_PAGE_MAXSIZE,        SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_MAXSIZE
-    { SID_ATTR_PAGE_EXT1,           SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_HORCENTER
-    { SID_ATTR_PAGE_EXT2,           SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_VERCENTER
-    { SID_ATTR_PAGE_ON,             SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_ON
-    { SID_ATTR_PAGE_DYNAMIC,        SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_DYNAMIC
-    { SID_ATTR_PAGE_SHARED,         SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_SHARED
-    { SID_SCATTR_PAGE_NOTES,        SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_NOTES
-    { SID_SCATTR_PAGE_GRID,         SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_GRID
-    { SID_SCATTR_PAGE_HEADERS,      SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_HEADERS
-    { SID_SCATTR_PAGE_CHARTS,       SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_CHARTS
-    { SID_SCATTR_PAGE_OBJECTS,      SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_OBJECTS
-    { SID_SCATTR_PAGE_DRAWINGS,     SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_DRAWINGS
-    { SID_SCATTR_PAGE_TOPDOWN,      SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_TOPDOWN
-    { SID_SCATTR_PAGE_SCALE,        SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_SCALE
-    { SID_SCATTR_PAGE_SCALETOPAGES, SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_SCALETOPAGES
-    { SID_SCATTR_PAGE_FIRSTPAGENO,  SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_FIRSTPAGENO
-    { SID_SCATTR_PAGE_PRINTAREA,    SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_PRINTAREA
-    { SID_SCATTR_PAGE_REPEATROW,    SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_REPEATROW
-    { SID_SCATTR_PAGE_REPEATCOL,    SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_REPEATCOL
-    { SID_SCATTR_PAGE_PRINTTABLES,  SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_PRINTTABLES
-    { SID_SCATTR_PAGE_HEADERLEFT,   SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_HEADERLEFT
-    { SID_SCATTR_PAGE_FOOTERLEFT,   SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_FOOTERLEFT
-    { SID_SCATTR_PAGE_HEADERRIGHT,  SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_HEADERRIGHT
-    { SID_SCATTR_PAGE_FOOTERRIGHT,  SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_FOOTERRIGHT
-    { SID_ATTR_PAGE_HEADERSET,      SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_HEADERSET
-    { SID_ATTR_PAGE_FOOTERSET,      SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_FOOTERSET
-    { SID_SCATTR_PAGE_FORMULAS,     SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_FORMULAS
-    { SID_SCATTR_PAGE_NULLVALS,     SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_NULLVALS
-    { SID_SCATTR_PAGE_SCALETO,      SfxItemPoolFlags::POOLABLE },    // ATTR_PAGE_SCALETO
-    { 0,                            SfxItemPoolFlags::POOLABLE }     // ATTR_HIDDEN
+    { SID_ATTR_CHAR_FONT,           true },    // ATTR_FONT
+    { SID_ATTR_CHAR_FONTHEIGHT,     true },    // ATTR_FONT_HEIGHT
+    { SID_ATTR_CHAR_WEIGHT,         true },    // ATTR_FONT_WEIGHT
+    { SID_ATTR_CHAR_POSTURE,        true },    // ATTR_FONT_POSTURE
+    { SID_ATTR_CHAR_UNDERLINE,      true },    // ATTR_FONT_UNDERLINE
+    { SID_ATTR_CHAR_OVERLINE,       true },    // ATTR_FONT_OVERLINE
+    { SID_ATTR_CHAR_STRIKEOUT,      true },    // ATTR_FONT_CROSSEDOUT
+    { SID_ATTR_CHAR_CONTOUR,        true },    // ATTR_FONT_CONTOUR
+    { SID_ATTR_CHAR_SHADOWED,       true },    // ATTR_FONT_SHADOWED
+    { SID_ATTR_CHAR_COLOR,          true },    // ATTR_FONT_COLOR
+    { SID_ATTR_CHAR_LANGUAGE,       true },    // ATTR_FONT_LANGUAGE
+    { SID_ATTR_CHAR_CJK_FONT,       true },    // ATTR_CJK_FONT            from 614
+    { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },    // ATTR_CJK_FONT_HEIGHT     from 614
+    { SID_ATTR_CHAR_CJK_WEIGHT,     true },    // ATTR_CJK_FONT_WEIGHT     from 614
+    { SID_ATTR_CHAR_CJK_POSTURE,    true },    // ATTR_CJK_FONT_POSTURE    from 614
+    { SID_ATTR_CHAR_CJK_LANGUAGE,   true },    // ATTR_CJK_FONT_LANGUAGE   from 614
+    { SID_ATTR_CHAR_CTL_FONT,       true },    // ATTR_CTL_FONT            from 614
+    { SID_ATTR_CHAR_CTL_FONTHEIGHT, true },    // ATTR_CTL_FONT_HEIGHT     from 614
+    { SID_ATTR_CHAR_CTL_WEIGHT,     true },    // ATTR_CTL_FONT_WEIGHT     from 614
+    { SID_ATTR_CHAR_CTL_POSTURE,    true },    // ATTR_CTL_FONT_POSTURE    from 614
+    { SID_ATTR_CHAR_CTL_LANGUAGE,   true },    // ATTR_CTL_FONT_LANGUAGE   from 614
+    { SID_ATTR_CHAR_EMPHASISMARK,   true },    // ATTR_FONT_EMPHASISMARK   from 614
+    { 0,                            true },    // ATTR_USERDEF             from 614 / 641c
+    { SID_ATTR_CHAR_WORDLINEMODE,   true },    // ATTR_FONT_WORDLINE       from 632b
+    { SID_ATTR_CHAR_RELIEF,         true },    // ATTR_FONT_RELIEF         from 632b
+    { SID_ATTR_ALIGN_HYPHENATION,   true },    // ATTR_HYPHENATE           from 632b
+    { 0,                            true },    // ATTR_SCRIPTSPACE         from 614d
+    { 0,                            true },    // ATTR_HANGPUNCTUATION     from 614d
+    { SID_ATTR_PARA_FORBIDDEN_RULES,true },    // ATTR_FORBIDDEN_RULES     from 614d
+    { SID_ATTR_ALIGN_HOR_JUSTIFY,   true },    // ATTR_HOR_JUSTIFY
+    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, true }, // ATTR_HOR_JUSTIFY_METHOD
+    { SID_ATTR_ALIGN_INDENT,        true },    // ATTR_INDENT          from 350
+    { SID_ATTR_ALIGN_VER_JUSTIFY,   true },    // ATTR_VER_JUSTIFY
+    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, true }, // ATTR_VER_JUSTIFY_METHOD
+    { SID_ATTR_ALIGN_STACKED,       true },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
+    { SID_ATTR_ALIGN_DEGREES,       true },    // ATTR_ROTATE_VALUE    from 367
+    { SID_ATTR_ALIGN_LOCKPOS,       true },    // ATTR_ROTATE_MODE     from 367
+    { SID_ATTR_ALIGN_ASIANVERTICAL, true },    // ATTR_VERTICAL_ASIAN  from 642
+    { SID_ATTR_FRAMEDIRECTION,      true },    // ATTR_WRITINGDIR      from 643
+    { SID_ATTR_ALIGN_LINEBREAK,     true },    // ATTR_LINEBREAK
+    { SID_ATTR_ALIGN_SHRINKTOFIT,   true },    // ATTR_SHRINKTOFIT     from 680/dr14
+    { SID_ATTR_BORDER_DIAG_TLBR,    true },    // ATTR_BORDER_TLBR     from 680/dr14
+    { SID_ATTR_BORDER_DIAG_BLTR,    true },    // ATTR_BORDER_BLTR     from 680/dr14
+    { SID_ATTR_ALIGN_MARGIN,        true },    // ATTR_MARGIN
+    { 0,                            true },    // ATTR_MERGE
+    { 0,                            true },    // ATTR_MERGE_FLAG
+    { SID_ATTR_NUMBERFORMAT_VALUE,  true },    // ATTR_VALUE_FORMAT
+    { ATTR_LANGUAGE_FORMAT,         true },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
+    { SID_ATTR_BRUSH,               true },    // ATTR_BACKGROUND
+    { SID_SCATTR_PROTECTION,        true },    // ATTR_PROTECTION
+    { SID_ATTR_BORDER_OUTER,        true },    // ATTR_BORDER
+    { SID_ATTR_BORDER_INNER,        true },    // ATTR_BORDER_INNER
+    { SID_ATTR_BORDER_SHADOW,       true },    // ATTR_SHADOW
+    { 0,                            true },    // ATTR_VALIDDATA
+    { 0,                            true },    // ATTR_CONDITIONAL
+    { 0,                            true },    // ATTR_HYPERLINK
+    { 0,                            true },    // ATTR_PATTERN
+    { SID_ATTR_LRSPACE,             true },    // ATTR_LRSPACE
+    { SID_ATTR_ULSPACE,             true },    // ATTR_ULSPACE
+    { SID_ATTR_PAGE,                true },    // ATTR_PAGE
+    { 0,                            true },    // ATTR_PAGE_PAPERTRAY, since 303 just a dummy
+    { SID_ATTR_PAGE_PAPERBIN,       true },    // ATTR_PAGE_PAPERBIN
+    { SID_ATTR_PAGE_SIZE,           true },    // ATTR_PAGE_SIZE
+    { SID_ATTR_PAGE_MAXSIZE,        true },    // ATTR_PAGE_MAXSIZE
+    { SID_ATTR_PAGE_EXT1,           true },    // ATTR_PAGE_HORCENTER
+    { SID_ATTR_PAGE_EXT2,           true },    // ATTR_PAGE_VERCENTER
+    { SID_ATTR_PAGE_ON,             true },    // ATTR_PAGE_ON
+    { SID_ATTR_PAGE_DYNAMIC,        true },    // ATTR_PAGE_DYNAMIC
+    { SID_ATTR_PAGE_SHARED,         true },    // ATTR_PAGE_SHARED
+    { SID_SCATTR_PAGE_NOTES,        true },    // ATTR_PAGE_NOTES
+    { SID_SCATTR_PAGE_GRID,         true },    // ATTR_PAGE_GRID
+    { SID_SCATTR_PAGE_HEADERS,      true },    // ATTR_PAGE_HEADERS
+    { SID_SCATTR_PAGE_CHARTS,       true },    // ATTR_PAGE_CHARTS
+    { SID_SCATTR_PAGE_OBJECTS,      true },    // ATTR_PAGE_OBJECTS
+    { SID_SCATTR_PAGE_DRAWINGS,     true },    // ATTR_PAGE_DRAWINGS
+    { SID_SCATTR_PAGE_TOPDOWN,      true },    // ATTR_PAGE_TOPDOWN
+    { SID_SCATTR_PAGE_SCALE,        true },    // ATTR_PAGE_SCALE
+    { SID_SCATTR_PAGE_SCALETOPAGES, true },    // ATTR_PAGE_SCALETOPAGES
+    { SID_SCATTR_PAGE_FIRSTPAGENO,  true },    // ATTR_PAGE_FIRSTPAGENO
+    { SID_SCATTR_PAGE_PRINTAREA,    true },    // ATTR_PAGE_PRINTAREA
+    { SID_SCATTR_PAGE_REPEATROW,    true },    // ATTR_PAGE_REPEATROW
+    { SID_SCATTR_PAGE_REPEATCOL,    true },    // ATTR_PAGE_REPEATCOL
+    { SID_SCATTR_PAGE_PRINTTABLES,  true },    // ATTR_PAGE_PRINTTABLES
+    { SID_SCATTR_PAGE_HEADERLEFT,   true },    // ATTR_PAGE_HEADERLEFT
+    { SID_SCATTR_PAGE_FOOTERLEFT,   true },    // ATTR_PAGE_FOOTERLEFT
+    { SID_SCATTR_PAGE_HEADERRIGHT,  true },    // ATTR_PAGE_HEADERRIGHT
+    { SID_SCATTR_PAGE_FOOTERRIGHT,  true },    // ATTR_PAGE_FOOTERRIGHT
+    { SID_ATTR_PAGE_HEADERSET,      true },    // ATTR_PAGE_HEADERSET
+    { SID_ATTR_PAGE_FOOTERSET,      true },    // ATTR_PAGE_FOOTERSET
+    { SID_SCATTR_PAGE_FORMULAS,     true },    // ATTR_PAGE_FORMULAS
+    { SID_SCATTR_PAGE_NULLVALS,     true },    // ATTR_PAGE_NULLVALS
+    { SID_SCATTR_PAGE_SCALETO,      true },    // ATTR_PAGE_SCALETO
+    { 0,                            true }     // ATTR_HIDDEN
 };
 static_assert(
     SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");

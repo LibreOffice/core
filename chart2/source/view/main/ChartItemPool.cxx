@@ -168,7 +168,7 @@ ChartItemPool::ChartItemPool():
     for( sal_uInt16 i = 0; i < nMax; i++ )
     {
         pItemInfos[i]._nSID = 0;
-        pItemInfos[i]._nFlags = SfxItemPoolFlags::POOLABLE;
+        pItemInfos[i]._bPoolable = true;
     }
 
     // slot ids differing from which ids
