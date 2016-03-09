@@ -215,15 +215,16 @@ ScRefFinder::~ScRefFinder()
 {
 }
 
-static sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
+static ScRefFlags lcl_NextFlags( ScRefFlags nOld )
 {
-    sal_uInt16 nNew = nOld & 7;                 // die drei Abs-Flags
-    nNew = ( nNew - 1 ) & 7;                // weiterzaehlen
+    const ScRefFlags Mask_ABS = (ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS | ScRefFlags::TAB_ABS);
+    ScRefFlags nNew = nOld & Mask_ABS;
+    nNew = ScRefFlags( (std::underlying_type<ScRefFlags>::type)(nNew) - 1 ) & Mask_ABS; // weiterzaehlen
 
-    if (!(nOld & SCA_TAB_3D))
-        nNew &= ~SCA_TAB_ABSOLUTE;          // not 3D -> never absolute!
+    if (!(nOld & ScRefFlags::TAB_3D))
+        nNew &= ~ScRefFlags::TAB_ABS; // not 3D -> never absolute!
 
-    return ( nOld & 0xfff8 ) | nNew;
+    return (nOld & ~Mask_ABS) | nNew;
 }
 
 void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
@@ -264,10 +265,10 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         // Check the validity of the expression, and toggle the relative flag.
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
         ScAddress::ExternalInfo aExtInfo;
-        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
-        if ( nResult & SCA_VALID )
+        ScRefFlags nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
+        if ( nResult & ScRefFlags::VALID )
         {
-            sal_uInt16 nFlags = lcl_NextFlags( nResult );
+            ScRefFlags nFlags;
             if( aExtInfo.mbExternal )
             {    // retain external doc name and tab name before toggle relative flag
                 sal_Int32 nSep;
@@ -283,11 +284,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
                          nSep = aExpr.lastIndexOf('.');
                          break;
                 }
-                if (nSep < 0)
-                {
-                    assert(!"Invalid syntax according to address convention.");
-                }
-                else
+                if (nSep >= 0)
                 {
                     OUString aRef = aExpr.copy(nSep+1);
                     OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
@@ -296,9 +293,14 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
                     nFlags = lcl_NextFlags( nResult );
                     aExpr = aExtDocNameTabName + aAddr.Format(nFlags, mpDoc, aDetails);
                 }
+                else
+                {
+                    assert(!"Invalid syntax according to address convention.");
+                }
             }
             else
             {
+                nFlags = lcl_NextFlags( nResult );
                 aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
             }
 

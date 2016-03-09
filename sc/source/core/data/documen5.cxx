@@ -143,7 +143,7 @@ void ScDocument::UpdateAllCharts()
                             {
                                 ScRangeListRef aRanges = pChartObj->GetRangeList();
                                 OUString sRangeStr;
-                                aRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                                aRanges->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
 
                                 chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                                 bool bHasCategories = pChartObj->HasRowHeaders();
@@ -264,7 +264,7 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
         for( sal_Int32 nN=0; nN<aRangeStrings.getLength(); nN++ )
         {
             ScRangeList aRanges;
-            aRanges.Parse( aRangeStrings[nN], pSheetNameDoc, SCA_VALID, pSheetNameDoc->GetAddressConvention() );
+            aRanges.Parse( aRangeStrings[nN], pSheetNameDoc, ScRefFlags::VALID, pSheetNameDoc->GetAddressConvention() );
             rRangesVector.push_back(aRanges);
         }
     }
@@ -281,7 +281,7 @@ void ScDocument::SetChartRanges( const OUString& rChartName, const ::std::vector
         {
             ScRangeList aScRangeList( rRangesVector[nN] );
             OUString sRangeStr;
-            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+            aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
             aRangeStrings[nN]=sRangeStr;
         }
         ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
@@ -407,7 +407,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                     }
 
                     OUString sRangeStr;
-                    aNewRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                    aNewRanges->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
 
                     lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
@@ -469,7 +469,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
             {
                 ScRange aRange;
                 ScAddress::Details aDetails(GetAddressConvention(), 0, 0);
-                if ( aRange.ParseAny( aRepresentations[i], this, aDetails ) & SCA_VALID )
+                if ( aRange.ParseAny( aRepresentations[i], this, aDetails ) & ScRefFlags::VALID )
                     aRanges->Append( aRange );
             }
 
@@ -603,7 +603,7 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
                     lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
                     OUString sRangeStr;
-                    rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                    rNewRangeListRef->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
 
                     lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 

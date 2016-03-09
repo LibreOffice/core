@@ -448,11 +448,11 @@ bool ScRangeStringConverter::GetAddressFromString(
     GetTokenByOffset( sToken, rAddressStr, nOffset, cSeparator, cQuote );
     if( nOffset >= 0 )
     {
-        if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & SCA_VALID) == SCA_VALID)
+        if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
             return true;
         ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
         if (eConv != eConvUI)
-            return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
+            return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
     }
     return false;
 }
@@ -478,11 +478,12 @@ bool ScRangeStringConverter::GetRangeFromString(
         {
             if ( aUIString[0] == '.' )
                 aUIString = aUIString.copy( 1 );
-            bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
+            bResult = (rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & ScRefFlags::VALID) ==
+                                                                                                     ScRefFlags::VALID;
             ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
             if (!bResult && eConv != eConvUI)
-                bResult = ((rRange.aStart.Parse(
-                    aUIString, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
+                bResult = (rRange.aStart.Parse(aUIString, const_cast<ScDocument*>(pDocument), eConvUI) & ScRefFlags::VALID) ==
+                                                                                                         ScRefFlags::VALID;
             rRange.aEnd = rRange.aStart;
         }
         else
@@ -497,24 +498,27 @@ bool ScRangeStringConverter::GetRangeFromString(
                     aUIString[ nIndex + 1 ] == '.' )
                 aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
-            bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
+            bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & ScRefFlags::VALID) ==
+                                                                                              ScRefFlags::VALID);
 
             // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
-                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
-                                eConv) & SCA_VALID) == SCA_VALID) &&
-                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument),
-                                eConv) & SCA_VALID) == SCA_VALID);
+                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument), eConv)
+                               & ScRefFlags::VALID) == ScRefFlags::VALID)
+                          &&
+                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument), eConv)
+                               & ScRefFlags::VALID) == ScRefFlags::VALID);
 
                 ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
-                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
-                                    eConvUI) & SCA_VALID) == SCA_VALID) &&
-                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument),
-                                    eConvUI) & SCA_VALID) == SCA_VALID);
+                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument), eConvUI)
+                                   & ScRefFlags::VALID) == ScRefFlags::VALID)
+                              &&
+                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument), eConvUI)
+                                   & ScRefFlags::VALID) == ScRefFlags::VALID);
                 }
             }
         }
@@ -618,7 +622,7 @@ void ScRangeStringConverter::GetStringFromAddress(
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
         bool bAppendStr,
-        sal_uInt16 nFormatFlags )
+        ScRefFlags nFormatFlags )
 {
     if (pDocument && pDocument->HasTable(rAddress.Tab()))
     {
@@ -634,7 +638,7 @@ void ScRangeStringConverter::GetStringFromRange(
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
         bool bAppendStr,
-        sal_uInt16 nFormatFlags )
+        ScRefFlags nFormatFlags )
 {
     if (pDocument && pDocument->HasTable(rRange.aStart.Tab()))
     {
@@ -674,7 +678,7 @@ void ScRangeStringConverter::GetStringFromArea(
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
         bool bAppendStr,
-        sal_uInt16 nFormatFlags )
+        ScRefFlags nFormatFlags )
 {
     ScRange aRange( rArea.nColStart, rArea.nRowStart, rArea.nTab, rArea.nColEnd, rArea.nRowEnd, rArea.nTab );
     GetStringFromRange( rString, aRange, pDocument, eConv, cSeparator, bAppendStr, nFormatFlags );
@@ -699,7 +703,7 @@ void ScRangeStringConverter::GetStringFromRange(
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
         bool bAppendStr,
-        sal_uInt16 nFormatFlags )
+        ScRefFlags nFormatFlags )
 {
     ScRange aScRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), rRange.Sheet,
         static_cast<SCCOL>(rRange.EndColumn), static_cast<SCROW>(rRange.EndRow), rRange.Sheet );
@@ -743,12 +747,12 @@ static void lcl_appendCellAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
     else
     {
-        OUString aAddr(rCell.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(ScRefFlags::ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
@@ -776,7 +780,7 @@ static void lcl_appendCellRangeAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell1.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell1.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
 
         rBuf.append(":");
@@ -788,7 +792,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append('.');
         }
 
-        aAddr = rCell2.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
+        aAddr = rCell2.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -796,7 +800,7 @@ static void lcl_appendCellRangeAddress(
         ScRange aRange;
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
-        OUString aAddr(aRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
@@ -852,28 +856,28 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;
             ScAddress aCell1, aCell2;
-            sal_uInt16 nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
-            if ((nRet & SCA_VALID) != SCA_VALID)
+            ScRefFlags nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
+            if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
             {
                 // first cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
                 nRet = aCell1.Parse(aBeginCell, pDoc, eConv, &aExtInfo1);
-                if ((nRet & SCA_VALID) != SCA_VALID)
+                if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     // first cell is really invalid.
                     continue;
             }
 
             nRet = aCell2.Parse(aEndCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
-            if ((nRet & SCA_VALID) != SCA_VALID)
+            if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
             {
                 // second cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
                 nRet = aCell2.Parse(aEndCell, pDoc, eConv, &aExtInfo2);
-                if ((nRet & SCA_VALID) != SCA_VALID)
+                if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     // second cell is really invalid.
                     continue;
             }
@@ -896,11 +900,11 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             // Chart always saves ranges using CONV_OOO convention.
             ScAddress::ExternalInfo aExtInfo;
             ScAddress aCell;
-            sal_uInt16 nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
-            if ((nRet & SCA_VALID) != SCA_VALID)
+            ScRefFlags nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+            if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
                 nRet = aCell.Parse(aToken, pDoc, eConv, &aExtInfo);
-                if ((nRet & SCA_VALID) != SCA_VALID)
+                if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     continue;
             }
 

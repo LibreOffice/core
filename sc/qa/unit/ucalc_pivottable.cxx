@@ -680,7 +680,7 @@ void Test::testPivotTableNamedSource()
 
     // Insert the raw data.
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
-    OUString aRangeStr(aSrcRange.Format(SCR_ABS_3D, m_pDoc));
+    OUString aRangeStr(aSrcRange.Format(ScRefFlags::RANGE_ABS_3D, m_pDoc));
 
     // Name this range.
     OUString aRangeName("MyData");
@@ -2126,7 +2126,7 @@ void Test::testFuncGETPIVOTDATA()
     aPos = aOutRange.aEnd;
     aPos.IncRow(2); // Move 2 rows down from the table output.
 
-    OUString aPivotPosStr(aOutRange.aStart.Format(SCA_ABS));
+    OUString aPivotPosStr(aOutRange.aStart.Format(ScRefFlags::ADDR_ABS));
 
     sc::AutoCalcSwitch aSwitch(*m_pDoc, true); // turn autocalc on.
 
@@ -2188,7 +2188,7 @@ void Test::testFuncGETPIVOTDATA()
     aPos = aOutRange.aEnd;
     aPos.IncRow(2); // move 2 rows down from the output.
 
-    aPivotPosStr = aOutRange.aStart.Format(SCA_ABS);
+    aPivotPosStr = aOutRange.aStart.Format(ScRefFlags::ADDR_ABS);
 
     // First, get the grand totals.
     aFormula = ("=GETPIVOTDATA(\"Sum - Value\";") + aPivotPosStr + ")";

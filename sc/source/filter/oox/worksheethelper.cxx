@@ -1029,7 +1029,8 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
             {
                 ScRange aRange;
                 if ((aRange.ParseAny( aUrl.copy( nSepPos + 1 ), nullptr,
-                                formula::FormulaGrammar::CONV_XL_R1C1) & SCA_VALID) != SCA_VALID)
+                                formula::FormulaGrammar::CONV_XL_R1C1)
+                      & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     aUrl = aUrl.replaceAt( nSepPos, 1, OUString( '.' ) );
             }
             // #i66592# convert sheet names that have been renamed on import

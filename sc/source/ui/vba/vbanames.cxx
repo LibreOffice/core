@@ -170,8 +170,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                     if ( sFormula.startsWith("=") )
                         sFormula = sFormula.copy(1);
                     ScRangeList aCellRanges;
-                    sal_uInt16 nFlags = 0;
-
+                    ScRefFlags nFlags = ScRefFlags::ZERO;
                     formula::FormulaGrammar::AddressConvention eConv = ( eGram == formula::FormulaGrammar::GRAM_NATIVE_XL_A1 ) ? formula::FormulaGrammar::CONV_XL_A1 : formula::FormulaGrammar::CONV_XL_R1C1;
                     if ( ScVbaRange::getCellRangesForAddress( nFlags, sFormula, pDocSh, aCellRanges, eConv , ',' ) )
                     {

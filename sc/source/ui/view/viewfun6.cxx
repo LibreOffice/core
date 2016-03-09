@@ -108,7 +108,7 @@ void ScViewFunc::DetectiveRefresh()
 
 static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument* pDoc)
 {
-    OUString aAddrText(rRange.Format(SCR_ABS_3D, pDoc));
+    OUString aAddrText(rRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc));
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
     SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
     pView->GetDispatcher().Execute(
@@ -189,7 +189,7 @@ void ScViewFunc::DetectiveMarkPred()
             aBuf.append(aTabName);
             aBuf.append('.');
 
-            OUString aRangeStr(aRange.Format(SCA_VALID));
+            OUString aRangeStr(aRange.Format(ScRefFlags::VALID));
             aBuf.append(aRangeStr);
 
             ScGlobal::OpenURL(aBuf.makeStringAndClear(), OUString());

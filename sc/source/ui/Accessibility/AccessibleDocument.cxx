@@ -2296,7 +2296,7 @@ OUString ScAccessibleDocument::GetCurrentCellName() const
     if (mpViewShell)
     {
         // Document not needed, because only the cell address, but not the tablename is needed
-        OUString sAddress(mpViewShell->GetViewData().GetCurPos().Format(SCA_VALID));
+        OUString sAddress(mpViewShell->GetViewData().GetCurPos().Format(ScRefFlags::VALID));
         sName = sName.replaceFirst("%1", sAddress);
     }
     return sName;

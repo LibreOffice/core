@@ -177,7 +177,7 @@ public:
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
                             bool bAppendStr = false,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+                            ScRefFlags nFormatFlags = (ScRefFlags::VALID | ScRefFlags::TAB_3D) );
     static void         GetStringFromRange(
                             OUString& rString,
                             const ScRange& rRange,
@@ -185,7 +185,7 @@ public:
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
                             bool bAppendStr = false,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+                            ScRefFlags nFormatFlags = (ScRefFlags::VALID | ScRefFlags::TAB_3D) );
     static void         GetStringFromRangeList(
                             OUString& rString,
                             const ScRangeList* pRangeList,
@@ -200,7 +200,7 @@ public:
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
                             bool bAppendStr = false,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+                            ScRefFlags nFormatFlags = (ScRefFlags::VALID | ScRefFlags::TAB_3D) );
 
 /// Range to String API
     static void         GetStringFromAddress(
@@ -217,7 +217,7 @@ public:
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
                             bool bAppendStr = false,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+                            ScRefFlags nFormatFlags = (ScRefFlags::VALID | ScRefFlags::TAB_3D) );
     static void         GetStringFromRangeList(
                             OUString& rString,
                             const css::uno::Sequence< css::table::CellRangeAddress >& rRangeSeq,

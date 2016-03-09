@@ -298,29 +298,29 @@ void Test::testFormulaParseReference()
 
     ScAddress aPos;
     ScAddress::ExternalInfo aExtInfo;
-    sal_uInt16 nRes = aPos.Parse("'90''s Music'.D10", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    ScRefFlags nRes = aPos.Parse("'90''s Music'.D10", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
     nRes = aPos.Parse("'90''s and 70''s'.C100", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(99), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
     nRes = aPos.Parse("'All Others'.B3", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(3), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
     nRes = aPos.Parse("NoQuote.E13", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(4), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), aPos.Row());
@@ -330,120 +330,130 @@ void Test::testFormulaParseReference()
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse(":B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("B:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse(":B2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("B2:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse(":2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("2:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse(":2B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("2B:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("abc_foo:abc_bar", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("B:B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
-            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
+                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
+                            ScRefFlags::ZERO);
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
+                           (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("2:2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
-            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), 0);
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
+                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
+                            ScRefFlags::ZERO);
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
+                           (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS));
 
     nRes = aRange.Parse("NoQuote.B:C", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
-            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
+                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
+                            ScRefFlags::ZERO);
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
+                           (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS));
 
     // Both rows at sheet bounds and relative => convert to absolute => entire column reference.
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("B1:B1048576", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
-            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
+                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
+                           ScRefFlags::ZERO);
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
+                           (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS));
 
     // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("A2:AMJ2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
-            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
-             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), 0);
-    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
+                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
+                            ScRefFlags::ZERO);
+    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
+                           (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS));
 
     // Check for reference input conversion to and display string of entire column/row.
     {
@@ -5883,7 +5893,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(3+i,1,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pCounta),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -5895,7 +5905,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(3+i,2,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum3),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -5907,7 +5917,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(3+i,3,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum4),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -5919,7 +5929,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(3+i,4,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSumX),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -5936,7 +5946,7 @@ void Test::testFuncTableRef()
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(4+i,3,0);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum4),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -5964,7 +5974,7 @@ void Test::testFuncTableRef()
     {
         OUString aFormula( OUString::createFromAscii( pColumn2Formula));
         ScAddress aPos(1,5,0);
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + "448"), OUString(aPrefix + m_pDoc->GetString(aPos)));
     }
 
@@ -6060,7 +6070,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(7+i,9,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pCounta),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -6072,7 +6082,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(7+i,10,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum3),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -6084,7 +6094,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(7+i,11,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum4),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -6096,7 +6106,7 @@ void Test::testFuncTableRef()
         ScAddress aPos(7+i,12,0);
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSumX),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -6113,7 +6123,7 @@ void Test::testFuncTableRef()
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(8+i,11,0);
         // For easier "debugability" have position and formula in assertion.
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum4),
                 aPrefix + m_pDoc->GetString( aPos));
     }
@@ -6140,7 +6150,7 @@ void Test::testFuncTableRef()
     {
         OUString aFormula( OUString::createFromAscii( pColumn3Formula));
         ScAddress aPos(5,13,0);
-        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + "448"), OUString(aPrefix + m_pDoc->GetString(aPos)));
     }
 
@@ -6912,57 +6922,57 @@ void Test::testFormulaErrorPropagation()
 
     aPos.IncRow();  // C2
     m_pDoc->SetString( aPos, "=ISERROR(A1:B1+3)");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
 
     aPos.IncRow();  // C3
     m_pDoc->SetString( aPos, "=ISERROR(A1:B1+{3})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
     aPos.IncRow();  // C4
     aPos2 = aPos;
     aPos2.IncCol(); // D4
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(A1:B1+{3})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
 
     aPos.IncRow();  // C5
     m_pDoc->SetString( aPos, "=ISERROR({1;\"x\"}+{3;4})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
     aPos.IncRow();  // C6
     aPos2 = aPos;
     aPos2.IncCol(); // D6
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR({1;\"x\"}+{3;4})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos2));
 
     aPos.IncRow();  // C7
     m_pDoc->SetString( aPos, "=ISERROR({\"x\";2}+{3;4})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
     aPos.IncRow();  // C8
     aPos2 = aPos;
     aPos2.IncCol(); // D8
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR({\"x\";2}+{3;4})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
 
     aPos.IncRow();  // C9
     m_pDoc->SetString( aPos, "=ISERROR(({1;\"x\"}+{3;4})-{5;6})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
     aPos.IncRow();  // C10
     aPos2 = aPos;
     aPos2.IncCol(); // D10
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(({1;\"x\"}+{3;4})-{5;6})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos2));
 
     aPos.IncRow();  // C11
     m_pDoc->SetString( aPos, "=ISERROR(({\"x\";2}+{3;4})-{5;6})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
     aPos.IncRow();  // C12
     aPos2 = aPos;
     aPos2.IncCol(); // D12
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(({\"x\";2}+{3;4})-{5;6})");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
 
     m_pDoc->DeleteTab(0);
 }
