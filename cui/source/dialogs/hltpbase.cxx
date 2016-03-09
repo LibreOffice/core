@@ -214,7 +214,7 @@ bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, bool bDisConnectDlg
     bool bReturn =  mpMarkWnd->MoveTo ( aNewPos );
 
     if( bDisConnectDlg )
-        mpMarkWnd->ConnectToDialog( false );
+        mpMarkWnd->ConnectToDialog();
 
     return ( !bReturn && IsMarkWndVisible() );
 }
@@ -242,7 +242,7 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
         {
             // Pos Extrawindow anywhere
             MoveToExtraWnd( Point(10,10) );  // very unlikely
-            mpMarkWnd->ConnectToDialog( false );
+            mpMarkWnd->ConnectToDialog();
         }
         else
         {

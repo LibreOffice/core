@@ -217,11 +217,11 @@ void SvxHlinkDlgMarkWnd::Move ()
         mbUserMoved = true;
 }
 
-bool SvxHlinkDlgMarkWnd::ConnectToDialog( bool bDoit )
+bool SvxHlinkDlgMarkWnd::ConnectToDialog()
 {
     bool bOldStatus = mbUserMoved;
 
-    mbUserMoved = !bDoit;
+    mbUserMoved = true;
 
     return bOldStatus;
 }

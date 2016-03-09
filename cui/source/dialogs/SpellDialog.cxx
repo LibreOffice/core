@@ -976,7 +976,7 @@ IMPL_LINK_TYPED(SpellDialog, ModifyHdl, Edit&, rEd, void)
 IMPL_LINK_NOARG_TYPED(SpellDialog, CancelHdl, Button*, void)
 {
     //apply changes and ignored text parts first - if there are any
-    rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(true), false);
+    rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(), false);
     Close();
 }
 
@@ -1048,7 +1048,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
     if(!bUseSavedSentence)
     {
         //apply changes and ignored text parts
-        rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(true), bRecheck);
+        rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(), bRecheck);
     }
     m_pSentenceED->ResetIgnoreErrorsAt();
     m_pSentenceED->ResetModified();
@@ -1852,7 +1852,7 @@ static void lcl_InsertBreakPosition_Impl(
     Returns the text in spell portions. Each portion contains text with an
     equal language and attribute. The spell alternatives are empty.
   -----------------------------------------------------------------------*/
-svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnoreFlag ) const
+svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 {
     svx::SpellPortions aRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1913,7 +1913,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
                 aPortion1.sText = pTextEngine->GetText(
                             TextSelection(TextPaM(0, nStart), TextPaM(0, aStart->nPosition)));
                 bool bIsIgnoreError = m_aIgnoreErrorsAt.find( nStart ) != m_aIgnoreErrorsAt.end();
-                if( bSetIgnoreFlag && bIsIgnoreError )
+                if( bIsIgnoreError )
                 {
                     aPortion1.bIgnoreThisError = true;
                 }

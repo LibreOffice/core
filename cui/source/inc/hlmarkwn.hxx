@@ -99,7 +99,7 @@ public:
     void RefreshTree(const OUString& aStrURL);
     bool SelectEntry(const OUString& aStrMark);
 
-    bool ConnectToDialog( bool bDoit = true );
+    bool ConnectToDialog();
 
     sal_uInt16 SetError( sal_uInt16 nError);
 };

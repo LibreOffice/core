@@ -107,7 +107,7 @@ public:
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
     void            SetUndoEditMode(bool bSet);
 
-    svx::SpellPortions  CreateSpellPortions( bool bSetIgnoreFlag ) const;
+    svx::SpellPortions  CreateSpellPortions() const;
 
     void            ResetUndo();
     void            Undo();
