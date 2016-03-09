@@ -244,7 +244,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
 {
     // get window position
     Point       aPos;
-    Size        aSize = pWindow->GetSizePixel();
+    Size        aSize = ::isLayoutEnabled(pWindow) ? pWindow->get_preferred_size() : pWindow->GetSizePixel();
     Rectangle   aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
     FloatingWindow *pFloatingWindow = dynamic_cast<FloatingWindow*>( pWindow );
 
