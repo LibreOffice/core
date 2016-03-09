@@ -222,67 +222,67 @@ struct CipherBF_Impl
     CipherContextBF m_context;
 };
 
-/** __rtl_cipherBF_init.
+/** BF_init.
  */
-static rtlCipherError __rtl_cipherBF_init (
+static rtlCipherError BF_init (
     CipherContextBF *ctx,
     rtlCipherMode    eMode,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
     const sal_uInt8 *pArgData, sal_Size nArgLen);
 
-/** __rtl_cipherBF_update.
+/** BF_update.
  */
-static rtlCipherError __rtl_cipherBF_update (
+static rtlCipherError BF_update (
     CipherContextBF    *ctx,
     rtlCipherMode       eMode,
     rtlCipherDirection  eDirection,
     const sal_uInt8    *pData,   sal_Size nDatLen,
     sal_uInt8          *pBuffer, sal_Size nBufLen);
 
-/** __rtl_cipherBF_updateECB.
+/** BF_updateECB.
  */
-static void __rtl_cipherBF_updateECB (
+static void BF_updateECB (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
     sal_uInt8          *pBuffer,
     sal_Size            nLength);
 
-/** __rtl_cipherBF_updateCBC.
+/** BF_updateCBC.
  */
-static void __rtl_cipherBF_updateCBC (
+static void BF_updateCBC (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
     sal_uInt8          *pBuffer,
     sal_Size          nLength);
 
-/** __rtl_cipherBF_updateCFB.
+/** BF_updateCFB.
  */
-static void __rtl_cipherBF_updateCFB (
+static void BF_updateCFB (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
     sal_uInt8          *pBuffer);
 
-/** __rtl_cipher_encode.
+/** _encode.
  */
-static void __rtl_cipherBF_encode (
+static void BF_encode (
     CipherKeyBF *key, sal_uInt32 *xl, sal_uInt32 *xr);
 
-/** __rtl_cipherBF_decode.
+/** BF_decode.
  */
-static void __rtl_cipherBF_decode (
+static void BF_decode (
     CipherKeyBF *key, sal_uInt32 *xl, sal_uInt32 *xr);
 
-/** __rtl_cipherBF.
+/** BF.
  */
-static sal_uInt32 __rtl_cipherBF (
+static sal_uInt32 BF (
     CipherKeyBF *key, sal_uInt32 x);
 
-/** __rtl_cipherBF_key.
+/** BF_key.
  */
-static const CipherKeyBF __rtl_cipherBF_key =
+static const CipherKeyBF BF_key =
 {
     /* S */
     {
@@ -646,9 +646,9 @@ static const CipherKeyBF __rtl_cipherBF_key =
 };
 
 /*
- * __rtl_cipherBF_init.
+ * BF_init.
  */
-static rtlCipherError __rtl_cipherBF_init (
+static rtlCipherError BF_init (
     CipherContextBF *ctx,
     rtlCipherMode    eMode,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
@@ -660,7 +660,7 @@ static rtlCipherError __rtl_cipherBF_init (
 
     key = &(ctx->m_key);
 
-    memcpy (key, &__rtl_cipherBF_key, sizeof (CipherKeyBF));
+    memcpy (key, &BF_key, sizeof (CipherKeyBF));
     memset (&(ctx->m_iv), 0, sizeof(ctx->m_iv));
     ctx->m_offset = 0;
 
@@ -682,7 +682,7 @@ static rtlCipherError __rtl_cipherBF_init (
 
     for (i = 0; i < CIPHER_ROUNDS_BF + 2; i += 2)
     {
-        __rtl_cipherBF_encode (key, &DL, &DR);
+        BF_encode (key, &DL, &DR);
         key->m_P[i    ] = DL;
         key->m_P[i + 1] = DR;
     }
@@ -691,7 +691,7 @@ static rtlCipherError __rtl_cipherBF_init (
     {
         for (k = 0; k < 256; k += 2)
         {
-            __rtl_cipherBF_encode (key, &DL, &DR);
+            BF_encode (key, &DL, &DR);
             key->m_S[i][k    ] = DL;
             key->m_S[i][k + 1] = DR;
         }
@@ -716,9 +716,9 @@ static rtlCipherError __rtl_cipherBF_init (
 }
 
 /*
- * __rtl_cipherBF_update.
+ * BF_update.
  */
-static rtlCipherError __rtl_cipherBF_update (
+static rtlCipherError BF_update (
     CipherContextBF    *ctx,
     rtlCipherMode       eMode,
     rtlCipherDirection  eDirection,
@@ -738,31 +738,31 @@ static rtlCipherError __rtl_cipherBF_update (
         /* Block mode. */
         while (nDatLen > 8)
         {
-            __rtl_cipherBF_updateECB (ctx, eDirection, pData, pBuffer, 8);
+            BF_updateECB (ctx, eDirection, pData, pBuffer, 8);
             nDatLen -= 8;
             pData   += 8;
             pBuffer += 8;
         }
-        __rtl_cipherBF_updateECB (ctx, eDirection, pData, pBuffer, nDatLen);
+        BF_updateECB (ctx, eDirection, pData, pBuffer, nDatLen);
     }
     else if (eMode == rtl_Cipher_ModeCBC)
     {
         /* Block mode. */
         while (nDatLen > 8)
         {
-            __rtl_cipherBF_updateCBC (ctx, eDirection, pData, pBuffer, 8);
+            BF_updateCBC (ctx, eDirection, pData, pBuffer, 8);
             nDatLen -= 8;
             pData   += 8;
             pBuffer += 8;
         }
-        __rtl_cipherBF_updateCBC (ctx, eDirection, pData, pBuffer, nDatLen);
+        BF_updateCBC (ctx, eDirection, pData, pBuffer, nDatLen);
     }
     else
     {
         /* Stream mode. */
         while (nDatLen > 0)
         {
-            __rtl_cipherBF_updateCFB (ctx, eDirection, pData, pBuffer);
+            BF_updateCFB (ctx, eDirection, pData, pBuffer);
             nDatLen -= 1;
             pData   += 1;
             pBuffer += 1;
@@ -772,9 +772,9 @@ static rtlCipherError __rtl_cipherBF_update (
 }
 
 /*
- * __rtl_cipherBF_updateECB.
+ * BF_updateECB.
  */
-static void __rtl_cipherBF_updateECB (
+static void BF_updateECB (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
@@ -789,7 +789,7 @@ static void __rtl_cipherBF_updateECB (
     {
         RTL_CIPHER_NTOHL64(pData, DL, DR, nLength);
 
-        __rtl_cipherBF_encode (key, &DL, &DR);
+        BF_encode (key, &DL, &DR);
 
         RTL_CIPHER_HTONL(DL, pBuffer);
         RTL_CIPHER_HTONL(DR, pBuffer);
@@ -799,7 +799,7 @@ static void __rtl_cipherBF_updateECB (
         RTL_CIPHER_NTOHL(pData, DL);
         RTL_CIPHER_NTOHL(pData, DR);
 
-        __rtl_cipherBF_decode (key, &DL, &DR);
+        BF_decode (key, &DL, &DR);
 
         RTL_CIPHER_HTONL64(DL, DR, pBuffer, nLength);
     }
@@ -807,9 +807,9 @@ static void __rtl_cipherBF_updateECB (
 }
 
 /*
- * __rtl_cipherBF_updateCBC.
+ * BF_updateCBC.
  */
-static void __rtl_cipherBF_updateCBC (
+static void BF_updateCBC (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
@@ -827,7 +827,7 @@ static void __rtl_cipherBF_updateCBC (
         DL ^= ctx->m_iv.m_long[0];
         DR ^= ctx->m_iv.m_long[1];
 
-        __rtl_cipherBF_encode (key, &DL, &DR);
+        BF_encode (key, &DL, &DR);
 
         ctx->m_iv.m_long[0] = DL;
         ctx->m_iv.m_long[1] = DR;
@@ -845,7 +845,7 @@ static void __rtl_cipherBF_updateCBC (
         IVL = DL;
         IVR = DR;
 
-        __rtl_cipherBF_decode (key, &DL, &DR);
+        BF_decode (key, &DL, &DR);
 
         DL ^= ctx->m_iv.m_long[0];
         DR ^= ctx->m_iv.m_long[1];
@@ -859,9 +859,9 @@ static void __rtl_cipherBF_updateCBC (
 }
 
 /*
- * __rtl_cipherBF_updateCFB.
+ * BF_updateCFB.
  */
-static void __rtl_cipherBF_updateCFB (
+static void BF_updateCFB (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
@@ -878,7 +878,7 @@ static void __rtl_cipherBF_updateCFB (
         sal_uInt32 IVL, IVR;
 
         RTL_CIPHER_NTOHL64(iv, IVL, IVR, 8);
-        __rtl_cipherBF_encode (&(ctx->m_key), &IVL, &IVR);
+        BF_encode (&(ctx->m_key), &IVL, &IVR);
         RTL_CIPHER_HTONL64(IVL, IVR, iv, 8);
 
         IVL = IVR = 0;
@@ -901,9 +901,9 @@ static void __rtl_cipherBF_updateCFB (
 }
 
 /*
- * __rtl_cipherBF_encode.
+ * BF_encode.
  */
-static void __rtl_cipherBF_encode (
+static void BF_encode (
     CipherKeyBF *key, sal_uInt32 *xl, sal_uInt32 *xr)
 {
     sal_uInt32  t, XL, XR;
@@ -915,7 +915,7 @@ static void __rtl_cipherBF_encode (
     for (i = 0; i < CIPHER_ROUNDS_BF; ++i)
     {
         XL ^= key->m_P[i];
-        XR ^= __rtl_cipherBF (key, XL);
+        XR ^= BF (key, XL);
 
         t  = XL;
         XL = XR;
@@ -935,9 +935,9 @@ static void __rtl_cipherBF_encode (
 }
 
 /*
- * __rtl_cipherBF_decode.
+ * BF_decode.
  */
-static void __rtl_cipherBF_decode (
+static void BF_decode (
     CipherKeyBF *key, sal_uInt32 *xl, sal_uInt32 *xr)
 {
     sal_uInt32  t, XL, XR;
@@ -949,7 +949,7 @@ static void __rtl_cipherBF_decode (
     for (i = CIPHER_ROUNDS_BF + 1; i > 1; --i)
     {
         XL ^= key->m_P[i];
-        XR ^= __rtl_cipherBF (key, XL);
+        XR ^= BF (key, XL);
 
         t  = XL;
         XL = XR;
@@ -969,9 +969,9 @@ static void __rtl_cipherBF_decode (
 }
 
 /*
- * __rtl_cipherBF.
+ * BF.
  */
-static sal_uInt32 __rtl_cipherBF (CipherKeyBF *key, sal_uInt32 x)
+static sal_uInt32 BF (CipherKeyBF *key, sal_uInt32 x)
 {
     sal_uInt16 a, b, c, d;
     sal_uInt32 y;
@@ -1047,7 +1047,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
     else
         return rtl_Cipher_E_Direction;
 
-    return __rtl_cipherBF_init (
+    return BF_init (
         &(pImpl->m_context), pImpl->m_cipher.m_mode,
         pKeyData, nKeyLen, pArgData, nArgLen);
 }
@@ -1072,7 +1072,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     if (pImpl->m_cipher.m_direction == rtl_Cipher_DirectionDecode)
         return rtl_Cipher_E_Direction;
 
-    return __rtl_cipherBF_update (
+    return BF_update (
         &(pImpl->m_context), pImpl->m_cipher.m_mode,
         rtl_Cipher_DirectionEncode,
         static_cast<const sal_uInt8*>(pData), nDatLen, pBuffer, nBufLen);
@@ -1098,7 +1098,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     if (pImpl->m_cipher.m_direction == rtl_Cipher_DirectionEncode)
         return rtl_Cipher_E_Direction;
 
-    return __rtl_cipherBF_update (
+    return BF_update (
         &(pImpl->m_context), pImpl->m_cipher.m_mode,
         rtl_Cipher_DirectionDecode,
         static_cast<const sal_uInt8*>(pData), nDatLen, pBuffer, nBufLen);
