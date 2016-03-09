@@ -971,7 +971,7 @@ SwContentNotify::~SwContentNotify()
     // #i44049#
     if ( pCnt->IsTextFrame() && POS_DIFF( maFrame, pCnt->Frame() ) )
     {
-        pCnt->InvalidateObjs( true );
+        pCnt->InvalidateObjs();
     }
 
     // #i43255# - move code to invalidate at-character
