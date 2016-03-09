@@ -1393,7 +1393,9 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
         pTextNode->GetpSwpHints()->DeRegister();
     }
 
-    if ( m_pHistory && bInserted )
+    // if (m_pHistory->Count()) return true, then it shouldn't to be pushed into
+    // the m_pHistory->m_SwpHstry again, or Undo Action will do the same thing twice
+    if ( m_pHistory && bInserted && !m_pHistory->Count() )
     {
         SwHistoryHint* pNewHstr = new SwHistoryResetAttrSet( rSet,
                                     pTextNode->GetIndex(), nStart, nEnd );
