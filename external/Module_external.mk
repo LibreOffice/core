@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,BZIP2,bzip2) \
 	$(call gb_Helper_optional,CAIRO,cairo) \
 	$(call gb_Helper_optional,CDR,libcdr) \
+	$(call gb_Helper_optional,OPENCL,clew) \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,CMIS,libcmis) \
 	$(call gb_Helper_optional,COINMP,coinmp) \
