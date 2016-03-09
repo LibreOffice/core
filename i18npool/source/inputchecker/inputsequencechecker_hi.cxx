@@ -99,7 +99,7 @@ static const sal_uInt16 dev_cell_check[14][14] = {
   /* 13 */ { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }  /* HD */
 };
 
-sal_Bool _DEV_Composible[2][2] = {
+sal_Bool DEV_Composible[2][2] = {
 /* Mode 0 */    {sal_True, sal_True }, // PASSTHROUGH = 0
 /* Mode 1 */    {sal_False, sal_True}  // STRICT = 1
 };
@@ -118,7 +118,7 @@ InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
   sal_uInt16  ch1 = getCharType(inputChar);
     sal_uInt16  ch2 = getCharType(currentChar);
 
-    return (_DEV_Composible[inputCheckMode][dev_cell_check[ch2][ch1]]);
+    return (DEV_Composible[inputCheckMode][dev_cell_check[ch2][ch1]]);
 }
 
 sal_Int32 SAL_CALL
