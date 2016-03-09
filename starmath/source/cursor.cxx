@@ -1488,7 +1488,8 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
             return false;
         }
 
-        sal_uInt16 index = pNode->FindIndex();
+        int index = pParentNode->IndexOfSubNode(pNode);
+        assert(index >= 0);
         if (index + 1 != pParentNode->GetNumSubNodes()) {
             // The cursor is not at the tail at one of ancestor nodes.
             return false;
