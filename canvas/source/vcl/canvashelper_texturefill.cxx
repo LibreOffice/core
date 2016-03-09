@@ -437,7 +437,7 @@ namespace vclcanvas
                                (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
                                (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )
                         rOutDev.SetFillColor( COL_RED );
 #endif
@@ -626,7 +626,7 @@ namespace vclcanvas
                 }
             }
 
-#if OSL_DEBUG_LEVEL > 3
+#if OSL_DEBUG_LEVEL > 0
             // extra-verbosity
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);

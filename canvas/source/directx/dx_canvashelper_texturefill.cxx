@@ -407,7 +407,7 @@ namespace dxcanvas
                 rGraphics->FillPath( pGradientBrush.get(), pFillPath.get() );
             }
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
             Gdiplus::Pen aPen( Gdiplus::Color( 255, 255, 0, 0 ),
                                0.0001f );
 
