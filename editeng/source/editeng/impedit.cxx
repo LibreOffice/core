@@ -1280,7 +1280,7 @@ bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong )
     return bIsWrong;
 }
 
-OUString ImpEditView::SpellIgnoreOrAddWord( bool bAdd )
+OUString ImpEditView::SpellIgnoreWord()
 {
     OUString aWord;
     if ( pEditEngine->pImpEditEngine->GetSpeller().is() )
@@ -1302,16 +1302,9 @@ OUString ImpEditView::SpellIgnoreOrAddWord( bool bAdd )
 
         if ( !aWord.isEmpty() )
         {
-            if ( bAdd )
-            {
-                OSL_FAIL( "Sorry, AddWord not implemented" );
-            }
-            else // Ignore
-            {
-                Reference< XDictionary >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
-                if (xDic.is())
-                    xDic->add( aWord, sal_False, OUString() );
-            }
+            Reference< XDictionary >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
+            if (xDic.is())
+                xDic->add( aWord, sal_False, OUString() );
             EditDoc& rDoc = pEditEngine->GetEditDoc();
             sal_Int32 nNodes = rDoc.Count();
             for ( sal_Int32 n = 0; n < nNodes; n++ )

@@ -1438,7 +1438,7 @@ IMPL_LINK_NOARG_TYPED(SwSidebarWin, DeleteHdl, void*, void)
 void SwSidebarWin::ResetAttributes()
 {
     mpOutlinerView->RemoveAttribsKeepLanguages(true);
-    mpOutliner->RemoveFields(true);
+    mpOutliner->RemoveFields();
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 

@@ -929,7 +929,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
         if ( nId == MN_IGNORE )
         {
-            OUString aWord = pImpEditView->SpellIgnoreOrAddWord( false );
+            OUString aWord = pImpEditView->SpellIgnoreWord();
             if ( pCallBack )
             {
                 SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );

@@ -580,7 +580,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
     bFirstParaIsEmpty = false;
 
-    pParaList->Clear( true );
+    pParaList->Clear();
     for( sal_Int32 nCurPara = 0; nCurPara < rPObj.Count(); nCurPara++ )
     {
         Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(nCurPara));
@@ -610,7 +610,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     sal_Int32 nPara;
     if( bFirstParaIsEmpty )
     {
-        pParaList->Clear( true );
+        pParaList->Clear();
         pEditEngine->SetText(rPObj.GetTextObject());
         nPara = 0;
     }
@@ -1105,7 +1105,7 @@ sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16
     bFirstParaIsEmpty = false;
 
     sal_Int32 nParas = pEditEngine->GetParagraphCount();
-     pParaList->Clear( true );
+     pParaList->Clear();
     for ( sal_Int32 n = 0; n < nParas; n++ )
     {
         Paragraph* pPara = new Paragraph( 0 );
@@ -1285,7 +1285,7 @@ Outliner::Outliner( SfxItemPool* pPool, sal_uInt16 nMode )
 Outliner::~Outliner()
 {
 
-    pParaList->Clear( true );
+    pParaList->Clear();
     delete pParaList;
     delete pEditEngine;
 }
@@ -1916,7 +1916,7 @@ void Outliner::Clear()
     {
         ImplBlockInsertionCallbacks( true );
         pEditEngine->Clear();
-        pParaList->Clear( true );
+        pParaList->Clear();
         pParaList->Append( new Paragraph( nMinDepth ));
         bFirstParaIsEmpty = true;
         ImplBlockInsertionCallbacks( false );
