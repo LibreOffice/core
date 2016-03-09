@@ -215,7 +215,7 @@ typedef enum _javaFrameworkError
     For convenience this API provides the function <code>jfw_freeJavaInfo</code>
     which frees the objects properly. </p>
  */
-struct _JavaInfo
+struct JavaInfo
 {
     /** contains the vendor.
 
@@ -259,8 +259,6 @@ struct _JavaInfo
      */
     sal_Sequence * arVendorData;
 };
-
-typedef struct _JavaInfo JavaInfo;
 
 /** frees the memory of a <code>JavaInfo</code> object.
     @param pInfo

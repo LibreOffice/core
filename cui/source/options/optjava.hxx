@@ -37,7 +37,7 @@
 // forward ---------------------------------------------------------------
 
 #if HAVE_FEATURE_JAVA
-typedef struct _JavaInfo JavaInfo;
+struct JavaInfo;
 #else
 typedef void* JavaInfo;
 #endif
