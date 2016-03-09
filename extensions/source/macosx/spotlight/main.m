@@ -53,7 +53,7 @@
 //    typedefs
 
 // The layout for an instance of MetaDataImporterPlugIn
-typedef struct __MetadataImporterPluginType
+typedef struct
 {
     MDImporterInterfaceStruct *conduitInterface;
     CFUUIDRef                 factoryID;
