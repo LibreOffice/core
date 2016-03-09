@@ -1488,6 +1488,19 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
     }
 }
 
+void ORowSetCache::rotateAllCacheIterators()
+{
+    // now correct the iterator in our iterator vector
+    auto aCacheEnd  = m_aCacheIterators.end();
+    for (auto aCacheIter = m_aCacheIterators.begin(); aCacheIter != aCacheEnd; ++aCacheIter)
+    {
+        if (!aCacheIter->second.pRowSet->isInsertRow() && !m_bModified)
+        {
+            aCacheIter->second.aIterator = m_pMatrix->end();
+        }
+    }
+}
+
 void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow)
 {
     m_aInsertRow = m_pInsertMatrix->begin();
@@ -1676,7 +1689,7 @@ bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos, sal_Int32 _nNewEndPos)
     bool bRet = fillMatrix(nNewSt,_nNewEndPos);
     m_nStartPos = nNewSt;
     m_nEndPos = _nNewEndPos;
-    rotateCacheIterator(static_cast<ORowSetMatrix::difference_type>(m_nFetchSize+1)); // invalidate every iterator
+    rotateAllCacheIterators(); // invalidate every iterator
     return bRet;
 }
 

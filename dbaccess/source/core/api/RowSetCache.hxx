@@ -100,6 +100,7 @@ namespace dbaccess
         void moveWindow();
 
         void rotateCacheIterator(ORowSetMatrix::difference_type _nDist);
+        void rotateAllCacheIterators();
         void updateValue(sal_Int32 columnIndex
                         ,const connectivity::ORowSetValue& x
                         ,ORowSetValueVector::Vector& io_aRow
