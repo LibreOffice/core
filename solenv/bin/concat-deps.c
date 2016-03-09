@@ -689,7 +689,7 @@ int fd;
     return buffer;
 }
 
-static void _cancel_relative(char const * base, char** ref_cursor, char** ref_cursor_out, char const * end)
+static void cancel_relative(char const * base, char** ref_cursor, char** ref_cursor_out, char const * end)
 {
     char* cursor = *ref_cursor;
     char* cursor_out = *ref_cursor_out;
@@ -906,7 +906,7 @@ FILE* depfile;
     return !depfile;
 }
 
-static int _process(struct hash* dep_hash, char* fn)
+static int process(struct hash* dep_hash, char* fn)
 {
 int rc;
 char* buffer;
@@ -944,7 +944,7 @@ off_t size;
                 {
                     if(!memcmp(cursor, "/../", 4))
                     {
-                        _cancel_relative(base, &cursor, &cursor_out, end);
+                        cancel_relative(base, &cursor, &cursor_out, end);
                     }
                 }
                 *cursor_out++ = *cursor++;
@@ -1097,7 +1097,7 @@ off_t size;
     return rc;
 }
 
-static void _usage(void)
+static void usage(void)
 {
     fputs("Usage: concat-deps <file that contains dep_files>\n", stderr);
 }
@@ -1128,7 +1128,7 @@ const char *env_str;
 
     if(argc < 2)
     {
-        _usage();
+        usage();
         return 1;
     }
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
@@ -1157,7 +1157,7 @@ const char *env_str;
                 *in_list_cursor = 0;
                 if(in_list_base < in_list_cursor)
                 {
-                    rc = _process(dep_hash, in_list_base);
+                    rc = process(dep_hash, in_list_base);
                     if(rc)
                     {
                         break;
@@ -1176,7 +1176,7 @@ const char *env_str;
             /* catch the last entry in case the input did not terminate with a 'space' */
             if(in_list_base < in_list_cursor)
             {
-                rc = _process(dep_hash, in_list_base);
+                rc = process(dep_hash, in_list_base);
             }
         }
 #ifdef HASH_STAT
