@@ -402,7 +402,7 @@ namespace sdr
             // always append an invisible outline for the cases where no visible content exists
             xRetval.push_back(
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                    false, aObjectMatrix));
+                    aObjectMatrix));
 
             return xRetval;
         }

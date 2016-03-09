@@ -327,7 +327,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
     // always append an invisible outline for the cases where no visible content exists
     xRetval.push_back(
         drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-            false, getObjectTransformation()));
+            getObjectTransformation()));
 
     return xRetval;
 }

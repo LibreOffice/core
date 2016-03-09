@@ -715,7 +715,6 @@ namespace sdr
                 // created an invisible outline for the cases where no visible content exists
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                        false,
                         aObjectMatrix));
 
                 return drawinglayer::primitive2d::Primitive2DContainer { xReference };

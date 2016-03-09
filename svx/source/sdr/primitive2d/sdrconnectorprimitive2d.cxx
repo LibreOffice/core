@@ -43,7 +43,6 @@ namespace drawinglayer
                 // create invisible line for HitTest/BoundRect
                 aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
-                        false,
                         basegfx::B2DPolyPolygon(getUnitPolygon())));
             }
             else

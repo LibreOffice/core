@@ -39,11 +39,9 @@ namespace drawinglayer
     {
         // helpers to create HitTestPrimitives Line
         Primitive2DReference DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives2D(
-            bool bFilled,
             const basegfx::B2DHomMatrix& rMatrix);
 
         Primitive2DReference DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives2D(
-            bool bFilled,
             const basegfx::B2DPolyPolygon& rPolygon);
 
         Primitive2DReference DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives2D(

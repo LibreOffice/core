@@ -30,23 +30,21 @@ namespace drawinglayer
     namespace primitive2d
     {
         Primitive2DReference createHiddenGeometryPrimitives2D(
-            bool bFilled,
             const basegfx::B2DHomMatrix& rMatrix)
         {
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
             return createHiddenGeometryPrimitives2D(
-                bFilled,
+                false/*bFilled*/,
                 basegfx::B2DPolyPolygon(aUnitOutline),
                 rMatrix);
         }
 
         Primitive2DReference createHiddenGeometryPrimitives2D(
-            bool bFilled,
             const basegfx::B2DPolyPolygon& rPolyPolygon)
         {
             return createHiddenGeometryPrimitives2D(
-                bFilled,
+                false/*bFilled*/,
                 rPolyPolygon,
                 basegfx::B2DHomMatrix());
         }

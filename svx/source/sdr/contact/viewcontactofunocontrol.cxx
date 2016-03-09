@@ -136,7 +136,7 @@ namespace sdr { namespace contact {
             // always append an invisible outline for the cases where no visible content exists
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                    false, aTransform));
+                    aTransform));
 
             return drawinglayer::primitive2d::Primitive2DContainer { xRetval };
         }

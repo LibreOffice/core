@@ -279,7 +279,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
         // on the handout page more simple, add hidden fill geometry
         const drawinglayer::primitive2d::Primitive2DReference xFrameHit(
             drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                false,
                 aPageObjectTransform));
         xRetval = drawinglayer::primitive2d::Primitive2DContainer { xFrameHit };
     }
