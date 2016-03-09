@@ -62,12 +62,12 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 
 } // namespace
 
-const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
-const sal_uInt16 _MAX_FRACTION_PREC = 3;
+const double D_MAX_U_LONG = (double) 0xffffffff;      // 4294967295.0
+const sal_uInt16 MAX_FRACTION_PREC = 3;
 const double D_EPS = 1.0E-2;
 
-const double _D_MAX_D_BY_100  = 1.7E306;
-const double _D_MIN_M_BY_1000 = 2.3E-305;
+const double D_MAX_D_BY_100  = 1.7E306;
+const double D_MIN_M_BY_1000 = 2.3E-305;
 
 static const sal_uInt8 cCharWidths[ 128-32 ] = {
     1,1,1,2,2,3,2,1,1,1,1,2,1,1,1,1,
@@ -1788,7 +1788,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString)
 {
     bool bModified = false;
-    if ( (eType & css::util::NumberFormat::PERCENT) && (fabs(fNumber) < _D_MAX_D_BY_100))
+    if ( (eType & css::util::NumberFormat::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))
     {
         if (fNumber == 0.0)
         {
@@ -2409,7 +2409,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     double fNum = floor(fNumber); // Integral part
 
     fNumber -= fNum; // Fractional part
-    if (fNum > _D_MAX_U_LONG_ || rInfo.nCntExp > 9) // Too large
+    if (fNum > D_MAX_U_LONG || rInfo.nCntExp > 9) // Too large
     {
         sBuff = rScan.GetErrorString();
         return false;
@@ -2424,7 +2424,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     sal_uLong nBasis = ((sal_uLong)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
     sal_uLong x0, y0, x1, y1;
 
-    if (rInfo.nCntExp <= _MAX_FRACTION_PREC)
+    if (rInfo.nCntExp <= MAX_FRACTION_PREC)
     {
         bool bUpperHalf;
 
@@ -2602,7 +2602,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     {
         double fNum1 = fNum * (double)nDiv + (double)nFrac;
 
-        if (fNum1 > _D_MAX_U_LONG_)
+        if (fNum1 > D_MAX_U_LONG)
         {
             sBuff = rScan.GetErrorString();
             return false;
@@ -2749,7 +2749,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     {
         bSign = false; // Not -00:00:00
     }
-    if( floor( fTime ) > _D_MAX_U_LONG_ )
+    if( floor( fTime ) > D_MAX_U_LONG )
     {
         sBuff = rScan.GetErrorString();
         return false;
@@ -3857,7 +3857,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     if (rInfo.eScannedType == css::util::NumberFormat::PERCENT)
     {
-        if (fNumber < _D_MAX_D_BY_100)
+        if (fNumber < D_MAX_D_BY_100)
         {
             fNumber *= 100.0;
         }
@@ -3876,7 +3876,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         long nPrecExp;
         for (i = 0; i < nThousand; i++)
         {
-           if (fNumber > _D_MIN_M_BY_1000)
+           if (fNumber > D_MIN_M_BY_1000)
            {
                fNumber /= 1000.0;
            }
