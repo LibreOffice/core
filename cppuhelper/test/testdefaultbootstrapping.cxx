@@ -50,10 +50,7 @@ SAL_IMPLEMENT_MAIN()
             if (!arg.isEmpty())
             {
                 Reference<XInterface> xInterface = smgr->createInstance(arg);
-                OString tmp = OUStringToOString(arg, RTL_TEXTENCODING_ASCII_US);
-#if OSL_DEBUG_LEVEL > 1
-                fprintf(stderr, "got the %s service %p\n", tmp.getStr(), xInterface.get());
-#endif
+                SAL_INFO("cppuhelper", "got the " << arg << " service " << xInterface.get());
 
                 result = result && (xInterface.get() != 0);
             }
@@ -65,9 +62,7 @@ SAL_IMPLEMENT_MAIN()
         fprintf(stderr, "an exception occurred: %s\n", message.getStr());
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("---------------------------------- %i", result);
-#endif
+    SAL_INFO("extensions", "---------------------------------- " << result);
 
     return result;
 }

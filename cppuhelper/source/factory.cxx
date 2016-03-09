@@ -699,9 +699,7 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
     }
     else if( xModuleFactory.is() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "### no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!" );
-#endif
+        SAL_INFO("cppuhelper", "no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!");
         return xModuleFactory->createInstanceWithArgumentsAndContext( Arguments, Reference< XComponentContext >() );
     }
 
@@ -732,12 +730,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
     }
     else if( xModuleFactoryDepr.is() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        if (xContext.is())
-        {
-            OSL_TRACE( "### ignoring context calling ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!" );
-        }
-#endif
+        SAL_INFO_IF(xContext.is(), "cppuhelper", "ignoring context calling ORegistryFactoryHelper::createInstaceWithArgumentsAndContext()!");
         return xModuleFactoryDepr->createInstanceWithArguments( rArguments );
     }
 
