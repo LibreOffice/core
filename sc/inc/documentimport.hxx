@@ -15,7 +15,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 class EditTextObject;
@@ -38,12 +37,11 @@ enum class SvtScriptType;
  * position calculation, or anything else that requires expensive
  * computation which are unnecessary and undesirable during import.
  */
-class SC_DLLPUBLIC ScDocumentImport : private boost::noncopyable
+class SC_DLLPUBLIC ScDocumentImport
 {
     std::unique_ptr<ScDocumentImportImpl> mpImpl;
 
     ScDocumentImport(); // disabled
-    ScDocumentImport& operator=(const ScDocumentImport&); //disabled
 
 public:
 
@@ -58,6 +56,8 @@ public:
     };
 
     ScDocumentImport(ScDocument& rDoc);
+    ScDocumentImport(const ScDocumentImport&) = delete;
+    const ScDocumentImport& operator=(const ScDocumentImport&) = delete;
     ~ScDocumentImport();
 
     ScDocument& getDoc();
