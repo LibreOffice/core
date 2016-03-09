@@ -606,7 +606,7 @@ OUString EnsureSeparator(const OUStringBuffer& rFilePath)
 void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUStringBuffer aBuffer( getSrcRootURL() );
+    OUStringBuffer aBuffer( m_directories.getSrcRootURL() );
     aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
     aBuffer.append(EnsureSeparator(aBuffer)).append(aFileExtension);
     aBuffer.append(EnsureSeparator(aBuffer)).append(aFileBase).append(aFileExtension);
@@ -615,7 +615,7 @@ void ScBootstrapFixture::createFileURL(
 
 void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
 {
-    OUStringBuffer aBuffer( getSrcRootPath());
+    OUStringBuffer aBuffer( m_directories.getSrcRootPath());
     aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
     aBuffer.append(EnsureSeparator(aBuffer)).append("contentCSV/").append(aFileBase).append("csv");
     rCSVPath = aBuffer.makeStringAndClear();

@@ -40,7 +40,7 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Calc.SpreadsheetDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Calc.SpreadsheetDocument");
     }
 
     void save(const OUString& aFilterName, TempFile& rTempFile)

@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_externals,unotest,\
 
 $(eval $(call gb_Library_add_exception_objects,unotest,\
     unotest/source/cpp/bootstrapfixturebase \
+    unotest/source/cpp/directories \
     unotest/source/cpp/filters-test \
     unotest/source/cpp/getargument \
     unotest/source/cpp/gettestargument \

@@ -80,7 +80,7 @@ void GraphicObjectTest::testSwap()
 {
     // simple non-linked case
     {
-        GraphicObject aGraphObj(lcl_loadGraphic(getURLFromSrc(aGraphicFile)));
+        GraphicObject aGraphObj(lcl_loadGraphic(m_directories.getURLFromSrc(aGraphicFile)));
         CPPUNIT_ASSERT(!aGraphObj.HasSwapStreamHdl());
         CPPUNIT_ASSERT(!aGraphObj.IsSwappedOut());
         CPPUNIT_ASSERT_EQUAL(nGraphicSizeBytes, aGraphObj.GetGraphic().GetSizeBytes());
@@ -96,7 +96,7 @@ void GraphicObjectTest::testSwap()
 
     // linked case
     {
-        GraphicObject aGraphObj(lcl_loadGraphic(getURLFromSrc(aGraphicFile)));
+        GraphicObject aGraphObj(lcl_loadGraphic(m_directories.getURLFromSrc(aGraphicFile)));
         aGraphObj.SetSwapStreamHdl(LINK(this, GraphicObjectTest, getLinkStream));
 
         CPPUNIT_ASSERT(aGraphObj.HasSwapStreamHdl());
@@ -114,7 +114,7 @@ void GraphicObjectTest::testSwap()
 
     // combination of two GraphicObjects
     {
-        GraphicObject aGraphObj(lcl_loadGraphic(getURLFromSrc(aGraphicFile)));
+        GraphicObject aGraphObj(lcl_loadGraphic(m_directories.getURLFromSrc(aGraphicFile)));
 
         GraphicObject aGraphObj2(aGraphObj);
         aGraphObj2.SetSwapStreamHdl(LINK(this, GraphicObjectTest, getLinkStream));
@@ -155,7 +155,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
     }
 
     uno::Reference< lang::XComponent > xComponent =
-        loadFromDesktop(getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+        loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
 
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
@@ -246,7 +246,7 @@ void GraphicObjectTest::testTdf88935()
 
     // Load a file with two images
     uno::Reference< lang::XComponent > xComponent =
-        loadFromDesktop(getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+        loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
     SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();

@@ -37,7 +37,7 @@ public:
 
         // repositories that we will be checking
         m_aRepositoryList.realloc( 1 );
-        m_aRepositoryList[0] = getURLFromSrc( "/extensions/qa/update/simple.xml" );
+        m_aRepositoryList[0] = m_directories.getURLFromSrc( "/extensions/qa/update/simple.xml" );
     }
 
     virtual void tearDown() override

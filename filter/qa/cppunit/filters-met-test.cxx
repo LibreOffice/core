@@ -60,7 +60,7 @@ bool MetFilterTest::load(const OUString &,
 void MetFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/met/"));
+        m_directories.getURLFromSrc("/filter/qa/cppunit/data/met/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MetFilterTest);

@@ -53,7 +53,7 @@ namespace
     void PackageTest::test()
     {
         testDir(OUString(),
-            getURLFromSrc("/package/qa/cppunit/data/"));
+            m_directories.getURLFromSrc("/package/qa/cppunit/data/"));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(PackageTest);

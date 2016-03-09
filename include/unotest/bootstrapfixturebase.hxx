@@ -11,7 +11,6 @@
 
 #include <sal/config.h>
 
-#include <rtl/string.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -21,6 +20,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <unotest/detail/unotestdllapi.hxx>
+#include <unotest/directories.hxx>
 
 namespace test {
 
@@ -33,13 +33,8 @@ namespace test {
 // run of unit tests ...
 class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 {
-private:
-  OUString m_aSrcRootURL;
-  OUString m_aSrcRootPath;
-  OUString m_aWorkdirRootURL;
-  OUString m_aWorkdirRootPath;
-
 protected:
+  Directories m_directories;
   css::uno::Reference<css::uno::XComponentContext> m_xContext;
   css::uno::Reference<css::lang::XMultiServiceFactory> m_xSFactory;
   css::uno::Reference<css::lang::XMultiComponentFactory> m_xFactory;
@@ -53,24 +48,6 @@ public:
   css::uno::Reference<css::lang::XMultiServiceFactory>
               getMultiServiceFactory() { return m_xSFactory; }
 
-  OUString getSrcRootURL()       { return m_aSrcRootURL; }
-  OUString getSrcRootPath()      { return m_aSrcRootPath; }
-
-  // return a URL to a given c-str path from the source directory
-  OUString getURLFromSrc( const char *pPath );
-  OUString getURLFromSrc( const OUString& rPath );
-
-  // return a Path to a given c-str path from the source directory
-  OUString getPathFromSrc( const char *pPath );
-
-
-  // return a URL to a given c-str path from the workdir directory
-  OUString getURLFromWorkdir( const char *pPath );
-
-#ifdef _WIN32
-  // return a Path to a given c-str path from the workdir directory
-  OUString getPathFromWorkdir( const char *pPath );
-#endif
   virtual void setUp() override;
   virtual void tearDown() override;
 
