@@ -209,7 +209,7 @@ void SigningTest::testOOXMLAppend()
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-        osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
+                         osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
@@ -265,7 +265,7 @@ void SigningTest::testOOXMLRemoveAll()
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-        osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
+                         osl::File::copy(getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());

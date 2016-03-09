@@ -592,7 +592,7 @@ public:
 
 inline void SwViewShell::ResetInvalidRect()
 {
-   maInvalidRect.Clear();
+    maInvalidRect.Clear();
 }
 
 inline void SwViewShell::StartAction()
