@@ -281,6 +281,8 @@ protected:
                css::lang::WrappedTargetException,
                css::uno::RuntimeException,
                std::exception);
+    uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase, SfxStyleSheetBase* pBase)
+        throw(uno::RuntimeException, std::exception);
     css::uno::Sequence< css::uno::Any > SAL_CALL GetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -1943,13 +1945,11 @@ void SwXStyle::setPropertyValues(
     }
 }
 
-static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
-                        const SfxItemPropertySet& rPropSet,
-                        SwStyleBase_Impl& rBase,
-                        SfxStyleSheetBase* pBase,
-                        SfxStyleFamily eFamily,
-                        SwDoc *pDoc) throw(uno::RuntimeException, std::exception)
+uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase, SfxStyleSheetBase* pBase)
+    throw(uno::RuntimeException, std::exception)
 {
+    SwDoc* pDoc = GetDoc();
+    SfxStyleFamily eFamily = GetFamily();
     uno::Any aRet;
 
     if(FN_UNO_IS_PHYSICAL == rEntry.nWID)
@@ -2302,7 +2302,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                 m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
             }
 
-            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, m_rEntry.m_eFamily, GetDoc() );
+            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase);
         }
         else if(m_bIsDescriptor)
         {
@@ -3345,7 +3345,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
                             {
                                 SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast< SfxItemSet& >(rSetSet));
-                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc());
+                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase);
                             }
                         }
                         else if(pEntry->nWID == SID_ATTR_PAGE_ON)
@@ -3370,7 +3370,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             default:
                             {
                                 // part of PageStyle, fallback to default
-                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase);
                             }
                         }
                     }
@@ -3416,14 +3416,14 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
                             {
                                 SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast<SfxItemSet&>(rSetSet));
-                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc());
+                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase);
                             }
                         }
                     }
                     else
                     {
                         // part of PageStyle, fallback to default
-                        pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                        pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase);
                     }
 
                     break;
@@ -3499,7 +3499,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 default:
                 {
                     //UUUU
-                    pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                    pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase);
                     break;
                 }
             }
