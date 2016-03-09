@@ -21,7 +21,7 @@
 
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
-#include "jvmfwk/framework.h"
+#include "jvmfwk/framework.hxx"
 #include "vendorplugin.hxx"
 
 /** typedefs for functions from vendorplugin.hxx
