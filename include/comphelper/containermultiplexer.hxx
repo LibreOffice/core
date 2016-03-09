@@ -53,7 +53,7 @@ namespace comphelper
         virtual void _elementInserted( const css::container::ContainerEvent& _rEvent )
             throw (css::uno::RuntimeException,
                    std::exception);
-        virtual void _elementRemoved( const css::container::ContainerEvent& _Event )
+        virtual void _elementRemoved( const css::container::ContainerEvent& _rEvent )
             throw (css::uno::RuntimeException,
                    std::exception);
         virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent )
