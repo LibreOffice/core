@@ -448,7 +448,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         pNewParser = pCUPSParser;
 
                         /*int nConflicts =*/ cupsMarkOptions( pPPD, pDest->num_options, pDest->options );
-                        SAL_INFO("vcl.unx.print", "processing the following options for printer " << pDest->name << " (instance " << pDest->instance << "):");
+                        SAL_INFO("vcl.unx.print", "processing the following options for printer " << pDest->name << " (instance " << (pDest->instance == nullptr ? "null" : pDest->instance) << "):");
                         for( int k = 0; k < pDest->num_options; k++ )
                             SAL_INFO("vcl.unx.print",
                                 "   \"" << pDest->options[k].name <<
