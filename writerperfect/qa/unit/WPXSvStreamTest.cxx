@@ -293,7 +293,7 @@ void WPXSvStreamTest::testStructured()
 {
     // OLE2
     {
-        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(getURLFromSrc(aOLEFile)));
+        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(m_directories.getURLFromSrc(aOLEFile)));
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
@@ -314,7 +314,7 @@ void WPXSvStreamTest::testStructured()
 
     // Zip
     {
-        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(getURLFromSrc(aZipFile)));
+        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(m_directories.getURLFromSrc(aZipFile)));
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());

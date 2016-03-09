@@ -31,7 +31,7 @@ class WmfTest : public test::BootstrapFixture, public XmlTestTools
 
     OUString getFullUrl(const OUString& sFileName)
     {
-        return getURLFromSrc(maDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
 public:

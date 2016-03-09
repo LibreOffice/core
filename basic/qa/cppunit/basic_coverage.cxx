@@ -138,7 +138,7 @@ void Coverage::process_directory(const OUString& sDirName)
 
 void Coverage::Coverage_Iterator()
 {
-    OUString sDirName = getURLFromSrc("/basic/qa/basic_coverage/");
+    OUString sDirName = m_directories.getURLFromSrc("/basic/qa/basic_coverage/");
 
     CPPUNIT_ASSERT(!sDirName.isEmpty());
     process_directory(sDirName); // any files in the root test dir are run in test harness default locale ( en-US )

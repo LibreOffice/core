@@ -134,54 +134,54 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 void SwFiltersTest::testCVEs()
 {
     testDir("StarOffice XML (Writer)",
-            getURLFromSrc("/sw/qa/core/data/xml/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/xml/"),
             FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir("writer8",
-            getURLFromSrc("/sw/qa/core/data/odt/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/odt/"),
             FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir("MS Word 97",
-            getURLFromSrc("/sw/qa/core/data/ww8/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/ww8/"),
             FILTER_WW8);
 
     testDir("MS WinWord 6.0",
-            getURLFromSrc("/sw/qa/core/data/ww6/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/ww6/"),
             sWW6);
 
     testDir("MS WinWord 5",
-            getURLFromSrc("/sw/qa/core/data/ww5/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/ww5/"),
             sWW5);
 
     testDir("Text (encoded)",
-            getURLFromSrc("/sw/qa/core/data/txt/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/txt/"),
             FILTER_TEXT_DLG);
 
     testDir("MS Word 2007 XML",
-            getURLFromSrc("/sw/qa/core/data/ooxml/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/ooxml/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
     testDir("Rich Text Format",
-            getURLFromSrc("/sw/qa/core/data/rtf/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/rtf/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
     testDir("HTML",
-            getURLFromSrc("/sw/qa/core/data/html/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/html/"),
             sHTML);
 
     testDir("T602Document",
-            getURLFromSrc("/sw/qa/core/data/602/"),
+            m_directories.getURLFromSrc("/sw/qa/core/data/602/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
     testDir("Rich Text Format",
-            getURLFromSrc("/sw/qa/core/exportdata/rtf/"),
+            m_directories.getURLFromSrc("/sw/qa/core/exportdata/rtf/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER,
             SotClipboardFormatId::NONE,
@@ -189,7 +189,7 @@ void SwFiltersTest::testCVEs()
             /*bExport=*/true);
 
     testDir("HTML",
-            getURLFromSrc("/sw/qa/core/exportdata/html/"),
+            m_directories.getURLFromSrc("/sw/qa/core/exportdata/html/"),
             sHTML,
             SfxFilterFlags::NONE,
             SotClipboardFormatId::NONE,
@@ -197,7 +197,7 @@ void SwFiltersTest::testCVEs()
             /*bExport=*/true);
 
     testDir("MS Word 2007 XML",
-            getURLFromSrc("/sw/qa/core/exportdata/ooxml/"),
+            m_directories.getURLFromSrc("/sw/qa/core/exportdata/ooxml/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER,
             SotClipboardFormatId::NONE,

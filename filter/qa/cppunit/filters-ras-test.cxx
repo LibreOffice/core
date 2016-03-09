@@ -60,7 +60,7 @@ bool RasFilterTest::load(const OUString &,
 void RasFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/ras/"));
+        m_directories.getURLFromSrc("/filter/qa/cppunit/data/ras/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RasFilterTest);

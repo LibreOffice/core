@@ -989,7 +989,7 @@ void SwUiWriterTest::testMergeDoc()
     SwDoc* const pDoc1(createDoc("merge-change1.odt"));
 
     auto xDoc2Component(loadFromDesktop(
-            getURLFromSrc(DATA_DIRECTORY) + "merge-change2.odt",
+            m_directories.getURLFromSrc(DATA_DIRECTORY) + "merge-change2.odt",
             "com.sun.star.text.TextDocument"));
     auto pxDoc2Document(
             dynamic_cast<SwXTextDocument *>(xDoc2Component.get()));
@@ -1707,7 +1707,7 @@ void SwUiWriterTest::testTdf69282WithMirror()
 void SwUiWriterTest::testTdf78742()
 {
     //testing with service type and any .ods file
-    OUString path = getURLFromSrc(DATA_DIRECTORY) + "calc-data-source.ods";
+    OUString path = m_directories.getURLFromSrc(DATA_DIRECTORY) + "calc-data-source.ods";
     SfxMedium aMedium(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher(OUString("com.sun.star.text.TextDocument"));
     const SfxFilter* pFilter = nullptr;
@@ -1724,7 +1724,7 @@ void SwUiWriterTest::testTdf78742()
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("calc8"), pFilter2->GetFilterName());
     //testing with service type and any .odt file
-    OUString path2 = getURLFromSrc(DATA_DIRECTORY) + "fdo69893.odt";
+    OUString path2 = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo69893.odt";
     SfxMedium aMedium3(path2, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher3(OUString("com.sun.star.text.TextDocument"));
     const SfxFilter* pFilter3 = nullptr;

@@ -113,7 +113,7 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
         maServiceName = "com.sun.star.drawing.DrawingDocument";
     }
 
-    mxComponent = loadFromDesktop(getURLFromSrc(aDir) + aName, maServiceName);
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aDir) + aName, maServiceName);
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
@@ -414,7 +414,7 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
 
 uno::Reference< chart::XChartDocument > ChartTest::getChartDocFromImpress( const char* pDir, const char* pName )
 {
-    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Draw.PresentationDocument");
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Draw.PresentationDocument");
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(mxComponent, uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xPage(
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );

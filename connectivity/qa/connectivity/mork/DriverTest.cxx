@@ -65,7 +65,7 @@ void MorkDriverTest::setUp()
     // is this the best way to pass test file through URL?
     // may be take a custom Sequence< PropertyValue > route?
     OUString url = "sdbc:address:thunderbird:unittest:" +
-        getPathFromSrc("/connectivity/qa/connectivity/mork/abook_10_john_does.mab");
+        m_directories.getPathFromSrc("/connectivity/qa/connectivity/mork/abook_10_john_does.mab");
 
     Sequence< PropertyValue > info;
     Reference< XDriver> xDriver(m_xMorkComponent, UNO_QUERY);

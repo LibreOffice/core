@@ -112,7 +112,7 @@ protected:
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
         uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
         xImporter->setTargetDocument(mxComponent);
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + rFilename, StreamMode::READ);
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + rFilename, StreamMode::READ);
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         {
@@ -138,7 +138,7 @@ public:
             std::cout << filename << ",";
             mnStartTime = osl_getGlobalTimer();
             {
-                OUString aURL(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename));
+                OUString aURL(m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename));
                 CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
                 uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
                 CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
