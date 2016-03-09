@@ -43,13 +43,13 @@ inline const sal_Int16& SAL_CALL shell::MyProperty::getAttributes() const
 {
     return Attributes;
 }
-inline void SAL_CALL shell::MyProperty::setValue( const css::uno::Any& __Value ) const
+inline void SAL_CALL shell::MyProperty::setValue( const css::uno::Any& theValue ) const
 {
-    const_cast<MyProperty*>(this)->Value = __Value;
+    const_cast<MyProperty*>(this)->Value = theValue;
 }
-inline void SAL_CALL shell::MyProperty::setState( const css::beans::PropertyState& __State ) const
+inline void SAL_CALL shell::MyProperty::setState( const css::beans::PropertyState& theState ) const
 {
-    const_cast<MyProperty*>(this)->State = __State;
+    const_cast<MyProperty*>(this)->State = theState;
 }
 
 #endif
