@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_3c7709d6",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-09T17:52:51Z",
+      "side": 1,
+      "message": "Might work, but this should be moved to the if(!bDone) block below so it is not executed while in input mode or the formula preview is to be executed or before the input line is updated. I think the right place would be between the WaitObject and CalcFormulaTree().\n\nIn that case probably best is to obtain ScInputHandler* in advance (above the if(pSh) block) as it would be used in both the if(pSh) and if(!bDone) blocks. So something like\n\n ScInputHandler* pHdl \u003d pSh ? SC_MOD()-\u003eGetInputHdl(pSh) : nullptr;\n\nso you can use if(pHdl) also in the if(!bDone) block.\n\nProbably best to check if the current position actually holds an ScFormulaCell, and only if so call SetDirty() at that, otherwise broadcasting dirty for data only could unnecessarily recalculate its dependents.",
+      "revId": "15728e992b4d4ba2f8c9f3bcfb4a57e39fe2567c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
