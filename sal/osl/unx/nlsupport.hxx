@@ -26,8 +26,8 @@
 
 namespace rtl { class OUString; }
 
-void _imp_getProcessLocale( rtl_Locale ** );
-int  _imp_setProcessLocale( rtl_Locale * );
+void imp_getProcessLocale( rtl_Locale ** );
+int  imp_setProcessLocale( rtl_Locale * );
 
 #if defined IOS || defined MACOSX
 rtl::OUString macosx_getLocale();

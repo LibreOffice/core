@@ -633,7 +633,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
  return the current process locale
  *****************************************************************************/
 
-void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     char * locale;
 
@@ -657,7 +657,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
  set the current process locale
  *****************************************************************************/
 
-int _imp_setProcessLocale( rtl_Locale * pLocale )
+int imp_setProcessLocale( rtl_Locale * pLocale )
 {
     char  locale_buf[64] = "";
     int   ret = 0;
@@ -840,7 +840,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
  return the current process locale
  *****************************************************************************/
 
-void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     rtl::OUString loc16(macosx_getLocale());
     rtl::OString locale;
@@ -880,7 +880,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
  return the current process locale
  *****************************************************************************/
 
-void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
 #ifdef ANDROID
     /* No locale environment variables on Android, so why even bother
@@ -915,7 +915,7 @@ _setenv (const char* name, const char* value)
     return setenv (name, value, 1);
 }
 
-int _imp_setProcessLocale( rtl_Locale * pLocale )
+int imp_setProcessLocale( rtl_Locale * pLocale )
 {
     char locale_buf[64];
 
