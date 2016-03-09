@@ -14,7 +14,6 @@
 
 #include <vector>
 #include <mdds/flat_segment_tree.hpp>
-#include <boost/noncopyable.hpp>
 
 class ScDocument;
 class ScColumn;
@@ -47,7 +46,7 @@ struct SC_DLLPUBLIC ColRowSpan
  * Structure that stores segments of boolean flags per column, and perform
  * custom action on those segments.
  */
-class ColumnSpanSet : private boost::noncopyable
+class ColumnSpanSet
 {
 public:
     typedef mdds::flat_segment_tree<SCROW, bool> ColumnSpansType;
@@ -87,7 +86,10 @@ public:
         virtual void executeSum(SCROW, SCROW, bool, double& )  { return; } ;
     };
 
+    ColumnSpanSet() = default;
     ColumnSpanSet(bool bInit);
+    ColumnSpanSet(const ColumnSpanSet&) = delete;
+    const ColumnSpanSet& operator=(const ColumnSpanSet&) = delete;
     ~ColumnSpanSet();
 
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);

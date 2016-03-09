@@ -29,8 +29,6 @@
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
 
-#include <boost/noncopyable.hpp>
-
 class SfxItemSet;
 class SvxBrushItem;
 class SvxBoxItem;
@@ -96,8 +94,13 @@ struct ScIconSetInfo
     bool mbShowValue;
 };
 
-struct CellInfo : boost::noncopyable
+struct CellInfo
 {
+    CellInfo() = default;
+    ~CellInfo() = default;
+    CellInfo(const CellInfo&) = delete;
+    const CellInfo& operator=(const CellInfo&) = delete;
+    
     ScRefCellValue              maCell;
 
     const ScPatternAttr*        pPatternAttr;
@@ -139,8 +142,13 @@ struct CellInfo : boost::noncopyable
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
 
-struct RowInfo : boost::noncopyable
+struct RowInfo
 {
+    RowInfo() = default;
+    ~RowInfo() = default;
+    RowInfo(const RowInfo&) = delete;
+    const RowInfo& operator=(const RowInfo&) = delete;
+    
     CellInfo*           pCellInfo;
 
     sal_uInt16          nHeight;
@@ -154,7 +162,7 @@ struct RowInfo : boost::noncopyable
     bool                bChanged:1;           // TRUE, if not tested
 };
 
-struct ScTableInfo : boost::noncopyable
+struct ScTableInfo
 {
     svx::frame::Array   maArray;
     RowInfo*            mpRowInfo;
@@ -163,6 +171,8 @@ struct ScTableInfo : boost::noncopyable
 
     explicit            ScTableInfo();
                         ~ScTableInfo();
+    ScTableInfo(const ScTableInfo&) = delete;
+    const ScTableInfo& operator=(const ScTableInfo&) = delete;
 };
 
 #endif
