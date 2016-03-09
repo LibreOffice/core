@@ -8,25 +8,22 @@
 #
 
 xmlsec_patches :=
-xmlsec_patches += xmlsec1-configure.patch
-xmlsec_patches += xmlsec1-configure-libxml-libxslt.patch
-xmlsec_patches += xmlsec1-oldlibtool.patch
-xmlsec_patches += xmlsec1-nssdisablecallbacks.patch
-xmlsec_patches += xmlsec1-nssmangleciphers.patch
-xmlsec_patches += xmlsec1-noverify.patch
-xmlsec_patches += xmlsec1-mingw-keymgr-mscrypto.patch
-xmlsec_patches += xmlsec1-vc.patch
-xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch
-xmlsec_patches += xmlsec1-android.patch
+xmlsec_patches += xmlsec1-configure.patch.1
+xmlsec_patches += xmlsec1-configure-libxml-libxslt.patch.1
+xmlsec_patches += xmlsec1-oldlibtool.patch.1
+xmlsec_patches += xmlsec1-nssdisablecallbacks.patch.1
+xmlsec_patches += xmlsec1-nssmangleciphers.patch.1
+xmlsec_patches += xmlsec1-noverify.patch.1
+xmlsec_patches += xmlsec1-mingw-keymgr-mscrypto.patch.1
+xmlsec_patches += xmlsec1-vc.patch.1
+xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
+xmlsec_patches += xmlsec1-android.patch.1
 # Partial backport of <https://github.com/lsh123/xmlsec/commit/6a4968bc33f83aaf61efc0a80333350ce9c372f5>.
-xmlsec_patches += xmlsec1-1.2.14-ansi.patch
+xmlsec_patches += xmlsec1-1.2.14-ansi.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1
 xmlsec_patches += xmlsec1-update-config.guess.patch.1
 # Upstreamed as <https://github.com/lsh123/xmlsec/commit/7069e2b0ab49679008abedd6d223fb95538b0684>.
 xmlsec_patches += xmlsec1-ooxml.patch.1
-# Partial backport of <https://github.com/lsh123/xmlsec/commit/a17e8da3a8f56348d71d325aa8d3e6366f13b512>.
-xmlsec_patches += xmlsec1-nss-sha256.patch.1
-xmlsec_patches += xmlsec1-mscrypto-sha256.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 

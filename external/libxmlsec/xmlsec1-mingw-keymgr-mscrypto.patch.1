@@ -1,26 +1,42 @@
---- misc/xmlsec1-1.2.14/src/mscrypto/Makefile.am	2009-06-26 05:53:18.000000000 +0900
-+++ misc/build/xmlsec1-1.2.14/src/mscrypto/Makefile.am	2009-09-30 18:53:05.373000000 +0900
-@@ -35,6 +35,7 @@
+From 26f650d3eb4b0c633d1dc44c7180aff836ee13b5 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:11:52 +0100
+Subject: [PATCH 07/14] xmlsec1-mingw-keymgr-mscrypto.patch
+
+Conflicts:
+	src/mscrypto/Makefile.in
+---
+ src/mscrypto/Makefile.am |  1 +
+ src/mscrypto/Makefile.in | 15 +++++++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/src/mscrypto/Makefile.am b/src/mscrypto/Makefile.am
+index 1099e3f..ccb9715 100644
+--- a/src/mscrypto/Makefile.am
++++ b/src/mscrypto/Makefile.am
+@@ -37,6 +37,7 @@ libxmlsec1_mscrypto_la_SOURCES =\
+ 	csp_calg.h \
  	csp_oid.h \
- 	globals.h \
  	xmlsec-mingw.h \
 +	akmngr.c \
  	$(NULL)
  
  if SHAREDLIB_HACK
---- misc/xmlsec1-1.2.14/src/mscrypto/Makefile.in	2009-06-26 05:53:32.000000000 +0900
-+++ misc/build/xmlsec1-1.2.14/src/mscrypto/Makefile.in	2009-09-30 19:00:50.107375000 +0900
-@@ -72,7 +72,8 @@
- am__libxmlsec1_mscrypto_la_SOURCES_DIST = app.c certkeys.c ciphers.c \
- 	crypto.c digests.c keysstore.c kt_rsa.c signatures.c symkeys.c \
- 	x509.c x509vfy.c csp_calg.h csp_oid.h globals.h xmlsec-mingw.h \
--	../strings.c
-+	../strings.c \
+diff --git a/src/mscrypto/Makefile.in b/src/mscrypto/Makefile.in
+index e3d1607..4336fe0 100644
+--- a/src/mscrypto/Makefile.in
++++ b/src/mscrypto/Makefile.in
+@@ -72,7 +72,8 @@ am__DEPENDENCIES_1 =
+ am__libxmlsec1_mscrypto_la_SOURCES_DIST = globals.h private.h app.c \
+ 	certkeys.c ciphers.c crypto.c digests.c hmac.c keysstore.c \
+ 	kt_rsa.c signatures.c symkeys.c x509.c x509vfy.c csp_calg.h \
+-	csp_oid.h xmlsec-mingw.h ../strings.c
++	csp_oid.h xmlsec-mingw.h ../strings.c \
 +	akmngr.c
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 =  \
  @SHAREDLIB_HACK_TRUE@	libxmlsec1_mscrypto_la-strings.lo
-@@ -86,7 +87,8 @@
+@@ -87,7 +88,8 @@ am_libxmlsec1_mscrypto_la_OBJECTS = libxmlsec1_mscrypto_la-app.lo \
  	libxmlsec1_mscrypto_la-signatures.lo \
  	libxmlsec1_mscrypto_la-symkeys.lo \
  	libxmlsec1_mscrypto_la-x509.lo \
@@ -30,15 +46,15 @@
  	$(am__objects_2)
  libxmlsec1_mscrypto_la_OBJECTS = $(am_libxmlsec1_mscrypto_la_OBJECTS)
  libxmlsec1_mscrypto_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-@@ -338,6 +340,7 @@
- libxmlsec1_mscrypto_la_SOURCES = app.c certkeys.c ciphers.c crypto.c \
- 	digests.c keysstore.c kt_rsa.c signatures.c symkeys.c x509.c \
- 	x509vfy.c csp_calg.h csp_oid.h globals.h xmlsec-mingw.h \
+@@ -339,6 +341,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
+ libxmlsec1_mscrypto_la_SOURCES = globals.h private.h app.c certkeys.c \
+ 	ciphers.c crypto.c digests.c hmac.c keysstore.c kt_rsa.c \
+ 	signatures.c symkeys.c x509.c x509vfy.c csp_calg.h csp_oid.h \
 +	akmngr.c \
- 	$(NULL) $(am__append_1)
+ 	xmlsec-mingw.h $(NULL) $(am__append_1)
  libxmlsec1_mscrypto_la_LIBADD = \
  	../libxmlsec1.la \
-@@ -441,6 +444,7 @@
+@@ -443,6 +446,7 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509vfy.Plo@am__quote@
@@ -46,17 +62,20 @@
  
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -470,6 +474,13 @@
+@@ -472,6 +476,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
 +libxmlsec1_mscrypto_la-akmngr.lo: akmngr.c
-+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_mscrypto_la-akmngr.lo -MD -MP -MF "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo" -c -o libxmlsec1_mscrypto_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c; \
-+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo" "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Plo"; else rm -f "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo"; exit 1; fi
++@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_mscrypto_la-akmngr.lo -MD -MP -MF $(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo -c -o libxmlsec1_mscrypto_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c
++@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo $(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Plo
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='akmngr.c' object='libxmlsec1_mscrypto_la-akmngr.lo' libtool=yes @AMDEPBACKSLASH@
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c
++@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c
 +
  libxmlsec1_mscrypto_la-certkeys.lo: certkeys.c
  @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_mscrypto_la-certkeys.lo -MD -MP -MF $(DEPDIR)/libxmlsec1_mscrypto_la-certkeys.Tpo -c -o libxmlsec1_mscrypto_la-certkeys.lo `test -f 'certkeys.c' || echo '$(srcdir)/'`certkeys.c
  @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libxmlsec1_mscrypto_la-certkeys.Tpo $(DEPDIR)/libxmlsec1_mscrypto_la-certkeys.Plo
+-- 
+2.6.2
+

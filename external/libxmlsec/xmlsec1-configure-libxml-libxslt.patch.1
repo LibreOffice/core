@@ -1,6 +1,17 @@
---- misc/xmlsec1-1.2.14/configure.in	Wed Jun 30 11:55:37 2010
-+++ misc/build/xmlsec1-1.2.14/configure.in	Wed Jun 30 11:53:55 2010
-@@ -231,7 +231,7 @@
+From 9d5883f326e74e846fa9ce987d45516454d6ba0e Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:06:58 +0100
+Subject: [PATCH 02/14] xmlsec1-configure-libxml-libxslt.patch
+
+---
+ configure.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 14cb432..cbf6e4a 100644
+--- a/configure.in
++++ b/configure.in
+@@ -220,7 +220,7 @@ fi
  if test "z$LIBXML_FOUND" = "zno" ; then
      if test "z$with_libxml" != "zyes" ; then
  	AC_PATH_PROG([LIBXML_CONFIG], [$LIBXML_CONFIG], [],
@@ -9,7 +20,7 @@
      fi
      AC_MSG_CHECKING([libxml2 $LIBXML_CONFIG ])
      if ! LIBXML_VERSION=`$LIBXML_CONFIG --version 2>/dev/null`; then
-@@ -296,7 +296,7 @@
+@@ -287,7 +287,7 @@ fi
  if test "z$LIBXSLT_FOUND" = "zno" ; then
      if test "z$with_libxslt" != "zyes" ; then
  	AC_PATH_PROG([LIBXSLT_CONFIG], [$LIBXSLT_CONFIG], [],
@@ -18,3 +29,6 @@
      fi
      AC_MSG_CHECKING(for libxslt libraries >= $LIBXSLT_MIN_VERSION) 
      if ! LIBXSLT_VERSION=`$LIBXSLT_CONFIG --version 2>/dev/null`; then
+-- 
+2.6.2
+

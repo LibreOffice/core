@@ -1,8 +1,17 @@
-From a74ad2cada3cd652f08679d65cb6e1ef3acad21c Mon Sep 17 00:00:00 2001
+From 7b79fdcd3f3872c9a7b2fed50308adeb07eb8755 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:19:12 +0100
-Subject: [PATCH] xmlsec1-customkeymanage.patch
+Subject: [PATCH 12/14] xmlsec1-customkeymanage.patch
 
+Conflicts:
+	include/xmlsec/nss/app.h
+	include/xmlsec/nss/keysstore.h
+	src/nss/hmac.c
+	src/nss/keysstore.c
+	src/nss/pkikeys.c
+	src/nss/symkeys.c
+	src/nss/x509.c
+	src/nss/x509vfy.c
 ---
  include/xmlsec/mscrypto/Makefile.am |    1 +
  include/xmlsec/mscrypto/Makefile.in |    1 +
@@ -19,15 +28,15 @@ Subject: [PATCH] xmlsec1-customkeymanage.patch
  src/nss/Makefile.in                 |   30 +-
  src/nss/akmngr.c                    |  384 +++++++++++
  src/nss/hmac.c                      |    8 +-
- src/nss/keysstore.c                 |  830 ++++++++++++++++--------
+ src/nss/keysstore.c                 |  826 ++++++++++++++++--------
  src/nss/keywrapers.c                | 1213 +++++++++++++++++++++++++++++++++++
  src/nss/pkikeys.c                   |   51 +-
- src/nss/symkeys.c                   |  717 ++++++++++++++++++++-
+ src/nss/symkeys.c                   |  705 +++++++++++++++++++-
  src/nss/tokens.c                    |  548 ++++++++++++++++
- src/nss/x509.c                      |  547 ++++------------
- src/nss/x509vfy.c                   |  303 +++------
+ src/nss/x509.c                      |  565 ++++------------
+ src/nss/x509vfy.c                   |  306 +++------
  win32/Makefile.msvc                 |    4 +
- 23 files changed, 4275 insertions(+), 960 deletions(-)
+ 23 files changed, 4259 insertions(+), 981 deletions(-)
  create mode 100644 include/xmlsec/mscrypto/akmngr.h
  create mode 100644 include/xmlsec/nss/akmngr.h
  create mode 100644 include/xmlsec/nss/ciphers.h
@@ -50,7 +59,7 @@ index 18dff94..44837b6 100644
  certkeys.h \
  crypto.h \
 diff --git a/include/xmlsec/mscrypto/Makefile.in b/include/xmlsec/mscrypto/Makefile.in
-index 1570c0f..1d02a06 100644
+index 4bc1320..689971b 100644
 --- a/include/xmlsec/mscrypto/Makefile.in
 +++ b/include/xmlsec/mscrypto/Makefile.in
 @@ -281,6 +281,7 @@ top_srcdir = @top_srcdir@
@@ -153,7 +162,7 @@ index e352162..997ca7f 100644
  
  install-exec-hook:
 diff --git a/include/xmlsec/nss/Makefile.in b/include/xmlsec/nss/Makefile.in
-index cd99f9d..3fb47cf 100644
+index 4b70b00..815d1da 100644
 --- a/include/xmlsec/nss/Makefile.in
 +++ b/include/xmlsec/nss/Makefile.in
 @@ -288,6 +288,9 @@ bignum.h \
@@ -229,7 +238,7 @@ index 0000000..8053511
 +
 +
 diff --git a/include/xmlsec/nss/app.h b/include/xmlsec/nss/app.h
-index b78492f..1d85eae 100644
+index 387d34e..d5dc345 100644
 --- a/include/xmlsec/nss/app.h
 +++ b/include/xmlsec/nss/app.h
 @@ -22,6 +22,9 @@ extern "C" {
@@ -239,18 +248,18 @@ index b78492f..1d85eae 100644
 +#include <xmlsec/nss/tokens.h>
 +#include <xmlsec/nss/akmngr.h>
 +
- /**
+ /********************************************************************
+  *
   * Init/shutdown
-  */
-@@ -36,6 +39,8 @@ XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrAdoptKey(xmlSecKeysMngrPtr
- 									    xmlSecKeyPtr key);
- XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrLoad	(xmlSecKeysMngrPtr mngr,
- 									 const char* uri);
-+XMLSEC_CRYPTO_EXPORT int		xmlSecNssAppDefaultKeysMngrAdoptKeySlot(xmlSecKeysMngrPtr mngr,
-+									 xmlSecNssKeySlotPtr keySlot);
- XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
- 									 const char* filename,
- 									 xmlSecKeyDataType type);
+@@ -40,6 +43,8 @@ XMLSEC_CRYPTO_EXPORT int                xmlSecNssAppDefaultKeysMngrAdoptKey(xmlS
+                                                                             xmlSecKeyPtr key);
+ XMLSEC_CRYPTO_EXPORT int                xmlSecNssAppDefaultKeysMngrLoad (xmlSecKeysMngrPtr mngr,
+                                                                          const char* uri);
++XMLSEC_CRYPTO_EXPORT int               xmlSecNssAppDefaultKeysMngrAdoptKeySlot(xmlSecKeysMngrPtr mngr,
++                                                                        xmlSecNssKeySlotPtr keySlot);
+ XMLSEC_CRYPTO_EXPORT int                xmlSecNssAppDefaultKeysMngrSave (xmlSecKeysMngrPtr mngr,
+                                                                          const char* filename,
+                                                                          xmlSecKeyDataType type);
 diff --git a/include/xmlsec/nss/ciphers.h b/include/xmlsec/nss/ciphers.h
 new file mode 100644
 index 0000000..607eb1e
@@ -293,11 +302,11 @@ index 0000000..607eb1e
 +
 +
 diff --git a/include/xmlsec/nss/keysstore.h b/include/xmlsec/nss/keysstore.h
-index 10e6bb3..126f2fb 100644
+index a2cc289..8571f68 100644
 --- a/include/xmlsec/nss/keysstore.h
 +++ b/include/xmlsec/nss/keysstore.h
 @@ -16,6 +16,8 @@ extern "C" {
- #endif /* __cplusplus */ 
+ #endif /* __cplusplus */
  
  #include <xmlsec/xmlsec.h>
 +#include <xmlsec/keysmngr.h>
@@ -306,14 +315,14 @@ index 10e6bb3..126f2fb 100644
  /****************************************************************************
   *
 @@ -31,6 +33,8 @@ extern "C" {
- XMLSEC_CRYPTO_EXPORT xmlSecKeyStoreId	xmlSecNssKeysStoreGetKlass	(void);
- XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreAdoptKey	(xmlSecKeyStorePtr store,
- 									 xmlSecKeyPtr key);
-+XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreAdoptKeySlot(xmlSecKeyStorePtr store,
-+									 xmlSecNssKeySlotPtr keySlot);
- XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
- 								 const char *uri,
- 								 xmlSecKeysMngrPtr keysMngr);
+ XMLSEC_CRYPTO_EXPORT xmlSecKeyStoreId   xmlSecNssKeysStoreGetKlass      (void);
+ XMLSEC_CRYPTO_EXPORT int                xmlSecNssKeysStoreAdoptKey      (xmlSecKeyStorePtr store,
+                                                                          xmlSecKeyPtr key);
++XMLSEC_CRYPTO_EXPORT int               xmlSecNssKeysStoreAdoptKeySlot(xmlSecKeyStorePtr store,
++                                                                        xmlSecNssKeySlotPtr keySlot);
+ XMLSEC_CRYPTO_EXPORT int                xmlSecNssKeysStoreLoad  (xmlSecKeyStorePtr store,
+                                                                  const char *uri,
+                                                                  xmlSecKeysMngrPtr keysMngr);
 diff --git a/include/xmlsec/nss/tokens.h b/include/xmlsec/nss/tokens.h
 new file mode 100644
 index 0000000..444c561
@@ -745,7 +754,7 @@ index 0000000..3bbd124
 +}
 +
 diff --git a/src/nss/Makefile.am b/src/nss/Makefile.am
-index 5209533..d8d3bdc 100644
+index 8cd8586..48a6bf9 100644
 --- a/src/nss/Makefile.am
 +++ b/src/nss/Makefile.am
 @@ -35,6 +35,9 @@ libxmlsec1_nss_la_SOURCES =\
@@ -759,7 +768,7 @@ index 5209533..d8d3bdc 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/nss/Makefile.in b/src/nss/Makefile.in
-index d6bc31e..50a2cb8 100644
+index d10f05f..7275b4a 100644
 --- a/src/nss/Makefile.in
 +++ b/src/nss/Makefile.in
 @@ -72,7 +72,8 @@ am__DEPENDENCIES_1 =
@@ -788,7 +797,7 @@ index d6bc31e..50a2cb8 100644
 +	akmngr.c keywrapers.c tokens.c \
  	$(NULL) $(am__append_1)
  libxmlsec1_nss_la_LIBADD = \
- 	../libxmlsec1.la \
+ 	$(NSS_LIBS) \
 @@ -439,6 +443,9 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509.Plo@am__quote@
@@ -1218,7 +1227,7 @@ index 0000000..65b94ac
 +}
 +
 diff --git a/src/nss/hmac.c b/src/nss/hmac.c
-index 98bf0c1..97dce9d 100644
+index dfe5a53..f6b26fe 100644
 --- a/src/nss/hmac.c
 +++ b/src/nss/hmac.c
 @@ -23,8 +23,8 @@
@@ -1230,32 +1239,32 @@ index 98bf0c1..97dce9d 100644
 +#include <xmlsec/nss/tokens.h>
  
  /* sizes in bits */
- #define XMLSEC_NSS_MIN_HMAC_SIZE		80
-@@ -286,13 +286,13 @@ xmlSecNssHmacSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
+ #define XMLSEC_NSS_MIN_HMAC_SIZE                80
+@@ -358,13 +358,13 @@ xmlSecNssHmacSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
      keyItem.data = xmlSecBufferGetData(buffer);
-     keyItem.len  = xmlSecBufferGetSize(buffer); 
+     keyItem.len  = xmlSecBufferGetSize(buffer);
  
 -    slot = PK11_GetBestSlot(ctx->digestType, NULL);
 +    slot = xmlSecNssSlotGet(ctx->digestType);
      if(slot == NULL) {
- 	xmlSecError(XMLSEC_ERRORS_HERE, 
- 		    xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
--		    "PK11_GetBestSlot",
-+		    "xmlSecNssSlotGet",
- 		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
-+		    "error code=%d", PORT_GetError());
- 	return(-1);
+         xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
+-                    "PK11_GetBestSlot",
++                    "xmlSecNssSlotGet",
+                     XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
++                    "error code=%d", PORT_GetError());
+         return(-1);
      }
- 	
+ 
 diff --git a/src/nss/keysstore.c b/src/nss/keysstore.c
-index a583f60..41a6d93 100644
+index f07e44b..e4cb0f1 100644
 --- a/src/nss/keysstore.c
 +++ b/src/nss/keysstore.c
 @@ -1,36 +1,56 @@
- /** 
+ /**
   * XMLSec library
-  * 
+  *
 - * Nss keys store that uses Simple Keys Store under the hood. Uses the
 - * Nss DB as a backing store for the finding keys, but the NSS DB is
 - * not written to by the keys store.
@@ -1263,12 +1272,12 @@ index a583f60..41a6d93 100644
 - * keys store, the NSS DB is looked up.
 - * If store is called to adopt a key, that key is not written to the NSS
 - * DB.
-- * Thus, the NSS DB can be used to pre-load keys and becomes an alternate 
+- * Thus, the NSS DB can be used to pre-load keys and becomes an alternate
 - * source of keys for xmlsec
-- * 
+- *
   * This is free software; see Copyright file in the source
   * distribution for precise wording.
-  * 
+  *
   * Copyright (c) 2003 America Online, Inc.  All rights reserved.
   */
 +
@@ -1309,13 +1318,13 @@ index a583f60..41a6d93 100644
  #include <stdlib.h>
  #include <string.h>
  
- #include <nss.h> 
--#include <cert.h> 
- #include <pk11func.h> 
+ #include <nss.h>
+-#include <cert.h>
+ #include <pk11func.h>
 +#include <prinit.h>
- #include <keyhi.h> 
+ #include <keyhi.h>
  
--#include <libxml/tree.h> 
+-#include <libxml/tree.h>
 -
  #include <xmlsec/xmlsec.h>
 -#include <xmlsec/buffer.h>
@@ -1324,7 +1333,7 @@ index a583f60..41a6d93 100644
  #include <xmlsec/errors.h>
  #include <xmlsec/xmltree.h>
  
-@@ -38,81 +58,460 @@
+@@ -38,82 +58,461 @@
  
  #include <xmlsec/nss/crypto.h>
  #include <xmlsec/nss/keysstore.h>
@@ -1337,22 +1346,39 @@ index a583f60..41a6d93 100644
   *
 - * Nss Keys Store. Uses Simple Keys Store under the hood
 + * Internal NSS key store context
-  * 
+  *
 - * Simple Keys Store ptr is located after xmlSecKeyStore
 + * This context is located after xmlSecKeyStore
   *
   ***************************************************************************/
+-#define xmlSecNssKeysStoreSize \
+-        (sizeof(xmlSecKeyStore) + sizeof(xmlSecKeyStorePtr))
+-
+-#define xmlSecNssKeysStoreGetSS(store) \
+-    ((xmlSecKeyStoreCheckSize((store), xmlSecNssKeysStoreSize)) ? \
+-     (xmlSecKeyStorePtr*)(((xmlSecByte*)(store)) + sizeof(xmlSecKeyStore)) : \
+-     (xmlSecKeyStorePtr*)NULL)
 +typedef struct _xmlSecNssKeysStoreCtx  xmlSecNssKeysStoreCtx ;
 +typedef struct _xmlSecNssKeysStoreCtx* xmlSecNssKeysStoreCtxPtr ;
-+
+ 
+-static int                      xmlSecNssKeysStoreInitialize    (xmlSecKeyStorePtr store);
+-static void                     xmlSecNssKeysStoreFinalize      (xmlSecKeyStorePtr store);
+-static xmlSecKeyPtr             xmlSecNssKeysStoreFindKey       (xmlSecKeyStorePtr store,
+-                                                                 const xmlChar* name,
+-                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+-
+-static xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
+-    sizeof(xmlSecKeyStoreKlass),
+-    xmlSecNssKeysStoreSize,
 +struct _xmlSecNssKeysStoreCtx {
 +       xmlSecPtrListPtr                keyList ;
 +       xmlSecPtrListPtr                slotList ;
 +} ;
-+
- #define xmlSecNssKeysStoreSize \
--	(sizeof(xmlSecKeyStore) + sizeof(xmlSecKeyStorePtr))
-+	( sizeof( xmlSecKeyStore ) + sizeof( xmlSecNssKeysStoreCtx ) )
+ 
+-    /* data */
+-    BAD_CAST "NSS-keys-store",          /* const xmlChar* name; */
++#define xmlSecNssKeysStoreSize \
++       ( sizeof( xmlSecKeyStore ) + sizeof( xmlSecNssKeysStoreCtx ) )
 +
 +#define xmlSecNssKeysStoreGetCtx( data ) \
 +       ( ( xmlSecNssKeysStoreCtxPtr )( ( ( xmlSecByte* )( data ) ) + sizeof( xmlSecKeyStore ) ) )
@@ -1406,10 +1432,10 @@ index a583f60..41a6d93 100644
 +       return 0 ;
 +}
  
--#define xmlSecNssKeysStoreGetSS(store) \
--    ((xmlSecKeyStoreCheckSize((store), xmlSecNssKeysStoreSize)) ? \
--     (xmlSecKeyStorePtr*)(((xmlSecByte*)(store)) + sizeof(xmlSecKeyStore)) : \
--     (xmlSecKeyStorePtr*)NULL)
+-    /* constructors/destructor */
+-    xmlSecNssKeysStoreInitialize,       /* xmlSecKeyStoreInitializeMethod initialize; */
+-    xmlSecNssKeysStoreFinalize,         /* xmlSecKeyStoreFinalizeMethod finalize; */
+-    xmlSecNssKeysStoreFindKey,          /* xmlSecKeyStoreFindKeyMethod findKey; */
 +int xmlSecNssKeysStoreAdoptKey(
 +       xmlSecKeyStorePtr       store ,
 +       xmlSecKeyPtr            key
@@ -1460,7 +1486,11 @@ index a583f60..41a6d93 100644
 +
 +       return 0 ;
 +}
-+
+ 
+-    /* reserved for the future */
+-    NULL,                               /* void* reserved0; */
+-    NULL,                               /* void* reserved1; */
+-};
 +/*
 + * xmlSecKeyStoreInitializeMethod:
 + * @store:             the store.
@@ -1494,18 +1524,19 @@ index a583f60..41a6d93 100644
 +       return 0 ;
 +}
  
--static int			xmlSecNssKeysStoreInitialize	(xmlSecKeyStorePtr store);
--static void			xmlSecNssKeysStoreFinalize	(xmlSecKeyStorePtr store);
--static xmlSecKeyPtr 		xmlSecNssKeysStoreFindKey	(xmlSecKeyStorePtr store, 
--								 const xmlChar* name, 
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
-+/**
-+ *
+ /**
+- * xmlSecNssKeysStoreGetKlass:
+  *
+- * The Nss list based keys store klass.
 + * xmlSecKeyStoreFinalizeMethod:
 + * @store:             the store.
-+ *
+  *
+- * Returns: Nss list based keys store klass.
 + * Keys store specific finalization (destroy) method.
-+ */
+  */
+-xmlSecKeyStoreId
+-xmlSecNssKeysStoreGetKlass(void) {
+-    return(&xmlSecNssKeysStoreKlass);
 +void
 +xmlSecNssKeysStoreFinalize(
 +       xmlSecKeyStorePtr store
@@ -1534,11 +1565,12 @@ index a583f60..41a6d93 100644
 +               xmlSecPtrListDestroy( context->slotList ) ;
 +               context->slotList = NULL ;
 +       }
-+}
+ }
  
--static xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
--    sizeof(xmlSecKeyStoreKlass),
--    xmlSecNssKeysStoreSize,
+-/**
+- * xmlSecNssKeysStoreAdoptKey:
+- * @store:              the pointer to Nss keys store.
+- * @key:                the pointer to key.
 +xmlSecKeyPtr
 +xmlSecNssKeysStoreFindKeyFromSlot(
 +       PK11SlotInfo* slot,
@@ -1676,25 +1708,23 @@ index a583f60..41a6d93 100644
 +
 +    return(key);
 +}
- 
--    /* data */
--    BAD_CAST "NSS-keys-store",		/* const xmlChar* name; */ 
--        
--    /* constructors/destructor */
--    xmlSecNssKeysStoreInitialize,	/* xmlSecKeyStoreInitializeMethod initialize; */
--    xmlSecNssKeysStoreFinalize,		/* xmlSecKeyStoreFinalizeMethod finalize; */
--    xmlSecNssKeysStoreFindKey,		/* xmlSecKeyStoreFindKeyMethod findKey; */
++
 +/** 
 + * xmlSecKeyStoreFindKeyMethod:
 + * @store:             the store.
 + * @name:              the desired key name.
 + * @keyInfoCtx:        the pointer to key info context.
-+ *
+  *
+- * Adds @key to the @store.
 + * Keys store specific find method. The caller is responsible for destroying 
 + * the returned key using #xmlSecKeyDestroy method.
-+ *
+  *
+- * Returns: 0 on success or a negative value if an error occurs.
 + * Returns the pointer to a key or NULL if key is not found or an error occurs.
-+ */
+  */
+-int
+-xmlSecNssKeysStoreAdoptKey(xmlSecKeyStorePtr store, xmlSecKeyPtr key) {
+-    xmlSecKeyStorePtr *ss;
 +static xmlSecKeyPtr
 +xmlSecNssKeysStoreFindKey(
 +       xmlSecKeyStorePtr store ,
@@ -1720,7 +1750,9 @@ index a583f60..41a6d93 100644
 +                    XMLSEC_ERRORS_NO_MESSAGE ) ;
 +            return NULL ;
 +    }
-+
+ 
+-    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
+-    xmlSecAssert2((key != NULL), -1);
 +    /*-
 +     * Look for key at keyList at first.
 +     */
@@ -1734,10 +1766,9 @@ index a583f60..41a6d93 100644
 +            }
 +    }
  
--    /* reserved for the future */
--    NULL,				/* void* reserved0; */
--    NULL,				/* void* reserved1; */
--};
+-    ss = xmlSecNssKeysStoreGetSS(store);
+-    xmlSecAssert2(((ss != NULL) && (*ss != NULL) &&
+-                   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
 +    /*-
 +     * Find the key from slotList
 +     */
@@ -1760,7 +1791,8 @@ index a583f60..41a6d93 100644
 +                    }
 +            }
 +    }
-+
+ 
+-    return (xmlSecSimpleKeysStoreAdoptKey(*ss, key));
 +    /*-
 +     * Create a session key if we can not find the key from keyList and slotList
 +     */
@@ -1794,49 +1826,25 @@ index a583f60..41a6d93 100644
 +       NULL ,
 +       NULL
 +} ;
- 
- /**
-  * xmlSecNssKeysStoreGetKlass:
-  * 
-- * The Nss list based keys store klass.
++
++/**
++ * xmlSecNssKeysStoreGetKlass:
++ *
 + * The simple list based keys store klass.
-  *
-- * Returns: Nss list based keys store klass.
-  */
- xmlSecKeyStoreId 
--xmlSecNssKeysStoreGetKlass(void) {
--    return(&xmlSecNssKeysStoreKlass);
++ *
++ */
++xmlSecKeyStoreId
 +xmlSecNssKeysStoreGetKlass( void ) {
 +    return &xmlSecNssKeysStoreKlass ;
  }
  
--/**
-- * xmlSecNssKeysStoreAdoptKey:
-- * @store:		the pointer to Nss keys store.
-- * @key:		the pointer to key.
-- * 
-- * Adds @key to the @store. 
-- *
-- * Returns: 0 on success or a negative value if an error occurs.
 +/**************************
 + * Application routines
-  */
--int 
--xmlSecNssKeysStoreAdoptKey(xmlSecKeyStorePtr store, xmlSecKeyPtr key) {
--    xmlSecKeyStorePtr *ss;
--    
--    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
--    xmlSecAssert2((key != NULL), -1);
--
--    ss = xmlSecNssKeysStoreGetSS(store);
--    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
--		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
--
--    return (xmlSecSimpleKeysStoreAdoptKey(*ss, key));
--}
- 
- /** 
++ */
++
+ /**
   * xmlSecNssKeysStoreLoad:
+  * @store:              the pointer to Nss keys store.
 @@ -252,234 +651,147 @@ xmlSecNssKeysStoreLoad(xmlSecKeyStorePtr store, const char *uri,
   */
  int
@@ -1856,18 +1864,21 @@ index a583f60..41a6d93 100644
 +    int ret;
  
      xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
--    xmlSecAssert2((filename != NULL), -1);    
--    
--    ss = xmlSecNssKeysStoreGetSS(store);
--    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
--		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
+-    xmlSecAssert2((filename != NULL), -1);
 +    xmlSecAssert2( xmlSecKeyStoreCheckSize( store , xmlSecNssKeysStoreSize ), -1 ) ;
 +    xmlSecAssert2(filename != NULL, -1);   
  
--    return (xmlSecSimpleKeysStoreSave(*ss, filename, type));
--}
+-    ss = xmlSecNssKeysStoreGetSS(store);
+-    xmlSecAssert2(((ss != NULL) && (*ss != NULL) &&
+-                   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
 +    context = xmlSecNssKeysStoreGetCtx( store ) ;
 +    xmlSecAssert2( context != NULL, -1 );
+ 
+-    return (xmlSecSimpleKeysStoreSave(*ss, filename, type));
+-}
++    list = context->keyList ;
++       xmlSecAssert2( list != NULL, -1 );
++    xmlSecAssert2(xmlSecPtrListCheckId(list, xmlSecKeyPtrListId), -1);
  
 -static int
 -xmlSecNssKeysStoreInitialize(xmlSecKeyStorePtr store) {
@@ -1877,44 +1888,41 @@ index a583f60..41a6d93 100644
 -
 -    ss = xmlSecNssKeysStoreGetSS(store);
 -    xmlSecAssert2((*ss == NULL), -1);
-+    list = context->keyList ;
-+       xmlSecAssert2( list != NULL, -1 );
-+    xmlSecAssert2(xmlSecPtrListCheckId(list, xmlSecKeyPtrListId), -1);
- 
+-
 -    *ss = xmlSecKeyStoreCreate(xmlSecSimpleKeysStoreId);
 -    if(*ss == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
+-        xmlSecError(XMLSEC_ERRORS_HERE,
 +    /* create doc */
 +    doc = xmlSecCreateTree(BAD_CAST "Keys", xmlSecNs);
 +    if(doc == NULL) {
-+	    xmlSecError(XMLSEC_ERRORS_HERE,
- 		    xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
--		    "xmlSecKeyStoreCreate",
-+		    "xmlSecCreateTree",
- 		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "xmlSecSimpleKeysStoreId");
-+		    XMLSEC_ERRORS_NO_MESSAGE);
- 	return(-1);
++           xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
+-                    "xmlSecKeyStoreCreate",
++                    "xmlSecCreateTree",
+                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "xmlSecSimpleKeysStoreId");
++                    XMLSEC_ERRORS_NO_MESSAGE);
+         return(-1);
      }
  
--    return(0);    
+-    return(0);
 -}
 -
 -static void
 -xmlSecNssKeysStoreFinalize(xmlSecKeyStorePtr store) {
 -    xmlSecKeyStorePtr *ss;
--    
+-
 -    xmlSecAssert(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId));
--    
+-
 -    ss = xmlSecNssKeysStoreGetSS(store);
 -    xmlSecAssert((ss != NULL) && (*ss != NULL));
--    
+-
 -    xmlSecKeyStoreDestroy(*ss);
 -}
 -
--static xmlSecKeyPtr 
--xmlSecNssKeysStoreFindKey(xmlSecKeyStorePtr store, const xmlChar* name, 
--		          xmlSecKeyInfoCtxPtr keyInfoCtx) {
+-static xmlSecKeyPtr
+-xmlSecNssKeysStoreFindKey(xmlSecKeyStorePtr store, const xmlChar* name,
+-                          xmlSecKeyInfoCtxPtr keyInfoCtx) {
 -    xmlSecKeyStorePtr* ss;
 -    xmlSecKeyPtr key = NULL;
 -    xmlSecKeyPtr retval = NULL;
@@ -1934,48 +1942,48 @@ index a583f60..41a6d93 100644
 -
 -    key = xmlSecKeyStoreFindKey(*ss, name, keyInfoCtx);
 -    if (key != NULL) {
--	return (key);
+-        return (key);
 -    }
 -
 -    /* Try to find the key in the NSS DB, and construct an xmlSecKey.
 -     * we must have a name to lookup keys in NSS DB.
 -     */
 -    if (name == NULL) {
--	goto done;
+-        goto done;
 -    }
 +    idsList = xmlSecKeyDataIdsGet();   
 +    xmlSecAssert2(idsList != NULL, -1);
  
--    /* what type of key are we looking for? 
+-    /* what type of key are we looking for?
 -     * TBD: For now, we'll look only for public/private keys using the
 -     * name as a cert nickname. Later on, we can attempt to find
--     * symmetric keys using PK11_FindFixedKey 
+-     * symmetric keys using PK11_FindFixedKey
 -     */
 -    keyReq = &(keyInfoCtx->keyReq);
--    if (keyReq->keyType & 
--	(xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate)) {
--	cert = CERT_FindCertByNickname (CERT_GetDefaultCertDB(), (char *)name);
--	if (cert == NULL) {
--	    goto done;
--	}
+-    if (keyReq->keyType &
+-        (xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate)) {
+-        cert = CERT_FindCertByNickname (CERT_GetDefaultCertDB(), (char *)name);
+-        if (cert == NULL) {
+-            goto done;
+-        }
 +    keysSize = xmlSecPtrListGetSize(list);
 +    idsSize = xmlSecPtrListGetSize(idsList);
 +    for(i = 0; i < keysSize; ++i) {
 +        key = (xmlSecKeyPtr)xmlSecPtrListGetItem(list, i);
 +        xmlSecAssert2(key != NULL, -1);
  
--	if (keyReq->keyType & xmlSecKeyDataTypePublic) {
-- 	    pubkey = CERT_ExtractPublicKey(cert);
--	    if (pubkey == NULL) {
+-        if (keyReq->keyType & xmlSecKeyDataTypePublic) {
+-            pubkey = CERT_ExtractPublicKey(cert);
+-            if (pubkey == NULL) {
 +        cur = xmlSecAddChild(xmlDocGetRootElement(doc), xmlSecNodeKeyInfo, xmlSecDSigNs);
 +        if(cur == NULL) {
- 		xmlSecError(XMLSEC_ERRORS_HERE,
--			    NULL,
--			    "CERT_ExtractPublicKey",
--			    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--			    XMLSEC_ERRORS_NO_MESSAGE);
--		goto done;
--	    }
+                 xmlSecError(XMLSEC_ERRORS_HERE,
+-                            NULL,
+-                            "CERT_ExtractPublicKey",
+-                            XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                            XMLSEC_ERRORS_NO_MESSAGE);
+-                goto done;
+-            }
 +                    xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
 +                    "xmlSecAddChild",
 +                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
@@ -1983,20 +1991,20 @@ index a583f60..41a6d93 100644
 +                    xmlSecErrorsSafeString(xmlSecNodeKeyInfo));
 +            xmlFreeDoc(doc); 
 +            return(-1);
- 	} 
+         }
  
--	if (keyReq->keyType & xmlSecKeyDataTypePrivate) { 
-- 	    privkey = PK11_FindKeyByAnyCert(cert, NULL);
--	    if (privkey == NULL) {
+-        if (keyReq->keyType & xmlSecKeyDataTypePrivate) {
+-            privkey = PK11_FindKeyByAnyCert(cert, NULL);
+-            if (privkey == NULL) {
 +        /* special data key name */
 +        if(xmlSecKeyGetName(key) != NULL) {
 +            if(xmlSecAddChild(cur, xmlSecNodeKeyName, xmlSecDSigNs) == NULL) {
- 		xmlSecError(XMLSEC_ERRORS_HERE,
--			    NULL,
--			    "PK11_FindKeyByAnyCert",
--			    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--			    XMLSEC_ERRORS_NO_MESSAGE);
--		goto done;
+                 xmlSecError(XMLSEC_ERRORS_HERE,
+-                            NULL,
+-                            "PK11_FindKeyByAnyCert",
+-                            XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                            XMLSEC_ERRORS_NO_MESSAGE);
+-                goto done;
 +                xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
 +                "xmlSecAddChild",
 +                XMLSEC_ERRORS_R_XMLSEC_FAILED,
@@ -2004,162 +2012,162 @@ index a583f60..41a6d93 100644
 +                xmlSecErrorsSafeString(xmlSecNodeKeyName));
 +            xmlFreeDoc(doc); 
 +            return(-1);
- 	    }
- 	}
+             }
+         }
  
--	data = xmlSecNssPKIAdoptKey(privkey, pubkey);
--	if(data == NULL) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecNssPKIAdoptKey",
--			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			XMLSEC_ERRORS_NO_MESSAGE);
--	    goto done;
--	}    
--	privkey = NULL;
--	pubkey = NULL;
+-        data = xmlSecNssPKIAdoptKey(privkey, pubkey);
+-        if(data == NULL) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecNssPKIAdoptKey",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        XMLSEC_ERRORS_NO_MESSAGE);
+-            goto done;
+-        }
+-        privkey = NULL;
+-        pubkey = NULL;
+-
+-        key = xmlSecKeyCreate();
+-        if (key == NULL) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecKeyCreate",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        XMLSEC_ERRORS_NO_MESSAGE);
+-            return (NULL);
+-        }
 +        /* create nodes for other keys data */
 +        for(j = 0; j < idsSize; ++j) {
 +            dataId = (xmlSecKeyDataId)xmlSecPtrListGetItem(idsList, j);
 +            xmlSecAssert2(dataId != xmlSecKeyDataIdUnknown, -1);
  
--        key = xmlSecKeyCreate();
--        if (key == NULL) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecKeyCreate",
--			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			XMLSEC_ERRORS_NO_MESSAGE);
--	    return (NULL);
+-        x509Data = xmlSecKeyDataCreate(xmlSecNssKeyDataX509Id);
+-        if(x509Data == NULL) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecKeyDataCreate",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "transform=%s",
+-                        xmlSecErrorsSafeString(xmlSecTransformKlassGetName(xmlSecNssKeyDataX509Id)));
+-            goto done;
 -        }
 +            if(dataId->dataNodeName == NULL) {
 +                continue;
 +            }
  
--	x509Data = xmlSecKeyDataCreate(xmlSecNssKeyDataX509Id);
--	if(x509Data == NULL) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecKeyDataCreate",
--			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			"transform=%s",
--			xmlSecErrorsSafeString(xmlSecTransformKlassGetName(xmlSecNssKeyDataX509Id)));
--	    goto done;
--	}
+-        ret = xmlSecNssKeyDataX509AdoptKeyCert(x509Data, cert);
+-        if (ret < 0) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecNssKeyDataX509AdoptKeyCert",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "data=%s",
+-                        xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
+-            goto done;
+-        }
+-        cert = CERT_DupCertificate(cert);
+-        if (cert == NULL) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "CERT_DupCertificate",
+-                        XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                        "data=%s",
+-                        xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
+-            goto done;
 +            data = xmlSecKeyGetData(key, dataId);
 +            if(data == NULL) {
 +                continue;
-+	    }
- 
--	ret = xmlSecNssKeyDataX509AdoptKeyCert(x509Data, cert);
--	if (ret < 0) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecNssKeyDataX509AdoptKeyCert",
--			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			"data=%s",
--			xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
--	    goto done;
--	}
--	cert = CERT_DupCertificate(cert);
--	if (cert == NULL) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"CERT_DupCertificate",
--			XMLSEC_ERRORS_R_CRYPTO_FAILED,
--			"data=%s",
--			xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
--	    goto done;
++           }
++
 +            if(xmlSecAddChild(cur, dataId->dataNodeName, dataId->dataNodeNs) == NULL) {
-+	        xmlSecError(XMLSEC_ERRORS_HERE,
++               xmlSecError(XMLSEC_ERRORS_HERE,
 +                xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
 +                "xmlSecAddChild",
-+		XMLSEC_ERRORS_R_XMLSEC_FAILED,
++               XMLSEC_ERRORS_R_XMLSEC_FAILED,
 +                "node=%s", 
 +                xmlSecErrorsSafeString(dataId->dataNodeName));
 +                xmlFreeDoc(doc); 
 +                return(-1);
-+	    }
- 	}
++           }
+         }
  
--	ret = xmlSecNssKeyDataX509AdoptCert(x509Data, cert);
-+	ret = xmlSecKeyInfoCtxInitialize(&keyInfoCtx, NULL);
- 	if (ret < 0) {
- 	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecNssKeyDataX509AdoptCert",
-+            xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
-+            "xmlSecKeyInfoCtxInitialize",
- 			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			"data=%s",
--			xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
--	    goto done;
+-        ret = xmlSecNssKeyDataX509AdoptCert(x509Data, cert);
++        ret = xmlSecKeyInfoCtxInitialize(&keyInfoCtx, NULL);
+         if (ret < 0) {
+             xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecNssKeyDataX509AdoptCert",
++                        xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
++                        "xmlSecKeyInfoCtxInitialize",
+                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "data=%s",
+-                        xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
+-            goto done;
 +            XMLSEC_ERRORS_NO_MESSAGE);
 +            xmlFreeDoc(doc);
 +            return(-1);
- 	}
--	cert = NULL;
+         }
+-        cert = NULL;
  
--	ret = xmlSecKeySetValue(key, data);
--	if (ret < 0) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecKeySetValue",
--			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			"data=%s", 
--			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)));
--	    goto done;
--	}
--	data = NULL;
+-        ret = xmlSecKeySetValue(key, data);
+-        if (ret < 0) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecKeySetValue",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "data=%s",
+-                        xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)));
+-            goto done;
+-        }
+-        data = NULL;
 +        keyInfoCtx.mode                 = xmlSecKeyInfoModeWrite;
 +        keyInfoCtx.keyReq.keyId         = xmlSecKeyDataIdUnknown;
 +        keyInfoCtx.keyReq.keyType       = type;
 +        keyInfoCtx.keyReq.keyUsage      = xmlSecKeyDataUsageAny;
  
--	ret = xmlSecKeyAdoptData(key, x509Data);
+-        ret = xmlSecKeyAdoptData(key, x509Data);
 +        /* finally write key in the node */
 +        ret = xmlSecKeyInfoNodeWrite(cur, key, &keyInfoCtx);
- 	if (ret < 0) {
- 	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecKeyAdoptData",
+         if (ret < 0) {
+             xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecKeyAdoptData",
 +            xmlSecErrorsSafeString(xmlSecKeyStoreGetName(store)),
 +            "xmlSecKeyInfoNodeWrite",
- 			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			"data=%s",
--			xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
--	    goto done;
--	}
--	x509Data = NULL;
+                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "data=%s",
+-                        xmlSecErrorsSafeString(xmlSecKeyDataGetName(x509Data)));
+-            goto done;
 +            XMLSEC_ERRORS_NO_MESSAGE);
 +        xmlSecKeyInfoCtxFinalize(&keyInfoCtx);
 +        xmlFreeDoc(doc); 
 +        return(-1);
-+        }
+         }
+-        x509Data = NULL;
  
--	retval = key;
--	key = NULL;
+-        retval = key;
+-        key = NULL;
 +        xmlSecKeyInfoCtxFinalize(&keyInfoCtx);
      }
  
 -done:
 -    if (cert != NULL) {
--	CERT_DestroyCertificate(cert);
+-        CERT_DestroyCertificate(cert);
 -    }
 -    if (pubkey != NULL) {
--	SECKEY_DestroyPublicKey(pubkey);
+-        SECKEY_DestroyPublicKey(pubkey);
 -    }
 -    if (privkey != NULL) {
--	SECKEY_DestroyPrivateKey(privkey);
+-        SECKEY_DestroyPrivateKey(privkey);
 -    }
 -    if (data != NULL) {
--	xmlSecKeyDataDestroy(data);
+-        xmlSecKeyDataDestroy(data);
 -    }
 -    if (x509Data != NULL) {
--	xmlSecKeyDataDestroy(x509Data);
+-        xmlSecKeyDataDestroy(x509Data);
 -    }
 -    if (key != NULL) {
--	xmlSecKeyDestroy(key);
+-        xmlSecKeyDestroy(key);
 +    /* now write result */
 +    ret = xmlSaveFormatFile(filename, doc, 1);
 +    if (ret < 0) {
@@ -3397,7 +3405,7 @@ index 0000000..ab91f2c
 +#endif /* XMLSEC_NO_DES */
 +
 diff --git a/src/nss/pkikeys.c b/src/nss/pkikeys.c
-index f854935..2e58afa 100644
+index ae9e29b..9acd317 100644
 --- a/src/nss/pkikeys.c
 +++ b/src/nss/pkikeys.c
 @@ -24,6 +24,7 @@
@@ -3415,39 +3423,39 @@ index f854935..2e58afa 100644
 +    ctxDst->privkey = NULL ;
 +    ctxDst->pubkey = NULL ;
      if (ctxSrc->privkey != NULL) {
- 	ctxDst->privkey = SECKEY_CopyPrivateKey(ctxSrc->privkey);
- 	if(ctxDst->privkey == NULL) {
+         ctxDst->privkey = SECKEY_CopyPrivateKey(ctxSrc->privkey);
+         if(ctxDst->privkey == NULL) {
 @@ -588,13 +591,13 @@ xmlSecNssKeyDataDsaXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 	goto done;
+         goto done;
      }
  
 -    slot = PK11_GetBestSlot(CKM_DSA, NULL);
 +    slot = xmlSecNssSlotGet(CKM_DSA);
      if(slot == NULL) {
- 	xmlSecError(XMLSEC_ERRORS_HERE,
- 		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--		    "PK11_GetBestSlot",
-+		    "xmlSecNssSlotGet",
- 		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
-+		    "error code=%d", PORT_GetError());
- 	ret = -1;
- 	goto done;
+         xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                    "PK11_GetBestSlot",
++                    "xmlSecNssSlotGet",
+                     XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
++                    "error code=%d", PORT_GetError());
+         ret = -1;
+         goto done;
      }
 @@ -792,14 +795,14 @@ done:
      if (slot != NULL) {
- 	PK11_FreeSlot(slot);
+         PK11_FreeSlot(slot);
      }
 -    if (ret != 0) {
-+
- 	if (pubkey != NULL) {
- 	    SECKEY_DestroyPublicKey(pubkey);
- 	}
- 	if (data != NULL) {
- 	    xmlSecKeyDataDestroy(data);
- 	}
++    
+         if (pubkey != NULL) {
+             SECKEY_DestroyPublicKey(pubkey);
+         }
+         if (data != NULL) {
+             xmlSecKeyDataDestroy(data);
+         }
 -    }
-+
++    
      return(ret);
  }
  
@@ -3456,48 +3464,48 @@ index f854935..2e58afa 100644
      ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
      xmlSecAssert2(ctx != NULL, -1);
 -    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);
-+/*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
++    /*xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
  
      if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
- 	/* we can have only private key or public key */
+         /* we can have only private key or public key */
 @@ -940,7 +943,8 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
- 		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 		    "PK11_PQG_ParamGen",
- 		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--		    "size=%d", sizeBits);
-+		    "size=%d, error code=%d", sizeBits, PORT_GetError());
+                     xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                     "PK11_PQG_ParamGen",
+                     XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    "size=%d", sizeBits);
++                    "size=%d, error code=%d", sizeBits, PORT_GetError());
 +	ret = -1;
- 	goto done;
+         goto done;
      }
  
 @@ -950,11 +954,12 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
- 		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 		    "PK11_PQG_VerifyParams",
- 		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--		    "size=%d", sizeBits);
-+		    "size=%d, error code=%d", sizeBits, PORT_GetError());
+                     xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                     "PK11_PQG_VerifyParams",
+                     XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    "size=%d", sizeBits);
++                    "size=%d, error code=%d", sizeBits, PORT_GetError());
 +	ret = -1;
- 	goto done;
+         goto done;
      }
  
 -    slot = PK11_GetBestSlot(CKM_DSA_KEY_PAIR_GEN, NULL);
 +    slot = xmlSecNssSlotGet(CKM_DSA_KEY_PAIR_GEN);
      PK11_Authenticate(slot, PR_TRUE, NULL /* default pwd callback */);
      privkey = PK11_GenerateKeyPair(slot, CKM_DSA_KEY_PAIR_GEN, pqgParams,
- 				   &pubkey, PR_FALSE, PR_TRUE, NULL);
+                                    &pubkey, PR_FALSE, PR_TRUE, NULL);
 @@ -964,8 +969,9 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
- 		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 		    "PK11_GenerateKeyPair",
- 		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
-+		    "error code=%d", PORT_GetError());
-         
-+	ret = -1;
- 	goto done;
+                     xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                     "PK11_GenerateKeyPair",
+                     XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
++                    "error code=%d", PORT_GetError());
+ 
++        ret =  -1;
+         goto done;
      }
  
 @@ -979,6 +985,8 @@ xmlSecNssKeyDataDsaGenerate(xmlSecKeyDataPtr data, xmlSecSize sizeBits, xmlSecKe
- 	goto done;
+         goto done;
      }
  
 +    privkey = NULL ;
@@ -3507,16 +3515,16 @@ index f854935..2e58afa 100644
  done:
 @@ -991,16 +999,13 @@ done:
      if (pqgVerify != NULL) {
- 	PK11_PQG_DestroyVerify(pqgVerify);
+         PK11_PQG_DestroyVerify(pqgVerify);
      }
 -    if (ret == 0) {
--	return (0);
+-        return (0);
 -    }
      if (pubkey != NULL) {
- 	SECKEY_DestroyPublicKey(pubkey);
+         SECKEY_DestroyPublicKey(pubkey);
      }
      if (privkey != NULL) {
- 	SECKEY_DestroyPrivateKey(privkey);
+         SECKEY_DestroyPrivateKey(privkey);
      }
 -    return(-1);
 +    return(ret);
@@ -3528,25 +3536,25 @@ index f854935..2e58afa 100644
      ctx = xmlSecNssPKIKeyDataGetCtx(data);
      xmlSecAssert2(ctx != NULL, -1);
 -    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);
-+/*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
++    /*xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
      if (ctx->privkey != NULL) {
- 	return(xmlSecKeyDataTypePrivate | xmlSecKeyDataTypePublic);
+         return(xmlSecKeyDataTypePrivate | xmlSecKeyDataTypePublic);
 -    } else {
 +    } else if( ctx->pubkey != NULL ) {
- 	return(xmlSecKeyDataTypePublic);
+         return(xmlSecKeyDataTypePublic);
      }
-        
+ 
 @@ -1027,7 +1032,7 @@ xmlSecNssKeyDataDsaGetSize(xmlSecKeyDataPtr data) {
      xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), 0);
      ctx = xmlSecNssPKIKeyDataGetCtx(data);
      xmlSecAssert2(ctx != NULL, -1);
 -    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);
-+/*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
++    /*xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
  
      return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
  }
 @@ -1216,13 +1221,13 @@ xmlSecNssKeyDataRsaXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 	goto done;
+         goto done;
      }
  
 -    slot = PK11_GetBestSlot(CKM_RSA_PKCS, NULL);
@@ -3567,7 +3575,7 @@ index f854935..2e58afa 100644
      ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
      xmlSecAssert2(ctx != NULL, -1);
 -    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);
-+/*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
++    /*xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
  
  
      if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
@@ -3579,18 +3587,18 @@ index f854935..2e58afa 100644
 +    slot = xmlSecNssSlotGet(CKM_RSA_PKCS_KEY_PAIR_GEN);
      PK11_Authenticate(slot, PR_TRUE, NULL /* default pwd callback */);
      privkey = PK11_GenerateKeyPair(slot, CKM_RSA_PKCS_KEY_PAIR_GEN, &params,
- 				   &pubkey, PR_FALSE, PR_TRUE, NULL);
+                                    &pubkey, PR_FALSE, PR_TRUE, NULL);
 @@ -1525,7 +1530,7 @@ xmlSecNssKeyDataRsaGetSize(xmlSecKeyDataPtr data) {
  
      ctx = xmlSecNssPKIKeyDataGetCtx(data);
      xmlSecAssert2(ctx != NULL, -1);
 -    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);
-+/*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
++    /*xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
  
      return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
  }
 diff --git a/src/nss/symkeys.c b/src/nss/symkeys.c
-index fb23f4f..8e5000f 100644
+index 3da7a69..9b4c700 100644
 --- a/src/nss/symkeys.c
 +++ b/src/nss/symkeys.c
 @@ -15,20 +15,41 @@
@@ -3613,7 +3621,7 @@ index fb23f4f..8e5000f 100644
 +#include <xmlsec/nss/tokens.h>
  
  /*****************************************************************************
-  * 
+  *
 - * Symmetic (binary) keys - just a wrapper for xmlSecKeyDataBinary
 + * Symmetic (binary) keys - a wrapper over slot information and PK11SymKey
   *
@@ -3633,10 +3641,10 @@ index fb23f4f..8e5000f 100644
 +#define xmlSecNssSymKeyDataGetCtx( data ) \
 +    ( ( xmlSecNssSymKeyDataCtxPtr )( ( ( xmlSecByte* )( data ) ) + sizeof( xmlSecKeyData ) ) )
 +
- static int	xmlSecNssSymKeyDataInitialize		(xmlSecKeyDataPtr data);
- static int	xmlSecNssSymKeyDataDuplicate		(xmlSecKeyDataPtr dst,
- 							 xmlSecKeyDataPtr src);
-@@ -67,107 +88,743 @@ static int	xmlSecNssSymKeyDataKlassCheck	(xmlSecKeyDataKlass* klass);
+ static int      xmlSecNssSymKeyDataInitialize           (xmlSecKeyDataPtr data);
+ static int      xmlSecNssSymKeyDataDuplicate            (xmlSecKeyDataPtr dst,
+                                                          xmlSecKeyDataPtr src);
+@@ -67,107 +88,743 @@ static int      xmlSecNssSymKeyDataKlassCheck   (xmlSecKeyDataKlass* klass);
      (xmlSecKeyDataIsValid((data)) && \
       xmlSecNssSymKeyDataKlassCheck((data)->id))
  
@@ -3767,8 +3775,6 @@ index fb23f4f..8e5000f 100644
 +    xmlSecNssSymKeyDataCtxPtr ctx;
 +
      xmlSecAssert2(xmlSecNssSymKeyDataCheckId(data), -1);
--    
--    return(xmlSecKeyDataBinaryValueInitialize(data));
 +    xmlSecAssert2(xmlSecKeyDataCheckSize(data, xmlSecNssSymKeyDataSize), -1);
 +
 +    ctx = xmlSecNssSymKeyDataGetCtx(data);
@@ -3797,7 +3803,8 @@ index fb23f4f..8e5000f 100644
 +            "Unsupported block cipher" ) ;
 +        return(-1) ;
 +    }
-+
+ 
+-    return(xmlSecKeyDataBinaryValueInitialize(data));
 +    return(0);
  }
  
@@ -3811,9 +3818,8 @@ index fb23f4f..8e5000f 100644
      xmlSecAssert2(xmlSecNssSymKeyDataCheckId(src), -1);
 +    xmlSecAssert2(xmlSecKeyDataCheckSize(src, xmlSecNssSymKeyDataSize), -1);
      xmlSecAssert2(dst->id == src->id, -1);
--        
+ 
 -    return(xmlSecKeyDataBinaryValueDuplicate(dst, src));
-+
 +    ctxDst = xmlSecNssSymKeyDataGetCtx(dst);
 +    xmlSecAssert2(ctxDst != NULL, -1);
 +
@@ -3860,13 +3866,12 @@ index fb23f4f..8e5000f 100644
 +    xmlSecNssSymKeyDataCtxPtr ctx;
 +
      xmlSecAssert(xmlSecNssSymKeyDataCheckId(data));
--    
--    xmlSecKeyDataBinaryValueFinalize(data);
 +    xmlSecAssert(xmlSecKeyDataCheckSize(data, xmlSecNssSymKeyDataSize));
 +
 +    ctx = xmlSecNssSymKeyDataGetCtx(data);
 +    xmlSecAssert(ctx != NULL);
-+
+ 
+-    xmlSecKeyDataBinaryValueFinalize(data);
 +    if( ctx->slot != NULL ) {
 +        PK11_FreeSlot( ctx->slot ) ;
 +        ctx->slot = NULL ;
@@ -3882,7 +3887,7 @@ index fb23f4f..8e5000f 100644
  
  static int
  xmlSecNssSymKeyDataXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 			       xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
+                                xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
 -    xmlSecAssert2(xmlSecNssSymKeyDataKlassCheck(id), -1);
 +    PK11SymKey* symKey ;
 +    PK11SlotInfo* slot ;
@@ -3908,7 +3913,8 @@ index fb23f4f..8e5000f 100644
 +            XMLSEC_ERRORS_NO_MESSAGE);
 +        return(-1);
 +    }
-+
+ 
+-    return(xmlSecKeyDataBinaryValueXmlRead(id, key, node, keyInfoCtx));
 +    ctx = xmlSecNssSymKeyDataGetCtx(data);
 +    xmlSecAssert2(ctx != NULL, -1);
 +
@@ -3999,8 +4005,7 @@ index fb23f4f..8e5000f 100644
 +               xmlSecKeyDataDestroy( data ) ;
 +        return(0);
 +    }
-     
--    return(xmlSecKeyDataBinaryValueXmlRead(id, key, node, keyInfoCtx));
++
 +    ret = xmlSecKeySetValue(key, data);
 +    if(ret < 0) {
 +        xmlSecError(XMLSEC_ERRORS_HERE,
@@ -4015,14 +4020,12 @@ index fb23f4f..8e5000f 100644
 +    return(0);
  }
  
- static int 
+ static int
  xmlSecNssSymKeyDataXmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 				    xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
+                                     xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
 +    PK11SymKey* symKey ;
 +
      xmlSecAssert2(xmlSecNssSymKeyDataKlassCheck(id), -1);
--    
--    return(xmlSecKeyDataBinaryValueXmlWrite(id, key, node, keyInfoCtx));
 +    xmlSecAssert2(key != NULL, -1);
 +    xmlSecAssert2(node != NULL, -1);
 +    xmlSecAssert2(keyInfoCtx != NULL, -1);
@@ -4084,14 +4087,15 @@ index fb23f4f..8e5000f 100644
 +               xmlSecBufferDestroy(keyBuf);
 +               PK11_FreeSymKey( symKey ) ;
 +    }
-+
+ 
+-    return(xmlSecKeyDataBinaryValueXmlWrite(id, key, node, keyInfoCtx));
 +    return 0 ;
  }
  
  static int
  xmlSecNssSymKeyDataBinRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 				    const xmlSecByte* buf, xmlSecSize bufSize,
- 				    xmlSecKeyInfoCtxPtr keyInfoCtx) {
+                                     const xmlSecByte* buf, xmlSecSize bufSize,
+                                     xmlSecKeyInfoCtxPtr keyInfoCtx) {
 -    xmlSecAssert2(xmlSecNssSymKeyDataKlassCheck(id), -1);
 +    PK11SymKey* symKey ;
 +    PK11SlotInfo* slot ;
@@ -4131,7 +4135,8 @@ index fb23f4f..8e5000f 100644
 +               xmlSecKeyDataDestroy( data ) ;
 +        return(-1) ;
 +    }
-+
+ 
+-    return(xmlSecKeyDataBinaryValueBinRead(id, key, buf, bufSize, keyInfoCtx));
 +    /* Wrap the raw key value SECItem */
 +    keyItem.type = siBuffer ;
 +    keyItem.data = buf ;
@@ -4177,8 +4182,7 @@ index fb23f4f..8e5000f 100644
 +               xmlSecKeyDataDestroy( data ) ;
 +        return(0);
 +    }
-     
--    return(xmlSecKeyDataBinaryValueBinRead(id, key, buf, bufSize, keyInfoCtx));
++
 +    ret = xmlSecKeySetValue(key, data);
 +    if(ret < 0) {
 +        xmlSecError(XMLSEC_ERRORS_HERE,
@@ -4195,8 +4199,8 @@ index fb23f4f..8e5000f 100644
  
  static int
  xmlSecNssSymKeyDataBinWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 				    xmlSecByte** buf, xmlSecSize* bufSize,
- 				    xmlSecKeyInfoCtxPtr keyInfoCtx) {
+                                     xmlSecByte** buf, xmlSecSize* bufSize,
+                                     xmlSecKeyInfoCtxPtr keyInfoCtx) {
 +    PK11SymKey* symKey ;
 +
      xmlSecAssert2(xmlSecNssSymKeyDataKlassCheck(id), -1);
@@ -4248,7 +4252,7 @@ index fb23f4f..8e5000f 100644
 +       memcpy((*buf), keyItem->data, (*bufSize));
 +       PK11_FreeSymKey( symKey ) ;
 +    }
-     
+ 
 -    return(xmlSecKeyDataBinaryValueBinWrite(id, key, buf, bufSize, keyInfoCtx));
 +    return 0 ;
  }
@@ -4266,8 +4270,6 @@ index fb23f4f..8e5000f 100644
  
 -    buffer = xmlSecKeyDataBinaryValueGetBuffer(data);
 -    xmlSecAssert2(buffer != NULL, -1);
--    
--    return(xmlSecNssGenerateRandom(buffer, (sizeBits + 7) / 8));
 +    ctx = xmlSecNssSymKeyDataGetCtx(data);
 +    xmlSecAssert2(ctx != NULL, -1);
 +
@@ -4311,7 +4313,8 @@ index fb23f4f..8e5000f 100644
 +            PK11_FreeSlot( slot ) ;
 +            return -1 ;
 +    }
-+
+ 
+-    return(xmlSecNssGenerateRandom(buffer, (sizeBits + 7) / 8));
 +    if( ctx->slot != NULL ) {
 +            PK11_FreeSlot( ctx->slot ) ;
 +            ctx->slot = NULL ;
@@ -4335,9 +4338,7 @@ index fb23f4f..8e5000f 100644
  
      xmlSecAssert2(xmlSecNssSymKeyDataCheckId(data), xmlSecKeyDataTypeUnknown);
 +    xmlSecAssert2( xmlSecKeyDataCheckSize( data, xmlSecNssSymKeyDataSize ), xmlSecKeyDataTypeUnknown ) ;
- 
--    buffer = xmlSecKeyDataBinaryValueGetBuffer(data);
--    xmlSecAssert2(buffer != NULL, xmlSecKeyDataTypeUnknown);
++
 +    context = xmlSecNssSymKeyDataGetCtx( data ) ;
 +    if( context == NULL ) {
 +            xmlSecError( XMLSEC_ERRORS_HERE ,
@@ -4347,7 +4348,9 @@ index fb23f4f..8e5000f 100644
 +                XMLSEC_ERRORS_NO_MESSAGE ) ;
 +            return xmlSecKeyDataTypeUnknown ;
 +    }
-+
+ 
+-    buffer = xmlSecKeyDataBinaryValueGetBuffer(data);
+-    xmlSecAssert2(buffer != NULL, xmlSecKeyDataTypeUnknown);
 +    if( context->symkey != NULL ) {
 +            type |= xmlSecKeyDataTypeSymmetric ;
 +    } else {
@@ -4358,7 +4361,7 @@ index fb23f4f..8e5000f 100644
 +    return type ;
  }
  
- static xmlSecSize 
+ static xmlSecSize
  xmlSecNssSymKeyDataGetSize(xmlSecKeyDataPtr data) {
 +    xmlSecNssSymKeyDataCtxPtr context ;
 +    unsigned int    length = 0 ;
@@ -4379,16 +4382,16 @@ index fb23f4f..8e5000f 100644
 +            length = PK11_GetKeyLength( context->symkey ) ;
 +            length *= 8 ;
 +    }
-     
+ 
 -    return(xmlSecKeyDataBinaryValueGetSize(data));
 +    return length ;
  }
  
- static void 
+ static void
  xmlSecNssSymKeyDataDebugDump(xmlSecKeyDataPtr data, FILE* output) {
      xmlSecAssert(xmlSecNssSymKeyDataCheckId(data));
-     
--    xmlSecKeyDataBinaryValueDebugDump(data, output);    
+ 
+-    xmlSecKeyDataBinaryValueDebugDump(data, output);
 +    /* print only size, everything else is sensitive */
 +    fprintf( output , "=== %s: size=%d\n" , data->id->dataNodeName ,
 +        xmlSecKeyDataGetSize(data)) ;
@@ -4397,15 +4400,14 @@ index fb23f4f..8e5000f 100644
  static void
  xmlSecNssSymKeyDataDebugXmlDump(xmlSecKeyDataPtr data, FILE* output) {
      xmlSecAssert(xmlSecNssSymKeyDataCheckId(data));
--    
--    xmlSecKeyDataBinaryValueDebugXmlDump(data, output);    
-+
+ 
+-    xmlSecKeyDataBinaryValueDebugXmlDump(data, output);
 +    /* print only size, everything else is sensitive */
 +    fprintf( output , "<%s size=\"%d\" />\n" , data->id->dataNodeName ,
 +        xmlSecKeyDataGetSize(data)) ;
  }
  
- static int 
+ static int
 @@ -201,7 +858,7 @@ xmlSecNssSymKeyDataKlassCheck(xmlSecKeyDataKlass* klass) {
   *************************************************************************/
  static xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
@@ -4988,7 +4990,7 @@ index 0000000..e27d1e4
 +}
 +
 diff --git a/src/nss/x509.c b/src/nss/x509.c
-index aea4012..347c8dd 100644
+index 887c77c..749bbde 100644
 --- a/src/nss/x509.c
 +++ b/src/nss/x509.c
 @@ -34,7 +34,6 @@
@@ -4999,53 +5001,53 @@ index aea4012..347c8dd 100644
  #include <xmlsec/base64.h>
  #include <xmlsec/errors.h>
  
-@@ -61,33 +60,18 @@ static int		xmlSecNssX509DataNodeRead		(xmlSecKeyDataPtr data,
- static int		xmlSecNssX509CertificateNodeRead	(xmlSecKeyDataPtr data,
- 								 xmlNodePtr node,
- 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
--static int		xmlSecNssX509CertificateNodeWrite	(CERTCertificate* cert,
--								 xmlNodePtr node,
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
- static int		xmlSecNssX509SubjectNameNodeRead	(xmlSecKeyDataPtr data,
- 								 xmlNodePtr node,
- 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
--static int		xmlSecNssX509SubjectNameNodeWrite	(CERTCertificate* cert,
--								 xmlNodePtr node,
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
- static int		xmlSecNssX509IssuerSerialNodeRead	(xmlSecKeyDataPtr data,
- 								 xmlNodePtr node,
- 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
--static int		xmlSecNssX509IssuerSerialNodeWrite	(CERTCertificate* cert,
--								 xmlNodePtr node,
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
- static int		xmlSecNssX509SKINodeRead		(xmlSecKeyDataPtr data,
- 								 xmlNodePtr node,
- 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
--static int		xmlSecNssX509SKINodeWrite		(CERTCertificate* cert,
--								 xmlNodePtr node,
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
- static int		xmlSecNssX509CRLNodeRead		(xmlSecKeyDataPtr data,
- 								 xmlNodePtr node,
- 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
--static int		xmlSecNssX509CRLNodeWrite		(CERTSignedCrl* crl,
--								 xmlNodePtr node,
--								 xmlSecKeyInfoCtxPtr keyInfoCtx);
- static int		xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, 
- 								xmlSecKeyPtr key,
- 								xmlSecKeyInfoCtxPtr keyInfoCtx);
-@@ -104,9 +88,6 @@ static CERTSignedCrl*	xmlSecNssX509CrlBase64DerRead		(xmlChar* buf,
- 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
- static xmlChar*		xmlSecNssX509CrlBase64DerWrite		(CERTSignedCrl* crl, 
- 								 int base64LineWrap);
--static xmlChar*		xmlSecNssX509NameWrite			(CERTName* nm);
--static xmlChar*		xmlSecNssASN1IntegerWrite		(SECItem *num);
--static xmlChar*		xmlSecNssX509SKIWrite			(CERTCertificate* cert);
- static void		xmlSecNssX509CertDebugDump		(CERTCertificate* cert, 
- 								 FILE* output);
- static void		xmlSecNssX509CertDebugXmlDump		(CERTCertificate* cert, 
-@@ -752,31 +733,22 @@ static int
+@@ -61,33 +60,18 @@ static int              xmlSecNssX509DataNodeRead               (xmlSecKeyDataPt
+ static int              xmlSecNssX509CertificateNodeRead        (xmlSecKeyDataPtr data,
+                                                                  xmlNodePtr node,
+                                                                  xmlSecKeyInfoCtxPtr keyInfoCtx);
+-static int              xmlSecNssX509CertificateNodeWrite       (CERTCertificate* cert,
+-                                                                 xmlNodePtr node,
+-                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ static int              xmlSecNssX509SubjectNameNodeRead        (xmlSecKeyDataPtr data,
+                                                                  xmlNodePtr node,
+                                                                  xmlSecKeyInfoCtxPtr keyInfoCtx);
+-static int              xmlSecNssX509SubjectNameNodeWrite       (CERTCertificate* cert,
+-                                                                 xmlNodePtr node,
+-                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ static int              xmlSecNssX509IssuerSerialNodeRead       (xmlSecKeyDataPtr data,
+                                                                  xmlNodePtr node,
+                                                                  xmlSecKeyInfoCtxPtr keyInfoCtx);
+-static int              xmlSecNssX509IssuerSerialNodeWrite      (CERTCertificate* cert,
+-                                                                 xmlNodePtr node,
+-                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ static int              xmlSecNssX509SKINodeRead                (xmlSecKeyDataPtr data,
+                                                                  xmlNodePtr node,
+                                                                  xmlSecKeyInfoCtxPtr keyInfoCtx);
+-static int              xmlSecNssX509SKINodeWrite               (CERTCertificate* cert,
+-                                                                 xmlNodePtr node,
+-                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ static int              xmlSecNssX509CRLNodeRead                (xmlSecKeyDataPtr data,
+                                                                  xmlNodePtr node,
+                                                                  xmlSecKeyInfoCtxPtr keyInfoCtx);
+-static int              xmlSecNssX509CRLNodeWrite               (CERTSignedCrl* crl,
+-                                                                 xmlNodePtr node,
+-                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ static int              xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data,
+                                                                 xmlSecKeyPtr key,
+                                                                 xmlSecKeyInfoCtxPtr keyInfoCtx);
+@@ -104,9 +88,6 @@ static CERTSignedCrl*   xmlSecNssX509CrlBase64DerRead           (xmlChar* buf,
+                                                                  xmlSecKeyInfoCtxPtr keyInfoCtx);
+ static xmlChar*         xmlSecNssX509CrlBase64DerWrite          (CERTSignedCrl* crl,
+                                                                  int base64LineWrap);
+-static xmlChar*         xmlSecNssX509NameWrite                  (CERTName* nm);
+-static xmlChar*         xmlSecNssASN1IntegerWrite               (SECItem *num);
+-static xmlChar*         xmlSecNssX509SKIWrite                   (CERTCertificate* cert);
+ static void             xmlSecNssX509CertDebugDump              (CERTCertificate* cert,
+                                                                  FILE* output);
+ static void             xmlSecNssX509CertDebugXmlDump           (CERTCertificate* cert,
+@@ -748,31 +729,22 @@ static int
  xmlSecNssKeyDataX509XmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 				xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
+                                 xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataPtr data;
 +    xmlNodePtr cur;
 +    xmlChar* buf;
@@ -5054,7 +5056,7 @@ index aea4012..347c8dd 100644
      xmlSecSize size, pos;
 -    int content = 0;
 -    int ret;
-     				
+ 
      xmlSecAssert2(id == xmlSecNssKeyDataX509Id, -1);
      xmlSecAssert2(key != NULL, -1);
      xmlSecAssert2(node != NULL, -1);
@@ -5062,15 +5064,15 @@ index aea4012..347c8dd 100644
  
 -    content = xmlSecX509DataGetNodeContent (node, 1, keyInfoCtx);
 -    if (content < 0) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--		    "xmlSecX509DataGetNodeContent",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "content=%d", content);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                    "xmlSecX509DataGetNodeContent",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "content=%d", content);
+-        return(-1);
 -    } else if(content == 0) {
--	/* by default we are writing certificates and crls */
--	content = XMLSEC_X509DATA_DEFAULT;
+-        /* by default we are writing certificates and crls */
+-        content = XMLSEC_X509DATA_DEFAULT;
 +    /* todo: flag in ctx remove all existing content */
 +    if(0) {
 +        xmlNodeSetContent(node, NULL);
@@ -5079,121 +5081,120 @@ index aea4012..347c8dd 100644
 -    /* get x509 data */
      data = xmlSecKeyGetData(key, id);
      if(data == NULL) {
- 	/* no x509 data in the key */
-@@ -796,79 +768,74 @@ xmlSecNssKeyDataX509XmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
- 	    return(-1);
- 	}
+         /* no x509 data in the key */
+@@ -792,79 +764,74 @@ xmlSecNssKeyDataX509XmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
+             return(-1);
+         }
  
--	if((content & XMLSEC_X509DATA_CERTIFICATE_NODE) != 0) {
--	    ret = xmlSecNssX509CertificateNodeWrite(cert, node, keyInfoCtx);
--	    if(ret < 0) {
-+	/* set base64 lines size from context */
-+	buf = xmlSecNssX509CertBase64DerWrite(cert, keyInfoCtx->base64LineSize); 
-+	if(buf == NULL) {
- 		xmlSecError(XMLSEC_ERRORS_HERE,
- 			    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--			    "xmlSecNssX509CertificateNodeWrite",
-+			    "xmlSecNssX509CertBase64DerWrite",
- 			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			    "pos=%d", pos);
-+			    XMLSEC_ERRORS_NO_MESSAGE);
- 		return(-1);
--	    }
- 	}
+-        if((content & XMLSEC_X509DATA_CERTIFICATE_NODE) != 0) {
+-            ret = xmlSecNssX509CertificateNodeWrite(cert, node, keyInfoCtx);
+-            if(ret < 0) {
++       /* set base64 lines size from context */
++       buf = xmlSecNssX509CertBase64DerWrite(cert, keyInfoCtx->base64LineSize); 
++       if(buf == NULL) {
+                 xmlSecError(XMLSEC_ERRORS_HERE,
+                             xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                            "xmlSecNssX509CertificateNodeWrite",
++                            "xmlSecNssX509CertBase64DerWrite",
+                             XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                            "pos=%d", pos);
++                            XMLSEC_ERRORS_NO_MESSAGE);
+                 return(-1);
+-            }
+         }
  
--	if((content & XMLSEC_X509DATA_SUBJECTNAME_NODE) != 0) {
--	    ret = xmlSecNssX509SubjectNameNodeWrite(cert, node, keyInfoCtx);
--	    if(ret < 0) {
-+	cur = xmlSecAddChild(node, xmlSecNodeX509Certificate, xmlSecDSigNs);
-+	if(cur == NULL) {
- 		xmlSecError(XMLSEC_ERRORS_HERE,
- 			    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--			    "xmlSecNssX509SubjectNameNodeWrite",
-+			    "xmlSecAddChild",
- 			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			    "pos=%d", pos);
-+			    "node=%s",
-+			    xmlSecErrorsSafeString(xmlSecNodeX509Certificate));
-+		xmlFree(buf);
- 		return(-1);
--	    }
- 	}
-+	/* todo: add \n around base64 data - from context */
-+	/* todo: add errors check */
-+	xmlNodeSetContent(cur, xmlSecStringCR);
-+	xmlNodeSetContent(cur, buf);
-+	xmlFree(buf);
+-        if((content & XMLSEC_X509DATA_SUBJECTNAME_NODE) != 0) {
+-            ret = xmlSecNssX509SubjectNameNodeWrite(cert, node, keyInfoCtx);
+-            if(ret < 0) {
++       cur = xmlSecAddChild(node, xmlSecNodeX509Certificate, xmlSecDSigNs);
++       if(cur == NULL) {
+                 xmlSecError(XMLSEC_ERRORS_HERE,
+                             xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                            "xmlSecNssX509SubjectNameNodeWrite",
++                            "xmlSecAddChild",
+                             XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                            "pos=%d", pos);
++                            "node=%s",
++                            xmlSecErrorsSafeString(xmlSecNodeX509Certificate));
++                xmlFree(buf);
+                 return(-1);
+-            }
+         }
++       /* todo: add \n around base64 data - from context */
++       /* todo: add errors check */
++       xmlNodeSetContent(cur, xmlSecStringCR);
++       xmlNodeSetContent(cur, buf);
++       xmlFree(buf);
 +    }
  
--	if((content & XMLSEC_X509DATA_ISSUERSERIAL_NODE) != 0) {
--	    ret = xmlSecNssX509IssuerSerialNodeWrite(cert, node, keyInfoCtx);
--	    if(ret < 0) {
--		xmlSecError(XMLSEC_ERRORS_HERE,
--			    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--			    "xmlSecNssX509IssuerSerialNodeWrite",
--			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			    "pos=%d", pos);
--		return(-1);
--	    }
+-        if((content & XMLSEC_X509DATA_ISSUERSERIAL_NODE) != 0) {
+-            ret = xmlSecNssX509IssuerSerialNodeWrite(cert, node, keyInfoCtx);
+-            if(ret < 0) {
+-                xmlSecError(XMLSEC_ERRORS_HERE,
+-                            xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                            "xmlSecNssX509IssuerSerialNodeWrite",
+-                            XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                            "pos=%d", pos);
+-                return(-1);
+-            }
 +    /* write crls */
 +    size = xmlSecNssKeyDataX509GetCrlsSize(data);
 +    for(pos = 0; pos < size; ++pos) {
-+	crl = xmlSecNssKeyDataX509GetCrl(data, pos);
-+	if(crl == NULL) {
-+	    xmlSecError(XMLSEC_ERRORS_HERE,
-+		xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
-+		"xmlSecNssKeyDataX509GetCrl",
-+		XMLSEC_ERRORS_R_XMLSEC_FAILED,
-+		"pos=%d", pos);
-+	    return(-1);
- 	}
++       crl = xmlSecNssKeyDataX509GetCrl(data, pos);
++       if(crl == NULL) {
++           xmlSecError(XMLSEC_ERRORS_HERE,
++               xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
++               "xmlSecNssKeyDataX509GetCrl",
++               XMLSEC_ERRORS_R_XMLSEC_FAILED,
++               "pos=%d", pos);
++           return(-1);
+         }
  
--	if((content & XMLSEC_X509DATA_SKI_NODE) != 0) {
--	    ret = xmlSecNssX509SKINodeWrite(cert, node, keyInfoCtx);
--	    if(ret < 0) {
--		xmlSecError(XMLSEC_ERRORS_HERE,
--			    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--			    "xmlSecNssX509SKINodeWrite",
--			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			    "pos=%d", pos);
--		return(-1);
--	    }
-+        /* set base64 lines size from context */
-+        buf = xmlSecNssX509CrlBase64DerWrite(crl, keyInfoCtx->base64LineSize);
-+        if(buf == NULL) {
-+	    xmlSecError(XMLSEC_ERRORS_HERE,
-+		xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
-+		"xmlSecNssX509CrlBase64DerWrite",
-+		XMLSEC_ERRORS_R_XMLSEC_FAILED,
-+		XMLSEC_ERRORS_NO_MESSAGE);
-+	    return(-1);
- 	}
--    }    
- 
+-        if((content & XMLSEC_X509DATA_SKI_NODE) != 0) {
+-            ret = xmlSecNssX509SKINodeWrite(cert, node, keyInfoCtx);
+-            if(ret < 0) {
+-                xmlSecError(XMLSEC_ERRORS_HERE,
+-                            xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                            "xmlSecNssX509SKINodeWrite",
+-                            XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                            "pos=%d", pos);
+-                return(-1);
+-            }
++         /* set base64 lines size from context */
++         buf = xmlSecNssX509CrlBase64DerWrite(crl, keyInfoCtx->base64LineSize);
++         if(buf == NULL) {
++            xmlSecError(XMLSEC_ERRORS_HERE,
++                xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
++                "xmlSecNssX509CrlBase64DerWrite",
++                XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                XMLSEC_ERRORS_NO_MESSAGE);
++            return(-1);
+         }
+-    }
+-
 -    /* write crls if needed */
 -    if((content & XMLSEC_X509DATA_CRL_NODE) != 0) {
--	size = xmlSecNssKeyDataX509GetCrlsSize(data);
--	for(pos = 0; pos < size; ++pos) {
--	    crl = xmlSecNssKeyDataX509GetCrl(data, pos);
--	    if(crl == NULL) {
--		xmlSecError(XMLSEC_ERRORS_HERE,
--			    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--			    "xmlSecNssKeyDataX509GetCrl",
--			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			    "pos=%d", pos);
--		return(-1);
--	    }
--	    
--	    ret = xmlSecNssX509CRLNodeWrite(crl, node, keyInfoCtx);
--	    if(ret < 0) {
--		xmlSecError(XMLSEC_ERRORS_HERE,
--			    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
--			    "xmlSecNssX509CRLNodeWrite",
--			    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			    "pos=%d", pos);
--		return(-1);
--	    }
--	}
+-        size = xmlSecNssKeyDataX509GetCrlsSize(data);
+-        for(pos = 0; pos < size; ++pos) {
+-            crl = xmlSecNssKeyDataX509GetCrl(data, pos);
+-            if(crl == NULL) {
+-                xmlSecError(XMLSEC_ERRORS_HERE,
+-                            xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                            "xmlSecNssKeyDataX509GetCrl",
+-                            XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                            "pos=%d", pos);
+-                return(-1);
+-            }
+ 
+-            ret = xmlSecNssX509CRLNodeWrite(crl, node, keyInfoCtx);
+-            if(ret < 0) {
+-                xmlSecError(XMLSEC_ERRORS_HERE,
+-                            xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
+-                            "xmlSecNssX509CRLNodeWrite",
+-                            XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                            "pos=%d", pos);
+-                return(-1);
+-            }
 +        cur = xmlSecAddChild(node, xmlSecNodeX509CRL, xmlSecDSigNs);
 +        if(cur == NULL) {
 +            xmlSecError(XMLSEC_ERRORS_HERE,
@@ -5204,7 +5205,7 @@ index aea4012..347c8dd 100644
 +                        xmlSecErrorsSafeString(xmlSecNodeX509CRL));
 +            xmlFree(buf);
 +            return(-1);
-+        }
+         }
 +        /* todo: add \n around base64 data - from context */
 +        /* todo: add errors check */
 +        xmlNodeSetContent(cur, xmlSecStringCR);
@@ -5212,40 +5213,39 @@ index aea4012..347c8dd 100644
      }
  
      return(0);
-@@ -1057,46 +1024,6 @@ xmlSecNssX509CertificateNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
-     return(0);
+@@ -1054,46 +1021,6 @@ xmlSecNssX509CertificateNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
  }
  
--static int 
+ static int
 -xmlSecNssX509CertificateNodeWrite(CERTCertificate* cert, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
 -    xmlChar* buf;
 -    xmlNodePtr cur;
--    
+-
 -    xmlSecAssert2(cert != NULL, -1);
 -    xmlSecAssert2(node != NULL, -1);
 -    xmlSecAssert2(keyInfoCtx != NULL, -1);
--    
+-
 -    /* set base64 lines size from context */
--    buf = xmlSecNssX509CertBase64DerWrite(cert, keyInfoCtx->base64LineSize); 
+-    buf = xmlSecNssX509CertBase64DerWrite(cert, keyInfoCtx->base64LineSize);
 -    if(buf == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecNssX509CertBase64DerWrite",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecNssX509CertBase64DerWrite",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
 -    }
--	
+-
 -    cur = xmlSecAddChild(node, xmlSecNodeX509Certificate, xmlSecDSigNs);
 -    if(cur == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecAddChild",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "node=%s",
--		    xmlSecErrorsSafeString(xmlSecNodeX509Certificate));
--	xmlFree(buf);
--	return(-1);	
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecAddChild",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "node=%s",
+-                    xmlSecErrorsSafeString(xmlSecNodeX509Certificate));
+-        xmlFree(buf);
+-        return(-1);
 -    }
 -
 -    /* todo: add \n around base64 data - from context */
@@ -5256,35 +5256,35 @@ index aea4012..347c8dd 100644
 -    return(0);
 -}
 -
- static int		
- xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {	
+-static int
+ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataStorePtr x509Store;
-@@ -1120,19 +1047,13 @@ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
+     xmlChar* subject;
+@@ -1116,19 +1043,13 @@ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
      }
  
      subject = xmlNodeGetContent(node);
 -    if((subject == NULL) || (xmlSecIsEmptyString(subject) == 1)) {
--	if(subject != NULL) {
--	    xmlFree(subject);
--	}
--	if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
+-        if(subject != NULL) {
+-            xmlFree(subject);
+-        }
+-        if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
 +    if(subject == NULL) {
- 	    xmlSecError(XMLSEC_ERRORS_HERE,
- 		        xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 			xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
- 			XMLSEC_ERRORS_R_INVALID_NODE_CONTENT,
- 			XMLSEC_ERRORS_NO_MESSAGE);
- 	    return(-1);
--	}
--	return(0);
+             xmlSecError(XMLSEC_ERRORS_HERE,
+                         xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                         xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
+                         XMLSEC_ERRORS_R_INVALID_NODE_CONTENT,
+                         XMLSEC_ERRORS_NO_MESSAGE);
+             return(-1);
+-        }
+-        return(0);
      }
  
      cert = xmlSecNssX509StoreFindCert(x509Store, subject, NULL, NULL, NULL, keyInfoCtx);
-@@ -1169,40 +1090,6 @@ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
-     return(0);
+@@ -1166,40 +1087,6 @@ xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecK
  }
  
--static int
+ static int
 -xmlSecNssX509SubjectNameNodeWrite(CERTCertificate* cert, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx ATTRIBUTE_UNUSED) {
 -    xmlChar* buf = NULL;
 -    xmlNodePtr cur = NULL;
@@ -5294,125 +5294,125 @@ index aea4012..347c8dd 100644
 -
 -    buf = xmlSecNssX509NameWrite(&(cert->subject));
 -    if(buf == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--	    NULL,
--	    "xmlSecNssX509NameWrite(&(cert->subject))",
--	    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--	    XMLSEC_ERRORS_NO_MESSAGE);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-            NULL,
+-            "xmlSecNssX509NameWrite(&(cert->subject))",
+-            XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-            XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
 -    }
 -
 -    cur = xmlSecAddChild(node, xmlSecNodeX509SubjectName, xmlSecDSigNs);
 -    if(cur == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--	    NULL,
--	    "xmlSecAddChild",
--	    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--	    "node=%s",
--	    xmlSecErrorsSafeString(xmlSecNodeX509SubjectName));
--	xmlFree(buf);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-            NULL,
+-            "xmlSecAddChild",
+-            XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-            "node=%s",
+-            xmlSecErrorsSafeString(xmlSecNodeX509SubjectName));
+-        xmlFree(buf);
+-        return(-1);
 -    }
 -    xmlSecNodeEncodeAndSetContent(cur, buf);
 -    xmlFree(buf);
 -    return(0);
 -}
 -
- static int 
+-static int
  xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataStorePtr x509Store;
-@@ -1228,21 +1115,9 @@ xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSec
+     xmlNodePtr cur;
+@@ -1224,21 +1111,9 @@ xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSec
      }
  
      cur = xmlSecGetNextElementNode(node->children);
 -    if(cur == NULL) {
--	if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
--			xmlSecErrorsSafeString(xmlSecNodeX509IssuerName),
--			XMLSEC_ERRORS_R_NODE_NOT_FOUND,
--			"node=%s",
--			xmlSecErrorsSafeString(xmlSecNodeGetName(cur)));
--	    return(-1);
--	}
--	return(0);
+-        if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+-                        xmlSecErrorsSafeString(xmlSecNodeX509IssuerName),
+-                        XMLSEC_ERRORS_R_NODE_NOT_FOUND,
+-                        "node=%s",
+-                        xmlSecErrorsSafeString(xmlSecNodeGetName(cur)));
+-            return(-1);
+-        }
+-        return(0);
 -    }
-     
+ 
      /* the first is required node X509IssuerName */
 -    if(!xmlSecCheckNodeName(cur, xmlSecNodeX509IssuerName, xmlSecDSigNs)) {
 +    if((cur == NULL) || !xmlSecCheckNodeName(cur, xmlSecNodeX509IssuerName, xmlSecDSigNs)) {
- 	xmlSecError(XMLSEC_ERRORS_HERE,
- 		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 		    xmlSecErrorsSafeString(xmlSecNodeX509IssuerName),
-@@ -1336,78 +1211,6 @@ xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSec
-     return(0);
+         xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                     xmlSecErrorsSafeString(xmlSecNodeX509IssuerName),
+@@ -1333,78 +1208,6 @@ xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSec
  }
  
--static int
+ static int
 -xmlSecNssX509IssuerSerialNodeWrite(CERTCertificate* cert, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx ATTRIBUTE_UNUSED) {
 -    xmlNodePtr cur;
 -    xmlNodePtr issuerNameNode;
 -    xmlNodePtr issuerNumberNode;
 -    xmlChar* buf;
--    
+-
 -    xmlSecAssert2(cert != NULL, -1);
 -    xmlSecAssert2(node != NULL, -1);
 -
 -    /* create xml nodes */
 -    cur = xmlSecAddChild(node, xmlSecNodeX509IssuerSerial, xmlSecDSigNs);
 -    if(cur == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecAddChild",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "node=%s",
--		    xmlSecErrorsSafeString(xmlSecNodeX509IssuerSerial));
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecAddChild",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "node=%s",
+-                    xmlSecErrorsSafeString(xmlSecNodeX509IssuerSerial));
+-        return(-1);
 -    }
 -
 -    issuerNameNode = xmlSecAddChild(cur, xmlSecNodeX509IssuerName, xmlSecDSigNs);
 -    if(issuerNameNode == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecAddChild",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "node=%s",
--		    xmlSecErrorsSafeString(xmlSecNodeX509IssuerName));
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecAddChild",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "node=%s",
+-                    xmlSecErrorsSafeString(xmlSecNodeX509IssuerName));
+-        return(-1);
 -    }
 -
 -    issuerNumberNode = xmlSecAddChild(cur, xmlSecNodeX509SerialNumber, xmlSecDSigNs);
 -    if(issuerNumberNode == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecAddChild",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "node=%s",
--		    xmlSecErrorsSafeString(xmlSecNodeX509SerialNumber));
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecAddChild",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "node=%s",
+-                    xmlSecErrorsSafeString(xmlSecNodeX509SerialNumber));
+-        return(-1);
 -    }
 -
 -    /* write data */
 -    buf = xmlSecNssX509NameWrite(&(cert->issuer));
 -    if(buf == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecNssX509NameWrite(&(cert->issuer))",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecNssX509NameWrite(&(cert->issuer))",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
 -    }
 -    xmlSecNodeEncodeAndSetContent(issuerNameNode, buf);
 -    xmlFree(buf);
 -
 -    buf = xmlSecNssASN1IntegerWrite(&(cert->serialNumber));
 -    if(buf == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecNssASN1IntegerWrite(&(cert->serialNumber))",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecNssASN1IntegerWrite(&(cert->serialNumber))",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
 -    }
 -    xmlNodeSetContent(issuerNumberNode, buf);
 -    xmlFree(buf);
@@ -5420,36 +5420,36 @@ index aea4012..347c8dd 100644
 -    return(0);
 -}
 -
- static int 
+-static int
  xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecKeyDataStorePtr x509Store;
-@@ -1431,11 +1234,7 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
+     xmlChar* ski;
+@@ -1427,11 +1230,7 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
      }
-     
+ 
      ski = xmlNodeGetContent(node);
 -    if((ski == NULL) || (xmlSecIsEmptyString(ski) == 1)) {
--	if(ski != NULL) {
--	    xmlFree(ski);
--	}
--	if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
+-        if(ski != NULL) {
+-            xmlFree(ski);
+-        }
+-        if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
 +    if(ski == NULL) {
- 	    xmlSecError(XMLSEC_ERRORS_HERE,
- 			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 			xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
-@@ -1443,8 +1242,6 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
- 			"node=%s",
- 			xmlSecErrorsSafeString(xmlSecNodeX509SKI));
- 	    return(-1);
--	}
--	return(0);
+             xmlSecError(XMLSEC_ERRORS_HERE,
+                         xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                         xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
+@@ -1439,8 +1238,6 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
+                         "node=%s",
+                         xmlSecErrorsSafeString(xmlSecNodeX509SKI));
+             return(-1);
+-        }
+-        return(0);
      }
  
      cert = xmlSecNssX509StoreFindCert(x509Store, NULL, NULL, NULL, ski, keyInfoCtx);
-@@ -1479,41 +1276,6 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
-     return(0);
+@@ -1476,41 +1273,6 @@ xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
  }
  
--static int
+ static int
 -xmlSecNssX509SKINodeWrite(CERTCertificate* cert, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx ATTRIBUTE_UNUSED) {
 -    xmlChar *buf = NULL;
 -    xmlNodePtr cur = NULL;
@@ -5459,24 +5459,24 @@ index aea4012..347c8dd 100644
 -
 -    buf = xmlSecNssX509SKIWrite(cert);
 -    if(buf == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecNssX509SKIWrite",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecNssX509SKIWrite",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
 -    }
 -
 -    cur = xmlSecAddChild(node, xmlSecNodeX509SKI, xmlSecDSigNs);
 -    if(cur == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecAddChild",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "new_node=%s",
--		    xmlSecErrorsSafeString(xmlSecNodeX509SKI));
--	xmlFree(buf);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecAddChild",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "new_node=%s",
+-                    xmlSecErrorsSafeString(xmlSecNodeX509SKI));
+-        xmlFree(buf);
+-        return(-1);
 -    }
 -    xmlSecNodeEncodeAndSetContent(cur, buf);
 -    xmlFree(buf);
@@ -5484,31 +5484,32 @@ index aea4012..347c8dd 100644
 -    return(0);
 -}
 -
- static int 
+-static int
  xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlChar *content;
-@@ -1524,19 +1286,13 @@ xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
+     CERTSignedCrl* crl;
+@@ -1520,19 +1282,13 @@ xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
      xmlSecAssert2(keyInfoCtx != NULL, -1);
  
      content = xmlNodeGetContent(node);
 -   if((content == NULL) || (xmlSecIsEmptyString(content) == 1)) {
--	if(content != NULL) {
--	    xmlFree(content);
--	}
--	if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
+-        if(content != NULL) {
+-            xmlFree(content);
+-        }
+-        if((keyInfoCtx->flags & XMLSEC_KEYINFO_FLAGS_STOP_ON_EMPTY_NODE) != 0) {
 +    if(content == NULL){
- 	    xmlSecError(XMLSEC_ERRORS_HERE,
- 			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 			xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
- 			XMLSEC_ERRORS_R_INVALID_NODE_CONTENT,
- 			XMLSEC_ERRORS_NO_MESSAGE);
- 	    return(-1);
--	}
--	return(0);
+             xmlSecError(XMLSEC_ERRORS_HERE,
+                         xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                         xmlSecErrorsSafeString(xmlSecNodeGetName(node)),
+                         XMLSEC_ERRORS_R_INVALID_NODE_CONTENT,
+                         XMLSEC_ERRORS_NO_MESSAGE);
+             return(-1);
+-        }
+-        return(0);
      }
  
      crl = xmlSecNssX509CrlBase64DerRead(content, keyInfoCtx);
-@@ -1556,47 +1312,6 @@ xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
+@@ -1552,47 +1308,6 @@ xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCt
  }
  
  static int
@@ -5521,26 +5522,26 @@ index aea4012..347c8dd 100644
 -    xmlSecAssert2(keyInfoCtx != NULL, -1);
 -
 -    /* set base64 lines size from context */
--    buf = xmlSecNssX509CrlBase64DerWrite(crl, keyInfoCtx->base64LineSize); 
+-    buf = xmlSecNssX509CrlBase64DerWrite(crl, keyInfoCtx->base64LineSize);
 -    if(buf == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecNssX509CrlBase64DerWrite",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecNssX509CrlBase64DerWrite",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
 -    }
 -
 -    cur = xmlSecAddChild(node, xmlSecNodeX509CRL, xmlSecDSigNs);
 -    if(cur == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecAddChild",
--		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    "new_node=%s",
--		    xmlSecErrorsSafeString(xmlSecNodeX509CRL));
--	xmlFree(buf);
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecAddChild",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    "new_node=%s",
+-                    xmlSecErrorsSafeString(xmlSecNodeX509CRL));
+-        xmlFree(buf);
+-        return(-1);
 -    }
 -    /* todo: add \n around base64 data - from context */
 -    /* todo: add errors check */
@@ -5554,55 +5555,54 @@ index aea4012..347c8dd 100644
 -
 -static int
  xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
- 				    xmlSecKeyInfoCtxPtr keyInfoCtx) {
+                                     xmlSecKeyInfoCtxPtr keyInfoCtx) {
      xmlSecNssX509DataCtxPtr ctx;
-@@ -1604,6 +1319,10 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
-     int ret;
+@@ -1601,6 +1316,10 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
      SECStatus status;
      PRTime notBefore, notAfter;
-+
+ 
 +    PK11SlotInfo* slot ;
 +    SECKEYPublicKey *pubKey = NULL;
 +    SECKEYPrivateKey *priKey = NULL;
-     
++
      xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataX509Id), -1);
      xmlSecAssert2(key != NULL, -1);
-@@ -1636,10 +1355,14 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
- 			    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
- 			    "CERT_DupCertificate",
- 			    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--			    XMLSEC_ERRORS_NO_MESSAGE);
-+			    "error code=%d", PORT_GetError());
- 		return(-1);
- 	    }
--	
-+
+     xmlSecAssert2(keyInfoCtx != NULL, -1);
+@@ -1632,10 +1351,14 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
+                             xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                             "CERT_DupCertificate",
+                             XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                            XMLSEC_ERRORS_NO_MESSAGE);
++                            "error code=%d", PORT_GetError());
+                 return(-1);
+             }
+ 
 +          /*-
-+	   * Get Public key from cert, which does not always work for sign
-+	   * action.
++          * Get Public key from cert, which does not always work for sign
++          * action.
 +           *
- 	    keyValue = xmlSecNssX509CertGetKey(ctx->keyCert);
- 	    if(keyValue == NULL) {
- 		xmlSecError(XMLSEC_ERRORS_HERE,
-@@ -1649,6 +1372,54 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
- 			    XMLSEC_ERRORS_NO_MESSAGE);
- 		return(-1);
- 	    }
-+	   */
+             keyValue = xmlSecNssX509CertGetKey(ctx->keyCert);
+             if(keyValue == NULL) {
+                 xmlSecError(XMLSEC_ERRORS_HERE,
+@@ -1645,6 +1368,54 @@ xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
+                             XMLSEC_ERRORS_NO_MESSAGE);
+                 return(-1);
+             }
++          */
 +            /*-
 +             * I'll search key according to KeyReq.
 +             */
-+	    slot = cert->slot ;
-+	    if( ( keyInfoCtx->keyReq.keyType & xmlSecKeyDataTypePrivate ) == xmlSecKeyDataTypePrivate ) {
-+	        if( ( priKey = PK11_FindPrivateKeyFromCert( slot , cert , NULL ) ) == NULL ) {
-+	                xmlSecError( XMLSEC_ERRORS_HERE ,
-+	                    xmlSecErrorsSafeString( xmlSecKeyDataGetName( data ) ) ,
-+	                    "PK11_FindPrivateKeyFromCert" ,
-+	                    XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-+	                    XMLSEC_ERRORS_NO_MESSAGE ) ;
-+	                return -1 ;
-+	            }
-+	    }
++           slot = cert->slot ;
++           if( ( keyInfoCtx->keyReq.keyType & xmlSecKeyDataTypePrivate ) == xmlSecKeyDataTypePrivate ) {
++               if( ( priKey = PK11_FindPrivateKeyFromCert( slot , cert , NULL ) ) == NULL ) {
++                       xmlSecError( XMLSEC_ERRORS_HERE ,
++                           xmlSecErrorsSafeString( xmlSecKeyDataGetName( data ) ) ,
++                           "PK11_FindPrivateKeyFromCert" ,
++                           XMLSEC_ERRORS_R_CRYPTO_FAILED ,
++                           XMLSEC_ERRORS_NO_MESSAGE ) ;
++                       return -1 ;
++                   }
++           }
 +
 +            if( ( keyInfoCtx->keyReq.keyType & xmlSecKeyDataTypePublic ) == xmlSecKeyDataTypePublic ) {
 +                if( ( pubKey = CERT_ExtractPublicKey( cert ) ) == NULL ) {
@@ -5636,10 +5636,10 @@ index aea4012..347c8dd 100644
 +                return -1 ;
 +            }
 +            /* Modify keyValue get Done */
- 	    
- 	    /* verify that the key matches our expectations */
- 	    if(xmlSecKeyReqMatchKeyValue(&(keyInfoCtx->keyReq), keyValue) != 1) {
-@@ -1950,86 +1721,6 @@ xmlSecNssX509CrlBase64DerWrite(CERTSignedCrl* crl, int base64LineWrap) {
+ 
+             /* verify that the key matches our expectations */
+             if(xmlSecKeyReqMatchKeyValue(&(keyInfoCtx->keyReq), keyValue) != 1) {
+@@ -1946,108 +1717,6 @@ xmlSecNssX509CrlBase64DerWrite(CERTSignedCrl* crl, int base64LineWrap) {
      return(res);
  }
  
@@ -5653,22 +5653,22 @@ index aea4012..347c8dd 100644
 -    str = CERT_NameToAscii(nm);
 -    if (str == NULL) {
 -        xmlSecError(XMLSEC_ERRORS_HERE,
--        	    NULL,
--        	    "CERT_NameToAscii",
--        	    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--        	    XMLSEC_ERRORS_NO_MESSAGE);
+-                    NULL,
+-                    "CERT_NameToAscii",
+-                    XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
 -        return(NULL);
 -    }
 -
 -    res = xmlStrdup(BAD_CAST str);
 -    if(res == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlStrdup",
--		    XMLSEC_ERRORS_R_MALLOC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	PORT_Free(str);
--	return(NULL);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlStrdup",
+-                    XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        PORT_Free(str);
+-        return(NULL);
 -    }
 -    PORT_Free(str);
 -    return(res);
@@ -5677,12 +5677,34 @@ index aea4012..347c8dd 100644
 -static xmlChar*
 -xmlSecNssASN1IntegerWrite(SECItem *num) {
 -    xmlChar *res = NULL;
--    
--    xmlSecAssert2(num != NULL, NULL);
+-    int resLen = 64; /* not more than 64 chars */
+-    PRUint64 val = 0;
+-    unsigned int ii = 0;
+-    int shift = 0;
 -
--    /* TODO : to be implemented after 
--     * NSS bug http://bugzilla.mozilla.org/show_bug.cgi?id=212864 is fixed 
+-    xmlSecAssert2(num != NULL, NULL);
+-    xmlSecAssert2(num->type == siBuffer, NULL);
+-    xmlSecAssert2(num->len <= 9, NULL);
+-    xmlSecAssert2(num->data != NULL, NULL);
+-
+-    /* HACK : to be fixed after
+-     * NSS bug http://bugzilla.mozilla.org/show_bug.cgi?id=212864 is fixed
 -     */
+-    for(ii = num->len; ii > 0; --ii, shift += 8) {
+-        val |= ((PRUint64)num->data[ii - 1]) << shift;
+-    }
+-
+-    res = (xmlChar*)xmlMalloc(resLen + 1);
+-    if(res == NULL) {
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlStrdup",
+-                    XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return (NULL);
+-    }
+-
+-    PR_snprintf((char*)res, resLen, "%llu", val);
 -    return(res);
 -}
 -
@@ -5698,36 +5720,36 @@ index aea4012..347c8dd 100644
 -
 -    rv = CERT_FindSubjectKeyIDExtension(cert, &ski);
 -    if (rv != SECSuccess) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "CERT_FindSubjectKeyIDExtension",
--		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	SECITEM_FreeItem(&ski, PR_FALSE);
--	return(NULL);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "CERT_FindSubjectKeyIDExtension",
+-                    XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        SECITEM_FreeItem(&ski, PR_FALSE);
+-        return(NULL);
 -    }
 -
 -    res = xmlSecBase64Encode(ski.data, ski.len, 0);
 -    if(res == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "xmlSecBase64Encode",
--	    	    XMLSEC_ERRORS_R_XMLSEC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	SECITEM_FreeItem(&ski, PR_FALSE);
--	return(NULL);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "xmlSecBase64Encode",
+-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        SECITEM_FreeItem(&ski, PR_FALSE);
+-        return(NULL);
 -    }
 -    SECITEM_FreeItem(&ski, PR_FALSE);
--    
+-
 -    return(res);
 -}
 -
 -
- static void 
+ static void
  xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
      SECItem *sn;
 diff --git a/src/nss/x509vfy.c b/src/nss/x509vfy.c
-index cfbcaca..63ed439 100644
+index 8a6e97a..de7de8c 100644
 --- a/src/nss/x509vfy.c
 +++ b/src/nss/x509vfy.c
 @@ -30,6 +30,7 @@
@@ -5738,136 +5760,119 @@ index cfbcaca..63ed439 100644
  #include <xmlsec/errors.h>
  
  #include <xmlsec/nss/crypto.h>
-@@ -61,17 +62,7 @@ struct _xmlSecNssX509StoreCtx {
-  
- static int		xmlSecNssX509StoreInitialize	(xmlSecKeyDataStorePtr store);
- static void		xmlSecNssX509StoreFinalize	(xmlSecKeyDataStorePtr store);
--static int 		xmlSecNssX509NameStringRead	(xmlSecByte **str, 
--							 int *strLen, 
--							 xmlSecByte *res, 
--							 int resLen,
--							 xmlSecByte delim, 
--							 int ingoreTrailingSpaces);
--static xmlSecByte * 	xmlSecNssX509NameRead		(xmlSecByte *str, 
--							 int len);
+@@ -70,18 +71,7 @@ struct _xmlSecNssX509StoreCtx {
+ 
+ static int              xmlSecNssX509StoreInitialize    (xmlSecKeyDataStorePtr store);
+ static void             xmlSecNssX509StoreFinalize      (xmlSecKeyDataStorePtr store);
+-static int              xmlSecNssX509NameStringRead     (xmlSecByte **str,
+-                                                         int *strLen,
+-                                                         xmlSecByte *res,
+-                                                         int resLen,
+-                                                         xmlSecByte delim,
+-                                                         int ingoreTrailingSpaces);
+-static xmlSecByte *     xmlSecNssX509NameRead           (xmlSecByte *str,
+-                                                         int len);
 -
--static void 		xmlSecNssNumToItem(SECItem *it, unsigned long num);
+-static int              xmlSecNssNumToItem              (SECItem *it, 
+-                                                         PRUint64 num);
 -
-+static int		xmlSecNssIntegerToItem( const xmlChar* integer , SECItem *it ) ;
++static int              xmlSecNssIntegerToItem( const xmlChar* integer , SECItem *it ) ;
  
  static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
      sizeof(xmlSecKeyDataStoreKlass),
-@@ -353,40 +344,28 @@ static CERTCertificate*
- xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName, 
- 		      xmlChar *issuerSerial, xmlChar *ski) {
-     CERTCertificate *cert = NULL;
--    xmlChar         *p = NULL;
-     CERTName *name = NULL;
-     SECItem *nameitem = NULL;
-     PRArenaPool *arena = NULL;
+@@ -431,16 +421,6 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
+     int rv;
  
-     if (subjectName != NULL) {
--	p = xmlSecNssX509NameRead(subjectName, xmlStrlen(subjectName));
--	if (p == NULL) {
+     if ((cert == NULL) && (subjectName != NULL)) {
+-        name = xmlSecNssGetCertName(subjectName);
+-        if (name == NULL) {
 -            xmlSecError(XMLSEC_ERRORS_HERE,
 -                        NULL,
--                        "xmlSecNssX509NameRead",
+-                        "xmlSecNssGetCertName",
 -                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
 -                        "subject=%s",
 -                        xmlSecErrorsSafeString(subjectName));
--	    goto done;
--	}
--
- 	arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
- 	if (arena == NULL) {
+-            goto done;
+-        }
+ 
+         if(arena == NULL) {
+             arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
+@@ -449,12 +429,12 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
+                             NULL,
+                             "PORT_NewArena",
+                             XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                            XMLSEC_ERRORS_NO_MESSAGE);
++                            "error code=%d", PORT_GetError());
+                 goto done;
+             }
+         }
+ 
+-        nameitem = SEC_ASN1EncodeItem(arena, NULL, (void *)name,
++        nameitem = SEC_ASN1EncodeItem(arena, NULL, (void *)subjectName,
+                                       SEC_ASN1_GET(CERT_NameTemplate));
+         if (nameitem == NULL) {
              xmlSecError(XMLSEC_ERRORS_HERE,
-                         NULL,
-                         "PORT_NewArena",
-                         XMLSEC_ERRORS_R_CRYPTO_FAILED,
--                        XMLSEC_ERRORS_NO_MESSAGE);
-+                        "error code=%d", PORT_GetError());
- 	    goto done;
- 	}
+@@ -472,17 +452,6 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
+         CERTIssuerAndSN issuerAndSN;
+         PRUint64 issuerSN = 0;
  
--	name = CERT_AsciiToName((char*)p);
-+	name = CERT_AsciiToName((char*)subjectName);
- 	if (name == NULL) {
-             xmlSecError(XMLSEC_ERRORS_HERE,
-                         NULL,
-                         "CERT_AsciiToName",
-                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
--                        XMLSEC_ERRORS_NO_MESSAGE);
-+                        "error code=%d", PORT_GetError());
- 	    goto done;
- 	}
- 
-@@ -408,34 +387,23 @@ xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName,
-     if((issuerName != NULL) && (issuerSerial != NULL)) {
- 	CERTIssuerAndSN issuerAndSN;
- 
--	p = xmlSecNssX509NameRead(issuerName, xmlStrlen(issuerName));
--	if (p == NULL) {
+-        name = xmlSecNssGetCertName(issuerName);
+-        if (name == NULL) {
 -            xmlSecError(XMLSEC_ERRORS_HERE,
 -                        NULL,
--                        "xmlSecNssX509NameRead",
+-                        "xmlSecNssGetCertName",
 -                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
 -                        "issuer=%s",
 -                        xmlSecErrorsSafeString(issuerName));
--	    goto done;
--	}
+-            goto done;
+-        }
 -
- 	arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
- 	if (arena == NULL) {
+         if(arena == NULL) {
+             arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
+             if (arena == NULL) {
+@@ -495,7 +464,7 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
+             }
+         }
+ 
+-        nameitem = SEC_ASN1EncodeItem(arena, NULL, (void *)name,
++        nameitem = SEC_ASN1EncodeItem(arena, NULL, (void *)issuerName,
+                                       SEC_ASN1_GET(CERT_NameTemplate));
+         if (nameitem == NULL) {
              xmlSecError(XMLSEC_ERRORS_HERE,
-                         NULL,
-                         "PORT_NewArena",
-                         XMLSEC_ERRORS_R_CRYPTO_FAILED,
--                        XMLSEC_ERRORS_NO_MESSAGE);
-+                        "error code=%d", PORT_GetError());
- 	    goto done;
- 	}
+@@ -511,26 +480,14 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
+         issuerAndSN.derIssuer.data = nameitem->data;
+         issuerAndSN.derIssuer.len = nameitem->len;
  
--	name = CERT_AsciiToName((char*)p);
-+	name = CERT_AsciiToName((char*)issuerName);
- 	if (name == NULL) {
-             xmlSecError(XMLSEC_ERRORS_HERE,
-                         NULL,
-                         "CERT_AsciiToName",
-                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
--                        XMLSEC_ERRORS_NO_MESSAGE);
-+                        "error code=%d", PORT_GetError());
- 	    goto done;
- 	}
- 
-@@ -455,8 +423,15 @@ xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName,
- 	issuerAndSN.derIssuer.data = nameitem->data;
- 	issuerAndSN.derIssuer.len = nameitem->len;
- 
--	/* TBD: serial num can be arbitrarily long */
--	xmlSecNssNumToItem(&issuerAndSN.serialNumber, PORT_Atoi((char *)issuerSerial));
+-        /* TBD: serial num can be arbitrarily long */
+-        if(PR_sscanf((char *)issuerSerial, "%llu", &issuerSN) != 1) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "PR_sscanf",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "error code=%d", PR_GetError());
+-            SECITEM_FreeItem(&issuerAndSN.serialNumber, PR_FALSE);
+-            goto done;
+-        }
+-
+-        rv = xmlSecNssNumToItem(&issuerAndSN.serialNumber, issuerSN);
+-        if(rv <= 0) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
 +        if( xmlSecNssIntegerToItem( issuerSerial, &issuerAndSN.serialNumber ) < 0 ) {
 +                xmlSecError(XMLSEC_ERRORS_HERE,
-+                        NULL,
+                         NULL,
+-                        "xmlSecNssNumToItem",
 +                        "xmlSecNssIntegerToItem",
-+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        "error code=%d", PR_GetError());
+-            SECITEM_FreeItem(&issuerAndSN.serialNumber, PR_FALSE);
+-            goto done;
 +                        "serial number=%s",
 +                        xmlSecErrorsSafeString(issuerSerial));
 +                goto done;
-+        }
+         }
  
- 	cert = CERT_FindCertByIssuerAndSN(CERT_GetDefaultCertDB(), 
- 					  &issuerAndSN);
-@@ -487,9 +462,6 @@ xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName,
-     }
- 
- done:
--    if (p != NULL) {
--	PORT_Free(p);
--    }
-     if (arena != NULL) {
- 	PORT_FreeArena(arena, PR_FALSE);
-     }
-@@ -500,176 +472,6 @@ done:
+         cert = CERT_FindCertByIssuerAndSN(CERT_GetDefaultCertDB(), &issuerAndSN);
+@@ -611,176 +568,6 @@ done:
      return(cert);
  }
  
@@ -5880,161 +5885,161 @@ index cfbcaca..63ed439 100644
 -    int nameLen, valueLen;
 -
 -    xmlSecAssert2(str != NULL, NULL);
--    
+-
 -    /* return string should be no longer than input string */
 -    retval = (xmlSecByte *)PORT_Alloc(len+1);
 -    if(retval == NULL) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    "PORT_Alloc",
--		    XMLSEC_ERRORS_R_MALLOC_FAILED,
--		    XMLSEC_ERRORS_NO_MESSAGE);
--	return(NULL);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    "PORT_Alloc",
+-                    XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(NULL);
 -    }
 -    p = retval;
--    
--    while(len > 0) {
--	/* skip spaces after comma or semicolon */
--	while((len > 0) && isspace(*str)) {
--	    ++str; --len;
--	}
 -
--	nameLen = xmlSecNssX509NameStringRead(&str, &len, name, sizeof(name), '=', 0);	
--	if(nameLen < 0) {
--	    xmlSecError(XMLSEC_ERRORS_HERE,
--			NULL,
--			"xmlSecNssX509NameStringRead",
--			XMLSEC_ERRORS_R_XMLSEC_FAILED,
--			XMLSEC_ERRORS_NO_MESSAGE);
--	    goto done;
--	}
--	memcpy(p, name, nameLen);
--	p+=nameLen;
--	*p++='=';
--	if(len > 0) {
--	    ++str; --len;
--	    if((*str) == '\"') {
--		valueLen = xmlSecNssX509NameStringRead(&str, &len, 
--					value, sizeof(value), '"', 1);	
--		if(valueLen < 0) {
--		    xmlSecError(XMLSEC_ERRORS_HERE,
--				NULL,
--				"xmlSecNssX509NameStringRead",
--				XMLSEC_ERRORS_R_XMLSEC_FAILED,
--				XMLSEC_ERRORS_NO_MESSAGE);
--		    goto done;
--    		}
--		/* skip spaces before comma or semicolon */
--		while((len > 0) && isspace(*str)) {
--		    ++str; --len;
--		}
--		if((len > 0) && ((*str) != ',')) {
--		    xmlSecError(XMLSEC_ERRORS_HERE,
--				NULL,
--				NULL,
--				XMLSEC_ERRORS_R_INVALID_DATA,
--				"comma is expected");
--		    goto done;
--		}
--		if(len > 0) {
--		    ++str; --len;
--		}
--		*p++='\"';
--		memcpy(p, value, valueLen);
--		p+=valueLen;
--		*p++='\"';
--	    } else if((*str) == '#') {
--		/* TODO: read octect values */
--		xmlSecError(XMLSEC_ERRORS_HERE,
--			    NULL,
--			    NULL,
--			    XMLSEC_ERRORS_R_INVALID_DATA,
--			    "reading octect values is not implemented yet");
--		goto done;
--	    } else {
--		valueLen = xmlSecNssX509NameStringRead(&str, &len, 
--					value, sizeof(value), ',', 1);	
--		if(valueLen < 0) {
--		    xmlSecError(XMLSEC_ERRORS_HERE,
--				NULL,
--				"xmlSecNssX509NameStringRead",
--				XMLSEC_ERRORS_R_XMLSEC_FAILED,
--				XMLSEC_ERRORS_NO_MESSAGE);
--		    goto done;
--    		}
--		memcpy(p, value, valueLen);
--		p+=valueLen;
--		if (len > 0)
--		    *p++=',';
--	    } 			
--	} else {
--	    valueLen = 0;
--	}
--	if(len > 0) {
--	    ++str; --len;
--	}	
+-    while(len > 0) {
+-        /* skip spaces after comma or semicolon */
+-        while((len > 0) && isspace(*str)) {
+-            ++str; --len;
+-        }
+-
+-        nameLen = xmlSecNssX509NameStringRead(&str, &len, name, sizeof(name), '=', 0);
+-        if(nameLen < 0) {
+-            xmlSecError(XMLSEC_ERRORS_HERE,
+-                        NULL,
+-                        "xmlSecNssX509NameStringRead",
+-                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                        XMLSEC_ERRORS_NO_MESSAGE);
+-            goto done;
+-        }
+-        memcpy(p, name, nameLen);
+-        p+=nameLen;
+-        *p++='=';
+-        if(len > 0) {
+-            ++str; --len;
+-            if((*str) == '\"') {
+-                valueLen = xmlSecNssX509NameStringRead(&str, &len,
+-                                        value, sizeof(value), '"', 1);
+-                if(valueLen < 0) {
+-                    xmlSecError(XMLSEC_ERRORS_HERE,
+-                                NULL,
+-                                "xmlSecNssX509NameStringRead",
+-                                XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                                XMLSEC_ERRORS_NO_MESSAGE);
+-                    goto done;
+-                }
+-                /* skip spaces before comma or semicolon */
+-                while((len > 0) && isspace(*str)) {
+-                    ++str; --len;
+-                }
+-                if((len > 0) && ((*str) != ',')) {
+-                    xmlSecError(XMLSEC_ERRORS_HERE,
+-                                NULL,
+-                                NULL,
+-                                XMLSEC_ERRORS_R_INVALID_DATA,
+-                                "comma is expected");
+-                    goto done;
+-                }
+-                if(len > 0) {
+-                    ++str; --len;
+-                }
+-                *p++='\"';
+-                memcpy(p, value, valueLen);
+-                p+=valueLen;
+-                *p++='\"';
+-            } else if((*str) == '#') {
+-                /* TODO: read octect values */
+-                xmlSecError(XMLSEC_ERRORS_HERE,
+-                            NULL,
+-                            NULL,
+-                            XMLSEC_ERRORS_R_INVALID_DATA,
+-                            "reading octect values is not implemented yet");
+-                goto done;
+-            } else {
+-                valueLen = xmlSecNssX509NameStringRead(&str, &len,
+-                                        value, sizeof(value), ',', 1);
+-                if(valueLen < 0) {
+-                    xmlSecError(XMLSEC_ERRORS_HERE,
+-                                NULL,
+-                                "xmlSecNssX509NameStringRead",
+-                                XMLSEC_ERRORS_R_XMLSEC_FAILED,
+-                                XMLSEC_ERRORS_NO_MESSAGE);
+-                    goto done;
+-                }
+-                memcpy(p, value, valueLen);
+-                p+=valueLen;
+-                if (len > 0)
+-                    *p++=',';
+-            }
+-        } else {
+-            valueLen = 0;
+-        }
+-        if(len > 0) {
+-            ++str; --len;
+-        }
 -    }
 -
 -    *p = 0;
 -    return(retval);
--    
+-
 -done:
 -    PORT_Free(retval);
 -    return (NULL);
 -}
 -
--static int 
--xmlSecNssX509NameStringRead(xmlSecByte **str, int *strLen, 
--			    xmlSecByte *res, int resLen,
--			    xmlSecByte delim, int ingoreTrailingSpaces) {
--    xmlSecByte *p, *q, *nonSpace; 
+-static int
+-xmlSecNssX509NameStringRead(xmlSecByte **str, int *strLen,
+-                            xmlSecByte *res, int resLen,
+-                            xmlSecByte delim, int ingoreTrailingSpaces) {
+-    xmlSecByte *p, *q, *nonSpace;
 -
 -    xmlSecAssert2(str != NULL, -1);
 -    xmlSecAssert2(strLen != NULL, -1);
 -    xmlSecAssert2(res != NULL, -1);
--    
+-
 -    p = (*str);
 -    nonSpace = q = res;
--    while(((p - (*str)) < (*strLen)) && ((*p) != delim) && ((q - res) < resLen)) { 
--	if((*p) != '\\') {
--	    if(ingoreTrailingSpaces && !isspace(*p)) {
--		nonSpace = q;	
--	    }
--	    *(q++) = *(p++);
--	} else {
--	    ++p;
--	    nonSpace = q;    
--	    if(xmlSecIsHex((*p))) {
--		if((p - (*str) + 1) >= (*strLen)) {
--		    xmlSecError(XMLSEC_ERRORS_HERE,
--				NULL,
--				NULL,
--				XMLSEC_ERRORS_R_INVALID_DATA,
--				"two hex digits expected");
--	    	    return(-1);
--		}
--		*(q++) = xmlSecGetHex(p[0]) * 16 + xmlSecGetHex(p[1]);
--		p += 2;
--	    } else {
--		if(((++p) - (*str)) >= (*strLen)) {
--		    xmlSecError(XMLSEC_ERRORS_HERE,
--				NULL,
--				NULL,
--				XMLSEC_ERRORS_R_INVALID_DATA,
--				"escaped symbol missed");
--		    return(-1);
--		}
--		*(q++) = *(p++); 
--	    }
--	}	    
+-    while(((p - (*str)) < (*strLen)) && ((*p) != delim) && ((q - res) < resLen)) {
+-        if((*p) != '\\') {
+-            if(ingoreTrailingSpaces && !isspace(*p)) {
+-                nonSpace = q;
+-            }
+-            *(q++) = *(p++);
+-        } else {
+-            ++p;
+-            nonSpace = q;
+-            if(xmlSecIsHex((*p))) {
+-                if((p - (*str) + 1) >= (*strLen)) {
+-                    xmlSecError(XMLSEC_ERRORS_HERE,
+-                                NULL,
+-                                NULL,
+-                                XMLSEC_ERRORS_R_INVALID_DATA,
+-                                "two hex digits expected");
+-                    return(-1);
+-                }
+-                *(q++) = xmlSecGetHex(p[0]) * 16 + xmlSecGetHex(p[1]);
+-                p += 2;
+-            } else {
+-                if(((++p) - (*str)) >= (*strLen)) {
+-                    xmlSecError(XMLSEC_ERRORS_HERE,
+-                                NULL,
+-                                NULL,
+-                                XMLSEC_ERRORS_R_INVALID_DATA,
+-                                "escaped symbol missed");
+-                    return(-1);
+-                }
+-                *(q++) = *(p++);
+-            }
+-        }
 -    }
 -    if(((p - (*str)) < (*strLen)) && ((*p) != delim)) {
--	xmlSecError(XMLSEC_ERRORS_HERE,
--		    NULL,
--		    NULL,
--		    XMLSEC_ERRORS_R_INVALID_SIZE,
--		    "buffer is too small");
--	return(-1);
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    NULL,
+-                    NULL,
+-                    XMLSEC_ERRORS_R_INVALID_SIZE,
+-                    "buffer is too small");
+-        return(-1);
 -    }
 -    (*strLen) -= (p - (*str));
 -    (*str) = p;
@@ -6042,11 +6047,11 @@ index cfbcaca..63ed439 100644
 -}
 -
  /* code lifted from NSS */
- static void
- xmlSecNssNumToItem(SECItem *it, unsigned long ui)
-@@ -713,6 +515,77 @@ xmlSecNssNumToItem(SECItem *it, unsigned long ui)
-     it->len = len;
-     PORT_Memcpy(it->data, bb + (sizeof(bb) - len), len);
+ static int
+ xmlSecNssNumToItem(SECItem *it, PRUint64 ui)
+@@ -817,6 +604,77 @@ xmlSecNssNumToItem(SECItem *it, PRUint64 ui)
+     PORT_Memcpy(it->data, bb + (zeros_len - 1), it->len);
+     return(it->len);
  }
 +
 +static int
@@ -6123,10 +6128,10 @@ index cfbcaca..63ed439 100644
  
  
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index 9a733d3..c2ab75c 100644
+index 2f4c3e7..601d379 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -218,6 +218,9 @@ XMLSEC_OPENSSL_OBJS_A = \
+@@ -224,6 +224,9 @@ XMLSEC_OPENSSL_OBJS_A = \
  	$(XMLSEC_OPENSSL_INTDIR_A)\x509vfy.obj 
  
  XMLSEC_NSS_OBJS = \
@@ -6136,7 +6141,7 @@ index 9a733d3..c2ab75c 100644
  	$(XMLSEC_NSS_INTDIR)\app.obj\
  	$(XMLSEC_NSS_INTDIR)\bignum.obj\
  	$(XMLSEC_NSS_INTDIR)\ciphers.obj \
-@@ -253,6 +256,7 @@ XMLSEC_NSS_OBJS_A = \
+@@ -259,6 +262,7 @@ XMLSEC_NSS_OBJS_A = \
  	$(XMLSEC_NSS_INTDIR_A)\strings.obj
  
  XMLSEC_MSCRYPTO_OBJS = \
