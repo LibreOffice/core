@@ -75,7 +75,7 @@ static inline void * makeInterface( sal_IntPtr nOffset, void * that )
     return (static_cast<char *>(that) + nOffset);
 }
 
-static inline bool __td_equals(
+static inline bool td_equals(
     typelib_TypeDescriptionReference const * pTDR1,
     typelib_TypeDescriptionReference const * pTDR2 )
 {
@@ -83,7 +83,7 @@ static inline bool __td_equals(
             OUString::unacquired(&pTDR1->pTypeName) == OUString::unacquired(&pTDR2->pTypeName));
 }
 
-static inline type_entry * __getTypeEntries( class_data * cd )
+static inline type_entry * getTypeEntries( class_data * cd )
 {
     type_entry * pEntries = cd->m_typeEntries;
     if (! cd->m_storedTypeRefs) // not inited?
@@ -113,9 +113,9 @@ static inline type_entry * __getTypeEntries( class_data * cd )
     return pEntries;
 }
 
-static inline void __fillTypes( Type * types, class_data * cd )
+static inline void fillTypes( Type * types, class_data * cd )
 {
-    type_entry * pEntries = __getTypeEntries( cd );
+    type_entry * pEntries = getTypeEntries( cd );
     for ( sal_Int32 n = cd->m_nTypes; n--; )
     {
         types[ n ] = pEntries[ n ].m_type.typeRef;
@@ -141,7 +141,7 @@ bool recursivelyFindType(
         typelib_InterfaceTypeDescription const * base = type->ppBaseTypes[i];
         // ignore XInterface:
         if (base->nBaseTypes > 0) {
-            if (__td_equals(
+            if (td_equals(
                     reinterpret_cast<
                         typelib_TypeDescriptionReference const * >(base),
                     demandedType))
@@ -164,17 +164,17 @@ bool recursivelyFindType(
 
 }
 
-static inline void * __queryDeepNoXInterface(
+static inline void * queryDeepNoXInterface(
     typelib_TypeDescriptionReference * pDemandedTDR, class_data * cd, void * that )
 {
-    type_entry * pEntries = __getTypeEntries( cd );
+    type_entry * pEntries = getTypeEntries( cd );
     sal_Int32 nTypes = cd->m_nTypes;
     sal_Int32 n;
 
     // try top interfaces without getting td
     for ( n = 0; n < nTypes; ++n )
     {
-        if (__td_equals( pEntries[ n ].m_type.typeRef, pDemandedTDR ))
+        if (td_equals( pEntries[ n ].m_type.typeRef, pDemandedTDR ))
         {
             return makeInterface( pEntries[ n ].m_offset, that );
         }
@@ -229,7 +229,7 @@ Any SAL_CALL ImplHelper_query(
     }
     else
     {
-        p = __queryDeepNoXInterface( pTDR, cd, that );
+        p = queryDeepNoXInterface( pTDR, cd, that );
         if (! p)
         {
             return Any();
@@ -244,7 +244,7 @@ Any SAL_CALL ImplHelper_queryNoXInterface(
     checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
-    void * p = __queryDeepNoXInterface( pTDR, cd, that );
+    void * p = queryDeepNoXInterface( pTDR, cd, that );
     if (p)
     {
         return Any( &p, pTDR );
@@ -266,7 +266,7 @@ Sequence< Type > SAL_CALL ImplHelper_getTypes(
 {
     Sequence< Type > types( cd->m_nTypes );
     Type * pTypes = types.getArray();
-    __fillTypes( pTypes, cd );
+    fillTypes( pTypes, cd );
     return types;
 }
 
@@ -277,7 +277,7 @@ Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
     sal_Int32 nAddTypes = rAddTypes.getLength();
     Sequence< Type > types( nImplTypes + nAddTypes );
     Type * pTypes = types.getArray();
-    __fillTypes( pTypes, cd );
+    fillTypes( pTypes, cd );
     // append base types
     Type const * pAddTypes = rAddTypes.getConstArray();
     while (nAddTypes--)
@@ -298,7 +298,7 @@ Any SAL_CALL WeakImplHelper_query(
     // shortcut XInterface to OWeakObject
     if (! isXInterface( pTDR->pTypeName ))
     {
-        void * p = __queryDeepNoXInterface( pTDR, cd, that );
+        void * p = queryDeepNoXInterface( pTDR, cd, that );
         if (p)
         {
             return Any( &p, pTDR );
@@ -313,7 +313,7 @@ Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
     sal_Int32 nTypes = cd->m_nTypes;
     Sequence< Type > types( nTypes +1 );
     Type * pTypes = types.getArray();
-    __fillTypes( pTypes, cd );
+    fillTypes( pTypes, cd );
     pTypes[ nTypes ] = cppu::UnoType<XWeak>::get();
     return types;
 }
@@ -329,7 +329,7 @@ Any SAL_CALL WeakAggImplHelper_queryAgg(
     // shortcut XInterface to OWeakAggObject
     if (! isXInterface( pTDR->pTypeName ))
     {
-        void * p = __queryDeepNoXInterface( pTDR, cd, that );
+        void * p = queryDeepNoXInterface( pTDR, cd, that );
         if (p)
         {
             return Any( &p, pTDR );
@@ -344,7 +344,7 @@ Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
     sal_Int32 nTypes = cd->m_nTypes;
     Sequence< Type > types( nTypes +2 );
     Type * pTypes = types.getArray();
-    __fillTypes( pTypes, cd );
+    fillTypes( pTypes, cd );
     pTypes[ nTypes++ ] = cppu::UnoType<XWeak>::get();
     pTypes[ nTypes ] = cppu::UnoType<XAggregation>::get();
     return types;
@@ -361,7 +361,7 @@ Any SAL_CALL WeakComponentImplHelper_query(
     // shortcut XInterface to WeakComponentImplHelperBase
     if (! isXInterface( pTDR->pTypeName ))
     {
-        void * p = __queryDeepNoXInterface( pTDR, cd, that );
+        void * p = queryDeepNoXInterface( pTDR, cd, that );
         if (p)
         {
             return Any( &p, pTDR );
@@ -376,7 +376,7 @@ Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
     sal_Int32 nTypes = cd->m_nTypes;
     Sequence< Type > types( nTypes +2 );
     Type * pTypes = types.getArray();
-    __fillTypes( pTypes, cd );
+    fillTypes( pTypes, cd );
     pTypes[ nTypes++ ] = cppu::UnoType<XWeak>::get();
     pTypes[ nTypes ] = cppu::UnoType<lang::XComponent>::get();
     return types;
@@ -393,7 +393,7 @@ Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     // shortcut XInterface to WeakAggComponentImplHelperBase
     if (! isXInterface( pTDR->pTypeName ))
     {
-        void * p = __queryDeepNoXInterface( pTDR, cd, that );
+        void * p = queryDeepNoXInterface( pTDR, cd, that );
         if (p)
         {
             return Any( &p, pTDR );
@@ -408,7 +408,7 @@ Sequence< Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     sal_Int32 nTypes = cd->m_nTypes;
     Sequence< Type > types( nTypes +3 );
     Type * pTypes = types.getArray();
-    __fillTypes( pTypes, cd );
+    fillTypes( pTypes, cd );
     pTypes[ nTypes++ ] = cppu::UnoType<XWeak>::get();
     pTypes[ nTypes++ ] = cppu::UnoType<XAggregation>::get();
     pTypes[ nTypes ] = cppu::UnoType<lang::XComponent>::get();
