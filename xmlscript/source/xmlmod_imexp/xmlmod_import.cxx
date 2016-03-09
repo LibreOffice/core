@@ -61,7 +61,7 @@ void ModuleElement::ignorableWhitespace(
 void ModuleElement::characters( OUString const & rChars )
     throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
-    _StrBuffer.append( rChars );
+    _strBuffer.append( rChars );
 }
 
 void ModuleElement::processingInstruction(
@@ -73,7 +73,7 @@ void ModuleElement::processingInstruction(
 void ModuleElement::endElement()
     throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
-    _pImport->mrModuleDesc.aCode = _StrBuffer.makeStringAndClear();
+    _pImport->mrModuleDesc.aCode = _strBuffer.makeStringAndClear();
 }
 
 Reference< xml::input::XElement > ModuleElement::startChildElement(

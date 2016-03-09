@@ -90,7 +90,7 @@ protected:
 
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
-    OUStringBuffer _StrBuffer;
+    OUStringBuffer _strBuffer;
 
 public:
     ModuleElement(
