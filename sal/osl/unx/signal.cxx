@@ -71,12 +71,12 @@
 #include <valgrind/memcheck.h>
 #endif
 
-typedef struct _oslSignalHandlerImpl
+struct oslSignalHandlerImpl
 {
     oslSignalHandlerFunction      Handler;
     void*                         pData;
-    struct _oslSignalHandlerImpl* pNext;
-} oslSignalHandlerImpl;
+    oslSignalHandlerImpl *        pNext;
+};
 
 static struct SignalAction
 {
