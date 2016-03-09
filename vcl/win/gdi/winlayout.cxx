@@ -3768,6 +3768,12 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
+    if (pRectToErase)
+    {
+        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left() + pRectToErase->GetWidth(), pRectToErase->Top() + pRectToErase->GetHeight() };
+        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
+    }
+
     if (!Ready())
         return false;
 
@@ -3794,18 +3800,15 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetTextColor(hDC)), &pBlackBrush));
 
     HRESULT hr = S_OK;
+    int nGlyphs = 0;
     if (succeeded)
     {
-        if (pRectToErase)
-            mpRT->Clear(D2D1::ColorF(D2D1::ColorF::White));
-
         const int MAX_GLYPHS = 2;
         sal_GlyphId glyphIntStr[MAX_GLYPHS];
         UINT16 glyphIndices[MAX_GLYPHS];
         long   glyphIntAdv[MAX_GLYPHS];
         FLOAT  glyphAdvances[MAX_GLYPHS];
         DWRITE_GLYPH_OFFSET glyphOffsets[MAX_GLYPHS] = { { 0.0f, 0.0f }, };
-        int nGlyphs = 0;
 
         mpRT->BeginDraw();
         do
@@ -3844,7 +3847,7 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     if (hr == D2DERR_RECREATE_TARGET)
         CreateRenderTarget();
 
-    return (SUCCEEDED(hr) && succeeded && pRectToErase);
+    return (succeeded && nGlyphs >= 1 && pRectToErase);
 }
 
 bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
