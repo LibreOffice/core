@@ -520,7 +520,7 @@ Sequence< OUString > PermissionCollection::toStrings() const
 }
 #endif
 
-inline static bool __implies(
+inline static bool implies(
     ::rtl::Reference< Permission > const & head, Permission const & demanded )
 {
     for ( Permission * perm = head.get(); perm; perm = perm->m_next.get() )
@@ -567,7 +567,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     {
         FilePermission demanded(
             *static_cast< io::FilePermission const * >( perm.pData ) );
-        if (__implies( m_head, demanded ))
+        if (implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE
             demanded_diag( demanded );
@@ -580,7 +580,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     {
         SocketPermission demanded(
             *static_cast< connection::SocketPermission const * >( perm.pData ) );
-        if (__implies( m_head, demanded ))
+        if (implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE
             demanded_diag( demanded );
@@ -593,7 +593,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     {
         RuntimePermission demanded(
             *static_cast< security::RuntimePermission const * >( perm.pData ) );
-        if (__implies( m_head, demanded ))
+        if (implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE
             demanded_diag( demanded );
@@ -605,7 +605,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     else if (demanded_type.equals( cppu::UnoType<security::AllPermission>::get()))
     {
         AllPermission demanded;
-        if (__implies( m_head, demanded ))
+        if (implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE
             demanded_diag( demanded );
