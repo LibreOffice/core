@@ -2049,7 +2049,7 @@ void SwContentFrame::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pN
                      !GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
                 {
                     // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
-                    GetIndNext()->InvalidateObjs( true );
+                    GetIndNext()->InvalidateObjs();
                 }
                 Prepare( PREP_UL_SPACE );   //TextFrame has to correct line spacing.
                 rInvFlags |= 0x80;
