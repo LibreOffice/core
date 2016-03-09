@@ -4939,6 +4939,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_DIBITMAP:
         m_aStates.top().aPicture.eStyle = RTFBmpStyle::DIBITMAP;
         break;
+    case RTF_PROPTYPE:
+    {
+        switch (nParam)
+        {
+        case 30:
+            m_aStates.top().aPropType = cppu::UnoType<OUString>::get();
+            break;
+        }
+    }
+    break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
