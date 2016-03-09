@@ -58,7 +58,7 @@ public:
     void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable );
 
     void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel );
-    void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID  );
+    void            ChangeRoadmapItemID( ItemId _nID, ItemId NewID  );
 
     void            SetRoadmapInteractive( bool _bInteractive );
     bool            IsRoadmapInteractive();
@@ -69,8 +69,8 @@ public:
     ItemIndex       GetItemCount() const;
     ItemId          GetItemID( ItemIndex _nIndex ) const;
 
-    void            InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled = true );
-    void            ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
+    void            InsertRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled = true );
+    void            ReplaceRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
     void            DeleteRoadmapItem( ItemIndex _nIndex );
 
     ItemId          GetCurrentRoadmapItemID() const;
@@ -96,15 +96,15 @@ private:
 
     RoadmapItem*         GetByID( ItemId _nID  );
     const RoadmapItem*   GetByID( ItemId _nID  ) const;
-    RoadmapItem*         GetPreviousHyperLabel( ItemIndex _Index);
+    RoadmapItem*         GetPreviousHyperLabel( ItemIndex Index);
 
     void                 DrawHeadline(vcl::RenderContext& rRenderContext);
     void                 DeselectOldRoadmapItems();
-    ItemId               GetNextAvailableItemId( ItemIndex _NewIndex );
-    ItemId               GetPreviousAvailableItemId( ItemIndex _NewIndex );
+    ItemId               GetNextAvailableItemId( ItemIndex NewIndex );
+    ItemId               GetPreviousAvailableItemId( ItemIndex NewIndex );
     RoadmapItem*         GetByPointer(vcl::Window* pWindow);
-    RoadmapItem*         InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled, bool _bIncomplete  );
-    void                 UpdatefollowingHyperLabels( ItemIndex _Index );
+    RoadmapItem*         InsertHyperLabel( ItemIndex Index, const OUString& _aStr, ItemId RMID, bool _bEnabled, bool _bIncomplete  );
+    void                 UpdatefollowingHyperLabels( ItemIndex Index );
 };
 
 }   // namespace svt
