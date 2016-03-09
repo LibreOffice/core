@@ -148,7 +148,6 @@ struct NamePair_Impl
     OUString maLongName;
 };
 
-class Updater_Impl;
 class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
 
@@ -186,7 +185,6 @@ class SfxDocTplService_Impl
     std::vector< NamePair_Impl* > maNames;
     lang::Locale                maLocale;
     Content                     maRootContent;
-    Updater_Impl*               mpUpdater;
     bool                        mbIsInitialized : 1;
     bool                        mbLocaleSet     : 1;
 
@@ -304,21 +302,6 @@ public:
 
     void                        update();
     void                        doUpdate();
-    void                        finished() { mpUpdater = nullptr; }
-};
-
-
-class Updater_Impl : public ::osl::Thread
-{
-private:
-    SfxDocTplService_Impl   *mpDocTemplates;
-
-public:
-    explicit                Updater_Impl( SfxDocTplService_Impl* pTemplates );
-    virtual                 ~Updater_Impl();
-
-    virtual void SAL_CALL   run() override;
-    virtual void SAL_CALL   onTerminated() override;
 };
 
 
@@ -1097,7 +1080,6 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentCo
     : maRelocator(xContext)
 {
     mxContext       = xContext;
-    mpUpdater       = nullptr;
     mbIsInitialized = false;
     mbLocaleSet     = false;
 }
@@ -1106,13 +1088,6 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentCo
 SfxDocTplService_Impl::~SfxDocTplService_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
-
-    if ( mpUpdater )
-    {
-        mpUpdater->terminate();
-        mpUpdater->join();
-        delete mpUpdater;
-    }
 
     for ( size_t i = 0, n = maNames.size(); i < n; ++i )
         delete maNames[ i ];
@@ -2374,33 +2349,6 @@ void SAL_CALL SfxDocTplService::update()
     if ( pImp->init() )
         pImp->update();
 }
-
-
-Updater_Impl::Updater_Impl( SfxDocTplService_Impl* pTemplates )
-{
-    mpDocTemplates = pTemplates;
-}
-
-
-Updater_Impl::~Updater_Impl()
-{
-}
-
-
-void SAL_CALL Updater_Impl::run()
-{
-    osl_setThreadName("Updater_Impl");
-
-    mpDocTemplates->doUpdate();
-}
-
-
-void SAL_CALL Updater_Impl::onTerminated()
-{
-    mpDocTemplates->finished();
-    delete this;
-}
-
 
 WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 {
