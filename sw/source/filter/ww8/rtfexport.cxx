@@ -474,6 +474,58 @@ void RtfExport::WriteInfo()
     Strm().WriteChar('}');
 }
 
+void RtfExport::WriteUserProps()
+{
+    Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_USERPROPS);
+
+    SwDocShell* pDocShell(m_pDoc->GetDocShell());
+    uno::Reference<document::XDocumentProperties> xDocProps;
+    if (pDocShell)
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(), uno::UNO_QUERY);
+        xDocProps.set(xDPS->getDocumentProperties());
+    }
+
+    if (xDocProps.is())
+    {
+        // Handle user-defined properties.
+        uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = xDocProps->getUserDefinedProperties();
+        if (xUserDefinedProperties.is())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xUserDefinedProperties, uno::UNO_QUERY);
+            uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+
+            for (const beans::Property& rProperty : aProperties)
+            {
+                if (rProperty.Name.startsWith("Company"))
+                    // We have explicit markup in RTF for this property.
+                    continue;
+
+                // Property name.
+                Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PROPNAME " ");
+                Strm().WriteCharPtr(msfilter::rtfutil::OutString(rProperty.Name, m_eDefaultEncoding).getStr());
+                Strm().WriteChar('}');
+
+                // Property value type.
+                OUString aValue;
+                if (xPropertySet->getPropertyValue(rProperty.Name) >>= aValue)
+                {
+                    Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
+                    OutULong(30);
+                }
+
+                // Property value.
+                Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_STATICVAL " ");
+                Strm().WriteCharPtr(msfilter::rtfutil::OutString(aValue, m_eDefaultEncoding).getStr());
+                Strm().WriteChar('}');
+            }
+        }
+
+    }
+
+    Strm().WriteChar('}');
+}
+
 void RtfExport::WritePageDescTable()
 {
     // Write page descriptions (page styles)
@@ -535,6 +587,7 @@ void RtfExport::ExportDocument_Impl()
     WriteRevTab();
 
     WriteInfo();
+    WriteUserProps();
     // Default TabSize
     Strm().WriteCharPtr(m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr()).WriteCharPtr(SAL_NEWLINE_STRING);
 
