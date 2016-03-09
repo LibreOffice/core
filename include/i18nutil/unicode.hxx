@@ -27,11 +27,11 @@
 
 class LanguageTag;
 
-typedef struct _ScriptTypeList {
+struct ScriptTypeList {
     sal_Int16 from;
     sal_Int16 to;
     sal_Int16 value;
-} ScriptTypeList;
+};
 
 class I18NUTIL_DLLPUBLIC unicode
 {
