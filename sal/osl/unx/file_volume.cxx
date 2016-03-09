@@ -84,12 +84,12 @@
  *
  ******************************************************************************/
 
-typedef struct _oslVolumeDeviceHandleImpl
+struct oslVolumeDeviceHandleImpl
 {
     sal_Char pszMountPoint[PATH_MAX];
     sal_Char ident[4];
     sal_uInt32   RefCount;
-} oslVolumeDeviceHandleImpl;
+};
 
 /******************************************************************************
  *
