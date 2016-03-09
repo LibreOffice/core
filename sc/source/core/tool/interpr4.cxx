@@ -75,6 +75,7 @@
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
 #include <boost/scoped_array.hpp>
+#include <stack>
 
 using namespace com::sun::star;
 using namespace formula;
@@ -3564,6 +3565,7 @@ StackVar ScInterpreter::Interpret()
     sal_uLong nRetIndexExpr = 0;
     sal_uInt16 nErrorFunction = 0;
     sal_uInt16 nErrorFunctionCount = 0;
+    std::stack<sal_uInt16> aErrorFunctionStack;
     sal_uInt16 nStackBase;
 
     nGlobalError = 0;
@@ -4094,7 +4096,19 @@ StackVar ScInterpreter::Interpret()
             else
                 nLevel = 0;
             if ( nLevel == 1 || (nLevel == 2 && aCode.IsEndOfPath()) )
+            {
+                if (nLevel == 1)
+                    aErrorFunctionStack.push( nErrorFunction);
                 bGotResult = JumpMatrix( nLevel );
+                if (aErrorFunctionStack.empty())
+                    assert(!"ScInterpreter::Interpret - aErrorFunctionStack empty in JumpMatrix context");
+                else
+                {
+                    nErrorFunction = aErrorFunctionStack.top();
+                    if (bGotResult)
+                        aErrorFunctionStack.pop();
+                }
+            }
             else
                 pJumpMatrix = NULL;
         } while ( bGotResult );
