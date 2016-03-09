@@ -28,8 +28,6 @@
 
 #include <svl/zforlist.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <set>
 #include <unordered_set>
 #include <unordered_map>
@@ -65,7 +63,7 @@ class ScDocument;
  * Base class that abstracts different data source types of a datapilot
  * table.
  */
-class SC_DLLPUBLIC ScDPTableData : public ::boost::noncopyable
+class SC_DLLPUBLIC ScDPTableData
 {
     //  cached data for GetDatePart
     long    nLastDateVal;
@@ -96,6 +94,8 @@ public:
         CalcInfo();
     };
 
+    ScDPTableData(const ScDPTableData&) = delete;
+    const ScDPTableData& operator=(const ScDPTableData&) = delete;
     ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
