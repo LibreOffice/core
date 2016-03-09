@@ -158,61 +158,61 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 }
 
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
-        { SID_ATTR_FRAMEDIRECTION, SfxItemPoolFlags::POOLABLE },         // EE_PARA_WRITINGDIR
-        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, SfxItemPoolFlags::POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
-        { SID_ATTR_PARA_FORBIDDEN_RULES, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_PARA_SCRIPTSPACE, SfxItemPoolFlags::POOLABLE },       // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, SfxItemPoolFlags::POOLABLE },         // EE_PARA_NUMBULL
-        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_HYPHENATE
-        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_BULLETSTATE
-        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_OUTLLRSPACE
-        { SID_ATTR_PARA_OUTLLEVEL, SfxItemPoolFlags::POOLABLE },         // EE_PARA_OUTLLEVEL
-        { SID_ATTR_PARA_BULLET, SfxItemPoolFlags::POOLABLE },            // EE_PARA_BULLET
-        { SID_ATTR_LRSPACE, SfxItemPoolFlags::POOLABLE },                // EE_PARA_LRSPACE
-        { SID_ATTR_ULSPACE, SfxItemPoolFlags::POOLABLE },                // EE_PARA_ULSPACE
-        { SID_ATTR_PARA_LINESPACE, SfxItemPoolFlags::POOLABLE },         // EE_PARA_SBL
-        { SID_ATTR_PARA_ADJUST, SfxItemPoolFlags::POOLABLE },            // EE_PARA_JUST
-        { SID_ATTR_TABSTOP, SfxItemPoolFlags::POOLABLE },                // EE_PARA_TABS
-        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SfxItemPoolFlags::POOLABLE }, // EE_PARA_JUST_METHOD
-        { SID_ATTR_ALIGN_VER_JUSTIFY, SfxItemPoolFlags::POOLABLE },      // EE_PARA_VER_JUST
-        { SID_ATTR_CHAR_COLOR, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_FONT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_SCALEWIDTH, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_WEIGHT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_UNDERLINE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_STRIKEOUT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_POSTURE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CONTOUR, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_SHADOWED, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_ESCAPEMENT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_AUTOKERN, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_KERNING, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_WORDLINEMODE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_LANGUAGE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CJK_LANGUAGE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CTL_LANGUAGE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CJK_FONT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CTL_FONT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CJK_WEIGHT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CTL_WEIGHT, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CJK_POSTURE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CTL_POSTURE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_EMPHASISMARK, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_RELIEF, SfxItemPoolFlags::POOLABLE },
-        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_CHAR_RUBI_DUMMY
-        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_CHAR_XMLATTRIBS
-        { SID_ATTR_CHAR_OVERLINE, SfxItemPoolFlags::POOLABLE },
-        { SID_ATTR_CHAR_CASEMAP, SfxItemPoolFlags::POOLABLE },       // EE_CHAR_CASEMAP
-        { SID_ATTR_CHAR_GRABBAG, SfxItemPoolFlags::POOLABLE },       // EE_CHAR_GRABBAG
-        { SID_ATTR_CHAR_BACK_COLOR, SfxItemPoolFlags::POOLABLE },    // EE_CHAR_BKGCOLOR
-        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_FEATURE_TAB
-        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_FEATURE_LINEBR
-        { SID_ATTR_CHAR_CHARSETCOLOR, SfxItemPoolFlags::POOLABLE },  // EE_FEATURE_NOTCONV
-        { SID_FIELD, SfxItemPoolFlags::POOLABLE }
+        { SID_ATTR_FRAMEDIRECTION, true },         // EE_PARA_WRITINGDIR
+        { 0, true },                               // EE_PARA_XMLATTRIBS
+        { SID_ATTR_PARA_HANGPUNCTUATION, true },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_PARA_FORBIDDEN_RULES, true },
+        { SID_ATTR_PARA_SCRIPTSPACE, true },       // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_NUMBERING_RULE, true },         // EE_PARA_NUMBULL
+        { 0, true },                               // EE_PARA_HYPHENATE
+        { 0, true },                               // EE_PARA_BULLETSTATE
+        { 0, true },                               // EE_PARA_OUTLLRSPACE
+        { SID_ATTR_PARA_OUTLLEVEL, true },         // EE_PARA_OUTLLEVEL
+        { SID_ATTR_PARA_BULLET, true },            // EE_PARA_BULLET
+        { SID_ATTR_LRSPACE, true },                // EE_PARA_LRSPACE
+        { SID_ATTR_ULSPACE, true },                // EE_PARA_ULSPACE
+        { SID_ATTR_PARA_LINESPACE, true },         // EE_PARA_SBL
+        { SID_ATTR_PARA_ADJUST, true },            // EE_PARA_JUST
+        { SID_ATTR_TABSTOP, true },                // EE_PARA_TABS
+        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, true }, // EE_PARA_JUST_METHOD
+        { SID_ATTR_ALIGN_VER_JUSTIFY, true },      // EE_PARA_VER_JUST
+        { SID_ATTR_CHAR_COLOR, true },
+        { SID_ATTR_CHAR_FONT, true },
+        { SID_ATTR_CHAR_FONTHEIGHT, true },
+        { SID_ATTR_CHAR_SCALEWIDTH, true },
+        { SID_ATTR_CHAR_WEIGHT, true },
+        { SID_ATTR_CHAR_UNDERLINE, true },
+        { SID_ATTR_CHAR_STRIKEOUT, true },
+        { SID_ATTR_CHAR_POSTURE, true },
+        { SID_ATTR_CHAR_CONTOUR, true },
+        { SID_ATTR_CHAR_SHADOWED, true },
+        { SID_ATTR_CHAR_ESCAPEMENT, true },
+        { SID_ATTR_CHAR_AUTOKERN, true },
+        { SID_ATTR_CHAR_KERNING, true },
+        { SID_ATTR_CHAR_WORDLINEMODE, true },
+        { SID_ATTR_CHAR_LANGUAGE, true },
+        { SID_ATTR_CHAR_CJK_LANGUAGE, true },
+        { SID_ATTR_CHAR_CTL_LANGUAGE, true },
+        { SID_ATTR_CHAR_CJK_FONT, true },
+        { SID_ATTR_CHAR_CTL_FONT, true },
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, true },
+        { SID_ATTR_CHAR_CJK_WEIGHT, true },
+        { SID_ATTR_CHAR_CTL_WEIGHT, true },
+        { SID_ATTR_CHAR_CJK_POSTURE, true },
+        { SID_ATTR_CHAR_CTL_POSTURE, true },
+        { SID_ATTR_CHAR_EMPHASISMARK, true },
+        { SID_ATTR_CHAR_RELIEF, true },
+        { 0, true },                           // EE_CHAR_RUBI_DUMMY
+        { 0, true },                           // EE_CHAR_XMLATTRIBS
+        { SID_ATTR_CHAR_OVERLINE, true },
+        { SID_ATTR_CHAR_CASEMAP, true },       // EE_CHAR_CASEMAP
+        { SID_ATTR_CHAR_GRABBAG, true },       // EE_CHAR_GRABBAG
+        { SID_ATTR_CHAR_BACK_COLOR, true },    // EE_CHAR_BKGCOLOR
+        { 0, true },                           // EE_FEATURE_TAB
+        { 0, true },                           // EE_FEATURE_LINEBR
+        { SID_ATTR_CHAR_CHARSETCOLOR, true },  // EE_FEATURE_NOTCONV
+        { SID_FIELD, true }
 };
 
 const sal_uInt16 aV1Map[] = {

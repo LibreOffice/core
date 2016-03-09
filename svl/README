@@ -19,7 +19,7 @@ A small reference counted piece of data.  Many subclasses, each with a
 unique integer to identify its type (WhichId).  Can be compared for equality
 (operator==), Clone()d, and converted to/from uno::Any (QueryValue/PutValue).
 
-A pool item may have value semantics (SfxItemPoolFlags::POOLABLE), meaning that
+A pool item may have value semantics ("poolable"), meaning that
 there will generally be only one instance that compares equal per item pool,
 or not, in which case the item will be Clone()d quite a bit.
 

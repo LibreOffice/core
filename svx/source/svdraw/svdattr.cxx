@@ -115,7 +115,7 @@ SdrItemPool::SdrItemPool(
     // init the non-persistent items
     for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)
     {
-        mpLocalItemInfos[i - SDRATTR_START]._nFlags = SfxItemPoolFlags::NONE;
+        mpLocalItemInfos[i - SDRATTR_START]._bPoolable = false;
     }
 
     // init own PoolDefaults
