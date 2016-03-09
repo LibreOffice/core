@@ -164,9 +164,9 @@ namespace comphelper
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) override;
 
         // XEnumerableMap
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createKeyEnumeration( sal_Bool _Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createValueEnumeration( sal_Bool _Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createElementEnumeration( sal_Bool _Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createKeyEnumeration( sal_Bool Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createValueEnumeration( sal_Bool Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createElementEnumeration( sal_Bool Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
         // XMap
         virtual Type SAL_CALL getKeyType() throw (RuntimeException, std::exception) override;
@@ -498,24 +498,24 @@ namespace comphelper
     }
 
 
-    Reference< XEnumeration > SAL_CALL EnumerableMap::createKeyEnumeration( sal_Bool _Isolated ) throw (NoSupportException, RuntimeException, std::exception)
+    Reference< XEnumeration > SAL_CALL EnumerableMap::createKeyEnumeration( sal_Bool Isolated ) throw (NoSupportException, RuntimeException, std::exception)
     {
         ComponentMethodGuard aGuard( *this );
-        return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eKeys, _Isolated );
+        return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eKeys, Isolated );
     }
 
 
-    Reference< XEnumeration > SAL_CALL EnumerableMap::createValueEnumeration( sal_Bool _Isolated ) throw (NoSupportException, RuntimeException, std::exception)
+    Reference< XEnumeration > SAL_CALL EnumerableMap::createValueEnumeration( sal_Bool Isolated ) throw (NoSupportException, RuntimeException, std::exception)
     {
         ComponentMethodGuard aGuard( *this );
-        return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eValues, _Isolated );
+        return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eValues, Isolated );
     }
 
 
-    Reference< XEnumeration > SAL_CALL EnumerableMap::createElementEnumeration( sal_Bool _Isolated ) throw (NoSupportException, RuntimeException, std::exception)
+    Reference< XEnumeration > SAL_CALL EnumerableMap::createElementEnumeration( sal_Bool Isolated ) throw (NoSupportException, RuntimeException, std::exception)
     {
         ComponentMethodGuard aGuard( *this );
-        return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eBoth, _Isolated );
+        return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eBoth, Isolated );
     }
 
 
