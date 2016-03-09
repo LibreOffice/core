@@ -234,8 +234,8 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 pvMoreParLcl = new SbiExprListVector();
             }
             SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
-            pvMoreParLcl->push_back( std::move(pAddPar) );
             bError = bError || !pAddPar->IsValid();
+            pvMoreParLcl->push_back( std::move(pAddPar) );
             eTok = pParser->Peek();
         }
     }
@@ -432,8 +432,8 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
                 pvMoreParLcl = new SbiExprListVector();
             }
             SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
-            pvMoreParLcl->push_back( std::move(pAddPar) );
             bError = bError || !pPar->IsValid();
+            pvMoreParLcl->push_back( std::move(pAddPar) );
             eTok = pParser->Peek();
         }
     }
