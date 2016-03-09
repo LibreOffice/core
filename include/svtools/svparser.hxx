@@ -27,6 +27,7 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <memory>
 
 struct SvParser_Impl;
 class SvStream;
@@ -51,7 +52,7 @@ protected:
     sal_uLong           nlLineNr;           // current line number
     sal_uLong           nlLinePos;          // current column number
 
-    SvParser_Impl       *pImplData;         // internal data
+    std::unique_ptr<SvParser_Impl> pImplData; // internal data
     long                nTokenValue;        // additional value (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
     SvParserState       eState;             // status also in derived classes
@@ -230,7 +231,7 @@ public:
 class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
     /** Construction/Destruction.
