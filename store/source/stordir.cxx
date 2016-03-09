@@ -41,9 +41,9 @@ using namespace store;
  *
  *======================================================================*/
 /*
- * __store_convertTextToUnicode.
+ * convertTextToUnicode.
  */
-inline sal_Size __store_convertTextToUnicode (
+static inline sal_Size convertTextToUnicode (
     rtl_TextToUnicodeConverter  hConverter,
     const sal_Char *pSrcBuffer, sal_Size nSrcLength,
     sal_Unicode    *pDstBuffer, sal_Size nDstLength)
@@ -182,7 +182,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
                 sal_Size  n = rtl_str_getLength (p);
                 sal_Size  k = rFindData.m_nLength;
 
-                n = __store_convertTextToUnicode (
+                n = convertTextToUnicode (
                     m_hTextCvt, p, n,
                     rFindData.m_pszName, STORE_MAXIMUM_NAMESIZE - 1);
                 if (k > n)
