@@ -1702,11 +1702,7 @@ ElementBase::~ElementBase()
         _pParent->release();
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OString aStr( OUStringToOString(
-                             _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    SAL_INFO("xmlscript.xmldlg", "ElementBase::~ElementBase(): " << aStr.getStr() );
-#endif
+    SAL_INFO("xmlscript.xmldlg", "ElementBase::~ElementBase(): " << _aLocalName );
 }
 
 // XRoot
@@ -1761,9 +1757,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
 
 DialogImport::~DialogImport()
 {
-#if OSL_DEBUG_LEVEL > 1
     SAL_INFO("xmlscript.xmldlg", "DialogImport::~DialogImport()." );
-#endif
 }
 
 Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormatsSupplier()
