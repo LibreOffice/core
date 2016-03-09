@@ -12,7 +12,6 @@
 
 #include "address.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sc {
@@ -21,8 +20,12 @@ namespace sc {
  * Stores data imported from the file that need to be processed at the end
  * of the import process.
  */
-struct ImportPostProcessData : boost::noncopyable
+struct ImportPostProcessData
 {
+    ImportPostProcessData() = default;  
+    ImportPostProcessData(const ImportPostProcessData&) = delete;
+    const ImportPostProcessData& operator=(const ImportPostProcessData&) = delete;
+    ~ImportPostProcessData() = default;
     /**
      * Data stream data needs to be post-processed because it requires
      * ScDocShell instance which is not available in the filter code.

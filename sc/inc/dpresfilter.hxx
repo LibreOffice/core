@@ -14,7 +14,6 @@
 
 #include <map>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -46,7 +45,7 @@ struct ScDPResultFilter
  * <p>If the pivot table layout only consists of either column or row
  * dimensions, the root node only has one child node.</p>
  */
-class ScDPResultTree : private boost::noncopyable
+class ScDPResultTree
 {
 public:
     typedef std::vector<double> ValuesType;
@@ -58,11 +57,13 @@ private:
     typedef std::map<OUString, MemberNode*> MembersType;
     typedef std::map<OUString, DimensionNode*> DimensionsType;
 
-    struct DimensionNode : boost::noncopyable
+    struct DimensionNode
     {
         MembersType maChildMembers;
 
         DimensionNode();
+        DimensionNode(const DimensionNode&) = delete;
+        const DimensionNode& operator=(const DimensionNode&) = delete;
         ~DimensionNode();
 
 #if DEBUG_PIVOT_TABLE
@@ -70,12 +71,14 @@ private:
 #endif
     };
 
-    struct MemberNode : boost::noncopyable
+    struct MemberNode
     {
         ValuesType maValues;
         DimensionsType maChildDimensions;
 
         MemberNode();
+        MemberNode(const MemberNode&) = delete;
+        const MemberNode& operator=(const MemberNode&) = delete;
         ~MemberNode();
 
 #if DEBUG_PIVOT_TABLE
@@ -98,8 +101,9 @@ private:
 public:
 
     ScDPResultTree();
-    ~ScDPResultTree();
-
+    ScDPResultTree(const ScDPResultTree&) = delete;
+    const ScDPResultTree& operator=(const ScDPResultTree&) = delete;
+    ~ScDPResultTree();    
     /**
      * Add a single value filter path.  The filters are expected to be sorted
      * by row dimension order then by column dimension order.

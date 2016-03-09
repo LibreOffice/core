@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SC_INC_UNITCONV_HXX
 #define INCLUDED_SC_INC_UNITCONV_HXX
 
-#include <boost/noncopyable.hpp>
-
 #include <map>
 
 class ScUnitConverterData
@@ -43,13 +41,15 @@ public:
         const OUString& rFromUnit, const OUString& rToUnit );
 };
 
-class ScUnitConverter : public boost::noncopyable
+class ScUnitConverter
 {
     typedef std::map<OUString, ScUnitConverterData> MapType;
     MapType maData;
 
 public:
     ScUnitConverter();
+    ScUnitConverter(const ScUnitConverter&) = delete;
+    const ScUnitConverter& operator=(const ScUnitConverter&) = delete;
     ~ScUnitConverter();
 
     bool GetValue(

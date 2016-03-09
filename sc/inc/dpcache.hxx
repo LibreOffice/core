@@ -24,7 +24,6 @@
 #include "calcmacros.hxx"
 #include <tools/date.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 #include <memory>
@@ -41,7 +40,7 @@ struct ScDPNumGroupInfo;
  * This class represents the cached data part of the datapilot cache table
  * implementation.
  */
-class SC_DLLPUBLIC ScDPCache : private boost::noncopyable
+class SC_DLLPUBLIC ScDPCache
 {
     typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 
@@ -50,17 +49,19 @@ public:
     typedef std::set<ScDPObject*> ScDPObjectSet;
     typedef std::vector<SCROW> IndexArrayType;
 
-    struct GroupItems : boost::noncopyable
+    struct GroupItems
     {
         ScDPItemDataVec maItems;
         ScDPNumGroupInfo maInfo;
         sal_Int32 mnGroupType;
 
         GroupItems();
+        GroupItems(const GroupItems&) = delete;
+        const GroupItems& operator=(const GroupItems&) = delete;
         GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGroupType);
     };
 
-    struct Field : boost::noncopyable
+    struct Field
     {
         /**
          * Optional items for grouped field.
@@ -82,6 +83,8 @@ public:
         sal_uLong mnNumFormat;
 
         Field();
+        Field(const Field&) = delete;
+        const Field& operator=(const Field&) = delete;
     };
 
     /**
@@ -184,6 +187,9 @@ public:
     size_t GetFieldCount() const;
     size_t GetGroupFieldCount() const;
 
+    ScDPCache() = default;
+    ScDPCache(const ScDPCache&) = delete;
+    const ScDPCache& operator=(const ScDPCache&) = delete;
     ScDPCache(ScDocument* pDoc);
     ~ScDPCache();
 

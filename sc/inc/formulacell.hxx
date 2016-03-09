@@ -23,8 +23,6 @@
 #include <set>
 #include <memory>
 
-#include <boost/noncopyable.hpp>
-
 #include <formula/tokenarray.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -53,7 +51,7 @@ class ScFormulaCell;
 class ScProgress;
 class ScTokenArray;
 
-struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
+struct SC_DLLPUBLIC ScFormulaCellGroup
 {
 private:
     struct Impl;
@@ -73,6 +71,8 @@ public:
     sal_uInt8 meCalcState;
 
     ScFormulaCellGroup();
+    ScFormulaCellGroup(const ScFormulaCellGroup&) = delete;
+    const ScFormulaCellGroup& operator=(const ScFormulaCellGroup&) = delete;
     ~ScFormulaCellGroup();
 
     void setCode( const ScTokenArray& rCode );

@@ -58,8 +58,6 @@
 #include "global.hxx"
 #include "zforauto.hxx"
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 #include <map>
 
@@ -72,7 +70,7 @@ logic handled and stored several writer-specific items (such as ScAutoFormatData
 That logic was preserved. From _31005 onward, writer-specific data should be handled by
 blobs to avoid needlessly complicating the Calc logic.
 */
-struct AutoFormatSwBlob : ::boost::noncopyable
+struct AutoFormatSwBlob
 {
     sal_uInt8 *pData;
     sal_Size size;
@@ -80,7 +78,8 @@ struct AutoFormatSwBlob : ::boost::noncopyable
     AutoFormatSwBlob() : pData(nullptr), size(0)
     {
     }
-
+    AutoFormatSwBlob(const AutoFormatSwBlob&) = delete;
+    const AutoFormatSwBlob& operator=(const AutoFormatSwBlob&) = delete;
     ~AutoFormatSwBlob()
     {
         Reset();
