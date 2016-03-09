@@ -1,0 +1,6 @@
+GLEW is the OpenGL Extension Wrangler
+
+GLEW provides efficient run-time mechanisms for determining which OpenGL
+extensions are supported on the target platform.
+
+http://glew.sourceforge.net/
