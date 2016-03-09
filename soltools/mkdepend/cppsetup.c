@@ -112,17 +112,17 @@ yyerror(s)
 #else /* not CPP */
 
 #include "ifparser.h"
-struct _parse_data {
+struct parse_data {
     struct filepointer *filep;
     struct inclist *inc;
     const char *line;
 };
 
 static const char *
-_my_if_errors (IfParser *ip, const char *cp, const char *expecting)
+my_if_errors (IfParser *ip, const char *cp, const char *expecting)
 {
 #ifdef DEBUG_MKDEPEND
-    struct _parse_data *pd = (struct _parse_data *) ip->data;
+    struct parse_data *pd = (struct parse_data *) ip->data;
     int lineno = pd->filep->f_line;
     char *filename = pd->inc->i_file;
     char prefix[300];
@@ -150,8 +150,8 @@ _my_if_errors (IfParser *ip, const char *cp, const char *expecting)
 
 #define MAXNAMELEN 256
 
-char *
-_lookup_variable (const char *var, size_t len)
+static char *
+lookup_variable (const char *var, size_t len)
 {
     char tmpbuf[MAXNAMELEN + 1];
 
@@ -165,10 +165,10 @@ _lookup_variable (const char *var, size_t len)
 
 
 static int
-_my_eval_defined (IfParser *ip, const char *var, size_t len)
+my_eval_defined (IfParser *ip, const char *var, size_t len)
 {
     (void)ip;
-    if (_lookup_variable (var, len))
+    if (lookup_variable (var, len))
         return 1;
     else
         return 0;
@@ -177,20 +177,20 @@ _my_eval_defined (IfParser *ip, const char *var, size_t len)
 #define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
 
 static int
-_my_eval_variable (IfParser *ip, const char *var, size_t len)
+my_eval_variable (IfParser *ip, const char *var, size_t len)
 {
     char *s;
 
     (void)ip;
 
-    s = _lookup_variable (var, len);
+    s = lookup_variable (var, len);
     if (!s)
         return 0;
     do {
       var = s;
       if (!isvarfirstletter(*var))
         break;
-      s = _lookup_variable (var, strlen(var));
+      s = lookup_variable (var, strlen(var));
     } while (s);
 
     return atoi(var);
@@ -200,15 +200,15 @@ _my_eval_variable (IfParser *ip, const char *var, size_t len)
 int cppsetup(char *line, struct filepointer *filep, struct inclist *inc)
 {
     IfParser ip;
-    struct _parse_data pd;
+    struct parse_data pd;
     int val = 0;
 
     pd.filep = filep;
     pd.inc = inc;
     pd.line = line;
-    ip.funcs.handle_error = _my_if_errors;
-    ip.funcs.eval_defined = _my_eval_defined;
-    ip.funcs.eval_variable = _my_eval_variable;
+    ip.funcs.handle_error = my_if_errors;
+    ip.funcs.eval_defined = my_eval_defined;
+    ip.funcs.eval_variable = my_eval_variable;
     ip.data = (char *) &pd;
 
     (void) ParseIfExpression (&ip, line, &val);
