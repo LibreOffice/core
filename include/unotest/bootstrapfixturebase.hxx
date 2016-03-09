@@ -33,12 +33,13 @@ namespace test {
 // run of unit tests ...
 class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 {
-protected:
+private:
   OUString m_aSrcRootURL;
   OUString m_aSrcRootPath;
   OUString m_aWorkdirRootURL;
   OUString m_aWorkdirRootPath;
 
+protected:
   css::uno::Reference<css::uno::XComponentContext> m_xContext;
   css::uno::Reference<css::lang::XMultiServiceFactory> m_xSFactory;
   css::uno::Reference<css::lang::XMultiComponentFactory> m_xFactory;
