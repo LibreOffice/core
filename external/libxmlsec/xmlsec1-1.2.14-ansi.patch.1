@@ -1,0 +1,27 @@
+From 7aaf2be1bb36db78450ea7f06dd571d98f57c06f Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:15:25 +0100
+Subject: [PATCH 11/14] xmlsec1-1.2.14-ansi.patch
+
+---
+ configure.in | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index cbf6e4a..403ec63 100644
+--- a/configure.in
++++ b/configure.in
+@@ -46,10 +46,6 @@ AC_PATH_PROG(TAR, tar, /bin/tar)
+ AC_PATH_PROG(HELP2MAN, help2man)
+ AC_PATH_PROG(MAN2HTML, man2html)
+ 
+-dnl Make sure we have an ANSI compiler
+-AM_C_PROTOTYPES
+-test "z$U" != "z" && AC_MSG_ERROR(Compiler not ANSI compliant)
+-
+ dnl Checks for header files.
+ AC_HEADER_DIRENT
+ AC_HEADER_STDC
+-- 
+2.6.2
+

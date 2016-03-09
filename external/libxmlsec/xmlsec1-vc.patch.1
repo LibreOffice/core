@@ -1,0 +1,82 @@
+From de1c40ec9621c4100bc4153a947f2e67be0c42e5 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:12:29 +0100
+Subject: [PATCH 08/14] xmlsec1-vc.patch
+
+---
+ apps/cmdline.c      |  2 +-
+ apps/crypto.c       |  2 +-
+ apps/xmlsec.c       |  2 +-
+ win32/Makefile.msvc | 10 +++++++++-
+ 4 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/apps/cmdline.c b/apps/cmdline.c
+index b9ecafb..4425eaf 100644
+--- a/apps/cmdline.c
++++ b/apps/cmdline.c
+@@ -7,7 +7,7 @@
+  * 
+  * Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+  */
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff --git a/apps/crypto.c b/apps/crypto.c
+index 49dd127..f46eeee 100644
+--- a/apps/crypto.c
++++ b/apps/crypto.c
+@@ -7,7 +7,7 @@
+  * 
+  * Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+  */
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff --git a/apps/xmlsec.c b/apps/xmlsec.c
+index 72d68fa..364ed5e 100644
+--- a/apps/xmlsec.c
++++ b/apps/xmlsec.c
+@@ -9,7 +9,7 @@
+ #include <string.h>
+ #include <time.h>
+ 
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
+index cfa0a46..2f4c3e7 100644
+--- a/win32/Makefile.msvc
++++ b/win32/Makefile.msvc
+@@ -305,6 +305,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"
+ CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
+ CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
+ CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
++CFLAGS 			= $(CFLAGS) -arch:SSE $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\xml2\include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common
++!if "$(MSVC_USE_DEBUG_RUNTIME)" != ""
++CFLAGS 			= $(CFLAGS) /MDd
++!endif
+ 
+ !if "$(UNICODE)" == "1"
+ CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
+@@ -359,7 +363,11 @@ LIBS 			=
+ !if "$(DEBUG)" == "1"
+ LDFLAGS 		= $(LDFLAGS) /DEBUG
+ !else
+-LDFLAGS 		= $(LDFLAGS) /OPT:NOWIN98
++!if "$(_NMAKE_VER)" >= "10.00.30319.01"
++LDFLAGS = $(LDFLAGS)
++!else
++LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
++!endif
+ !endif
+ 
+ SOLIBS 			= $(LIBS) libxml2.lib 
+-- 
+2.6.2
+

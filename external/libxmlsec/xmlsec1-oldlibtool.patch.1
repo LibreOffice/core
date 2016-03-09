@@ -1,5 +1,18 @@
---- /dev/null	2012-11-27 15:14:41.892226008 +0100
-+++ misc/xmlsec1-1.2.14/compile	2012-11-29 12:27:14.000000000 +0100
+From 68c5e703a5db9b58eb7b90c0e6a42323cd7c3d47 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:08:09 +0100
+Subject: [PATCH 03/14] xmlsec1-oldlibtool.patch
+
+---
+ compile | 142 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 142 insertions(+)
+ create mode 100644 compile
+
+diff --git a/compile b/compile
+new file mode 100644
+index 0000000..1b1d232
+--- /dev/null
++++ b/compile
 @@ -0,0 +1,142 @@
 +#! /bin/sh
 +# Wrapper for compilers which do not understand `-c -o'.
@@ -143,3 +156,6 @@
 +# time-stamp-format: "%:y-%02m-%02d.%02H"
 +# time-stamp-end: "$"
 +# End:
+-- 
+2.6.2
+

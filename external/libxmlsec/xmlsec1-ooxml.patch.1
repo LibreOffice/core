@@ -1,8 +1,10 @@
-From 24c1395c547f8a2f0c78a8618c766ecd55909c66 Mon Sep 17 00:00:00 2001
+From 236d595dec5e4df1036ba797ebebcd2bb3b29234 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Mon, 25 Jan 2016 09:50:03 +0100
-Subject: [PATCH] OOXML Relationship Transform
+Subject: [PATCH 14/14] OOXML Relationship Transform
 
+Conflicts:
+	include/xmlsec/transforms.h
 ---
  include/xmlsec/strings.h    |   3 +
  include/xmlsec/transforms.h |   4 +
@@ -12,7 +14,7 @@ Subject: [PATCH] OOXML Relationship Transform
  5 files changed, 563 insertions(+)
 
 diff --git a/include/xmlsec/strings.h b/include/xmlsec/strings.h
-index 07afb9d..9c72d1b 100644
+index 98650bf..d9fa3df 100644
 --- a/include/xmlsec/strings.h
 +++ b/include/xmlsec/strings.h
 @@ -551,6 +551,9 @@ XMLSEC_EXPORT_VAR const xmlChar xmlSecXPath2FilterUnion[];
@@ -26,13 +28,13 @@ index 07afb9d..9c72d1b 100644
   *
   * Xslt strings
 diff --git a/include/xmlsec/transforms.h b/include/xmlsec/transforms.h
-index 4008cae..b0e31e4 100644
+index aec8bb5..0bbd7ec 100644
 --- a/include/xmlsec/transforms.h
 +++ b/include/xmlsec/transforms.h
-@@ -961,6 +961,10 @@ XMLSEC_EXPORT int		xmlSecTransformXPointerSetExpr		(xmlSecTransformPtr transform
- 									 const xmlChar* expr,
- 									 xmlSecNodeSetType nodeSetType,
- 									 xmlNodePtr hereNode);
+@@ -961,6 +961,10 @@ XMLSEC_EXPORT int               xmlSecTransformXPointerSetExpr          (xmlSecT
+                                                                          const xmlChar* expr,
+                                                                          xmlSecNodeSetType nodeSetType,
+                                                                          xmlNodePtr hereNode);
 +
 +#define xmlSecTransformRelationshipId xmlSecTransformRelationshipGetKlass()
 +XMLSEC_EXPORT xmlSecTransformId xmlSecTransformRelationshipGetKlass (void);
@@ -41,12 +43,12 @@ index 4008cae..b0e31e4 100644
  /**
   * xmlSecTransformXsltId:
 diff --git a/src/strings.c b/src/strings.c
-index 9897198..546e993 100644
+index 99ee316..d318d16 100644
 --- a/src/strings.c
 +++ b/src/strings.c
-@@ -543,6 +543,9 @@ const xmlChar xmlSecXPath2FilterUnion[]		= "union";
- const xmlChar xmlSecNameXPointer[]		= "xpointer";
- const xmlChar xmlSecNodeXPointer[]		= "XPointer";
+@@ -543,6 +543,9 @@ const xmlChar xmlSecXPath2FilterUnion[]         = "union";
+ const xmlChar xmlSecNameXPointer[]              = "xpointer";
+ const xmlChar xmlSecNodeXPointer[]              = "XPointer";
  
 +const xmlChar xmlSecNameRelationship[] = "relationship";
 +const xmlChar xmlSecHrefRelationship[] = "http://schemas.openxmlformats.org/package/2006/RelationshipTransform";
@@ -55,11 +57,11 @@ index 9897198..546e993 100644
   *
   * Xslt strings
 diff --git a/src/transforms.c b/src/transforms.c
-index 2ed3fe8..9e5ad27 100644
+index e8e0050..a966f0b 100644
 --- a/src/transforms.c
 +++ b/src/transforms.c
 @@ -271,6 +271,17 @@ xmlSecTransformIdsRegisterDefault(void) {
- 	return(-1);
+         return(-1);
      }
  
 +    if (xmlSecTransformIdsRegister(xmlSecTransformRelationshipId) < 0)
@@ -75,9 +77,9 @@ index 2ed3fe8..9e5ad27 100644
 +
  #ifndef XMLSEC_NO_XSLT
      if(xmlSecTransformIdsRegister(xmlSecTransformXsltId) < 0) {
- 	xmlSecError(XMLSEC_ERRORS_HERE,
+         xmlSecError(XMLSEC_ERRORS_HERE,
 diff --git a/src/xpath.c b/src/xpath.c
-index 8b0b4f8..b9a03e5 100644
+index afa7c52..92a2337 100644
 --- a/src/xpath.c
 +++ b/src/xpath.c
 @@ -17,6 +17,7 @@
@@ -383,14 +385,14 @@ index 8b0b4f8..b9a03e5 100644
 +    {
 +        int size;
 +        int i;
- 
++
 +        xmlListSort(list);
 +        size = xmlListSize(list);
 +        for (i = 0; i < size; ++i)
 +        {
 +            xmlLinkPtr link = xmlListFront(list);
 +            xmlNodePtr node = (xmlNodePtr)xmlLinkGetData(link);
- 
++
 +            ret = xmlSecTransformRelationshipProcessNode(transform, buf, node);
 +            if (ret < 0)
 +            {
@@ -484,7 +486,7 @@ index 8b0b4f8..b9a03e5 100644
 +	    return(-1);
 +	}
 +    }
-+
+ 
 +    ret = xmlSecTransformRelationshipExecute(transform, buf, nodes->doc);
 +    if (ret < 0)
 +    {
@@ -496,7 +498,7 @@ index 8b0b4f8..b9a03e5 100644
 +	xmlOutputBufferClose(buf);
 +	return(-1);
 +    }
-+
+ 
 +    ret = xmlOutputBufferClose(buf);
 +    if (ret < 0)
 +    {
