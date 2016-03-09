@@ -12,7 +12,7 @@
 //! \file clew.h
 //! \brief OpenCL run-time loader header
 //!
-//! This file contains a copy of the contents of CL.H and CL_PLATFORM.H from the 
+//! This file contains a copy of the contents of CL.H and CL_PLATFORM.H from the
 //! official OpenCL spec. The purpose of this code is to load the OpenCL dynamic
 //! library at run-time and thus allow the executable to function on many
 //! platforms regardless of the vendor of the OpenCL driver actually installed.
@@ -78,10 +78,10 @@ extern "C" {
 
 #if defined(__APPLE__)
 #define CL_API_SUFFIX__VERSION_1_0   AVAILABLE_MAC_OS_X_VERSION_10_6_AND_LATER
-#define CL_EXTENSION_WEAK_LINK       __attribute__((weak_import))       
+#define CL_EXTENSION_WEAK_LINK       __attribute__((weak_import))
 #else
 #define CL_API_SUFFIX__VERSION_1_0
-#define CL_EXTENSION_WEAK_LINK                         
+#define CL_EXTENSION_WEAK_LINK
 #endif
 
 #if defined(_WIN32) && defined(_MSC_VER)
@@ -102,17 +102,17 @@ typedef double                  cl_double;
 
 
 /*
-* Vector types 
+* Vector types
 *
-*  Note:   OpenCL requires that all types be naturally aligned. 
+*  Note:   OpenCL requires that all types be naturally aligned.
 *          This means that vector types must be naturally aligned.
 *          For example, a vector of four floats must be aligned to
-*          a 16 byte boundary (calculated as 4 * the natural 4-byte 
+*          a 16 byte boundary (calculated as 4 * the natural 4-byte
 *          alignment of the float).  The alignment qualifiers here
 *          will only function properly if your compiler supports them
 *          and if you don't actively work to defeat them.  For example,
 *          in order for a cl_float4 to be 16 byte aligned in a struct,
-*          the start of the struct must itself be 16-byte aligned. 
+*          the start of the struct must itself be 16-byte aligned.
 *
 *          Maintaining proper alignment is the user's responsibility.
 */
@@ -182,17 +182,17 @@ typedef float           cl_float    __attribute__((aligned(4)));
 typedef double          cl_double   __attribute__((aligned(8)));
 
 /*
-* Vector types 
+* Vector types
 *
-*  Note:   OpenCL requires that all types be naturally aligned. 
+*  Note:   OpenCL requires that all types be naturally aligned.
 *          This means that vector types must be naturally aligned.
 *          For example, a vector of four floats must be aligned to
-*          a 16 byte boundary (calculated as 4 * the natural 4-byte 
+*          a 16 byte boundary (calculated as 4 * the natural 4-byte
 *          alignment of the float).  The alignment qualifiers here
 *          will only function properly if your compiler supports them
 *          and if you don't actively work to defeat them.  For example,
 *          in order for a cl_float4 to be 16 byte aligned in a struct,
-*          the start of the struct must itself be 16-byte aligned. 
+*          the start of the struct must itself be 16-byte aligned.
 *
 *          Maintaining proper alignment is the user's responsibility.
 */
@@ -304,7 +304,7 @@ typedef struct _cl_kernel *         cl_kernel;
 typedef struct _cl_event *          cl_event;
 typedef struct _cl_sampler *        cl_sampler;
 
-typedef cl_uint             cl_bool;                     /* WARNING!  Unlike cl_ types in cl_platform.h, cl_bool is not guaranteed to be the same size as the bool in kernels. */ 
+typedef cl_uint             cl_bool;                     /* WARNING!  Unlike cl_ types in cl_platform.h, cl_bool is not guaranteed to be the same size as the bool in kernels. */
 typedef cl_ulong            cl_bitfield;
 typedef cl_bitfield         cl_device_type;
 typedef cl_uint             cl_platform_info;
@@ -316,7 +316,7 @@ typedef cl_uint             cl_device_local_mem_type;
 typedef cl_bitfield         cl_device_exec_capabilities;
 typedef cl_bitfield         cl_command_queue_properties;
 
-typedef intptr_t			cl_context_properties;
+typedef intptr_t            cl_context_properties;
 typedef cl_uint             cl_context_info;
 typedef cl_uint             cl_command_queue_info;
 typedef cl_uint             cl_channel_order;
@@ -487,29 +487,29 @@ PFNCLGETPLATFORMIDS)(cl_uint          /* num_entries */,
                  cl_platform_id * /* platforms */,
                  cl_uint *        /* num_platforms */) CL_API_SUFFIX__VERSION_1_0;
 
-typedef CL_API_ENTRY cl_int (CL_API_CALL * 
-PFNCLGETPLATFORMINFO)(cl_platform_id   /* platform */, 
+typedef CL_API_ENTRY cl_int (CL_API_CALL *
+PFNCLGETPLATFORMINFO)(cl_platform_id   /* platform */,
                   cl_platform_info /* param_name */,
-                  size_t           /* param_value_size */, 
+                  size_t           /* param_value_size */,
                   void *           /* param_value */,
                   size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
 
 // Device APIs
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLGETDEVICEIDS)(cl_platform_id   /* platform */,
-               cl_device_type   /* device_type */, 
-               cl_uint          /* num_entries */, 
-               cl_device_id *   /* devices */, 
+               cl_device_type   /* device_type */,
+               cl_uint          /* num_entries */,
+               cl_device_id *   /* devices */,
                cl_uint *        /* num_devices */) CL_API_SUFFIX__VERSION_1_0;
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLGETDEVICEINFO)(cl_device_id    /* device */,
-                cl_device_info  /* param_name */, 
-                size_t          /* param_value_size */, 
+                cl_device_info  /* param_name */,
+                size_t          /* param_value_size */,
                 void *          /* param_value */,
                 size_t *        /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
 
-// Context APIs  
+// Context APIs
 typedef CL_API_ENTRY cl_context (CL_API_CALL *
 PFNCLCREATECONTEXT)(const cl_context_properties * /* properties */,
                 cl_uint                       /* num_devices */,
@@ -532,16 +532,16 @@ typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLRELEASECONTEXT)(cl_context /* context */) CL_API_SUFFIX__VERSION_1_0;
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
-PFNCLGETCONTEXTINFO)(cl_context         /* context */, 
-                 cl_context_info    /* param_name */, 
-                 size_t             /* param_value_size */, 
-                 void *             /* param_value */, 
+PFNCLGETCONTEXTINFO)(cl_context         /* context */,
+                 cl_context_info    /* param_name */,
+                 size_t             /* param_value_size */,
+                 void *             /* param_value */,
                  size_t *           /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
 
 // Command Queue APIs
 typedef CL_API_ENTRY cl_command_queue (CL_API_CALL *
-PFNCLCREATECOMMANDQUEUE)(cl_context                     /* context */, 
-                     cl_device_id                   /* device */, 
+PFNCLCREATECOMMANDQUEUE)(cl_context                     /* context */,
+                     cl_device_id                   /* device */,
                      cl_command_queue_properties    /* properties */,
                      cl_int *                       /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
 
@@ -560,7 +560,7 @@ PFNCLGETCOMMANDQUEUEINFO)(cl_command_queue      /* command_queue */,
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLSETCOMMANDQUEUEPROPERTY)(cl_command_queue              /* command_queue */,
-                          cl_command_queue_properties   /* properties */, 
+                          cl_command_queue_properties   /* properties */,
                           cl_bool                        /* enable */,
                           cl_command_queue_properties * /* old_properties */) CL_API_SUFFIX__VERSION_1_0;
 
@@ -578,7 +578,7 @@ PFNCLCREATEIMAGE2D)(cl_context              /* context */,
                 const cl_image_format * /* image_format */,
                 size_t                  /* image_width */,
                 size_t                  /* image_height */,
-                size_t                  /* image_row_pitch */, 
+                size_t                  /* image_row_pitch */,
                 void *                  /* host_ptr */,
                 cl_int *                /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
 
@@ -586,11 +586,11 @@ typedef CL_API_ENTRY cl_mem (CL_API_CALL *
 PFNCLCREATEIMAGE3D)(cl_context              /* context */,
                 cl_mem_flags            /* flags */,
                 const cl_image_format * /* image_format */,
-                size_t                  /* image_width */, 
+                size_t                  /* image_width */,
                 size_t                  /* image_height */,
-                size_t                  /* image_depth */, 
-                size_t                  /* image_row_pitch */, 
-                size_t                  /* image_slice_pitch */, 
+                size_t                  /* image_depth */,
+                size_t                  /* image_row_pitch */,
+                size_t                  /* image_slice_pitch */,
                 void *                  /* host_ptr */,
                 cl_int *                /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
 
@@ -610,14 +610,14 @@ PFNCLGETSUPPORTEDIMAGEFORMATS)(cl_context           /* context */,
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLGETMEMOBJECTINFO)(cl_mem           /* memobj */,
-                   cl_mem_info      /* param_name */, 
+                   cl_mem_info      /* param_name */,
                    size_t           /* param_value_size */,
                    void *           /* param_value */,
                    size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLGETIMAGEINFO)(cl_mem           /* image */,
-               cl_image_info    /* param_name */, 
+               cl_image_info    /* param_name */,
                size_t           /* param_value_size */,
                void *           /* param_value */,
                size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
@@ -625,8 +625,8 @@ PFNCLGETIMAGEINFO)(cl_mem           /* image */,
 // Sampler APIs
 typedef CL_API_ENTRY cl_sampler (CL_API_CALL *
 PFNCLCREATESAMPLER)(cl_context          /* context */,
-                cl_bool             /* normalized_coords */, 
-                cl_addressing_mode  /* addressing_mode */, 
+                cl_bool             /* normalized_coords */,
+                cl_addressing_mode  /* addressing_mode */,
                 cl_filter_mode      /* filter_mode */,
                 cl_int *            /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
 
@@ -670,7 +670,7 @@ typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLBUILDPROGRAM)(cl_program           /* program */,
                cl_uint              /* num_devices */,
                const cl_device_id * /* device_list */,
-               const char *         /* options */, 
+               const char *         /* options */,
                void (*pfn_notify)(cl_program /* program */, void * /* user_data */),
                void *               /* user_data */) CL_API_SUFFIX__VERSION_1_0;
 
@@ -770,30 +770,30 @@ PFNCLENQUEUEREADBUFFER)(cl_command_queue    /* command_queue */,
                     cl_mem              /* buffer */,
                     cl_bool             /* blocking_read */,
                     size_t              /* offset */,
-                    size_t              /* cb */, 
+                    size_t              /* cb */,
                     void *              /* ptr */,
                     cl_uint             /* num_events_in_wait_list */,
                     const cl_event *    /* event_wait_list */,
                     cl_event *          /* event */) CL_API_SUFFIX__VERSION_1_0;
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
-PFNCLENQUEUEWRITEBUFFER)(cl_command_queue   /* command_queue */, 
-                     cl_mem             /* buffer */, 
-                     cl_bool            /* blocking_write */, 
-                     size_t             /* offset */, 
-                     size_t             /* cb */, 
-                     const void *       /* ptr */, 
-                     cl_uint            /* num_events_in_wait_list */, 
-                     const cl_event *   /* event_wait_list */, 
+PFNCLENQUEUEWRITEBUFFER)(cl_command_queue   /* command_queue */,
+                     cl_mem             /* buffer */,
+                     cl_bool            /* blocking_write */,
+                     size_t             /* offset */,
+                     size_t             /* cb */,
+                     const void *       /* ptr */,
+                     cl_uint            /* num_events_in_wait_list */,
+                     const cl_event *   /* event_wait_list */,
                      cl_event *         /* event */) CL_API_SUFFIX__VERSION_1_0;
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
-PFNCLENQUEUECOPYBUFFER)(cl_command_queue    /* command_queue */, 
+PFNCLENQUEUECOPYBUFFER)(cl_command_queue    /* command_queue */,
                     cl_mem              /* src_buffer */,
-                    cl_mem              /* dst_buffer */, 
+                    cl_mem              /* dst_buffer */,
                     size_t              /* src_offset */,
                     size_t              /* dst_offset */,
-                    size_t              /* cb */, 
+                    size_t              /* cb */,
                     cl_uint             /* num_events_in_wait_list */,
                     const cl_event *    /* event_wait_list */,
                     cl_event *          /* event */) CL_API_SUFFIX__VERSION_1_0;
@@ -801,11 +801,11 @@ PFNCLENQUEUECOPYBUFFER)(cl_command_queue    /* command_queue */,
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUEREADIMAGE)(cl_command_queue     /* command_queue */,
                    cl_mem               /* image */,
-                   cl_bool              /* blocking_read */, 
+                   cl_bool              /* blocking_read */,
                    const size_t *       /* origin[3] */,
                    const size_t *       /* region[3] */,
                    size_t               /* row_pitch */,
-                   size_t               /* slice_pitch */, 
+                   size_t               /* slice_pitch */,
                    void *               /* ptr */,
                    cl_uint              /* num_events_in_wait_list */,
                    const cl_event *     /* event_wait_list */,
@@ -814,11 +814,11 @@ PFNCLENQUEUEREADIMAGE)(cl_command_queue     /* command_queue */,
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUEWRITEIMAGE)(cl_command_queue    /* command_queue */,
                     cl_mem              /* image */,
-                    cl_bool             /* blocking_write */, 
+                    cl_bool             /* blocking_write */,
                     const size_t *      /* origin[3] */,
                     const size_t *      /* region[3] */,
                     size_t              /* input_row_pitch */,
-                    size_t              /* input_slice_pitch */, 
+                    size_t              /* input_slice_pitch */,
                     const void *        /* ptr */,
                     cl_uint             /* num_events_in_wait_list */,
                     const cl_event *    /* event_wait_list */,
@@ -827,10 +827,10 @@ PFNCLENQUEUEWRITEIMAGE)(cl_command_queue    /* command_queue */,
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUECOPYIMAGE)(cl_command_queue     /* command_queue */,
                    cl_mem               /* src_image */,
-                   cl_mem               /* dst_image */, 
+                   cl_mem               /* dst_image */,
                    const size_t *       /* src_origin[3] */,
                    const size_t *       /* dst_origin[3] */,
-                   const size_t *       /* region[3] */, 
+                   const size_t *       /* region[3] */,
                    cl_uint              /* num_events_in_wait_list */,
                    const cl_event *     /* event_wait_list */,
                    cl_event *           /* event */) CL_API_SUFFIX__VERSION_1_0;
@@ -838,9 +838,9 @@ PFNCLENQUEUECOPYIMAGE)(cl_command_queue     /* command_queue */,
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUECOPYIMAGETOBUFFER)(cl_command_queue /* command_queue */,
                            cl_mem           /* src_image */,
-                           cl_mem           /* dst_buffer */, 
+                           cl_mem           /* dst_buffer */,
                            const size_t *   /* src_origin[3] */,
-                           const size_t *   /* region[3] */, 
+                           const size_t *   /* region[3] */,
                            size_t           /* dst_offset */,
                            cl_uint          /* num_events_in_wait_list */,
                            const cl_event * /* event_wait_list */,
@@ -849,10 +849,10 @@ PFNCLENQUEUECOPYIMAGETOBUFFER)(cl_command_queue /* command_queue */,
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUECOPYBUFFERTOIMAGE)(cl_command_queue /* command_queue */,
                            cl_mem           /* src_buffer */,
-                           cl_mem           /* dst_image */, 
+                           cl_mem           /* dst_image */,
                            size_t           /* src_offset */,
                            const size_t *   /* dst_origin[3] */,
-                           const size_t *   /* region[3] */, 
+                           const size_t *   /* region[3] */,
                            cl_uint          /* num_events_in_wait_list */,
                            const cl_event * /* event_wait_list */,
                            cl_event *       /* event */) CL_API_SUFFIX__VERSION_1_0;
@@ -860,7 +860,7 @@ PFNCLENQUEUECOPYBUFFERTOIMAGE)(cl_command_queue /* command_queue */,
 typedef CL_API_ENTRY void * (CL_API_CALL *
 PFNCLENQUEUEMAPBUFFER)(cl_command_queue /* command_queue */,
                    cl_mem           /* buffer */,
-                   cl_bool          /* blocking_map */, 
+                   cl_bool          /* blocking_map */,
                    cl_map_flags     /* map_flags */,
                    size_t           /* offset */,
                    size_t           /* cb */,
@@ -871,9 +871,9 @@ PFNCLENQUEUEMAPBUFFER)(cl_command_queue /* command_queue */,
 
 typedef CL_API_ENTRY void * (CL_API_CALL *
 PFNCLENQUEUEMAPIMAGE)(cl_command_queue  /* command_queue */,
-                  cl_mem            /* image */, 
-                  cl_bool           /* blocking_map */, 
-                  cl_map_flags      /* map_flags */, 
+                  cl_mem            /* image */,
+                  cl_bool           /* blocking_map */,
+                  cl_map_flags      /* map_flags */,
                   const size_t *    /* origin[3] */,
                   const size_t *    /* region[3] */,
                   size_t *          /* image_row_pitch */,
@@ -911,9 +911,9 @@ PFNCLENQUEUETASK)(cl_command_queue  /* command_queue */,
 
 typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUENATIVEKERNEL)(cl_command_queue  /* command_queue */,
-                      void (*user_func)(void *), 
+                      void (*user_func)(void *),
                       void *            /* args */,
-                      size_t            /* cb_args */, 
+                      size_t            /* cb_args */,
                       cl_uint           /* num_mem_objects */,
                       const cl_mem *    /* mem_list */,
                       const void **     /* args_mem_loc */,
@@ -937,7 +937,7 @@ PFNCLENQUEUEBARRIER)(cl_command_queue /* command_queue */) CL_API_SUFFIX__VERSIO
 //
 // Returns the extension function address for the given function name,
 // or NULL if a valid function can not be found.  The client must
-// check to make sure the address is not NULL, before using or 
+// check to make sure the address is not NULL, before using or
 // calling the returned function address.
 //
 typedef CL_API_ENTRY void * (CL_API_CALL * PFNCLGETEXTENSIONFUNCTIONADDRESS)(const char * /* func_name */) CL_API_SUFFIX__VERSION_1_0;
@@ -1036,72 +1036,72 @@ CLEW_FUN_EXPORT     PFNCLENQUEUEBARRIER                 __clewEnqueueBarrier    
 CLEW_FUN_EXPORT     PFNCLGETEXTENSIONFUNCTIONADDRESS    __clewGetExtensionFunctionAddress   ;
 
 
-#define	clGetPlatformIDs                CLEW_GET_FUN(__clewGetPlatformIDs                )
-#define	clGetPlatformInfo               CLEW_GET_FUN(__clewGetPlatformInfo               )
-#define	clGetDeviceIDs                  CLEW_GET_FUN(__clewGetDeviceIDs                  )
-#define	clGetDeviceInfo                 CLEW_GET_FUN(__clewGetDeviceInfo                 )
-#define	clCreateContext                 CLEW_GET_FUN(__clewCreateContext                 )
-#define	clCreateContextFromType         CLEW_GET_FUN(__clewCreateContextFromType         )
-#define	clRetainContext                 CLEW_GET_FUN(__clewRetainContext                 )
-#define	clReleaseContext                CLEW_GET_FUN(__clewReleaseContext                )
-#define	clGetContextInfo                CLEW_GET_FUN(__clewGetContextInfo                )
-#define	clCreateCommandQueue            CLEW_GET_FUN(__clewCreateCommandQueue            )
-#define	clRetainCommandQueue            CLEW_GET_FUN(__clewRetainCommandQueue            )
-#define	clReleaseCommandQueue           CLEW_GET_FUN(__clewReleaseCommandQueue           )
-#define	clGetCommandQueueInfo           CLEW_GET_FUN(__clewGetCommandQueueInfo           )
-#define	clSetCommandQueueProperty       CLEW_GET_FUN(__clewSetCommandQueueProperty       )
-#define	clCreateBuffer                  CLEW_GET_FUN(__clewCreateBuffer                  )
-#define	clCreateImage2D                 CLEW_GET_FUN(__clewCreateImage2D                 )
-#define	clCreateImage3D                 CLEW_GET_FUN(__clewCreateImage3D                 )
-#define	clRetainMemObject               CLEW_GET_FUN(__clewRetainMemObject               )
-#define	clReleaseMemObject              CLEW_GET_FUN(__clewReleaseMemObject              )
-#define	clGetSupportedImageFormats      CLEW_GET_FUN(__clewGetSupportedImageFormats      )
-#define	clGetMemObjectInfo              CLEW_GET_FUN(__clewGetMemObjectInfo              )
-#define	clGetImageInfo                  CLEW_GET_FUN(__clewGetImageInfo                  )
-#define	clCreateSampler                 CLEW_GET_FUN(__clewCreateSampler                 )
-#define	clRetainSampler                 CLEW_GET_FUN(__clewRetainSampler                 )
-#define	clReleaseSampler                CLEW_GET_FUN(__clewReleaseSampler                )
-#define	clGetSamplerInfo                CLEW_GET_FUN(__clewGetSamplerInfo                )
-#define	clCreateProgramWithSource       CLEW_GET_FUN(__clewCreateProgramWithSource       )
-#define	clCreateProgramWithBinary       CLEW_GET_FUN(__clewCreateProgramWithBinary       )
-#define	clRetainProgram                 CLEW_GET_FUN(__clewRetainProgram                 )
-#define	clReleaseProgram                CLEW_GET_FUN(__clewReleaseProgram                )
-#define	clBuildProgram                  CLEW_GET_FUN(__clewBuildProgram                  )
-#define	clUnloadCompiler                CLEW_GET_FUN(__clewUnloadCompiler                )
-#define	clGetProgramInfo                CLEW_GET_FUN(__clewGetProgramInfo                )
-#define	clGetProgramBuildInfo           CLEW_GET_FUN(__clewGetProgramBuildInfo           )
-#define	clCreateKernel                  CLEW_GET_FUN(__clewCreateKernel                  )
-#define	clCreateKernelsInProgram        CLEW_GET_FUN(__clewCreateKernelsInProgram        )
-#define	clRetainKernel                  CLEW_GET_FUN(__clewRetainKernel                  )
-#define	clReleaseKernel                 CLEW_GET_FUN(__clewReleaseKernel                 )
-#define	clSetKernelArg                  CLEW_GET_FUN(__clewSetKernelArg                  )
-#define	clGetKernelInfo                 CLEW_GET_FUN(__clewGetKernelInfo                 )
-#define	clGetKernelWorkGroupInfo        CLEW_GET_FUN(__clewGetKernelWorkGroupInfo        )
-#define	clWaitForEvents                 CLEW_GET_FUN(__clewWaitForEvents                 )
-#define	clGetEventInfo                  CLEW_GET_FUN(__clewGetEventInfo                  )
-#define	clRetainEvent                   CLEW_GET_FUN(__clewRetainEvent                   )
-#define	clReleaseEvent                  CLEW_GET_FUN(__clewReleaseEvent                  )
-#define	clGetEventProfilingInfo         CLEW_GET_FUN(__clewGetEventProfilingInfo         )
-#define	clFlush                         CLEW_GET_FUN(__clewFlush                         )
-#define	clFinish                        CLEW_GET_FUN(__clewFinish                        )
-#define	clEnqueueReadBuffer             CLEW_GET_FUN(__clewEnqueueReadBuffer             )
-#define	clEnqueueWriteBuffer            CLEW_GET_FUN(__clewEnqueueWriteBuffer            )
-#define	clEnqueueCopyBuffer             CLEW_GET_FUN(__clewEnqueueCopyBuffer             )
-#define	clEnqueueReadImage              CLEW_GET_FUN(__clewEnqueueReadImage              )
-#define	clEnqueueWriteImage             CLEW_GET_FUN(__clewEnqueueWriteImage             )
-#define	clEnqueueCopyImage              CLEW_GET_FUN(__clewEnqueueCopyImage              )
-#define	clEnqueueCopyImageToBuffer      CLEW_GET_FUN(__clewEnqueueCopyImageToBuffer      )
-#define	clEnqueueCopyBufferToImage      CLEW_GET_FUN(__clewEnqueueCopyBufferToImage      )
-#define	clEnqueueMapBuffer              CLEW_GET_FUN(__clewEnqueueMapBuffer              )
-#define	clEnqueueMapImage               CLEW_GET_FUN(__clewEnqueueMapImage               )
-#define	clEnqueueUnmapMemObject         CLEW_GET_FUN(__clewEnqueueUnmapMemObject         )
-#define	clEnqueueNDRangeKernel          CLEW_GET_FUN(__clewEnqueueNDRangeKernel          )
-#define	clEnqueueTask                   CLEW_GET_FUN(__clewEnqueueTask                   )
-#define	clEnqueueNativeKernel           CLEW_GET_FUN(__clewEnqueueNativeKernel           )
-#define	clEnqueueMarker                 CLEW_GET_FUN(__clewEnqueueMarker                 )
-#define	clEnqueueWaitForEvents          CLEW_GET_FUN(__clewEnqueueWaitForEvents          )
-#define	clEnqueueBarrier                CLEW_GET_FUN(__clewEnqueueBarrier                )
-#define	clGetExtensionFunctionAddress   CLEW_GET_FUN(__clewGetExtensionFunctionAddress   )
+#define clGetPlatformIDs                CLEW_GET_FUN(__clewGetPlatformIDs                )
+#define clGetPlatformInfo               CLEW_GET_FUN(__clewGetPlatformInfo               )
+#define clGetDeviceIDs                  CLEW_GET_FUN(__clewGetDeviceIDs                  )
+#define clGetDeviceInfo                 CLEW_GET_FUN(__clewGetDeviceInfo                 )
+#define clCreateContext                 CLEW_GET_FUN(__clewCreateContext                 )
+#define clCreateContextFromType         CLEW_GET_FUN(__clewCreateContextFromType         )
+#define clRetainContext                 CLEW_GET_FUN(__clewRetainContext                 )
+#define clReleaseContext                CLEW_GET_FUN(__clewReleaseContext                )
+#define clGetContextInfo                CLEW_GET_FUN(__clewGetContextInfo                )
+#define clCreateCommandQueue            CLEW_GET_FUN(__clewCreateCommandQueue            )
+#define clRetainCommandQueue            CLEW_GET_FUN(__clewRetainCommandQueue            )
+#define clReleaseCommandQueue           CLEW_GET_FUN(__clewReleaseCommandQueue           )
+#define clGetCommandQueueInfo           CLEW_GET_FUN(__clewGetCommandQueueInfo           )
+#define clSetCommandQueueProperty       CLEW_GET_FUN(__clewSetCommandQueueProperty       )
+#define clCreateBuffer                  CLEW_GET_FUN(__clewCreateBuffer                  )
+#define clCreateImage2D                 CLEW_GET_FUN(__clewCreateImage2D                 )
+#define clCreateImage3D                 CLEW_GET_FUN(__clewCreateImage3D                 )
+#define clRetainMemObject               CLEW_GET_FUN(__clewRetainMemObject               )
+#define clReleaseMemObject              CLEW_GET_FUN(__clewReleaseMemObject              )
+#define clGetSupportedImageFormats      CLEW_GET_FUN(__clewGetSupportedImageFormats      )
+#define clGetMemObjectInfo              CLEW_GET_FUN(__clewGetMemObjectInfo              )
+#define clGetImageInfo                  CLEW_GET_FUN(__clewGetImageInfo                  )
+#define clCreateSampler                 CLEW_GET_FUN(__clewCreateSampler                 )
+#define clRetainSampler                 CLEW_GET_FUN(__clewRetainSampler                 )
+#define clReleaseSampler                CLEW_GET_FUN(__clewReleaseSampler                )
+#define clGetSamplerInfo                CLEW_GET_FUN(__clewGetSamplerInfo                )
+#define clCreateProgramWithSource       CLEW_GET_FUN(__clewCreateProgramWithSource       )
+#define clCreateProgramWithBinary       CLEW_GET_FUN(__clewCreateProgramWithBinary       )
+#define clRetainProgram                 CLEW_GET_FUN(__clewRetainProgram                 )
+#define clReleaseProgram                CLEW_GET_FUN(__clewReleaseProgram                )
+#define clBuildProgram                  CLEW_GET_FUN(__clewBuildProgram                  )
+#define clUnloadCompiler                CLEW_GET_FUN(__clewUnloadCompiler                )
+#define clGetProgramInfo                CLEW_GET_FUN(__clewGetProgramInfo                )
+#define clGetProgramBuildInfo           CLEW_GET_FUN(__clewGetProgramBuildInfo           )
+#define clCreateKernel                  CLEW_GET_FUN(__clewCreateKernel                  )
+#define clCreateKernelsInProgram        CLEW_GET_FUN(__clewCreateKernelsInProgram        )
+#define clRetainKernel                  CLEW_GET_FUN(__clewRetainKernel                  )
+#define clReleaseKernel                 CLEW_GET_FUN(__clewReleaseKernel                 )
+#define clSetKernelArg                  CLEW_GET_FUN(__clewSetKernelArg                  )
+#define clGetKernelInfo                 CLEW_GET_FUN(__clewGetKernelInfo                 )
+#define clGetKernelWorkGroupInfo        CLEW_GET_FUN(__clewGetKernelWorkGroupInfo        )
+#define clWaitForEvents                 CLEW_GET_FUN(__clewWaitForEvents                 )
+#define clGetEventInfo                  CLEW_GET_FUN(__clewGetEventInfo                  )
+#define clRetainEvent                   CLEW_GET_FUN(__clewRetainEvent                   )
+#define clReleaseEvent                  CLEW_GET_FUN(__clewReleaseEvent                  )
+#define clGetEventProfilingInfo         CLEW_GET_FUN(__clewGetEventProfilingInfo         )
+#define clFlush                         CLEW_GET_FUN(__clewFlush                         )
+#define clFinish                        CLEW_GET_FUN(__clewFinish                        )
+#define clEnqueueReadBuffer             CLEW_GET_FUN(__clewEnqueueReadBuffer             )
+#define clEnqueueWriteBuffer            CLEW_GET_FUN(__clewEnqueueWriteBuffer            )
+#define clEnqueueCopyBuffer             CLEW_GET_FUN(__clewEnqueueCopyBuffer             )
+#define clEnqueueReadImage              CLEW_GET_FUN(__clewEnqueueReadImage              )
+#define clEnqueueWriteImage             CLEW_GET_FUN(__clewEnqueueWriteImage             )
+#define clEnqueueCopyImage              CLEW_GET_FUN(__clewEnqueueCopyImage              )
+#define clEnqueueCopyImageToBuffer      CLEW_GET_FUN(__clewEnqueueCopyImageToBuffer      )
+#define clEnqueueCopyBufferToImage      CLEW_GET_FUN(__clewEnqueueCopyBufferToImage      )
+#define clEnqueueMapBuffer              CLEW_GET_FUN(__clewEnqueueMapBuffer              )
+#define clEnqueueMapImage               CLEW_GET_FUN(__clewEnqueueMapImage               )
+#define clEnqueueUnmapMemObject         CLEW_GET_FUN(__clewEnqueueUnmapMemObject         )
+#define clEnqueueNDRangeKernel          CLEW_GET_FUN(__clewEnqueueNDRangeKernel          )
+#define clEnqueueTask                   CLEW_GET_FUN(__clewEnqueueTask                   )
+#define clEnqueueNativeKernel           CLEW_GET_FUN(__clewEnqueueNativeKernel           )
+#define clEnqueueMarker                 CLEW_GET_FUN(__clewEnqueueMarker                 )
+#define clEnqueueWaitForEvents          CLEW_GET_FUN(__clewEnqueueWaitForEvents          )
+#define clEnqueueBarrier                CLEW_GET_FUN(__clewEnqueueBarrier                )
+#define clGetExtensionFunctionAddress   CLEW_GET_FUN(__clewGetExtensionFunctionAddress   )
 
 #endif  //  CLCC_GENERATE_DOCUMENTATION
 

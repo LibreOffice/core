@@ -23,7 +23,7 @@
         #define CLCC_DYNLIB_IMPORT  GetProcAddress
     #else
         #include <dlfcn.h>
-        
+
         typedef void*                   CLCC_DYNLIB_HANDLE;
 
         #define CLCC_DYNLIB_OPEN(path)  dlopen(path, RTLD_NOW | RTLD_GLOBAL)
@@ -314,7 +314,7 @@ const char* clewErrorString(cl_int error)
         , "CL_INVALID_GLOBAL_WORK_SIZE"                 //  -63
     };
 
-    if  (   (error > 0) 
+    if  (   (error > 0)
         ||  (error < -63)
         )
     {
