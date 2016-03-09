@@ -337,16 +337,16 @@ void SvRTFParser::ScanText()
                             sal_Char nSlash = '\\';
                             while (!bBreak)
                             {
-                                wchar_t __next=GetNextChar();
-                                if (__next>0xFF) // fix for #i43933# and #i35653#
+                                wchar_t next=GetNextChar();
+                                if (next>0xFF) // fix for #i43933# and #i35653#
                                 {
                                     if (!aByteString.isEmpty())
                                         aStrBuffer.append( OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding()) );
-                                    aStrBuffer.append((sal_Unicode)__next);
+                                    aStrBuffer.append((sal_Unicode)next);
 
                                     continue;
                                 }
-                                nSlash = (sal_Char)__next;
+                                nSlash = (sal_Char)next;
                                 while (nSlash == 0xD || nSlash == 0xA)
                                     nSlash = (sal_Char)GetNextChar();
 
