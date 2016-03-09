@@ -28,9 +28,9 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
 
-    void SAL_CALL OInteractionPassword::setPassword( const OUString& _Password ) throw (RuntimeException, std::exception)
+    void SAL_CALL OInteractionPassword::setPassword( const OUString& Password ) throw (RuntimeException, std::exception)
     {
-        m_sPassword = _Password;
+        m_sPassword = Password;
     }
 
 
