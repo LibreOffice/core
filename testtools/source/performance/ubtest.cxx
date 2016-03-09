@@ -1161,9 +1161,6 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         // dump out tables
 
         out( "\nTimes( ratio to direct in process )", stream );
-#if OSL_DEBUG_LEVEL > 1
-        out ("; compiled with OSL_DEBUG_LEVEL > 1", stream );
-#endif
         out( ":", stream );
 
         sal_Int32 nPos = 60;
