@@ -1149,7 +1149,7 @@ public:
         const sal_Int16 nCellType,
         const OUString& rCurrency);
 
-    void ProgressBarIncrement(bool bEditCell);
+    void ProgressBarIncrement();
 
     void SetNewCondFormatData() { mbHasNewCondFormatData = true; }
     bool HasNewCondFormatData() { return mbHasNewCondFormatData; }

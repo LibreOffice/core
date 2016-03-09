@@ -130,7 +130,7 @@ public:
     void UpdateAllRowHeights();
 
     void                    BeforeXMLLoading();
-    void                    AfterXMLLoading(bool bRet);
+    void                    AfterXMLLoading();
     ScSheetSaveData*        GetSheetSaveData();
 
     void                    RepaintRange( const ScRange& rRange );

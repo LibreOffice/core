@@ -331,7 +331,7 @@ private:
     // XclExpScToken: pass-by-value and return-by-value is intended
 
     const FormulaToken* GetNextRawToken();
-    const FormulaToken* PeekNextRawToken( bool bSkipSpaces ) const;
+    const FormulaToken* PeekNextRawToken() const;
 
     bool                GetNextToken( XclExpScToken& rTokData );
     XclExpScToken       GetNextToken();
@@ -796,7 +796,7 @@ const FormulaToken* XclExpFmlaCompImpl::GetNextRawToken()
     return pScToken;
 }
 
-const FormulaToken* XclExpFmlaCompImpl::PeekNextRawToken( bool bSkipSpaces ) const
+const FormulaToken* XclExpFmlaCompImpl::PeekNextRawToken() const
 {
     /*  Returns pointer to next raw token in the token array. The token array
         iterator already points to the next token (A call to GetNextToken()
@@ -805,7 +805,7 @@ const FormulaToken* XclExpFmlaCompImpl::PeekNextRawToken( bool bSkipSpaces ) con
         created and set to the passed skip-spaces mode. If spaces have to be
         skipped, and the iterator currently points to a space token, the
         constructor will move it to the next non-space token. */
-    XclTokenArrayIterator aTempIt( mxData->maTokArrIt, bSkipSpaces );
+    XclTokenArrayIterator aTempIt( mxData->maTokArrIt, true/*bSkipSpaces*/ );
     return aTempIt.Get();
 }
 
@@ -1252,7 +1252,7 @@ void XclExpFmlaCompImpl::ProcessExternal( const XclExpScToken& rTokData )
         names and for external/invalid function calls. This function looks for
         the next token in the token array. If it is an opening parenthesis, the
         token is processed as external function call, otherwise as undefined name. */
-    const FormulaToken* pNextScToken = PeekNextRawToken( true );
+    const FormulaToken* pNextScToken = PeekNextRawToken();
     if( !pNextScToken || (pNextScToken->GetOpCode() != ocOpen) )
         AppendMissingNameToken( rTokData.mpScToken->GetExternal(), rTokData.mnSpaces );
     else

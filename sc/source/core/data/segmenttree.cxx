@@ -378,9 +378,9 @@ void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
+SCROW ScFlatBoolRowSegments::findLastNotOf() const
 {
-    return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
+    return static_cast<SCROW>(mpImpl->findLastNotOf(false));
 }
 
 ScFlatBoolColSegments::ScFlatBoolColSegments() :

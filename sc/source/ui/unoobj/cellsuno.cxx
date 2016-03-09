@@ -1809,10 +1809,10 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangesBase::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-void ScCellRangesBase::PaintRanges_Impl( sal_uInt16 nPart )
+void ScCellRangesBase::PaintGridRanges_Impl( )
 {
     for (size_t i = 0, nCount = aRanges.size(); i < nCount; ++i)
-        pDocShell->PostPaint( *aRanges[ i ], nPart );
+        pDocShell->PostPaint( *aRanges[ i ], PAINT_GRID );
 }
 
 // XSheetOperation
@@ -3174,7 +3174,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
                 }
 
                 //! undo
-                PaintRanges_Impl( PAINT_GRID );
+                PaintGridRanges_Impl();
                 pDocShell->SetDocumentModified();
                 ForceChartListener_Impl();          // call listeners for this object synchronously
                 bDone = true;
@@ -3244,7 +3244,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
                     }
 
                     //! undo
-                    PaintRanges_Impl( PAINT_GRID );
+                    PaintGridRanges_Impl();
                     pDocShell->SetDocumentModified();
                     ForceChartListener_Impl();          // call listeners for this object synchronously
                     bDone = true;
@@ -3315,7 +3315,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                     }
 
                     //! undo
-                    PaintRanges_Impl( PAINT_GRID );
+                    PaintGridRanges_Impl();
                     pDocShell->SetDocumentModified();
                     ForceChartListener_Impl();          // call listeners for this object synchronously
                     bDone = true;

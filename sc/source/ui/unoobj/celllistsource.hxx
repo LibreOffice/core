@@ -128,8 +128,6 @@ namespace calc
                 getRangeAddress( ) const;
 
         /** retrievs the text of a cell within our range
-            @param _nRangeRelativeColumn
-                the relative column index of the cell within our range
             @param _nRangeRelativeRow
                 the relative row index of the cell within our range
             @precond
@@ -137,7 +135,6 @@ namespace calc
         */
         OUString
                 getCellTextContent_noCheck(
-                    sal_Int32 _nRangeRelativeColumn,
                     sal_Int32 _nRangeRelativeRow
                 );
 

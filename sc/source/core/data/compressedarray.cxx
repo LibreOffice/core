@@ -386,8 +386,7 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
 }
 
 template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
-        const D& rBitMask ) const
+A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( const D& rBitMask ) const
 {
     A nEnd = ::std::numeric_limits<A>::max();
     size_t nIndex = this->nCount-1;
@@ -403,7 +402,7 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
             if (nIndex > 0)
             {
                 --nIndex;
-                if (this->pData[nIndex].nEnd < nStart)
+                if (this->pData[nIndex].nEnd < 0)
                     break;  // while
             }
             else

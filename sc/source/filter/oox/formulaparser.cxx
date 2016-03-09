@@ -471,7 +471,7 @@ protected:
     void                pushOperandSize( size_t nSize );
     size_t              popOperandSize();
 
-    ApiToken&           getOperandToken( size_t nOpCountFromEnd, size_t nOpIndex, size_t nTokenIndex );
+    ApiToken&           getOperandToken( size_t nOpIndex, size_t nTokenIndex );
 
     bool                pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     bool                pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
@@ -480,7 +480,7 @@ protected:
     template< typename Type >
     inline bool         pushValueOperandToken( const Type& rValue )
                             { return pushValueOperandToken( rValue, OPCODE_PUSH, nullptr ); }
-    bool                pushParenthesesOperandToken( const WhiteSpaceVec* pOpeningSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
+    bool                pushParenthesesOperandToken( const WhiteSpaceVec* pClosingSpaces = nullptr );
     bool                pushUnaryPreOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     bool                pushUnaryPostOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     bool                pushBinaryOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
@@ -747,13 +747,13 @@ size_t FormulaParserImpl::popOperandSize()
     return nOpSize;
 }
 
-ApiToken& FormulaParserImpl::getOperandToken( size_t nOpCountFromEnd, size_t nOpIndex, size_t nTokenIndex )
+ApiToken& FormulaParserImpl::getOperandToken( size_t nOpIndex, size_t nTokenIndex )
 {
     SAL_WARN_IF(
-        getOperandSize( nOpCountFromEnd, nOpIndex ) <= nTokenIndex, "sc.filter",
+        getOperandSize( 1, nOpIndex ) <= nTokenIndex, "sc.filter",
         "FormulaParserImpl::getOperandToken - invalid parameters" );
     SizeTypeVector::const_iterator aIndexIt = maTokenIndexes.end();
-    for( SizeTypeVector::const_iterator aEnd = maOperandSizeStack.end(), aIt = aEnd - nOpCountFromEnd + nOpIndex; aIt != aEnd; ++aIt )
+    for( SizeTypeVector::const_iterator aEnd = maOperandSizeStack.end(), aIt = aEnd - 1 + nOpIndex; aIt != aEnd; ++aIt )
         aIndexIt -= *aIt;
     return maTokenStorage[ *(aIndexIt + nTokenIndex) ];
 }
@@ -783,9 +783,9 @@ bool FormulaParserImpl::pushValueOperandToken( const Type& rValue, sal_Int32 nOp
     return true;
 }
 
-bool FormulaParserImpl::pushParenthesesOperandToken( const WhiteSpaceVec* pOpeningSpaces, const WhiteSpaceVec* pClosingSpaces )
+bool FormulaParserImpl::pushParenthesesOperandToken( const WhiteSpaceVec* pClosingSpaces )
 {
-    size_t nSpacesSize = appendWhiteSpaceTokens( pOpeningSpaces );
+    size_t nSpacesSize = appendWhiteSpaceTokens( nullptr );
     appendRawToken( OPCODE_OPEN );
     nSpacesSize += appendWhiteSpaceTokens( pClosingSpaces );
     appendRawToken( OPCODE_CLOSE );
@@ -861,7 +861,7 @@ bool FormulaParserImpl::pushFunctionOperatorToken( sal_Int32 nOpCode, size_t nPa
 
     // add function parentheses and function name
     return bOk &&
-        ((nParamCount > 0) ? pushParenthesesOperatorToken( nullptr, pClosingSpaces ) : pushParenthesesOperandToken( nullptr, pClosingSpaces )) &&
+        ((nParamCount > 0) ? pushParenthesesOperatorToken( nullptr, pClosingSpaces ) : pushParenthesesOperandToken( pClosingSpaces )) &&
         pushUnaryPreOperatorToken( nOpCode, pLeadingSpaces );
 }
 
@@ -872,10 +872,10 @@ bool FormulaParserImpl::pushFunctionOperatorToken( const FunctionInfo& rFuncInfo
     {
        // create an external add-in call for the passed built-in function
         if( (rFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) && !rFuncInfo.maExtProgName.isEmpty() )
-            getOperandToken( 1, 0, 0 ).Data <<= rFuncInfo.maExtProgName;
+            getOperandToken( 0, 0 ).Data <<= rFuncInfo.maExtProgName;
         // create a bad token with unsupported function name
         else if( (rFuncInfo.mnApiOpCode == OPCODE_BAD) && !rFuncInfo.maOoxFuncName.isEmpty() )
-            getOperandToken( 1, 0, 0 ).Data <<= rFuncInfo.maOoxFuncName;
+            getOperandToken( 0, 0 ).Data <<= rFuncInfo.maOoxFuncName;
     }
     return bOk;
 }

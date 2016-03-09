@@ -177,7 +177,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
     if ( pViewShell )
     {
-        pViewShell->CutToClip( nullptr, true );
+        pViewShell->CutToClip( true );
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
         ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( nullptr );

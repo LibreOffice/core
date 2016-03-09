@@ -191,7 +191,7 @@ private:
     DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
 
 private:
-    void            PaintRanges_Impl( sal_uInt16 nPart );
+    void            PaintGridRanges_Impl();
     ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
     void            ForceChartListener_Impl();
     ScMemChart*     CreateMemChart_Impl() const;

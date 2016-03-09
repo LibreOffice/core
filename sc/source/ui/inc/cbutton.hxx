@@ -37,8 +37,8 @@ public:
     void    Draw( const Point&  rAt,
                   const Size&   rSize,
                   bool          bState );
-    void    Draw( bool          bState )
-                { Draw( aBtnPos, aBtnSize, bState ); }
+    void    Draw()
+                { Draw( aBtnPos, aBtnSize, false ); }
 
     void    SetOptSizePixel();
 

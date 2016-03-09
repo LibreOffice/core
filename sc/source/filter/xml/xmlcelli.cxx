@@ -738,7 +738,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             if (pContext)
             {
                 bIsEmpty = false;
-                rXMLImport.ProgressBarIncrement(false);
+                rXMLImport.ProgressBarIncrement();
             }
         }
     }
@@ -1138,7 +1138,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     // Formatted text that is put into the cell by the child context
     // is handled in AddCellsToTable() (bIsEmpty is true then).
     if (bDoIncrement)
-        rXMLImport.ProgressBarIncrement(false);
+        rXMLImport.ProgressBarIncrement();
 }
 
 void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
@@ -1169,7 +1169,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
 
         rXMLImport.GetDoc().setNumericCell(rCurrentPos, fValue);
     }
-    rXMLImport.ProgressBarIncrement(false);
+    rXMLImport.ProgressBarIncrement();
 }
 
 namespace {
@@ -1464,7 +1464,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
         SetAnnotation( rCellPos );
         SetDetectiveObj( rCellPos );
         SetCellRangeSource( rCellPos );
-        rXMLImport.ProgressBarIncrement(false);
+        rXMLImport.ProgressBarIncrement();
     }
     else
     {

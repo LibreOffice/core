@@ -83,7 +83,7 @@ private:
     void                ExecuteScenarioSlot( sal_uInt16 nSlotId );
     void                SelectScenario();
     void                EditScenario();
-    void                DeleteScenario( bool bQueryBox );
+    void                DeleteScenario();
 
 private:
     ScScenarioWindow&   mrParent;

@@ -169,9 +169,9 @@ public:
                         getCellRangeFromDoc(
                             const css::table::CellRangeAddress& rRange ) const;
 
-    /** Returns the cell or page styles container from the Calc document. */
+    /** Returns the cell styles container from the Calc document. */
     css::uno::Reference< css::container::XNameContainer >
-                        getStyleFamily( bool bPageStyles ) const;
+                        getCellStyleFamily() const;
     /** Returns the specified cell or page style from the Calc document. */
     css::uno::Reference< css::style::XStyle >
                         getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;

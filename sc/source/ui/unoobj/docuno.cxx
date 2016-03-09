@@ -444,10 +444,10 @@ void ScModelObj::BeforeXMLLoading()
         pDocShell->BeforeXMLLoading();
 }
 
-void ScModelObj::AfterXMLLoading(bool bRet)
+void ScModelObj::AfterXMLLoading()
 {
     if (pDocShell)
-        pDocShell->AfterXMLLoading(bRet);
+        pDocShell->AfterXMLLoading(true);
 }
 
 ScSheetSaveData* ScModelObj::GetSheetSaveData()

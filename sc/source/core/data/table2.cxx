@@ -3263,7 +3263,7 @@ SCROW ScTable::GetLastFlaggedRow() const
     SCROW nLastFound = 0;
     if (pRowFlags)
     {
-        SCROW nRow = pRowFlags->GetLastAnyBitAccess( 0, sal::static_int_cast<sal_uInt8>(CR_ALL) );
+        SCROW nRow = pRowFlags->GetLastAnyBitAccess( sal::static_int_cast<sal_uInt8>(CR_ALL) );
         if (ValidRow(nRow))
             nLastFound = nRow;
     }
@@ -3273,14 +3273,14 @@ SCROW ScTable::GetLastFlaggedRow() const
 
     if (mpHiddenRows)
     {
-        SCROW nRow = mpHiddenRows->findLastNotOf(false);
+        SCROW nRow = mpHiddenRows->findLastNotOf();
         if (ValidRow(nRow))
             nLastFound = ::std::max(nLastFound, nRow);
     }
 
     if (mpFilteredRows)
     {
-        SCROW nRow = mpFilteredRows->findLastNotOf(false);
+        SCROW nRow = mpFilteredRows->findLastNotOf();
         if (ValidRow(nRow))
             nLastFound = ::std::max(nLastFound, nRow);
     }

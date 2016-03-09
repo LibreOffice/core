@@ -97,7 +97,7 @@ public:
 
     void            EnterDataAtCursor( const OUString& rString );         //! Not used?
 
-    SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = nullptr, bool bIncludeObjects = false );
+    SC_DLLPUBLIC void           CutToClip( bool bIncludeObjects = false );
     SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc = nullptr, bool bCut = false, bool bApi = false,
                                             bool bIncludeObjects = false, bool bStopEdit = true );
     SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut = false,

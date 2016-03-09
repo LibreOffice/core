@@ -171,10 +171,9 @@ public:
                                     A nStart, A nEnd, const D& rValueToAnd );
 
     /** Return the last row where an entry meets the condition:
-        ((aValue & rBitMask) != 0), start searching at nStart. If no entry
+        ((aValue & rBitMask) != 0), start searching at 0. If no entry
         meets this condition, ::std::numeric_limits<A>::max() is returned. */
-    A                           GetLastAnyBitAccess( A nStart,
-                                    const D& rBitMask ) const;
+    A                           GetLastAnyBitAccess( const D& rBitMask ) const;
 };
 
 template< typename A, typename D >

@@ -75,7 +75,7 @@ using namespace com::sun::star;
 
 //      C U T
 
-void ScViewFunc::CutToClip( ScDocument* pClipDoc, bool bIncludeObjects )
+void ScViewFunc::CutToClip( bool bIncludeObjects )
 {
     UpdateInputLine();
 
@@ -104,7 +104,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, bool bIncludeObjects )
             MarkDataChanged();
         }
 
-        CopyToClip( pClipDoc, true, false, bIncludeObjects );           // copy to clipboard
+        CopyToClip( nullptr, true, false, bIncludeObjects );           // copy to clipboard
 
         ScAddress aOldEnd( aRange.aEnd );       //  combined cells in this range?
         pDoc->ExtendMerge( aRange, true );

@@ -408,7 +408,7 @@ void ScXMLTableContext::EndElement()
     }
 
     rTables.DeleteTable();
-    rImport.ProgressBarIncrement(false);
+    rImport.ProgressBarIncrement();
 
     // store stream positions
     if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)

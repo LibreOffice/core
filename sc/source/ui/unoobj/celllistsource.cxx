@@ -162,12 +162,12 @@ namespace calc
         return aAddress;
     }
 
-    OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeColumn, sal_Int32 _nRangeRelativeRow )
+    OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeRow )
     {
         OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
         Reference< XTextRange > xCellText;
         if ( m_xRange.is() )
-            xCellText.set(m_xRange->getCellByPosition( _nRangeRelativeColumn, _nRangeRelativeRow ), css::uno::UNO_QUERY);
+            xCellText.set(m_xRange->getCellByPosition( 0, _nRangeRelativeRow ), css::uno::UNO_QUERY);
 
         OUString sText;
         if ( xCellText.is() )
@@ -194,7 +194,7 @@ namespace calc
         if ( _nPosition >= getListEntryCount() )
             throw IndexOutOfBoundsException();
 
-        return getCellTextContent_noCheck( 0, _nPosition );
+        return getCellTextContent_noCheck( _nPosition );
     }
 
     Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException, std::exception)
@@ -207,7 +207,7 @@ namespace calc
         OUString* pAllEntries = aAllEntries.getArray();
         for ( sal_Int32 i = 0; i < aAllEntries.getLength(); ++i )
         {
-            *pAllEntries++ = getCellTextContent_noCheck( 0, i );
+            *pAllEntries++ = getCellTextContent_noCheck( i );
         }
 
         return aAllEntries;
