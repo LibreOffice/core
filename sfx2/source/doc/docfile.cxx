@@ -3137,7 +3137,7 @@ void SfxMedium::ForceSynchronStream_Impl()
     {
         SvLockBytes* pBytes = pImp->m_pInStream->GetLockBytes();
         if( pBytes )
-            pBytes->SetSynchronMode( true/*bForce*/ );
+            pBytes->SetSynchronMode();
     }
 }
 
