@@ -332,7 +332,7 @@ public:
     ::std::vector< SortingData_Impl* >  maContent;
     ::osl::Mutex                        maMutex;
 
-    SvTreeListBox*                       mpCurView;
+    VclPtr<SvTreeListBox>               mpCurView;
     VclPtr<ViewTabListBox_Impl>         mpView;
     VclPtr<IconView>                    mpIconView;
     NameTranslator_Impl*    mpNameTrans;
