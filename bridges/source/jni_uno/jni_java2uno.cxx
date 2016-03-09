@@ -412,7 +412,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
 
             JLocalAutoRef jo_type_name(
                 jni, jni->GetObjectField(
-                    jo_type.get(), jni_info->m_field_Type__typeName ) );
+                    jo_type.get(), jni_info->m_field_Type_typeName ) );
             if (! jo_type_name.is())
             {
                 throw BridgeRuntimeError(

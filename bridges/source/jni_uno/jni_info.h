@@ -177,11 +177,11 @@ public:
     jmethodID                   m_method_UnoRuntime_generateOid;
     jmethodID                   m_method_UnoRuntime_queryInterface;
     jmethodID                   m_ctor_Any_with_Type_Object;
-    jfieldID                    m_field_Any__type;
-    jfieldID                    m_field_Any__object;
+    jfieldID                    m_field_Any_type;
+    jfieldID                    m_field_Any_object;
     jmethodID                   m_ctor_Type_with_Class;
     jmethodID                   m_ctor_Type_with_Name_TypeClass;
-    jfieldID                    m_field_Type__typeName;
+    jfieldID                    m_field_Type_typeName;
     jmethodID                   m_method_TypeClass_fromInt;
     jfieldID                    m_field_Enum_m_value;
 

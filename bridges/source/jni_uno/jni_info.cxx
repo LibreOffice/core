@@ -673,10 +673,10 @@ JNI_info::JNI_info(
     jni.ensure_no_exception();
     assert( nullptr != m_ctor_Type_with_Name_TypeClass );
     // field Type._typeName
-    m_field_Type__typeName = jni->GetFieldID(
+    m_field_Type_typeName = jni->GetFieldID(
         static_cast<jclass>(jo_Type.get()), "_typeName", "Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Type__typeName );
+    assert( nullptr != m_field_Type_typeName );
 
     // ctor Any( Type, Object )
     m_ctor_Any_with_Type_Object = jni->GetMethodID(
@@ -686,15 +686,15 @@ JNI_info::JNI_info(
     assert( nullptr != m_ctor_Any_with_Type_Object );
 
     // field Any._type
-    m_field_Any__type = jni->GetFieldID(
+    m_field_Any_type = jni->GetFieldID(
         static_cast<jclass>(jo_Any.get()), "_type", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Any__type );
+    assert( nullptr != m_field_Any_type );
     // field Any._object
-    m_field_Any__object = jni->GetFieldID(
+    m_field_Any_object = jni->GetFieldID(
         static_cast<jclass>(jo_Any.get()), "_object", "Ljava/lang/Object;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Any__object );
+    assert( nullptr != m_field_Any_object );
 
     // method IEnvironment.getRegisteredInterface()
     m_method_IEnvironment_getRegisteredInterface = jni->GetMethodID(

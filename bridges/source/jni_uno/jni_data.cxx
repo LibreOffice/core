@@ -411,7 +411,7 @@ void Bridge::map_to_uno(
         // type name
         JLocalAutoRef jo_type_name(
             jni, jni->GetObjectField(
-                java_data.l, getJniInfo()->m_field_Type__typeName ) );
+                java_data.l, getJniInfo()->m_field_Type_typeName ) );
         if (! jo_type_name.is())
         {
             throw BridgeRuntimeError(
@@ -466,7 +466,7 @@ void Bridge::map_to_uno(
         {
             // boxed any
             jo_type.reset( jni->GetObjectField(
-                               java_data.l, getJniInfo()->m_field_Any__type ) );
+                               java_data.l, getJniInfo()->m_field_Any_type ) );
             if (! jo_type.is())
             {
                 throw BridgeRuntimeError(
@@ -477,7 +477,7 @@ void Bridge::map_to_uno(
             // wrapped value
             jo_wrapped_holder.reset(
                 jni->GetObjectField(
-                    java_data.l, getJniInfo()->m_field_Any__object ) );
+                    java_data.l, getJniInfo()->m_field_Any_object ) );
             java_data.l = jo_wrapped_holder.get();
         }
         else
@@ -490,7 +490,7 @@ void Bridge::map_to_uno(
         // get type name
         JLocalAutoRef jo_type_name(
             jni, jni->GetObjectField(
-                jo_type.get(), getJniInfo()->m_field_Type__typeName ) );
+                jo_type.get(), getJniInfo()->m_field_Type_typeName ) );
         jni.ensure_no_exception();
         OUString type_name(
             jstring_to_oustring( jni, static_cast<jstring>(jo_type_name.get()) ) );
