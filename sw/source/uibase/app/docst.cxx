@@ -419,7 +419,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     false, &pItem ))
                     pActShell = pShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
 
-                if( nSlot == SID_STYLE_UPDATE_BY_EXAMPLE )
+                if( nSlot == SID_STYLE_UPDATE_BY_EXAMPLE && aParam.isEmpty() )
                 {
                     switch( nFamily )
                     {
