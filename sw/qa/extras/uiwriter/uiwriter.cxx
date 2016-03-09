@@ -86,6 +86,7 @@
 #include <txtfrm.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -186,6 +187,7 @@ public:
     void testTdf98987();
     void testTdf99004();
     void testTdf84695();
+    void testClassificationPaste();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -278,6 +280,7 @@ public:
     CPPUNIT_TEST(testTdf98987);
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
+    CPPUNIT_TEST(testClassificationPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3222,6 +3225,30 @@ void SwUiWriterTest::testTdf84695()
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, Enter did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testClassificationPaste()
+{
+    SwDocShell* pSourceShell = createDoc()->GetDocShell();
+    uno::Reference<lang::XComponent> xSourceComponent = mxComponent;
+    mxComponent.clear();
+
+    SwDocShell* pDestinationShell = createDoc()->GetDocShell();
+
+    // Not classified source, not classified destination.
+    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::None), int(SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell)));
+
+    // Classified source, not classified destination.
+    uno::Sequence<beans::PropertyValue> aInternalOnly = comphelper::InitPropertySequence({{"Name", uno::makeAny(OUString("Internal Only"))}});
+    lcl_dispatchCommand(xSourceComponent, ".uno:ClassificationApply", aInternalOnly);
+    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified), int(SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell)));
+
+    // Classified source and classified destination -- internal only has a higher level than confidential.
+    uno::Sequence<beans::PropertyValue> aConfidential = comphelper::InitPropertySequence({{"Name", uno::makeAny(OUString("Confidential"))}});
+    lcl_dispatchCommand(mxComponent, ".uno:ClassificationApply", aConfidential);
+    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow), int(SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell)));
+
+    xSourceComponent->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
