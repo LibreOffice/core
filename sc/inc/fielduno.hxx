@@ -40,7 +40,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 class ScEditSource;
@@ -190,9 +189,10 @@ class ScEditFieldObj : public cppu::WeakImplHelper<
                             css::lang::XUnoTunnel,
                             css::lang::XServiceInfo>,
                         public ScMutexHelper,
-                        public ::cppu::OComponentHelper,
-                        private boost::noncopyable
+                        public ::cppu::OComponentHelper
 {
+    ScEditFieldObj(const ScEditFieldObj&) = delete;
+    const ScEditFieldObj& operator=(const ScEditFieldObj&) = delete;
     const SfxItemPropertySet* pPropSet;
     ScEditSource* mpEditSource;
     ESelection aSelection;

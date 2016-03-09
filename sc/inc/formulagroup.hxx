@@ -27,7 +27,6 @@
 #include <set>
 #include <unordered_map>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 class ScDocument;
 class ScTokenArray;
@@ -52,7 +51,7 @@ struct FormulaGroupEntry
     FormulaGroupEntry( ScFormulaCell* pCell, size_t nRow );
 };
 
-struct FormulaGroupContext : boost::noncopyable
+struct FormulaGroupContext
 {
     typedef AlignedAllocator<double,256> DoubleAllocType;
     typedef std::vector<double, DoubleAllocType> NumArrayType;
@@ -100,6 +99,8 @@ struct FormulaGroupContext : boost::noncopyable
     void ensureNumArray( ColArray& rColArray, size_t nArrayLen );
 
     FormulaGroupContext();
+    FormulaGroupContext(const FormulaGroupContext&) = delete;
+    const FormulaGroupContext& operator=(const FormulaGroupContext&) = delete;
     ~FormulaGroupContext();
 };
 

@@ -35,8 +35,6 @@
 
 #include <memory>
 
-#include <boost/noncopyable.hpp>
-
 class EditEngine;
 class EditTextObject;
 class SvxEditEngineForwarder;
@@ -110,7 +108,7 @@ public:
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
 
-class ScHeaderFooterTextData : private boost::noncopyable
+class ScHeaderFooterTextData
 {
 private:
     std::unique_ptr<EditTextObject> mpTextObj;
@@ -121,6 +119,9 @@ private:
     bool                        bDataValid;
 
 public:
+    ScHeaderFooterTextData() = default;
+    ScHeaderFooterTextData(const ScHeaderFooterTextData&) = delete;
+    const ScHeaderFooterTextData& operator=(const ScHeaderFooterTextData&) = delete;
     ScHeaderFooterTextData(
         rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
     ~ScHeaderFooterTextData();
