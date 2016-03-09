@@ -47,6 +47,7 @@ enum class GtkControlPart
     SpinButtonDownButton,
     ScrollbarVertical,
     ScrollbarHorizontal,
+    ScrollbarContents,
     ScrollbarTrough,
     ScrollbarSlider,
     ScrollbarButton,
@@ -105,10 +106,12 @@ private:
     static GtkStyleContext *mpEntryStyle;
     static GtkStyleContext *mpTextViewStyle;
     static GtkStyleContext *mpVScrollbarStyle;
+    static GtkStyleContext *mpVScrollbarContentsStyle;
     static GtkStyleContext *mpVScrollbarTroughStyle;
     static GtkStyleContext *mpVScrollbarSliderStyle;
     static GtkStyleContext *mpVScrollbarButtonStyle;
     static GtkStyleContext *mpHScrollbarStyle;
+    static GtkStyleContext *mpHScrollbarContentsStyle;
     static GtkStyleContext *mpHScrollbarTroughStyle;
     static GtkStyleContext *mpHScrollbarSliderStyle;
     static GtkStyleContext *mpHScrollbarButtonStyle;

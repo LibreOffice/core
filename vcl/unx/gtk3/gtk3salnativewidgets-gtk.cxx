@@ -26,10 +26,12 @@ GtkStyleContext* GtkSalGraphics::mpLinkButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpTextViewStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpVScrollbarContentsStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarTroughStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarSliderStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpHScrollbarContentsStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarTroughStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarSliderStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarButtonStyle = nullptr;
@@ -419,6 +421,14 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
     bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
 
+    // ----------------- CONTENTS
+    GtkStyleContext* pScrollbarContentsStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                              mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
+    gtk_render_background(pScrollbarContentsStyle, cr, 0, 0,
+                          scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
+    gtk_render_frame(pScrollbarContentsStyle, cr, 0, 0,
+                     scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
+
     // ----------------- TROUGH
     GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
                                               mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
@@ -442,12 +452,15 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         GtkBorder margin;
         gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
 
-
-        gtk_render_slider(pScrollbarSliderStyle, cr,
+        gtk_render_background(pScrollbarSliderStyle, cr,
                           thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
                           thumbRect.GetWidth() - margin.left - margin.right,
-                          thumbRect.GetHeight() - margin.top - margin.bottom,
-                          scrollbarOrientation);
+                          thumbRect.GetHeight() - margin.top - margin.bottom);
+
+        gtk_render_frame(pScrollbarSliderStyle, cr,
+                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                          thumbRect.GetWidth() - margin.left - margin.right,
+                          thumbRect.GetHeight() - margin.top - margin.bottom);
     }
 
     bool backwardButtonInsensitive =
@@ -893,6 +906,15 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
 #endif
             gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::ScrollbarVertical ? "vertical" : "horizontal");
+            break;
+        case GtkControlPart::ScrollbarContents:
+            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
+#if GTK_CHECK_VERSION(3, 19, 2)
+            gtk_widget_path_iter_set_object_name(path, -1, "contents");
+#else
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CONTENTS);
+#endif
             break;
         case GtkControlPart::ScrollbarTrough:
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
@@ -2346,11 +2368,13 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpToolButtonStyle = gtk_widget_get_style_context(GTK_WIDGET(pButton));
 
     mpVScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarVertical);
-    mpVScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarTrough, mpVScrollbarStyle);
+    mpVScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarContents, mpVScrollbarStyle);
+    mpVScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarTrough, mpVScrollbarContentsStyle);
     mpVScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarSlider, mpVScrollbarTroughStyle);
     mpVScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarButton, mpVScrollbarStyle);
     mpHScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarHorizontal);
-    mpHScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarTrough, mpHScrollbarStyle);
+    mpHScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarContents, mpHScrollbarStyle);
+    mpHScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarTrough, mpHScrollbarContentsStyle);
     mpHScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarSlider, mpHScrollbarTroughStyle);
     mpHScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarButton, mpHScrollbarStyle);
 
