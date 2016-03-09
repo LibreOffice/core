@@ -556,12 +556,12 @@ void SAL_CALL osl_setThreadName(char const * name) {
 
 #define HASHID(x) ((unsigned long)PTHREAD_VALUE(x) % HashSize)
 
-typedef struct _HashEntry
+struct HashEntry
 {
     pthread_t         Handle;
     sal_uInt16        Ident;
-    struct _HashEntry *Next;
-} HashEntry;
+    HashEntry *       Next;
+};
 
 static HashEntry* HashTable[31];
 static int HashSize = SAL_N_ELEMENTS(HashTable);
@@ -935,11 +935,11 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     return Priority;
 }
 
-typedef struct _wrapper_pthread_key
+struct wrapper_pthread_key
 {
     pthread_key_t m_key;
     oslThreadKeyCallbackFunction pfnCallback;
-} wrapper_pthread_key;
+};
 
 oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {
