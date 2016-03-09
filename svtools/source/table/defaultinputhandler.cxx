@@ -141,7 +141,7 @@ namespace svt { namespace table
         const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
         sal_uInt16 nKeyCode = rKeyCode.GetCode();
 
-        struct _ActionMapEntry
+        struct ActionMapEntry
         {
             sal_uInt16              nKeyCode;
             sal_uInt16              nKeyModifier;
@@ -169,7 +169,7 @@ namespace svt { namespace table
             { 0, 0, invalidTableControlAction }
         };
 
-        const _ActionMapEntry* pActions = aKnownActions;
+        const ActionMapEntry* pActions = aKnownActions;
         for ( ; pActions->eAction != invalidTableControlAction; ++pActions )
         {
             if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetModifier() ) )
