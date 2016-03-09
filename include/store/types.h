@@ -59,23 +59,19 @@ extern "C" {
     @see store_openDirectory()
     @see store_openStream()
  */
-enum __store_AccessMode
+typedef enum
 {
     store_AccessCreate,
     store_AccessReadCreate,
     store_AccessReadWrite,
     store_AccessReadOnly,
     store_Access_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-};
-
-/** Access Mode type.
- */
-typedef enum __store_AccessMode storeAccessMode;
+} storeAccessMode;
 
 
 /** Error Code enumeration.
  */
-enum __store_Error
+typedef enum
 {
     store_E_None = 0,
     store_E_AccessViolation,
@@ -100,18 +96,14 @@ enum __store_Error
     store_E_WrongVersion,
     store_E_Unknown,
     store_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-};
-
-/** Error Code type.
- */
-typedef enum __store_Error storeError;
+} storeError;
 
 
 /** Find Data structure.
     @see store_findFirst()
     @see store_findNext()
  */
-struct __store_FindData
+typedef struct
 {
     /** Name.
         @see m_nLength
@@ -137,11 +129,7 @@ struct __store_FindData
     /** Reserved for internal use.
      */
     sal_uInt32 m_nReserved;
-};
-
-/** Find Data type.
- */
-typedef struct __store_FindData storeFindData;
+} storeFindData;
 
 
 /*========================================================================
