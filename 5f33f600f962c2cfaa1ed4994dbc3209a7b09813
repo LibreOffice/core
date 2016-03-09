@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_5cf91d4d",
+        "filename": "sc/inc/dapiuno.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-09T17:24:22Z",
+      "side": 0,
+      "message": "This one I\u0027d also like to keep, one advantage of typedef is that it makes finding places where it is used easier.",
+      "revId": "5f33f600f962c2cfaa1ed4994dbc3209a7b09813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
