@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_3c3a69ce",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1961,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-09T08:50:20Z",
+      "side": 1,
+      "message": "why not just inline the code here? like this:\n    if(mbIsClipPathContent || ((SVGTokenMarker \u003d\u003d mrOwner.getType()) \u0026\u0026 !maFill.isSet()))",
+      "revId": "d64f9ada03e7558ab3a883e2607842adfe9c0d2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
