@@ -231,9 +231,9 @@ namespace dbp
     }
 
 
-    Sequence< OUString > OLCPage::getTableFields(bool _bNeedIt)
+    Sequence< OUString > OLCPage::getTableFields()
     {
-        Reference< XNameAccess > xTables = getTables(_bNeedIt);
+        Reference< XNameAccess > xTables = getTables(true);
         Sequence< OUString > aColumnNames;
         if (xTables.is())
         {
@@ -242,7 +242,7 @@ namespace dbp
                 // the list table as XColumnsSupplier
                 Reference< XColumnsSupplier > xSuppCols;
                 xTables->getByName(getSettings().sListContentTable) >>= xSuppCols;
-                DBG_ASSERT(!_bNeedIt || xSuppCols.is(), "OLCPage::getTableFields: no columns supplier!");
+                DBG_ASSERT(xSuppCols.is(), "OLCPage::getTableFields: no columns supplier!");
 
                 // the columns
                 Reference< XNameAccess > xColumns;
@@ -255,7 +255,7 @@ namespace dbp
             }
             catch(const Exception&)
             {
-                DBG_ASSERT(!_bNeedIt, "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns!");
+                DBG_ASSERT(false, "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns!");
             }
         }
         return aColumnNames;
@@ -384,7 +384,7 @@ namespace dbp
         OLCPage::initializePage();
 
         // fill the list of fields
-        fillListBox(*m_pSelectTableField, getTableFields(true));
+        fillListBox(*m_pSelectTableField, getTableFields());
 
         m_pSelectTableField->SelectEntry(getSettings().sListContentField);
         m_pDisplayedField->SetText(getSettings().sListContentField);
@@ -462,7 +462,7 @@ namespace dbp
         // fill the value list
         fillListBox(*m_pValueListField, getContext().aFieldNames);
         // fill the table field list
-        fillListBox(*m_pTableField, getTableFields(true));
+        fillListBox(*m_pTableField, getTableFields());
 
         // the initial selections
         m_pValueListField->SetText(getSettings().sLinkedFormField);
