@@ -32,7 +32,7 @@ namespace fileaccess {
         css::sdbc::XRow >
     {
     public:
-        XRow_impl( shell* pShell,const css::uno::Sequence< css::uno::Any >& __m_aValueMap );
+        XRow_impl( shell* pShell,const css::uno::Sequence< css::uno::Any >& aValueMap );
         virtual ~XRow_impl();
 
         virtual sal_Bool SAL_CALL
