@@ -37,9 +37,9 @@ namespace basegfx
             return 0.0;
         }
 
-        template < unsigned int _RowSize > class ImplMatLine
+        template < unsigned int RowSize_ > class ImplMatLine
         {
-            enum { RowSize = _RowSize };
+            enum { RowSize = RowSize_ };
 
             double                                          mfValue[RowSize];
 
@@ -74,9 +74,9 @@ namespace basegfx
             }
         };
 
-        template < unsigned int _RowSize > class ImplHomMatrixTemplate
+        template < unsigned int RowSize_ > class ImplHomMatrixTemplate
         {
-            enum { RowSize = _RowSize };
+            enum { RowSize = RowSize_ };
 
             ImplMatLine< RowSize >                          maLine[RowSize - 1];
             ImplMatLine< RowSize >*                         mpLine;
