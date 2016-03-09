@@ -39,8 +39,6 @@
 #include <memory>
 #include <set>
 
-#include <boost/noncopyable.hpp>
-
 class ScFormulaCell;
 class ScTokenArray;
 struct ScRefCellValue;
@@ -405,7 +403,7 @@ private:
 };
 
 //  complete conditional formatting
-class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
+class SC_DLLPUBLIC ScConditionalFormat
 {
     ScDocument*         pDoc;
     sal_uInt32          nKey;               // Index in attributes
@@ -417,6 +415,8 @@ class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
 public:
     ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
     ~ScConditionalFormat();
+     ScConditionalFormat(const ScConditionalFormat&) = delete;
+     const ScConditionalFormat& operator=(const ScConditionalFormat&) = delete;
 
     // true copy of formulas (for Ref-Undo / between documents)
     ScConditionalFormat* Clone(ScDocument* pNewDoc = nullptr) const;
