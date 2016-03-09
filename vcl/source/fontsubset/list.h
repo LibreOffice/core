@@ -37,7 +37,7 @@ extern "C"
  * List of void * pointers
  */
 
-    typedef struct _list *list;
+    typedef struct list_ *list;
     typedef void (*list_destructor)(void *);
 
 /*- constructors and a destructor */

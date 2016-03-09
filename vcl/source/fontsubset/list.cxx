@@ -39,7 +39,7 @@ typedef struct _lnode {
 
 } lnode;
 
-struct _list {
+struct list_ {
     lnode *head, *tail, *cptr;
     size_t aCount;
     list_destructor eDtor;
@@ -84,7 +84,7 @@ static lnode *appendPrim(list pThis, void *el)
 /*- public methods  */
 list listNewEmpty()                           /*- default ctor */
 {
-    list pThis = static_cast<list>(rtl_allocateMemory(sizeof(struct _list)));
+    list pThis = static_cast<list>(rtl_allocateMemory(sizeof(struct list_)));
     assert(pThis != nullptr);
 
     pThis->aCount = 0;
