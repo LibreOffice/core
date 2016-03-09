@@ -3222,32 +3222,25 @@ bool lcl_checkClassification(SwDoc* pSourceDoc, SwDoc* pDestinationDoc)
     if (!pSourceShell || !pDestinationShell)
         return true;
 
-    bool bSourceClassified = SfxClassificationHelper::IsClassified(*pSourceShell);
-    if (!bSourceClassified)
-        // No classification on the source side. Return early, regardless the
-        // state of the destination side.
-        return true;
-
-    bool bDestinationClassified = SfxClassificationHelper::IsClassified(*pDestinationShell);
-    if (bSourceClassified && !bDestinationClassified)
+    switch (SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell))
     {
-        // Paste from a classified document to a non-classified one -> deny.
+    case SfxClassificationCheckPasteResult::None:
+    {
+        return true;
+    }
+    break;
+    case SfxClassificationCheckPasteResult::TargetDocNotClassified:
+    {
         ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RES(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
         return false;
     }
-
-    // Remaining case: paste between two classified documents.
-    SfxClassificationHelper aSource(*pSourceShell);
-    SfxClassificationHelper aDestination(*pDestinationShell);
-    if (aSource.GetImpactScale() != aDestination.GetImpactScale())
-        // It's possible to compare them if they have the same scale.
-        return true;
-
-    if (aSource.GetImpactLevel() > aDestination.GetImpactLevel())
+    break;
+    case SfxClassificationCheckPasteResult::DocClassificationTooLow:
     {
-        // Paste from a doc that has higher classification -> deny.
         ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RES(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
         return false;
+    }
+    break;
     }
 
     return true;

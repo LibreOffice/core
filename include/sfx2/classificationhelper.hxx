@@ -23,6 +23,14 @@ namespace basegfx
 class BColor;
 }
 
+/// Return code of SfxClassificationHelper::CheckPaste().
+enum class SfxClassificationCheckPasteResult
+{
+    None = 1,
+    TargetDocNotClassified = 2,
+    DocClassificationTooLow = 3
+};
+
 /// Shared code to handle Business Authorization Identification and Labeling Scheme (BAILS) properties.
 class SFX2_DLLPUBLIC SfxClassificationHelper
 {
@@ -32,6 +40,8 @@ class SFX2_DLLPUBLIC SfxClassificationHelper
 public:
     /// Does the document have any BAILS properties?
     static bool IsClassified(SfxObjectShell& rObjectShell);
+    /// Checks if pasting from rSource to rDestination would leak information.
+    static SfxClassificationCheckPasteResult CheckPaste(SfxObjectShell& rSource, SfxObjectShell& rDestination);
 
     SfxClassificationHelper(SfxObjectShell& rObjectShell);
     ~SfxClassificationHelper();

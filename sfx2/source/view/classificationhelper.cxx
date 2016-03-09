@@ -426,6 +426,35 @@ bool SfxClassificationHelper::IsClassified(SfxObjectShell& rObjectShell)
     return false;
 }
 
+SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(SfxObjectShell& rSource, SfxObjectShell& rDestination)
+{
+    bool bSourceClassified = SfxClassificationHelper::IsClassified(rSource);
+    if (!bSourceClassified)
+        // No classification on the source side. Return early, regardless the
+        // state of the destination side.
+        return SfxClassificationCheckPasteResult::None;
+
+    bool bDestinationClassified = SfxClassificationHelper::IsClassified(rDestination);
+    if (bSourceClassified && !bDestinationClassified)
+    {
+        // Paste from a classified document to a non-classified one -> deny.
+        return SfxClassificationCheckPasteResult::TargetDocNotClassified;
+    }
+
+    // Remaining case: paste between two classified documents.
+    SfxClassificationHelper aSource(rSource);
+    SfxClassificationHelper aDestination(rDestination);
+    if (aSource.GetImpactScale() != aDestination.GetImpactScale())
+        // It's possible to compare them if they have the same scale.
+        return SfxClassificationCheckPasteResult::None;
+
+    if (aSource.GetImpactLevel() > aDestination.GetImpactLevel())
+        // Paste from a doc that has higher classification -> deny.
+        return SfxClassificationCheckPasteResult::DocClassificationTooLow;
+
+    return SfxClassificationCheckPasteResult::None;
+}
+
 SfxClassificationHelper::SfxClassificationHelper(SfxObjectShell& rObjectShell)
     : m_pImpl(o3tl::make_unique<Impl>(rObjectShell))
 {
