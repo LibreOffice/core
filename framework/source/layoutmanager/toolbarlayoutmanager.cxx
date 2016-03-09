@@ -979,7 +979,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                         if ( aToolbar.m_xUIElement.is() && !aToolbar.m_bFloating )
                         {
                             implts_setLayoutDirty();
-                            m_pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
+                            m_pParentLayouter->requestLayout();
                         }
                     }
                 }
@@ -3233,7 +3233,7 @@ throw( uno::RuntimeException, std::exception )
         }
 
         if ( bNotify )
-            m_pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
+            m_pParentLayouter->requestLayout();
     }
 }
 
@@ -3572,7 +3572,7 @@ throw (uno::RuntimeException, std::exception)
     aWriteLock.clear();
 
     if ( bNotify )
-        m_pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
+        m_pParentLayouter->requestLayout();
 }
 
 sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::EventObject& e )
@@ -3726,7 +3726,7 @@ throw (uno::RuntimeException, std::exception)
             aReadLock.clear();
 
             if ( pParentLayouter )
-                pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
+                pParentLayouter->requestLayout();
         }
     }
     else
@@ -3790,7 +3790,7 @@ throw (uno::RuntimeException, std::exception)
         aWriteLock.clear();
 
         if ( bLayoutDirty && pParentLayouter )
-            pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
+            pParentLayouter->requestLayout();
     }
 }
 
@@ -3943,7 +3943,7 @@ throw (uno::RuntimeException, std::exception)
             aWriteLock.clear();
 
             if ( bNotify && pParentLayouter )
-                pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
+                pParentLayouter->requestLayout();
         }
     }
 }

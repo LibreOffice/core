@@ -56,8 +56,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 
-const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
-
 //  constructor
 
 MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
@@ -152,7 +150,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
     else if ( m_pMenuManager && aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING )
     {
         if ( m_pMenuManager )
-            impl_setMenuBar( nullptr );
+            impl_clearMenuBar();
     }
 }
 
@@ -188,7 +186,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 
         // Remove our menu from system window if it is still there!
         if ( m_pMenuManager )
-            impl_setMenuBar( nullptr );
+            impl_clearMenuBar();
     }
 }
 
@@ -209,7 +207,7 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
     }
 }
 
-bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar )
+bool MenuDispatcher::impl_clearMenuBar()
 {
     uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
     if ( xFrame.is() )
@@ -240,30 +238,6 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar )
                 (static_cast< css::uno::XInterface* >(static_cast<OWeakObject*>(m_pMenuManager)))->release();
 
                 m_pMenuManager = nullptr;
-            }
-
-            if ( pMenuBar != nullptr )
-            {
-                sal_uInt16 nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
-                if ( nPos != MENU_ITEM_NOTFOUND )
-                {
-                    uno::Reference< XModel >            xModel;
-                    uno::Reference< XController >   xController( xFrame->getController(), UNO_QUERY );
-
-                    if ( xController.is() )
-                        xModel.set( xController->getModel(), UNO_QUERY );
-
-                    // retrieve addon popup menus and add them to our menu bar
-                    AddonMenuManager::MergeAddonPopupMenus( xFrame, nPos, pMenuBar, m_xContext );
-
-                    // retrieve addon help menu items and add them to our help menu
-                    AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar, m_xContext );
-                }
-
-                // set new menu on our system window and create new menu manager
-                m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, true, true );
-
-                pSysWindow->SetMenuBar( pMenuBar );
             }
 
             return true;

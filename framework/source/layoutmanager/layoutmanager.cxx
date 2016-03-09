@@ -2306,10 +2306,9 @@ throw (RuntimeException, std::exception)
 
 //  ILayoutNotifications
 
-void LayoutManager::requestLayout( Hint eHint )
+void LayoutManager::requestLayout()
 {
-    if ( eHint == HINT_TOOLBARSPACE_HAS_CHANGED )
-        doLayout();
+    doLayout();
 }
 
 void LayoutManager::implts_doLayout_notify( bool bOuterResize )

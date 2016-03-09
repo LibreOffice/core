@@ -78,12 +78,6 @@ namespace framework
                           public  LayoutManager_PBase
     {
         public:
-            enum Hint
-            {
-                HINT_NOT_SPECIFIED,
-                HINT_TOOLBARSPACE_HAS_CHANGED,
-                HINT_COUNT
-            };
             enum { DOCKINGAREAS_COUNT = 4 };
 
             LayoutManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -176,7 +170,7 @@ namespace framework
             DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
             //  called from ToolbarLayoutManager
-            void requestLayout( Hint eHint = HINT_NOT_SPECIFIED );
+            void requestLayout();
 
             /// Reading of settings - shared with ToolbarLayoutManager.
             static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
