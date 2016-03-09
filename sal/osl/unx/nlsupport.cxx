@@ -43,14 +43,14 @@
 typedef struct {
     const char              *key;
     const rtl_TextEncoding   value;
-} _pair;
+} pair;
 
 /*****************************************************************************
  compare function for binary search
  *****************************************************************************/
 
 static int
-_pair_compare (const char *key, const _pair *pair)
+pair_compare (const char *key, const pair *pair)
 {
     int result = rtl_str_compareIgnoreAsciiCase( key, pair->key );
     return result;
@@ -60,8 +60,8 @@ _pair_compare (const char *key, const _pair *pair)
  binary search on encoding tables
  *****************************************************************************/
 
-static const _pair*
-_pair_search (const char *key, const _pair *base, unsigned int member )
+static const pair*
+pair_search (const char *key, const pair *base, unsigned int member )
 {
     unsigned int lower = 0;
     unsigned int upper = member;
@@ -74,7 +74,7 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
     while ( lower < upper )
     {
         const unsigned int current = (lower + upper) / 2;
-        const int comparison = _pair_compare( key, base + current );
+        const int comparison = pair_compare( key, base + current );
         if (comparison < 0)
             upper = current;
         else if (comparison > 0)
@@ -90,7 +90,7 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
  convert rtl_Locale to locale string
  *****************************************************************************/
 
-static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
+static char * compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 {
     /* check if a valid locale is specified */
     if( pLocale && pLocale->Language &&
@@ -162,7 +162,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
  convert locale string to rtl_Locale
  *****************************************************************************/
 
-static rtl_Locale * _parse_locale( const char * locale )
+static rtl_Locale * parse_locale( const char * locale )
 {
     static sal_Unicode c_locale[2] = { (sal_Unicode) 'C', 0 };
 
@@ -254,7 +254,7 @@ static rtl_Locale * _parse_locale( const char * locale )
  *    LC_ALL=$i locale -k code_set_name
  *  done
  */
-const _pair _nl_language_list[] = {
+static const pair nl_language_list[] = {
     { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
     { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
     { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
@@ -291,7 +291,7 @@ const _pair _nl_language_list[] = {
 
 #elif defined(LINUX)
 
-const _pair _nl_language_list[] = {
+static const pair nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
     { "ANSI_X3.4-1968",             RTL_TEXTENCODING_ISO_8859_1 },  /* fake: ASCII_US */
     { "ASMO_449",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */
@@ -473,7 +473,7 @@ const _pair _nl_language_list[] = {
 
 #elif defined(FREEBSD) || defined(DRAGONFLY)
 
-const _pair _nl_language_list[] = {
+static const pair nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
     { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
@@ -497,7 +497,7 @@ const _pair _nl_language_list[] = {
 
 #elif defined(NETBSD)
 
-const _pair _nl_language_list[] = {
+static const pair nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
     { "Big5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
@@ -532,7 +532,7 @@ const _pair _nl_language_list[] = {
 
 #elif defined(OPENBSD)
 
-const _pair _nl_language_list[] = {
+static const pair nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
     { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
@@ -564,7 +564,7 @@ static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language=nullptr;
+    const pair *language=nullptr;
 
     char  locale_buf[64] = "";
     char  codeset_buf[64];
@@ -577,7 +577,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */
-    _compose_locale( pLocale, locale_buf, 64 );
+    compose_locale( pLocale, locale_buf, 64 );
 
     /* basic thread safeness */
     pthread_mutex_lock( &aLocalMutex );
@@ -616,7 +616,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* search the codeset in our language list */
     if ( codeset != nullptr )
     {
-        language = _pair_search (codeset, _nl_language_list, SAL_N_ELEMENTS( _nl_language_list ) );
+        language = pair_search (codeset, nl_language_list, SAL_N_ELEMENTS( nl_language_list ) );
     }
 
     OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
@@ -648,7 +648,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
         locale = setlocale( LC_CTYPE, nullptr );
 
     /* return the LC_CTYPE locale */
-    *ppLocale = _parse_locale( locale );
+    *ppLocale = parse_locale( locale );
 
     pthread_mutex_unlock( &aLocalMutex );
 }
@@ -663,7 +663,7 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
     int   ret = 0;
 
     /* convert rtl_Locale to locale string */
-    _compose_locale( pLocale, locale_buf, 64 );
+    compose_locale( pLocale, locale_buf, 64 );
 
     /* basic thread safeness */
     pthread_mutex_lock( &aLocalMutex );
@@ -683,7 +683,7 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
  * from the ISO language codes.
  */
 
-const _pair _full_locale_list[] = {
+static const pair full_locale_list[] = {
     { "ja_JP.eucJP",  RTL_TEXTENCODING_EUC_JP      },
     { "ja_JP.EUC",    RTL_TEXTENCODING_EUC_JP      },
     { "ko_KR.EUC",    RTL_TEXTENCODING_EUC_KR      },
@@ -691,7 +691,7 @@ const _pair _full_locale_list[] = {
     { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      }
 };
 
-const _pair _locale_extension_list[] = {
+static const pair locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
     { "big5hk",       RTL_TEXTENCODING_BIG5_HKSCS  },
     { "gb18030",      RTL_TEXTENCODING_GB_18030    },
@@ -720,7 +720,7 @@ const _pair _locale_extension_list[] = {
     { "utf-8",        RTL_TEXTENCODING_UTF8        }
 };
 
-const _pair _iso_language_list[] = {
+static const pair iso_language_list[] = {
     { "af",  RTL_TEXTENCODING_ISO_8859_1 },
     { "ar",  RTL_TEXTENCODING_ISO_8859_6 },
     { "az",  RTL_TEXTENCODING_ISO_8859_9 },
@@ -787,7 +787,7 @@ const _pair _iso_language_list[] = {
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language = nullptr;
+    const pair *language = nullptr;
     char locale_buf[64] = "";
 
     /* default to process locale if pLocale == NULL */
@@ -795,10 +795,10 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */
-    if( _compose_locale( pLocale, locale_buf, 64 ) )
+    if( compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* check special handling list (EUC) first */
-        language = _pair_search( locale_buf, _full_locale_list, SAL_N_ELEMENTS( _full_locale_list ) );
+        language = pair_search( locale_buf, full_locale_list, SAL_N_ELEMENTS( full_locale_list ) );
 
         if( nullptr == language )
         {
@@ -811,7 +811,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
             if( nullptr != cp )
             {
-                language = _pair_search( cp + 1, _locale_extension_list, SAL_N_ELEMENTS( _locale_extension_list ) );
+                language = pair_search( cp + 1, locale_extension_list, SAL_N_ELEMENTS( locale_extension_list ) );
             }
         }
 
@@ -821,7 +821,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
             /* iso lang codes have 2 charaters */
             locale_buf[2] = '\0';
 
-            language = _pair_search( locale_buf, _iso_language_list, SAL_N_ELEMENTS( _iso_language_list ) );
+            language = pair_search( locale_buf, iso_language_list, SAL_N_ELEMENTS( iso_language_list ) );
         }
     }
 
@@ -869,7 +869,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     }
 
     /* return the locale */
-    *ppLocale = _parse_locale( locale.getStr() );
+    *ppLocale = parse_locale( locale.getStr() );
 
     setenv( "LC_ALL", locale.getStr(), 1);
     setenv("LC_CTYPE", locale.getStr(), 1 );
@@ -901,7 +901,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
         locale = "C";
 
 #endif
-    *ppLocale = _parse_locale( locale );
+    *ppLocale = parse_locale( locale );
 }
 #endif
 
@@ -910,7 +910,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
  *****************************************************************************/
 
 static int
-_setenv (const char* name, const char* value)
+imp_setenv (const char* name, const char* value)
 {
     return setenv (name, value, 1);
 }
@@ -920,17 +920,17 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
     char locale_buf[64];
 
     /* convert rtl_Locale to locale string */
-    if( nullptr != _compose_locale( pLocale, locale_buf, 64 ) )
+    if( nullptr != compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) )
-            _setenv( "LC_ALL", locale_buf );
+            imp_setenv( "LC_ALL", locale_buf );
 
         if( getenv( "LC_CTYPE" ) )
-            _setenv("LC_CTYPE", locale_buf );
+            imp_setenv("LC_CTYPE", locale_buf );
 
         if( getenv( "LANG" ) )
-            _setenv( "LANG", locale_buf );
+            imp_setenv( "LANG", locale_buf );
     }
 
     return 0;
