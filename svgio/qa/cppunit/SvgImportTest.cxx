@@ -83,8 +83,8 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
 {
     const Reference<XSvgParser> xSvgParser = SvgTools::create(m_xContext);
 
-    OUString aUrl  = getURLFromSrc(aSource);
-    OUString aPath = getPathFromSrc(aSource);
+    OUString aUrl  = m_directories.getURLFromSrc(aSource);
+    OUString aPath = m_directories.getPathFromSrc(aSource);
 
     SvFileStream aFileStream(aUrl, StreamMode::READ);
     sal_Size nSize = aFileStream.remainingSize();

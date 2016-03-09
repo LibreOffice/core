@@ -251,7 +251,7 @@ protected:
                         OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
                         static_cast<int>(aString.getLength()),
                         OUStringToOString(
-                            getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
+                            m_directories.getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
                             RTL_TEXTENCODING_UTF8).getStr());
             }
         }

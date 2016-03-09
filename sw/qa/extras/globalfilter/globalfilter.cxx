@@ -73,7 +73,7 @@ void Test::testSwappedOutImageExport()
 
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -149,7 +149,7 @@ void Test::testLinkedGraphicRT()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OString("Failed on filter: ")
             + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
@@ -219,7 +219,7 @@ void Test::testImageWithSpecialID()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/images_with_special_IDs.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/images_with_special_IDs.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -300,7 +300,7 @@ void Test::testGraphicShape()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/graphic_shape.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/graphic_shape.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -382,7 +382,7 @@ void Test::testCharHighlightBody()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_highlight.docx"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_highlight.docx"),
                                       "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
@@ -477,7 +477,7 @@ void Test::testCharHighlight()
 
 void Test::testCharHighlightODF()
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
                                       "com.sun.star.text.TextDocument");
 
     // don't check import, testMSCharBackgroundEditing already does that
@@ -570,7 +570,7 @@ void Test::testMSCharBackgroundEditing()
         if (mxComponent.is())
             mxComponent->dispose();
 
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
                                       "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
@@ -683,7 +683,7 @@ void Test::testCharBackgroundToHighlighting()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background.odt"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background.odt"),
                                       "com.sun.star.text.TextDocument");
 
         OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
@@ -768,10 +768,10 @@ void Test::testSkipImages()
             args[0].Handle = -1;
             args[0].Value <<= OUString::createFromAscii(aFilterNames[nFilter][1]);
             args[0].State = beans::PropertyState_DIRECT_VALUE;
-            mxComponent = loadFromDesktop(getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
+            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
             sFailedMessage = sFailedMessage + " - " + aFilterNames[nFilter][1];
         } else
-            mxComponent = loadFromDesktop(getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument");
+            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument");
 
         // Check shapes (images, textboxes, custom shapes)
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

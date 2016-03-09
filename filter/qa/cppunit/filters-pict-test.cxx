@@ -46,7 +46,7 @@ public:
 
     OUString pictURL()
     {
-        return getURLFromSrc("/filter/qa/cppunit/data/pict/");
+        return m_directories.getURLFromSrc("/filter/qa/cppunit/data/pict/");
     }
 
     /**

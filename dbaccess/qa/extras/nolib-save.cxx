@@ -68,7 +68,7 @@ void DialogSaveTest::test()
     SolarMutexReleaser rel;
 
     const OUString sStandard("Standard");
-    const OUString aFileName(getURLFromWorkdir("CppunitTest/testNolibSave.odb"));
+    const OUString aFileName(m_directories.getURLFromWorkdir("CppunitTest/testNolibSave.odb"));
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());

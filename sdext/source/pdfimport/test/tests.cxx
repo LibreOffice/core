@@ -458,7 +458,7 @@ namespace
             std::shared_ptr<TestSink> pSink( new TestSink() );
             CPPUNIT_ASSERT(
                 pdfi::xpdf_ImportFromFile(
-                    getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
+                    m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                     pSink,
                     uno::Reference< task::XInteractionHandler >(),
                     OUString(),
@@ -475,7 +475,7 @@ namespace
             CPPUNIT_ASSERT( osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   xAdaptor->odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
+                                   xAdaptor->odfConvert( m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
                                                         nullptr ));
             osl::File::remove( tempFileURL );
@@ -490,7 +490,7 @@ namespace
             CPPUNIT_ASSERT( osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   xAdaptor->odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
+                                   xAdaptor->odfConvert( m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
                                                         nullptr ));
             osl::File::remove( tempFileURL );
@@ -503,7 +503,7 @@ namespace
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                xAdaptor->odfConvert(getURLFromSrc("/sdext/source/pdfimport/test/testTdf96993.pdf"),
+                xAdaptor->odfConvert(m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testTdf96993.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr));
             // This ensures that the imported image arrives properly flipped
@@ -517,7 +517,7 @@ namespace
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                xAdaptor->odfConvert(getURLFromSrc("/sdext/source/pdfimport/test/testTdf96993.pdf"),
+                xAdaptor->odfConvert(m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testTdf96993.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr));
             // This ensures that the imported image arrives properly flipped

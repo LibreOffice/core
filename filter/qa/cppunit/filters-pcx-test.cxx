@@ -60,7 +60,7 @@ bool PcxFilterTest::load(const OUString &,
 void PcxFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/pcx/"));
+        m_directories.getURLFromSrc("/filter/qa/cppunit/data/pcx/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PcxFilterTest);

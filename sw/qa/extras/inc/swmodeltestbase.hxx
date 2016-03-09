@@ -609,7 +609,7 @@ protected:
 
     void load(const char* pDir, const char* pName)
     {
-        return loadURL(getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
+        return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
     }
 
     void loadURL(OUString const& rURL, const char* pName)

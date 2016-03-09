@@ -54,7 +54,7 @@ void VBATest::testMiscVBAFunctions()
 #endif
         "win32compatb.vb" // same methods, different signatures.
     };
-    OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
+    OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
     // Some test data expects the uk locale
     LanguageTag aLocale(LANGUAGE_ENGLISH_UK);
     SvtSysLocaleOptions aLocalOptions;
@@ -109,11 +109,11 @@ void VBATest::testMiscOLEStuff()
         "ole_dfltObjDflMethod.vb",
     };
 
-    OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
+    OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
 
     uno::Sequence< uno::Any > aArgs(1);
     // path to test document
-    OUString sPath = getPathFromSrc("/basic/qa/vba_tests/data/");
+    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/");
     sPath += "ADODBdata.xls";
     sPath = sPath.replaceAll( "/", "\\" );
 

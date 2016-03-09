@@ -60,7 +60,7 @@ bool PsdFilterTest::load(const OUString &,
 void PsdFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/psd/"));
+        m_directories.getURLFromSrc("/filter/qa/cppunit/data/psd/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PsdFilterTest);

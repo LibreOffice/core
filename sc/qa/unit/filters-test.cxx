@@ -129,22 +129,22 @@ void ScFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
     testDir("Quattro Pro 6.0",
-        getURLFromSrc("/sc/qa/unit/data/qpro/"));
+        m_directories.getURLFromSrc("/sc/qa/unit/data/qpro/"));
 
     //warning, the current "sylk filter" in sc (docsh.cxx) automatically
     //chains on failure on trying as csv, rtf, etc. so "success" may
     //not indicate that it imported as .slk.
     testDir("SYLK",
-        getURLFromSrc("/sc/qa/unit/data/slk/"));
+        m_directories.getURLFromSrc("/sc/qa/unit/data/slk/"));
 
     testDir("MS Excel 97",
-        getURLFromSrc("/sc/qa/unit/data/xls/"));
+        m_directories.getURLFromSrc("/sc/qa/unit/data/xls/"));
 
     testDir("dBase",
-        getURLFromSrc("/sc/qa/unit/data/dbf/"));
+        m_directories.getURLFromSrc("/sc/qa/unit/data/dbf/"));
 
     testDir("Lotus",
-        getURLFromSrc("/sc/qa/unit/data/wks/"));
+        m_directories.getURLFromSrc("/sc/qa/unit/data/wks/"));
 
 #endif
 }
