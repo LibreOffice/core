@@ -90,10 +90,10 @@ struct TEWritingDirectionInfo
     sal_uInt8    nType;
     sal_Int32    nStartPos;
     sal_Int32    nEndPos;
-    TEWritingDirectionInfo( sal_uInt8 _Type, sal_Int32 _Start, sal_Int32 _End )
-        : nType {_Type}
-        , nStartPos {_Start}
-        , nEndPos {_End}
+    TEWritingDirectionInfo( sal_uInt8 Type, sal_Int32 Start, sal_Int32 End )
+        : nType {Type}
+        , nStartPos {Start}
+        , nEndPos {End}
     {}
 };
 
