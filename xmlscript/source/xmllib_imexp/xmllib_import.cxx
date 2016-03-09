@@ -110,10 +110,7 @@ LibElementBase::~LibElementBase()
         _pParent->release();
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    SAL_INFO("xmlscript.xmllib", "LibElementBase::~LibElementBase(): " << aStr.getStr() );
-#endif
+    SAL_INFO("xmlscript.xmllib", "LibElementBase::~LibElementBase(): " << _aLocalName );
 }
 
 // XRoot
@@ -176,9 +173,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
 
 LibraryImport::~LibraryImport()
 {
-#if OSL_DEBUG_LEVEL > 1
     SAL_INFO("xmlscript.xmllib", "LibraryImport::~LibraryImport()." );
-#endif
 }
 
 // libraries
