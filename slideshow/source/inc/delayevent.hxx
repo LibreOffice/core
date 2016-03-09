@@ -98,7 +98,7 @@ inline EventSharedPtr makeEvent_( FuncT const& func, OUString const& rsDescripti
 #define makeDelay(f, t, d) makeDelay_(f, t, d)
 #define makeEvent(f, d) makeEvent_(f, d)
 
-#else // OSL_DEBUG_LEVEL > 1
+#else // OSL_DEBUG_LEVEL > 0
 
 class Delay_ : public Delay {
 public:
