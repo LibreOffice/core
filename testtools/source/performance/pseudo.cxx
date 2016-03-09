@@ -84,7 +84,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, v
     typelib_typedescription_release( (typelib_TypeDescription *)pThis->pTypeDescr );
     (*pThis->pPseudoMapping->release)( pThis->pPseudoMapping );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
