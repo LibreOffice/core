@@ -1290,6 +1290,7 @@ void RTFDocumentImpl::text(OUString& rString)
     case Destination::MGROW:
     case Destination::INDEXENTRY:
     case Destination::TOCENTRY:
+    case Destination::PROPNAME:
         m_aStates.top().pDestinationText->append(rString);
         break;
     default:
@@ -2050,6 +2051,13 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FTNSEP:
             m_aStates.top().eDestination = Destination::FOOTNOTESEPARATOR;
             m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, std::make_shared<RTFValue>(NS_ooxml::LN_Value_doc_ST_FtnEdn_separator));
+            break;
+        case RTF_USERPROPS:
+            // Container of all user-defined properties.
+            m_aStates.top().eDestination = Destination::USERPROPS;
+            break;
+        case RTF_PROPNAME:
+            m_aStates.top().eDestination = Destination::PROPNAME;
             break;
         default:
         {
@@ -5874,6 +5882,11 @@ RTFError RTFDocumentImpl::popState()
         if (aState.bCreatedShapeGroup)
             m_pSdrImport->popParent();
         break;
+    case Destination::PROPNAME:
+        if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
+            break; // not for nested group
+        aState.aPropName = m_aStates.top().pDestinationText->makeStringAndClear();
+        break;
     default:
         break;
     }
@@ -6142,6 +6155,10 @@ RTFError RTFDocumentImpl::popState()
             if (aState.aDrawingObject.nBottom)
                 m_aStates.top().aDrawingObject.nBottom = aState.aDrawingObject.nBottom;
         }
+        break;
+    case Destination::PROPNAME:
+        if (m_aStates.top().eDestination == Destination::USERPROPS)
+            m_aStates.top().aPropName = aState.aPropName;
         break;
     default:
     {

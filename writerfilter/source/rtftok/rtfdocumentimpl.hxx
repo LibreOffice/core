@@ -297,6 +297,9 @@ public:
     bool bInShape; ///< If we're inside a \shp group.
     bool bCreatedShapeGroup; ///< A GroupShape was created and pushed to the parent stack.
     bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
+
+    /// User-defined property: key name.
+    OUString aPropName;
 };
 
 /// An RTF stack is similar to std::stack, except that it has an operator[].

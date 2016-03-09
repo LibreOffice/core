@@ -156,6 +156,8 @@ enum class Destination
     FOOTNOTESEPARATOR,
     INDEXENTRY,
     TOCENTRY,
+    USERPROPS,
+    PROPNAME,
 };
 
 enum RTFKeyword
