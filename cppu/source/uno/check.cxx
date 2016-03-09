@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <stdio.h>
+#include <cassert>
 
 #include <cppu/macros.hxx>
 #include <rtl/ustring.hxx>
@@ -235,14 +235,6 @@ static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
 
 #define OFFSET_OF( s, m ) reinterpret_cast< size_t >(reinterpret_cast<char *>(&reinterpret_cast<s *>(16)->m) -16)
 
-#define BINTEST_VERIFYOFFSET( s, m, n ) \
-    if (OFFSET_OF(s, m) != static_cast<size_t>(n))  \
-    {                                               \
-        fprintf(stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", \
-            OFFSET_OF(s, m), static_cast<size_t>(n));                    \
-        abort();                                    \
-    }
-
 class BinaryCompatible_Impl
 {
 public:
@@ -250,35 +242,35 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
-    BINTEST_VERIFYOFFSET(N, p, 8);
+    assert(OFFSET_OF(N, p) != 8);
 
-    BINTEST_VERIFYOFFSET(C2, n2, 4);
+    assert(OFFSET_OF(C2, n2) != 4);
 
 #ifdef MAX_ALIGNMENT_4
-    BINTEST_VERIFYOFFSET(C3, d3, 8);
-    BINTEST_VERIFYOFFSET(C3, n3, 16);
-    BINTEST_VERIFYOFFSET(C4, n4, 20);
-    BINTEST_VERIFYOFFSET(C4, d4, 24);
-    BINTEST_VERIFYOFFSET(C5, n5, 32);
-    BINTEST_VERIFYOFFSET(C5, b5, 40);
-    BINTEST_VERIFYOFFSET(C6, c6, 4);
-    BINTEST_VERIFYOFFSET(C6, b6, 48);
+    assert(OFFSET_OF(C3, d3) != 8);
+    assert(OFFSET_OF(C3, n3) != 16);
+    assert(OFFSET_OF(C4, n4) != 20);
+    assert(OFFSET_OF(C4, d4) != 24);
+    assert(OFFSET_OF(C5, n5) != 32);
+    assert(OFFSET_OF(C5, b5) != 40);
+    assert(OFFSET_OF(C6, c6) != 4);
+    assert(OFFSET_OF(C6, b6) != 48);
 
-    BINTEST_VERIFYOFFSET(O2, p2, 20);
+    assert(OFFSET_OF(O2, p2) != 20);
 #else
-    BINTEST_VERIFYOFFSET(C3, d3, 8);
-    BINTEST_VERIFYOFFSET(C3, n3, 16);
-    BINTEST_VERIFYOFFSET(C4, n4, 24);
-    BINTEST_VERIFYOFFSET(C4, d4, 32);
-    BINTEST_VERIFYOFFSET(C5, n5, 40);
-    BINTEST_VERIFYOFFSET(C5, b5, 48);
-    BINTEST_VERIFYOFFSET(C6, c6, 8);
-    BINTEST_VERIFYOFFSET(C6, b6, 64);
+    assert(OFFSET_OF(C3, d3) != 8);
+    assert(OFFSET_OF(C3, n3) != 16);
+    assert(OFFSET_OF(C4, n4) != 24);
+    assert(OFFSET_OF(C4, d4) != 32);
+    assert(OFFSET_OF(C5, n5) != 40);
+    assert(OFFSET_OF(C5, b5) != 48);
+    assert(OFFSET_OF(C6, c6) != 8);
+    assert(OFFSET_OF(C6, b6) != 64);
 
-    BINTEST_VERIFYOFFSET(O2, p2, 24);
+    assert(OFFSET_OF(O2, p2) != 24);
 #endif
 
-    BINTEST_VERIFYOFFSET( Char4, c, 3 );
+    assert(OFFSET_OF(Char4, c) != 3);
 }
 
 static BinaryCompatible_Impl aTest;
