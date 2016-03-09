@@ -711,7 +711,7 @@ void SAL_CALL Moderator::onTerminated()
    Function for opening UCB contents synchronously,
    but with handled timeout;
 */
-static bool _UCBOpenContentSync(
+static bool UCBOpenContentSync_(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
@@ -743,7 +743,7 @@ static bool UCBOpenContentSync(
         ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdav") &&
         ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdavs") &&
         ! aScheme.equalsIgnoreAsciiCase("ftp"))
-        return _UCBOpenContentSync(
+        return UCBOpenContentSync_(
             xLockBytes,xContent,rArg,xSink,xInteract);
 
     if ( !aScheme.equalsIgnoreAsciiCase( "http" ) &&
@@ -956,7 +956,7 @@ static bool UCBOpenContentSync(
 /**
     Function for opening UCB contents synchronously
  */
-static bool _UCBOpenContentSync(
+static bool UCBOpenContentSync_(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
