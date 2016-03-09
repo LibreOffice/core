@@ -23,23 +23,16 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <memory>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
 
 BitmapTransporter::BitmapTransporter()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "BitmapTransporter\n" );
-#endif
+    SAL_INFO("extensions.scanner", "BitmapTransporter");
 }
 
 
 BitmapTransporter::~BitmapTransporter()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "~BitmapTransporter\n" );
-#endif
+    SAL_INFO("extensions.scanner", "~BitmapTransporter");
 }
 
 
@@ -152,17 +145,13 @@ ScannerThread::ScannerThread(
                              ScannerManager* pManager )
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "ScannerThread\n" );
-#endif
+    SAL_INFO("extensions.scanner", "ScannerThread");
 }
 
 
 ScannerThread::~ScannerThread()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "~ScannerThread\n" );
-#endif
+    SAL_INFO("extensions.scanner", "~ScannerThread");
 }
 
 
@@ -259,9 +248,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
         osl::MutexGuard aGuard( theSaneProtector::get() );
         sanevec &rSanes = theSanes::get().m_aSanes;
 
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "ScannerManager::configureScanner\n" );
-#endif
+        SAL_INFO("extensions.scanner", "ScannerManager::configureScanner");
 
         if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
             throw ScannerException(
@@ -297,9 +284,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "ScannerManager::startScan\n" );
-#endif
+    SAL_INFO("extensions.scanner", "ScannerManager::startScan");
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(

@@ -905,10 +905,8 @@ void SaneDlg::AcquirePreview()
     }
     else
     {
-#if OSL_DEBUG_LEVEL > 1
         xTransporter->getStream().Seek( STREAM_SEEK_TO_END );
-        fprintf( stderr, "Previewbitmapstream contains %d bytes\n", (int)xTransporter->getStream().Tell() );
-#endif
+        SAL_INFO("extensions.scanner", "Previewbitmapstream contains " << xTransporter->getStream().Tell() << "bytes");
         xTransporter->getStream().Seek( STREAM_SEEK_TO_BEGIN );
         mpPreview->SetBitmap(xTransporter->getStream());
     }
@@ -1492,10 +1490,7 @@ bool SaneDlg::SetAdjustedNumericalValue(
         return false;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SaneDlg::SetAdjustedNumericalValue( \"%s\", %lg ) ",
-             pOption, fValue );
-#endif
+    SAL_INFO("extensions.scanner", "SaneDlg::SetAdjustedNumericalValue(\"" << pOption << "\", " << fValue << ") ");
 
     if( nValues )
     {
@@ -1520,9 +1515,7 @@ bool SaneDlg::SetAdjustedNumericalValue(
     }
     delete [] pValues;
     mrSane.SetOptionValue( nOption, fValue, nElement );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "yields %lg\n", fValue );
-#endif
+    SAL_INFO("extensions.scanner", "yields " << fValue);
 
 
     return true;
