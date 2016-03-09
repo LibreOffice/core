@@ -118,12 +118,12 @@ namespace
     void SotTest::test()
     {
         testDir(OUString(),
-            getURLFromSrc("/sot/qa/cppunit/data/"));
+            m_directories.getURLFromSrc("/sot/qa/cppunit/data/"));
     }
 
     void SotTest::testSize()
     {
-        OUString aURL(getURLFromSrc("/sot/qa/cppunit/data/pass/fdo84229-1.compound"));
+        OUString aURL(m_directories.getURLFromSrc("/sot/qa/cppunit/data/pass/fdo84229-1.compound"));
         SvFileStream aStream(aURL, StreamMode::READ);
         tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",

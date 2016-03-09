@@ -123,31 +123,31 @@ void VclFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/wmf/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/wmf/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/emf/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/emf/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/sgv/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/sgv/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/png/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/png/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/jpg/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/jpg/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/gif/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/gif/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/bmp/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/bmp/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/xbm/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/xbm/"));
 
     testDir(OUString(),
-        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/xpm/"));
+        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/xpm/"));
 #endif
 }
 
