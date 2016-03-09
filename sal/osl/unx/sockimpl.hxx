@@ -54,9 +54,6 @@ struct oslPipeImpl {
 #endif
 };
 
-oslSocket __osl_createSocketImpl(int Socket);
-void __osl_destroySocketImpl(oslSocket pImpl);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
