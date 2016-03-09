@@ -486,7 +486,7 @@ public:
             rDev.SetClipRegion();
         }
 
-        void drawComplex (OutputDevice &rDev, Rectangle r)
+        static void drawComplex (OutputDevice &rDev, Rectangle r)
         {
             const unsigned char pInvalid[] = { 0xfe, 0x1f };
             const unsigned char pDiacritic1[] = { 0x61, 0xcc, 0x8a, 0xcc, 0x8c };
@@ -601,7 +601,7 @@ public:
             rDev.SetClipRegion();
         }
         // render text, bbox, DX arrays etc.
-        long drawStringBox(OutputDevice &rDev, Point aPos,
+        static long drawStringBox(OutputDevice &rDev, Point aPos,
                            const OUString &aText,
                            long &nMaxTextHeight)
         {
