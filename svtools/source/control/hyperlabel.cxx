@@ -178,14 +178,14 @@ namespace svt
         return m_pImpl->Index;
     }
 
-    void HyperLabel::SetID( sal_Int16 _ID )
+    void HyperLabel::SetID( sal_Int16 ID )
     {
-        m_pImpl->ID = _ID;
+        m_pImpl->ID = ID;
     }
 
-    void HyperLabel::SetIndex( sal_Int32 _Index )
+    void HyperLabel::SetIndex( sal_Int32 Index )
     {
-        m_pImpl->Index = _Index;
+        m_pImpl->Index = Index;
     }
 
     void HyperLabel::SetLabel( const OUString& _rText )
