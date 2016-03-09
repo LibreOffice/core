@@ -4808,6 +4808,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_right, std::make_shared<RTFValue>(aAttributes));
         }
         break;
+    case RTF_PROPTYPE:
+    {
+        switch (nParam)
+        {
+        case 30:
+            m_aStates.top().aPropType = cppu::UnoType<OUString>::get();
+            break;
+        }
+    }
+    break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << lcl_RtfToString(nKeyword) << "'");

@@ -300,6 +300,8 @@ public:
 
     /// User-defined property: key name.
     OUString aPropName;
+    /// User-defined property: value type.
+    css::uno::Type aPropType;
 };
 
 /// An RTF stack is similar to std::stack, except that it has an operator[].
