@@ -1427,7 +1427,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     }
     else
     {
-        Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( true );
+        Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer();
         Reference< XDevice > xD( xPeer, UNO_QUERY );
 
         SimpleFontMetric aFM;

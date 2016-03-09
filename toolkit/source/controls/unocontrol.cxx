@@ -156,16 +156,13 @@ OUString UnoControl::GetComponentServiceName()
     return OUString();
 }
 
-Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( bool bAcceptExistingPeer )
+Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer()
 {
     DBG_ASSERT( !mbCreatingCompatiblePeer, "ImplGetCompatiblePeer - rekursive?" );
 
     mbCreatingCompatiblePeer = true;
 
-    Reference< XWindowPeer > xCompatiblePeer;
-
-    if ( bAcceptExistingPeer )
-        xCompatiblePeer = getPeer();
+    Reference< XWindowPeer > xCompatiblePeer = getPeer();
 
     if ( !xCompatiblePeer.is() )
     {
@@ -1005,7 +1002,7 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException, std::e
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        xDrawPeer = ImplGetCompatiblePeer( true );
+        xDrawPeer = ImplGetCompatiblePeer();
         bDisposeDrawPeer = xDrawPeer.is() && ( xDrawPeer != getPeer() );
 
         xDrawPeerView.set( xDrawPeer, UNO_QUERY );
