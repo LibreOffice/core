@@ -1,0 +1,52 @@
+From 8b86c6ee388008ab5ab9afd8807e869db0e420e4 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:09:10 +0100
+Subject: [PATCH 04/14] xmlsec1-nssdisablecallbacks.patch
+
+Conflicts:
+	src/nss/crypto.c
+---
+ src/nss/crypto.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/src/nss/crypto.c b/src/nss/crypto.c
+index 7137f1c..7a59575 100644
+--- a/src/nss/crypto.c
++++ b/src/nss/crypto.c
+@@ -214,6 +214,7 @@ xmlSecCryptoGetFunctions_nss(void) {
+      * High level routines form xmlsec command line utility
+      *
+      ********************************************************************/
++#if 0
+     gXmlSecNssFunctions->cryptoAppInit                  = xmlSecNssAppInit;
+     gXmlSecNssFunctions->cryptoAppShutdown              = xmlSecNssAppShutdown;
+     gXmlSecNssFunctions->cryptoAppDefaultKeysMngrInit   = xmlSecNssAppDefaultKeysMngrInit;
+@@ -231,6 +232,25 @@ xmlSecCryptoGetFunctions_nss(void) {
+     gXmlSecNssFunctions->cryptoAppKeyLoad               = xmlSecNssAppKeyLoad;
+     gXmlSecNssFunctions->cryptoAppKeyLoadMemory         = xmlSecNssAppKeyLoadMemory;
+     gXmlSecNssFunctions->cryptoAppDefaultPwdCallback    = (void*)xmlSecNssAppGetDefaultPwdCallback();
++#else
++    gXmlSecNssFunctions->cryptoAppInit                  = NULL;
++    gXmlSecNssFunctions->cryptoAppShutdown              = NULL;
++    gXmlSecNssFunctions->cryptoAppDefaultKeysMngrInit   = NULL;
++    gXmlSecNssFunctions->cryptoAppDefaultKeysMngrAdoptKey       = NULL;
++    gXmlSecNssFunctions->cryptoAppDefaultKeysMngrLoad   = NULL;
++    gXmlSecNssFunctions->cryptoAppDefaultKeysMngrSave   = NULL;
++#ifndef XMLSEC_NO_X509
++    gXmlSecNssFunctions->cryptoAppKeysMngrCertLoad      = NULL;
++    gXmlSecNssFunctions->cryptoAppKeysMngrCertLoadMemory= NULL;
++    gXmlSecNssFunctions->cryptoAppPkcs12Load            = NULL;
++    gXmlSecNssFunctions->cryptoAppPkcs12LoadMemory      = NULL;
++    gXmlSecNssFunctions->cryptoAppKeyCertLoad           = NULL;
++    gXmlSecNssFunctions->cryptoAppKeyCertLoadMemory     = NULL;
++#endif /* XMLSEC_NO_X509 */
++    gXmlSecNssFunctions->cryptoAppKeyLoad               = NULL;
++    gXmlSecNssFunctions->cryptoAppKeyLoadMemory         = NULL;
++    gXmlSecNssFunctions->cryptoAppDefaultPwdCallback    = (void*)NULL;
++#endif
+ 
+     return(gXmlSecNssFunctions);
+ }
+-- 
+2.6.2
+
