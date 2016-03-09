@@ -25,7 +25,7 @@
 #include <typeinfo>
 
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 static sal_uLong nItemCount = 0;
 
 const char* pw1 = "Wow! 10.000 items!";
@@ -41,7 +41,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_nKind(SFX_ITEMS_NONE)
 {
     DBG_ASSERT(nWhich <= SHRT_MAX, "invalid WhichId");
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ++nItemCount;
     if ( pw1 && nItemCount>=10000 )
     {
@@ -77,7 +77,7 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     , m_nWhich(rCpy.Which()) // call function because of ChkThis() (WTF does that mean?)
     , m_nKind( SFX_ITEMS_NONE )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ++nItemCount;
     if ( pw1 && nItemCount>=10000 )
     {
@@ -112,7 +112,7 @@ SfxPoolItem::~SfxPoolItem()
 {
     DBG_ASSERT(m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF,
             "destroying item in use");
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     --nItemCount;
 #endif
 }

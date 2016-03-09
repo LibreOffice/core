@@ -234,7 +234,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             }
             else
                 aRetText = "TableCell";
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
             aRetText += ",";
@@ -247,7 +247,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
                 sal_Int32 rowId = _nPosition + 1;
                 aRetText = OUString::number( rowId );
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
             aRetText += ",";
@@ -257,7 +257,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
             aRetText = GetColumnDescription( sal_Int16( _nPosition ) );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
             aRetText += ",";
