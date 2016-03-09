@@ -73,7 +73,7 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
     return PipeError[i].error;
 }
 
-oslPipe __osl_createPipeImpl()
+static oslPipe createPipeImpl()
 {
     oslPipe pPipeImpl;
 
@@ -89,7 +89,7 @@ oslPipe __osl_createPipeImpl()
     return pPipeImpl;
 }
 
-void __osl_destroyPipeImpl(oslPipe pImpl)
+static void destroyPipeImpl(oslPipe pImpl)
 {
     if (pImpl != nullptr)
         free(pImpl);
@@ -214,7 +214,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     }
 
     /* alloc memory */
-    pPipe = __osl_createPipeImpl();
+    pPipe = createPipeImpl();
 
     if (pPipe == nullptr)
         return nullptr;
@@ -224,7 +224,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     if ( pPipe->m_Socket < 0 )
     {
         SAL_WARN("sal.osl.pipe", "socket() failed: " << strerror(errno));
-        __osl_destroyPipeImpl(pPipe);
+        destroyPipeImpl(pPipe);
         return nullptr;
     }
 
@@ -261,7 +261,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             if ( connect(pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
             {
                 close (pPipe->m_Socket);
-                __osl_destroyPipeImpl(pPipe);
+                destroyPipeImpl(pPipe);
                 return nullptr;
             }
 
@@ -273,7 +273,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         {
             SAL_WARN("sal.osl.pipe", "bind() failed: " << strerror(errno));
             close (pPipe->m_Socket);
-            __osl_destroyPipeImpl(pPipe);
+            destroyPipeImpl(pPipe);
             return nullptr;
         }
 
@@ -294,7 +294,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             // that point in time:
             unlink(name);   /* remove filesystem entry */
             close (pPipe->m_Socket);
-            __osl_destroyPipeImpl(pPipe);
+            destroyPipeImpl(pPipe);
             return nullptr;
         }
 
@@ -313,7 +313,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         }
 
         close (pPipe->m_Socket);
-        __osl_destroyPipeImpl(pPipe);
+        destroyPipeImpl(pPipe);
         return nullptr;
     }
 }
@@ -334,7 +334,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
         if( ! pPipe->m_bClosed )
             osl_closePipe( pPipe );
 
-        __osl_destroyPipeImpl( pPipe );
+        destroyPipeImpl( pPipe );
     }
 }
 
@@ -447,7 +447,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     else
     {
         /* alloc memory */
-        pAcceptedPipe = __osl_createPipeImpl();
+        pAcceptedPipe = createPipeImpl();
 
         OSL_ASSERT(pAcceptedPipe);
         if(pAcceptedPipe==nullptr)
