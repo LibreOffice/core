@@ -48,7 +48,6 @@ class TargetHelper
             E_BLANK         ,
             E_DEFAULT       ,
             E_BEAMER        ,
-            E_MENUBAR       ,
             E_HELPAGENT     ,
             E_HELPTASK
         };

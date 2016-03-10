@@ -22,7 +22,6 @@
 #include <loadenv/loadenv.hxx>
 #include <dispatch/loaddispatcher.hxx>
 #include <dispatch/closedispatcher.hxx>
-#include <dispatch/menudispatcher.hxx>
 #include <dispatch/startmoduledispatcher.hxx>
 
 #include <pattern/window.hxx>
@@ -33,6 +32,7 @@
 #include <targets.h>
 #include <general.h>
 
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -167,7 +167,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
 
     // ignore wrong requests which are not supported
     if (
-        (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for frame dispatches - not for desktop
         (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
         (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
                                                             // and they exist more than ones. We have no idea which our sub tasks is the right one
@@ -271,15 +270,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // it's a special target - ignore search flags
     }
 
-    // I.II) "_menubar"
-    //  Special mode on frame or task to receive the local menu. Not supported by findFrame()
-
-    else if (sTargetName==SPECIALTARGET_MENUBAR)
-    {
-        xDispatcher = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER, xFrame );
-    }
-
-    // I.IV) "_beamer"
+    // I.II) "_beamer"
     //  Special sub frame of a top frame only. Search or create it. ... OK it's currently a little bit HACKI.
     //  Only the sfx (means the controller) can create it.
 
@@ -300,7 +291,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
     }
 
-    // I.V) "_parent"
+    // I.IV) "_parent"
     //  Our parent frame (if it exist) should handle this URL.
 
     else if (sTargetName==SPECIALTARGET_PARENT)
@@ -311,7 +302,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
     }
 
-    // I.VI) "_top"
+    // I.V) "_top"
     //  This request must be forwarded to any parent frame, till we reach a top frame.
     //  If no parent exist, we can handle itself.
 
@@ -334,7 +325,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
     }
 
-    // I.VII) "_self", ""
+    // I.VI) "_self", ""
     //  Our owner frame should handle this URL. But we can't do it for all of them.
     //  So we ask the internal setted controller first. If he disagree we try to find a registered
     //  protocol handler. If this failed too - we check for a loadable content and in case of true
@@ -394,7 +385,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
     }
 
-    // I.VI) no further special handlings exist
+    // I.VII) no further special handlings exist
     //  Now we have to search for the right target frame by calling findFrame() - but should provide our code
     //  against creation of a new task if no frame could be found.
     //  I said it before - it's allowed for dispatch() only.
@@ -535,20 +526,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     switch (eHelper)
     {
-        case E_MENUDISPATCHER :
-                {
-                    // Attention: Such menue dispatcher must be a singleton for this frame - means our owner frame.
-                    // Otherwhise he can make some trouble.
-                    SolarMutexGuard g;
-                    if ( ! m_xMenuDispatcher.is() )
-                    {
-                        MenuDispatcher* pDispatcher = new MenuDispatcher( m_xContext, xOwner );
-                        m_xMenuDispatcher.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                    }
-                    xDispatchHelper = m_xMenuDispatcher;
-                }
-                break;
-
         case E_CREATEDISPATCHER :
                 {
                     LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, sTarget, nSearchFlags);

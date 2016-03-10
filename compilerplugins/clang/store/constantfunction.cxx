@@ -433,8 +433,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
     // LINK callback which supplies a return value which means something
-    if (aFunctionName == "framework::MenuManager::Highlight"
-        || aFunctionName == "framework::MenuBarManager::Highlight") {
+    if (aFunctionName == "framework::MenuBarManager::Highlight") {
         return true;
     }
     if (aFunctionName == "sc::AlignedAllocator::operator!=") {

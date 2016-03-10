@@ -47,9 +47,6 @@ bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
         case E_BEAMER :
             return sCheckTarget == SPECIALTARGET_BEAMER;
 
-        case E_MENUBAR :
-            return sCheckTarget == SPECIALTARGET_MENUBAR;
-
         case E_HELPTASK :
             return sCheckTarget == SPECIALTARGET_HELPTASK;
         default:
