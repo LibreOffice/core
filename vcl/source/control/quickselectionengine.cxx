@@ -56,7 +56,7 @@ namespace vcl
 
     namespace
     {
-        static void lcl_reset( QuickSelectionEngine_Data& _data )
+        void lcl_reset( QuickSelectionEngine_Data& _data )
         {
             _data.sCurrentSearchString.clear();
             _data.aSingleSearchChar.reset();
