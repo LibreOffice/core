@@ -1954,8 +1954,20 @@ namespace svgio
 
         const basegfx::BColor* SvgStyleAttributes::getFill() const
         {
-            if(mbIsClipPathContent || ((SVGTokenMarker == mrOwner.getType()) && !maFill.isSet()))
+            if(mbIsClipPathContent)
             {
+                static basegfx::BColor aBlack(0.0, 0.0, 0.0);
+                return &aBlack;
+            }
+            else if((SVGTokenMarker == mrOwner.getType()) && !maFill.isSet())
+            {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getFill();
+                }
+
                 static basegfx::BColor aBlack(0.0, 0.0, 0.0);
                 return &aBlack;
             }
