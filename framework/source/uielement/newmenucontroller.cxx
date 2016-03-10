@@ -22,8 +22,6 @@
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <framework/bmkmenu.hxx>
-#include <framework/menuconfiguration.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -43,6 +41,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
@@ -331,9 +330,6 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
     if ( pVCLPopupMenu )
     {
-        MenuConfiguration aMenuCfg( m_xContext );
-        std::unique_ptr<BmkMenu> pSubMenu;
-
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         URL aTargetURL;
         aTargetURL.Complete = rtl::OUString::createFromAscii(m_bNewMenu ? aSlotNewDocDirect : aSlotAutoPilot);
@@ -341,31 +337,44 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
         if(xMenuItemDispatch == nullptr)
             return;
-        if ( m_bNewMenu )
-            pSubMenu.reset(static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU )));
-        else
-            pSubMenu.reset(static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU )));
 
-        // copy entries as we have to use the provided popup menu
-        *pVCLPopupMenu = *pSubMenu;
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aDynamicMenuEntries =
+            SvtDynamicMenuOptions().GetMenu( m_bNewMenu ? E_NEWMENU : E_WIZARDMENU );
 
-        Image           aImage;
+        OUString aTitle;
+        OUString aURL;
+        OUString aTargetFrame;
+        OUString aImageId;
+        sal_uInt16 nItemId = 1;
 
-        // retrieve additional parameters from bookmark menu and
-        // store it in a unordered_map.
-        for ( sal_uInt16 i = 0; i < pSubMenu->GetItemCount(); i++ )
+        for ( const auto& aDynamicMenuEntry : aDynamicMenuEntries )
         {
-            sal_uInt16 nItemId = pSubMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ) );
-            if (( nItemId != 0 ) &&
-                ( pSubMenu->GetItemType( nItemId ) != MenuItemType::SEPARATOR ))
+            for ( const auto& aProperty : aDynamicMenuEntry )
             {
-                sal_uLong nAttributePtr = pSubMenu->GetUserValue(nItemId);
-                if (nAttributePtr)
-                {
-                    MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
-                    pAttributes->acquire();
-                    pVCLPopupMenu->SetUserValue(nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute);
-                }
+                if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_URL )
+                    aProperty.Value >>= aURL;
+                else if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_TITLE )
+                    aProperty.Value >>= aTitle;
+                else if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
+                    aProperty.Value >>= aImageId;
+                else if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
+                    aProperty.Value >>= aTargetFrame;
+            }
+
+            if ( aTitle.isEmpty() && aURL.isEmpty() )
+                continue;
+
+            if ( aURL == "private:separator" )
+                pVCLPopupMenu->InsertSeparator();
+            else
+            {
+                pVCLPopupMenu->InsertItem( nItemId, aTitle );
+                pVCLPopupMenu->SetItemCommand( nItemId, aURL );
+
+                sal_uIntPtr nAttributePtr = MenuAttributes::CreateAttribute( aTargetFrame, aImageId );
+                pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
+
+                nItemId++;
             }
         }
 

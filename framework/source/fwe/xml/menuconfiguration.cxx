@@ -19,7 +19,6 @@
 
 #include <framework/menuconfiguration.hxx>
 
-#include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
@@ -98,18 +97,6 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
-}
-
-PopupMenu* MenuConfiguration::CreateBookmarkMenu(css::uno::Reference<css::frame::XFrame >& rFrame, const OUString& aURL)
-    throw (css::lang::WrappedTargetException,
-           css::uno::RuntimeException)
-{
-    if ( aURL == BOOKMARK_NEWMENU )
-        return new BmkMenu( rFrame, BmkMenu::BMK_NEWMENU );
-    else if ( aURL == BOOKMARK_WIZARDMENU )
-        return new BmkMenu( rFrame, BmkMenu::BMK_WIZARDMENU );
-    else
-        return nullptr;
 }
 
 void MenuConfiguration::StoreMenuBarConfigurationToXML(

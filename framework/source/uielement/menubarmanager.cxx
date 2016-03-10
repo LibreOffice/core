@@ -19,7 +19,6 @@
 
 #include <uielement/menubarmanager.hxx>
 #include <framework/menuconfiguration.hxx>
-#include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>

@@ -36,9 +36,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
-#define BOOKMARK_NEWMENU        "private:menu_bookmark_new"
-#define BOOKMARK_WIZARDMENU     "private:menu_bookmark_wizard"
-
 // Prepare for inclusion by framework and sfx
 // Please consider that there is a corresponding define also in sfxsids.hrc!! (SID_SFX_START)/(SID_ADDONS)
 #define FWK_SID_SFX_START 5000
@@ -108,9 +105,6 @@ public:
 
         css::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
             css::uno::Reference< css::io::XInputStream >& rInputStream )
-            throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
-
-        PopupMenu* CreateBookmarkMenu(css::uno::Reference<css::frame::XFrame >& rFrame, const OUString& aURL)
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         void StoreMenuBarConfigurationToXML(
