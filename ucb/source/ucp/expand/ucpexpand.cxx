@@ -115,7 +115,7 @@ void ExpandContentProviderImpl::disposing()
 }
 
 
-static uno::Reference< uno::XInterface > SAL_CALL create(
+uno::Reference< uno::XInterface > SAL_CALL create(
     uno::Reference< uno::XComponentContext > const & xComponentContext )
 {
     return static_cast< ::cppu::OWeakObject * >(
@@ -123,13 +123,13 @@ static uno::Reference< uno::XInterface > SAL_CALL create(
 }
 
 
-static OUString SAL_CALL implName()
+OUString SAL_CALL implName()
 {
     return OUString("com.sun.star.comp.ucb.ExpandContentProvider");
 }
 
 
-static uno::Sequence< OUString > SAL_CALL supportedServices()
+uno::Sequence< OUString > SAL_CALL supportedServices()
 {
     OUString names [] = {
         OUString("com.sun.star.ucb.ExpandContentProvider"),

@@ -67,12 +67,12 @@ extern "C"
 {
 
 
-static void SAL_CALL ExceptionThrower_acquire_release_nop(
+void SAL_CALL ExceptionThrower_acquire_release_nop(
     SAL_UNUSED_PARAMETER uno_Interface * )
 {}
 
 
-static void SAL_CALL ExceptionThrower_dispatch(
+void SAL_CALL ExceptionThrower_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
 {
