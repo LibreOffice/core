@@ -555,11 +555,12 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
                     SAL_INFO( "avmedia.gstreamer", AVVERSION "queried size: " << mnWidth << "x" << mnHeight );
 
-                    maSizeCondition.set();
                 }
                 gst_caps_unref( caps );
                 g_object_unref( pad );
             }
+
+            maSizeCondition.set();
         }
 #endif
     } else if (gst_is_missing_plugin_message(message)) {
