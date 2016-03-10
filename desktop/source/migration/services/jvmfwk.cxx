@@ -73,7 +73,7 @@ CJavaInfo::CJavaInfo(): pData(nullptr)
 
 CJavaInfo::~CJavaInfo()
 {
-    jfw_freeJavaInfo(pData);
+    delete pData;
 }
 
 

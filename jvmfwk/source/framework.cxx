@@ -427,7 +427,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
             {
                 bInfoFound = true;
             }
-            jfw_freeJavaInfo(pHomeInfo);
+            delete pHomeInfo;
         }
 
         // if no Java installation providing all features was detected by using JAVA_HOME,
@@ -460,7 +460,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
                             aCurrentInfo = pJInfo;
                         }
 
-                        jfw_freeJavaInfo(pJInfo);
+                        delete pJInfo;
                     }
                     ++it;
                 }
@@ -529,7 +529,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
                 //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
                 //its contents
                 for (int j = 0; j < cInfos; j++)
-                    jfw_freeJavaInfo(arInfos[j]);
+                    delete arInfos[j];
                 rtl_freeMemory(arInfos);
 
                 if (bInfoFound)
@@ -640,12 +640,6 @@ bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
         return true;
     }
     return false;
-}
-
-
-void jfw_freeJavaInfo(JavaInfo *pInfo)
-{
-    delete pInfo;
 }
 
 javaFrameworkError jfw_getSelectedJRE(JavaInfo **ppInfo)
@@ -805,7 +799,7 @@ javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo)
             jfw::setJavaSelected();
         }
 
-        jfw_freeJavaInfo(currentInfo);
+        delete currentInfo;
     }
     catch (const jfw::FrameworkException& e)
     {
@@ -1051,7 +1045,7 @@ CJavaInfo CJavaInfo::createWrapper(::JavaInfo* info)
 }
 void CJavaInfo::attach(::JavaInfo * info)
 {
-    jfw_freeJavaInfo(pInfo);
+    delete pInfo;
     pInfo = info;
 }
 ::JavaInfo * CJavaInfo::detach()
@@ -1063,7 +1057,7 @@ void CJavaInfo::attach(::JavaInfo * info)
 
 CJavaInfo::~CJavaInfo()
 {
-    jfw_freeJavaInfo(pInfo);
+    delete pInfo;
 }
 
 
@@ -1085,7 +1079,7 @@ CJavaInfo & CJavaInfo::operator = (const CJavaInfo& info)
     if (&info == this)
         return *this;
 
-    jfw_freeJavaInfo(pInfo);
+    delete pInfo;
     pInfo = copyJavaInfo(info.pInfo);
     return *this;
 }
@@ -1094,7 +1088,7 @@ CJavaInfo & CJavaInfo::operator = (const ::JavaInfo* info)
     if (info == pInfo)
         return *this;
 
-    jfw_freeJavaInfo(pInfo);
+    delete pInfo;
     pInfo = copyJavaInfo(info);
     return *this;
 }

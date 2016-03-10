@@ -662,10 +662,10 @@ namespace {
 struct JavaInfoGuard: private boost::noncopyable {
     JavaInfoGuard(): info(nullptr) {}
 
-    ~JavaInfoGuard() { jfw_freeJavaInfo(info); }
+    ~JavaInfoGuard() { delete info; }
 
     void clear() {
-        jfw_freeJavaInfo(info);
+        delete info;
         info = nullptr;
     }
 
@@ -836,7 +836,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 }
             }
 
-            jfw_freeJavaInfo(pJavaInfo);
+            delete pJavaInfo;
 
             //Error: %PRODUCTNAME requires a Java
             //runtime environment (JRE) to perform this task. The selected JRE

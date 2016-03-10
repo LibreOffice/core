@@ -97,7 +97,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
         fprintf(stdout, "%s\n", sPaths.getStr());
-        jfw_freeJavaInfo(pInfo);
+        delete pInfo;
     }
     catch (const std::exception&)
     {

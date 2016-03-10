@@ -208,9 +208,7 @@ typedef enum _javaFrameworkError
 
     <p>
     Instances of this struct are created by the plug-in libraries which are used by
-    this framework (jvmfwk/vendorplugin.h).
-    For convenience this API provides the function <code>jfw_freeJavaInfo</code>
-    which frees the objects properly. </p>
+    this framework (jvmfwk/vendorplugin.h).</p>
  */
 struct JavaInfo
 {
@@ -256,13 +254,6 @@ struct JavaInfo
      */
     rtl::ByteSequence arVendorData;
 };
-
-/** frees the memory of a <code>JavaInfo</code> object.
-    @param pInfo
-    The object which is to be freed. It can be NULL;
- */
-JVMFWK_DLLPUBLIC void jfw_freeJavaInfo(JavaInfo *pInfo);
-
 
 /** compares two <code>JavaInfo</code> objects for equality.
 
@@ -362,7 +353,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning);
 
     @param ppInfo
     [out] a <code>JavaInfo</code> pointer, representing the selected JRE.
-    The caller has to free it by calling <code>jfw_freeJavaInfo<code>. The
+    The caller has to delete it. The
     <code>JavaInfo</code> is for informational purposes only. It is not
     necessary to call <code>jfw_setSelectedJRE</code> afterwards.<br/>
     <code>ppInfo</code>can be NULL. If <code>*ppInfo</code> is not null, then it is
@@ -393,7 +384,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo);
     [out] on returns it contains a pointer to an array of <code>JavaInfo</code>
     pointers.
     The caller must free the array with <code>rtl_freeMemory</code> and each
-    element of the array must be freed with <code>jfw_freeJavaInfo</code>.
+    element of the array must be deleted.
     @param pSize
     [out] on return contains the size of array returned in <code>parInfo</code>.
 
@@ -750,8 +741,8 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool
     should be called. That is, <code>jfw_startVM</code> which uses the
     settings cannot be called before all settings have be made.</p>
     <p>
-    The only functions which are not effected by <code>jfw_lock</code> are
-    <code>jfw_freeJavaInfo</code> and <code>jfw_areEqualJavaInfo</code>.
+    The only functions which is not effected by <code>jfw_lock</code> is
+    <code>jfw_areEqualJavaInfo</code>.
  */
 JVMFWK_DLLPUBLIC void jfw_lock();
 
