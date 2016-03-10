@@ -3226,7 +3226,7 @@ bool lcl_checkClassification(SwDoc* pSourceDoc, SwDoc* pDestinationDoc)
     if (!pSourceShell || !pDestinationShell)
         return true;
 
-    switch (SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell))
+    switch (SfxClassificationHelper::CheckPaste(pSourceShell->getDocProperties(), pDestinationShell->getDocProperties()))
     {
     case SfxClassificationCheckPasteResult::None:
     {

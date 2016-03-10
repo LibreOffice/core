@@ -1153,7 +1153,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     if (SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell())
                     {
-                        SfxClassificationHelper aHelper(*pObjectShell);
+                        SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
                         aHelper.SetBACName(rName);
                     }
                 }

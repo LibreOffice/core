@@ -974,7 +974,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         if (pArgs && pArgs->GetItemState(nSlotId, false, &pItem) == SfxItemState::SET)
         {
             const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-            SfxClassificationHelper aHelper(*pDocSh);
+            SfxClassificationHelper aHelper(pDocSh->getDocProperties());
             aHelper.SetBACName(rName);
         }
         else

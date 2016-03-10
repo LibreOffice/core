@@ -13,6 +13,8 @@
 #include <memory>
 #include <vector>
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
@@ -39,11 +41,12 @@ class SFX2_DLLPUBLIC SfxClassificationHelper
 
 public:
     /// Does the document have any BAILS properties?
-    static bool IsClassified(SfxObjectShell& rObjectShell);
-    /// Checks if pasting from rSource to rDestination would leak information.
-    static SfxClassificationCheckPasteResult CheckPaste(SfxObjectShell& rSource, SfxObjectShell& rDestination);
+    static bool IsClassified(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
+    /// Checks if pasting from xSource to xDestination would leak information.
+    static SfxClassificationCheckPasteResult CheckPaste(const css::uno::Reference<css::document::XDocumentProperties>& xSource,
+            const css::uno::Reference<css::document::XDocumentProperties>& xDestination);
 
-    SfxClassificationHelper(SfxObjectShell& rObjectShell);
+    SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
     ~SfxClassificationHelper();
     const OUString& GetBACName();
     /// Return all possible valid category names, based on the policy.

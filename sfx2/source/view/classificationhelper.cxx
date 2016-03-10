@@ -321,18 +321,18 @@ public:
     SfxClassificationCategory m_aCategory;
     /// Possible categories of a policy to choose from.
     std::vector<SfxClassificationCategory> m_aCategories;
-    SfxObjectShell& m_rObjectShell;
+    const uno::Reference<document::XDocumentProperties>& m_xDocumentProperties;
 
-    Impl(SfxObjectShell& rObjectShell);
+    Impl(const uno::Reference<document::XDocumentProperties>& xDocumentProperties);
     void parsePolicy();
-    /// Synchronize m_aLabels back to the object shell.
-    void pushToObjectShell();
+    /// Synchronize m_aLabels back to the document properties.
+    void pushToDocumentProperties();
     /// Set the classification start date to the system time.
     void setStartValidity();
 };
 
-SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
-    : m_rObjectShell(rObjectShell)
+SfxClassificationHelper::Impl::Impl(const uno::Reference<document::XDocumentProperties>& xDocumentProperties)
+    : m_xDocumentProperties(xDocumentProperties)
 {
 }
 
@@ -384,10 +384,9 @@ void SfxClassificationHelper::Impl::setStartValidity()
     }
 }
 
-void SfxClassificationHelper::Impl::pushToObjectShell()
+void SfxClassificationHelper::Impl::pushToDocumentProperties()
 {
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = m_rObjectShell.getDocProperties();
-    uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+    uno::Reference<beans::XPropertyContainer> xPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     std::map<OUString, OUString> aLabels = m_aCategory.m_aLabels;
@@ -403,14 +402,13 @@ void SfxClassificationHelper::Impl::pushToObjectShell()
         }
         catch (const uno::Exception& rException)
         {
-            SAL_WARN("sfx.view", "pushToObjectShell() failed for property " << rLabel.first << ": " << rException.Message);
+            SAL_WARN("sfx.view", "pushDocumentProperties() failed for property " << rLabel.first << ": " << rException.Message);
         }
     }
 }
 
-bool SfxClassificationHelper::IsClassified(SfxObjectShell& rObjectShell)
+bool SfxClassificationHelper::IsClassified(const uno::Reference<document::XDocumentProperties>& xDocumentProperties)
 {
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = rObjectShell.getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     if (!xPropertyContainer.is())
         return false;
@@ -426,15 +424,16 @@ bool SfxClassificationHelper::IsClassified(SfxObjectShell& rObjectShell)
     return false;
 }
 
-SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(SfxObjectShell& rSource, SfxObjectShell& rDestination)
+SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(const uno::Reference<document::XDocumentProperties>& xSource,
+        const uno::Reference<document::XDocumentProperties>& xDestination)
 {
-    bool bSourceClassified = SfxClassificationHelper::IsClassified(rSource);
+    bool bSourceClassified = SfxClassificationHelper::IsClassified(xSource);
     if (!bSourceClassified)
         // No classification on the source side. Return early, regardless the
         // state of the destination side.
         return SfxClassificationCheckPasteResult::None;
 
-    bool bDestinationClassified = SfxClassificationHelper::IsClassified(rDestination);
+    bool bDestinationClassified = SfxClassificationHelper::IsClassified(xDestination);
     if (bSourceClassified && !bDestinationClassified)
     {
         // Paste from a classified document to a non-classified one -> deny.
@@ -442,8 +441,8 @@ SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(SfxObjectS
     }
 
     // Remaining case: paste between two classified documents.
-    SfxClassificationHelper aSource(rSource);
-    SfxClassificationHelper aDestination(rDestination);
+    SfxClassificationHelper aSource(xSource);
+    SfxClassificationHelper aDestination(xDestination);
     if (aSource.GetImpactScale() != aDestination.GetImpactScale())
         // It's possible to compare them if they have the same scale.
         return SfxClassificationCheckPasteResult::None;
@@ -455,10 +454,9 @@ SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(SfxObjectS
     return SfxClassificationCheckPasteResult::None;
 }
 
-SfxClassificationHelper::SfxClassificationHelper(SfxObjectShell& rObjectShell)
-    : m_pImpl(o3tl::make_unique<Impl>(rObjectShell))
+SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::XDocumentProperties>& xDocumentProperties)
+    : m_pImpl(o3tl::make_unique<Impl>(xDocumentProperties))
 {
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = rObjectShell.getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     if (!xPropertyContainer.is())
         return;
@@ -660,7 +658,7 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
     m_pImpl->m_aCategory = *it;
 
     m_pImpl->setStartValidity();
-    m_pImpl->pushToObjectShell();
+    m_pImpl->pushToDocumentProperties();
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if (!pViewFrame)
         return;

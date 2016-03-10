@@ -3249,6 +3249,16 @@ void SwUiWriterTest::testTdf96961()
     CPPUNIT_ASSERT(nLast > nOther);
 }
 
+namespace
+{
+
+int checkShells(SwDocShell* pSource, SwDocShell* pDestination)
+{
+    return int(SfxClassificationHelper::CheckPaste(pSource->getDocProperties(), pDestination->getDocProperties()));
+}
+
+}
+
 void SwUiWriterTest::testClassificationPaste()
 {
     SwDocShell* pSourceShell = createDoc()->GetDocShell();
@@ -3258,17 +3268,17 @@ void SwUiWriterTest::testClassificationPaste()
     SwDocShell* pDestinationShell = createDoc()->GetDocShell();
 
     // Not classified source, not classified destination.
-    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::None), int(SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell)));
+    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::None), checkShells(pSourceShell, pDestinationShell));
 
     // Classified source, not classified destination.
     uno::Sequence<beans::PropertyValue> aInternalOnly = comphelper::InitPropertySequence({{"Name", uno::makeAny(OUString("Internal Only"))}});
     lcl_dispatchCommand(xSourceComponent, ".uno:ClassificationApply", aInternalOnly);
-    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified), int(SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell)));
+    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified), checkShells(pSourceShell, pDestinationShell));
 
     // Classified source and classified destination -- internal only has a higher level than confidential.
     uno::Sequence<beans::PropertyValue> aConfidential = comphelper::InitPropertySequence({{"Name", uno::makeAny(OUString("Confidential"))}});
     lcl_dispatchCommand(mxComponent, ".uno:ClassificationApply", aConfidential);
-    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow), int(SfxClassificationHelper::CheckPaste(*pSourceShell, *pDestinationShell)));
+    CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow), checkShells(pSourceShell, pDestinationShell));
 
     xSourceComponent->dispose();
 }

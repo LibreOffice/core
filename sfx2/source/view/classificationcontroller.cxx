@@ -164,7 +164,7 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     if (!pObjectShell)
         return;
 
-    SfxClassificationHelper aHelper(*pObjectShell);
+    SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
     if (m_pCategories->GetEntryCount() == 0)
     {
         std::vector<OUString> aNames = aHelper.GetBACNames();

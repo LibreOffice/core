@@ -1343,10 +1343,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     }
                 }
 
-                if (SfxClassificationHelper::IsClassified(*xObjSh.get()))
+                if (SfxClassificationHelper::IsClassified(xObjSh->getDocProperties()))
                 {
                     // Document has BAILS properties, display an infobar accordingly.
-                    SfxClassificationHelper aHelper(*xObjSh.get());
+                    SfxClassificationHelper aHelper(xObjSh->getDocProperties());
                     aHelper.UpdateInfobar(*this);
                 }
 

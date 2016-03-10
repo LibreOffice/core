@@ -177,7 +177,7 @@ void SwEditShell::SetClassification(const OUString& rName)
     if (!pDocShell)
         return;
 
-    SfxClassificationHelper aHelper(*pDocShell);
+    SfxClassificationHelper aHelper(pDocShell->getDocProperties());
 
     bool bHadWatermark = !aHelper.GetDocumentWatermark().isEmpty();
 
