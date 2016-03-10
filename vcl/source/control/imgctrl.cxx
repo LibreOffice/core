@@ -47,7 +47,7 @@ void ImageControl::Resize()
 
 namespace
 {
-    static Size lcl_calcPaintSize( const Rectangle& _rPaintRect, const Size& _rBitmapSize )
+    Size lcl_calcPaintSize( const Rectangle& _rPaintRect, const Size& _rBitmapSize )
     {
         const Size aPaintSize = _rPaintRect.GetSize();
 
@@ -58,7 +58,7 @@ namespace
         return Size( long( _rBitmapSize.Width() * nRatioMin ), long( _rBitmapSize.Height() * nRatioMin ) );
     }
 
-    static Point lcl_centerWithin( const Rectangle& _rArea, const Size& _rObjectSize )
+    Point lcl_centerWithin( const Rectangle& _rArea, const Size& _rObjectSize )
     {
         Point aPos( _rArea.TopLeft() );
         aPos.X() += ( _rArea.GetWidth() - _rObjectSize.Width() ) / 2;
