@@ -45,6 +45,8 @@ public:
     /// Checks if pasting from xSource to xDestination would leak information.
     static SfxClassificationCheckPasteResult CheckPaste(const css::uno::Reference<css::document::XDocumentProperties>& xSource,
             const css::uno::Reference<css::document::XDocumentProperties>& xDestination);
+    /// Wrapper around CheckPaste(): informs the user if necessary and finds out if the paste can be continued or not.
+    static bool ShowPasteInfo(SfxClassificationCheckPasteResult eResult);
 
     SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
     ~SfxClassificationHelper();

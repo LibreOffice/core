@@ -32,6 +32,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
+#include <vcl/layout.hxx>
 #include <config_folders.h>
 
 using namespace com::sun::star;
@@ -452,6 +453,34 @@ SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(const uno:
         return SfxClassificationCheckPasteResult::DocClassificationTooLow;
 
     return SfxClassificationCheckPasteResult::None;
+}
+
+bool SfxClassificationHelper::ShowPasteInfo(SfxClassificationCheckPasteResult eResult)
+{
+    switch (eResult)
+    {
+    case SfxClassificationCheckPasteResult::None:
+    {
+        return true;
+    }
+    break;
+    case SfxClassificationCheckPasteResult::TargetDocNotClassified:
+    {
+        if (!Application::IsHeadlessModeEnabled())
+            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
+        return false;
+    }
+    break;
+    case SfxClassificationCheckPasteResult::DocClassificationTooLow:
+    {
+        if (!Application::IsHeadlessModeEnabled())
+            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
+        return false;
+    }
+    break;
+    }
+
+    return true;
 }
 
 SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::XDocumentProperties>& xDocumentProperties)

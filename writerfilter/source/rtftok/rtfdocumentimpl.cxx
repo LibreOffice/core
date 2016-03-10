@@ -5131,39 +5131,6 @@ bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, con
     }) != rProperties.end();
 }
 
-namespace
-{
-
-RTFError lcl_checkClassification(const uno::Reference<document::XDocumentProperties>& xSource, const uno::Reference<document::XDocumentProperties>& xDestination)
-{
-    switch (SfxClassificationHelper::CheckPaste(xSource, xDestination))
-    {
-    case SfxClassificationCheckPasteResult::None:
-    {
-        return RTFError::OK;
-    }
-    break;
-    case SfxClassificationCheckPasteResult::TargetDocNotClassified:
-    {
-        if (!Application::IsHeadlessModeEnabled())
-            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
-        return RTFError::CLASSIFICATION;
-    }
-    break;
-    case SfxClassificationCheckPasteResult::DocClassificationTooLow:
-    {
-        if (!Application::IsHeadlessModeEnabled())
-            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
-        return RTFError::CLASSIFICATION;
-    }
-    break;
-    }
-
-    return RTFError::OK;
-}
-
-}
-
 RTFError RTFDocumentImpl::popState()
 {
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
@@ -5985,9 +5952,8 @@ RTFError RTFDocumentImpl::popState()
             if (!m_bIsNewDoc)
             {
                 // Check classification.
-                RTFError nError = lcl_checkClassification(xDocumentProperties, m_xDocumentProperties);
-                if (nError != RTFError::OK)
-                    return nError;
+                if (!SfxClassificationHelper::ShowPasteInfo(SfxClassificationHelper::CheckPaste(xDocumentProperties, m_xDocumentProperties)))
+                    return RTFError::CLASSIFICATION;
             }
 
             uno::Reference<beans::XPropertyContainer> xClipboardPropertyContainer = xDocumentProperties->getUserDefinedProperties();

@@ -3226,28 +3226,8 @@ bool lcl_checkClassification(SwDoc* pSourceDoc, SwDoc* pDestinationDoc)
     if (!pSourceShell || !pDestinationShell)
         return true;
 
-    switch (SfxClassificationHelper::CheckPaste(pSourceShell->getDocProperties(), pDestinationShell->getDocProperties()))
-    {
-    case SfxClassificationCheckPasteResult::None:
-    {
-        return true;
-    }
-    break;
-    case SfxClassificationCheckPasteResult::TargetDocNotClassified:
-    {
-        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
-        return false;
-    }
-    break;
-    case SfxClassificationCheckPasteResult::DocClassificationTooLow:
-    {
-        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
-        return false;
-    }
-    break;
-    }
-
-    return true;
+    SfxClassificationCheckPasteResult eResult = SfxClassificationHelper::CheckPaste(pSourceShell->getDocProperties(), pDestinationShell->getDocProperties());
+    return SfxClassificationHelper::ShowPasteInfo(eResult);
 }
 
 }
