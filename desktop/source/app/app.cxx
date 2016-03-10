@@ -2354,8 +2354,6 @@ void Desktop::OpenClients()
     OfficeIPCThread::EnableRequests();
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
-    aRequest.pcProcessed = nullptr;
-
     aRequest.aOpenList = rArgs.GetOpenList();
     aRequest.aViewList = rArgs.GetViewList();
     aRequest.aStartList = rArgs.GetStartList();
@@ -2482,7 +2480,6 @@ void Desktop::OpenDefault()
     }
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
-    aRequest.pcProcessed = nullptr;
     aRequest.aOpenList.push_back(aName);
     OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
 }
@@ -2607,8 +2604,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 docsRequest.aOpenList.insert(
                     docsRequest.aOpenList.end(), data.begin(), data.end());
-                docsRequest.pcProcessed = nullptr;
-
                 OfficeIPCThread::ExecuteCmdLineRequests(docsRequest);
             }
         }
@@ -2626,8 +2621,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 docsRequest.aPrintList.insert(
                     docsRequest.aPrintList.end(), data.begin(), data.end());
-                docsRequest.pcProcessed = nullptr;
-
                 OfficeIPCThread::ExecuteCmdLineRequests(docsRequest);
             }
         }
