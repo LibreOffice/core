@@ -85,7 +85,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         bool executeDispatchRequests( const DispatchList& aDispatches, bool bNoTerminate = false );
 
     private:
-        static ::osl::Mutex&        GetMutex();
+        osl::Mutex m_mutex;
 
         std::unordered_map<OUString, sal_Int32, OUStringHash>
             m_aRequestContainer;

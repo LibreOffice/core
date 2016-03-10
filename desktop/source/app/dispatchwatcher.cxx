@@ -58,7 +58,6 @@
 #include <osl/thread.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
-#include <rtl/instance.hxx>
 #include <iostream>
 
 using namespace ::osl;
@@ -168,16 +167,6 @@ OUString impl_GuessFilter( const OUString& rUrlOut, const OUString& rDocService 
     return aOutFilter;
 }
 
-}
-
-namespace
-{
-    class theWatcherMutex : public rtl::Static<Mutex, theWatcherMutex> {};
-}
-
-Mutex& DispatchWatcher::GetMutex()
-{
-    return theWatcherMutex::get();
 }
 
 DispatchWatcher::DispatchWatcher()
@@ -317,7 +306,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             if( xDispatcher.is() )
             {
                 {
-                    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+                    ::osl::ClearableMutexGuard aGuard(m_mutex);
                     // Remember request so we can find it in statusChanged!
                     m_aRequestContainer.emplace(aURL.Complete, 1);
                     m_nRequestCount++;
@@ -698,7 +687,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 xDisp->dispatchWithNotification( aDispatches[n].aURL, aArgs, this );
             else
             {
-                ::osl::ClearableMutexGuard aGuard( GetMutex() );
+                ::osl::ClearableMutexGuard aGuard(m_mutex);
                 m_nRequestCount--;
                 aGuard.clear();
                 xDispatch->dispatch( aDispatches[n].aURL, aArgs );
@@ -706,7 +695,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         }
     }
 
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    ::osl::ClearableMutexGuard aGuard(m_mutex);
     bool bEmpty = (m_nRequestCount == 0);
     aGuard.clear();
 
@@ -738,7 +727,7 @@ void SAL_CALL DispatchWatcher::disposing( const css::lang::EventObject& )
 
 void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )
 {
-    osl::ClearableMutexGuard aGuard( GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_mutex);
     sal_Int16 nCount = --m_nRequestCount;
     aGuard.clear();
     OfficeIPCThread::RequestsCompleted();
