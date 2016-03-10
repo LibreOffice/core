@@ -73,7 +73,7 @@ namespace dbaccess
 
     namespace
     {
-        static const DocumentEventData* lcl_getDocumentEventData()
+        const DocumentEventData* lcl_getDocumentEventData()
         {
             static const DocumentEventData s_aData[] = {
                 { "OnCreate",               true  },
