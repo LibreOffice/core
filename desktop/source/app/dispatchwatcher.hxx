@@ -38,11 +38,6 @@ namespace desktop
     there is arose a problem. If there is none the office will be shutdown to prevent a
     running office without UI.
 */
-
-class DispatchWatcherHashMap : public std::unordered_map< OUString, sal_Int32, OUStringHash, std::equal_to< OUString >  >
-{
-};
-
 class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResultListener >
 {
     public:
@@ -95,7 +90,8 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
 
         static ::osl::Mutex&        GetMutex();
 
-        DispatchWatcherHashMap      m_aRequestContainer;
+        std::unordered_map<OUString, sal_Int32, OUStringHash>
+            m_aRequestContainer;
 
         sal_Int16                   m_nRequestCount;
 };

@@ -339,7 +339,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 {
                     ::osl::ClearableMutexGuard aGuard( GetMutex() );
                     // Remember request so we can find it in statusChanged!
-                    m_aRequestContainer.insert( DispatchWatcherHashMap::value_type( aURL.Complete, (sal_Int32)1 ) );
+                    m_aRequestContainer.emplace(aURL.Complete, 1);
                     m_nRequestCount++;
                 }
 
