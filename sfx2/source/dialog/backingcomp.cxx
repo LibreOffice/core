@@ -63,7 +63,6 @@ namespace {
 
 const char FRAME_PROPNAME_LAYOUTMANAGER[] = "LayoutManager";
 const char HID_BACKINGWINDOW[] = "FWK_HID_BACKINGWINDOW";
-const char SPECIALTARGET_MENUBAR[] = "_menubar";
 
 /**
     implements the backing component.
@@ -588,21 +587,6 @@ void SAL_CALL BackingComp::dispose()
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
-
-    // kill the menu
-    css::util::URL aURL;
-    aURL.Complete = ".uno:close";
-    css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
-    if (xParser.is())
-        xParser->parseStrict(aURL);
-
-    css::uno::Reference< css::frame::XDispatchProvider > xProvider(m_xFrame, css::uno::UNO_QUERY);
-    if (xProvider.is())
-    {
-        css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, SPECIALTARGET_MENUBAR, 0);
-        if (xDispatch.is())
-            xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
-    }
 
     // stop listening at the window
     if (m_xWindow.is())

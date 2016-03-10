@@ -68,14 +68,12 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/accelerators/storageholder \
     framework/source/classes/framecontainer \
     framework/source/classes/fwktabwindow \
-    framework/source/classes/menumanager \
     framework/source/classes/taskcreator \
     framework/source/dispatch/closedispatcher \
     framework/source/dispatch/dispatchinformationprovider \
     framework/source/dispatch/dispatchprovider \
     framework/source/dispatch/interceptionhelper \
     framework/source/dispatch/loaddispatcher \
-    framework/source/dispatch/menudispatcher \
     framework/source/dispatch/startmoduledispatcher \
     framework/source/dispatch/windowcommanddispatch \
     framework/source/helper/dockingareadefaultacceptor \

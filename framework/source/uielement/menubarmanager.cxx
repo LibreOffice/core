@@ -23,7 +23,6 @@
 #include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
-#include <classes/menumanager.hxx>
 #include <helper/mischelper.hxx>
 #include <framework/menuextensionsupplier.hxx>
 #include <classes/resource.hrc>
@@ -764,7 +763,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
 
         OUString aMenuCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aMenuCommand == aSpecialWindowCommand )
-             MenuManager::UpdateSpecialWindowMenu( pMenu, m_xContext );
+            UpdateSpecialWindowMenu( pMenu, m_xContext );
 
         // Check if some modes have changed so we have to update our menu images
         OUString sIconTheme = SvtMiscOptions().GetIconTheme();
@@ -776,7 +775,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
             m_bShowMenuImages   = bShowMenuImages;
             m_bRetrieveImages   = false;
             m_sIconTheme     = sIconTheme;
-            MenuManager::FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
+            FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
 
         // Try to map commands to labels
@@ -1979,6 +1978,126 @@ void MenuBarManager::SetHdl()
 
     if ( !m_xURLTransformer.is() && m_xContext.is() )
         m_xURLTransformer.set( URLTransformer::create( m_xContext) );
+}
+
+void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext )
+{
+    // update window list
+    ::std::vector< OUString > aNewWindowListVector;
+
+    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+
+    sal_uInt16  nActiveItemId = 0;
+    sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
+
+    Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
+    Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+    sal_Int32 nFrameCount = xList->getCount();
+    aNewWindowListVector.reserve(nFrameCount);
+    for (sal_Int32 i=0; i<nFrameCount; ++i )
+    {
+        Reference< XFrame > xFrame;
+        xList->getByIndex(i) >>= xFrame;
+
+        if (xFrame.is())
+        {
+            if ( xFrame == xCurrentFrame )
+                nActiveItemId = nItemId;
+
+            vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            if ( pWin && pWin->IsVisible() )
+            {
+                aNewWindowListVector.push_back( pWin->GetText() );
+                ++nItemId;
+            }
+        }
+    }
+
+    {
+        SolarMutexGuard g;
+
+        int nItemCount = pMenu->GetItemCount();
+
+        if ( nItemCount > 0 )
+        {
+            // remove all old window list entries from menu
+            sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_WINDOWLIST );
+            for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
+                pMenu->RemoveItem( n );
+
+            if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
+                pMenu->RemoveItem( pMenu->GetItemCount()-1 );
+        }
+
+        if ( !aNewWindowListVector.empty() )
+        {
+            // append new window list entries to menu
+            pMenu->InsertSeparator();
+            nItemId = START_ITEMID_WINDOWLIST;
+            const sal_uInt32 nCount = aNewWindowListVector.size();
+            for ( sal_uInt32 i = 0; i < nCount; i++ )
+            {
+                pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
+                if ( nItemId == nActiveItemId )
+                    pMenu->CheckItem( nItemId );
+                ++nItemId;
+            }
+        }
+    }
+}
+
+void MenuBarManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool bShowMenuImages)
+{
+    AddonsOptions       aAddonOptions;
+
+    for ( sal_uInt16 nPos = 0; nPos < _pMenu->GetItemCount(); nPos++ )
+    {
+        sal_uInt16 nId = _pMenu->GetItemId( nPos );
+        if ( _pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR )
+        {
+            bool bTmpShowMenuImages( bShowMenuImages );
+            // overwrite the show icons on menu option?
+            if (!bTmpShowMenuImages)
+            {
+                MenuItemBits nBits =  _pMenu->GetItemBits( nId );
+                bTmpShowMenuImages = ( ( nBits & MenuItemBits::ICON ) == MenuItemBits::ICON );
+            }
+
+            if ( bTmpShowMenuImages )
+            {
+                bool        bImageSet = false;
+                OUString aImageId;
+
+                ::framework::MenuAttributes* pMenuAttributes =
+                    reinterpret_cast< ::framework::MenuAttributes*>(_pMenu->GetUserValue( nId ));
+
+                if ( pMenuAttributes )
+                    aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+
+                if ( !aImageId.isEmpty() )
+                {
+                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, false, _xFrame );
+                    if ( !!aImage )
+                    {
+                        bImageSet = true;
+                        _pMenu->SetItemImage( nId, aImage );
+                    }
+                }
+
+                if ( !bImageSet )
+                {
+                    OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
+                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aMenuItemCommand, false, _xFrame );
+                    if ( !aImage )
+                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, false );
+
+                    _pMenu->SetItemImage( nId, aImage );
+                }
+            }
+            else
+                _pMenu->SetItemImage( nId, Image() );
+        }
+    }
 }
 
 }

@@ -907,7 +907,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
         (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
         (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
                                                             // and they exist more than ones. We have no idea which our sub tasks is the right one

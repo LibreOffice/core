@@ -48,7 +48,6 @@ namespace framework{
 enum EDispatchHelper
 {
     E_DEFAULTDISPATCHER     ,
-    E_MENUDISPATCHER        ,
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
@@ -83,8 +82,6 @@ class DispatchProvider  :   private TransactionBase                     ,
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
-        /// different dispatcher to handle special dispatch calls, protocols or URLs (they will be created on demand.)
-        css::uno::Reference< css::frame::XDispatch > m_xMenuDispatcher;
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
 

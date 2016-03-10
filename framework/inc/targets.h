@@ -30,7 +30,6 @@ namespace framework{
 #define SPECIALTARGET_BLANK           "_blank"                            // Create a new task.
 #define SPECIALTARGET_DEFAULT         "_default"                          // Create a new task or recycle an existing one
 #define SPECIALTARGET_BEAMER          "_beamer"                           // special frame in hierarchy
-#define SPECIALTARGET_MENUBAR         "_menubar"                          // special target for menubars
 #define SPECIALTARGET_HELPTASK        "OFFICE_HELP_TASK"                  // special name for our help task
 
 }       //  namespace framework

@@ -945,7 +945,7 @@ OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException, std::excep
     @descr      This name is used to find target of findFrame() or queryDispatch() calls.
 
     @attention  Special names like "_blank", "_self" aren't allowed...
-                "_beamer" or "_menubar" excepts this rule!
+                "_beamer" excepts this rule!
 
     @seealso    method getName()
 
@@ -997,10 +997,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     //    in following code again and again. If we do not so -wrong
     //    search results can occur!
 
-    if (
-        (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_MENUBAR  )         // valid for dispatches - not for findFrame()!
-       )
+    if ( sTargetFrameName == SPECIALTARGET_DEFAULT ) // valid for dispatches - not for findFrame()!
     {
         return nullptr;
     }
