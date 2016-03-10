@@ -307,17 +307,17 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
         pWeakMap = nullptr;
     }
 #if OSL_DEBUG_LEVEL > 0
-    SAL_WARN_IF( (nTypeDescriptionCount), "cppu.typelib", "nTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nCompoundTypeDescriptionCount), "cppu.typelib", "nCompoundTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nIndirectTypeDescriptionCount), "cppu.typelib", "nIndirectTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nEnumTypeDescriptionCount), "cppu.typelib", "nEnumTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nInterfaceMethodTypeDescriptionCount), "cppu.typelib", "nInterfaceMethodTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nInterfaceAttributeTypeDescriptionCount), "cppu.typelib", "nInterfaceAttributeTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nInterfaceTypeDescriptionCount), "cppu.typelib", "nInterfaceTypeDescriptionCount is not zero" );
-    SAL_WARN_IF( (nTypeDescriptionReferenceCount), "cppu.typelib", "nTypeDescriptionReferenceCount is not zero" );
+    SAL_WARN_IF( nTypeDescriptionCount, "cppu.typelib", "nTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nCompoundTypeDescriptionCount, "cppu.typelib", "nCompoundTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nIndirectTypeDescriptionCount, "cppu.typelib", "nIndirectTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nEnumTypeDescriptionCount, "cppu.typelib", "nEnumTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nInterfaceMethodTypeDescriptionCount, "cppu.typelib", "nInterfaceMethodTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nInterfaceAttributeTypeDescriptionCount, "cppu.typelib", "nInterfaceAttributeTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nInterfaceTypeDescriptionCount, "cppu.typelib", "nInterfaceTypeDescriptionCount is not zero" );
+    SAL_WARN_IF( nTypeDescriptionReferenceCount, "cppu.typelib", "nTypeDescriptionReferenceCount is not zero" );
 #endif
 
-    SAL_WARN_IF( (pCallbacks && !pCallbacks->empty()), "cppu.typelib", "pCallbacks is not NULL or empty" );
+    SAL_WARN_IF( pCallbacks && !pCallbacks->empty(), "cppu.typelib", "pCallbacks is not NULL or empty" );
     delete pCallbacks;
     pCallbacks = nullptr;
 
