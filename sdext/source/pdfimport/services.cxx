@@ -33,12 +33,12 @@ using namespace ::com::sun::star::registry;
 
 namespace
 {
-    static Reference< XInterface > Create_PDFIHybridAdaptor( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > Create_PDFIHybridAdaptor( const Reference< XComponentContext >& _rxContext )
     {
         return *(new pdfi::PDFIHybridAdaptor( _rxContext ));
     }
 
-    static Reference< XInterface > Create_PDFIRawAdaptor_Writer( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > Create_PDFIRawAdaptor_Writer( const Reference< XComponentContext >& _rxContext )
     {
         pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.WriterPDFImport", _rxContext );
 
@@ -48,7 +48,7 @@ namespace
         return uno::Reference<uno::XInterface>(static_cast<xml::XImportFilter*>(pAdaptor));
     }
 
-    static Reference< XInterface > Create_PDFIRawAdaptor_Draw( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > Create_PDFIRawAdaptor_Draw( const Reference< XComponentContext >& _rxContext )
     {
         pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.DrawPDFImport", _rxContext );
 
@@ -57,7 +57,7 @@ namespace
         return uno::Reference<uno::XInterface>(static_cast<xml::XImportFilter*>(pAdaptor));
     }
 
-    static Reference< XInterface > Create_PDFIRawAdaptor_Impress( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > Create_PDFIRawAdaptor_Impress( const Reference< XComponentContext >& _rxContext )
     {
         pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.ImpressPDFImport", _rxContext );
 
@@ -66,7 +66,7 @@ namespace
         return uno::Reference<uno::XInterface>(static_cast<xml::XImportFilter*>(pAdaptor));
     }
 
-    static Reference< XInterface > Create_PDFDetector( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > Create_PDFDetector( const Reference< XComponentContext >& _rxContext )
     {
         return *(new pdfi::PDFDetector( _rxContext ) );
     }
@@ -96,7 +96,7 @@ namespace
         }
     };
 
-    static const ComponentDescription* lcl_getComponents()
+    const ComponentDescription* lcl_getComponents()
     {
         static const ComponentDescription aDescriptions[] = {
             ComponentDescription( "com.sun.star.document.ImportFilter", "org.libreoffice.comp.documents.HybridPDFImport", Create_PDFIHybridAdaptor ),

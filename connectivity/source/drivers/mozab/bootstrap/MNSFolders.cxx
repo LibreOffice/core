@@ -40,7 +40,7 @@ using namespace ::com::sun::star::mozilla;
 namespace
 {
 
-    static OUString lcl_getUserDataDirectory()
+    OUString lcl_getUserDataDirectory()
     {
         ::osl::Security   aSecurity;
         OUString   aConfigPath;
@@ -90,7 +90,7 @@ namespace
     };
 
 
-    static OUString lcl_guessProfileRoot( MozillaProductType _product )
+    OUString lcl_guessProfileRoot( MozillaProductType _product )
     {
         size_t productIndex = _product - 1;
 

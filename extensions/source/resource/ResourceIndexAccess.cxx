@@ -26,7 +26,7 @@ using namespace ::com::sun::star::container;
 
 namespace
 {
-    static std::shared_ptr<ResMgr> GetResMgr(Sequence<Any> const& rArgs)
+    std::shared_ptr<ResMgr> GetResMgr(Sequence<Any> const& rArgs)
     {
         if(rArgs.getLength()!=1)
             return std::shared_ptr<ResMgr>();

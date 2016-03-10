@@ -1231,7 +1231,7 @@ namespace
 // Scheme means pattern of chromatic values.
 // [2,2,1] -> red and green are approximately equal and blue is the dominant color (e.g. blue)
 // [1,1,1] -> all chromatic values are approximately equal (e.g. white, gray, black)
-static void CalculateScheme(const BitmapColor& rBitmapColor, std::vector<int> &vScheme, sal_uInt16 nVariance)
+void CalculateScheme(const BitmapColor& rBitmapColor, std::vector<int> &vScheme, sal_uInt16 nVariance)
 {
     vScheme.resize(3,1);
     if( rBitmapColor.GetRed() < rBitmapColor.GetGreen() + nVariance )
@@ -1248,7 +1248,7 @@ static void CalculateScheme(const BitmapColor& rBitmapColor, std::vector<int> &v
         ++vScheme[2];
 }
 
-static bool HasSimilarScheme(const BitmapColor& rBitmapColor1, const BitmapColor& rBitmapColor2, sal_uInt16 nVariance)
+bool HasSimilarScheme(const BitmapColor& rBitmapColor1, const BitmapColor& rBitmapColor2, sal_uInt16 nVariance)
 {
     std::vector<int> vScheme1, vScheme2;
     CalculateScheme(rBitmapColor1, vScheme1, nVariance);
@@ -1262,7 +1262,7 @@ static bool HasSimilarScheme(const BitmapColor& rBitmapColor1, const BitmapColor
 }
 
 // Find the best match in the color palette using scheme of the input color
-static sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor& rBitmapColor)
+sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor& rBitmapColor)
 {
     sal_uInt16 nReturn = 0;
     sal_uInt16 nLastErr = SAL_MAX_UINT16;

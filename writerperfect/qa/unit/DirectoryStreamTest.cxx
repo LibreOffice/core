@@ -62,7 +62,7 @@ static const char g_aDirPath[] = "/writerperfect/qa/unit/data/stream/test.dir";
 static const char g_aNondirPath[] = "/writerperfect/qa/unit/data/stream/test.dir/mimetype";
 static const char g_aNonexistentPath[] = "/writerperfect/qa/unit/data/stream/foo/bar";
 
-static DirectoryStream *createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
+DirectoryStream *createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
 {
     try
     {

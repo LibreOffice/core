@@ -48,7 +48,7 @@ SaxAttrList::~SaxAttrList()
 }
 
 namespace {
-    static OUString getCDATAString()
+    OUString getCDATAString()
     {
         return OUString( "CDATA" );
     }
