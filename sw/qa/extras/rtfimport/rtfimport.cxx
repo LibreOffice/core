@@ -2525,6 +2525,35 @@ DECLARE_RTFIMPORT_TEST(testTdf87034, "tdf87034.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("A1B3C4D"), getParagraph(1)->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testClassificatonPaste, "hello.rtf")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+
+    // Not classified source, not classified destination: OK.
+    paste("classification-no.rtf", xEnd);
+    CPPUNIT_ASSERT_EQUAL(OUString("classification-no"), getParagraph(2)->getString());
+
+    // Classified source, not classified destination: nothing should happen.
+    OUString aOld = xText->getString();
+    paste("classification-yes.rtf", xEnd);
+    CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
+}
+
+DECLARE_RTFIMPORT_TEST(testClassificatonPasteLevels, "classification-confidential.rtf")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+
+    // Classified source and classified destination, but internal only has a
+    // higher level than confidential: nothing should happen.
+    OUString aOld = xText->getString();
+    paste("classification-yes.rtf", xEnd);
+    CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
