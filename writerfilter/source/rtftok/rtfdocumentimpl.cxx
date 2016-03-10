@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -2056,6 +2057,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_USERPROPS:
             // Container of all user-defined properties.
             m_aStates.top().eDestination = Destination::USERPROPS;
+            if (m_xDocumentProperties.is())
+                // Create a custom document properties to be able to process them later all at once.
+                m_xDocumentProperties = document::DocumentProperties::create(m_xContext);
             break;
         case RTF_PROPNAME:
             m_aStates.top().eDestination = Destination::PROPNAME;
@@ -5924,20 +5928,48 @@ RTFError RTFDocumentImpl::popState()
             if (m_aStates.top().aPropType == cppu::UnoType<OUString>::get())
                 aAny = uno::makeAny(aStaticVal);
 
-            // Set it.
-            try
-            {
-                if (lcl_containsProperty(aProperties, rKey))
-                    xPropertySet->setPropertyValue(rKey, aAny);
-                else
-                    xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
-            }
-            catch (const uno::Exception& rException)
-            {
-                SAL_WARN("writerfilter", "failed to set property " << rKey << ": " << rException.Message);
-            }
+            xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
         }
         break;
+    case Destination::USERPROPS:
+    {
+        // These are the imported properties.
+        uno::Reference<document::XDocumentProperties> xDocumentProperties = m_xDocumentProperties;
+
+        // These are the real document properties.
+        uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xDstDoc, uno::UNO_QUERY);
+        if (xDocumentPropertiesSupplier.is())
+            m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+
+        if (m_xDocumentProperties.is())
+        {
+            uno::Reference<beans::XPropertyContainer> xClipboardPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+            uno::Reference<beans::XPropertyContainer> xDocumentPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
+            uno::Reference<beans::XPropertySet> xClipboardPropertySet(xClipboardPropertyContainer, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xDocumentPropertySet(xDocumentPropertyContainer, uno::UNO_QUERY);
+            uno::Sequence<beans::Property> aClipboardProperties = xClipboardPropertySet->getPropertySetInfo()->getProperties();
+            uno::Sequence<beans::Property> aDocumentProperties = xDocumentPropertySet->getPropertySetInfo()->getProperties();
+
+            for (const beans::Property& rProperty : aClipboardProperties)
+            {
+                const OUString& rKey = rProperty.Name;
+                uno::Any aValue = xClipboardPropertySet->getPropertyValue(rKey);
+
+                try
+                {
+                    if (lcl_containsProperty(aDocumentProperties, rKey))
+                        xDocumentPropertySet->setPropertyValue(rKey, aValue);
+                    else
+                        xDocumentPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aValue);
+                }
+                catch (const uno::Exception& rException)
+                {
+                    SAL_WARN("writerfilter", "failed to set property " << rKey << ": " << rException.Message);
+                }
+            }
+        }
+    }
+    break;
     default:
         break;
     }
