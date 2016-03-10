@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include "scitems.hxx"
+#include <comphelper/lok.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
@@ -164,8 +165,10 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     aExternalRange.aEnd.SetRow( nEndRow );
     aExternalRange.aEnd.SetCol( nEndCol );
 
-    if(( rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col() ) ||
-        ( rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row() ) )
+    // with LibreOfficeKit, don't try to interact with the user
+    if (!comphelper::LibreOfficeKit::isActive() &&
+        ((rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col()) ||
+         (rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row())))
     {
         sal_uInt16 nFmt = SCA_VALID;
 
