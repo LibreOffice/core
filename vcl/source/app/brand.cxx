@@ -29,7 +29,7 @@
 #include <vcl/svgdata.hxx>
 
 namespace {
-    static bool loadPng( const OUString & rPath, BitmapEx &rBitmap)
+    bool loadPng( const OUString & rPath, BitmapEx &rBitmap)
     {
         INetURLObject aObj( rPath );
         SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
@@ -41,7 +41,7 @@ namespace {
         else
             return false;
     }
-    static bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
+    bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
         return loadPng( rBaseDir + "/" LIBO_ETC_FOLDER + rName, rBitmap);
     }

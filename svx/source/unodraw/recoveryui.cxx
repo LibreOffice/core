@@ -176,7 +176,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 }
 
 
-static OUString GetCrashConfigDir()
+OUString GetCrashConfigDir()
 {
 
 #if defined(_WIN32)
@@ -202,14 +202,14 @@ static OUString GetCrashConfigDir()
 #endif
 
 
-static OUString GetUnsentURL()
+OUString GetUnsentURL()
 {
     OUString aURL = GetCrashConfigDir() + "/" LCKFILE;
     return aURL;
 }
 
 
-static bool delete_pending_crash()
+bool delete_pending_crash()
 {
     OUString    aUnsentURL = GetUnsentURL();
     return ( FileBase::E_None == File::remove( aUnsentURL ) );
