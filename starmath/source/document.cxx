@@ -252,12 +252,7 @@ void SmDocShell::ArrangeFormula()
     SmPrinterAccess  aPrtAcc(*this);
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
-    if (!pOutDev)
-    {
-#if OSL_DEBUG_LEVEL > 1
-        SAL_WARN( "starmath", "!! SmDocShell::ArrangeFormula: reference device missing !!");
-#endif
-    }
+    SAL_WARN_IF( !pOutDev, "starmath", "!! SmDocShell::ArrangeFormula: reference device missing !!");
 
     // if necessary get another OutputDevice for which we format
     if (!pOutDev)

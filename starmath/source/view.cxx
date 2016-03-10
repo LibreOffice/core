@@ -143,9 +143,6 @@ void SmGraphicWindow::ApplyColorConfigValues(const svtools::ColorConfig &rColorC
 {
     // Note: SetTextColor not necessary since the nodes that
     // get painted have the color information.
-#if OSL_DEBUG_LEVEL > 1
-//   ColorData nVal = rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor;
-#endif
     SetBackground(Color(static_cast<ColorData>(rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor)));
 }
 
@@ -667,13 +664,6 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
-SmEditController::~SmEditController()
-{
-}
-#endif
-
-
 void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     const SfxStringItem *pItem =  dynamic_cast<const SfxStringItem*>( pState);
@@ -878,11 +868,6 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
     static_cast<SfxDockingWindow *>(GetWindow())->Initialize(pInfo);
 }
 
-#if OSL_DEBUG_LEVEL > 1
-SmCmdBoxWrapper::~SmCmdBoxWrapper()
-{
-}
-#endif
 
 struct SmViewShell_Impl
 {

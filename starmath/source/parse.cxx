@@ -311,8 +311,6 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
-
 static const sal_Unicode aDelimiterTable[] =
 {
     ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
@@ -345,8 +343,6 @@ bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
 
     return bIsDelim;
 }
-
-#endif
 
 void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
 {
@@ -470,10 +466,7 @@ void SmParser::NextToken()
         m_aCurToken.nLevel     = 5;
         m_aCurToken.aText      = m_aBufferString.copy( nRealStart, n );
 
-#if OSL_DEBUG_LEVEL > 1
-        if (!IsDelimiter( m_aBufferString, aRes.EndPos ))
-            SAL_WARN( "starmath", "identifier really finished? (compatibility!)" );
-#endif
+        SAL_WARN_IF( !IsDelimiter( m_aBufferString, aRes.EndPos ), "starmath", "identifier really finished? (compatibility!)" );
     }
     else if (aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING)
     {
@@ -508,9 +501,8 @@ void SmParser::NextToken()
             m_aCurToken.nLevel     = 5;
             m_aCurToken.aText      = aName;
 
-#if OSL_DEBUG_LEVEL > 1
-            if (!IsDelimiter( m_aBufferString, aRes.EndPos ))
-                SAL_WARN( "starmath", "identifier really finished? (compatibility!)" );
+#if OSL_DEBUG_LEVEL > 0
+            SAL_WARN_IF(!IsDelimiter(m_aBufferString, aRes.EndPos),"starmath", "identifier really finished? (compatibility!)");
 #endif
         }
     }
