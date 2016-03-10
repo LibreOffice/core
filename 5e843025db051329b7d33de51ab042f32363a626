@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_07791630",
+        "filename": "starmath/inc/view.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-10T07:23:20Z",
+      "side": 1,
+      "message": "these #if\u0027ed virtual dtors look very odd (esp. as they are defined as empty); probably better to just remove them",
+      "revId": "5e843025db051329b7d33de51ab042f32363a626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_67761240",
+        "filename": "starmath/source/dialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-10T07:23:20Z",
+      "side": 1,
+      "message": "what\u0027s the benefit of this code, doing a dead assignment to cChar?  wouldn\u0027t it be better to just remove it?",
+      "revId": "5e843025db051329b7d33de51ab042f32363a626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_277c1a20",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-10T07:23:20Z",
+      "side": 1,
+      "message": "can even turn this into a SAL_WARN_IF now",
+      "revId": "5e843025db051329b7d33de51ab042f32363a626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c786de12",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-10T07:23:20Z",
+      "side": 1,
+      "message": "you can turn the below nEnd+OSL_ENSURE into a single SAL_WARN_IF, removing the need for both #if around it",
+      "revId": "5e843025db051329b7d33de51ab042f32363a626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_e78162fd",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-10T07:23:20Z",
+      "side": 1,
+      "message": "you can drop the #if\u0027s around these SAL_WARN_IF\u0027s now (also then requiring IsDelimiter to be visible unconditionally, of course)",
+      "revId": "5e843025db051329b7d33de51ab042f32363a626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
