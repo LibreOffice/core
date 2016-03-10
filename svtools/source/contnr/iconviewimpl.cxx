@@ -508,7 +508,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            if ( !pNewCursor && pCursor )
+            if (!pNewCursor)
                 pNewCursor = pCursor;
 
             if( pNewCursor )
