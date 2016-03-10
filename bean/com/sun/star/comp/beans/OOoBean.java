@@ -520,7 +520,7 @@ public class OOoBean
         @throws java.io.IOException
             if an IO error occurs reading the resource specified by the URL.
 
-        @throws com.sun.star.lang.NoConnectionException
+        @throws com.sun.star.comp.beans.NoConnectionException
             if no connection can be established.
 
         @throws com.sun.star.util.CloseVetoException
@@ -797,7 +797,7 @@ public class OOoBean
         @throws java.io.IOException
             if an IO error occurs reading the resource specified by the URL.
 
-        @throws com.sun.star.lang.NoConnectionException
+        @throws com.sun.star.comp.beans.NoConnectionException
             if no connection is established.
 
         @throws NoDocumentException
