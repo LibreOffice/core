@@ -52,6 +52,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--without-librtmp --disable-ldaps --disable-tftp --disable-pop3 \
 			--disable-imap --disable-smtp --disable-manual --without-metalink \
 			--without-nghttp2 \
+			$(if $(filter LINUX,$(OS)),--without-ca-bundle --without-ca-path) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
