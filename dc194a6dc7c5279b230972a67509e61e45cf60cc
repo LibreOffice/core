@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_47c5ce59",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-10T06:55:35Z",
+      "side": 1,
+      "message": "This should be in the constructor as it initializes msEffectName.",
+      "revId": "dc194a6dc7c5279b230972a67509e61e45cf60cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a7a00aa7",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-10T06:55:35Z",
+      "side": 1,
+      "message": "Instead of manually concatenating strings, please define your string like \"Emphasis: %1\" and use OUString::replaceFirst() to replace the \"%1\" with the preset name",
+      "revId": "dc194a6dc7c5279b230972a67509e61e45cf60cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
