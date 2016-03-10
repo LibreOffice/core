@@ -658,8 +658,7 @@ OfficeIPCThread::OfficeIPCThread() :
     Thread( "OfficeIPCThread" ),
     mbDowning( false ),
     mbRequestsEnabled( false ),
-    mnPendingRequests( 0 ),
-    mpDispatchWatcher( nullptr )
+    mnPendingRequests( 0 )
 {
 }
 
@@ -667,8 +666,7 @@ OfficeIPCThread::~OfficeIPCThread()
 {
     ::osl::ClearableMutexGuard  aGuard( GetMutex() );
 
-    if ( mpDispatchWatcher )
-        mpDispatchWatcher->release();
+    mpDispatchWatcher.clear();
     maPipe.close();
     pGlobalOfficeIPCThread.clear();
 }
@@ -1079,10 +1077,9 @@ bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
             return bShutdown;
 
         pGlobalOfficeIPCThread->mnPendingRequests += aDispatchList.size();
-        if ( !pGlobalOfficeIPCThread->mpDispatchWatcher )
+        if ( !pGlobalOfficeIPCThread->mpDispatchWatcher.is() )
         {
             pGlobalOfficeIPCThread->mpDispatchWatcher = DispatchWatcher::GetDispatchWatcher();
-            pGlobalOfficeIPCThread->mpDispatchWatcher->acquire();
         }
 
         // copy for execute

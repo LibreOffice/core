@@ -85,7 +85,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // Access function to get a dispatcher watcher reference. There must be a global reference holder
-        static DispatchWatcher* GetDispatchWatcher();
+        static rtl::Reference<DispatchWatcher> GetDispatchWatcher();
 
         // execute new dispatch request
         bool executeDispatchRequests( const DispatchList& aDispatches, bool bNoTerminate = false );

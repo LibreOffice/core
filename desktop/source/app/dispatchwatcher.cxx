@@ -182,10 +182,9 @@ Mutex& DispatchWatcher::GetMutex()
 
 // Create or get the dispatch watcher implementation. This implementation must be
 // a singleton to prevent access to the framework after it wants to terminate.
-DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
+rtl::Reference<DispatchWatcher> DispatchWatcher::GetDispatchWatcher()
 {
-    static Reference< XInterface > xDispatchWatcher;
-    static DispatchWatcher*        pDispatchWatcher = nullptr;
+    static rtl::Reference<DispatchWatcher> xDispatchWatcher;
 
     if ( !xDispatchWatcher.is() )
     {
@@ -193,14 +192,11 @@ DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 
         if ( !xDispatchWatcher.is() )
         {
-            pDispatchWatcher = new DispatchWatcher();
-
-            // We have to hold a reference to ourself forever to prevent our own destruction.
-            xDispatchWatcher = static_cast< cppu::OWeakObject *>( pDispatchWatcher );
+            xDispatchWatcher = new DispatchWatcher();
         }
     }
 
-    return pDispatchWatcher;
+    return xDispatchWatcher;
 }
 
 
@@ -378,7 +374,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                     aArgs2[0].Value <<= sal_True;
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
-                        xDisp->dispatchWithNotification( aURL, aArgs2, DispatchWatcher::GetDispatchWatcher() );
+                        xDisp->dispatchWithNotification( aURL, aArgs2, DispatchWatcher::GetDispatchWatcher().get() );
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }

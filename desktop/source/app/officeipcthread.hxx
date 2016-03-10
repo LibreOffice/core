@@ -76,7 +76,7 @@ class OfficeIPCThread : public salhelper::Thread
     bool                        mbDowning;
     bool                        mbRequestsEnabled;
     int                         mnPendingRequests;
-    DispatchWatcher*            mpDispatchWatcher;
+    rtl::Reference<DispatchWatcher> mpDispatchWatcher;
 
     /* condition to be set when the request has been processed */
     ::osl::Condition cProcessed;
