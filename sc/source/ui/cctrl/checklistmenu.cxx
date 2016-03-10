@@ -916,6 +916,7 @@ ScCheckListMenuWindow::~ScCheckListMenuWindow()
 
 void ScCheckListMenuWindow::dispose()
 {
+    maTabStops.clear();
     maEdSearch.disposeAndClear();
     maChecks.disposeAndClear();
     maChkToggleAll.disposeAndClear();
@@ -923,7 +924,6 @@ void ScCheckListMenuWindow::dispose()
     maBtnUnselectSingle.disposeAndClear();
     maBtnOk.disposeAndClear();
     maBtnCancel.disposeAndClear();
-    maTabStops.clear();
     ScMenuFloatingWindow::dispose();
 }
 

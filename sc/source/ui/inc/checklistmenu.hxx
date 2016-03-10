@@ -192,13 +192,22 @@ private:
 
 class ScCheckListMenuWindow;
 
+template <class T> struct VclPtr_hash;
+template <> struct VclPtr_hash< VclPtr<vcl::Window> >
+{
+    size_t operator()( const VclPtr<vcl::Window>& r ) const
+    {
+        return reinterpret_cast<size_t>(r.get());
+    }
+};
+
 class ScTabStops
 {
 private:
-    typedef std::unordered_map<vcl::Window*, size_t> ControlToPosMap;
-    ScCheckListMenuWindow* mpMenuWindow;
+    typedef std::unordered_map< VclPtr<vcl::Window>, size_t, VclPtr_hash<VclPtr<vcl::Window>> > ControlToPosMap;
+    VclPtr<ScCheckListMenuWindow> mpMenuWindow;
     ControlToPosMap maControlToPos;
-    std::vector<vcl::Window*> maControls;
+    std::vector<VclPtr<vcl::Window>> maControls;
     size_t mnCurTabStop;
 public:
     ScTabStops( ScCheckListMenuWindow* mpMenuWin );
