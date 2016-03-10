@@ -78,6 +78,7 @@ void PreviewValueSet::Rearrange (bool /*bForceRequestResize*/)
         GetOutputSizePixel().Width()));
     sal_uInt16 nNewRowCount (CalculateRowCount (nNewColumnCount));
 
+    SetFormat();
     SetColCount(nNewColumnCount);
     SetLineCount(nNewRowCount);
 }
