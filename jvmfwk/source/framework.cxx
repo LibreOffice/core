@@ -624,13 +624,13 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     return errcode;
 }
 
-sal_Bool SAL_CALL jfw_areEqualJavaInfo(
+bool SAL_CALL jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 {
     if (pInfoA == pInfoB)
-        return sal_True;
+        return true;
     if (pInfoA == nullptr || pInfoB == nullptr)
-        return sal_False;
+        return false;
     OUString sVendor(pInfoA->sVendor);
     OUString sLocation(pInfoA->sLocation);
     OUString sVersion(pInfoA->sVersion);
@@ -642,9 +642,9 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
         && pInfoA->nRequirements == pInfoB->nRequirements
         && sData == pInfoB->arVendorData)
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -827,7 +827,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     }
     return errcode;
 }
-javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
+javaFrameworkError SAL_CALL jfw_setEnabled(bool bEnabled)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try

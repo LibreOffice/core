@@ -27,8 +27,6 @@
 #include <osl/mutex.h>
 #include "jni.h"
 
-extern "C" {
-
 /** @file
     <p>This library can operate in two modes, application mode and direct mode.</p>
 
@@ -285,10 +283,10 @@ JVMFWK_DLLPUBLIC void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
    @param pInfoB
    the second argument which is compared with the first.
    @return
-   sal_True - both object represent the same JRE.</br>
-   sal_False - the objects represend different JREs
+   true - both object represent the same JRE.</br>
+   false - the objects represend different JREs
  */
-JVMFWK_DLLPUBLIC sal_Bool SAL_CALL jfw_areEqualJavaInfo(
+JVMFWK_DLLPUBLIC bool SAL_CALL jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB);
 
 /** determines if a Java Virtual Machine is already running.
@@ -573,7 +571,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInf
 
 /** determines if Java can be used.
 
-   <p>If <code>bEnabled</code> is <code>sal_False</code> then a call
+   <p>If <code>bEnabled</code> is <code>false</code> then a call
    to jfw_startVM will result in an error with the errorcode
    <code>JFW_E_JAVA_DISABLED</code></p>
 
@@ -587,7 +585,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInf
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setEnabled(bool bEnabled);
 
 /** provides the information if Java can be used.
 
@@ -765,8 +763,6 @@ JVMFWK_DLLPUBLIC void SAL_CALL jfw_lock();
     threads to use this API concurrently.</p>
 */
 JVMFWK_DLLPUBLIC void SAL_CALL jfw_unlock();
-
-}
 
 #endif
 

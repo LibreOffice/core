@@ -163,7 +163,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             nResult = aQueryBox->Execute();
             if ( nResult == RET_YES )
             {
-                jfw_setEnabled(sal_True);
+                jfw_setEnabled(true);
             }
 
             m_nResult_JavaDisabled = nResult;
