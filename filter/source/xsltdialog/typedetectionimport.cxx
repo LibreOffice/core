@@ -34,19 +34,12 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace std;
 
+static const OUString sNode( "node" );
+static const OUString sName( "oor:name" );
+static const OUString sUIName( "UIName" );
+static const OUString sData( "Data" );
 
 TypeDetectionImporter::TypeDetectionImporter()
-:   sRootNode( "oor:component-data" ),
-    sNode( "node" ),
-    sName( "oor:name" ),
-    sProp( "prop" ),
-    sValue( "value" ),
-    sUIName( "UIName" ),
-    sData( "Data" ),
-    sFilters( "Filters" ),
-    sTypes( "Types" ),
-    sFilterAdaptorService( "com.sun.star.comp.Writer.XmlFilterAdaptor" ),
-    sXSLTFilterService( "com.sun.star.documentconversion.XSLTFilter" )
 {
 }
 
@@ -200,10 +193,10 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     if( pFilter->maFlags == 0 )
         bOk = false;
 
-    if( aFilterService != sFilterAdaptorService )
+    if( aFilterService != "com.sun.star.comp.Writer.XmlFilterAdaptor" )
         bOk = false;
 
-    if( aAdapterService != sXSLTFilterService )
+    if( aAdapterService != "com.sun.star.documentconversion.XSLTFilter" )
         bOk = false;
 
     if( pFilter->maExtension.isEmpty() )
@@ -236,7 +229,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     if( maStack.empty() )
     {
         // #109668# support legacy name as well on import
-        if( aName == sRootNode || aName == "oor:node" )
+        if( aName == "oor:component-data" || aName == "oor:node" )
         {
             eNewState = e_Root;
         }
@@ -247,11 +240,11 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
         {
             OUString aNodeName( xAttribs->getValueByName( sName ) );
 
-            if( aNodeName == sFilters )
+            if( aNodeName == "Filters" )
             {
                 eNewState = e_Filters;
             }
-            else if( aNodeName == sTypes )
+            else if( aNodeName == "Types" )
             {
                 eNewState = e_Types;
             }
@@ -268,7 +261,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     }
     else if( (maStack.top() == e_Filter) || (maStack.top() == e_Type))
     {
-        if( aName == sProp )
+        if( aName == "prop" )
         {
             maPropertyName = xAttribs->getValueByName( sName );
             eNewState = e_Property;
@@ -276,7 +269,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     }
     else if( maStack.top() == e_Property )
     {
-        if( aName == sValue )
+        if( aName == "value" )
         {
             eNewState = e_Value;
             maValue.clear();
