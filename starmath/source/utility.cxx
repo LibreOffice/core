@@ -194,22 +194,6 @@ void SmFontPickListBox::Insert(const vcl::Font &rFont)
 }
 
 
-void SmFontPickListBox::Update(const vcl::Font &rFont, const vcl::Font &rNewFont)
-{
-    SmFontPickList::Update(rFont, rNewFont);
-
-    return;
-}
-
-
-void SmFontPickListBox::Remove(const vcl::Font &rFont)
-{
-    SmFontPickList::Remove(rFont);
-
-    return;
-}
-
-
 bool IsItalic( const vcl::Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
