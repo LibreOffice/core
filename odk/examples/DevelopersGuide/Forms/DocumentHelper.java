@@ -223,7 +223,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** retrieves a com.sun.star.drawing.DrawPage of the document, denoted by index
      *  @param index
-     *      the index of the draw page<br/>
+     *      the index of the draw page<br>
      *  @throws
      *      com.sun.star.lang.IndexOutOfBoundsException
      *      com.sun.star.lang.WrappedTargetException
