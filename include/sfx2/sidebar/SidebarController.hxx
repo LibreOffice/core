@@ -151,8 +151,8 @@ public:
     void SwitchToDeck ( const ::rtl::OUString& rsDeckId);
     void SwitchToDefaultDeck();
 
-    void CreateDeck(const ::rtl::OUString& rDeckId, bool bForceCreate = false);
-    void CreatePanels(const ::rtl::OUString& rDeckId);
+    void CreateDeck(const ::rtl::OUString& rDeckId);
+    void CreateDeck(const ::rtl::OUString& rDeckId, const Context& rContext, bool bForceCreate = false);
 
     ResourceManager::DeckContextDescriptorContainer GetMatchingDecks();
     ResourceManager::PanelContextDescriptorContainer GetMatchingPanels( const ::rtl::OUString& rDeckId);
@@ -220,6 +220,9 @@ private:
         const bool bWantsCanvas,
         const Context& rContext);
 
+    void CreatePanels(
+        const ::rtl::OUString& rDeckId,
+        const Context& rContext);
     VclPtr<Panel> CreatePanel (
         const ::rtl::OUString& rsPanelId,
         vcl::Window* pParentWindow,
@@ -230,6 +233,7 @@ private:
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);
+
     void ShowPopupMenu (
         const Rectangle& rButtonBox,
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
