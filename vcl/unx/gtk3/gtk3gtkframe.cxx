@@ -1221,8 +1221,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         m_pParent->m_aChildren.push_back( this );
     }
 
-    InitCommon();
-
     // set window type
     bool bDecoHandling =
         ! isChild() &&
@@ -1252,9 +1250,12 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         }
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
+        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
     }
     else if( (nStyle & SalFrameStyleFlags::FLOAT) )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
+
+    InitCommon();
 
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
@@ -1263,13 +1264,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         ensure_dbus_setup( this );
 #endif
 
-    }
-
-    if( bDecoHandling )
-    {
-        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
-        if( ( (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION)) ) )
-            gtk_window_set_accept_focus(GTK_WINDOW(m_pWindow), false);
     }
 }
 
