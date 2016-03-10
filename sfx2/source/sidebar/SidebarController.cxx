@@ -588,52 +588,66 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
     // Update the panel list.
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
     SharedPanelContainer aNewPanels;
-
-    aNewPanels.resize(nNewPanelCount);
     sal_Int32 nWriteIndex (0);
 
-    for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
-    {
-        const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
-            aPanelContextDescriptors[nReadIndex]);
+    if (nNewPanelCount == 0) {
+        //There are no panels to be displayed.
 
-        // Determine if the panel can be displayed.
-        const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
-        if ( ! bIsPanelVisible)
-            continue;
+        VclPtr<Panel>  aPanel = CreatePanel(
+                                    "EmptyPanel",
+                                    pDeck->GetPanelParentWindow(),
+                                    true,
+                                    maCurrentContext,
+                                    pDeck);
+        aNewPanels.push_back(aPanel);
+        nWriteIndex++;
 
-        Panel *const pPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
-        if (pPanel != nullptr)
+    } else {
+        aNewPanels.resize(nNewPanelCount);
+
+        for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
         {
-            aNewPanels[nWriteIndex] = pPanel;
-            ++nWriteIndex;
-        }
-        else
-        {
-                VclPtr<Panel>  aPanel = CreatePanel(
-                                            rPanelContexDescriptor.msId,
-                                            pDeck->GetPanelParentWindow(),
-                                            rPanelContexDescriptor.mbIsInitiallyVisible,
-                                            maCurrentContext,
-                                            pDeck);
-                if (aPanel.get()!=nullptr )
-                {
-                    aNewPanels[nWriteIndex] = aPanel;
+            const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
+                aPanelContextDescriptors[nReadIndex]);
 
-                    // Depending on the context we have to change the command
-                    // for the "more options" dialog.
-                    PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
-                    if (pTitleBar != nullptr)
+            // Determine if the panel can be displayed.
+            const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
+            if ( ! bIsPanelVisible)
+                continue;
+
+            Panel *const pPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
+            if (pPanel != nullptr)
+            {
+                aNewPanels[nWriteIndex] = pPanel;
+                ++nWriteIndex;
+            }
+            else
+            {
+                    VclPtr<Panel>  aPanel = CreatePanel(
+                                                rPanelContexDescriptor.msId,
+                                                pDeck->GetPanelParentWindow(),
+                                                rPanelContexDescriptor.mbIsInitiallyVisible,
+                                                maCurrentContext,
+                                                pDeck);
+                    if (aPanel.get()!=nullptr )
                     {
-                        pTitleBar->SetMoreOptionsCommand(
-                            rPanelContexDescriptor.msMenuCommand,
-                            mxFrame, xController);
+                        aNewPanels[nWriteIndex] = aPanel;
+
+                        // Depending on the context we have to change the command
+                        // for the "more options" dialog.
+                        PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
+                        if (pTitleBar != nullptr)
+                        {
+                            pTitleBar->SetMoreOptionsCommand(
+                                rPanelContexDescriptor.msMenuCommand,
+                                mxFrame, xController);
+                        }
+                        ++nWriteIndex;
                     }
-                    ++nWriteIndex;
-                 }
 
             }
         }
+    }
 
     // mpCurrentPanels - may miss stuff (?)
     aNewPanels.resize(nWriteIndex);
