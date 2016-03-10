@@ -9,14 +9,14 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,ucb_webdav_local))
+$(eval $(call gb_CppunitTest_CppunitTest,ucb_webdav_local_neon))
 
-$(eval $(call gb_CppunitTest_use_api,ucb_webdav_local, \
+$(eval $(call gb_CppunitTest_use_api,ucb_webdav_local_neon, \
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_local, \
+$(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_local_neon, \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -26,30 +26,30 @@ $(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_local, \
 	ucbhelper \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_local, \
+$(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_local_neon, \
 	ucpdav1 \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,ucb_webdav_local,\
+$(eval $(call gb_CppunitTest_use_externals,ucb_webdav_local_neon,\
 	boost_headers \
 	libxml2 \
 	neon \
 	openssl \
 ))
 
-$(eval $(call gb_CppunitTest_use_custom_headers,ucb_webdav_local,\
+$(eval $(call gb_CppunitTest_use_custom_headers,ucb_webdav_local_neon,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,ucb_webdav_local, \
+$(eval $(call gb_CppunitTest_add_exception_objects,ucb_webdav_local_neon, \
     ucb/qa/cppunit/webdav/webdav_local_neon \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,ucb_webdav_local,\
+$(eval $(call gb_CppunitTest_set_include,ucb_webdav_local_neon,\
     $$(INCLUDE) \
     -I$(SRCDIR)/ucb/source/ucp/webdav-neon \
 ))
 
-$(eval $(call gb_CppunitTest_use_static_libraries,ucb_webdav_local))
+$(eval $(call gb_CppunitTest_use_static_libraries,ucb_webdav_local_neon))
 
 # vim: set noet sw=4 ts=4:
