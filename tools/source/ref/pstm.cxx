@@ -70,33 +70,16 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, Ind
 
 SvPersistStream::~SvPersistStream()
 {
-    SetStream( nullptr );
+    ClearStream();
 }
 
-/**
-
-    @param pStream    This stream is used as the medium for PersistStream
-
-    @warning pStream is used as the medium for PersistStream.
-             It must not be manipulated while used in SvPersistStream.
-             An Exception to this is pvStream (cf. <SvPersistStream::SetStream>).
-*/
-void SvPersistStream::SetStream( SvStream * pStream )
+void SvPersistStream::ClearStream()
 {
-    if( pStm != pStream )
+    if( pStm != nullptr )
     {
-        if( pStm )
-        {
-            SyncSysStream();
-            pStm->SetError( GetError() );
-        }
-        pStm = pStream;
-    }
-    if( pStm )
-    {
-        SetVersion( pStm->GetVersion() );
-        SetError( pStm->GetError() );
-        SyncSvStream( pStm->Tell() );
+        SyncSysStream();
+        pStm->SetError( GetError() );
+        pStm = nullptr;
     }
 }
 

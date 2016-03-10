@@ -731,10 +731,9 @@ public:
 
     inline bool HasParam() const { return m_aQuery.isPresent(); }
 
-    inline OUString GetParam(DecodeMechanism eMechanism = DECODE_TO_IURI,
-                              rtl_TextEncoding eCharset
+    inline OUString GetParam(rtl_TextEncoding eCharset
                                   = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aQuery, eMechanism, eCharset); }
+    { return decode(m_aQuery, NO_DECODE, eCharset); }
 
     inline bool SetParam(OUString const & rTheQuery,
                          EncodeMechanism eMechanism = WAS_ENCODED,
@@ -800,8 +799,7 @@ public:
 
     // POP3 and URLs:
 
-    static OUString GetMsgId(DecodeMechanism eMechanism = DECODE_TO_IURI,
-                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+    static OUString GetMsgId(rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     // Coding:
 

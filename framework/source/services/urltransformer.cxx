@@ -107,8 +107,8 @@ namespace
             _rURL.Name      = _rParser.GetName  (                                    );
         }
 
-        _rURL.Arguments  = _rParser.GetParam  ( INetURLObject::NO_DECODE           );
-        _rURL.Mark      = _rParser.GetMark  ( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Arguments  = _rParser.GetParam();
+        _rURL.Mark      = _rParser.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
         // INetURLObject supports only an intelligent method of parsing URL's. So write
         // back Complete to have a valid encoded URL in all cases!

@@ -158,7 +158,7 @@ public:
                                          Index nStartIdx = 1 );
                         virtual ~SvPersistStream();
 
-    void                SetStream( SvStream * pStream );
+    void                ClearStream();
 
     SvPersistBase *     GetObject( Index nIdx ) const;
     Index               GetIndex( SvPersistBase * ) const;

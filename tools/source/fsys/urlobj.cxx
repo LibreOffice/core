@@ -3656,8 +3656,8 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
             rObject.GetHost(NO_DECODE))
         || GetPort() != rObject.GetPort()
         || HasParam() != rObject.HasParam()
-        || GetParam(NO_DECODE) != rObject.GetParam(NO_DECODE)
-        || GetMsgId(NO_DECODE) != INetURLObject::GetMsgId(NO_DECODE))
+        || GetParam() != rObject.GetParam()
+        || GetMsgId() != INetURLObject::GetMsgId(NO_DECODE))
         return false;
     OUString aPath1(GetURLPath(NO_DECODE));
     OUString aPath2(rObject.GetURLPath(NO_DECODE));
@@ -4528,8 +4528,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
     }
 }
 
-OUString INetURLObject::GetMsgId(DecodeMechanism,
-                                 rtl_TextEncoding)
+OUString INetURLObject::GetMsgId(rtl_TextEncoding)
 {
     return OUString();
 }
