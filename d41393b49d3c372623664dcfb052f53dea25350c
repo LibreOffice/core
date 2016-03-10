@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_6720d2f8",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-10T10:50:50Z",
+      "side": 1,
+      "message": "Maybe you can add some stock icons to those buttons and see how it looks (go back, go forward, previous, next or sth along that line) and see how that\u0027ll look",
+      "revId": "d41393b49d3c372623664dcfb052f53dea25350c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a7780afa",
+        "filename": "sw/source/uibase/uiview/viewsrch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-10T10:50:50Z",
+      "side": 1,
+      "message": "Please try to revert this part of the patch and see if you still get a crash (because I don\u0027t anymore). Include it only if you still do",
+      "revId": "d41393b49d3c372623664dcfb052f53dea25350c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_877d06ea",
+        "filename": "sw/source/uibase/uiview/viewsrch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-10T10:50:50Z",
+      "side": 1,
+      "message": "and the same here of course",
+      "revId": "d41393b49d3c372623664dcfb052f53dea25350c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

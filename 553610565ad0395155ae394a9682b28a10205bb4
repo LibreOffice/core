@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_471dcebc",
+        "filename": "svx/source/dialog/srchdlg.src",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-10T10:50:50Z",
+      "side": 0,
+      "message": "Are those strings really no longer needed? What happens if I\u0027m now on the last word matching the pattern and click \u0027find next\u0027? Does the search silently continue from the beginning? \n\nI would keep those strings (and even extend them, \u0027reached the end of the document, continuing from the top\u0027), ~all decent text editors have such notifications and this (some label in a dialog appearing) is a very mild form of it. \n\nSome not so decent text editors have the user close a pop-up dialog when the end of the search space is reached.",
+      "revId": "553610565ad0395155ae394a9682b28a10205bb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
