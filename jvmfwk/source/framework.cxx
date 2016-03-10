@@ -631,13 +631,10 @@ bool SAL_CALL jfw_areEqualJavaInfo(
         return true;
     if (pInfoA == nullptr || pInfoB == nullptr)
         return false;
-    OUString sVendor(pInfoA->sVendor);
-    OUString sLocation(pInfoA->sLocation);
-    OUString sVersion(pInfoA->sVersion);
     rtl::ByteSequence sData(pInfoA->arVendorData);
-    if (sVendor.equals(pInfoB->sVendor)
-        && sLocation.equals(pInfoB->sLocation)
-        && sVersion.equals(pInfoB->sVersion)
+    if (pInfoA->sVendor == pInfoB->sVendor
+        && pInfoA->sLocation == pInfoB->sLocation
+        && pInfoA->sVersion == pInfoB->sVersion
         && pInfoA->nFeatures == pInfoB->nFeatures
         && pInfoA->nRequirements == pInfoB->nRequirements
         && sData == pInfoB->arVendorData)
@@ -652,9 +649,6 @@ void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo)
 {
     if (pInfo == nullptr)
         return;
-    rtl_uString_release(pInfo->sVendor);
-    rtl_uString_release(pInfo->sLocation);
-    rtl_uString_release(pInfo->sVersion);
     rtl_byte_sequence_release(pInfo->arVendorData);
     delete pInfo;
 }
@@ -1083,12 +1077,8 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
     if (pInfo == nullptr)
         return nullptr;
-    JavaInfo* newInfo = new JavaInfo;
-    memcpy(newInfo, pInfo, sizeof(JavaInfo));
-    rtl_uString_acquire(pInfo->sVendor);
-    rtl_uString_acquire(pInfo->sLocation);
-    rtl_uString_acquire(pInfo->sVersion);
-    rtl_byte_sequence_acquire(pInfo->arVendorData);
+    JavaInfo* newInfo = new JavaInfo(*pInfo);
+    rtl_byte_sequence_acquire(newInfo->arVendorData);
     return newInfo;
 }
 

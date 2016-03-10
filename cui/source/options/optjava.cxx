@@ -594,7 +594,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
         if ( !bFound )
         {
-            jfw_addJRELocation( pInfo->sLocation );
+            jfw_addJRELocation( pInfo->sLocation.pData );
             AddJRE( pInfo );
             m_aAddedInfos.push_back( pInfo );
             nPos = m_pJavaList->GetEntryCount() - 1;
