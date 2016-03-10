@@ -24,6 +24,7 @@
 
 #include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 #include <osl/mutex.h>
 #include "jni.h"
 
@@ -219,10 +220,10 @@ struct JavaInfo
         Java system property <code>java.vendor</code>.
         </p>
      */
-    rtl_uString *sVendor;
+    OUString sVendor;
     /** contains the file URL to the installation directory.
     */
-    rtl_uString *sLocation;
+    OUString sLocation;
     /** contains the version of this Java distribution.
 
         <p>The version string  must adhere to the rules
@@ -231,7 +232,7 @@ struct JavaInfo
         equal the Java system property <code>java.version</code>.
         </p>
     */
-    rtl_uString *sVersion;
+    OUString sVersion;
     /** indicates supported special features.
 
         <p>For example, <code>JFW_FEATURE_ACCESSBRIDGE</code> indicates that
@@ -268,9 +269,8 @@ JVMFWK_DLLPUBLIC void jfw_freeJavaInfo(JavaInfo *pInfo);
    <p>Two <code>JavaInfo</code> objects are said to be equal if the contained
    members of the first <code>JavaInfo</code> are equal to their counterparts
    in the second <code>JavaInfo</code> object. The equality of the
-   <code>rtl_uString</code> members is determined
-   by the respective comparison function (see
-   <code>OUString::equals</code>).
+   <code>OUString</code> members is determined
+   by <code>operator ==</code>.
    Similarly the equality of the <code>sal_Sequence</code> is
    also determined by a comparison
    function (see <code>rtl::ByteSequence::operator ==</code>). </p>

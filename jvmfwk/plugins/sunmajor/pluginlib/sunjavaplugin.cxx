@@ -147,15 +147,9 @@ OString getPluginJarPath(
 JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
 {
     JavaInfo* pInfo = new JavaInfo;
-    OUString sVendor = info->getVendor();
-    pInfo->sVendor = sVendor.pData;
-    rtl_uString_acquire(sVendor.pData);
-    OUString sHome = info->getHome();
-    pInfo->sLocation = sHome.pData;
-    rtl_uString_acquire(pInfo->sLocation);
-    OUString sVersion = info->getVersion();
-    pInfo->sVersion = sVersion.pData;
-    rtl_uString_acquire(pInfo->sVersion);
+    pInfo->sVendor = info->getVendor();
+    pInfo->sLocation = info->getHome();
+    pInfo->sVersion = info->getVersion();
     pInfo->nFeatures = info->supportsAccessibility() ? 1 : 0;
     pInfo->nRequirements = info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0;
     OUStringBuffer buf(1024);
@@ -692,7 +686,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #if defined UNX && !defined MACOSX
     //Setting the JAVA_HOME is needed for awt
     OUString sPathLocation;
-    osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
+    osl::FileBase::getSystemPathFromFileURL(pInfo->sLocation, sPathLocation);
     osl_setEnvironment(OUString("JAVA_HOME").pData, sPathLocation.pData);
 #endif
 
