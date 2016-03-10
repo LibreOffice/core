@@ -374,7 +374,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                     aArgs2[0].Value <<= sal_True;
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
-                        xDisp->dispatchWithNotification( aURL, aArgs2, DispatchWatcher::GetDispatchWatcher().get() );
+                        xDisp->dispatchWithNotification( aURL, aArgs2, this );
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
