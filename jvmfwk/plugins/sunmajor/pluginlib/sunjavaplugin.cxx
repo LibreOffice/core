@@ -162,10 +162,9 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     }
 
     OUString sVendorData = buf.makeStringAndClear();
-    rtl::ByteSequence byteSeq( reinterpret_cast<sal_Int8*>(sVendorData.pData->buffer),
-                               sVendorData.getLength() * sizeof(sal_Unicode));
-    pInfo->arVendorData = byteSeq.get();
-    rtl_byte_sequence_acquire(pInfo->arVendorData);
+    pInfo->arVendorData = rtl::ByteSequence(
+        reinterpret_cast<sal_Int8*>(sVendorData.pData->buffer),
+        sVendorData.getLength() * sizeof(sal_Unicode));
 
     return pInfo;
 }

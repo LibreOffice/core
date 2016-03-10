@@ -630,13 +630,12 @@ bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
         return true;
     if (pInfoA == nullptr || pInfoB == nullptr)
         return false;
-    rtl::ByteSequence sData(pInfoA->arVendorData);
     if (pInfoA->sVendor == pInfoB->sVendor
         && pInfoA->sLocation == pInfoB->sLocation
         && pInfoA->sVersion == pInfoB->sVersion
         && pInfoA->nFeatures == pInfoB->nFeatures
         && pInfoA->nRequirements == pInfoB->nRequirements
-        && sData == pInfoB->arVendorData)
+        && pInfoA->arVendorData == pInfoB->arVendorData)
     {
         return true;
     }
@@ -646,9 +645,6 @@ bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 
 void jfw_freeJavaInfo(JavaInfo *pInfo)
 {
-    if (pInfo == nullptr)
-        return;
-    rtl_byte_sequence_release(pInfo->arVendorData);
     delete pInfo;
 }
 
@@ -1073,11 +1069,7 @@ CJavaInfo::~CJavaInfo()
 
 JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
-    if (pInfo == nullptr)
-        return nullptr;
-    JavaInfo* newInfo = new JavaInfo(*pInfo);
-    rtl_byte_sequence_acquire(newInfo->arVendorData);
-    return newInfo;
+    return pInfo == nullptr ? nullptr : new JavaInfo(*pInfo);
 }
 
 
