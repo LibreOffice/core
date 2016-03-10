@@ -64,7 +64,7 @@ class TestCollaboration : public Collaboration
     virtual void StartCollaboration( TeleConference* ) {}
 };
 
-static gboolean timed_out( void * )
+gboolean timed_out( void * )
 {
     CPPUNIT_ASSERT_MESSAGE( "Test took longer than ten seconds!", false);
 
