@@ -22,6 +22,7 @@
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <vcl/wmf.hxx>
+#include <vcl/layout.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/string.hxx>
 #include <tools/globname.hxx>
@@ -31,6 +32,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <sfx2/classificationhelper.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxresid.hxx>
 #include <oox/mathml/import.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
@@ -744,6 +748,9 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
         break;
     case RTFError::CHAR_OVER:
         SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: characters after last '}'");
+        break;
+    case RTFError::CLASSIFICATION:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: classification prevented paste");
         break;
     }
 }
@@ -5255,6 +5262,39 @@ bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, con
     }) != rProperties.end();
 }
 
+namespace
+{
+
+RTFError lcl_checkClassification(const uno::Reference<document::XDocumentProperties>& xSource, const uno::Reference<document::XDocumentProperties>& xDestination)
+{
+    switch (SfxClassificationHelper::CheckPaste(xSource, xDestination))
+    {
+    case SfxClassificationCheckPasteResult::None:
+    {
+        return RTFError::OK;
+    }
+    break;
+    case SfxClassificationCheckPasteResult::TargetDocNotClassified:
+    {
+        if (!Application::IsHeadlessModeEnabled())
+            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VCL_MESSAGE_INFO)->Execute();
+        return RTFError::CLASSIFICATION;
+    }
+    break;
+    case SfxClassificationCheckPasteResult::DocClassificationTooLow:
+    {
+        if (!Application::IsHeadlessModeEnabled())
+            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VCL_MESSAGE_INFO)->Execute();
+        return RTFError::CLASSIFICATION;
+    }
+    break;
+    }
+
+    return RTFError::OK;
+}
+
+}
+
 RTFError RTFDocumentImpl::popState()
 {
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
@@ -6087,6 +6127,14 @@ RTFError RTFDocumentImpl::popState()
 
         if (m_xDocumentProperties.is())
         {
+            if (!m_bIsNewDoc)
+            {
+                // Check classification.
+                RTFError nError = lcl_checkClassification(xDocumentProperties, m_xDocumentProperties);
+                if (nError != RTFError::OK)
+                    return nError;
+            }
+
             uno::Reference<beans::XPropertyContainer> xClipboardPropertyContainer = xDocumentProperties->getUserDefinedProperties();
             uno::Reference<beans::XPropertyContainer> xDocumentPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
             uno::Reference<beans::XPropertySet> xClipboardPropertySet(xClipboardPropertyContainer, uno::UNO_QUERY);
@@ -6102,7 +6150,11 @@ RTFError RTFDocumentImpl::popState()
                 try
                 {
                     if (lcl_containsProperty(aDocumentProperties, rKey))
-                        xDocumentPropertySet->setPropertyValue(rKey, aValue);
+                    {
+                        // When pasting, don't update existing properties.
+                        if (!m_bIsNewDoc)
+                            xDocumentPropertySet->setPropertyValue(rKey, aValue);
+                    }
                     else
                         xDocumentPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aValue);
                 }

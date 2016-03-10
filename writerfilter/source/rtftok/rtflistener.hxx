@@ -30,7 +30,8 @@ enum class RTFError
     GROUP_OVER,
     UNEXPECTED_EOF,
     HEX_INVALID,
-    CHAR_OVER
+    CHAR_OVER,
+    CLASSIFICATION
 };
 
 /**
