@@ -1196,7 +1196,7 @@ void SdImportTest::testTdf62255()
 
 void SdImportTest::testTdf89927()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf89927.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf89927.pptx"), PPTX);
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
     uno::Reference< text::XTextRange > xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< text::XTextRange > xRun( getRunFromParagraph( 0, xParagraph ) );
