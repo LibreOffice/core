@@ -1983,6 +1983,18 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEn
     rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     return uno::makeAny(xBase->IsHidden());
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+    throw(uno::RuntimeException, std::exception)
+{
+    SfxStyleSheetBase* pBase(GetStyleSheetBase());
+    if(!pBase)
+        return uno::Any();
+    uno::Any aRet;
+    rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    xBase->GetGrabBagItem(aRet);
+    return aRet;
+}
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -2001,11 +2013,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
     }
     else if (FN_UNO_STYLE_INTEROP_GRAB_BAG == rEntry.nWID)
     {
-        if (pBase)
-        {
-            rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
-            xBase->GetGrabBagItem(aRet);
-        }
+        return GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(rEntry, rPropSet, rBase);
     }
     else if(pBase)
     {
