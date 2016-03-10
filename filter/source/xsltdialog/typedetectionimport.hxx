@@ -97,18 +97,6 @@ private:
     OUString maValue;
     OUString maNodeName;
     OUString maPropertyName;
-
-    const OUString sRootNode;
-    const OUString sNode;
-    const OUString sName;
-    const OUString sProp;
-    const OUString sValue;
-    const OUString sUIName;
-    const OUString sData;
-    const OUString sFilters;
-    const OUString sTypes;
-    const OUString sFilterAdaptorService;
-    const OUString sXSLTFilterService;
 };
 #endif
 
