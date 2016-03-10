@@ -846,16 +846,10 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPo
 }
 
 bool SimpleWinLayout::DrawTextImpl(HDC hDC,
-                                   const Rectangle* pRectToErase,
+                                   const Rectangle* /* pRectToErase */,
                                    Point* /* pPos */,
                                    int* /* pGetNextGlypInfo */) const
 {
-    if (pRectToErase)
-    {
-        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left()+pRectToErase->GetWidth(), pRectToErase->Top()+pRectToErase->GetHeight() };
-        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
-    }
-
     if( mnGlyphCount <= 0 )
         return false;
 
@@ -1383,6 +1377,9 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
 
                 // we are making changes to the DC, make sure we got a new one
                 assert(aDC.getCompatibleHDC() != hDC);
+
+                RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(), aRect.Top() + aRect.GetHeight() };
+                FillRect(aDC.getCompatibleHDC(), &aWinRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
 
                 // setup the hidden DC with black color and white background, we will
                 // use the result of the text drawing later as a mask only
@@ -2605,16 +2602,10 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 }
 
 bool UniscribeLayout::DrawTextImpl(HDC hDC,
-                                   const Rectangle* pRectToErase,
+                                   const Rectangle* /* pRectToErase */,
                                    Point* /* pPos */,
                                    int* /* pGetNextGlypInfo */) const
 {
-    if (pRectToErase)
-    {
-        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left()+pRectToErase->GetWidth(), pRectToErase->Top()+pRectToErase->GetHeight() };
-        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
-    }
-
     HFONT hOrigFont = DisableFontScaling();
 
     int nBaseClusterOffset = 0;
@@ -3710,12 +3701,6 @@ bool ExTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
-    if (pRectToErase)
-    {
-        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left() + pRectToErase->GetWidth(), pRectToErase->Top() + pRectToErase->GetHeight() };
-        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
-    }
-
     const int MAX_GLYPHS = 2;
     sal_GlyphId glyphIntStr[MAX_GLYPHS];
     int nGlyphs = 0;
@@ -3768,12 +3753,6 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
-    if (pRectToErase)
-    {
-        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left() + pRectToErase->GetWidth(), pRectToErase->Top() + pRectToErase->GetHeight() };
-        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
-    }
-
     if (!Ready())
         return false;
 
