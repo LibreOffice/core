@@ -656,7 +656,7 @@ void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo)
     rtl_uString_release(pInfo->sLocation);
     rtl_uString_release(pInfo->sVersion);
     rtl_byte_sequence_release(pInfo->arVendorData);
-    rtl_freeMemory(pInfo);
+    delete pInfo;
 }
 
 javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
@@ -1083,16 +1083,12 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
     if (pInfo == nullptr)
         return nullptr;
-    JavaInfo* newInfo =
-          static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
-    if (newInfo)
-    {
-        memcpy(newInfo, pInfo, sizeof(JavaInfo));
-        rtl_uString_acquire(pInfo->sVendor);
-        rtl_uString_acquire(pInfo->sLocation);
-        rtl_uString_acquire(pInfo->sVersion);
-        rtl_byte_sequence_acquire(pInfo->arVendorData);
-    }
+    JavaInfo* newInfo = new JavaInfo;
+    memcpy(newInfo, pInfo, sizeof(JavaInfo));
+    rtl_uString_acquire(pInfo->sVendor);
+    rtl_uString_acquire(pInfo->sLocation);
+    rtl_uString_acquire(pInfo->sVersion);
+    rtl_byte_sequence_acquire(pInfo->arVendorData);
     return newInfo;
 }
 

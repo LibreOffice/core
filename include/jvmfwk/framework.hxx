@@ -206,10 +206,8 @@ typedef enum _javaFrameworkError
 
     <p>
     Instances of this struct are created by the plug-in libraries which are used by
-    this framework (jvmfwk/vendorplugin.h). The memory of the instances is created
-    by <code>rtl_allocateMemory</code> (rtl/alloc.h). Therefore, the memory must
-    be freed by <code>rtl_freeMemory</code>. Also the contained members must be
-    freed particularly.
+    this framework (jvmfwk/vendorplugin.h). The contained members must be
+    freed individually.
     For convenience this API provides the function <code>jfw_freeJavaInfo</code>
     which frees the objects properly. </p>
  */
