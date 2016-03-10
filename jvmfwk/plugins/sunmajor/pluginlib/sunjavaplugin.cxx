@@ -146,9 +146,7 @@ OString getPluginJarPath(
 
 JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
 {
-    JavaInfo* pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
-    if (pInfo == nullptr)
-        return nullptr;
+    JavaInfo* pInfo = new JavaInfo;
     OUString sVendor = info->getVendor();
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(sVendor.pData);

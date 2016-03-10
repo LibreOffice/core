@@ -977,9 +977,7 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 {
     if (bNil || m_bEmptyNode)
         return nullptr;
-    JavaInfo * pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
-    if (pInfo == nullptr)
-        return nullptr;
+    JavaInfo * pInfo = new JavaInfo;
     memset(pInfo, 0, sizeof(JavaInfo));
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(pInfo->sVendor);
