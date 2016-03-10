@@ -657,23 +657,6 @@ JavaVirtualMachine::getSupportedServiceNames()
     return serviceGetSupportedServiceNames();
 }
 
-namespace {
-
-struct JavaInfoGuard: private boost::noncopyable {
-    JavaInfoGuard(): info(nullptr) {}
-
-    ~JavaInfoGuard() { delete info; }
-
-    void clear() {
-        delete info;
-        info = nullptr;
-    }
-
-    JavaInfo * info;
-};
-
-}
-
 css::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     throw (css::uno::RuntimeException, std::exception)
@@ -698,7 +681,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     if (aId != aProcessId)
         return css::uno::Any();
 
-    JavaInfoGuard info;
+    jfw::JavaInfoGuard info;
     while (!m_xVirtualMachine.is()) // retry until successful
     {
         // This is the second attempt to create Java.  m_bDontCreateJvm is
@@ -816,14 +799,14 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //we search another one. As long as there is a javaldx, we should
             //never come into this situation. javaldx checks always if the JRE
             //still exist.
-            JavaInfo * pJavaInfo = nullptr;
-            if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo))
+            jfw::JavaInfoGuard pJavaInfo;
+            if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo.info))
             {
                 sal_Bool bExist = sal_False;
-                if (JFW_E_NONE == jfw_existJRE(pJavaInfo, &bExist))
+                if (JFW_E_NONE == jfw_existJRE(pJavaInfo.info, &bExist))
                 {
                     if (!bExist
-                        && ! (pJavaInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
+                        && ! (pJavaInfo.info->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     {
                         info.clear();
                         javaFrameworkError errFind = jfw_findAndSelectJRE(
@@ -835,8 +818,6 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                     }
                 }
             }
-
-            delete pJavaInfo;
 
             //Error: %PRODUCTNAME requires a Java
             //runtime environment (JRE) to perform this task. The selected JRE

@@ -255,6 +255,26 @@ struct JavaInfo
     rtl::ByteSequence arVendorData;
 };
 
+namespace jfw {
+
+struct JavaInfoGuard {
+    JavaInfoGuard(JavaInfoGuard &) = delete;
+    void operator =(JavaInfoGuard) = delete;
+
+    JavaInfoGuard(): info(nullptr) {}
+
+    ~JavaInfoGuard() { delete info; }
+
+    void clear() {
+        delete info;
+        info = nullptr;
+    }
+
+    JavaInfo * info;
+};
+
+}
+
 /** compares two <code>JavaInfo</code> objects for equality.
 
    <p>Two <code>JavaInfo</code> objects are said to be equal if the contained

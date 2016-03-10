@@ -64,8 +64,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        JavaInfo * pInfo = nullptr;
-        errcode = jfw_getSelectedJRE( & pInfo);
+        jfw::JavaInfoGuard pInfo;
+        errcode = jfw_getSelectedJRE(&pInfo.info);
 
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
         {
@@ -73,19 +73,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        if (pInfo == nullptr)
+        if (pInfo.info == nullptr)
         {
-            if (!findAndSelect(&pInfo))
+            if (!findAndSelect(&pInfo.info))
                 return -1;
         }
         else
         {
             //check if the JRE was not uninstalled
             sal_Bool bExist = sal_False;
-            errcode = jfw_existJRE(pInfo, &bExist);
+            errcode = jfw_existJRE(pInfo.info, &bExist);
             if (errcode == JFW_E_NONE)
             {
-                if (!bExist && !findAndSelect(&pInfo))
+                if (!bExist && !findAndSelect(&pInfo.info))
                     return -1;
             }
             else
@@ -95,9 +95,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
         }
 
-        OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
+        OString sPaths = getLD_LIBRARY_PATH(pInfo.info->arVendorData);
         fprintf(stdout, "%s\n", sPaths.getStr());
-        delete pInfo;
     }
     catch (const std::exception&)
     {
