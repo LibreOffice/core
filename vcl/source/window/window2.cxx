@@ -326,6 +326,12 @@ void Window::StartTracking( StartTrackingFlags nFlags )
     pSVData->maWinData.mpTrackWin   = this;
     pSVData->maWinData.mnTrackFlags = nFlags;
     CaptureMouse();
+
+    if (nFlags & StartTrackingFlags::UseToolKitDrag)
+    {
+        SalFrame* pFrame = mpWindowImpl->mpFrame;
+        pFrame->StartToolKitMoveBy();
+    }
 }
 
 void Window::EndTracking( TrackingEventFlags nFlags )

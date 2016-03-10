@@ -157,11 +157,10 @@ enum class PosSizeFlags
     PosSize          = Pos | Size,
     All              = PosSize,
     Dropdown         = 0x0010,
-    ByDrag           = 0x0020,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<PosSizeFlags> : is_typed_flags<PosSizeFlags, 0x003f> {};
+    template<> struct typed_flags<PosSizeFlags> : is_typed_flags<PosSizeFlags, 0x001f> {};
 }
 
 // Flags for Show()
@@ -297,10 +296,11 @@ enum class StartTrackingFlags
     ButtonRepeat         = 0x0010,
     MouseButtonDown      = 0x0020,
     FocusCancel          = 0x0040,
+    UseToolKitDrag       = 0x0080,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x007f> {};
+    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x00ff> {};
 }
 
 // Flags for StartAutoScroll()

@@ -2767,8 +2767,6 @@ void Window::setPosSizePixel( long nX, long nY,
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
         if( nFlags & PosSizeFlags::Height )
             nSysFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        if( nFlags & PosSizeFlags::ByDrag )
-            nSysFlags |= SAL_FRAME_POSSIZE_BYDRAG;
         if( nFlags & PosSizeFlags::X )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_X;

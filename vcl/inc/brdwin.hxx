@@ -175,8 +175,6 @@ public:
 
     Rectangle               GetMenuRect() const;
 
-    void                    MoveToByDrag(const Point& rNewPos);
-
     virtual Size            GetOptimalSize() const override;
 };
 

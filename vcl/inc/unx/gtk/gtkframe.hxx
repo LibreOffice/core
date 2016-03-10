@@ -332,10 +332,7 @@ class GtkSalFrame : public SalFrame
     void widget_set_size_request(long nWidth, long nHeight);
 
     void resizeWindow( long nWidth, long nHeight );
-    void moveWindow(long nX, long nY);
-#if GTK_CHECK_VERSION(3,0,0)
-    void dragWindowTo(long nX, long nY);
-#endif
+    void moveWindow( long nX, long nY );
 
     Size calcDefaultSize();
 
@@ -529,6 +526,8 @@ public:
     virtual sal_uIntPtr         ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
     virtual bool                UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const Rectangle& rHelpArea) override;
     virtual bool                HidePopover(sal_uIntPtr nId) override;
+
+    virtual void                StartToolKitMoveBy() override;
 #endif
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );

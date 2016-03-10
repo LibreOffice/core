@@ -888,23 +888,6 @@ void GtkSalFrame::moveWindow( long nX, long nY )
         gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
 }
 
-void GtkSalFrame::dragWindowTo(long nX, long nY)
-{
-    if (isChild(false))
-        moveWindow(nX, nY);
-    else
-    {
-#if defined(GDK_WINDOWING_WAYLAND)
-        if (GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
-        {
-            gtk_window_begin_move_drag(GTK_WINDOW(m_pWindow), 1, nX, nY, GDK_CURRENT_TIME);
-            return;
-        }
-#endif
-        gtk_window_move(GTK_WINDOW(m_pWindow), nX, nY);
-    }
-}
-
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
@@ -1649,10 +1632,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
         m_bDefaultPos = false;
 
-        if (nFlags & SAL_FRAME_POSSIZE_BYDRAG)
-            dragWindowTo(nX, nY);
-        else
-            moveWindow(nX, nY);
+        moveWindow(nX, nY);
 
         updateScreenNumber();
     }
@@ -2562,6 +2542,26 @@ bool GtkSalFrame::HidePopover(sal_uIntPtr nId)
     (void)nId;
     return false;
 #endif
+}
+
+void GtkSalFrame::StartToolKitMoveBy()
+{
+    GdkEvent *pEvent = gtk_get_current_event();
+    if (!pEvent)
+    {
+        SAL_WARN("vcl.gtk", "no current event for starting window move by wm");
+        return;
+    }
+    if (pEvent->type != GDK_BUTTON_PRESS)
+    {
+        SAL_WARN("vcl.gtk", "current event for starting window move by wm is not a button");
+        return;
+    }
+    gtk_window_begin_move_drag(GTK_WINDOW(m_pWindow),
+                               pEvent->button.button,
+                               pEvent->button.x_root,
+                               pEvent->button.y_root,
+                               pEvent->button.time);
 }
 
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )

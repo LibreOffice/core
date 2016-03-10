@@ -925,7 +925,10 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                 maFrameData.mbDragFull = false;
                 if ( nDragFullTest != DragFullOptions::NONE )
                     maFrameData.mbDragFull = true;   // always fulldrag for proper docking, ignore system settings
-                pBorderWindow->StartTracking();
+                StartTrackingFlags eFlags = maFrameData.mbDragFull ?
+                    StartTrackingFlags::UseToolKitDrag :
+                    StartTrackingFlags::NONE;
+                pBorderWindow->StartTracking(eFlags);
             }
             else if ( bHitTest )
                 maFrameData.mnHitTest = 0;
@@ -1242,7 +1245,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 aPos.Y() += aMousePos.Y();
                 if ( maFrameData.mbDragFull )
                 {
-                    pBorderWindow->MoveToByDrag(aPos);
+                    pBorderWindow->SetPosPixel( aPos );
                     pBorderWindow->ImplUpdateAll();
                     pBorderWindow->ImplGetFrameWindow()->ImplUpdateAll();
                 }
@@ -2201,11 +2204,6 @@ long ImplBorderWindow::CalcTitleWidth() const
 Rectangle ImplBorderWindow::GetMenuRect() const
 {
     return mpBorderView->GetMenuRect();
-}
-
-void ImplBorderWindow::MoveToByDrag(const Point& rNewPos)
-{
-    setPosSizePixel(rNewPos.X(), rNewPos.Y(), 0, 0, PosSizeFlags::Pos | PosSizeFlags::ByDrag);
 }
 
 Size ImplBorderWindow::GetOptimalSize() const
