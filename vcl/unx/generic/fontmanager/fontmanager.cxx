@@ -55,7 +55,7 @@
 #include "parseAFM.hxx"
 #include "sft.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <sys/times.h>
 #include <stdio.h>
 #endif
@@ -398,9 +398,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
         // default is jis
         if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
             m_aEncoding = RTL_TEXTENCODING_JIS_X_0208;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Encoding %d for %s\n", m_aEncoding, pInfo->gfi->fontName );
-#endif
+        SAL_INFO("vcl.fontmanager", "Encoding " << m_aEncoding << " for " << pInfo->gfi->fontName);
     }
 
     // #i37313# check if Fontspecific is not rather some character encoding
@@ -421,12 +419,8 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
         }
         if( bQFound && bYFound )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "setting FontSpecific font %s (file %s) to unicode\n",
-                     pInfo->gfi->fontName,
-                     rFileName.getStr()
-                     );
-            #endif
+            SAL_INFO("vcl.fontmanager", "setting FontSpecific font " << pInfo->gfi->fontName <<
+                    "(file " << rFileName.getStr() << ") to unicode");
             nAdobeEncoding = 4;
             m_aEncoding = RTL_TEXTENCODING_UNICODE;
             bFillEncodingvector = false; // will be filled anyway, don't do the work twice
@@ -835,9 +829,8 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
         int nLength = CountTTCFonts( aFullPath.getStr() );
         if (nLength > 0)
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "ttc: %s contains %d fonts\n", aFullPath.getStr(), nLength );
-#endif
+            SAL_INFO("vcl.fontmanager", "ttc: " << aFullPath.getStr() << " contains " << nLength <<
+                    " fonts");
 
             sal_uInt64 fileSize = 0;
 
@@ -1359,14 +1352,14 @@ void PrintFontManager::initialize()
 
     if( ! m_pFontCache )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         fprintf( stderr, "creating font cache ... " );
         clock_t aStart;
         struct tms tms;
         aStart = times( &tms );
 #endif
         m_pFontCache = new FontCache();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         clock_t aStop = times( &tms );
         fprintf( stderr, "done in %lf s\n", (double)(aStop - aStart)/(double)sysconf( _SC_CLK_TCK ) );
 #endif
@@ -1384,7 +1377,7 @@ void PrintFontManager::initialize()
         m_aPrivateFontDirectories.clear();
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     clock_t aStart;
     clock_t aStep1;
     clock_t aStep2;
@@ -1451,9 +1444,7 @@ void PrintFontManager::initialize()
         std::list< PrintFont* > aCacheFonts;
         if( m_pFontCache->listDirectory( aPath, aCacheFonts ) )
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "adding cache directory: %s\n", aPath.getStr() );
-#endif
+            SAL_INFO("vcl.fontmanager", "adding cache directory: " << aPath.getStr());
             for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
             {
                 fontID aFont = m_nNextFontID++;
@@ -1462,13 +1453,9 @@ void PrintFontManager::initialize()
                     m_aFontFileToFontID[ static_cast<Type1FontFile*>(*it)->m_aFontFile ].insert( aFont );
                 else if( (*it)->m_eType == fonttype::TrueType )
                     m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
-#if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf(stderr, "Un-cached type '%d'\n", (*it)->m_eType);
-#if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "adding cached font %d: %s\n", aFont, getFontFileSysPath( aFont ).getStr() );
-#endif
-#endif
+                    SAL_INFO("vcl.fontmanager", "Un-cached type '" << (*it)->m_eType << "'");
+                SAL_INFO("vcl.fontmanager", "adding cached font " << aFont << ": " << getFontFileSysPath(aFont).getStr());
             }
             if( ! m_pFontCache->scanAdditionalFiles( aPath ) )
                 continue;
@@ -1476,7 +1463,7 @@ void PrintFontManager::initialize()
 
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     aStep1 = times( &tms );
 #endif
 
@@ -1494,12 +1481,12 @@ void PrintFontManager::initialize()
         m_aFamilyTypes[ font_it->second->m_nFamilyName ] = eType;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     aStep2 = times( &tms );
-    fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts\n", m_aFonts.size() );
+    SAL_INFO("vcl.fontmanager", "PrintFontManager::initialize: collected " << m_aFonts.size() << " fonts");
     double fTick = (double)sysconf( _SC_CLK_TCK );
-    fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
-    fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );
+    SAL_INFO("vcl.fontmanager", "Step 1 took " << (double)(aStep1 - aStart)/fTick);
+    SAL_INFO("vcl.fontmanager", "Step 2 took " << (double)(aStep2 - aStep1)/fTick);
 #endif
 
     m_pFontCache->flush();

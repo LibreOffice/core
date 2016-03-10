@@ -106,7 +106,7 @@ void RandRWrapper::releaseWrapper()
 
 #include "unx/saldisp.hxx"
 #include "unx/salframe.h"
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <cstdio>
 #endif
 
@@ -126,10 +126,7 @@ void SalDisplay::DeInitRandR()
     #ifdef USE_RANDR
     if( m_bUseRandRWrapper )
         RandRWrapper::releaseWrapper();
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalDisplay::DeInitRandR()\n" );
-#endif
-    #else
+    SAL_INFO("vcl.app", "SalDistplay::DeInitRandR()");
     (void)this;
     #endif
 }
@@ -168,10 +165,8 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
                     m_aScreens[i].m_aSize = Size( pTargetSize->width, pTargetSize->height );
 
                     pWrapper->XRRFreeScreenConfigInfo( pConfig );
-
-                    #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "screen %d changed to size %dx%d\n", (int)i, (int)pTargetSize->width, (int)pTargetSize->height );
-                    #endif
+                    SAL_WARN("vcl.app", "screen " << i << " changed to size " << pTargetSize->width << "x" <<
+                            pTargetSize->height);
                 }
             }
             if( bNotify )

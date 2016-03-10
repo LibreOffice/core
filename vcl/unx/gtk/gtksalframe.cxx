@@ -68,7 +68,7 @@
 #include <algorithm>
 #include <glib/gprintf.h>
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #  include <cstdio>
 #endif
 
@@ -2012,7 +2012,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         if (bSameMonitor)
             nMonitor = nOldMonitor;
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
         if( nMonitor == nOldMonitor )
             g_warning( "An apparently pointless SetScreen - should we elide it ?" );
     #endif
@@ -3343,12 +3343,11 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
     }
     pThis->m_nState = pEvent->window_state.new_window_state;
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     if( (pEvent->window_state.changed_mask & GDK_WINDOW_STATE_FULLSCREEN) )
     {
-        fprintf( stderr, "window %p %s full screen state\n",
-            pThis,
-            (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? "enters" : "leaves");
+        SAL_INFO("vcl.gtk", "window " << pThis << " " << ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ?
+                   "enters" : "leaves") << " full screen state");
     }
     #endif
 

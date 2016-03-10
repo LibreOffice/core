@@ -31,10 +31,6 @@
 #include <kapplication.h>
 #endif // ENABLE_TDE
 
-#if OSL_DEBUG_LEVEL > 1
-#include <iostream>
-#endif
-
 // CommandEvent
 
 KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringList )
@@ -148,9 +144,7 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
 {
     QMutexLocker qMutexLocker( &m_aMutex );
 
-#if OSL_DEBUG_LEVEL > 1
-    ::std::cerr << "kdefilepicker received: " << rString.latin1() << ::std::endl;
-#endif
+    SAL_INFO("vcl.kde", "kdefilepicker received: " << rString.latin1());
 
     bQuit = false;
     QStringList *pTokens = tokenize( rString );
@@ -165,18 +159,14 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
 
     QString qCommand = pTokens->front();
     pTokens->pop_front();
-#if OSL_DEBUG_LEVEL > 1
-    ::std::cerr << "kdefilepicker first command: " << qCommand.latin1() << ::std::endl;
-#endif
+    SAL_INFO("vcl.kde", "kdefilepicker first command: " << qCommand.latin1());
 
     if ( qCommand == "exit" )
     {
         bQuit = true;
         QApplication::exit();
         kapp->wakeUpGuiThread();
-#if OSL_DEBUG_LEVEL > 1
-        ::std::cerr << "kdefilepicker: exiting" << ::std::endl;
-#endif
+        SAL_INFO("vcl.kde", "kdefilepicker: exiting");
     }
     else
         QApplication::postEvent( m_pObject, new KDECommandEvent( qCommand, pTokens ) );

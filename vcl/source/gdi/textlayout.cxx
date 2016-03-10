@@ -28,7 +28,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
 #endif
 
@@ -182,7 +182,7 @@ namespace vcl
 
         // retrieve the character widths from the reference device
         long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         if ( _pDXAry )
         {
             OStringBuffer aTrace;

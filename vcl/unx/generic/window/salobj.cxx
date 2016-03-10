@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 
@@ -115,11 +115,8 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     }
     else
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "visual id of vcl %x, of visual %x\n",
-                 static_cast<unsigned int> (pSalDisp->GetVisual( nXScreen ).GetVisualId()),
-                 static_cast<unsigned int> (aVisID) );
-        #endif
+        SAL_INFO("vcl.window", "visual id of vcl " << static_cast<unsigned int>(pSalDisp->GetVisual(nXScreen).GetVisualId())
+                << ", of visual " << static_cast<unsigned int>(aVisID));
         GetGenericData()->ErrorTrapPush();
 
         // create colormap for visual - there might not be one

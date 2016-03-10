@@ -52,7 +52,7 @@
 
 #undef SALGDI2_TESTTRANS
 
-#if (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
+#if (OSL_DEBUG_LEVEL > 0) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )                              \
 {                                                                   \
     XCopyArea( pXDisp, _def_drawable, aDrawable, GetCopyGC(),       \
@@ -60,9 +60,9 @@
                rPosAry.mnDestWidth, rPosAry.mnDestHeight,         \
                0, 0 );                                              \
 }
-#else // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
+#else // (OSL_DEBUG_LEVEL > 0) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )
-#endif // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
+#endif // (OSL_DEBUG_LEVEL > 0) && defined SALGDI2_TESTTRANS
 
 #define STATIC_POINTS 64
 

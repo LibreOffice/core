@@ -332,7 +332,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         cairo_set_font_matrix(cr, &m);
         cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
         //draw origin
         cairo_save (cr);
         cairo_rectangle (cr, cairo_glyphs[nStartIndex].x, cairo_glyphs[nStartIndex].y, 5, 5);
