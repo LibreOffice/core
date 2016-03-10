@@ -70,6 +70,7 @@
 #include "unomodel.hxx"
 #include "ViewClipboard.hxx"
 #include <sfx2/ipclient.hxx>
+#include <sfx2/classificationhelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
@@ -355,7 +356,21 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // the work was done; this allows to check multiple formats and not just fail
     // when a CHECK_FORMAT_TRANS(*format*) detected format does not work. This is
     // e.g. necessary for SotClipboardFormatId::BITMAP
-    if( pOwnData && nFormat == SotClipboardFormatId::NONE )
+
+    if (!bReturn && pOwnData)
+    {
+        // Paste only if SfxClassificationHelper recommends so.
+        const SfxObjectShellRef& pSource = pOwnData->GetDocShell();
+        SfxObjectShell* pDestination = mrDoc.GetDocSh();
+        if (pSource && pDestination)
+        {
+            SfxClassificationCheckPasteResult eResult = SfxClassificationHelper::CheckPaste(pSource->getDocProperties(), pDestination->getDocProperties());
+            if (!SfxClassificationHelper::ShowPasteInfo(eResult))
+                bReturn = true;
+        }
+    }
+
+    if( !bReturn && pOwnData && nFormat == SotClipboardFormatId::NONE )
     {
         const View* pSourceView = pOwnData->GetView();
 
