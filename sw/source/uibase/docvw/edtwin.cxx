@@ -1455,13 +1455,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
                 else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
             }
-
-            if ( rSh.IsInRightToLeftText() )
-            {
-                if( KEY_LEFT == nKey ) nKey = KEY_RIGHT;
-                else if( KEY_RIGHT == nKey ) nKey = KEY_LEFT;
-            }
-
             aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
                                   vcl::KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
                                   rKEvt.GetRepeat() );
