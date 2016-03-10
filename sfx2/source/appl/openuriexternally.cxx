@@ -48,7 +48,7 @@ bool sfx2::openUriExternally(
             SfxGetpApp()->GetTopWindow(), SfxResId(STR_NO_ABS_URI_REF));
         eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", uri));
         eb->Execute();
-    } catch (css::system::SystemShellExecuteException &) {
+    } catch (css::system::SystemShellExecuteException & e) {
         if (!handleSystemShellExecuteException) {
             throw;
         }
@@ -56,6 +56,11 @@ bool sfx2::openUriExternally(
         ScopedVclPtrInstance<MessageDialog> eb(
             SfxGetpApp()->GetTopWindow(),
             SfxResId(STR_NO_WEBBROWSER_FOUND));
+        eb->set_primary_text(
+            eb->get_primary_text().replaceFirst("$(ARG1)", uri)
+            .replaceFirst("$(ARG2)", OUString::number(e.PosixError))
+            .replaceFirst("$(ARG3)", e.Message));
+            //TODO: avoid subsequent replaceFirst acting on previous replacement
         eb->Execute();
     }
     return false;

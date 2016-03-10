@@ -60,7 +60,7 @@ String STR_QUERY_LASTVERSION
 
 String STR_NO_WEBBROWSER_FOUND
 {
-    Text [ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Firefox) in the default  location requested during the browser installation." ;
+    Text [ en-US ] = "Opening \"$(ARG1)\" failed with error code $(ARG2) and message: \"$(ARG3)\"\n(Maybe no web browser could be found on your system. In that case, please check your Desktop Preferences or install a web browser (for example, Firefox) in the default location requested during the browser installation.)" ;
 };
 
 String STR_NO_ABS_URI_REF
