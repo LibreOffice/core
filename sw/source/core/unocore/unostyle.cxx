@@ -281,6 +281,10 @@ protected:
                css::lang::WrappedTargetException,
                css::uno::RuntimeException,
                std::exception);
+    SfxStyleSheetBase* GetStyleSheetBase();
+    template<sal_uInt16>
+    uno::Any GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+        throw(uno::RuntimeException, std::exception);
     uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
         throw(uno::RuntimeException, std::exception);
     css::uno::Sequence< css::uno::Any > SAL_CALL GetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
@@ -1944,35 +1948,42 @@ void SwXStyle::setPropertyValues(
         throw aWExc;
     }
 }
-
+SfxStyleSheetBase* SwXStyle::GetStyleSheetBase()
+{
+    if(!m_pBasePool)
+        return nullptr;
+    const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
+    return pBase;
+}
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+    throw(uno::RuntimeException, std::exception)
+{
+    SfxStyleSheetBase* pBase(GetStyleSheetBase());
+    if(!pBase)
+        return uno::makeAny(false);
+    bool bPhys = static_cast<SwDocStyleSheet*>(pBase)->IsPhysical();
+    // The standard character format is not existing physically
+    if( bPhys && SFX_STYLE_FAMILY_CHAR == GetFamily() &&
+        static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat() &&
+        static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat()->IsDefault() )
+        bPhys = false;
+    return uno::makeAny<bool>(bPhys);
+}
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
     SwDoc* pDoc = GetDoc();
     SfxStyleFamily eFamily = GetFamily();
-    SfxStyleSheetBase* pBase = nullptr;
-    if(m_pBasePool)
-    {
-        const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        pBase = m_pBasePool->Find(m_sStyleName);
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
-    }
+    SfxStyleSheetBase* pBase(GetStyleSheetBase());
     uno::Any aRet;
 
     if(FN_UNO_IS_PHYSICAL == rEntry.nWID)
     {
-        bool bPhys = pBase != nullptr;
-        if(pBase)
-        {
-            bPhys = static_cast<SwDocStyleSheet*>(pBase)->IsPhysical();
-            // The standard character format is not existing physically
-            if( bPhys && SFX_STYLE_FAMILY_CHAR == eFamily &&
-                static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat() &&
-                static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat()->IsDefault() )
-                bPhys = false;
-        }
-        aRet <<= bPhys;
+        return GetStyleProperty<FN_UNO_IS_PHYSICAL>(rEntry, rPropSet, rBase);
     }
     else if (FN_UNO_HIDDEN == rEntry.nWID)
     {
