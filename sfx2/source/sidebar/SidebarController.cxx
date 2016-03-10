@@ -544,8 +544,11 @@ void SidebarController::SwitchToDeck (
     }
 }
 
+void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId) {
+    CreateDeck(rDeckId, maCurrentContext);
+}
 
-void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, bool bForceCreate)
+void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, const Context& rContext, bool bForceCreate)
 {
     DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
@@ -563,12 +566,13 @@ void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, bool bForceCr
                             [this]() { return this->RequestCloseDeck(); });
         }
         pDeckDescriptor->mpDeck = aDeck;
-        CreatePanels(rDeckId);
+        CreatePanels(rDeckId, rContext);
     }
 }
 
-void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
+void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId, const Context& rContext)
 {
+
      DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
     // init panels bounded to that deck, do not wait them being displayed as may be accessed through API
@@ -581,16 +585,16 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
 
     mpResourceManager->GetMatchingPanels(
                                         aPanelContextDescriptors,
-                                        maCurrentContext,
+                                        rContext,
                                         rDeckId,
                                         xController);
 
     // Update the panel list.
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
     SharedPanelContainer aNewPanels;
+    sal_Int32 nWriteIndex (0);
 
     aNewPanels.resize(nNewPanelCount);
-    sal_Int32 nWriteIndex (0);
 
     for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
     {
@@ -614,7 +618,7 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
                                             rPanelContexDescriptor.msId,
                                             pDeck->GetPanelParentWindow(),
                                             rPanelContexDescriptor.mbIsInitiallyVisible,
-                                            maCurrentContext,
+                                            rContext,
                                             pDeck);
                 if (aPanel.get()!=nullptr )
                 {
@@ -630,10 +634,9 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
                             mxFrame, xController);
                     }
                     ++nWriteIndex;
-                 }
-
-            }
+                }
         }
+    }
 
     // mpCurrentPanels - may miss stuff (?)
     aNewPanels.resize(nWriteIndex);
@@ -694,10 +697,10 @@ void SidebarController::SwitchToDeck (
 
     // Provide a configuration and Deck object.
 
-    CreateDeck(rDeckDescriptor.msId, bForceNewDeck);
+    CreateDeck(rDeckDescriptor.msId, rContext, bForceNewDeck);
 
     if (bForceNewPanels && !bForceNewDeck) // already forced if bForceNewDeck
-        CreatePanels(rDeckDescriptor.msId);
+        CreatePanels(rDeckDescriptor.msId, rContext);
 
     mpCurrentDeck.reset(rDeckDescriptor.mpDeck);
 
