@@ -23,6 +23,7 @@
 #define INCLUDED_JVMFWK_FRAMEWORK_HXX
 
 #include <jvmfwk/jvmfwkdllapi.hxx>
+#include <rtl/byteseq.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.h>
@@ -207,8 +208,7 @@ typedef enum _javaFrameworkError
 
     <p>
     Instances of this struct are created by the plug-in libraries which are used by
-    this framework (jvmfwk/vendorplugin.h). The contained members must be
-    freed individually.
+    this framework (jvmfwk/vendorplugin.h).
     For convenience this API provides the function <code>jfw_freeJavaInfo</code>
     which frees the objects properly. </p>
  */
@@ -254,7 +254,7 @@ struct JavaInfo
         values. The plug-in libraries can put all data, necessary for
         starting the java runtime into this sequence. </p>
      */
-    sal_Sequence * arVendorData;
+    rtl::ByteSequence arVendorData;
 };
 
 /** frees the memory of a <code>JavaInfo</code> object.
@@ -271,7 +271,7 @@ JVMFWK_DLLPUBLIC void jfw_freeJavaInfo(JavaInfo *pInfo);
    in the second <code>JavaInfo</code> object. The equality of the
    <code>OUString</code> members is determined
    by <code>operator ==</code>.
-   Similarly the equality of the <code>sal_Sequence</code> is
+   Similarly the equality of the <code>rtl::ByteSequence</code> is
    also determined by a comparison
    function (see <code>rtl::ByteSequence::operator ==</code>). </p>
    <p>

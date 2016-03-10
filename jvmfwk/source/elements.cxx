@@ -984,8 +984,7 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     pInfo->sVersion = sVersion;
     pInfo->nFeatures = nFeatures;
     pInfo->nRequirements = nRequirements;
-    pInfo->arVendorData = arVendorData.getHandle();
-    rtl_byte_sequence_acquire(pInfo->arVendorData);
+    pInfo->arVendorData = arVendorData;
     return pInfo;
 }
 
