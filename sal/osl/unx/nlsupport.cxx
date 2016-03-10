@@ -50,9 +50,9 @@ typedef struct {
  *****************************************************************************/
 
 static int
-pair_compare (const char *key, const pair *pair)
+pair_compare (const char *key, const pair *pair_)
 {
-    int result = rtl_str_compareIgnoreAsciiCase( key, pair->key );
+    int result = rtl_str_compareIgnoreAsciiCase( key, pair_->key );
     return result;
 }
 
