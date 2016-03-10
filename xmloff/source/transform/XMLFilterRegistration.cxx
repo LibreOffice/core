@@ -43,7 +43,7 @@ namespace
         CreateInstance              createInstance;
     };
 
-    static const ServiceDescriptor* getServiceDescriptors()
+    const ServiceDescriptor* getServiceDescriptors()
     {
         static const ServiceDescriptor aDescriptors[] =
         {
