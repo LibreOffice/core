@@ -16,6 +16,24 @@
       "revId": "15728e992b4d4ba2f8c9f3bcfb4a57e39fe2567c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_27ceda83",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-03-10T06:49:16Z",
+      "side": 1,
+      "message": "OK, will move the code and retest before submitting.\n\nThe placement was on purpose. DoRecalc()is only called when the user (or a macro) explicitly asks for recalculation, so I didn\u0027t see a problem in setting the cell to dirty in the current place. I didn\u0027t test all possible states (e.g. input state) though.",
+      "parentUuid": "bacf61ea_3c7709d6",
+      "revId": "15728e992b4d4ba2f8c9f3bcfb4a57e39fe2567c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
