@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_a72acae5",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-10T09:44:35Z",
+      "side": 1,
+      "message": "still wrong",
+      "revId": "6ee63e4d963481db2e8ceb1bc84e84b887388998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
