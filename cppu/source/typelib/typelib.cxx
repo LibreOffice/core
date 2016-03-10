@@ -354,12 +354,11 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
 //          OslGuard aGuard( rInit.getMutex() );
         CallbackEntry aEntry( pContext, pCallback );
         CallbackSet_Impl::iterator iPos( rInit.pCallbacks->begin() );
-        while (!(iPos == rInit.pCallbacks->end()))
+        while (iPos != rInit.pCallbacks->end())
         {
             if (*iPos == aEntry)
             {
-                rInit.pCallbacks->erase( iPos );
-                iPos = rInit.pCallbacks->begin();
+                iPos = rInit.pCallbacks->erase(iPos);
             }
             else
             {
