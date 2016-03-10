@@ -39,6 +39,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if( argc < 4 )
         return 1;
 
+    int nRet = 0;
+
     try
     {
         OUString aBaseURL, aTmpURL, aSrcURL, aDstURL;
@@ -74,7 +76,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), aEnv.getComponentContext()) );
         xAdaptor->setTreeVisitorFactory(pTreeFactory);
-        xAdaptor->odfConvert( aSrcURL, new OutputWrap(aDstURL), nullptr );
+        nRet = xAdaptor->odfConvert(aSrcURL, new OutputWrap(aDstURL), nullptr) ? 0 : 1;
     }
     catch (const uno::Exception& e)
     {
@@ -87,7 +89,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     }
 
-    return 0;
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
