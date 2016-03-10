@@ -2412,7 +2412,7 @@ css::uno::Reference< css::datatransfer::XTransferable >
 // ======================    Virtual Methods    ========================
 
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
-                              const long*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
+                              const long*, const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
                               const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
                               const css::lang::Locale*, const Color&, const Color&)
 
@@ -2421,8 +2421,7 @@ void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int3
 
 void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
                              const OUString& /*rChar*/, const SvxFont& /*rFont*/,
-                             sal_Int32 /*nPara*/, sal_Int32 /*nIndex*/,
-                             sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
+                             sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
                              bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
                              const Color& /*rTextLineColor*/)
 {

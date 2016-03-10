@@ -3344,7 +3344,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                     // StripPortions() data callback
                                     GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
-                                        aTmpFont, n, nIndex, rTextPortion.GetRightToLeft(),
+                                        aTmpFont, n, rTextPortion.GetRightToLeft(),
                                         aWrongSpellVector.size() ? &aWrongSpellVector : nullptr,
                                         pFieldData,
                                         bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
@@ -3574,7 +3574,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         GetEditEnginePtr()->DrawingTab( aTmpPos,
                                             rTextPortion.GetSize().Width(),
                                             OUString(rTextPortion.GetExtraValue()),
-                                            aTmpFont, n, nIndex, rTextPortion.GetRightToLeft(),
+                                            aTmpFont, n, rTextPortion.GetRightToLeft(),
                                             bEndOfLine, bEndOfParagraph,
                                             aOverlineColor, aTextLineColor);
                                     }
@@ -3592,7 +3592,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                     GetEditEnginePtr()->DrawingText(
                                         aTmpPos, OUString(), 0, 0, nullptr,
-                                        aTmpFont, n, nIndex, 0,
+                                        aTmpFont, n, 0,
                                         nullptr,
                                         nullptr,
                                         bEndOfLine, bEndOfParagraph, false,
@@ -3649,7 +3649,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                 GetEditEnginePtr()->DrawingText(
                     aTmpPos, OUString(), 0, 0, nullptr,
-                    aTmpFont, n, nIndex, 0,
+                    aTmpFont, n, 0,
                     nullptr,
                     nullptr,
                     false, true, false, // support for EOL/EOP TEXT comments
