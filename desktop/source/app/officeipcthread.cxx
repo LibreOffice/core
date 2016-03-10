@@ -1079,7 +1079,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
         pGlobalOfficeIPCThread->mnPendingRequests += aDispatchList.size();
         if ( !pGlobalOfficeIPCThread->mpDispatchWatcher.is() )
         {
-            pGlobalOfficeIPCThread->mpDispatchWatcher = DispatchWatcher::GetDispatchWatcher();
+            pGlobalOfficeIPCThread->mpDispatchWatcher = new DispatchWatcher;
         }
 
         // copy for execute

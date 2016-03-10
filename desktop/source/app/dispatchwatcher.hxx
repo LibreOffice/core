@@ -70,6 +70,8 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
 
         typedef std::vector< DispatchRequest > DispatchList;
 
+        DispatchWatcher();
+
         virtual ~DispatchWatcher();
 
         // XEventListener
@@ -79,15 +81,10 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         // XDispachResultListener
         virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        // Access function to get a dispatcher watcher reference. There must be a global reference holder
-        static rtl::Reference<DispatchWatcher> GetDispatchWatcher();
-
         // execute new dispatch request
         bool executeDispatchRequests( const DispatchList& aDispatches, bool bNoTerminate = false );
 
     private:
-        DispatchWatcher();
-
         static ::osl::Mutex&        GetMutex();
 
         std::unordered_map<OUString, sal_Int32, OUStringHash>

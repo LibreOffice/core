@@ -180,26 +180,6 @@ Mutex& DispatchWatcher::GetMutex()
     return theWatcherMutex::get();
 }
 
-// Create or get the dispatch watcher implementation. This implementation must be
-// a singleton to prevent access to the framework after it wants to terminate.
-rtl::Reference<DispatchWatcher> DispatchWatcher::GetDispatchWatcher()
-{
-    static rtl::Reference<DispatchWatcher> xDispatchWatcher;
-
-    if ( !xDispatchWatcher.is() )
-    {
-        ::osl::MutexGuard aGuard( GetMutex() );
-
-        if ( !xDispatchWatcher.is() )
-        {
-            xDispatchWatcher = new DispatchWatcher();
-        }
-    }
-
-    return xDispatchWatcher;
-}
-
-
 DispatchWatcher::DispatchWatcher()
     : m_nRequestCount(0)
 {
