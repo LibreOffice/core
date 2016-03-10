@@ -161,7 +161,7 @@ protected:
 
 public:
     SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     virtual ~SmEditController();
 #endif
 
@@ -216,7 +216,7 @@ class SmCmdBoxWrapper : public SfxChildWindow
 protected:
     SmCmdBoxWrapper(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo);
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     virtual ~SmCmdBoxWrapper();
 #endif
 

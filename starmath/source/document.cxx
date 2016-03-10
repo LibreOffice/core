@@ -254,9 +254,7 @@ void SmDocShell::ArrangeFormula()
 
     if (!pOutDev)
     {
-#if OSL_DEBUG_LEVEL > 1
         SAL_WARN( "starmath", "!! SmDocShell::ArrangeFormula: reference device missing !!");
-#endif
     }
 
     // if necessary get another OutputDevice for which we format

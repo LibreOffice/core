@@ -581,7 +581,7 @@ bool MathType::Parse(SotStorage *pStor)
     //starmaths internals.
     rRet += "{}";
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #   ifdef CAOLAN
     //sanity check
 
