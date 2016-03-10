@@ -31,6 +31,9 @@
 #include <vector>
 
 namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentProperties;
+    }
     namespace text {
         class XTextField;
     }
@@ -190,12 +193,14 @@ public:
 };
 
     /// knows all meta-fields in the document.
-class MetaFieldManager
+class SW_DLLPUBLIC MetaFieldManager
     : private ::boost::noncopyable
 {
 private:
     typedef ::std::vector< std::weak_ptr<MetaField> > MetaFieldList_t;
     MetaFieldList_t m_MetaFields;
+    /// Document properties of a clipboard document, empty for non-clipboard documents.
+    css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
 
 public:
     MetaFieldManager();
@@ -205,6 +210,9 @@ public:
                 const bool bIsFixedLanguage = false );
     /// get all meta fields
     ::std::vector< css::uno::Reference<css::text::XTextField> > getMetaFields();
+    /// Copy document properties from rSource to m_xDocumentProperties.
+    void copyDocumentProperties(const SwDoc& rSource);
+    css::uno::Reference<css::document::XDocumentProperties> getDocumentProperties();
 };
 
 } // namespace sw

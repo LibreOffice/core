@@ -36,6 +36,8 @@
 #include <unostyle.hxx>
 #include <unoevent.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 
 #include <cmdid.h>
 #include <com/sun/star/uno/Any.h>
@@ -825,6 +827,22 @@ MetaFieldManager::getMetaFields()
     ::std::transform(filtered.begin(), filtered.end(), ret.begin(),
             MakeUnoObject());
     return ret;
+}
+
+void MetaFieldManager::copyDocumentProperties(const SwDoc& rSource)
+{
+    const SwDocShell* pDocShell = rSource.GetDocShell();
+    if (!pDocShell)
+        return;
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(pDocShell->GetModel(), uno::UNO_QUERY);
+    uno::Reference<util::XCloneable> xCloneable(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+    m_xDocumentProperties.set(xCloneable->createClone(), uno::UNO_QUERY);
+}
+
+uno::Reference<document::XDocumentProperties> MetaFieldManager::getDocumentProperties()
+{
+    return m_xDocumentProperties;
 }
 
 } // namespace sw
