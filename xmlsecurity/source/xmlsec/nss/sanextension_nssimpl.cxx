@@ -64,7 +64,7 @@ sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( ::com::sun::star::uno::R
 
 namespace {
     // Helper functions from nss/lib/certdb/genname.c
-    static int GetNamesLength(CERTGeneralName *names)
+    int GetNamesLength(CERTGeneralName *names)
     {
         int              length = 0;
         CERTGeneralName  *first;

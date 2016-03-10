@@ -491,7 +491,7 @@ IMPL_LINK_NOARG_TYPED( FmPropBrw, OnAsyncGetFocus, void*, void )
 
 namespace
 {
-    static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
+    bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
         ::utl::OConfigurationTreeRoot aConfiguration(
             ::utl::OConfigurationTreeRoot::createWithComponentContext(
