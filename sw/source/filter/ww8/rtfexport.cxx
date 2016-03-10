@@ -47,6 +47,7 @@
 #endif
 #include <svx/xflclit.hxx>
 #include <editeng/hyphenzoneitem.hxx>
+#include <fmtmeta.hxx>
 
 using namespace ::com::sun::star;
 
@@ -487,6 +488,12 @@ void RtfExport::WriteUserProps()
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(), uno::UNO_QUERY);
         xDocProps.set(xDPS->getDocumentProperties());
+    }
+    else
+    {
+        // Clipboard document, read metadata from the meta field manager.
+        sw::MetaFieldManager& rManager = m_pDoc->GetMetaFieldManager();
+        xDocProps.set(rManager.getDocumentProperties());
     }
 
     if (xDocProps.is())

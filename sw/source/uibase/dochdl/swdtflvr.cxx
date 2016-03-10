@@ -123,6 +123,7 @@
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
 #include <calbck.hxx>
+#include <fmtmeta.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
@@ -380,6 +381,8 @@ namespace
         rDest.ReplaceStyles(rSrc, false);
 
         rSrcWrtShell.Copy(&rDest);
+
+        rDest.GetMetaFieldManager().copyDocumentProperties(rSrc);
     }
 
     void lclCheckAndPerformRotation(Graphic& aGraphic)
