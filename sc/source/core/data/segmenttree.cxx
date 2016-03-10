@@ -52,7 +52,7 @@ public:
     void removeSegment(SCCOLROW nPos1, SCCOLROW nPos2);
     void insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary);
 
-    SCROW findLastNotOf(ValueType nValue) const;
+    SCROW findLastTrue(ValueType nValue) const;
 
     // range iteration
     bool getFirst(RangeData& rData);
@@ -192,7 +192,7 @@ void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::insertSegment(SCCOLROW nPos,
 }
 
 template<typename _ValueType, typename _ExtValueType>
-SCCOLROW ScFlatSegmentsImpl<_ValueType, _ExtValueType>::findLastNotOf(ValueType nValue) const
+SCCOLROW ScFlatSegmentsImpl<_ValueType, _ExtValueType>::findLastTrue(ValueType nValue) const
 {
     SCCOLROW nPos = numeric_limits<SCCOLROW>::max(); // position not found.
     typename fst_type::const_reverse_iterator itr = maSegments.rbegin(), itrEnd = maSegments.rend();
@@ -378,9 +378,9 @@ void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-SCROW ScFlatBoolRowSegments::findLastNotOf() const
+SCROW ScFlatBoolRowSegments::findLastTrue() const
 {
-    return static_cast<SCROW>(mpImpl->findLastNotOf(false));
+    return static_cast<SCROW>(mpImpl->findLastTrue(false));
 }
 
 ScFlatBoolColSegments::ScFlatBoolColSegments() :
@@ -506,9 +506,9 @@ void ScFlatUInt16RowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipS
     mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-SCROW ScFlatUInt16RowSegments::findLastNotOf(sal_uInt16 nValue) const
+SCROW ScFlatUInt16RowSegments::findLastTrue(sal_uInt16 nValue) const
 {
-    return static_cast<SCROW>(mpImpl->findLastNotOf(nValue));
+    return static_cast<SCROW>(mpImpl->findLastTrue(nValue));
 }
 
 void ScFlatUInt16RowSegments::enableTreeSearch(bool bEnable)

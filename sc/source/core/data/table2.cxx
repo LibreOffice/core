@@ -3273,14 +3273,14 @@ SCROW ScTable::GetLastFlaggedRow() const
 
     if (mpHiddenRows)
     {
-        SCROW nRow = mpHiddenRows->findLastNotOf();
+        SCROW nRow = mpHiddenRows->findLastTrue();
         if (ValidRow(nRow))
             nLastFound = ::std::max(nLastFound, nRow);
     }
 
     if (mpFilteredRows)
     {
-        SCROW nRow = mpFilteredRows->findLastNotOf();
+        SCROW nRow = mpFilteredRows->findLastTrue();
         if (ValidRow(nRow))
             nLastFound = ::std::max(nLastFound, nRow);
     }
@@ -3311,7 +3311,7 @@ SCROW ScTable::GetLastChangedRow() const
     // Find the last row position where the height is NOT the standard row
     // height.
     // KOHEI: Test this to make sure it does what it's supposed to.
-    SCROW nLastHeight = mpRowHeights->findLastNotOf(ScGlobal::nStdRowHeight);
+    SCROW nLastHeight = mpRowHeights->findLastTrue(ScGlobal::nStdRowHeight);
     if (!ValidRow(nLastHeight))
         nLastHeight = 0;
 

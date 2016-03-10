@@ -73,7 +73,7 @@ public:
     void removeSegment(SCROW nRow1, SCROW nRow2);
     void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
-    SCROW findLastNotOf() const;
+    SCROW findLastTrue() const;
 
 private:
     ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
@@ -141,7 +141,7 @@ public:
     void removeSegment(SCROW nRow1, SCROW nRow2);
     void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
-    SCROW findLastNotOf(sal_uInt16 nValue) const;
+    SCROW findLastTrue(sal_uInt16 nValue) const;
 
     void enableTreeSearch(bool bEnable);
 
