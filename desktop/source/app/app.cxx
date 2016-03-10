@@ -2603,15 +2603,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             const CommandLineArgs& rCmdLine = GetCommandLineArgs();
             if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
             {
-                ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
-                    rCmdLine.getCwdUrl());
+                ProcessDocumentsRequest docsRequest(rCmdLine.getCwdUrl());
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
-                pDocsRequest->aOpenList.insert(
-                    pDocsRequest->aOpenList.end(), data.begin(), data.end());
-                pDocsRequest->pcProcessed = nullptr;
+                docsRequest.aOpenList.insert(
+                    docsRequest.aOpenList.end(), data.begin(), data.end());
+                docsRequest.pcProcessed = nullptr;
 
-                OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
-                delete pDocsRequest;
+                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest);
             }
         }
         break;
@@ -2624,15 +2622,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             const CommandLineArgs& rCmdLine = GetCommandLineArgs();
             if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
             {
-                ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
-                    rCmdLine.getCwdUrl());
+                ProcessDocumentsRequest docsRequest(rCmdLine.getCwdUrl());
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
-                pDocsRequest->aPrintList.insert(
-                    pDocsRequest->aPrintList.end(), data.begin(), data.end());
-                pDocsRequest->pcProcessed = nullptr;
+                docsRequest.aPrintList.insert(
+                    docsRequest.aPrintList.end(), data.begin(), data.end());
+                docsRequest.pcProcessed = nullptr;
 
-                OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
-                delete pDocsRequest;
+                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest);
             }
         }
         break;
