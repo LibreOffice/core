@@ -1973,6 +1973,16 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>(const SfxItemPropertySim
         bPhys = false;
     return uno::makeAny<bool>(bPhys);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+    throw(uno::RuntimeException, std::exception)
+{
+    SfxStyleSheetBase* pBase(GetStyleSheetBase());
+    if(!pBase)
+        return uno::makeAny(false);
+    rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    return uno::makeAny(xBase->IsHidden());
+}
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -1987,13 +1997,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
     }
     else if (FN_UNO_HIDDEN == rEntry.nWID)
     {
-        bool bHidden = false;
-        if(pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)) );
-            bHidden = xBase->IsHidden();
-        }
-        aRet <<= bHidden;
+        return GetStyleProperty<FN_UNO_HIDDEN>(rEntry, rPropSet, rBase);
     }
     else if (FN_UNO_STYLE_INTEROP_GRAB_BAG == rEntry.nWID)
     {
