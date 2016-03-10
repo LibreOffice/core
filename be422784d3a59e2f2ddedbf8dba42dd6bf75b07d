@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e70b227c",
+        "filename": "oox/source/drawingml/textcharacterpropertiescontext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-10T10:20:32Z",
+      "side": 1,
+      "message": "I couldn\u0027t believe it, but I checked with the specification and it is indeed possible to have a gradient or pattern fill for the text. Crazy",
+      "revId": "be422784d3a59e2f2ddedbf8dba42dd6bf75b07d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
