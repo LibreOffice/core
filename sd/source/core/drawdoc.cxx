@@ -23,6 +23,9 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <svx/svxids.hrc>
@@ -438,6 +441,33 @@ SdrModel* SdDrawDocument::AllocModel() const
     return AllocSdDrawDocument();
 }
 
+namespace
+{
+
+/// Copies all user-defined properties from pSource to pDestination.
+void lcl_copyUserDefinedProperties(SfxObjectShell* pSource, SfxObjectShell* pDestination)
+{
+    if (!pSource || !pDestination)
+        return;
+
+    uno::Reference<document::XDocumentProperties> xSource = pSource->getDocProperties();
+    uno::Reference<document::XDocumentProperties> xDestination = pDestination->getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xSourcePropertyContainer = xSource->getUserDefinedProperties();
+    uno::Reference<beans::XPropertyContainer> xDestinationPropertyContainer = xDestination->getUserDefinedProperties();
+    uno::Reference<beans::XPropertySet> xSourcePropertySet(xSourcePropertyContainer, uno::UNO_QUERY);
+    uno::Sequence<beans::Property> aProperties = xSourcePropertySet->getPropertySetInfo()->getProperties();
+
+    for (const beans::Property& rProperty : aProperties)
+    {
+        const OUString& rKey = rProperty.Name;
+        uno::Any aValue = xSourcePropertySet->getPropertyValue(rKey);
+        // We know that pDestination was just created, so has no properties: addProperty() will never throw.
+        xDestinationPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aValue);
+    }
+}
+
+}
+
 // This method creates a new document (SdDrawDocument) and returns a pointer to
 // said document. The drawing engine uses this method to put the document (or
 // parts of it) into the clipboard/DragServer.
@@ -480,6 +510,8 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
             SdStyleSheetVector aCreatedSheets;
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
         }
+
+        lcl_copyUserDefinedProperties(GetDocSh(), pNewDocSh);
 
         pNewModel->NewOrLoadCompleted( DOC_LOADED );  // loaded from source document
     }
