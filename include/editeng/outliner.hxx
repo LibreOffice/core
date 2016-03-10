@@ -396,6 +396,7 @@ public:
     const OUString      maText;
     sal_Int32           mnTextStart;
     sal_Int32           mnTextLen;
+    sal_Int32           mnPara;
     const SvxFont&      mrFont;
     const long*         mpDXArray;
 
@@ -423,6 +424,7 @@ public:
         sal_Int32 nTxtStart,
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
+        sal_Int32 nPar,
         const long* pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -439,6 +441,7 @@ public:
         maText(rTxt),
         mnTextStart(nTxtStart),
         mnTextLen(nTxtLen),
+        mnPara(nPar),
         mrFont(rFnt),
         mpDXArray(pDXArr),
         mpWrongSpellVector(pWrongSpellVector),
@@ -832,7 +835,7 @@ public:
     void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
                               const long* pDXArray, const SvxFont& rFont,
-                              sal_uInt8 nRightToLeft,
+                              sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,
                               bool bEndOfLine,
@@ -843,7 +846,7 @@ public:
                               const Color& rTextLineColor);
 
     void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
-                             const SvxFont& rFont, sal_uInt8 nRightToLeft,
+                             const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
                              bool bEndOfLine,
                              bool bEndOfParagraph,
                              const Color& rOverlineColor,
