@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include "NeonUri.hxx"
 
@@ -15,17 +16,10 @@
 namespace
 {
 
-    class webdav_local_test: public test::BootstrapFixture
+    class webdav_local_test: public CppUnit::TestFixture
     {
 
     public:
-        webdav_local_test() : BootstrapFixture( true, true ) {}
-
-        // initialise your test code values here.
-        void setUp(  ) override;
-
-        void tearDown(  ) override;
-
         void NeonUriTest();
 
         // Change the following lines only, if you add, remove or rename
@@ -36,15 +30,6 @@ namespace
         CPPUNIT_TEST( NeonUriTest );
         CPPUNIT_TEST_SUITE_END();
     };                          // class webdav_local_test
-
-    // initialise your test code values here.
-    void webdav_local_test::setUp()
-    {
-    }
-
-    void webdav_local_test::tearDown()
-    {
-    }
 
     void webdav_local_test::NeonUriTest()
     {

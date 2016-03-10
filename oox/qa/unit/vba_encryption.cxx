@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unotest/bootstrapfixturebase.hxx>
-
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestFixture.h>
@@ -16,7 +14,7 @@
 #include <oox/ole/vbaexport.hxx>
 #include <algorithm>
 
-class TestVbaEncryption : public test::BootstrapFixtureBase
+class TestVbaEncryption : public CppUnit::TestFixture
 {
 public:
 
@@ -29,17 +27,11 @@ public:
 
     void testProjKey1();
 
-    // avoid the BootstrapFixtureBase::setUp and tearDown
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     CPPUNIT_TEST_SUITE(TestVbaEncryption);
     // CPPUNIT_TEST(testSimple1);
     // CPPUNIT_TEST(testSimple2);
     CPPUNIT_TEST(testProjKey1);
     CPPUNIT_TEST_SUITE_END();
-
-private:
 };
 
 #if 0
@@ -84,13 +76,6 @@ void TestVbaEncryption::testProjKey1()
     OUString aProjectID("{917DED54-440B-4FD1-A5C1-74ACF261E600}");
     sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
     CPPUNIT_ASSERT_EQUAL((int)0xdf, (int)nProjKey);
-}
-
-void TestVbaEncryption::setUp()
-{
-}
-void TestVbaEncryption::tearDown()
-{
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestVbaEncryption);

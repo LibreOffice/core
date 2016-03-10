@@ -7,17 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unotest/bootstrapfixturebase.hxx>
-
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestFixture.h>
 
 #include <oox/ole/vbaexport.hxx>
 #include <tools/stream.hxx>
+#include <unotest/directories.hxx>
 #include <algorithm>
 
-class TestVbaCompression : public test::BootstrapFixtureBase
+class TestVbaCompression : public CppUnit::TestFixture
 {
 public:
 
@@ -42,10 +41,6 @@ public:
     // section 3.2.3
     void testSpec323();
 
-    // avoid the BootstrapFixtureBase::setUp and tearDown
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     CPPUNIT_TEST_SUITE(TestVbaCompression);
     CPPUNIT_TEST(testSimple1);
     CPPUNIT_TEST(testSimple2);
@@ -57,6 +52,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    test::Directories m_directories;
 };
 
 namespace {
@@ -235,14 +231,6 @@ void TestVbaCompression::testSpec323()
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
-}
-
-void TestVbaCompression::setUp()
-{
-}
-
-void TestVbaCompression::tearDown()
-{
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestVbaCompression);
