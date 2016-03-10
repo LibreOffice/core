@@ -3770,6 +3770,7 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     bool succeeded = GetDWriteInkBox(*pFontFace, rLayout, lfEmHeight, bounds);
     if (pRectToErase)
     {
+        // Isn't this equivalent to simply doing: bounds = *pRectToErase ?
         bounds.Intersection(*pRectToErase);
         bounds.Union(*pRectToErase);
     }
