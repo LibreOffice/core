@@ -2015,278 +2015,252 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
     {
         return GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(rEntry, rPropSet, rBase);
     }
-    else if(pBase)
+    else if(!pBase)
+        throw uno::RuntimeException();
+
+    if(!rBase.getNewBase().is())
     {
-        if(!rBase.getNewBase().is())
-        {
-            rBase.setNewBase(new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ));
-        }
+        rBase.setNewBase(new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ));
+    }
 
-        //UUUU
-        const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
+    //UUUU
+    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
+    bool bHandleDefaulyWay(false);
 
-        //UUUU adapted switch logic to a more readable state; removed goto's and made
-        // execution of standard setting of proerty in ItemSet dependent of this variable
-        bool bDone(false);
-
-        switch(rEntry.nWID)
-        {
-            case RES_PAPER_BIN:
-            {
-                SfxItemSet& rSet = rBase.GetItemSet();
-                rPropSet.getPropertyValue(rEntry, rSet, aRet);
-                sal_Int8 nBin = 0;
-                aRet >>= nBin;
-                if ( nBin == -1 )
-                    aRet <<= OUString( "[From printer settings]" );
-                else
-                {
-                    SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
-                    OUString sTmp;
-                    if (pPrinter )
-                        sTmp = pPrinter->GetPaperBinName ( nBin );
-                    aRet <<= sTmp;
-                }
-
-                bDone = true;
-                break;
-            }
-            case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
-            {
-                const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
-                OSL_ENSURE(pRule, "Where is the NumRule?");
-                uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
-
-                aRet.setValue(&xRules, cppu::UnoType<container::XIndexReplace>::get());
-                bDone = true;
-                break;
-            }
-            break;
-            case RES_PARATR_OUTLINELEVEL:
-            {
-                OSL_ENSURE( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
-                int nLevel = rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel();
-                aRet <<= static_cast<sal_Int16>( nLevel );
-                bDone = true;
-                break;
-            }
-            case FN_UNO_FOLLOW_STYLE:
-            {
-                OUString aString;
-                SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
-                aRet <<= aString;
-                bDone = true;
-                break;
-            }
-            case RES_PAGEDESC :
-            {
-                if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
-                    break;
-                // special handling for RES_PAGEDESC
-                const SfxPoolItem* pItem;
-                if (SfxItemState::SET == rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
-                {
-                    const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
-                    if(pDesc)
-                    {
-                        OUString aString;
-                        SwStyleNameMapper::FillProgName(pDesc->GetName(), aString,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
-                        aRet <<= aString;
-                    }
-
-                }
-                bDone = true;
-                break;
-            }
-            case FN_UNO_IS_AUTO_UPDATE:
-            {
-                bool bAuto = false;
-                if(SFX_STYLE_FAMILY_PARA == eFamily)
-                    bAuto = rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat();
-                else if(SFX_STYLE_FAMILY_FRAME == eFamily)
-                    bAuto = rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat();
-                aRet <<= bAuto;
-
-                bDone = true;
-                break;
-            }
-            case FN_UNO_DISPLAY_NAME:
-            {
-                aRet <<= rBase.getNewBase()->GetDisplayName();
-
-                bDone = true;
-                break;
-            }
-            case FN_UNO_PARA_STYLE_CONDITIONS:
-            {
-                OSL_ENSURE(COND_COMMAND_COUNT == 28,
-                        "invalid size of command count?");
-                uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
-                beans::NamedValue *pSeq = aSeq.getArray();
-
-                SwFormat *pFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCollection();
-                const CommandStruct *pCmds = SwCondCollItem::GetCmds();
-                for (sal_uInt16 n = 0;  n < COND_COMMAND_COUNT;  ++n)
-                {
-                    OUString aStyleName;
-
-                    const SwCollCondition* pCond = nullptr;
-                    if( pFormat && RES_CONDTXTFMTCOLL == pFormat->Which() &&
-                        nullptr != ( pCond = static_cast<SwConditionTextFormatColl*>(pFormat)->
-                        HasCondition( SwCollCondition( nullptr, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
-                        && pCond->GetTextFormatColl() )
-                    {
-                        // get programmatic style name from UI style name
-                        aStyleName = pCond->GetTextFormatColl()->GetName();
-                        SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
-                    }
-
-                    pSeq[n].Name  = GetCommandContextByIndex(n);
-                    pSeq[n].Value <<= aStyleName;
-                }
-                aRet <<= aSeq;
-
-                bDone = true;
-                break;
-            }
-            case FN_UNO_CATEGORY:
-            {
-                const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
-                short nRet = -1;
-
-                switch ( COLL_GET_RANGE_BITS & nPoolId )
-                {
-                    case COLL_TEXT_BITS:
-                        nRet = style::ParagraphStyleCategory::TEXT;
-                        break;
-                    case COLL_DOC_BITS:
-                        nRet = style::ParagraphStyleCategory::CHAPTER;
-                        break;
-                    case COLL_LISTS_BITS:
-                        nRet = style::ParagraphStyleCategory::LIST;
-                        break;
-                    case COLL_REGISTER_BITS:
-                        nRet = style::ParagraphStyleCategory::INDEX;
-                        break;
-                    case COLL_EXTRA_BITS:
-                        nRet = style::ParagraphStyleCategory::EXTRA;
-                        break;
-                    case COLL_HTML_BITS:
-                        nRet = style::ParagraphStyleCategory::HTML;
-                        break;
-                }
-
-                aRet <<= nRet;
-                bDone = true;
-                break;
-            }
-            case SID_SWREGISTER_COLLECTION:
-            {
-                const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
-                const SwTextFormatColl* pCol = nullptr;
-                OUString aString;
-                if( pPageDesc )
-                    pCol = pPageDesc->GetRegisterFormatColl();
-                if( pCol )
-                    SwStyleNameMapper::FillProgName(
-                                pCol->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-                aRet <<= aString;
-                bDone = true;
-                break;
-            }
-            case RES_BACKGROUND:
-            {
-                //UUUU
-                const SfxItemSet& rSet = rBase.GetItemSet();
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-
-                if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
-                {
-                    OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
-                }
-
-                bDone = true;
-                break;
-            }
-            case OWN_ATTR_FILLBMP_MODE:
-            {
-                //UUUU
-                const SfxItemSet& rSet = rBase.GetItemSet();
-                const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
-                const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
-
-                if( pTileItem && pTileItem->GetValue() )
-                {
-                    aRet <<= drawing::BitmapMode_REPEAT;
-                }
-                else if( pStretchItem && pStretchItem->GetValue() )
-                {
-                    aRet <<= drawing::BitmapMode_STRETCH;
-                }
-                else
-                {
-                    aRet <<= drawing::BitmapMode_NO_REPEAT;
-                }
-
-                bDone = true;
-                break;
-            }
-            default:
-            {
-                // nothing to do as default
-                break;
-            }
-        }
-
-        if(!bDone)
+    switch(rEntry.nWID)
+    {
+        case RES_PAPER_BIN:
         {
             SfxItemSet& rSet = rBase.GetItemSet();
             rPropSet.getPropertyValue(rEntry, rSet, aRet);
-
-            //UUUU
-            if(rEntry.aType == ::cppu::UnoType<sal_Int16>::get() && rEntry.aType != aRet.getValueType())
+            sal_Int8 nBin = 0;
+            aRet >>= nBin;
+            if ( nBin == -1 )
+                aRet <<= OUString( "[From printer settings]" );
+            else
             {
-                // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-                sal_Int32 nValue = 0;
-                if (aRet >>= nValue)
-                    aRet <<= (sal_Int16)nValue;
+                SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
+                OUString sTmp;
+                if (pPrinter )
+                    sTmp = pPrinter->GetPaperBinName ( nBin );
+                aRet <<= sTmp;
             }
+            break;
+        }
+        case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
+        {
+            const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
+            OSL_ENSURE(pRule, "Where is the NumRule?");
+            uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
 
-            //UUUU check for needed metric translation
-            if(rEntry.nMemberId & SFX_METRIC_ITEM)
+            aRet.setValue(&xRules, cppu::UnoType<container::XIndexReplace>::get());
+            break;
+        }
+        break;
+        case RES_PARATR_OUTLINELEVEL:
+        {
+            OSL_ENSURE( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
+            int nLevel = rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel();
+            aRet <<= static_cast<sal_Int16>( nLevel );
+            break;
+        }
+        case FN_UNO_FOLLOW_STYLE:
+        {
+            OUString aString;
+            SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
+            aRet <<= aString;
+            break;
+        }
+        case RES_PAGEDESC :
+        {
+            if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
             {
-                bool bDoIt(true);
-
-                if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
+                bHandleDefaulyWay = true;
+                break;
+            }
+            // special handling for RES_PAGEDESC
+            const SfxPoolItem* pItem;
+            if (SfxItemState::SET == rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
+            {
+                const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                if(pDesc)
                 {
-                    // exception: If these ItemTypes are used, do not convert when these are negative
-                    // since this means they are intended as percent values
-                    sal_Int32 nValue = 0;
-
-                    if(aRet >>= nValue)
-                    {
-                        bDoIt = nValue > 0;
-                    }
+                    OUString aString;
+                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
+                    aRet <<= aString;
                 }
 
-                if(bDoIt && pDoc)
-                {
-                    const SfxItemPool& rPool = pDoc->GetAttrPool();
-                    const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
+            }
+            break;
+        }
+        case FN_UNO_IS_AUTO_UPDATE:
+        {
+            bool bAuto = false;
+            if(SFX_STYLE_FAMILY_PARA == eFamily)
+                bAuto = rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat();
+            else if(SFX_STYLE_FAMILY_FRAME == eFamily)
+                bAuto = rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat();
+            aRet <<= bAuto;
+            break;
+        }
+        case FN_UNO_DISPLAY_NAME:
+        {
+            aRet <<= rBase.getNewBase()->GetDisplayName();
+            break;
+        }
+        case FN_UNO_PARA_STYLE_CONDITIONS:
+        {
+            OSL_ENSURE(COND_COMMAND_COUNT == 28,
+                    "invalid size of command count?");
+            uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
+            beans::NamedValue *pSeq = aSeq.getArray();
 
-                    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
-                    {
-                        SvxUnoConvertToMM(eMapUnit, aRet);
-                    }
+            SwFormat *pFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCollection();
+            const CommandStruct *pCmds = SwCondCollItem::GetCmds();
+            for (sal_uInt16 n = 0;  n < COND_COMMAND_COUNT;  ++n)
+            {
+                OUString aStyleName;
+
+                const SwCollCondition* pCond = nullptr;
+                if( pFormat && RES_CONDTXTFMTCOLL == pFormat->Which() &&
+                    nullptr != ( pCond = static_cast<SwConditionTextFormatColl*>(pFormat)->
+                    HasCondition( SwCollCondition( nullptr, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
+                    && pCond->GetTextFormatColl() )
+                {
+                    // get programmatic style name from UI style name
+                    aStyleName = pCond->GetTextFormatColl()->GetName();
+                    SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
+                }
+
+                pSeq[n].Name  = GetCommandContextByIndex(n);
+                pSeq[n].Value <<= aStyleName;
+            }
+            aRet <<= aSeq;
+            break;
+        }
+        case FN_UNO_CATEGORY:
+        {
+            const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
+            short nRet = -1;
+
+            switch ( COLL_GET_RANGE_BITS & nPoolId )
+            {
+                case COLL_TEXT_BITS:
+                    nRet = style::ParagraphStyleCategory::TEXT;
+                    break;
+                case COLL_DOC_BITS:
+                    nRet = style::ParagraphStyleCategory::CHAPTER;
+                    break;
+                case COLL_LISTS_BITS:
+                    nRet = style::ParagraphStyleCategory::LIST;
+                    break;
+                case COLL_REGISTER_BITS:
+                    nRet = style::ParagraphStyleCategory::INDEX;
+                    break;
+                case COLL_EXTRA_BITS:
+                    nRet = style::ParagraphStyleCategory::EXTRA;
+                    break;
+                case COLL_HTML_BITS:
+                    nRet = style::ParagraphStyleCategory::HTML;
+                    break;
+            }
+
+            aRet <<= nRet;
+            break;
+        }
+        case SID_SWREGISTER_COLLECTION:
+        {
+            const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
+            const SwTextFormatColl* pCol = nullptr;
+            OUString aString;
+            if( pPageDesc )
+                pCol = pPageDesc->GetRegisterFormatColl();
+            if( pCol )
+                SwStyleNameMapper::FillProgName(
+                            pCol->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
+            aRet <<= aString;
+            break;
+        }
+        case RES_BACKGROUND:
+        {
+            //UUUU
+            const SfxItemSet& rSet = rBase.GetItemSet();
+            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+
+            if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
+            {
+                OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
+            }
+            break;
+        }
+        case OWN_ATTR_FILLBMP_MODE:
+        {
+            //UUUU
+            const SfxItemSet& rSet = rBase.GetItemSet();
+            const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
+            const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
+
+            if( pTileItem && pTileItem->GetValue() )
+            {
+                aRet <<= drawing::BitmapMode_REPEAT;
+            }
+            else if( pStretchItem && pStretchItem->GetValue() )
+            {
+                aRet <<= drawing::BitmapMode_STRETCH;
+            }
+            else
+            {
+                aRet <<= drawing::BitmapMode_NO_REPEAT;
+            }
+            break;
+        }
+        default:
+            bHandleDefaulyWay = true;
+            break;
+    }
+    if(bHandleDefaulyWay)
+    {
+        SfxItemSet& rSet = rBase.GetItemSet();
+        rPropSet.getPropertyValue(rEntry, rSet, aRet);
+
+        //UUUU
+        if(rEntry.aType == ::cppu::UnoType<sal_Int16>::get() && rEntry.aType != aRet.getValueType())
+        {
+            // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+            sal_Int32 nValue = 0;
+            if (aRet >>= nValue)
+                aRet <<= (sal_Int16)nValue;
+        }
+
+        //UUUU check for needed metric translation
+        if(rEntry.nMemberId & SFX_METRIC_ITEM)
+        {
+            bool bDoIt(true);
+
+            if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
+            {
+                // exception: If these ItemTypes are used, do not convert when these are negative
+                // since this means they are intended as percent values
+                sal_Int32 nValue = 0;
+
+                if(aRet >>= nValue)
+                {
+                    bDoIt = nValue > 0;
+                }
+            }
+
+            if(bDoIt && pDoc)
+            {
+                const SfxItemPool& rPool = pDoc->GetAttrPool();
+                const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
+
+                if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                {
+                    SvxUnoConvertToMM(eMapUnit, aRet);
                 }
             }
         }
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
-
     return aRet;
 }
 
