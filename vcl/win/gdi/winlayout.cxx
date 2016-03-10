@@ -3673,8 +3673,10 @@ bool D2DWriteTextOutRenderer::InitModules()
 
 void D2DWriteTextOutRenderer::CleanupModules()
 {
-    if (mmD2d1)     FreeLibrary(mmD2d1);
-    if (mmDWrite)   FreeLibrary(mmDWrite);
+    if (mmD2d1)
+        FreeLibrary(mmD2d1);
+    if (mmDWrite)
+        FreeLibrary(mmDWrite);
 
     mmD2d1 = nullptr;
     mmDWrite = nullptr;
@@ -3741,10 +3743,14 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
 
 D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
 {
-    if (mpRT)            mpRT->Release();
-    if (mpGdiInterop)    mpGdiInterop->Release();
-    if (mpDWriteFactory) mpDWriteFactory->Release();
-    if (mpD2DFactory)    mpD2DFactory->Release();
+    if (mpRT)
+        mpRT->Release();
+    if (mpGdiInterop)
+        mpGdiInterop->Release();
+    if (mpDWriteFactory)
+        mpDWriteFactory->Release();
+    if (mpD2DFactory)
+        mpD2DFactory->Release();
 
     CleanupModules();
 }
