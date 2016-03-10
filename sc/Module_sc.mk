@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_filters_test \
 	CppunitTest_sc_rangelst_test \
 	CppunitTest_sc_core \
+	CppunitTest_sc_tiledrendering \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
