@@ -20,6 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVECALCULATOR_HXX
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -43,12 +44,15 @@ public:
 protected:
     virtual OUString ImplGetRepresentation(
         const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
-        sal_Int32 nNumberFormatKey ) const = 0;
+        sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength = nullptr ) const = 0;
 
     static OUString getFormattedString(
         const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
-        double fNumber );
+        double fNumber,
+        sal_Int32* pStringLength = nullptr );
+
+    static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, sal_Int32* pMaxLength );
 
     double m_fCorrelationCoeffitient;
 
@@ -56,6 +60,8 @@ protected:
     bool  mForceIntercept;
     double    mInterceptValue;
     sal_Int32 mPeriod;
+
+    const OUString m_aHash;
 
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
@@ -92,7 +98,7 @@ protected:
 
     virtual OUString SAL_CALL getFormattedRepresentation(
         const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumFmtSupplier,
-        sal_Int32 nNumberFormatKey )
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
         throw (css::uno::RuntimeException, std::exception) override;
 };
 

@@ -233,47 +233,86 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL PolynomialRegressionCurveCalcula
 
 OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth /* = nullptr */ ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    OUStringBuffer aBuf( "f(x) = " );
 
+    sal_Int32 nValueLength=0;
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
+
+    if ( pFormulaMaxWidth && *pFormulaMaxWidth > 0 )
+    {
+        sal_Int32 nCharMin = aBuf.getLength(); // count characters different from coefficients
+        double nCoefficients = aLastIndex + 1.0; // number of coefficients
+        for (sal_Int32 i = aLastIndex; i >= 0; i--)
+        {
+            double aValue = mCoefficients[i];
+            if ( aValue == 0.0 )
+            { // do not count coeffitient if it is 0
+                nCoefficients --;
+                continue;
+            }
+            if ( rtl::math::approxEqual( fabs( aValue ) , 1.0 ) )
+            { // do not count coeffitient if it is 1
+                nCoefficients --;
+                if ( i == 0 ) // intercept = 1
+                    nCharMin ++;
+            }
+            if ( i != aLastIndex )
+                nCharMin += 3; // " + "
+            if ( i > 0 )
+            {
+                nCharMin += 1; // "x"
+                if ( i > 1 )
+                    nCharMin +=2; // "^i"
+                if ( i >= 10 )
+                    nCharMin ++; // 2 digits for i
+            }
+        }
+        nValueLength = ( *pFormulaMaxWidth - nCharMin ) / nCoefficients;
+        if ( nValueLength <= 0 )
+            nValueLength = 1;
+    }
     bool bFindValue = false;
+    sal_Int32 nLineLength = aBuf.getLength();
     for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
         double aValue = mCoefficients[i];
+        OUStringBuffer aTmpBuf(""); // temporary buffer
         if (aValue == 0.0)
         {
             continue;
         }
         else if (aValue < 0.0)
         {
-            aBuf.append( " - " );
+            aTmpBuf.append( " - " );
             aValue = - aValue;
         }
         else
         {
             if ( bFindValue )
-                aBuf.append( " + " );
+                aTmpBuf.append( " + " );
         }
         bFindValue = true;
-
-        if ( i == 0 || !rtl::math::approxEqual( aValue , 1.0 ) )
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, aValue ) );
+        // if nValueLength not calculated then nullptr
+        sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
+        OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, aValue, pValueLength );
+        if ( i == 0 || aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
+            aTmpBuf.append( aValueString );
 
         if(i > 0)
         {
-            if (i == 1)
+            aTmpBuf.append( "x" );
+            if (i > 1)
             {
-                aBuf.append( "x" );
-            }
-            else
-            {
-                aBuf.append( "x^" );
-                aBuf.append(i);
+                aTmpBuf.append( "^" );
+                aTmpBuf.append(i);
             }
         }
+        addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
+    if ( aBuf.toString() == "f(x) = " )
+        aBuf.append('0');
 
     return aBuf.makeStringAndClear();
 }

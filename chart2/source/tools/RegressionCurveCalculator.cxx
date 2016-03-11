@@ -27,6 +27,9 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
+#include <comphelper/numbers.hxx>
+#include <comphelper/extract.hxx>
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -40,7 +43,8 @@ RegressionCurveCalculator::RegressionCurveCalculator() :
         mDegree(2),
         mForceIntercept(false),
         mInterceptValue(0.0),
-        mPeriod(2)
+        mPeriod(2),
+        m_aHash("###")
 {
     rtl::math::setNan( &m_fCorrelationCoeffitient );
     rtl::math::setNan( &mInterceptValue );
@@ -82,17 +86,46 @@ void RegressionCurveCalculator::setRegressionProperties(
 OUString RegressionCurveCalculator::getFormattedString(
     const Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey,
-    double fNumber )
+    double fNumber, sal_Int32* pStringLength /* = nullptr */ )
 {
+    if ( pStringLength && *pStringLength <= 0 )
+        return OUString( "###" );
     OUString aResult;
 
-    if( xNumFormatter.is())
+    if( xNumFormatter.is() )
+    {
+        bool bStandard = ::cppu::any2bool( ::comphelper::getNumberFormatProperty( xNumFormatter, nNumberFormatKey, "StandardFormat" ) );
+        if( pStringLength && bStandard )
+        {   // round fNumber to *pStringLength characters
+            const sal_Int32 nMinDigit = 6; // minimum significant digits for General format
+            sal_Int32 nSignificantDigit = ( *pStringLength <= nMinDigit ? nMinDigit : *pStringLength );
+            aResult = OStringToOUString(
+                        ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, nSignificantDigit, '.', true ),
+                                        RTL_TEXTENCODING_ASCII_US );
+            // count characters different from significant digits (decimal separator, scientific notation)
+            sal_Int32 nExtraChar = aResult.getLength() - *pStringLength;
+            if ( nExtraChar > 0 && *pStringLength > nMinDigit )
+            {
+                nSignificantDigit = *pStringLength - nExtraChar;
+                if ( nSignificantDigit < nMinDigit )
+                    nSignificantDigit = nMinDigit;
+                aResult = OStringToOUString(
+                    ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, nSignificantDigit, '.', true ),
+                                            RTL_TEXTENCODING_ASCII_US );
+            }
+            fNumber = ::rtl::math::stringToDouble( aResult, '.', ',' );
+        }
         aResult = xNumFormatter->convertNumberToString( nNumberFormatKey, fNumber );
+    }
     else
+    {
+        sal_Int32 nStringLength = 4;  // default length
+        if ( pStringLength )
+            nStringLength = *pStringLength;
         aResult = OStringToOUString(
-                      ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, 4, '.', true ),
+                      ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, nStringLength, '.', true ),
                       RTL_TEXTENCODING_ASCII_US );
-
+    }
     return aResult;
 }
 
@@ -150,8 +183,8 @@ OUString SAL_CALL RegressionCurveCalculator::getRepresentation()
 
 OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     const Reference< util::XNumberFormatsSupplier > & xNumFmtSupplier,
-    sal_Int32 nNumberFormatKey )
-    throw (uno::RuntimeException, std::exception)
+    sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
+throw (uno::RuntimeException, std::exception)
 {
     // create and prepare a number formatter
     if( !xNumFmtSupplier.is())
@@ -160,7 +193,21 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     Reference< util::XNumberFormatter > xNumFormatter( util::NumberFormatter::create(xContext), uno::UNO_QUERY_THROW );
     xNumFormatter->attachNumberFormatsSupplier( xNumFmtSupplier );
 
+    if ( nFormulaLength > 0 )
+        return ImplGetRepresentation( xNumFormatter, nNumberFormatKey, &nFormulaLength );
     return ImplGetRepresentation( xNumFormatter, nNumberFormatKey );
+}
+
+void RegressionCurveCalculator::addStringToEquation(
+        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, sal_Int32* pMaxWidth)
+{
+    if ( pMaxWidth && ( nLineLength + aAddString.getLength() > *pMaxWidth ) )
+    {  // wrap line
+        aStrEquation.append("\n "); // start new line with a blank
+        nLineLength = 1;
+    }
+    aStrEquation.append( aAddString );
+    nLineLength += aAddString.getLength();
 }
 
 } //  namespace chart
