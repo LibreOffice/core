@@ -5279,9 +5279,13 @@ find_dotnetsdk46()
 {
     unset frametest
 
-    for ver in 4.6; do
-        # TODO(davido): Do we need to take care about 32bit?
+    for ver in 4.6.1 4.6; do
         reg_get_value_64 "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
+        if test -n "$regvalue"; then
+            frametest=$regvalue
+            return
+        fi
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
             return
