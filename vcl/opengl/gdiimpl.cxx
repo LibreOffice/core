@@ -454,6 +454,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
             maOffscreenTex.GetHeight() != GetHeight() )
         {
             VCL_GL_INFO( "re-size offscreen texture " << maOffscreenTex.Id() );
+            mpFlush->SetPriority( SchedulerPriority::POST_PAINT );
             mpContext->ReleaseFramebuffer( maOffscreenTex );
             maOffscreenTex = OpenGLTexture();
         }
