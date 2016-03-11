@@ -667,7 +667,7 @@ public class java_remote_bridge
 
     /**
      *
-     * @see NotifyDispose#addDisposeListener
+     * @see DisposeNotifier#addDisposeListener
      */
     public void addDisposeListener(DisposeListener listener) {
         synchronized (this) {
