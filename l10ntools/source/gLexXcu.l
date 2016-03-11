@@ -18,15 +18,6 @@
  */
  
 
-/*****************************************************************************
- **********************   L E X   D E F I N I T I O N   **********************
- *****************************************************************************
- * lex grammar for parsing ressource source files (*.xrm files)
- * file is converted to gConXcu_yy.cxx with "flex"
- *****************************************************************************/
-
-
- 
 /***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
 %top{
 #include "gConvXcu.hxx"
@@ -155,7 +146,7 @@ FIN   [^/>]*">"
 
 void xcu_dummyJustForCompiler()
 {
-//  char *txt = NULL;
+  char *txt = NULL;
 //  yy_flex_strlen(txt);
-//  yyunput(0, txt);
+  yyunput(0, txt);
 }

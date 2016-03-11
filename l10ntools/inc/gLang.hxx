@@ -113,7 +113,7 @@ class convert_gen
     ~convert_gen();
 
     // do extract/merge
-    bool execute(const bool bMerge);
+    bool execute(const bool bMerge, const bool bKid);
 
     // ONLY po should implement these functions
     void startSave(const std::string& sLanguage,
@@ -126,39 +126,5 @@ class convert_gen
     void endSave();
     static bool checkAccess(std::string& sFile);
     static bool createDir(std::string& sDir, std::string& sFile);
-};
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
-class handler
-{
-  public:
-    handler();
-    ~handler();
-
-    void checkCommandLine(int argc, char *argv[]);
-    void run();
-
-  private:
-    enum {DO_CONVERT, DO_CONVERT_POT, DO_EXTRACT, DO_EXTRACT_KID, DO_MERGE} meWorkMode;
-    l10nMem                  mcMemory;
-    std::string              msModuleName;
-    std::string              msPoOutDir;
-    std::string              msPoDir;
-    std::string              msSourceDir;
-    std::string              msTargetDir;
-    bool                     mbForceSave;
-    std::vector<std::string> mvSourceFiles;
-    std::vector<std::string> mvLanguages;
-
-    void runConvert(bool bPot);
-    void runExtract(bool bKid);
-    void runMerge();
-
-    void showUsage(std::string& sErr);
-    void showManual();
-    void loadL10MEM(bool onlyTemplates);
-    void readFileWithSources();
 };
 #endif

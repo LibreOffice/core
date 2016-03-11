@@ -18,15 +18,6 @@
  */
 
 
-/*****************************************************************************
- **********************   L E X   D E F I N I T I O N   **********************
- *****************************************************************************
- * lex grammar for parsing ressource source files (*.xrm files)
- * file is converted to gConXcs_yy.cxx with "flex"
- *****************************************************************************/
-
-
- 
 /***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
 %top{
 #include "gConvXcs.hxx"
@@ -105,7 +96,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 
 void xcs_dummyJustForCompiler()
 {
-//  char *txt = NULL;
+  char *txt = NULL;
 //  yy_flex_strlen(txt);
-//  yyunput(0, txt);
+  yyunput(0, txt);
 }

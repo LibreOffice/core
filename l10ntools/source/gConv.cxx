@@ -103,9 +103,12 @@ convert_gen::~convert_gen()
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-bool convert_gen::execute(const bool bMerge)
+bool convert_gen::execute(const bool bMerge, const bool bKid)
 {
   convert_gen_impl::mcImpl->mbMergeMode  = bMerge;
+
+  if (bKid)
+      throw l10nMem::showError("not implemented");
 
   // and load file
   if (!convert_gen_impl::mcImpl->prepareFile())

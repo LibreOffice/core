@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
  
-
-/*****************************************************************************
- **********************   L E X   D E F I N I T I O N   **********************
- *****************************************************************************
- * lex grammar for parsing ressource source files (*.po files)
- * file is converted to gConPo_yy.cxx with "flex"
- *****************************************************************************/
-
 /*
  white-space
      #  translator-comments
@@ -167,8 +159,8 @@ SPACE [ \t]*
 
 void dummyJustForCompiler()
 {
-//  char *txt = NULL;
+  char *txt = NULL;
 //  yy_flex_strlen(txt);
-//  yyunput(0, txt);
+  yyunput(0, txt);
 }
 
