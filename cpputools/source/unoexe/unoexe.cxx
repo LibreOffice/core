@@ -109,13 +109,7 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
         }
         else
         {
-#if OSL_DEBUG_LEVEL > 1
-            out( "\n> identified option -" );
-            out( pOpt );
-            out( " = " );
-            OString tmp = OUStringToOString(aArg, RTL_TEXTENCODING_ASCII_US);
-              out( tmp.getStr() );
-#endif
+            SAL_INFO("cpputools.unoexe", "> identified option -" << pOpt << " = " << aArg);
             ++(*pnIndex);
             return true;
         }
@@ -123,13 +117,7 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
       else if (aArg.indexOf(aOpt) == 1)
     {
         *pValue = aArg.copy(1 + aOpt.getLength());
-#if OSL_DEBUG_LEVEL > 1
-        out( "\n> identified option -" );
-        out( pOpt );
-        out( " = " );
-        OString tmp = OUStringToOString(aArg.copy(aOpt.getLength()), RTL_TEXTENCODING_ASCII_US);
-        out( tmp.getStr() );
-#endif
+        SAL_INFO("cpputools.unoexe", "> identified option -" << pOpt << " = " << aArg);
         ++(*pnIndex);
 
         return true;
@@ -146,10 +134,7 @@ static bool readOption( bool * pbOpt, const sal_Char * pOpt,
     {
         ++(*pnIndex);
         *pbOpt = true;
-#if OSL_DEBUG_LEVEL > 1
-        out( "\n> identified option --" );
-        out( pOpt );
-#endif
+        SAL_INFO("cpputools.unoexe", "> identified option --" << pOpt);
         return true;
     }
     return false;
@@ -557,9 +542,6 @@ SAL_IMPLEMENT_MAIN()
     if (xComp.is())
         xComp->dispose();
 
-#if OSL_DEBUG_LEVEL > 1
-    out( "\n" );
-#endif
     return nRet;
 }
 

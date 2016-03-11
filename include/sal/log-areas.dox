@@ -100,6 +100,11 @@ certain functionality.
 @li @c cppuhelper
 @li @c cppuhelper.shlib
 
+@section cpputools
+
+@li @c cpputools
+@li @c cpputools.unoexe
+
 @section cui
 
 @li @c cui.customize
