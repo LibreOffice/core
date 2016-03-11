@@ -44,7 +44,7 @@ private:
     char* mmappedData;
 };
 
-static size_t getFilesize(const char* filename)
+size_t getFilesize(const char* filename)
 {
     struct stat st;
     stat(filename, &st);
@@ -71,7 +71,7 @@ UnusedMethodsRemove::~UnusedMethodsRemove()
     close(mmapFD);
 }
 
-static std::string niceName(const CXXMethodDecl* functionDecl)
+std::string niceName(const CXXMethodDecl* functionDecl)
 {
     std::string s =
         compat::getReturnType(*functionDecl).getCanonicalType().getAsString()

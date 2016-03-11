@@ -110,7 +110,7 @@ private:
     bool externCFunction;
 };
 
-static const char * recommendedFix(clang::CastKind ck) {
+const char * recommendedFix(clang::CastKind ck) {
     switch(ck) {
         case CK_IntegralToPointer: return "reinterpret_cast";
         case CK_PointerToIntegral: return "reinterpret_cast";
