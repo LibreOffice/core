@@ -37,7 +37,7 @@ class TestWorkAt implements TestIWorkAt {
     private Thread _sync_thread;
     private Thread _async_thread;
 
-    private boolean _passedAync = true;
+    private boolean _passedAsync = true;
     boolean _notified = false;
 
     public synchronized void syncCall() throws Throwable {
@@ -47,12 +47,12 @@ class TestWorkAt implements TestIWorkAt {
         // defer the check until passedAsyncTest and assert here
         assertEquals(MESSAGES, _async_counter);
         if(_async_counter != MESSAGES)
-            _passedAync = false;
+            _passedAsync = false;
 
         if(_sync_thread == null)
             _sync_thread = Thread.currentThread();
 
-        if(DEBUG) System.err.println("syncCall:" + _sync_counter + " " + _passedAync + " " + Thread.currentThread());
+        if(DEBUG) System.err.println("syncCall:" + _sync_counter + " " + _passedAsync + " " + Thread.currentThread());
     }
 
     public synchronized void asyncCall() throws Throwable {
@@ -81,7 +81,7 @@ class TestWorkAt implements TestIWorkAt {
 
     public synchronized boolean passedAsyncTest() {
         assertEquals(MESSAGES, _sync_counter);
-        assertTrue(_passedAync);
-        return  _passedAync && (_sync_counter == MESSAGES);
+        assertTrue(_passedAsync);
+        return  _passedAsync && (_sync_counter == MESSAGES);
     }
 }
