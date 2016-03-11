@@ -72,9 +72,10 @@ class OfficeIPCThread : public salhelper::Thread
   private:
     static rtl::Reference< OfficeIPCThread > pGlobalOfficeIPCThread;
 
+    enum class State { Starting, RequestsEnabled, Downing };
+
     osl::Pipe                   maPipe;
-    bool                        mbDowning;
-    bool                        mbRequestsEnabled;
+    State                       mState;
     int                         mnPendingRequests;
     rtl::Reference<DispatchWatcher> mpDispatchWatcher;
 
@@ -121,7 +122,7 @@ class OfficeIPCThread : public salhelper::Thread
     static void                 WaitForReady();
     static bool                 IsEnabled();
 
-    bool                        AreRequestsEnabled() const { return mbRequestsEnabled && ! mbDowning; }
+    bool                        AreRequestsEnabled() const { return mState == State::RequestsEnabled; }
 };
 
 

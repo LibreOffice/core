@@ -391,7 +391,7 @@ void OfficeIPCThread::SetDowning()
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if ( pGlobalOfficeIPCThread.is() )
-        pGlobalOfficeIPCThread->mbDowning = true;
+        pGlobalOfficeIPCThread->mState = State::Downing;
 }
 
 static bool s_bInEnableRequests = false;
@@ -404,7 +404,9 @@ void OfficeIPCThread::EnableRequests()
     if ( pGlobalOfficeIPCThread.is() )
     {
         s_bInEnableRequests = true;
-        pGlobalOfficeIPCThread->mbRequestsEnabled = true;
+        if (pGlobalOfficeIPCThread->mState != State::Downing) {
+            pGlobalOfficeIPCThread->mState = State::RequestsEnabled;
+        }
         // hit the compiler over the head
         ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
         // trigger already queued requests
@@ -634,7 +636,7 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
             pGlobalOfficeIPCThread);
         pGlobalOfficeIPCThread.clear();
 
-        pOfficeIPCThread->mbDowning = true;
+        pOfficeIPCThread->mState = State::Downing;
         pOfficeIPCThread->maPipe.close();
 
         // release mutex to avoid deadlocks
@@ -652,8 +654,7 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 
 OfficeIPCThread::OfficeIPCThread() :
     Thread( "OfficeIPCThread" ),
-    mbDowning( false ),
-    mbRequestsEnabled( false ),
+    mState( State::Starting ),
     mnPendingRequests( 0 )
 {
 }
@@ -722,7 +723,7 @@ void OfficeIPCThread::execute()
             // down during wait
             osl::ClearableMutexGuard aGuard( GetMutex() );
 
-            if ( mbDowning )
+            if ( mState == State::Downing )
             {
                 break;
             }
@@ -963,7 +964,7 @@ void OfficeIPCThread::execute()
         {
             {
                 osl::MutexGuard aGuard( GetMutex() );
-                if ( mbDowning )
+                if ( mState == State::Downing )
                 {
                     break;
                 }
