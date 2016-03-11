@@ -75,7 +75,6 @@
 
 
 #include <svx/svdotable.hxx>
-
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -147,7 +146,10 @@ public:
 
     void testFdo90607();
     void testTdf91378();
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
     void testBnc822341();
+#endif
     void testMathObject();
     void testMathObjectPPT2010();
     void testTdf80224();
@@ -187,8 +189,10 @@ public:
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testTdf91378);
-
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
     CPPUNIT_TEST(testBnc822341);
+#endif
     CPPUNIT_TEST(testMathObject);
     CPPUNIT_TEST(testMathObjectPPT2010);
     CPPUNIT_TEST(testTdf80224);
@@ -1102,6 +1106,8 @@ void SdExportTest::testTdf91378()
     xDocShRef->DoClose();
 }
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 void SdExportTest::testBnc822341()
 {
     // Check import / export of embedded text document
@@ -1171,6 +1177,7 @@ void SdExportTest::testBnc822341()
 
     xDocShRef->DoClose();
 }
+#endif
 
 void SdExportTest::testMathObject()
 {

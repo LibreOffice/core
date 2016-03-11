@@ -53,6 +53,7 @@
 #include <com/sun/star/rdf/Statement.hpp>
 
 #include <string>
+#include <config_features.h>
 
 class Test : public SwModelTestBase
 {
@@ -372,6 +373,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77812, "fdo77812.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", 1);
 }
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
@@ -397,6 +400,7 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
         "ProgID",
         "Excel.Sheet.12");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
 {
@@ -733,6 +737,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
         "Excel.SheetMacroEnabled.12");
 }
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
 {
    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
@@ -758,7 +764,10 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
         "ProgID",
         "Word.DocumentMacroEnabled.12");
 }
+#endif
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
 {
    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
@@ -784,6 +793,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
         "ProgID",
         "PowerPoint.ShowMacroEnabled.12");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
 {
@@ -811,6 +821,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
         "PowerPoint.SlideMacroEnabled.12");
 }
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
 {
     // This UT for DOCX embedded with binary excel work sheet.
@@ -837,6 +849,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
         "ProgID",
         "Word.Document.8");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
 {
