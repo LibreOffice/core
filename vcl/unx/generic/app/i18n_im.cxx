@@ -264,7 +264,7 @@ SalI18N_InputMethod::~SalI18N_InputMethod()
 // XXX
 // debug routine: lets have a look at the provided method styles
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 
 extern "C" char*
 GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize)
@@ -348,8 +348,8 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
             if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, nullptr)
                 != nullptr)
                 mbUseable = False;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "Creating Mono-Lingual InputMethod\n" );
+            #if OSL_DEBUG_LEVEL > 0
+            SAL_WARN("vcl.app", "Creating Mono-Lingual InputMethod");
             PrintInputStyle( mpStyles );
             #endif
         }
@@ -359,10 +359,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         }
     }
 
-    #if OSL_DEBUG_LEVEL > 1
-    if ( !mbUseable )
-        fprintf(stderr, "input method creation failed\n");
-    #endif
+    SAL_WARN_IF(!mbUseable, "vcl.app", "input method creation failed");
 
     maDestroyCallback.callback    = static_cast<XIMProc>(IM_IMDestroyCallback);
     maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);

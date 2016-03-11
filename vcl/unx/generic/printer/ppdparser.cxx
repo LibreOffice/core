@@ -131,7 +131,7 @@ namespace psp
             // empty locale requested, fill in application UI locale
             aLoc = Application::GetSettings().GetUILanguageTag().getLocale();
 
-            #if OSL_DEBUG_LEVEL > 1
+            #if OSL_DEBUG_LEVEL > 0
             static const char* pEnvLocale = getenv( "SAL_PPDPARSER_LOCALE" );
             if( pEnvLocale && *pEnvLocale )
             {
@@ -658,7 +658,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
 
     // now get the Values
     parse( aLines );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SAL_INFO("vcl.unx.print", "acquired " << m_aKeys.size()
             << " Keys from PPD " << m_aFile << ":");
     for( PPDParser::hash_type::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )

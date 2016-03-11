@@ -415,7 +415,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
     if (!bEMFPlus) {
         pOut->PassEMFPlusHeaderInfo();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // debug code - write the stream to debug file /tmp/emf-stream.emf
         int pos = pWMF->Tell();
         pWMF->Seek(0);

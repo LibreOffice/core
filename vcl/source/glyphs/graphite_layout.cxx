@@ -21,7 +21,7 @@
 //              Graphite engine.
 
 // Enable lots of debug info
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <cstdio>
 #define GRLAYOUT_DEBUG 1
 #undef NDEBUG

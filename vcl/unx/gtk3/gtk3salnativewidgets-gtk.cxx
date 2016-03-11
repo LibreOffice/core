@@ -1817,18 +1817,13 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         case PANGO_STRETCH_ULTRA_EXPANDED:    aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;break;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
-#endif
+    SAL_INFO("vcl.gtk3", "font name BEFORE system match: \"" << aFamily.getStr() << "\"");
 
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
-                  aInfo.m_nID != 0 ? "succeeded" : "failed",
-                  OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+    SAL_INFO("vcl.gtk3", "font match " << (aInfo.m_nID != 0 ? "succeeded" : "failed") <<
+            ", name AFTER: \"" << aInfo.m_aFamilyName << "\"");
 
     int nPointHeight = 0;
     /*sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
@@ -2117,10 +2112,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     gchar* pThemeName = NULL;
     g_object_get( pSettings, "gtk-theme-name", &pThemeName, nullptr );
-    fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
+    SAL_INFO("vcl.gtk3", "Theme name is \"" << pThemeName << "\"");
     g_free(pThemeName);
 #endif
 }

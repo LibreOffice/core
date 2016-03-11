@@ -118,10 +118,8 @@ class ControllerProperties;
     mpViewState->bNeedRestart = false;
     if( nPages != pLastPageCount )
     {
-        #if OSL_DEBUG_LEVEL > 1
         SAL_INFO( "vcl.osx.print", "number of pages changed" <<
                   " from " << pLastPageCount << " to " << nPages );
-        #endif
         mpViewState->bNeedRestart = true;
     }
 

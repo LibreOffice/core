@@ -116,9 +116,7 @@ bool isSupportedProtocol( const QString &rProtocol )
 
 void sendCommand( const QString &rCommand )
 {
-#if OSL_DEBUG_LEVEL > 1
-    ::std::cerr << "kdefilepicker sent: " << rCommand.latin1() << ::std::endl;
-#endif
+    SAL_INFO("vcl.kde", "kdefilepicker sent: " << rCommand.latin1());
 
     //m_aOutputStream << rCommand << endl;
     ::std::cout << rCommand.utf8() << ::std::endl;
