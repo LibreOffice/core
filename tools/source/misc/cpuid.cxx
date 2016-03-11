@@ -22,13 +22,13 @@ namespace
 {
 #if defined(_MSC_VER)
 #include <intrin.h>
-static void getCpuId(uint32_t array[4])
+void getCpuId(uint32_t array[4])
 {
     __cpuid((int*)array, 1);
 }
 #else
 #include <cpuid.h>
-static void getCpuId(uint32_t array[4])
+void getCpuId(uint32_t array[4])
 {
     __get_cpuid(1, array + 0, array + 1, array + 2, array + 3);
 }

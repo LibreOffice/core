@@ -31,7 +31,7 @@ namespace comphelper
 
     namespace
     {
-        static OUString lcl_getUnknownPropertyErrorMessage( const OUString& _rPropertyName )
+        OUString lcl_getUnknownPropertyErrorMessage( const OUString& _rPropertyName )
         {
             // TODO: perhaps it's time to think about resources in the comphelper module?
             // Would be nice to have localized exception strings (a simply resource file containing

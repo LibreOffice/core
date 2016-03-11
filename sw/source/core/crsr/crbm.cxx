@@ -64,13 +64,13 @@ namespace
         SwCursorSaveState m_aSaveState;
     };
 
-    static bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
+    bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
         const IDocumentMarkAccess::pMark_t& rpSecond)
     {
         return rpFirst->GetMarkEnd() > rpSecond->GetMarkEnd();
     }
 
-    static bool lcl_IsInvisibleBookmark(IDocumentMarkAccess::pMark_t pMark)
+    bool lcl_IsInvisibleBookmark(IDocumentMarkAccess::pMark_t pMark)
     {
         return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::MarkType::BOOKMARK;
     }

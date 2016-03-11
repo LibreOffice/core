@@ -33,7 +33,7 @@ namespace framework
 
 namespace
 {
-static sal_uInt16 impl_convertItemBitsToItemStyle( sal_Int16 nItemBits )
+sal_uInt16 impl_convertItemBitsToItemStyle( sal_Int16 nItemBits )
 {
     sal_uInt16 nStyle( 0 );
 
