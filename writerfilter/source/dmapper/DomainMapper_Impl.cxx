@@ -32,6 +32,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
@@ -73,7 +74,7 @@
 #include <oox/token/tokens.hxx>
 
 #include <map>
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -449,7 +450,6 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 }
 
 
-
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
     m_bDummyParaAddedForTableInSection = bIsAdded;
@@ -472,7 +472,6 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
 {
     m_bSdt = bSdt;
 }
-
 
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
@@ -566,7 +565,6 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
         pRet = m_aPropertyStacks[eId].top();
     return pRet;
 }
-
 
 
 uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
@@ -1327,7 +1325,6 @@ void DomainMapper_Impl::appendTextContent(
 }
 
 
-
 void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
     static const char sEmbeddedService[] = "com.sun.star.text.TextEmbeddedObject";
@@ -1722,7 +1719,6 @@ void DomainMapper_Impl::EndParaMarkerChange( )
 }
 
 
-
 void DomainMapper_Impl::PushAnnotation()
 {
     try
@@ -2066,7 +2062,7 @@ void DomainMapper_Impl::PopShapeContext()
 
 bool DomainMapper_Impl::IsSdtEndBefore()
 {
-    bool bIsSdtEndBefore = false;;
+    bool bIsSdtEndBefore = false;
     PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
     if(pContext)
     {
@@ -2286,24 +2282,30 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
     assert(rIndex == rCommand.getLength());
     if (bQuoted)
     {
+        // MS Word allows this, so just emit a debug message
         SAL_INFO("writerfilter.dmapper",
                     "field argument with unterminated quote");
-        return OUString();
     }
-    else
-    {
-        rHaveToken = !token.isEmpty();
-        return token.makeStringAndClear();
-    }
+    rHaveToken = !token.isEmpty();
+    return token.makeStringAndClear();
 }
 
-boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
-lcl_SplitFieldCommand(const OUString& rCommand)
+std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCommand(const OUString& rCommand)
 {
     OUString sType;
     std::vector<OUString> arguments;
     std::vector<OUString> switches;
     sal_Int32 nStartIndex(0);
+    // tdf#54584: Field may be prepended by a backslash
+    // This is not an escapement, but already escaped literal "\"
+    // MS Word allows this, so just skip it
+    if ((rCommand.getLength() >= nStartIndex + 2) &&
+        (rCommand[nStartIndex] == L'\\') &&
+        (rCommand[nStartIndex + 1] != L'\\') &&
+        (rCommand[nStartIndex + 1] != L' '))
+    {
+        ++nStartIndex;
+    }
 
     do
     {
@@ -2329,9 +2331,8 @@ lcl_SplitFieldCommand(const OUString& rCommand)
         }
     } while (nStartIndex < rCommand.getLength());
 
-    return boost::make_tuple(sType, arguments, switches);
+    return std::make_tuple(sType, arguments, switches);
 }
-
 
 OUString lcl_ExctractAskVariableAndHint( const OUString& rCommand, OUString& rHint )
 {
@@ -3554,13 +3555,13 @@ void DomainMapper_Impl::CloseFieldCommand()
         {
             uno::Reference< uno::XInterface > xFieldInterface;
 
-            boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
-                field(lcl_SplitFieldCommand(pContext->GetCommand()));
-            OUString const sFirstParam(boost::get<1>(field).empty()
-                    ? OUString() : boost::get<1>(field).front());
+            std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
+                field(splitFieldCommand(pContext->GetCommand()));
+            OUString const sFirstParam(std::get<1>(field).empty()
+                    ? OUString() : std::get<1>(field).front());
 
             FieldConversionMap_t::iterator const aIt =
-                aFieldConversionMap.find(boost::get<0>(field));
+                aFieldConversionMap.find(std::get<0>(field));
             if(aIt != aFieldConversionMap.end())
             {
                 bool bCreateEnhancedField = false;
@@ -3614,7 +3615,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
                         FieldConversionMap_t::iterator aEnhancedIt =
-                            aEnhancedFieldConversionMap.find(boost::get<0>(field));
+                            aEnhancedFieldConversionMap.find(std::get<0>(field));
                         if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
                             sServiceName += OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
                     }
@@ -3682,7 +3683,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" COMMENTS") );
                         // A parameter with COMMENTS shouldn't set fixed
                         // ( or at least the binary filter doesn't )
-                        // If we set fixed then we wont export a field cmd.
+                        // If we set fixed then we won't export a field cmd.
                         // Additionally the para in COMMENTS is more like an
                         // instruction to set the document property comments
                         // with the param ( e.g. each COMMENT with a param will
@@ -4775,7 +4776,6 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
 }
 
 
-
 void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sal_Int32 ndxaLnn )
 {
     if( !m_bLineNumberingSet )
@@ -4823,7 +4823,6 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
 }
 
 
-
 _PageMar::_PageMar()
 {
     header = footer = ConversionHelper::convertTwipToMM100(sal_Int32(720));
@@ -4833,7 +4832,6 @@ _PageMar::_PageMar()
     right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
     gutter = 0;
 }
-
 
 
 void DomainMapper_Impl::RegisterFrameConversion(

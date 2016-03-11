@@ -9,6 +9,8 @@
 #ifndef INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
 #define INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
 
+#include <vector>
+
 #include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -42,6 +44,10 @@ public:
                  SourceDocumentType eDocumentType,
                  utl::MediaDescriptor& rMediaDesc);
 };
+
+// export just for test
+SAL_DLLPUBLIC_EXPORT std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCommand(const OUString& rCommand);
+
 } // namespace dmapper
 } // namespace writerfilter
 
