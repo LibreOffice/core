@@ -543,7 +543,7 @@ namespace frm
 
     namespace
     {
-        static void lcl_inflate( Rectangle& _rRect, long _nInflateX, long _nInflateY )
+        void lcl_inflate( Rectangle& _rRect, long _nInflateX, long _nInflateY )
         {
             _rRect.Left() -= _nInflateX;
             _rRect.Right() += _nInflateX;

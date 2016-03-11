@@ -20,7 +20,7 @@
 namespace
 {
     //Find ascii escaped unicode
-    static sal_Int32 lcl_IndexOfUnicode(
+    sal_Int32 lcl_IndexOfUnicode(
         const OString& rSource, const sal_Int32 nFrom = 0 )
     {
         const OString sHexDigits = "0123456789abcdefABCDEF";
@@ -41,7 +41,7 @@ namespace
     }
 
     //Convert ascii escaped unicode to utf-8
-    static OString lcl_ConvertToUTF8( const OString& rText )
+    OString lcl_ConvertToUTF8( const OString& rText )
     {
         OString sResult = rText;
         sal_Int32 nIndex = lcl_IndexOfUnicode( sResult );
@@ -59,7 +59,7 @@ namespace
     }
 
     //Escape unicode characters
-    static void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
+    void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
     {
         const OUString sTemp =
             OStringToOUString( rText, RTL_TEXTENCODING_UTF8 );

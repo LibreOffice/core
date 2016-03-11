@@ -38,7 +38,7 @@ namespace frm
 
     namespace
     {
-        static URL createClipboardURL( OClipboardDispatcher::ClipboardFunc _eFunc )
+        URL createClipboardURL( OClipboardDispatcher::ClipboardFunc _eFunc )
         {
             URL aURL;
             switch ( _eFunc )

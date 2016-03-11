@@ -98,7 +98,7 @@ AddonsToolBarFactory::~AddonsToolBarFactory()
 {
 }
 
-static bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
+bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
 {
     if ( aContextList.isEmpty() )
         return true;

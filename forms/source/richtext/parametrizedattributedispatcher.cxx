@@ -53,7 +53,7 @@ namespace frm
 
     namespace
     {
-        static SfxSlotId lcl_normalizeLatinScriptSlotId( SfxSlotId _nSlotId )
+        SfxSlotId lcl_normalizeLatinScriptSlotId( SfxSlotId _nSlotId )
         {
             switch ( _nSlotId )
             {
