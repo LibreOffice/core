@@ -4701,14 +4701,14 @@ void Test::testCopyPasteFormulasExternalDoc()
     ScClipParam aClipParam(aRange, false);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
-    ScDocument* pClipDoc = new ScDocument(SCDOCMODE_CLIP);
-    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
     aRange = ScRange(1,1,1,1,6,1);
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
-    rExtDoc.CopyFromClip(aRange, aMarkData2, nFlags, nullptr, pClipDoc);
+    rExtDoc.CopyFromClip(aRange, aMarkData2, nFlags, nullptr, &aClipDoc);
 
     OUString aFormula;
     rExtDoc.GetFormula(1,1,1, aFormula);
