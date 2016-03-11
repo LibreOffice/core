@@ -2026,7 +2026,6 @@ uno::Any SwXStyle::GetStyleProperty<RES_PARATR_OUTLINELEVEL>(const SfxItemProper
     SAL_WARN_IF(SFX_STYLE_FAMILY_PARA == GetFamily(), "sw.uno", "only paras");
     return uno::makeAny<sal_Int16>(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel());
 }
-
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
@@ -2035,6 +2034,25 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySi
     SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum(GetFamily()), true);
     return uno::makeAny(aString);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<RES_PAGEDESC>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
+    if(MID_PAGEDESC_PAGEDESCNAME != nMemberId)
+        return uno::Any();
+    // special handling for RES_PAGEDESC
+    const SfxPoolItem* pItem;
+    if(SfxItemState::SET != rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
+        return uno::Any();
+    const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+    if(!pDesc)
+        return uno::Any();
+    OUString aString;
+    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
+    return uno::makeAny(aString);
+}
+
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -2085,27 +2103,14 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         {
             return GetStyleProperty<FN_UNO_FOLLOW_STYLE>(rEntry, rPropSet, rBase);
         }
-        case RES_PAGEDESC :
+        case RES_PAGEDESC:
         {
             if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
             {
                 bHandleDefaulyWay = true;
                 break;
             }
-            // special handling for RES_PAGEDESC
-            const SfxPoolItem* pItem;
-            if (SfxItemState::SET == rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
-            {
-                const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
-                if(pDesc)
-                {
-                    OUString aString;
-                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
-                    aRet <<= aString;
-                }
-
-            }
-            break;
+            return GetStyleProperty<RES_PAGEDESC>(rEntry, rPropSet, rBase);
         }
         case FN_UNO_IS_AUTO_UPDATE:
         {
