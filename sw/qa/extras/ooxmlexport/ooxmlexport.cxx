@@ -20,7 +20,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 
 #include <string>
-
+#include <config_features.h>
 class Test : public SwModelTestBase
 {
 public:
@@ -82,11 +82,14 @@ protected:
     }
 };
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", "Icon");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
 {

@@ -51,6 +51,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 
 #include <string>
+#include <config_features.h>
 
 class Test : public SwModelTestBase
 {
@@ -466,6 +467,8 @@ DECLARE_OOXMLEXPORT_TEST(testAbi11739, "abi11739.docx")
     CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "qFormat"));
 }
 
+//This test gives error due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 {
     // check there are two objects and they are FrameShapes
@@ -496,6 +499,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
     CPPUNIT_ASSERT_EQUAL(2, nSheetFiles);
     CPPUNIT_ASSERT_EQUAL(2, nImageFiles);
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testNumberedLists_StartingWithZero, "FDO74105.docx")
 {
@@ -531,6 +535,8 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreak,"fdo74566.docx")
     getRun(xParagraph4, 1, "Second Page First line after Page Break");
 }
 
+//This test gives errors due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -558,6 +564,7 @@ DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")
         "application/vnd.openxmlformats-officedocument.oleObject");
 
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
 {
@@ -707,6 +714,8 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
     CPPUNIT_ASSERT_EQUAL( idInDocXml, idInCommentXml );
 }
 
+//This features gives error due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
 {
     // fdo#76015 : Document contains oleobject in header xml.
@@ -739,6 +748,7 @@ DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
         "ProgID",
         "Word.Picture.8");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(test_ClosingBrace, "2120112713.docx")
 {
@@ -884,6 +894,8 @@ DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:citation", 1);
 }
 
+//This feature gives error due to ATL
+#if HAVE_FEATURE_ATL
 DECLARE_OOXMLEXPORT_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
@@ -910,6 +922,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.docx")
         "ProgID",
         "Excel.Chart.8");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
 {
