@@ -1124,6 +1124,12 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
 #   define CHECKED GTK_STATE_FLAG_ACTIVE
 #endif
 
+#if GTK_CHECK_VERSION(3,19,11)
+#   define ACTIVE_TAB GTK_STATE_FLAG_CHECKED
+#else
+#   define ACTIVE_TAB GTK_STATE_FLAG_ACTIVE
+#endif
+
 void GtkSalGraphics::PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
                                        const Rectangle& rControlRectangle, bool bIsCheck, bool bInMenu)
 {
@@ -1345,7 +1351,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case CTRL_TAB_ITEM:
         context = mpNotebookHeaderTabsTabStyle;
         if (nState & ControlState::SELECTED)
-            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_ACTIVE);
+            flags = (GtkStateFlags) (flags | ACTIVE_TAB);
         break;
     case CTRL_WINDOW_BACKGROUND:
         context = gtk_widget_get_style_context(mpWindow);
@@ -2030,7 +2036,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aTextColor = getColor( text_color );
         aStyleSet.SetTabRolloverTextColor(aTextColor);
 
-        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_ACTIVE);
+        gtk_style_context_set_state(pCStyle, ACTIVE_TAB);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabHighlightTextColor(aTextColor);
