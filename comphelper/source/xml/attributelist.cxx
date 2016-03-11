@@ -100,15 +100,20 @@ OUString SAL_CALL AttributeList::getValueByName(const OUString& sName) throw( cs
     return OUString();
 }
 
-
 AttributeList::AttributeList()
+    : m_pImpl(new AttributeList_Impl)
 {
-    m_pImpl = new AttributeList_Impl;
+}
+
+AttributeList::AttributeList(const AttributeList &r)
+    : cppu::WeakImplHelper<XAttributeList, XCloneable>()
+    , m_pImpl(new AttributeList_Impl)
+{
+    *m_pImpl = *(r.m_pImpl);
 }
 
 AttributeList::~AttributeList()
 {
-    delete m_pImpl;
 }
 
 void AttributeList::AddAttribute(const OUString &sName,
@@ -120,6 +125,13 @@ void AttributeList::AddAttribute(const OUString &sName,
 void AttributeList::Clear()
 {
     m_pImpl->vecAttribute.clear();
+}
+
+css::uno::Reference< css::util::XCloneable > AttributeList::createClone() throw (css::uno::RuntimeException, std::exception)
+
+{
+    AttributeList *p = new AttributeList( *this );
+    return css::uno::Reference< css::util::XCloneable > ( static_cast<css::util::XCloneable *>(p) );
 }
 
 } // namespace comphelper
