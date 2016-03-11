@@ -870,10 +870,6 @@ private:
     bool m_bParaHadField;
 };
 
-// export just for test
-SAL_DLLPUBLIC_EXPORT std::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
-    lcl_SplitFieldCommand(const OUString& rCommand);
-
 } //namespace dmapper
 } //namespace writerfilter
 #endif

@@ -40,7 +40,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <rtl/uri.hxx>
-#include <dmapper/DomainMapper_Impl.hxx>
+#include <dmapper/DomainMapperFactory.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtflookahead.hxx>
 #include <rtfcharsets.hxx>
@@ -1575,7 +1575,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     aBuf.append(ch);
                 }
                 OUString aFieldCommand = OStringToOUString(aBuf.toString(), RTL_TEXTENCODING_UTF8);
-                std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > aResult = writerfilter::dmapper::lcl_SplitFieldCommand(aFieldCommand);
+                std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > aResult = writerfilter::dmapper::splitFieldCommand(aFieldCommand);
                 m_aPicturePath = std::get<1>(aResult).empty() ? OUString() : std::get<1>(aResult).front();
             }
 

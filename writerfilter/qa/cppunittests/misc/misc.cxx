@@ -59,80 +59,80 @@ void WriterfilterMiscTest::testTwipConversions()
 
 void WriterfilterMiscTest::testFieldParameters()
 {
-    using writerfilter::dmapper::lcl_SplitFieldCommand;
+    using writerfilter::dmapper::splitFieldCommand;
     std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > result;
 
-    result = lcl_SplitFieldCommand("PAGEREF last_page");
+    result = splitFieldCommand("PAGEREF last_page");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand(" PAGEREF last_page ");
+    result = splitFieldCommand(" PAGEREF last_page ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
 
-    result = lcl_SplitFieldCommand("pageref last_page");
+    result = splitFieldCommand("pageref last_page");
     CPPUNIT_ASSERT(std::get<2>(result).empty());
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("pageref \"last_page\"");
+    result = splitFieldCommand("pageref \"last_page\"");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("\"PAGEREF\" \"last_page\" \"\" ");
+    result = splitFieldCommand("\"PAGEREF\" \"last_page\" \"\" ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(2), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT_EQUAL(OUString(), std::get<1>(result)[1]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("\"PAGEREF\"\"last_page\"  ");
+    result = splitFieldCommand("\"PAGEREF\"\"last_page\"  ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("PAGEREF\"last_page\"  ");
+    result = splitFieldCommand("PAGEREF\"last_page\"  ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("\"PAGEREF\"last_page \"\"");
+    result = splitFieldCommand("\"PAGEREF\"last_page \"\"");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(2), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT_EQUAL(OUString(), std::get<1>(result)[1]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("\"PAGEREF\"last_page \"\"");
+    result = splitFieldCommand("\"PAGEREF\"last_page \"\"");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(2), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT_EQUAL(OUString(), std::get<1>(result)[1]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("pageref \"last\\\\pa\\\"ge\"");
+    result = splitFieldCommand("pageref \"last\\\\pa\\\"ge\"");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last\\pa\"ge"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT(std::get<2>(result).empty());
 
-    result = lcl_SplitFieldCommand("PAGEREF\"last_page\"\\*");
+    result = splitFieldCommand("PAGEREF\"last_page\"\\*");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<2>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("\\*"), std::get<2>(result)[0]);
 
-    result = lcl_SplitFieldCommand("PAGEREF  last_page   \\b   foobar ");
+    result = splitFieldCommand("PAGEREF  last_page   \\b   foobar ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(size_t(1), std::get<1>(result).size());
     CPPUNIT_ASSERT_EQUAL(OUString("last_page"), std::get<1>(result)[0]);
@@ -140,7 +140,7 @@ void WriterfilterMiscTest::testFieldParameters()
     CPPUNIT_ASSERT_EQUAL(OUString("\\B"), std::get<2>(result)[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), std::get<2>(result)[1]);
 
-    result = lcl_SplitFieldCommand("PAGEREF\\bfoobar\\A\"\"");
+    result = splitFieldCommand("PAGEREF\\bfoobar\\A\"\"");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
     CPPUNIT_ASSERT(std::get<1>(result).empty());
     CPPUNIT_ASSERT_EQUAL(size_t(4), std::get<2>(result).size());
@@ -154,19 +154,19 @@ void WriterfilterMiscTest::testFieldParameters()
                         "]", "^", "_", "`", "{", "|", "}", "~"})
     {
         OUString test(OUString::createFromAscii(prefix) + "PAGE");
-        result = lcl_SplitFieldCommand(test + " ");
+        result = splitFieldCommand(test + " ");
         CPPUNIT_ASSERT_EQUAL(test, std::get<0>(result));
     }
-    result = lcl_SplitFieldCommand("\\PAGE ");
+    result = splitFieldCommand("\\PAGE ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGE"), std::get<0>(result));
-    result = lcl_SplitFieldCommand("\\ PAGE ");
+    result = splitFieldCommand("\\ PAGE ");
     CPPUNIT_ASSERT_EQUAL(OUString("\\ "), std::get<0>(result));
     CPPUNIT_ASSERT_EQUAL(OUString("PAGE"), std::get<1>(result)[0]);
-    result = lcl_SplitFieldCommand("\\\\PAGE ");
+    result = splitFieldCommand("\\\\PAGE ");
     CPPUNIT_ASSERT_EQUAL(OUString("\\PAGE"), std::get<0>(result));
-    result = lcl_SplitFieldCommand("\"PAGE\" ");
+    result = splitFieldCommand("\"PAGE\" ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGE"), std::get<0>(result));
-    result = lcl_SplitFieldCommand("\"PAGE ");
+    result = splitFieldCommand("\"PAGE ");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGE "), std::get<0>(result));
 }
 

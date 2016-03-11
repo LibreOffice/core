@@ -2283,8 +2283,7 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
     return token.makeStringAndClear();
 }
 
-std::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
-lcl_SplitFieldCommand(const OUString& rCommand)
+std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCommand(const OUString& rCommand)
 {
     OUString sType;
     std::vector<OUString> arguments;
@@ -3550,7 +3549,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             uno::Reference< uno::XInterface > xFieldInterface;
 
             std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
-                field(lcl_SplitFieldCommand(pContext->GetCommand()));
+                field(splitFieldCommand(pContext->GetCommand()));
             OUString const sFirstParam(std::get<1>(field).empty()
                     ? OUString() : std::get<1>(field).front());
 
