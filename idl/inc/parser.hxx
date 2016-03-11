@@ -45,11 +45,12 @@ public:
     void         ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );
     void         ReadInterfaceOrShellEntry( SvMetaClass& rClass );
     bool         ReadInterfaceOrShellSlot( SvMetaSlot& rSlot );
-    void         ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr );
+    void         ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr );
     void         ReadItem();
     void         ReadStruct();
     void         ReadEnum();
     void         ReadEnumValue( SvMetaTypeEnum& rEnum );
+    void         ReadSlotId(SvIdentifier& rSlotId);
     SvMetaClass* ReadKnownClass();
     SvMetaType*  ReadKnownType();
     void         Read(char cChar);

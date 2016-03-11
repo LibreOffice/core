@@ -316,7 +316,7 @@ void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
         else
         {
             xAttr = new SvMetaAttribute( pType );
-            ReadInterfaceOrShellMethodOrAttribute(*xAttr);
+            ReadInterfaceOrShellMethod(*xAttr);
             bOk = true;
         }
         if( bOk )
@@ -354,7 +354,7 @@ bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
                 rSlot.ReadAttributesSvIdl( rBase, rInStm );
                 ReadIfDelimiter();
             }
-            bOk = ReadIf( ']' );
+            Read( ']' );
         }
     }
     else
@@ -379,17 +379,13 @@ bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
     return bOk;
 }
 
-void SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr )
+void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )
 {
     rAttr.SetName( ReadIdentifier() );
-    rAttr.aSlotId.setString( ReadIdentifier() );
-    sal_uLong n;
-    if( !rBase.FindId( rAttr.aSlotId.getString(), &n ) )
-        throw SvParseException( rInStm, "no value for identifier <" + rAttr.aSlotId.getString() + "> " );
-    rAttr.aSlotId.SetValue(n);
+    ReadSlotId( rAttr.aSlotId );
 
-    Read( '(' );
     // read method arguments
+    Read( '(' );
     tools::SvRef<SvMetaType> xT(new SvMetaType() );
     xT->SetRef(rAttr.GetType() );
     rAttr.aType = xT;
@@ -398,17 +394,25 @@ void SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
     {
         while (true)
         {
-            tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
-            if( !xAttr->ReadSvIdl( rBase, rInStm ) )
-                throw SvParseException(rInStm, "ReadSvIdl in method argument parsing failed");
-            if( !xAttr->Test( rInStm ) )
-                throw SvParseException(rInStm, "test in method argument parsing failed");
-            rAttr.aType->GetAttrList().push_back( xAttr );
+            tools::SvRef<SvMetaAttribute> xParamAttr( new SvMetaAttribute() );
+            xParamAttr->aType = ReadKnownType();
+            xParamAttr->SetName( ReadIdentifier() );
+            ReadSlotId(xParamAttr->aSlotId);
+            rAttr.aType->GetAttrList().push_back( xParamAttr );
             if (!ReadIfDelimiter())
                 break;
         }
         Read(')');
     }
+}
+
+void SvIdlParser::ReadSlotId(SvIdentifier& rSlotId)
+{
+    rSlotId.setString( ReadIdentifier() );
+    sal_uLong n;
+    if( !rBase.FindId( rSlotId.getString(), &n ) )
+        throw SvParseException( rInStm, "no value for identifier <" + rSlotId.getString() + "> " );
+    rSlotId.SetValue(n);
 }
 
 SvMetaClass * SvIdlParser::ReadKnownClass()
@@ -470,9 +474,8 @@ OString SvIdlParser::ReadString()
 
 void SvIdlParser::Read(char cChar)
 {
-    if( !(rInStm.GetToken().IsChar() && rInStm.GetToken().GetChar() == cChar ) )
+    if( !ReadIf(cChar) )
         throw SvParseException(rInStm, "expected char '" + OString(cChar) + "'");
-    rInStm.GetToken_Next();
 }
 
 bool SvIdlParser::ReadIf(char cChar)
