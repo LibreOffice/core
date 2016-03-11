@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_2df999c9",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-11T22:53:08Z",
+      "side": 1,
+      "message": "Humm.. this may have been a misunderstanding. What I meant was\n\n ScFormulaCell* pFC \u003d aDocument.GetFormulaCell( pHdl-\u003eGetCursorPos());\n if (pFC)\n     pFC-\u003eSetDirty();\n\nWhich has less overhead.\n\nI\u0027ll change that in an amended commit.",
+      "revId": "a8c1088071a20322f325282dc891cc2b6ecd49c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
