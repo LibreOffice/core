@@ -154,7 +154,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalcul
 
 OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32* /*pFormulaLength = nullptr */ ) const
 {
     double fIntercept = m_fSign * exp(m_fLogIntercept);
     bool bHasSlope = !rtl::math::approxEqual( exp(m_fLogSlope), 1.0 );

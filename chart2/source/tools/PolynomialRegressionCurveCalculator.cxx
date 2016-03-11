@@ -27,7 +27,6 @@
 
 #include <SpecialUnicodes.hxx>
 
-
 using namespace com::sun::star;
 
 namespace chart
@@ -236,15 +235,53 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL PolynomialRegressionCurveCalcula
 
 OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth /* = nullptr */ ) const
 {
     OUStringBuffer aBuf( "f(x) = " );
 
+    sal_Int32 nValueLength=0;
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
+
+    if ( pFormulaMaxWidth && *pFormulaMaxWidth > 0 )
+    {
+        sal_Int32 nCharMin = aBuf.getLength(); // count characters different from coefficients
+        double nCoefficients = aLastIndex + 1.0; // number of coefficients
+        for (sal_Int32 i = aLastIndex; i >= 0; i--)
+        {
+            double aValue = mCoefficients[i];
+            if ( aValue == 0.0 )
+            { // do not count coeffitient if it is 0
+                nCoefficients --;
+                continue;
+            }
+            if ( rtl::math::approxEqual( fabs( aValue ) , 1.0 ) )
+            { // do not count coeffitient if it is 1
+                nCoefficients --;
+                if ( i == 0 ) // intercept = 1
+                    nCharMin ++;
+            }
+            if ( i != aLastIndex )
+                nCharMin += 3; // " + "
+            if ( i > 0 )
+            {
+                 nCharMin += 1; // "x"
+                if ( i > 1 )
+                    nCharMin +=1; // "^i"
+                if ( i >= 10 )
+                    nCharMin ++; // 2 digits for i
+            }
+        }
+        nValueLength = ( *pFormulaMaxWidth - nCharMin ) / nCoefficients;
+        if ( nValueLength <= 0 )
+            nValueLength = 1;
+    }
+
     bool bFindValue = false;
+    sal_Int32 nLineLength = aBuf.getLength();
     for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
         double aValue = mCoefficients[i];
+        OUStringBuffer aTmpBuf(""); // temporary buffer
         if (aValue == 0.0)
         {
             continue;
@@ -252,38 +289,42 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         else if (aValue < 0.0)
         {
             if ( bFindValue ) // if it is not the first aValue
-                aBuf.append( " " );
-            aBuf.append( aMinusSign + " ");
+                aTmpBuf.append( " " );
+            aTmpBuf.append( aMinusSign + " ");
             aValue = - aValue;
         }
         else
         {
             if ( bFindValue ) // if it is not the first aValue
-                aBuf.append( " + " );
+                aTmpBuf.append( " + " );
         }
         bFindValue = true;
 
-        if ( i == 0 || !rtl::math::approxEqual( aValue , 1.0 ) )
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, aValue ) );
+        // if nValueLength not calculated then nullptr
+        sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
+        OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, aValue, pValueLength );
+        if ( i == 0 || aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
+            aTmpBuf.append( aValueString );
 
         if(i > 0)
         {
-            aBuf.append( "x" );
+            aTmpBuf.append( "x" );
             if (i > 1)
             {
                 if (i < 10) // simple case if only one digit
-                    aBuf.append( aSuperscriptFigures[ i ] );
+                    aTmpBuf.append( aSuperscriptFigures[ i ] );
                 else
                 {
                     OUString aValueOfi = OUString::number( i );
                     for ( sal_Int32 n = 0; n < aValueOfi.getLength() ; n++ )
                     {
                         sal_Int32 nIndex = aValueOfi[n] - sal_Unicode ( '0' );
-                        aBuf.append( aSuperscriptFigures[ nIndex ] );
+                        aTmpBuf.append( aSuperscriptFigures[ nIndex ] );
                     }
                 }
             }
         }
+        addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
     if ( aBuf.toString() == "f(x) = " )
         aBuf.append( "0" );
