@@ -2027,6 +2027,14 @@ uno::Any SwXStyle::GetStyleProperty<RES_PARATR_OUTLINELEVEL>(const SfxItemProper
     return uno::makeAny<sal_Int16>(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel());
 }
 
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    OUString aString;
+    SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum(GetFamily()), true);
+    return uno::makeAny(aString);
+}
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -2074,10 +2082,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case FN_UNO_FOLLOW_STYLE:
         {
-            OUString aString;
-            SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
-            aRet <<= aString;
-            break;
+            return GetStyleProperty<FN_UNO_FOLLOW_STYLE>(rEntry, rPropSet, rBase);
         }
         case RES_PAGEDESC :
         {
