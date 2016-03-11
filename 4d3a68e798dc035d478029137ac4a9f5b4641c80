@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_6d90b196",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-11T17:22:07Z",
+      "side": 1,
+      "message": "First of all, as already discussed on IRC, please add some spaces and fix indentation here, so it looks e.g. like\nif ( foo[bar] \u003d\u003d baz[bleh] ||\n     something.else || \n..\n\nIt\u0027ll be easier to read",
+      "revId": "4d3a68e798dc035d478029137ac4a9f5b4641c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_4d8ded7a",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-11T17:22:07Z",
+      "side": 1,
+      "message": "So this means: \"it is our own lock if either of OOOUSERNAME, SYSUSERNAME is empty\" ... is that really what you wanted to achieve? (I\u0027ve no clue, I don\u0027t know this code so well)",
+      "revId": "4d3a68e798dc035d478029137ac4a9f5b4641c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
