@@ -387,59 +387,84 @@ void ChartAreaPanel::updateData()
     if (!xPropSet.is())
         return;
 
-    css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
-    xPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
-    XFillStyleItem aFillStyleItem(eFillStyle);
-    updateFillStyle(false, true, &aFillStyleItem);
+    css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+    if (!xInfo.is())
+        return;
 
-    sal_uInt16 nFillTransparence = 0;
-    xPropSet->getPropertyValue("FillTransparence") >>= nFillTransparence;
-    SfxUInt16Item aTransparenceItem(0, nFillTransparence);
-    updateFillTransparence(false, true, &aTransparenceItem);
-
-    OUString aGradientName;
-    xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
-    XGradient xGradient = getXGradientForName(mxModel, aGradientName);
-    XFillGradientItem aGradientItem(aGradientName, xGradient);
-    updateFillGradient(false, true, &aGradientItem);
-
-    OUString aHatchName;
-    xPropSet->getPropertyValue("FillHatchName") >>= aHatchName;
-    XHatch xHatch = getXHatchFromName(mxModel, aHatchName);
-    XFillHatchItem aHatchItem(aHatchName, xHatch);
-    updateFillHatch(false, true, &aHatchItem);
-
-    OUString aBitmapName;
-    xPropSet->getPropertyValue("FillBitmapName") >>= aBitmapName;
-    GraphicObject xBitmap = getXBitmapFromName(mxModel, aBitmapName);
-    XFillBitmapItem aBitmapItem(aBitmapName, xBitmap);
-    XFillBitmapItem* pBitmapItem = nullptr;
-    DrawModelWrapper* pModelWrapper = nullptr;
-    try
+    if (xInfo->hasPropertyByName("FillStyle"))
     {
-        pModelWrapper = getDrawModelWrapper(mxModel);
-        if (pModelWrapper)
+        css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
+        xPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
+        XFillStyleItem aFillStyleItem(eFillStyle);
+        updateFillStyle(false, true, &aFillStyleItem);
+    }
+
+    if (xInfo->hasPropertyByName("FillTransparence"))
+    {
+        sal_uInt16 nFillTransparence = 0;
+        xPropSet->getPropertyValue("FillTransparence") >>= nFillTransparence;
+        SfxUInt16Item aTransparenceItem(0, nFillTransparence);
+        updateFillTransparence(false, true, &aTransparenceItem);
+    }
+
+    if (xInfo->hasPropertyByName("FillGradientName"))
+    {
+       OUString aGradientName;
+       xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
+       XGradient xGradient = getXGradientForName(mxModel, aGradientName);
+       XFillGradientItem aGradientItem(aGradientName, xGradient);
+       updateFillGradient(false, true, &aGradientItem);
+    }
+
+    if (xInfo->hasPropertyByName("FillHatchName"))
+    {
+        OUString aHatchName;
+        xPropSet->getPropertyValue("FillHatchName") >>= aHatchName;
+        XHatch xHatch = getXHatchFromName(mxModel, aHatchName);
+        XFillHatchItem aHatchItem(aHatchName, xHatch);
+        updateFillHatch(false, true, &aHatchItem);
+    }
+
+    if (xInfo->hasPropertyByName("FillBitmapName"))
+    {
+        OUString aBitmapName;
+        xPropSet->getPropertyValue("FillBitmapName") >>= aBitmapName;
+        GraphicObject xBitmap = getXBitmapFromName(mxModel, aBitmapName);
+        XFillBitmapItem aBitmapItem(aBitmapName, xBitmap);
+        XFillBitmapItem* pBitmapItem = nullptr;
+        DrawModelWrapper* pModelWrapper = nullptr;
+        try
         {
-            pBitmapItem = aBitmapItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
+            pModelWrapper = getDrawModelWrapper(mxModel);
+            if (pModelWrapper)
+            {
+                pBitmapItem = aBitmapItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
+            }
         }
+        catch (...)
+        {
+        }
+        updateFillBitmap(false, true, pBitmapItem ? pBitmapItem : &aBitmapItem);
+        delete pBitmapItem;
     }
-    catch (...)
+
+    if (xInfo->hasPropertyByName("FillTransparenceGradientName"))
     {
+        OUString aFillFloatTransparenceName;
+        xPropSet->getPropertyValue("FillTransparenceGradientName") >>= aFillFloatTransparenceName;
+        XFillFloatTransparenceItem aFillFloatTransparenceItem = getXTransparencyGradientForName(mxModel, aFillFloatTransparenceName);
+        updateFillFloatTransparence(false, true, &aFillFloatTransparenceItem);
+
+        maFillColorWrapper.updateData();
     }
-    updateFillBitmap(false, true, pBitmapItem ? pBitmapItem : &aBitmapItem);
-    delete pBitmapItem;
 
-    OUString aFillFloatTransparenceName;
-    xPropSet->getPropertyValue("FillTransparenceGradientName") >>= aFillFloatTransparenceName;
-    XFillFloatTransparenceItem aFillFloatTransparenceItem = getXTransparencyGradientForName(mxModel, aFillFloatTransparenceName);
-    updateFillFloatTransparence(false, true, &aFillFloatTransparenceItem);
-
-    maFillColorWrapper.updateData();
-
-    sal_uInt32 nFillColor = 0;
-    xPropSet->getPropertyValue("FillColor") >>= nFillColor;
-    XFillColorItem aFillColorItem("", Color(nFillColor));
-    updateFillColor(true, &aFillColorItem);
+    if (xInfo->hasPropertyByName("FillColor"))
+    {
+        sal_uInt32 nFillColor = 0;
+        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        XFillColorItem aFillColorItem("", Color(nFillColor));
+        updateFillColor(true, &aFillColorItem);
+    }
 }
 
 void ChartAreaPanel::modelInvalid()
