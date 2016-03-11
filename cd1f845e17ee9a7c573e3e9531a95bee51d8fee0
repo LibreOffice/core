@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_6a81b78f",
+        "filename": "basctl/source/basicide/baside2b.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-11T12:05:17Z",
+      "side": 0,
+      "message": "This seems to be all dead code. Id suggest to just remove it.",
+      "revId": "cd1f845e17ee9a7c573e3e9531a95bee51d8fee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
