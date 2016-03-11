@@ -161,7 +161,14 @@ namespace basebmp
             return; // really, nothing to do then.
 
         detail::VectorOfVectorOfVertices aGET; // the Global Edge Table
-        aGET.resize( nMaxY - nMinY + 1 );
+        try
+        {
+            aGET.resize( nMaxY - nMinY + 1 );
+        }
+        catch (...)
+        {
+            return;
+        }
 
         sal_uInt32 const nVertexCount(
             detail::setupGlobalEdgeTable( aGET, rPoly, nMinY ) );
