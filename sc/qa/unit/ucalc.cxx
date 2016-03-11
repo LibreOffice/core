@@ -3441,15 +3441,14 @@ void Test::testCopyPasteTranspose()
     ScDocument aNewClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aSrcRange, &aNewClipDoc);
 
-    ::std::unique_ptr<ScDocument> pTransClip;
-    pTransClip.reset(new ScDocument(SCDOCMODE_CLIP));
+    ::std::unique_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aNewClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false);
-    ScDocument* pTransposedClip = pTransClip.release();
 
     ScRange aDestRange = ScRange(3,1,1,3,3,1);//target: Sheet2.D2:D4
     ScMarkData aMark;
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransposedClip);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get());
+    pTransClip.reset();
 
     //check cell content after transposed copy/paste
     OUString aString = m_pDoc->GetString(3, 3, 1);
