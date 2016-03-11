@@ -296,12 +296,8 @@ IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, p
 {
     // Documents requests are processed by the OfficeIPCThread implementation
     ProcessDocumentsRequest* pDocsRequest = static_cast<ProcessDocumentsRequest*>(pEvent);
-
-    if ( pDocsRequest )
-    {
-        OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
-        delete pDocsRequest;
-    }
+    OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+    delete pDocsRequest;
 }
 
 void ImplPostForeignAppEvent( ApplicationEvent* pEvent )
