@@ -534,9 +534,8 @@ void Application::Reschedule( bool i_bAllEvents )
 
 void Scheduler::ProcessEventsToIdle()
 {
-    int nSanity = 1000;
-    while(Scheduler::ProcessTaskScheduling(false) ||
-          ImplYield(false, false, 0))
+    int nSanity = 100;
+    while(ImplYield(false, false, 0))
     {
         if (nSanity-- < 0)
         {
