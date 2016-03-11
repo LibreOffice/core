@@ -122,7 +122,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
 {
     SvGlobalName aOwnGlobalName;
     SvGlobalName aObjName( rObj->getClassID() );
-    const SfxFilter* pExpFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pExpFilter;
     {
         static struct _ObjExpType {
             sal_uInt32 nFlag;

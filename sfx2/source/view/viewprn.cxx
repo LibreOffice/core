@@ -656,7 +656,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     // document that is going to be printed!)
     OUString aHelpFilterName( "writer_web_HTML_help" );
     SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
-    const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : nullptr;
+    std::shared_ptr<const SfxFilter> pFilter = pMedium ? pMedium->GetFilter() : nullptr;
     bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
 
     const sal_uInt16 nId = rReq.GetSlot();

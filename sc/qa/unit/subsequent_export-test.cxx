@@ -279,11 +279,11 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
-    SfxFilter* pExportFilter = new SfxFilter(
+    std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
         rFilter,
         OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
-        rUserData, OUString("private:factory/scalc*") );
-    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        rUserData, OUString("private:factory/scalc*") ));
+    const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
     SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
     uno::Sequence< beans::NamedValue > aEncryptionData = comphelper::OStorageHelper::CreatePackageEncryptionData( "test" );

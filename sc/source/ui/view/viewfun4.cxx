@@ -584,7 +584,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     if (!bLink)     // for bLink only graphics or URL
     {
         // 1. can I open the file?
-        const SfxFilter* pFlt = nullptr;
+        std::shared_ptr<const SfxFilter> pFlt;
 
         // search only for its own filters, without selection box (as in ScDocumentLoader)
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
@@ -592,7 +592,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         // #i73992# GuessFilter no longer calls UseInteractionHandler.
         // This is UI, so it can be called here.
         aSfxMedium.UseInteractionHandler(true);
-        ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
+        ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, pFlt );
 
         if ( pFlt && !nErr )
         {

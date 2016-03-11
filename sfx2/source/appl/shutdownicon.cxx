@@ -446,7 +446,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
 
                 if ( !aFilterName.isEmpty() )
                 {
-                    const SfxFilter* pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4UIName( aFilterName, SfxFilterFlags::NONE, SfxFilterFlags::NOTINFILEDLG );
+                    std::shared_ptr<const SfxFilter> pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4UIName( aFilterName, SfxFilterFlags::NONE, SfxFilterFlags::NOTINFILEDLG );
 
                     if ( pFilter )
                     {

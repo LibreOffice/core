@@ -579,7 +579,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
     else
     {
         // show dragged-in document
-        const SfxFilter* pFilter = nullptr;
+        std::shared_ptr<const SfxFilter> pFilter;
         ErrCode nErr = 0;
 
         if (aFileName != maDropFileName)
@@ -587,7 +587,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
             SfxMedium aMed(aFileName, (StreamMode::READ | StreamMode::SHARE_DENYNONE));
             SfxFilterMatcher aMatch( OUString("simpress") );
             aMed.UseInteractionHandler( true );
-            nErr = aMatch.GuessFilter(aMed, &pFilter);
+            nErr = aMatch.GuessFilter(aMed, pFilter);
         }
 
         if ((pFilter && !nErr) || aFileName == maDropFileName)

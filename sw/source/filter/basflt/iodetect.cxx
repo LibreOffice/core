@@ -60,7 +60,7 @@ const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     return OUString();
 }
 
-const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
+std::shared_ptr<const SfxFilter> SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
     const SfxFilterContainer* pCnt)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
@@ -72,7 +72,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
         {
             SfxFilterMatcher aMatcher( pFltCnt->GetName() );
             SfxFilterMatcherIter aIter( aMatcher );
-            const SfxFilter* pFilter = aIter.First();
+            std::shared_ptr<const SfxFilter> pFilter = aIter.First();
             while ( pFilter )
             {
                 if( pFilter->GetUserData().equals(rFormatNm) )
@@ -141,7 +141,7 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 // Check the type of the stream (file) by searching for corresponding set of bytes.
 // If no known type is found, return ASCII for now!
 // Returns the internal FilterName.
-const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
+std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFileName)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
     SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
@@ -149,7 +149,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
 
     SfxFilterMatcher aMatcher( pFCntnr->GetName() );
     SfxFilterMatcherIter aIter( aMatcher );
-    const SfxFilter* pFilter = aIter.First();
+    std::shared_ptr<const SfxFilter> pFilter = aIter.First();
     if ( !pFilter )
         return nullptr;
 
@@ -163,7 +163,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         SfxMedium aMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ);
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
-        const SfxFilter* pTemplateFilter = nullptr;
+        std::shared_ptr<const SfxFilter> pTemplateFilter;
         if (aMedium.IsStorage())
         {
             uno::Reference<embed::XStorage> const xStor = aMedium.GetStorage();

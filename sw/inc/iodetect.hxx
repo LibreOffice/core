@@ -83,14 +83,14 @@ class SwIoSystem
 {
 public:
     /// find for an internal format name the corresponding filter entry
-    SW_DLLPUBLIC static const SfxFilter*
+    SW_DLLPUBLIC static std::shared_ptr<const SfxFilter>
         GetFilterOfFormat( const OUString& rFormat,
             const SfxFilterContainer* pCnt = nullptr );
 
     /** Detect for the given file which filter should be used. The filter name
      is returned. If no filter could be found, the name of the ASCII filter
      is returned! */
-    static const SfxFilter* GetFileFilter(const OUString& rFileName);
+    static std::shared_ptr<const SfxFilter> GetFileFilter(const OUString& rFileName);
 
     static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static bool IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);

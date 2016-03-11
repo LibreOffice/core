@@ -1049,7 +1049,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
     nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
 
-    const SfxFilter* pFilter = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if (pFilter)
     {
         OUString aFltName = pFilter->GetFilterName();
@@ -1517,7 +1517,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
 bool ScDocShell::LoadExternal( SfxMedium& rMed )
 {
-    const SfxFilter* pFilter = rMed.GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = rMed.GetFilter();
     if (!pFilter)
         return false;
 

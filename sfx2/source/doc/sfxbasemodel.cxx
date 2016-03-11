@@ -1788,7 +1788,7 @@ namespace {
 
 OUString getFilterProvider( SfxMedium& rMedium )
 {
-    const SfxFilter* pFilter = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if (!pFilter)
         return OUString();
 
@@ -1911,7 +1911,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         // file recovery: restore original filter
         const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILTER_NAME, false);
         SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-        const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
+        std::shared_ptr<const SfxFilter> pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
         pMedium->SetFilter( pSetFilter );
         m_pData->m_pObjectShell->SetModified();
     }
@@ -2913,7 +2913,7 @@ bool SfxBaseModel::impl_isDisposed() const
 
 OUString SfxBaseModel::GetMediumFilterName_Impl()
 {
-    const SfxFilter* pFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
     if ( pMedium )
         pFilter = pMedium->GetFilter();
@@ -2946,7 +2946,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
             if ( pMedium )
             {
-                const SfxFilter* pFilter = pMedium->GetFilter();
+                std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
                 if ( pFilter && aFilterName.equals( pFilter->GetFilterName() ) )
                 {
                     // #i119366# - If the former file saving with password, do not trying in StoreSelf anyway...
@@ -3772,7 +3772,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     if( pItem )
     {
         OUString aFilterName = pItem->GetValue();
-        const SfxFilter* pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        std::shared_ptr<const SfxFilter> pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
         if ( pFilter && pFilter->UsesStorage() )
             nVersion = pFilter->GetVersion();
     }

@@ -33,6 +33,8 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfilt.hxx>
 
+#include <memory>
+
 namespace com
 {
     namespace sun
@@ -248,7 +250,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
 
 
-ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItemSet* pSet);
+ErrCode RequestPassword(std::shared_ptr<const SfxFilter> pCurrentFilter, OUString& aURL, SfxItemSet* pSet);
 }
 
 #endif

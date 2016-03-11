@@ -2568,7 +2568,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 
                 //Own FileFormat? --> insert, not for StarWriter/Web
                 OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link<OUString *, bool>(), false );
-                const SfxFilter* pFlt = SwPasteSdr::SetAttr == nAction
+                std::shared_ptr<const SfxFilter> pFlt = SwPasteSdr::SetAttr == nAction
                         ? nullptr : SwIoSystem::GetFileFilter(sFileURL);
                 if( pFlt && dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) == nullptr )
                 {

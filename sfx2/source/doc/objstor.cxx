@@ -628,7 +628,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pMedium->CanDisposeStorage_Impl( true );
 
     bool bOk = false;
-    const SfxFilter* pFilter = pMed->GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
     SfxItemSet* pSet = pMedium->GetItemSet();
     if( !pImp->nEventId )
     {
@@ -893,7 +893,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
         {
             try {
                 bool bAbort = false;
-                const SfxFilter* pFilter = pMedium->GetFilter();
+                std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
                 Sequence < PropertyValue > aProps;
                 Any aAny = xFilterCFG->getByName( pFilter->GetName() );
                 if ( aAny >>= aProps )
@@ -1107,7 +1107,7 @@ bool SfxObjectShell::SaveTo_Impl
 
     ModifyBlocker_Impl aMod(this);
 
-    const SfxFilter *pFilter = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
         // if no filter was set, use the default filter
@@ -1334,7 +1334,7 @@ bool SfxObjectShell::SaveTo_Impl
         // document. It can be retrieved from the default filter for the desired target format
         SotClipboardFormatId nFormat = rMedium.GetFilter()->GetFormat();
         SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-        const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
+        std::shared_ptr<const SfxFilter> pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
         if ( pFilt )
         {
             if ( pFilt->GetServiceName() != rMedium.GetFilter()->GetServiceName() )
@@ -1957,7 +1957,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         pMedium->CanDisposeStorage_Impl( true );
     }
 
-    const SfxFilter *pFilter = pMedium ? pMedium->GetFilter() : nullptr;
+    std::shared_ptr<const SfxFilter> pFilter = pMedium ? pMedium->GetFilter() : nullptr;
     if ( pNewMed )
     {
         if( bMedChanged )
@@ -2103,7 +2103,7 @@ void SfxObjectShell::AddToRecentlyUsedList()
 
     if ( aUrl.GetProtocol() == INetProtocol::File )
     {
-        const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
+        std::shared_ptr<const SfxFilter> pOrgFilter = pMedium->GetOrigFilter();
         Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
                                               (pOrgFilter) ? pOrgFilter->GetMimeType() : OUString(),
                                               (pOrgFilter) ? pOrgFilter->GetServiceName() : OUString() );
@@ -2485,7 +2485,7 @@ bool SfxObjectShell::ConvertTo
 bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 {
     SfxMedium* pRetrMedium = GetMedium();
-    const SfxFilter* pFilter = pRetrMedium->GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = pRetrMedium->GetFilter();
 
     // copy the original itemset, but remove the "version" item, because pMediumTmp
     // is a new medium "from scratch", so no version should be stored into it
@@ -2585,7 +2585,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     {
         const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_FILTER_NAME, false);
         OUString aFilterName;
-        const SfxFilter *pFilter = nullptr;
+        std::shared_ptr<const SfxFilter> pFilter;
         if ( pFilterItem )
             pFilter = SfxFilterMatcher( OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
 
@@ -2644,7 +2644,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     const SfxBoolItem* pSaveToItem = rItemSet.GetItem<SfxBoolItem>(SID_SAVETO, false);
     bool bSaveTo = pSaveToItem && pSaveToItem->GetValue();
 
-    const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
+    std::shared_ptr<const SfxFilter> pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
     if ( !pFilter
         || !pFilter->CanExport()
         || (!bSaveTo && !pFilter->CanImport()) )
@@ -2896,7 +2896,7 @@ bool SfxObjectShell::IsInformationLost()
     // for the latest store then the user should be asked to store in own format
     if ( !aFilterName.isEmpty() && aFilterName.equals( aPreusedFilterName ) )
     {
-        const SfxFilter *pFilt = GetMedium()->GetFilter();
+        std::shared_ptr<const SfxFilter> pFilt = GetMedium()->GetFilter();
         DBG_ASSERT( pFilt && aFilterName.equals( pFilt->GetName() ), "MediaDescriptor contains wrong filter!\n" );
         return ( pFilt && pFilt->IsAlienFormat() );
     }
@@ -3061,7 +3061,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         const bool bTemplate = rMedium.GetFilter()->IsOwnTemplateFormat()
             && nVersion > SOFFICE_FILEFORMAT_60;
 
-        const SfxFilter* pFilter = rMedium.GetFilter();
+        std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
         bool bChart = false;
         if(pFilter->GetName() == "chart8")
             bChart = true;

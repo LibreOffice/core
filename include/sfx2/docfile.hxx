@@ -74,7 +74,7 @@ public:
                          */
                         SfxMedium( const OUString &rName,
                                    StreamMode nOpenMode,
-                                   const SfxFilter *pFilter = nullptr,
+                                   std::shared_ptr<const SfxFilter> pFilter = nullptr,
                                    SfxItemSet *pSet = nullptr );
                         /**
                          * @param pSet Takes ownership
@@ -82,7 +82,7 @@ public:
                         SfxMedium( const OUString &rName,
                                    const OUString &rReferer,
                                    StreamMode nOpenMode,
-                                   const SfxFilter *pFilter = nullptr,
+                                   std::shared_ptr<const SfxFilter> pFilter = nullptr,
                                    SfxItemSet *pSet = nullptr );
 
                         /**
@@ -113,9 +113,12 @@ public:
     void                SetLoadTargetFrame(SfxFrame* pFrame );
     SfxFrame*           GetLoadTargetFrame() const;
 
-    void                SetFilter(const SfxFilter *pFlt);
-    const SfxFilter*    GetFilter() const;
-    const SfxFilter*    GetOrigFilter() const;
+    /**
+     * Does not take ownership of pFlt but pFlt needs to be around as long as the SfxMedium instance.
+     */
+    void                SetFilter(std::shared_ptr<const SfxFilter> pFilter);
+    std::shared_ptr<const SfxFilter>    GetFilter() const;
+    std::shared_ptr<const SfxFilter>    GetOrigFilter() const;
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;

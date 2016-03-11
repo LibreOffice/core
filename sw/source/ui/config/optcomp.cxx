@@ -285,7 +285,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         else if ( pObjShell && !sName.isEmpty() )
         {
             SfxFilterContainer* pFacCont = pObjShell->GetFactory().GetFilterContainer();
-            const SfxFilter* pFilter = pFacCont->GetFilter4FilterName( sName );
+            std::shared_ptr<const SfxFilter> pFilter = pFacCont->GetFilter4FilterName( sName );
             if ( pFilter )
                 sNewEntry = pFilter->GetUIName();
         }

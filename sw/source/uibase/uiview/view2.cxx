@@ -2110,13 +2110,13 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
     if( !rFileName.isEmpty() )
     {
         SfxObjectFactory& rFact = pDocSh->GetFactory();
-        const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
+        std::shared_ptr<const SfxFilter> pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
         if ( !pFilter )
         {
             pMed = new SfxMedium(rFileName, StreamMode::READ, nullptr, nullptr );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( true );
-            ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE);
+            ErrCode nErr = aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE);
             if ( nErr )
                 DELETEZ(pMed);
             else

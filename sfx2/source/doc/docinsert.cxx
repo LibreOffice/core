@@ -95,8 +95,8 @@ SfxMedium* DocumentInserter::CreateMedium()
         else
             pMatcher = new SfxFilterMatcher();
 
-        const SfxFilter* pFilter = nullptr;
-        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter );
+        std::shared_ptr<const SfxFilter> pFilter;
+        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, pFilter );
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
@@ -125,8 +125,8 @@ SfxMediumList* DocumentInserter::CreateMediumList()
             pMedium->UseInteractionHandler( true );
 
             SfxFilterMatcher aMatcher( m_sDocFactory );
-            const SfxFilter* pFilter = nullptr;
-            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter );
+            std::shared_ptr<const SfxFilter> pFilter;
+            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, pFilter );
             if ( nError == ERRCODE_NONE && pFilter )
                 pMedium->SetFilter( pFilter );
             else

@@ -572,7 +572,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( mpDoc->GetPageCount() )
     {
-        const SfxFilter*    pMediumFilter = rMedium.GetFilter();
+        std::shared_ptr<const SfxFilter> pMediumFilter = rMedium.GetFilter();
         const OUString aTypeName( pMediumFilter->GetTypeName() );
         SdFilter*           pFilter = nullptr;
 
@@ -613,8 +613,6 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
             bRet = pFilter->Export();
             if( !bRet )
                 mpDoc->SetSwapGraphicsMode( nOldSwapMode );
-
-            delete pFilter;
         }
     }
 
@@ -945,7 +943,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark, bool bRealizeMul
 bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
 
-    const SfxFilter* pFilter = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
 
     if (pFilter->IsOwnTemplateFormat())
     {

@@ -1480,10 +1480,10 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             {
                 // normal link
                 OUString            aFilterName;
-                const SfxFilter*    pSfxFilter = nullptr;
+                std::shared_ptr<const SfxFilter> pSfxFilter;
                 SfxMedium           aSfxMedium( aURL, referer_, StreamMode::READ | StreamMode::SHARE_DENYNONE );
 
-                SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter );
+                SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, pSfxFilter );
 
                 if( !pSfxFilter )
                 {

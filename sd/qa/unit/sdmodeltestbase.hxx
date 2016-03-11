@@ -116,17 +116,18 @@ protected:
         SotClipboardFormatId nOptions = SotClipboardFormatId::NONE;
         if (pFmt->nFormatType != SfxFilterFlags::NONE)
             nOptions = SotClipboardFormatId::STARCALC_8;
-        SfxFilter* aFilter = new SfxFilter(
+        SfxFilter* pFilter = new SfxFilter(
             OUString::createFromAscii( pFmt->pFilterName ),
             OUString(), pFmt->nFormatType, nOptions,
             OUString::createFromAscii( pFmt->pTypeName ),
             0, OUString(),
             OUString::createFromAscii( pFmt->pUserData ),
             OUString("private:factory/simpress*") );
-        aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, aFilter, pParams);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, pFilt, pParams);
         if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.Is() )
         {
             if (xDocShRef.Is())
@@ -152,14 +153,14 @@ protected:
         SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
         if (pFormat->nFormatType == ODP_FORMAT_TYPE)
             nExportFormat = SotClipboardFormatId::STARCALC_8;
-        SfxFilter* pExportFilter = new SfxFilter(
+        std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
                                         OUString::createFromAscii(pFormat->pFilterName),
                                         OUString(), pFormat->nFormatType, nExportFormat,
                                         OUString::createFromAscii(pFormat->pTypeName),
                                         0, OUString(),
                                         OUString::createFromAscii(pFormat->pUserData),
-                                        OUString("private:factory/simpress*") );
-        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+                                        OUString("private:factory/simpress*") ));
+        const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         aStoreMedium.SetFilter(pExportFilter);
         pShell->ConvertTo(aStoreMedium);
         pShell->DoClose();
@@ -171,14 +172,14 @@ protected:
         SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
         if (pFormat->nFormatType == ODP_FORMAT_TYPE)
             nExportFormat = SotClipboardFormatId::STARCHART_8;
-        SfxFilter* pExportFilter = new SfxFilter(
+        std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
                                         OUString::createFromAscii(pFormat->pFilterName),
                                         OUString(), pFormat->nFormatType, nExportFormat,
                                         OUString::createFromAscii(pFormat->pTypeName),
                                         0, OUString(),
                                         OUString::createFromAscii(pFormat->pUserData),
-                                        OUString("private:factory/simpress*") );
-        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+                                        OUString("private:factory/simpress*") ));
+        const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         aStoreMedium.SetFilter(pExportFilter);
         pShell->DoSaveAs(aStoreMedium);
         pShell->DoClose();

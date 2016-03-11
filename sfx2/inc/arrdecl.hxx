@@ -20,9 +20,10 @@
 #define INCLUDED_SFX2_INC_ARRDECL_HXX
 
 #include <vector>
+#include <memory>
 
 class SfxFilter;
-typedef ::std::vector< SfxFilter* > SfxFilterList_Impl;
+typedef ::std::vector< std::shared_ptr<const SfxFilter> > SfxFilterList_Impl;
 
 #endif
 

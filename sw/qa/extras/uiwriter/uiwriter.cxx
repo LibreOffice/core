@@ -1710,16 +1710,16 @@ void SwUiWriterTest::testTdf78742()
     OUString path = m_directories.getURLFromSrc(DATA_DIRECTORY) + "calc-data-source.ods";
     SfxMedium aMedium(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher(OUString("com.sun.star.text.TextDocument"));
-    const SfxFilter* pFilter = nullptr;
-    sal_uInt32 filter = aMatcher.DetectFilter(aMedium, &pFilter);
+    std::shared_ptr<const SfxFilter> pFilter;
+    sal_uInt32 filter = aMatcher.DetectFilter(aMedium, pFilter);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_IO_ABORT, filter);
     //it should not return any Filter
     CPPUNIT_ASSERT(!pFilter);
     //testing without service type and any .ods file
     SfxMedium aMedium2(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher2;
-    const SfxFilter* pFilter2 = nullptr;
-    sal_uInt32 filter2 = aMatcher2.DetectFilter(aMedium2, &pFilter2);
+    std::shared_ptr<const SfxFilter> pFilter2;
+    sal_uInt32 filter2 = aMatcher2.DetectFilter(aMedium2, pFilter2);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter2);
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("calc8"), pFilter2->GetFilterName());
@@ -1727,8 +1727,8 @@ void SwUiWriterTest::testTdf78742()
     OUString path2 = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo69893.odt";
     SfxMedium aMedium3(path2, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher3(OUString("com.sun.star.text.TextDocument"));
-    const SfxFilter* pFilter3 = nullptr;
-    sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, &pFilter3);
+    std::shared_ptr<const SfxFilter> pFilter3;
+    sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, pFilter3);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter3);
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("writer8"), pFilter3->GetFilterName());

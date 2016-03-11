@@ -144,7 +144,7 @@ IMPL_LINK_TYPED(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
         SfxFilterMatcher aMatcher( OUString::createFromAscii(rFact.GetShortName()) );
         SfxFilterMatcherIter aIter( aMatcher );
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-        const SfxFilter* pFlt = aIter.First();
+        std::shared_ptr<const SfxFilter> pFlt = aIter.First();
         while( pFlt )
         {
             if( pFlt && pFlt->IsAllowedAsTemplate() )

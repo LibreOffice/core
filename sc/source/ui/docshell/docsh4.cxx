@@ -718,7 +718,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     //  GetFilter needs name without the prefix.
                     ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
-                    const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
+                    std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
                     SfxItemSet* pSet = new SfxAllItemSet( pApp->GetPool() );
                     if (!aOptions.isEmpty())
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );

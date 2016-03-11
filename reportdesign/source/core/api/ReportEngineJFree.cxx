@@ -167,7 +167,7 @@ OUString OReportEngineJFree::getNewOutputName()
         {
             MimeConfigurationHelper aConfighelper(m_xContext);
             const OUString sMimeType = m_xReport->getMimeType();
-            const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
+            std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
             OUString sExt(".rpt");
             if ( pFilter )
                 sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');

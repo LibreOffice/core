@@ -191,7 +191,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 
     OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
     OUString  aFilter;
-    const SfxFilter* pFilter = pMed->GetOrigFilter();
+    std::shared_ptr<const SfxFilter> pFilter = pMed->GetOrigFilter();
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 

@@ -171,7 +171,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
     bool bNewUrlName = !aFileName.equals(aNewUrl);
 
-    const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
+    std::shared_ptr<const SfxFilter> pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return false;
 
@@ -462,7 +462,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
     //  Filter-Detection
 
-    const SfxFilter* pSfxFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pSfxFilter;
     SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
@@ -471,9 +471,9 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
         SfxFilterMatcher aMatcher("scalc");
         if( bWithContent )
-            aMatcher.GuessFilter( *pMedium, &pSfxFilter );
+            aMatcher.GuessFilter( *pMedium, pSfxFilter );
         else
-            aMatcher.GuessFilterIgnoringContent( *pMedium, &pSfxFilter );
+            aMatcher.GuessFilterIgnoringContent( *pMedium, pSfxFilter );
     }
 
     bool bOK = false;
@@ -497,7 +497,7 @@ void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
         rFilterName = rFilterName.copy( aAppPrefix.getLength());
 }
 
-SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, const SfxFilter* pFilter,
+SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> pFilter,
         const OUString& rOptions )
 {
     // Always create SfxItemSet so ScDocShell can set options.
@@ -517,7 +517,7 @@ ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
     if ( rFilterName.isEmpty() )
         GetFilterName( rFileName, rFilterName, rOptions, true, bWithInteraction );
 
-    const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
+    std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
     pMedium = CreateMedium( rFileName, pFilter, rOptions);
     if ( pMedium->GetError() != ERRCODE_NONE )

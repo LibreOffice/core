@@ -198,7 +198,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         }
     }
 
-    const SfxFilter* pFilter;
+    std::shared_ptr<const SfxFilter> pFilter;
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:

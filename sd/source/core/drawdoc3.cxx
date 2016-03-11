@@ -202,11 +202,11 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
     bool bOK = true;
     SdDrawDocument* pBookmarkDoc = nullptr;
     OUString aBookmarkName = rMedium.GetName();
-    const SfxFilter* pFilter = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
         rMedium.UseInteractionHandler( true );
-        SfxGetpApp()->GetFilterMatcher().GuessFilter( rMedium, &pFilter );
+        SfxGetpApp()->GetFilterMatcher().GuessFilter( rMedium, pFilter );
     }
 
     if ( !pFilter )

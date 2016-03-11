@@ -122,17 +122,17 @@ OUString SfxFilter::GetSuffixes() const
     return aRet;
 }
 
-const SfxFilter* SfxFilter::GetDefaultFilter( const OUString& rName )
+std::shared_ptr<const SfxFilter> SfxFilter::GetDefaultFilter( const OUString& rName )
 {
     return SfxFilterContainer::GetDefaultFilter_Impl( rName );
 }
 
-const SfxFilter* SfxFilter::GetDefaultFilterFromFactory( const OUString& rFact )
+std::shared_ptr<const SfxFilter> SfxFilter::GetDefaultFilterFromFactory( const OUString& rFact )
 {
     return GetDefaultFilter( SfxObjectShell::GetServiceNameFromFactory( rFact ) );
 }
 
-const SfxFilter* SfxFilter::GetFilterByName( const OUString& rName )
+std::shared_ptr<const SfxFilter> SfxFilter::GetFilterByName( const OUString& rName )
 {
     SfxFilterMatcher aMatch;
     return aMatch.GetFilter4FilterName( rName, SfxFilterFlags::NONE, SfxFilterFlags::NONE );
@@ -169,7 +169,7 @@ OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
         SotClipboardFormatId nClipId = ((SotStorage&)rStg).GetFormat();
         if ( nClipId != SotClipboardFormatId::NONE )
         {
-            const SfxFilter* pFilter = SfxFilterMatcher().GetFilter4ClipBoardId( nClipId );
+            std::shared_ptr<const SfxFilter> pFilter = SfxFilterMatcher().GetFilter4ClipBoardId( nClipId );
             if ( pFilter )
                 return pFilter->GetTypeName();
         }
@@ -206,7 +206,7 @@ OUString SfxFilter::GetTypeFromStorage(
                     nDont |= SfxFilterFlags::TEMPLATEPATH;
 
                 // get filter from storage MediaType
-                const SfxFilter* pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
+                std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
                 if ( !pFilter )
                     // template filter is asked for , but there isn't one; so at least the "normal" format should be detected
                     // or storage *is* a template, but bTemplate is not set

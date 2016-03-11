@@ -1517,17 +1517,17 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
     SotClipboardFormatId nFormat = SotClipboardFormatId::STARCALC_8;
-    SfxFilter* aFilter = new SfxFilter(
+    std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         aFilterName,
         OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, 0, OUString(),
-        OUString(), OUString("private:factory/scalc*") );
-    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        OUString(), OUString("private:factory/scalc*") ));
+    const_cast<SfxFilter*>(pFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocSh = new ScDocShell;
     SfxMedium* pMedium = new SfxMedium(aFileName, STREAM_STD_READWRITE);
     SfxItemSet* pSet = pMedium->GetItemSet();
     pSet->Put(SfxStringItem(SID_PASSWORD, OUString("test")));
-    pMedium->SetFilter(aFilter);
+    pMedium->SetFilter(pFilter);
     if (!xDocSh->DoLoad(pMedium))
     {
         xDocSh->DoClose();

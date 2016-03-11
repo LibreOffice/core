@@ -719,7 +719,7 @@ namespace dbaui
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                 0, OUString("sdatabase") );
-        const SfxFilter* pFilter = getStandardDatabaseFilter();
+        std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());

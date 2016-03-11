@@ -6916,7 +6916,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
     if ( sStarName.getLength() )
     {
         //TODO/MBA: check if (and when) storage and stream will be destroyed!
-        const SfxFilter* pFilter = nullptr;
+        std::shared_ptr<const SfxFilter> pFilter;
         std::unique_ptr<SvMemoryStream> xMemStream (new SvMemoryStream);
         if ( pName )
         {

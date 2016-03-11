@@ -301,7 +301,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         return OUString();
 
     SfxFilterMatcher aMatcher("scalc");
-    const SfxFilter* pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
+    std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
 
     if (!pFilter)
         return OUString();

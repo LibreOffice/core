@@ -88,7 +88,7 @@ struct DispatchHolder
 namespace
 {
 
-const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory )
+std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory )
 {
     // create the list of filters
     OUStringBuffer sQuery(256);
@@ -105,7 +105,7 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
             xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", xContext ),
             UNO_QUERY_THROW );
 
-    const SfxFilter* pBestMatch = nullptr;
+    std::shared_ptr<const SfxFilter> pBestMatch;
 
     const Reference< XEnumeration > xFilterEnum(
             xFilterFactory->createSubSetEnumerationByQuery( sQuery.makeStringAndClear() ), UNO_QUERY_THROW );
@@ -115,7 +115,7 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
         const rtl::OUString aName( aFilterProps.getUnpackedValueOrDefault( "Name", rtl::OUString() ) );
         if ( !aName.isEmpty() )
         {
-            const SfxFilter* const pFilter( SfxFilter::GetFilterByName( aName ) );
+            std::shared_ptr<const SfxFilter> pFilter( SfxFilter::GetFilterByName( aName ) );
             if ( pFilter && pFilter->CanExport() && pFilter->GetWildcard().Matches( rUrl ) )
             {
                 if ( !pBestMatch || ( SfxFilterFlags::PREFERED & pFilter->GetFilterFlags() ) )
@@ -127,7 +127,7 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
     return pBestMatch;
 }
 
-static const SfxFilter* impl_getExportFilterFromUrl(
+static std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
         const rtl::OUString& rUrl, const rtl::OUString& rFactory)
 {
 try
@@ -138,7 +138,7 @@ try
             UNO_QUERY_THROW );
     const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
-    const SfxFilter* pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SfxFilterFlags::EXPORT ) );
+    std::shared_ptr<const SfxFilter> pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SfxFilterFlags::EXPORT ) );
     if ( !pFilter )
         pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
     if ( !pFilter )
@@ -161,7 +161,7 @@ catch ( const Exception& )
 OUString impl_GuessFilter( const OUString& rUrlOut, const OUString& rDocService )
 {
     OUString aOutFilter;
-    const SfxFilter* pOutFilter = impl_getExportFilterFromUrl( rUrlOut, rDocService );
+    std::shared_ptr<const SfxFilter> pOutFilter = impl_getExportFilterFromUrl( rUrlOut, rDocService );
     if (pOutFilter)
         aOutFilter = pOutFilter->GetFilterName();
 

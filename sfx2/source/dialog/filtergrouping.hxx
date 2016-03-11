@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include "filedlgimpl.hxx"
 
+#include <memory>
 
 namespace sfx2
 {
@@ -37,11 +38,11 @@ namespace sfx2
 
     public:
         explicit TSortedFilterList(const css::uno::Reference< css::container::XEnumeration >& xFilterList);
-        const SfxFilter* First();
-        const SfxFilter* Next();
+        std::shared_ptr<const SfxFilter> First();
+        std::shared_ptr<const SfxFilter> Next();
 
     private:
-        const SfxFilter* impl_getFilter(sal_Int32 nIndex);
+        std::shared_ptr<const SfxFilter> impl_getFilter(sal_Int32 nIndex);
     };
 
 
