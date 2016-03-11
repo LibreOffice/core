@@ -180,7 +180,7 @@ DispatchWatcher::~DispatchWatcher()
 }
 
 
-bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList, bool bNoTerminate )
+bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest>& aDispatchRequestsList, bool bNoTerminate )
 {
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 

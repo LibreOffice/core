@@ -68,8 +68,6 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
             OUString   aPreselectedFactory;
         };
 
-        typedef std::vector< DispatchRequest > DispatchList;
-
         DispatchWatcher();
 
         virtual ~DispatchWatcher();
@@ -82,7 +80,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // execute new dispatch request
-        bool executeDispatchRequests( const DispatchList& aDispatches, bool bNoTerminate = false );
+        bool executeDispatchRequests( const std::vector<DispatchRequest>& aDispatches, bool bNoTerminate = false );
 
     private:
         osl::Mutex m_mutex;

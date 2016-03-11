@@ -986,7 +986,7 @@ void OfficeIPCThread::execute()
 }
 
 static void AddToDispatchList(
-    DispatchWatcher::DispatchList& rDispatchList,
+    std::vector<DispatchWatcher::DispatchRequest>& rDispatchList,
     boost::optional< OUString > const & cwdUrl,
     std::vector< OUString > const & aRequestList,
     DispatchWatcher::RequestType nType,
@@ -1002,7 +1002,7 @@ static void AddToDispatchList(
 }
 
 static void AddConversionsToDispatchList(
-    DispatchWatcher::DispatchList& rDispatchList,
+    std::vector<DispatchWatcher::DispatchRequest>& rDispatchList,
     boost::optional< OUString > const & cwdUrl,
     std::vector< OUString > const & rRequestList,
     const OUString& rParam,
@@ -1057,7 +1057,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
     // protect the dispatch list
     osl::ClearableMutexGuard aGuard( GetMutex() );
 
-    static DispatchWatcher::DispatchList    aDispatchList;
+    static std::vector<DispatchWatcher::DispatchRequest> aDispatchList;
 
     // Create dispatch list for dispatch watcher
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aInFilter, DispatchWatcher::REQUEST_INFILTER, "", aRequest.aModule );
@@ -1083,7 +1083,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
         }
 
         // copy for execute
-        DispatchWatcher::DispatchList aTempList( aDispatchList );
+        std::vector<DispatchWatcher::DispatchRequest> aTempList( aDispatchList );
         aDispatchList.clear();
 
         aGuard.clear();
