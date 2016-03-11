@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_8a67cb24",
+        "filename": "forms/source/xforms/model.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-11T11:56:40Z",
+      "side": 1,
+      "message": "Since assert aborts the debug build now, did you check this to pass all tests etc. in a debug build?",
+      "revId": "ab1635310ddc2ed0fc8f57cd49d3853d582a7fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
