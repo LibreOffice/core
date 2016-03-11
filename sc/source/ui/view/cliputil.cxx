@@ -15,12 +15,34 @@
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "clipparam.hxx"
+#include "clipoptions.hxx"
 #include "rangelst.hxx"
 #include "viewutil.hxx"
 #include "markdata.hxx"
 #include <gridwin.hxx>
 
 #include <vcl/waitobj.hxx>
+#include <sfx2/classificationhelper.hxx>
+
+namespace
+{
+
+/// Paste only if SfxClassificationHelper recommends so.
+bool lcl_checkClassification(ScDocument* pSourceDoc, ScDocument* pDestinationDoc)
+{
+    if (!pSourceDoc || !pDestinationDoc)
+        return true;
+
+    ScClipOptions* pSourceOptions = pSourceDoc->GetClipOptions();
+    SfxObjectShell* pDestinationShell = pDestinationDoc->GetDocumentShell();
+    if (!pSourceOptions || !pDestinationShell)
+        return true;
+
+    SfxClassificationCheckPasteResult eResult = SfxClassificationHelper::CheckPaste(pSourceOptions->m_xDocumentProperties, pDestinationShell->getDocProperties());
+    return SfxClassificationHelper::ShowPasteInfo(eResult);
+}
+
+}
 
 void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
 {
@@ -64,9 +86,10 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                 // For multi-range paste, we paste values by default.
                 nFlags &= ~InsertDeleteFlags::FORMULA;
 
-            pTabViewShell->PasteFromClip( nFlags, pClipDoc,
-                    ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
-                    bShowDialog );      // allow warning dialog
+            if (lcl_checkClassification(pClipDoc, pThisDoc))
+                pTabViewShell->PasteFromClip( nFlags, pClipDoc,
+                        ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                        bShowDialog );      // allow warning dialog
         }
     }
     pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
