@@ -1809,8 +1809,6 @@ void ExcelToSc::SetComplRow( ScComplexRefData &rCRD )
 
 void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
 {
-    ScMatrix*   pMatrix;
-
     sal_uInt8 nByte = aIn.ReaduInt8();
     sal_uInt16 nUINT16 = aIn.ReaduInt16();
 
@@ -1827,7 +1825,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
         nRows = nUINT16;
     }
 
-    pMatrix = aPool.GetMatrix( n );
+    ScMatrix* pMatrix = aPool.GetMatrix( n );
 
     if( nullptr != pMatrix )
     {
