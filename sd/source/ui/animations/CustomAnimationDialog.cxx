@@ -42,6 +42,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/field.hxx>
@@ -1617,6 +1618,7 @@ public:
 
     DECL_LINK_TYPED( implControlHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
+    DECL_LINK_TYPED( DurationModifiedHdl, Edit&, void );
     void implHdl(Control*);
 
 private:
@@ -1627,7 +1629,7 @@ private:
     VclPtr<FixedText> mpFTStartDelay;
     VclPtr<MetricField> mpMFStartDelay;
     VclPtr<FixedText> mpFTDuration;
-    VclPtr<ListBox> mpCBDuration;
+    VclPtr<MetricBox> mpCBXDuration;
     VclPtr<FixedText> mpFTRepeat;
     VclPtr<ListBox> mpCBRepeat;
     VclPtr<CheckBox> mpCBXRewind;
@@ -1644,7 +1646,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
     get(mpFTStartDelay, "delay_label" );
     get(mpMFStartDelay, "delay_value" );
     get(mpFTDuration, "duration_label" );
-    get(mpCBDuration, "duration_list" );
+    get(mpCBXDuration, "anim_duration" );
     get(mpFTRepeat, "repeat_label" );
     get(mpCBRepeat, "repeat_list" );
     get(mpCBXRewind, "rewind" );
@@ -1654,10 +1656,18 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
     mpLBTrigger->set_width_request(approximate_char_width() * 40);
 
     fillRepeatComboBox( mpCBRepeat );
-    fillDurationComboBox( mpCBDuration );
+
+    //fillDurationMetricComboBox
+    mpCBXDuration->InsertValue(50, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(100, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(200, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(300, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(500, FUNIT_CUSTOM);
+    mpCBXDuration->AdaptDropDownLineCountToMaximum();
 
     mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implClickHdl ) );
     mpLBTrigger->SetSelectHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
+    mpCBXDuration->SetModifyHdl(LINK( this, CustomAnimationDurationTabPage, DurationModifiedHdl));
 
     if( pSet->getPropertyState( nHandleStart ) != STLPropertyState_AMBIGUOUS )
     {
@@ -1687,30 +1697,14 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
         if( fDuration == 0.001 )
         {
             mpFTDuration->Disable();
-            mpCBDuration->Disable();
+            mpCBXDuration->Disable();
             mpFTRepeat->Disable();
             mpCBRepeat->Disable();
             mpCBXRewind->Disable();
         }
         else
         {
-            sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
-
-            if( fDuration == 5.0 )
-                nPos = 0;
-            else if( fDuration == 3.0 )
-                nPos = 1;
-            else if( fDuration == 2.0 )
-                nPos = 2;
-            else if( fDuration == 1.0 )
-                nPos = 3;
-            else if( fDuration == 0.5 )
-                nPos = 4;
-
-            if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                mpCBDuration->SelectEntryPos( nPos );
-            else
-                mpCBDuration->SetText(OUString::number(fDuration));
+            mpCBXDuration->SetValue( (fDuration)*100.0 );
         }
     }
 
@@ -1821,7 +1815,7 @@ void CustomAnimationDurationTabPage::dispose()
     mpFTStartDelay.clear();
     mpMFStartDelay.clear();
     mpFTDuration.clear();
-    mpCBDuration.clear();
+    mpCBXDuration.clear();
     mpFTRepeat.clear();
     mpCBRepeat.clear();
     mpCBXRewind.clear();
@@ -1835,9 +1829,22 @@ IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implClickHdl, Button*, pBtn, vo
 {
     implHdl(pBtn);
 }
+
 IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implControlHdl, ListBox&, rListBox, void )
 {
     implHdl(&rListBox);
+}
+
+IMPL_LINK_NOARG_TYPED(CustomAnimationDurationTabPage, DurationModifiedHdl, Edit&, void)
+{
+    if(!(mpCBXDuration->GetText()).isEmpty() )
+    {
+        double duration_value = static_cast<double>(mpCBXDuration->GetValue());
+        if(duration_value <= 0.0)
+        {
+            mpCBXDuration->SetValue(1);
+        }
+    }
 }
 
 void CustomAnimationDurationTabPage::implHdl( Control* pControl )
@@ -1929,18 +1936,13 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     }
 
     double fDuration = -1.0;
-    nPos = mpCBDuration->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+
+    if(!(mpCBXDuration->GetText()).isEmpty() )
     {
-        fDuration = *static_cast< const double * >( mpCBDuration->GetEntryData(nPos) );
-    }
-    else
-    {
-        OUString aText( mpCBDuration->GetText() );
-        if( !aText.isEmpty() )
-        {
-            fDuration = aText.toDouble();
-        }
+        double duration_value = static_cast<double>(mpCBXDuration->GetValue());
+
+        if(duration_value > 0)
+            fDuration = duration_value/100.0;
     }
 
     if( fDuration != -1.0 )

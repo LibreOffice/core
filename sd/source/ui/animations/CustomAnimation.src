@@ -199,31 +199,6 @@ Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
     };
 };
 
-String STR_CUSTOMANIMATION_DURATION_VERY_SLOW
-{
-    Text [ en-US ] = "Very slow";
-};
-
-String STR_CUSTOMANIMATION_DURATION_SLOW
-{
-    Text [ en-US ] = "Slow";
-};
-
-String STR_CUSTOMANIMATION_DURATION_NORMAL
-{
-    Text [ en-US ] = "Medium";
-};
-
-String STR_CUSTOMANIMATION_DURATION_FAST
-{
-    Text [ en-US ] = "Fast";
-};
-
-String STR_CUSTOMANIMATION_DURATION_VERY_FAST
-{
-    Text [ en-US ] = "Very fast";
-};
-
 String STR_CUSTOMANIMATION_REPEAT_NONE
 {
     Text [ en-US ] = "none";
