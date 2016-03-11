@@ -990,7 +990,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SfxCallMode::SYNCHRON|SfxCallMode::RECORD);
         if( bMergeShell || !pSourceDocSh->IsModified() )
         {
-            const SfxFilter* pStoreToFilter = nullptr;
+            std::shared_ptr<const SfxFilter> pStoreToFilter;
             const OUString* pStoreToFilterOptions = nullptr;
 
             CreateStoreToFilter(pStoreToFilter, pStoreToFilterOptions, pSourceDocSh, bEMail, rMergeDescriptor);
@@ -1327,7 +1327,7 @@ void SwDBManager::GetPathAddress(OUString &sPath, OUString &sAddress, uno::Refer
 
 bool SwDBManager::CreateNewTemp(OUString &sPath, const OUString &sAddress,
                                 std::unique_ptr< utl::TempFile > &aTempFile,
-                                const SwMergeDescriptor& rMergeDescriptor,  const SfxFilter* pStoreToFilter)
+                                const SwMergeDescriptor& rMergeDescriptor,  std::shared_ptr<const SfxFilter> pStoreToFilter)
 {
     INetURLObject aEntry(sPath);
     OUString sLeading;
@@ -1469,7 +1469,7 @@ void SwDBManager::UpdateExpFields(SwWrtShell& rWorkShell, SfxObjectShellLock xWo
     }
 }
 
-void SwDBManager::CreateStoreToFilter(const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
+void SwDBManager::CreateStoreToFilter(std::shared_ptr<const SfxFilter>& pStoreToFilter, const OUString *&pStoreToFilterOptions,
                                       SwDocShell *pSourceDocSh, bool bEMail, const SwMergeDescriptor &rMergeDescriptor)
 {
     pStoreToFilter = SwIoSystem::GetFileFilter(
@@ -1484,7 +1484,7 @@ void SwDBManager::CreateStoreToFilter(const SfxFilter *&pStoreToFilter, const OU
     }
     else if( !rMergeDescriptor.sSaveToFilter.isEmpty())
     {
-        const SfxFilter* pFilter =
+        std::shared_ptr<const SfxFilter> pFilter =
             pFilterContainer->GetFilter4FilterName( rMergeDescriptor.sSaveToFilter );
         if(pFilter)
         {
@@ -1618,7 +1618,7 @@ void SwDBManager::FinishMailMergeFile(SfxObjectShellLock &xWorkDocSh, SwView *pW
 
 bool SwDBManager::SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTargetView, const SwMergeDescriptor &rMergeDescriptor,
                                std::unique_ptr< utl::TempFile > &aTempFile,
-                               const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
+                               std::shared_ptr<const SfxFilter>& pStoreToFilter, const OUString *&pStoreToFilterOptions,
                                const bool bMergeShell, bool bCreateSingleFile, const bool bPrinter)
 {
     bool bNoError = true;
@@ -2965,7 +2965,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         {
             //copy rSh to aTempFile
             OUString sTempURL;
-            const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+            std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
                         FILTER_XML,
                         SwDocShell::Factory().GetFilterContainer() );
             try

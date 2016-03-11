@@ -35,9 +35,9 @@ namespace abp
     using namespace ::svt;
     using namespace ::utl;
 
-    const SfxFilter* lcl_getBaseFilter()
+    std::shared_ptr<const SfxFilter> lcl_getBaseFilter()
     {
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         return pFilter;
     }
@@ -111,7 +111,7 @@ namespace abp
             sPath += "/";
             sPath += rSettings.sDataSourceName;
 
-            const SfxFilter* pFilter = lcl_getBaseFilter();
+            std::shared_ptr<const SfxFilter> pFilter = lcl_getBaseFilter();
             if ( pFilter )
             {
                 OUString sExt = pFilter->GetDefaultExtension();

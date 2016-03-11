@@ -539,12 +539,11 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
     sal_uIntPtr nFilterVersion, const OUString* pPassword )
 {
-    // TODO: will currently leak the pFilter instance
-    SfxFilter* pFilter = new SfxFilter(
+    std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         rFilter,
         OUString(), nFilterFlags, nClipboardID, rTypeName, 0, OUString(),
-        rUserData, OUString("private:factory/scalc*"));
-    pFilter->SetVersion(nFilterVersion);
+        rUserData, OUString("private:factory/scalc*")));
+    const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
     xDocShRef->GetDocument().EnableUserInteraction(false);
@@ -632,12 +631,12 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
-    std::unique_ptr<SfxFilter> pExportFilter(new SfxFilter(
+    std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
         rFilter,
         OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
         rUserData, OUString("private:factory/scalc*") ));
-    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-    aStoreMedium.SetFilter(pExportFilter.get());
+    const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+    aStoreMedium.SetFilter(pExportFilter);
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
 
@@ -678,12 +677,12 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell,
     SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
-    std::unique_ptr<SfxFilter> pExportFilter(new SfxFilter(
+    std::shared_ptr<SfxFilter> pExportFilter(new SfxFilter(
         aFilterName,
         OUString(), nFormatType, nExportFormat, aFilterType, 0, OUString(),
         OUString(), OUString("private:factory/scalc*") ));
-    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-    aStoreMedium.SetFilter(pExportFilter.get());
+    const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+    aStoreMedium.SetFilter(pExportFilter);
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
 

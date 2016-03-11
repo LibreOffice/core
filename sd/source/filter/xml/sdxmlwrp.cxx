@@ -783,7 +783,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
                 else
                 {
                     // check for binary formats
-                     const SfxFilter * pFilter = mrMedium.GetFilter();
+                    std::shared_ptr<const SfxFilter> pFilter = mrMedium.GetFilter();
                     if( pFilter )
                     {
                         OUString typeName(pFilter->GetRealTypeName());

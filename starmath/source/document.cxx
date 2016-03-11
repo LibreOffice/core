@@ -863,7 +863,7 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
 bool SmDocShell::ConvertTo( SfxMedium &rMedium )
 {
     bool bRet = false;
-    const SfxFilter* pFlt = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFlt = rMedium.GetFilter();
     if( pFlt )
     {
         if( !pTree )

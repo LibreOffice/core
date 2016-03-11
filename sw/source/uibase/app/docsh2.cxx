@@ -510,7 +510,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         SfxFilterMatcher aMatcher( OUString::createFromAscii(rFact.GetShortName()) );
                         SfxFilterMatcherIter aIter( aMatcher );
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                        const SfxFilter* pFlt = aIter.First();
+                        std::shared_ptr<const SfxFilter> pFlt = aIter.First();
                         while( pFlt )
                         {
                             // --> OD #i117339#
@@ -524,7 +524,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             pFlt = aIter.Next();
                         }
                         bool bWeb = dynamic_cast< SwWebDocShell *>( this ) !=  nullptr;
-                        const SfxFilter *pOwnFlt =
+                        std::shared_ptr<const SfxFilter> pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
                                 GetFilter4FilterName("writer8");
 
@@ -591,7 +591,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     // 1 - file unsaved -> save as HTML
                     // 2 - file modified and HTML filter active -> save
                     // 3 - file saved in non-HTML -> QueryBox to save as HTML
-                    const SfxFilter* pHtmlFlt =
+                    std::shared_ptr<const SfxFilter> pHtmlFlt =
                                     SwIoSystem::GetFilterOfFormat(
                                         "HTML",
                                         SwWebDocShell::Factory().GetFilterContainer() );
@@ -599,7 +599,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(bLocalHasName)
                     {
                         //check for filter type
-                        const SfxFilter* pFlt = GetMedium()->GetFilter();
+                        std::shared_ptr<const SfxFilter> pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
                             ScopedVclPtrInstance<MessageDialog> aQuery(&pViewFrame->GetWindow(),
@@ -915,7 +915,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     aDlgHelper.SetControlHelpIds( nControlIds, pHelpIds );
                     uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
-                    const SfxFilter* pFlt;
+                    std::shared_ptr<const SfxFilter> pFlt;
                     sal_uInt16 nStrId;
 
                     if( bCreateHtml )
@@ -1393,13 +1393,13 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
 
     // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, STREAM_STD_READ );
-    const SfxFilter* pFlt = nullptr;
-    aMatcher.DetectFilter( aMed, &pFlt );
+    std::shared_ptr<const SfxFilter> pFlt;
+    aMatcher.DetectFilter( aMed, pFlt );
     if(!pFlt)
     {
         OUString sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
         SfxFilterMatcher aWebMatcher( sWebFactory );
-        aWebMatcher.DetectFilter( aMed, &pFlt );
+        aWebMatcher.DetectFilter( aMed, pFlt );
     }
     // --> OD #i117339# - trigger import only for own formats
     bool bImport( false );
@@ -1550,7 +1550,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     if( INetProtocol::File == aTmpObj.GetProtocol() )
         xMed->Download(); // Touch the medium (download it)
 
-    const SfxFilter* pSfxFlt = nullptr;
+    std::shared_ptr<const SfxFilter> pSfxFlt;
     if (!xMed->GetError())
     {
         SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
@@ -1568,7 +1568,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             xMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
-            aMatcher.DetectFilter( *xMed, &pSfxFlt );
+            aMatcher.DetectFilter( *xMed, pSfxFlt );
 
         if( pSfxFlt )
         {

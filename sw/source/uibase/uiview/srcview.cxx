@@ -304,7 +304,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
 
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
-            const SfxFilter* pFilter =
+            std::shared_ptr<const SfxFilter> pFilter =
                 pFilterCont->GetFilter4Extension( "html", SfxFilterFlags::EXPORT );
             if ( pFilter )
             {
@@ -796,7 +796,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     aEditWin->SetTextEncoding(eDestEnc);
     SfxMedium* pMedium = pDocShell->GetMedium();
 
-    const SfxFilter* pFilter = pMedium->GetFilter();
+    std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
     bool bHtml = pFilter && pFilter->GetUserData() == "HTML";
     bool bDocModified = pDocShell->IsModified();
     if(bHtml && !bDocModified && pDocShell->HasName())

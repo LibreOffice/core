@@ -123,7 +123,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
             }
 
             SfxFilterMatcher aMatch("sdraw");
-            const SfxFilter* pFilter = aMatch.GetFilter4FilterName( aName );
+            std::shared_ptr<const SfxFilter> pFilter = aMatch.GetFilter4FilterName( aName );
             if ( pFilter )
                 return pFilter->GetRealTypeName();
         }

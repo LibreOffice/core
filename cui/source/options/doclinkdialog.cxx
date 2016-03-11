@@ -164,7 +164,7 @@ namespace svx
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
         if ( pFilter )
         {
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());

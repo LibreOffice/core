@@ -129,7 +129,7 @@ protected:
     virtual                 ~SfxFrameLoader_Impl();
 
 private:
-    const SfxFilter*    impl_getFilterFromServiceName_nothrow(
+    std::shared_ptr<const SfxFilter>    impl_getFilterFromServiceName_nothrow(
                             const OUString& i_rServiceName
                         ) const;
 
@@ -138,7 +138,7 @@ private:
                             const OUString& i_rDocumentURL
                         );
 
-    const SfxFilter*    impl_detectFilterForURL(
+    std::shared_ptr<const SfxFilter>    impl_detectFilterForURL(
                             const OUString& _rURL,
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
                             const SfxFilterMatcher& rMatcher
@@ -204,7 +204,7 @@ SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
 }
 
 
-const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& sURL,
+std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& sURL,
         const ::comphelper::NamedValueCollection& i_rDescriptor, const SfxFilterMatcher& rMatcher ) const
 {
     OUString sFilter;
@@ -229,7 +229,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
         OUString sType = xDetect->queryTypeByDescriptor( aQueryArgs, sal_True );
         if ( !sType.isEmpty() )
         {
-            const SfxFilter* pFilter = rMatcher.GetFilter4EA( sType );
+            std::shared_ptr<const SfxFilter> pFilter = rMatcher.GetFilter4EA( sType );
             if ( pFilter )
                 sFilter = pFilter->GetName();
         }
@@ -244,14 +244,14 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
         sFilter.clear();
     }
 
-    const SfxFilter* pFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pFilter;
     if (!sFilter.isEmpty())
         pFilter = rMatcher.GetFilter4FilterName(sFilter);
     return pFilter;
 }
 
 
-const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( const OUString& i_rServiceName ) const
+std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( const OUString& i_rServiceName ) const
 {
     try
     {
@@ -275,7 +275,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
             if ( sFilterName.isEmpty() )
                 continue;
 
-            const SfxFilter* pFilter = rMatcher.GetFilter4FilterName( sFilterName );
+            std::shared_ptr<const SfxFilter> pFilter = rMatcher.GetFilter4FilterName( sFilterName );
             if ( !pFilter )
                 continue;
 
@@ -361,7 +361,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
                               xInteraction = io_rDescriptor.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() );
 
     const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-    const SfxFilter* pFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pFilter;
 
     // get filter by its name directly ...
     if ( !sFilterName.isEmpty() )
@@ -444,7 +444,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
         {
             // detect the filter for the template. Might still be NULL (if the template is broken, or does not
             // exist, or some such), but this is handled by our caller the same way as if no template/URL was present.
-            const SfxFilter* pTemplateFilter = impl_detectFilterForURL( sTemplateURL, io_rDescriptor, SfxGetpApp()->GetFilterMatcher() );
+            std::shared_ptr<const SfxFilter> pTemplateFilter = impl_detectFilterForURL( sTemplateURL, io_rDescriptor, SfxGetpApp()->GetFilterMatcher() );
             if ( pTemplateFilter )
             {
                 // load the template document, but, well, "as template"

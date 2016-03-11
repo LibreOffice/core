@@ -695,7 +695,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SaveOutputHdl_Impl, Button*, pButton, voi
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
-        const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+        std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 FILTER_XML,
                 SwDocShell::Factory().GetFilterContainer() );
 
@@ -998,7 +998,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
     bool bAsBody = false;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
-    const SfxFilter *pSfxFlt = nullptr;
+    std::shared_ptr<const SfxFilter> pSfxFlt;
     sal_uLong nDocType = reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData());
     OUString sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
@@ -1025,7 +1025,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
             //because it uses the same user data :-(
             SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
             SfxFilterMatcherIter aIter( aMatcher );
-            const SfxFilter* pFilter = aIter.First();
+            std::shared_ptr<const SfxFilter> pFilter = aIter.First();
             while ( pFilter )
             {
                 if( pFilter->GetUserData() == FILTER_WW8 && pFilter->CanExport() )
@@ -1117,7 +1117,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
     OUString sTargetTempURL = URIHelper::SmartRel2Abs(
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
-    const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
+    std::shared_ptr<const SfxFilter> pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
 

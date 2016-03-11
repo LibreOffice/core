@@ -220,10 +220,10 @@ IMPL_LINK_TYPED( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFi
         const OUString aHTMLFilterName( FILTERNAME_HTML );
         const OUString aWebQFilterName( FILTERNAME_QUERY );
 
-        const SfxFilter* pFilter = pMed->GetFilter();
+        std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
         if (pFilter && aHTMLFilterName.equals(pFilter->GetFilterName()))
         {
-            const SfxFilter* pNewFilter =
+            std::shared_ptr<const SfxFilter> pNewFilter =
                 ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
             if( pNewFilter )
                 pMed->SetFilter( pNewFilter );

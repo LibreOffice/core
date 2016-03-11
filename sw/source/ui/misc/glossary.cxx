@@ -580,7 +580,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
         SfxFilterMatcherIter aIter( aMatcher );
-        const SfxFilter* pFilter = aIter.First();
+        std::shared_ptr<const SfxFilter> pFilter = aIter.First();
         while ( pFilter )
         {
             if( pFilter->GetUserData() == FILTER_WW8 )

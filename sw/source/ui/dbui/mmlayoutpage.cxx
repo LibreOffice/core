@@ -96,7 +96,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pExampleContainerWIN->set_height_request(aSize.Height());
     get(m_pZoomLB, "zoom");
 
-    const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+    std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file

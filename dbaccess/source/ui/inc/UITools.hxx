@@ -26,6 +26,8 @@
 #include <vcl/taskpanelist.hxx>
 #include <connectivity/dbtools.hxx>
 
+#include <memory>
+
 #define RET_ALL     10
 
 // we only need forward decl here
@@ -366,7 +368,7 @@ namespace dbaui
         @retrun
             the filter
     */
-    const SfxFilter* getStandardDatabaseFilter();
+    std::shared_ptr<const SfxFilter> getStandardDatabaseFilter();
 
     /** opens a save dialog to store a form or report folder in the current hierarchy.
         @param  _pParent

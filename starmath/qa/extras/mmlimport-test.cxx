@@ -44,7 +44,7 @@ private:
     {
         // Cf.
         // filter/source/config/fragments/filters/MathML_XML__Math_.xcu
-        SfxFilter* pFilter = new SfxFilter(MATHML_XML,
+        std::shared_ptr<SfxFilter> pFilter(new SfxFilter(MATHML_XML,
                                            OUString(),
                                            SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
                                            SotClipboardFormatId::STARCALC_8,
@@ -52,8 +52,8 @@ private:
                                            0,
                                            OUString(),
                                            OUString(),
-                                           "private:factory/smath*");
-        pFilter->SetVersion(SOFFICE_FILEFORMAT_60);
+                                           "private:factory/smath*"));
+        const_cast<SfxFilter*>(pFilter.get())->SetVersion(SOFFICE_FILEFORMAT_60);
 
         mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                     SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |

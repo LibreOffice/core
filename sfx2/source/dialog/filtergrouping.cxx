@@ -607,7 +607,7 @@ namespace sfx2
         OUString sFilterWildcard;
         OUString sFilterName;
         // loop through all the filters
-        for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
+        for ( std::shared_ptr<const SfxFilter> pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
             sFilterName = pFilter->GetFilterName();
             sFilterWildcard = pFilter->GetWildcard().getGlob();
@@ -762,7 +762,7 @@ namespace sfx2
 
 
         // check if there's already a filter <ALL>
-        for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter && !bHasAll; pFilter = _rFilterMatcher.Next() )
+        for ( std::shared_ptr<const SfxFilter> pFilter = _rFilterMatcher.First(); pFilter && !bHasAll; pFilter = _rFilterMatcher.Next() )
         {
             if ( pFilter->GetUIName() == _rAllFilterName )
                 bHasAll = true;
@@ -869,21 +869,21 @@ namespace sfx2
     }
 
 
-    const SfxFilter* TSortedFilterList::First()
+    std::shared_ptr<const SfxFilter> TSortedFilterList::First()
     {
         m_nIterator = 0;
         return impl_getFilter(m_nIterator);
     }
 
 
-    const SfxFilter* TSortedFilterList::Next()
+    std::shared_ptr<const SfxFilter> TSortedFilterList::Next()
     {
         ++m_nIterator;
         return impl_getFilter(m_nIterator);
     }
 
 
-    const SfxFilter* TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
+    std::shared_ptr<const SfxFilter> TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
     {
         if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
             return nullptr;
@@ -908,7 +908,7 @@ namespace sfx2
 
         // retrieve the default filter for this application module.
         // It must be set as first of the generated filter list.
-        const SfxFilter* pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
+        std::shared_ptr<const SfxFilter> pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
         // Only use one extension (#i32434#)
         // (and always the first if there are more than one)
         sExtension = pDefaultFilter->GetWildcard().getGlob().getToken(0, ';');
@@ -924,7 +924,7 @@ namespace sfx2
             SAL_WARN( "sfx.dialog", "Could not append DefaultFilter" << sUIName );
         }
 
-        for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
+        for ( std::shared_ptr<const SfxFilter> pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
             if (pFilter->GetName() == pDefaultFilter->GetName())
                 continue;
@@ -975,7 +975,7 @@ namespace sfx2
         Reference< XFilterGroupManager >    xFilterGroupManager( _rxFilterManager, UNO_QUERY );
         OUString                     sTypeName;
 
-        for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
+        for ( std::shared_ptr<const SfxFilter> pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
             sTypeName   = pFilter->GetTypeName();
             sUIName     = pFilter->GetUIName();

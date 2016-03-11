@@ -899,9 +899,9 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     return bRet;
 }
 
-const SfxFilter* getStandardDatabaseFilter()
+std::shared_ptr<const SfxFilter> getStandardDatabaseFilter()
 {
-    const SfxFilter* pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+    std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
     OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
     return pFilter;
 }

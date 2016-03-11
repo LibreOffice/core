@@ -185,11 +185,11 @@ void SwDocTest::testFileNameFields()
     OUString sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
     SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE);
 
-    SfxFilter aFilter(
+    std::shared_ptr<SfxFilter> pFilter(new SfxFilter(
         OUString("Text"),
         OUString(), SfxFilterFlags::NONE, SotClipboardFormatId::NONE, OUString(), 0, OUString(),
-        OUString("TEXT"), OUString() );
-    aDstMed.SetFilter(&aFilter);
+        OUString("TEXT"), OUString() ));
+    aDstMed.SetFilter(pFilter);
 
     m_xDocShRef->DoSaveAs(aDstMed);
     m_xDocShRef->DoSaveCompleted(&aDstMed);

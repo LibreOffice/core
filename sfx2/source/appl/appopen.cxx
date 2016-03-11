@@ -280,7 +280,7 @@ sal_uInt32 CheckPasswd_Impl
 
 sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, bool bCopy, SfxItemSet* pSet )
 {
-    const SfxFilter* pFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
 
     if ( !aMedium.GetStorage( false ).is() )
@@ -293,7 +293,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
     }
 
     aMedium.UseInteractionHandler( true );
-    sal_uIntPtr nErr = GetFilterMatcher().GuessFilter( aMedium,&pFilter,SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
+    sal_uIntPtr nErr = GetFilterMatcher().GuessFilter( aMedium, pFilter, SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
     if ( 0 != nErr)
     {
         delete pSet;
@@ -830,7 +830,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
             SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-            const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
+            std::shared_ptr<const SfxFilter> pFilter = rMatcher.GetFilter4EA( aTypeName );
             if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS

@@ -200,13 +200,13 @@ public:
     mutable SfxItemSet* m_pSet;
     mutable INetURLObject* m_pURLObj;
 
-    const SfxFilter* m_pFilter;
-    std::unique_ptr<SfxFilter> m_pCustomFilter;
+    std::shared_ptr<const SfxFilter> m_pFilter;
+    std::shared_ptr<const SfxFilter> m_pCustomFilter;
 
     SvStream* m_pInStream;
     SvStream* m_pOutStream;
 
-    const SfxFilter* pOrigFilter;
+    std::shared_ptr<const SfxFilter> pOrigFilter;
     OUString    aOrigURL;
     DateTime         aExpireTime;
     SfxFrameWeakRef  wLoadTargetFrame;
@@ -242,7 +242,7 @@ public:
     ~SfxMedium_Impl();
 
     OUString getFilterMimeType()
-    { return m_pFilter == nullptr ? OUString() : m_pFilter->GetMimeType(); }
+        { return !m_pFilter ? OUString() : m_pFilter->GetMimeType(); }
 };
 
 
@@ -2666,18 +2666,18 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
 }
 
 
-void SfxMedium::SetFilter( const SfxFilter* pFilterP )
+void SfxMedium::SetFilter( std::shared_ptr<const SfxFilter> pFilter )
 {
-    pImp->m_pFilter = pFilterP;
+    pImp->m_pFilter = pFilter;
 }
 
-const SfxFilter* SfxMedium::GetFilter() const
+std::shared_ptr<const SfxFilter> SfxMedium::GetFilter() const
 {
     return pImp->m_pFilter;
 }
 
 
-const SfxFilter* SfxMedium::GetOrigFilter() const
+std::shared_ptr<const SfxFilter> SfxMedium::GetOrigFilter() const
 {
     return pImp->pOrigFilter ? pImp->pOrigFilter : pImp->m_pFilter;
 }
@@ -2951,17 +2951,17 @@ void SfxMedium::CompleteReOpen()
     pImp->bUseInteractionHandler = bUseInteractionHandler;
 }
 
-SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, SfxItemSet *pInSet) :
     pImp(new SfxMedium_Impl)
 {
     pImp->m_pSet = pInSet;
-    pImp->m_pFilter = pFlt;
+    pImp->m_pFilter = pFilter;
     pImp->m_aLogicName = rName;
     pImp->m_nStorOpenMode = nOpenMode;
     Init_Impl();
 }
 
-SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, SfxItemSet *pInSet) :
     pImp(new SfxMedium_Impl)
 {
     pImp->m_pSet = pInSet;
@@ -2969,7 +2969,7 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
     if (s->GetItem(SID_REFERER) == nullptr) {
         s->Put(SfxStringItem(SID_REFERER, rReferer));
     }
-    pImp->m_pFilter = pFlt;
+    pImp->m_pFilter = pFilter;
     pImp->m_aLogicName = rName;
     pImp->m_nStorOpenMode = nOpenMode;
     Init_Impl();
@@ -3001,7 +3001,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     {
         // This filter is from an external provider such as orcus.
         pImp->m_pCustomFilter.reset(new SfxFilter(aFilterProvider, aFilterName));
-        pImp->m_pFilter = pImp->m_pCustomFilter.get();
+        pImp->m_pFilter = pImp->m_pCustomFilter;
     }
 
     const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_DOC_SALVAGE, false);

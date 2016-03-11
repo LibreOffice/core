@@ -31,6 +31,8 @@
 #include <sfx2/dllapi.h>
 #include <tools/wldcrd.hxx>
 
+#include <memory>
+
 class SfxFilterContainer;
 class SotStorage;
 
@@ -104,9 +106,9 @@ public:
     const OUString& GetServiceName() const { return aServiceName; }
     const OUString& GetProviderName() const { return maProvider;}
 
-    static const SfxFilter* GetDefaultFilter( const OUString& rName );
-    static const SfxFilter* GetFilterByName( const OUString& rName );
-    static const SfxFilter* GetDefaultFilterFromFactory( const OUString& rServiceName );
+    static std::shared_ptr<const SfxFilter> GetDefaultFilter( const OUString& rName );
+    static std::shared_ptr<const SfxFilter> GetFilterByName( const OUString& rName );
+    static std::shared_ptr<const SfxFilter> GetDefaultFilterFromFactory( const OUString& rServiceName );
 
     static OUString GetTypeFromStorage( const SotStorage& rStg );
     static OUString GetTypeFromStorage(

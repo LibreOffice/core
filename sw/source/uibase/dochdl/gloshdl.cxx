@@ -710,11 +710,11 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     bool bRet = false;
     if( !rName.isEmpty() )
     {
-        const SfxFilter* pFilter = nullptr;
+        std::shared_ptr<const SfxFilter> pFilter;
         std::unique_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, nullptr, nullptr ));
         SfxFilterMatcher aMatcher( OUString("swriter") );
         pMed->UseInteractionHandler( true );
-        if (!aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE))
+        if (!aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE))
         {
             SwTextBlocks *pGlossary = nullptr;
             pMed->SetFilter( pFilter );

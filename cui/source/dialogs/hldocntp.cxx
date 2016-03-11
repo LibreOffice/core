@@ -197,7 +197,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
                 aDocumentUrl = "private:factory/simpress"; // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data
-            const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );
+            std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );
             if ( pFilter )
             {
                 // insert doc-name and image

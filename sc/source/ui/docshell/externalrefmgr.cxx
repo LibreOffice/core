@@ -2431,7 +2431,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     else
         ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
-    const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
+    std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
 
     if (pFileData->maRelativeName.isEmpty())
     {

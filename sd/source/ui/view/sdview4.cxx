@@ -446,9 +446,9 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
             }
             if( !bOK )
             {
-                const SfxFilter*        pFoundFilter = nullptr;
+                std::shared_ptr<const SfxFilter> pFoundFilter;
                 SfxMedium               aSfxMedium( aCurrentDropFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
-                ErrCode                 nErr = SfxGetpApp()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter );
+                ErrCode                 nErr = SfxGetpApp()->GetFilterMatcher().GuessFilter(  aSfxMedium, pFoundFilter );
 
                 if( pFoundFilter && !nErr )
                 {

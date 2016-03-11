@@ -362,15 +362,14 @@ void FileDialogHelper_Impl::SaveLastUsedFilter()
         SaveLastUsedFilter( *pConfigId );
 }
 
-const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
+std::shared_ptr<const SfxFilter> FileDialogHelper_Impl::getCurentSfxFilter()
 {
     OUString aFilterName = getCurrentFilterUIName();
 
-    const SfxFilter* pFilter = nullptr;
     if ( mpMatcher && !aFilterName.isEmpty() )
-        pFilter = mpMatcher->GetFilter4UIName( aFilterName, m_nMustFlags, m_nDontFlags );
+        return mpMatcher->GetFilter4UIName( aFilterName, m_nMustFlags, m_nDontFlags );
 
-    return pFilter;
+    return nullptr;
 }
 
 bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedControlId, bool _bEnable )
@@ -393,7 +392,7 @@ bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedControlId
     return bIsEnabled;
 }
 
-bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _pFilter )
+bool FileDialogHelper_Impl::CheckFilterOptionsCapability( std::shared_ptr<const SfxFilter> _pFilter )
 {
     bool bResult = false;
 
@@ -512,7 +511,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
 
     if ( bSelectionBoxFound )
     {
-        const SfxFilter* pFilter = getCurentSfxFilter();
+        std::shared_ptr<const SfxFilter> pFilter = getCurentSfxFilter();
         mbSelectionFltrEnabled = updateExtendedControl(
             ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
             ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::SUPPORTSSELECTION ) ) );
@@ -528,7 +527,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
 
     bool bWasEnabled = mbIsPwdEnabled;
 
-    const SfxFilter* pCurrentFilter = getCurentSfxFilter();
+    std::shared_ptr<const SfxFilter> pCurrentFilter = getCurentSfxFilter();
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
         pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::ENCRYPTION )
@@ -1305,7 +1304,7 @@ void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
         lLastURLs.push_back(*i);
 }
 
-void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList, const SfxFilter* pFilter)
+void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList, std::shared_ptr<const SfxFilter> pFilter)
 {
     rpURLList.clear();
 
@@ -1471,7 +1470,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         // set the filter
         getRealFilter( rFilter );
 
-        const SfxFilter* pCurrentFilter = getCurentSfxFilter();
+        std::shared_ptr<const SfxFilter> pCurrentFilter = getCurentSfxFilter();
 
         // fill the rpURLList
         implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
@@ -1553,7 +1552,7 @@ void FileDialogHelper_Impl::getRealFilter( OUString& _rFilter ) const
 
     if ( !_rFilter.isEmpty() && mpMatcher )
     {
-        const SfxFilter* pFilter =
+        std::shared_ptr<const SfxFilter> pFilter =
             mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
         _rFilter = pFilter ? pFilter->GetFilterName() : OUString("");
     }
@@ -1664,7 +1663,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 
     if ( !rFilter.isEmpty() && mpMatcher )
     {
-        const SfxFilter* pFilter = mpMatcher->GetFilter4FilterName(
+        std::shared_ptr<const SfxFilter> pFilter = mpMatcher->GetFilter4FilterName(
                                         rFilter, m_nMustFlags, m_nDontFlags );
         if ( pFilter )
             maCurFilter = pFilter->GetUIName();
@@ -2600,7 +2599,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
     return nRet;
 }
 
-ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
+ErrCode RequestPassword(std::shared_ptr<const SfxFilter> pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
 {
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
     // TODO: need a save way to distinguish MS filters from other filters

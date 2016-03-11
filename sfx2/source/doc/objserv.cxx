@@ -278,7 +278,7 @@ bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItem
             const SfxStringItem* pContentTypeItem = rItemSet.GetItem<SfxStringItem>(SID_CONTENTTYPE, false);
             if ( pContentTypeItem )
             {
-                const SfxFilter* pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SfxFilterFlags::EXPORT );
+                std::shared_ptr<const SfxFilter> pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SfxFilterFlags::EXPORT );
                 if ( pFilter )
                     aFilterName = pFilter->GetName();
             }
@@ -287,7 +287,7 @@ bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItem
         // in case no filter defined use default one
         if( aFilterName.isEmpty() )
         {
-            const SfxFilter* pFilt = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
+            std::shared_ptr<const SfxFilter> pFilt = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
 
             DBG_ASSERT( pFilt, "No default filter!\n" );
             if( pFilt )

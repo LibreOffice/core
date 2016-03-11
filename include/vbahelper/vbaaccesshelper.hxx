@@ -55,7 +55,7 @@ namespace ooo
         {
             bool bRes( false );
             const SfxMedium *pMedium = rDocShell.GetMedium();
-            const SfxFilter *pFilt = pMedium ? pMedium->GetFilter() : nullptr;
+            std::shared_ptr<const SfxFilter> pFilt = pMedium ? pMedium->GetFilter() : nullptr;
             if ( pFilt && pFilt->IsAlienFormat() )
                 bRes = pFilt->GetMimeType().equalsAscii( pMimeType );
             return bRes;

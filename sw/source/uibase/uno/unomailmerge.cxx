@@ -774,7 +774,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     // save document with temporary filename
-    const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+    std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
     OUString aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));

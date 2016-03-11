@@ -154,7 +154,7 @@ void SfxViewFrame::InitInterface_Impl()
 #endif
 }
 
-static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
+static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, std::shared_ptr<const SfxFilter> pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
     bool bResult = ( !nPasswordHash && !aInfo.getLength() );
@@ -609,7 +609,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
 
                 SfxItemSet* pNewSet = nullptr;
-                const SfxFilter *pFilter = pMedium->GetFilter();
+                std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
                 if( pURLItem )
                 {
                     pNewSet = new SfxAllItemSet( pApp->GetPool() );
@@ -622,7 +622,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         referer = refererItem->GetValue();
                     }
                     SfxMedium aMedium( pURLItem->GetValue(), referer, SFX_STREAM_READWRITE );
-                    SfxFilterMatcher().GuessFilter( aMedium, &pFilter );
+                    SfxFilterMatcher().GuessFilter( aMedium, pFilter );
                     if ( pFilter )
                         pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
                     pNewSet->Put( *aMedium.GetItemSet() );

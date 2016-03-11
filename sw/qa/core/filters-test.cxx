@@ -80,20 +80,20 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
-    SfxFilter* pFilter = new SfxFilter(
+    std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         rFilter, OUString(), nFilterFlags,
         nClipboardID, OUString(), 0, OUString(),
-        rUserData, OUString());
-    pFilter->SetVersion(nFilterVersion);
+        rUserData, OUString()));
+    const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
 
-    const SfxFilter* pImportFilter = nullptr;
-    SfxFilter* pExportFilter = nullptr;
+    std::shared_ptr<const SfxFilter> pImportFilter;
+    std::shared_ptr<const SfxFilter> pExportFilter;
     if (bExport)
     {
-        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SfxFilterFlags::IMPORT, SfxFilterFlags::NONE);
+        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pSrcMed, pImportFilter, SfxFilterFlags::IMPORT, SfxFilterFlags::NONE);
         pExportFilter = pFilter;
     }
     else

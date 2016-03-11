@@ -1666,7 +1666,7 @@ OUString GeometryHandler::impl_ConvertMimeTypeToUI_nothrow(const OUString& _sMim
 {
     ::comphelper::MimeConfigurationHelper aMimeHelper(m_xContext);
     OUString sRet;
-    const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aMimeHelper.GetDocServiceNameFromMediaType(_sMimetype) );
+    std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetDefaultFilter( aMimeHelper.GetDocServiceNameFromMediaType(_sMimetype) );
     if ( pFilter )
         sRet = pFilter->GetUIName();
     if ( sRet.isEmpty() )

@@ -170,7 +170,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             pMedSet->GetItemState( FN_API_CALL, true, &pApiItem ) )
             bAPICall = static_cast<const SfxBoolItem*>(pApiItem)->GetValue();
 
-    const SfxFilter* pFlt = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFlt = rMedium.GetFilter();
     if( !pFlt )
     {
         if(!bAPICall)
@@ -399,7 +399,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
     {
         // Task 75666 - is the Document imported by our Microsoft-Filters?
-        const SfxFilter* pOldFilter = GetMedium()->GetFilter();
+        std::shared_ptr<const SfxFilter> pOldFilter = GetMedium()->GetFilter();
         if( pOldFilter &&
             ( pOldFilter->GetUserData() == FILTER_WW8 ||
               pOldFilter->GetUserData() == "CWW6" ||
@@ -534,7 +534,7 @@ static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 
 bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 {
-    const SfxFilter* pFlt = rMedium.GetFilter();
+    std::shared_ptr<const SfxFilter> pFlt = rMedium.GetFilter();
     if( !pFlt )
         return false;
 

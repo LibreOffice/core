@@ -1644,7 +1644,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     {
                         std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
                         pClipboardMedium->GetItemSet(); //generate initial itemset, not sure if necessary
-                        const SfxFilter* pMathFilter =
+                        std::shared_ptr<const SfxFilter> pMathFilter =
                             SfxFilter::GetFilterByName(MATHML_XML);
                         pClipboardMedium->SetFilter(pMathFilter);
                         pClipboardMedium->setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
@@ -1662,7 +1662,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         {
                             std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
                             pClipboardMedium->GetItemSet(); //generates initial itemset, not sure if necessary
-                            const SfxFilter* pMathFilter =
+                            std::shared_ptr<const SfxFilter> pMathFilter =
                                 SfxFilter::GetFilterByName(MATHML_XML);
                             pClipboardMedium->SetFilter(pMathFilter);
 

@@ -380,7 +380,7 @@ void SAL_CALL OApplicationController::disposing()
                 {
                     OUString     aFilter;
                     INetURLObject       aURL( m_xModel->getURL() );
-                    const SfxFilter* pFilter = getStandardDatabaseFilter();
+                    std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
 
@@ -1126,7 +1126,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         0, getView());
                     aFileDlg.SetDisplayDirectory( sUrl );
 
-                    const SfxFilter* pFilter = getStandardDatabaseFilter();
+                    std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
                     {
                         aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());

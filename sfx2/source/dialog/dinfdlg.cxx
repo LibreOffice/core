@@ -867,7 +867,7 @@ IMPL_STATIC_LINK_NOARG_TYPED(SfxDocumentPage, ChangePassHdl, Button*, void)
         SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
         if (!pMedSet)
             break;
-        const SfxFilter* pFilter = pShell->GetMedium()->GetFilter();
+        std::shared_ptr<const SfxFilter> pFilter = pShell->GetMedium()->GetFilter();
         if (!pFilter)
             break;
 

@@ -245,7 +245,7 @@ friend class SwConnectionDisposedListener_Impl;
 
     SAL_DLLPRIVATE bool CreateNewTemp(OUString &sPath, const OUString &sAddress,
                                       std::unique_ptr< utl::TempFile > &aTempFile,
-                                      const SwMergeDescriptor& rMergeDescriptor,  const SfxFilter* pStoreToFilter);
+                                      const SwMergeDescriptor& rMergeDescriptor,  std::shared_ptr<const SfxFilter> pStoreToFilter);
 
 
     SAL_DLLPRIVATE bool CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
@@ -261,7 +261,7 @@ friend class SwConnectionDisposedListener_Impl;
 
     SAL_DLLPRIVATE void UpdateExpFields(SwWrtShell& rWorkShell, SfxObjectShellLock xWorkDocSh);
 
-    SAL_DLLPRIVATE void CreateStoreToFilter(const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
+    SAL_DLLPRIVATE void CreateStoreToFilter(std::shared_ptr<const SfxFilter>& pStoreToFilter, const OUString *&pStoreToFilterOptions,
                                             SwDocShell *pSourceDocSh, bool bEMail, const SwMergeDescriptor &rMergeDescriptor);
 
     SAL_DLLPRIVATE void MergeSingleFiles(SwDoc *pWorkDoc, SwWrtShell &rWorkShell, SwWrtShell *pTargetShell, SwDoc *pTargetDoc,
@@ -282,7 +282,7 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE bool SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTargetView,
                                      const SwMergeDescriptor &rMergeDescriptor,
                                      std::unique_ptr< utl::TempFile > &aTempFile,
-                                     const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
+                                     std::shared_ptr<const SfxFilter>& pStoreToFilter, const OUString *&pStoreToFilterOptions,
                                      const bool bMergeShell, bool bCreateSingleFile, const bool bPrinter);
 
     SAL_DLLPRIVATE void SetPrinterOptions(const SwMergeDescriptor &rMergeDescriptor,
