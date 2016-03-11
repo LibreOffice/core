@@ -188,3 +188,8 @@ cmd/sc_deleteslide.png cmd/sc_deletepage.png
 cmd/sc_firstslide.png cmd/sc_firstpage.png
 cmd/sc_lastslide.png cmd/sc_lastpage.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
+
+# icon view and list view
+fpicker/res/fp017.png svx/res/galicon.png
+fpicker/res/fp018.png svx/res/gallist.png
+

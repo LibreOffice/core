@@ -43,3 +43,8 @@ cmd/sc_lastslide.png cmd/sc_lastpage.png
 cmd/sc_previousslide.png cmd/sc_previouspage.png
 cmd/sc_nextslide.png cmd/sc_nextpage.png
 cmd/sc_slidesetup.png cmd/sc_setdocumentproperties.png
+
+# icon view and list view
+fpicker/res/fp017.png svx/res/galicon.png
+fpicker/res/fp018.png svx/res/gallist.png
+
