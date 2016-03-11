@@ -193,6 +193,7 @@ public:
     void            EndSelection();
 
     void            SaveValue() { meSaveValue = GetState(); }
+    TriState        GetSavedValue() { return meSaveValue; }
     bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
     Size            CalcMinimumSize() const;

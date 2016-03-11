@@ -30,6 +30,7 @@
 #include <tools/fract.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <basegfx/range/b2drange.hxx>
+#include <vcl/button.hxx>
 
 class SdrView;
 class FixedText;
@@ -84,24 +85,27 @@ public:
 
 private:
     //Position
+    VclPtr<FixedText>        mpFtPos;
     VclPtr<FixedText>        mpFtPosX;
     VclPtr<MetricField>      mpMtrPosX;
     VclPtr<FixedText>        mpFtPosY;
     VclPtr<MetricField>      mpMtrPosY;
+    VclPtr<PushButton>      mpProtectPos;
 
     // size
+    VclPtr<FixedText>        mpFtSize;
     VclPtr<FixedText>        mpFtWidth;
     VclPtr<MetricField>      mpMtrWidth;
     VclPtr<FixedText>        mpFtHeight;
     VclPtr<MetricField>      mpMtrHeight;
+    VclPtr<PushButton>      mpProtectSize;
     VclPtr<CheckBox>         mpCbxScale;
 
     //rotation
     VclPtr<FixedText>        mpFtAngle;
     VclPtr<MetricBox>        mpMtrAngle;
-
-    //rotation control
-    VclPtr<SidebarDialControl>  mpDial;
+    VclPtr<PushButton>           mpRotateLeft;
+    VclPtr<PushButton>           mpRotateRight;
 
     //flip
     VclPtr<FixedText>        mpFtFlip;
@@ -152,22 +156,28 @@ private:
 
     DECL_LINK_TYPED( ChangePosXHdl, Edit&, void );
     DECL_LINK_TYPED( ChangePosYHdl, Edit&, void );
+    DECL_LINK_TYPED( ProtectPosition, Button*, void );
     DECL_LINK_TYPED( ChangeWidthHdl, Edit&, void );
     DECL_LINK_TYPED( ChangeHeightHdl, Edit&, void );
+    DECL_LINK_TYPED( ProtectSize, Button*, void );
     DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
     DECL_LINK_TYPED( AngleModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( RotationHdl, svx::DialControl*, void );
+    DECL_LINK_TYPED( RotationClickHdl, Button*, void );
     DECL_LINK_TYPED( FlipHdl, ToolBox *, void );
 
     void Initialize();
     void executePosX();
     void executePosY();
+    void executeProtectPos();
+    void executeProtectSize();
     void executeSize();
 
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
     void SetPosSizeMinMax();
+    double GetAngle();
+    void ExecuteAngleChange( double fTmp );
 
     /** Check if the UI scale has changed and handle such a change.
         UI scale is an SD only feature.  The UI scale is represented by items

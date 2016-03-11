@@ -518,6 +518,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     , m_bPositioningDisabled(false)
     , m_bIsMultiSelection(false)
     , m_bIsInRightToLeft(false)
+    , mnProtectSizeState(TRISTATE_FALSE)
 {
     get(m_pWidthMF, "width");
     get(m_pHeightMF, "height");
@@ -584,7 +585,8 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pVertToLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, RelHdl));
 
     m_pHoriMirrorCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, MirrorHdl));
-    m_pPositionCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, ProtectHdl));
+    m_pPositionCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, ProtectPosHdl));
+    m_pSizeCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, ProtectSizeHdl));
 }
 
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
@@ -1399,9 +1401,16 @@ IMPL_LINK_TYPED( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, ProtectSizeHdl, Button*, void)
 {
-    m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
+    if( m_pSizeCB->IsEnabled() )
+        mnProtectSizeState = m_pSizeCB->GetState();
+}
+
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, ProtectPosHdl, Button*, void)
+{
+    m_pSizeCB->SetState( m_pPositionCB->GetState() == TRISTATE_TRUE ? TRISTATE_TRUE
+                            : mnProtectSizeState );
 }
 
 short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
