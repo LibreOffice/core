@@ -5203,6 +5203,20 @@
             </constraints>
             <value>0</value>
           </prop>
+	  <prop oor:name="ExportFormulaAsAnnotation" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if cell formulas are exported to PDF as highlight annotations
+	      (in Calc documents only).</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="FormulaAnnotationHighlightColor" oor:type="xs:int" oor:nillable="false">
+              <info>
+                <desc>Specifies colour used to highlight cells that have formula in exported PDF,
+		-1 if no highlight should be used (Calc documents only).</desc>
+              </info>
+              <value>-1</value>
+          </prop>
           <prop oor:name="AllowDuplicateFieldNames" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether multiple form fields exported are allowed

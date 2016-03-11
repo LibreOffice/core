@@ -39,6 +39,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
@@ -4665,6 +4666,8 @@ bool PDFWriterImpl::emitNoteAnnotations()
 bool PDFWriterImpl::emitFormulaAnnotations()
 {
     int nFormulaNotes = m_aFormulaNotes.size();
+    sal_Int32 nColor = officecfg::Office::Common::Filter::PDF::Export::FormulaAnnotationHighlightColor::get();
+    Color aColor( nColor );
 
     for (int i = 0; i < nFormulaNotes; i++)
     {
@@ -4708,7 +4711,16 @@ bool PDFWriterImpl::emitFormulaAnnotations()
         aLine.append( "]" );
 
         aLine.append( "/F 4" );
-        aLine.append( "/C [1 1 0]");
+
+        if ( nColor == -1 )
+            aLine.append( "/C [0.63 0.63 0.63]/CA 0") ; // light grey-ish pop-up note, transparent highlight
+        else
+        {
+            aLine.append( "/C [");
+            appendColor( aColor, aLine);
+            aLine.append( "]/CA 1");
+        }
+
         aLine.append( "/Border [0 0 1]");
         aLine.append( "/Contents\n" );
         appendLiteralStringEncrypt( rFormulaNote.m_aContents.Contents, rFormulaNote.m_nObject, aLine );
