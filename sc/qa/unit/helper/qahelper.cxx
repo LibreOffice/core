@@ -681,7 +681,7 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell,
         aFilterName,
         OUString(), nFormatType, nExportFormat, aFilterType, 0, OUString(),
         OUString(), OUString("private:factory/scalc*") ));
-    const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+    pExportFilter.get()->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
