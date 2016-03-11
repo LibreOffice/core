@@ -34,6 +34,7 @@
 #include "formulagroup.hxx"
 
 #include <svx/svdpage.hxx>
+#include <config_features.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2788,8 +2789,6 @@ void ScOpenCLTest:: testFinancialXirrFormula()
         double fExpected = rDoc.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
     }
-
-
 }
 
 void ScOpenCLTest::testStatisticalFormulaChiSqDist()
