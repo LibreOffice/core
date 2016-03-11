@@ -245,9 +245,17 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
     return executeAction( nAction, rKEvt.GetKeyCode().IsShift(), pWindow );
 }
 
+namespace {
 
-// css::awt::XMouseClickHandler:
+Point pixelToLogic(const Point& rPoint, vcl::Window* pWindow)
+{
+    if (!pWindow)
+        return rPoint;
 
+    return pWindow->PixelToLogic(rPoint);
+}
+
+}
 
 bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWindow )
 {
@@ -268,7 +276,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
     if( !rMEvt.IsRight() && mpView->PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN, aVEvt) == SDRHIT_HANDLE )
         return false;
 
-    TableHitKind eHit = static_cast< SdrTableObj* >(mxTableObj.get())->CheckTableHit( pWindow->PixelToLogic(rMEvt.GetPosPixel()), maMouseDownPos.mnCol, maMouseDownPos.mnRow, 0 );
+    TableHitKind eHit = static_cast< SdrTableObj* >(mxTableObj.get())->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), maMouseDownPos.mnCol, maMouseDownPos.mnRow, 0);
 
     mbLeftButtonDown = (rMEvt.GetClicks() == 1) && rMEvt.IsLeft();
 
@@ -286,11 +294,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
     {
         RemoveSelection();
 
-        Point aPnt(rMEvt.GetPosPixel());
-        if (pWindow!=nullptr)
-            aPnt=pWindow->PixelToLogic(aPnt);
-
-        SdrHdl* pHdl = mpView->PickHandle(aPnt);
+        SdrHdl* pHdl = mpView->PickHandle(pixelToLogic(rMEvt.GetPosPixel(), pWindow));
 
         if( pHdl )
         {
@@ -356,7 +360,7 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWind
 
     SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
     CellPos aPos;
-    if( mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit( pWindow->PixelToLogic(rMEvt.GetPosPixel()), aPos.mnCol, aPos.mnRow, 0 ) != SDRTABLEHIT_NONE )
+    if (mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), aPos.mnCol, aPos.mnRow, 0 ) != SDRTABLEHIT_NONE)
     {
         if(aPos != maMouseDownPos)
         {
