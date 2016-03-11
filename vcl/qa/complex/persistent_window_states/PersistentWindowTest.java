@@ -233,7 +233,7 @@ public class PersistentWindowTest
     /**
      * Load a document
      * @param xMSF A MultiServiceFactory from an office
-     * @param docLoader A documet loader
+     * @param docLoader A document loader
      * @return A handle to the document
      */
     private DocumentHandle loadDocument(XMultiServiceFactory xMSF,
