@@ -130,7 +130,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalcul
 
 OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32* /* pFormulaLength = nullptr */ ) const
 {
     OUStringBuffer aBuf( "f(x) = ");
 
