@@ -224,12 +224,12 @@ void ScStyleSheetPool::CreateStandardStyles()
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
     SvxSetItem*     pHFSetItem      = nullptr;
-    ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), true );
+    std::unique_ptr<ScEditEngineDefaulter> pEdEngine(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
     pEdEngine->SetUpdateMode( false );
     EditTextObject* pEmptyTxtObj    = pEdEngine->CreateTextObject();
     EditTextObject* pTxtObj         = nullptr;
-    ScPageHFItem*   pHeaderItem     = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
-    ScPageHFItem*   pFooterItem     = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
+    std::unique_ptr<ScPageHFItem> pHeaderItem(new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ));
+    std::unique_ptr<ScPageHFItem> pFooterItem(new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ));
     ScStyleSheet*   pSheet          = nullptr;
     ::editeng::SvxBorderLine    aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
@@ -430,9 +430,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     delete pTxtObj;
 
     delete pEmptyTxtObj;
-    delete pHeaderItem;
-    delete pFooterItem;
-    delete pEdEngine;
 }
 
 namespace {
