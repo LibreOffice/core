@@ -48,10 +48,6 @@ class EncryptionEngine : public cppu::ImplInheritanceHelper
  *
  *   FUNCTION
  *  Maintains common members and methods related with encryption.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

@@ -46,10 +46,6 @@ class DecryptorImpl : public DecryptorImpl_Base
  *   FUNCTION
  *  Collects all resources for decrypting an encryption, then decrypts the
  *  encryption by invoking a xmlsec-based encryption bridge component.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

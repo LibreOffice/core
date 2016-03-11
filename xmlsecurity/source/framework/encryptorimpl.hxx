@@ -49,10 +49,6 @@ class EncryptorImpl : public EncryptorImpl_Base
  *   FUNCTION
  *  Collects all resources for an encryption generation, then generates the
  *  encryption by invoking a xmlsec-based encryption bridge component.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

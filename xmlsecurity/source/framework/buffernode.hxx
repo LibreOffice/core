@@ -42,10 +42,6 @@ class BufferNode
  *  an ancestor of another bufferred element, then the corresponding
  *  BufferNode objects are also in ancestor/descendant relationship.
  *  This class is used to manipulate the tree of bufferred elements.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

@@ -46,10 +46,6 @@ class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
  *   FUNCTION
  *  Used as a wrapper class to transfer a libxml2 node structure
  *  between different UNO components.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

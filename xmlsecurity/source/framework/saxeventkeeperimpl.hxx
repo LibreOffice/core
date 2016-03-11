@@ -55,10 +55,6 @@ class SAXEventKeeperImpl : public cppu::WeakImplHelper
  *   FUNCTION
  *  Controls SAX events to be bufferred, and controls bufferred SAX events
  *  to be released.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

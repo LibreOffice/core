@@ -43,10 +43,6 @@ class SecurityEngine : public cppu::WeakImplHelper
  *   FUNCTION
  *  Maintains common members and methods related with security engine
  *  operation.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 protected:
