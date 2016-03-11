@@ -43,9 +43,7 @@ namespace {
     typedef ::cppu::WeakComponentImplHelper <
         css::rendering::XSpriteCanvas,
         css::rendering::XBitmap,
-        css::awt::XWindowListener,
-        css::lang::XInitialization,
-        css::lang::XServiceInfo
+        css::awt::XWindowListener
     > PresenterCanvasInterfaceBase;
 }
 
@@ -67,11 +65,6 @@ class PresenterCanvas
       public PresenterCanvasInterfaceBase
 {
 public:
-    /** This constructor is used when a PresenterCanvas object is created as
-        a service.
-    */
-    PresenterCanvas();
-
     /** This constructor is used when a PresenterCanvas object is created
         directly, typically by the PresenterCanvasFactory.
         @param rxUpdateCanvas
@@ -129,21 +122,6 @@ public:
         const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxOriginalClip,
         const css::geometry::RealPoint2D& rLocation,
         const css::geometry::RealSize2D& rSize);
-
-    // XInitialization
-
-    virtual void SAL_CALL initialize (
-        const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
-
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
-
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
 
     // XCanvas
 

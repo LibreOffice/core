@@ -31,9 +31,6 @@
     <service name="com.sun.star.drawing.DrawingDocumentFactory"/>
     <service name="com.sun.star.presentation.PresentationDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.PresenterCanvasFactory"
-      constructor="com_sun_star_comp_Draw_PresenterCanvasFactory_get_implementation">
-  </implementation>
   <implementation name="com.sun.star.comp.Draw.PresenterHelper"
       constructor="com_sun_star_comp_Draw_PresenterHelper_get_implementation">
     <service name="com.sun.star.drawing.PresenterHelper"/>
