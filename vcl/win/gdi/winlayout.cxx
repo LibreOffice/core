@@ -179,7 +179,7 @@ void DumpGlyphBitmap(HDC hDC)
 
     SAL_INFO("vcl.gdi.opengl", "Bitmap " << hBitmap << ": " << aBitmap.bmWidth << "x" << aBitmap.bmHeight << ":");
 
-    std::ostringstream sLine("\n");
+    std::ostringstream sLine("\n", std::ios_base::ate);
     for (long y = 0; y < aBitmap.bmHeight; y++)
     {
         for (long x = 0; x < std::min(75l, aBitmap.bmWidth); x++)
