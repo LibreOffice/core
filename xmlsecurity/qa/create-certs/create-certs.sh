@@ -150,7 +150,8 @@ do
         -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
         -passin env:SSLPASS \
         -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
-        -certfile intermediate/certs/ca-chain.cert.pem
+        -certfile intermediate/certs/ca-chain.cert.pem \
+        -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
 done
 
 echo
