@@ -1100,7 +1100,7 @@ void ScExportTest::testRichTextCellFormat()
     ScDocShellRef xDocSh = loadDoc("cellformat.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pSheet = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pSheet);
 
     // make sure the only cell in this doc is assigned some formatting record
@@ -1113,7 +1113,7 @@ void ScExportTest::testRichTextCellFormat()
     //the stream anymore. I have neither knowledge nor time to debug it
     ScDocShellRef xNewDocSh = loadDoc("cellformat.", FORMAT_XLS);
 
-    xmlDocPtr pStyles = XPathHelper::parseExport(&(*xNewDocSh), m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocPtr pStyles = XPathHelper::parseExport(*xNewDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pStyles);
 
     OString nFormatIdx = OString::number( aCellFormat.toInt32() + 1 );
@@ -2162,7 +2162,7 @@ void ScExportTest::testRelativePaths()
     ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "content.xml", FORMAT_ODS);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
@@ -2720,7 +2720,7 @@ void ScExportTest::testSheetTextBoxHyperlink()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:nvSpPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]", 1);
@@ -2733,7 +2733,7 @@ void ScExportTest::testFontSize()
     ScDocShellRef xDocSh = loadDoc("fontSize.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     OUString fontSize = getXPath(pDoc,
                 "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "sz");
@@ -2749,7 +2749,7 @@ void ScExportTest::testSheetCharacterKerningSpace()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString CharKerningSpace = getXPath(pDoc,
@@ -2769,7 +2769,7 @@ void ScExportTest::testSheetCondensedCharacterSpace()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString CondensedCharSpace = getXPath(pDoc,
@@ -2787,7 +2787,7 @@ void ScExportTest::testTextUnderlineColor()
     ScDocShellRef xDocSh = loadDoc("underlineColor.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     OUString color = getXPath(pDoc,
             "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/a:solidFill/a:srgbClr", "val");
@@ -2803,7 +2803,7 @@ void ScExportTest::testSheetRunParagraphProperty()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString aColor = getXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]/x:color", "rgb");
@@ -2818,7 +2818,7 @@ void ScExportTest::testPreserveTextWhitespaceXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si/x:t", "space", "preserve");
     xDocSh->DoClose();
@@ -2830,7 +2830,7 @@ void ScExportTest::testPreserveTextWhitespace2XLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si[1]/x:t", "space", "preserve");
     assertXPath(pDoc, "/x:sst/x:si[2]/x:r[1]/x:t", "space", "preserve");
@@ -2843,7 +2843,7 @@ void ScExportTest::testHiddenShape()
     ScDocShellRef xDocSh = loadDoc("hiddenShape.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
 }
@@ -2852,7 +2852,7 @@ void ScExportTest::testHyperlinkXLSX()
     ScDocShellRef xDocSh = loadDoc("hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
 }
@@ -3028,7 +3028,7 @@ void ScExportTest::testMatrixMultiplication()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString CellFormulaRange = getXPath(pDoc,
@@ -3154,7 +3154,7 @@ void ScExportTest::testTextDirection()
     ScDocShellRef xDocSh = loadDoc("writingMode.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR

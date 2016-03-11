@@ -36,7 +36,7 @@ namespace XPathHelper
      * xml stream, and asserting an XPath expression. This method returns the
      * xml stream, so that you can do the asserting.
      */
-    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(ScDocShell* pShell, uno::Reference< lang::XMultiServiceFactory> xSFactory,
+    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(ScDocShell& rShell, uno::Reference< lang::XMultiServiceFactory> xSFactory,
             const OUString& rFile, sal_Int32 nFormat);
 }
 
