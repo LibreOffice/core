@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_2a77bfd5",
+        "filename": "toolkit/source/controls/controlmodelcontainerbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-11T12:02:14Z",
+      "side": 0,
+      "message": "aCurrentGroupLabels seems to be dead code? I see there is stuff written to it, but its never read. Id suggest to just remove it.",
+      "revId": "64172644c898d4f5f29494b2f8b5fbcdc2cd9824",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
