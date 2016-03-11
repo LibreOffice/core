@@ -40,19 +40,23 @@
 
 #include <string.h>
 
-typedef struct {
+namespace {
+
+struct Pair {
     const char              *key;
     const rtl_TextEncoding   value;
-} pair;
+};
+
+}
 
 /*****************************************************************************
  compare function for binary search
  *****************************************************************************/
 
 static int
-pair_compare (const char *key, const pair *pair_)
+pair_compare (const char *key, const Pair *pair)
 {
-    int result = rtl_str_compareIgnoreAsciiCase( key, pair_->key );
+    int result = rtl_str_compareIgnoreAsciiCase( key, pair->key );
     return result;
 }
 
@@ -60,8 +64,8 @@ pair_compare (const char *key, const pair *pair_)
  binary search on encoding tables
  *****************************************************************************/
 
-static const pair*
-pair_search (const char *key, const pair *base, unsigned int member )
+static const Pair*
+pair_search (const char *key, const Pair *base, unsigned int member )
 {
     unsigned int lower = 0;
     unsigned int upper = member;
@@ -254,7 +258,7 @@ static rtl_Locale * parse_locale( const char * locale )
  *    LC_ALL=$i locale -k code_set_name
  *  done
  */
-static const pair nl_language_list[] = {
+static const Pair nl_language_list[] = {
     { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
     { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
     { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
@@ -291,7 +295,7 @@ static const pair nl_language_list[] = {
 
 #elif defined(LINUX)
 
-static const pair nl_language_list[] = {
+static const Pair nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
     { "ANSI_X3.4-1968",             RTL_TEXTENCODING_ISO_8859_1 },  /* fake: ASCII_US */
     { "ASMO_449",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */
@@ -473,7 +477,7 @@ static const pair nl_language_list[] = {
 
 #elif defined(FREEBSD) || defined(DRAGONFLY)
 
-static const pair nl_language_list[] = {
+static const Pair nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
     { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
@@ -497,7 +501,7 @@ static const pair nl_language_list[] = {
 
 #elif defined(NETBSD)
 
-static const pair nl_language_list[] = {
+static const Pair nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
     { "Big5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
@@ -532,7 +536,7 @@ static const pair nl_language_list[] = {
 
 #elif defined(OPENBSD)
 
-static const pair nl_language_list[] = {
+static const Pair nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
     { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
@@ -564,7 +568,7 @@ static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const pair *language=nullptr;
+    const Pair *language=nullptr;
 
     char  locale_buf[64] = "";
     char  codeset_buf[64];
@@ -683,7 +687,7 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
  * from the ISO language codes.
  */
 
-static const pair full_locale_list[] = {
+static const Pair full_locale_list[] = {
     { "ja_JP.eucJP",  RTL_TEXTENCODING_EUC_JP      },
     { "ja_JP.EUC",    RTL_TEXTENCODING_EUC_JP      },
     { "ko_KR.EUC",    RTL_TEXTENCODING_EUC_KR      },
@@ -691,7 +695,7 @@ static const pair full_locale_list[] = {
     { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      }
 };
 
-static const pair locale_extension_list[] = {
+static const Pair locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
     { "big5hk",       RTL_TEXTENCODING_BIG5_HKSCS  },
     { "gb18030",      RTL_TEXTENCODING_GB_18030    },
@@ -720,7 +724,7 @@ static const pair locale_extension_list[] = {
     { "utf-8",        RTL_TEXTENCODING_UTF8        }
 };
 
-static const pair iso_language_list[] = {
+static const Pair iso_language_list[] = {
     { "af",  RTL_TEXTENCODING_ISO_8859_1 },
     { "ar",  RTL_TEXTENCODING_ISO_8859_6 },
     { "az",  RTL_TEXTENCODING_ISO_8859_9 },
@@ -787,7 +791,7 @@ static const pair iso_language_list[] = {
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const pair *language = nullptr;
+    const Pair *language = nullptr;
     char locale_buf[64] = "";
 
     /* default to process locale if pLocale == NULL */
