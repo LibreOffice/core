@@ -61,6 +61,10 @@ public:
     virtual void tearDown() override;
 
     void testDescription();
+    /// Test a typical ODF where all streams are signed.
+    void testODFGood();
+    /// Test a typical broken ODF signature where one stream is corrupted.
+    void testODFBroken();
     /// Test a typical OOXML where a number of (but not all) streams are signed.
     void testOOXMLPartial();
     /// Test a typical broken OOXML signature where one stream is corrupted.
@@ -75,6 +79,9 @@ public:
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
+    CPPUNIT_TEST(testODFGood);
+    CPPUNIT_TEST(testODFBroken);
+    CPPUNIT_TEST(testODFBroken);
     CPPUNIT_TEST(testOOXMLPartial);
     CPPUNIT_TEST(testOOXMLBroken);
     CPPUNIT_TEST(testOOXMLDescription);
@@ -299,6 +306,33 @@ void SigningTest::testOOXMLRemoveAll()
     {
         return rPair.First.startsWith("/_xmlsignatures/sig");
     }));
+}
+
+void SigningTest::testODFGood()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
+         .getStr()),
+        (nActual == SignatureState::NOTVALIDATED
+         || nActual == SignatureState::PARTIAL_OK));
+}
+
+void SigningTest::testODFBroken()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
 void SigningTest::testOOXMLPartial()
