@@ -638,7 +638,7 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
         // release mutex to avoid deadlocks
         aMutex.clear();
 
-        OfficeIPCThread::SetReady(pOfficeIPCThread);
+        pOfficeIPCThread->cReady.set();
 
         // exit gracefully and join
         if (join)
@@ -664,14 +664,11 @@ OfficeIPCThread::~OfficeIPCThread()
     pGlobalOfficeIPCThread.clear();
 }
 
-void OfficeIPCThread::SetReady(
-    rtl::Reference< OfficeIPCThread > const & pThread)
+void OfficeIPCThread::SetReady()
 {
-    rtl::Reference< OfficeIPCThread > const & t(
-        pThread.is() ? pThread : pGlobalOfficeIPCThread);
-    if (t.is())
+    if (pGlobalOfficeIPCThread.is())
     {
-        t->cReady.set();
+        pGlobalOfficeIPCThread->cReady.set();
     }
 }
 
