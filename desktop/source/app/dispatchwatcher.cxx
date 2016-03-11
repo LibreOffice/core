@@ -184,16 +184,13 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 {
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
-    DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
     OUString                 aAsTemplateArg( "AsTemplate" );
     bool                     bSetInputFilter = false;
     OUString                 aForcedInputFilter;
 
-    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); ++p )
+    for (auto const & aDispatchRequest: aDispatchRequestsList)
     {
-        const DispatchRequest&  aDispatchRequest = *p;
-
         // create parameter array
         sal_Int32 nCount = 4;
         if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
