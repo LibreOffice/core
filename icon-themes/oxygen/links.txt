@@ -20,3 +20,7 @@ cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
+# icon view and list view
+fpicker/res/fp017.png svx/res/galicon.png
+fpicker/res/fp018.png svx/res/gallist.png

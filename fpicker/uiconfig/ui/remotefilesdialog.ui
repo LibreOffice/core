@@ -160,10 +160,12 @@
             </child>
             <child>
               <object class="GtkButton" id="list_view">
-                <property name="label" translatable="yes">List view</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">List view</property>
+                <property name="tooltip_text" translatable="yes">List view</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -173,10 +175,12 @@
             </child>
             <child>
               <object class="GtkButton" id="icon_view">
-                <property name="label" translatable="yes">Icon view</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Icon view</property>
+                <property name="tooltip_text" translatable="yes">Icon view</property>
               </object>
               <packing>
                 <property name="expand">False</property>

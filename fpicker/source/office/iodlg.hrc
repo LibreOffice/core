@@ -28,6 +28,8 @@
 #define IMG_FILEDLG_CREATEFOLDER            14
 #define IMG_FILEDLG_PLACE_LOCAL             15
 #define IMG_FILEDLG_PLACE_REMOTE            16
+#define IMG_FILEDLG_ICON_VIEW               17
+#define IMG_FILEDLG_LIST_VIEW               18
 
 #define STR_EXPLORERFILE_OPEN               (RID_FPICKER_START+31)
 #define STR_EXPLORERFILE_SAVE               (RID_FPICKER_START+32)
