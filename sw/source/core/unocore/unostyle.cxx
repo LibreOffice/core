@@ -1995,6 +1995,22 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItem
     xBase->GetGrabBagItem(aRet);
     return aRet;
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<RES_PAPER_BIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    SfxItemSet& rSet = rBase.GetItemSet();
+    uno::Any aValue;
+    rPropSet.getPropertyValue(rEntry, rSet, aValue);
+    sal_Int8 nBin(aValue.get<sal_Int8>());
+    if(nBin == -1)
+        return uno::makeAny<OUString>("[From printer settings]");
+    SfxPrinter* pPrinter = GetDoc()->getIDocumentDeviceAccess().getPrinter(false);
+    if(!pPrinter)
+        return uno::Any();
+    return uno::makeAny(pPrinter->GetPaperBinName(nBin));
+}
+
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -2030,21 +2046,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
     {
         case RES_PAPER_BIN:
         {
-            SfxItemSet& rSet = rBase.GetItemSet();
-            rPropSet.getPropertyValue(rEntry, rSet, aRet);
-            sal_Int8 nBin = 0;
-            aRet >>= nBin;
-            if ( nBin == -1 )
-                aRet <<= OUString( "[From printer settings]" );
-            else
-            {
-                SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
-                OUString sTmp;
-                if (pPrinter )
-                    sTmp = pPrinter->GetPaperBinName ( nBin );
-                aRet <<= sTmp;
-            }
-            break;
+            return GetStyleProperty<RES_PAPER_BIN>(rEntry, rPropSet, rBase);
         }
         case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
         {
