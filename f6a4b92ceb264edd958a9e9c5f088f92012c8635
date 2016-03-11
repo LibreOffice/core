@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_8a2fcbf5",
+        "filename": "sc/inc/columniterator.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "why add a default ctor?",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_6af2579c",
+        "filename": "sc/inc/columniterator.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "(there\u0027s no need to explicitly declare a defaulted dtor here; but of course it doesn\u0027t hurt, either)",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_4aef93b0",
+        "filename": "sc/inc/columnspanset.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "why add a default ctor?",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_aa2a8fe5",
+        "filename": "sc/inc/conditio.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "why add a default ctor?",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ea34874b",
+        "filename": "sc/inc/dpcache.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "why add a default ctor?",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ca39c343",
+        "filename": "sc/inc/dpresfilter.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "please do not add trailing whitespace",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_2a3fbf26",
+        "filename": "sc/inc/dptabdat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "why add a default ctor?",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_0a3c7b2e",
+        "filename": "sc/inc/fielduno.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "please do not add trailing whitespace",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_4a4673c0",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "(there\u0027s no need to explicitly declare a defaulted dtor here; but of course it doesn\u0027t hurt, either)",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_aa11efb1",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "(there\u0027s no need to explicitly declare a defaulted dtor here; but of course it doesn\u0027t hurt, either)",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ca10a3ab",
+        "filename": "sc/inc/importfilterdata.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "please do not add trailing whitespace",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ea0be77b",
+        "filename": "sc/inc/importfilterdata.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-11T08:47:15Z",
+      "side": 1,
+      "message": "(there\u0027s no need to explicitly declare a defaulted dtor here; but of course it doesn\u0027t hurt, either)",
+      "revId": "f6a4b92ceb264edd958a9e9c5f088f92012c8635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
