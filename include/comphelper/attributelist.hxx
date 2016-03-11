@@ -28,7 +28,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <memory>
 
 namespace comphelper
 {
