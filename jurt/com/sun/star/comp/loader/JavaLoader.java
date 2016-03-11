@@ -232,9 +232,6 @@ public class JavaLoader implements XImplementationLoader,
      * <p>To get the factory the inspects the class for the optional static member
      * functions __getServiceFactory resp. getServiceFactory (DEPRECATED).</p>
      *
-     * <p>If the function can not be found a default factory @see ComponentFactoryWrapper
-     * will be created.</p>
-     *
      * @param       implementationName          the implementation (class) name of the component.
      * @param       implementationLoaderUrl     the URL of the implementation loader. Not used.
      * @param       locationUrl                 points to an archive (JAR file) which contains a component.
@@ -362,8 +359,6 @@ public class JavaLoader implements XImplementationLoader,
      * @param       implementationLoaderUrl specifies the loader, the component is loaded by.
      * @param       locationUrl             points to an archive (JAR file) which contains a component.
      * @return      true if registration is successfully - otherwise false.
-     *
-     * @see         ComponentFactoryWrapper
      */
     public boolean writeRegistryInfo( XRegistryKey regKey,
                                       String implementationLoaderUrl,
