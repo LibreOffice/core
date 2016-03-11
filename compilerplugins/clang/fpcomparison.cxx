@@ -40,7 +40,7 @@ private:
     EState meState = EState::None;
 };
 
-static const std::set<std::string> whitelist {
+const std::set<std::string> whitelist {
     "rtl::math::approxEqual",
     "(anonymous namespace)::doubleToString",
     "(anonymous namespace)::stringToDouble",
@@ -95,7 +95,7 @@ bool FpComparison::ignore(FunctionDecl* function)
     return false;
 }
 
-static bool isZeroConstant(ASTContext& context, const Expr* expr)
+bool isZeroConstant(ASTContext& context, const Expr* expr)
 {
     if (!expr->getType()->isFloatingType()) {
         return false;

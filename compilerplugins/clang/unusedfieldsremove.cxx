@@ -44,7 +44,7 @@ private:
     char* mmappedData;
 };
 
-static size_t getFilesize(const char* filename)
+size_t getFilesize(const char* filename)
 {
     struct stat st;
     stat(filename, &st);
@@ -71,7 +71,7 @@ UnusedFieldsRemove::~UnusedFieldsRemove()
     close(mmapFD);
 }
 
-static std::string niceName(const FieldDecl* fieldDecl)
+std::string niceName(const FieldDecl* fieldDecl)
 {
     std::string s = fieldDecl->getParent()->getQualifiedNameAsString() + " " +
         fieldDecl->getNameAsString();
