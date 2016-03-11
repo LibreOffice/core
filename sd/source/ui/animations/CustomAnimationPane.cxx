@@ -111,30 +111,6 @@ using ::com::sun::star::uno::Exception;
 
 namespace sd {
 
-void fillDurationComboBox( ListBox* pBox )
-{
-    static const double gdVerySlow = 5.0;
-    static const double gdSlow = 3.0;
-    static const double gdNormal = 2.0;
-    static const double gdFast = 1.0;
-    static const double gdVeryFast = 0.5;
-
-    OUString aVerySlow( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_VERY_SLOW ) );
-    pBox->SetEntryData( pBox->InsertEntry( aVerySlow ), const_cast<double *>(&gdVerySlow) );
-
-    OUString aSlow( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_SLOW ) );
-    pBox->SetEntryData( pBox->InsertEntry( aSlow ), const_cast<double *>(&gdSlow) );
-
-    OUString aNormal( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_NORMAL ) );
-    pBox->SetEntryData( pBox->InsertEntry( aNormal ), const_cast<double *>(&gdNormal) );
-
-    OUString aFast( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_FAST ) );
-    pBox->SetEntryData( pBox->InsertEntry( aFast ), const_cast<double *>(&gdFast) );
-
-    OUString aVeryFast( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_VERY_FAST ) );
-    pBox->SetEntryData( pBox->InsertEntry( aVeryFast ), const_cast<double *>(&gdVeryFast) );
-}
-
 void fillRepeatComboBox( ListBox* pBox )
 {
     OUString aNone( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_NONE ) );
@@ -175,8 +151,8 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     get(mpLBProperty, "effect_property_list");
     get(mpPBPropertyMore, "more_properties");
 
-    get(mpFTSpeed, "effect_speed");
-    get(mpCBSpeed, "effect_speed_list");
+    get(mpFTDuration, "effect_duration");
+    get(mpCBXDuration, "anim_duration");
     get(mpFTCategory, "categorylabel");
     get(mpLBCategory, "categorylb");
     get(mpFTAnimation, "effectlabel");
@@ -197,12 +173,19 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
     maStrProperty = mpFTProperty->GetText();
 
-    fillDurationComboBox( mpCBSpeed );
+    //fillDurationMetricComboBox
+    mpCBXDuration->InsertValue(50, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(100, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(200, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(300, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(500, FUNIT_CUSTOM);
+    mpCBXDuration->AdaptDropDownLineCountToMaximum();
+
 
     mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBRemoveEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpLBStart->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
-    mpCBSpeed->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
+    mpCBXDuration->SetModifyHdl(LINK( this, CustomAnimationPane, DurationModifiedHdl));
     mpPBPropertyMore->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBMoveUp->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
@@ -260,8 +243,8 @@ void CustomAnimationPane::dispose()
     mpPlaceholderBox.clear();
     mpLBProperty.clear();
     mpPBPropertyMore.clear();
-    mpFTSpeed.clear();
-    mpCBSpeed.clear();
+    mpFTDuration.clear();
+    mpCBXDuration.clear();
     mpCustomAnimationList.clear();
     mpPBMoveUp.clear();
     mpPBMoveDown.clear();
@@ -488,8 +471,8 @@ OUString getPropertyName( sal_Int32 nPropertyType )
 
 void CustomAnimationPane::updateControls()
 {
-    mpFTSpeed->Enable( mxView.is() );
-    mpCBSpeed->Enable( mxView.is() );
+    mpFTDuration->Enable( mxView.is() );
+    mpCBXDuration->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
@@ -655,25 +638,12 @@ void CustomAnimationPane::updateControls()
         double fDuration = pEffect->getDuration();
         const bool bHasSpeed = fDuration > 0.001;
 
-        mpFTSpeed->Enable(bHasSpeed);
-        mpCBSpeed->Enable(bHasSpeed);
+        mpFTDuration->Enable(bHasSpeed);
+        mpCBXDuration->Enable(bHasSpeed);
 
         if( bHasSpeed )
         {
-            if( fDuration == 5.0 )
-                nPos = 0;
-            else if( fDuration == 3.0 )
-                nPos = 1;
-            else if( fDuration == 2.0 )
-                nPos = 2;
-            else if( fDuration == 1.0 )
-                nPos = 3;
-            else if( fDuration == 0.5 )
-                nPos = 4;
-            else
-                nPos = 0xffff;
-
-            mpCBSpeed->SelectEntryPos( nPos );
+            mpCBXDuration->SetValue( (fDuration)*100.0 );
         }
 
         mpPBPropertyMore->Enable();
@@ -684,9 +654,9 @@ void CustomAnimationPane::updateControls()
         mpFTProperty->Enable( false );
         mpLBProperty->Enable( false );
         mpPBPropertyMore->Enable( false );
-        mpFTSpeed->Enable(false);
-        mpCBSpeed->Enable(false);
-        mpCBSpeed->SetNoSelection();
+        mpFTDuration->Enable(false);
+        mpCBXDuration->Enable(false);
+        mpCBXDuration->SetNoSelection();
         mpFTEffect->SetText( maStrModify );
     }
 
@@ -917,8 +887,8 @@ void CustomAnimationPane::UpdateLook()
         mpFTStart->SetBackground(aBackground);
     if (mpFTProperty != nullptr)
         mpFTProperty->SetBackground(aBackground);
-    if (mpFTSpeed != nullptr)
-        mpFTSpeed->SetBackground(aBackground);
+    if (mpFTDuration != nullptr)
+        mpFTDuration->SetBackground(aBackground);
 }
 
 void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
@@ -1850,21 +1820,10 @@ void CustomAnimationPane::onAdd()
         pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
 
     const double fDuration = pDescriptor->getDuration();
-    sal_uInt32 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if( fDuration == 5.0 )
-        nPos = 0;
-    else if( fDuration == 3.0 )
-        nPos = 1;
-    else if( fDuration == 2.0 )
-        nPos = 2;
-    else if( fDuration == 1.0 )
-        nPos = 3;
-    else if( fDuration == 0.5 )
-        nPos = 4;
-    mpCBSpeed->SelectEntryPos( nPos );
+    mpCBXDuration->SetValue( (fDuration)*100.0 );
     bool bHasSpeed = pDescriptor->getDuration() > 0.001;
-    mpCBSpeed->Enable( bHasSpeed );
-    mpFTSpeed->Enable( bHasSpeed );
+    mpCBXDuration->Enable( bHasSpeed );
+    mpFTDuration->Enable( bHasSpeed );
 
     if( pDescriptor.get() )
     {
@@ -2023,16 +1982,15 @@ void CustomAnimationPane::onChangeProperty()
 
 void CustomAnimationPane::onChangeSpeed()
 {
-    if( mpCBSpeed->GetSelectEntryCount() == 1 )
+    double fDuration = getDuration();
+
+    if(fDuration < 0)
+        return;
+    else
     {
         addUndo();
 
         MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        double fDuration = getDuration();
-        if(fDuration == 0) {
-             return;
-        }
 
         // change selected effect
         EffectSequence::iterator aIter( maListSelection.begin() );
@@ -2046,23 +2004,42 @@ void CustomAnimationPane::onChangeSpeed()
         mpMainSequence->rebuild();
         updateControls();
         mrBase.GetDocShell()->SetModified();
-
-        onPreview( false );
     }
 }
 
-float CustomAnimationPane::getDuration()
+double CustomAnimationPane::getDuration()
 {
-    sal_uInt16 nPos= mpCBSpeed->GetSelectEntryPos();
-    float fDuration = 0;
-    switch( nPos )
+    double fDuration = 0;
+
+    if(mpCBXDuration->GetSelectEntryCount() > 0 )
     {
-    case 0: fDuration = 5.0; break;
-    case 1: fDuration = 3.0; break;
-    case 2: fDuration = 2.0; break;
-    case 3: fDuration = 1.0; break;
-    case 4: fDuration = 0.5; break;
+        sal_Int32 nPos = mpCBXDuration->GetSelectEntryPos();
+        if(nPos == 0)
+        {
+            fDuration = 0.5;
+        }
+        else if(nPos == 1)
+        {
+            fDuration = 1.0;
+        }
+        else if(nPos == 2)
+        {
+            fDuration = 2.0;
+        }
+        else if(nPos == 3)
+        {
+            fDuration = 3.0;
+        }
+        else if(nPos == 4)
+        {
+            fDuration = 5.0;
+        }
     }
+    else if(!(mpCBXDuration->GetText()).isEmpty())
+    {
+        fDuration = static_cast<double>(mpCBXDuration->GetValue())/100.0;
+    }
+
     return fDuration;
 }
 
@@ -2080,6 +2057,11 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
 {
     fillAnimationLB();
+}
+
+IMPL_LINK_NOARG_TYPED(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
+{
+    onChangeSpeed();
 }
 
 sal_uInt32 CustomAnimationPane::fillAnimationLB()
@@ -2158,8 +2140,6 @@ void CustomAnimationPane::implControlHdl(Control* pControl )
         onRemove();
     else if( pControl == mpLBStart )
         onChangeStart();
-    else if( pControl == mpCBSpeed )
-        onChangeSpeed();
     else if( pControl == mpPBPropertyMore )
         showOptions();
     else if( pControl == mpPBMoveUp )

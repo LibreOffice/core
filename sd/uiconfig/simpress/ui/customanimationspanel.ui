@@ -244,11 +244,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="effect_speed">
+                  <object class="GtkLabel" id="effect_duration">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Sp_eed:</property>
+                    <property name="label" translatable="yes">D_uration:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -310,10 +310,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="effect_speed_list">
+                  <object class="VclComboBoxNumeric" id="anim_duration:0.00sec">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Select the speed of Custom Animation.</property>
+                    <property name="tooltip_text" translatable="yes">Select the speed of Custom Animation.</property>
                     <property name="hexpand">True</property>
+                    <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
