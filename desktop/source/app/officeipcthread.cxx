@@ -666,6 +666,7 @@ OfficeIPCThread::~OfficeIPCThread()
 
 void OfficeIPCThread::SetReady()
 {
+    osl::MutexGuard g(GetMutex());
     if (pGlobalOfficeIPCThread.is())
     {
         pGlobalOfficeIPCThread->cReady.set();
@@ -674,7 +675,11 @@ void OfficeIPCThread::SetReady()
 
 void OfficeIPCThread::WaitForReady()
 {
-    rtl::Reference< OfficeIPCThread > const & t(pGlobalOfficeIPCThread);
+    rtl::Reference<OfficeIPCThread> t;
+    {
+        osl::MutexGuard g(GetMutex());
+        t =  pGlobalOfficeIPCThread;
+    }
     if (t.is())
     {
         t->cReady.wait();
@@ -683,6 +688,7 @@ void OfficeIPCThread::WaitForReady()
 
 bool OfficeIPCThread::IsEnabled()
 {
+    osl::MutexGuard g(GetMutex());
     return pGlobalOfficeIPCThread.is();
 }
 
