@@ -35,24 +35,17 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 
     if( rTok.Is( pName ) )
     {
-        bool bOk = true;
-        bool bBracket = rInStm.ReadIf( '(' );
-        if( bBracket || rInStm.ReadIf( '=' ) )
+        if( rInStm.ReadIf( '=' ) )
         {
             rTok = rInStm.GetToken();
-            if( rTok.IsBool() )
-            {
-                *this = rTok.GetBool();
-
-                rInStm.GetToken_Next();
-            }
-            if( bOk && bBracket )
-                bOk = rInStm.ReadIf( ')' );
+            if( !rTok.IsBool() )
+                throw SvParseException(rInStm, "xxx");
+            *this = rTok.GetBool();
+            rInStm.GetToken_Next();
         }
         else
             *this = true; //default action set to TRUE
-        if( bOk )
-            return true;
+        return true;
     }
     rInStm.Seek( nTokPos );
     return false;

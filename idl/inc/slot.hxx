@@ -25,6 +25,7 @@
 
 class SvMetaSlot : public SvMetaAttribute
 {
+public:
     tools::SvRef<SvMetaType>      aSlotType;
     tools::SvRef<SvMetaSlot>      aMethod;
     SvIdentifier     aGroupId;
@@ -69,7 +70,6 @@ class SvMetaSlot : public SvMetaAttribute
     bool            IsVariable() const;
     bool            IsMethod() const;
 
-protected:
     void    SetToggle( bool bSet ) { aToggle = bSet; }
     void    SetAutoUpdate( bool bSet ) { aAutoUpdate = bSet; }
     void    SetAsynchron( bool bSet ) { aAsynchron = bSet; }
