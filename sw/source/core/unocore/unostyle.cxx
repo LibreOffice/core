@@ -2010,6 +2010,15 @@ uno::Any SwXStyle::GetStyleProperty<RES_PAPER_BIN>(const SfxItemPropertySimpleEn
         return uno::Any();
     return uno::makeAny(pPrinter->GetPaperBinName(nBin));
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
+    assert(pRule && "Where is the NumRule?");
+    uno::Reference<container::XIndexReplace> xRules(new SwXNumberingRules(*pRule, GetDoc()));
+    return uno::makeAny<uno::Reference<container::XIndexReplace>>(xRules);
+}
 
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
@@ -2048,14 +2057,9 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         {
             return GetStyleProperty<RES_PAPER_BIN>(rEntry, rPropSet, rBase);
         }
-        case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
+        case FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
         {
-            const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
-            OSL_ENSURE(pRule, "Where is the NumRule?");
-            uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
-
-            aRet.setValue(&xRules, cppu::UnoType<container::XIndexReplace>::get());
-            break;
+            return GetStyleProperty<FN_UNO_NUM_RULES>(rEntry, rPropSet, rBase);
         }
         break;
         case RES_PARATR_OUTLINELEVEL:
