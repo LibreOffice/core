@@ -996,8 +996,7 @@ static void AddToDispatchList(
     for (std::vector< OUString >::const_iterator i(aRequestList.begin());
          i != aRequestList.end(); ++i)
     {
-        rDispatchList.push_back(
-            DispatchWatcher::DispatchRequest( nType, *i, cwdUrl, aParam, aFactory ));
+        rDispatchList.push_back({nType, *i, cwdUrl, aParam, aFactory});
     }
 }
 
@@ -1046,8 +1045,7 @@ static void AddConversionsToDispatchList(
     for (std::vector< OUString >::const_iterator i(rRequestList.begin());
          i != rRequestList.end(); ++i)
     {
-        rDispatchList.push_back(
-            DispatchWatcher::DispatchRequest( nType, *i, cwdUrl, aParam, rFactory ));
+        rDispatchList.push_back({nType, *i, cwdUrl, aParam, rFactory});
     }
 }
 

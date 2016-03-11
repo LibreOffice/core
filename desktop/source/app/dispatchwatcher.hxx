@@ -58,9 +58,6 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
 
         struct DispatchRequest
         {
-            DispatchRequest( RequestType aType, const OUString& aFile, boost::optional< OUString > const & cwdUrl, const OUString& aPrinter, const OUString& aFact ) :
-                aRequestType( aType ), aURL( aFile ), aCwdUrl( cwdUrl ), aPrinterName( aPrinter ), aPreselectedFactory( aFact ) {}
-
             RequestType     aRequestType;
             OUString   aURL;
             boost::optional< OUString > aCwdUrl;
