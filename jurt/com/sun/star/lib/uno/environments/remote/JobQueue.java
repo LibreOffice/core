@@ -31,7 +31,7 @@ import com.sun.star.lang.DisposedException;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.</p>
  *
- * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
+ * @see         com.sun.star.lib.uno.environments.remote.IThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
  * @see         com.sun.star.lib.uno.environments.remote.ThreadId
  * @since       UDK1.0
