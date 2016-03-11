@@ -58,8 +58,10 @@ public:
 private:
 #if !defined(WNT) && !defined(MACOSX)
     ScModelObj* createDoc(const char* pName);
+#if 0
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+#endif
 #endif
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -102,10 +104,12 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
     return pModelObj;
 }
 
+#if 0
 void ScTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
 {
     static_cast<ScTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
 }
+#endif
 
 /* TODO when needed...
 static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
@@ -136,6 +140,7 @@ static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
 }
 */
 
+#if 0
 void ScTiledRenderingTest::callbackImpl(int /*nType*/, const char* /*pPayload*/)
 {
     // TODO when needed...
@@ -143,6 +148,7 @@ void ScTiledRenderingTest::callbackImpl(int /*nType*/, const char* /*pPayload*/)
     //{
     //}
 }
+#endif
 
 void ScTiledRenderingTest::testSortAscendingDescending()
 {
