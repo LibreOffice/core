@@ -949,9 +949,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     AllGroups::iterator aCurrentGroup = maGroups.end(); // the group which we're currently building
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
 
-#if OSL_DEBUG_LEVEL > 1
-    ::std::vector< OUString > aCurrentGroupLabels;
-#endif
 
     for ( ; pControlModels != pControlModelsEnd; ++pControlModels )
     {
@@ -981,13 +978,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 // new state: looking for further members
                 eState = eExpandingGroup;
 
-#if OSL_DEBUG_LEVEL > 1
-                Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName("Label") )
-                    xModelProps->getPropertyValue("Label") >>= sLabel;
-                aCurrentGroupLabels.push_back( sLabel );
-#endif
             }
             break;
 
@@ -997,9 +987,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 {   // no radio button -> the group is done
                     aCurrentGroup = maGroups.end();
                     eState = eLookingForGroup;
-#if OSL_DEBUG_LEVEL > 1
-                    aCurrentGroupLabels.clear();
-#endif
                     continue;
                 }
 
@@ -1014,22 +1001,12 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                     // state still is eExpandingGroup - we're looking for further elements
                     eState = eExpandingGroup;
 
-#if OSL_DEBUG_LEVEL > 1
-                    Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                    OUString sLabel;
-                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName("Label") )
-                        xModelProps->getPropertyValue("Label") >>= sLabel;
-                    aCurrentGroupLabels.push_back( sLabel );
-#endif
                     continue;
                 }
 
                 // it's a radio button, but on a different page
                 // -> we open a new group for it
 
-#if OSL_DEBUG_LEVEL > 1
-                aCurrentGroupLabels.clear();
-#endif
 
                 // open a new group
                 size_t nGroups = maGroups.size();
@@ -1042,13 +1019,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 
                 // state is the same: we still are looking for further elements of the current group
                 eState = eExpandingGroup;
-#if OSL_DEBUG_LEVEL > 1
-                Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName("Label") )
-                    xModelProps->getPropertyValue("Label") >>= sLabel;
-                aCurrentGroupLabels.push_back( sLabel );
-#endif
             }
             break;
         }
