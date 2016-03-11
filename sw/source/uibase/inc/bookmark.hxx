@@ -21,35 +21,42 @@
 
 #include <svx/stddlg.hxx>
 #include <vcl/fixed.hxx>
+#include <ndtxt.hxx>
 
 #include <vcl/button.hxx>
+#include <svtools/simptabl.hxx>
+#include <pam.hxx>
 
 #include "swlbox.hxx"
+#include "IMark.hxx"
 
 class SwWrtShell;
 class SfxRequest;
 
-class BookmarkCombo : public SwComboBox
+class BookmarkTable : public SvSimpleTable
 {
-    sal_Int32           GetFirstSelEntryPos() const;
-    sal_Int32           GetNextSelEntryPos(sal_Int32  nPos) const;
-    sal_Int32           GetSelEntryPos(sal_Int32  nPos) const;
-
-    virtual bool    PreNotify(NotifyEvent& rNEvt) override;
+    /*virtual bool    PreNotify(NotifyEvent& rNEvt) override;*/
+    SvTreeListEntry*    GetRowByBookmarkName(OUString name);
 public:
-    BookmarkCombo(vcl::Window* pWin, WinBits nStyle);
-
-    sal_Int32           GetSelectEntryCount() const;
-    sal_Int32           GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
+    BookmarkTable(SvSimpleTableContainer& rParent, WinBits nStyle);
+    void                InsertBookmark(sw::mark::IMark* pMark);
+    sw::mark::IMark*    GetBookmarkByName(OUString sName);
+    void                SelectByName(OUString sName);
+    OUString            GetNameProposal();
 
     static const OUString aForbiddenChars;
+    static const OUString sDefaultBookmarkName;
 };
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
-    VclPtr<BookmarkCombo>  m_pBookmarkBox;
-    VclPtr<OKButton>       m_pOkBtn;
-    VclPtr<PushButton>     m_pDeleteBtn;
+    VclPtr<SvSimpleTableContainer>      m_BookmarksContainer;
+    VclPtr<BookmarkTable>               m_pBookmarksBox;
+    VclPtr<Edit>                        m_pEditBox;
+    VclPtr<OKButton>                    m_pOkBtn;
+    VclPtr<PushButton>                  m_pDeleteBtn;
+    VclPtr<PushButton>                  m_pGotoBtn;
+
 
     OUString        sRemoveWarning;
     SwWrtShell      &rSh;
@@ -57,7 +64,11 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
 
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     DECL_LINK_TYPED(DeleteHdl, Button*, void);
+    DECL_LINK_TYPED(GotoHdl, Button*, void);
+    DECL_LINK_TYPED(SelectionChangedHdl, SvTreeListBox*, void);
+    DECL_LINK_TYPED(DoubleClickHdl, SvTreeListBox*, bool);
 
+    void GoToSelectedBookmark();
     virtual void Apply() override;
 
 public:
