@@ -79,7 +79,7 @@ class TestWorkAt implements TestIWorkAt {
         _notified = true;
     }
 
-    public boolean passedAsyncTest() {
+    public synchronized boolean passedAsyncTest() {
         assertEquals(MESSAGES, _sync_counter);
         assertTrue(_passedAync);
         return  _passedAync && (_sync_counter == MESSAGES);
