@@ -55,15 +55,8 @@ bool SignatureVerifierImpl::checkReady() const
  *  1. the result listener is ready;
  *  2. the SignatureEngine is ready.
  *
- *   INPUTS
- *  empty
- *
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_xResultListener.is() && SignatureEngine::checkReady());
@@ -75,22 +68,6 @@ void SignatureVerifierImpl::notifyResultListener() const
  *
  *   NAME
  *  notifyResultListener -- notifies the listener about the verify result.
- *
- *   SYNOPSIS
- *  notifyResultListener( );
- *
- *   FUNCTION
- *  see NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >
@@ -111,19 +88,9 @@ void SignatureVerifierImpl::startEngine( const cssu::Reference<
  *   SYNOPSIS
  *  startEngine( xSignatureTemplate );
  *
- *   FUNCTION
- *  see NAME.
- *
  *   INPUTS
  *  xSignatureTemplate - the signature template (along with all referenced
  *  elements) to be verified.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;

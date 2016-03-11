@@ -51,10 +51,6 @@ class SignatureEngine : public cppu::ImplInheritanceHelper
  *
  *   FUNCTION
  *  Maintains common members and methods related with signature operation.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

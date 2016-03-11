@@ -116,21 +116,8 @@ void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
  *   NAME
  *  setNativeElement -- Configures the libxml2 node wrapped by this object
  *
- *   SYNOPSIS
- *  setNativeElement( pNode );
- *
- *   FUNCTION
- *  see NAME
- *
  *   INPUTS
  *  pNode - the new libxml2 node to be wrapped by this object
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_pElement = pNode;

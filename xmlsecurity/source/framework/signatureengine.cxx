@@ -51,15 +51,8 @@ bool SignatureEngine::checkReady() const
  *  4. all of referenced elements, the key element and the signature
  *     template are bufferred.
  *
- *   INPUTS
- *  empty
- *
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = true;
@@ -88,9 +81,6 @@ void SignatureEngine::tryToPerform( )
  *   NAME
  *  tryToPerform -- tries to perform the signature operation.
  *
- *   SYNOPSIS
- *  tryToPerform( );
- *
  *   FUNCTION
  *  if the situation is ready, perform following operations.
  *  1. prepares a signature template;
@@ -98,16 +88,6 @@ void SignatureEngine::tryToPerform( )
  *  3. clears up all used resources;
  *  4. notifies the result listener;
  *  5. sets the "accomplishment" flag.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (checkReady())
@@ -152,24 +132,11 @@ void SignatureEngine::clearUp( ) const
  *   NAME
  *  clearUp -- clear up all resources used by this operation.
  *
- *   SYNOPSIS
- *  clearUp( );
- *
  *   FUNCTION
  *  cleaning resources up includes:
  *  1. releases the ElementCollector for the signature template element;
  *  2. releases ElementCollectors for referenced elements;
  *  3. releases the ElementCollector for the key element, if there is one.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference < cssxc::sax::XReferenceResolvedBroadcaster >

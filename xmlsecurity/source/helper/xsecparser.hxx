@@ -46,10 +46,6 @@ class XSecParser: public cppu::WeakImplHelper
  *
  *   NOTES
  *  This class is used when importing a document.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     friend class XSecController;

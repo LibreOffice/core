@@ -34,10 +34,6 @@ class ElementCollector : public ElementMark
  *  This class is derived from the ElementMark class. Beyond the function
  *  of the ElementMark class, this class also maintains the priority, and
  *  manages the notify process
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

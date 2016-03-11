@@ -56,15 +56,8 @@ bool EncryptorImpl::checkReady() const
  *  1. the result listener is ready;
  *  2. the EncryptionEngine is ready.
  *
- *   INPUTS
- *  empty
- *
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 nKeyInc = 0;
@@ -86,22 +79,6 @@ void EncryptorImpl::notifyResultListener() const
  *   NAME
  *  notifyResultListener -- notifies the listener about the encryption
  *  result.
- *
- *   SYNOPSIS
- *  notifyResultListener( );
- *
- *   FUNCTION
- *  see NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     Reference< cssxc::sax::XEncryptionResultListener >
@@ -129,13 +106,6 @@ void EncryptorImpl::startEngine( const Reference<
  *
  *   INPUTS
  *  xEncryptionTemplate - the encryption template to be encrypted.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     Reference < cssxc::XXMLEncryptionTemplate > xResultTemplate;

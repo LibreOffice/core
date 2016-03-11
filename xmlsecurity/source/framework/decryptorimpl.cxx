@@ -56,15 +56,8 @@ bool DecryptorImpl::checkReady() const
  *  1. the result listener is ready;
  *  2. the EncryptionEngine is ready.
  *
- *   INPUTS
- *  empty
- *
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_xResultListener.is() && EncryptionEngine::checkReady());
@@ -77,22 +70,6 @@ void DecryptorImpl::notifyResultListener() const
  *   NAME
  *  notifyResultListener -- notifies the listener about the decryption
  *  result.
- *
- *   SYNOPSIS
- *  notifyResultListener( );
- *
- *   FUNCTION
- *  see NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::sax::XDecryptionResultListener >
@@ -110,9 +87,6 @@ void DecryptorImpl::startEngine( const cssu::Reference<
  *   NAME
  *  startEngine -- decrypts the encryption.
  *
- *   SYNOPSIS
- *  startEngine( xEncryptionTemplate );
- *
  *   FUNCTION
  *  decrypts the encryption element, then if succeeds, updates the link
  *  of old template element to the new encryption element in
@@ -120,13 +94,6 @@ void DecryptorImpl::startEngine( const cssu::Reference<
  *
  *   INPUTS
  *  xEncryptionTemplate - the encryption template to be decrypted.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::XXMLEncryptionTemplate > xResultTemplate;

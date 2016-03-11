@@ -48,10 +48,6 @@ class SignatureVerifierImpl : public SignatureVerifierImpl_Base
  *   FUNCTION
  *  Collects all resources for a signature verification, then verifies the
  *  signature by invoking a xmlsec-based signature bridge component.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

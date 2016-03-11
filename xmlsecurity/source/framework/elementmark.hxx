@@ -34,10 +34,6 @@ class ElementMark
  *   FUNCTION
  *  This class maintains the security id, buffer id and its type for a
  *  buffer node.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 protected:

@@ -87,19 +87,12 @@ int XSecController::findSignatureInfor( sal_Int32 nSecurityId) const
  *   SYNOPSIS
  *  index = findSignatureInfor( nSecurityId );
  *
- *   FUNCTION
- *  see NAME.
- *
  *   INPUTS
  *  nSecurityId - the signature's id
  *
  *   RESULT
  *  index - the index of the signature, or -1 when no such signature
  *          existing
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     int i;
@@ -122,24 +115,11 @@ void XSecController::createXSecComponent( )
  *   NAME
  *  bResult = createXSecComponent -- creates xml security components
  *
- *   SYNOPSIS
- *  createXSecComponent( );
- *
  *   FUNCTION
  *  Creates xml security components, including:
  *  1. an xml signature bridge component ( Java based or C based)
  *  2. an XMLDocumentWrapper component ( Java based or C based)
  *  3. a SAXEventKeeper component
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OUString sSAXEventKeeper( SAXEVENTKEEPER_COMPONENT );
@@ -242,10 +222,6 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
  *  So for the SAXEventKeeper, it needs to receive all missed key SAX
  *  events except that startElement event, then adds a new
  *  ElementCollector, then receives that startElement event.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
@@ -327,22 +303,6 @@ void XSecController::chainOff()
  *
  *   NAME
  *  chainOff -- disconnects the SAXEventKeeper from the SAX chain.
- *
- *   SYNOPSIS
- *  chainOff( );
- *
- *   FUNCTION
- *  See NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (!m_bIsSAXEventKeeperSticky )
@@ -398,16 +358,6 @@ void XSecController::checkChainingStatus()
  *  1. some element is being collected, or
  *  2. the SAX event stream is blocking.
  *  Otherwise, chain off the SAXEventKeeper.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if ( m_bIsCollectingElement || m_bIsBlocking )
@@ -427,23 +377,10 @@ void XSecController::initializeSAXChain()
  *  initializeSAXChain -- initializes the SAX chain according to the
  *  current setting.
  *
- *   SYNOPSIS
- *  initializeSAXChain( );
- *
  *   FUNCTION
  *  Initializes the SAX chain, if the SAXEventKeeper is asked to be always
  *  on the SAX chain, chains it on. Otherwise, starts the
  *  ElementStackKeeper to reserve key SAX events.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bIsSAXEventKeeperConnected = false;
@@ -471,18 +408,11 @@ cssu::Reference< com::sun::star::io::XInputStream >
  *   SYNOPSIS
  *  xInputStream = getObjectInputStream( objectURL );
  *
- *   FUNCTION
- *  See NAME.
- *
  *   INPUTS
  *  objectURL - the object uri
  *
  *   RESULT
  *  xInputStream - the XInputStream interface
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
         cssu::Reference< com::sun::star::io::XInputStream > xObjectInputStream;
@@ -513,9 +443,6 @@ void XSecController::startMission(
  *   NAME
  *  startMission -- starts a new security mission.
  *
- *   SYNOPSIS
- *  startMission( xUriBinding, xSecurityContect );
- *
  *   FUNCTION
  *  get ready for a new mission.
  *
@@ -524,13 +451,6 @@ void XSecController::startMission(
  *                          XInputStreams
  *  xSecurityContext  - the security context component which can provide
  *                      cryptoken
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_xUriBinding = xUriBinding;
@@ -559,21 +479,11 @@ void XSecController::setSAXChainConnector(
  *                        xDocumentHandler,
  *                        xElementStackKeeper );
  *
- *   FUNCTION
- *  See NAME.
- *
  *   INPUTS
  *  xInitialization     - the previous node on the SAX chain
  *  xDocumentHandler    - the next node on the SAX chain
  *  xElementStackKeeper - the ElementStackKeeper component which reserves
  *                        missed key SAX events for the SAXEventKeeper
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bIsPreviousNodeInitializable = true;
@@ -589,22 +499,6 @@ void XSecController::clearSAXChainConnector()
  *
  *   NAME
  *  clearSAXChainConnector -- resets the collaborating components.
- *
- *   SYNOPSIS
- *  clearSAXChainConnector( );
- *
- *   FUNCTION
- *  See NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     /*
@@ -632,21 +526,8 @@ void XSecController::endMission()
  *   NAME
  *  endMission -- forces to end all missions
  *
- *   SYNOPSIS
- *  endMission( );
- *
  *   FUNCTION
  *  Deletes all signature information and forces all missions to an end.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 size = m_vInternalSignatureInformations.size();
@@ -695,19 +576,9 @@ void XSecController::exportSignature(
  *   SYNOPSIS
  *  exportSignature( xDocumentHandler, signatureInfo);
  *
- *   FUNCTION
- *  see NAME.
- *
  *   INPUTS
  *  xDocumentHandler    - the document handler to receive the signature
  *  signatureInfo       - signature to be exported
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     /*

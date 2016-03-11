@@ -58,15 +58,8 @@ bool SignatureCreatorImpl::checkReady() const
  *  2. the id of the template blocker is known;
  *  3. the SignatureEngine is ready.
  *
- *   INPUTS
- *  empty
- *
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_xResultListener.is() &&
@@ -81,22 +74,6 @@ void SignatureCreatorImpl::notifyResultListener() const
  *   NAME
  *  notifyResultListener -- notifies the listener about the signature
  *  creation result.
- *
- *   SYNOPSIS
- *  notifyResultListener( );
- *
- *   FUNCTION
- *  see NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::sax::XSignatureCreationResultListener >
@@ -125,13 +102,6 @@ void SignatureCreatorImpl::startEngine( const cssu::Reference<
  *   INPUTS
  *  xSignatureTemplate - the signature template (along with all referenced
  *  elements) to be signed.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;
@@ -165,16 +135,6 @@ void SignatureCreatorImpl::clearUp() const
  *  cleaning resources up includes:
  *  1. SignatureEngine's clearing up;
  *  2. releases the Blocker for the signature template element.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     SignatureEngine::clearUp();

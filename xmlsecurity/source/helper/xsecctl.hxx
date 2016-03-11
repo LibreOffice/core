@@ -175,10 +175,6 @@ class XSecController : public cppu::WeakImplHelper
  *  The XFastPropertySet interface is used to transfer common values to
  *  classes in other module, for instance, the signature id for all
  *  sessions is transferred to xmloff module through this interface.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     friend class XSecParser;

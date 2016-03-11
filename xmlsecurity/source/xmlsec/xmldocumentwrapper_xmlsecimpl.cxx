@@ -106,16 +106,6 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
  *  NODEPOSITION_STARTELEMENT for startElement;
  *  NODEPOSITION_ENDELEMENT for endElement;
  *  NODEPOSITION_NORMAL for other SAX events;
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OSL_ASSERT( m_pCurrentElement != nullptr );
@@ -204,13 +194,6 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
  *          startElement SAX event. It can't be NULL.
  *  pNode -     the node on which the startElement should be generated.
  *          This node must be a element type.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     SvXMLAttributeList* pAttributeList = new SvXMLAttributeList();
@@ -304,13 +287,6 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
  *          endElement SAX event. It can't be NULL.
  *  pNode -     the node on which the endElement should be generated.
  *          This node must be a element type.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OString sNodeName = getNodeQName(pNode);
@@ -352,13 +328,6 @@ void XMLDocumentWrapper_XmlSecImpl::sendNode(
  *          If it is a text node, then a characters SAX event is
  *          generated; if it is a PI node, then a
  *          processingInstructionfor SAX event is generated.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     xmlElementType type = pNode->type;
@@ -396,18 +365,11 @@ OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode)
  *   SYNOPSIS
  *  name = getNodeQName(pNode);
  *
- *   FUNCTION
- *  see NAME
- *
  *   INPUTS
  *  pNode - the node whose name will be retrieved
  *
  *   RESULT
  *  name - the node's qualified name
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OString sNodeName(reinterpret_cast<const char*>(pNode->name));
@@ -435,18 +397,11 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< c
  *   SYNOPSIS
  *  node = checkElement(xXMLElement);
  *
- *   FUNCTION
- *  see NAME
- *
  *   INPUTS
  *  xXMLElement -   the XXMLElementWrapper interface wraping a node
  *
  *   RESULT
  *  node - the node wrapped in the XXMLElementWrapper interface
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     xmlNodePtr rc = nullptr;
@@ -511,10 +466,6 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
  *   NOTES
  *  The node in the m_aReservedNodes list must be in the tree order, otherwise
  *  the result is unpredictable.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (pNode == m_pStopAtNode)
@@ -582,16 +533,6 @@ void XMLDocumentWrapper_XmlSecImpl::getNextReservedNode()
  *  This method is used to highlight the next node in the node list.
  *  This method is called at the time when the current highlighted node
  *  has been already processed, and the next node should be ready.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (m_nReservedNodeIndex < m_aReservedNodes.getLength())
@@ -619,13 +560,6 @@ void XMLDocumentWrapper_XmlSecImpl::removeNode(const xmlNodePtr pNode) const
  *
  *   INPUTS
  *  pNode - the node to be deleted
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     /* you can't remove the current node */
@@ -656,18 +590,8 @@ void XMLDocumentWrapper_XmlSecImpl::buildIDAttr(xmlNodePtr pNode) const
  *   SYNOPSIS
  *  buildIDAttr( pNode );
  *
- *   FUNCTION
- *  see NAME
- *
  *   INPUTS
  *  pNode - the node whose id attribute will be built
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     xmlAttrPtr idAttr = xmlHasProp( pNode, reinterpret_cast<const unsigned char *>("id") );
@@ -692,18 +616,8 @@ void XMLDocumentWrapper_XmlSecImpl::rebuildIDLink(xmlNodePtr pNode) const
  *   SYNOPSIS
  *  rebuildIDLink( pNode );
  *
- *   FUNCTION
- *  see NAME
- *
  *   INPUTS
  *  pNode - the node, from which the branch will be rebuilt
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (pNode != nullptr && pNode->type == XML_ELEMENT_NODE)

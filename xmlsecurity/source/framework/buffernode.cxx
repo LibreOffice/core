@@ -60,10 +60,6 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
  *
  *   RESULT
  *  bExist - true if a match found, false otherwise
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
@@ -104,10 +100,6 @@ void BufferNode::setReceivedAll()
  *
  *   RESULT
  *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bAllReceived = true;
@@ -132,10 +124,6 @@ void BufferNode::addElementCollector(const ElementCollector* pElementCollector)
  *
  *   RESULT
  *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_vElementCollectors.push_back( pElementCollector );
@@ -160,10 +148,6 @@ void BufferNode::removeElementCollector(const ElementCollector* pElementCollecto
  *
  *   RESULT
  *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const ElementCollector* >::iterator ii = m_vElementCollectors.begin();
@@ -201,10 +185,6 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
  *   NOTES
  *  Because there is only one blocker permitted for a BufferNode, so the
  *  old blocker on this BufferNode, if there is one, will be overcasted.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OSL_ASSERT(!(m_pBlocker != nullptr && pBlocker != nullptr));
@@ -233,10 +213,6 @@ OUString BufferNode::printChildren() const
  *
  *   RESULT
  *  result - the information string
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OUString rc;
@@ -290,10 +266,6 @@ bool BufferNode::hasAnything() const
  *
  *   RESULT
  *  bExist - true if there is, false otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_pBlocker || !m_vElementCollectors.empty());
@@ -317,10 +289,6 @@ bool BufferNode::hasChildren() const
  *
  *   RESULT
  *  bExist - true if there is, false otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (!m_vChildren.empty());
@@ -349,10 +317,6 @@ const BufferNode* BufferNode::getFirstChild() const
  *   RESULT
  *  child - the first child BufferNode, or NULL if there is no child
  *          BufferNode.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = nullptr;
@@ -387,10 +351,6 @@ void BufferNode::addChild(const BufferNode* pChild, sal_Int32 nPosition)
  *   NOTES
  *  If the nPosition is -1, then the new child BufferNode is appended
  *  at the end.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (nPosition == -1)
@@ -425,10 +385,6 @@ void BufferNode::addChild(const BufferNode* pChild)
  *
  *   NOTES
  *  The new child BufferNode is appended at the end.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     addChild(pChild, -1);
@@ -451,10 +407,6 @@ void BufferNode::removeChild(const BufferNode* pChild)
  *
  *   RESULT
  *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >::iterator ii = m_vChildren.begin();
@@ -487,10 +439,6 @@ sal_Int32 BufferNode::indexOfChild(const BufferNode* pChild) const
  *   RESULT
  *  index - the index of that child BufferNode. If that child BufferNode
  *          is not found, -1 is returned.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 nIndex = 0;
@@ -539,10 +487,6 @@ const BufferNode* BufferNode::getNextSibling() const
  *
  *   RESULT
  *  sibling - the next sibling BufferNode, or NULL if there is none.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = nullptr;
@@ -574,10 +518,6 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
  *   RESULT
  *  bIs -   true if this BufferNode is an ancestor of the pDescendant,
  *          false otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = nullptr;
@@ -626,10 +566,6 @@ bool BufferNode::isPrevious(const BufferNode* pFollowing) const
  *   RESULT
  *  bIs -   true if this BufferNode is ahead in the tree order, false
  *          otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
@@ -676,10 +612,6 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
  *  3. otherwise, if it has a parent node, the parent's next sibling
  *     node is;
  *  4. otherwise, no "next" node exists.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
         /*
@@ -752,10 +684,6 @@ void BufferNode::notifyBranch()
  *
  *   RESULT
  *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
@@ -786,10 +714,6 @@ void BufferNode::elementCollectorNotify()
  *   RESULT
  *  child - the first child BufferNode, or NULL if there is no child
  *          BufferNode.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (!m_vElementCollectors.empty())
@@ -876,10 +800,6 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  *
  *   RESULT
  *  bExist - true if a match found, false otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
@@ -940,10 +860,6 @@ bool BufferNode::isECOfBeforeModifyInAncestorIncluded(sal_Int32 nIgnoredSecurity
  *
  *   RESULT
  *  bExist - true if a match found, false otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
@@ -985,10 +901,6 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  *
  *   RESULT
  *  bExist - true if a match found, false otherwise.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
@@ -1036,10 +948,6 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
  *   RESULT
  *  nextChild - the next child BufferNode after the pChild, or NULL if
  *  there is none.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = nullptr;
@@ -1081,10 +989,6 @@ void BufferNode::freeAllChildren()
  *
  *   RESULT
  *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();

@@ -45,10 +45,6 @@ class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
  *  Use this class to initialize a XmlSec based Security Context
  *  instance. After this instance is used up, use this class to free this
  *  instance.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:

@@ -97,13 +97,6 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
  *
  *   INPUTS
  *  pBufferNode - a BufferNode which will be the new active BufferNode
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (pBufferNode != m_pCurrentBufferNode)
@@ -139,16 +132,9 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
  *  current BufferNode doesn't exist, creates one.
  *  Clears up the new ElementCollector list and the new Blocker pointer.
  *
- *   INPUTS
- *  empty
- *
  *   RESULT
  *  pBufferNode - the BufferNode that has been connected with both new
  *                ElementCollectors and new Blocker.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* pBufferNode = nullptr;
@@ -228,10 +214,6 @@ ElementMark* SAXEventKeeperImpl::findElementMarkBuffer(sal_Int32 nId) const
  *   RESULT
  *  pElementMark - the ElementMark with the particular Id, or NULL when
  *                 no such Id exists.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     ElementMark* pElementMark = nullptr;
@@ -264,13 +246,6 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
  *
  *   INPUTS
  *  nId - the Id of the ElementMark to be removed.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const ElementMark* >::iterator ii = m_vElementMarkBuffers.begin();
@@ -339,10 +314,6 @@ OUString SAXEventKeeperImpl::printBufferNode(
  *
  *   RESULT
  *  info - the information string
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OUString rc;
@@ -403,18 +374,11 @@ cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
  *   SYNOPSIS
  *  list = collectChildWorkingElement( pBufferNode );
  *
- *   FUNCTION
- *  see NAME.
- *
  *   INPUTS
  *  pBufferNode - the BufferNode whose child Elements will be collected.
  *
  *   RESULT
  *  list - the child Elements list.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
@@ -458,9 +422,6 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  pBufferNode -   the BufferNode to be removed
  *  bClearRoot -    whether the root element also needs to be cleared up.
  *
- *   RESULT
- *  empty
- *
  *   NOTES
  *  when removing a Blocker's BufferNode, the bClearRoot flag should be
  *  true. Because a Blocker can buffer many SAX events which are not used
@@ -469,10 +430,6 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  cleared, with a stop flag seting at the next Blocking BufferNode. This
  *  operation can delete all useless bufferred SAX events which are only
  *  needed by the Blocker to be deleted.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (!pBufferNode->hasAnything())
@@ -601,9 +558,6 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
  *   SYNOPSIS
  *  pBufferNode = findNextBlockingBufferNode( pStartBufferNode );
  *
- *   FUNCTION
- *  see NAME.
- *
  *   INPUTS
  *  pStartBufferNode - the BufferNode from where to search the next
  *                     blocking BufferNode.
@@ -611,10 +565,6 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
  *   RESULT
  *  pBufferNode - the next blocking BufferNode, or NULL if no such
  *                BufferNode exists.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* pNext = nullptr;
@@ -652,13 +602,6 @@ void SAXEventKeeperImpl::diffuse(BufferNode* pBufferNode)
  *   INPUTS
  *  pBufferNode - the BufferNode from which the notification will be
  *                diffused.
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* pParent = pBufferNode;
@@ -683,16 +626,6 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
  *  releases each ElementMark in the releasing list
  *  m_vReleasedElementMarkBuffers.
  *  The operation differs between an ElementCollector and a Blocker.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bIsReleasing = true;
@@ -838,13 +771,6 @@ void SAXEventKeeperImpl::markElementMarkBuffer(sal_Int32 nId)
  *
  *   INPUTS
  *  nId - the Id of the ElementMark which will be released
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_vReleasedElementMarkBuffers.push_back( nId );
@@ -881,10 +807,6 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
  *
  *   RESULT
  *  nId - the Id of the new ElementCollector
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 nId = m_nNextElementMarkId;
@@ -918,15 +840,8 @@ sal_Int32 SAXEventKeeperImpl::createBlocker()
  *   SYNOPSIS
  *  nId = createBlocker( nSecurityId );
  *
- *   FUNCTION
- *  see NAME.
- *
  *   RESULT
  *  nId - the Id of the new Blocker
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 nId = m_nNextElementMarkId;
