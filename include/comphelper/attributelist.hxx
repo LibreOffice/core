@@ -20,6 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
 #define INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase.hxx>
