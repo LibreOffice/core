@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/helper/documentsignaturehelper \
 	xmlsecurity/source/helper/documentsignaturemanager \
 	xmlsecurity/source/helper/ooxmlsecparser \
+	xmlsecurity/source/helper/ooxmlsecexporter \
 	xmlsecurity/source/helper/xmlsignaturehelper2 \
 	xmlsecurity/source/helper/xmlsignaturehelper \
 	xmlsecurity/source/helper/xsecctl \
