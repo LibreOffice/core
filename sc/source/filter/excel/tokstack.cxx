@@ -773,8 +773,6 @@ const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
 
 const TokenId TokenPool::StoreMatrix()
 {
-    ScMatrix* pM;
-
     if( nElementAkt >= nElement )
         if (!GrowElement())
             return static_cast<const TokenId>(nElementAkt+1);
@@ -786,7 +784,7 @@ const TokenId TokenPool::StoreMatrix()
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
 
-    pM = new ScFullMatrix( 0, 0 );
+    ScMatrix* pM = new ScFullMatrix( 0, 0 );
     pM->IncRef( );
     ppP_Matrix[ nP_MatrixAkt ] = pM;
 
