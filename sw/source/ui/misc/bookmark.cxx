@@ -22,94 +22,154 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
+#include <svtools/headbar.hxx>
+#include <svtools/treelistentry.hxx>
 
 #include "view.hxx"
 #include "basesh.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "bookmark.hxx"
-#include "IMark.hxx"
 #include "globals.hrc"
 
-const OUString BookmarkCombo::aForbiddenChars("/\\@*?\";,#");
+const OUString BookmarkTable::aForbiddenChars("/\\@*?\",#");
 
-IMPL_LINK_TYPED( SwInsertBookmarkDlg, ModifyHdl, Edit&, rEdit, void )
+// gtkEdit ModifyHandler
+IMPL_LINK_NOARG_TYPED( SwInsertBookmarkDlg, ModifyHdl, Edit&, void )
 {
-    BookmarkCombo& rBox = static_cast<BookmarkCombo&>(rEdit);
-    bool bSelEntries = rBox.GetSelectEntryCount() != 0;
+    m_pBookmarksBox->SelectAll(false);
     // if a string has been pasted from the clipboard then
     // there may be illegal characters in the box
-    if(!bSelEntries)
+    // sanitization
+    OUString sTmp = m_pEditBox->GetText();
+    const sal_Int32 nLen = sTmp.getLength();
+    OUString sMsg;
+    for(sal_Int32 i = 0; i < BookmarkTable::aForbiddenChars.getLength(); i++)
     {
-        OUString sTmp = rBox.GetText();
-        const sal_Int32 nLen = sTmp.getLength();
-        OUString sMsg;
-        for(sal_Int32 i = 0; i < BookmarkCombo::aForbiddenChars.getLength(); i++)
-        {
-            const sal_Int32 nTmpLen = sTmp.getLength();
-            sTmp = comphelper::string::remove(sTmp, BookmarkCombo::aForbiddenChars[i]);
-            if(sTmp.getLength() != nTmpLen)
-                sMsg += OUString(BookmarkCombo::aForbiddenChars[i]);
-        }
-        if(sTmp.getLength() != nLen)
-        {
-            rBox.SetText(sTmp);
-            ScopedVclPtr<InfoBox>::Create(this, sRemoveWarning+sMsg)->Execute();
-        }
-
+        const sal_Int32 nTmpLen = sTmp.getLength();
+        sTmp = comphelper::string::remove(sTmp, BookmarkTable::aForbiddenChars[i]);
+        if(sTmp.getLength() != nTmpLen)
+           sMsg += OUString(BookmarkTable::aForbiddenChars[i]);
+    }
+    if(sTmp.getLength() != nLen)
+    {
+        m_pEditBox->SetText(sTmp);
+        ScopedVclPtr<InfoBox>::Create(this, sRemoveWarning+sMsg)->Execute();
     }
 
-    m_pOkBtn->Enable(!bSelEntries);    // new text mark
-    m_pDeleteBtn->Enable(bSelEntries); // deletable?
+    sal_Int32 nSelectedEntries = 0;
+    sal_Int32 nEntries = 0;
+    sal_Int32 nTokenIndex = 0;
+    do
+    {
+        OUString aToken = sTmp.getToken(0, ';', nTokenIndex).trim();
+        if (m_pBookmarksBox->GetBookmarkByName(aToken))
+        {
+            m_pBookmarksBox->SelectByName(aToken);
+            nSelectedEntries++;
+        }
+        nEntries++;
+    }
+    while ( nTokenIndex >= 0 );
+
+    // allow to add new bookmark only if one name provided and its not taken
+    m_pOkBtn->Enable(nEntries == 1 && nSelectedEntries == 0);
+
+    // allow to delete only if all bookmarks are recognized;
+    m_pDeleteBtn->Enable(nEntries == nSelectedEntries);
 }
 
 // callback to delete a text mark
 IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, DeleteHdl, Button*, void)
 {
-    // remove text marks from the ComboBox
+    if (m_pBookmarksBox->GetSelectionCount() == 0)
+        return;
 
-    for (sal_Int32 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
-        m_pBookmarkBox->RemoveEntryAt(m_pBookmarkBox->GetSelectEntryPos(i - 1));
+    SvTreeListEntry* pSelected = m_pBookmarksBox->FirstSelected();
+    for (sal_Int32 i = m_pBookmarksBox->GetSelectionCount(); i; i-- )
+    {
+        // remove from internal container
+        OUString sRemoved = ((sw::mark::IMark*)pSelected->GetUserData())->GetName(); // todo: c++ cast
+        IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+        pMarkAccess->deleteMark( pMarkAccess->findMark(sRemoved) );
+        SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
+        aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
+        aReq.Done();
+        // remove from ComboBox
+        SvTreeListEntry* nextSelected = m_pBookmarksBox->NextSelected(pSelected);
+        m_pBookmarksBox->RemoveEntry(pSelected);
+        pSelected = nextSelected;
+    }
+    m_pBookmarksBox->SelectAll(false);
 
-    m_pBookmarkBox->SetText(OUString());
-    m_pDeleteBtn->Enable(false);   // no further entries there
+    m_pDeleteBtn->Disable();
+    m_pOkBtn->Enable();
+}
 
-    m_pOkBtn->Enable();            // the OK handler deletes
+// callback to goto a text mark
+IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, GotoHdl, Button*, void)
+{
+    // if no entries selected we cant jump anywhere
+    if (m_pBookmarksBox->GetSelectionCount() == 0)
+        return;
+
+    // todo c++ cast
+    sw::mark::IMark* pBookmark = (sw::mark::IMark*)m_pBookmarksBox->FirstSelected()->GetUserData();
+
+    // Maybe check if Bookmark is still valid. To prevent crash
+    rSh.EnterStdMode();
+    rSh.GotoMark( pBookmark );
+    Close();
+}
+
+IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
+{
+    // this event is fired only if we change selection by selecting BookmarkTable entry
+    if (!m_pBookmarksBox->HasFocus())
+    {
+        return;
+    }
+
+    OUString sEditBoxText;
+    SvTreeListEntry* pSelected = m_pBookmarksBox->FirstSelected();
+    for (sal_Int32 i = m_pBookmarksBox->GetSelectionCount(); i; i-- )
+    {
+        OUString sEntryName = ((sw::mark::IMark*)pSelected->GetUserData())->GetName(); // todo: c++ cast
+        if (i!=1)
+        {
+            sEditBoxText = sEditBoxText + sEntryName + "; ";
+        }
+        else
+        {
+             sEditBoxText = sEditBoxText + sEntryName;
+        }
+        pSelected = m_pBookmarksBox->NextSelected(pSelected);;
+    }
+
+    if (m_pBookmarksBox->GetSelectionCount() > 0)
+    {
+        m_pOkBtn->Disable();
+        m_pDeleteBtn->Enable();
+        m_pEditBox->SetText(sEditBoxText);
+    }
+    else
+    {
+        m_pOkBtn->Enable();
+        m_pDeleteBtn->Disable();
+    }
 }
 
 // callback for OKButton. Inserts a new text mark to the current position.
 // Deleted text marks are also deleted in the model.
 void SwInsertBookmarkDlg::Apply()
 {
-    //at first remove deleted bookmarks to prevent multiple bookmarks with the same
-    //name
-    for (sal_Int32 nCount = m_pBookmarkBox->GetRemovedCount(); nCount > 0; nCount--)
-    {
-        OUString sRemoved = m_pBookmarkBox->GetRemovedEntry( nCount -1 ).GetName();
-        IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-        pMarkAccess->deleteMark( pMarkAccess->findMark(sRemoved) );
-        SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
-        aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
-        aReq.Done();
-    }
-
-    // insert text mark
-    SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText() );
-
-    if (!m_pBookmarkBox->GetText().isEmpty() &&
-        (m_pBookmarkBox->GetSwEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND))
-    {
-        OUString sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
-            m_pBookmarkBox->GetMultiSelectionSeparator()));
-
-        rSh.SetBookmark( vcl::KeyCode(), sEntry, OUString() );
-        rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sEntry ) );
-        rReq.Done();
-    }
-
+    // don't allow spaces at beginnig or end of bookmark name
+    OUString sBookmark = m_pEditBox->GetText().trim();
+    rSh.SetBookmark( vcl::KeyCode(), sBookmark, OUString() );
+    rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sBookmark ) );
+    rReq.Done();
     if ( !rReq.IsDone() )
         rReq.Ignore();
-
 }
 
 SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
@@ -117,15 +177,21 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
     rSh( rS ),
     rReq( rRequest )
 {
-    get(m_pBookmarkBox, "bookmarks");
+    get(m_BookmarksContainer, "bookmarks");
     get(m_pOkBtn, "ok");
     get(m_pDeleteBtn, "delete");
+    get(m_pGotoBtn, "goto");
+    get(m_pEditBox, "bookmark_name");
 
-    m_pBookmarkBox->SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
-    m_pBookmarkBox->EnableMultiSelection(true);
-    m_pBookmarkBox->EnableAutocomplete( true, true );
+    m_pBookmarksBox = VclPtr<BookmarkTable>::Create( *m_BookmarksContainer, 0);
 
+    m_pBookmarksBox->SetSelectHdl(LINK(this, SwInsertBookmarkDlg, SelectionChangedHdl));
+    m_pBookmarksBox->SetDeselectHdl(LINK(this, SwInsertBookmarkDlg, SelectionChangedHdl));
+    m_pEditBox->SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
     m_pDeleteBtn->SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
+    m_pGotoBtn->SetClickHdl(LINK(this, SwInsertBookmarkDlg, GotoHdl));
+
+    m_pDeleteBtn->Disable();
 
     // fill Combobox with existing bookmarks
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
@@ -135,10 +201,17 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
     {
         if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            m_pBookmarkBox->InsertSwEntry(
-                    SwBoxEntry(ppBookmark->get()->GetName()));
+            m_pBookmarksBox->InsertBookmark(ppBookmark->get());
         }
     }
+
+    // bookmark name proposal eg. "Bookmark 1"
+    // complexity could be better if we would do pattern reading (like scanf("Bookmark %d", &nBId)) and find min nBId
+    static sal_Int32 nBookmarkId = 1;
+    OUString sBookmarkName = "Bookmark " + OUString::number(nBookmarkId);
+    nBookmarkId++;
+    m_pEditBox->SetText(sBookmarkName);
+    m_pEditBox->SetCursorAtLast();
 
     sRemoveWarning = OUString(SW_RES(STR_REMOVE_WARNING));
 }
@@ -150,92 +223,78 @@ SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 
 void SwInsertBookmarkDlg::dispose()
 {
-    m_pBookmarkBox.clear();
+    m_pBookmarksBox.disposeAndClear();
+    m_BookmarksContainer.clear();
     m_pOkBtn.clear();
     m_pDeleteBtn.clear();
+    m_pGotoBtn.clear();
+    m_pEditBox.clear();
     SvxStandardDialog::dispose();
 }
 
-BookmarkCombo::BookmarkCombo(vcl::Window* pWin, WinBits nStyle)
-    : SwComboBox(pWin, nStyle)
+BookmarkTable::BookmarkTable(SvSimpleTableContainer& rParent, WinBits nStyle)
+    : SvSimpleTable(rParent, nStyle)
 {
+    static long nTabs[] = { 3, 0, 50, 150 };
+
+    SetTabs( nTabs, MAP_PIXEL );
+    InsertHeaderEntry("Page");
+    InsertHeaderEntry("Name");
+    InsertHeaderEntry("Text");
+
+    SetSelectionMode( MULTIPLE_SELECTION );
+
+    rParent.SetTable(this);
 }
 
-sal_Int32 BookmarkCombo::GetFirstSelEntryPos() const
+void BookmarkTable::InsertBookmark(sw::mark::IMark* mark)
 {
-    return GetSelEntryPos(0);
+    SwPaM* pSwPaM = new SwPaM( mark->GetMarkPos() );
+    const SwPosition* pPos = pSwPaM->GetPoint();
+    sal_Int32 nBookmarkPos = pPos->nContent.GetIndex();
+    OUString sBookmarkNodeText = pPos->nNode.GetNode().GetTextNode()->GetText();
+    sBookmarkNodeText = sBookmarkNodeText.copy(nBookmarkPos,
+                                               std::min<sal_Int32>((sBookmarkNodeText.getLength() - nBookmarkPos), 20));
+
+    OUString sPageNum = OUString::number( pSwPaM->GetPageNum() );
+    OUString sData = sPageNum + "\t"+ mark->GetName() + "\t" + sBookmarkNodeText;
+
+    InsertEntryToColumn(sData, TREELIST_APPEND, 0xffff, mark);
+    delete pSwPaM;
 }
 
-sal_Int32 BookmarkCombo::GetNextSelEntryPos(sal_Int32 nPos) const
+SvTreeListEntry* BookmarkTable::GetRowByBookmarkName(OUString name)
 {
-    return GetSelEntryPos(nPos + 1);
-}
-
-sal_Int32 BookmarkCombo::GetSelEntryPos(sal_Int32 nPos) const
-{
-    sal_Unicode cSep = GetMultiSelectionSeparator();
-
-    sal_Int32 nCnt = comphelper::string::getTokenCount(GetText(), cSep);
-
-    for (; nPos < nCnt; nPos++)
+    SvTreeListEntry* pEntry = First();
+    for (sal_Int32 i = GetRowCount(); i; i-- )
     {
-        OUString sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
-        if (GetEntryPos(sEntry) != COMBOBOX_ENTRY_NOTFOUND)
-            return nPos;
-    }
-
-    return COMBOBOX_ENTRY_NOTFOUND;
-}
-
-sal_Int32 BookmarkCombo::GetSelectEntryCount() const
-{
-    sal_Int32 nCnt = 0;
-
-    sal_Int32 nPos = GetFirstSelEntryPos();
-    while (nPos != COMBOBOX_ENTRY_NOTFOUND)
-    {
-        nPos = GetNextSelEntryPos(nPos);
-        nCnt++;
-    }
-
-    return nCnt;
-}
-
-// position inside of the listbox (the ComboBox)
-sal_Int32 BookmarkCombo::GetSelectEntryPos( sal_Int32 nSelIndex ) const
-{
-    sal_Int32 nCnt = 0;
-    sal_Int32 nPos = GetFirstSelEntryPos();
-    while (nPos != COMBOBOX_ENTRY_NOTFOUND)
-    {
-        if (nSelIndex == nCnt)
+        OUString sName = ((sw::mark::IMark*)pEntry->GetUserData())->GetName(); // todo: c++ cast
+        if (sName == name)
         {
-            sal_Unicode cSep = GetMultiSelectionSeparator();
-            OUString sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
-            return GetEntryPos(sEntry);
+            return pEntry;
         }
-        nPos = GetNextSelEntryPos(nPos);
-        nCnt++;
+        pEntry = Next(pEntry);
     }
-
-    return COMBOBOX_ENTRY_NOTFOUND;
+    return NULL;
 }
 
-bool BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
+sw::mark::IMark* BookmarkTable::GetBookmarkByName(OUString name)
 {
-    bool bHandled = false;
-    if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType() &&
-         rNEvt.GetKeyEvent()->GetCharCode() )
+    SvTreeListEntry* pEntry = GetRowByBookmarkName(name);
+    if (!pEntry)
     {
-        OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
-        if(-1 != aForbiddenChars.indexOf(sKey))
-            bHandled = true;
+        return NULL;
     }
-    if(!bHandled)
-        bHandled = SwComboBox::PreNotify( rNEvt );
-    return bHandled;
+    return (sw::mark::IMark*)pEntry->GetUserData(); // todo c++ cast
 }
 
-VCL_BUILDER_FACTORY_ARGS(BookmarkCombo, 0)
+void BookmarkTable::SelectByName(OUString sName)
+{
+    SvTreeListEntry* pEntry = GetRowByBookmarkName(sName);
+    if (pEntry)
+    {
+        Select(pEntry);
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
