@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <SpecialUnicodes.hxx>
 
 using namespace ::com::sun::star;
 
@@ -118,12 +119,16 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculat
 
 OUString MeanValueRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength /* = nullptr */ ) const
 {
-    OUString aBuf = "f(x) = " +
-                    getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue );
-
-    return aBuf;
+    OUString aBuf = "f(x) = ";
+    if ( pFormulaLength )
+    {
+        *pFormulaLength -= aBuf.getLength();
+        if ( *pFormulaLength <= 0 )
+            return aHashString;
+    }
+    return ( aBuf + getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue, pFormulaLength ) );
 }
 
 } //  namespace chart
