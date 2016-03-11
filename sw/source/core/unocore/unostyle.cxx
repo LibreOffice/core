@@ -2019,6 +2019,13 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertySimpl
     uno::Reference<container::XIndexReplace> xRules(new SwXNumberingRules(*pRule, GetDoc()));
     return uno::makeAny<uno::Reference<container::XIndexReplace>>(xRules);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<RES_PARATR_OUTLINELEVEL>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    SAL_WARN_IF(SFX_STYLE_FAMILY_PARA == GetFamily(), "sw.uno", "only paras");
+    return uno::makeAny<sal_Int16>(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel());
+}
 
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
@@ -2061,13 +2068,9 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         {
             return GetStyleProperty<FN_UNO_NUM_RULES>(rEntry, rPropSet, rBase);
         }
-        break;
         case RES_PARATR_OUTLINELEVEL:
         {
-            OSL_ENSURE( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
-            int nLevel = rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel();
-            aRet <<= static_cast<sal_Int16>( nLevel );
-            break;
+            return GetStyleProperty<RES_PARATR_OUTLINELEVEL>(rEntry, rPropSet, rBase);
         }
         case FN_UNO_FOLLOW_STYLE:
         {
