@@ -1544,6 +1544,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     if( !pOrigChangeTrack )
         return nullptr;
 
+    assert(!pTempDoc);
     // create empty document
     pTempDoc = new ScDocument;
 
