@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_6aaa571b",
+        "filename": "cpputools/source/unoexe/unoexe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-11T11:54:27Z",
+      "side": 1,
+      "message": "Since the uno executable will be run quite a lot during the build: can we just use SAL_INFO here (which can be enabled and disabled at runtime) instead of something always producing output in a debug build?",
+      "revId": "88e9a669230560911af5ec6e9899a6c2c314f6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
