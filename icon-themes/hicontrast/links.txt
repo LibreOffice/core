@@ -12,3 +12,7 @@ cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 # FolderTree icons
 svtools/res/folder.png formula/res/fapclose.png
 svtools/res/folderop.png formula/res/fapopen.png
+
+# icon view and list view
+fpicker/res/fp017.png svx/res/galicon.png
+fpicker/res/fp018.png svx/res/gallist.png

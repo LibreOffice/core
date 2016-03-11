@@ -157,3 +157,7 @@ cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 # anchor menu
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
+
+# icon view and list view
+fpicker/res/fp017.png svx/res/galicon.png
+fpicker/res/fp018.png svx/res/gallist.png

@@ -37,10 +37,12 @@ ImageList RID_FILEPICKER_IMAGES
         IMG_FILEDLG_CREATEFOLDER;
         IMG_FILEDLG_PLACE_LOCAL;
         IMG_FILEDLG_PLACE_REMOTE;
+        IMG_FILEDLG_ICON_VIEW;
+        IMG_FILEDLG_LIST_VIEW;
     };
     IdCount =
     {
-        5;
+        7;
     };
 };
 

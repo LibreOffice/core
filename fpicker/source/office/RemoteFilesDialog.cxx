@@ -203,6 +203,8 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pFilter_lb->Enable( false );
     m_pName_ed->Enable( false );
 
+    m_aImages = ImageList( fpicker::SvtResId( RID_FILEPICKER_IMAGES ) );
+
     if( m_eMode == REMOTEDLG_MODE_OPEN )
     {
         get( m_pOk_btn, "open" );
@@ -213,13 +215,14 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     {
         get( m_pOk_btn, "save" );
 
-        m_aImages = ImageList( fpicker::SvtResId( RID_FILEPICKER_IMAGES ) );
         m_pNewFolder->SetModeImage( m_aImages.GetImage( IMG_FILEDLG_CREATEFOLDER ) );
         m_pNewFolder->SetClickHdl( LINK( this, RemoteFilesDialog, NewFolderHdl ) );
     }
 
     m_pIconView_btn->SetClickHdl( LINK( this, RemoteFilesDialog, IconViewHdl ) );
+    m_pIconView_btn->SetModeImage( Image( m_aImages.GetImage( IMG_FILEDLG_ICON_VIEW ) ) );
     m_pListView_btn->SetClickHdl( LINK( this, RemoteFilesDialog, ListViewHdl ) );
+    m_pListView_btn->SetModeImage( Image( m_aImages.GetImage( IMG_FILEDLG_LIST_VIEW ) ) );
 
     m_pOk_btn->Show();
     m_pOk_btn->Enable( false );

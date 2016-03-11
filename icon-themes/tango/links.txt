@@ -536,3 +536,7 @@ cmd/lc_conditionalformatmenu.png cmd/lc_colorscaleformatdialog.png
 # anchor menu
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
+
+# icon view and list view
+fpicker/res/fp017.png svx/res/galicon.png
+fpicker/res/fp018.png svx/res/gallist.png
