@@ -2027,8 +2027,8 @@ void Test::testPivotTableDocFunc()
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
 
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
@@ -2039,8 +2039,8 @@ void Test::testPivotTableDocFunc()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table collection.", pDPs);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
-    pDPObj = &(*pDPs)[0];
-    ScRange aOutRange = pDPObj->GetOutRange();
+    ScDPObject* pDPObject = &(*pDPs)[0];
+    ScRange aOutRange = pDPObject->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -2060,7 +2060,7 @@ void Test::testPivotTableDocFunc()
 
     // Remove this pivot table output. This should also clear the pivot cache
     // it was referencing.
-    bSuccess = aFunc.RemovePivotTable(*pDPObj, false, true);
+    bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table output via ScDBDocFunc.", bSuccess);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDPs->GetSheetCaches().size());
