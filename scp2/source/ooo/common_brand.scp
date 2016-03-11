@@ -921,7 +921,7 @@ ProfileItem gid_Brand_Profileitem_Version_Useragent
     Section = "Version";
     Order = 17;
     Key = "UpdateUserAgent";
-    Value = "<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})";
+    Value = "<PRODUCT> (${buildid}; ${_OS}; ${_ARCH})";
 End
 
 ProfileItem gid_Brand_Profileitem_Version_Vendor
