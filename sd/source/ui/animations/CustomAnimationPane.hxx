@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/field.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CustomAnimationPreset.hxx"
@@ -32,6 +33,7 @@
 #include "motionpathtag.hxx"
 #include "misc/scopelock.hxx"
 #include "CustomAnimationPreset.hxx"
+
 #include <vector>
 
 class PushButton;
@@ -96,7 +98,7 @@ public:
 
     void addUndo();
 
-    float getDuration();
+    double getDuration();
     void updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag );
 
 private:
@@ -123,6 +125,7 @@ private:
     DECL_LINK_TYPED( implPropertyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
     DECL_LINK_TYPED( lateInitCallback, Timer *, void );
+    DECL_LINK_TYPED( DurationModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( UpdateAnimationLB, ListBox&, void );
     DECL_LINK_TYPED( AnimationSelectHdl, ListBox&, void );
     void implControlHdl(Control*);
@@ -141,8 +144,8 @@ private:
     VclPtr<VclHBox>    mpPlaceholderBox;
     VclPtr<PropertyControl>    mpLBProperty;
     VclPtr<PushButton> mpPBPropertyMore;
-    VclPtr<FixedText>  mpFTSpeed;
-    VclPtr<ListBox>   mpCBSpeed;
+    VclPtr<FixedText>  mpFTDuration;
+    VclPtr<MetricBox>   mpCBXDuration;
     VclPtr<CustomAnimationList>    mpCustomAnimationList;
     VclPtr<PushButton> mpPBMoveUp;
     VclPtr<PushButton> mpPBMoveDown;
@@ -186,8 +189,6 @@ private:
 };
 
 void fillRepeatComboBox( ListBox* pBox );
-
-void fillDurationComboBox( ListBox* pBox );
 
 }
 
