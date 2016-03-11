@@ -41,6 +41,7 @@
 #include "chartlock.hxx"
 #include "refupdat.hxx"
 #include "docoptio.hxx"
+#include "clipoptions.hxx"
 #include "viewopti.hxx"
 #include "scextopt.hxx"
 #include "brdcst.hxx"
@@ -75,6 +76,7 @@
 #include "globalnames.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <o3tl/make_unique.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -1951,6 +1953,11 @@ void ScDocument::SetExtDocOptions( ScExtDocOptions* pNewOptions )
 {
     delete pExtDocOptions;
     pExtDocOptions = pNewOptions;
+}
+
+void ScDocument::SetClipOptions(const ScClipOptions& rClipOptions)
+{
+    mpClipOptions = o3tl::make_unique<ScClipOptions>(rClipOptions);
 }
 
 void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,

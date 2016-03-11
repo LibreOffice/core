@@ -66,8 +66,10 @@
 #include "undodat.hxx"
 #include "drawview.hxx"
 #include "cliputil.hxx"
+#include "clipoptions.hxx"
 #include <gridwin.hxx>
 #include <memory>
+#include <com/sun/star/util/XCloneable.hpp>
 
 using namespace com::sun::star;
 
@@ -224,6 +226,16 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 // following paste operation with range? would be nicer to just set this always
                 // and lose the 'if' above
                 aClipParam.setSourceDocID( pDoc->GetDocumentID() );
+
+            if (SfxObjectShell* pObjectShell = pDoc->GetDocumentShell())
+            {
+                // Copy document properties from pObjectShell to pClipDoc (to its clip options, as it has no object shell).
+                uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(pObjectShell->GetModel(), uno::UNO_QUERY);
+                uno::Reference<util::XCloneable> xCloneable(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+                ScClipOptions aOptions;
+                aOptions.m_xDocumentProperties.set(xCloneable->createClone(), uno::UNO_QUERY);
+                pClipDoc->SetClipOptions(aOptions);
+            }
 
             pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects, true, bUseRangeForVBA );
             if ( !bUseRangeForVBA && pDoc && pClipDoc )

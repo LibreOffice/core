@@ -99,6 +99,7 @@
 #include "interpre.hxx"
 #include <tokenstringcontext.hxx>
 #include "docsh.hxx"
+#include "clipoptions.hxx"
 #include <listenercontext.hxx>
 
 using namespace com::sun::star;

@@ -117,6 +117,7 @@ class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
 class ScChartCollection;
 class ScChartListenerCollection;
+class ScClipOptions;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScDBCollection;
@@ -351,6 +352,7 @@ private:
     ScViewOptions*      pViewOptions;                   // view options
     ScDocOptions*       pDocOptions;                    // document options
     ScExtDocOptions*    pExtDocOptions;                 // for import etc.
+    std::unique_ptr<ScClipOptions> mpClipOptions;       // clipboard options
     ScConsolidateParam* pConsolidateDlgData;
 
     ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
@@ -505,6 +507,9 @@ public:
 
     ScExtDocOptions*        GetExtDocOptions()  { return pExtDocOptions; }
     SC_DLLPUBLIC void                   SetExtDocOptions( ScExtDocOptions* pNewOptions );
+
+    ScClipOptions*          GetClipOptions()    { return mpClipOptions.get(); }
+    void                    SetClipOptions(const ScClipOptions& rClipOptions);
 
     SC_DLLPUBLIC void       GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
