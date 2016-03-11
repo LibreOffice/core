@@ -296,7 +296,7 @@ IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, p
 {
     // Documents requests are processed by the OfficeIPCThread implementation
     ProcessDocumentsRequest* pDocsRequest = static_cast<ProcessDocumentsRequest*>(pEvent);
-    OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+    OfficeIPCThread::ExecuteCmdLineRequests(*pDocsRequest, false);
     delete pDocsRequest;
 }
 
@@ -394,8 +394,6 @@ void OfficeIPCThread::SetDowning()
         pGlobalOfficeIPCThread->mState = State::Downing;
 }
 
-static bool s_bInEnableRequests = false;
-
 void OfficeIPCThread::EnableRequests()
 {
     // switch between just queueing the requests and executing them
@@ -403,15 +401,13 @@ void OfficeIPCThread::EnableRequests()
 
     if ( pGlobalOfficeIPCThread.is() )
     {
-        s_bInEnableRequests = true;
         if (pGlobalOfficeIPCThread->mState != State::Downing) {
             pGlobalOfficeIPCThread->mState = State::RequestsEnabled;
         }
         // hit the compiler over the head
         ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
         // trigger already queued requests
-        OfficeIPCThread::ExecuteCmdLineRequests( aEmptyReq );
-        s_bInEnableRequests = false;
+        OfficeIPCThread::ExecuteCmdLineRequests(aEmptyReq, true);
     }
 }
 
@@ -1047,7 +1043,8 @@ static void AddConversionsToDispatchList(
 }
 
 
-bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
+bool OfficeIPCThread::ExecuteCmdLineRequests(
+    ProcessDocumentsRequest& aRequest, bool noTerminate)
 {
     // protect the dispatch list
     osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -1084,7 +1081,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
         aGuard.clear();
 
         // Execute dispatch requests
-        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aTempList, s_bInEnableRequests );
+        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
 
         // set processed flag
         if (aRequest.pcProcessed != nullptr)

@@ -110,7 +110,8 @@ class OfficeIPCThread : public salhelper::Thread
     static void                 EnableRequests();
     static bool                 AreRequestsPending();
     static void                 RequestsCompleted();
-    static bool                 ExecuteCmdLineRequests( ProcessDocumentsRequest& );
+    static bool                 ExecuteCmdLineRequests(
+        ProcessDocumentsRequest&, bool noTerminate);
 
     // return sal_False if second office
     static Status               EnableOfficeIPCThread();

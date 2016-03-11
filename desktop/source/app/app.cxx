@@ -2407,7 +2407,7 @@ void Desktop::OpenClients()
         }
 
         // Process request
-        if ( OfficeIPCThread::ExecuteCmdLineRequests( aRequest ) )
+        if ( OfficeIPCThread::ExecuteCmdLineRequests(aRequest, false) )
         {
             // Don't do anything if we have successfully called terminate at desktop:
             return;
@@ -2481,7 +2481,7 @@ void Desktop::OpenDefault()
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
     aRequest.aOpenList.push_back(aName);
-    OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
+    OfficeIPCThread::ExecuteCmdLineRequests(aRequest, false);
 }
 
 
@@ -2604,7 +2604,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 docsRequest.aOpenList.insert(
                     docsRequest.aOpenList.end(), data.begin(), data.end());
-                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest);
+                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest, false);
             }
         }
         break;
@@ -2621,7 +2621,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 docsRequest.aPrintList.insert(
                     docsRequest.aPrintList.end(), data.begin(), data.end());
-                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest);
+                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest, false);
             }
         }
         break;
