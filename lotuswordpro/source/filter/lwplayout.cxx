@@ -78,6 +78,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     , m_bGettingHasProtection(false)
     , m_bGettingIsProtected(false)
     , m_bGettingMarginsValue(false)
+    , m_bGettingExtMarginsValue(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -750,7 +751,7 @@ double LwpMiddleLayout::MarginsValue(const sal_uInt8 &nWhichSide)
  * @param:
  * @return:
 */
-double LwpMiddleLayout::GetExtMarginsValue(const sal_uInt8 &nWhichSide)
+double LwpMiddleLayout::ExtMarginsValue(const sal_uInt8 &nWhichSide)
 {
     double fValue = 0;
     if(m_nOverrideFlag & OVER_MARGINS)
@@ -768,7 +769,7 @@ double LwpMiddleLayout::GetExtMarginsValue(const sal_uInt8 &nWhichSide)
         fValue = pStyle->GetExtMarginsValue(nWhichSide);
         return fValue;
     }
-    return LwpVirtualLayout::GetExtMarginsValue(nWhichSide);
+    return LwpVirtualLayout::ExtMarginsValue(nWhichSide);
 }
 /**
  * @descr:  Get the LwpBorderStuff object according to m_LayBorderStuff id.
