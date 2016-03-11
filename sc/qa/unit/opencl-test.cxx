@@ -151,7 +151,10 @@ public:
     void testMathFormulaArcCos();
     void testMathFormulaSqrt();
     void testMathFormulaArcCosHyp();
+//This test gives errors if ATL is enabled
+#if HAVE_FEATURE_ATL
     void testFinancialXirrFormula();
+#endif
     void testFinacialNPVFormula();
     void testStatisticalFormulaNormsdist();
     void testStatisticalFormulaNorminv();
@@ -380,7 +383,10 @@ public:
     CPPUNIT_TEST(testMathFormulaArcCos);
     CPPUNIT_TEST(testMathFormulaSqrt);
     CPPUNIT_TEST(testMathFormulaArcCosHyp);
+//This test gives errors if ATL is enabled
+#if HAVE_FEATURE_ATL
     CPPUNIT_TEST(testFinancialXirrFormula);
+#endif
     CPPUNIT_TEST(testFinacialNPVFormula);
     CPPUNIT_TEST(testStatisticalFormulaNormsdist);
     CPPUNIT_TEST(testStatisticalFormulaNorminv);
@@ -2769,6 +2775,8 @@ void ScOpenCLTest:: testFinancialIPMTFormula()
     }
 }
 
+//This test gives errors if ATL is enabled
+#if HAVE_FEATURE_ATL
 void ScOpenCLTest:: testFinancialXirrFormula()
 {
     if(!initTestEnv("opencl/financial/XIRR.", FORMAT_ODS, false))
@@ -2788,9 +2796,8 @@ void ScOpenCLTest:: testFinancialXirrFormula()
         double fExpected = rDoc.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
     }
-
-
 }
+#endif
 
 void ScOpenCLTest::testStatisticalFormulaChiSqDist()
 {

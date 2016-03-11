@@ -3737,16 +3737,19 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
 
     AC_MSG_CHECKING([whether to use ATL])
     if test "$enable_atl" = "yes" -o "$enable_atl" = "" -a "$vcexpress" != Express; then
-        DISABLE_ATL=""
+		DISABLE_ATL="TRUE"
+		AC_DEFINE(HAVE_FEATURE_ATL, 1)
         AC_MSG_RESULT([yes])
     else
-        DISABLE_ATL="TRUE"
+		DISABLE_ATL="TRUE"
+		AC_DEFINE(HAVE_FEATURE_ATL, 1)
         AC_MSG_RESULT([no])
     fi
 else
     ENABLE_DIRECTX=""
     DISABLE_ACTIVEX="TRUE"
-    DISABLE_ATL="TRUE"
+	DISABLE_ATL="TRUE"
+	AC_DEFINE(HAVE_FEATURE_ATL, 1)
 fi
 
 AC_SUBST(ENABLE_DIRECTX)
