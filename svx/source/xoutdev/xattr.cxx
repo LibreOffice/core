@@ -53,7 +53,6 @@
 #include <basegfx/tools/unotools.hxx>
 #include <vcl/gradient.hxx>
 
-#include <stdio.h>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
