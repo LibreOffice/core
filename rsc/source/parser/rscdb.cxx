@@ -96,8 +96,8 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
             AddLanguage( aLang.getStr() );
             nID = GetLangId( aLang );
         }
-        SAL_INFO("rsc", "RscTypCont::ChangeLanguage: " <<
-            "'" << aLang << "'" << " (0x" << std::hex << nID << ") (" << (bAdd ? "added" : "exists"));
+        SAL_INFO("rsc", "RscTypCont::ChangeLanguage: '" <<
+            aLang << "' (0x" << std::hex << nID << ") (" << (bAdd ? "added" : "exists"));
         aLangFallbacks.push_back( nID);
     }
 
