@@ -16,6 +16,24 @@
       "revId": "a8c1088071a20322f325282dc891cc2b6ecd49c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_0dc77546",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-03-12T08:42:33Z",
+      "side": 1,
+      "message": "Ahh.. not so much misunderstanding as unfamiliarity with all the possible classes and class members. \nThank you for noting and for amending :-)",
+      "parentUuid": "9ad45d7e_2df999c9",
+      "revId": "a8c1088071a20322f325282dc891cc2b6ecd49c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
