@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>

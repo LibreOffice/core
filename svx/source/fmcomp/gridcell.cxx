@@ -68,7 +68,6 @@
 #include <connectivity/sqlnode.hxx>
 
 #include <math.h>
-#include <stdio.h>
 
 using namespace ::connectivity;
 using namespace ::svxform;
