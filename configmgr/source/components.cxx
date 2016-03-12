@@ -774,7 +774,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
         for (UnresolvedList::iterator i(unres.begin()); i != unres.end();) {
             if (i->manager->parse(&existingDeps)) {
                 processedDeps.insert(i->name);
-                unres.erase(i++);
+                i = unres.erase(i);
                 isResolved = true;
             } else {
                 ++i;

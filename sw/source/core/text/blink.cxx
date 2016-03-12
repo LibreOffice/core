@@ -166,7 +166,7 @@ void SwBlink::FrameDelete( const SwRootFrame* pRoot )
     for (SwBlinkSet::iterator it = m_List.begin(); it != m_List.end(); )
     {
         if (pRoot == (*it)->GetRootFrame())
-            m_List.erase( it++ );
+            it = m_List.erase(it);
         else
             ++it;
     }
