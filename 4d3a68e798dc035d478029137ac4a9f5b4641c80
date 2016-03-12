@@ -33,6 +33,24 @@
       "revId": "4d3a68e798dc035d478029137ac4a9f5b4641c80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_8da525b7",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2016-03-12T05:44:30Z",
+      "side": 1,
+      "message": "Yes, That fixes this bug. When you create an empty lock file,it doesn\u0027t have any meaning except that it doesn\u0027t allow you to save your file with that same name. An empty lock file doesn\u0027t have OOOUSERNAME and SYSUSERNAME. So in that case we could take ownership of our lock.",
+      "parentUuid": "9ad45d7e_4d8ded7a",
+      "revId": "4d3a68e798dc035d478029137ac4a9f5b4641c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
