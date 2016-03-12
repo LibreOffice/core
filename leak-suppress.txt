@@ -44,3 +44,7 @@ leak:libGL.so
 
 # knowingly leaked in the unit tests to get a SfxMedium
 leak:SfxObjectShell::DoInitUnitTest
+
+# ignore some libc related leaks
+leak:__new_exitfn
+leak:__GI___strdup
