@@ -736,7 +736,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
                 )
             )
         {
-            m_arrStatusListener.erase( iterSearch++ );
+            iterSearch = m_arrStatusListener.erase(iterSearch);
             if (!bRemoveForAll)
                 // remove the listener only for the given URL, so we can exit the loop after deletion
                 break;
