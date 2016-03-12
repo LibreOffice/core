@@ -19,7 +19,6 @@
 
 
 #include <ctype.h>
-#include <stdio.h>
 
 #include <tools/debug.hxx>
 

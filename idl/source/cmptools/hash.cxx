@@ -20,7 +20,6 @@
 
 // C and C++ includes
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
 
 // program-sensitive includes

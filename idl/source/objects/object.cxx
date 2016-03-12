@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <ctype.h>
-#include <stdio.h>
 
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
