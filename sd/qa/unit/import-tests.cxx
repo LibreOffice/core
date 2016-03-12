@@ -111,6 +111,7 @@ public:
     void testTdf62255();
     void testTdf89927();
     void testTdf93868();
+    void testTdf95932();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testTdf62255);
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf93868);
+    CPPUNIT_TEST(testTdf95932);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1229,6 +1231,24 @@ void SdImportTest::testTdf93868()
     CPPUNIT_ASSERT_EQUAL(size_t(5), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, dynamic_cast<const XFillStyleItem&>(pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, dynamic_cast<const XFillStyleItem&>(pPage->GetObj(1)->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf95932()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf95932.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    SdrObject *const pObj = pPage->GetObj(2);
+    CPPUNIT_ASSERT(pObj);
+
+    const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+        pObj->GetMergedItem(XATTR_FILLSTYLE));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+    const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+        pObj->GetMergedItem(XATTR_FILLCOLOR));
+    CPPUNIT_ASSERT_EQUAL(ColorData(0x76bf3d), rColorItem.GetColorValue().GetColor());
 
     xDocShRef->DoClose();
 }
