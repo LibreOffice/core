@@ -890,7 +890,8 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDi
     if (nDim < static_cast<long>(maDimMembers.size()) && maDimMembers[nDim])
         return maDimMembers[nDim];
 
-    maDimMembers.resize(nDim+1, nullptr);
+    if (nDim >= static_cast<long>(maDimMembers.size()))
+        maDimMembers.resize(nDim+1, nullptr);
 
     ResultMembers* pResultMembers = new ResultMembers();
     // global order is used to initialize aMembers, so it doesn't have to be looked at later
