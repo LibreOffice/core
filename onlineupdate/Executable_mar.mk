@@ -11,10 +11,13 @@ $(eval $(call gb_Executable_Executable,mar))
 
 $(eval $(call gb_Executable_set_include,mar,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/inc/ \
-	-I$(SRCDIR)/onlineupdate/source/libmar/src/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/verify/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/sign/ \
 	$$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_use_static_libraries,Executable_mar,\
+	libmar \
 ))
 
 ifeq ($(OS),WNT)
@@ -30,9 +33,6 @@ $(eval $(call gb_Executable_add_defs,mar,-DMAR_NSS))
 endif
 
 $(eval $(call gb_Executable_add_cobjects,mar,\
-	onlineupdate/source/libmar/src/mar_create \
-	onlineupdate/source/libmar/src/mar_extract \
-	onlineupdate/source/libmar/src/mar_read \
 	onlineupdate/source/libmar/sign/nss_secutil \
 	onlineupdate/source/libmar/sign/mar_sign \
 	onlineupdate/source/libmar/verify/cryptox \
