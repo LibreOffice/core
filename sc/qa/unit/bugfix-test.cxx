@@ -207,7 +207,7 @@ void ScFiltersTest::testTdf91979()
     CPPUNIT_ASSERT(aPos.getX() == (MAXCOL - 1) * nColWidth);
     CPPUNIT_ASSERT(aPos.getY() == 10000 * nRowHeight);
 
-    xDocSh->DoClose();
+    xComponent->dispose();
 }
 
 /*
