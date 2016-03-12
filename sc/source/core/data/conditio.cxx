@@ -2269,7 +2269,7 @@ bool ScConditionalFormatList::CheckAllEntries()
         if ((*itr)->GetRange().empty())
         {
             bValid = false;
-            m_ConditionalFormats.erase(itr++);
+            itr = m_ConditionalFormats.erase(itr);
         }
         else
             ++itr;
