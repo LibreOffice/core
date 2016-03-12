@@ -16,8 +16,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
-	external/liborcus/0001-Fix-for-OSX-build-inside-LibreOffice.patch \
-	external/liborcus/0001-Get-it-to-build-on-Windows.patch \
 ))
 
 ifeq ($(OS),WNT)
