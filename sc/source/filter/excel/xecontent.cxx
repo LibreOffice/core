@@ -945,14 +945,16 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
+        std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
         rWorksheet->writeEscaped(XclXmlUtils::ToOUString( GetCompileFormulaContext(), mrFormatEntry.GetValidSrcPos(),
-                    mrFormatEntry.CreateTokenArry(0)));
+                    pTokenArray.get()));
         rWorksheet->endElement( XML_formula );
         if (bFmla2)
         {
             rWorksheet->startElement( XML_formula, FSEND );
+            std::unique_ptr<ScTokenArray> pTokenArray2(mrFormatEntry.CreateTokenArry(1));
             rWorksheet->writeEscaped(XclXmlUtils::ToOUString( GetCompileFormulaContext(), mrFormatEntry.GetValidSrcPos(),
-                        mrFormatEntry.CreateTokenArry(1)));
+                        pTokenArray2.get()));
             rWorksheet->endElement( XML_formula );
         }
     }
@@ -1091,7 +1093,7 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     if(mrEntry.GetType() == COLORSCALE_FORMULA)
     {
         OUString aFormula = XclXmlUtils::ToOUString( GetCompileFormulaContext(), maSrcPos,
-                mrEntry.GetFormula()->Clone());
+                mrEntry.GetFormula());
         aValue = OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
     else
