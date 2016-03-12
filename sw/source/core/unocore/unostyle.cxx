@@ -2052,6 +2052,17 @@ uno::Any SwXStyle::GetStyleProperty<RES_PAGEDESC>(const SfxItemPropertySimpleEnt
     SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
     return uno::makeAny(aString);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    switch(GetFamily())
+    {
+        case SFX_STYLE_FAMILY_PARA : return uno::makeAny<bool>(rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat());
+        case SFX_STYLE_FAMILY_FRAME: return uno::makeAny<bool>(rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat());
+        default: return uno::Any();
+    }
+}
 
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
@@ -2108,13 +2119,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case FN_UNO_IS_AUTO_UPDATE:
         {
-            bool bAuto = false;
-            if(SFX_STYLE_FAMILY_PARA == eFamily)
-                bAuto = rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat();
-            else if(SFX_STYLE_FAMILY_FRAME == eFamily)
-                bAuto = rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat();
-            aRet <<= bAuto;
-            break;
+            return GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(rEntry, rPropSet, rBase);
         }
         case FN_UNO_DISPLAY_NAME:
         {
