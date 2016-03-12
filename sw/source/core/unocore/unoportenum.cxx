@@ -617,7 +617,7 @@ static void lcl_ExportBookmark(
         SwXBookmarkPortion_ImplSharedPtr pPtr = (*aIter);
         if ( nIndex > pPtr->getIndex() )
         {
-            rBkmArr.erase( aIter++ );
+            aIter = rBkmArr.erase(aIter);
             continue;
         }
         if ( nIndex < pPtr->getIndex() )
@@ -641,7 +641,7 @@ static void lcl_ExportBookmark(
             rPortions.push_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
         }
-        rBkmArr.erase( aIter++ );
+        aIter = rBkmArr.erase(aIter);
     }
 }
 
@@ -658,7 +658,7 @@ static void lcl_ExportSoftPageBreak(
     {
         if ( nIndex > *aIter )
         {
-            rBreakArr.erase( aIter++ );
+            aIter = rBreakArr.erase(aIter);
             continue;
         }
         if ( nIndex < *aIter )
@@ -666,7 +666,7 @@ static void lcl_ExportSoftPageBreak(
 
         rPortions.push_back(
             new SwXTextPortion(pUnoCursor, xParent, PORTION_SOFT_PAGEBREAK) );
-        rBreakArr.erase( aIter++ );
+        aIter = rBreakArr.erase(aIter);
     }
 }
 
@@ -1113,13 +1113,13 @@ static void lcl_ExportRedline(
         sal_Int32 nRealIndex = pPtr->getRealIndex();
         // MTG: 23/11/05: If there are elements before nIndex, remove them
         if ( nIndex > nRealIndex )
-            rRedlineArr.erase ( aIter++ );
+            aIter = rRedlineArr.erase(aIter);
         // MTG: 23/11/05: If the elements match, and them to the list
         else if ( nIndex == nRealIndex )
         {
             rPortions.push_back( new SwXRedlinePortion(
                         *pPtr->m_pRedline, pUnoCursor, xParent, pPtr->m_bStart));
-            rRedlineArr.erase ( aIter++ );
+            aIter = rRedlineArr.erase(aIter);
         }
         // MTG: 23/11/05: If we've iterated past nIndex, exit the loop
         else
@@ -1161,7 +1161,7 @@ static void lcl_ExportAnnotationStarts(
             SwAnnotationStartPortion_ImplSharedPtr pPtr = (*aIter);
             if ( nIndex > pPtr->getIndex() )
             {
-                rAnnotationStartArr.erase( aIter++ );
+                aIter = rAnnotationStartArr.erase(aIter);
                 continue;
             }
             if ( pPtr->getIndex() > nIndex )
@@ -1174,7 +1174,7 @@ static void lcl_ExportAnnotationStarts(
             pPortion->SetTextField( pPtr->mxAnnotationField );
             rPortions.push_back(pPortion);
 
-            rAnnotationStartArr.erase( aIter++ );
+            aIter = rAnnotationStartArr.erase(aIter);
         }
     }
 }
