@@ -1776,7 +1776,7 @@ void cppuhelper::ServiceManager::removeRdbFiles(
                     removeFromImplementationMap(
                         &data_.singletons, j->second->info->singletons,
                         j->second);
-                    data_.namedImplementations.erase(j++);
+                    j = data_.namedImplementations.erase(j);
                 } else {
                     ++j;
                 }
