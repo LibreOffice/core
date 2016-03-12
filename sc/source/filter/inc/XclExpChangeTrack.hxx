@@ -251,7 +251,7 @@ class XclExpXmlChTrHeader : public ExcXmlRecord
     sal_uInt32 mnMaxAction;
 
     std::vector<sal_uInt16> maTabBuffer;
-    std::vector<XclExpChTrAction*> maActions;
+    std::vector<std::unique_ptr<XclExpChTrAction>> maActions;
 
 public:
     XclExpXmlChTrHeader(
@@ -260,7 +260,7 @@ public:
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
-    void AppendAction( XclExpChTrAction* pAction );
+    void AppendAction( std::unique_ptr<XclExpChTrAction> pAction );
 };
 
 // XclExpChTrInfo - header of action group of a user

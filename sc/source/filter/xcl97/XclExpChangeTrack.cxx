@@ -476,11 +476,10 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
 
     pRevLogStrm->write(">");
 
-    std::vector<XclExpChTrAction*>::iterator it = maActions.begin(), itEnd = maActions.end();
+    auto it = maActions.begin(), itEnd = maActions.end();
     for (; it != itEnd; ++it)
     {
-        XclExpChTrAction* p = *it;
-        p->SaveXml(rStrm);
+        (*it)->SaveXml(rStrm);
     }
 
     pRevLogStrm->write("</")->writeId(XML_revisions)->write(">");
@@ -490,7 +489,7 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
     pHeader->write("</")->writeId(XML_header)->write(">");
 }
 
-void XclExpXmlChTrHeader::AppendAction( XclExpChTrAction* pAction )
+void XclExpXmlChTrHeader::AppendAction( std::unique_ptr<XclExpChTrAction> pAction )
 {
     sal_uInt32 nActionNum = pAction->GetActionNumber();
     if (!mnMinAction || mnMinAction > nActionNum)
@@ -499,7 +498,7 @@ void XclExpXmlChTrHeader::AppendAction( XclExpChTrAction* pAction )
     if (!mnMaxAction || mnMaxAction < nActionNum)
         mnMaxAction = nActionNum;
 
-    maActions.push_back(pAction);
+    maActions.push_back(std::move(pAction));
 }
 
 XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID ) :
@@ -1517,7 +1516,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
                 pHeaders->SetGUID(aGUID);
             }
             pAction->SetIndex(nIndex);
-            pCurHeader->AppendAction(pAction);
+            pCurHeader->AppendAction(std::unique_ptr<XclExpChTrAction>(pAction));
         }
 
         pHeaders->SetGUID(aGUID);
