@@ -118,7 +118,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     // 6. Paste
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
-    xDocSh->DoClose();
+    xComponent->dispose();
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
