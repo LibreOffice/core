@@ -689,7 +689,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
         }
 
         for (size_t i=1; i<=nDelCount; ++i)
-            pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
+            pModel->AddCalcUndo( new SdrUndoDelObj( *ppObj[nDelCount-i] ) );
 
         for (size_t i=1; i<=nDelCount; ++i)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
