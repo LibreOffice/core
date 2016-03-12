@@ -32,7 +32,7 @@ bool ScCorrelationDialog::Close()
 
 const OUString ScCorrelationDialog::getLabel()
 {
-    return SC_STRLOAD(RID_STATISTICS_DLGS, STR_CORRELATION_LABEL);
+    return Sc_StrLoad(RID_STATISTICS_DLGS, STR_CORRELATION_LABEL);
 }
 
 const OUString ScCorrelationDialog::getTemplate()

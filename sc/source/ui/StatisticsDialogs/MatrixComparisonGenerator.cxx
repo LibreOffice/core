@@ -91,9 +91,9 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
         aTemplate.applyNumber(strWildcardNumber, i + 1);
         output.writeString(aTemplate.getTemplate());
@@ -106,9 +106,9 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
         aTemplate.applyNumber(strWildcardNumber, i + 1);
         output.writeString(aTemplate.getTemplate());
