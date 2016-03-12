@@ -41,3 +41,6 @@ leak:libfontconfig.so
 # ignore libGL related leaks, most likely false positives
 # libGL is not built with asan/lsan
 leak:libGL.so
+
+# knowingly leaked in the unit tests to get a SfxMedium
+leak:SfxObjectShell::DoInitUnitTest
