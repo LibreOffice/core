@@ -15,7 +15,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be TABLEDEF or QUERYDEF
-Private _Name					As String
+Private _Name					As String				&apos;	For tables: [[Catalog.]Schema.]Table
 Private _ParentDatabase			As Object
 Private _ReadOnly				As Boolean
 Private Table					As Object				&apos;	com.sun.star.sdb.dbaccess.ODBTable

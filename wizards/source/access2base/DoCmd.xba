@@ -25,8 +25,6 @@ Type _FindParams
 	ResultSetIndex()		As Integer		&apos;	Array of column numbers in ResultSet
 End Type
 
-&apos;Global _gFind				As _FindParams
-
 Type _Window
 	Frame					As Object		&apos;	com.sun.star.comp.framework.Frame
 	_Name					As String		&apos;	Object Name
