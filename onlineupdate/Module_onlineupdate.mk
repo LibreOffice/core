@@ -14,6 +14,7 @@ ifneq ($(ENABLE_ONLINE_UPDATE_MAR),)
 $(eval $(call gb_Module_add_targets,onlineupdate,\
 	Executable_mar \
 	Executable_updater \
+	StaticLibrary_libmar \
 ))
 endif
 
