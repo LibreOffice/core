@@ -103,7 +103,7 @@ String STR_TARGET_DOC_NOT_CLASSIFIED
 
 String STR_DOC_CLASSIFICATION_TOO_LOW
 {
-    Text [ en-US ] = "This document has a lower classificaton level than the clipboard." ;
+    Text [ en-US ] = "This document has a lower classification level than the clipboard." ;
 };
 
 PushButton BT_CHECKOUT
