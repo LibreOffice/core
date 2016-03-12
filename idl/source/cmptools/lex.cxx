@@ -18,7 +18,6 @@
  */
 
 #include <ctype.h>
-#include <stdio.h>
 
 #include <hash.hxx>
 #include <lex.hxx>
