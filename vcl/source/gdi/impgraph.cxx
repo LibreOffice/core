@@ -98,7 +98,8 @@ ImpGraphic::ImpGraphic() :
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false )
+        mbSwapUnderway  ( false ),
+        mbDummyContext  ( false )
 {
 }
 
@@ -111,7 +112,8 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
-        mbSwapUnderway  ( false )
+        mbSwapUnderway  ( false ),
+        mbDummyContext  ( rImpGraphic.mbDummyContext )
 {
     if( mpSwapFile )
         mpSwapFile->nRefCount++;
@@ -142,7 +144,8 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false )
+        mbSwapUnderway  ( false ),
+        mbDummyContext  ( false )
 {
 }
 
@@ -156,7 +159,8 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false )
+        mbSwapUnderway  ( false ),
+        mbDummyContext  ( false )
 {
 }
 
@@ -170,6 +174,7 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
     mnRefCount( 1UL ),
     mbSwapOut( false ),
     mbSwapUnderway( false ),
+    mbDummyContext  ( false ),
     maSvgData(rSvgDataPtr)
 {
 }
@@ -184,7 +189,8 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false )
+        mbSwapUnderway  ( false ),
+        mbDummyContext  ( false )
 {
 }
 
@@ -198,16 +204,15 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false )
+        mbSwapUnderway  ( false ),
+        mbDummyContext  ( false )
 {
 }
 
 ImpGraphic::~ImpGraphic()
 {
     ImplClear();
-
-    if( reinterpret_cast<sal_uLong>(mpContext) > 1UL )
-        delete mpContext;
+    delete mpContext;
 }
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
@@ -939,6 +944,7 @@ sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 {
     mpContext = pReader;
+    mbDummyContext = false;
 }
 
 bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )

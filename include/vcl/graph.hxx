@@ -198,7 +198,8 @@ public:
 
     GraphicReader*  GetContext();
     void            SetContext( GraphicReader* pReader );
-
+    void            SetDummyContext(bool value);
+    bool            IsDummyContext();
 private:
     friend class GraphicObject;
 

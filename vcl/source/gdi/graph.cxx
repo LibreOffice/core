@@ -506,6 +506,16 @@ void Graphic::SetContext( GraphicReader* pReader )
     mpImpGraphic->ImplSetContext( pReader );
 }
 
+void Graphic::SetDummyContext( bool value )
+{
+    mpImpGraphic->ImplSetDummyContext( value );
+}
+
+bool Graphic::IsDummyContext()
+{
+    return mpImpGraphic->ImplIsDummyContext();
+}
+
 bool Graphic::SwapOut()
 {
     ImplTestRefCount();

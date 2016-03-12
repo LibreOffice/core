@@ -49,7 +49,7 @@ private:
     sal_uLong           mnRefCount;
     bool                mbSwapOut;
     bool                mbSwapUnderway;
-
+    bool                mbDummyContext;
     SvgDataPtr          maSvgData;
 
 private:
@@ -115,8 +115,7 @@ private:
 
     GraphicReader*      ImplGetContext() { return mpContext;}
     void                ImplSetContext( GraphicReader* pReader );
-
-private:
+    void                ImplSetDummyContext( bool value ) { mbDummyContext = value; }
     bool                ImplReadEmbedded( SvStream& rIStream );
     bool                ImplWriteEmbedded( SvStream& rOStream );
 
@@ -128,7 +127,7 @@ private:
     bool                ImplSwapOut( SvStream* pOStm );
 
     bool                ImplIsSwapOut() const { return mbSwapOut;}
-
+    bool                ImplIsDummyContext() const { return mbDummyContext; }
     void                ImplSetLink( const GfxLink& );
     GfxLink             ImplGetLink();
     bool                ImplIsLink() const;
