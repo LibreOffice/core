@@ -37,7 +37,7 @@ bool ScCovarianceDialog::Close()
 
 const OUString ScCovarianceDialog::getLabel()
 {
-    return SC_STRLOAD(RID_STATISTICS_DLGS, STR_COVARIANCE_LABEL);
+    return Sc_StrLoad(RID_STATISTICS_DLGS, STR_COVARIANCE_LABEL);
 }
 
 const OUString ScCovarianceDialog::getTemplate()

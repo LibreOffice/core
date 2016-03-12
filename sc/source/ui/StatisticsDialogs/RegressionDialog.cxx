@@ -129,31 +129,31 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
     aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
 
-    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_REGRESSION));
+    aOutput.writeBoldString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_REGRESSION));
     aOutput.newLine();
     aOutput.newLine();
     aOutput.push();
 
     // REGRESSION MODEL
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_REGRESSION_MODEL));
+    aOutput.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_LABEL_REGRESSION_MODEL));
     aOutput.nextRow();
 
     // RSQUARED
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_RSQUARED));
+    aOutput.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_LABEL_RSQUARED));
     aOutput.nextRow();
 
     // Standard Error
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_STD_ERROR));
+    aOutput.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STRID_CALC_STD_ERROR));
     aOutput.nextRow();
 
     aOutput.nextRow();
 
     // Slope
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_SLOPE));
+    aOutput.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_LABEL_SLOPE));
     aOutput.nextRow();
 
     // Intercept
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_INTERCEPT));
+    aOutput.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_LABEL_INTERCEPT));
     aOutput.nextRow();
 
     aOutput.nextRow();
@@ -193,7 +193,7 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
         nColumn += 1;
 
         // REGRESSION MODEL
-        aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, constRegressionModel[nRegressionIndex]));
+        aOutput.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, constRegressionModel[nRegressionIndex]));
         aOutput.nextRow();
 
         // RSQUARED

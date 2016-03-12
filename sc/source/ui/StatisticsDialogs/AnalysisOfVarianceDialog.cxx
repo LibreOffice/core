@@ -184,7 +184,7 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
     else
     {
         sal_Int16 aLabelId = (aGroupedBy == BY_COLUMN) ? STR_COLUMN_LABEL_TEMPLATE : STR_ROW_LABEL_TEMPLATE;
-        OUString aLabelTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, aLabelId));
+        OUString aLabelTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, aLabelId));
 
         for (size_t i = 0; i < rRangeList.size(); i++)
         {
@@ -200,11 +200,11 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
 
 void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate)
 {
-    output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_SINGLE_FACTOR_LABEL));
+    output.writeBoldString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ANOVA_SINGLE_FACTOR_LABEL));
     output.newLine();
 
     double aAlphaValue = mpAlphaField->GetValue() / 100.0;
-    output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
+    output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
     output.nextColumn();
     output.writeValue(aAlphaValue);
     aTemplate.autoReplaceAddress("%ALPHA%", output.current());
@@ -214,7 +214,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     // Write labels
     for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
     {
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatistics[i].aLabelId));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, lclBasicStatistics[i].aLabelId));
         output.nextColumn();
     }
     output.newLine();
@@ -246,7 +246,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     output.resetColumn();
     for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
     {
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclAnovaLabels[i]));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, lclAnovaLabels[i]));
         output.nextColumn();
     }
     output.nextRow();
@@ -257,7 +257,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     {
         // Label
         output.resetColumn();
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_BETWEEN_GROUPS));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_BETWEEN_GROUPS));
         output.nextColumn();
 
         // Sum of Squares
@@ -303,7 +303,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     {
         // Label
         output.resetColumn();
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_WITHIN_GROUPS));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_WITHIN_GROUPS));
         output.nextColumn();
 
         // Sum of Squares
@@ -330,7 +330,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     {
         // Label
         output.resetColumn();
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_TOTAL));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_TOTAL));
         output.nextColumn();
 
         // Sum of Squares
@@ -348,7 +348,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
 
 void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate)
 {
-    output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_TWO_FACTOR_LABEL));
+    output.writeBoldString(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ANOVA_TWO_FACTOR_LABEL));
     output.newLine();
 
     double aAlphaValue = mpAlphaField->GetValue() / 100.0;
@@ -362,7 +362,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     // Write labels
     for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
     {
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatistics[i].aLabelId));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, lclBasicStatistics[i].aLabelId));
         output.nextColumn();
     }
     output.newLine();
@@ -411,7 +411,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     // Write ANOVA labels
     for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
     {
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclAnovaLabels[i]));
+        output.writeString(Sc_StrLoad(RID_STATISTICS_DLGS, lclAnovaLabels[i]));
         output.nextColumn();
     }
     output.nextRow();

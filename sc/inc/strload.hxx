@@ -38,7 +38,10 @@ private:
     OUString theStr;
 };
 
-#define SC_STRLOAD(resource,strid) ScRscStrLoader( resource, strid).GetString()
+const OUString& Sc_StrLoad(sal_uInt16 nResource, sal_uInt16 nStrId)
+{
+    return ScRscStrLoader(nResource, nStrId).GetString();
+}
 
 #endif // INCLUDED_SC_INC_STRLOAD_HXX
 

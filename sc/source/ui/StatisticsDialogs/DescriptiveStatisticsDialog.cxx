@@ -101,9 +101,9 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(Sc_StrLoad(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
         aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
         aOutput.writeBoldString(aTemplate.getTemplate());
@@ -116,7 +116,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     // Write calculation labels
     for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != nullptr; i++)
     {
-        OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
+        OUString aLabel(Sc_StrLoad(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
         aOutput.writeString(aLabel);
         aOutput.nextRow();
     }
