@@ -51,7 +51,7 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
+    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, int& rDupsToSkip, gboolean bGetSubmenu );
     void                        ImplUpdate( gboolean bRecurse );
     void                        ActivateAllSubmenus(MenuBar* pMenuBar);
 
