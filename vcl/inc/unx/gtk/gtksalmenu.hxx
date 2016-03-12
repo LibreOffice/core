@@ -54,7 +54,7 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
+    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, int& rDupsToSkip, gboolean bGetSubmenu );
     void                        ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries);
     void                        ActivateAllSubmenus(Menu* pMenuBar);
 
