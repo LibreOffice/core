@@ -593,8 +593,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     refExprStk = new SbxArray;
     SetVBAEnabled( pMod->IsVBACompat() );
     SetParameters( pe ? pe->GetParameters() : nullptr );
-    pRefSaveList = nullptr;
-    pItemStoreList = nullptr;
 }
 
 SbiRuntime::~SbiRuntime()
@@ -602,15 +600,6 @@ SbiRuntime::~SbiRuntime()
     ClearGosubStack();
     ClearArgvStack();
     ClearForStack();
-
-    // #74254 free items for saving temporary references
-    ClearRefs();
-    while( pItemStoreList )
-    {
-        RefSaveItem* pToDeleteItem = pItemStoreList;
-        pItemStoreList = pToDeleteItem->pNext;
-        delete pToDeleteItem;
-    }
 }
 
 void SbiRuntime::SetVBAEnabled(bool bEnabled )
@@ -4038,7 +4027,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // #74254 now per list
     if( pObj )
     {
-        SaveRef( static_cast<SbxVariable*>(pObj) );
+        aRefSaveList.push_back( pObj );
     }
     PushVar( FindElement( pObj, nOp1, nOp2, ERRCODE_BASIC_NO_METHOD, false ) );
 }
@@ -4118,7 +4107,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     else if( t != SbxVARIANT && (SbxDataType)(p->GetType() & 0x0FFF ) != t )
     {
         SbxVariable* q = new SbxVariable( t );
-        SaveRef( q );
+        aRefSaveList.push_back( q );
         *q = *p;
         p = q;
         if ( i )
@@ -4212,7 +4201,7 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
     ClearExprStack();
 
-    ClearRefs();
+    aRefSaveList.clear();
 
     // We have to cancel hard here because line and column
     // would be wrong later otherwise!
