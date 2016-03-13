@@ -126,11 +126,7 @@ TokenPool::~TokenPool()
         delete ppP_Nlf[ n ];
     delete[] ppP_Nlf;
 
-    for( n = 0 ; n < nP_Matrix ; n++ )
-    {
-        if( ppP_Matrix[ n ] )
-            ppP_Matrix[ n ]->DecRef( );
-    }
+    ClearMatrix();
     delete[] ppP_Matrix;
 
     delete pScToken;
@@ -879,6 +875,7 @@ void TokenPool::Reset()
     maExtNames.clear();
     maExtCellRefs.clear();
     maExtAreaRefs.clear();
+    ClearMatrix();
 }
 
 bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
@@ -932,6 +929,15 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
     else
         SAL_WARN("sc.filter", "GetMatrix: " << n << " >= " << nP_MatrixAkt << "\n");
     return nullptr;
+}
+
+void TokenPool::ClearMatrix()
+{
+    for(sal_uInt16 n = 0 ; n < nP_Matrix ; n++ )
+    {
+        if( ppP_Matrix[ n ] )
+            ppP_Matrix[ n ]->DecRef( );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
