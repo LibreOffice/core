@@ -61,7 +61,6 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test,\
     unotest \
     utl \
     xmlreader \
-    $(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),MACOSX)

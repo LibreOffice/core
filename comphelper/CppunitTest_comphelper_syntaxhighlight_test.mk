@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,comphelper_syntaxhighlight_test, \
     cppuhelper \
     cppu \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

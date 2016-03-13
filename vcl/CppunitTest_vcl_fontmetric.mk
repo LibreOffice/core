@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_fontmetric, \
 	tk \
 	unotest \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_fontmetric))

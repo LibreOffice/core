@@ -49,7 +49,6 @@ $(eval $(call gb_Library_use_libraries,sdfilt,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt))

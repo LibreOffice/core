@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_set_external_code,cppu_any-external))
 $(eval $(call gb_CppunitTest_use_libraries,cppu_any-external, \
     cppu \
     sal \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_udk_api,cppu_any-external))

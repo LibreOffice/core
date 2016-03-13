@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_libraries,fsstorage,\
     tl \
     ucbhelper \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fsstorage,\

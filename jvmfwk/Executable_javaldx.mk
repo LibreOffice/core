@@ -12,7 +12,6 @@ $(eval $(call gb_Executable_Executable,javaldx))
 $(eval $(call gb_Executable_use_libraries,javaldx,\
     jvmfwk \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,javaldx,\
