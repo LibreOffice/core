@@ -110,7 +110,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
             SCTAB       nTab        = rViewData.GetTabNo();
 
             aStr = ScGlobal::GetRscString(nGlobStrId);
-            aStr += "=";
+            aStr += ": ";
 
             ScAddress aCursor( nPosX, nPosY, nTab );
             double nVal;
@@ -141,7 +141,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
                 bFirst = false;
             }
             else
-                rFuncStr += (";" + aStr);
+                rFuncStr += ("    " + aStr);
         }
     }
 
