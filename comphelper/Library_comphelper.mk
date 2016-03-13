@@ -49,7 +49,6 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     salhelper \
     ucbhelper \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,comphelper))

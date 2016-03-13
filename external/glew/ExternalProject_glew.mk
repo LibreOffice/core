@@ -16,11 +16,13 @@ $(eval $(call gb_ExternalProject_register_targets,glew,\
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,glew,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter 140,$(VCVER)),$(DEVENV) /Upgrade glew.sln,echo up-to-date) && \
-		msbuild.exe glew_shared.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) $(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140,/p:PlatformToolset=v120) \
+		$(DEVENV) /Upgrade glew.sln && \
+		msbuild.exe glew_shared.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+		/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) /p:PlatformToolset=v140 \
 	,build/vc12) \
 	$(call gb_ExternalProject_run,build,\
-		msbuild.exe glewinfo.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=Release $(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140,/p:PlatformToolset=v120) \
+		msbuild.exe glewinfo.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+		/p:Configuration=Release /p:PlatformToolset=v140 \
 	,build/vc12)
 
 else

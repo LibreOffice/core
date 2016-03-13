@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_libraries,forui,\
     utl \
     vcl \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,forui,\

@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_tiledrendering, \
     vcl \
     tl \
 	utl \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_tiledrendering,\

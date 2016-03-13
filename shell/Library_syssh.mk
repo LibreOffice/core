@@ -15,7 +15,6 @@ $(eval $(call gb_Library_use_libraries,syssh,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

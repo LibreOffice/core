@@ -14,7 +14,6 @@ $(eval $(call gb_Library_use_external,sal_textenc,boost_headers))
 
 $(eval $(call gb_Library_use_libraries,sal_textenc,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_defs,sal_textenc,\

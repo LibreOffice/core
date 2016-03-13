@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Library_Library,dict_ja))
 
-$(eval $(call gb_Library_use_libraries,dict_ja,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Library_add_generated_exception_objects,dict_ja,\
 	CustomTarget/i18npool/breakiterator/dict_ja \
 ))

@@ -14,7 +14,6 @@ $(eval $(call gb_Executable_Executable,osl_process_child))
 
 $(eval $(call gb_Executable_use_libraries,osl_process_child,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,osl_process_child,\

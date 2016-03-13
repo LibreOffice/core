@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,sdd,\
     tl \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,sdd,sd/util/sdd))

@@ -19,7 +19,6 @@ $(eval $(call gb_CppunitTest_use_external,cppu_qa_reference,boost_headers))
 $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_reference, \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_qa_reference, \

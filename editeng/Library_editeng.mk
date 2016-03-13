@@ -147,7 +147,6 @@ $(eval $(call gb_Library_use_libraries,editeng,\
     sax \
     i18nlangtag \
     i18nutil \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,editeng,\

@@ -56,7 +56,6 @@ $(eval $(call gb_Library_use_libraries,sb,\
 	utl \
 	vcl \
 	xmlscript \
-	$(gb_UWINAPI) \
 ))
 
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)

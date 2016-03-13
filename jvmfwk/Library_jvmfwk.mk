@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,jvmfwk,\
     cppuhelper \
     sal \
     salhelper \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),ANDROID)

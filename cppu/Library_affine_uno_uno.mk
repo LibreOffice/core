@@ -15,7 +15,6 @@ $(eval $(call gb_Library_use_udk_api,affine_uno_uno))
 $(eval $(call gb_Library_use_libraries,affine_uno_uno,\
 	purpenvhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,affine_uno_uno,\

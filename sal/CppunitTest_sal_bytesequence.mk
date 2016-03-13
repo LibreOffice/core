@@ -16,7 +16,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_bytesequence,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_bytesequence,\
     sal \
-	$(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

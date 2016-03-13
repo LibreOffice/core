@@ -19,8 +19,7 @@ define sw_ooxmlexport_libraries
 	tl \
 	unotest \
 	utl \
-	vcl \
-	$(gb_UWINAPI)
+	vcl
 endef
 
 define sw_ooxmlexport_components

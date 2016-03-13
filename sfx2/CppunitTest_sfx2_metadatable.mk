@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_metadatable, \
 	cppuhelper \
     sal \
     sfx \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,sfx2_metadatable,boost_headers))

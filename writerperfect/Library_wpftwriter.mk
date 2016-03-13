@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	vcl \
 	writerperfect \
 	xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,wpftwriter,\

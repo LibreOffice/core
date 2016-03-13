@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_use_libraries,i18nlangtag_test_languagetag,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(ENABLE_LIBLANGTAG),TRUE)
