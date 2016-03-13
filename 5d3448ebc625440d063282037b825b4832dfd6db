@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_501742ed",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-13T16:39:50Z",
+      "side": 1,
+      "message": "That should just be Edit - it is not really gtkEdit as we have our own controls",
+      "revId": "5d3448ebc625440d063282037b825b4832dfd6db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b0d2fe32",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-13T16:39:50Z",
+      "side": 1,
+      "message": "just do a c++ cast - why TODO? (same on all other places)",
+      "revId": "5d3448ebc625440d063282037b825b4832dfd6db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_90d7fa22",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-13T16:39:50Z",
+      "side": 1,
+      "message": "use nullptr instead (see also other places)",
+      "range": {
+        "startLine": 304,
+        "startChar": 15,
+        "endLine": 304,
+        "endChar": 19
+      },
+      "revId": "5d3448ebc625440d063282037b825b4832dfd6db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f0dc7648",
+        "filename": "sw/source/uibase/inc/bookmark.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-13T16:39:50Z",
+      "side": 1,
+      "message": "should be m_pBookmarksContainer",
+      "range": {
+        "startLine": 53,
+        "startChar": 40,
+        "endLine": 53,
+        "endChar": 60
+      },
+      "revId": "5d3448ebc625440d063282037b825b4832dfd6db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
