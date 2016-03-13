@@ -99,6 +99,24 @@ SfxFilter::SfxFilter( const OUString &rName,
     aWildCard.setGlob(aShort);
 }
 
+SfxFilter::SfxFilter( const OUString &rName,
+                      SfxFilterFlags nType,
+                      const OUString &rTypNm,
+                      const OUString &rMimeType,
+                      const OUString &rServiceName,
+                      sal_uIntPtr nVer):
+    aTypeName(rTypNm),
+    aServiceName(rServiceName),
+    aMimeType(rMimeType),
+    maFilterName(rName),
+    aUIName(maFilterName),
+    nFormatType(nType),
+    nVersion(nVer),
+    lFormat(SotClipboardFormatId::NONE),
+    nDocIcon(0)
+{
+}
+
 SfxFilter::~SfxFilter()
 {
 }

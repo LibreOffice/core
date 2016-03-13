@@ -74,6 +74,14 @@ public:
                const OUString &rMimeType,
                const OUString &rUserData,
                const OUString& rServiceName );
+
+    SfxFilter( const OUString &rName,
+               SfxFilterFlags nFormatType,
+               const OUString &rTypeName,
+               const OUString &rMimeType,
+               const OUString& rServiceName,
+               sal_uIntPtr nVersion);
+
     ~SfxFilter();
 
     bool IsAllowedAsTemplate() const { return bool(nFormatType & SfxFilterFlags::TEMPLATE); }
@@ -100,7 +108,7 @@ public:
     void SetURLPattern( const OUString& rStr );
     void            SetUIName( const OUString& rName ) { aUIName = rName; }
     void            SetVersion( sal_uIntPtr nVersionP ) { nVersion = nVersionP; }
-    sal_uIntPtr           GetVersion() const { return nVersion; }
+    sal_uIntPtr     GetVersion() const { return nVersion; }
     OUString GetSuffixes() const;
     OUString GetDefaultExtension() const;
     const OUString& GetServiceName() const { return aServiceName; }
