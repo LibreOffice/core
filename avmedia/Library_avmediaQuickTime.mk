@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_libraries,avmediaQuickTime,\
 	sal \
 	tl \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaQuickTime,\

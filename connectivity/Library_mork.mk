@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_libraries,mork, \
     salhelper \
     tl \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,mork))

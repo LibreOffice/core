@@ -19,10 +19,6 @@ $(eval $(call gb_Executable_add_ldflags,sbase,\
     /ENTRY:wWinMainCRTStartup \
 ))
 
-$(eval $(call gb_Executable_use_libraries,sbase,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Executable_use_static_libraries,sbase,\
     winlauncher \
 ))

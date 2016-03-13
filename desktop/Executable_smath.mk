@@ -19,10 +19,6 @@ $(eval $(call gb_Executable_add_ldflags,smath,\
     /ENTRY:wWinMainCRTStartup \
 ))
 
-$(eval $(call gb_Executable_use_libraries,smath,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Executable_use_static_libraries,smath,\
     winlauncher \
 ))
