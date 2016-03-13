@@ -21,10 +21,6 @@ $(eval $(call gb_Library_use_system_win32_libs,inprocserv,\
 	uuid \
 ))
 
-$(eval $(call gb_Library_use_libraries,inprocserv,\
-	$(gb_UWINAPI) \
-))
-
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,inprocserv,\
 	/DEF:$(SRCDIR)/embedserv/source/inprocserv/inprocserv.def \

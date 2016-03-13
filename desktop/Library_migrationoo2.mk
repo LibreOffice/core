@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,migrationoo2,\
     sal \
     tl \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,migrationoo2,desktop/source/migration/services/migrationoo2))

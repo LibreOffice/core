@@ -60,7 +60,6 @@ $(eval $(call gb_Library_use_libraries,msword,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,msword,\

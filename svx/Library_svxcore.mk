@@ -77,7 +77,6 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,svxcore,\
