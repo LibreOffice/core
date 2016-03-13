@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_outdev, \
 	tl \
 	unotest \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_outdev))

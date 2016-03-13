@@ -14,7 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libwpd,$(WPD_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libwpd,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
-	external/libwpd/libwpd-vs2013.patch.1 \
 	$(if $(SYSTEM_REVENGE),,external/libwpd/rpath.patch) \
 ))
 

@@ -41,7 +41,6 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_mork, \
     unotest \
     ucbhelper \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,connectivity_mork,\

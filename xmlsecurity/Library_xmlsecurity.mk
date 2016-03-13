@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	i18nlangtag \
 	xsec_fw \
 	xsec_xmlsec \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\

@@ -55,7 +55,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_range_test, \
     vbahelper \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_range_test,\

@@ -28,7 +28,6 @@ $(eval $(call gb_Executable_use_libraries,rsc,\
 	i18nlangtag \
 	tl \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_grammars,rsc,\

@@ -17,7 +17,6 @@ $(eval $(call gb_Library_use_libraries,namingservice,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,namingservice,stoc/source/namingservice/namingservice))

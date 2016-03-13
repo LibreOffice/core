@@ -52,7 +52,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_dialog_save, \
     vbahelper \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,dbaccess_dialog_save,\

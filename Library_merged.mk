@@ -25,7 +25,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	sal \
 	salhelper \
 	xmlreader \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

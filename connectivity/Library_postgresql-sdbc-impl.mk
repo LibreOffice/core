@@ -25,7 +25,6 @@ $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
 	dbtools \
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

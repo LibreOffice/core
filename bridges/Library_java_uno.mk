@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,java_uno,\
 	jvmaccess \
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,java_uno,\
