@@ -584,17 +584,13 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nLine     = 0;
     nCol1     = 0;
     nCol2     = 0;
-    nExprLvl  = 0;
     nArgc     = 0;
     nError    = 0;
     nGosubLvl = 0;
     nForLvl   = 0;
     nOps      = 0;
-    refExprStk = new SbxArray;
     SetVBAEnabled( pMod->IsVBACompat() );
     SetParameters( pe ? pe->GetParameters() : nullptr );
-    pRefSaveList = nullptr;
-    pItemStoreList = nullptr;
 }
 
 SbiRuntime::~SbiRuntime()
@@ -602,15 +598,6 @@ SbiRuntime::~SbiRuntime()
     ClearGosubStack();
     ClearArgvStack();
     ClearForStack();
-
-    // #74254 free items for saving temporary references
-    ClearRefs();
-    while( pItemStoreList )
-    {
-        RefSaveItem* pToDeleteItem = pItemStoreList;
-        pItemStoreList = pToDeleteItem->pNext;
-        delete pToDeleteItem;
-    }
 }
 
 void SbiRuntime::SetVBAEnabled(bool bEnabled )
@@ -975,20 +962,26 @@ void SbiRuntime::PushVar( SbxVariable* pVar )
 {
     if( pVar )
     {
-        refExprStk->Put( pVar, nExprLvl++ );
+        aRefExprStk.push_back(SbxVariableRef(pVar));
     }
 }
 
 SbxVariableRef SbiRuntime::PopVar()
 {
 #ifdef DBG_UTIL
-    if( !nExprLvl )
+    if( aRefExprStk.empty() )
     {
         StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return new SbxVariable;
     }
 #endif
-    SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
+    assert(!aRefExprStk.empty());
+    SbxVariableRef xVar;
+    if (!aRefExprStk.empty())
+    {
+        xVar = std::move(aRefExprStk.back());
+        aRefExprStk.pop_back();
+    }
 #ifdef DBG_UTIL
     if ( xVar->GetName() == "Cells" )
         SAL_INFO("basic", "PopVar: Name equals 'Cells'" );
@@ -1004,11 +997,10 @@ SbxVariableRef SbiRuntime::PopVar()
 void SbiRuntime::ClearExprStack()
 {
     // Attention: Clear() doesn't suffice as methods must be deleted
-    while ( nExprLvl )
+    while ( !aRefExprStk.empty() )
     {
         PopVar();
     }
-    refExprStk->Clear();
 }
 
 // Take variable from the expression-stack without removing it
@@ -1016,21 +1008,26 @@ void SbiRuntime::ClearExprStack()
 
 SbxVariable* SbiRuntime::GetTOS()
 {
-    short n = nExprLvl - 1;
 #ifdef DBG_UTIL
-    if( n < 0 )
+    if( aRefExprStk.empty() )
     {
         StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return new SbxVariable;
     }
 #endif
-    return refExprStk->Get( (sal_uInt16) n );
+    assert(!aRefExprStk.empty());
+    return aRefExprStk.back();
 }
 
 
 void SbiRuntime::TOSMakeTemp()
 {
-    SbxVariable* p = refExprStk->Get( nExprLvl - 1 );
+    assert(!aRefExprStk.empty());
+    if (aRefExprStk.empty())
+    {
+        return;
+    }
+    SbxVariable* p = aRefExprStk.back();
     if ( p->GetType() == SbxEMPTY )
     {
         p->Broadcast( SBX_HINT_DATAWANTED );
@@ -1045,15 +1042,15 @@ void SbiRuntime::TOSMakeTemp()
         // called below pParent is accessed ( but its deleted )
         // so set it to NULL now
         pDflt->SetParent( nullptr );
-        p = new SbxVariable( *pDflt );
-        p->SetFlag( SbxFlagBits::ReadWrite );
-        refExprStk->Put( p, nExprLvl - 1 );
+        auto pNew = tools::make_ref<SbxVariable>( *pDflt );
+        pNew->SetFlag( SbxFlagBits::ReadWrite );
+        aRefExprStk.back() =  std::move(pNew);
     }
     else if( p->GetRefCount() != 1 )
     {
-        SbxVariable* pNew = new SbxVariable( *p );
+        auto pNew = tools::make_ref<SbxVariable>( *p );
         pNew->SetFlag( SbxFlagBits::ReadWrite );
-        refExprStk->Put( pNew, nExprLvl - 1 );
+        aRefExprStk.back() = std::move(pNew);
     }
 }
 
@@ -2878,7 +2875,7 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
                 // Call by Value is requested -> create a copy
                 pVar = new SbxVariable( *pVar );
                 pVar->SetFlag( SbxFlagBits::ReadWrite );
-                refExprStk->Put( pVar, refArgv->Count() - 1 );
+                aRefExprStk.push_back(pVar);
             }
             else
                 pVar->SetFlag( SbxFlagBits::Reference );     // Ref-Flag for DllMgr
@@ -4038,7 +4035,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // #74254 now per list
     if( pObj )
     {
-        SaveRef( static_cast<SbxVariable*>(pObj) );
+        SaveRef( pObj );
     }
     PushVar( FindElement( pObj, nOp1, nOp2, ERRCODE_BASIC_NO_METHOD, false ) );
 }
@@ -4195,13 +4192,13 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // some fool has called X as a function, although it's a variable!
     bool bFatalExpr = false;
     OUString sUnknownMethodName;
-    if( nExprLvl > 1 )
+    if( aRefExprStk.size() > 1 )
     {
         bFatalExpr = true;
     }
-    else if( nExprLvl )
+    else if( !aRefExprStk.empty() )
     {
-        SbxVariable* p = refExprStk->Get( 0 );
+        SbxVariable* p = aRefExprStk.front();
         if( p->GetRefCount() > 1 &&
             refLocals.Is() && refLocals->Find( p->GetName(), p->GetClass() ) )
         {
