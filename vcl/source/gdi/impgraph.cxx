@@ -943,6 +943,7 @@ sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 
 void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 {
+    assert(!mpContext);
     mpContext = pReader;
     mbDummyContext = false;
 }
