@@ -553,12 +553,12 @@ SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )
 
 SbxDimArray::~SbxDimArray()
 {
-    Clear();
 }
 
 void SbxDimArray::Clear()
 {
     m_vDimensions.clear();
+    SbxArray::Clear();
 }
 
 // Add a dimension
