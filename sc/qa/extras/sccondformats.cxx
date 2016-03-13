@@ -29,8 +29,6 @@ using namespace css;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 1
-
 class ScConditionalFormatTest : public CalcUnoApiTest
 {
 public:
@@ -49,12 +47,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 private:
 
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScConditionalFormatTest::nTest = 0;
-uno::Reference< lang::XComponent > ScConditionalFormatTest::mxComponent;
 
 ScConditionalFormatTest::ScConditionalFormatTest()
     : CalcUnoApiTest("sc/qa/unit/data/ods")
@@ -223,16 +217,14 @@ void ScConditionalFormatTest::testUndoAnchor()
 
 void ScConditionalFormatTest::setUp()
 {
-    nTest++;
     CalcUnoApiTest::setUp();
 }
 
 void ScConditionalFormatTest::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
+    if (mxComponent.is())
     {
         closeDocument(mxComponent);
-        mxComponent.clear();
     }
 
     CalcUnoApiTest::tearDown();
