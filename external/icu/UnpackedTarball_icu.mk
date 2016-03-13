@@ -14,7 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-build.patch \
 	external/icu/icu4c-aix.patch \
-	external/icu/icu4c-wchar_t.patch \
 	external/icu/icu4c-warnings.patch \
 	external/icu/icu4c-macosx.patch \
 	external/icu/icu4c-solarisgcc.patch \
