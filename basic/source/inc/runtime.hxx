@@ -210,16 +210,6 @@ public:
         LanguageType* peFormatterLangType=nullptr, DateFormat* peFormatterDateFormat=nullptr );
 };
 
-// chainable items to keep references temporary
-struct RefSaveItem
-{
-    SbxVariableRef xRef;
-    RefSaveItem* pNext;
-
-    RefSaveItem() { pNext = nullptr; }
-};
-
-
 // There's one instance of this class for every executed sub-program.
 // This instance is the heart of the BASIC-machine and contains only local data.
 
@@ -240,7 +230,6 @@ class SbiRuntime
     SbMethod*     pMeth;            // method instance
     SbiIoSystem*   pIosys;          // I/O-System
     const SbiImage* pImg;           // Code-Image
-    SbxArrayRef   refExprStk;       // expression stack
     SbxArrayRef   refCaseStk;       // CASE expression stack
     SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
     SbxVariableRef   refRedim;   // Array saved to use for REDIM
@@ -249,7 +238,6 @@ class SbiRuntime
     SbiArgvStack*  pArgvStk;        // ARGV-Stack
     SbiGosubStack* pGosubStk;       // GOSUB stack
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
-    sal_uInt16        nExprLvl;         // depth of the expr-stack
     sal_uInt16        nGosubLvl;        // to prevent dead-recursions
     sal_uInt16        nForLvl;          // #118235: Maintain for level
     const sal_uInt8*   pCode;            // current Code-Pointer
@@ -262,7 +250,7 @@ class SbiRuntime
     SbxArrayRef   refParams;        // current procedure parameters
     SbxArrayRef   refLocals;        // local variable
     SbxArrayRef   refArgv;
-    // #74254, one refSaveObj is not enough! new: pRefSaveList (see above)
+    // #74254, one refSaveObj is not enough! new: aRefSaveList (see above)
     short         nArgc;
     bool          bRun;
     bool          bError;           // true: handle errors
@@ -274,29 +262,15 @@ class SbiRuntime
     sal_uInt16        nOps;             // opcode counter
     sal_uInt32    m_nLastTime;
 
-    RefSaveItem*  pRefSaveList;     // #74254 save temporary references
-    RefSaveItem*  pItemStoreList;   // keep unused items
+    std::vector<SbxVariableRef> aRefExprStk;  // expression stack
+    std::vector<SbxVariableRef> aRefs;        // #74254 save temporary references
     void SaveRef( SbxVariable* pVar )
     {
-        RefSaveItem* pItem = pItemStoreList;
-        if( pItem )
-            pItemStoreList = pItem->pNext;
-        else
-            pItem = new RefSaveItem();
-        pItem->pNext = pRefSaveList;
-        pItem->xRef = pVar;
-        pRefSaveList = pItem;
+        aRefs.push_back(SbxVariableRef(pVar));
     }
     void ClearRefs()
     {
-        while( pRefSaveList )
-        {
-            RefSaveItem* pToClearItem = pRefSaveList;
-            pRefSaveList = pToClearItem->pNext;
-            pToClearItem->xRef = nullptr;
-            pToClearItem->pNext = pItemStoreList;
-            pItemStoreList = pToClearItem;
-        }
+        aRefs.clear();
     }
 
     SbxVariable* FindElement
