@@ -484,7 +484,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
 
     //drop maps, etc. that we don't need again
-    delete m_pParserState;
+    m_pParserState.reset();
 
     SAL_WARN_IF(!m_sID.isEmpty() && (!m_bToplevelParentFound && !get_by_name(m_sID)), "vcl.layout",
         "Requested top level widget \"" << m_sID.getStr() <<

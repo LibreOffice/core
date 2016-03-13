@@ -304,7 +304,7 @@ private:
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;
     bool        m_bToplevelParentFound;
-    ParserState *m_pParserState;
+    std::unique_ptr<ParserState> m_pParserState;
 
     vcl::Window *get_by_name(const OString& sID);
     void        delete_by_name(const OString& sID);
