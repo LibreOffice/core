@@ -11,6 +11,8 @@
 #include <editutil.hxx>
 #include <cellvalue.hxx>
 #include <svl/languageoptions.hxx>
+#include <column.hxx>
+#include <sal/types.h>
 
 void Test::testColumnFindEditCells()
 {
@@ -91,6 +93,41 @@ void Test::testColumnFindEditCells()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(-1), nResRow);
 
     m_pDoc->DeleteTab(0);
+}
+
+
+void Test::testSetFormula()
+{
+
+    ScColumn Column;
+
+    struct aInputs
+    {
+        const char* aName;
+        SCTAB nTab;
+        SCROW nRow;
+        SCCOL nCol;
+        const char* aFormula1;      // Represents the formula that is input to SetFormula function.
+        const char* aFormula2;      // Represents the formula that is actually stored in the cell.
+        formula::FormulaGrammar::Grammar eGram;
+
+    } aTest[] = {
+        { "Rock and Roll" ,1 ,5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },
+        { "Blues"         ,2 ,5 , 5 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE      },
+        { "Acoustic"      ,3 ,6 , 6 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_A1},
+        { "Nursery Rhymes",4 ,7 , 8 , "=[.A1]-[.$C2]+[.G$3]-[.$F$4]","=A1-$C2+G$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_ODFF        }
+    };
+
+    for(size_t i = 0 ; i < SAL_N_ELEMENTS(aTest) ;++i)
+    {
+        m_pDoc->InsertTab(aTest[i].nTab,OUString::createFromAscii(aTest[i].aName));
+        OUString aBuffer;
+        Column.Init(aTest[i].nCol , aTest[i].nTab ,m_pDoc);
+        Column.SetFormula(aTest[i].nRow , OUString::createFromAscii(aTest[i].aFormula1) ,aTest[i].eGram);
+        Column.GetFormula(aTest[i].nRow, aBuffer);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to set formula",OUString::createFromAscii(aTest[i].aFormula2),aBuffer);
+
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
