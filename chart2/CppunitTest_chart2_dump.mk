@@ -55,7 +55,6 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_dump, \
     vbahelper \
     xo \
     sw \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,chart2_dump,\

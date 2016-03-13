@@ -52,7 +52,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     utl \
     vcl \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\

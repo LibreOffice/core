@@ -61,7 +61,6 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 	utl \
 	vcl \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\

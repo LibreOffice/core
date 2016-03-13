@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,framework_dispatch, \
 	sal \
 	test \
 	unotest \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,framework_dispatch,boost_headers))

@@ -41,7 +41,6 @@ $(eval $(call gb_Library_use_libraries,i18nutil,\
 	comphelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,i18nutil,\

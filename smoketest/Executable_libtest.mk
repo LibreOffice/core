@@ -13,10 +13,6 @@ $(eval $(call gb_Executable_set_include,libtest,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_libraries,libtest,\
-	$(gb_UWINAPI) \
-))
-
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,libtest,\
 	-ldl \

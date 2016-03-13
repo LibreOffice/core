@@ -16,7 +16,6 @@ $(eval $(call gb_Library_use_libraries,offacc,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,offacc,desktop/source/offacc/offacc))

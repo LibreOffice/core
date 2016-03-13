@@ -50,7 +50,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_rtl,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sal_rtl,\

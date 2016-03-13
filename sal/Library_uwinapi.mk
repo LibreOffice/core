@@ -36,12 +36,6 @@ $(eval $(call gb_Library_add_cobjects,uwinapi,\
 	sal/systools/win32/uwinapi/legacy \
 ))
 
-ifeq ($(VCVER),120)
-$(eval $(call gb_Library_add_ldflags,uwinapi,\
-	/DEF:$(SRCDIR)/sal/systools/win32/uwinapi/uwinapi.def \
-))
-endif
-
 endif
 
 

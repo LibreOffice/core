@@ -22,7 +22,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pcx_test, \
 	tl \
 	unotest \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,filter_pcx_test))

@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,fps_office,\
 	utl \
 	vcl \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fps_office,\

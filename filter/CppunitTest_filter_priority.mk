@@ -22,7 +22,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_priority, \
 	cppuhelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,filter_priority,\
