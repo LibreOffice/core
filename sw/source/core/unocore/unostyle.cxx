@@ -1880,9 +1880,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
     }
 }
 
-void SwXStyle::SetPropertyValues_Impl(
-    const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues )
+void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<uno::Any>& rValues)
 {
     if(!m_pDoc)
         throw uno::RuntimeException();
@@ -1898,12 +1896,13 @@ void SwXStyle::SetPropertyValues_Impl(
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask);
-        OSL_ENSURE(pBase, "where is the style?");
-        if(pBase)
-            aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
-        else
+        SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
+        if(!pBase)
             throw uno::RuntimeException();
+        aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     }
+    if(!aBaseImpl.getNewBase().is() && !m_bIsDescriptor)
+        throw uno::RuntimeException();
 
     const OUString* pNames = rPropertyNames.getConstArray();
     const uno::Any* pValues = rValues.getConstArray();
@@ -1915,26 +1914,13 @@ void SwXStyle::SetPropertyValues_Impl(
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
         if(aBaseImpl.getNewBase().is())
-        {
             SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-        }
-        else if(m_bIsDescriptor)
-        {
-            if(!m_pPropertiesImpl->SetProperty(pNames[nProp], pValues[nProp]))
-            {
-                throw lang::IllegalArgumentException();
-            }
-        }
-        else
-        {
-            throw uno::RuntimeException();
-        }
+        else if(!m_pPropertiesImpl->SetProperty(pNames[nProp], pValues[nProp]))
+            throw lang::IllegalArgumentException();
     }
 
     if(aBaseImpl.HasItemSet())
-    {
         aBaseImpl.getNewBase()->SetItemSet(aBaseImpl.GetItemSet());
-    }
 }
 
 void SwXStyle::setPropertyValues(
