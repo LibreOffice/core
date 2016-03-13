@@ -137,6 +137,21 @@ namespace
     #define nPoolCollRegisterStackedStart ( nPoolCollExtraStackedStart    + nPoolCollExtraRange)
     #define nPoolCollDocStackedStart      ( nPoolCollRegisterStackedStart + nPoolCollRegisterRange)
     #define nPoolCollHtmlStackedStart     ( nPoolCollDocStackedStart      + nPoolCollDocRange)
+    using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
+    using swstylebits_t = sal_uInt16;
+    using collectionbits_t = sal_uInt16;
+    struct ParagraphStyleCategoryEntry
+    {
+        paragraphstyle_t m_eCategory;
+        swstylebits_t m_nSwStyleBits;
+        collectionbits_t m_nCollectionBits;
+        ParagraphStyleCategoryEntry(paragraphstyle_t eCategory, swstylebits_t nSwStyleBits, collectionbits_t nCollectionBits)
+                : m_eCategory(eCategory)
+                , m_nSwStyleBits(nSwStyleBits)
+                , m_nCollectionBits(nCollectionBits)
+            { }
+    };
+    static const std::vector<ParagraphStyleCategoryEntry>* our_pParagraphStyleCategoryEntries;
 }
 static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries();
 
@@ -943,6 +958,22 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     return our_pStyleFamilyEntries;
 }
 
+static const std::vector<ParagraphStyleCategoryEntry>* lcl_GetParagraphStyleCategoryEntries()
+{
+    if(!our_pParagraphStyleCategoryEntries)
+    {
+        our_pParagraphStyleCategoryEntries = new std::vector<ParagraphStyleCategoryEntry>{
+            { style::ParagraphStyleCategory::TEXT,    SWSTYLEBIT_TEXT,    COLL_TEXT_BITS     },
+            { style::ParagraphStyleCategory::CHAPTER, SWSTYLEBIT_CHAPTER, COLL_DOC_BITS      },
+            { style::ParagraphStyleCategory::LIST,    SWSTYLEBIT_LIST,    COLL_LISTS_BITS    },
+            { style::ParagraphStyleCategory::INDEX,   SWSTYLEBIT_IDX,     COLL_REGISTER_BITS },
+            { style::ParagraphStyleCategory::EXTRA,   SWSTYLEBIT_EXTRA,   COLL_EXTRA_BITS    },
+            { style::ParagraphStyleCategory::HTML,    SWSTYLEBIT_HTML,    COLL_HTML_BITS     }
+        };
+    }
+    return our_pParagraphStyleCategoryEntries;
+}
+
 class SwStyleProperties_Impl
 {
     const PropertyEntryVector_t aPropertyEntries;
@@ -1705,21 +1736,15 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
-    using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
-    using paragraphcorestyle_t = sal_uInt16;
     if(!o_rStyleBase.getNewBase()->IsUserDefined() || !rValue.has<paragraphstyle_t>())
         throw lang::IllegalArgumentException();
-    static std::unique_ptr<std::map<paragraphstyle_t, paragraphcorestyle_t>> pUnoToCore;
+    static std::unique_ptr<std::map<paragraphstyle_t, swstylebits_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<paragraphstyle_t, paragraphcorestyle_t> {
-            { style::ParagraphStyleCategory::TEXT,    SWSTYLEBIT_TEXT    },
-            { style::ParagraphStyleCategory::CHAPTER, SWSTYLEBIT_CHAPTER },
-            { style::ParagraphStyleCategory::LIST,    SWSTYLEBIT_LIST    },
-            { style::ParagraphStyleCategory::INDEX,   SWSTYLEBIT_IDX     },
-            { style::ParagraphStyleCategory::EXTRA,   SWSTYLEBIT_EXTRA   },
-            { style::ParagraphStyleCategory::HTML,    SWSTYLEBIT_HTML    }
-        });
+        pUnoToCore.reset(new std::map<paragraphstyle_t, swstylebits_t>());
+        auto pEntries = lcl_GetParagraphStyleCategoryEntries();
+        std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
+            [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<paragraphstyle_t, swstylebits_t>(rEntry.m_eCategory, rEntry.m_nSwStyleBits); });
     }
     const auto pUnoToCoreIt(pUnoToCore->find(rValue.get<paragraphstyle_t>()));
     if(pUnoToCoreIt == pUnoToCore->end())
@@ -2095,19 +2120,13 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
-    using paragraphcorestyle_t = sal_Int16;
-    static std::unique_ptr<std::map<paragraphstyle_t, paragraphcorestyle_t>> pUnoToCore;
+    static std::unique_ptr<std::map<collectionbits_t, paragraphstyle_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<paragraphcorestyle_t, paragraphstyle_t> {
-            { COLL_TEXT_BITS,     style::ParagraphStyleCategory::TEXT    },
-            { COLL_DOC_BITS,      style::ParagraphStyleCategory::CHAPTER },
-            { COLL_LISTS_BITS,    style::ParagraphStyleCategory::LIST    },
-            { COLL_REGISTER_BITS, style::ParagraphStyleCategory::INDEX   },
-            { COLL_EXTRA_BITS,    style::ParagraphStyleCategory::EXTRA   },
-            { COLL_HTML_BITS,     style::ParagraphStyleCategory::HTML    }
-        });
+        pUnoToCore.reset(new std::map<collectionbits_t, paragraphstyle_t>());
+        auto pEntries = lcl_GetParagraphStyleCategoryEntries();
+        std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
+            [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<collectionbits_t, paragraphstyle_t>(rEntry.m_nCollectionBits, rEntry.m_eCategory); });
     }
     const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
     const auto pUnoToCoreIt(pUnoToCore->find(COLL_GET_RANGE_BITS & nPoolId));
