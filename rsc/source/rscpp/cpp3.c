@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-#if (OSL_DEBUG_LEVEL > 0) && (HOST == SYS_UNIX)
+#if (OSL_DEBUG_LEVEL > 1) && (HOST == SYS_UNIX)
 #include <signal.h>
 #endif
 
@@ -42,13 +42,13 @@ int openfile(char* filename)
 
     if ((fp = fopen(filename, "r")) == NULL)
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         if ( debug || !bDumpDefs )
             perror(filename);
 #endif
         return (FALSE);
     }
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     if (debug)
         fprintf(stderr, "Reading from \"%s\"\n", filename);
 #endif
@@ -252,7 +252,7 @@ int dooptions(int argc, char** argv)
                     cwarn("\"%s\" wasn't defined", ap);
                 break;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
             case 'X':                       /* Debug                */
                 debug = (isdigit(*ap)) ? atoi(ap) : 1;
 #if (HOST == SYS_UNIX)
@@ -262,7 +262,7 @@ int dooptions(int argc, char** argv)
                 break;
 #endif
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
             case 'P':                       /* #define's dump       */
                 bDumpDefs = 1;
                 fprintf(stderr, "Dump #define's is on\n");
@@ -278,7 +278,7 @@ int dooptions(int argc, char** argv)
   -N\t\t\tDon't predefine target-specific names\n\
   -Stext\t\tSpecify sizes for #if sizeof\n\
   -Usymbol\t\tUndefine symbol\n");
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                 fprintf(stderr, "  -Xvalue\t\tSet internal debug flag\n");
                 fprintf(stderr, "  -P\t\t\tdump #define's\n");
 #endif
@@ -286,7 +286,7 @@ int dooptions(int argc, char** argv)
             }                       /* Switch on all options        */
         }                           /* If it's a -option            */
     }                               /* For all arguments            */
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     if ( (bDumpDefs ? j > 4 : j > 3) )
 #else
     if (j > 3)
@@ -316,7 +316,7 @@ int readoptions(char* filename, char*** pfargv)
     filename++;
     if ((fp = fopen(filename, "r")) == NULL)
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         if ( debug || !bDumpDefs )
             perror(filename);
 #endif

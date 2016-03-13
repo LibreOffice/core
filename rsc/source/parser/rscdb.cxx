@@ -83,6 +83,9 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
     if (bAppendEnUsFallback)
         aFallbacks.push_back( "en-US");
 
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "RscTypCont::ChangeLanguage: " );
+#endif
 
     aLangFallbacks.clear();
 
@@ -96,11 +99,15 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
             AddLanguage( aLang.getStr() );
             nID = GetLangId( aLang );
         }
-        SAL_INFO("rsc", "RscTypCont::ChangeLanguage: '" <<
-            aLang << "' (0x" << std::hex << nID << ") (" << (bAdd ? "added" : "exists"));
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, " '%s' (0x%hx) (%s)", aLang.getStr(), (int)nID, (bAdd ? "added" : "exists") );
+#endif
         aLangFallbacks.push_back( nID);
     }
 
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "\n" );
+#endif
 
     return aRet;
 }

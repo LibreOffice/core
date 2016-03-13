@@ -42,7 +42,9 @@ static RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 
 int rsc2_main( int argc, char **argv )
 {
-    SAL_WARN("rsc", "debugging " << argv[0]);
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "debugging %s\n", argv[0] );
+#endif
 
     ERRTYPE     aError;
 

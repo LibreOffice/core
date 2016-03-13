@@ -624,7 +624,7 @@ DEFBUF* defendel(char* name, int delete)
     return dp;
 }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 
 void dumpdef(char* why)
 {
@@ -798,7 +798,7 @@ int get()
         {
             if ((file->bptr = fgets(file->buffer, NBUFF, file->fp)) != NULL)
             {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                 if (debug > 1)              /* Dump it to stdout    */
                 {
                     fprintf( pCppOut, "\n#line %d (%s), %s",

@@ -96,7 +96,9 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     i = 1;
     while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
-        SAL_INFO("rsc", "CmdLineArg: \"" << *ppStr << "\"");
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "CmdLineArg: \"%s\"\n", *ppStr );
+#endif
         if (strcmp(*ppStr, "-isystem") == 0)
         {
             // ignore "-isystem" and following arg
@@ -773,7 +775,9 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                     bFile = aFS.isRegular();
             }
 
-            SAL_INFO("rsc", "Searching image: " << aSysPath);
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "Searching image: %s\n", aSysPath.getStr() );
+#endif
 
             if( bFile )
             {
@@ -808,7 +812,9 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                     fprintf( pSysListFile, "%s\n", rContext.pCmdLine->substitutePaths( aSysPath ).getStr() );
                 }
 
-                SAL_INFO("rsc", "ImagePath to add: " << rImagePath);
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "ImagePath to add: %s\n", rImagePath.getStr() );
+#endif
             }
 
             ++aDirIter;

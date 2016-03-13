@@ -42,7 +42,7 @@
 #define L_pragma        ('p' + ('a' << 1))
 #define L_undef         ('u' + ('d' << 1))
 #define L_error         ('e' + ('r' << 1))      /* BP 5.3.92, #error */
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 #define L_debug         ('d' + ('b' << 1))      /* #debug               */
 #define L_nodebug       ('n' + ('d' << 1))      /* #nodebug             */
 #endif
@@ -89,7 +89,7 @@ int control(int counter)
     case L_pragma:  tp = "pragma";          break;
     case L_undef:   tp = "undef";           break;
     case L_error:   tp = "error";           break;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     case L_debug:   tp = "debug";           break;
     case L_nodebug: tp = "nodebug";         break;
 #endif
@@ -258,7 +258,7 @@ int control(int counter)
         unget();
         break;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     case L_debug:
         if (debug == 0)
             dumpdef("debug set on");

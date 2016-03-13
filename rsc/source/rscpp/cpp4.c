@@ -200,7 +200,7 @@ void dodefine()
     *workp = EOS;                           /* Terminate work       */
     dp->repl = savestring(work);            /* Save the string      */
     dp->nargs = nargs;                      /* Save arg count       */
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     if (debug)
         dumpadef("macro definition", dp);
     else if (bDumpDefs)
@@ -372,7 +372,7 @@ void expand(DEFBUF* tokenp)
     int c;
     FILEINFO* file;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     if (debug)
         dumpadef("expand entry", tokenp);
 #endif
@@ -452,7 +452,7 @@ void expand(DEFBUF* tokenp)
                 cwarn("Wrong number of macro arguments for \"%s\"",
                       tokenp->name);
             }
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
             if (debug)
                 dumpparm("expand");
 #endif
@@ -522,7 +522,7 @@ FILE_LOCAL int expcollect()
             charput(c);                     /* Store this one       */
         }                                   /* Collect an argument  */
         charput(EOS);                       /* Terminate argument   */
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         if (debug)
             fprintf( pCppOut, "parm[%d] = \"%s\"\n", nargs, parlist[nargs - 1]);
 #endif
@@ -598,13 +598,13 @@ FILE_LOCAL void expstuff(DEFBUF* tokenp)
             }
         }
         *defp = EOS;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         if (debug > 1)
             fprintf( pCppOut, "macroline: \"%s\"\n", file->buffer);
 #endif
     }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 
     /*
      * Dump parameter list.
