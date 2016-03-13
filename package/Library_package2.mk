@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_libraries,package2,\
 	sal \
 	sax \
 	ucbhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,package2,\

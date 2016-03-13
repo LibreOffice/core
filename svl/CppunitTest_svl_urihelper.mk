@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     svl \
     tl \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,svl_urihelper))

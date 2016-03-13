@@ -33,7 +33,6 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_textsearch,\
 	cppuhelper \
 	sal \
 	unotest \
-	$(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

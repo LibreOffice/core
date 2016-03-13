@@ -17,7 +17,6 @@ $(eval $(call gb_Library_add_defs,i18nlangtag,\
 
 $(eval $(call gb_Library_use_libraries,i18nlangtag,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,i18nlangtag,\
