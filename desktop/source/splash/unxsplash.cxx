@@ -36,7 +36,7 @@ namespace desktop
 
 UnxSplashScreen::~UnxSplashScreen()
 {
-    SAL_WARN("desktop.splash", "UnxSplashScreen::~UnxSplashScreen()");
+    SAL_INFO("desktop.splash", "UnxSplashScreen::~UnxSplashScreen()");
     if ( m_pOutFd )
     {
         fclose( m_pOutFd );
@@ -52,7 +52,7 @@ void SAL_CALL UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRa
 void SAL_CALL UnxSplashScreen::end()
     throw ( uno::RuntimeException, std::exception )
 {
-    SAL_WARN("desktop.splash", "UnxSplashScreen::end()");
+    SAL_INFO("desktop.splash", "UnxSplashScreen::end()");
     if( !m_pOutFd )
         return;
 
@@ -101,7 +101,7 @@ UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
         {
             int fd = aNum.toInt32();
             m_pOutFd = fdopen( fd, "w" );
-            SAL_WARN("desktop.splash", "Got argument '--splash-pipe=" << fd << " ('"
+            SAL_INFO("desktop.splash", "Got argument '--splash-pipe=" << fd << " ('"
                 << aNum << "') ("
                 << static_cast<void *>(m_pOutFd) << ")");
         }

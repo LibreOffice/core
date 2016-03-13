@@ -249,7 +249,7 @@ rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
 // Into a hex string of well known length ff132a86...
 OUString CreateMD5FromString( const OUString& aMsg )
 {
-    SAL_WARN("desktop.app", "create md5 from '" << aMsg << "'");
+    SAL_INFO("desktop.app", "create md5 from '" << aMsg << "'");
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle )

@@ -397,7 +397,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
             buf.append( Reference<lang::XServiceInfo>(
                             xBackend, UNO_QUERY_THROW )
                         ->getImplementationName() );
-            dp_misc::writeConsole( buf.makeStringAndClear() + "\n");
+            dp_misc::TRACE( buf.makeStringAndClear() + "\n");
         }
         dp_misc::TRACE( "> [dp_registry.cxx] ambiguous backends:\n\n" );
         for ( t_registryset::const_iterator iPos(
