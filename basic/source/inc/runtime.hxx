@@ -230,7 +230,6 @@ class SbiRuntime
     SbMethod*     pMeth;            // method instance
     SbiIoSystem*   pIosys;          // I/O-System
     const SbiImage* pImg;           // Code-Image
-    SbxArrayRef   refExprStk;       // expression stack
     SbxArrayRef   refCaseStk;       // CASE expression stack
     SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
     SbxVariableRef   refRedim;   // Array saved to use for REDIM
@@ -239,7 +238,6 @@ class SbiRuntime
     SbiArgvStack*  pArgvStk;        // ARGV-Stack
     SbiGosubStack* pGosubStk;       // GOSUB stack
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
-    sal_uInt16        nExprLvl;         // depth of the expr-stack
     sal_uInt16        nGosubLvl;        // to prevent dead-recursions
     sal_uInt16        nForLvl;          // #118235: Maintain for level
     const sal_uInt8*   pCode;            // current Code-Pointer
@@ -252,7 +250,7 @@ class SbiRuntime
     SbxArrayRef   refParams;        // current procedure parameters
     SbxArrayRef   refLocals;        // local variable
     SbxArrayRef   refArgv;
-    // #74254, one refSaveObj is not enough! new: pRefSaveList (see above)
+    // #74254, one refSaveObj is not enough! new: aRefSaveList (see above)
     short         nArgc;
     bool          bRun;
     bool          bError;           // true: handle errors
@@ -264,6 +262,7 @@ class SbiRuntime
     sal_uInt16        nOps;             // opcode counter
     sal_uInt32    m_nLastTime;
 
+    std::vector<SbxVariableRef> aRefExprStk;  // expression stack
     std::vector<SbxVariableRef>  aRefSaveList; // #74254 save temporary references
 
     SbxVariable* FindElement
