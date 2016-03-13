@@ -16,10 +16,6 @@ $(eval $(call gb_Executable_use_externals,xpdfimport,\
     zlib \
 ))
 
-$(eval $(call gb_Executable_use_libraries,xpdfimport,\
-    $(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,xpdfimport,\
     sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl \
     sdext/source/pdfimport/xpdfwrapper/pnghelper \

@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,xmlfd,\
 	sal \
 	utl \
 	tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xmlfd,\

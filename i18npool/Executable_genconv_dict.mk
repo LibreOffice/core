@@ -11,7 +11,6 @@ $(eval $(call gb_Executable_Executable,genconv_dict))
 
 $(eval $(call gb_Executable_use_libraries,genconv_dict,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,genconv_dict,\

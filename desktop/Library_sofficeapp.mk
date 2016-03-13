@@ -66,7 +66,6 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),MACOSX)

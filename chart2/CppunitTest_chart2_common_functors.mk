@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_common_functors, \
     cppuhelper \
     sal \
     salhelper \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,chart2_common_functors,\

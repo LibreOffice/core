@@ -46,7 +46,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_chart_regression_test, \
     vbahelper \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_chart_regression_test,\

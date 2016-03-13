@@ -26,7 +26,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sccomp_lpsolver,\
 	cppu \
 	sal \
 	test \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sccomp_lpsolver,\

@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,unordf,\
     cppuhelper \
     cppu \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,unordf,\

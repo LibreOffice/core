@@ -54,7 +54,6 @@ $(eval $(call gb_Library_use_libraries,dbp,\
 	sal \
 	salhelper \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 # vim:set noet sw=4 ts=4:

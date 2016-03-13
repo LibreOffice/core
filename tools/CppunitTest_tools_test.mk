@@ -33,7 +33,6 @@ $(eval $(call gb_CppunitTest_use_api,tools_test, \
 $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
     sal \
     tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,tools_test, \

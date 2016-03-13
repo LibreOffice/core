@@ -18,7 +18,6 @@ $(eval $(call gb_Library_use_libraries,hwp,\
     sal \
     utl \
     tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,hwp,\

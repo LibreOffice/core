@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,deployment,\
     utl \
     xmlscript \
     i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment))

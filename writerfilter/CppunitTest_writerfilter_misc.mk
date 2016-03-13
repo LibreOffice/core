@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_misc, \
 	cppu \
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,writerfilter_misc,\

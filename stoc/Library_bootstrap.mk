@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_libraries,bootstrap,\
     reg \
     sal \
     salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,bootstrap,stoc/util/bootstrap))

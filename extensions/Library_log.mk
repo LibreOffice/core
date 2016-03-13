@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,log,\
 	cppu \
 	sal \
 	tl \
-	$(gb_UWINAPI) \
 ))
 
 # vim:set noet sw=4 ts=4:

@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     tl \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,writerfilter,\

@@ -41,7 +41,6 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	tl \
 	utl \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(ENABLE_GLTF),TRUE)

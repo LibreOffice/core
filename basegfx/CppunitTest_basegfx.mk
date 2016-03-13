@@ -22,7 +22,6 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\

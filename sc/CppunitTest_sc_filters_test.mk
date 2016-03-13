@@ -55,7 +55,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_filters_test, \
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_filters_test,\

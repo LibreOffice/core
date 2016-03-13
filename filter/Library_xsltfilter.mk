@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,xsltfilter,\
 	cppu \
 	salhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,xsltfilter,\

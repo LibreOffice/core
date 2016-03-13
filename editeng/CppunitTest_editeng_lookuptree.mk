@@ -43,7 +43,6 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_lookuptree, \
     salhelper \
     i18nlangtag \
     i18nutil \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_lookuptree,\

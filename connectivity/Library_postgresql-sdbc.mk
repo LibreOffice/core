@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,postgresql-sdbc,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,postgresql-sdbc,connectivity/source/drivers/postgresql/postgresql-sdbc))

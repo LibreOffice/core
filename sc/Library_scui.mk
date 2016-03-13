@@ -50,7 +50,6 @@ $(eval $(call gb_Library_use_libraries,scui,\
 	tl \
 	utl \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scui,\

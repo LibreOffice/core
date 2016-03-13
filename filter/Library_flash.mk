@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,flash,\
 	cppuhelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,flash,\

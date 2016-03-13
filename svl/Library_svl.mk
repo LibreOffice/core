@@ -60,7 +60,6 @@ $(eval $(call gb_Library_use_libraries,svl,\
     tl \
     ucbhelper \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svl,\

@@ -35,7 +35,6 @@ $(eval $(call gb_Executable_use_libraries,climaker,\
 	sal \
 	salhelper \
 	unoidl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_use_system_win32_libs,climaker,\

@@ -27,7 +27,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_draw,\
 	tl \
 	ucbhelper \
 	unotest \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_draw,\

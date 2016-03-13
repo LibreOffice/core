@@ -37,7 +37,6 @@ $(eval $(call gb_Library_use_libraries,sal,\
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
 	) \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,sal,\

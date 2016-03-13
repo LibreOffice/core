@@ -47,7 +47,6 @@ $(eval $(call gb_Library_use_libraries,fwi,\
     tl \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwi,\

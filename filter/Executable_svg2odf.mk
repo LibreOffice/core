@@ -36,7 +36,6 @@ $(eval $(call gb_Executable_use_libraries,svg2odf,\
 	cppuhelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,svg2odf,\

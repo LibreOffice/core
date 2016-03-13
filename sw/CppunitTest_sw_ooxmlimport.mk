@@ -28,7 +28,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     tl \
     vcl \
     svxcore \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ooxmlimport,\

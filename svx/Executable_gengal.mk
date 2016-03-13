@@ -41,7 +41,6 @@ $(eval $(call gb_Executable_use_libraries,gengal,\
     utl \
     vcl \
     svxcore \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,gengal,\

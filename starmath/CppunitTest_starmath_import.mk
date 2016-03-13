@@ -53,7 +53,6 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_import,\
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,starmath_import))

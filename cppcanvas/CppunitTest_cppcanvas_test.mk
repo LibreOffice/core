@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_test, \
 	test \
 	tl \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,cppcanvas_test,\

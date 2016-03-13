@@ -41,7 +41,6 @@ $(eval $(call gb_Library_use_libraries,utl,\
     salhelper \
     tl \
     ucbhelper \
-	$(gb_UWINAPI) \
 ))
 
 # add all source files that shall be compiled with exceptions enabled

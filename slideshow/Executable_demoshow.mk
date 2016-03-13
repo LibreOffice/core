@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_use_libraries,demoshow,\
     tl \
     ucbhelper \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,demoshow,\

@@ -26,7 +26,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_msfilter, \
 	cppu \
 	msfilter \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,filter_msfilter,\

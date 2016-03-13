@@ -33,8 +33,8 @@ $(eval $(call gb_Library_use_static_libraries,sn_tools,\
 $(eval $(call gb_Library_use_system_win32_libs,sn_tools,\
 	libcmt \
 	libcpmt \
-	$(if $(filter-out 120,$(VCVER)),libucrt) \
-	$(if $(filter-out 120,$(VCVER)),libvcruntime) \
+	libucrt \
+	libvcruntime \
 	kernel32 \
 	msi \
 	advapi32 \

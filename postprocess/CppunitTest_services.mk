@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,services, \
 	sal \
 	test \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,services))

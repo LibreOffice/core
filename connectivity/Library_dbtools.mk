@@ -40,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	tl \
 	comphelper \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 	svt \
 ))
 

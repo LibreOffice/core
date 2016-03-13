@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 	sax \
 	ucbhelper \
 	tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,ucpcmis1,\

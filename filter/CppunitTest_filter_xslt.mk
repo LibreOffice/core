@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_xslt, \
 	cppuhelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,filter_xslt,\

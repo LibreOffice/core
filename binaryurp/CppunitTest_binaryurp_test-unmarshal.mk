@@ -16,7 +16,6 @@ $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-unmarshal,\
 	cppuhelper \
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,binaryurp_test-unmarshal,\

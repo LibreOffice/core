@@ -50,7 +50,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_svg_export_tests, \
     utl \
     vcl \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_svg_export_tests,\

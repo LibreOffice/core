@@ -27,7 +27,6 @@ $(eval $(call gb_Executable_use_libraries,rsc,\
 	comphelper \
 	sal \
 	tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_grammars,rsc,\

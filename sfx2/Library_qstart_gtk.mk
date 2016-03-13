@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,qstart_gtk,\
     utl \
     vcl \
     sfx \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,qstart_gtk,\

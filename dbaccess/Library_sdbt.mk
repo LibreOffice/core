@@ -30,7 +30,6 @@ $(eval $(call gb_Library_use_libraries,sdbt,\
     salhelper \
     tl \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,sdbt,dbaccess/util/sdbt))

@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,ucphier1,\
 	sal \
 	salhelper \
 	ucbhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucphier1,\

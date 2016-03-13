@@ -85,7 +85,6 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     sal \
     salhelper \
     xmlreader \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),MACOSX)

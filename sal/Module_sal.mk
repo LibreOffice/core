@@ -31,7 +31,6 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter $(OS),WNT),,CppunitTest_sal_osl_file) \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_sal_osl_module) \
-	$(if $(filter-out MSC-120,$(COM)-$(VCVER)),CppunitTest_sal_osl_security) \
 	CppunitTest_sal_bytesequence \
 	CppunitTest_sal_osl_condition \
 	CppunitTest_sal_osl_getsystempathfromfileurl \

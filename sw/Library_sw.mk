@@ -78,7 +78,6 @@ $(eval $(call gb_Library_use_libraries,sw,\
     vcl \
     xmlreader \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,sw,\
