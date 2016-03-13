@@ -1923,14 +1923,10 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
         aBaseImpl.getNewBase()->SetItemSet(aBaseImpl.GetItemSet());
 }
 
-void SwXStyle::setPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues )
-        throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-                lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SwXStyle::setPropertyValues(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<uno::Any>& rValues)
+        throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
     // workaround for bad designed API
     try
     {
@@ -1945,6 +1941,7 @@ void SwXStyle::setPropertyValues(
         throw aWExc;
     }
 }
+
 SfxStyleSheetBase* SwXStyle::GetStyleSheetBase()
 {
     if(!m_pBasePool)
