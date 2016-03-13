@@ -2137,13 +2137,64 @@ uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemProp
     SwStyleNameMapper::FillProgName(pCol->GetName(), aName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
     return uno::makeAny(aName);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<RES_BACKGROUND>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    //UUUU
+    const SfxItemSet& rSet = rBase.GetItemSet();
+    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
+    uno::Any aResult;
+    if(!aOriginalBrushItem.QueryValue(aResult, nMemberId))
+        SAL_WARN("sw.uno", "error getting attribute from RES_BACKGROUND.");
+    return aResult;
+}
+template<>
+uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    //UUUU
+    const SfxItemSet& rSet = rBase.GetItemSet();
+    const XFillBmpTileItem* pTileItem = dynamic_cast<const XFillBmpTileItem*>(&rSet.Get(XATTR_FILLBMP_TILE));
+    if(pTileItem && pTileItem->GetValue())
+        return uno::makeAny(drawing::BitmapMode_REPEAT);
+    const XFillBmpStretchItem* pStretchItem = dynamic_cast<const XFillBmpStretchItem*>(&rSet.Get(XATTR_FILLBMP_STRETCH));
+    if(pStretchItem && pStretchItem->GetValue())
+        return uno::makeAny(drawing::BitmapMode_STRETCH);
+    return uno::makeAny(drawing::BitmapMode_NO_REPEAT);
+}
+template<>
+uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    SfxItemSet& rSet = rBase.GetItemSet();
+    uno::Any aResult;
+    rPropSet.getPropertyValue(rEntry, rSet, aResult);
+    //UUUU
+    // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+    if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
+        aResult = uno::makeAny<sal_Int16>(aResult.get<sal_Int32>());
+    //UUUU check for needed metric translation
+    if(rEntry.nMemberId & SFX_METRIC_ITEM && GetDoc())
+    {
+        const SfxItemPool& rPool = GetDoc()->GetAttrPool();
+        const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
+        bool bAllowedConvert(true);
+        // exception: If these ItemTypes are used, do not convert when these are negative
+        // since this means they are intended as percent values
+        if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
+            bAllowedConvert = !aResult.has<sal_Int32>() || aResult.get<sal_Int32>() > 0;
+        if(eMapUnit != SFX_MAPUNIT_100TH_MM && bAllowedConvert)
+            SvxUnoConvertToMM(eMapUnit, aResult);
+    }
+    return aResult;
+}
 
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
-    SwDoc* pDoc = GetDoc();
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
-    uno::Any aRet;
 
     if(FN_UNO_IS_PHYSICAL == rEntry.nWID)
     {
@@ -2165,9 +2216,6 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         rBase.setNewBase(new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ));
     }
 
-    //UUUU
-    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
-    bool bHandleDefaulyWay(false);
 
     switch(rEntry.nWID)
     {
@@ -2189,11 +2237,10 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case RES_PAGEDESC:
         {
+            //UUUU
+            const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
             if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
-            {
-                bHandleDefaulyWay = true;
-                break;
-            }
+                return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
             return GetStyleProperty<RES_PAGEDESC>(rEntry, rPropSet, rBase);
         }
         case FN_UNO_IS_AUTO_UPDATE:
@@ -2218,85 +2265,15 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case RES_BACKGROUND:
         {
-            //UUUU
-            const SfxItemSet& rSet = rBase.GetItemSet();
-            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-
-            if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
-            {
-                OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
-            }
-            break;
+            return GetStyleProperty<RES_BACKGROUND>(rEntry, rPropSet, rBase);
         }
         case OWN_ATTR_FILLBMP_MODE:
         {
-            //UUUU
-            const SfxItemSet& rSet = rBase.GetItemSet();
-            const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
-            const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
-
-            if( pTileItem && pTileItem->GetValue() )
-            {
-                aRet <<= drawing::BitmapMode_REPEAT;
-            }
-            else if( pStretchItem && pStretchItem->GetValue() )
-            {
-                aRet <<= drawing::BitmapMode_STRETCH;
-            }
-            else
-            {
-                aRet <<= drawing::BitmapMode_NO_REPEAT;
-            }
-            break;
+            return GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(rEntry, rPropSet, rBase);
         }
         default:
-            bHandleDefaulyWay = true;
-            break;
+            return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
     }
-    if(bHandleDefaulyWay)
-    {
-        SfxItemSet& rSet = rBase.GetItemSet();
-        rPropSet.getPropertyValue(rEntry, rSet, aRet);
-
-        //UUUU
-        if(rEntry.aType == ::cppu::UnoType<sal_Int16>::get() && rEntry.aType != aRet.getValueType())
-        {
-            // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            sal_Int32 nValue = 0;
-            if (aRet >>= nValue)
-                aRet <<= (sal_Int16)nValue;
-        }
-
-        //UUUU check for needed metric translation
-        if(rEntry.nMemberId & SFX_METRIC_ITEM)
-        {
-            bool bDoIt(true);
-
-            if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
-            {
-                // exception: If these ItemTypes are used, do not convert when these are negative
-                // since this means they are intended as percent values
-                sal_Int32 nValue = 0;
-
-                if(aRet >>= nValue)
-                {
-                    bDoIt = nValue > 0;
-                }
-            }
-
-            if(bDoIt && pDoc)
-            {
-                const SfxItemPool& rPool = pDoc->GetAttrPool();
-                const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
-
-                if(eMapUnit != SFX_MAPUNIT_100TH_MM)
-                {
-                    SvxUnoConvertToMM(eMapUnit, aRet);
-                }
-            }
-        }
-    }
-    return aRet;
 }
 
 uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
