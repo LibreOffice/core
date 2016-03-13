@@ -2069,12 +2069,40 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_DISPLAY_NAME>(const SfxItemPropertySi
 {
     return uno::makeAny(rBase.getNewBase()->GetDisplayName());
 }
-
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+    throw(uno::RuntimeException, std::exception)
+{
+    static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
+    uno::Sequence<beans::NamedValue> aSeq(COND_COMMAND_COUNT);
+    sal_uInt16 nIndex = 0;
+    for(auto& rNV : aSeq)
+    {
+        rNV.Name = GetCommandContextByIndex(nIndex++);
+        rNV.Value = uno::makeAny(OUString());
+    }
+    SwFormat* pFormat = static_cast<SwDocStyleSheet*>(GetStyleSheetBase())->GetCollection();
+    if(pFormat && RES_CONDTXTFMTCOLL == pFormat->Which())
+    {
+        const CommandStruct* pCmds = SwCondCollItem::GetCmds();
+        beans::NamedValue* pSeq = aSeq.getArray();
+        for(sal_uInt16 n = 0;  n < COND_COMMAND_COUNT; ++n)
+        {
+            const SwCollCondition* pCond = static_cast<SwConditionTextFormatColl*>(pFormat)->HasCondition(SwCollCondition(nullptr, pCmds[n].nCnd, pCmds[n].nSubCond));
+            if(!pCond || !pCond->GetTextFormatColl())
+                continue;
+            // get programmatic style name from UI style name
+            OUString aStyleName = pCond->GetTextFormatColl()->GetName();
+            SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum(GetFamily()), true);
+            pSeq[n].Value = uno::makeAny(aStyleName);
+        }
+    }
+    return uno::makeAny(aSeq);
+}
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
     SwDoc* pDoc = GetDoc();
-    SfxStyleFamily eFamily = GetFamily();
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     uno::Any aRet;
 
@@ -2133,33 +2161,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case FN_UNO_PARA_STYLE_CONDITIONS:
         {
-            OSL_ENSURE(COND_COMMAND_COUNT == 28,
-                    "invalid size of command count?");
-            uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
-            beans::NamedValue *pSeq = aSeq.getArray();
-
-            SwFormat *pFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCollection();
-            const CommandStruct *pCmds = SwCondCollItem::GetCmds();
-            for (sal_uInt16 n = 0;  n < COND_COMMAND_COUNT;  ++n)
-            {
-                OUString aStyleName;
-
-                const SwCollCondition* pCond = nullptr;
-                if( pFormat && RES_CONDTXTFMTCOLL == pFormat->Which() &&
-                    nullptr != ( pCond = static_cast<SwConditionTextFormatColl*>(pFormat)->
-                    HasCondition( SwCollCondition( nullptr, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
-                    && pCond->GetTextFormatColl() )
-                {
-                    // get programmatic style name from UI style name
-                    aStyleName = pCond->GetTextFormatColl()->GetName();
-                    SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
-                }
-
-                pSeq[n].Name  = GetCommandContextByIndex(n);
-                pSeq[n].Value <<= aStyleName;
-            }
-            aRet <<= aSeq;
-            break;
+            return GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(rEntry, rPropSet, rBase);
         }
         case FN_UNO_CATEGORY:
         {
