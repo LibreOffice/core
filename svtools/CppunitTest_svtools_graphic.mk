@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,svtools_graphic, \
 	test \
 	unotest \
 	vcl \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,svtools_graphic,\

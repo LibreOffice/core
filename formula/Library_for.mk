@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,for,\
     tl \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,for,formula/util/for))

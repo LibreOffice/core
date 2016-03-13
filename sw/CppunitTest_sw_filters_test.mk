@@ -37,7 +37,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filters_test, \
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_filters_test,\

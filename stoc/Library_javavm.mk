@@ -21,7 +21,6 @@ $(eval $(call gb_Library_use_libraries,javavm,\
     jvmfwk \
     sal \
     salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,javavm,stoc/source/javavm/javavm))

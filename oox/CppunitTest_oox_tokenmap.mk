@@ -57,7 +57,6 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_tokenmap,\
     vcl \
     xo \
     xmlscript \
-    $(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

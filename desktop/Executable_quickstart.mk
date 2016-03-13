@@ -19,10 +19,6 @@ $(eval $(call gb_Executable_use_system_win32_libs,quickstart,\
     shell32 \
 ))
 
-$(eval $(call gb_Executable_use_libraries,quickstart,\
-	$(gb_UWINAPI) \
-))
-
 ifeq ($(COM),GCC)
 
 $(eval $(call gb_Executable_use_system_win32_libs,quickstart,\

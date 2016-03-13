@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sax, \
 	sal \
 	comphelper \
 	cppu \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sax, \
