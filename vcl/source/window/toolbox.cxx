@@ -1343,11 +1343,11 @@ IMPL_LINK_TYPED( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
         EndDragging();
 }
 
-void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ToolBox::ImplInitToolBoxData()
 {
     // initialize variables
-    ImplGetWindowImpl()->mbToolBox         = true;
-    mpData                = new ImplToolBoxPrivateData;
+    ImplGetWindowImpl()->mbToolBox  = true;
+    mpData = new ImplToolBoxPrivateData;
     mpFloatWin        = nullptr;
     mnDX              = 0;
     mnDY              = 0;
@@ -1383,18 +1383,18 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbFormat          = false;
     mbFullPaint       = false;
     mbHorz            = true;
-    mbScroll          = (nStyle & WB_SCROLL) != 0;
+    mbScroll          = false;
     mbCustomize       = false;
     mbCustomizeMode   = false;
     mbDragging        = false;
     mbMenuStrings     = false;
-    mbIsShift          = false;
+    mbIsShift         = false;
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
     meButtonType      = ButtonType::SYMBOLONLY;
     meAlign           = WindowAlign::Top;
     meLastStyle       = PointerStyle::Arrow;
-    mnWinStyle        = nStyle;
+    mnWinStyle        = 0;
     meLayoutMode      = TBX_LAYOUT_NORMAL;
     mnLastFocusItemId = 0;
     mnKeyModifier     = 0;
@@ -1408,6 +1408,13 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );
     mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
+}
+
+void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+{
+    // initialize variables
+    mbScroll          = (nStyle & WB_SCROLL) != 0;
+    mnWinStyle        = nStyle;
 
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
 
@@ -1604,6 +1611,7 @@ void ToolBox::doDeferredInit(WinBits nBits)
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
+    ImplInitToolBoxData();
     ImplInit( pParent, nStyle );
 }
 
@@ -1611,6 +1619,7 @@ ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
     SAL_INFO( "vcl.window", "vcl: ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId )" );
+    ImplInitToolBoxData();
 
     rResId.SetRT( RSC_TOOLBOX );
     WinBits nStyle = ImplInitRes( rResId );
@@ -1632,6 +1641,8 @@ ToolBox::ToolBox(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : DockingWindow(WINDOW_TOOLBOX)
 {
+    ImplInitToolBoxData();
+
     loadUI(pParent, rID, rUIXMLDescription, rFrame);
 
     // calculate size of floating windows and switch if the

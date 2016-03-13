@@ -159,6 +159,7 @@ private:
                                        bool bInvalidateLower = true);
     SAL_DLLPRIVATE void InvalidateMenuButton();
 
+    SAL_DLLPRIVATE void            ImplInitToolBoxData();
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
