@@ -36,12 +36,6 @@ $(eval $(call gb_Executable_add_libs,updater,\
 ))
 endif
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_add_cxxflags,updater,\
-	/Zc:wchar_t \
-))
-endif
-
 $(eval $(call gb_Executable_use_externals,updater,\
 	gtk \
 	bzip2 \
