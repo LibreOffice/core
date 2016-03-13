@@ -2123,6 +2123,21 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertySimple
         return uno::makeAny<sal_Int16>(-1);
     return uno::makeAny(pUnoToCoreIt->second);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
+    if(!pPageDesc)
+        return uno::makeAny(OUString());
+    const SwTextFormatColl* pCol = pPageDesc->GetRegisterFormatColl();
+    if(!pCol)
+        return uno::makeAny(OUString());
+    OUString aName;
+    SwStyleNameMapper::FillProgName(pCol->GetName(), aName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+    return uno::makeAny(aName);
+}
+
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -2193,16 +2208,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case SID_SWREGISTER_COLLECTION:
         {
-            const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
-            const SwTextFormatColl* pCol = nullptr;
-            OUString aString;
-            if( pPageDesc )
-                pCol = pPageDesc->GetRegisterFormatColl();
-            if( pCol )
-                SwStyleNameMapper::FillProgName(
-                            pCol->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-            aRet <<= aString;
-            break;
+            return GetStyleProperty<SID_SWREGISTER_COLLECTION>(rEntry, rPropSet, rBase);
         }
         case RES_BACKGROUND:
         {
