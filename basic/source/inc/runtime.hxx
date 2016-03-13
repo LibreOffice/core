@@ -210,16 +210,6 @@ public:
         LanguageType* peFormatterLangType=nullptr, DateFormat* peFormatterDateFormat=nullptr );
 };
 
-// chainable items to keep references temporary
-struct RefSaveItem
-{
-    SbxVariableRef xRef;
-    RefSaveItem* pNext;
-
-    RefSaveItem() { pNext = nullptr; }
-};
-
-
 // There's one instance of this class for every executed sub-program.
 // This instance is the heart of the BASIC-machine and contains only local data.
 
@@ -274,30 +264,7 @@ class SbiRuntime
     sal_uInt16        nOps;             // opcode counter
     sal_uInt32    m_nLastTime;
 
-    RefSaveItem*  pRefSaveList;     // #74254 save temporary references
-    RefSaveItem*  pItemStoreList;   // keep unused items
-    void SaveRef( SbxVariable* pVar )
-    {
-        RefSaveItem* pItem = pItemStoreList;
-        if( pItem )
-            pItemStoreList = pItem->pNext;
-        else
-            pItem = new RefSaveItem();
-        pItem->pNext = pRefSaveList;
-        pItem->xRef = pVar;
-        pRefSaveList = pItem;
-    }
-    void ClearRefs()
-    {
-        while( pRefSaveList )
-        {
-            RefSaveItem* pToClearItem = pRefSaveList;
-            pRefSaveList = pToClearItem->pNext;
-            pToClearItem->xRef = nullptr;
-            pToClearItem->pNext = pItemStoreList;
-            pItemStoreList = pToClearItem;
-        }
-    }
+    std::vector<SbxVariableRef>  aRefSaved; // #74254 save temporary references
 
     SbxVariable* FindElement
     ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, bool bLocal, bool bStatic = false );
