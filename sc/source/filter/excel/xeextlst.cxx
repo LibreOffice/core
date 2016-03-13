@@ -101,8 +101,7 @@ XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& 
         OUString aFormula;
         if(pArr)
         {
-            aFormula = XclXmlUtils::ToOUString( GetCompileFormulaContext(), rSrcPos,
-                    pArr->Clone());
+            aFormula = XclXmlUtils::ToOUString( GetCompileFormulaContext(), rSrcPos, pArr);
         }
         maValue = OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
