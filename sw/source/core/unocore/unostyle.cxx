@@ -2216,61 +2216,31 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         rBase.setNewBase(new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ));
     }
 
-    switch(rEntry.nWID)
+    using propertytype_t = decltype(rEntry.nWID);
+    using coresetter_t = std::function<uno::Any(SwXStyle&, const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)>;
+    static std::unique_ptr<std::map<propertytype_t, coresetter_t>> pUnoToCore;
+    if(!pUnoToCore)
     {
-        case RES_PAPER_BIN:
-        {
-            return GetStyleProperty<RES_PAPER_BIN>(rEntry, rPropSet, rBase);
-        }
-        case FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
-        {
-            return GetStyleProperty<FN_UNO_NUM_RULES>(rEntry, rPropSet, rBase);
-        }
-        case RES_PARATR_OUTLINELEVEL:
-        {
-            return GetStyleProperty<RES_PARATR_OUTLINELEVEL>(rEntry, rPropSet, rBase);
-        }
-        case FN_UNO_FOLLOW_STYLE:
-        {
-            return GetStyleProperty<FN_UNO_FOLLOW_STYLE>(rEntry, rPropSet, rBase);
-        }
-        case RES_PAGEDESC:
-        {
-            return GetStyleProperty<RES_PAGEDESC>(rEntry, rPropSet, rBase);
-        }
-        case FN_UNO_IS_AUTO_UPDATE:
-        {
-            return GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(rEntry, rPropSet, rBase);
-        }
-        case FN_UNO_DISPLAY_NAME:
-        {
-            return GetStyleProperty<FN_UNO_DISPLAY_NAME>(rEntry, rPropSet, rBase);
-        }
-        case FN_UNO_PARA_STYLE_CONDITIONS:
-        {
-            return GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(rEntry, rPropSet, rBase);
-        }
-        case FN_UNO_CATEGORY:
-        {
-            return GetStyleProperty<FN_UNO_CATEGORY>(rEntry, rPropSet, rBase);
-        }
-        case SID_SWREGISTER_COLLECTION:
-        {
-            return GetStyleProperty<SID_SWREGISTER_COLLECTION>(rEntry, rPropSet, rBase);
-        }
-        case RES_BACKGROUND:
-        {
-            return GetStyleProperty<RES_BACKGROUND>(rEntry, rPropSet, rBase);
-        }
-        case OWN_ATTR_FILLBMP_MODE:
-        {
-            return GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(rEntry, rPropSet, rBase);
-        }
-        default:
-        {
-            return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
-        }
+        pUnoToCore.reset(new std::map<propertytype_t, coresetter_t> {
+            // these explicit std::mem_fn() calls shouldn't be needed, but apparently MSVC is currently too stupid for C++11 again
+            { RES_PAPER_BIN,                std::mem_fn(&SwXStyle::GetStyleProperty<RES_PAPER_BIN>)                },
+            { FN_UNO_NUM_RULES,             std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>)             },
+            { RES_PARATR_OUTLINELEVEL,      std::mem_fn(&SwXStyle::GetStyleProperty<RES_PARATR_OUTLINELEVEL>)      },
+            { FN_UNO_FOLLOW_STYLE,          std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>)          },
+            { RES_PAGEDESC,                 std::mem_fn(&SwXStyle::GetStyleProperty<RES_PAGEDESC>)                 },
+            { FN_UNO_IS_AUTO_UPDATE,        std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>)        },
+            { FN_UNO_DISPLAY_NAME,          std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_DISPLAY_NAME>)          },
+            { FN_UNO_PARA_STYLE_CONDITIONS, std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>) },
+            { FN_UNO_CATEGORY,              std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>)              },
+            { SID_SWREGISTER_COLLECTION,    std::mem_fn(&SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>)    },
+            { RES_BACKGROUND,               std::mem_fn(&SwXStyle::GetStyleProperty<RES_BACKGROUND>)               },
+            { OWN_ATTR_FILLBMP_MODE,        std::mem_fn(&SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>)        }
+        });
     }
+    const auto pUnoToCoreIt(pUnoToCore->find(rEntry.nWID));
+    if(pUnoToCoreIt != pUnoToCore->end())
+        return pUnoToCoreIt->second(*this, rEntry, rPropSet, rBase);
+    return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
 }
 
 uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
