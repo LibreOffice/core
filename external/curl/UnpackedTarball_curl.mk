@@ -25,6 +25,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-7.26.0_win-proxy.patch \
 ))
 
+ifeq ($(SYSTEM_NSS),)
+$(eval $(call gb_UnpackedTarball_add_patches,curl,\
+	external/curl/curl-nss.patch.1 \
+))
+endif
+
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-android.patch \
