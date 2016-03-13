@@ -802,21 +802,7 @@ int mscx_filterCppException(
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
-        pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
-#if _MSC_VER >= 1900 // VC 2015/2017 (and later?)
-            __current_exception()
-#else
-            // Hack to get msvcrt internal _curexception field
-            reinterpret_cast< char * >( __pxcptinfoptrs() ) +
-            // As long as we don't demand MSVCR source as build prerequisite,
-            // we have to code those offsets here.
-            //
-            // MSVS9/crt/src/mtdll.h:
-            // offsetof (_tiddata, _curexception) -
-            // offsetof (_tiddata, _tpxcptinfoptrs):
-            0x48
-#endif
-            );
+        pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(__current_exception());
     }
 
     // Rethrow: handle only C++ exceptions:
