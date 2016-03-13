@@ -1430,15 +1430,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
     return m_pOldPageDesc;
 }
 
-static void lcl_SetDefaultWay(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
-{
-    // default ItemSet handling
-    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
-    aSet.SetParent(&rStyleSet);
-    rPropSet.setPropertyValue(rEntry, rValue, aSet);
-    rStyleSet.Put(aSet);
-}
+
 
 sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
 {
@@ -1461,6 +1453,16 @@ sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* p
     return rEntry.nMemberId & (~SFX_METRIC_ITEM);
 }
 template<>
+void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    // default ItemSet handling
+    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
+    aSet.SetParent(&rStyleSet);
+    rPropSet.setPropertyValue(rEntry, rValue, aSet);
+    rStyleSet.Put(aSet);
+}
+template<>
 void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     bool bHidden = false;
@@ -1470,14 +1472,14 @@ void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry&
         o_rStyleBase.getNewBase()->GetItemSet();
         o_rStyleBase.getNewBase()->SetHidden(bHidden);
     }
-    lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+    SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     o_rStyleBase.getNewBase()->GetItemSet();
     o_rStyleBase.getNewBase()->SetGrabBagItem(rValue);
-    lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+    SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
 void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -1505,7 +1507,7 @@ void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleE
         }
     }
     else
-        lcl_SetDefaultWay(rEntry, rPropSet, aValue, o_rStyleBase);
+        SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, aValue, o_rStyleBase);
 }
 template<>
 void SwXStyle::SetPropertyValue<RES_BACKGROUND>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -1645,7 +1647,7 @@ void SwXStyle::SetPropertyValue<RES_PAGEDESC>(const SfxItemPropertySimpleEntry& 
 {
     if(MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
     {
-        lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+        SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
         return;
     }
     if(!rValue.has<OUString>())
@@ -1788,7 +1790,7 @@ void SwXStyle::SetPropertyValue<RES_TXTATR_CJK_RUBY>(const SfxItemPropertySimple
         pRuby->SetCharFormatId(nId);
     }
     rStyleSet.Put(*pRuby);
-    lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+    SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
 void SwXStyle::SetPropertyValue<RES_PARATR_DROP>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -1818,7 +1820,7 @@ void SwXStyle::SetPropertyValue<RES_PARATR_NUMRULE>(const SfxItemPropertySimpleE
 {
     uno::Any aValue(rValue);
     lcl_TranslateMetric(rEntry, m_pDoc, aValue);
-    lcl_SetDefaultWay(rEntry, rPropSet, aValue, o_rStyleBase);
+    SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, aValue, o_rStyleBase);
     // --> OD 2006-10-18 #i70223#
     if(SFX_STYLE_FAMILY_PARA == m_rEntry.m_eFamily &&
             o_rStyleBase.getNewBase().is() && o_rStyleBase.getNewBase()->GetCollection() &&
@@ -1874,7 +1876,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
         // execution of standard setting of proerty in ItemSet dependent of this variable
         uno::Any aValue(rValue);
         lcl_TranslateMetric(rEntry, m_pDoc, aValue);
-        lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
+        SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, aValue, rBase);
     }
 }
 
