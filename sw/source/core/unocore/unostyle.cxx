@@ -295,7 +295,7 @@ protected:
     template<sal_uInt16>
     uno::Any GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
     uno::Any GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
-    css::uno::Sequence<uno::Any> GetPropertyValues_Impl(const css::uno::Sequence< OUString >& aPropertyNames);
+    uno::Any GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase, const OUString& rPropertyName);
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
@@ -2219,91 +2219,89 @@ uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntr
     return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
 }
 
-uno::Sequence<uno::Any> SwXStyle::GetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames)
+uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase, const OUString& rPropertyName)
 {
-    if(!m_pDoc)
-        throw uno::RuntimeException();
-
-    sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.m_nPropMapType;
-
-    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-    const OUString* pNames = rPropertyNames.getConstArray();
-    uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
-    uno::Any* pRet = aRet.getArray();
-    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
-
-    if(!m_pBasePool && !m_bIsDescriptor)
-        throw uno::RuntimeException();
-
-    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropertyName);
+    if(!pEntry || (!m_bIsConditional && rPropertyName == UNO_NAME_PARA_STYLE_CONDITIONS))
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    if(m_pBasePool)
+        return GetStyleProperty_Impl(*pEntry, *pPropSet, rBase);
+    const uno::Any* pAny = nullptr;
+    m_pPropertiesImpl->GetProperty(rPropertyName, pAny);
+    if(pAny->hasValue())
+        return *pAny;
+    uno::Any aValue;
+    switch(m_rEntry.m_eFamily)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
-        if(!pEntry || (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
-            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
-        if(m_pBasePool)
-            pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-        else
+        case SFX_STYLE_FAMILY_PSEUDO:
+            throw uno::RuntimeException("No default value for: " + rPropertyName);
+        break;
+        case SFX_STYLE_FAMILY_PARA:
+        case SFX_STYLE_FAMILY_PAGE:
+            SwStyleProperties_Impl::GetProperty(rPropertyName, m_xStyleData, aValue);
+        break;
+        case SFX_STYLE_FAMILY_CHAR:
+        case SFX_STYLE_FAMILY_FRAME:
         {
-            const uno::Any* pAny = nullptr;
-            m_pPropertiesImpl->GetProperty(pNames[nProp], pAny);
-            if(pAny->hasValue())
-                pRet[nProp] = *pAny;
+            if(pEntry->nWID < POOLATTR_BEGIN || pEntry->nWID >= RES_UNKNOWNATR_END)
+                throw uno::RuntimeException("No default value for: " + rPropertyName);
+            SwFormat* pFormat;
+            if(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_CHAR)
+                pFormat = m_pDoc->GetDfltCharFormat();
             else
-            {
-                switch(m_rEntry.m_eFamily)
-                {
-                    case SFX_STYLE_FAMILY_PSEUDO:
-                        throw uno::RuntimeException("No default value for: " + pNames[nProp]);
-                    break;
-                    case SFX_STYLE_FAMILY_PARA:
-                    case SFX_STYLE_FAMILY_PAGE:
-                        SwStyleProperties_Impl::GetProperty(pNames[nProp], m_xStyleData, pRet[nProp]);
-                    break;
-                    case SFX_STYLE_FAMILY_CHAR:
-                    case SFX_STYLE_FAMILY_FRAME:
-                    {
-                        if(pEntry->nWID < POOLATTR_BEGIN || pEntry->nWID >= RES_UNKNOWNATR_END)
-                            throw uno::RuntimeException("No default value for: " + pNames[nProp]);
-                        SwFormat* pFormat;
-                        if(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_CHAR)
-                            pFormat = m_pDoc->GetDfltCharFormat();
-                        else
-                            pFormat = m_pDoc->GetDfltFrameFormat();
-                        const SwAttrPool* pPool = pFormat->GetAttrSet().GetPool();
-                        const SfxPoolItem& rItem = pPool->GetDefaultItem(pEntry->nWID);
-                        rItem.QueryValue(pRet[nProp], pEntry->nMemberId);
-                    }
-                    break;
-                    default:
-                        ;
-                }
-            }
+                pFormat = m_pDoc->GetDfltFrameFormat();
+            const SwAttrPool* pPool = pFormat->GetAttrSet().GetPool();
+            const SfxPoolItem& rItem = pPool->GetDefaultItem(pEntry->nWID);
+            rItem.QueryValue(aValue, pEntry->nMemberId);
         }
+        break;
+        default:
+        ;
     }
-    return aRet;
+    return aValue;
 }
 
-uno::Sequence< uno::Any > SwXStyle::getPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames ) throw(uno::RuntimeException, std::exception)
+uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< uno::Any > aValues;
+    if(!m_pDoc)
+        throw uno::RuntimeException();
+    if(!m_pBasePool && !m_bIsDescriptor)
+        throw uno::RuntimeException();
+    sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
+    return GetPropertyValue_Impl(pPropSet, aBase, rPropertyName);
+}
 
+uno::Sequence<uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString>& rPropertyNames)
+    throw(uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    if(!m_pDoc)
+        throw uno::RuntimeException();
+    if(!m_pBasePool && !m_bIsDescriptor)
+        throw uno::RuntimeException();
+    sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
+    uno::Sequence<uno::Any> aValues(rPropertyNames.getLength());
     // workaround for bad designed API
     try
     {
-        aValues = GetPropertyValues_Impl( rPropertyNames );
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
+            aValues[nProp] = GetPropertyValue_Impl(pPropSet, aBase, rPropertyNames[nProp]);
     }
-    catch (beans::UnknownPropertyException &)
+    catch(beans::UnknownPropertyException&)
     {
-        throw uno::RuntimeException("Unknown property exception caught", static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Unknown property exception caught", static_cast<cppu::OWeakObject*>(this));
     }
-    catch (lang::WrappedTargetException &)
+    catch(lang::WrappedTargetException&)
     {
-        throw uno::RuntimeException("WrappedTargetException caught", static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("WrappedTargetException caught", static_cast<cppu::OWeakObject*>(this));
     }
-
     return aValues;
 }
 
@@ -2321,14 +2319,6 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const uno::Any& r
     SetPropertyValues_Impl( aProperties, aValues );
 }
 
-uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
-    return GetPropertyValues_Impl(aProperties).getConstArray()[0];
-
-}
 
 beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
