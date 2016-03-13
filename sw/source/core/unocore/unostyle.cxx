@@ -2099,6 +2099,30 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
     }
     return uno::makeAny(aSeq);
 }
+template<>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+    throw(uno::RuntimeException, std::exception)
+{
+    using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
+    using paragraphcorestyle_t = sal_Int16;
+    static std::unique_ptr<std::map<paragraphstyle_t, paragraphcorestyle_t>> pUnoToCore;
+    if(!pUnoToCore)
+    {
+        pUnoToCore.reset(new std::map<paragraphcorestyle_t, paragraphstyle_t> {
+            { COLL_TEXT_BITS,     style::ParagraphStyleCategory::TEXT    },
+            { COLL_DOC_BITS,      style::ParagraphStyleCategory::CHAPTER },
+            { COLL_LISTS_BITS,    style::ParagraphStyleCategory::LIST    },
+            { COLL_REGISTER_BITS, style::ParagraphStyleCategory::INDEX   },
+            { COLL_EXTRA_BITS,    style::ParagraphStyleCategory::EXTRA   },
+            { COLL_HTML_BITS,     style::ParagraphStyleCategory::HTML    }
+        });
+    }
+    const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
+    const auto pUnoToCoreIt(pUnoToCore->find(COLL_GET_RANGE_BITS & nPoolId));
+    if(pUnoToCoreIt == pUnoToCore->end())
+        return uno::makeAny<sal_Int16>(-1);
+    return uno::makeAny(pUnoToCoreIt->second);
+}
 uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
     throw(uno::RuntimeException, std::exception)
 {
@@ -2171,33 +2195,7 @@ uno::Any SwXStyle::lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry
         }
         case FN_UNO_CATEGORY:
         {
-            const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
-            short nRet = -1;
-
-            switch ( COLL_GET_RANGE_BITS & nPoolId )
-            {
-                case COLL_TEXT_BITS:
-                    nRet = style::ParagraphStyleCategory::TEXT;
-                    break;
-                case COLL_DOC_BITS:
-                    nRet = style::ParagraphStyleCategory::CHAPTER;
-                    break;
-                case COLL_LISTS_BITS:
-                    nRet = style::ParagraphStyleCategory::LIST;
-                    break;
-                case COLL_REGISTER_BITS:
-                    nRet = style::ParagraphStyleCategory::INDEX;
-                    break;
-                case COLL_EXTRA_BITS:
-                    nRet = style::ParagraphStyleCategory::EXTRA;
-                    break;
-                case COLL_HTML_BITS:
-                    nRet = style::ParagraphStyleCategory::HTML;
-                    break;
-            }
-
-            aRet <<= nRet;
-            break;
+            return GetStyleProperty<FN_UNO_CATEGORY>(rEntry, rPropSet, rBase);
         }
         case SID_SWREGISTER_COLLECTION:
         {
