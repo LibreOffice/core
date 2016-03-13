@@ -182,8 +182,14 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
             switch( aToken.eTokenType )
             {
             case TOKEN_ENTRY_NO:
-                // for TOC numbering
-                rText += GetNumStringOfFirstNode( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
+                {
+                    // for TOC numbering
+                    OUString numString = GetNumStringOfFirstNode( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
+                    if (numString.getLength() > 0)
+                    {
+                        rText += numString + " " ;
+                    }
+                }
                 break;
 
             case TOKEN_ENTRY_TEXT: {
