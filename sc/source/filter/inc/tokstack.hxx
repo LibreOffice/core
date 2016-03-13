@@ -187,8 +187,9 @@ private:
         bool                        GrowExt();
         bool                        GrowNlf();
         bool                        GrowMatrix();
-		bool						GetElement( const sal_uInt16 nId );
-		bool						GetElementRek( const sal_uInt16 nId );
+        bool                        GetElement( const sal_uInt16 nId );
+        bool                        GetElementRek( const sal_uInt16 nId );
+        void                        ClearMatrix();
 public:
     TokenPool( svl::SharedStringPool& rSPool );
                                     ~TokenPool();
