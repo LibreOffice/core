@@ -2221,19 +2221,10 @@ uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntr
 
 uno::Sequence<uno::Any> SwXStyle::GetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames)
 {
-    if ( !m_pDoc )
+    if(!m_pDoc)
         throw uno::RuntimeException();
 
-    sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
-
-    switch(m_rEntry.m_eFamily)
-    {
-        case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
-        case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
-        case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE  ;break;
-        case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE   ;break;
-        default: ;
-    }
+    sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.m_nPropMapType;
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
@@ -2242,67 +2233,53 @@ uno::Sequence<uno::Any> SwXStyle::GetPropertyValues_Impl(const uno::Sequence<OUS
     uno::Any* pRet = aRet.getArray();
     SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
 
+    if(!m_pBasePool && !m_bIsDescriptor)
+        throw uno::RuntimeException();
+
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
-        if(!pEntry ||
-           (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
-            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-
+        if(!pEntry || (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
+            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
         if(m_pBasePool)
-        {
             pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-        }
-        else if(m_bIsDescriptor)
+        else
         {
             const uno::Any* pAny = nullptr;
             m_pPropertiesImpl->GetProperty(pNames[nProp], pAny);
-            if(!pAny->hasValue())
+            if(pAny->hasValue())
+                pRet[nProp] = *pAny;
+            else
             {
-                bool bExcept = false;
-                switch( m_rEntry.m_eFamily )
+                switch(m_rEntry.m_eFamily)
                 {
                     case SFX_STYLE_FAMILY_PSEUDO:
-                        bExcept = true;
+                        throw uno::RuntimeException("No default value for: " + pNames[nProp]);
                     break;
                     case SFX_STYLE_FAMILY_PARA:
                     case SFX_STYLE_FAMILY_PAGE:
-                        SwStyleProperties_Impl::GetProperty ( pNames[nProp], m_xStyleData, pRet[ nProp ] );
+                        SwStyleProperties_Impl::GetProperty(pNames[nProp], m_xStyleData, pRet[nProp]);
                     break;
                     case SFX_STYLE_FAMILY_CHAR:
-                    case SFX_STYLE_FAMILY_FRAME :
+                    case SFX_STYLE_FAMILY_FRAME:
                     {
-                        if (pEntry->nWID >= POOLATTR_BEGIN && pEntry->nWID < RES_UNKNOWNATR_END )
-                        {
-                            SwFormat * pFormat;
-                            if ( m_rEntry.m_eFamily == SFX_STYLE_FAMILY_CHAR )
-                                pFormat = m_pDoc->GetDfltCharFormat();
-                            else
-                                pFormat = m_pDoc->GetDfltFrameFormat();
-                            const SwAttrPool * pPool = pFormat->GetAttrSet().GetPool();
-                            const SfxPoolItem & rItem = pPool->GetDefaultItem ( pEntry->nWID );
-                            rItem.QueryValue ( pRet[nProp], pEntry->nMemberId );
-                        }
+                        if(pEntry->nWID < POOLATTR_BEGIN || pEntry->nWID >= RES_UNKNOWNATR_END)
+                            throw uno::RuntimeException("No default value for: " + pNames[nProp]);
+                        SwFormat* pFormat;
+                        if(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_CHAR)
+                            pFormat = m_pDoc->GetDfltCharFormat();
                         else
-                            bExcept = true;
+                            pFormat = m_pDoc->GetDfltFrameFormat();
+                        const SwAttrPool* pPool = pFormat->GetAttrSet().GetPool();
+                        const SfxPoolItem& rItem = pPool->GetDefaultItem(pEntry->nWID);
+                        rItem.QueryValue(pRet[nProp], pEntry->nMemberId);
                     }
                     break;
-
                     default:
                         ;
                 }
-                if (bExcept )
-                {
-                    uno::RuntimeException aExcept;
-                    aExcept.Message = "No default value for: " + pNames[nProp];
-                    throw aExcept;
-                }
             }
-            else
-                pRet [ nProp ] = *pAny;
         }
-        else
-            throw uno::RuntimeException();
     }
     return aRet;
 }
