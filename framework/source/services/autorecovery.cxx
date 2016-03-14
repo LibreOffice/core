@@ -439,7 +439,7 @@ private:
                 we use [ms] instead of that. Further we don't
                 wait 10 s for user idle ...
      */
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     sal_Bool m_dbg_bMakeItFaster;
     #endif
 
@@ -1266,7 +1266,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
     , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     , m_dbg_bMakeItFaster       (sal_False                                          )
     #endif
 {
@@ -2291,7 +2291,7 @@ void AutoRecovery::implts_updateTimer()
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
-        #if OSL_DEBUG_LEVEL > 1
+        #if OSL_DEBUG_LEVEL > 0
         if (m_dbg_bMakeItFaster)
             nMilliSeconds = m_nAutoSaveTimeIntervall;  // [ms]
         #endif
@@ -2299,7 +2299,7 @@ void AutoRecovery::implts_updateTimer()
     else if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
     {
         nMilliSeconds = MIN_TIME_FOR_USER_IDLE;
-        #if OSL_DEBUG_LEVEL > 1
+        #if OSL_DEBUG_LEVEL > 0
         if (m_dbg_bMakeItFaster)
             nMilliSeconds = 300; // let us some time, to finish this method .-)
         #endif
