@@ -1120,7 +1120,7 @@ Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
         m_xContentEventListener = new ContentEventListener_Impl( *this );
         m_xContent->addContentEventListener( m_xContentEventListener );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // Only done on demand in product version for performance reasons,
         // but a nice debug helper.
         getURL();
@@ -1153,7 +1153,7 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
         m_xContent = xContent;
         m_xContent->addContentEventListener( m_xContentEventListener );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // Only done on demand in product version for performance reasons,
         // but a nice debug helper.
         getURL();
