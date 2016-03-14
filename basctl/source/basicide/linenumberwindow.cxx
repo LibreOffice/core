@@ -99,10 +99,10 @@ void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
     }
 }
 
-void LineNumberWindow::DoScroll(long nHorzScroll, long nVertScroll)
+void LineNumberWindow::DoScroll(long nVertScroll)
 {
     m_nCurYOffset -= nVertScroll;
-    Window::Scroll(nHorzScroll, nVertScroll);
+    Window::Scroll(0, nVertScroll);
 }
 
 

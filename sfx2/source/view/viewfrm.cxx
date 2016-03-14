@@ -1044,7 +1044,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
 {
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
-    GetFrame().ReleasingComponent_Impl( true );
+    GetFrame().ReleasingComponent_Impl();
     if ( GetWindow().HasChildPathFocus( true ) )
     {
         DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );

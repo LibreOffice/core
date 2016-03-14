@@ -77,7 +77,7 @@ using namespace com::sun::star;
 
 //      C U T
 
-void ScViewFunc::CutToClip( bool bIncludeObjects )
+void ScViewFunc::CutToClip()
 {
     UpdateInputLine();
 
@@ -106,7 +106,7 @@ void ScViewFunc::CutToClip( bool bIncludeObjects )
             MarkDataChanged();
         }
 
-        CopyToClip( nullptr, true, false, bIncludeObjects );           // copy to clipboard
+        CopyToClip( nullptr, true, false, true/*bIncludeObjects*/ );           // copy to clipboard
 
         ScAddress aOldEnd( aRange.aEnd );       //  combined cells in this range?
         pDoc->ExtendMerge( aRange, true );
@@ -129,8 +129,7 @@ void ScViewFunc::CutToClip( bool bIncludeObjects )
 
         rMark.MarkToMulti();
         pDoc->DeleteSelection( InsertDeleteFlags::ALL, rMark );
-        if ( bIncludeObjects )
-            pDoc->DeleteObjectsInSelection( rMark );
+        pDoc->DeleteObjectsInSelection( rMark );
         rMark.MarkToSimple();
 
         if ( !AdjustRowHeight( aRange.aStart.Row(), aRange.aEnd.Row() ) )

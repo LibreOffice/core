@@ -192,7 +192,7 @@ public:
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
 
     short               Execute() override;
-    void                Start( bool bShow = true );
+    void                Start();
     bool                QueryClose();
 
     void                SetCtrlStyle();

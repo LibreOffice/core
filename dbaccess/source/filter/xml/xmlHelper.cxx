@@ -136,7 +136,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapp
     return new XMLPropertySetMapper(s_aCellStylesProperties, xFac, bForExport);
 }
 
-rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper( bool bForExport )
+rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper()
 {
 #define MAP_CONST_ROW( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFVER_010, false }
     static const XMLPropertyMapEntry s_aStylesProperties[] =
@@ -145,7 +145,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMappe
         MAP_END()
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
-    return new XMLPropertySetMapper(s_aStylesProperties, xFac, bForExport);
+    return new XMLPropertySetMapper(s_aStylesProperties, xFac, true/*bForExport*/);
 }
 
 }

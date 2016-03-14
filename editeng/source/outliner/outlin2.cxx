@@ -155,7 +155,7 @@ bool Outliner::UpdateFields()
 
 void Outliner::RemoveFields( std::function<bool ( const SvxFieldData* )> isFieldData )
 {
-    pEditEngine->RemoveFields( true/*bKeepFieldText*/, isFieldData );
+    pEditEngine->RemoveFields( isFieldData );
 }
 
 void Outliner::SetWordDelimiters( const OUString& rDelimiters )

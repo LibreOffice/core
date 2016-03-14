@@ -576,7 +576,7 @@ void SbaTableQueryBrowser::initializePreviewMode()
     {
         getBrowserView()->getVclControl()->AlwaysEnableInput( false );
         getBrowserView()->getVclControl()->EnableInput( false );
-        getBrowserView()->getVclControl()->ForceHideScrollbars( true );
+        getBrowserView()->getVclControl()->ForceHideScrollbars();
     }
     Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
     if ( xDataSourceSet.is() )

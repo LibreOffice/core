@@ -281,11 +281,11 @@ protected:
       * This method removes the propertyset containing the Additional Core
       * Properties of the content.
       *
-      * @param  bRecursive is a flag indicating whether propertysets for
-      *         children described by rOldKey shall be removed too.
+      * Propertysets for children described by rOldKey are removed too.
+      *
       * @return True, if the operation succeeded - False, otherwise.
       */
-    bool removeAdditionalPropertySet( bool bRecursive );
+    bool removeAdditionalPropertySet();
 
 public:
     /**

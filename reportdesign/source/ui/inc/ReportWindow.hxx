@@ -143,11 +143,11 @@ namespace rptui
         sal_Int32       GetTotalWidth() const;
 
         /** calculate the max width of the markers
+        * The end marker will not be used for calculation.
         *
-        * @param _bWithEnd  if <TRUE/> the end marker will be used for calculation as well otherwise not.
         * \return the max width
         */
-        sal_Int32       getMaxMarkerWidth(bool _bWithEnd) const;
+        sal_Int32       getMaxMarkerWidth() const;
 
         void            ScrollChildren(const Point& _aThumbPos);
 

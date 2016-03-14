@@ -33,7 +33,7 @@ public:
     virtual ~LineNumberWindow();
     virtual void dispose() override;
 
-    void DoScroll( long nHorzScroll, long nVertScroll );
+    void DoScroll( long nVertScroll );
 
     bool SyncYOffset();
     long& GetCurYOffset() { return m_nCurYOffset;}

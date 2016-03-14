@@ -203,8 +203,7 @@ public:
 
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
-    void InvalidateStates( AccessibleStates _nStates,
-                           const SwFrame* _pFrame = nullptr );
+    void InvalidateEditableStates( const SwFrame* _pFrame );
 
     void InvalidateRelationSet( const SwFrame* pMaster, const SwFrame* pFollow );
 

@@ -515,14 +515,14 @@ SwAuthorityField::~SwAuthorityField()
 
 OUString SwAuthorityField::Expand() const
 {
-    return ConditionalExpand(AUTH_FIELD_IDENTIFIER);
+    return ConditionalExpandAuthIdentifier();
 }
 
-OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
+OUString SwAuthorityField::ConditionalExpandAuthIdentifier() const
 {
     SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(GetTyp());
     OUString sRet;
-    if(pAuthType->GetPrefix() && eField != AUTH_FIELD_TITLE)
+    if(pAuthType->GetPrefix())
         sRet = OUString(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )
@@ -539,7 +539,7 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
         if(pEntry)
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }
-    if(pAuthType->GetSuffix() && eField != AUTH_FIELD_TITLE)
+    if(pAuthType->GetSuffix())
         sRet += OUString(pAuthType->GetSuffix());
     return sRet;
 }

@@ -128,7 +128,7 @@ namespace
     class OTablePreviewWindow : public vcl::Window
     {
         DECL_LINK_TYPED(OnDisableInput, void*, void);
-        void ImplInitSettings( bool bBackground );
+        void ImplInitSettings();
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
@@ -137,7 +137,7 @@ namespace
     };
     OTablePreviewWindow::OTablePreviewWindow(vcl::Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
     }
     bool OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
     {
@@ -157,11 +157,11 @@ namespace
         if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
             (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
         {
-            ImplInitSettings( true );
+            ImplInitSettings();
             Invalidate();
         }
     }
-    void OTablePreviewWindow::ImplInitSettings( bool bBackground )
+    void OTablePreviewWindow::ImplInitSettings()
     {
         //FIXME RenderContext
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -173,8 +173,7 @@ namespace
         SetTextColor( rStyleSettings.GetFieldTextColor() );
         SetTextFillColor();
 
-        if( bBackground )
-            SetBackground( rStyleSettings.GetFieldColor() );
+        SetBackground( rStyleSettings.GetFieldColor() );
     }
 
 }
@@ -1245,7 +1244,7 @@ void OAppDetailPageHelper::ImplInitSettings()
 OPreviewWindow::OPreviewWindow(vcl::Window* _pParent)
 : Window(_pParent)
 {
-    ImplInitSettings( true );
+    ImplInitSettings();
 }
 
 bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
@@ -1304,12 +1303,12 @@ void OPreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
         Invalidate();
     }
 }
 
-void OPreviewWindow::ImplInitSettings( bool bBackground )
+void OPreviewWindow::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -1321,8 +1320,7 @@ void OPreviewWindow::ImplInitSettings( bool bBackground )
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
 
-    if( bBackground )
-        SetBackground( rStyleSettings.GetFieldColor() );
+    SetBackground( rStyleSettings.GetFieldColor() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

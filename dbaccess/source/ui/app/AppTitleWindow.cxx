@@ -37,7 +37,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 
     setTitle(_nTitleId);
     SetBorderStyle(WindowBorderStyle::MONO);
-    ImplInitSettings( true );
+    ImplInitSettings();
 
     const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
     vcl::Window* pWindows[] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
@@ -134,12 +134,12 @@ void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
         Invalidate();
     }
 }
 
-void OTitleWindow::ImplInitSettings( bool bBackground )
+void OTitleWindow::ImplInitSettings()
 {
     // FIXME RenderContext
     AllSettings aAllSettings = GetSettings();
@@ -157,8 +157,7 @@ void OTitleWindow::ImplInitSettings( bool bBackground )
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
 
-    if( bBackground )
-        SetBackground( rStyleSettings.GetFieldColor() );
+    SetBackground( rStyleSettings.GetFieldColor() );
 }
 
 void OTitleWindow::ApplySettings(vcl::RenderContext& rRenderContext)

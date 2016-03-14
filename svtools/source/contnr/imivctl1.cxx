@@ -82,7 +82,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     bool            EditingCanceled() const { return bCanceled; }
-    void            StopEditing( bool bCancel = false );
+    void            StopEditing();
     bool            IsGrabFocus() const { return bGrabFocus; }
 };
 
@@ -3003,7 +3003,7 @@ IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, TextEditEndedHdl, LinkParamNone*, 
 void SvxIconChoiceCtrl_Impl::StopEntryEditing()
 {
     if( pEdit )
-        pEdit->StopEditing( true/*bCancel*/ );
+        pEdit->StopEditing();
 }
 
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
@@ -3179,11 +3179,11 @@ bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-void IcnViewEdit_Impl::StopEditing( bool bCancel )
+void IcnViewEdit_Impl::StopEditing()
 {
     if ( !bAlreadyInCallback )
     {
-        bCanceled = bCancel;
+        bCanceled = true;
         CallCallBackHdl_Impl();
     }
 }

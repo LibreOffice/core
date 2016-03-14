@@ -375,8 +375,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     }
 }
 
-::std::unique_ptr<BitmapCache::CacheIndex> BitmapCache::GetCacheIndex (
-    bool bIncludeNoPreview) const
+::std::unique_ptr<BitmapCache::CacheIndex> BitmapCache::GetCacheIndex() const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -391,7 +390,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
         if ( iEntry->second.IsPrecious())
             continue;
 
-        if ( ! bIncludeNoPreview && ! iEntry->second.HasPreview())
+        if ( ! iEntry->second.HasPreview())
             continue;
 
         aSortedContainer.push_back(SortableBitmapContainer::value_type(

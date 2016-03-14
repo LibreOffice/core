@@ -408,7 +408,7 @@ OUString SwField::ExpandField(bool const bCached) const
             if (GetTypeId() == TYP_AUTHORITY)
             {
                 const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
-                m_Cache = pAuthorityField->ConditionalExpand(AUTH_FIELD_IDENTIFIER);
+                m_Cache = pAuthorityField->ConditionalExpandAuthIdentifier();
             }
             else
                 m_Cache = Expand();

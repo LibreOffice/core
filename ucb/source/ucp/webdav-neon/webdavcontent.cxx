@@ -546,7 +546,7 @@ uno::Any SAL_CALL Content::execute(
         destroy( bDeletePhysical );
 
         // Remove own and all children's Additional Core Properties.
-        removeAdditionalPropertySet( true );
+        removeAdditionalPropertySet();
     }
     else if ( aCommand.Name == "transfer" && isFolder( Environment ) )
     {

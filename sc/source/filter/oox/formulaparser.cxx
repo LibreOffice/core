@@ -467,7 +467,7 @@ protected:
     size_t              appendWhiteSpaceTokens( const WhiteSpaceVec* pSpaces );
     size_t              insertWhiteSpaceTokens( const WhiteSpaceVec* pSpaces, size_t nIndexFromEnd );
 
-    size_t              getOperandSize( size_t nOpCountFromEnd, size_t nOpIndex ) const;
+    size_t              getOperandSize( size_t nOpIndex ) const;
     void                pushOperandSize( size_t nSize );
     size_t              popOperandSize();
 
@@ -727,11 +727,11 @@ size_t FormulaParserImpl::insertWhiteSpaceTokens( const WhiteSpaceVec* pSpaces, 
     return pSpaces ? pSpaces->size() : 0;
 }
 
-size_t FormulaParserImpl::getOperandSize( size_t nOpCountFromEnd, size_t nOpIndex ) const
+size_t FormulaParserImpl::getOperandSize( size_t nOpIndex ) const
 {
-    OSL_ENSURE( (nOpIndex < nOpCountFromEnd) && (nOpCountFromEnd <= maOperandSizeStack.size()),
+    OSL_ENSURE( (nOpIndex < 1) && (1 <= maOperandSizeStack.size()),
         "FormulaParserImpl::getOperandSize - invalid parameters" );
-    return maOperandSizeStack[ maOperandSizeStack.size() - nOpCountFromEnd + nOpIndex ];
+    return maOperandSizeStack[ maOperandSizeStack.size() - 1 + nOpIndex ];
 }
 
 void FormulaParserImpl::pushOperandSize( size_t nSize )
@@ -749,8 +749,7 @@ size_t FormulaParserImpl::popOperandSize()
 
 ApiToken& FormulaParserImpl::getOperandToken( size_t nOpIndex, size_t nTokenIndex )
 {
-    SAL_WARN_IF(
-        getOperandSize( 1, nOpIndex ) <= nTokenIndex, "sc.filter",
+    SAL_WARN_IF( getOperandSize( nOpIndex ) <= nTokenIndex, "sc.filter",
         "FormulaParserImpl::getOperandToken - invalid parameters" );
     SizeTypeVector::const_iterator aIndexIt = maTokenIndexes.end();
     for( SizeTypeVector::const_iterator aEnd = maOperandSizeStack.end(), aIt = aEnd - 1 + nOpIndex; aIt != aEnd; ++aIt )

@@ -1110,12 +1110,9 @@ void ScDocument::FillInfo(
         }
     }
 
-    /*  Mirror the entire frame array.
-        1st param = Mirror the vertical double line styles as well.
-        2nd param = Do not swap diagonal lines.
-     */
+    /*  Mirror the entire frame array. */
     if( bLayoutRTL )
-        rArray.MirrorSelfX( false );
+        rArray.MirrorSelfX();
 }
 
 ScTableInfo::ScTableInfo()

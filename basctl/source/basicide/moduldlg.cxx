@@ -739,7 +739,7 @@ IMPL_LINK_TYPED( ObjectPage, ButtonHdl, Button *, pButton, void )
                 pDispatcher->Execute( SID_BASICIDE_LIBSELECTED, SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0 );
             }
         }
-        EndTabDialog( 1 );
+        EndTabDialog();
     }
     else if (pButton == m_pNewModButton)
         NewModule();
@@ -919,11 +919,11 @@ void ObjectPage::DeleteCurrent()
 }
 
 
-void ObjectPage::EndTabDialog( sal_uInt16 nRet )
+void ObjectPage::EndTabDialog()
 {
     DBG_ASSERT( pTabDlg, "TabDlg nicht gesetzt!" );
     if ( pTabDlg )
-        pTabDlg->EndDialog( nRet );
+        pTabDlg->EndDialog( 1 );
 }
 
 LibDialog::LibDialog( vcl::Window* pParent )

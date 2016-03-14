@@ -191,7 +191,7 @@ public:
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
     void            SetNoMarker ();
 
-    void            DoScroll( long nHorzScroll, long nVertScroll );
+    void            DoScroll( long nVertScroll );
     long&           GetCurYOffset()         { return nCurYOffset; }
     BreakPointList& GetBreakPoints()        { return aBreakPointList; }
 };

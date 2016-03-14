@@ -343,7 +343,7 @@ public:
     bool IsConvertToPolyObjPossible() const { ForcePossibilities(); return bCanConvToPoly; }
     bool IsConvertToContourPossible() const { ForcePossibilities(); return bCanConvToContour; }
     void ConvertMarkedToPathObj(bool bLineToArea);
-    void ConvertMarkedToPolyObj(bool bLineToArea);
+    void ConvertMarkedToPolyObj();
 
     // Align all marked objects vertically. Normally the SnapRect of an object is used.
     void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert);

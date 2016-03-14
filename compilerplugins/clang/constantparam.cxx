@@ -21,8 +21,8 @@
 
  The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unuseddefaultparams' check
-  $ ./compilerplugins/clang/unuseddefaultparams.py unuseddefaultparams.log
+  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='constantparam' check
+  $ ./compilerplugins/clang/constantparam.py constantparam.log
 */
 
 namespace {
@@ -56,6 +56,13 @@ public:
 
     virtual void run() override
     {
+        // there is a crash here that I can't seem to workaround
+        //  clang-3.8: /home/noel/clang/src/tools/clang/lib/AST/Type.cpp:1878: bool clang::Type::isConstantSizeType() const: Assertion `!isDependentType() && "This doesn't make sense for dependent types"' failed.
+        FileID mainFileID = compiler.getSourceManager().getMainFileID();
+        if (strstr(compiler.getSourceManager().getFileEntryForID(mainFileID)->getDir()->getName(), "oox/source/dump") != 0) {
+            return;
+        }
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes

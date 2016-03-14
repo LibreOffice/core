@@ -1666,7 +1666,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             {
                 pStream = &xStrm;
                 if( SotClipboardFormatId::RTF == nFormat )
-                    pRead = SwReaderWriter::GetReader( READER_WRITER_RTF );
+                    pRead = SwReaderWriter::GetRtfReader();
                 else if( !pRead )
                 {
                     pRead = ReadHTML;

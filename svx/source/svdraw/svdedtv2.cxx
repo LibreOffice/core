@@ -1998,9 +1998,9 @@ void SdrEditView::ConvertMarkedToPathObj(bool bLineToArea)
     ImpConvertTo(true, bLineToArea);
 }
 
-void SdrEditView::ConvertMarkedToPolyObj(bool bLineToArea)
+void SdrEditView::ConvertMarkedToPolyObj()
 {
-    ImpConvertTo(false, bLineToArea);
+    ImpConvertTo(false, false/*bLineToArea*/);
 }
 
 

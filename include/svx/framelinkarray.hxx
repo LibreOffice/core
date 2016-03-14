@@ -327,10 +327,8 @@ public:
 
     // mirroring --------------------------------------------------------------
 
-    /** Mirrors the entire array horizontally.
-        @param bSwapDiag
-            true = Swap top-left to bottom-right and bottom-left to top-right frame borders. */
-    void                MirrorSelfX( bool bSwapDiag );
+    /** Mirrors the entire array horizontally. */
+    void                MirrorSelfX();
 
     // drawing ----------------------------------------------------------------
 

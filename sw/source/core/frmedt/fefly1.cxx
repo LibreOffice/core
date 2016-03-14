@@ -1112,41 +1112,35 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     return bRet;
 }
 
-// Reset requested attributes or the ones contained in the set.
-bool SwFEShell::ResetFlyFrameAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
+// Reset attributes contained in the set.
+bool SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
 {
     bool bRet = false;
 
-    if( RES_ANCHOR != nWhich && RES_CHAIN != nWhich && RES_CNTNT != nWhich )
+    SET_CURR_SHELL( this );
+
+    SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
+    OSL_ENSURE( pFly, "SetFlyFrameAttr, no Fly selected." );
+    if( pFly )
     {
-        SET_CURR_SHELL( this );
+        StartAllAction();
 
-        SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
-        OSL_ENSURE( pFly, "SetFlyFrameAttr, no Fly selected." );
-        if( pFly )
+        SfxItemIter aIter( *pSet );
+        const SfxPoolItem* pItem = aIter.FirstItem();
+        while( pItem )
         {
-            StartAllAction();
-
-            if( pSet )
+            if( !IsInvalidItem( pItem ) )
             {
-                SfxItemIter aIter( *pSet );
-                const SfxPoolItem* pItem = aIter.FirstItem();
-                while( pItem )
-                {
-                    if( !IsInvalidItem( pItem ) &&
-                        RES_ANCHOR != ( nWhich = pItem->Which() ) &&
-                        RES_CHAIN != nWhich && RES_CNTNT != nWhich )
-                        pFly->GetFormat()->ResetFormatAttr( nWhich );
-                    pItem = aIter.NextItem();
-                }
+                sal_uInt16 nWhich = pItem->Which();
+                if( RES_ANCHOR != nWhich && RES_CHAIN != nWhich && RES_CNTNT != nWhich )
+                    pFly->GetFormat()->ResetFormatAttr( nWhich );
             }
-            else
-                pFly->GetFormat()->ResetFormatAttr( nWhich );
-
-            bRet = true;
-            EndAllActionAndCall();
-            GetDoc()->getIDocumentState().SetModified();
+            pItem = aIter.NextItem();
         }
+
+        bRet = true;
+        EndAllActionAndCall();
+        GetDoc()->getIDocumentState().SetModified();
     }
     return bRet;
 }

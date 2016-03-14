@@ -62,7 +62,7 @@ namespace dbaui
                 <TRUE/> when successful
         */
         bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
-        void ImplInitSettings( bool bBackground );
+        void ImplInitSettings();
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
