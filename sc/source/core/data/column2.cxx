@@ -1089,7 +1089,7 @@ public:
             }
         }
         //  change URL field to text (not possible otherwise, thus pType=0)
-        mpEngine->RemoveFields(true);
+        mpEngine->RemoveFields();
 
         bool bSpellErrors = mpEngine->HasOnlineSpellErrors();
         bool bNeedObject = bSpellErrors || nParCount>1;         // keep errors/paragraphs

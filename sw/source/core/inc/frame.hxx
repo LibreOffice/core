@@ -202,15 +202,13 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
         'All footnotes' is no longer treated. Instead each footnote is treated
         as an own environment.
 
-        @param _bInSameFootnote
-        input parameter - boolean indicating, that the found previous content
-        frame has to be in the same footnote frame. This parameter is only
+        The found previous content frame has to be in the same footnote frame. This is only
         relevant for flow frames in footnotes.
 
         @return SwContentFrame*
         pointer to the found previous content frame. It's NULL, if none exists.
     */
-    SwContentFrame* _FindPrevCnt( const bool _bInSameFootnote = false );
+    SwContentFrame* _FindPrevCnt();
 
     void _UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
     SwFrame* _GetIndNext();

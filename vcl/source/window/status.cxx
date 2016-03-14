@@ -168,9 +168,9 @@ void StatusBar::dispose()
     Window::dispose();
 }
 
-void StatusBar::AdjustItemWidthsForHiDPI(bool bAdjustHiDPI)
+void StatusBar::AdjustItemWidthsForHiDPI()
 {
-    mbAdjustHiDPI = bAdjustHiDPI;
+    mbAdjustHiDPI = true;
 }
 
 void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)

@@ -452,9 +452,9 @@ public:
     bool            HasConvertibleTextPortion( LanguageType nLang );
     virtual bool    ConvertNextDocument();
 
-    bool UpdateFields();
-    bool UpdateFieldsOnly();
-    void            RemoveFields( bool bKeepFieldText, std::function<bool ( const SvxFieldData* )> isFieldData = [] (const SvxFieldData* ){return true;} );
+    bool            UpdateFields();
+    bool            UpdateFieldsOnly();
+    void            RemoveFields( std::function<bool ( const SvxFieldData* )> isFieldData = [] (const SvxFieldData* ){return true;} );
 
     sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
     EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;

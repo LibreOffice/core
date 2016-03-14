@@ -1416,7 +1416,7 @@ void SvTreeListBox::InitTreeView()
 
     SetSpaceBetweenEntries( 0 );
     SetLineColor();
-    InitSettings( true );
+    InitSettings();
     ImplInitStyle();
     SetTabs();
 }
@@ -3715,7 +3715,7 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         nEntryHeight = 0;   // _together_ with true of 1. par (bFont) of InitSettings() a zero-height
                             //  forces complete recalc of heights!
-        InitSettings( true );
+        InitSettings();
         Invalidate();
     }
     else
@@ -3751,7 +3751,7 @@ void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
         pCheckButtonData->SetDefaultImages(this);
 }
 
-void SvTreeListBox::InitSettings(bool bBackground)
+void SvTreeListBox::InitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     vcl::Font aFont;
@@ -3763,8 +3763,7 @@ void SvTreeListBox::InitSettings(bool bBackground)
     SetTextColor(rStyleSettings.GetFieldTextColor());
     SetTextFillColor();
 
-    if (bBackground)
-        SetBackground(rStyleSettings.GetFieldColor());
+    SetBackground(rStyleSettings.GetFieldColor());
 
     // always try to re-create default-SvLBoxButtonData
     if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )

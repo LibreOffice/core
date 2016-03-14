@@ -32,7 +32,7 @@ namespace dbaui
         VclPtr<vcl::Window>             m_pRight;
         bool                            m_bVertical;
 
-        void ImplInitSettings( bool bBackground );
+        void ImplInitSettings();
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;

@@ -853,9 +853,9 @@ void SfxFrame::GrabFocusOnComponent_Impl()
         pFocusWindow->GrabFocus();
 }
 
-void SfxFrame::ReleasingComponent_Impl( bool bSet )
+void SfxFrame::ReleasingComponent_Impl()
 {
-    pImp->bReleasingComponent = bSet;
+    pImp->bReleasingComponent = true;
 }
 
 bool SfxFrame::IsInPlace() const

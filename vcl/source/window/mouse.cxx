@@ -320,7 +320,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         {
             // Cursor hidden
             if ( pOldFocusWindow->mpWindowImpl->mpCursor )
-                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide( true );
+                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
         }
 
         // !!!!! due to old SV-Office Activate/Deactivate handling

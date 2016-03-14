@@ -45,7 +45,7 @@ OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB
     ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
 {
 
-    ImplInitSettings( true );
+    ImplInitSettings();
     // Children erzeugen
     m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
     m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create( this );
@@ -114,7 +114,7 @@ IMPL_LINK_TYPED( OTableBorderWindow, SplitHdl, Splitter*, pSplit, void )
     }
 }
 
-void OTableBorderWindow::ImplInitSettings( bool bBackground )
+void OTableBorderWindow::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -130,13 +130,10 @@ void OTableBorderWindow::ImplInitSettings( bool bBackground )
         aTextColor = GetControlForeground();
     SetTextColor( aTextColor );
 
-    if ( bBackground )
-    {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( rStyleSettings.GetFaceColor() );
-    }
+    if( IsControlBackground() )
+        SetBackground( GetControlBackground() );
+    else
+        SetBackground( rStyleSettings.GetFaceColor() );
 }
 
 void OTableBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -146,7 +143,7 @@ void OTableBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
         Invalidate();
     }
 }

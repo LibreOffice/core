@@ -105,7 +105,7 @@ public:
     virtual             ~StatusBar();
     virtual void        dispose() override;
 
-    void                AdjustItemWidthsForHiDPI(bool bAdjustHiDPI);
+    void                AdjustItemWidthsForHiDPI();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;

@@ -2834,8 +2834,7 @@ void SwAccessibleMap::SetCursorContext(
     mxCursorContext = xAcc;
 }
 
-void SwAccessibleMap::InvalidateStates( AccessibleStates _nStates,
-                                        const SwFrame* _pFrame )
+void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
 {
     // Start with the frame or the first upper that is accessible
     SwAccessibleChild aFrameOrObj( _pFrame );
@@ -2852,13 +2851,13 @@ void SwAccessibleMap::InvalidateStates( AccessibleStates _nStates,
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
                                        pAccImpl,
                                        SwAccessibleChild(pAccImpl->GetFrame()),
-                                       _nStates );
+                                       AccessibleStates::EDITABLE );
         AppendEvent( aEvent );
     }
     else
     {
         FireEvents();
-        pAccImpl->InvalidateStates( _nStates );
+        pAccImpl->InvalidateStates( AccessibleStates::EDITABLE );
     }
 }
 

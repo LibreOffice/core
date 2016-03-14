@@ -1786,7 +1786,7 @@ IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
                 pSVData->maWinData.mpFocusWin = nullptr;
 
                 if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
-                    pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
+                    pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 
                 // Deaktivate rufen
                 vcl::Window* pOldFocusWindow = pFocusWin;
@@ -1873,7 +1873,7 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
 
     vcl::Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
-        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
+        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 }
 
 struct DelayedCloseEvent

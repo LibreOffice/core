@@ -197,7 +197,7 @@ protected:
     void                DeleteCurrent();
     void                NewModule();
     void                NewDialog();
-    void                EndTabDialog( sal_uInt16 nRet );
+    void                EndTabDialog();
 
     VclPtr<TabDialog>          pTabDlg;
 
@@ -242,7 +242,7 @@ protected:
     void                Export();
     void                ExportAsPackage( const OUString& aLibName );
     void                ExportAsBasic( const OUString& aLibName );
-    void                EndTabDialog( sal_uInt16 nRet );
+    void                EndTabDialog();
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();

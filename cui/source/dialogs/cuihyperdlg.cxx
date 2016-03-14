@@ -146,7 +146,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     SetCurPageId(RID_SVXPAGE_HYPERLINK_INTERNET);
 
     // Init Dialog
-    Start (false);
+    Start();
 
     pBindings->Update( SID_READONLY_MODE );
 

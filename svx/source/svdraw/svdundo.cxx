@@ -176,7 +176,7 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
     case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects();        break;
     case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects();      break;
     case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(true);  break;
-    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(false); break;
+    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj();      break;
     case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(false); break;
     case SDRREPFUNC_OBJ_GROUP           :  rView.GroupMarked();                 break;
     case SDRREPFUNC_OBJ_UNGROUP         :  rView.UnGroupMarked();               break;

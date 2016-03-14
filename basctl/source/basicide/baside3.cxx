@@ -80,7 +80,7 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
                                             : Reference<frame::XModel>(), xDialogModel))
     ,pUndoMgr(new SfxUndoManager)
 {
-    InitSettings( true );
+    InitSettings();
 
     pEditor->GetModel().SetNotifyUndoActionHdl(
         LINK(this, DialogWindow, NotifyUndoActionHdl)
@@ -1325,14 +1325,14 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        InitSettings( true );
+        InitSettings();
         Invalidate();
     }
     else
         BaseWindow::DataChanged( rDCEvt );
 }
 
-void DialogWindow::InitSettings(bool bBackground)
+void DialogWindow::InitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -1343,8 +1343,7 @@ void DialogWindow::InitSettings(bool bBackground)
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
 
-    if( bBackground )
-        SetBackground( rStyleSettings.GetFieldColor() );
+    SetBackground( rStyleSettings.GetFieldColor() );
 }
 
 css::uno::Reference< css::accessibility::XAccessible > DialogWindow::CreateAccessible()

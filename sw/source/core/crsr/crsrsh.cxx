@@ -2183,14 +2183,12 @@ void SwCursorShell::ShellLoseFocus()
     m_bHasFocus = false;
 }
 
-void SwCursorShell::ShellGetFocus( bool bUpdate )
+void SwCursorShell::ShellGetFocus()
 {
     m_bHasFocus = true;
     if( !m_bBasicHideCursor && VisArea().Width() )
     {
-        UpdateCursor( static_cast<sal_uInt16>( bUpdate ?
-                    SwCursorShell::CHKRANGE|SwCursorShell::SCROLLWIN
-                    : SwCursorShell::CHKRANGE ) );
+        UpdateCursor( static_cast<sal_uInt16>( SwCursorShell::CHKRANGE ) );
         ShowCursors( m_bSVCursorVis );
     }
 }

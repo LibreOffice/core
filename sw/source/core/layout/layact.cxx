@@ -2238,7 +2238,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                         // CursorShell and it doesn't paint the selection.
                         pCursorShell->ShellLoseFocus();
                         pCursorShell->UnlockPaint( true );
-                        pCursorShell->ShellGetFocus( false );
+                        pCursorShell->ShellGetFocus();
                     }
                     else
                         rSh.UnlockPaint( true );

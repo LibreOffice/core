@@ -492,7 +492,7 @@ public:
         bar <b>always</b> implies a horizontal scroll bar
         @seealso EnableNavigationBar
     */
-    void        ForceHideScrollbars( bool _bForce );
+    void        ForceHideScrollbars();
 
     css::uno::Reference< css::uno::XComponentContext >
         getContext() const { return m_xContext; }

@@ -52,7 +52,7 @@ namespace dbaxml
         static rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper( bool bForExport );
         static rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper( bool bForExport );
         static rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper( bool bForExport );
-        static rtl::Reference < XMLPropertySetMapper > GetRowStylesPropertySetMapper( bool bForExport );
+        static rtl::Reference < XMLPropertySetMapper > GetRowStylesPropertySetMapper();
     };
 } // dbaxml
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLHELPER_HXX

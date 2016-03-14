@@ -351,12 +351,12 @@ void SwViewShellImp::InvalidateAccessibleEditableState( bool bAllShells,
         for(SwViewShell& rTmp : GetShell()->GetRingContainer())
         {
             if( rTmp.Imp()->IsAccessible() )
-                rTmp.Imp()->GetAccessibleMap().InvalidateStates( AccessibleStates::EDITABLE, pFrame );
+                rTmp.Imp()->GetAccessibleMap().InvalidateEditableStates( pFrame );
         }
     }
     else if( IsAccessible() )
     {
-        GetAccessibleMap().InvalidateStates( AccessibleStates::EDITABLE, pFrame );
+        GetAccessibleMap().InvalidateEditableStates( pFrame );
     }
 }
 

@@ -159,9 +159,9 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 
 namespace SwReaderWriter {
 
-Reader* GetReader( ReaderWriterEnum eReader )
+Reader* GetRtfReader()
 {
-    return aReaderWriter[eReader].GetReader();
+    return aReaderWriter[READER_WRITER_RTF].GetReader();
 }
 
 void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )

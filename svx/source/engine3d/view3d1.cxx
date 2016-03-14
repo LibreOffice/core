@@ -66,7 +66,7 @@ void E3dView::ConvertMarkedToPolyObj()
 
     if (!pNewObj)
     {
-        SdrView::ConvertMarkedToPolyObj(false/*bLineToArea*/);
+        SdrView::ConvertMarkedToPolyObj();
     }
 }
 

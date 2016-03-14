@@ -657,17 +657,12 @@ short IconChoiceDialog::Execute()
 }
 
 
-void IconChoiceDialog::Start( bool bShow )
+void IconChoiceDialog::Start()
 {
-
     m_pCancelBtn->SetClickHdl( LINK( this, IconChoiceDialog, CancelHdl ) );
     bModal = false;
 
     Start_Impl();
-
-    if ( bShow )
-        Window::Show();
-
 }
 
 

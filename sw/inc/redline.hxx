@@ -259,7 +259,7 @@ public:
     // hide the Del-Redlines via Copy and Delete.
     // Otherwise at Move the attribution would be handled incorrectly.
     // All other callers must always give 0.
-    void CallDisplayFunc(sal_uInt16 nLoop, size_t nMyPos);
+    void CallDisplayFunc(size_t nMyPos);
     void Show(sal_uInt16 nLoop , size_t nMyPos);
     void Hide(sal_uInt16 nLoop , size_t nMyPos);
     void ShowOriginal(sal_uInt16 nLoop, size_t nMyPos);

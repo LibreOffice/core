@@ -153,7 +153,7 @@ class SwAuthorityField : public SwField
 
 public:
     /// For internal use only, in general continue using ExpandField() instead.
-    OUString ConditionalExpand(ToxAuthorityField eField) const;
+    OUString ConditionalExpandAuthIdentifier() const;
 
     //To handle Citation
     SW_DLLPUBLIC OUString ExpandCitation(ToxAuthorityField eField) const;

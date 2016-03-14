@@ -380,7 +380,7 @@ public:
     bool GetFlyFrameAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrameAttr( SfxItemSet &rSet );
     static SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
-    bool ResetFlyFrameAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = nullptr );
+    bool ResetFlyFrameAttr( const SfxItemSet* pSet );
     const SwFrameFormat *NewFlyFrame( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrameFormat *pParent = nullptr );
     void SetFlyPos( const Point &rAbsPos);

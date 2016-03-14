@@ -1075,9 +1075,9 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
             rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
             rModulWindow.GetBreakPointWindow().DoScroll
-                ( 0, rModulWindow.GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+                ( rModulWindow.GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
             rModulWindow.GetLineNumberWindow().DoScroll
-                ( 0, rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+                ( rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -1416,10 +1416,10 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     rRenderContext.DrawImage(aPos, aMarker);
 }
 
-void BreakPointWindow::DoScroll( long nHorzScroll, long nVertScroll )
+void BreakPointWindow::DoScroll( long nVertScroll )
 {
     nCurYOffset -= nVertScroll;
-    Window::Scroll( nHorzScroll, nVertScroll );
+    Window::Scroll( 0, nVertScroll );
 }
 
 void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, bool bError )
@@ -2040,8 +2040,8 @@ IMPL_LINK_TYPED(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void
         DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Wer scrollt hier ?" );
         long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
         aEdtWindow->GetEditView()->Scroll( 0, nDiff );
-        aBrkWindow->DoScroll( 0, nDiff );
-        aLineNumberWindow->DoScroll(0, nDiff);
+        aBrkWindow->DoScroll( nDiff );
+        aLineNumberWindow->DoScroll( nDiff );
         aEdtWindow->GetEditView()->ShowCursor(false);
         pCurScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
     }

@@ -30,7 +30,7 @@ namespace dbaui
         VclPtr<FixedText>   m_aTitle;
         VclPtr<vcl::Window> m_pChild;
         bool                m_bShift;
-        void ImplInitSettings( bool bBackground );
+        void ImplInitSettings();
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:

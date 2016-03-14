@@ -47,7 +47,7 @@ struct Cell
 
     inline bool         IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
 
-    void                MirrorSelfX( bool bMirrorStyles, bool bSwapDiag );
+    void                MirrorSelfX( bool bSwapDiag );
 };
 
 typedef std::vector< long >     LongVec;
@@ -64,23 +64,17 @@ Cell::Cell() :
 {
 }
 
-void Cell::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
+void Cell::MirrorSelfX( bool bSwapDiag )
 {
     std::swap( maLeft, maRight );
     std::swap( mnAddLeft, mnAddRight );
-    if( bMirrorStyles )
-    {
-        maLeft.MirrorSelf();
-        maRight.MirrorSelf();
-    }
+    maLeft.MirrorSelf();
+    maRight.MirrorSelf();
     if( bSwapDiag )
     {
         std::swap( maTLBR, maBLTR );
-        if( bMirrorStyles )
-        {
-            maTLBR.MirrorSelf();
-            maBLTR.MirrorSelf();
-        }
+        maTLBR.MirrorSelf();
+        maBLTR.MirrorSelf();
     }
 }
 
@@ -857,7 +851,7 @@ void Array::SetUseDiagDoubleClipping( bool bSet )
 }
 
 // mirroring
-void Array::MirrorSelfX( bool bSwapDiag )
+void Array::MirrorSelfX()
 {
     CellVec aNewCells;
     aNewCells.reserve( GetCellCount() );
@@ -868,7 +862,7 @@ void Array::MirrorSelfX( bool bSwapDiag )
         for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
         {
             aNewCells.push_back( CELL( mxImpl->GetMirrorCol( nCol ), nRow ) );
-            aNewCells.back().MirrorSelfX( true, bSwapDiag );
+            aNewCells.back().MirrorSelfX( false/*bSwapDiag*/ );
         }
     }
     for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )

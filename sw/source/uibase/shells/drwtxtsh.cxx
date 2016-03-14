@@ -439,7 +439,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case FN_FORMAT_RESET:   // delete hard text attributes
         {
             pOLV->RemoveAttribsKeepLanguages( true );
-            pOLV->GetEditView().GetEditEngine()->RemoveFields(true);
+            pOLV->GetEditView().GetEditEngine()->RemoveFields();
             rReq.Done();
         }
         break;

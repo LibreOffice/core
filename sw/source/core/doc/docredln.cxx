@@ -297,7 +297,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_t nP = rv.first - begin();
-        p->CallDisplayFunc(0, nP);
+        p->CallDisplayFunc(nP);
         return rv.second;
     }
     return InsertWithValidRanges( p );
@@ -309,7 +309,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         rP = rv.first - begin();
-        p->CallDisplayFunc(0, rP);
+        p->CallDisplayFunc(rP);
         return rv.second;
     }
     return InsertWithValidRanges( p, &rP );
@@ -406,7 +406,7 @@ bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsP
                 pNew->HasValidRange() &&
                 Insert( pNew, nInsPos ) )
             {
-                pNew->CallDisplayFunc(0, nInsPos);
+                pNew->CallDisplayFunc(nInsPos);
                 bAnyIns = true;
                 pNew = nullptr;
                 if( pInsPos && *pInsPos < nInsPos )
@@ -913,18 +913,18 @@ bool SwRangeRedline::HasValidRange() const
     return false;
 }
 
-void SwRangeRedline::CallDisplayFunc(sal_uInt16 nLoop, size_t nMyPos)
+void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
 {
     switch( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() )
     {
     case nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE:
-        Show(nLoop, nMyPos);
+        Show(0, nMyPos);
         break;
     case nsRedlineMode_t::REDLINE_SHOW_INSERT:
-        Hide(nLoop, nMyPos);
+        Hide(0, nMyPos);
         break;
     case nsRedlineMode_t::REDLINE_SHOW_DELETE:
-        ShowOriginal(nLoop, nMyPos);
+        ShowOriginal(0, nMyPos);
         break;
     }
 }

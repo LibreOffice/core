@@ -155,7 +155,7 @@ public:
 
     SAL_DLLPRIVATE bool DoClose_Impl();
     SAL_DLLPRIVATE void SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame );
-    SAL_DLLPRIVATE void ReleasingComponent_Impl( bool bSet );
+    SAL_DLLPRIVATE void ReleasingComponent_Impl();
     SAL_DLLPRIVATE void GetViewData_Impl();
     SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );
     SAL_DLLPRIVATE bool PrepareClose_Impl( bool bUI );

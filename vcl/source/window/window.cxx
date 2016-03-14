@@ -3062,7 +3062,7 @@ void Window::SetCursor( vcl::Cursor* pCursor )
     if ( mpWindowImpl->mpCursor != pCursor )
     {
         if ( mpWindowImpl->mpCursor )
-            mpWindowImpl->mpCursor->ImplHide( true );
+            mpWindowImpl->mpCursor->ImplHide();
         mpWindowImpl->mpCursor = pCursor;
         if ( pCursor )
             pCursor->ImplShow();

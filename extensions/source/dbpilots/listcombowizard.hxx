@@ -89,7 +89,7 @@ namespace dbp
         bool isListBox() { return static_cast<OListComboWizard*>(getDialog())->isListBox(); }
 
     protected:
-        css::uno::Reference< css::container::XNameAccess >  getTables(bool _bNeedIt);
+        css::uno::Reference< css::container::XNameAccess >  getTables();
         css::uno::Sequence< OUString >                      getTableFields();
     };
 

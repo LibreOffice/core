@@ -550,7 +550,7 @@ uno::Any SAL_CALL Content::execute(
         }
 
         // Remove own and all children's Additional Core Properties.
-        removeAdditionalPropertySet( true );
+        removeAdditionalPropertySet();
     }
     else if ( aCommand.Name == "transfer" )
     {
@@ -2202,7 +2202,7 @@ void Content::transfer(
         }
 
         // Remove own and all children's Additional Core Properties.
-        if ( !xSource->removeAdditionalPropertySet( true ) )
+        if ( !xSource->removeAdditionalPropertySet() )
         {
             uno::Any aProps
                 = uno::makeAny(

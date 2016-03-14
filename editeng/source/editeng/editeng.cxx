@@ -2281,11 +2281,9 @@ bool EditEngine::UpdateFieldsOnly()
     return pImpEditEngine->UpdateFields();
 }
 
-void EditEngine::RemoveFields( bool bKeepFieldText, std::function<bool ( const SvxFieldData* )> isFieldData )
+void EditEngine::RemoveFields( std::function<bool ( const SvxFieldData* )> isFieldData )
 {
-
-    if ( bKeepFieldText )
-        pImpEditEngine->UpdateFields();
+    pImpEditEngine->UpdateFields();
 
     sal_Int32 nParas = pImpEditEngine->GetEditDoc().Count();
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++  )
