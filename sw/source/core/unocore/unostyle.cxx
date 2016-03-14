@@ -2306,26 +2306,20 @@ uno::Sequence<uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString
 }
 
 void SwXStyle::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
-    throw( beans::UnknownPropertyException,
-        beans::PropertyVetoException,
-        lang::IllegalArgumentException,
-        lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     const uno::Sequence<uno::Any> aValues(&rValue, 1);
-
-    SetPropertyValues_Impl( aProperties, aValues );
+    SetPropertyValues_Impl(aProperties, aValues);
 }
 
-
 beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
+        throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aNames { rPropertyName };
-    uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
+    uno::Sequence<OUString> aNames{rPropertyName};
+    uno::Sequence<beans::PropertyState> aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
 
