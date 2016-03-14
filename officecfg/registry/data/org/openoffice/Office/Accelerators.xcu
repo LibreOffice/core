@@ -99,6 +99,12 @@
           <value xml:lang="en-US">.uno:ToggleControlFocus</value>
         </prop>
       </node>
+      <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:Navigator</value>
+        </prop>
+      </node>
       <node oor:name="F7_SHIFT_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -766,12 +772,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:ToggleRelative</value>
-          </prop>
-        </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
           </prop>
         </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
@@ -1533,12 +1533,6 @@
             <value xml:lang="en-US">.uno:TransformDialog</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F7" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2121,22 +2115,10 @@
             <value xml:lang="en-US">.uno:JumpToNextFrame</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -2218,6 +2200,13 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RepeatSearch</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+          </prop>
+        </node>
+        <node oor:name="G_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
@@ -2802,12 +2791,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -3490,22 +3473,10 @@
             <value xml:lang="en-US">.uno:JumpToNextFrame</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -3587,6 +3558,13 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RepeatSearch</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+          </prop>
+        </node>
+        <node oor:name="G_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
@@ -4251,22 +4229,10 @@
             <value xml:lang="en-US">.uno:JumpToNextFrame</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -4348,6 +4314,13 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RepeatSearch</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+          </prop>
+        </node>
+        <node oor:name="G_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
@@ -5012,22 +4985,10 @@
             <value xml:lang="en-US">.uno:JumpToNextFrame</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -5109,6 +5070,13 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RepeatSearch</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+          </prop>
+        </node>
+        <node oor:name="G_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
@@ -5785,22 +5753,10 @@
             <value xml:lang="en-US">.uno:JumpToNextFrame</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -5882,6 +5838,13 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RepeatSearch</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+          </prop>
+        </node>
+        <node oor:name="G_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
@@ -6564,22 +6527,10 @@
             <value xml:lang="en-US">.uno:JumpToNextFrame</value>
           </prop>
         </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Navigator</value>
-          </prop>
-        </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RestoreEditingView</value>
-          </prop>
-        </node>
-        <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -6661,6 +6612,13 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RepeatSearch</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+          </prop>
+        </node>
+        <node oor:name="G_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GotoPage</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
