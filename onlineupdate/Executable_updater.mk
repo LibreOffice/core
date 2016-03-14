@@ -10,14 +10,11 @@
 $(eval $(call gb_Executable_Executable,updater))
 
 $(eval $(call gb_Executable_set_include,updater,\
+	-I$(SRCDIR)/onlineupdate/source/update/src \
 	-I$(SRCDIR)/onlineupdate/source/update/inc \
 	-I$(SRCDIR)/onlineupdate/source/update/common \
 	-I$(SRCDIR)/onlineupdate/source/update/updater/xpcom/glue \
 	$$(INCLUDE) \
-))
-
-$(eval $(call gb_Library_use_static_libraries,Executable_updater,\
-	libmar \
 ))
 
 ifeq ($(OS),WNT)
@@ -65,6 +62,12 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/common/uachelper \
 	onlineupdate/source/update/common/updatehelper \
 	onlineupdate/source/update/common/updatelogging \
+))
+
+$(eval $(call gb_Executable_add_cobjects,updater,\
+	onlineupdate/source/update/src/mar_create \
+	onlineupdate/source/update/src/mar_extract \
+	onlineupdate/source/update/src/mar_read \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
