@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_b0031e76",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-03-14T00:06:32Z",
+      "side": 1,
+      "message": "still bad name, non obvious,",
+      "revId": "3dfdbc709f8b9032363403d0ab05ad9cccc1f5ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f0fd966f",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-03-14T00:06:32Z",
+      "side": 1,
+      "message": "ValidateBookmarks",
+      "revId": "3dfdbc709f8b9032363403d0ab05ad9cccc1f5ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d002126f",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-03-14T00:06:32Z",
+      "side": 1,
+      "message": "there is edge case:\nif user enter Bookmark 2147483647\nit overflows",
+      "revId": "3dfdbc709f8b9032363403d0ab05ad9cccc1f5ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
