@@ -1375,12 +1375,12 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     return m_nOptions;
 }
 
-void DbGridControl::ForceHideScrollbars( bool _bForce )
+void DbGridControl::ForceHideScrollbars()
 {
-    if ( m_bHideScrollbars == _bForce )
+    if ( m_bHideScrollbars )
         return;
 
-    m_bHideScrollbars = _bForce;
+    m_bHideScrollbars = true;
 
     if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
         SetMode( m_nMode );

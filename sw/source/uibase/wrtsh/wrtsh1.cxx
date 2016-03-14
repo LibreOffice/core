@@ -1580,7 +1580,7 @@ void SwWrtShell::AutoUpdateFrame( SwFrameFormat* pFormat, const SfxItemSet& rSty
 {
     StartAction();
 
-    ResetFlyFrameAttr( 0, &rStyleSet );
+    ResetFlyFrameAttr( &rStyleSet );
     pFormat->SetFormatAttr( rStyleSet );
 
     EndAction();

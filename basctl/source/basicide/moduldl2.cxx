@@ -633,7 +633,7 @@ IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
                                     SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0 );
-        EndTabDialog( 1 );
+        EndTabDialog();
         return;
     }
     else if (pButton == m_pNewLibButton)
@@ -1369,11 +1369,11 @@ void LibPage::DeleteCurrent()
     }
 }
 
-void LibPage::EndTabDialog( sal_uInt16 nRet )
+void LibPage::EndTabDialog()
 {
     DBG_ASSERT( pTabDlg, "TabDlg nicht gesetzt!" );
     if ( pTabDlg )
-        pTabDlg->EndDialog( nRet );
+        pTabDlg->EndDialog( 1 );
 }
 
 void LibPage::FillListBox()

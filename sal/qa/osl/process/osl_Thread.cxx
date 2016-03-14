@@ -167,11 +167,11 @@ public:
             osl::MutexGuard g(m_aMutex);
             return m_nFlag;
         }
-    void addValue(T n)
+    void incValue()
         {
             //only one thread operate on the flag.
             osl::MutexGuard g(m_aMutex);
-            m_nFlag += n;
+            m_nFlag++;
         }
     void acquire() {m_aMutex.acquire();}
     void release() {m_aMutex.release();}
@@ -239,7 +239,7 @@ protected:
         {
             while(schedule())
             {
-                m_aFlag.addValue(1);
+                m_aFlag.incValue();
                 ThreadHelper::thread_sleep_tenth_sec(1);
             }
         }
@@ -298,7 +298,7 @@ protected:
             /// if the thread should terminate, schedule return false
             while (m_aFlag.getValue() < 20 && schedule())
             {
-                m_aFlag.addValue(1);
+                m_aFlag.incValue();
                 ThreadHelper::thread_sleep_tenth_sec(1);
 
                 if (m_nWaitSec != 0)
@@ -346,7 +346,7 @@ protected:
         {
             while (m_aFlag.getValue() < 10)
             {
-                m_aFlag.addValue(1);
+                m_aFlag.incValue();
                 ThreadHelper::thread_sleep_tenth_sec(1);
             }
         }
@@ -391,7 +391,7 @@ protected:
             //if the thread should terminate, schedule return false
             while (schedule())
             {
-                m_aFlag.addValue(1);
+                m_aFlag.incValue();
             }
         }
     void SAL_CALL onTerminated() override

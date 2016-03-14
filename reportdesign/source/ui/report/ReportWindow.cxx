@@ -142,12 +142,10 @@ void OReportWindow::showRuler(bool _bShow)
     m_aViewsWindow->showRuler(_bShow);
 }
 
-sal_Int32 OReportWindow::getMaxMarkerWidth(bool _bWithEnd) const
+sal_Int32 OReportWindow::getMaxMarkerWidth() const
 {
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_aViewsWindow->GetMapMode().GetScaleX();
-    if ( _bWithEnd )
-        aStartWidth += Fraction(long(REPORT_ENDMARKER_WIDTH));
     return sal_Int32((long)aStartWidth);
 }
 

@@ -400,7 +400,7 @@ public:
     void                    InitSelection();
     void                    ResetCursor();
 
-    inline void             EndEditing( bool _bCancel );
+    inline void             EndEditing();
 
     void                    onTimeout();
 
@@ -419,10 +419,10 @@ inline void SvtFileView_Impl::EnableDelete( bool bEnable )
         mbReplaceNames = false;
 }
 
-inline void SvtFileView_Impl::EndEditing( bool _bCancel )
+inline void SvtFileView_Impl::EndEditing()
 {
     if ( mpCurView->IsEditingActive() )
-        mpCurView->EndEditing(_bCancel);
+        mpCurView->EndEditing();
 }
 
 // functions -------------------------------------------------------------
@@ -1259,7 +1259,7 @@ void SvtFileView::EnableDelete( bool bEnable )
 
 void SvtFileView::EndInplaceEditing()
 {
-    return mpImp->EndEditing( false/*_bCancel*/ );
+    return mpImp->EndEditing();
 }
 
 IMPL_LINK_TYPED( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )

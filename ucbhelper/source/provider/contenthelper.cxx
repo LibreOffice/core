@@ -673,10 +673,10 @@ bool ContentImplHelper::copyAdditionalPropertySet(
                                         rSourceKey, rTargetKey, bRecursive );
 }
 
-bool ContentImplHelper::removeAdditionalPropertySet( bool bRecursive )
+bool ContentImplHelper::removeAdditionalPropertySet()
 {
     return m_xProvider->removeAdditionalPropertySet(
-                    m_xIdentifier->getContentIdentifier(), bRecursive );
+                    m_xIdentifier->getContentIdentifier(), true/*bRecursive*/ );
 }
 
 void ContentImplHelper::notifyPropertiesChange(

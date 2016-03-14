@@ -450,7 +450,7 @@ public:
      */
     bool HasShellFocus() const { return m_bHasFocus; }
     void ShellLoseFocus();
-    void ShellGetFocus( bool bUpdate = true );
+    void ShellGetFocus();
 
     // Methods for displaying or hiding the visible text cursor.
     void ShowCursor();

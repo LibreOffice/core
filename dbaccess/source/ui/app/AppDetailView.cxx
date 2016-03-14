@@ -360,7 +360,7 @@ OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetai
     m_aCreation->SetDefaultCollapsedEntryBmp( aFolderImage );
     m_aCreation->SetDefaultExpandedEntryBmp( aFolderImage );
 
-    ImplInitSettings(true);
+    ImplInitSettings();
 }
 
 OTasksWindow::~OTasksWindow()
@@ -386,12 +386,12 @@ void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
         Invalidate();
     }
 }
 
-void OTasksWindow::ImplInitSettings( bool bBackground )
+void OTasksWindow::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -407,13 +407,10 @@ void OTasksWindow::ImplInitSettings( bool bBackground )
     m_aDescription->SetTextColor( rStyleSettings.GetFieldTextColor() );
     m_aDescription->SetTextFillColor();
 
-    if( bBackground )
-    {
-        SetBackground( rStyleSettings.GetFieldColor() );
-        m_aHelpText->SetBackground( rStyleSettings.GetFieldColor() );
-        m_aDescription->SetBackground( rStyleSettings.GetFieldColor() );
-        m_aFL->SetBackground( rStyleSettings.GetFieldColor() );
-    }
+    SetBackground( rStyleSettings.GetFieldColor() );
+    m_aHelpText->SetBackground( rStyleSettings.GetFieldColor() );
+    m_aDescription->SetBackground( rStyleSettings.GetFieldColor() );
+    m_aFL->SetBackground( rStyleSettings.GetFieldColor() );
 
     aFont = m_aDescription->GetControlFont();
     aFont.SetWeight(WEIGHT_BOLD);
@@ -533,7 +530,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     ,m_rBorderWin(_rParent)
 {
     SetUniqueId(UID_APP_DETAIL_VIEW);
-    ImplInitSettings( true );
+    ImplInitSettings();
 
     m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
     m_pControlHelper->Show();
@@ -575,7 +572,7 @@ void OApplicationDetailView::dispose()
     OSplitterView::dispose();
 }
 
-void OApplicationDetailView::ImplInitSettings( bool bBackground )
+void OApplicationDetailView::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -587,8 +584,7 @@ void OApplicationDetailView::ImplInitSettings( bool bBackground )
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
 
-    if( bBackground )
-        SetBackground( rStyleSettings.GetFieldColor() );
+    SetBackground( rStyleSettings.GetFieldColor() );
 
     m_aHorzSplitter->SetBackground( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter->SetFillColor( rStyleSettings.GetDialogColor() );
@@ -605,7 +601,7 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
         Invalidate();
     }
 }

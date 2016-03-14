@@ -526,8 +526,7 @@ struct SwReaderWriterEntry
 
 namespace SwReaderWriter
 {
-    /// Return reader based on ReaderWriterEnum.
-    SW_DLLPUBLIC Reader* GetReader( ReaderWriterEnum eReader );
+    SW_DLLPUBLIC Reader* GetRtfReader();
 
     /// Return reader based on the name.
     Reader* GetReader( const OUString& rFltName );

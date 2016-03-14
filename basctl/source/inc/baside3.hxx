@@ -77,7 +77,7 @@ protected:
     virtual void        DoInit() override;
     virtual void        DoScroll( ScrollBar* pCurScrollBar ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-    void                InitSettings(bool bBackground);
+    void                InitSettings();
 
 public:
     DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, css::uno::Reference<css::container::XNameContainer> const& xDialogModel);

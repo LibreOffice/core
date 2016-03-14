@@ -1272,7 +1272,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CUT:               // for graphs in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CutToClip( true );
+                pTabViewShell->CutToClip();
                 rReq.Done();
                 GetViewData()->SetPasteMode( (ScPasteFlags)(SC_PASTE_MODE | SC_PASTE_BORDER));
                 pTabViewShell->ShowCursor();

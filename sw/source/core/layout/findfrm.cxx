@@ -171,7 +171,7 @@ SwContentFrame* SwFrame::FindPrevCnt( )
     if ( GetPrev() && GetPrev()->IsContentFrame() )
         return static_cast<SwContentFrame*>(GetPrev());
     else
-        return _FindPrevCnt( true );
+        return _FindPrevCnt();
 }
 
 const SwContentFrame* SwFrame::FindPrevCnt() const
@@ -179,7 +179,7 @@ const SwContentFrame* SwFrame::FindPrevCnt() const
     if ( GetPrev() && GetPrev()->IsContentFrame() )
         return static_cast<const SwContentFrame*>(GetPrev());
     else
-        return const_cast<SwFrame*>(this)->_FindPrevCnt( true );
+        return const_cast<SwFrame*>(this)->_FindPrevCnt();
 }
 
 SwContentFrame *SwFrame::FindNextCnt( const bool _bInSameFootnote )
@@ -943,7 +943,7 @@ SwContentFrame *SwFrame::_FindNextCnt( const bool _bInSameFootnote )
 
     OD 2005-11-30 #i27138#
 */
-SwContentFrame* SwFrame::_FindPrevCnt( const bool _bInSameFootnote )
+SwContentFrame* SwFrame::_FindPrevCnt()
 {
     if ( !IsFlowFrame() )
     {
@@ -1012,7 +1012,7 @@ SwContentFrame* SwFrame::_FindPrevCnt( const bool _bInSameFootnote )
             {
                 const bool bInDocBody = pCurrContentFrame->IsInDocBody();
                 const bool bInFootnote  = pCurrContentFrame->IsInFootnote();
-                if ( bInDocBody || ( bInFootnote && !_bInSameFootnote ) )
+                if ( bInDocBody )
                 {
                     // handling for environments 'footnotes' and 'document body frames':
                     // Assure that found previous frame is also in one of these
@@ -1027,7 +1027,7 @@ SwContentFrame* SwFrame::_FindPrevCnt( const bool _bInSameFootnote )
                         pPrevContentFrame = pPrevContentFrame->GetPrevContentFrame();
                     }
                 }
-                else if ( bInFootnote && _bInSameFootnote )
+                else if ( bInFootnote )
                 {
                     // handling for environments 'each footnote':
                     // Assure that found next content frame belongs to the same footnotes

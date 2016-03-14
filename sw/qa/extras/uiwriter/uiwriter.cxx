@@ -610,7 +610,7 @@ void SwUiWriterTest::testImportRTF()
     OString aData = "{\\rtf1 Hello world!\\par}";
     SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCursor());
-    Reader* pRTFReader = SwReaderWriter::GetReader(READER_WRITER_RTF);
+    Reader* pRTFReader = SwReaderWriter::GetRtfReader();
     CPPUNIT_ASSERT(pRTFReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
 

@@ -214,18 +214,17 @@ namespace dbp
         return true;
     }
 
-    Reference< XNameAccess > OLCPage::getTables(bool _bNeedIt)
+    Reference< XNameAccess > OLCPage::getTables()
     {
         Reference< XConnection > xConn = getFormConnection();
-        DBG_ASSERT(!_bNeedIt || xConn.is(), "OLCPage::getTables: should have an active connection when reaching this page!");
-        (void)_bNeedIt;
+        DBG_ASSERT(xConn.is(), "OLCPage::getTables: should have an active connection when reaching this page!");
 
         Reference< XTablesSupplier > xSuppTables(xConn, UNO_QUERY);
         Reference< XNameAccess > xTables;
         if (xSuppTables.is())
             xTables = xSuppTables->getTables();
 
-        DBG_ASSERT(!_bNeedIt || xTables.is() || !xConn.is(), "OLCPage::getTables: got no tables from the connection!");
+        DBG_ASSERT(xTables.is() || !xConn.is(), "OLCPage::getTables: got no tables from the connection!");
 
         return xTables;
     }
@@ -233,7 +232,7 @@ namespace dbp
 
     Sequence< OUString > OLCPage::getTableFields()
     {
-        Reference< XNameAccess > xTables = getTables(true);
+        Reference< XNameAccess > xTables = getTables();
         Sequence< OUString > aColumnNames;
         if (xTables.is())
         {
@@ -320,7 +319,7 @@ namespace dbp
         m_pSelectTable->Clear();
         try
         {
-            Reference< XNameAccess > xTables = getTables(true);
+            Reference< XNameAccess > xTables = getTables();
             Sequence< OUString > aTableNames;
             if (xTables.is())
                 aTableNames = xTables->getElementNames();

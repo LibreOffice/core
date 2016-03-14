@@ -227,10 +227,9 @@ void vcl::Cursor::ImplShow()
     ImplDoShow( true/*bDrawDirect*/, false );
 }
 
-void vcl::Cursor::ImplHide( bool i_bStopTimer )
+void vcl::Cursor::ImplHide()
 {
-    assert( i_bStopTimer );
-    ImplDoHide( !i_bStopTimer );
+    ImplDoHide( false );
 }
 
 void vcl::Cursor::ImplResume( bool bRestore )
@@ -325,7 +324,7 @@ void vcl::Cursor::Hide()
     if ( mbVisible )
     {
         mbVisible = false;
-        ImplHide( true );
+        ImplHide();
     }
 }
 

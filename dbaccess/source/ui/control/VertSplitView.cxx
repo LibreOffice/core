@@ -34,7 +34,7 @@ OSplitterView::OSplitterView(vcl::Window* _pParent,bool _bVertical) : Window(_pP
     ,m_pRight(nullptr)
     ,m_bVertical(_bVertical)
 {
-    ImplInitSettings( true );
+    ImplInitSettings();
 }
 
 OSplitterView::~OSplitterView()
@@ -64,7 +64,7 @@ IMPL_LINK_NOARG_TYPED( OSplitterView, SplitHdl, Splitter*, void )
     Resize();
 }
 
-void OSplitterView::ImplInitSettings( bool bBackground )
+void OSplitterView::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -80,13 +80,10 @@ void OSplitterView::ImplInitSettings( bool bBackground )
          aTextColor = GetControlForeground();
     SetTextColor( aTextColor );
 
-    if ( bBackground )
-    {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( rStyleSettings.GetFaceColor() );
-    }
+    if( IsControlBackground() )
+        SetBackground( GetControlBackground() );
+    else
+        SetBackground( rStyleSettings.GetFaceColor() );
 }
 
 void OSplitterView::DataChanged( const DataChangedEvent& rDCEvt )
@@ -96,7 +93,7 @@ void OSplitterView::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings( true );
+        ImplInitSettings();
         Invalidate();
     }
 }

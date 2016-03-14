@@ -35,7 +35,7 @@ namespace dbaui
         ElementType                         m_eLastType;
         OAppBorderWindow&                   m_rBorderWin;
 
-        void ImplInitSettings( bool bBackground );
+        void ImplInitSettings();
 
         DECL_LINK_TYPED( OnContainerSelectHdl, SvtIconChoiceCtrl*, void );
         DECL_LINK_TYPED( ChangeToLastSelected, void*, void );
