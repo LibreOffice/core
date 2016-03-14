@@ -309,7 +309,6 @@ ScDocFuncSend::~ScDocFuncSend()
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
 {
     // Want to group these operations for the other side ...
-    OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
     ScChangeOpWriter aOp( "enterListAction" );
     aOp.appendInt( nNameResId ); // nasty but translate-able ...
     SendMessage( aOp );
