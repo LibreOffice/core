@@ -2321,149 +2321,115 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
     return aStates.getConstArray()[0];
 }
 
-uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
-    const uno::Sequence< OUString >& rPropertyNames)
-        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
+// allow to retarget the SfxItemSet working on, default correctly. Only
+// use pSourceSet below this point (except in header/footer processing)
+const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxStyleFamily eFamily, const OUString& rPropertyName)
+{
+    if(eFamily != SFX_STYLE_FAMILY_PAGE)
+        return &rSet;
+    const bool isFooter = rPropertyName.startsWith("Footer");
+    if(!isFooter && !rPropertyName.startsWith("Header") && rPropertyName != UNO_NAME_FIRST_IS_SHARED)
+        return &rSet;
+    const SvxSetItem* pSetItem;
+    if(!lcl_GetHeaderFooterItem(rSet, rPropertyName, isFooter, pSetItem))
+        return nullptr;
+    return &pSetItem->GetItemSet();
+}
+uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Sequence<OUString>& rPropertyNames)
+        throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
+    uno::Sequence<beans::PropertyState> aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
 
-    if(m_pBasePool)
+    if(!m_pBasePool)
+        throw uno::RuntimeException();
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+
+    SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
+    if(!pBase)
+        throw uno::RuntimeException();
+
+    const OUString* pNames = rPropertyNames.getConstArray();
+    rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
+
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+    const SfxItemSet& rSet = xStyle->GetItemSet();
+
+    for(sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
     {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily );
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "where is the style?" );
+        const OUString sPropName = pNames[i];
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
 
-        if(pBase)
+        if(!pEntry)
+            throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast<cppu::OWeakObject*>(this));
+
+        if(FN_UNO_NUM_RULES == pEntry->nWID || FN_UNO_FOLLOW_STYLE == pEntry->nWID)
         {
-            const OUString* pNames = rPropertyNames.getConstArray();
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
-
-            switch(m_rEntry.m_eFamily)
+            // handle NumRules first, done
+            pStates[i] = beans::PropertyState_DIRECT_VALUE;
+            continue;
+        }
+        const SfxItemSet* pSourceSet = lcl_GetItemsetForProperty(rSet, m_rEntry.m_eFamily, sPropName);
+        if(!pSourceSet)
+        {
+            // if no SetItem, value is ambigous and we are done
+            pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
+            continue;
+        }
+        switch(pEntry->nWID)
+        {
+            case OWN_ATTR_FILLBMP_MODE:
             {
-                case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
-                case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
-                case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE;   break;
-                case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE   ;break;
-                default: ;
-            }
-
-            const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-            const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-            const SfxItemSet& rSet = xStyle->GetItemSet();
-
-            for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
-            {
-                const OUString sPropName = pNames[i];
-                const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
-                bool bDone(false);
-
-                if(!pEntry)
+                //UUUU
+                if(SfxItemState::SET == pSourceSet->GetItemState(XATTR_FILLBMP_STRETCH, false)
+                    || SfxItemState::SET == pSourceSet->GetItemState(XATTR_FILLBMP_TILE, false))
                 {
-                    throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
-                }
-
-                if( FN_UNO_NUM_RULES == pEntry->nWID || FN_UNO_FOLLOW_STYLE == pEntry->nWID )
-                {
-                    // handle NumRules first, done
                     pStates[i] = beans::PropertyState_DIRECT_VALUE;
-                    bDone = true;
                 }
-
-                // allow to retarget the SfxItemSet working on, default correctly. Only
-                // use pSourceSet below this point (except in header/footer processing)
-                const SfxItemSet* pSourceSet = &rSet;
-
-                if(!bDone)
+                else
                 {
-                    // check for Header/Footer entry
-                    const bool bHeader(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && sPropName.startsWith("Header"));
-                    const bool bFooter(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && sPropName.startsWith("Footer"));
-
-                    if(bHeader || bFooter || sPropName == UNO_NAME_FIRST_IS_SHARED)
-                    {
-                        const SvxSetItem* pSetItem;
-
-                        if (lcl_GetHeaderFooterItem(rSet, sPropName, bFooter, pSetItem))
-                        {
-                            // retarget the SfxItemSet to the HeaderFooter SfxSetItem's SfxItenSet
-                            pSourceSet = &pSetItem->GetItemSet();
-                        }
-                        else
-                        {
-                            // if no SetItem, value is ambigous and we are done
-                            pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
-                            bDone = true;
-                        }
-                    }
+                    pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
                 }
-
-                if(!bDone && OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
-                {
-                    //UUUU
-                    if(SfxItemState::SET == pSourceSet->GetItemState(XATTR_FILLBMP_STRETCH, false)
-                        || SfxItemState::SET == pSourceSet->GetItemState(XATTR_FILLBMP_TILE, false))
-                    {
-                        pStates[i] = beans::PropertyState_DIRECT_VALUE;
-                    }
-                    else
-                    {
-                        pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
-                    }
-
-                    bDone = true;
-                }
-
+            }
+            break;
+            case RES_BACKGROUND:
+            {
                 //UUUU for FlyFrames we need to mark the used properties from type RES_BACKGROUND
                 // as beans::PropertyState_DIRECT_VALUE to let users of this property call
                 // getPropertyValue where the member properties will be mapped from the
                 // fill attributes to the according SvxBrushItem entries
-                if (!bDone && RES_BACKGROUND == pEntry->nWID)
+                if (SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*pSourceSet, pEntry->nMemberId))
                 {
-                    if (SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*pSourceSet, pEntry->nMemberId))
-                    {
-                        pStates[i] = beans::PropertyState_DIRECT_VALUE;
-                    }
-                    else
+                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                }
+                else
+                {
+                    pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                }
+            }
+            break;
+            default:
+            {
+                pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
+
+                if(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && SID_ATTR_PAGE_SIZE == pEntry->nWID && beans::PropertyState_DIRECT_VALUE == pStates[i])
+                {
+                    const SvxSizeItem& rSize = static_cast <const SvxSizeItem&>( rSet.Get(SID_ATTR_PAGE_SIZE));
+                    sal_uInt8 nMemberId = pEntry->nMemberId & 0x7f;
+
+                    if((LONG_MAX == rSize.GetSize().Width() && (MID_SIZE_WIDTH == nMemberId || MID_SIZE_SIZE == nMemberId)) ||
+                        (LONG_MAX == rSize.GetSize().Height() && MID_SIZE_HEIGHT == nMemberId))
                     {
                         pStates[i] = beans::PropertyState_DEFAULT_VALUE;
-                    }
-                    bDone = true;
-                }
-
-                if(!bDone)
-                {
-                    pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
-
-                    if(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && SID_ATTR_PAGE_SIZE == pEntry->nWID && beans::PropertyState_DIRECT_VALUE == pStates[i])
-                    {
-                        const SvxSizeItem& rSize = static_cast <const SvxSizeItem&>( rSet.Get(SID_ATTR_PAGE_SIZE));
-                        sal_uInt8 nMemberId = pEntry->nMemberId & 0x7f;
-
-                        if( ( LONG_MAX == rSize.GetSize().Width() &&
-                              (MID_SIZE_WIDTH == nMemberId ||
-                               MID_SIZE_SIZE == nMemberId ) ) ||
-                            ( LONG_MAX == rSize.GetSize().Height() &&
-                              MID_SIZE_HEIGHT == nMemberId ) )
-                        {
-                            pStates[i] = beans::PropertyState_DEFAULT_VALUE;
-                        }
                     }
                 }
             }
         }
-        else
-        {
-            throw uno::RuntimeException();
-        }
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
-
     return aRet;
 }
 
