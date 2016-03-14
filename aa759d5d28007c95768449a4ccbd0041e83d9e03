@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_3be70f14",
+        "filename": "include/sfx2/sidebar/SidebarController.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-14T13:48:09Z",
+      "side": 1,
+      "message": "It\u0027d be good to keep the overloaded methods of the same name in the header file together, so please move this upwards, to the other CreateDeck thing ...",
+      "revId": "aa759d5d28007c95768449a4ccbd0041e83d9e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
