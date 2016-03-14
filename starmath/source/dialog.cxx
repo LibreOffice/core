@@ -1289,8 +1289,6 @@ void SmShowSymbolSetWindow::calccols()
     Size aOutputSize = GetOutputSizePixel();
 
     nColumns = aOutputSize.Width() / nLen;
-    if (nColumns > 2  && nColumns % 2 != 0)
-        --nColumns;
     nRows = aOutputSize.Height() / nLen;
     nColumns = std::max<long>(1, nColumns);
     nRows = std::max<long>(1, nRows);
