@@ -29,6 +29,7 @@
 #include "opengl/framebuffer.hxx"
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
+#include "opengl/AccumulatedTextures.hxx"
 
 #include <memory>
 
@@ -99,6 +100,8 @@ protected:
     SalColor mProgramSolidColor;
     double mProgramSolidTransparency;
 
+    std::unique_ptr<AccumulatedTextures> mpAccumulatedTextures;
+
     void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
     void ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge = false );
@@ -144,6 +147,8 @@ public:
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
+    void DeferredTextDraw(const OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
+    void FlushDeferredDrawing(bool bInDraw = false);
 
 public:
     // get the width of the device

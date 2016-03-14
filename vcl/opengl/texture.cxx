@@ -369,6 +369,52 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
     }
 }
 
+template <>
+void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry, bool bInverted) const
+{
+    VCL_GL_INFO("Add coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
+
+    GLfloat x1 = 0.0f;
+    GLfloat x2 = 0.0f;
+    GLfloat y1 = 0.0f;
+    GLfloat y2 = 0.0f;
+
+    if (mpImpl)
+    {
+        x1 = (maRect.Left() + rPosAry.mnSrcX) / (double) mpImpl->mnWidth;
+        x2 = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) mpImpl->mnWidth;
+
+        if (bInverted)
+        {
+            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
+            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+        }
+        else
+        {
+            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
+            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+        }
+    }
+
+    aCoord.push_back(x1);
+    aCoord.push_back(y1);
+
+    aCoord.push_back(x2);
+    aCoord.push_back(y1);
+
+    aCoord.push_back(x1);
+    aCoord.push_back(y2);
+
+    aCoord.push_back(x1);
+    aCoord.push_back(y2);
+
+    aCoord.push_back(x2);
+    aCoord.push_back(y1);
+
+    aCoord.push_back(x2);
+    aCoord.push_back(y2);
+}
+
 void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 {
     if( GetWidth() != mpImpl->mnWidth || GetHeight() != mpImpl->mnHeight )

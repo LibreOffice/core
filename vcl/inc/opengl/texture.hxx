@@ -110,6 +110,7 @@ public:
     GLuint          Id() const;
     int             GetWidth() const;
     int             GetHeight() const;
+
     void            GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted=false ) const;
     void            GetWholeCoord( GLfloat* pCoord ) const;
 
@@ -128,6 +129,9 @@ public:
     OpenGLTexture&  operator=( const OpenGLTexture& rTexture );
     bool            operator==( const OpenGLTexture& rTexture ) const;
     bool            operator!=( const OpenGLTexture& rTexture ) const;
+
+    template<GLenum type>
+    void FillCoords(std::vector<GLfloat>& aCoordVector, const SalTwoRect& rPosAry, bool bInverted) const;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H
