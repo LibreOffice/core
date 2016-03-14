@@ -2317,9 +2317,8 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     {
         // create and reset the new array
         mpGlyphs2Chars = new int[ mnGlyphCapacity ];
-        static const int CHARPOS_NONE = -1;
         for( int i = 0; i < mnGlyphCount; ++i )
-            mpGlyphs2Chars[i] = CHARPOS_NONE;
+            mpGlyphs2Chars[i] = -1;
         // calculate the char->glyph mapping
         for( nItem = 0; nItem < mnItemCount; ++nItem )
         {
@@ -2362,7 +2361,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             // use a heuristic to fill the gaps in the glyphs2chars array
             c = !rVI.IsRTL() ? rVI.mnMinCharPos : rVI.mnEndCharPos - 1;
             for( int i = rVI.mnMinGlyphPos; i < rVI.mnEndGlyphPos; ++i ) {
-                if( mpGlyphs2Chars[i] == CHARPOS_NONE )
+                if( mpGlyphs2Chars[i] == -1 )
                     mpGlyphs2Chars[i] = c;
                 else
                     c = mpGlyphs2Chars[i];
@@ -2573,11 +2572,10 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
 
 void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 {
-    static const WCHAR cDroppedGlyph = DROPPED_OUTGLYPH;
     int i;
     // if there are no dropped glyphs don't bother
     for( i = 0; i < mnGlyphCount; ++i )
-        if( mpOutGlyphs[ i ] == cDroppedGlyph )
+        if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
             break;
     if( i >= mnGlyphCount )
         return;
@@ -2614,7 +2612,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         for( i = rVI.mnMinCharPos; i < rVI.mnEndCharPos; ++i )
         {
             int j = mpLogClusters[ i ] + rVI.mnMinGlyphPos;
-            if( mpOutGlyphs[ j ] == cDroppedGlyph )
+            if( mpOutGlyphs[ j ] == DROPPED_OUTGLYPH )
                 mpCharWidths[ i ] = 0;
         }
 
@@ -2622,7 +2620,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         int nMinGlyphPos, nEndGlyphPos, nOrigMinGlyphPos = rVI.mnMinGlyphPos;
         GetItemSubrange( rVI, nMinGlyphPos, nEndGlyphPos );
         i = nMinGlyphPos;
-        while( (i < nEndGlyphPos) && (mpOutGlyphs[i] == cDroppedGlyph) )
+        while( (i < nEndGlyphPos) && (mpOutGlyphs[i] == DROPPED_OUTGLYPH) )
         {
             rVI.mnMinGlyphPos = ++i;
         }
@@ -2641,18 +2639,18 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         {
             // drop any glyphs in the visual item outside the range
             for (i = nOrigMinGlyphPos; i < nMinGlyphPos; i++)
-                mpOutGlyphs[ i ] = cDroppedGlyph;
+                mpOutGlyphs[ i ] = DROPPED_OUTGLYPH;
             rVI.mnMinGlyphPos = i = nOrigMinGlyphPos;
         }
 
         // handle dropped glyphs in the middle of visual item
         for(; i < nEndGlyphPos; ++i )
-            if( mpOutGlyphs[ i ] == cDroppedGlyph )
+            if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
                 break;
         int j = i;
         while( ++i < nEndGlyphPos )
         {
-            if( mpOutGlyphs[ i ] == cDroppedGlyph )
+            if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
                 continue;
             mpOutGlyphs[ j ]      = mpOutGlyphs[ i ];
             mpGlyphOffsets[ j ]   = mpGlyphOffsets[ i ];
