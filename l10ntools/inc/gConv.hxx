@@ -19,11 +19,33 @@
 
 #ifndef GCON_HXX
 #define GCON_HXX
-#include "gLang.hxx"
-
 #include <iostream>
 #include <fstream>
 
+class convert_gen
+{
+public:
+    convert_gen(l10nMem&           cMemory,
+        const std::string& sSourceDir,
+        const std::string& sTargetDir,
+        const std::string& sSourceFile);
+    ~convert_gen();
+
+    // do extract/merge
+    bool execute(const bool bMerge, const bool bKid);
+
+    // ONLY po should implement these functions
+    void startSave(const std::string& sLanguage,
+        const std::string& sFile);
+    void save(const std::string& sFileName,
+        const std::string& sKey,
+        const std::string& sENUStext,
+        const std::string& sText,
+        bool               bFuzzy);
+    void endSave();
+    static bool checkAccess(std::string& sFile);
+    static bool createDir(std::string& sDir, std::string& sFile);
+};
 
 
 /*****************************************************************************

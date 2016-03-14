@@ -16,8 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "gLang.hxx"
 #include <iostream>
+#include <string>
+#include <vector>
+
+#include "gL10nMem.hxx"
+#include "gConv.hxx"
 
 
 
@@ -34,7 +38,6 @@ class handler
 
     private:
         bool mbForceSave;
-        bool mbSave;
         enum {DO_CONVERT, DO_EXTRACT, DO_MERGE_KID, DO_MERGE} meWorkMode;
         std::string              msTargetDir;
         std::string              msPoDir;
@@ -170,7 +173,7 @@ void handler::checkCommandLine(int argc, char *argv[])
 
 
     // Set default
-    mbForceSave = mbSave = false;
+    mbForceSave = false;
 
     // check for fixed parameter: genLang <cmd>
     if (argc < 2)
@@ -189,7 +192,7 @@ void handler::checkCommandLine(int argc, char *argv[])
         sWorkText = argv[i];
         if (sWorkText == "-d") {
             // show debug information
-            mcMemory.mbDebug = true;
+            mcMemory.setDebug(true);
         }
         else if (sWorkText == "-k") {
             // generate key identifier version
@@ -199,11 +202,11 @@ void handler::checkCommandLine(int argc, char *argv[])
         }
         else if (sWorkText == "-v") {
             // show progress information
-            mcMemory.mbVerbose = true;
+            mcMemory.setVerbose(true);
         }
         else if (sWorkText == "-s") {
             // forced save
-            mbSave = true;
+            mbForceSave = true;
         }
         else if (sWorkText == "--files") {
             // list of input files
@@ -323,7 +326,7 @@ void handler::loadL10MEM(bool onlyTemplates)
 
     // load texts from en-US po file (master)
     // tell system
-    mcMemory.showDebug("genLang loading master text from file " + sLoad);
+    l10nMem::showDebug("genLang loading master text from file " + sLoad);
 
     // and load file
     mcMemory.setLanguage("", true);
@@ -341,7 +344,7 @@ void handler::loadL10MEM(bool onlyTemplates)
         mcMemory.setLanguage(*siLang, true);
 
         // tell system
-        mcMemory.showDebug("genLang loading text from language file " + sLoad);
+        l10nMem::showDebug("genLang loading text from language file " + sLoad);
 
         convert_gen(mcMemory, sLoad, msTargetDir, "").execute(false, false);
     }
@@ -362,7 +365,7 @@ void handler::runConvert()
     for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
     {
         // tell system
-        mcMemory.showDebug("genLang compare template " + *siSource);
+        l10nMem::showDebug("genLang compare template " + *siSource);
 
         // get converter and extract files
         convert_gen convertObj(mcMemory, "./", msTargetDir, *siSource);
@@ -378,7 +381,7 @@ void handler::runConvert()
             mcMemory.setLanguage(*siLang, false);
 
             // tell system
-            mcMemory.showDebug("genLang convert text from file " +
+            l10nMem::showDebug("genLang convert text from file " +
                                sFilePath + *siSource + " language " + *siLang);
 
             // get converter and extract files
@@ -405,7 +408,7 @@ void handler::runExtract()
     for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
     {
         // tell system
-        mcMemory.showDebug("genLang extracting text from file " + *siSource);
+        l10nMem::showDebug("genLang extracting text from file " + *siSource);
 
         // get converter and extract file
         convert_gen convertObj(mcMemory, "", msTargetDir, *siSource);
@@ -429,7 +432,7 @@ void handler::runMerge(bool bKid)
     for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
     {
         // tell system
-        mcMemory.showDebug("genLang merging translated text to file " + *siSource);
+        l10nMem::showDebug("genLang merging translated text to file " + *siSource);
 
         // get converter and extract file
         convert_gen convertObj(mcMemory, "", msTargetDir, *siSource);

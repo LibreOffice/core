@@ -20,6 +20,10 @@
 
 /***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
 %top{
+#include <string>
+#include <vector>
+
+#include "gL10nMem.hxx"
 #include "gConvXcu.hxx"
 
 #define IMPLptr convert_gen_impl::mcImpl
