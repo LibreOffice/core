@@ -3752,27 +3752,6 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
 
     if (!BindFont(hDC))
         return false;
-#if 0
-    // Gather glyph positioning data.
-    std::vector<uint16_t> indices;
-    std::vector<float> advances;
-    std::vector<Point> offsets;
-    sal_GlyphId nLGlyph;
-    DeviceCoordinate nAdv;
-    while (rLayout.GetNextGlyphs(1, &nLGlyph, *pPos, *pGetNextGlypInfo, &nAdv) == 1)
-    {
-        indices.push_back(nLGlyph);
-        advances.push_back(nAdv);
-        offsets.push_back(Point(0,pPos->Y()));
-    }
-
-    // Find the bounds
-    DrawGlyphs(rLayout.DrawBase(), indices.data(), indices.data()+indices.size(), advances.data(), offsets.data());
-
-    ReleaseFont();
-
-    return false;
-#else
     Rectangle bounds;
     bool succeeded = GetDWriteInkBox(*mpFontFace, rLayout, mlfEmHeight, bounds);
     if (pRectToErase)
@@ -3834,7 +3813,6 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
         CreateRenderTarget();
 
     return (succeeded && nGlyphs >= 1 && pRectToErase);
-#endif
 }
 
 bool D2DWriteTextOutRenderer::BindFont(HDC hDC)
