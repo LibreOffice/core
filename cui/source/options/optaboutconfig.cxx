@@ -933,7 +933,7 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, ExpandingHdl_Impl, SvTreeListBox*,
         }
     }
 
-    return true;
+    return pEntry && pEntry->HasChildren();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
