@@ -904,11 +904,11 @@ static const FunctionData saFuncTable2013[] =
 /* FIXME: BIFF12 function identifiers available? Where to obtain? */
 static const FunctionData saFuncTable2016[] =
 {
-    { "FORECAST.ETS",             "FORECAST.ETS",             NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
-    { "FORECAST.ETS.CONFINT",     "FORECAST.ETS.CONFINT",     NOID,   NOID,   4,  7,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
-    { "FORECAST.ETS.SEASONALITY", "FORECAST.ETS.SEASONALITY", NOID,   NOID,   2,  4,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
-    { "FORECAST.ETS.STAT",        "FORECAST.ETS.STAT",        NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
-    { "FORECAST.LINEAR",          "FORECAST.LINEAR",          NOID,   NOID,   3,  3,  V, { VR, VA }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.FORECAST.ETS",             "FORECAST.ETS",             NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.FORECAST.ETS.CONFINT",     "FORECAST.ETS.CONFINT",     NOID,   NOID,   4,  7,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.FORECAST.ETS.SEASONALITY", "FORECAST.ETS.SEASONALITY", NOID,   NOID,   2,  4,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.FORECAST.ETS.STAT",        "FORECAST.ETS.STAT",        NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.FORECAST.LINEAR",          "FORECAST.LINEAR",          NOID,   NOID,   3,  3,  V, { VR, VA }, FUNCFLAG_MACROCALL_NEW }
 };
 
 
