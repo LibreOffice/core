@@ -33,6 +33,8 @@
 #include <rtl/ref.hxx>
 #include "scdllapi.h"
 
+#include <memory>
+
 #include <boost/noncopyable.hpp>
 
 class EditEngine;
@@ -111,7 +113,7 @@ public:
 class ScHeaderFooterTextData : private boost::noncopyable
 {
 private:
-    EditTextObject* mpTextObj;
+    std::unique_ptr<EditTextObject> mpTextObj;
     rtl::Reference<ScHeaderFooterContentObj> rContentObj;
     sal_uInt16                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
@@ -132,7 +134,7 @@ public:
     sal_uInt16                  GetPart() const         { return nPart; }
     rtl::Reference<ScHeaderFooterContentObj> GetContentObj() const { return rContentObj; }
 
-    const EditTextObject* GetTextObject() const { return mpTextObj; }
+    const EditTextObject* GetTextObject() const { return mpTextObj.get(); }
 
     void dispose() { rContentObj.clear(); }
 };

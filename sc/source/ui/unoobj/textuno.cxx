@@ -198,7 +198,6 @@ ScHeaderFooterTextData::~ScHeaderFooterTextData()
 
     delete pForwarder;
     delete pEditEngine;
-    delete mpTextObj;
 }
 
 SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
@@ -247,15 +246,13 @@ void ScHeaderFooterTextData::UpdateData()
 {
     if (pEditEngine)
     {
-        delete mpTextObj;
-        mpTextObj = pEditEngine->CreateTextObject();
+        mpTextObj.reset(pEditEngine->CreateTextObject());
     }
 }
 
 void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 {
-    delete mpTextObj;
-    mpTextObj = rEditEngine.CreateTextObject();
+    mpTextObj.reset(rEditEngine.CreateTextObject());
     bDataValid = false;
 }
 
