@@ -48,18 +48,16 @@
 #include <vector>
 #include <map>
 
-// Maps the Which() field to a pointer to a SfxPoolItem
-typedef std::map<sal_uInt16, std::unique_ptr<SfxPoolItem>> SfxItemPtrMap;
-
-
 using namespace com::sun::star;
 
 struct SfxShell_Impl: public SfxBroadcaster
 {
     OUString                    aObjectName;   // Name of Sbx-Objects
-    SfxItemPtrMap               m_Items;       // Data exchange on Item level
+    // Maps the Which() field to a pointer to a SfxPoolItem
+    std::map<sal_uInt16, std::unique_ptr<SfxPoolItem>>
+                                m_Items;       // Data exchange on Item level
     SfxViewShell*               pViewSh;       // SfxViewShell if Shell is
-                                            // ViewFrame/ViewShell/SubShell list
+                                               // ViewFrame/ViewShell/SubShell list
     SfxViewFrame*               pFrame;        // Frame, if  <UI-active>
     SfxRepeatTarget*            pRepeatTarget; // SbxObjectRef xParent;
     bool                        bActive;

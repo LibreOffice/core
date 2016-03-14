@@ -64,7 +64,6 @@ public:
     virtual void lcl_attribute( Id aName, Value& rVal ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
 };
-typedef std::shared_ptr<WrapHandler> WrapHandlerPtr;
 
 } }
 

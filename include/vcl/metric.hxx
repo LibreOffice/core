@@ -33,7 +33,6 @@ class CmapResult;
 typedef sal_uInt32 sal_UCS4;
 typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
 typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
-typedef boost::intrusive_ptr< ImplFontMetric > ImplFontMetricPtr;
 
 class VCL_DLLPUBLIC FontMetric : public vcl::Font
 {
@@ -73,7 +72,7 @@ public:
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 protected:
-    ImplFontMetricPtr   mpImplMetric;    // Implementation
+    boost::intrusive_ptr<ImplFontMetric> mpImplMetric;    // Implementation
 };
 
 template< typename charT, typename traits >

@@ -248,8 +248,6 @@ Reference < XStyle > XMLPropStyleContext::Create()
     return xNewStyle;
 }
 
-typedef ::std::set < OUString > PropertyNameSet;
-
 void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 {
     SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(&mxStyles);
@@ -391,7 +389,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 }
                 else
                 {
-                    PropertyNameSet aNameSet;
+                    std::set < OUString > aNameSet;
                     sal_Int32 nCount = xPrMap->GetEntryCount();
                     sal_Int32 i;
                     for( i = 0; i < nCount; i++ )
