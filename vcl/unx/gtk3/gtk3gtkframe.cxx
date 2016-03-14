@@ -2078,9 +2078,9 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
     if (bGrab)
-        gdk_device_grab(pPointer, widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE, bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, GDK_CURRENT_TIME);
+        gdk_device_grab(pPointer, widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE, bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, gtk_get_current_event_time());
     else
-        gdk_device_ungrab(pPointer, GDK_CURRENT_TIME);
+        gdk_device_ungrab(pPointer, gtk_get_current_event_time());
 }
 
 void GtkSalFrame::grabKeyboard( bool bGrab )
@@ -2098,11 +2098,11 @@ void GtkSalFrame::grabKeyboard( bool bGrab )
     if (bGrab)
     {
         gdk_device_grab(pKeyboard, widget_get_window(m_pWindow), GDK_OWNERSHIP_NONE,
-                        true, (GdkEventMask)(GDK_KEY_PRESS | GDK_KEY_RELEASE), nullptr, GDK_CURRENT_TIME);
+                        true, (GdkEventMask)(GDK_KEY_PRESS | GDK_KEY_RELEASE), nullptr, gtk_get_current_event_time());
     }
     else
     {
-        gdk_device_ungrab(pKeyboard, GDK_CURRENT_TIME);
+        gdk_device_ungrab(pKeyboard, gtk_get_current_event_time());
     }
 }
 
