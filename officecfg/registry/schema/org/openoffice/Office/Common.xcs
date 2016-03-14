@@ -2536,7 +2536,7 @@
             <desc>Contains the path to the users NSS certificate directory.</desc>
           </info>
         </prop>
-        <prop oor:name="TSAURLs" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="TSAURLs" oor:type="oor:string-list">
           <info>
             <desc>Contains the URLs or Time Stamping Authority servers.</desc>
           </info>

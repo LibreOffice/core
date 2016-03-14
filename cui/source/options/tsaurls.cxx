@@ -36,11 +36,14 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
 
     try
     {
-        css::uno::Sequence<OUString> aUserSetTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
-
-        for (auto i = aUserSetTSAURLs.begin(); i != aUserSetTSAURLs.end(); ++i)
+        boost::optional<css::uno::Sequence<OUString>> aUserSetTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+        if (aUserSetTSAURLs)
         {
-            AddTSAURL(*i);
+            const css::uno::Sequence<OUString>& rUserSetTSAURLs = aUserSetTSAURLs.get();
+            for (auto i = rUserSetTSAURLs.begin(); i != rUserSetTSAURLs.end(); ++i)
+            {
+                AddTSAURL(*i);
+            }
         }
     }
     catch (const uno::Exception &e)
