@@ -78,8 +78,6 @@ public:
 };
 
 typedef std::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
-typedef std::deque<StyleSheetEntryPtr> StyleSheetEntryDeque;
-typedef std::shared_ptr<StyleSheetEntryDeque> StyleSheetEntryDequePtr;
 
 class DomainMapper;
 class StyleSheetTable :

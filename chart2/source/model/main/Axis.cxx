@@ -309,10 +309,9 @@ struct StaticAxisInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 };
 
 typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
-typedef uno::Sequence< lcl_tSubGridType >     lcl_tSubGridSeq;
 
 void lcl_CloneSubGrids(
-    const lcl_tSubGridSeq & rSource, lcl_tSubGridSeq & rDestination )
+    const uno::Sequence< lcl_tSubGridType > & rSource, uno::Sequence< lcl_tSubGridType > & rDestination )
 {
     const lcl_tSubGridType * pBegin = rSource.getConstArray();
     const lcl_tSubGridType * pEnd = pBegin + rSource.getLength();

@@ -15,13 +15,11 @@
 #if VCL_FLOAT_DEVICE_PIXEL
 #include <basegfx/point/b2dpoint.hxx>
 typedef double DeviceCoordinate;
-typedef basegfx::B2DPoint DevicePoint;
 
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
 
 #include <basegfx/point/b2ipoint.hxx>
 typedef long DeviceCoordinate;
-typedef basegfx::B2IPoint DevicePoint;
 
 #endif /* ! Carpet Cushion */
 

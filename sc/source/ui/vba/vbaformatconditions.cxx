@@ -33,8 +33,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef std::vector< beans::PropertyValue > VecPropValues;
-
 static const char OPERATOR[] = "Operator";
 static const char FORMULA1[] = "Formula1";
 static const char FORMULA2[] = "Formula2";
@@ -168,7 +166,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
             sStyleName = xStyle->getName();
         }
 
-        VecPropValues aPropertyValueVector;
+        std::vector< beans::PropertyValue > aPropertyValueVector;
         sheet::ConditionOperator aType = ScVbaFormatCondition::retrieveAPIType(_nType, uno::Reference< sheet::XSheetCondition >() );
         uno::Any aValue;
 
