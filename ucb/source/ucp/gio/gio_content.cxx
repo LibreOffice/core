@@ -685,9 +685,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const beans::PropertyValue& rValue = pValues[ n ];
-#if OSL_DEBUG_LEVEL > 1
-        g_warning("Set prop '%s'", OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
-#endif
+        SAL_WARN("ucb.ucp.gio", "Set prop '" << rValue.Name << "'");
         if ( rValue.Name == "ContentType" ||
              rValue.Name == "MediaType" ||
              rValue.Name == "IsDocument" ||
@@ -723,9 +721,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             if (!newName || !oldName || strcmp(newName, oldName))
             {
-#if OSL_DEBUG_LEVEL > 1
-                g_warning ("Set new name to '%s'", newName);
-#endif
+                SAL_WARN("ucb.ucp.gio", "Set new name to '" << newName << "'");
 
                 aEvent.PropertyName = "Title";
                 if (oldName)
@@ -910,10 +906,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
             // Note: rOpenCommand.Sink may contain an XStream
             //       implementation. Support for this type of
             //       sink is optional...
-#ifdef DEBUG
-            g_warning ("Failed to load data from '%s'",
-                OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
-#endif
+            SAL_WARN("ucb.ucp.gio", "Failed to load data from '" << m_xIdentifier->getContentIdentifier() << "'");
 
             ucbhelper::cancelCommandExecution(
                 uno::makeAny (ucb::UnsupportedDataSinkException
@@ -923,7 +916,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         }
     }
     else
-        g_warning ("Open falling through ...");
+        SAL_INFO("ucb.ucp.gio", "Open falling through ...");
     return aRet;
 }
 
@@ -1049,9 +1042,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
          g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
          g_file_info_get_file_type(pInfo) == G_FILE_TYPE_DIRECTORY )
     {
-#if OSL_DEBUG_LEVEL > 1
-        g_warning ("Make directory");
-#endif
+        SAL_INFO("ucb.ucp.gio", "Make directory");
         if( !g_file_make_directory( getGFile(), nullptr, &pError))
             ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
         return;
@@ -1171,17 +1162,11 @@ uno::Reference< ucb::XContent >
         create_document = false;
     else
     {
-#ifdef DEBUG
-        g_warning( "Failed to create new content '%s'", OUStringToOString(Info.Type,
-            RTL_TEXTENCODING_UTF8).getStr() );
-#endif
+        SAL_WARN("ucb.ucp.gio", "Failed to create new content '" << Info.Type << "'");
         return uno::Reference< ucb::XContent >();
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    g_warning( "createNewContent (%d)", (int) create_document );
-#endif
-
+    SAL_INFO("ucb.ucp.gio", "createNewContent (" << create_document << ")");
     OUString aURL = m_xIdentifier->getContentIdentifier();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
