@@ -41,8 +41,8 @@
 #include "gL10nMem.hxx"
 #include "gConvPo.hxx"
 
-#define IMPLptr convert_gen_impl::mcImpl
-#define LOCptr ((convert_po *)convert_gen_impl::mcImpl)
+#define IMPLptr convert_gen::mcImpl
+#define LOCptr ((convert_po *)convert_gen::mcImpl)
 
 /* enlarge token buffer to tokenize whole std::strings */
 #undef  YYLMAX

@@ -45,31 +45,25 @@
 #endif
 
 
-
-/*****************************************************************************
- ****************************   G C O N . C X X   ****************************
- *****************************************************************************
- * This is the generic conversion module, it handles all generic work of the
- * conversion, and offer utility functions to the specific conversion classes
- *****************************************************************************/
-
-
-
-/*******************   G L O B A L   D E F I N I T I O N   *******************/
-convert_gen_impl * convert_gen_impl::mcImpl = nullptr;
-
+convert_gen * convert_gen::mcImpl = NULL;
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-convert_gen::convert_gen(l10nMem&           cMemory,
+convert_gen::convert_gen(l10nMem&           cMemory)
+    : mcMemory(cMemory)
+{
+    mcImpl = this;
+}
+convert_gen::~convert_gen()
+{
+}
+
+
+convert_gen& convert_gen::createInstance(l10nMem&           cMemory,
                          const std::string& sSourceDir,
                          const std::string& sTargetDir,
                          const std::string& sSourceFile)
 {
-  // do we have an old object
-  if (convert_gen_impl::mcImpl)
-    delete convert_gen_impl::mcImpl;
-
   // did the user give a .xxx with the source file ?
   int nInx = sSourceFile.rfind(".");
   if (nInx == (int)std::string::npos)
@@ -77,30 +71,24 @@ convert_gen::convert_gen(l10nMem&           cMemory,
 
   // find correct conversion class and create correct object
   std::string sExtension = sSourceFile.substr(nInx+1);
-  if      (sExtension == "hrc")        convert_gen_impl::mcImpl = new convert_src(cMemory);
-  else if (sExtension == "src")        convert_gen_impl::mcImpl = new convert_src(cMemory);
-  else if (sExtension == "po")         convert_gen_impl::mcImpl = new convert_po(cMemory);
-  else if (sExtension == "pot")        convert_gen_impl::mcImpl = new convert_po(cMemory);
-  else if (sExtension == "tree")       convert_gen_impl::mcImpl = new convert_tree(cMemory);
-  else if (sExtension == "ulf")        convert_gen_impl::mcImpl = new convert_ulf(cMemory);
-  else if (sExtension == "xcu")        convert_gen_impl::mcImpl = new convert_xcu(cMemory);
-  else if (sExtension == "xhp")        convert_gen_impl::mcImpl = new convert_xhp(cMemory);
-  else if (sExtension == "xrm")        convert_gen_impl::mcImpl = new convert_xrm(cMemory);
-  else if (sExtension == "properties") convert_gen_impl::mcImpl = new convert_prop(cMemory);
+  convert_gen *x;
+  if      (sExtension == "hrc")        x = new convert_src(cMemory);
+  else if (sExtension == "src")        x = new convert_src(cMemory);
+  else if (sExtension == "po")         x = new convert_po(cMemory);
+  else if (sExtension == "pot")        x = new convert_po(cMemory);
+  else if (sExtension == "tree")       x = new convert_tree(cMemory);
+  else if (sExtension == "ulf")        x = new convert_ulf(cMemory);
+  else if (sExtension == "xcu")        x = new convert_xcu(cMemory);
+  else if (sExtension == "xhp")        x = new convert_xhp(cMemory);
+  else if (sExtension == "xrm")        x = new convert_xrm(cMemory);
+  else if (sExtension == "properties") x = new convert_prop(cMemory);
   else throw l10nMem::showError("unknown extension on source file: "+sSourceFile);
 
   // and set environment
-  convert_gen_impl::mcImpl->msSourceFile = sSourceFile;
-  convert_gen_impl::mcImpl->msTargetPath = sTargetDir;
-  convert_gen_impl::mcImpl->msSourcePath = sSourceDir + sSourceFile;
-}
-
-
-
-/**********************   I M P L E M E N T A T I O N   **********************/
-convert_gen::~convert_gen()
-{
-  delete convert_gen_impl::mcImpl;
+  x->msSourceFile = sSourceFile;
+  x->msTargetPath = sTargetDir;
+  x->msSourcePath = sSourceDir + sSourceFile;
+  return *x;
 }
 
 
@@ -108,17 +96,17 @@ convert_gen::~convert_gen()
 /**********************   I M P L E M E N T A T I O N   **********************/
 bool convert_gen::execute(const bool bMerge, const bool bKid)
 {
-  convert_gen_impl::mcImpl->mbMergeMode  = bMerge;
+  mbMergeMode  = bMerge;
 
   if (bKid)
       throw l10nMem::showError("not implemented");
 
   // and load file
-  if (!convert_gen_impl::mcImpl->prepareFile())
+  if (!prepareFile())
     return false;
 
   // and execute conversion
-  convert_gen_impl::mcImpl->execute();
+  execute();
 
   return true;
 }
@@ -129,11 +117,6 @@ bool convert_gen::execute(const bool bMerge, const bool bKid)
 void convert_gen::startSave(const std::string& sLanguage,
                             const std::string& sFile)
 {
-  convert_gen_impl::mcImpl->startSave(sLanguage, sFile);
-}
-void convert_gen_impl::startSave(const std::string& sLanguage,
-                                 const std::string& sFile)
-{
   std::string x;
 
   x = sLanguage;
@@ -143,20 +126,11 @@ void convert_gen_impl::startSave(const std::string& sLanguage,
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_gen::save(const std::string& sFileName,
                        const std::string& sKey,
                        const std::string& sENUStext,
                        const std::string& sText,
                        bool               bFuzzy)
-{
-  convert_gen_impl::mcImpl->save(sFileName, sKey, sENUStext, sText, bFuzzy);
-}
-void convert_gen_impl::save(const std::string& sFileName,
-                            const std::string& sKey,
-                            const std::string& sENUStext,
-                            const std::string& sText,
-                            bool               bFuzzy)
 {
   std::string x;
 
@@ -167,12 +141,7 @@ void convert_gen_impl::save(const std::string& sFileName,
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_gen::endSave()
-{
-  convert_gen_impl::mcImpl->endSave();
-}
-void convert_gen_impl::endSave()
 {
   throw l10nMem::showError("endSave called with non .po file");
 }
@@ -216,26 +185,7 @@ bool convert_gen::createDir(std::string& sDir, std::string& sFile)
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-convert_gen_impl::convert_gen_impl(l10nMem& crMemory)
-                                  : mbMergeMode(false),
-                                    mbLoadMode(false),
-                                    mcMemory(crMemory),
-                                    miLineNo(1)
-{
-}
-
-
-
-/**********************   I M P L E M E N T A T I O N   **********************/
-convert_gen_impl::~convert_gen_impl()
-{
-  mcImpl = nullptr;
-}
-
-
-
-/**********************   I M P L E M E N T A T I O N   **********************/
-bool convert_gen_impl::prepareFile()
+bool convert_gen::prepareFile()
 {
   std::ifstream inputFile(msSourcePath.c_str(), std::ios::binary);
 
@@ -290,7 +240,7 @@ bool convert_gen_impl::prepareFile()
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-void convert_gen_impl::lexRead(char *sBuf, int *nResult, int nMax_size)
+void convert_gen::lexRead(char *sBuf, int *nResult, int nMax_size)
 {
   // did we hit eof
   if (miSourceReadIndex == -1)
@@ -320,7 +270,7 @@ void convert_gen_impl::lexRead(char *sBuf, int *nResult, int nMax_size)
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-void convert_gen_impl::writeSourceFile(const std::string& line)
+void convert_gen::writeSourceFile(const std::string& line)
 {
   if (!line.size())
     return;
@@ -332,7 +282,7 @@ void convert_gen_impl::writeSourceFile(const std::string& line)
 
 
 /**********************   I M P L E M E N T A T I O N   **********************/
-std::string& convert_gen_impl::copySource(char const *yyText, bool bDoClear)
+std::string& convert_gen::copySource(char const *yyText, bool bDoClear)
 {
   int nL;
 

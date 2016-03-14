@@ -330,7 +330,7 @@ void handler::loadL10MEM(bool onlyTemplates)
 
     // and load file
     mcMemory.setLanguage("", true);
-    convert_gen (mcMemory, sLoad, msTargetDir, "").execute(false, false);
+    convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false, false);
 
     if (onlyTemplates)
       return;
@@ -346,7 +346,7 @@ void handler::loadL10MEM(bool onlyTemplates)
         // tell system
         l10nMem::showDebug("genLang loading text from language file " + sLoad);
 
-        convert_gen(mcMemory, sLoad, msTargetDir, "").execute(false, false);
+        convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false, false);
     }
 }
 
@@ -368,7 +368,7 @@ void handler::runConvert()
         l10nMem::showDebug("genLang compare template " + *siSource);
 
         // get converter and extract files
-        convert_gen convertObj(mcMemory, "./", msTargetDir, *siSource);
+        convert_gen& convertObj = convert_gen::createInstance(mcMemory, "./", msTargetDir, *siSource);
         convertObj.execute(false, false);
 
         mcMemory.showNOconvert();
@@ -385,7 +385,7 @@ void handler::runConvert()
                                sFilePath + *siSource + " language " + *siLang);
 
             // get converter and extract files
-            //convert_gen convertObj(mcMemory, sFilePath, msTargetDir, *siSource);
+            convert_gen& convertObj = convert_gen::createInstance(mcMemory, sFilePath, msTargetDir, *siSource);
             convertObj.execute(true, false);
         }
     }
@@ -411,7 +411,7 @@ void handler::runExtract()
         l10nMem::showDebug("genLang extracting text from file " + *siSource);
 
         // get converter and extract file
-        convert_gen convertObj(mcMemory, "", msTargetDir, *siSource);
+        convert_gen& convertObj = convert_gen::createInstance(mcMemory, "", msTargetDir, *siSource);
         convertObj.execute(false, false);
     }
 
@@ -435,7 +435,7 @@ void handler::runMerge(bool bKid)
         l10nMem::showDebug("genLang merging translated text to file " + *siSource);
 
         // get converter and extract file
-        convert_gen convertObj(mcMemory, "", msTargetDir, *siSource);
+        convert_gen& convertObj = convert_gen::createInstance(mcMemory, "", msTargetDir, *siSource);
         convertObj.execute(true, bKid);
     }
 }

@@ -25,65 +25,40 @@
 class convert_gen
 {
 public:
-    convert_gen(l10nMem&           cMemory,
+    static convert_gen *mcImpl;
+
+    convert_gen(l10nMem&           cMemory);
+    virtual ~convert_gen();
+
+    // Create instance
+    static convert_gen& createInstance(l10nMem&           cMemory,
         const std::string& sSourceDir,
         const std::string& sTargetDir,
         const std::string& sSourceFile);
-    ~convert_gen();
 
     // do extract/merge
     bool execute(const bool bMerge, const bool bKid);
-
-    // ONLY po should implement these functions
-    void startSave(const std::string& sLanguage,
-        const std::string& sFile);
-    void save(const std::string& sFileName,
-        const std::string& sKey,
-        const std::string& sENUStext,
-        const std::string& sText,
-        bool               bFuzzy);
-    void endSave();
-    static bool checkAccess(std::string& sFile);
-    static bool createDir(std::string& sDir, std::string& sFile);
-};
-
-
-/*****************************************************************************
- ****************************   G C O N . H X X   ****************************
- *****************************************************************************
- * This is the class definition header for all converter classes,
- * all classes and their interrelations is defined here
- *****************************************************************************/
-
-
-
-/*******************   G L O B A L   D E F I N I T I O N   *******************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
-class convert_gen_impl
-{
-  public:
-    static convert_gen_impl *mcImpl;
-
-
-    convert_gen_impl(l10nMem& crMemory);
-    virtual ~convert_gen_impl();
 
     // all converters MUST implement this function
     virtual void execute() = 0;
 
     // ONLY po should implement these functions
     virtual void startSave(const std::string& sLanguage,
-                           const std::string& sFile);
+        const std::string& sFile);
     virtual void save(const std::string& sFileName,
-                      const std::string& sKey,
-                      const std::string& sENUStext,
-                      const std::string& sText,
-                      bool               bFuzzy);
+        const std::string& sKey,
+        const std::string& sENUStext,
+        const std::string& sText,
+        bool               bFuzzy);
     virtual void endSave();
+    static bool checkAccess(std::string& sFile);
+    static bool createDir(std::string& sDir, std::string& sFile);
 
+    // utility functions for converters
+    void lexRead(char *sBuf, int *nResult, int nMax_size);
+    std::string& copySource(char const *yyText, bool bDoClear = true);
+
+protected:
     // generic variables
     bool         mbMergeMode;
     bool         mbLoadMode;
@@ -93,22 +68,14 @@ class convert_gen_impl
     l10nMem&     mcMemory;
     std::string  msCollector;
     int          miLineNo;
-
-
-    // utility functions for converters
-    void         lexRead        (char *sBuf, int *nResult, int nMax_size);
-    void         writeSourceFile(const std::string& line);
-    std::string& copySource     (char const *yyText, bool bDoClear = true);
-
-  protected:
     std::string  msSourceBuffer, msCopyText;
     int          miSourceReadIndex;
 
     bool prepareFile();
 
-  private:
+    // utility functions for converters
+    void         writeSourceFile(const std::string& line);
+private:
     std::ofstream mcOutputFile;
-
-    friend class convert_gen;
 };
 #endif

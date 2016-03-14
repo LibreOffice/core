@@ -26,8 +26,8 @@
 #include "gL10nMem.hxx"
 #include "gConvXhp.hxx"
 
-#define IMPLptr convert_gen_impl::mcImpl
-#define LOCptr ((convert_xhp *)convert_gen_impl::mcImpl)
+#define IMPLptr convert_gen::mcImpl
+#define LOCptr ((convert_xhp *)convert_gen::mcImpl)
 
 /* enlarge token buffer to tokenize whole std::strings */
 #undef  YYLMAX

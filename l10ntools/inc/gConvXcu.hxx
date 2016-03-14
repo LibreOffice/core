@@ -33,7 +33,7 @@
 
 /********************   C L A S S   D E F I N I T I O N   ********************/
 class xcu_stack_entry;
-class convert_xcu : public convert_gen_impl
+class convert_xcu : public convert_gen
 {
   public:
     bool mbNoCollectingData;

@@ -31,7 +31,7 @@
 
 
 /********************   C L A S S   D E F I N I T I O N   ********************/
-class convert_src : public convert_gen_impl
+class convert_src : public convert_gen
 {
   public:
     bool mbExpectValue;

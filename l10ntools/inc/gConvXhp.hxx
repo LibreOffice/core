@@ -32,7 +32,7 @@
 
 
 /********************   C L A S S   D E F I N I T I O N   ********************/
-class convert_xhp : public convert_gen_impl
+class convert_xhp : public convert_gen
 {
   public:
     convert_xhp(l10nMem& crMemory);

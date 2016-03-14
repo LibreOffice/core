@@ -32,7 +32,7 @@
 
 
 /********************   C L A S S   D E F I N I T I O N   ********************/
-class convert_tree : public convert_gen_impl
+class convert_tree : public convert_gen
 {
   public:
     typedef enum

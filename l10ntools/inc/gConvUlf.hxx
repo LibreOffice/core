@@ -32,7 +32,7 @@
 
 
 /********************   C L A S S   D E F I N I T I O N   ********************/
-class convert_ulf : public convert_gen_impl
+class convert_ulf : public convert_gen
 {
   public:
     convert_ulf(l10nMem& crMemory);

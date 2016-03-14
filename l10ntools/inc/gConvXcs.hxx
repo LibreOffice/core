@@ -32,7 +32,7 @@
 
 
 /********************   C L A S S   D E F I N I T I O N   ********************/
-class convert_xcs : public convert_gen_impl
+class convert_xcs : public convert_gen
 {
   public:
     convert_xcs(l10nMem& crMemory);

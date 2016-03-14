@@ -37,7 +37,7 @@
 
 /************   I N T E R F A C E   I M P L E M E N T A T I O N   ************/
 convert_po::convert_po(l10nMem& crMemory)
-                      : convert_gen_impl(crMemory),
+                      : convert_gen(crMemory),
                         mbExpectId(false),
                         mbExpectStr(false),
                         mbFuzzy(false)

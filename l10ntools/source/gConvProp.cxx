@@ -24,16 +24,7 @@
 
 
 
-/*****************************************************************************
- ************************   G C O N P R O P . C X X   ************************
- *****************************************************************************
- * This is the conversion for .properties files
- *****************************************************************************/
-
-
-
-/**********************   I M P L E M E N T A T I O N   **********************/
-convert_prop::convert_prop(l10nMem& crMemory) : convert_gen_impl(crMemory)
+convert_prop::convert_prop(l10nMem& crMemory) : convert_gen(crMemory)
 {
 //  throw l10nMem::showError(std::string("convert_prop not implemented"));
 }
