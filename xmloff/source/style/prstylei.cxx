@@ -306,7 +306,17 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                     pProps->Name = "ParaStyleName";
                     OUString sParent( GetParentName() );
                     if( !sParent.isEmpty() )
+                    {
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
+                        Reference < XNameContainer > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
+                        if(xFamilies.is() && xFamilies->hasByName( sParent ) )
+                        {
+                            css::uno::Reference< css::style::XStyle > xStyle;
+                            Any aAny = xFamilies->getByName( sParent );
+                            aAny >>= xStyle;
+                            sParent = xStyle->getName() ;
+                        }
+                    }
                     else
                         sParent = "Standard";
                     pProps->Value <<= sParent;
