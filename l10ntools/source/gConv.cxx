@@ -302,12 +302,13 @@ void convert_gen_impl::lexRead(char *sBuf, int *nResult, int nMax_size)
   // space enough for the whole line ?
   if (*nResult <= nMax_size)
   {
-    msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
+//    msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
+      l10nMem::showDebug(sBuf);
     miSourceReadIndex = -1;
   }
   else
   {
-    msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
+//    msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
     *nResult           = nMax_size;
     miSourceReadIndex += nMax_size;
   }

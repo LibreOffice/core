@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GLANG_HXX
 #define GLANG_HXX
 #include <string>
@@ -24,107 +23,113 @@
 
 
 
-/*****************************************************************************
- ***************************   G L A N G . H X X   ***************************
- *****************************************************************************
- * This is the class definition header of the l10n localizer program,
- * all global classes and their interrelations is defined here
- *****************************************************************************/
-
-
-
-/*******************   G L O B A L   D E F I N I T I O N   *******************/
-
-
-
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
-class l10nMem_impl;
+class l10nMem_db;
 class l10nMem
 {
-  public:
-    l10nMem();
-    ~l10nMem();
+    public:
+        l10nMem();
+        ~l10nMem();
 
-    typedef enum
-    {
-      ENTRY_DELETED,
-      ENTRY_ADDED,
-      ENTRY_CHANGED,
-      ENTRY_NORMAL
-    } ENTRY_STATE;
+        static int  showError(const std::string& sText, int iLineNo = 0);
+        static void showWarning(const std::string& sText, int iLineNo = 0);
+        static void showDebug(const std::string& sText, int iLineNo = 0);
+        static void showVerbose(const std::string& sText, int iLineNo = 0);
+        static bool isError();
 
-    static void setShowVerbose ();
-    static void setShowDebug   ();
+        void setModuleName (const std::string& sModuleName);
+        const std::string& getModuleName (void);
+        void setLanguage   (const std::string& sLanguage,
+                            bool               bCreate);
+        void setConvert    (bool               bConvert,
+                            bool               bStrict);
+        void loadEntryKey  (int                iLineNo,
+                            const std::string& sSourceFile,
+                            const std::string& sKey,
+                            const std::string& sOrgText,
+                            const std::string& sText,
+                            bool               bIsFuzzy);
 
-    static int  showError   (const std::string& sText, int iLineNo = 0);
-    static int  showWarning (const std::string& sText, int iLineNo = 0);
-    static void showDebug   (const std::string& sText, int iLineNo = 0);
-    static void showVerbose (const std::string& sText, int iLineNo = 0);
-    bool        isError            ();
+        void setSourceKey  (int                iLineNo,
+                            const std::string& sFilename,
+                            const std::string& sKey,
+                            const std::string& sText,
+                            bool               bMustExist);
 
-    void setModuleName (const std::string& sModuleName);
-    const std::string& getModuleName (void);
-    void setLanguage   (const std::string& sLanguage,
-                        bool               bCreate);
-    void setConvert    (bool               bConvert,
-                        bool               bStrict);
-    void loadEntryKey  (int                iLineNo,
-                        const std::string& sSourceFile,
-                        const std::string& sKey,
-                        const std::string& sOrgText,
-                        const std::string& sText,
-                        bool               bIsFuzzy);
+        void saveTemplates (const std::string& sTargetDir,
+                            bool               bKid,
+                            bool               bForce);
+        void saveLanguages(l10nMem&           cMem,
+                           const std::string& sTargetDir,
+                           bool               bForce);
+        void dumpMem       (const std::string& sTargetDir);
 
-    void setSourceKey  (int                iLineNo,
-                        const std::string& sFilename,
-                        const std::string& sKey,
-                        const std::string& sText,
-                        bool               bMustExist);
+        int  prepareMerge  ();
+        bool getMergeLang  (std::string& sLang,
+                            std::string& sText);
+        void showNOconvert ();
 
-    void saveTemplates (const std::string& sTargetDir,
-                        bool               bKid,
-                        bool               bForce);
-    void saveLanguages (const std::string& sTargetDir,
-                        bool               bForce);
-    void dumpMem       (const std::string& sTargetDir);
+        void convertToInetString(std::string& sText);
+        void convertFromInetString(std::string& sText);
 
-    int  prepareMerge  ();
-    bool getMergeLang  (std::string& sLang,
-                        std::string& sText);
-    void showNOconvert ();
+    private:
+        l10nMem_db *mcDb;
+        bool        mbVerbose;
+        bool        mbDebug;
+        bool        mbInError;
+        typedef enum
+        {
+            ENTRY_DELETED,
+            ENTRY_ADDED,
+            ENTRY_CHANGED,
+            ENTRY_NORMAL
+        } ENTRY_STATE;
+        std::string msModuleName;
 
-    void convertToInetString(std::string& sText);
-    void convertFromInetString(std::string& sText);
+        void formatAndShowText(const std::string& sType, int iLineNo, const std::string& sText);
+        bool needWrite(const std::string sFileName, bool bForce);
+        bool convFilterWarning(const std::string& sSourceFile,
+                               const std::string& sKey,
+                               const std::string& sMsgId);
+        void convEntryKey(int                iLineNo,
+                          const std::string& sSourceFile,
+                          const std::string& sKey,
+                          const std::string& sMsgId,
+                          const std::string& sMsgStr,
+                          bool               bIsFuzzy);
+        void saveTemplates(l10nMem&           cMem,
+                           const std::string& sTargetDir,
+                           bool               bKid,
+                           bool               bForce);
+
+        friend class handler;
+        friend class l10nMem_enus_entry;
+        friend class l10nMem_db;
 };
 
 
 
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_gen
 {
-  public:
-    convert_gen(l10nMem&           cMemory,
-                const std::string& sSourceDir,
-                const std::string& sTargetDir,
-                const std::string& sSourceFile);
-    ~convert_gen();
+    public:
+        convert_gen(l10nMem&           cMemory,
+                    const std::string& sSourceDir,
+                    const std::string& sTargetDir,
+                    const std::string& sSourceFile);
+        ~convert_gen();
 
-    // do extract/merge
-    bool execute(const bool bMerge, const bool bKid);
+        // do extract/merge
+        bool execute(const bool bMerge, const bool bKid);
 
-    // ONLY po should implement these functions
-    void startSave(const std::string& sLanguage,
-                   const std::string& sFile);
-    void save(const std::string& sFileName,
-              const std::string& sKey,
-              const std::string& sENUStext,
-              const std::string& sText,
-              bool               bFuzzy);
-    void endSave();
-    static bool checkAccess(std::string& sFile);
-    static bool createDir(std::string& sDir, std::string& sFile);
+        // ONLY po should implement these functions
+        void startSave(const std::string& sLanguage,
+                       const std::string& sFile);
+        void save(const std::string& sFileName,
+                  const std::string& sKey,
+                  const std::string& sENUStext,
+                  const std::string& sText,
+                  bool               bFuzzy);
+        void endSave();
+        static bool checkAccess(std::string& sFile);
+        static bool createDir(std::string& sDir, std::string& sFile);
 };
 #endif

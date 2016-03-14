@@ -23,16 +23,6 @@
 
 
 
-/*****************************************************************************
- ************************   G L 1 0 N M E M . H X X   ************************
- *****************************************************************************
- * This is the class definition header of the l10n localizer program,
- * all global classes and their interrelations is defined here
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class l10nMem_lang_entry
 {
   public:
@@ -45,7 +35,6 @@ class l10nMem_lang_entry
 
 
 
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class l10nMem_enus_entry
 {
   public:
@@ -67,7 +56,6 @@ class l10nMem_enus_entry
 
 
 
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class l10nMem_file_entry
 {
   public:
@@ -82,7 +70,6 @@ class l10nMem_file_entry
 
 
 
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class l10nMem_lang_list_entry
 {
   public:
@@ -95,7 +82,6 @@ class l10nMem_lang_list_entry
 
 
 
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class l10nMem_db
 {
   public:
@@ -148,70 +134,5 @@ class l10nMem_db
     bool getLangList    (std::string& sLang);
 
 static void keyToUpper(std::string& sKey);
-};
-
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
-class l10nMem_impl
-{
-  public:
-    l10nMem_impl();
-    ~l10nMem_impl();
-
-    int  showError     (const std::string& sText, int iLineNo);
-    int  showWarning   (const std::string& sText, int iLineNo);
-    void showDebug     (const std::string& sText, int iLineNo);
-    void showVerbose   (const std::string& sText, int iLineNo);
-
-    void setModuleName (const std::string& sModuleName);
-    const std::string& getModuleName (void);
-    void loadEntryKey  (int                iLineNo,
-                        const std::string& sSourceFile,
-                        const std::string& sKey,
-                        const std::string& sMsgId,
-                        const std::string& sMsgStr,
-                        bool               bIsFuzzy);
-    void setSourceKey  (int                iLineNo,
-                        const std::string& sFilename,
-                        const std::string& sKey,
-                        const std::string& sMsgId,
-                        bool               bMustExist);
-
-    void saveTemplates (l10nMem& cMem,
-                        const std::string& sTargetDir,
-                        bool               bKid,
-                        bool               bForce);
-    void saveLanguages (l10nMem& cMem,
-                        const std::string& sTargetDir,
-                        bool               bForce);
-    void dumpMem      (const std::string& sTargetDir);
-    void showNOconvert();
-
-    void convertToInetString(std::string& sText);
-    void convertFromInetString(std::string& sText);
-
-  private:
-    static bool                         mbVerbose;
-    static bool                         mbDebug;
-    static l10nMem_impl                *mcImpl;
-    l10nMem_db                          mcDb;
-    std::string                         msModuleName;
-    bool                                mbInError;
-
-    void formatAndShowText(const std::string& sType, int iLineNo, const std::string& sText);
-    bool needWrite        (const std::string sFileName, bool bForce);
-    bool convFilterWarning(const std::string& sSourceFile,
-                           const std::string& sKey,
-                           const std::string& sMsgId);
-    void convEntryKey     (int                iLineNo,
-                           const std::string& sSourceFile,
-                           const std::string& sKey,
-                           const std::string& sMsgId,
-                           const std::string& sMsgStr,
-                           bool               bIsFuzzy);
-
-    friend class l10nMem;
 };
 #endif

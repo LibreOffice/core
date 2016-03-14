@@ -23,16 +23,6 @@
 #include <sstream>
 
 
-/*****************************************************************************
- **********************   G L 1 0 N M E M D B . C X X   **********************
- *****************************************************************************
- * This is the translation memory that links between the converts (from source
- * files) and to the language files. The memory contains the actual text info
- ***********************d******************************************************/
-
-
-
-/*******************   G L O B A L   D E F I N I T I O N   *******************/
 
 
 

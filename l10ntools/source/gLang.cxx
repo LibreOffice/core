@@ -34,8 +34,6 @@ class handler
 
     private:
         bool mbForceSave;
-        bool mbDebug;
-        bool mbVerbose;
         bool mbSave;
         enum {DO_CONVERT, DO_EXTRACT, DO_MERGE_KID, DO_MERGE} meWorkMode;
         std::string              msTargetDir;
@@ -172,7 +170,7 @@ void handler::checkCommandLine(int argc, char *argv[])
 
 
     // Set default
-    mbForceSave = mbDebug = mbVerbose = mbSave = false;
+    mbForceSave = mbSave = false;
 
     // check for fixed parameter: genLang <cmd>
     if (argc < 2)
@@ -191,7 +189,7 @@ void handler::checkCommandLine(int argc, char *argv[])
         sWorkText = argv[i];
         if (sWorkText == "-d") {
             // show debug information
-            mbDebug = true;
+            mcMemory.mbDebug = true;
         }
         else if (sWorkText == "-k") {
             // generate key identifier version
@@ -201,7 +199,7 @@ void handler::checkCommandLine(int argc, char *argv[])
         }
         else if (sWorkText == "-v") {
             // show progress information
-            mbVerbose = true;
+            mcMemory.mbVerbose = true;
         }
         else if (sWorkText == "-s") {
             // forced save
@@ -325,7 +323,7 @@ void handler::loadL10MEM(bool onlyTemplates)
 
     // load texts from en-US po file (master)
     // tell system
-    l10nMem::showDebug("genLang loading master text from file " + sLoad);
+    mcMemory.showDebug("genLang loading master text from file " + sLoad);
 
     // and load file
     mcMemory.setLanguage("", true);
@@ -343,7 +341,7 @@ void handler::loadL10MEM(bool onlyTemplates)
         mcMemory.setLanguage(*siLang, true);
 
         // tell system
-        l10nMem::showDebug("genLang loading text from language file " + sLoad);
+        mcMemory.showDebug("genLang loading text from language file " + sLoad);
 
         convert_gen(mcMemory, sLoad, msTargetDir, "").execute(false, false);
     }
@@ -356,7 +354,6 @@ void handler::runConvert()
     std::vector<std::string>::iterator siSource;
     std::vector<std::string>::iterator siLang;
 
-    throw("NOT CONTROLLED");
 
     // convert
     mcMemory.setConvert(true, false);
@@ -365,7 +362,7 @@ void handler::runConvert()
     for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
     {
         // tell system
-        l10nMem::showDebug("genLang compare template " + *siSource);
+        mcMemory.showDebug("genLang compare template " + *siSource);
 
         // get converter and extract files
         convert_gen convertObj(mcMemory, "./", msTargetDir, *siSource);
@@ -381,7 +378,7 @@ void handler::runConvert()
             mcMemory.setLanguage(*siLang, false);
 
             // tell system
-            l10nMem::showDebug("genLang convert text from file " +
+            mcMemory.showDebug("genLang convert text from file " +
                                sFilePath + *siSource + " language " + *siLang);
 
             // get converter and extract files
@@ -403,13 +400,12 @@ void handler::runExtract()
 
     // no convert
     mcMemory.setConvert(false, false);
-    throw("NOT CONTROLLED");
 
     // loop through all source files, and extract messages from each file
     for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
     {
         // tell system
-        l10nMem::showDebug("genLang extracting text from file " + *siSource);
+        mcMemory.showDebug("genLang extracting text from file " + *siSource);
 
         // get converter and extract file
         convert_gen convertObj(mcMemory, "", msTargetDir, *siSource);
@@ -428,13 +424,12 @@ void handler::runMerge(bool bKid)
 
     // no convert
     mcMemory.setConvert(false, false);
-    throw("NOT CONTROLLED");
 
     // loop through all source files, and extract messages from each file
     for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
     {
         // tell system
-        l10nMem::showDebug("genLang merging translated text to file " + *siSource);
+        mcMemory.showDebug("genLang merging translated text to file " + *siSource);
 
         // get converter and extract file
         convert_gen convertObj(mcMemory, "", msTargetDir, *siSource);
