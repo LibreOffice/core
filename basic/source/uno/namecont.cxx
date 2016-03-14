@@ -1953,7 +1953,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             {
                 try
                 {
-                    xSourceLibrariesStor->isStorageElement(rLib.aName);
+                    (void)xSourceLibrariesStor->isStorageElement(rLib.aName);
                 }
                 catch (container::NoSuchElementException const&)
                 {
