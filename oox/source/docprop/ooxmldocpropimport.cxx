@@ -141,7 +141,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "metadata/core-properties" ) );
     // MS Office seems to have a bug, so we have to do similar handling
     if( !aCoreStreams.hasElements() )
-        aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_PACKAGE_RELATION_TYPE( "metadata/core-properties" ) );
+        aCoreStreams = lclGetRelatedStreams( rxSource, "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" );
 
     Sequence< InputSource > aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "extended-properties" ) );
     // OOXML strict

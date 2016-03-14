@@ -22,20 +22,6 @@
 #include "iodlg.hrc"
 #include "OfficeFilePicker.hrc"
 
-#define FILEPICKER_IL_IDLIST \
-    IdList = \
-    { \
-        IMG_FILEDLG_BTN_UP; \
-        IMG_FILEDLG_BTN_STD; \
-        IMG_FILEDLG_CREATEFOLDER; \
-        IMG_FILEDLG_PLACE_LOCAL; \
-        IMG_FILEDLG_PLACE_REMOTE; \
-    }; \
-    IdCount = \
-    { \
-        5; \
-    };
-
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
  // image lists ***************************************************************
@@ -44,7 +30,18 @@ ImageList RID_FILEPICKER_IMAGES
 {
     Prefix = "fp";
     MASKCOLOR
-    FILEPICKER_IL_IDLIST
+    IdList =
+    {
+        IMG_FILEDLG_BTN_UP;
+        IMG_FILEDLG_BTN_STD;
+        IMG_FILEDLG_CREATEFOLDER;
+        IMG_FILEDLG_PLACE_LOCAL;
+        IMG_FILEDLG_PLACE_REMOTE;
+    };
+    IdCount =
+    {
+        5;
+    };
 };
 
 // strings *******************************************************************

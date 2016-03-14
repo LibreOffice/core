@@ -55,49 +55,40 @@ String RID_STR_TABLES_CONTAINER
     Text [ en-US ] = "Tables";
 };
 
-#define MID_EDIT_DATABASE   \
-    Identifier = ID_TREE_EDIT_DATABASE ;    \
-    HelpId = HID_BROWSER_EDIT_DATABASE; \
-    Text [ en-US ] = "Edit ~Database File..." ;\
-
-#define MID_ADMINISTRATE    \
-    Identifier = ID_TREE_ADMINISTRATE ; \
-    HelpId = HID_BROWSER_ADMINISTRATE;  \
-    Text [ en-US ] = "Registered databases ..." ;\
-
-#define MID_CLOSECONN   \
-    Identifier = ID_TREE_CLOSE_CONN ;   \
-    HelpId = HID_BROWSER_CLOSECONN ;    \
-    Text [ en-US ] = "Disco~nnect" ;    \
-
 Menu MENU_BROWSER_DEFAULTCONTEXT
 {
     ItemList =
     {
-        MenuItem    \
-        {   \
-            MID_EDIT_DATABASE   \
-        };  \
-        MenuItem    \
-        {   \
-            MID_CLOSECONN   \
-        };  \
-        MenuItem    \
-        {   \
-            Separator = TRUE;   \
-        };  \
+        MenuItem
+        {
+            Identifier = ID_TREE_EDIT_DATABASE ;
+            HelpId = HID_BROWSER_EDIT_DATABASE ;
+            Text [ en-US ] = "Edit ~Database File..." ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_CLOSE_CONN ;
+            HelpId = HID_BROWSER_CLOSECONN ;
+            Text [ en-US ] = "Disco~nnect" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
         MenuItem {
             Identifier = SID_COPY ;
             Command = ".uno:Copy" ;
             Text [ en-US ] = "~Copy" ;
         };
-        MenuItem    \
-        {   \
-            Separator = TRUE;   \
-        };  \
-        MenuItem    \
-        {   \
-            MID_ADMINISTRATE    \
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_ADMINISTRATE ;
+            HelpId = HID_BROWSER_ADMINISTRATE;
+            Text [ en-US ] = "Registered databases ..." ;
         };
     };
 };

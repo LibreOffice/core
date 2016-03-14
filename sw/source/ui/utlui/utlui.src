@@ -324,22 +324,19 @@ String STR_HYPH_TITLE
     Text [ en-US ] = "Hyphenation";
 };
 
-#define IMGLIST_IDS\
-    IdList = \
-    { \
-        IMG_COLLAPSE;\
-        IMG_EXPAND  ;\
-        IMG_DB      ;\
-        IMG_DBTABLE ;\
-        IMG_DBQUERY ;\
-    }; \
-    IdCount = 5
-
 ImageList ILIST_DB_DLG
 {
     Prefix = "sx";
     MaskColor = IMAGE_MASK_COLOR;
-    IMGLIST_IDS;
+    IdList =
+    {
+        IMG_COLLAPSE;
+        IMG_EXPAND  ;
+        IMG_DB      ;
+        IMG_DBTABLE ;
+        IMG_DBQUERY ;
+    };
+    IdCount = 5;
 };
 Image IMG_VIEWLAYOUT_AUTOMATIC
 {

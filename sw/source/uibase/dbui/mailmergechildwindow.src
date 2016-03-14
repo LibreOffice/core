@@ -30,19 +30,16 @@ String     ST_CONTINUE
     Text[ en-US ] = "~Continue";
 };
 
-#define IMGLIST2_IDS\
-    IdList = \
-    { \
-        FN_FORMULA_CANCEL ;\
-        FN_FORMULA_APPLY     ;\
-    }; \
-    IdCount = 2
-
 ImageList ILIST
 {
     Prefix = "sc";
     MaskColor = IMAGE_MASK_COLOR;
-    IMGLIST2_IDS;
+    IdList =
+    {
+        FN_FORMULA_CANCEL ;
+        FN_FORMULA_APPLY  ;
+    };
+    IdCount = 2;
 };
 
 String ST_TASK

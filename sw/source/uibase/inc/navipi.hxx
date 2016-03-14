@@ -170,7 +170,10 @@ public:
                         SfxBindings*,
                         SfxChildWinInfo*  );
 
-    SFX_DECL_CHILDWINDOW_CONTEXT( SwNavigationChild )
+    //! soon obsolete !
+    static  SfxChildWindowContext* CreateImpl(vcl::Window *pParent,
+                SfxBindings *pBindings, SfxChildWinInfo* pInfo );
+    static  void RegisterChildWindowContext(SfxModule *pMod=nullptr);
 };
 
 #endif

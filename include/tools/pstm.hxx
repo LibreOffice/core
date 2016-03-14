@@ -59,7 +59,7 @@ public:
     virtual void    Load( SvPersistStream & ) override;          \
     virtual void    Save( SvPersistStream & ) override;
 
-#define PRV_SV_IMPL_PERSIST( Class )                                \
+#define SV_IMPL_PERSIST1( Class, Super1 )                           \
     void *          Class::CreateInstance( SvPersistBase ** ppBase )\
                     {                                               \
                         Class * p = new Class();                    \
@@ -75,9 +75,6 @@ public:
                         rpObj = dynamic_cast< Class*>( pObj );      \
                         return rStm;                                \
                     }
-
-#define SV_IMPL_PERSIST1( Class, Super1 )                           \
-    PRV_SV_IMPL_PERSIST( Class )
 
 class SvPersistStream;
 

@@ -79,7 +79,9 @@ public:
 
 // css::lang::XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
-    DECLARE_IMPLEMENTATION_ID( );
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+    static css::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
+
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;

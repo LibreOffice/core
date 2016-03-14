@@ -37,39 +37,37 @@ Window DLG_NAVIGATION_PI
     {
         198;
     };
-#define NAVI_IDLIST \
-        IdList =                                    \
-        {                                           \
-            FN_UP ;                   \
-            FN_DOWN ;                \
-            FN_SELECT_HEADER ;      \
-            FN_SELECT_FOOTER ;      \
-            FN_SELECT_FOOTNOTE ;    \
-            FN_SHOW_CONTENT_BOX ;       \
-            FN_SHOW_ROOT ;      \
-            FN_ITEM_UP ;        \
-            FN_ITEM_DOWN ;      \
-            FN_ITEM_LEFT ;      \
-            FN_ITEM_RIGHT ;     \
-            FN_DROP_REGION ;    \
-            FN_OUTLINE_LEVEL ;    \
-            FN_SELECT_SET_AUTO_BOOKMARK ; \
-            FN_DROP_REGION_LINK ;   \
-            FN_DROP_REGION_COPY ;   \
-            FN_GLOBAL_SWITCH ;         \
-            FN_GLOBAL_EDIT ;           \
-            FN_GLOBAL_UPDATE ;         \
-            FN_GLOBAL_OPEN ;           \
-            FN_GLOBAL_SAVE_CONTENT ;     \
-            FN_CREATE_NAVIGATION ;       \
-        };                                               \
-        IdCount = { 21 ; };
 
     ImageList IL_CONTENT
     {
         Prefix = "sc";
         MaskColor = IMAGE_MASK_COLOR ;
-        NAVI_IDLIST
+        IdList =
+        {
+            FN_UP ;
+            FN_DOWN ;
+            FN_SELECT_HEADER ;
+            FN_SELECT_FOOTER ;
+            FN_SELECT_FOOTNOTE ;
+            FN_SHOW_CONTENT_BOX ;
+            FN_SHOW_ROOT ;
+            FN_ITEM_UP ;
+            FN_ITEM_DOWN ;
+            FN_ITEM_LEFT ;
+            FN_ITEM_RIGHT ;
+            FN_DROP_REGION ;
+            FN_OUTLINE_LEVEL ;
+            FN_SELECT_SET_AUTO_BOOKMARK ;
+            FN_DROP_REGION_LINK ;
+            FN_DROP_REGION_COPY ;
+            FN_GLOBAL_SWITCH ;
+            FN_GLOBAL_EDIT ;
+            FN_GLOBAL_UPDATE ;
+            FN_GLOBAL_OPEN ;
+            FN_GLOBAL_SAVE_CONTENT ;
+            FN_CREATE_NAVIGATION ;
+        };
+        IdCount = { 21 ; };
     };
     Toolbox TB_CONTENT
     {
@@ -312,29 +310,27 @@ Window DLG_NAVIGATION_PI
         Value = 5 ;
     };
 };
-#define NAVI_ENTRY_IDS \
-    IdList =           \
-    {                  \
-        20000 ;        \
-        20001 ;        \
-        20002 ;        \
-        20003 ;        \
-        20004 ;        \
-        20005 ;        \
-        20006 ;        \
-        20007 ;        \
-        20008 ;        \
-        20009 ;        \
-        20010 ;        \
-        20011 ;        \
-    };                 \
-    IdCount = { 12 ; };
 
 ImageList IMG_NAVI_ENTRYBMP
 {
     Prefix = "nc";
     MaskColor = IMAGE_MASK_COLOR ;
-    NAVI_ENTRY_IDS
+    IdList =
+    {
+        20000 ;
+        20001 ;
+        20002 ;
+        20003 ;
+        20004 ;
+        20005 ;
+        20006 ;
+        20007 ;
+        20008 ;
+        20009 ;
+        20010 ;
+        20011 ;
+    };
+    IdCount = { 12 ; };
 };
 
 String STR_ACCESS_TL_GLOBAL

@@ -63,9 +63,10 @@ ________________________________________________________________________________
     }
 
 //  private
-//  implementation of XInterface::queryInterface() with max. 12 other interfaces!
+//  complete implementation of XInterface with max. 12 other interfaces!
 
-#define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                            \
+#define PRIVATE_DEFINE_XINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                                           \
+    PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                           \
     css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                                       \
         /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
@@ -82,10 +83,11 @@ ________________________________________________________________________________
         return aReturn;                                                                                                                                     \
     }
 
+
 //  private
 //  implementation of XInterface::queryInterface() with more than 12 other interfaces!
-
-#define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                             \
+#define PRIVATE_DEFINE_XINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                                            \
+    PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                           \
     css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                                       \
         /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
@@ -108,16 +110,6 @@ ________________________________________________________________________________
         return aReturn;                                                                                                                                     \
     }
 
-//  private
-//  complete implementation of XInterface for different use cases
-
-#define PRIVATE_DEFINE_XINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                                           \
-    PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \
-    PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE( CLASS, BASECLASS, INTERFACES )
-
-#define PRIVATE_DEFINE_XINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                                            \
-    PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \
-    PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )
 
 //  private
 //  help macros to replace INTERFACES in queryInterface() [see before]
@@ -133,44 +125,20 @@ ________________________________________________________________________________
         INTERFACE1
 //#endif // #ifdef ENABLE_SERVICEDEBUG
 
-#define PRIVATE_DEFINE_INTERFACE_2( INTERFACE1, INTERFACE2 )                                                                                                                                            \
-    PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 ),                                                                                                                                                           \
-    INTERFACE2
-
-#define PRIVATE_DEFINE_INTERFACE_3( INTERFACE1, INTERFACE2, INTERFACE3 )                                                                                                                                \
-    PRIVATE_DEFINE_INTERFACE_2( INTERFACE1, INTERFACE2 ),                                                                                                                                               \
-    INTERFACE3
-
-#define PRIVATE_DEFINE_INTERFACE_4( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4 )                                                                                                                    \
-    PRIVATE_DEFINE_INTERFACE_3( INTERFACE1, INTERFACE2, INTERFACE3 ),                                                                                                                                   \
-    INTERFACE4
-
-#define PRIVATE_DEFINE_INTERFACE_5( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5 )                                                                                                        \
-    PRIVATE_DEFINE_INTERFACE_4( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4 ),                                                                                                                       \
-    INTERFACE5
-
 #define PRIVATE_DEFINE_INTERFACE_6( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6 )                                                                                            \
-    PRIVATE_DEFINE_INTERFACE_5( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5 ),                                                                                                           \
+    PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 ),                                                                                                                                                           \
+    INTERFACE2, \
+    INTERFACE3, \
+    INTERFACE4, \
+    INTERFACE5, \
     INTERFACE6
 
-#define PRIVATE_DEFINE_INTERFACE_7( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7 )                                                                                \
-    PRIVATE_DEFINE_INTERFACE_6( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6 ),                                                                                               \
-    INTERFACE7
-
-#define PRIVATE_DEFINE_INTERFACE_8( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8 )                                                                    \
-    PRIVATE_DEFINE_INTERFACE_7( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7 ),                                                                                   \
-    INTERFACE8
-
-#define PRIVATE_DEFINE_INTERFACE_9( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9 )                                                        \
-    PRIVATE_DEFINE_INTERFACE_8( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8 ),                                                                       \
-    INTERFACE9
-
-#define PRIVATE_DEFINE_INTERFACE_10( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10 )                                          \
-    PRIVATE_DEFINE_INTERFACE_9( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9 ),                                                           \
-    INTERFACE10
-
 #define PRIVATE_DEFINE_INTERFACE_11( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11 )                             \
-    PRIVATE_DEFINE_INTERFACE_10( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10 ),                                             \
+    PRIVATE_DEFINE_INTERFACE_6( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6 ),                                                                                               \
+    INTERFACE7, \
+    INTERFACE8, \
+    INTERFACE9, \
+    INTERFACE10, \
     INTERFACE11
 
 //  public

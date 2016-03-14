@@ -185,16 +185,6 @@ Class::getSupportedServiceNames()                                           \
     return getSupportedServiceNames_Static();                               \
 }
 
-#define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                          \
-static css::uno::Reference< css::uno::XInterface > SAL_CALL  \
-Class##_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )       \
-    throw( css::uno::Exception )                                 \
-{                                                                           \
-    css::lang::XServiceInfo* pX =                                \
-                static_cast<css::lang::XServiceInfo*>(new Class( rSMgr ));    \
-    return css::uno::Reference< css::uno::XInterface >::query( pX ); \
-}
-
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                          \
 static css::uno::Reference< css::uno::XInterface > SAL_CALL  \
 Class##_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )       \
@@ -254,15 +244,20 @@ Class::getSupportedServiceNames_Static()
 
 // 1 service name
 #define XSERVICEINFO_IMPL_1( Class, ImplName, Service1 )                    \
-XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
-XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
-                                                                            \
-css::uno::Sequence< OUString >                              \
-Class::getSupportedServiceNames_Static()                                    \
-{                                                                           \
-    css::uno::Sequence< OUString > aSNS { Service1 };                       \
-    return aSNS;                                                            \
-}
+  XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
+  static css::uno::Reference< css::uno::XInterface > SAL_CALL  \
+  Class##_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )       \
+    throw( css::uno::Exception )                                 \
+  {                                                                           \
+      css::lang::XServiceInfo* pX =                                \
+                  static_cast<css::lang::XServiceInfo*>(new Class( rSMgr ));    \
+      return css::uno::Reference< css::uno::XInterface >::query( pX ); \
+  } \
+  css::uno::Sequence< OUString >                              \
+  Class::getSupportedServiceNames_Static()                                    \
+  {                                                                             \
+      return css::uno::Sequence< OUString > { Service1 };                       \
+  }
 
 // 1 service name
 #define XSERVICEINFO_IMPL_1_CTX( Class, ImplName, Service1 )                    \

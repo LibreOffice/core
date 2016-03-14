@@ -22,15 +22,12 @@
 // Imageliste hier, damit sie nicht in ui.src beim Zusammenbauen der
 // "echten" Imagelisten stoert
 
-#define OUTLINE_ID_LIST                                     \
-    IdList = { 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; };    \
-    IdCount = { 12; };
-
 ImageList RID_OUTLINEBITMAPS
 {
     Prefix = "ou";
     MaskColor = STD_MASKCOLOR;
-    OUTLINE_ID_LIST
+    IdList = { 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; };
+    IdCount = { 12; };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

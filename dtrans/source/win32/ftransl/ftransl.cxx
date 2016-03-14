@@ -37,7 +37,6 @@
 
 #define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
 
-#define MODULE_PRIVATE
 #define CPPUTYPE_SEQSALINT8       cppu::UnoType<Sequence< sal_Int8 >>::get()
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            cppu::UnoType<OUString>::get()
@@ -60,7 +59,7 @@ using namespace com::sun::star::container;
 
 // helper functions
 
-namespace MODULE_PRIVATE
+namespace
 {
     Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
     {

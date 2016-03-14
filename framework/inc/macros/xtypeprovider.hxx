@@ -59,9 +59,32 @@ ________________________________________________________________________________
     }
 
 //  private
-//  implementation of XTypeProvider::getTypes() with max. 12 interfaces!
+//  help macros to replace TYPES in getTypes() [see before]
 
-#define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, TYPES )                                                                                   \
+#define PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 )                                                                       \
+    cppu::UnoType<TYPE1>::get(), \
+    cppu::UnoType<TYPE2>::get(), \
+    cppu::UnoType<TYPE3>::get(), \
+    cppu::UnoType<TYPE4>::get(), \
+    cppu::UnoType<TYPE5>::get(), \
+    cppu::UnoType<TYPE6>::get()
+
+#define PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 )                                                  \
+    PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 ),                                                                          \
+    cppu::UnoType<TYPE7>::get(), \
+    cppu::UnoType<TYPE8>::get(), \
+    cppu::UnoType<TYPE9>::get()
+
+#define PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 )                                 \
+    PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 ),                                                     \
+    cppu::UnoType<TYPE10>::get(), \
+    cppu::UnoType<TYPE11>::get()
+
+//  private
+//  complete implementation of XTypeProvider with max. 12 interfaces!
+
+#define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                                                                                            \
+    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                   \
     css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes() throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
@@ -87,10 +110,11 @@ ________________________________________________________________________________
         return pTypeCollection->getTypes();                                                                                                     \
     }
 
+
 //  private
 //  implementation of XTypeProvider::getTypes() with more than 12 interfaces!
-
-#define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                         \
+#define PRIVATE_DEFINE_XTYPEPROVIDER_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                                  \
+    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                   \
     css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes() throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
@@ -138,66 +162,6 @@ ________________________________________________________________________________
         return *pTypeCollection;                                                                                                                \
     }
 
-//  private
-//  help macros to replace TYPES in getTypes() [see before]
-
-#define PRIVATE_DEFINE_TYPE_1( TYPE1 )                                                                                                          \
-    cppu::UnoType<TYPE1>::get()
-
-#define PRIVATE_DEFINE_TYPE_2( TYPE1, TYPE2 )                                                                                                   \
-    PRIVATE_DEFINE_TYPE_1( TYPE1 ),                                                                                                             \
-    cppu::UnoType<TYPE2>::get()
-
-#define PRIVATE_DEFINE_TYPE_3( TYPE1, TYPE2, TYPE3 )                                                                                            \
-    PRIVATE_DEFINE_TYPE_2( TYPE1, TYPE2 ),                                                                                                      \
-    cppu::UnoType<TYPE3>::get()
-
-#define PRIVATE_DEFINE_TYPE_4( TYPE1, TYPE2, TYPE3, TYPE4 )                                                                                     \
-    PRIVATE_DEFINE_TYPE_3( TYPE1, TYPE2, TYPE3 ),                                                                                               \
-    cppu::UnoType<TYPE4>::get()
-
-#define PRIVATE_DEFINE_TYPE_5( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5 )                                                                              \
-    PRIVATE_DEFINE_TYPE_4( TYPE1, TYPE2, TYPE3, TYPE4 ),                                                                                        \
-    cppu::UnoType<TYPE5>::get()
-
-#define PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 )                                                                       \
-    PRIVATE_DEFINE_TYPE_5( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5 ),                                                                                 \
-    cppu::UnoType<TYPE6>::get()
-
-#define PRIVATE_DEFINE_TYPE_7( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7 )                                                                \
-    PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 ),                                                                          \
-    cppu::UnoType<TYPE7>::get()
-
-#define PRIVATE_DEFINE_TYPE_8( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8 )                                                         \
-    PRIVATE_DEFINE_TYPE_7( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7 ),                                                                   \
-    cppu::UnoType<TYPE8>::get()
-
-#define PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 )                                                  \
-    PRIVATE_DEFINE_TYPE_8( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8 ),                                                            \
-    cppu::UnoType<TYPE9>::get()
-
-#define PRIVATE_DEFINE_TYPE_10( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10 )                                         \
-    PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 ),                                                     \
-    cppu::UnoType<TYPE10>::get()
-
-#define PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 )                                 \
-    PRIVATE_DEFINE_TYPE_10( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10 ),                                            \
-    cppu::UnoType<TYPE11>::get()
-
-#define PRIVATE_DEFINE_TYPE_12( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12 )                         \
-    PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 ),                                    \
-    cppu::UnoType<TYPE12>::get()
-
-//  private
-//  complete implementation of XTypeProvider
-
-#define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                                                                                                        \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, TYPES )
-
-#define PRIVATE_DEFINE_XTYPEPROVIDER_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                                              \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )
 
 //  public
 //  declaration of XTypeProvider
@@ -245,19 +209,8 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider with 20 additional interfaces for getTypes()
 #define DEFINE_XTYPEPROVIDER_21( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12, TYPE13, TYPE14, TYPE15, TYPE16, TYPE17, TYPE18, TYPE19, TYPE20, TYPE21 ) \
     PRIVATE_DEFINE_XTYPEPROVIDER_LARGE  (   CLASS,                                                                                                              \
-                                            (PRIVATE_DEFINE_TYPE_12 (   TYPE1   ,                                                                               \
-                                                                        TYPE2   ,                                                                               \
-                                                                        TYPE3   ,                                                                               \
-                                                                        TYPE4   ,                                                                               \
-                                                                        TYPE5   ,                                                                               \
-                                                                        TYPE6   ,                                                                               \
-                                                                        TYPE7   ,                                                                               \
-                                                                        TYPE8   ,                                                                               \
-                                                                        TYPE9   ,                                                                               \
-                                                                        TYPE10  ,                                                                               \
-                                                                        TYPE11  ,                                                                               \
-                                                                        TYPE12                                                                                  \
-                                                                    )),                                                                                         \
+                                            (PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 ),           \
+                                             cppu::UnoType<TYPE12>::get()),                                                                                     \
                                             (PRIVATE_DEFINE_TYPE_9  (   TYPE13  ,                                                                               \
                                                                         TYPE14  ,                                                                               \
                                                                         TYPE15  ,                                                                               \
