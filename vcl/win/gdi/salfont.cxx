@@ -2014,9 +2014,9 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
     rRect.Left()    = static_cast<int>( mfCurrentFontScale * rRect.Left() );
-    rRect.Right()   = static_cast<int>( mfCurrentFontScale * rRect.Right() );
+    rRect.Right()   = static_cast<int>( mfCurrentFontScale * rRect.Right() ) + 1;
     rRect.Top()     = static_cast<int>( mfCurrentFontScale * rRect.Top() );
-    rRect.Bottom()  = static_cast<int>( mfCurrentFontScale * rRect.Bottom() );
+    rRect.Bottom()  = static_cast<int>( mfCurrentFontScale * rRect.Bottom() ) + 1;
     return true;
 }
 
