@@ -1853,11 +1853,12 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
     xFrame.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2173), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
 #ifdef MACOSX
-    // FIXME: The assert below fails wildly on a Retina display. So use some (horrible)
-    // heuristics. Note that for instance on the 5K Retina iMac, [NSScreen mainScreen].frame.size is
-    // 2560x1440, not the true display size 5120x2880. But whatever, I don't have much time to spend
-    // on this.
-    if ([NSScreen mainScreen].frame.size.width > 2000)
+    // FIXME: The assert below fails wildly on a Retina display
+    NSScreen* nsScreen = [ NSScreen mainScreen ];
+    CGFloat scaleFactor = [ nsScreen userSpaceScaleFactor ]; // for instance on the 5K Retina iMac,
+                                                             // [NSScreen mainScreen].frame.size is 2560x1440,
+                                                             // while real display size is 5120x2880
+    if ( nsScreen.frame.size.width * scaleFactor > 4000 )
         return;
 #endif
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2805), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
