@@ -1715,11 +1715,14 @@ IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, v
 
         try
         {
-            css::uno::Sequence<OUString> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
-
-            for (auto i = aTSAURLs.begin(); i != aTSAURLs.end(); ++i)
+            boost::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+            if (aTSAURLs)
             {
-                mpLBSignTSA->InsertEntry( *i );
+                const css::uno::Sequence<OUString>& rTSAURLs = aTSAURLs.get();
+                for (auto i = rTSAURLs.begin(); i != rTSAURLs.end(); ++i)
+                {
+                    mpLBSignTSA->InsertEntry( *i );
+                }
             }
         }
         catch (const uno::Exception &e)
