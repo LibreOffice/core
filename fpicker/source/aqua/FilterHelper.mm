@@ -251,20 +251,20 @@ void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
     }
 
     //only for output purposes
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     FilterList::iterator aFilter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
     if (aFilter != m_pFilterList->end()) {
         OUStringList suffixes = aFilter->getFilterSuffixList();
         if (!suffixes.empty()) {
-            OSL_TRACE("Current active suffixes: ");
+            SAL_INFO("fpicker.aqua", "Current active suffixes: ");
             OUStringList::iterator suffIter = suffixes.begin();
             while(suffIter != suffixes.end()) {
-                OSL_TRACE("%s", OUStringToOString((*suffIter), RTL_TEXTENCODING_UTF8).getStr());
+                SAL_INFO("fpicker.aqua", *suffIter);
                 suffIter++;
             }
         }
     } else {
-        OSL_TRACE("No filter entry was found for that name!");
+        SAL_INFO("fpicker.aqua", "No filter entry was found for that name!");
     }
 #endif
 }
