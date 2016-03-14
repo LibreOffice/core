@@ -104,7 +104,7 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
 XSERVICEINFO_IMPL_1_CTX(
     ContentProvider,
     OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ),
-    TDOC_CONTENT_PROVIDER_SERVICE_NAME );
+    "com.sun.star.ucb.TransientDocumentsContentProvider" );
 
 
 // Service factory implementation.

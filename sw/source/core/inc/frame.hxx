@@ -1161,11 +1161,6 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
                                 fnRect = bVert ? \
                                     ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
                                     ( bRev ? fnRectB2T : fnRectHori ); }
-#define SWRECTFN2( pFrame )   bool bVert = pFrame->IsVertical(); \
-                bool bVertL2R = pFrame->IsVertLR(); \
-                            bool bNeighb = pFrame->IsNeighbourFrame(); \
-                            SwRectFn fnRect = bVert == bNeighb ? \
-                                fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
 
 #define POS_DIFF( aFrame1, aFrame2 ) \
             ( (aFrame1.*fnRect->fnGetTop)() != (aFrame2.*fnRect->fnGetTop)() || \

@@ -22,21 +22,18 @@
 #include "globals.hrc"
 #include "helpid.h"
 
-#define DLG_IMAGE_IDLIST \
-        IdList =                        \
-        {                               \
-            BMP_HIDE           /*1*/ ;\
-            BMP_NO_HIDE        /*2*/ ;\
-            BMP_PROT_HIDE      /*3*/ ;\
-            BMP_PROT_NO_HIDE   /*4*/ ;\
-        };                              \
-        IdCount = { 4 ; };
-
 ImageList IL_SECTION_BITMAPS
 {
     Prefix = "re";
     MaskColor = IMAGE_MASK_COLOR ;
-    DLG_IMAGE_IDLIST
+    IdList =
+    {
+        BMP_HIDE           /*1*/ ;
+        BMP_NO_HIDE        /*2*/ ;
+        BMP_PROT_HIDE      /*3*/ ;
+        BMP_PROT_NO_HIDE   /*4*/ ;
+    };
+    IdCount = { 4 ; };
 };
 
 String STR_REG_DUPLICATE

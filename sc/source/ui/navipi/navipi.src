@@ -19,34 +19,6 @@
 
 #include "navipi.hrc"
 
-#define SC_NAVI_CMD_IDLIST \
-    IdList =               \
-    {                      \
-        IID_DATA ;         \
-        IID_UP ;           \
-        IID_DOWN ;         \
-        IID_SCENARIOS ;    \
-        IID_DROPMODE ;     \
-        IID_CHANGEROOT ;   \
-        IID_ZOOMOUT ;      \
-    };                     \
-    IdCount = { 8 ; };
-
-// SC_CONTENT_...
-#define SC_NAVI_CONT_IDLIST \
-    IdList =                \
-    {                       \
-        1 ;                 \
-        2 ;                 \
-        3 ;                 \
-        4 ;                 \
-        5 ;                 \
-        6 ;                 \
-        7 ;                 \
-        8 ;                 \
-    };                      \
-    IdCount = { 8 ; };
-
 Window RID_SCDLG_NAVIGATOR
 {
     SVLook = TRUE ;
@@ -118,7 +90,17 @@ Window RID_SCDLG_NAVIGATOR
     {
         Prefix = "na";
         MaskColor = STD_MASKCOLOR ;
-        SC_NAVI_CMD_IDLIST
+        IdList =
+        {
+            IID_DATA ;
+            IID_UP ;
+            IID_DOWN ;
+            IID_SCENARIOS ;
+            IID_DROPMODE ;
+            IID_CHANGEROOT ;
+            IID_ZOOMOUT ;
+        };
+        IdCount = { 8 ; };
     };
     ToolBox TBX_CMD
     {
@@ -218,7 +200,19 @@ ImageList RID_IMAGELIST_NAVCONT
 {
     Prefix = "nc";
     MaskColor = STD_MASKCOLOR ;
-    SC_NAVI_CONT_IDLIST
+    // SC_CONTENT_...
+    IdList =
+    {
+        1 ;
+        2 ;
+        3 ;
+        4 ;
+        5 ;
+        6 ;
+        7 ;
+        8 ;
+    };
+    IdCount = { 8 ; };
 };
 
 Image RID_IMG_DROP_URL

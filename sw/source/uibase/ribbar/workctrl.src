@@ -23,37 +23,34 @@
 #include "helpid.h"
 #include "cmdid.h"
 
-#define SCROLL_IMAGE_IDLIST \
-        IdList =                        \
-        {                               \
-            NID_NEXT ;                  \
-            NID_PREV ;                  \
-            NID_TBL ;                   \
-            NID_FRM ;                   \
-            NID_PGE ;                   \
-            NID_DRW ;                   \
-            NID_CTRL ;                  \
-            NID_REG ;                   \
-            NID_BKM ;                   \
-            NID_GRF ;                   \
-            NID_OLE ;                   \
-            NID_OUTL ;                  \
-            NID_SEL ;                   \
-            NID_FTN ;                   \
-            NID_MARK ;                  \
-            NID_POSTIT ;                \
-            NID_SRCH_REP ;              \
-            NID_INDEX_ENTRY;            \
-            NID_TABLE_FORMULA;          \
-            NID_TABLE_FORMULA_ERROR;    \
-        };                              \
-        IdCount = { 20 ; };
-
 ImageList IL_VALUES
 {
     Prefix = "sr";
     MaskColor = IMAGE_MASK_COLOR ;
-    SCROLL_IMAGE_IDLIST
+    IdList =
+    {
+        NID_NEXT ;
+        NID_PREV ;
+        NID_TBL ;
+        NID_FRM ;
+        NID_PGE ;
+        NID_DRW ;
+        NID_CTRL ;
+        NID_REG ;
+        NID_BKM ;
+        NID_GRF ;
+        NID_OLE ;
+        NID_OUTL ;
+        NID_SEL ;
+        NID_FTN ;
+        NID_MARK ;
+        NID_POSTIT ;
+        NID_SRCH_REP ;
+        NID_INDEX_ENTRY;
+        NID_TABLE_FORMULA;
+        NID_TABLE_FORMULA_ERROR;
+    };
+    IdCount = { 20 ; };
 };
 String ST_TBL
 {

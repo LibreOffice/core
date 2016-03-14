@@ -43,9 +43,6 @@ public:
 #define DECL_FIXEDMEMPOOL_NEW_DECL() \
 static void * operator new( size_t n )
 
-#define DECL_FIXEDMEMPOOL_NEW_IMPL( Class ) \
-void * Class::operator new( size_t n )
-
 #define IMPL_FIXEDMEMPOOL_NEW_BODY( Class, aPool ) \
 { \
     if ( n == sizeof( Class ) ) \
@@ -54,15 +51,8 @@ void * Class::operator new( size_t n )
         return ::operator new(n); \
 }
 
-#define DECL_FIXEDMEMPOOL_NEW_INLINE( Class, aPool ) \
-DECL_FIXEDMEMPOOL_NEW_DECL() \
-IMPL_FIXEDMEMPOOL_NEW_BODY( Class, aPool )
-
 #define DECL_FIXEDMEMPOOL_DEL_DECL() \
 static void operator delete( void * p, size_t n )
-
-#define DECL_FIXEDMEMPOOL_DEL_IMPL( Class ) \
-void Class::operator delete( void * p, size_t n )
 
 #define IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool ) \
 { \
@@ -72,16 +62,14 @@ void Class::operator delete( void * p, size_t n )
         ::operator delete(p); \
 }
 
-#define DECL_FIXEDMEMPOOL_DEL_INLINE( Class, aPool ) \
-DECL_FIXEDMEMPOOL_DEL_DECL() \
-IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
-
 #define DECL_FIXEDMEMPOOL_NEWDEL( Class ) \
     private: \
         static FixedMemPool aPool; \
     public: \
-        DECL_FIXEDMEMPOOL_NEW_INLINE( Class, aPool ) \
-        DECL_FIXEDMEMPOOL_DEL_INLINE( Class, aPool )
+        DECL_FIXEDMEMPOOL_NEW_DECL() \
+        IMPL_FIXEDMEMPOOL_NEW_BODY( Class, aPool ) \
+        DECL_FIXEDMEMPOOL_DEL_DECL() \
+        IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
 
 #define IMPL_FIXEDMEMPOOL_NEWDEL( Class ) \
     FixedMemPool Class::aPool( SAL_STRINGIFY( Class ), sizeof( Class ) );
@@ -95,9 +83,9 @@ IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
 
 #define IMPL_FIXEDMEMPOOL_NEWDEL_DLL( Class ) \
     FixedMemPool Class::aPool( SAL_STRINGIFY( Class ), sizeof( Class ) ); \
-    DECL_FIXEDMEMPOOL_NEW_IMPL( Class ) \
+    void * Class::operator new( size_t n ) \
     IMPL_FIXEDMEMPOOL_NEW_BODY( Class, aPool ) \
-    DECL_FIXEDMEMPOOL_DEL_IMPL( Class ) \
+    void Class::operator delete( void * p, size_t n ) \
     IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
 
 #endif

@@ -26,9 +26,6 @@
 #define TEXT_DELETE_NODOTS \
     Text [ en-US ] = "Delete" ;\
 
-#define TEXT_TEXT_ONLY \
-    Text [ en-US ] = "Text only" ;\
-
 Menu MODIFY_TOOLBAR
 {
     ItemList =
@@ -68,7 +65,7 @@ Menu MODIFY_TOOLBAR
             Identifier = ID_TEXT_ONLY ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
-            TEXT_TEXT_ONLY
+            Text [ en-US ] = "Text only" ;
         };
         MenuItem
         {

@@ -453,7 +453,10 @@ Size SwFrame::ChgSize( const Size& aNewSize )
 
     if ( GetUpper() )
     {
-        SWRECTFN2( this )
+        bool bNeighb = IsNeighbourFrame();
+        SwRectFn fnRect = IsVertical() == bNeighb ?
+            fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
+
         SwRect aNew( Point(0,0), aNewSize );
         (maFrame.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
         long nNew = (aNew.*fnRect->fnGetHeight)();

@@ -60,7 +60,23 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-SFX_IMPL_CHILDWINDOW_CONTEXT( SwNavigationChild, SID_NAVIGATOR, SwView )
+//! soon obsolete !
+SfxChildWindowContext* SwNavigationChild::CreateImpl( vcl::Window *pParent,
+        SfxBindings *pBindings, SfxChildWinInfo* pInfo )
+{
+    SfxChildWindowContext *pContext = new SwNavigationChild(pParent,
+            /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()),
+            pBindings,pInfo);
+    return pContext;
+}
+void    SwNavigationChild::RegisterChildWindowContext(SfxModule* pMod)
+{
+    SfxChildWinContextFactory *pFact = new SfxChildWinContextFactory(
+       SwNavigationChild::CreateImpl,
+       /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()) );
+    SfxChildWindowContext::RegisterChildWindowContext(pMod, SID_NAVIGATOR, pFact);
+}
+
 
 // Filter the control characters out of the Outline-Entry
 

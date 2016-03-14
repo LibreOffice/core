@@ -124,14 +124,6 @@ public:
     css::beans::Property* pProperties = _rProps.getArray();       \
 
 
-#define BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( count, aggregate )   \
-    _rProps.realloc( count );   \
-    css::beans::Property* pProperties = _rProps.getArray();       \
-    \
-    if (aggregate.is()) \
-        _rAggregateProps = aggregate->getPropertySetInfo()->getProperties();    \
-
-
 #define DECL_PROP0(varname, type)   \
     DECL_PROP_IMPL(varname, type) 0)
 

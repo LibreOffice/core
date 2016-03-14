@@ -20,34 +20,31 @@
 #include "helpid.hrc"
 #include "imapdlg.hrc"
 
-#define IMAPDLG_IDLIST \
-    IdList =            \
-    {                   \
-        TBI_APPLY ; \
-        TBI_OPEN ;  \
-        TBI_SAVEAS ;    \
-        TBI_SELECT ;    \
-        TBI_RECT ;  \
-        TBI_CIRCLE ;    \
-        TBI_POLY ;  \
-        TBI_FREEPOLY ;  \
-        TBI_POLYEDIT ;  \
-        TBI_POLYMOVE ; \
-        TBI_POLYINSERT ;    \
-        TBI_POLYDELETE ;    \
-        TBI_UNDO ;  \
-        TBI_REDO ;  \
-        TBI_ACTIVE ; \
-        TBI_MACRO ; \
-        TBI_PROPERTY ; \
-    };                 \
-    IdCount = { 17 ; };
-
 ImageList IL_IMAPDLG
 {
     Prefix = "id";
     MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
-    IMAPDLG_IDLIST
+    IdList =
+    {
+        TBI_APPLY ;
+        TBI_OPEN ;
+        TBI_SAVEAS ;
+        TBI_SELECT ;
+        TBI_RECT ;
+        TBI_CIRCLE ;
+        TBI_POLY ;
+        TBI_FREEPOLY ;
+        TBI_POLYEDIT ;
+        TBI_POLYMOVE ;
+        TBI_POLYINSERT ;
+        TBI_POLYDELETE ;
+        TBI_UNDO ;
+        TBI_REDO ;
+        TBI_ACTIVE ;
+        TBI_MACRO ;
+        TBI_PROPERTY ;
+    };
+    IdCount = { 17 ; };
 };
 
 /******************************************************************************/

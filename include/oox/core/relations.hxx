@@ -39,11 +39,6 @@ namespace core {
 #define CREATE_OFFICEDOC_RELATION_TYPE_STRICT( ascii ) \
     ( "http://purl.oclc.org/ooxml/officeDocument/relationships/" ascii )
 
-/** Expands to an OUString containing a 'package' relation type created from
-    the passed literal(!) ASCII(!) character array. */
-#define CREATE_PACKAGE_RELATION_TYPE( ascii ) \
-    ( "http://schemas.openxmlformats.org/package/2006/relationships/" ascii )
-
 /** Expands to an OUString containing an MS Office specific relation type
     created from the passed literal(!) ASCII(!) character array. */
 #define CREATE_MSOFFICE_RELATION_TYPE( ascii ) \
