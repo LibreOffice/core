@@ -82,10 +82,8 @@ bool isAccessibilitySupportDesired()
                 else if (strcmp((char*) arData, "false") == 0
                          || strcmp((char*) arData, "0") == 0)
                     retVal = false;
-#if OSL_DEBUG_LEVEL > 1
                 else
-                    OSL_ASSERT(0);
-#endif
+                    assert(0);
             }
             else if (dwType == REG_DWORD)
             {
@@ -93,10 +91,8 @@ bool isAccessibilitySupportDesired()
                     retVal = true;
                 else if (arData[0] == 0)
                     retVal = false;
-#if OSL_DEBUG_LEVEL > 1
                 else
-                    OSL_ASSERT(0);
-#endif
+                    assert(0);
             }
         }
     }
