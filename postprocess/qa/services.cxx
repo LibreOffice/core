@@ -19,7 +19,7 @@
 // instantiatable implementations that appears to work well).
 
 #include <sal/config.h>
-
+#include <config_features.h>
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -131,6 +131,10 @@ void Test::test() {
     // <https://bugs.documentfoundation.org/show_bug.cgi?id=89343>
     // "~SwXMailMerge() goes into endless SwCache::Check()":
     blacklist.push_back("SwXMailMerge");
+#if HAVE_FEATURE_OPENGL
+#else
+    blacklist.push_back("com.sun.star.comp.chart.GL3DBarChartType");
+#endif
 
     css::uno::Reference<css::container::XContentEnumerationAccess> enumAcc(
         m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);

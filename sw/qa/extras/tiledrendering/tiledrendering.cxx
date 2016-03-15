@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
@@ -130,6 +131,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SwTiledRenderingTest::testRegisterCallback()
 {
+#if HAVE_FEATURE_OPENGL
 #ifdef MACOSX
     // For some reason this particular test requires window system access on OS X.
 
@@ -157,10 +159,12 @@ void SwTiledRenderingTest::testRegisterCallback()
     // Also on OS X. But is tiled rendering even supposed to work on Windows and OS X?
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
 #endif
+#endif
 }
 
 void SwTiledRenderingTest::testPostKeyEvent()
 {
+#if HAVE_FEATURE_OPENGL
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -172,6 +176,7 @@ void SwTiledRenderingTest::testPostKeyEvent()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     // Did we manage to insert the character after the first one?
     CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+#endif
 }
 
 void SwTiledRenderingTest::testPostMouseEvent()
@@ -253,6 +258,7 @@ void SwTiledRenderingTest::testGetTextSelection()
 
 void SwTiledRenderingTest::testSetGraphicSelection()
 {
+#if HAVE_FEATURE_OPENGL
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -272,6 +278,7 @@ void SwTiledRenderingTest::testSetGraphicSelection()
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
 #if !defined(MACOSX) // FIXME
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHeight() + 1000, aShapeAfter.getHeight());
+#endif
 #endif
 }
 
@@ -316,6 +323,7 @@ void lcl_search(bool bBackward)
 
 void SwTiledRenderingTest::testSearch()
 {
+#if HAVE_FEATURE_OPENGL
 #if !defined(WNT) && !defined(MACOSX)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -351,10 +359,12 @@ void SwTiledRenderingTest::testSearch()
     nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
 #endif
+#endif
 }
 
 void SwTiledRenderingTest::testSearchViewArea()
 {
+#if HAVE_FEATURE_OPENGL
 #if !defined(WNT) && !defined(MACOSX)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -378,10 +388,12 @@ void SwTiledRenderingTest::testSearchViewArea()
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
     CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 #endif
+#endif
 }
 
 void SwTiledRenderingTest::testSearchTextFrame()
 {
+#if HAVE_FEATURE_OPENGL
 #if !defined(WNT) && !defined(MACOSX)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
@@ -393,6 +405,7 @@ void SwTiledRenderingTest::testSearchTextFrame()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
     CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
+#endif
 #endif
 }
 

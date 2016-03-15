@@ -8,6 +8,7 @@
  */
 
 #define LOK_USE_UNSTABLE_API
+#include <config_features.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
@@ -187,6 +188,7 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SdTiledRenderingTest::testRegisterCallback()
 {
+#if HAVE_FEATURE_OPENGL
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -202,6 +204,7 @@ void SdTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+#endif
 }
 
 void SdTiledRenderingTest::testPostKeyEvent()
@@ -221,6 +224,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
 
     CPPUNIT_ASSERT(pView->GetTextEditObject());
+#if HAVE_FEATURE_OPENGL
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we manage to enter a second character?
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), rEditView.GetSelection().nStartPos);
@@ -228,6 +232,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
     rEditView.SetSelection(aWordSelection);
     // Did we enter the expected character?
     CPPUNIT_ASSERT_EQUAL(OUString("xx"), rEditView.GetSelected());
+#endif
 }
 
 void SdTiledRenderingTest::testPostMouseEvent()
@@ -327,7 +332,9 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
+#if HAVE_FEATURE_OPENGL
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+#endif
 }
 
 void SdTiledRenderingTest::testResetSelection()
@@ -366,6 +373,7 @@ static void lcl_search(const OUString& rKey)
 
 void SdTiledRenderingTest::testSearch()
 {
+#if HAVE_FEATURE_OPENGL
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -392,6 +400,7 @@ void SdTiledRenderingTest::testSearch()
     Application::EnableHeadlessMode(false);
     lcl_search("ccc");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
+#endif
 }
 
 #endif
