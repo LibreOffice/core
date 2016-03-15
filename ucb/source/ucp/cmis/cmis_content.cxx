@@ -366,61 +366,78 @@ namespace cmis
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
-            if ( authProvider.authenticationQuery( rUsername, rPassword ) )
+
+            bool bIsDone = false;
+
+            while ( !bIsDone )
             {
-                // Initiate a CMIS session and register it as we found nothing
-                libcmis::OAuth2DataPtr oauth2Data;
-                if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
-                    oauth2Data.reset( new libcmis::OAuth2Data(
-                        GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
-                        GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
-                        GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
-                if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                    oauth2Data.reset( new libcmis::OAuth2Data(
-                        ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
-                        ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
-                        ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
-                if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
+                if ( authProvider.authenticationQuery( rUsername, rPassword ) )
                 {
-                    libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
-                    oauth2Data.reset( new libcmis::OAuth2Data(
-                        ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
-                        ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
-                        ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
-                }
-                m_pSession = libcmis::SessionFactory::createSession(
-                        OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                        rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, oauth2Data );
-                if ( m_pSession == nullptr )
-                {
-                    // Fail: session was not created
-                    ucbhelper::cancelCommandExecution(
-                        ucb::IOErrorCode_INVALID_DEVICE,
-                        generateErrorArguments(m_aURL),
-                        xEnv);
-                }
-                else if ( m_pSession->getRepository() == nullptr )
-                {
-                    // Fail: no repository or repository is invalid
-                    ucbhelper::cancelCommandExecution(
-                        ucb::IOErrorCode_INVALID_DEVICE,
-                        generateErrorArguments(m_aURL),
-                        xEnv,
-                        "error accessing a repository");
+                    // Initiate a CMIS session and register it as we found nothing
+                    libcmis::OAuth2DataPtr oauth2Data;
+                    if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                        oauth2Data.reset( new libcmis::OAuth2Data(
+                            GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
+                            GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
+                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+                    if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
+                        oauth2Data.reset( new libcmis::OAuth2Data(
+                            ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
+                            ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
+                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
+                    if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
+                    {
+                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
+                        oauth2Data.reset( new libcmis::OAuth2Data(
+                            ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
+                            ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
+                            ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
+                    }
+                    try
+                    {
+                        m_pSession = libcmis::SessionFactory::createSession(
+                            OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
+                            rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, oauth2Data );
+
+                        if ( m_pSession == nullptr )
+                        {
+                            // Fail: session was not created
+                            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_INVALID_DEVICE,
+                                generateErrorArguments(m_aURL),
+                                xEnv);
+                        }
+                        else if ( m_pSession->getRepository() == nullptr )
+                        {
+                            // Fail: no repository or repository is invalid
+                            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_INVALID_DEVICE,
+                                generateErrorArguments(m_aURL),
+                                xEnv,
+                                "error accessing a repository");
+                        }
+                        else
+                        {
+                            m_pProvider->registerSession(sSessionId, m_aURL.getUsername( ), m_pSession);
+                        }
+
+                        bIsDone = true;
+                    }
+                    catch( const libcmis::Exception & e )
+                    {
+                        if ( e.getType().compare( "permissionDenied" ) != 0 )
+                            throw;
+                    }
                 }
                 else
                 {
-                    m_pProvider->registerSession(sSessionId, m_aURL.getUsername( ), m_pSession);
+                    // Silently fail as the user cancelled the authentication
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_ABORT,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv );
+                    throw uno::RuntimeException( );
                 }
-            }
-            else
-            {
-                // Silently fail as the user cancelled the authentication
-                ucbhelper::cancelCommandExecution(
-                                    ucb::IOErrorCode_ABORT,
-                                    uno::Sequence< uno::Any >( 0 ),
-                                    xEnv );
-                throw uno::RuntimeException( );
             }
         }
         return m_pSession;
@@ -559,11 +576,13 @@ namespace cmis
         catch ( const libcmis::Exception& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
+
             ucbhelper::cancelCommandExecution(
-                                ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
-                                xEnv,
-                                OUString::createFromAscii( e.what( ) ) );
+                            ucb::IOErrorCode_GENERAL,
+                            uno::Sequence< uno::Any >( 0 ),
+                            xEnv,
+                            OUString::createFromAscii( e.what( ) ) );
+
         }
         return bIsFolder;
     }
