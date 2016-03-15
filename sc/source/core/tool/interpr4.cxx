@@ -3565,7 +3565,36 @@ double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& r
     return fVal;
 }
 
+// Test for Functions that evaluate an error code and directly set nGlobalError to 0
+bool IsErrFunc(OpCode oc)
+{
+    switch (oc)
+    {
+        case ocCount :
+        case ocCount2 :
+        case ocErrorType :
+        case ocIsEmpty :
+        case ocIsErr :
+        case ocIsError :
+        case ocIsFormula :
+        case ocIsLogical :
+        case ocIsNA :
+        case ocIsNonString :
+        case ocIsRef :
+        case ocIsString :
+        case ocIsValue :
+        case ocN :
+        case ocType :
+        case ocIfError :
+        case ocIfNA :
+        case ocErrorType_ODF :
+            return true;
+        default:
+            return false;
+    }
 }
+
+} //namespace
 
 StackVar ScInterpreter::Interpret()
 {
@@ -4132,48 +4161,17 @@ StackVar ScInterpreter::Interpret()
                 pJumpMatrix = nullptr;
         } while ( bGotResult );
 
-// Functions that evaluate an error code and directly set nGlobalError to 0,
-// usage: switch( OpCode ) { CASE_OCERRFUNC statements; }
-#define CASE_OCERRFUNC \
-    case ocCount : \
-    case ocCount2 : \
-    case ocErrorType : \
-    case ocIsEmpty : \
-    case ocIsErr : \
-    case ocIsError : \
-    case ocIsFormula : \
-    case ocIsLogical : \
-    case ocIsNA : \
-    case ocIsNonString : \
-    case ocIsRef : \
-    case ocIsString : \
-    case ocIsValue : \
-    case ocN : \
-    case ocType : \
-    case ocIfError : \
-    case ocIfNA : \
-    case ocErrorType_ODF :
+        if( IsErrFunc(eOp) )
+            ++nErrorFunction;
 
-        switch ( eOp )
-        {
-            CASE_OCERRFUNC
-                 ++ nErrorFunction;
-            default:
-                ;   // nothing
-        }
         if ( nGlobalError )
         {
             if ( !nErrorFunctionCount )
             {   // count of errorcode functions in formula
                 for ( FormulaToken* t = rArr.FirstRPN(); t; t = rArr.NextRPN() )
                 {
-                    switch ( t->GetOpCode() )
-                    {
-                        CASE_OCERRFUNC
-                             ++nErrorFunctionCount;
-                        default:
-                            ;   // nothing
-                    }
+                    if ( IsErrFunc(t->GetOpCode()) )
+                        ++nErrorFunctionCount;
                 }
             }
             if ( nErrorFunction >= nErrorFunctionCount )
