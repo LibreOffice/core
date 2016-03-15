@@ -462,12 +462,12 @@ const SwContent* SwContentType::GetMember(size_t nIndex)
     return nullptr;
 }
 
-void    SwContentType::Invalidate()
+void SwContentType::Invalidate()
 {
     bDataValid = false;
 }
 
-void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
+void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 {
     SwContentArr*   pOldMember = nullptr;
     size_t nOldMemberCount = 0;
@@ -1271,7 +1271,7 @@ sal_IntPtr SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 
 // Content will be integrated into the Box only on demand.
 
-void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
+void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
 {
     // Is this a content type?
     if(lcl_IsContentType(pParent))
@@ -2317,8 +2317,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                                 pEntry = Prev(pEntry);
                                 if(pEntry &&
                                     (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()||
-                                     CTYPE_CNT !=
-                                        static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
+                                     CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
                                 {
                                     break;
                                 }
@@ -2364,7 +2363,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
     }
 }
 
-void    SwContentTree::ShowTree()
+void SwContentTree::ShowTree()
 {
     SvTreeListBox::Show();
 }
@@ -2378,7 +2377,7 @@ void SwContentTree::Paint( vcl::RenderContext& rRenderContext,
     SvTreeListBox::Paint( rRenderContext, rRect );
 }
 
-void    SwContentTree::HideTree()
+void SwContentTree::HideTree()
 {
     m_aUpdTimer.Stop();
     SvTreeListBox::Hide();
@@ -2437,8 +2436,8 @@ DragDropMode SwContentTree::NotifyStartDrag(
 {
     DragDropMode eMode = (DragDropMode)0;
     if( m_bIsActive && m_nRootType == ContentTypeId::OUTLINE &&
-        GetModel()->GetAbsPos( pEntry ) > 0
-        && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
+            GetModel()->GetAbsPos( pEntry ) > 0
+            && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
         eMode = GetDragDropMode();
     else if(!m_bIsActive && GetWrtShell()->GetView().GetDocShell()->HasName())
         eMode = DragDropMode::APP_COPY;
@@ -2532,7 +2531,7 @@ bool  SwContentTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 // If a Ctrl + DoubleClick are executed in an open area,
 // then the base function of the control is to be called.
 
-void  SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
+void SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPos( rMEvt.GetPosPixel());
     SvTreeListEntry* pEntry = GetEntry( aPos, true );
@@ -2544,7 +2543,7 @@ void  SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 
 // Update immediately
 
-void  SwContentTree::GetFocus()
+void SwContentTree::GetFocus()
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
     if(pActView)
@@ -2568,7 +2567,7 @@ void  SwContentTree::GetFocus()
     SvTreeListBox::GetFocus();
 }
 
-void  SwContentTree::KeyInput(const KeyEvent& rEvent)
+void SwContentTree::KeyInput(const KeyEvent& rEvent)
 {
     const vcl::KeyCode aCode = rEvent.GetKeyCode();
     if(aCode.GetCode() == KEY_RETURN)
@@ -2703,8 +2702,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                             }
                             if ( !hasObjectMarked )
                             {
-                                SwEditWin& pEditWindow =
-                                    m_pActiveShell->GetView().GetEditWin();
+                                SwEditWin& pEditWindow = m_pActiveShell->GetView().GetEditWin();
                                 vcl::KeyCode tempKeycode( KEY_ESCAPE );
                                 KeyEvent rKEvt( 0 , tempKeycode );
                                 static_cast<vcl::Window*>(&pEditWindow)->KeyInput( rKEvt );
@@ -2725,7 +2723,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
 }
 
-void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
+void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bCallBase = true;
     if( rHEvt.GetMode() & HelpEventMode::QUICK )
@@ -2841,7 +2839,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+void SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     SvTreeListEntry* pFirst = FirstSelected();
     switch( nSelectedPopupEntry )
