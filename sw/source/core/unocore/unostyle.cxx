@@ -2436,10 +2436,10 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
 }
 
 void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
+        throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
-    setPropertiesToDefault ( aSequence );
+    const uno::Sequence<OUString> aSequence(&rPropertyName, 1);
+    setPropertiesToDefault(aSequence);
 }
 
 void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
