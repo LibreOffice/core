@@ -141,13 +141,15 @@ public:
 
     const SwTOXBase* GetTOXBase() const {return pBase;}
 };
-/*
-    class ContentType contains information to one type of content.
-    MemberArray is only populated if the content is requested by
-    GetMember. It is reloaded after Invalidate() only if the content
-    should be read again.
-*/
 
+/**
+ * Content type, knows it's contents and the WrtShell.
+ *
+ * The class ContentType contains information to one type of content.
+ * MemberArray is only populated if the content is requested by
+ * GetMember. It is reloaded after Invalidate() only if the content
+ * should be read again.
+*/
 class SwContentType : public SwTypeNumber
 {
     SwWrtShell*         pWrtShell;
@@ -168,10 +170,14 @@ public:
         virtual ~SwContentType();
 
         void                Init(bool* pbInvalidateWindow = nullptr);
+
+        /** Fill the List of contents */
         void                FillMemberList(bool* pbLevelChanged = nullptr);
         size_t              GetMemberCount() const
                                 {return nMemberCount;};
         ContentTypeId       GetType() const {return nContentType;}
+
+        /** Deliver content, for that if necessary fill the list */
         const SwContent*    GetMember(size_t nIndex);
         const OUString&     GetName() {return sContentTypeName;}
         const OUString&     GetSingleName() const {return sSingleContentTypeName;}
