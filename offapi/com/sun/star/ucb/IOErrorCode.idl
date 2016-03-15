@@ -176,7 +176,11 @@ published enum IOErrorCode
 
     /** An incorrect file version.
     */
-    WRONG_VERSION
+    WRONG_VERSION,
+
+    /** An incorrect password.
+    */
+    WRONG_PASSWORD
 
 };
 
