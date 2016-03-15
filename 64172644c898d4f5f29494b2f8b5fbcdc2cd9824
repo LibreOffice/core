@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_dba3534e",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-15T00:24:10Z",
+      "side": 0,
+      "message": "this conditional include shouldnt be needed when all printfs are SAL_INFOS then ...",
+      "revId": "64172644c898d4f5f29494b2f8b5fbcdc2cd9824",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3b89cfcb",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-15T00:24:10Z",
+      "side": 0,
+      "message": "replacing g_warnings with SAL_WARN (as done in gio) seems like a good idea while at it  ...",
+      "revId": "64172644c898d4f5f29494b2f8b5fbcdc2cd9824",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
