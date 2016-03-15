@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cmis,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 						external/libcmis/libcmis-libxml2_compatibility.patch \
+						external/libcmis/libcmis-fix-google-drive.patch \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
