@@ -294,6 +294,7 @@ g_lo_menu_set_action_and_target_value (GLOMenu     *menu,
 
     g_lo_menu_set_attribute_value (menu, position, G_MENU_ATTRIBUTE_ACTION, action_value);
     g_lo_menu_set_attribute_value (menu, position, G_MENU_ATTRIBUTE_TARGET, target_value);
+    g_lo_menu_set_attribute_value (menu, position, G_LO_MENU_ATTRIBUTE_SUBMENU_ACTION, nullptr);
 
     g_menu_model_items_changed (G_MENU_MODEL (menu), position, 1, 1);
 }

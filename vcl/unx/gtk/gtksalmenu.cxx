@@ -297,7 +297,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
-            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+            bool bNonMenuChangedToMenu = NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
             pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
 
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -310,12 +310,12 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
             g_object_unref( pSubMenuModel );
 
-            if ( bRecurse )
+            if (bRecurse || bNonMenuChangedToMenu)
             {
                 SAL_INFO("vcl.unity", "preparing submenu  " << pSubMenuModel << " to menu model " << G_MENU_MODEL(pSubMenuModel) << " and action group " << G_ACTION_GROUP(pActionGroup));
                 pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
                 pSubmenu->SetActionGroup( G_ACTION_GROUP( pActionGroup ) );
-                pSubmenu->ImplUpdate(bRecurse, bRemoveDisabledEntries);
+                pSubmenu->ImplUpdate(true, bRemoveDisabledEntries);
             }
         }
 
@@ -798,7 +798,7 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
     g_free( aCurrentAccel );
 }
 
-void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
+bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
                                        unsigned nItemPos,
                                        sal_uInt16 nId,
                                        const gchar* aCommand,
@@ -806,6 +806,8 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
                                        gboolean bChecked,
                                        gboolean bIsSubmenu )
 {
+    bool bSubMenuAddedOrRemoved = false;
+
     SolarMutexGuard aGuard;
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
@@ -845,6 +847,18 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
     if ( aCurrentCommand == nullptr || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
     {
+        bool bOldHasSubmenu = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos) != nullptr;
+        bSubMenuAddedOrRemoved = bOldHasSubmenu != bIsSubmenu;
+        if (bSubMenuAddedOrRemoved)
+        {
+            //tdf#98636 its not good enough to unset the "submenu-action" attribute to change something
+            //from a submenu to a non-submenu item, so remove the old one entirely and re-add it to
+            //support achieving that
+            gchar* pLabel = g_lo_menu_get_label_from_item_in_section(pMenu, nSection, nItemPos);
+            g_lo_menu_remove_from_section(pMenu, nSection, nItemPos);
+            g_lo_menu_insert_in_section(pMenu, nSection, nItemPos, pLabel);
+        }
+
         g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand );
 
         gchar* aItemCommand = g_strconcat("win.", aCommand, nullptr );
@@ -865,6 +879,8 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
     if (pTarget)
         g_variant_unref(pTarget);
+
+    return bSubMenuAddedOrRemoved;
 }
 
 GtkSalMenu* GtkSalMenu::GetMenuForItemCommand(gchar* aCommand, int& rDupsToSkip, gboolean bGetSubmenu)

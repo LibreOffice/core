@@ -87,7 +87,7 @@ public:
     bool                        IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
-    void                        NativeSetItemCommand( unsigned nSection,
+    bool                        NativeSetItemCommand( unsigned nSection,
                                                       unsigned nItemPos,
                                                       sal_uInt16 nId,
                                                       const gchar* aCommand,
