@@ -4079,29 +4079,34 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     if( bIsDocReadOnly )
                         break;
 
-                    bool bIsMediaSelected = rSh.GetSelectionType() & nsSelectionType::SEL_GRF ||
+                    bool bResizeKeepRatio = rSh.GetSelectionType() & nsSelectionType::SEL_GRF ||
                                             rSh.GetSelectionType() & nsSelectionType::SEL_MEDIA ||
                                             rSh.GetSelectionType() & nsSelectionType::SEL_OLE;
                     bool bisResize = g_eSdrMoveHdl != HDL_MOVE;
+
+                    // Resize proportionally when media is selected and the user drags on a corner
+                    const Point aSttPt(PixelToLogic(m_aStartPos));
+                    SdrHdl* pHdl = pSdrView->PickHandle(aSttPt);
+                    if (pHdl)
+                        bResizeKeepRatio = bResizeKeepRatio && pHdl->IsCornerHdl();
 
                     if (pSdrView)
                     {
                         if (pSdrView->GetDragMode() == SDRDRAG_CROP)
                             bisResize = false;
-
                         if (rMEvt.IsShift())
                         {
-                            pSdrView->SetAngleSnapEnabled(!bIsMediaSelected);
+                            pSdrView->SetAngleSnapEnabled(!bResizeKeepRatio);
                             if (bisResize)
-                                pSdrView->SetOrtho(!bIsMediaSelected);
+                                pSdrView->SetOrtho(!bResizeKeepRatio);
                             else
                                 pSdrView->SetOrtho(true);
                         }
                         else
                         {
-                            pSdrView->SetAngleSnapEnabled(bIsMediaSelected);
+                            pSdrView->SetAngleSnapEnabled(bResizeKeepRatio);
                             if (bisResize)
-                                pSdrView->SetOrtho(bIsMediaSelected);
+                                pSdrView->SetOrtho(bResizeKeepRatio);
                             else
                                 pSdrView->SetOrtho(false);
                         }
