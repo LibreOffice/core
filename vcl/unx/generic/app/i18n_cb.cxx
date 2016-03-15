@@ -405,7 +405,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
 
 // iv. preedit caret callback
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 void
 PreeditCaretCallback ( XIC ic, XPointer client_data,
     XIMPreeditCaretCallbackStruct *call_data )
@@ -414,7 +414,7 @@ void
 PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
 #endif
 {
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     // XXX PreeditCaretCallback is pure debug code for now
     const char *direction = "?";
     const char *style = "?";
@@ -508,11 +508,11 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
         }
         vcl::I18NStatus::get().setStatusText( aText );
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
     {
-        fprintf( stderr, "XIMStatusDataType %s not supported\n",
-            call_data->type == XIMBitmapType ? "XIMBitmapType" : OString::number(call_data->type).getStr() );
+        SAL_WARN("vcl.app", "XIMStatusDataType " << (call_data->type == XIMBitmapType ? "XIMBitmapType" :
+                OString::number(call_data->type).getStr()) << " not supported");
     }
 #endif
     return;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 #include <sal/alloca.h>
@@ -360,10 +360,8 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
                      rGeom.nY + rGeom.nHeight + nDistance
                      );
     }
-#if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
-#endif
+        SAL_WARN("vcl.app", "Warning: could not reposition status window since no frame");
     EnableAlwaysOnTop();
 }
 

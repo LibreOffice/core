@@ -184,10 +184,8 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
         delete pAdaptor;
         pAdaptor = nullptr;
     }
-#if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "WM supports extended WM hints\n" );
-#endif
+        SAL_INFO("vcl.app", "WM supports extended WM hints");
 
     // try a GnomeWM
     if( ! pAdaptor )
@@ -198,20 +196,14 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
             delete pAdaptor;
             pAdaptor = nullptr;
         }
-#if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "WM supports GNOME WM hints\n" );
-#endif
+            SAL_WARN("vcl.app", "WM supports GNOME WM hints");
     }
 
     if( ! pAdaptor )
         pAdaptor = new WMAdaptor( pSalDisplay );
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "Window Manager's name is \"%s\"\n",
-        OUStringToOString(pAdaptor->getWindowManagerName(),
-        RTL_TEXTENCODING_UTF8).getStr());
-#endif
+    SAL_INFO("vcl.app", "Window Manager's name is \"" << pAdaptor->getWindowManagerName() << "\"");
     return pAdaptor;
 }
 
@@ -387,9 +379,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             char** pAtomNames = static_cast<char**>(alloca( sizeof(char*)*nItems ));
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "supported protocols:\n" );
-#endif
+                SAL_INFO("vcl.app", "supported protocols: ");
                 for( unsigned long i = 0; i < nItems; i++ )
                 {
                     // #i80971# protect against invalid atoms
@@ -410,9 +400,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                         if( pMatch->nProtocol == NET_WM_STATE_STAYS_ON_TOP )
                             m_bEnableAlwaysOnTopWorks = true;
                     }
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "  %s%s\n", pAtomNames[i], ((pMatch)&&(pMatch->nProtocol != -1)) ? "" : " (unsupported)" );
-#endif
+                    SAL_INFO("vcl.app", "  " << pAtomNames[i]<< (((pMatch)&&(pMatch->nProtocol != -1)) ? "" : " (unsupported)"));
                     XFree( pAtomNames[i] );
                 }
             }
@@ -473,22 +461,18 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     m_aWMWorkAreas[i] = aWorkArea;
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "workarea %d: %ldx%ld+%ld+%ld\n",
-                             i,
-                             m_aWMWorkAreas[i].GetWidth(),
-                             m_aWMWorkAreas[i].GetHeight(),
-                             m_aWMWorkAreas[i].Left(),
+                    SAL_INFO( "vcl.app", "workarea " <<
+                             i << ": " <<
+                             m_aWMWorkAreas[i].GetWidth() << "x" <<
+                             m_aWMWorkAreas[i].GetHeight() << "+" <<
+                             m_aWMWorkAreas[i].Left() << "+" <<
                              m_aWMWorkAreas[i].Top() );
-#endif
                 }
                 XFree( pProperty );
             }
             else
             {
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "%ld workareas for %d desktops !\n", nItems/4, m_nDesktops );
-#endif
+                SAL_INFO("vcl.app", nItems/4 << " workareas for " << m_nDesktops << " desktops !");
                 if( pProperty )
                 {
                     XFree(pProperty);
@@ -645,9 +629,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             char** pAtomNames = static_cast<char**>(alloca( sizeof(char*)*nItems ));
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "supported protocols:\n" );
-#endif
+                SAL_INFO("vcl.app", "supported protocols:");
                 for( unsigned long i = 0; i < nItems; i++ )
                 {
                     // #i80971# protect against invalid atoms
@@ -674,9 +656,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                         m_nWinGravity = NorthWestGravity;
                         m_nInitWinGravity = NorthWestGravity;
                     }
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "  %s%s\n", pAtomNames[i], ((pMatch) && (pMatch->nProtocol != -1)) ? "" : " (unsupported)" );
-#endif
+                    SAL_INFO("vcl.app","  " <<pAtomNames[i]<< (((pMatch) && (pMatch->nProtocol != -1)) ? "" : " (unsupported)"));
                     XFree( pAtomNames[i] );
                 }
             }

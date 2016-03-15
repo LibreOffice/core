@@ -2279,14 +2279,14 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     WinFontFace* pWinFontData = (WinFontFace*)aIFSD.mpFontData;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // get font metrics
     TEXTMETRICA aWinMetric;
     if( !::GetTextMetricsA( getHDC(), &aWinMetric ) )
         return FALSE;
 
-    DBG_ASSERT( !(aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "cannot subset device font" );
-    DBG_ASSERT( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "can only subset TT font" );
+    assert(!(aWinMetric.tmPitchAndFamily & TMPF_DEVICE) && "cannot subset device font");
+    assert( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE && "can only subset TT font" );
 #endif
 
     OUString aSysPath;
