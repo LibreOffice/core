@@ -50,6 +50,7 @@ enum class EditEntryMode
     RENAME        = 5,
 };
 
+/** TreeListBox for content indicator */
 class SwContentTree
     : public SvTreeListBox
     , public SfxListener
@@ -101,6 +102,10 @@ class SwContentTree
     bool                m_bIsKeySpace;
     Rectangle           m_aOldRectangle;
 
+    /**
+     * Before any data will be deleted, the last active entry has to be found.
+     * After this the UserData will be deleted
+     */
     void                FindActiveTypeAndRemoveUserData();
 
     using SvTreeListBox::ExecuteDrop;
@@ -121,6 +126,8 @@ protected:
 
     bool        FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode );
+
+    /** Check if the displayed content is valid. */
     bool            HasContentChanged();
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
@@ -156,14 +163,24 @@ public:
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
+    /** Switch the display to Root */
     void            ToggleToRoot();
     void            SetRootType(ContentTypeId nType);
+
+    /** Show the file */
     void            Display( bool bActiveView );
+    /** In the Clear the content types have to be deleted, also. */
     void            Clear();
+
+    /** After a file is dropped on the Navigator, the new shell will be set */
     void            SetHiddenShell(SwWrtShell* pSh);
     void            ShowHiddenShell();
     void            ShowActualView();
+
+    /** Document change - set new Shell */
     void            SetActiveShell(SwWrtShell* pSh);
+
+    /** Set an open view as active. */
     void            SetConstantShell(SwWrtShell* pSh);
 
     SwWrtShell*     GetWrtShell()
@@ -176,13 +193,16 @@ public:
     sal_uInt8       GetOutlineLevel()const {return m_nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
+    /** Expand - Remember the state for content types */
     virtual bool    Expand( SvTreeListEntry* pParent ) override;
-
+    /** Collapse - Remember the state for content types. */
     virtual bool    Collapse( SvTreeListEntry* pParent ) override;
 
+    /** Execute commands of the Navigator */
     void            ExecCommand(sal_uInt16 nCmd, bool bModifier);
 
     void            ShowTree();
+    /** folded together will not be glidled */
     void            HideTree();
 
     bool            IsConstantView() {return m_bIsConstant;}

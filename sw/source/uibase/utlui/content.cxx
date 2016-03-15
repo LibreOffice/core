@@ -217,8 +217,6 @@ SwTOXBaseContent::~SwTOXBaseContent()
 {
 }
 
-// Content type, knows it's contents and the WrtShell.
-
 SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 nLevel) :
     SwTypeNumber(CTYPE_CTT),
     pWrtShell(pShell),
@@ -452,8 +450,6 @@ SwContentType::~SwContentType()
     delete pMember;
 }
 
-// Deliver content, for that if necessary fill the list
-
 const SwContent* SwContentType::GetMember(size_t nIndex)
 {
     if(!bDataValid || !pMember)
@@ -470,8 +466,6 @@ void    SwContentType::Invalidate()
 {
     bDataValid = false;
 }
-
-// Fill the List of contents
 
 void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 {
@@ -768,8 +762,6 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
 }
 
-// TreeListBox for content indicator
-
 SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
     : SvTreeListBox(pParent, rResId)
     , m_sSpace(OUString("                    "))
@@ -874,9 +866,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                         case OBJ_wegFITTEXT:
                         case OBJ_LINE:
                         case OBJ_RECT:
-                            //caoxueqin added custom shape
                         case OBJ_CUSTOMSHAPE:
-                            //end 2005/08/05
                         case OBJ_CIRC:
                         case OBJ_SECT:
                         case OBJ_CARC:
@@ -899,7 +889,6 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                         {
                             return pTemp->GetTitle();
                         }
-                        //Commented End
                     }
                 }
             }
@@ -961,9 +950,7 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
                         case OBJ_wegFITTEXT:
                         case OBJ_LINE:
                         case OBJ_RECT:
-                            //caoxueqin added custom shape
                         case OBJ_CUSTOMSHAPE:
-                            //end 2005/08/05
                         case OBJ_CIRC:
                         case OBJ_SECT:
                         case OBJ_CARC:
@@ -986,7 +973,6 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
                         {
                             return pTemp->GetDescription();
                         }
-                        //Commented End
                     }
                 }
             }
@@ -1373,7 +1359,6 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
     }
 }
 
-//Get drawing Objects by content .
 SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 {
     SdrObject *pRetObj = nullptr;
@@ -1405,8 +1390,6 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
     }
     return pRetObj;
 }
-
-// Expand - Remember the state for content types.
 
 bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
@@ -1462,8 +1445,6 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
     }
     return SvTreeListBox::Expand(pParent);
 }
-
-// Collapse - Remember the state for content types.
 
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
@@ -1523,8 +1504,6 @@ IMPL_LINK_NOARG_TYPED(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool
     }
     return false;
 }
-
-// Show the file
 
 void SwContentTree::Display( bool bActive )
 {
@@ -1733,8 +1712,6 @@ void SwContentTree::Display( bool bActive )
     m_bActiveDocModified = false;
 }
 
-// In the Clear the content types have to be deleted, also.
-
 void SwContentTree::Clear()
 {
     SetUpdateMode(false);
@@ -1794,7 +1771,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         case ContentTypeId::POSTIT:
         case ContentTypeId::INDEX:
         case ContentTypeId::REFERENCE :
-            // cannot inserted as URL or as  koennen weder als URL noch als region
+            // cannot be inserted, neither as URL nor as region
         break;
         case ContentTypeId::URLFIELD:
             sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
@@ -1877,8 +1854,6 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     return bRet;
 }
 
-// Switch the display to Root
-
 void SwContentTree::ToggleToRoot()
 {
     if(!m_bIsRoot)
@@ -1912,8 +1887,6 @@ void SwContentTree::ToggleToRoot()
     m_pConfig->SetRootType( m_nRootType );
     GetParentWindow()->m_aContentToolBox->CheckItem(FN_SHOW_ROOT, m_bIsRoot);
 }
-
-// Check if the displayed content is valid.
 
 bool SwContentTree::HasContentChanged()
 {
@@ -2128,9 +2101,6 @@ bool SwContentTree::HasContentChanged()
     return bRepaint;
 }
 
-// Before any data will be deleted, the last active entry has to be found.
-// After this the UserData will be deleted
-
 void SwContentTree::FindActiveTypeAndRemoveUserData()
 {
     SvTreeListEntry* pEntry = FirstSelected();
@@ -2152,9 +2122,6 @@ void SwContentTree::FindActiveTypeAndRemoveUserData()
     }
 }
 
-// After a file is dropped on the Navigator,
-// the new shell will be set.
-
 void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 {
     m_pHiddenShell = pSh;
@@ -2169,8 +2136,6 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 
     GetParentWindow()->UpdateListBox();
 }
-
-//  Document change - set new Shell
 
 void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 {
@@ -2208,8 +2173,6 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         Display(true);
     }
 }
-
-// Set an open view as active.
 
 void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 {
@@ -2251,8 +2214,6 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
         SfxListener::Notify(rBC, rHint);
     }
 }
-
-// Execute commands of the Navigator
 
 void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
 {
@@ -2417,16 +2378,13 @@ void SwContentTree::Paint( vcl::RenderContext& rRenderContext,
     SvTreeListBox::Paint( rRenderContext, rRect );
 }
 
-// folded together will not be glidled
-
 void    SwContentTree::HideTree()
 {
     m_aUpdTimer.Stop();
     SvTreeListBox::Hide();
 }
 
-// No idle with focus or while dragging.
-
+/** No idle with focus or while dragging */
 IMPL_LINK_NOARG_TYPED(SwContentTree, TimerUpdate, Timer *, void)
 {
     if (IsDisposed())
@@ -3368,7 +3326,6 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
-                    // #i51726# - all drawing objects can be named now
                     if (pTemp->GetName().equals(pCnt->GetName()))
                     {
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
