@@ -78,7 +78,6 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     , bDragHelpLine(false)
     , nHelpLine(0)
     , bPermanent(false)
-    , bIsMediaSelected(false)
 {
 }
 
@@ -154,25 +153,6 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     bool bReturn = false;
     bDragHelpLine = false;
     aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
-
-    // Check whether a media object is selected
-    bIsMediaSelected = false;
-    if (mpView->AreObjectsMarked())
-    {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        if (rMarkList.GetMarkCount() == 1)
-        {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            // tdf#89758 Extra check to avoid interactive crop preview from being
-            // proportionally scaled by default.
-            if (mpView->GetDragMode() != SDRDRAG_CROP)
-            {
-                sal_uInt16 aObjIdentifier = pMark->GetMarkedSdrObj()->GetObjIdentifier();
-                bIsMediaSelected = aObjIdentifier == OBJ_GRAF ||
-                                   aObjIdentifier == OBJ_MEDIA;
-            }
-        }
-    }
 
     if ( rMEvt.IsLeft() )
     {
@@ -261,7 +241,7 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     if (mpView->IsAction())
     {
         // #i33136# and fdo#88339
-        if(bRestricted && (bIsMediaSelected || doConstructOrthogonal()))
+        if(bRestricted && doConstructOrthogonal())
         {
             // Scale proportionally by default:
             // rectangle->quadrat, ellipse->circle, Images etc.

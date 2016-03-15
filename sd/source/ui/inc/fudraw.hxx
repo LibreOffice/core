@@ -77,7 +77,6 @@ protected:
     bool    bDragHelpLine;
     sal_uInt16  nHelpLine;
     bool    bPermanent;
-    bool bIsMediaSelected;
 
 private:
     void DoModifiers(const MouseEvent& rMEvt, bool bSnapModPressed);
