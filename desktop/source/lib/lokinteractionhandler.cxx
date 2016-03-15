@@ -141,7 +141,7 @@ bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
     if (!(rRequest >>= aIoException))
         return false;
 
-    static ErrCode const aErrorCode[ucb::IOErrorCode_WRONG_VERSION + 1] =
+    static ErrCode const aErrorCode[ucb::IOErrorCode_WRONG_PASSWORD + 1] =
     {
         ERRCODE_IO_ABORT,
         ERRCODE_IO_ACCESSDENIED,
@@ -179,6 +179,7 @@ bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
         ERRCODE_IO_WRITEPROTECTED,
         ERRCODE_IO_WRONGFORMAT,
         ERRCODE_IO_WRONGVERSION,
+        ERRCODE_IO_WRONGPASSWORD,
     };
 
     postError(aIoException.Classification, "io", aErrorCode[aIoException.Code], "");

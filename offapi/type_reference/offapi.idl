@@ -9368,7 +9368,8 @@ module com {
      UNKNOWN = 32,
      WRITE_PROTECTED = 33,
      WRONG_FORMAT = 34,
-     WRONG_VERSION = 35
+     WRONG_VERSION = 35,
+     WRONG_PASSWORD = 36
     };
     published exception InteractiveIOException: ::com::sun::star::task::ClassifiedInteractionRequest {
      ::com::sun::star::ucb::IOErrorCode Code;

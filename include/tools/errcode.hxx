@@ -183,6 +183,8 @@ inline sal_uInt32 ERRCODE_TOERROR( ErrCode x )
                                          ERRCODE_AREA_IO)
 #define ERRCODE_IO_OUTOFSPACE         CAST_TO_UINT32(9UL |ERRCODE_CLASS_SPACE|\
                                          ERRCODE_AREA_IO)
+#define ERRCODE_IO_WRONGPASSWORD      CAST_TO_UINT32(10UL|ERRCODE_CLASS_PATH|\
+                                         ERRCODE_AREA_IO)
 #define ERRCODE_IO_ISWILDCARD         CAST_TO_UINT32(11UL|ERRCODE_CLASS_PARAMETER|\
                                          ERRCODE_AREA_IO)
 #define ERRCODE_IO_NOTSUPPORTED       CAST_TO_UINT32(12UL|ERRCODE_CLASS_NOTSUPPORTED|\

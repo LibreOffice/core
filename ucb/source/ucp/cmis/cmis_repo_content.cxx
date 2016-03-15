@@ -42,6 +42,8 @@
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
+#define LIBCMIS_EXCEPTION_PERMISSION_DENIED_STR "permissionDenied"
+
 using namespace com::sun::star;
 using namespace std;
 
@@ -201,10 +203,21 @@ namespace cmis
                 catch (const libcmis::Exception& e)
                 {
                     SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
-                    ucbhelper::cancelCommandExecution(
+
+                    if(e.getType().compare(LIBCMIS_EXCEPTION_PERMISSION_DENIED_STR) == 0)
+                    {
+                        ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_WRONG_PASSWORD,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv );
+                    }
+                    else
+                    {
+                        ucbhelper::cancelCommandExecution(
                                         ucb::IOErrorCode_INVALID_DEVICE,
                                         uno::Sequence< uno::Any >( 0 ),
                                         xEnv );
+                    }
                 }
             }
             else

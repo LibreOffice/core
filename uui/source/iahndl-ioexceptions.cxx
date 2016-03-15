@@ -109,7 +109,7 @@ UUIInteractionHelper::handleInteractiveIOException(
         ErrCode nErrorCode;
         std::vector< OUString > aArguments;
         static ErrCode const
-            aErrorCode[ucb::IOErrorCode_WRONG_VERSION + 1][2]
+            aErrorCode[ucb::IOErrorCode_WRONG_PASSWORD + 1][2]
             = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
                 { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
                 // ACCESS_DENIED
@@ -177,7 +177,9 @@ UUIInteractionHelper::handleInteractiveIOException(
                 { ERRCODE_IO_WRONGFORMAT, ERRCODE_UUI_IO_WRONGFORMAT },
                 // WRONG_FORMAT
                 { ERRCODE_IO_WRONGVERSION,
-                  ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
+                  ERRCODE_UUI_IO_WRONGVERSION }, // WRONG_VERSION
+                { ERRCODE_IO_WRONGPASSWORD,
+                  ERRCODE_UUI_IO_WRONGPASSWORD } }; // WRONG_PASSWORD
         switch (aIoException.Code)
         {
         case ucb::IOErrorCode_CANT_CREATE:

@@ -508,6 +508,10 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "File format error found at $(ARG1)(row,col).";
     };
+    String (ERRCODE_IO_WRONGPASSWORD)
+    {
+        Text [ en-US ] = "Incorrect login or password.";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
