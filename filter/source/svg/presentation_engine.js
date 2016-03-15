@@ -4145,6 +4145,7 @@ FADE_TRANSITION             = 9; // 37
 RANDOMBARWIPE_TRANSITION    = 10; // 38
 CHECKERBOARDWIPE_TRANSITION = 11; // 39
 DISSOLVE_TRANSITION         = 12; // 40
+SNAKEWIPE_TRANSITION        = 13; // 30
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -4158,12 +4159,13 @@ aTransitionTypeInMap = {
     'fade'              : FADE_TRANSITION,
     'randomBarWipe'     : RANDOMBARWIPE_TRANSITION,
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
-    'dissolve'          : DISSOLVE_TRANSITION
+    'dissolve'          : DISSOLVE_TRANSITION,
+    'snakeWipe'         : SNAKEWIPE_TRANSITION
 };
 
 aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
                           'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
-                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' ];
+                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' , 'snakeWipe'];
 
 
 // Transition Subtypes
@@ -4195,36 +4197,49 @@ THREEBLADE_TRANS_SUBTYPE            = 24;
 EIGHTBLADE_TRANS_SUBTYPE            = 25;
 ONEBLADE_TRANS_SUBTYPE              = 26; // 107
 ACROSS_TRANS_SUBTYPE                = 27;
+TOPLEFTVERTICAL_TRANS_SUBTYPE       = 28; // 109
+TOPLEFTHORIZONTAL_TRANS_SUBTYPE     = 29; // 64
+TOPLEFTDIAGONAL_TRANS_SUBTYPE       = 30; // 65
+TOPRIGHTDIAGONAL_TRANS_SUBTYPE      = 31; // 66
+BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE   = 32; // 67
+BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE    = 33; // 68
+
 
 aTransitionSubtypeInMap = {
-    'default'           : DEFAULT_TRANS_SUBTYPE,
-    'leftToRight'       : LEFTTORIGHT_TRANS_SUBTYPE,
-    'topToBottom'       : TOPTOBOTTOM_TRANS_SUBTYPE,
-    'cornersIn'         : CORNERSIN_TRANS_SUBTYPE,
-    'cornersOut'        : CORNERSOUT_TRANS_SUBTYPE,
-    'vertical'          : VERTICAL_TRANS_SUBTYPE,
-    'horizontal'        : HORIZONTAL_TRANS_SUBTYPE,
-    'down'              : DOWN_TRANS_SUBTYPE,
-    'circle'            : CIRCLE_TRANS_SUBTYPE,
-    'clockwiseTwelve'   : CLOCKWISETWELVE_TRANS_SUBTYPE,
-    'clockwiseThree'    : CLOCKWISETHREE_TRANS_SUBTYPE,
-    'clockwiseSix'      : CLOCKWISESIX_TRANS_SUBTYPE,
-    'clockwiseNine'     : CLOCKWISENINE_TRANS_SUBTYPE,
-    'twoBladeVertical'  : TWOBLADEVERTICAL_TRANS_SUBTYPE,
-    'twoBladeHorizontal': TWOBLADEHORIZONTAL_TRANS_SUBTYPE,
-    'fourBlade'         : FOURBLADE_TRANS_SUBTYPE,
-    'fromLeft'          : FROMLEFT_TRANS_SUBTYPE,
-    'fromTop'           : FROMTOP_TRANS_SUBTYPE,
-    'fromRight'         : FROMRIGHT_TRANS_SUBTYPE,
-    'fromBottom'        : FROMBOTTOM_TRANS_SUBTYPE,
-    'crossfade'         : CROSSFADE_TRANS_SUBTYPE,
-    'fadeToColor'       : FADETOCOLOR_TRANS_SUBTYPE,
-    'fadeFromColor'     : FADEFROMCOLOR_TRANS_SUBTYPE,
-    'fadeOverColor'     : FADEOVERCOLOR_TRANS_SUBTYPE,
-    'threeBlade'        : THREEBLADE_TRANS_SUBTYPE,
-    'eightBlade'        : EIGHTBLADE_TRANS_SUBTYPE,
-    'oneBlade'          : ONEBLADE_TRANS_SUBTYPE,
-    'across'            : ACROSS_TRANS_SUBTYPE
+    'default'             : DEFAULT_TRANS_SUBTYPE,
+    'leftToRight'         : LEFTTORIGHT_TRANS_SUBTYPE,
+    'topToBottom'         : TOPTOBOTTOM_TRANS_SUBTYPE,
+    'cornersIn'           : CORNERSIN_TRANS_SUBTYPE,
+    'cornersOut'          : CORNERSOUT_TRANS_SUBTYPE,
+    'vertical'            : VERTICAL_TRANS_SUBTYPE,
+    'horizontal'          : HORIZONTAL_TRANS_SUBTYPE,
+    'down'                : DOWN_TRANS_SUBTYPE,
+    'circle'              : CIRCLE_TRANS_SUBTYPE,
+    'clockwiseTwelve'     : CLOCKWISETWELVE_TRANS_SUBTYPE,
+    'clockwiseThree'      : CLOCKWISETHREE_TRANS_SUBTYPE,
+    'clockwiseSix'        : CLOCKWISESIX_TRANS_SUBTYPE,
+    'clockwiseNine'       : CLOCKWISENINE_TRANS_SUBTYPE,
+    'twoBladeVertical'    : TWOBLADEVERTICAL_TRANS_SUBTYPE,
+    'twoBladeHorizontal'  : TWOBLADEHORIZONTAL_TRANS_SUBTYPE,
+    'fourBlade'           : FOURBLADE_TRANS_SUBTYPE,
+    'fromLeft'            : FROMLEFT_TRANS_SUBTYPE,
+    'fromTop'             : FROMTOP_TRANS_SUBTYPE,
+    'fromRight'           : FROMRIGHT_TRANS_SUBTYPE,
+    'fromBottom'          : FROMBOTTOM_TRANS_SUBTYPE,
+    'crossfade'           : CROSSFADE_TRANS_SUBTYPE,
+    'fadeToColor'         : FADETOCOLOR_TRANS_SUBTYPE,
+    'fadeFromColor'       : FADEFROMCOLOR_TRANS_SUBTYPE,
+    'fadeOverColor'       : FADEOVERCOLOR_TRANS_SUBTYPE,
+    'threeBlade'          : THREEBLADE_TRANS_SUBTYPE,
+    'eightBlade'          : EIGHTBLADE_TRANS_SUBTYPE,
+    'oneBlade'            : ONEBLADE_TRANS_SUBTYPE,
+    'across'              : ACROSS_TRANS_SUBTYPE,
+    'topLeftVertical'     : TOPLEFTVERTICAL_TRANS_SUBTYPE,
+    'topLeftHorizontal'   : TOPLEFTHORIZONTAL_TRANS_SUBTYPE,
+    'topLeftDiagonal'     : TOPLEFTDIAGONAL_TRANS_SUBTYPE,
+    'topRightDiagonal'    : TOPRIGHTDIAGONAL_TRANS_SUBTYPE,
+    'bottomRightDiagonal' : BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE,
+    'bottonLeftDiagonal'  : BOTTONLEFTDIAGONAL_TRANS_SUBTYPE
 };
 
 aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn',
@@ -4234,7 +4249,8 @@ aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn
                              'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
                              'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
                              'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade',
-                             'across' ];
+                             'across', 'topLeftVerical', 'topLeftHorizontal', 'topLeftDiagonal',
+                             'topRightDiagonal', 'bottomRightDiagonal', 'bottonLeftDiagonal'];
 
 
 // Transition Modes
@@ -4524,6 +4540,67 @@ aTransitionInfoTable[DISSOLVE_TRANSITION][DEFAULT_TRANS_SUBTYPE] =
     'scaleIsotropically' : true
 };
 
+aTransitionInfoTable[SNAKEWIPE_TRANSITION] = {};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPLEFTVERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : true
+}
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPLEFTHORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+}
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPLEFTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+}
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPRIGHTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+}
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+}
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+}
 
 // Transition tables
 
@@ -8108,6 +8185,18 @@ function createClipPolyPolygon( nType, nSubtype )
             return new CheckerBoardWipePath( 10 );
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
+        case SNAKEWIPE_TRANSITION:
+            return new SnakeWipePath( 8 * 8, // diagonal
+                                             nSubtype == TOPLEFTDIAGONAL_TRANS_SUBTYPE     ||
+                                             nSubtype == TOPRIGHTDIAGONAL_TRANS_SUBTYPE    ||
+                                             nSubtype == BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE ||
+                                             nSubtype == BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE   ,
+                                             // flipOnYAxis
+                                             nSubtype == TOPLEFTVERTICAL_TRANS_SUBTYPE     ||
+                                             nSubtype == TOPRIGHTDIAGONAL_TRANS_SUBTYPE    ||
+                                             nSubtype == BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE
+                                             ) );
+
     }
 }
 
@@ -8137,7 +8226,6 @@ function pruneScaleValue( nVal )
     else
         return (nVal > 0.00001 ? nVal : 0.00001);
 }
-
 
 /** Class BarWipePath
  *  This class handles a <path> element that defines a unit square and
@@ -8520,6 +8608,179 @@ RandomWipePath.prototype.perform = function( nT )
 };
 
 
+/** Class SnakeWipeSlide
+ *
+ *  @param nElements
+ *  @param bDiagonal
+ *  @param bFlipOnYaxis
+ */
+function SnakeWipePath(nElements, bDiagonal, bflipOnYAxis)
+{
+    this.sqrtElements = Math.floor(Math.sqrt(nElements));
+    this.elementEdge  = (1.0 / this.sqrtElements);
+    this.diagonal     = bDiagonal;
+    this.flipOnYAxis  = bflipOnYAxis;
+    this.aBasePath    = createUnitSquarePath();
+}
+
+SnakeWipePath.calcSnake = function(t)
+{
+    var res = this.aBasePath.cloneNode(true);
+    var area   = (t * sqrtElements * sqrtElements);
+    var line_  = Math.floor(area / sqrtElements);
+    var line   = pruneScaleValue(line_ / sqrtElements);
+    var col    = pruneScaleValue((area - (line_ * sqrtElements)) / sqrtElements);
+
+    if(line != 0) {
+        var poly = SVGIdentityMatrix;
+        var aPoint = document.documentElement.createSVGPoint();
+        poly.appendPath(aPoint);
+        aPoint.y = line;
+        poly.appendPath(aPoint);
+        aPoint.x = 1.0;
+        poly.appendPath(aPoint);
+        aPoint.y = 0.0;
+        poly.appendPath(aPoint);
+        res.appendPath(poly);
+    }
+    if(col != 0) {
+        var offset = 0.0;
+        if((line_ & 1) == 1) {
+            // odd line: => right to left
+            offset = (1.0 - col);
+        }
+        var poly = SVGIdentityMatrix;
+        var aPoint = document.documentElement.createSVGPoint();
+        aPoint.x = offset;
+        aPoint.y = line;
+        poly.appendPath(aPoint);
+        aPoint.y = line + elementEdge;
+        poly.appendPath(aPoint);
+        aPoint.x = offset + col;
+        poly.appendPath(aPoint);
+        aPoint.y = line;
+        poly.appendPath(aPoint);
+        res.appendPath(poly);
+    }
+
+    return res;
+}
+
+SnakeWipePath.calcHalfDiagonalSnake = function(nT, bIn) {
+    var res = this.aBasePath.cloneNode(true);
+
+    if(bIn) {
+        var sqrtArea2 = Math.sqrt(nT * sqrtElements * sqrtElements);
+        var edge = pruneScaleValue(sqrtArea2 / sqrtElements);
+
+        var poly = SVGIdentityMatrix;
+        if(edge) {
+            var aPoint = document.documentElement.createSVGPoint();
+            poly.appendPath(aPoint);
+            aPoint.y = height;
+            poly.appendPath(aPoint);
+            aPoint.x = len + a;
+            poly.appendPath(aPoint);
+            aPoint.y = 0.0;
+            poly.appendPath(aPoint);
+            res.appendPath(poly);
+        }
+        var a = (Math.SQRT1_2 / sqrtElements);
+        var d = (sqrtArea2 - Math.floor(sqrtArea2));
+        var len = (nT * Math.SQRT1_2 * d);
+        var height = pruneScaleValue(Math.SQRT1_2 / sqrtElements);
+        poly = SVGIdentityMatrix;
+        var aPoint = document.documentElement.createSVGPoint();
+        poly.appendPath(aPoint);
+        aPoint.y = height;
+        poly.appendPath(aPoint);
+        aPoint.x = len + a;
+        poly.appendPath(aPoint);
+        aPoint.y = 0.0;
+        poly.appendPath(aPoint);
+
+        var aTransform;
+
+        if(Math.floor(sqrtArea2) & 1) == 1) {
+            // odd line
+            aTransform = SVGIdentityMatrix.rotate((Math.PI)/2 + (Math.PI)/4);
+            aTransform.translate(edge + elementEdge, 0.0);
+        }
+        else {
+            aTransform = SVGIdentityMatrix.translate(-a, 0.0);
+            aTransform.rotate(-(Math.PI/4));
+            aTransform.translate(0.0, edge);
+        }
+
+        poly.transform(aTransform);
+        res.appendPath(poly);
+    }
+    else { //out
+        var sqrtArea2 = sqrt(t * sqrtElements * sqrtElements);
+        var edge = pruneScaleValue(Math.floor(sqrtArea2)/sqrtElements);
+
+        var poly = SVGIdentityMatrix;
+        if(edge) {
+            var aPoint = document.documentElement.createSVGPoint();
+            poly.appendPath(aPoint);
+            aPoint.x = edge;
+            poly.appendPath(aPoint);
+            aPoint.y = edge;
+            aPoint.x = 1.0;
+            poly.appendPath(aPoint);
+            aPoint.y = 0.0;
+            poly.appendPath(aPoint);
+            res.append(poly);
+        }
+        var a = (Math.SQRT1_2 / sqrtElements);
+        var d = (sqrtArea2 - Math.floor(sqrtArea2));
+        var len = ((1.0 - t) * Math.SQRT2 * d);
+        var height = pruneScaleValue(Math.SQRT1_2 / sqrtElements);
+
+        poly = SVGIdentityMatrix;
+        var aPoint = document.documentElement.createSVGPoint();
+        poly.appendPath(aPoint);
+        aPoint.y = height;
+        poly.appendPath(aPoint);
+        aPoint.x = len + a;
+        poly.appendPath(aPoint);
+        aPoint.y = 0.0;
+        poly.appendPath(aPoint);
+        res.appendPath(poly);
+
+        var aTransform;
+
+        if((Math.floor(sqrtArea2) & 1) == 1) {
+            // odd line
+            aTransform = SVGIdentityMatrix.translate(0.0, -height);
+            aTransform.rotate(Math.PI/2 + Math.PI/4);
+            aTransform.translate(1.0, edge);
+        }
+        else {
+            aTransform = SVGIdentityMatrix.rotate(-(Math.PI/4));
+            aTransform = aTransform.translate(edge, 1.0);
+        }
+        poly = poly.transform(aTransform);
+        res.appendPath(poly);
+    }
+    return res;
+}
+
+SnakeWipePath.prototype.perform = function(nT) {
+    var res = this.aBasePath.cloneNode(true);
+    if(diagonal) {
+        if(nT >= 0.5) {
+            res.appendPath(calcHalfDiagonalSnake(1.0, true));
+            res.appendPath(calcHalfDiagonalSnake(2.0*(nT-0.5), false));
+        }
+        else
+            res.appendPath(calcHalfDiagonalSnake(2.0*nT, true));
+    }
+    else
+        res = calcSnake(nT);
+
+    return this.flipOnYAxis ? res.flipY() : res;
+}
 
 /** Class AnimatedSlide
  *  This class handle a slide element during a slide transition.
