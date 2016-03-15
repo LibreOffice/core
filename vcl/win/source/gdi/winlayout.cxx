@@ -3907,8 +3907,8 @@ bool D2DWriteTextOutRenderer::DrawGlyphs(const Point & origin, uint16_t * pGid, 
         DWRITE_GLYPH_OFFSET glyphOffsets[MAX_GLYPHS] = { { 0.0f, 0.0f }, };
 
         mpRT->BeginDraw();
-        for (size_t nGlyphs = std::min(pGidEnd - pGid, MAX_GLYPHS); pGid != pGidEnd;
-                    pGid += nGlyphs, nGlyphs = std::min(pGidEnd - pGid, MAX_GLYPHS))
+        for (size_t nGlyphs = std::min(static_cast<int>(pGidEnd - pGid), MAX_GLYPHS); pGid != pGidEnd;
+                    pGid += nGlyphs, nGlyphs = std::min(static_cast<int>(pGidEnd - pGid), MAX_GLYPHS))
         {
             std::copy(pGid, pGidEnd, glyphIndices);
             std::copy_n(pAdvances, nGlyphs, glyphAdvances);
