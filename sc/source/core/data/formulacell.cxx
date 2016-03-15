@@ -1438,6 +1438,28 @@ bool ScFormulaCell::MarkUsedExternalReferences()
     return pCode && pDocument->MarkUsedExternalReferences(*pCode, aPos);
 }
 
+namespace {
+class RecursionCounter
+{
+    ScRecursionHelper&  rRec;
+    bool                bStackedInIteration;
+public:
+    RecursionCounter( ScRecursionHelper& r, ScFormulaCell* p ) : rRec(r)
+    {
+        bStackedInIteration = rRec.IsDoingIteration();
+        if (bStackedInIteration)
+            rRec.GetRecursionInIterationStack().push( p);
+        rRec.IncRecursionCount();
+    }
+    ~RecursionCounter()
+    {
+        rRec.DecRecursionCount();
+        if (bStackedInIteration)
+            rRec.GetRecursionInIterationStack().pop();
+    }
+};
+}
+
 void ScFormulaCell::Interpret()
 {
     if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
@@ -1680,25 +1702,7 @@ void ScFormulaCell::Interpret()
 
 void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
-    class RecursionCounter
-    {
-        ScRecursionHelper&  rRec;
-        bool                bStackedInIteration;
-        public:
-        RecursionCounter( ScRecursionHelper& r, ScFormulaCell* p ) : rRec(r)
-        {
-            bStackedInIteration = rRec.IsDoingIteration();
-            if (bStackedInIteration)
-                rRec.GetRecursionInIterationStack().push( p);
-            rRec.IncRecursionCount();
-        }
-        ~RecursionCounter()
-        {
-            rRec.DecRecursionCount();
-            if (bStackedInIteration)
-                rRec.GetRecursionInIterationStack().pop();
-        }
-    } aRecursionCounter( pDocument->GetRecursionHelper(), this);
+    RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
     if( !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
@@ -3843,6 +3847,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
     if (!officecfg::Office::Common::Misc::UseOpenCL::get())
         return false;
+
+    // Guard against endless recursion of Interpret() calls, for this to work
+    // ScFormulaCell::InterpretFormulaGroup() must never be called through
+    // anything else than ScFormulaCell::Interpret(), same as
+    // ScFormulaCell::InterpretTail()
+    RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
 
     // TODO : Disable invariant formula group interpretation for now in order
     // to get implicit intersection to work.
