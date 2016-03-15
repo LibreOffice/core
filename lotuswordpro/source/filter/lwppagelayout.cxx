@@ -892,7 +892,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
         RegisterChildStyle();
         //End
         pChangeMgr->SetHeadFootChange(pHeader);
-        pStory->XFConvert(pHeader);
+        pStory->DoXFConvert(pHeader);
 
         pChangeMgr->SetHeadFootFribMap(false);
     }
@@ -1046,7 +1046,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 
         pChangeMgr->SetHeadFootChange(pFooter);//add by ,7/6
 
-        pStory->XFConvert(pFooter);
+        pStory->DoXFConvert(pFooter);
 
         pChangeMgr->SetHeadFootFribMap(false);
     }

@@ -184,7 +184,7 @@ void LwpNoteLayout::XFConvert(XFContentContainer * pCont)
     LwpVirtualLayout* pTextLayout = GetTextLayout();
     if(pTextLayout)
     {
-        pTextLayout->XFConvert(pCont);
+        pTextLayout->DoXFConvert(pCont);
     }
 }
 
@@ -293,7 +293,7 @@ void LwpNoteTextLayout::XFConvert(XFContentContainer * pCont)
     rtl::Reference<LwpObject> pContent = m_Content.obj();
     if(pContent.is())
     {
-        pContent->XFConvert(pCont);
+        pContent->DoXFConvert(pCont);
     }
 }
 
