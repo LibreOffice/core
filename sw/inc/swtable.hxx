@@ -62,7 +62,9 @@ class SwServerObject;
 
 void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
-class SwTableLines : public std::vector<SwTableLine*> {
+class SwTableLines /* public std::vector<SwTableLine*>*/ {
+private:
+    std::vector<SwTableLine*> SwT;
 public:
     // free's any remaining child objects
     ~SwTableLines();
@@ -70,8 +72,8 @@ public:
     // return USHRT_MAX if not found, else index of position
     sal_uInt16 GetPos(const SwTableLine* pBox) const
     {
-        const_iterator it = std::find(begin(), end(), pBox);
-        return it == end() ? USHRT_MAX : it - begin();
+        std::vector<SwTableLine*>const_iterator it = std::find(SwT.begin(), SwT.end(), pBox);
+        return it == SwT.end() ? USHRT_MAX : it - SwT.begin();
     }
 };
 
