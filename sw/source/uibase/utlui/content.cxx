@@ -434,12 +434,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 SdrPage* pPage = pModel->GetPage(0);
                 const size_t nCount = pPage->GetObjCount();
                 for( size_t i=0; i<nCount; ++i )
-                {
-                    SdrObject* pTemp = pPage->GetObj(i);
-                    // #i51726# - all drawing objects can be named now
-                    if (!pTemp->GetName().isEmpty())
-                        nMemberCount++;
-                }
+                    nMemberCount++;
             }
         }
         break;
@@ -746,26 +741,21 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
-                    // #i51726# - all drawing objects can be named now
-                    if (!pTemp->GetName().isEmpty())
-                    {
-                        SwContact* pContact = static_cast<SwContact*>(pTemp->GetUserCall());
-                        long nYPos = 0;
-                        const Point aNullPt;
-                        if(pContact && pContact->GetFormat())
-                            nYPos = pContact->GetFormat()->FindLayoutRect(false, &aNullPt).Top();
-                        SwContent* pCnt = new SwContent(
-                                            this,
-                                            pTemp->GetName(),
-                                            nYPos);
-                        if(!rIDDMA.IsVisibleLayerId(pTemp->GetLayer()))
-                            pCnt->SetInvisible();
-                        pMember->insert(pCnt);
-                        nMemberCount++;
-                        if (nOldMemberCount > i &&
-                            (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
-                                *pbLevelOrVisibilityChanged = true;
-                    }
+                    SwContact* pContact = static_cast<SwContact*>(pTemp->GetUserCall());
+                    long nYPos = 0;
+                    const Point aNullPt;
+                    if(pContact && pContact->GetFormat())
+                        nYPos = pContact->GetFormat()->FindLayoutRect(false, &aNullPt).Top();
+                    SwContent* pCnt = new SwContent(
+                                        this,
+                                        pTemp->TakeObjNameSingul(),
+                                        nYPos);
+                    if(!rIDDMA.IsVisibleLayerId(pTemp->GetLayer()))
+                        pCnt->SetInvisible();
+                    pMember->insert(pCnt);
+                    nMemberCount++;
+                    if (nOldMemberCount > i && (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
+                        *pbLevelOrVisibilityChanged = true;
                 }
             }
         }
