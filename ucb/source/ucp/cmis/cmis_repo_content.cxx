@@ -163,58 +163,70 @@ namespace cmis
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
-            if ( authProvider.authenticationQuery( rUsername, rPassword ) )
-            {
-                try
-                {
-                    // Create a session to get repositories
-                    libcmis::OAuth2DataPtr oauth2Data;
-                    if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
-                        oauth2Data.reset( new libcmis::OAuth2Data(
-                            GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
-                            GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
-                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
-                    if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                        oauth2Data.reset( new libcmis::OAuth2Data(
-                            ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
-                            ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
-                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
-                    if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
-                    {
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
-                        oauth2Data.reset( new libcmis::OAuth2Data(
-                            ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
-                            ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
-                            ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
-                    }
 
-                    std::unique_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
-                            OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, "", false, oauth2Data ));
-                    if (!session)
-                        ucbhelper::cancelCommandExecution(
+            bool bIsDone = false;
+
+            while( !bIsDone )
+            {
+                if ( authProvider.authenticationQuery( rUsername, rPassword ) )
+                {
+                    try
+                    {
+                        // Create a session to get repositories
+                        libcmis::OAuth2DataPtr oauth2Data;
+                        if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                            oauth2Data.reset( new libcmis::OAuth2Data(
+                                GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
+                                GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
+                                GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+                        if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
+                            oauth2Data.reset( new libcmis::OAuth2Data(
+                                ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
+                                ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
+                                ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
+                        if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
+                        {
+                            libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
+                            oauth2Data.reset( new libcmis::OAuth2Data(
+                                ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
+                                ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
+                                ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
+                        }
+
+                        std::unique_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
+                                OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
+                                rUsername, rPassword, "", false, oauth2Data ));
+                        if (!session)
+                            ucbhelper::cancelCommandExecution(
+                                                ucb::IOErrorCode_INVALID_DEVICE,
+                                                uno::Sequence< uno::Any >( 0 ),
+                                                xEnv );
+                        m_aRepositories = session->getRepositories( );
+
+                        bIsDone = true;
+                    }
+                    catch ( const libcmis::Exception& e )
+                    {
+                        SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
+
+                        if ( e.getType().compare( "permissionDenied" ) != 0 )
+                        {
+                            ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,
                                             uno::Sequence< uno::Any >( 0 ),
                                             xEnv );
-                    m_aRepositories = session->getRepositories( );
+                        }
+                    }
                 }
-                catch (const libcmis::Exception& e)
+                else
                 {
-                    SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
+                    // Throw user cancelled exception
                     ucbhelper::cancelCommandExecution(
-                                        ucb::IOErrorCode_INVALID_DEVICE,
+                                        ucb::IOErrorCode_ABORT,
                                         uno::Sequence< uno::Any >( 0 ),
-                                        xEnv );
+                                        xEnv,
+                                        "Authentication cancelled" );
                 }
-            }
-            else
-            {
-                // Throw user cancelled exception
-                ucbhelper::cancelCommandExecution(
-                                    ucb::IOErrorCode_ABORT,
-                                    uno::Sequence< uno::Any >( 0 ),
-                                    xEnv,
-                                    "Authentication cancelled" );
             }
         }
     }
