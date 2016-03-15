@@ -2442,16 +2442,10 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
     setPropertiesToDefault(aSequence);
 }
 
-SwFormat* lcl_GetFormatForStyle(SfxStyleSheetBasePool* pBasePool, SwDoc* pDoc, const OUString& sStyleName, const SfxStyleFamily eFamily)
+SwFormat* lcl_GetFormatForStyle(SwDoc* pDoc, rtl::Reference<SwDocStyleSheet> xStyle, const SfxStyleFamily eFamily)
 {
-    if(!pBasePool)
+    if(!xStyle.is())
         return nullptr;
-    pBasePool->SetSearchMask(eFamily);
-    SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-    SAL_WARN_IF(!pBase, "sw.uno", "Where is the style?");
-    if(pBase)
-        return nullptr;
-    rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR: return xStyle->GetCharFormat();
@@ -2464,7 +2458,6 @@ SwFormat* lcl_GetFormatForStyle(SfxStyleSheetBasePool* pBasePool, SwDoc* pDoc, c
                 return &pDesc->GetMaster();
         }
         break;
-        case SFX_STYLE_FAMILY_PSEUDO: break;
         default: ;
     }
     return nullptr;
@@ -2474,7 +2467,8 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFormat* pTargetFormat = lcl_GetFormatForStyle(m_pBasePool, m_pDoc, m_sStyleName, m_rEntry.m_eFamily);
+    const rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(GetStyleSheetBase())));
+    SwFormat* pTargetFormat = lcl_GetFormatForStyle(m_pDoc, xStyle, m_rEntry.m_eFamily);
     if(!pTargetFormat)
     {
         if(!m_bIsDescriptor)
@@ -2516,130 +2510,86 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
     }
 }
 
-void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXStyle::setAllPropertiesToDefault()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    if(m_pBasePool)
+    if(!m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "Where is the style?");
-
-        if(pBase)
+        if(!m_bIsDescriptor)
+            throw uno::RuntimeException();
+        m_pPropertiesImpl->ClearAllProperties();
+        return;
+    }
+    const rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(GetStyleSheetBase())));
+    if(!xStyle.is())
+        throw uno::RuntimeException();
+    if(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily)
+    {
+        size_t nPgDscPos(0);
+        SwPageDesc* pDesc = m_pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName(), &nPgDscPos);
+        SwFormat* pPageFormat(nullptr);
+        if(pDesc)
         {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            SwFormat *pTargetFormat = nullptr;
-            size_t nPgDscPos = SIZE_MAX;
-            switch(m_rEntry.m_eFamily)
+            pPageFormat = &pDesc->GetMaster();
+            pDesc->SetUseOn(nsUseOnPage::PD_ALL);
+        }
+        else
+            pPageFormat = lcl_GetFormatForStyle(m_pDoc, xStyle, m_rEntry.m_eFamily);
+        SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(nPgDscPos);
+        rPageDesc.ResetAllMasterAttr();
+
+        SvxLRSpaceItem aLR(RES_LR_SPACE);
+        sal_Int32 nSize = GetMetricVal(CM_1) * 2;
+        aLR.SetLeft(nSize);
+        aLR.SetLeft(nSize);
+        SvxULSpaceItem aUL(RES_UL_SPACE);
+        aUL.SetUpper(static_cast<sal_uInt16>(nSize));
+        aUL.SetLower(static_cast<sal_uInt16>(nSize));
+        pPageFormat->SetFormatAttr(aLR);
+        pPageFormat->SetFormatAttr(aUL);
+        SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+        SwFormatFrameSize aFrameSz(ATT_FIX_SIZE);
+
+        if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFormatId())
+        {
+            if(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))
             {
-                case SFX_STYLE_FAMILY_CHAR:
-                    pTargetFormat = xStyle->GetCharFormat();
-                    break;
-
-                case SFX_STYLE_FAMILY_PARA:
-                {
-                    pTargetFormat = xStyle->GetCollection();
-                    if(xStyle->GetCollection())
-                    {
-                        xStyle->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
-                    }
-                    break;
-                }
-
-                case SFX_STYLE_FAMILY_FRAME:
-                    pTargetFormat = xStyle->GetFrameFormat();
-                    break;
-
-                case SFX_STYLE_FAMILY_PAGE:
-                {
-                    SwPageDesc *pDesc = m_pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName(), &nPgDscPos);
-                    if( pDesc )
-                    {
-                        pTargetFormat = &pDesc->GetMaster();
-                        pDesc->SetUseOn(nsUseOnPage::PD_ALL);
-                    }
-                    break;
-                }
-
-                case SFX_STYLE_FAMILY_PSEUDO:
-                    break;
-
-                default: ;
+                const Size aPhysSize( SvxPaperInfo::GetPaperSize(
+                    static_cast<Printer*>(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))));
+                aFrameSz.SetSize(aPhysSize);
+            }
+            else
+            {
+                aFrameSz.SetSize(SvxPaperInfo::GetDefaultPaperSize());
             }
 
-            if(pTargetFormat)
-            {
-                if(SIZE_MAX != nPgDscPos)
-                {
-                    SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(nPgDscPos);
-                    rPageDesc.ResetAllMasterAttr();
-
-                    SvxLRSpaceItem aLR(RES_LR_SPACE);
-                    sal_Int32 nSize = GetMetricVal(CM_1) * 2;
-                    aLR.SetLeft(nSize);
-                    aLR.SetLeft(nSize);
-                    SvxULSpaceItem aUL(RES_UL_SPACE);
-                    aUL.SetUpper(static_cast <sal_uInt16> (nSize));
-                    aUL.SetLower(static_cast <sal_uInt16> (nSize));
-                    pTargetFormat->SetFormatAttr(aLR);
-                    pTargetFormat->SetFormatAttr(aUL);
-                    SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-                    SwFormatFrameSize aFrameSz(ATT_FIX_SIZE);
-
-                    if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFormatId())
-                    {
-                        if(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))
-                        {
-                            const Size aPhysSize( SvxPaperInfo::GetPaperSize(
-                                static_cast<Printer*>(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))));
-                            aFrameSz.SetSize(aPhysSize);
-                        }
-                        else
-                        {
-                            aFrameSz.SetSize(SvxPaperInfo::GetDefaultPaperSize());
-                        }
-
-                    }
-                    else
-                    {
-                        aFrameSz = pStdPgDsc->GetMaster().GetFrameSize();
-                    }
-
-                    if(pStdPgDsc->GetLandscape())
-                    {
-                        SwTwips nTmp = aFrameSz.GetHeight();
-                        aFrameSz.SetHeight(aFrameSz.GetWidth());
-                        aFrameSz.SetWidth(nTmp);
-                    }
-
-                    pTargetFormat->SetFormatAttr( aFrameSz );
-                }
-                else
-                {
-                    pTargetFormat->ResetAllFormatAttr();
-                }
-
-                if(SIZE_MAX != nPgDscPos)
-                {
-                    m_pDoc->ChgPageDesc(nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos));
-                }
-            }
         }
         else
         {
-            throw uno::RuntimeException();
+            aFrameSz = pStdPgDsc->GetMaster().GetFrameSize();
         }
+
+        if(pStdPgDsc->GetLandscape())
+        {
+            SwTwips nTmp = aFrameSz.GetHeight();
+            aFrameSz.SetHeight(aFrameSz.GetWidth());
+            aFrameSz.SetWidth(nTmp);
+        }
+
+        pPageFormat->SetFormatAttr(aFrameSz);
+        m_pDoc->ChgPageDesc(nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos));
+        return;
     }
-    else if ( m_bIsDescriptor )
+    if(SFX_STYLE_FAMILY_PARA == m_rEntry.m_eFamily)
     {
-        m_pPropertiesImpl->ClearAllProperties();
+        if(xStyle->GetCollection())
+            xStyle->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    SwFormat* const pTargetFormat = lcl_GetFormatForStyle(m_pDoc, xStyle, m_rEntry.m_eFamily);
+    if(!pTargetFormat)
+        return;
+    pTargetFormat->ResetAllFormatAttr();
 }
 
 uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
