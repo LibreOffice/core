@@ -157,7 +157,6 @@ public class TestParameters extends HashMap<String,Object> {
         put(PropertyName.TIME_OUT, Integer.valueOf(3000000));
         put(PropertyName.THREAD_TIME_OUT, Integer.valueOf(3000000));
         put(PropertyName.AUTO_RESTART, Boolean.FALSE);
-        put(PropertyName.OFFICE_CLOSE_TIME_OUT, Integer.valueOf(15000));
 
         // get the operating system
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());

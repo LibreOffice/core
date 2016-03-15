@@ -93,12 +93,6 @@ public interface PropertyName {
      */
     String THREAD_TIME_OUT = "ThreadTimeOut";
     /**
-     * parameter name: "OfficeCloseTimeOut"
-     * This parameter contains the time which the office could use to close for
-     * itself before it is destroyed. Default is 15000 ms
-     */
-    String OFFICE_CLOSE_TIME_OUT = "OfficeCloseTimeOut";
-    /**
      * parameter name: "OperatingSystem"
      */
     String OPERATING_SYSTEM = "OperatingSystem";

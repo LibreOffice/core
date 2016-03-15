@@ -476,16 +476,6 @@ public class OfficeProvider implements AppProvider
 
                     desk.terminate();
                     dbg("Desktop terminated");
-
-                    try
-                    {
-                        final int closeTime = param.getInt(util.PropertyName.OFFICE_CLOSE_TIME_OUT);
-                        dbg("the Office has " + closeTime / 1000 + " seconds for closing...");
-                        Thread.sleep(closeTime);
-                    }
-                    catch (InterruptedException e)
-                    {
-                    }
                 }
             }
             catch (com.sun.star.uno.Exception ue)
