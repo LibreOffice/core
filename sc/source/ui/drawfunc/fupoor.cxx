@@ -290,16 +290,15 @@ bool FuPoor::doConstructOrthogonal() const
         }
     }
 
-    // Detect image and resize proportionally, but don't constrain movement by default
+    // Detect image/media and resize proportionally, but don't constrain movement by default
     if (pView->AreObjectsMarked())
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            if (rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF)
-            {
-                return true;
-            }
+            sal_uInt16 aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
+            return aObjIdentifier == OBJ_GRAF ||
+                   aObjIdentifier == OBJ_MEDIA;
         }
     }
     else if (aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON || aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON_NOFILL)

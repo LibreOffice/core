@@ -4079,7 +4079,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     if( bIsDocReadOnly )
                         break;
 
-                    bool bIsSelectionGfx = rSh.GetSelectionType() & nsSelectionType::SEL_GRF;
+                    bool bIsMediaSelected = rSh.GetSelectionType() & nsSelectionType::SEL_GRF ||
+                                            rSh.GetSelectionType() & nsSelectionType::SEL_MEDIA;
                     bool bisResize = g_eSdrMoveHdl != HDL_MOVE;
 
                     if (pSdrView)
@@ -4089,17 +4090,17 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                         if (rMEvt.IsShift())
                         {
-                            pSdrView->SetAngleSnapEnabled(!bIsSelectionGfx);
+                            pSdrView->SetAngleSnapEnabled(!bIsMediaSelected);
                             if (bisResize)
-                                pSdrView->SetOrtho(!bIsSelectionGfx);
+                                pSdrView->SetOrtho(!bIsMediaSelected);
                             else
                                 pSdrView->SetOrtho(true);
                         }
                         else
                         {
-                            pSdrView->SetAngleSnapEnabled(bIsSelectionGfx);
+                            pSdrView->SetAngleSnapEnabled(bIsMediaSelected);
                             if (bisResize)
-                                pSdrView->SetOrtho(bIsSelectionGfx);
+                                pSdrView->SetOrtho(bIsMediaSelected);
                             else
                                 pSdrView->SetOrtho(false);
                         }
