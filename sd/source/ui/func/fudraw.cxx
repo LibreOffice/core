@@ -78,7 +78,7 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     , bDragHelpLine(false)
     , nHelpLine(0)
     , bPermanent(false)
-    , bIsImageSelected(false)
+    , bIsMediaSelected(false)
 {
 }
 
@@ -155,8 +155,8 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     bDragHelpLine = false;
     aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-    // Check whether an image is selected
-    bIsImageSelected = false;
+    // Check whether a media object is selected
+    bIsMediaSelected = false;
     if (mpView->AreObjectsMarked())
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -167,7 +167,9 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
             // proportionally scaled by default.
             if (mpView->GetDragMode() != SDRDRAG_CROP)
             {
-                bIsImageSelected = pMark->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF;
+                sal_uInt16 aObjIdentifier = pMark->GetMarkedSdrObj()->GetObjIdentifier();
+                bIsMediaSelected = aObjIdentifier == OBJ_GRAF ||
+                                   aObjIdentifier == OBJ_MEDIA;
             }
         }
     }
@@ -259,7 +261,7 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     if (mpView->IsAction())
     {
         // #i33136# and fdo#88339
-        if(bRestricted && (bIsImageSelected || doConstructOrthogonal()))
+        if(bRestricted && (bIsMediaSelected || doConstructOrthogonal()))
         {
             // Scale proportionally by default:
             // rectangle->quadrat, ellipse->circle, Images etc.
