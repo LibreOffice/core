@@ -1409,6 +1409,49 @@ void ScTabView::MarkRows()
     SelectionChanged();
 }
 
+
+void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
+{
+    SCCOL nStartCol = nCol;
+    SCTAB nTab = aViewData.GetTabNo();
+    bool bTestNeg = true;
+
+    switch( nModifier )
+    {
+        case KEY_SHIFT:
+        case KEY_MOD1 + KEY_SHIFT:
+            nStartCol = aViewData.GetCurX();
+            bTestNeg = false;
+    }
+
+    DoneBlockMode( nModifier != 0 );
+    InitBlockMode( nStartCol, 0, nTab, bTestNeg, true, false );
+    MarkCursor( nCol, MAXROW, nTab );
+    SetCursor( nCol, 0 );
+    SelectionChanged();
+}
+
+void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
+{
+    SCROW nStartRow = nRow;
+    SCTAB nTab = aViewData.GetTabNo();
+    bool bTestNeg = true;
+
+    switch ( nModifier )
+    {
+        case KEY_SHIFT:
+        case KEY_MOD1 + KEY_SHIFT:
+            nStartRow = aViewData.GetCurY();
+            bTestNeg = false;
+    }
+
+    DoneBlockMode( nModifier != 0 );
+    InitBlockMode( 0, nStartRow, nTab, bTestNeg, false, true );
+    MarkCursor( MAXCOL, nRow, nTab );
+    SetCursor( 0, nRow );
+    SelectionChanged();
+}
+
 void ScTabView::MarkDataArea( bool bIncludeCursor )
 {
     ScDocument* pDoc = aViewData.GetDocument();
