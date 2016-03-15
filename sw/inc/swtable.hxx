@@ -62,7 +62,9 @@ class SwServerObject;
 
 void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
-class SwTableLines : public std::vector<SwTableLine*> {
+class SwTableLines /* public std::vector<SwTableLine*>*/ {
+private:
+    std::vector<SwTableLine*> SwT;
 public:
     // free's any remaining child objects
     ~SwTableLines();
@@ -70,8 +72,32 @@ public:
     // return USHRT_MAX if not found, else index of position
     sal_uInt16 GetPos(const SwTableLine* pBox) const
     {
-        const_iterator it = std::find(begin(), end(), pBox);
-        return it == end() ? USHRT_MAX : it - begin();
+        std::vector<SwTableLine*>::const_iterator it = std::find(SwT.begin(), SwT.end(), pBox);
+        return it == SwT.end() ? USHRT_MAX : it - SwT.begin();
+    }
+    size_t size() const
+    {
+        return SwT.size();
+    }
+    SwTableLine *operator[](size_t i) const {return SwT[i];}
+    const SwTableLine* front() const { return SwT.front();}
+    const SwTableLine* back() const { return SwT.back();}
+    std::vector<SwTableLine*>::const_iterator begin() { return SwT.begin(); }
+    std::vector<SwTableLine*>::const_iterator end() { return SwT.end(); }
+    void clear() { SwT.clear(); }
+    bool empty() const {return SwT.empty();}
+    void push_back(SwTableLine* S) {SwT.push_back(S);}
+    void erase(std::vector<SwTableLine*>::const_iterator it)
+    {
+        SwT.erase(SwT.begin() + (it - SwT.begin());
+    }
+    void erase(std::vector<SwTableLine*>::const_iterator first  , std::vector<SwTableLine*>::const_iterator last)
+    {
+         SwT.erase(SwT.begin() + (first - SwT.begin()), SwT.end() + (last - SwT.end()));
+    }
+    void erase(size_t index)
+    {
+        SwT.erase(SwT.begin() + index);
     }
 };
 
