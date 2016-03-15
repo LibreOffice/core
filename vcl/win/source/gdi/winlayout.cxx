@@ -76,7 +76,7 @@ const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
 
 struct OpenGLGlyphCacheChunk
 {
-    WORD mnFirstGlyph;
+    int mnFirstGlyph;           // Must be int to handle non-BMP code points when mbRealGlyphIndices is false
     int mnGlyphCount;
     std::vector<Rectangle> maLocation;
     std::vector<int> maLeftOverhangs;
@@ -383,9 +383,9 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(bool bRealGlyphIndices, int nGlyphIndex,
     aChunk.mnGlyphCount = nCount;
     aChunk.mbRealGlyphIndices = bRealGlyphIndices;
 
-    std::vector<WORD> aGlyphIndices(nCount);
+    std::vector<uint32_t> aCodePointsOrGlyphIndices(nCount);
     for (int i = 0; i < nCount; i++)
-        aGlyphIndices[i] = nGlyphIndex + i;
+        aCodePointsOrGlyphIndices[i] = nGlyphIndex + i;
 
     HDC hDC = CreateCompatibleDC(rLayout.mhDC);
     if (hDC == NULL)
@@ -424,17 +424,20 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(bool bRealGlyphIndices, int nGlyphIndex,
             return false;
         }
     }
+    std::vector<WORD> aGlyphIndices(nCount);
     // Fetch the ink boxes and calculate the size of the atlas.
     if (!bRealGlyphIndices)
     {
-        // FIXME First convert from UTF16 to utf32
-        std::vector<uint32_t> aCodePoints(aGlyphIndices.begin(), aGlyphIndices.end());
-        aGlyphIndices.resize(aCodePoints.size());
-            if (!SUCCEEDED(pTxt->GetFontFace()->GetGlyphIndices(aCodePoints.data(), aCodePoints.size(), aGlyphIndices.data())))
+        if (!SUCCEEDED(pTxt->GetFontFace()->GetGlyphIndices(aCodePointsOrGlyphIndices.data(), aCodePointsOrGlyphIndices.size(), aGlyphIndices.data())))
         {
             pTxt->ReleaseFont();
             return false;
         }
+    }
+    else
+    {
+        for (int i = 0; i < nCount; i++)
+            aGlyphIndices[i] = aCodePointsOrGlyphIndices[i];
     }
     Rectangle bounds(0, 0, 0, 0);
     auto aInkBoxes = pTxt->GetGlyphInkBoxes(aGlyphIndices.data(), aGlyphIndices.data() + nCount);
@@ -712,7 +715,10 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             if( bSurrogate )
                 nCharCode = 0x10000 + ((pCodes[0] - 0xD800) << 10) + (pCodes[1] - 0xDC00);
             else // or fall back to a replacement character
+            {
+                // FIXME: Surely this is an error situation that should not happen?
                 nCharCode = '?';
+            }
         }
 
         // get the advance width for the current UTF-32 code point
@@ -1492,10 +1498,25 @@ bool SimpleWinLayout::CacheGlyphs(SalGraphics& rGraphics) const
 
     for (int i = 0; i < mnGlyphCount; i++)
     {
-        if (mrWinFontEntry.GlyphIsCached(mpOutGlyphs[i]))
+        int nCodePoint;
+        if (i < mnGlyphCount-1 && rtl::isHighSurrogate(mpOutGlyphs[i]) && rtl::isLowSurrogate(mpOutGlyphs[i+1]))
+        {
+#if 1
+            return false;
+#else
+            nCodePoint = rtl::combineSurrogates(mpOutGlyphs[i], mpOutGlyphs[i+1]);
+            i++;
+#endif
+        }
+        else
+        {
+            nCodePoint = mpOutGlyphs[i];
+        }
+
+        if (mrWinFontEntry.GlyphIsCached(nCodePoint))
             continue;
 
-        if (!mrWinFontEntry.AddChunkOfGlyphs(false, mpOutGlyphs[i], *this, rGraphics))
+        if (!mrWinFontEntry.AddChunkOfGlyphs(false, nCodePoint, *this, rGraphics))
             return false;
     }
 
@@ -1529,10 +1550,21 @@ bool SimpleWinLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
         if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
             continue;
 
-        assert(mrWinFontEntry.GlyphIsCached(mpOutGlyphs[i]));
+        int nCodePoint;
+        if (i < mnGlyphCount-1 && rtl::isHighSurrogate(mpOutGlyphs[i]) && rtl::isLowSurrogate(mpOutGlyphs[i+1]))
+        {
+            nCodePoint = rtl::combineSurrogates(mpOutGlyphs[i], mpOutGlyphs[i+1]);
+            i++;
+        }
+        else
+        {
+            nCodePoint = mpOutGlyphs[i];
+        }
 
-        const OpenGLGlyphCacheChunk& rChunk = mrWinFontEntry.GetCachedGlyphChunkFor(mpOutGlyphs[i]);
-        const int n = mpOutGlyphs[i] - rChunk.mnFirstGlyph;
+        assert(mrWinFontEntry.GlyphIsCached(nCodePoint));
+
+        const OpenGLGlyphCacheChunk& rChunk = mrWinFontEntry.GetCachedGlyphChunkFor(nCodePoint);
+        const int n = nCodePoint - rChunk.mnFirstGlyph;
 
         SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
                            rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
