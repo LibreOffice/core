@@ -180,7 +180,7 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         }
     }
 
-    pLayout->XFConvert(pXFContentContainer);
+    pLayout->DoXFConvert(pXFContentContainer);
 
     if(m_bRevisionFlag)
     {
