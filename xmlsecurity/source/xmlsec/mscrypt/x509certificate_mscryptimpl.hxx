@@ -78,6 +78,9 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw (css::uno::RuntimeException);
 
+        /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
+        virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() throw (css::uno::RuntimeException, std::exception) override;
+
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
         static X509Certificate_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
 
