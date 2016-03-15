@@ -89,9 +89,7 @@ PrinterInfoManager& PrinterInfoManager::get()
             pSalData->m_pPIManager = new PrinterInfoManager();
 
         pSalData->m_pPIManager->initialize();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pSalData->m_pPIManager->getType() );
-#endif
+        SAL_INFO("vcl.unx.printer", "PrinterInfoManager::get create Manager of type " << pSalData->m_pPIManager->getType());
     }
 
     return *pSalData->m_pPIManager;
@@ -119,9 +117,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 PrinterInfoManager::~PrinterInfoManager()
 {
     delete m_pQueueInfo;
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
-    #endif
+    SAL_INFO("vcl.unx.printer", "PrinterInfoManager: destroyed Manager of type " << getType());
 }
 
 void PrinterInfoManager::initSystemDefaultPaper()
@@ -160,13 +156,9 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 
     if( bWait && m_pQueueInfo )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "syncing printer discovery thread\n" );
-        #endif
+        SAL_INFO("vcl.unx.printer", "syncing printer discovery thread");
         m_pQueueInfo->join();
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "done: syncing printer discovery thread\n" );
-        #endif
+        SAL_INFO("vcl.unx.printer", "done: syncing printer discovery thread");
     }
 
     if( ! bChanged && m_pQueueInfo )
@@ -199,9 +191,7 @@ void PrinterInfoManager::initialize()
 
     if( ! m_aGlobalDefaults.m_pParser )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Error: no default PPD file SGENPRT available, shutting down psprint...\n" );
-        #endif
+        SAL_INFO("vcl.unx.printer", "Error: no default PPD file SGENPRT available, shutting down psprint...");
         return;
     }
 
@@ -215,9 +205,7 @@ void PrinterInfoManager::initialize()
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found global defaults in %s\n", OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-            #endif
+            SAL_INFO("vcl.unx.printer", "found global defaults in " << aFile.PathToFileName());
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
 
             OString aValue( aConfig.ReadKey( "Copies" ) );
@@ -750,14 +738,11 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
 
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "new printer %s, level = %d, pdfdevice = %d, colordevice = %d, depth = %d\n",
-                 OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
-        m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
-        m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice,
-        m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
-        m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
-        #endif
+        SAL_INFO("vcl.unx.printer", "new printer " << rPrinterName << ", level = " <<
+            m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel << ", pdfdevice = " <<
+            m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice << ", colordevice = "<<
+            m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice << ", depth = " <<
+            m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
         // comment: logically one should writePrinterConfig() here
         // but immediately after addPrinter() a changePrinterInfo()
         // will follow which writes it again, so we can currently save some
@@ -905,10 +890,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
 
     if( nModified >= 0 ) // paper was set already, do not modify
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "not setting default paper, already set %s\n",
-                 OUStringToOString( rContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-        #endif
+        SAL_INFO("vcl.unx.printer", "not setting default paper, already set " << rContext.getValue(pPageSizeKey)->m_aOption);
         return;
     }
 
@@ -923,14 +905,10 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     }
     if( pPaperVal )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "setting default paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-        #endif
+        SAL_INFO("vcl.unx.printer", "setting default paper " <<  pPaperVal->m_aOption);
         rContext.setValue( pPageSizeKey, pPaperVal );
-        #if OSL_DEBUG_LEVEL > 1
         pPaperVal = rContext.getValue( pPageSizeKey );
-        fprintf( stderr, "-> got paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-        #endif
+        SAL_INFO("vcl.unx.printer", "-> got paper " << pPaperVal->m_aOption);
     }
 }
 
@@ -1170,9 +1148,7 @@ void SystemQueueInfo::run()
         aLines.clear();
         OStringBuffer aCmdLine( 128 );
         aCmdLine.append( aParms[i].pQueueCommand );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
-        #endif
+        SAL_INFO("vcl.unx.printer", "trying print queue command \"" << aParms[i].pQueueCommand << "\" ...");
         aCmdLine.append( " 2>/dev/null" );
         FILE *pPipe;
         if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
@@ -1187,15 +1163,11 @@ void SystemQueueInfo::run()
                 m_bChanged  = true;
                 m_aQueues   = aSysPrintQueues;
                 m_aCommand  = OUString::createFromAscii( aParms[i].pPrintCommand );
-                #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "success\n" );
-                #endif
+                SAL_INFO("vcl.unx.printer", "success");
                 break;
             }
         }
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "failed\n" );
-        #endif
+        SAL_INFO("vcl.unx.printer", "failed");
     }
 }
 

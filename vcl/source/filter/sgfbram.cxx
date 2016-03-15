@@ -487,7 +487,7 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 *************************************************************************/
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
 {
-#if OSL_DEBUG_LEVEL > 1 // check record size, new Compiler had different alignment!
+#if OSL_DEBUG_LEVEL > 0 // check record size, new Compiler had different alignment!
     if (sizeof(SgfHeader)!=SgfHeaderSize ||
         sizeof(SgfEntry) !=SgfEntrySize  ||
         sizeof(SgfVector)!=SgfVectorSize ||

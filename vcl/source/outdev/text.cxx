@@ -839,10 +839,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
     }
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "   OutputDevice::DrawText(\"%s\")\n",
-         OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    SAL_INFO("vcl", "   OutputDevice::DrawText(\"" << rStr << "\")");
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );

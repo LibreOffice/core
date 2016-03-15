@@ -1323,7 +1323,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         rOutMtf.SetPrefMapMode( rInMtf.GetPrefMapMode() );
         rOutMtf.SetPrefSize( rInMtf.GetPrefSize() );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // iterate over all aCCList members and generate rectangles for the bounding boxes
         rOutMtf.AddAction( new MetaFillColorAction( COL_WHITE, false ) );
         for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )

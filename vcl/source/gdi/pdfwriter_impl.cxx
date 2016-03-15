@@ -1144,10 +1144,10 @@ PDFWriterImpl::PDFPage::~PDFPage()
 
 void PDFWriterImpl::PDFPage::beginStream()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     {
         OStringBuffer aLine( "PDFWriterImpl::PDFPage::beginStream, +" );
-         m_pWriter->emitComment( aLine.getStr() );
+        m_pWriter->emitComment( aLine.getStr() );
     }
 #endif
     m_aStreamObjects.push_back(m_pWriter->createObject());
@@ -2409,10 +2409,7 @@ const sal_Char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr
     std::map< PDFWriter::StructAttribute, const char* >::const_iterator it =
         aAttributeStrings.find( eAttr );
 
-#if OSL_DEBUG_LEVEL > 1
-    if( it == aAttributeStrings.end() )
-        fprintf( stderr, "invalid PDFWriter::StructAttribute %d\n", eAttr );
-#endif
+    SAL_WARN_IF( it == aAttributeStrings.end(), "vcl.gdi", "invalid PDFWriter::StructAttribute " << eAttr );
 
     return it != aAttributeStrings.end() ? it->second : "";
 }
@@ -2454,10 +2451,7 @@ const sal_Char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeV
     std::map< PDFWriter::StructAttributeValue, const char* >::const_iterator it =
         aValueStrings.find( eVal );
 
-#if OSL_DEBUG_LEVEL > 1
-    if( it == aValueStrings.end() )
-        fprintf( stderr, "invalid PDFWriter::StructAttributeValue %d\n", eVal );
-#endif
+    SAL_WARN_IF(it == aValueStrings.end(), "vcl.gdi", "invalid PDFWriter::StructAttributeValue " << eVal);
 
     return it != aValueStrings.end() ? it->second : "";
 }
@@ -2531,8 +2525,8 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             else
             {
                 OSL_FAIL( "unresolved link id for Link structure" );
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "unresolved link id %" SAL_PRIdINT32 " for Link structure\n", nLink );
+#if OSL_DEBUG_LEVEL > 0
+                SAL_WARN("vcl.gdi", "unresolved link id " << nLink << " for Link structure");
                 {
                     OStringBuffer aLine( "unresolved link id " );
                     aLine.append( nLink );
@@ -2638,18 +2632,14 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 else
                 {
                     OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
-#endif
+                    SAL_WARN("vcl.gdi", "invalid child structure element with id " << *it);
                 }
             }
         }
         else
         {
             OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
-#endif
+            SAL_WARN("vcl.gdi", "invalid child structure id " << *it);
         }
     }
 
@@ -2808,7 +2798,7 @@ bool PDFWriterImpl::emitTilings()
 
         aTilingObj.setLength( 0 );
 
-        #if OSL_DEBUG_LEVEL > 1
+        #if OSL_DEBUG_LEVEL > 0
         emitComment( "PDFWriterImpl::emitTilings" );
         #endif
 
@@ -3330,7 +3320,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     }
 
                     // now we can actually write the font stream !
-                    #if OSL_DEBUG_LEVEL > 1
+                    #if OSL_DEBUG_LEVEL > 0
                     emitComment( " PDFWriterImpl::emitEmbeddedFont" );
                     #endif
                     OStringBuffer aLine( 512 );
@@ -3755,7 +3745,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     pCodec.EndCompression();
 #endif
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     emitComment( "PDFWriterImpl::createToUnicodeCMap" );
     #endif
     OStringBuffer aLine( 40 );
@@ -3945,7 +3935,7 @@ bool PDFWriterImpl::emitFonts()
                 if ( osl::File::E_None != aFontFile.getPos(nLength1) ) return false;
                 if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
 
-                #if OSL_DEBUG_LEVEL > 1
+                #if OSL_DEBUG_LEVEL > 0
                 emitComment( "PDFWriterImpl::emitFonts" );
                 #endif
                 sal_Int32 nFontStream = createObject();
@@ -4331,9 +4321,7 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
 {
     if( nDestID < 0 || nDestID >= (sal_Int32)m_aDests.size() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "ERROR: invalid dest %d requested\n", (int)nDestID );
-#endif
+        SAL_WARN("vcl.gdi", "ERROR: invalid dest " << nDestID << " requested");
         return false;
     }
 
@@ -5223,7 +5211,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 pApppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
                 sal_Int32 nObject = createObject();
                 CHECK_RETURN( updateObject( nObject ) );
-                #if OSL_DEBUG_LEVEL > 1
+                #if OSL_DEBUG_LEVEL > 0
                 emitComment( "PDFWriterImpl::emitAppearances" );
                 #endif
                 OStringBuffer aLine;
@@ -10717,7 +10705,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
     sal_uLong nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     emitComment( "PDFWriterImpl::writeTransparentObject" );
     #endif
     OStringBuffer aLine( 512 );
@@ -10871,7 +10859,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     Size aSize = aSample.GetSizePixel();
 
     sal_Int32 nStreamLengthObject = createObject();
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     emitComment( "PDFWriterImpl::writeGradientFunction" );
     #endif
     OStringBuffer aLine( 120 );
@@ -11081,7 +11069,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
             m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDF13 );
 
     }
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     emitComment( "PDFWriterImpl::writeJPG" );
     #endif
 
@@ -11200,7 +11188,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     sal_Int32 nStreamLengthObject   = createObject();
     sal_Int32 nMaskObject           = 0;
 
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     emitComment( "PDFWriterImpl::writeBitmapObject" );
     #endif
     OStringBuffer aLine(1024);
@@ -12384,12 +12372,8 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         writeBuffer( aLine.getStr(), aLine.getLength() );
 
         // update the element's content list
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "beginning marked content id %" SAL_PRIdINT32 " on page object %" SAL_PRIdINT32 ", structure first page = %" SAL_PRIdINT32 "\n",
-                 nMCID,
-                 m_aPages[ m_nCurrentPage ].m_nPageObject,
-                 rEle.m_nFirstPageObject );
-#endif
+        SAL_WARN("vcl.gdi", "beginning marked content id " << nMCID << " on page object " <<
+                m_aPages[m_nCurrentPage].m_nPageObject << ", structure first page = " << rEle.m_nFirstPageObject);
         rEle.m_aKids.push_back( PDFStructureElementKid( nMCID, m_aPages[m_nCurrentPage].m_nPageObject ) );
         // update the page's mcid parent list
         m_aPages[ m_nCurrentPage ].m_aMCIDParents.push_back( rEle.m_nObject );
@@ -12505,7 +12489,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         m_aRoleMap[ aAliasName ] = getStructureTag( eType );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OStringBuffer aLine( "beginStructureElement " );
     aLine.append( m_nCurrentStructElement );
     aLine.append( ": " );
@@ -12549,7 +12533,7 @@ void PDFWriterImpl::endStructureElement()
     // end the marked content sequence
     endStructureElementMCSeq();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OStringBuffer aLine( "endStructureElement " );
     aLine.append( m_nCurrentStructElement );
     aLine.append( ": " );
@@ -12568,7 +12552,7 @@ void PDFWriterImpl::endStructureElement()
     // check whether to emit structure henceforth
     m_bEmitStructure = checkEmitStructure();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( m_bEmitStructure )
         emitComment( aLine.getStr() );
 #endif
@@ -12600,18 +12584,14 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 else
                 {
                     OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
-#endif
+                    SAL_WARN("vcl.gdi", "invalid child structure element with id " << *it);
                 }
             }
         }
         else
         {
             OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
-#endif
+            SAL_WARN("vcl.gdi", "invalid child structure id " << *it);
         }
     }
 
@@ -12687,7 +12667,7 @@ bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
 
         m_nCurrentStructElement = nEle;
         m_bEmitStructure = checkEmitStructure();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OStringBuffer aLine( "setCurrentStructureElement " );
         aLine.append( m_nCurrentStructElement );
         aLine.append( ": " );
@@ -12891,15 +12871,10 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
 
     if( bInsert )
         m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( eVal );
-#if OSL_DEBUG_LEVEL > 1
-    else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
-        fprintf( stderr, "rejecting setStructureAttribute( %s, %s ) on %s (%s) element\n",
-                 getAttributeTag( eAttr ),
-                 getAttributeValueTag( eVal ),
-                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ),
-                 m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
-                 );
-#endif
+    SAL_WARN_IF(m_nCurrentStructElement > 0 && m_bEmitStructure, "vcl.gdi",
+            "rejecting setStructureAttribute(" << getAttributeTag(eAttr) << ", " <<
+            getAttributeValueTag(eVal) << ") on " << getStructureTag(m_aStructure[m_nCurrentStructElement].m_eType)
+            << "(" << m_aStructure[m_nCurrentStructElement].m_aAlias);
 
     return bInsert;
 }
@@ -13025,15 +13000,11 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
 
     if( bInsert )
         m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( nValue );
-#if OSL_DEBUG_LEVEL > 1
-    else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
-        fprintf( stderr, "rejecting setStructureAttributeNumerical( %s, %d ) on %s (%s) element\n",
-                 getAttributeTag( eAttr ),
-                 (int)nValue,
-                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ),
-                 m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr() );
-#endif
 
+    SAL_WARN_IF(m_nCurrentStructElement > 0 && m_bEmitStructure, "vcl.gdi", "rejecting setStructureAttributeNumerical("
+            << getAttributeTag(eAttr) << ", " << nValue << ") on " <<
+            getStructureTag(m_aStructure[m_nCurrentStructElement].m_eType) << "(" <<
+            m_aStructure[m_nCurrentStructElement].m_aAlias << ") element");
     return bInsert;
 }
 
@@ -13112,9 +13083,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
         {
             int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
             const OUString& rVal = m_aWidgets[nKidIndex].m_aOnValue;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "OnValue: %s\n", OUStringToOString( rVal, RTL_TEXTENCODING_UTF8 ).getStr() );
-            #endif
+            SAL_INFO("vcl.gdi", "OnValue: " << rVal);
             if( aOnValues.find( rVal ) == aOnValues.end() )
             {
                 aOnValues[ rVal ] = 1;
@@ -13126,9 +13095,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
         }
         if( ! bIsUnique )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "enforcing unique OnValues\n" );
-            #endif
+            SAL_INFO("vcl.gdi", "enforcing unique OnValues");
             // make unique by using ascending OnValues
             for( int nKid = 0; nKid < nChildren; nKid++ )
             {
@@ -13156,10 +13123,9 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                     appendName( rKid.m_aOnValue, aBuf );
                     (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
                 }
-                #if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "error: RadioButton without \"Yes\" stream\n" );
-                #endif
+                    SAL_WARN("vcl.gdi", "error: RadioButton without \"Yes\" stream");
+
             }
             // update selected radio button
             if( rKid.m_aValue != "Off" )
