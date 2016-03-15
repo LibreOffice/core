@@ -4080,7 +4080,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         break;
 
                     bool bIsMediaSelected = rSh.GetSelectionType() & nsSelectionType::SEL_GRF ||
-                                            rSh.GetSelectionType() & nsSelectionType::SEL_MEDIA;
+                                            rSh.GetSelectionType() & nsSelectionType::SEL_MEDIA ||
+                                            rSh.GetSelectionType() & nsSelectionType::SEL_OLE;
                     bool bisResize = g_eSdrMoveHdl != HDL_MOVE;
 
                     if (pSdrView)
