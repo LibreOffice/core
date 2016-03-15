@@ -187,7 +187,7 @@ void LwpFootnote::XFConvert(XFContentContainer * pCont)
     LwpContent* pContent = FindFootnoteContent();
     if(pContent)
     {
-        pContent->XFConvert(pCont);
+        pContent->DoXFConvert(pCont);
     }
 }
 

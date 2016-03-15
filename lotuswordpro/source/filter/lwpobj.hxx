@@ -92,10 +92,12 @@ protected:
     LwpSvStream* m_pStrm;
     bool m_bRegisteringStyle;
     bool m_bParsingStyle;
+    bool m_bConvertingContent;
 protected:
     virtual void Read();
     virtual void RegisterStyle();
     virtual void Parse(IXFStream* pOutputStream);
+    virtual void XFConvert(XFContentContainer* pCont);
 public:
     void QuickRead();
     //calls RegisterStyle but bails if DoRegisterStyle is called
@@ -118,8 +120,16 @@ public:
         Parse(pOutputStream);
         m_bParsingStyle = false;
     }
-
-    virtual void XFConvert(XFContentContainer* pCont);
+    //calls XFConvert but bails if DoXFConvert is called
+    //on the same object recursively
+    void DoXFConvert(XFContentContainer* pCont)
+    {
+        if (m_bConvertingContent)
+            throw std::runtime_error("recursion in parsing");
+        m_bConvertingContent = true;
+        XFConvert(pCont);
+        m_bConvertingContent = false;
+    }
 
     LwpFoundry* GetFoundry(){return m_pFoundry;}
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}
