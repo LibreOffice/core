@@ -16,6 +16,23 @@
       "revId": "90cf5d398e11fe786f8d1002a793668dd40a5bd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3bdb8fef",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3169,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-15T00:11:20Z",
+      "side": 1,
+      "message": "uno::Sequence now has STL-iterators and there is no need for getConstArray() -- you can use STL algos, ranged-fors etc. instead of naked pointer arithmetic.",
+      "revId": "90cf5d398e11fe786f8d1002a793668dd40a5bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
