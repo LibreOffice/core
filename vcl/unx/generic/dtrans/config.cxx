@@ -54,9 +54,7 @@ sal_Int32 SelectionManager::getSelectionTimeout()
     {
         DtransX11ConfigItem aCfg;
         m_nSelectionTimeout = aCfg.getSelectionTimeout();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "initialized selection timeout to %" SAL_PRIdINT32 " seconds\n", m_nSelectionTimeout );
-#endif
+        SAL_INFO("vcl.unx.dtrans", "initialized selection timeout to " << m_nSelectionTimeout << " seconds");
     }
     return m_nSelectionTimeout;
 }
@@ -72,9 +70,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
 {
     Sequence<OUString> aKeys { SELECTION_PROPERTY };
     Sequence< Any > aValues = GetProperties( aKeys );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
-#endif
+    SAL_INFO("vcl.unx.dtrans", "found " << aValues.getLength() << " properties for " << SELECTION_PROPERTY);
     Any* pValue = aValues.getArray();
     for( int i = 0; i < aValues.getLength(); i++, pValue++ )
     {
@@ -87,16 +83,10 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
                 if( m_nSelectionTimeout < 1 )
                     m_nSelectionTimeout = 1;
             }
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found SelectionTimeout \"%s\"\n",
-                     OUStringToOString( *pLine, osl_getThreadTextEncoding() ).getStr() );
-#endif
+            SAL_INFO("vcl.unx.dtrans", "found SelectionTimeout \"" << *pLine << "\"");
         }
-#if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "found SelectionTimeout of type \"%s\"\n",
-                     OUStringToOString( pValue->getValueType().getTypeName(), osl_getThreadTextEncoding() ).getStr() );
-#endif
+            SAL_INFO("vcl.unx.dtrans", "found SelectionTimeout of type \"" << pValue->getValueType().getTypeName());
     }
 }
 

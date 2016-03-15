@@ -25,6 +25,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+#include <sal/log.hxx>
 #include "FWS.hxx"
 
 static Atom fwsIconAtom;
@@ -95,17 +96,13 @@ WMSupportsFWS (Display *display, int screen)
         propItems != 1 ||
         propBytesAfter != 0)
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf (stderr, "Bad FWS_COMM_WINDOW property on root window.\n");
-        #endif
+        SAL_INFO("vcl.window", "Bad FWS_COMM_WINDOW property on root window.");
         XFree (propData);
         return False;
     }
 
     fwsCommWindow = *reinterpret_cast< ::Window * >(propData);
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf (stderr, "Using fwsCommWindow = 0x%lx.\n", fwsCommWindow);
-    #endif
+    SAL_INFO("vcl.window", "Using fwsCommWindow = 0x" << std::hex << fwsCommWindow);
     XFree (propData);
 
     if (XGetWindowProperty (display, DefaultRootWindow (display),
@@ -120,9 +117,7 @@ WMSupportsFWS (Display *display, int screen)
     if (propFormat     != 32 ||
         propBytesAfter != 0)
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf (stderr, "Bad FWS_PROTOCOLS property on root window.\n");
-        #endif
+        SAL_INFO("vcl.window", "Bad FWS_PROTOCOLS property on root window.");
         XFree (propData);
         return False;
     }
@@ -133,33 +128,25 @@ WMSupportsFWS (Display *display, int screen)
         if (protocol == FWS_STACK_UNDER)
         {
             fwsStackUnder = True;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf (stderr, "Using fwsStackUnder.\n");
-            #endif
+            SAL_INFO("vcl.window", "Using fwsStackUnder.");
         }
         else
         if (protocol == FWS_PARK_ICONS)
         {
             fwsParkIcons = True;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf (stderr, "Using fwsParkIcons.\n");
-            #endif
+            SAL_INFO("vcl.window", "Using fwsParkIcons.");
         }
         else
         if (protocol == FWS_PASSES_INPUT)
         {
             fwsPassesInput = True;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf (stderr, "Using fwsPassesInput.\n");
-            #endif
+            SAL_INFO("vcl.window", "Using fwsPassesInput.");
         }
         else
         if (protocol == FWS_HANDLES_FOCUS)
         {
             fwsHandlesFocus = True;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf (stderr, "Using fwsHandlesFocus.\n");
-            #endif
+            SAL_INFO("vcl.window", "Using fwsHandlesFocus.");
         }
     }
 
@@ -212,10 +199,7 @@ RegisterFwsWindow (Display *display, Window window)
     XSync (display, False);
 
     XSetErrorHandler (oldHandler);
-    #if OSL_DEBUG_LEVEL > 1
-    if (badWindowFound)
-        fprintf (stderr, "No FWS client window to register with.\n");
-    #endif
+    SAL_INFO_IF(badWindowFound, "vcl.window", "No FWS client window to register with.");
 
     return !badWindowFound;
 }

@@ -439,7 +439,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
                             hWndParent, 0, pInst->mhInst, (void*)pFrame );
     if( !hWnd )
         ImplWriteLastError( GetLastError(), "CreateWindowEx" );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // set transparency value
     if( GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
         SetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );

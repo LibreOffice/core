@@ -276,9 +276,7 @@ SalDisplay::SalDisplay( Display *display ) :
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalDisplay::SalDisplay()\n" );
-#endif
+    SAL_INFO("vcl.app", "SalDisplay::SalDisplay()");
     SalGenericData *pData = GetGenericData();
 
     DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
@@ -289,15 +287,11 @@ SalDisplay::SalDisplay( Display *display ) :
 
 SalDisplay::~SalDisplay()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalDisplay::~SalDisplay()\n" );
-#endif
+    SAL_INFO("vcl.app", "SalDisplay::~SalDisplay()");
     if( pDisp_ )
     {
         doDestruct();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "display %p closed\n", pDisp_ );
-#endif
+        SAL_INFO("vcl.app", "display " << pDisp_ << " closed");
         pDisp_ = nullptr;
     }
     // don't do this in doDestruct since RandR extension adds hooks into Display
@@ -411,9 +405,7 @@ SalX11Display::SalX11Display( Display *display )
 
 SalX11Display::~SalX11Display()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalX11Display::~SalX11Display()\n" );
-#endif
+    SAL_INFO("vcl.app", "SalX11Display::~SalX11Display()");
     if( pDisp_ )
     {
         doDestruct();
@@ -2297,11 +2289,12 @@ void SalDisplay::InitXinerama()
         }
     }
 #endif
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( m_bXinerama )
     {
         for( std::vector< Rectangle >::const_iterator it = m_aXineramaScreens.begin(); it != m_aXineramaScreens.end(); ++it )
-            fprintf( stderr, "Xinerama screen: %ldx%ld+%ld+%ld\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
+            SAL_INFO("vcl.app", "Xinerame screen: " << it->GetWidth() << "x" << it->GetHeight() << "+" << it->Left() <<
+                    "+" << it->Top());
     }
 #endif
 }

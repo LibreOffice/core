@@ -561,10 +561,8 @@ void GtkData::initNWF()
     if( pEnv && *pEnv )
         GtkSalGraphics::bNeedPixmapPaint = true;
 
-    #if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "GtkPlugin: using %s NWF\n",
-             GtkSalGraphics::bNeedPixmapPaint ? "offscreen" : "direct" );
-    #endif
+    SAL_INFO("vcl.gtk", "GtkPlugin: using " << (GtkSalGraphics::bNeedPixmapPaint ? "offscreen" : "direct")
+            << "NWF");
 
     GtkSettings *gtks = gtk_settings_get_default ();
     gint val;
@@ -3864,7 +3862,7 @@ static inline Color getColor( const GdkColor& rCol )
     return Color( rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 
 void printColor( const char* name, const GdkColor& rCol )
 {
@@ -3944,7 +3942,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     NWEnsureGTKDialog( m_nXScreen );
     NWEnsureGTKFrame( m_nXScreen );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     printStyleColors( pStyle );
 #endif
 
@@ -4049,7 +4047,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuBarRolloverTextColor(getColor(pMenubarStyle->fg[GTK_STATE_PRELIGHT]));
     aStyleSet.SetMenuBarHighlightTextColor(getColor(pMenubarStyle->fg[GTK_STATE_SELECTED]));
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     std::fprintf( stderr, "==\n" );
     std::fprintf( stderr, "MenuColor = %x (%d)\n", (int)aStyleSet.GetMenuColor().GetColor(), aStyleSet.GetMenuColor().GetLuminance() );
     std::fprintf( stderr, "MenuTextColor = %x (%d)\n", (int)aStyleSet.GetMenuTextColor().GetColor(), aStyleSet.GetMenuTextColor().GetLuminance() );
@@ -4124,18 +4122,13 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         case PANGO_STRETCH_ULTRA_EXPANDED:    aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;break;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
-#endif
+    SAL_INFO("vcl.gtk", "font name BEFORE system match: \"" << aFamily.getStr() << "\"");
 
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
 
-#if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
-             aInfo.m_nID != 0 ? "succeeded" : "failed",
-             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+    SAL_INFO("vcl.gtk", "font match " << (aInfo.m_nID != 0 ? "succeeded" : "failed") <<
+            ", name AFTER: \"" << aInfo.m_aFamilyName);
 
     sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
     int nPointHeight = 0;

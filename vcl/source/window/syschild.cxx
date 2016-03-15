@@ -168,9 +168,9 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 
     if( jtThrowable )
     { // is it a java exception ?
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         pJavaEnv->ExceptionDescribe();
-#endif // OSL_DEBUG_LEVEL > 1
+#endif // OSL_DEBUG_LEVEL > 0
         pJavaEnv->ExceptionClear();
 
         jclass          jcThrowable = pJavaEnv->FindClass("java/lang/Throwable");
