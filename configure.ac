@@ -3386,6 +3386,19 @@ find_msvs()
     done
 }
 
+win_get_env_from_vsvars32bat()
+{
+    WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
+    echo -e "@setlocal\r\n" >> $WRAPPERBATCHFILEPATH
+    echo -e "@call \"`cygpath -w $VC_PRODUCT_DIR`/../Common7/Tools/vsvars32.bat\"\r\n" >> $WRAPPERBATCHFILEPATH
+    echo -e "@echo %$1%\r\n" >> $WRAPPERBATCHFILEPATH
+    echo -e "@endlocal\r\n" >> $WRAPPERBATCHFILEPATH
+    chmod +x $WRAPPERBATCHFILEPATH
+    _win_get_env_from_vsvars32bat="`$WRAPPERBATCHFILEPATH | $SED -e s/^M^J//`"
+    rm -f $WRAPPERBATCHFILEPATH
+    echo $_win_get_env_from_vsvars32bat
+}
+
 find_ucrt()
 {
     reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
@@ -3393,6 +3406,13 @@ find_ucrt()
         ucrttest=$regvalue
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
         ucrtdir=$regvalue
+    fi
+    if test -z "$ucrttest"; then
+        if test -f "$VC_PRODUCT_DIR/../Common7/Tools/vsvars32.bat"; then
+            PathFormat "`win_get_env_from_vsvars32bat "UniversalCRTSdkDir"`"
+            ucrttest=$formatted_path
+            ucrtdir=`win_get_env_from_vsvars32bat "UCRTVersion"`
+        fi
     fi
 }
 
