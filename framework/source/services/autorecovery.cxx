@@ -440,7 +440,7 @@ private:
                 wait 10 s for user idle ...
      */
     #if OSL_DEBUG_LEVEL > 0
-    sal_Bool m_dbg_bMakeItFaster;
+    bool m_dbg_bMakeItFaster;
     #endif
 
 // interface
@@ -1267,7 +1267,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
 
     #if OSL_DEBUG_LEVEL > 0
-    , m_dbg_bMakeItFaster       (sal_False                                          )
+    , m_dbg_bMakeItFaster       (false                                              )
     #endif
 {
 }
