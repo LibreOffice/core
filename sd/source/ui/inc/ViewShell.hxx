@@ -329,27 +329,6 @@ public:
     */
     virtual void Resize();
 
-    /** Set the position and size of the area which contains the GUI
-        elements like rulers, sliders, and buttons as well as the document
-        view.  Both size and position are expected to be in pixel
-        coordinates.  The positions and sizes of the mentioned GUI elements
-        are updated as well.
-
-        <p> This method is implemented by first setting copying the given
-        values to internal variables and then calling the
-        <type>ArrangeGUIElements</type> method which performs the actual
-        work of sizeing and arranging the UI elements accordingly.</p>
-        @param rPos
-            The position of the enclosing window relative to the document
-            window.  This is only interesting if a Draw/Impress document
-            view is embedded as OLE object into another document view.  For
-            normal documents this position is (0,0).
-        @param rSize
-            The new size in pixel.
-    */
-    // This is to be replaced by Resize.
-    //  virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
-
     /** Set position and size of the GUI elements that are controlled by
         the view shell like rulers and scroll bars as well as the actual
         document view according to the position and size that were given
