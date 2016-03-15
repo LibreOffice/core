@@ -533,7 +533,7 @@ public:
                 // - FIXME: replicate justification
                 SET("gentium basic", pJustification),
 
-                // tdf#97319 - Unicode beyond BMP; SEP & Plane 2
+                // tdf#97319 - Unicode beyond BMP; SMP & Plane 2
                 SET("symbola", pEmojis),
                 SET("symbola", pThreeBowlG),
                 SET("symbola", pWavesAndDomino),
