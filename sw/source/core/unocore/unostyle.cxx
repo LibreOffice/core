@@ -2440,113 +2440,76 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
     setPropertiesToDefault(aSequence);
 }
 
-void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
-    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+SwFormat* lcl_GetFormatForStyle(SfxStyleSheetBasePool* pBasePool, SwDoc* pDoc, const OUString& sStyleName, const SfxStyleFamily eFamily)
 {
-    SolarMutexGuard aGuard;
-    SwFormat *pTargetFormat = nullptr;
-
-    if(m_pBasePool)
+    if(!pBasePool)
+        return nullptr;
+    pBasePool->SetSearchMask(eFamily);
+    SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
+    SAL_WARN_IF(!pBase, "sw.uno", "Where is the style?");
+    if(pBase)
+        return nullptr;
+    rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    switch(eFamily)
     {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "Where is the style?");
-
-        if(pBase)
+        case SFX_STYLE_FAMILY_CHAR: return xStyle->GetCharFormat();
+        case SFX_STYLE_FAMILY_PARA: return xStyle->GetCollection();
+        case SFX_STYLE_FAMILY_FRAME: return xStyle->GetFrameFormat();
+        case SFX_STYLE_FAMILY_PAGE:
         {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            switch(m_rEntry.m_eFamily)
-            {
-                case SFX_STYLE_FAMILY_CHAR:
-                    pTargetFormat = xStyle->GetCharFormat();
-                    break;
-
-                case SFX_STYLE_FAMILY_PARA:
-                    pTargetFormat = xStyle->GetCollection();
-                    break;
-
-                case SFX_STYLE_FAMILY_FRAME:
-                    pTargetFormat = xStyle->GetFrameFormat();
-                    break;
-
-                case SFX_STYLE_FAMILY_PAGE:
-                {
-                    SwPageDesc *pDesc = m_pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName());
-                    if( pDesc )
-                        pTargetFormat = &pDesc->GetMaster();
-                    break;
-                }
-                case SFX_STYLE_FAMILY_PSEUDO:
-                    break;
-                default: ;
-            }
+            SwPageDesc* pDesc(pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName()));
+            if(pDesc)
+                return &pDesc->GetMaster();
         }
-    }
-
-    sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
-
-    switch(m_rEntry.m_eFamily)
-    {
-        case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
-        case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE; break;
-        case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE; break;
-        case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE; break;
+        break;
+        case SFX_STYLE_FAMILY_PSEUDO: break;
         default: ;
     }
+    return nullptr;
+}
 
+void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aPropertyNames)
+        throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    SwFormat* pTargetFormat = lcl_GetFormatForStyle(m_pBasePool, m_pDoc, m_sStyleName, m_rEntry.m_eFamily);
+    if(!pTargetFormat)
+    {
+        if(!m_bIsDescriptor)
+            return;
+        for(const auto& rName : aPropertyNames)
+            m_pPropertiesImpl->ClearProperty(rName);
+        return;
+    }
+    const sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-    const OUString* pNames = aPropertyNames.getConstArray();
-
-    if(pTargetFormat)
+    for(const auto& rName : aPropertyNames)
     {
-        for(sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++)
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rName);
+        if(!pEntry)
+            throw beans::UnknownPropertyException("Unknown property: " + rName, static_cast<cppu::OWeakObject*>(this));
+        if(pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES)
+            throw uno::RuntimeException("Cannot reset: " + rName, static_cast<cppu::OWeakObject*>(this));
+        if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            throw uno::RuntimeException("setPropertiesToDefault: property is read-only: " + rName, static_cast<cppu::OWeakObject*>(this));
+        if(pEntry->nWID == RES_PARATR_OUTLINELEVEL)
         {
-            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[nProp]);
-
-            if( !pEntry )
-            {
-                throw beans::UnknownPropertyException ( "Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-            }
-
-            if ( pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES )
-            {
-                throw uno::RuntimeException ("Cannot reset: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-            }
-
-            if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            {
-                throw uno::RuntimeException("setPropertiesToDefault: property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-            }
-
-            if( pEntry->nWID == RES_PARATR_OUTLINELEVEL )
-            {
-                static_cast<SwTextFormatColl*>(pTargetFormat)->DeleteAssignmentToListLevelOfOutlineStyle();
-            }
-            else
-            {
-                pTargetFormat->ResetFormatAttr( pEntry->nWID );
-            }
-
-            if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
-            {
-                //UUUU
-                SwDoc* pDoc = pTargetFormat->GetDoc();
-                SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
-                aSet.SetParent(&pTargetFormat->GetAttrSet());
-
-                aSet.ClearItem(XATTR_FILLBMP_STRETCH);
-                aSet.ClearItem(XATTR_FILLBMP_TILE);
-
-                pTargetFormat->SetFormatAttr(aSet);
-            }
+            static_cast<SwTextFormatColl*>(pTargetFormat)->DeleteAssignmentToListLevelOfOutlineStyle();
+            continue;
         }
-    }
-    else if(m_bIsDescriptor)
-    {
-        for(sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++)
+        pTargetFormat->ResetFormatAttr(pEntry->nWID);
+        if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
-            m_pPropertiesImpl->ClearProperty(pNames[nProp]);
+            //UUUU
+            SwDoc* pDoc = pTargetFormat->GetDoc();
+            SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+            aSet.SetParent(&pTargetFormat->GetAttrSet());
+
+            aSet.ClearItem(XATTR_FILLBMP_STRETCH);
+            aSet.ClearItem(XATTR_FILLBMP_TILE);
+
+            pTargetFormat->SetFormatAttr(aSet);
         }
     }
 }
