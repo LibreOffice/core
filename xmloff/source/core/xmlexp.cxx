@@ -2370,7 +2370,7 @@ SvtSaveOptions::ODFSaneDefaultVersion SvXMLExport::getSaneDefaultVersion() const
         return mpImpl->maSaveOptions.GetODFSaneDefaultVersion();
 
     // fatal error, use current version as default
-    return SvtSaveOptions::ODFSVER_012;
+    return SvtSaveOptions::ODFSVER_LATEST;
 }
 
 OUString SvXMLExport::GetStreamName() const
