@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_96e1b2d3",
+        "filename": "sd/source/ui/view/drviewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-15T17:24:21Z",
+      "side": 1,
+      "message": "OSL_ENSURE is deprecated. Please use SAL_WARN/SAL_WARN_IF in new code.",
+      "revId": "659435a982c4ed9d87985cdeb82080c8191718d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_76f23e9c",
+        "filename": "sd/source/ui/view/drviewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-15T17:24:21Z",
+      "side": 1,
+      "message": "better to check for overflows _before_ the assignment in line 117 using std::numeric_limits, because after that assignment everything is implementation-defined behaviour anyway.",
+      "revId": "659435a982c4ed9d87985cdeb82080c8191718d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
