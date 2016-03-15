@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_d6ecca91",
+        "filename": "cppu/source/uno/check.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2016-03-15T20:11:56Z",
+      "side": 0,
+      "message": "By the way is it just another way to say \"everything but windows\"?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 19
+      },
+      "revId": "604021c66f0c409b241eafd89a3d3b43f2632437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
