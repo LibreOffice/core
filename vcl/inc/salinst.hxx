@@ -53,6 +53,7 @@ struct SalItemParams;
 class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
+class SystemWindow;
 class Menu;
 enum class VclInputFlags;
 enum class SalFrameStyleFlags;
@@ -137,7 +138,7 @@ public:
     virtual bool            AnyInput( VclInputFlags nType ) = 0;
 
     // menus
-    virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pMenu );
+    virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pMenu, SystemWindow* pAssociatedSystemWindow );
     virtual void            DestroyMenu( SalMenu* pMenu);
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
     virtual void            DestroyMenuItem( SalMenuItem* pItem );

@@ -220,7 +220,7 @@ static void initAppMenu()
     }
 }
 
-SalMenu* AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
+SalMenu* AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu, SystemWindow* /*pAssociatedSystemWindow*/ )
 {
     initAppMenu();
 
