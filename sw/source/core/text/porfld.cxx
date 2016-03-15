@@ -375,7 +375,8 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
 
             // These characters should not be contained in the follow
             // field portion. They are handled via the HookChar mechanism.
-            switch( aNew[0] )
+            const sal_Unicode nNew = !aNew.isEmpty() ? aNew[0] : 0;
+            switch (nNew)
             {
                 case CH_BREAK  : bFull = true;
                             // no break
