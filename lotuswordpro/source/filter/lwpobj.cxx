@@ -66,6 +66,7 @@
 LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)
     : m_ObjHdr(objHdr), m_pObjStrm(nullptr), m_pFoundry(nullptr)
     , m_pStrm(pStrm), m_bRegisteringStyle(false), m_bParsingStyle(false)
+    , m_bConvertingContent(false)
 {
     m_pObjStrm = new LwpObjectStream(pStrm, m_ObjHdr.IsCompressed(),
             static_cast<sal_uInt16>(m_ObjHdr.GetSize()) );

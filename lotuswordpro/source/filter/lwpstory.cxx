@@ -334,7 +334,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
                     pCont->FindFirstContent(enumXFContentPara));
                 XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
                 if(pXFFirtPara)
-                    xFrameLayout->XFConvert(pXFFirtPara);
+                    xFrameLayout->DoXFConvert(pXFFirtPara);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
@@ -361,7 +361,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
                       || xFrameLayout->IsSuperTable()
                       || xFrameLayout->IsGroupHead())))
             {
-                xFrameLayout->XFConvert(pCont);
+                xFrameLayout->DoXFConvert(pCont);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
@@ -384,7 +384,7 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
         {
             if (xFrameLayout->IsAnchorFrame())
             {
-                xFrameLayout->XFConvert(pCont);
+                xFrameLayout->DoXFConvert(pCont);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
@@ -412,7 +412,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
                     pCont->FindFirstContent(enumXFContentPara));
                 XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
                 if(pXFFirtPara)
-                    xFrameLayout->XFConvert(pXFFirtPara);
+                    xFrameLayout->DoXFConvert(pXFFirtPara);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }

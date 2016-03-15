@@ -840,7 +840,7 @@ void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
             rtl::Reference<LwpObject> content = m_Content.obj();
             if (content.is())
             {
-                content->XFConvert(pXFFrame);
+                content->DoXFConvert(pXFFrame);
                 //set frame size according to ole size
                 ApplyGraphicSize(pXFFrame);
             }
@@ -1108,7 +1108,7 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
 
         while (pLayout && pLayout != this)
         {
-            pLayout->XFConvert(pXFFrame);
+            pLayout->DoXFConvert(pXFFrame);
             pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
         }
 
