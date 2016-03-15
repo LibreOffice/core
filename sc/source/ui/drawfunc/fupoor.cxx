@@ -155,14 +155,6 @@ bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* String in Applikations-Statuszeile ausgeben
-|*
-\************************************************************************/
-
-//  WriteStatus gibt's nicht mehr
-
-/*************************************************************************
-|*
 |* Tastaturereignisse bearbeiten
 |*
 |* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
