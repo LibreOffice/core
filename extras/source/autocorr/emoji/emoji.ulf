@@ -4465,7 +4465,7 @@ en-US = "^B"
 
 [MODIFIER_LETTER_CAPITAL_D]
 x-comment = "ᴰ (U+01D30), see http://wiki.documentfoundation.org/Emoji"
-en-US = "^C"
+en-US = "^D"
 
 [MODIFIER_LETTER_CAPITAL_E]
 x-comment = "ᴱ (U+01D31), see http://wiki.documentfoundation.org/Emoji"
