@@ -213,7 +213,7 @@ String STR_CONTENT_TYPE_INDEX
 };
 String STR_CONTENT_TYPE_DRAWOBJECT
 {
-    Text [ en-US ] = "Draw objects" ;
+    Text [ en-US ] = "Drawing objects" ;
 };
 String STR_CONTENT_TYPE_POSTIT
 {
