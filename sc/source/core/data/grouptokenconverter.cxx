@@ -89,7 +89,7 @@ ScGroupTokenConverter::ScGroupTokenConverter(ScTokenArray& rGroupTokens, ScDocum
 {
 }
 
-bool ScGroupTokenConverter::convert(ScTokenArray& rCode, std::vector<ScTokenArray*>& rConversionStack)
+bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
 {
 #if 0
     { // debug to start with:
@@ -232,16 +232,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode, std::vector<ScTokenArra
 
                 mrGroupTokens.AddOpCode(ocOpen);
 
-                if (std::find(rConversionStack.begin(), rConversionStack.end(), pNamedTokens) != rConversionStack.end())
-                {
-                    SAL_WARN("sc", "loop in recursive ScGroupTokenConverter::convert");
-                    return false;
-                }
-
-                rConversionStack.push_back(pNamedTokens);
-                bool bOk = convert(*pNamedTokens, rConversionStack);
-                rConversionStack.pop_back();
-                if (!bOk)
+                if (!convert(*pNamedTokens))
                     return false;
 
                 mrGroupTokens.AddOpCode(ocClose);

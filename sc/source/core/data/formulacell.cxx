@@ -4036,8 +4036,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
         ScTokenArray aCode;
         ScGroupTokenConverter aConverter(aCode, *pDocument, *this, xGroup->mpTopCell->aPos);
-        std::vector<ScTokenArray*> aLoopControl;
-        if (!aConverter.convert(*pCode, aLoopControl))
+        if (!aConverter.convert(*pCode))
         {
             SAL_INFO("sc.opencl", "conversion of group " << this << " failed, disabling");
             mxGroup->meCalcState = sc::GroupCalcDisabled;

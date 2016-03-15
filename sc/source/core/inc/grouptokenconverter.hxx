@@ -30,7 +30,7 @@ class SC_DLLPUBLIC ScGroupTokenConverter
 public:
     ScGroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos);
 
-    bool convert(ScTokenArray& rCode, std::vector<ScTokenArray*>& rConversionStack);
+    bool convert(ScTokenArray& rCode);
 };
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
