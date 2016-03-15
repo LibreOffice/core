@@ -6192,7 +6192,7 @@ SfxVoidItem SelectOLE SID_OLE_SELECT
 
 
 SfxVoidItem SelectColumn SID_SELECT_COL
-()
+(SfxInt32Item Col FN_PARAM_1,SfxInt16Item Modifier FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6441,7 +6441,7 @@ SfxObjectItem Selection SID_SC_SELECTION
 
 
 SfxVoidItem SelectRow SID_SELECT_ROW
-()
+(SfxInt32Item Row FN_PARAM_1,SfxInt16Item Modifier FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,

@@ -1612,6 +1612,17 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
         if (nY2 > nYBottom)
             nY2 = nYBottom;
     }
+    else
+    {
+        SCCOL nMaxTiledCol;
+        SCROW nMaxTiledRow;
+        pDoc->GetTiledRenderingArea( nTab, nMaxTiledCol, nMaxTiledRow );
+
+        if (nX2 > nMaxTiledCol)
+            nX2 = nMaxTiledCol;
+        if (nY2 > nMaxTiledRow)
+            nY2 = nMaxTiledRow;
+    }
 
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
