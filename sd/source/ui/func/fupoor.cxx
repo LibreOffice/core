@@ -1124,23 +1124,26 @@ bool FuPoor::cancel()
 bool FuPoor::doConstructOrthogonal() const
 {
     // Check whether a media object is selected
-    bool bIsMediaSelected = false;
+    bool bResizeKeepRatio = false;
     // tdf#89758 Avoid interactive crop preview from being proportionally scaled by default.
     if (mpView->AreObjectsMarked() && mpView->GetDragMode() != SDRDRAG_CROP)
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            sal_uInt16 aObjIdentifier = pMark->GetMarkedSdrObj()->GetObjIdentifier();
-            bIsMediaSelected = aObjIdentifier == OBJ_GRAF ||
+            sal_uInt16 aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
+            bResizeKeepRatio = aObjIdentifier == OBJ_GRAF ||
                                aObjIdentifier == OBJ_MEDIA ||
                                aObjIdentifier == OBJ_OLE2;
         }
     }
+    SdrHdl* pHdl = mpView->PickHandle(aMDPos);
+    // Resize proportionally when media is selected and the user drags on a corner
+    if (pHdl)
+        bResizeKeepRatio = bResizeKeepRatio && pHdl->IsCornerHdl();
 
     return (
-        bIsMediaSelected ||
+        bResizeKeepRatio ||
         SID_DRAW_XLINE == nSlotId ||
         SID_DRAW_CIRCLEARC == nSlotId ||
         SID_DRAW_SQUARE == nSlotId ||

@@ -297,9 +297,15 @@ bool FuPoor::doConstructOrthogonal() const
         if (rMarkList.GetMarkCount() == 1)
         {
             sal_uInt16 aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
-            return aObjIdentifier == OBJ_GRAF ||
-                   aObjIdentifier == OBJ_MEDIA ||
-                   aObjIdentifier == OBJ_OLE2;
+            bool bIsMediaSelected = aObjIdentifier == OBJ_GRAF ||
+                                    aObjIdentifier == OBJ_MEDIA ||
+                                    aObjIdentifier == OBJ_OLE2;
+
+            SdrHdl* pHdl = pView->PickHandle(aMDPos);
+            // Resize proportionally when media is selected and the user drags on a corner
+            if (pHdl)
+                return bIsMediaSelected && pHdl->IsCornerHdl();
+            return bIsMediaSelected;
         }
     }
     else if (aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON || aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON_NOFILL)
