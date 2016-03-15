@@ -85,10 +85,6 @@ svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bReche
             }
             while( mbNeedNextObj );
         }
-
-        // finished? - close the spelling dialog
-        if( mxEngine->IsFinished() )
-            GetBindings().GetDispatcher()->Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
     }
     return aPortions;
 }
