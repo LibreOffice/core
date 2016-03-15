@@ -275,6 +275,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     sal_uInt16 nSlotId  = rReq.GetSlot();
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
 
     if(nSlotId != SID_CURSORTOPOFSCREEN && nSlotId != SID_CURSORENDOFSCREEN)
         pTabViewShell->ExecuteInputDirect();
@@ -316,11 +317,37 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_SELECT_COL:
-            pTabViewShell->MarkColumns();
+            if ( pReqArgs )
+            {
+                const SfxPoolItem* pColItem;
+                const SfxPoolItem* pModifierItem;
+
+                if ( pReqArgs->HasItem( FN_PARAM_1, &pColItem ) &&
+                     pReqArgs->HasItem( FN_PARAM_2, &pModifierItem ) )
+                {
+                    SCCOL nCol = static_cast<SCCOL>(static_cast<const SfxInt16Item*>(pColItem)->GetValue());;
+                    sal_Int16 nModifier = static_cast<sal_Int16>(static_cast<const SfxInt16Item*>(pModifierItem)->GetValue());
+
+                    pTabViewShell->MarkColumns( nCol, nModifier );
+                }
+            }
             break;
 
         case SID_SELECT_ROW:
-            pTabViewShell->MarkRows();
+            if ( pReqArgs )
+            {
+                const SfxPoolItem* pRowItem;
+                const SfxPoolItem* pModifierItem;
+
+                if ( pReqArgs->HasItem( FN_PARAM_1, &pRowItem ) &&
+                     pReqArgs->HasItem( FN_PARAM_2, &pModifierItem ) )
+                {
+                    SCROW nRow = static_cast<SCROW>(static_cast<const SfxInt32Item*>(pRowItem)->GetValue());;
+                    sal_Int16 nModifier = static_cast<sal_Int16>(static_cast<const SfxInt16Item*>(pModifierItem)->GetValue());
+
+                    pTabViewShell->MarkRows( nRow, nModifier );
+                }
+            }
             break;
 
         case SID_SELECT_NONE:

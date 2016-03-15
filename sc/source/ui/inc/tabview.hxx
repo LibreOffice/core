@@ -472,8 +472,20 @@ public:
     void            ExpandBlockPage(SCsCOL nMovX, SCsROW nMovY);
     void            ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY);
 
-    void            MarkColumns();
-    void            MarkRows();
+    /**
+     * @brief Called to select a full column
+     *
+     * @param nCol: Column number to do operation on
+     * @param nModifier:
+     */
+    void            MarkColumns(SCCOL nCol, sal_Int16 nModifier);
+    /**
+     * @brief Called to select a full row
+     *
+     * @param nRow: Row number to do operation on
+     * @param nModifier:
+     */
+    void            MarkRows(SCROW nRow, sal_Int16 nModifier);
     void            MarkDataArea( bool bIncludeCursor = true );
     void            MarkMatrixFormula();
     void            Unmark();

@@ -65,6 +65,8 @@
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
+#include <comphelper/lok.hxx>
+
 namespace
 {
 
@@ -1355,57 +1357,92 @@ void ScTabView::FindNextUnprot( bool bShift, bool bInSelection )
     aViewData.SetTabStartCol( nTabCol );
 }
 
-void ScTabView::MarkColumns()
+void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
 {
-    SCCOL nStartCol;
-    SCCOL nEndCol;
-
-    ScMarkData& rMark = aViewData.GetMarkData();
-    if (rMark.IsMarked())
-    {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        nStartCol = aMarkRange.aStart.Col();
-        nEndCol = aMarkRange.aEnd.Col();
-    }
-    else
-    {
-        SCROW nDummy;
-        aViewData.GetMoveCursor( nStartCol, nDummy );
-        nEndCol=nStartCol;
-    }
-
+    SCCOL nStartCol = nCol;
+    SCROW nEndRow = MAXROW;
     SCTAB nTab = aViewData.GetTabNo();
-    DoneBlockMode();
-    InitBlockMode( nStartCol,0, nTab );
-    MarkCursor( nEndCol,MAXROW, nTab );
+    bool bTestNeg = false;
+    bool bSelForceNeg = false;
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        SCCOL nDummy;
+        ScDocument* pDoc = aViewData.GetDocument();
+        pDoc->GetTiledRenderingArea( nTab, nDummy, nEndRow );
+
+        ScMarkData& rMark = aViewData.GetMarkData();
+        bool bIsCurColMarked = true;
+        for ( SCROW nRow = 0; nRow <= nEndRow && bIsCurColMarked; nRow++ )
+        {
+            if ( !rMark.IsCellMarked( nCol, nRow ) )
+                bIsCurColMarked = false;
+        }
+        bSelForceNeg = bIsCurColMarked;
+    }
+
+    switch( nModifier )
+    {
+        case 0:
+            bSelForceNeg = false;
+            break;
+        case KEY_SHIFT:
+        case KEY_MOD1 + KEY_SHIFT:
+            nStartCol = aViewData.GetCurX();
+        case KEY_MOD1:
+            bTestNeg = true;
+    }
+
+    DoneBlockMode( nModifier != 0 );
+    InitBlockMode( nStartCol, 0, nTab, bTestNeg, true, false, bSelForceNeg );
+    MarkCursor( nCol, nEndRow, nTab );
+    SetCursor( nCol, 0 );
     SelectionChanged();
 }
 
-void ScTabView::MarkRows()
+void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
 {
-    SCROW nStartRow;
-    SCROW nEndRow;
-
-    ScMarkData& rMark = aViewData.GetMarkData();
-    if (rMark.IsMarked())
-    {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        nStartRow = aMarkRange.aStart.Row();
-        nEndRow = aMarkRange.aEnd.Row();
-    }
-    else
-    {
-        SCCOL nDummy;
-        aViewData.GetMoveCursor( nDummy, nStartRow );
-        nEndRow=nStartRow;
-    }
-
+    SCROW nStartRow = nRow;
+    SCCOL nEndCol = MAXCOL;
     SCTAB nTab = aViewData.GetTabNo();
-    DoneBlockMode();
-    InitBlockMode( 0,nStartRow, nTab );
-    MarkCursor( MAXCOL,nEndRow, nTab );
+    bool bTestNeg = false;
+    bool bSelForceNeg = false;
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        SCROW nDummy;
+        ScDocument* pDoc = aViewData.GetDocument();
+        pDoc->GetTiledRenderingArea( nTab, nEndCol, nDummy );
+
+        ScMarkData& rMark = aViewData.GetMarkData();
+        bool bIsCurRowMarked = true;
+        for ( SCCOL nCol = 0; nCol <= nEndCol && bIsCurRowMarked; nCol++ )
+        {
+            if ( !rMark.IsCellMarked( nCol, nRow ) )
+                bIsCurRowMarked = false;
+        }
+        bSelForceNeg = bIsCurRowMarked;
+    }
+
+    switch ( nModifier )
+    {
+        case 0:
+            bSelForceNeg = false;
+            break;
+        case KEY_SHIFT:
+        case KEY_MOD1 + KEY_SHIFT:
+            nStartRow = aViewData.GetCurY();
+            // Fall-through to check for negative selection
+        case KEY_MOD1:
+            // defer the test for negative selection
+            // to InitBlockMode in case for no tiled rendering
+            bTestNeg = true;
+    }
+
+    DoneBlockMode( nModifier != 0 );
+    InitBlockMode( 0, nStartRow, nTab, bTestNeg, false, true, bSelForceNeg );
+    MarkCursor( nEndCol, nRow, nTab );
+    SetCursor( 0, nRow );
     SelectionChanged();
 }
 
