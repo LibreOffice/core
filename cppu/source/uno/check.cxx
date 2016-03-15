@@ -26,17 +26,6 @@
 #include <sal/types.h>
 #include <uno/any2.h>
 
-// Why hardcode like this instead of using the (generated)
-// <sal/typesizes.h> ?
-#if (defined(INTEL) \
-    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) ||   \
-                              defined(NETBSD) || defined(OPENBSD) ||  \
-                              defined(DRAGONFLY) || defined(SOLARIS)) \
-        || defined(MACOSX) )) \
-    || defined(IOS)
-#define MAX_ALIGNMENT_4
-#endif
-
 namespace {
 
 #if defined( SAL_W32)
@@ -161,12 +150,10 @@ static_assert( static_cast<sal_Bool>(true) == sal_True,
                "must be binary compatible" );
 static_assert( static_cast<sal_Bool>(false) == sal_False,
                "must be binary compatible" );
-#ifdef MAX_ALIGNMENT_4
-// max alignment is 4
+#if SAL_TYPES_ALIGNMENT8 == 4
 static_assert(offsetof(AlignSize_Impl, dDouble) == 4, "offsetof(AlignSize_Impl, dDouble) != 4");
 static_assert(sizeof(AlignSize_Impl) == 12, "sizeof(AlignSize_Impl) != 12");
-#else
-// max alignment is 8
+#elif SAL_TYPES_ALIGNMENT8 == 8
 static_assert(offsetof(AlignSize_Impl, dDouble) == 8, "offsetof(AlignSize_Impl, dDouble) != 8");
 static_assert(sizeof(AlignSize_Impl) == 16, "sizeof(AlignSize_Impl) != 16");
 #endif
@@ -191,9 +178,9 @@ static_assert(sizeof(N) == 12, "sizeof(N) != 12");
 static_assert(sizeof(N2) == 12, "sizeof(N2) != 12");
 
 static_assert(offsetof(N2, p) == 8, "offsetof(N2, p) != 8");
-#ifdef MAX_ALIGNMENT_4
+#if SAL_TYPES_ALIGNMENT8 == 4
 static_assert(sizeof(O) == 20, "sizeof(O) != 20");
-#else
+#elif SAL_TYPES_ALIGNMENT8 == 8
 static_assert(sizeof(O) == 24, "sizeof(O) != 24");
 #endif
 static_assert(sizeof(D) == 8, "sizeof(D) != 8");
@@ -204,14 +191,14 @@ static_assert(offsetof(E, e) == 8, "offsetof(E, e) != 8");
 static_assert(sizeof(C1) == 2, "sizeof(C1) != 2");
 static_assert(sizeof(C2) == 8, "sizeof(C2) != 8");
 
-#ifdef MAX_ALIGNMENT_4
+#if SAL_TYPES_ALIGNMENT8 == 4
 static_assert(sizeof(C3) == 20, "sizeof(C3) != 20");
 static_assert(sizeof(C4) == 32, "sizeof(C4) != 32");
 static_assert(sizeof(C5) == 44, "sizeof(C5) != 44");
 static_assert(sizeof(C6) == 52, "sizeof(C6) != 52");
 
 static_assert(sizeof(O2) == 24, "sizeof(O2) != 24");
-#else
+#elif SAL_TYPES_ALIGNMENT8 == 8
 static_assert(sizeof(C3) == 24, "sizeof(C3) != 24");
 static_assert(sizeof(C4) == 40, "sizeof(C4) != 40");
 static_assert(sizeof(C5) == 56, "sizeof(C5) != 56");
@@ -222,10 +209,10 @@ static_assert(sizeof(O2) == 32, "sizeof(O2) != 32");
 
 static_assert(sizeof(Char3) == 3, "sizeof(Char3) != 3");
 
-#ifdef MAX_ALIGNMENT_4
+#if SAL_TYPES_ALIGNMENT8 == 4
 // max alignment is 4
 static_assert(sizeof(P) == 20, "sizeof(P) != 20");
-#else
+#elif SAL_TYPES_ALIGNMENT8 == 8
 // alignment of P is 8, because of P[] ...
 static_assert(sizeof(P) == 24, "sizeof(P) != 24");
 static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
@@ -246,7 +233,7 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 
     assert(OFFSET_OF(C2, n2) == 4);
 
-#ifdef MAX_ALIGNMENT_4
+#if SAL_TYPES_ALIGNMENT8 == 4
     assert(OFFSET_OF(C3, d3) == 8);
     assert(OFFSET_OF(C3, n3) == 16);
     assert(OFFSET_OF(C4, n4) == 20);
@@ -257,7 +244,7 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     assert(OFFSET_OF(C6, b6) == 48);
 
     assert(OFFSET_OF(O2, p2) == 20);
-#else
+#elif SAL_TYPES_ALIGNMENT8 == 8
     assert(OFFSET_OF(C3, d3) == 8);
     assert(OFFSET_OF(C3, n3) == 16);
     assert(OFFSET_OF(C4, n4) == 24);
