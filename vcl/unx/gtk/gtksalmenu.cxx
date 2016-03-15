@@ -456,16 +456,26 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
  * GtkSalMenu
  */
 
-GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
+GtkSalMenu::GtkSalMenu( bool bMenuBar, GActionGroup *pActionGroup ) :
     mbMenuBar( bMenuBar ),
     mpMenuBarWidget( nullptr ),
     mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
     mpParentSalMenu( nullptr ),
     mpFrame( nullptr ),
-    mpMenuModel( nullptr ),
-    mpActionGroup( nullptr )
+    mpActionGroup(pActionGroup)
 {
+    if (bMenuBar)
+        mpMenuModel = G_MENU_MODEL(g_lo_menu_new());
+    else
+        mpMenuModel = nullptr;
+
+    GLOActionGroup* pLOActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
+    if (pLOActionGroup)
+    {
+        g_lo_action_group_clear(pLOActionGroup);
+        g_lo_action_group_set_top_menu(pLOActionGroup, static_cast<gpointer>(this));
+    }
 }
 
 void GtkSalMenu::SetMenuModel(GMenuModel* pMenuModel)
@@ -664,22 +674,12 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
 
     GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
-    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
-    SAL_INFO("vcl.unity", "Found menu model: " << pMenuModel << " and action group: " << pActionGroup);
+    SAL_INFO("vcl.unity", "Found menu model: " << pMenuModel);
 
     if ( pMenuModel )
     {
         if ( g_menu_model_get_n_items( G_MENU_MODEL( pMenuModel ) ) > 0 )
             g_lo_menu_remove( pMenuModel, 0 );
-
-        mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-    }
-
-    if ( pActionGroup )
-    {
-        g_lo_action_group_clear( pActionGroup );
-        g_lo_action_group_set_top_menu(pActionGroup, static_cast<gpointer>(this));
-        mpActionGroup = G_ACTION_GROUP( pActionGroup );
     }
 
     // Generate the main menu structure.

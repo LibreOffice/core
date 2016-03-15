@@ -32,6 +32,7 @@
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/syswin.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
@@ -347,10 +348,24 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 #ifdef ENABLE_GMENU_INTEGRATION
 
-SalMenu* GtkInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
+SalMenu* GtkInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu, SystemWindow* pAssociatedSystemWindow )
 {
     EnsureInit();
-    GtkSalMenu* pSalMenu = new GtkSalMenu( bMenuBar );
+
+    GtkSalFrame *pFrame = pAssociatedSystemWindow ? dynamic_cast<GtkSalFrame*>(pAssociatedSystemWindow->ImplGetFrame())
+                                                  : nullptr;
+
+    GActionGroup* pActionGroup;
+    if (pFrame)
+    {
+        GtkWidget* pWidget = pFrame->getWindow();
+        GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
+        pActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
+    }
+    else
+        pActionGroup = nullptr;
+
+    GtkSalMenu* pSalMenu = new GtkSalMenu(bMenuBar, pActionGroup);
     pSalMenu->SetMenu( pVCLMenu );
     return pSalMenu;
 }

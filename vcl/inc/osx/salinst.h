@@ -111,7 +111,7 @@ public:
     virtual SalYieldResult  DoYield(bool bWait, bool bHandleAllCurrentEvents,
                                     sal_uLong nReleased) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;
-    virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pVCLMenu ) override;
+    virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pVCLMenu, SystemWindow* pAssociatedSystemWindow ) override;
     virtual void            DestroyMenu( SalMenu* ) override;
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData ) override;
     virtual void            DestroyMenuItem( SalMenuItem* ) override;

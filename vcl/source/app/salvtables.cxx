@@ -65,7 +65,7 @@ SalInstance::~SalInstance()
 {
 }
 
-SalMenu* SalInstance::CreateMenu( bool, Menu* )
+SalMenu* SalInstance::CreateMenu( bool, Menu*, SystemWindow* )
 {
     // default: no native menus
     return nullptr;

@@ -726,11 +726,13 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
     Reference< ui::XUIElement > xUIElement;
 
     SolarMutexGuard g;
-    Sequence< PropertyValue > aPropSeq( 2 );
+    Sequence< PropertyValue > aPropSeq( 3 );
     aPropSeq[0].Name = "Frame";
     aPropSeq[0].Value <<= m_xFrame;
     aPropSeq[1].Name = "Persistent";
     aPropSeq[1].Value <<= sal_True;
+    aPropSeq[2].Name = "Container";
+    aPropSeq[2].Value <<= m_xContainerWindow;
 
     try
     {

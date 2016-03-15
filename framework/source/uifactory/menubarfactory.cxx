@@ -34,6 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
+using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
@@ -74,6 +75,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     Reference< XUIConfigurationManager > xCfgMgr;
     Reference< XUIConfigurationManager > xConfigSource;
     Reference< XFrame >                  xFrame;
+    Reference< XWindow >                 xContainerWindow;
     OUString                        aResourceURL( ResourceURL );
     bool                             bPersistent( true );
     bool                             bExtraMode( false );
@@ -84,6 +86,8 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
             Args[n].Value >>= xConfigSource;
         else if ( Args[n].Name == "Frame" )
             Args[n].Value >>= xFrame;
+        else if ( Args[n].Name == "Container" )
+            Args[n].Value >>= xContainerWindow;
         else if ( Args[n].Name == "ResourceURL" )
             Args[n].Value >>= aResourceURL;
         else if ( Args[n].Name == "Persistent" )
@@ -129,7 +133,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     }
 
     PropertyValue aPropValue;
-    Sequence< Any > aPropSeq( _pExtraMode ? 5 : 4);
+    Sequence< Any > aPropSeq( _pExtraMode ? 6 : 5);
     aPropValue.Name = "Frame";
     aPropValue.Value <<= xFrame;
     aPropSeq[0] <<= aPropValue;
@@ -142,11 +146,14 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     aPropValue.Name = "Persistent";
     aPropValue.Value <<= bPersistent;
     aPropSeq[3] <<= aPropValue;
+    aPropValue.Name = "Container";
+    aPropValue.Value <<= xContainerWindow;
+    aPropSeq[4] <<= aPropValue;
     if ( _pExtraMode )
     {
         aPropValue.Name = OUString::createFromAscii(_pExtraMode);
         aPropValue.Value <<= bExtraMode;
-        aPropSeq[4] <<= aPropValue;
+        aPropSeq[5] <<= aPropValue;
     }
 
     SolarMutexGuard aGuard;

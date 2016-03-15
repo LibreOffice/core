@@ -413,6 +413,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     bool mbFloatBtnVisible : 1;
     bool mbHideBtnVisible : 1;
     bool mbDisplayable : 1;
+    SystemWindow* mpAssociatedSystemWindow;
 
     friend class Application;
     friend class Menu;
@@ -431,7 +432,7 @@ protected:
     MenuBarWindow* getMenuBarWindow();
 
 public:
-    MenuBar();
+    MenuBar( SystemWindow* pAssociatedSystemWindow = nullptr );
     MenuBar( const MenuBar& rMenu );
     virtual ~MenuBar();
 

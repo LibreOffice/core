@@ -199,7 +199,7 @@ public:
     virtual SalSystem*          CreateSalSystem() override;
     virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup) override;
     virtual SalPrinter*         CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
-    virtual SalMenu*            CreateMenu( bool, Menu* ) override;
+    virtual SalMenu*            CreateMenu( bool, Menu*, SystemWindow* ) override;
     virtual void                DestroyMenu( SalMenu* pMenu ) override;
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* ) override;
     virtual void                DestroyMenuItem( SalMenuItem* pItem ) override;
