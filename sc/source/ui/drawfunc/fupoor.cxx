@@ -298,7 +298,8 @@ bool FuPoor::doConstructOrthogonal() const
         {
             sal_uInt16 aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
             return aObjIdentifier == OBJ_GRAF ||
-                   aObjIdentifier == OBJ_MEDIA;
+                   aObjIdentifier == OBJ_MEDIA ||
+                   aObjIdentifier == OBJ_OLE2;
         }
     }
     else if (aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON || aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON_NOFILL)

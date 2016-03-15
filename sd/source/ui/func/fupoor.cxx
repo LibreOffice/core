@@ -1134,7 +1134,8 @@ bool FuPoor::doConstructOrthogonal() const
             SdrMark* pMark = rMarkList.GetMark(0);
             sal_uInt16 aObjIdentifier = pMark->GetMarkedSdrObj()->GetObjIdentifier();
             bIsMediaSelected = aObjIdentifier == OBJ_GRAF ||
-                               aObjIdentifier == OBJ_MEDIA;
+                               aObjIdentifier == OBJ_MEDIA ||
+                               aObjIdentifier == OBJ_OLE2;
         }
     }
 
