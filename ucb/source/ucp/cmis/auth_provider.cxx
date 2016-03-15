@@ -38,7 +38,8 @@ namespace cmis
                         m_sUrl, m_sBindingUrl, OUString(),
                         STD_TO_OUSTR( username ),
                         STD_TO_OUSTR( password ),
-                        OUString(), false, false );
+                        OUString(), false, false,
+                        m_sErrorMessage );
                 xIH->handle( xRequest.get() );
 
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -64,6 +65,11 @@ namespace cmis
             }
         }
         return false;
+    }
+
+    void AuthProvider::setErrorMessage(const OUString & rMessage)
+    {
+        m_sErrorMessage = rMessage;
     }
 
     char* AuthProvider::onedriveAuthCodeFallback( const char* url,

@@ -23,6 +23,8 @@ $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 	sax \
 	ucbhelper \
 	tl \
+	i18nlangtag \
+	vcl \
 	$(gb_UWINAPI) \
 ))
 

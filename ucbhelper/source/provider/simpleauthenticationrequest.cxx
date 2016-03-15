@@ -33,7 +33,8 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rPassword,
                                       const OUString & rAccount,
                                       bool bAllowUseSystemCredentials,
-                                      bool bAllowSessionStoring )
+                                      bool bAllowSessionStoring,
+                                      const OUString & rErrorMessage )
 {
 
     // Fill request...
@@ -42,7 +43,8 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
 //    aRequest.Context        = // XInterface
     aRequest.Classification = task::InteractionClassification_ERROR;
     aRequest.ServerName     = rServerName;
-//    aRequest.Diagnostic     = // OUString
+    if ( !rErrorMessage.isEmpty() )
+        aRequest.Diagnostic = rErrorMessage;
     aRequest.HasRealm       = !rRealm.isEmpty();
     if ( aRequest.HasRealm )
         aRequest.Realm = rRealm;

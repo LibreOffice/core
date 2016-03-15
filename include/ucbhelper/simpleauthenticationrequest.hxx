@@ -96,7 +96,8 @@ public:
                                  const OUString & rPassword,
                                  const OUString & rAccount,
                                  bool bAllowUseSystemCredentials,
-                                 bool bAllowSessionStoring = true );
+                                 bool bAllowSessionStoring = true,
+                                 const OUString & rErrorMessage = OUString() );
 
 
     /**

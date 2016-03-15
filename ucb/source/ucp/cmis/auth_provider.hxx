@@ -21,6 +21,7 @@ namespace cmis
         static css::uno::Reference< css::ucb::XCommandEnvironment> sm_xEnv;
         OUString m_sUrl;
         OUString m_sBindingUrl;
+        OUString m_sErrorMessage;
 
         public:
             AuthProvider ( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv,
@@ -29,6 +30,8 @@ namespace cmis
                 m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
 
             bool authenticationQuery( std::string& username, std::string& password ) override;
+
+            void setErrorMessage(const OUString & rMessage);
 
             static char* onedriveAuthCodeFallback( const char* url,
                     const char* /*username*/,

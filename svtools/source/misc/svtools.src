@@ -157,4 +157,8 @@ String STR_SVT_PRNDLG_JOBCOUNT
 {
     Text [ en-US ] = "%d documents" ;
 };
+String STR_SVT_WRONG_PASS
+{
+    Text [ en-US ] = "Incorrect login or password.";
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
