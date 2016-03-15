@@ -1,3 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AutoCorrect list is generated from input provided by visitors of
+     http://autocorr.akl.lt/
+-->
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=".*-&gt;.*" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=",," block-list:name="„"/>
+  <block-list:block block-list:abbreviated-name=".*..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=".*(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=".*(P)" block-list:name="℗"/>
+  <block-list:block block-list:abbreviated-name=".*(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=".*&lt;-.*" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="abiems" block-list:name="abiem"/>
+  <block-list:block block-list:abbreviated-name="agl" block-list:name="gal"/>
+  <block-list:block block-list:abbreviated-name="akd" block-list:name="kad"/>
+  <block-list:block block-list:abbreviated-name="akda" block-list:name="kada"/>
+  <block-list:block block-list:abbreviated-name="amn" block-list:name="man"/>
+  <block-list:block block-list:abbreviated-name="apei" block-list:name="apie"/>
+  <block-list:block block-list:abbreviated-name="ati" block-list:name="tai"/>
+  <block-list:block block-list:abbreviated-name="beabejo" block-list:name="be abejo"/>
+  <block-list:block block-list:abbreviated-name="blogiua" block-list:name="blogiau"/>
+  <block-list:block block-list:abbreviated-name="bnet" block-list:name="bent"/>
+  <block-list:block block-list:abbreviated-name="bsu" block-list:name="bus"/>
+  <block-list:block block-list:abbreviated-name="darugas" block-list:name="draugas"/>
+  <block-list:block block-list:abbreviated-name="dviems" block-list:name="dviem"/>
+  <block-list:block block-list:abbreviated-name="ens" block-list:name="nes"/>
+  <block-list:block block-list:abbreviated-name="geriua" block-list:name="geriau"/>
+  <block-list:block block-list:abbreviated-name="greai" block-list:name="gerai"/>
+  <block-list:block block-list:abbreviated-name="gryžti" block-list:name="grįžti"/>
+  <block-list:block block-list:abbreviated-name="i" block-list:name="į"/>
+  <block-list:block block-list:abbreviated-name="įdėja" block-list:name="idėja"/>
+  <block-list:block block-list:abbreviated-name="įdėją" block-list:name="idėją"/>
+  <block-list:block block-list:abbreviated-name="įdėjai" block-list:name="idėjai"/>
+  <block-list:block block-list:abbreviated-name="įdėjas" block-list:name="idėjas"/>
+  <block-list:block block-list:abbreviated-name="įdėjoje" block-list:name="idėjoje"/>
+  <block-list:block block-list:abbreviated-name="įdėjomis" block-list:name="idėjomis"/>
+  <block-list:block block-list:abbreviated-name="įdėjoms" block-list:name="idėjoms"/>
+  <block-list:block block-list:abbreviated-name="įdėjos" block-list:name="idėjos"/>
+  <block-list:block block-list:abbreviated-name="įdėjose" block-list:name="idėjose"/>
+  <block-list:block block-list:abbreviated-name="įdėjų" block-list:name="idėjų"/>
+  <block-list:block block-list:abbreviated-name="ištikrųjų" block-list:name="iš tikrųjų"/>
+  <block-list:block block-list:abbreviated-name="kalida" block-list:name="klaida"/>
+  <block-list:block block-list:abbreviated-name="kažaks" block-list:name="kažkas"/>
+  <block-list:block block-list:abbreviated-name="kda" block-list:name="kad"/>
+  <block-list:block block-list:abbreviated-name="klaba" block-list:name="kalba"/>
+  <block-list:block block-list:abbreviated-name="kolidorius" block-list:name="koridorius"/>
+  <block-list:block block-list:abbreviated-name="ksda" block-list:name="kada"/>
+  <block-list:block block-list:abbreviated-name="musm" block-list:name="mums"/>
+  <block-list:block block-list:abbreviated-name="nse" block-list:name="nes"/>
+  <block-list:block block-list:abbreviated-name="paie" block-list:name="apie"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymą" block-list:name="pasiūlymą"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymai" block-list:name="pasiūlymai"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymais" block-list:name="pasiūlymais"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymams" block-list:name="pasiūlymams"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymas" block-list:name="pasiūlymas"/>
+  <block-list:block block-list:abbreviated-name="pasiųlyme" block-list:name="pasiūlyme"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymo" block-list:name="pasiūlymo"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymu" block-list:name="pasiūlymu"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymų" block-list:name="pasiūlymų"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymui" block-list:name="pasiūlymui"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymuose" block-list:name="pasiūlymuose"/>
+  <block-list:block block-list:abbreviated-name="pasiųlymus" block-list:name="pasiūlymus"/>
+  <block-list:block block-list:abbreviated-name="ri" block-list:name="ir"/>
+  <block-list:block block-list:abbreviated-name="siųlyti" block-list:name="siūlyti"/>
+  <block-list:block block-list:abbreviated-name="siūsti" block-list:name="siųsti"/>
+  <block-list:block block-list:abbreviated-name="stadijonas" block-list:name="stadionas"/>
+  <block-list:block block-list:abbreviated-name="šei" block-list:name="šie"/>
+  <block-list:block block-list:abbreviated-name="šeip" block-list:name="šiaip"/>
+  <block-list:block block-list:abbreviated-name="šoi" block-list:name="šio"/>
+  <block-list:block block-list:abbreviated-name="t.y." block-list:name="t. y."/>
+  <block-list:block block-list:abbreviated-name="tasi" block-list:name="tarsi"/>
+  <block-list:block block-list:abbreviated-name="tiap" block-list:name="taip"/>
+  <block-list:block block-list:abbreviated-name="tirkai" block-list:name="tikrai"/>
+  <block-list:block block-list:abbreviated-name="visdėlto" block-list:name="vis dėlto"/>
+  <block-list:block block-list:abbreviated-name="vsio" block-list:name="viso"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":10:30:" block-list:name="🕥"/>
