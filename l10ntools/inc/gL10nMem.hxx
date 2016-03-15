@@ -24,116 +24,110 @@ class l10nMem_file_entry;
 class l10nMem_lang_list_entry;
 class l10nMem
 {
-public:
-    l10nMem();
-    ~l10nMem();
+    public:
+        l10nMem();
+        ~l10nMem();
 
-    typedef enum
-    {
-        ENTRY_DELETED,
-        ENTRY_ADDED,
-        ENTRY_CHANGED,
-        ENTRY_NORMAL
-    } ENTRY_STATE;
+        typedef enum {
+            ENTRY_DELETED,
+            ENTRY_ADDED,
+            ENTRY_CHANGED,
+            ENTRY_NORMAL
+        } ENTRY_STATE;
 
-    static int  showError(const std::string& sText, int iLineNo = 0);
-    static void showWarning(const std::string& sText, int iLineNo = 0);
-    static void showDebug(const std::string& sText, int iLineNo = 0);
-    static void showVerbose(const std::string& sText, int iLineNo = 0);
-    static void keyToUpper(std::string& sKey);
+        static int  showError(const std::string& sText, int iLineNo = 0);
+        static void showWarning(const std::string& sText, int iLineNo = 0);
+        static void showDebug(const std::string& sText, int iLineNo = 0);
+        static void showVerbose(const std::string& sText, int iLineNo = 0);
+        static void keyToUpper(std::string& sKey);
 
-    void setModuleName(const std::string& sModuleName);
-    const std::string& getModuleName(void);
-    void setLanguage(const std::string& sLanguage,
-        bool               bCreate);
-    void setConvert(bool               bConvert,
-        bool               bStrict);
-    void setVerbose(const bool doVerbose);
-    void setDebug(const bool doDebug);
+        void setModuleName(const std::string& sModuleName);
+        const std::string& getModuleName(void);
+        void setLanguage(const std::string& sLanguage,
+                         bool               bCreate);
+        void setConvert(bool               bConvert,
+                        bool               bStrict);
+        void setVerbose(const bool doVerbose);
+        void setDebug(const bool doDebug);
 
+        void loadEntryKey(int                iLineNo,
+                          const std::string& sSourceFile,
+                          const std::string& sKey,
+                          const std::string& sOrgText,
+                          const std::string& sText,
+                          bool               bIsFuzzy);
+        void setSourceKey(int                iLineNo,
+                          const std::string& sFilename,
+                          const std::string& sKey,
+                          const std::string& sText,
+                          bool               bMustExist);
 
-    void loadEntryKey(int                iLineNo,
-        const std::string& sSourceFile,
-        const std::string& sKey,
-        const std::string& sOrgText,
-        const std::string& sText,
-        bool               bIsFuzzy);
+        void saveTemplates(const std::string& sTargetDir,
+                           bool               bKid,
+                           bool               bForce);
+        void saveLanguages(l10nMem&           cMem,
+                           const std::string& sTargetDir,
+                           bool               bForce);
+        void dumpMem(const std::string& sTargetDir);
+        int  prepareMerge();
+        bool getMergeLang(std::string& sLang,
+                          std::string& sText);
+        void showNOconvert();
+        bool isError();
+        void convertToInetString(std::string& sText);
+        void convertFromInetString(std::string& sText);
 
-    void setSourceKey(int                iLineNo,
-        const std::string& sFilename,
-        const std::string& sKey,
-        const std::string& sText,
-        bool               bMustExist);
+    private:
+        bool        mbVerbose;
+        bool        mbDebug;
+        bool        mbInError;
+        std::string msModuleName;
+        int                                  miCurFileInx;
+        int                                  miCurLangInx;
+        int                                  miCurENUSinx;
+        bool                                 mbNeedWrite;
+        bool                                 mbConvertMode;
+        bool                                 mbStrictMode;
+        std::vector<l10nMem_enus_entry>      mcENUSlist;
+        std::vector<l10nMem_file_entry>      mcFileList;
+        std::vector<l10nMem_lang_list_entry> mcLangList;
 
-    void saveTemplates(const std::string& sTargetDir,
-        bool               bKid,
-        bool               bForce);
-    void saveLanguages(l10nMem&           cMem,
-        const std::string& sTargetDir,
-        bool               bForce);
-    void dumpMem(const std::string& sTargetDir);
-
-    int  prepareMerge();
-    bool getMergeLang(std::string& sLang,
-        std::string& sText);
-    void showNOconvert();
-    bool isError();
-
-    void convertToInetString(std::string& sText);
-    void convertFromInetString(std::string& sText);
-
-private:
-    bool        mbVerbose;
-    bool        mbDebug;
-    bool        mbInError;
-    std::string msModuleName;
-    int                                  miCurFileInx;
-    int                                  miCurLangInx;
-    int                                  miCurENUSinx;
-    bool                                 mbNeedWrite;
-    bool                                 mbConvertMode;
-    bool                                 mbStrictMode;
-    std::vector<l10nMem_enus_entry>      mcENUSlist;
-    std::vector<l10nMem_file_entry>      mcFileList;
-    std::vector<l10nMem_lang_list_entry> mcLangList;
-
-    void formatAndShowText(const std::string& sType, int iLineNo, const std::string& sText);
-    bool needWrite(const std::string sFileName, bool bForce);
-    bool convFilterWarning(const std::string& sSourceFile,
-        const std::string& sKey,
-        const std::string& sMsgId);
-    void convEntryKey(int                iLineNo,
-        const std::string& sSourceFile,
-        const std::string& sKey,
-        const std::string& sMsgId,
-        const std::string& sMsgStr,
-        bool               bIsFuzzy);
-    void saveTemplates(l10nMem&           cMem,
-        const std::string& sTargetDir,
-        bool               bKid,
-        bool               bForce);
-
-    void loadENUSkey(int                iLineNo,
-        const std::string& sSourceFile,
-        const std::string& sKey,
-        const std::string& sMsgId);
-    void loadLangKey(int                iLineNo,
-        const std::string& sSourceFile,
-        const std::string& sKey,
-        const std::string& sMsgId,
-        const std::string& sMsgStr,
-        bool               bFuzzy);
-    void reorganize(bool               bConvert);
-    bool locateKey(int                iLineNo,
-        const std::string& sSourceFile,
-        const std::string& sKey,
-        const std::string& sMsgId,
-        bool               bThrow);
-    void addKey(int                  iLineNo,
-        const std::string&   sSourceFile,
-        const std::string&   sKey,
-        const std::string&   sMsgId,
-        l10nMem::ENTRY_STATE eStat);
-    bool findFileName(const std::string& sSourceFile);
+        void formatAndShowText(const std::string& sType, int iLineNo, const std::string& sText);
+        bool needWrite(const std::string sFileName, bool bForce);
+        bool convFilterWarning(const std::string& sSourceFile,
+                               const std::string& sKey,
+                               const std::string& sMsgId);
+        void convEntryKey(int                iLineNo,
+                          const std::string& sSourceFile,
+                          const std::string& sKey,
+                          const std::string& sMsgId,
+                          const std::string& sMsgStr,
+                          bool               bIsFuzzy);
+        void saveTemplates(l10nMem&           cMem,
+                           const std::string& sTargetDir,
+                           bool               bKid,
+                           bool               bForce);
+        void loadENUSkey(int                iLineNo,
+                         const std::string& sSourceFile,
+                         const std::string& sKey,
+                         const std::string& sMsgId);
+        void loadLangKey(int                iLineNo,
+                         const std::string& sSourceFile,
+                         const std::string& sKey,
+                         const std::string& sMsgId,
+                         const std::string& sMsgStr,
+                         bool               bFuzzy);
+        void reorganize(bool               bConvert);
+        bool locateKey(int                iLineNo,
+                       const std::string& sSourceFile,
+                       const std::string& sKey,
+                       const std::string& sMsgId,
+                       bool               bThrow);
+        void addKey(int                  iLineNo,
+                    const std::string&   sSourceFile,
+                    const std::string&   sKey,
+                    const std::string&   sMsgId,
+                    l10nMem::ENTRY_STATE eStat);
+        bool findFileName(const std::string& sSourceFile);
 };
 #endif

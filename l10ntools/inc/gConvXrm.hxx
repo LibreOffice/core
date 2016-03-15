@@ -16,41 +16,31 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONXRM_HXX
 #define GCONXRM_HXX
 #include "gConv.hxx"
 
 
 
-/*****************************************************************************
- *************************   G C O N X R M . H X X   *************************
- *****************************************************************************
- * This is the class definition header xrm converter
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_xrm : public convert_gen
 {
-  public:
-    bool mbNoCollectingData;
-    convert_xrm(l10nMem& crMemory);
-    virtual ~convert_xrm();
+    public:
+        bool mbNoCollectingData;
+        convert_xrm(l10nMem& crMemory);
+        ~convert_xrm();
 
-    void setId(char *yytext);
-    void setLang(char *yytext);
-    void setTag(char *yytext);
-    void startCollectData(char *yytext);
-    void stopCollectData(char *yytext);
+        void setId(char *yytext);
+        void setLang(char *yytext);
+        void setTag(char *yytext);
+        void startCollectData(char *yytext);
+        void stopCollectData(char *yytext);
 
-  private:
-    std::string msKey;
-    bool        mbIsTag;
-    bool        mbIsLang;
-    std::string msTag;
+    private:
+        std::string msKey;
+        bool        mbIsTag;
+        bool        mbIsLang;
+        std::string msTag;
 
-    void execute() override;
+        void execute() override;
 };
 #endif

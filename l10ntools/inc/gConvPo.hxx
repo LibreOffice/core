@@ -23,49 +23,40 @@
 
 
 
-/*****************************************************************************
- **************************   G C O N P O . H X X   **************************
- *****************************************************************************
- * This is the class header for .po conversion
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_po : public convert_gen
 {
-  public:
-    bool mbExpectId;
-    bool mbExpectStr;
+    public:
+        bool mbExpectId;
+        bool mbExpectStr;
 
 
-    convert_po(l10nMem& crMemory);
-    virtual ~convert_po();
+        convert_po(l10nMem& crMemory);
+        ~convert_po();
 
-    void startLook ();
-    void setValue  (char *syyText, int iLineCnt);
-    void setFuzzy  ();
-    void setKey    (char *syyText);
-    void setMsgId  ();
-    void setMsgStr ();
-    void handleNL  ();
+        void startLook ();
+        void setValue  (char *syyText, int iLineCnt);
+        void setFuzzy  ();
+        void setKey    (char *syyText);
+        void setMsgId  ();
+        void setMsgStr ();
+        void handleNL  ();
 
-  private:
-    std::string  msId;
-    std::string  msStr;
-    std::string  msKey;
-    bool         mbFuzzy;
-    std::filebuf outBuffer;
+    private:
+        std::string  msId;
+        std::string  msStr;
+        std::string  msKey;
+        bool         mbFuzzy;
+        std::filebuf outBuffer;
 
-    void execute() override;
+        void execute() override;
 
-    void startSave(const std::string& sLanguage,
-                   const std::string& sFile) override;
-    void save(const std::string& sFileName,
-              const std::string& sKey,
-              const std::string& sENUStext,
-              const std::string& sText,
-              bool               bFuzzy) override;
-    void endSave() override;
+        void startSave(const std::string& sLanguage,
+                       const std::string& sFile) override;
+        void save(const std::string& sFileName,
+                  const std::string& sKey,
+                  const std::string& sENUStext,
+                  const std::string& sText,
+                  bool               bFuzzy) override;
+        void endSave() override;
 };
 #endif

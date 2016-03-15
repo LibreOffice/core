@@ -16,30 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONPROP_HXX
 #define GCONPROP_HXX
 #include "gConv.hxx"
 
 
 
-/*****************************************************************************
- ************************   G C O N P R O P . H X X   ************************
- *****************************************************************************
- * This is the class header for .proporties conversion
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_prop : public convert_gen
 {
-  public:
-    convert_prop(l10nMem& crMemory);
-    virtual ~convert_prop();
+    public:
+        convert_prop(l10nMem& crMemory);
+        ~convert_prop();
 
-
-  private:
-    void execute() override;
+    private:
+        void execute() override;
 };
 #endif

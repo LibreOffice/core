@@ -18,7 +18,7 @@
  */
 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
 %top{
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -66,30 +66,28 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 %e 1200
 %n 500
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 IDENT [a-zA-Z0-9_-]*
 NAME  \"{IDENT}\"
 SP    [ \t]*
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 
 "id"{SP}"="{SP}{NAME} {
-  LOCptr->setId(yytext);
+    LOCptr->setId(yytext);
 }
 
 
 
 "lang"{SP}"="{SP}{NAME} {
-  LOCptr->setLang(yytext);
+    LOCptr->setLang(yytext);
 }
 
 
 "<title "    |
 "<h"[0-9]" " |
 "<p "        {
-  LOCptr->setTag(yytext);
+    LOCptr->setTag(yytext);
 }
 
 
@@ -97,23 +95,23 @@ SP    [ \t]*
 "</title>"[ \t\r]*[\n]    |
 "</h"[0-9]">"[ \t\r]*[\n] |
 "</p>"[ \t\r]*[\n]        {
-  LOCptr->stopCollectData(yytext);
+    LOCptr->stopCollectData(yytext);
 }
 
 
 
 ">" {
-  LOCptr->startCollectData(yytext);
+    LOCptr->startCollectData(yytext);
 }
 
 
 
 .|\n {
-  IMPLptr->copySource(yytext, LOCptr->mbNoCollectingData);
+    IMPLptr->copySource(yytext, LOCptr->mbNoCollectingData);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 
 
@@ -121,7 +119,7 @@ SP    [ \t]*
 
 void xrm_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

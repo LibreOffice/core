@@ -362,8 +362,7 @@ void handler::runConvert()
     mcMemory.setConvert(true, false);
 
     // loop through all source files, and extract messages from each file
-    for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
-    {
+    for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource) {
         // tell system
         l10nMem::showDebug("genLang compare template " + *siSource);
 
@@ -373,8 +372,7 @@ void handler::runConvert()
 
         mcMemory.showNOconvert();
 
-        for (siLang = mvLanguages.begin(); siLang != mvLanguages.end(); ++siLang)
-        {
+        for (siLang = mvLanguages.begin(); siLang != mvLanguages.end(); ++siLang) {
             std::string sFilePath = *siLang + "/";
 
             // get converter and extract files
@@ -405,8 +403,7 @@ void handler::runExtract()
     mcMemory.setConvert(false, false);
 
     // loop through all source files, and extract messages from each file
-    for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
-    {
+    for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource) {
         // tell system
         l10nMem::showDebug("genLang extracting text from file " + *siSource);
 
@@ -429,8 +426,7 @@ void handler::runMerge(bool bKid)
     mcMemory.setConvert(false, false);
 
     // loop through all source files, and extract messages from each file
-    for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource)
-    {
+    for (siSource = mvSourceFiles.begin(); siSource != mvSourceFiles.end(); ++siSource) {
         // tell system
         l10nMem::showDebug("genLang merging translated text to file " + *siSource);
 

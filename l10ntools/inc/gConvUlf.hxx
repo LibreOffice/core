@@ -16,37 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONULF_HXX
 #define GCONULF_HXX
 #include "gConv.hxx"
 
 
 
-/*****************************************************************************
- *************************   G C O N U L F . H X X   *************************
- *****************************************************************************
- * This is the class header for .ulf conversion
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_ulf : public convert_gen
 {
-  public:
-    convert_ulf(l10nMem& crMemory);
-    virtual ~convert_ulf();
+    public:
+        convert_ulf(l10nMem& crMemory);
+        ~convert_ulf();
 
-    void setKey(char *syyText);
-    void setText(char *syyText, bool bIsEnUs);
-    void setValue(char *syyText);
+        void setKey(char *syyText);
+        void setText(char *syyText, bool bIsEnUs);
+        void setValue(char *syyText);
 
-  private:
-    std::string msKey;
+    private:
+        std::string msKey;
 
-
-    void execute() override;
-    void handleLines();
+        void execute() override;
+        void handleLines();
 };
 #endif

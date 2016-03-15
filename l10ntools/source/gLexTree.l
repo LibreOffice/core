@@ -18,7 +18,7 @@
  */
 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
 %top{
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -61,7 +61,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 /* --- The following options are for future use (maybe)                      */
 /* yyclass=           --> subClass yyFlexLexer to allow own functions        */
 /* c++                --> generate C++ classes                               */
-%option prefix="tree" 8bit noyywrap never-interactive 
+%option prefix="tree" 8bit noyywrap never-interactive
 %array
 %p 24000
 %e 1200
@@ -69,81 +69,79 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 
 
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 SP [ \t]*
 IDENT [\.a-zA-Z0-9_-]+
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 "\"" {
-  int j;
+    int j;
 
-  // build current "..."
-  for (j = -1; (yytext[++j] = yyinput()) != '\"';)
-    if (yytext[j] == '\\')
-      yytext[++j] = yyinput();
+    // build current "..."
+    for (j = -1; (yytext[++j] = yyinput()) != '\"';)
+        if (yytext[j] == '\\')
+            yytext[++j] = yyinput();
 
-  yytext[j+1] = '\0';
-  LOCptr->setString(yytext);
+    yytext[j+1] = '\0';
+    LOCptr->setString(yytext);
 }
 
 
 
 \> {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_VALUE, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_VALUE, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "id=" {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_ID);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_ID);
 }
 
 
 
 "application=" {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_APPL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_APPL);
 }
 
 
 
 "title=" {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_TITLE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_TITLE);
 }
 
 
 
 "<help_section " {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_HELPSEC, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_HELPSEC, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "<node " {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_NODE, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NODE, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "<topic " {
-  LOCptr->setState(yytext, convert_tree::STATE_TAG_TOPIC, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_TOPIC, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "</topic" {
-  LOCptr->setValue(yytext);
+    LOCptr->setValue(yytext);
 }
 
 
 
 .|\n {
-  LOCptr->copySourceSpecial(yytext, 0);
+    LOCptr->copySourceSpecial(yytext, 0);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 
 
@@ -154,7 +152,7 @@ IDENT [\.a-zA-Z0-9_-]+
 
 void tree_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

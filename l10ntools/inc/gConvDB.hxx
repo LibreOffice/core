@@ -16,34 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONDN_HXX
 #define GCONDN_HXX
 #include "gConv.hxx"
 
 
 
-/*****************************************************************************
- **************************   G C O N D B . H X X   **************************
- *****************************************************************************
- * This is the class header for loading/writing internal "object" files
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_db : public convert_gen
 {
-  public:
-    convert_db(l10nMem& crMemory);
-    virtual ~convert_db();
+    public:
+        convert_db(l10nMem& crMemory);
+        ~convert_db();
 
-  private:
-    static const int NUMFIELD = 16;
-    std::string      msFields[NUMFIELD];
-    int              miSize;
+    private:
+        static const int NUMFIELD = 16;
+        std::string      msFields[NUMFIELD];
+        int              miSize;
 
-    void execute() override;
-    bool collectLine();
+        void execute() override;
+        bool collectLine();
 };
 #endif

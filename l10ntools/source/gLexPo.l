@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
- 
+
 /*
  white-space
      #  translator-comments
@@ -32,8 +32,8 @@
      msgstr "Error desconegut del sistema"
 */
 
- 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
+
 %top{
 #include <string>
 #include <vector>
@@ -58,9 +58,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -79,53 +79,48 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 %e 1200
 %n 500
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 SPACE [ \t]*
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 "\"" {
-  char c, buildValue[8000];
-  int j, i, iLineCnt;
+    char c, buildValue[8000];
+    int j, i, iLineCnt;
 
-  // loop across multiple "..." and combine them, while keeping the source
-  for (j = -1, iLineCnt = i = 0; (c = yytext[i]) == '\"';)
-  {
-    // build current "..."
-    for (; (buildValue[++j] = yytext[++i] = c = yyinput()) != '\"';)
-      if (yytext[i] == '\\')
-        buildValue[++j] = yytext[++i] = yyinput();
-    --j;
+    // loop across multiple "..." and combine them, while keeping the source
+    for (j = -1, iLineCnt = i = 0; (c = yytext[i]) == '\"';) {
+        // build current "..."
+        for (; (buildValue[++j] = yytext[++i] = c = yyinput()) != '\"';)
+            if (yytext[i] == '\\')
+                buildValue[++j] = yytext[++i] = yyinput();
+        --j;
 
-    if (!LOCptr->mbExpectId && !LOCptr->mbExpectStr)
-      break;
+        if (!LOCptr->mbExpectId && !LOCptr->mbExpectStr)
+            break;
 
-    // skip rest of line
-    for (; (c = yytext[++i] = yyinput()) == ' ' || yytext[i] == '\t' || yytext[i] == '\n';)
-      if (yytext[i] == '\n')
-        ++iLineCnt;
-  }
-
-  if (LOCptr->mbExpectId || LOCptr->mbExpectStr)
-  {
-    if (yytext[i] != EOF)
-    {
-      unput(yytext[i]);
+        // skip rest of line
+        for (; (c = yytext[++i] = yyinput()) == ' ' || yytext[i] == '\t' || yytext[i] == '\n';)
+            if (yytext[i] == '\n')
+                ++iLineCnt;
     }
-    buildValue[j+1] = '\0';
-    LOCptr->setValue(buildValue, iLineCnt);
-  }
+
+    if (LOCptr->mbExpectId || LOCptr->mbExpectStr) {
+        if (yytext[i] != EOF) {
+            unput(yytext[i]);
+        }
+        buildValue[j+1] = '\0';
+        LOCptr->setValue(buildValue, iLineCnt);
+    }
 }
 
 
 "#,"{SPACE}.*[fF][uU][zZ][zZ][yY] {
-  LOCptr->setFuzzy();
+    LOCptr->setFuzzy();
 }
 
 
 "#:".* {
-  LOCptr->setKey(yytext);
+    LOCptr->setKey(yytext);
 }
 
 
@@ -133,26 +128,26 @@ SPACE [ \t]*
 "#*".*                         |
 "# ".*                         |
 "#~".*                         {
-  // special comment, just skip
+    // special comment, just skip
 }
 
 
 [mM][sS][gG][iI][dD]{SPACE} {
-  LOCptr->setMsgId();
+    LOCptr->setMsgId();
 }
 
 
 [mM][sS][gG][sS][tT][rR]{SPACE} {
-  LOCptr->setMsgStr();
+    LOCptr->setMsgStr();
 }
 
 
 \n {
-  LOCptr->handleNL();
+    LOCptr->handleNL();
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 
 
@@ -163,8 +158,7 @@ SPACE [ \t]*
 
 void dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }
-

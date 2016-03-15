@@ -18,7 +18,7 @@
  */
 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
 %top{
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -68,84 +68,82 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 
 
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 SP [ \t]*
 IDENT [\.a-zA-Z0-9_-]+
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 
 \" {
-  LOCptr->setString(yytext);
+    LOCptr->setString(yytext);
 }
 
 
 
 \< {
-  LOCptr->openTag(yytext);
+    LOCptr->openTag(yytext);
 }
 
 
 
 \/\> {
-  LOCptr->closeTagNOvalue(yytext);
+    LOCptr->closeTagNOvalue(yytext);
 }
 
 
 
 \> {
-  LOCptr->closeTag(yytext);
+    LOCptr->closeTag(yytext);
 }
 
 
 
 "id="{SP}\"{SP}{IDENT}{SP}\" {
-  LOCptr->setId(yytext);
+    LOCptr->setId(yytext);
 }
 
 
 
 "xml-lang="{SP}\"{SP}{IDENT}{SP}\" {
-  LOCptr->setLang(yytext);
+    LOCptr->setLang(yytext);
 }
 
 
 
 "oldref="{SP}\"{SP}{IDENT}{SP}\" {
-  LOCptr->setRef(yytext);
+    LOCptr->setRef(yytext);
 }
 
 
 "<title "     |
 "<bookmark "  |
 "<paragraph " {
-  LOCptr->openTransTag(yytext);
+    LOCptr->openTransTag(yytext);
 }
 
 
 "</title>"     |
 "</bookmark>"  |
 "</paragraph>" {
-  LOCptr->closeTransTag(yytext);
+    LOCptr->closeTransTag(yytext);
 }
 
 
 
 "<comment>" {
-  LOCptr->startComment(yytext);
+    LOCptr->startComment(yytext);
 }
 
 
 
 "</comment>" {
-  LOCptr->stopComment(yytext);
+    LOCptr->stopComment(yytext);
 }
 
 
 
 "localize=\"false\"" {
-  LOCptr->stopTransTag(yytext);
+    LOCptr->stopTransTag(yytext);
 }
 
 
@@ -154,28 +152,28 @@ IDENT [\.a-zA-Z0-9_-]+
 "&gt;"   |
 "&lt;"   |
 "&quot;" {
-  LOCptr->handleSpecial(yytext);
+    LOCptr->handleSpecial(yytext);
 }
 
 
 \r*\n\t* {
-  LOCptr->handleDataEnd(yytext);
+    LOCptr->handleDataEnd(yytext);
 }
 
 
 
 \\ {
-  LOCptr->duplicate(yytext);
+    LOCptr->duplicate(yytext);
 }
 
 
 
 .|\n {
-  LOCptr->copySourceSpecial(yytext, 0);
+    LOCptr->copySourceSpecial(yytext, 0);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 
 
@@ -186,7 +184,7 @@ IDENT [\.a-zA-Z0-9_-]+
 
 void xhp_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

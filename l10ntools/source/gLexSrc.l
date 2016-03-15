@@ -18,7 +18,7 @@
  */
 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
 %top{
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -61,14 +61,13 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 /* --- The following options are for future use (maybe)               */
 /* yyclass=           --> subClass yyFlexLexer to allow own functions */
 /* c++                --> generate C++ classes                        */
-%option prefix="src" 8bit noyywrap never-interactive 
+%option prefix="src" 8bit noyywrap never-interactive
 %array
 %p 24000
 %e 1200
 %n 500
 
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 %x CMD
 PRE   ^[ \t]*
 SUF   [ \t\r\n\\]
@@ -77,105 +76,102 @@ SPACE [ \t]*
 IDENT ([(a-zA-Z0-9_][ a-zA-Z0-9_\-\+\*(,&]*[a-zA-Z0-9)_]|[a-zA-Z0-9_])
 KEYID [a-zA-Z0-9_-]+
 
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 
 "/*" {
-  int i = 1;
-  for (;;)
-  {
-    while (yytext[i] != '*')
-      yytext[++i] = yyinput();
-    yytext[++i] = yyinput();
-    if (yytext[i] == '/')
-      break;
-  }
-  yytext[i+1] = '\0';
+    int i = 1;
+    for (;;) {
+        while (yytext[i] != '*')
+            yytext[++i] = yyinput();
+        yytext[++i] = yyinput();
+        if (yytext[i] == '/')
+            break;
+    }
+    yytext[i+1] = '\0';
 
-  IMPLptr->copySource(yytext);
+    IMPLptr->copySource(yytext);
 }
 
 
 "//".* {
-  IMPLptr->copySource(yytext);
+    IMPLptr->copySource(yytext);
 }
 
 
 
 "\"" {
-  char buildValue[8000];
-  int j, i;
+    char buildValue[8000];
+    int j, i;
 
-  // loop across multiple "..." and combine them, while keeping the source
-  buildValue[0] = yytext[0];
-  for (j = i = 0; yytext[i] != ';' ;)
-  {
-    // build current "..."
-    for (; (buildValue[++j] = yytext[++i] = yyinput()) != '\"';)
-      if (yytext[i] == '\\')
-        buildValue[++j] = yytext[++i] = yyinput();
-    --j;
-    // Look for termination or continuation
-    if (LOCptr->mbExpectValue)
-      for (; (yytext[++i] = yyinput()) != ';' && yytext[i] != '\"';) ;
-    else
-      break;
-  }
-  yytext[++i]   =
-  buildValue[j+1] = '\0';
-  LOCptr->setValue(yytext, &buildValue[1]);
+    // loop across multiple "..." and combine them, while keeping the source
+    buildValue[0] = yytext[0];
+    for (j = i = 0; yytext[i] != ';' ;) {
+        // build current "..."
+        for (; (buildValue[++j] = yytext[++i] = yyinput()) != '\"';)
+            if (yytext[i] == '\\')
+                buildValue[++j] = yytext[++i] = yyinput();
+        --j;
+        // Look for termination or continuation
+        if (LOCptr->mbExpectValue)
+            for (; (yytext[++i] = yyinput()) != ';' && yytext[i] != '\"';) ;
+        else
+            break;
+    }
+    yytext[++i]   =
+    buildValue[j+1] = '\0';
+    LOCptr->setValue(yytext, &buildValue[1]);
 }
 
 
 
 "{" {
-  LOCptr->startBlock(yytext);
+    LOCptr->startBlock(yytext);
 }
 
 
 
 "}"{SPACE}";"* {
-  LOCptr->stopBlock(yytext);
+    LOCptr->stopBlock(yytext);
 }
 
 
 
 {PRE}"<"{SUF} {
-  yyless(strlen(yytext)-1);
-  LOCptr->setListItem(yytext, true);
+    yyless(strlen(yytext)-1);
+    LOCptr->setListItem(yytext, true);
 }
 
 
 
 ">"{SPACE}";"{SUF} {
-  yyless(strlen(yytext)-1);
-  LOCptr->setListItem(yytext, false);
+    yyless(strlen(yytext)-1);
+    LOCptr->setListItem(yytext, false);
 }
 
 
 
 \n {
-  LOCptr->setNL(yytext, false);
+    LOCptr->setNL(yytext, false);
 }
 
 
 
 \\[\r]*\n {
-  LOCptr->setNL(yytext, true);
+    LOCptr->setNL(yytext, true);
 }
 
 
 
 "["{SPACE}en-US{SPACE}"]" {
-  LOCptr->setLang(yytext, true);
+    LOCptr->setLang(yytext, true);
 }
 
 
 
 "["{SPACE}{KEYID}{SPACE}"]" {
-  LOCptr->setLang(yytext, false);
+    LOCptr->setLang(yytext, false);
 }
 
 
@@ -233,38 +229,38 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[wW][aA][rR][nN][iI][nN][gG][bB][oO][xX]{SUF}                                 |
 {PRE}[wW][iI][nN][dD][oO][wW]{SUF}                                                 |
 {PRE}[wW][oO][rR][kK][wW][iI][nN][dD][oO][wW]{SUF}                                 {
-  yyless(strlen(yytext)-1);
-  LOCptr->setCmd(yytext);
-  BEGIN(CMD);
+    yyless(strlen(yytext)-1);
+    LOCptr->setCmd(yytext);
+    BEGIN(CMD);
 }
 
 <CMD>{IDENT} {
-  LOCptr->setName(yytext);
-  BEGIN(INITIAL);
+    LOCptr->setName(yytext);
+    BEGIN(INITIAL);
 }
 
 <CMD>[ \t=]+ {
-  IMPLptr->copySource(yytext);
+    IMPLptr->copySource(yytext);
 }
 
 <CMD>.|\n|\r {
-  yyless(0);
-  BEGIN(INITIAL);
+    yyless(0);
+    BEGIN(INITIAL);
 }
 
 
 
 {PRE}[hH][eE][lL][pP][iI][dD]{SUF} {
-  yyless(strlen(yytext)-1);
-  LOCptr->setId(yytext, false);
+    yyless(strlen(yytext)-1);
+    LOCptr->setId(yytext, false);
 }
 
 
 
 {PRE}[sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][yY]{SUF}  |
 {PRE}[iI][dD][eE][nN][tT][iI][fF][iI][eE][rR]{SUF}      {
-  yyless(strlen(yytext)-1);
-  LOCptr->setId(yytext, true);
+    yyless(strlen(yytext)-1);
+    LOCptr->setId(yytext, true);
 }
 
 
@@ -275,8 +271,8 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[qQ][uU][iI][cC][kK][hH][eE][lL][pP][tT][eE][xX][tT]{SUFT}     |
 {PRE}[tT][eE][xX][tT]{SUFT}                                         |
 {PRE}[tT][iI][tT][lL][eE]{SUFT}                                     {
-  yyless(strlen(yytext)-1);
-  LOCptr->setText(yytext);
+    yyless(strlen(yytext)-1);
+    LOCptr->setText(yytext);
 }
 
 
@@ -284,40 +280,40 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[fF][iI][lL][tT][eE][rR][lL][iI][sS][tT]{SUFT}                     |
 {PRE}[iI][tT][eE][mM][lL][iI][sS][tT]{SUFT}                             |
 {PRE}[sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][yY][lL][iI][sS][tT]{SUF}  {
-  yyless(strlen(yytext)-1);
-  LOCptr->setList(yytext);
+    yyless(strlen(yytext)-1);
+    LOCptr->setList(yytext);
 }
 
 
 
 {PRE}[pP][aA][iI][rR][eE][dD][lL][iI][sS][tT]{SUFT}  |
 {PRE}[sS][tT][rR][iI][nN][gG][lL][iI][sS][tT]{SUFT}  {
-  yyless(strlen(yytext)-1);
-  LOCptr->setList(yytext);
+    yyless(strlen(yytext)-1);
+    LOCptr->setList(yytext);
 }
 
 
 
 {PRE}"#define"{SUF} {
-  yyless(strlen(yytext)-1);
-  LOCptr->setMacro(yytext);
-  BEGIN(CMD);
+    yyless(strlen(yytext)-1);
+    LOCptr->setMacro(yytext);
+    BEGIN(CMD);
 }
 
 
 
 {KEYID} {
-  LOCptr->setName(yytext);
+    LOCptr->setName(yytext);
 }
 
 
 
 . {
-  IMPLptr->copySource(yytext);
+    IMPLptr->copySource(yytext);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 
 %%
@@ -326,7 +322,7 @@ KEYID [a-zA-Z0-9_-]+
 
 void src_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

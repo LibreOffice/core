@@ -29,63 +29,58 @@ convert_db::~convert_db()                                              {}
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_db::execute()
 {
-  std::string newKey;
-  int         i;
+    std::string newKey;
+    int         i;
 
 
-  msSourceBuffer   += '\n';
-  miSize            = msSourceBuffer.size() -1;
-  miLineNo          = 0;
+    msSourceBuffer   += '\n';
+    miSize            = msSourceBuffer.size() -1;
+    miLineNo          = 0;
 
-  while (collectLine())
-  {
-    newKey = msFields[4];
-    if (msFields[5].size())
-      newKey += "." + msFields[5];
-    if (msFields[3].size())
-      newKey += "." + msFields[3];
+    while (collectLine()) {
+        newKey = msFields[4];
+        if (msFields[5].size())
+            newKey += "." + msFields[5];
+        if (msFields[3].size())
+            newKey += "." + msFields[3];
 
-    for (; (i = msFields[1].find('\\')) != (int)std::string::npos;)
-      msFields[1][i] = '/';
+        for (; (i = msFields[1].find('\\')) != (int)std::string::npos;)
+            msFields[1][i] = '/';
 
-    // handle en-US or lang
-    mcMemory.loadEntryKey(miLineNo, msFields[1], newKey, msFields[10], msFields[10], false);
-  }
+        // handle en-US or lang
+        mcMemory.loadEntryKey(miLineNo, msFields[1], newKey, msFields[10], msFields[10], false);
+    }
 }
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
+
 bool convert_db::collectLine()
 {
-  int  i, iStart;
-  bool bLineEnd;
+    int  i, iStart;
+    bool bLineEnd;
 
-  ++miLineNo;
+    ++miLineNo;
 
-  for (i = 0; i < NUMFIELD; ++i)
-    msFields[i].clear();
+    for (i = 0; i < NUMFIELD; ++i)
+        msFields[i].clear();
 
-  if (miSourceReadIndex >= miSize)
-    return false;
+    if (miSourceReadIndex >= miSize)
+        return false;
 
-  for (i = 0, bLineEnd = false, iStart = miSourceReadIndex; !bLineEnd; ++miSourceReadIndex)
-  {
-     if (msSourceBuffer[miSourceReadIndex] == '\r' ||
-         msSourceBuffer[miSourceReadIndex] == '\n' ||
-         miSourceReadIndex == miSize)
-       bLineEnd = true;
-     if (msSourceBuffer[miSourceReadIndex] == '\t' || bLineEnd)
-     {
-       if (i >= NUMFIELD)
-       {
-         l10nMem::showError("TOO many fields", miLineNo);
-       }
-       msFields[i++] = msSourceBuffer.substr(iStart, miSourceReadIndex - iStart);
-       iStart       = miSourceReadIndex +1;
-     }
-  }
-  return true;
+    for (i = 0, bLineEnd = false, iStart = miSourceReadIndex; !bLineEnd; ++miSourceReadIndex) {
+        if (msSourceBuffer[miSourceReadIndex] == '\r' ||
+            msSourceBuffer[miSourceReadIndex] == '\n' ||
+            miSourceReadIndex == miSize)
+            bLineEnd = true;
+        if (msSourceBuffer[miSourceReadIndex] == '\t' || bLineEnd) {
+            if (i >= NUMFIELD) {
+                l10nMem::showError("TOO many fields", miLineNo);
+            }
+            msFields[i++] = msSourceBuffer.substr(iStart, miSourceReadIndex - iStart);
+            iStart       = miSourceReadIndex +1;
+        }
+    }
+    return true;
 }

@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
- 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
+
 %top{
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -69,32 +69,30 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 
 
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 SPACE [ \t]*
 NAME  .*"oor:name="\"[^\"]+\"{SPACE}
 FIN   [^/>]*">"
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 
 "component-data" {
-  LOCptr->addLevel();
-  IMPLptr->copySource(yytext, false);
+    LOCptr->addLevel();
+    IMPLptr->copySource(yytext, false);
 }
 
 
 
 "<oor:component-data"{NAME} {
-  LOCptr->addLevel();
-  LOCptr->pushKey(yytext);
+    LOCptr->addLevel();
+    LOCptr->pushKey(yytext);
 }
 
 
 
 "<prop"{NAME}{FIN} |
 "<node"{NAME}{FIN} {
-  LOCptr->pushKey(yytext);
+    LOCptr->pushKey(yytext);
 }
 
 
@@ -102,18 +100,18 @@ FIN   [^/>]*">"
 "</oor:component-data" |
 "</prop"               |
 "</node"               {
-  LOCptr->popKey(yytext);
+    LOCptr->popKey(yytext);
 }
 
 
 "<value xml:lang="\"[^\"]+\"[^>]*">" {
-  LOCptr->startCollectData(yytext);
+    LOCptr->startCollectData(yytext);
 }
 
 
 
 "</value>" {
-  LOCptr->stopCollectData(yytext);
+    LOCptr->stopCollectData(yytext);
 }
 
 
@@ -123,23 +121,23 @@ FIN   [^/>]*">"
 "&gt;"   |
 "&lt;"   |
 "&quot;" {
-  LOCptr->copySpecial(yytext);
+    LOCptr->copySpecial(yytext);
 }
 
 
 
 ({SPACE}\n{SPACE})+ {
-  LOCptr->copyNL(yytext);
+    LOCptr->copyNL(yytext);
 }
 
 
 
 . {
-  IMPLptr->copySource(yytext, LOCptr->mbNoCollectingData);
+    IMPLptr->copySource(yytext, LOCptr->mbNoCollectingData);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 
 
@@ -150,7 +148,7 @@ FIN   [^/>]*">"
 
 void xcu_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

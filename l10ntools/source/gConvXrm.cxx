@@ -34,133 +34,112 @@ convert_xrm::convert_xrm(l10nMem& crMemory)
 
 
 
-/************   I N T E R F A C E   I M P L E M E N T A T I O N   ************/
 convert_xrm::~convert_xrm()
 {
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
-//namespace XrmWrap
-//{
-//#define IMPLptr convert_gen_impl::mcImpl
-//#define LOCptr ((convert_xrm *)convert_gen_impl::mcImpl)
-//#include "gConXrm_yy.c"
-//}
-
-
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_xrm::execute()
 {
-////  XrmWrap::yylex();
+    ////  XrmWrap::yylex();
 
-  // write last part of file.
-  if (mbMergeMode)
-    writeSourceFile(msCollector);
+    // write last part of file.
+    if (mbMergeMode)
+        writeSourceFile(msCollector);
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_xrm::setId(char *yytext)
 {
-  std::string& sText = copySource(yytext, mbNoCollectingData);
-  int          nL, nE;
+    std::string& sText = copySource(yytext, mbNoCollectingData);
+    int          nL, nE;
 
 
-  if (mbIsTag)
-  {
-    nL = sText.find("\"");
-    nE = sText.find("\"", nL+1);
-    if (nL == (int)std::string::npos || nE == (int)std::string::npos)
-      return;
+    if (mbIsTag) {
+        nL = sText.find("\"");
+        nE = sText.find("\"", nL+1);
+        if (nL == (int)std::string::npos || nE == (int)std::string::npos)
+            return;
 
-    msKey = sText.substr(nL+1, nE - nL -1);
-  }
+        msKey = sText.substr(nL+1, nE - nL -1);
+    }
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_xrm::setLang(char *yytext)
 {
-  std::string& sText = copySource(yytext, mbNoCollectingData);
-  std::string  sLang;
-  int          nL, nE;
+    std::string& sText = copySource(yytext, mbNoCollectingData);
+    std::string  sLang;
+    int          nL, nE;
 
 
-  if (mbIsTag)
-  {
-    nL = sText.find("\"");
-    nE = sText.find("\"", nL+1);
-    if (nL == (int)std::string::npos || nE == (int)std::string::npos)
-      return;
+    if (mbIsTag) {
+        nL = sText.find("\"");
+        nE = sText.find("\"", nL+1);
+        if (nL == (int)std::string::npos || nE == (int)std::string::npos)
+            return;
 
-    sLang = sText.substr(nL+1, nE - nL -1);
-    if (sLang == "en-US")
-      mbIsLang = true;
-    else
-      l10nMem::showError(sLang + " is no en-US language");
-  }
+        sLang = sText.substr(nL+1, nE - nL -1);
+        if (sLang == "en-US")
+            mbIsLang = true;
+        else
+            l10nMem::showError(sLang + " is no en-US language");
+    }
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_xrm::setTag(char *yytext)
 {
-  msTag = copySource(yytext);
+    msTag = copySource(yytext);
 
-  msKey.clear();
-  mbIsLang = false;
-  mbIsTag  = true;
+    msKey.clear();
+    mbIsLang = false;
+    mbIsTag  = true;
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_xrm::startCollectData(char *yytext)
 {
-  copySource(yytext, mbNoCollectingData);
+    copySource(yytext, mbNoCollectingData);
 
-  if (mbIsTag && mbIsLang && msKey.size())
-    mbNoCollectingData = false;
+    if (mbIsTag && mbIsLang && msKey.size())
+        mbNoCollectingData = false;
 
-  mbIsTag = mbIsLang = false;
+    mbIsTag = mbIsLang = false;
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_xrm::stopCollectData(char *yytext)
 {
-  std::string sTagText, sTagEnd, sLang, sText = msCollector;
+    std::string sTagText, sTagEnd, sLang, sText = msCollector;
 
-  copySource(yytext);
-  if (!mbNoCollectingData)
-  {
-    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
-    mbNoCollectingData = true;
-    if (mbMergeMode)
-    {
-      sTagEnd  = "</" + msTag.substr(1,msTag.size()-2) + ">\n";
-      msTag   += "id=\"" + msKey + "\" xml:lang=\"";
+    copySource(yytext);
+    if (!mbNoCollectingData) {
+        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
+        mbNoCollectingData = true;
+        if (mbMergeMode) {
+            sTagEnd  = "</" + msTag.substr(1,msTag.size()-2) + ">\n";
+            msTag   += "id=\"" + msKey + "\" xml:lang=\"";
 
-      // prepare to read all languages
-      mcMemory.prepareMerge();
-      for (; mcMemory.getMergeLang(sLang, sText);)
-      {
-        // replace \" with "
-        for (int i = 0; (i = sText.find("\\\"", i)) != (int)std::string::npos;)
-          sText.erase(i,1);
+            // prepare to read all languages
+            mcMemory.prepareMerge();
+            for (; mcMemory.getMergeLang(sLang, sText);) {
+                // replace \" with "
+                for (int i = 0; (i = sText.find("\\\"", i)) != (int)std::string::npos;)
+                    sText.erase(i,1);
 
-        // Prepare tag start and end
-        sTagText = msTag + sLang + "\">" + sText + sTagEnd;
-        writeSourceFile(sTagText);
-      }
+                // Prepare tag start and end
+                sTagText = msTag + sLang + "\">" + sText + sTagEnd;
+                writeSourceFile(sTagText);
+            }
+        }
+        msKey.clear();
     }
-    msKey.clear();
-  }
-  mbIsTag = false;
+    mbIsTag = false;
 }

@@ -16,37 +16,27 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONXCS_HXX
 #define GCONXCS_HXX
 #include "gConv.hxx"
 
 
 
-/*****************************************************************************
- *************************   G C O N X C S . H X X   *************************
- *****************************************************************************
- * This is the class header for .xcs conversion
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class convert_xcs : public convert_gen
 {
-  public:
-    convert_xcs(l10nMem& crMemory);
-    virtual ~convert_xcs();
+    public:
+        convert_xcs(l10nMem& crMemory);
+        ~convert_xcs();
 
-    void setKey(char *syyText);
-    void unsetKey(char *syyText);
-    void startCollectData(char *syyText);
-    void stopCollectData(char *syyText);
+        void setKey(char *syyText);
+        void unsetKey(char *syyText);
+        void startCollectData(char *syyText);
+        void stopCollectData(char *syyText);
 
-  private:
-    std::string msKey;
-    bool        mbCollectingData;
+    private:
+        std::string msKey;
+        bool        mbCollectingData;
 
-    void execute() override;
+        void execute() override;
 };
 #endif

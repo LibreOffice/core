@@ -18,7 +18,7 @@
  */
 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
 %top{
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -67,65 +67,62 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 %e 1200
 %n 500
 
-/***********************   H E L P E R   M A C R O S   ***********************/
 PRE   ^[ \t]*
 SUF   [ \t\r\n]
 SUFT  [ \t\r\n\[]
 SPACE [ \t]*
 IDENT ([a-zA-Z0-9][ a-zA-Z0-9_\-\+\*]*[a-zA-Z0-9]|[0-9])
 KEYID [a-zA-Z0-9_-]+
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 
 
 "/*" {
-  int i = 1;
-  for (;;)
-  {
-    while (yytext[i] != '*')
-      yytext[++i] = yyinput();
-    yytext[++i] = yyinput();
-    if (yytext[i] == '/')
-      break;
-  }
-  yytext[i+1] = '\0';
+    int i = 1;
+    for (;;) {
+        while (yytext[i] != '*')
+            yytext[++i] = yyinput();
+        yytext[++i] = yyinput();
+        if (yytext[i] == '/')
+            break;
+    }
+    yytext[i+1] = '\0';
 
-  IMPLptr->copySource(yytext);
+    IMPLptr->copySource(yytext);
 }
 
 
 
 "\"".* {
-  LOCptr->setValue(yytext);
+    LOCptr->setValue(yytext);
 }
 
 
 
 "["[^\]]+"]" {
-  LOCptr->setKey(yytext);
+    LOCptr->setKey(yytext);
 }
 
 
 
 "en-US"[ \t]*"=" {
-  LOCptr->setText(yytext, true);
+    LOCptr->setText(yytext, true);
 }
 
 
 
 [a-zA-Z_\-]+[ \t]*"=" {
-  LOCptr->setText(yytext, false);
+    LOCptr->setText(yytext, false);
 }
 
 
-  
-.|\n {
-  IMPLptr->copySource(yytext);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+.|\n {
+    IMPLptr->copySource(yytext);
+
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 %%
 
@@ -133,7 +130,7 @@ KEYID [a-zA-Z0-9_-]+
 
 void ulf_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

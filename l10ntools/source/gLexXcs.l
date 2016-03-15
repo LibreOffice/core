@@ -18,7 +18,7 @@
  */
 
 
-/***************   O V E R W R I T I N G   F U N C T I O N S   ***************/
+
 %top{
 #include <string>
 #include <vector>
@@ -42,9 +42,9 @@
 %{
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-        register int i;
-        for ( i = 0; i < n; ++i )
-                s1[i] = s2[i];
+    register int i;
+    for ( i = 0; i < n; ++i )
+        s1[i] = s2[i];
 }
 %}
 
@@ -68,31 +68,30 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 
 
 
-/*******************   R U L E S   D E F I N I T I O N S   *******************/
 %%
 
 "<prop"[^>]*> {
-  LOCptr->setKey(yytext);
+    LOCptr->setKey(yytext);
 }
 
 "</prop>" {
-  LOCptr->unsetKey(yytext);
+    LOCptr->unsetKey(yytext);
 }
-  
+
 "<value"[^>]*> {
-  LOCptr->startCollectData(yytext);
+    LOCptr->startCollectData(yytext);
 }
 
 "</value>" {
-  LOCptr->stopCollectData(yytext);
+    LOCptr->stopCollectData(yytext);
 }
 
 .|\n {
-  IMPLptr->copySource(yytext);
+    IMPLptr->copySource(yytext);
 
-  // Just to please compiler.
-  if (false)
-    REJECT;
+    // Just to please compiler.
+    if (false)
+        REJECT;
 }
 %%
 
@@ -100,7 +99,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 
 void xcs_dummyJustForCompiler()
 {
-  char *txt = NULL;
-//  yy_flex_strlen(txt);
-  yyunput(0, txt);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

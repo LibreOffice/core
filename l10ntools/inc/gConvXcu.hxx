@@ -16,45 +16,35 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONXCU_HXX
 #define GCONXCU_HXX
 #include "gConv.hxx"
 
 
 
-/*****************************************************************************
- *************************   G C O N X C U . H X X   *************************
- *****************************************************************************
- * This is the class header for .xcu conversion
- *****************************************************************************/
-
-
-
-/********************   C L A S S   D E F I N I T I O N   ********************/
 class xcu_stack_entry;
 class convert_xcu : public convert_gen
 {
-  public:
-    bool mbNoCollectingData;
+    public:
+        bool mbNoCollectingData;
 
-    convert_xcu(l10nMem& crMemory);
-    virtual ~convert_xcu();
+        convert_xcu(l10nMem& crMemory);
+        ~convert_xcu();
 
-    void pushKey(char *syyText);
-    void popKey(char *syyText);
+        void pushKey(char *syyText);
+        void popKey(char *syyText);
 
-    void startCollectData(char *syyText);
-    void stopCollectData(char *syyText);
-    void copySpecial(char *syyText);
-    void copyNL(char *syyText);
-    void addLevel();
+        void startCollectData(char *syyText);
+        void stopCollectData(char *syyText);
+        void copySpecial(char *syyText);
+        void copyNL(char *syyText);
+        void addLevel();
 
-  private:
-    std::vector<std::string> mcStack;
-    int                      miLevel;
-    bool                     mbNoTranslate;
+    private:
+        std::vector<std::string> mcStack;
+        int                      miLevel;
+        bool                     mbNoTranslate;
 
-    void execute() override;
+        void execute() override;
 };
 #endif

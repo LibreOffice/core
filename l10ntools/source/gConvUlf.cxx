@@ -29,68 +29,52 @@ convert_ulf::~convert_ulf()                                              {}
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
-//namespace UlfWrap
-//{
-//#define IMPLptr convert_gen_impl::mcImpl
-//#define LOCptr ((convert_ulf *)convert_gen_impl::mcImpl)
-//#include "gConUlf_yy.c"
-//}
-
-
-
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_ulf::execute()
 {
-//  UlfWrap::yylex();
+    //  UlfWrap::yylex();
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_ulf::setKey(char *syyText)
 {
-  std::string sText = copySource(syyText);
+    std::string sText = copySource(syyText);
 
-  // locate key (is any)
-  msKey = sText.substr(1,sText.size()-2);
+    // locate key (is any)
+    msKey = sText.substr(1,sText.size()-2);
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_ulf::setText(char *syyText, bool bIsEnUs)
 {
-  std::string sText = copySource(syyText) + " is not en-US";
+    std::string sText = copySource(syyText) + " is not en-US";
 
 
-  if (!bIsEnUs)
-      l10nMem::showError(sText);
+    if (!bIsEnUs)
+        l10nMem::showError(sText);
 }
 
 
 
-/**********************   I M P L E M E N T A T I O N   **********************/
 void convert_ulf::setValue(char *syyText)
 {
-  std::string sLang, sText = copySource(syyText);
-  int         nL;
+    std::string sLang, sText = copySource(syyText);
+    int         nL;
 
-  sText.erase(0,1);
-  nL = sText.rfind("\"");
-  sText.erase(nL);
+    sText.erase(0,1);
+    nL = sText.rfind("\"");
+    sText.erase(nL);
 
-  mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
 
-  if (mbMergeMode)
-  {
-    // prepare to read all languages
-    mcMemory.prepareMerge();
-    for (; mcMemory.getMergeLang(sLang, sText);)
-    {
-      // Prepare tag
-      sText = "\n" + sLang + " = \"" + sText + "\"";
-      writeSourceFile(sText);
+    if (mbMergeMode) {
+        // prepare to read all languages
+        mcMemory.prepareMerge();
+        for (; mcMemory.getMergeLang(sLang, sText);) {
+            // Prepare tag
+            sText = "\n" + sLang + " = \"" + sText + "\"";
+            writeSourceFile(sText);
+        }
     }
-  }
 }
