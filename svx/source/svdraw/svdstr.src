@@ -21,24 +21,24 @@
 
 String STR_ObjNameSingulNONE
 {
-    Text [ en-US ] = "draw object" ;
+    Text [ en-US ] = "Drawing object" ;
 };
 String STR_ObjNamePluralNONE
 {
-    Text [ en-US ] = "draw objects" ;
+    Text [ en-US ] = "Drawing objects" ;
 };
 
 String STR_ObjNameSingulGRUP
 {
-    Text [ en-US ] = "group object" ;
+    Text [ en-US ] = "Group object" ;
 };
 String STR_ObjNamePluralGRUP
 {
-    Text [ en-US ] = "group objects" ;
+    Text [ en-US ] = "Group objects" ;
 };
 String STR_ObjNameSingulGRUPEMPTY
 {
-    Text [ en-US ] = "blank group object" ;
+    Text [ en-US ] = "Blank group object" ;
 };
 String STR_ObjNamePluralGRUPEMPTY
 {
@@ -51,7 +51,7 @@ String STR_ObjNameSingulLINE
 };
 String STR_ObjNameSingulLINE_Hori
 {
-    Text [ en-US ] = "horizontal line" ;
+    Text [ en-US ] = "Horizontal line" ;
 };
 String STR_ObjNameSingulLINE_Vert
 {
@@ -59,7 +59,7 @@ String STR_ObjNameSingulLINE_Vert
 };
 String STR_ObjNameSingulLINE_Diag
 {
-    Text [ en-US ] = "diagonal line" ;
+    Text [ en-US ] = "Diagonal line" ;
 };
 String STR_ObjNamePluralLINE
 {
@@ -337,11 +337,11 @@ String STR_ObjNamePluralOUTLINETEXT
 
 String STR_ObjNameSingulGRAF
 {
-    Text [ en-US ] = "graphic" ;
+    Text [ en-US ] = "Graphic" ;
 };
 String STR_ObjNamePluralGRAF
 {
-    Text [ en-US ] = "graphics" ;
+    Text [ en-US ] = "Graphics" ;
 };
 String STR_ObjNameSingulGRAFLNK
 {
@@ -528,7 +528,7 @@ String STR_ObjNamePluralMEASURE
 };
 String STR_ObjNamePlural
 {
-    Text [ en-US ] = "draw objects" ;
+    Text [ en-US ] = "Drawing objects" ;
 };
 String STR_ObjNameNoObj
 {
@@ -540,7 +540,7 @@ String STR_ObjNameAnd
 };
 String STR_ObjNameSingulPlural
 {
-    Text [ en-US ] = "draw object(s)" ;
+    Text [ en-US ] = "Draw object(s)" ;
 };
 
 // New in 537: names for 3D objects
@@ -576,12 +576,12 @@ String STR_ObjNamePluralLabel3d
 
 String STR_ObjNameSingulLathe3d
 {
-    Text [ en-US ] = "rotation object";
+    Text [ en-US ] = "Rotation object";
 };
 
 String STR_ObjNamePluralLathe3d
 {
-    Text [ en-US ] = "rotation objects";
+    Text [ en-US ] = "Rotation objects";
 };
 
 String STR_ObjNameSingulObj3d
@@ -611,12 +611,12 @@ String STR_ObjNamePluralScene3d
 
 String STR_ObjNameSingulSphere3d
 {
-    Text [ en-US ] = "sphere";
+    Text [ en-US ] = "Sphere";
 };
 
 String STR_ObjNamePluralSphere3d
 {
-    Text [ en-US ] = "spheres";
+    Text [ en-US ] = "Spheres";
 };
 
 String STR_EditWithCopy
@@ -2815,11 +2815,11 @@ Bitmap SIP_SA_CROP_MARKERS
 
 String STR_ObjNameSingulFONTWORK
 {
-    Text [ en-US ] = "font work" ;
+    Text [ en-US ] = "Font work" ;
 };
 String STR_ObjNamePluralFONTWORK
 {
-    Text [ en-US ] = "font works" ;
+    Text [ en-US ] = "Font works" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
