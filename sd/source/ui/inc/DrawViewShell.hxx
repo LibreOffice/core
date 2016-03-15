@@ -125,7 +125,7 @@ public:
         the enclosing window and current sizes of buttons, rulers, and
         sliders.
     */
-    virtual void ArrangeGUIElements() override;
+    virtual void    ArrangeGUIElements() override;
 
     void            HidePage();
 
@@ -135,11 +135,11 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin) override;
 
-    virtual void Resize() override;
+    virtual void    Resize() override;
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
-    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
+    virtual void    ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
     virtual void    SetZoom( long nZoom ) override;
     virtual void    SetZoomRect( const Rectangle& rZoomRect ) override;
@@ -157,8 +157,8 @@ public:
     virtual void    Deactivate(bool IsMDIActivate) override;
     virtual void    UIActivating( SfxInPlaceClient* ) override;
     virtual void    UIDeactivated( SfxInPlaceClient* ) override;
-    OUString GetSelectionText( bool bCompleteWords = false );
-    bool    HasSelection( bool bText = true ) const;
+    OUString        GetSelectionText( bool bCompleteWords = false );
+    bool            HasSelection( bool bText = true ) const;
 
     //If we are editing an PRESOBJ_OUTLINE return the Outliner and fill rSel
     //with the current selection
@@ -174,7 +174,7 @@ public:
         <p>This function also sets the states of the mode buttons
         (those at the upper right corner) accordingly.</p>
     */
-    void GetModeSwitchingMenuState (SfxItemSet &rSet);
+    void            GetModeSwitchingMenuState (SfxItemSet &rSet);
     void            GetAttrState(SfxItemSet& rSet);
     void            GetSnapItemState(SfxItemSet& rSet);
 
@@ -199,7 +199,7 @@ public:
     void            ExecNavigatorWin(SfxRequest& rReq);
     void            GetNavigatorWinState(SfxItemSet& rSet);
 
-    void         ExecutePropPanelAttr (SfxRequest& rReq);
+    void            ExecutePropPanelAttr (SfxRequest& rReq);
     void            GetStatePropPanelAttr(SfxItemSet& rSet);
 
     void            ExecEffectWin(SfxRequest& rReq);
@@ -242,9 +242,7 @@ public:
     void            ExecuteAnnotation (SfxRequest& rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
 
-    void StartRulerDrag (
-        const Ruler& rRuler,
-        const MouseEvent& rMEvt);
+    void            StartRulerDrag (const Ruler& rRuler, const MouseEvent& rMEvt);
 
     virtual bool    PrepareClose( bool bUI = true ) override;
 
@@ -289,17 +287,17 @@ public:
     void            UnlockInput();
     bool            IsInputLocked() const { return mnLockCount > 0UL; }
 
-    sal_uInt16          GetCurPageId() { return maTabControl->GetCurPageId(); }
+    sal_uInt16      GetCurPageId() { return maTabControl->GetCurPageId(); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
         Do not call this method directly.  Call the method at ViewShellBase
         instead.
     */
-    virtual void ShowUIControls (bool bVisible = true) override;
+    virtual void    ShowUIControls (bool bVisible = true) override;
 
     void            ScannerEvent( const css::lang::EventObject& rEventObject );
 
-    bool IsLayerModeActive() const { return mbIsLayerModeActive;}
+    bool            IsLayerModeActive() const { return mbIsLayerModeActive;}
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
