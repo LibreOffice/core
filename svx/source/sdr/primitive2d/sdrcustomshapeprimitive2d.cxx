@@ -80,15 +80,14 @@ namespace drawinglayer
             const Primitive2DContainer& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
-            bool b3DShape,
-            bool bForceTextClipToTextRange)
+            bool b3DShape)
         :   BufferedDecompositionPrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
             mb3DShape(b3DShape),
-            mbForceTextClipToTextRange(bForceTextClipToTextRange)
+            mbForceTextClipToTextRange(false)
         {
         }
 

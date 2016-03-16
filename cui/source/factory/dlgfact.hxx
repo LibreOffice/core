@@ -602,11 +602,9 @@ public:
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (vcl::Window* pParent,
                                                 const Graphic& rGraphic, double nRadius) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (vcl::Window* pParent,
-                                                const Graphic& rGraphic, sal_uInt8 nGreyThreshold,
-                                                bool bInvert) override;
+                                                const Graphic& rGraphic, sal_uInt8 nGreyThreshold) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (vcl::Window* pParent,
-                                                const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
-                                                bool bEnhanceEdges) override;
+                                                const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight) override;
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( vcl::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,

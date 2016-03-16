@@ -127,8 +127,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
 
 
 void SvxTextEncodingBox::FillFromDbTextEncodingMap(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
-        sal_uInt32 nButIncludeInfoFlags )
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags )
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void)bExcludeImportSubsets;
@@ -156,7 +155,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                             nEnc == RTL_TEXTENCODING_UCS4) )
                         bInsert = false;    // InfoFlags don't work for Unicode :-(
                 }
-                else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
+                else
                     bInsert = false;
             }
         }

@@ -67,7 +67,7 @@ public:
     OUString GetStyleString();
 
     SdrOle2Obj( bool bFrame_ = false );
-    SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false );
+    SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect );
     virtual ~SdrOle2Obj();
 
     const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const;

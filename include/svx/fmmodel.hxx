@@ -83,7 +83,7 @@ public:
     FmXUndoEnvironment& GetUndoEnv();
 
 private:
-    void        implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce );
+    void        implSetOpenInDesignMode( bool _bOpenDesignMode );
 };
 
 #endif          // _FM_FMMODEL_HXX

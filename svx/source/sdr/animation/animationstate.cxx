@@ -107,7 +107,7 @@ namespace sdr
         }
 
         PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DContainer& rAnimatedPrimitives)
-        :   Event(0L),
+        :   Event(),
             mrVOContact(rVOContact),
             maAnimatedPrimitives(rAnimatedPrimitives)
         {

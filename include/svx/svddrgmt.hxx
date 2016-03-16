@@ -90,8 +90,7 @@ private:
 
 public:
     SdrDragEntryPrimitive2DSequence(
-        const drawinglayer::primitive2d::Primitive2DContainer& rSequence,
-        bool bAddToTransparent);
+        const drawinglayer::primitive2d::Primitive2DContainer& rSequence);
     virtual ~SdrDragEntryPrimitive2DSequence();
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
@@ -129,7 +128,7 @@ protected:
     void clearSdrDragEntries();
     void addSdrDragEntry(SdrDragEntry* pNew);
     virtual void createSdrDragEntries();
-    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
+    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact);
 
     // access for derivated classes to maOverlayObjectList
     void clearOverlayObjectList() { maOverlayObjectList.clear(); }
@@ -229,7 +228,7 @@ private:
     void ImpCheckSnap(const Point& rPt);
 
 protected:
-    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify) override;
+    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact) override;
 
 public:
     SdrDragMove(SdrDragView& rNewView);

@@ -373,10 +373,10 @@ public:
                                                 double nRadius)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (vcl::Window* pParent,
                                                 const Graphic& rGraphic,
-                                                sal_uInt8 nGreyThreshold, bool bInvert)=0;
+                                                sal_uInt8 nGreyThreshold)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (vcl::Window* pParent,
                                                 const Graphic& rGraphic,
-                                                sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges)=0;
+                                                sal_uInt16 nTileWidth, sal_uInt16 nTileHeight)=0;
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( vcl::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,

@@ -708,7 +708,7 @@ public:
     void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems = false);
 
     // NotPersistAttr for Layer, ObjName, geometrical transformations etc.
-    void TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const;
+    void TakeNotPersistAttr(SfxItemSet& rAttr) const;
     void ApplyNotPersistAttr(const SfxItemSet& rAttr);
     void NbcApplyNotPersistAttr(const SfxItemSet& rAttr);
 

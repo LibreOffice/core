@@ -350,20 +350,16 @@ sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
     return nRet;
 }
 
-sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack, bool bNext, sal_uInt16 nId0) const
+sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
 {
-    sal_uInt16 nCount=GetCount();
-    sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
-    sal_uInt16 nNum=bBack ? 0 : nCount;
-    while ((bBack ? nNum<nCount : nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
-        if (!bBack) nNum--;
-        const SdrGluePoint* pGP=GetObject(nNum);
-        if (bNext) {
-            if (pGP->GetId()==nId0) bNext=false;
-        } else {
-            if (pGP->IsHit(rPnt,rOut,pObj)) nRet=nNum;
-        }
-        if (bBack) nNum++;
+    sal_uInt16 nCount = GetCount();
+    sal_uInt16 nRet = SDRGLUEPOINT_NOTFOUND;
+    sal_uInt16 nNum = nCount;
+    while ((nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
+        nNum--;
+        const SdrGluePoint* pGP = GetObject(nNum);
+        if (pGP->IsHit(rPnt,rOut,pObj))
+            nRet = nNum;
     }
     return nRet;
 }

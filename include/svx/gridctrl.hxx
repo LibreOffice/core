@@ -459,7 +459,7 @@ public:
     bool IsUpdating() const {return m_bUpdating;}
 
     void RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
-    void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
+    void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true );
     void RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
 
     void resetCurrentRow();

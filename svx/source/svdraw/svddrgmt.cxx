@@ -203,13 +203,12 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPri
 
 
 SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
-    const drawinglayer::primitive2d::Primitive2DContainer& rSequence,
-    bool bAddToTransparent)
+    const drawinglayer::primitive2d::Primitive2DContainer& rSequence)
 :   SdrDragEntry(),
     maPrimitive2DSequence(rSequence)
 {
     // add parts to transparent overlay stuff if necessary
-    setAddToTransparent(bAddToTransparent);
+    setAddToTransparent(true);
 }
 
 SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
@@ -351,11 +350,11 @@ void SdrDragMethod::createSdrDragEntries()
     }
 }
 
-void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
+void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact)
 {
     // add full object drag; Clone() at the object has to work
     // for this
-    addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, bModify));
+    addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, true/*bModify*/));
 }
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
@@ -399,7 +398,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
                                 {
                                     // add full object drag; Clone() at the object has to work
                                     // for this
-                                    createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
+                                    createSdrDragEntryForSdrObject(*pCandidate, rOC);
                                 }
 
                                 if(bAddWireframe)
@@ -1472,7 +1471,7 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 }
 
 
-void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
+void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact)
 {
     // for SdrDragMove, use current Primitive2DContainer of SdrObject visualization
     // in given ObjectContact directly
@@ -1484,7 +1483,7 @@ void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr
     // here we want the complete primitive sequence without visible clippings
     rObjectContact.resetViewPort();
 
-    addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo), true));
+    addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo)));
 }
 
 void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)

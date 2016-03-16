@@ -148,20 +148,16 @@ public:
     const Style&        GetCellStyleBottom( size_t nCol, size_t nRow ) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns the visible style (i.e. from top-left corner of a merged range).
+        Ignores merged ranges;
         @return
             The top-left to bottom-right frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleTLBR( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    const Style&        GetCellStyleTLBR( size_t nCol, size_t nRow ) const;
 
     /** Returns the bottom-left to top-right frame style of the cell (nCol,nRow).
-        @param bSimple
-            true = Ignores merged ranges;
-            false = Returns the visible style (i.e. from top-left corner of a merged range).
+        Ignores merged ranges;
         @return
             The bottom-left to top-right frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleBLTR( size_t nCol, size_t nRow, bool bSimple = false ) const;
+    const Style&        GetCellStyleBLTR( size_t nCol, size_t nRow ) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
         @return

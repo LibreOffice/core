@@ -52,12 +52,12 @@ Size SvxParaPrevWindow::GetOptimalSize() const
 
 void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    DrawParagraph(rRenderContext, true);
+    DrawParagraph(rRenderContext);
 }
 
 #define DEF_MARGIN  120
 
-void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext, bool bAll)
+void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 {
     Size aWinSize(GetOutputSizePixel());
     aWinSize = rRenderContext.PixelToLogic(aWinSize);
@@ -71,8 +71,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext, bool b
     Color aGrayColor(COL_LIGHTGRAY);
 
     rRenderContext.SetFillColor(Color(rWinColor));
-    if (bAll)
-        rRenderContext.DrawRect(Rectangle(Point(), aWinSize));
+    rRenderContext.DrawRect(Rectangle(Point(), aWinSize));
 
     rRenderContext.SetLineColor();
 
@@ -195,18 +194,8 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext, bool b
 
         Rectangle aRect(aPnt, aSiz);
 
-        if (Lines[i] != aRect || bAll)
-        {
-            if (!bAll)
-            {
-                Color aFillCol = rRenderContext.GetFillColor();
-                rRenderContext.SetFillColor(rWinColor);
-                rRenderContext.DrawRect(Lines[i]);
-                rRenderContext.SetFillColor(aFillCol);
-            }
-            rRenderContext.DrawRect( aRect );
-            Lines[i] = aRect;
-        }
+        rRenderContext.DrawRect( aRect );
+        Lines[i] = aRect;
 
         if (5 == i)
         {

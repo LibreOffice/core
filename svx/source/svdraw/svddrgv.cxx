@@ -661,7 +661,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point
         }
         else
         {
-            mnInsPointNum = pMarkedPath->NbcInsPointOld(aPt, bNewObj, true);
+            mnInsPointNum = pMarkedPath->NbcInsPointOld(aPt, bNewObj);
         }
 
         if(bClosed0 != pMarkedPath->IsClosedObj())

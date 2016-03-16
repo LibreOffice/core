@@ -200,13 +200,13 @@ class DisposeListenerGridBridge : public FmXDisposeListener
     FmXDisposeMultiplexer*  m_pRealListener;
 
 public:
-    DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId = -1);
+    DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
     virtual ~DisposeListenerGridBridge();
 
     virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) override { m_rParent.disposing(_nId, _rEvent); }
 };
 
-DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
+DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
     :FmXDisposeListener(m_aMutex)
     ,m_rParent(_rParent)
     ,m_pRealListener(nullptr)
@@ -214,7 +214,7 @@ DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, co
 
     if (_rxObject.is())
     {
-        m_pRealListener = new FmXDisposeMultiplexer(this, _rxObject, _rId);
+        m_pRealListener = new FmXDisposeMultiplexer(this, _rxObject, 0);
         m_pRealListener->acquire();
     }
 }
@@ -1657,7 +1657,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // start listening on the seek cursor
     if (m_pSeekCursor)
-        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > (Reference< XInterface >(*m_pSeekCursor), UNO_QUERY), 0);
+        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > (Reference< XInterface >(*m_pSeekCursor), UNO_QUERY));
 }
 
 void DbGridControl::RemoveColumns()
@@ -1922,7 +1922,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
     EnablePaint(true);
 }
 
-void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint, bool bKeepSelection)
+void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint)
 {
     if (nNumRows)
     {
@@ -1937,7 +1937,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint, bool bK
         else if (m_nTotalCount >= 0)
             m_nTotalCount += nNumRows;
 
-        DbGridControl_Base::RowInserted(nRow, nNumRows, bDoPaint, bKeepSelection);
+        DbGridControl_Base::RowInserted(nRow, nNumRows, bDoPaint);
         m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
     }
 }
