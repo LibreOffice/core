@@ -422,7 +422,7 @@ public:
     { return decode(m_aAuth, eMechanism, eCharset); }
 
     inline bool SetUser(OUString const & rTheUser)
-    { return setUser(rTheUser, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
+    { return setUser(rTheUser, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
 
     inline bool SetPass(OUString const & rThePassword);
 
@@ -444,7 +444,7 @@ public:
     sal_uInt32 GetPort() const;
 
     inline bool SetHost(OUString const & rTheHost)
-    { return setHost(rTheHost, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
+    { return setHost(rTheHost, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
 
     bool SetPort(sal_uInt32 nThePort);
 
@@ -460,7 +460,7 @@ public:
     inline bool SetURLPath(OUString const & rThePath,
                            EncodeMechanism eMechanism = WAS_ENCODED,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
-    { return setPath(rThePath, false, eMechanism, eCharset); }
+    { return setPath(rThePath, eMechanism, eCharset); }
 
     // Hierarchical Path:
 
@@ -515,6 +515,8 @@ public:
                        bool bIgnoreFinalSlash = true);
 
     /** Insert a new segment into the hierarchical path.
+        A final slash at the end of the
+        hierarchical path does not denote an empty segment, but is ignored.
 
         @param rTheName  The name part of the new segment.  The new segment
         will contain no parameters.
@@ -528,9 +530,6 @@ public:
         getSegmentCount() inserts the new segment at the end of the
         hierarchical path.
 
-        @param bIgnoreFinalSlash  If true, a final slash at the end of the
-        hierarchical path does not denote an empty segment, but is ignored.
-
         @param eMechanism  See the general discussion for set-methods.
 
         @param eCharset  See the general discussion for set-methods.
@@ -543,7 +542,6 @@ public:
     inline bool insertName(OUString const & rTheName,
                            bool bAppendFinalSlash = false,
                            sal_Int32 nIndex = LAST_SEGMENT,
-                           bool bIgnoreFinalSlash = true,
                            EncodeMechanism eMechanism = WAS_ENCODED,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -604,14 +602,13 @@ public:
         const;
 
     /** Set the base of the name of a segment (preserving the extension).
+        A final slash at the end of the
+        hierarchical path does not denote an empty segment, but is ignored.
 
         @param rTheBase  The new base.
 
         @param nIndex  The non-negative index of the segment, or LAST_SEGMENT
         if addressing the last segment.
-
-        @param bIgnoreFinalSlash  If true, a final slash at the end of the
-        hierarchical path does not denote an empty segment, but is ignored.
 
         @param eMechanism  See the general discussion for set-methods.
 
@@ -624,7 +621,6 @@ public:
      */
     bool setBase(OUString const & rTheBase,
                  sal_Int32 nIndex = LAST_SEGMENT,
-                 bool bIgnoreFinalSlash = true,
                  EncodeMechanism eMechanism = WAS_ENCODED,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -920,7 +916,7 @@ public:
     inline bool Append(OUString const & rTheSegment,
                        EncodeMechanism eMechanism = WAS_ENCODED,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
-    { return appendSegment(rTheSegment, false, eMechanism, eCharset); }
+    { return appendSegment(rTheSegment, eMechanism, eCharset); }
 
     void CutLastName();
 
@@ -1026,7 +1022,7 @@ private:
         FSysStyle eStyle) const;
 
     bool convertAbsToRel(
-        OUString const & rTheAbsURIRef, bool bOctets,
+        OUString const & rTheAbsURIRef,
         OUString & rTheRelURIRef, EncodeMechanism eEncodeMechanism,
         DecodeMechanism eDecodeMechanism, rtl_TextEncoding eCharset,
         FSysStyle eStyle) const;
@@ -1064,13 +1060,13 @@ private:
     // User Info:
 
     bool setUser(
-        OUString const & rTheUser, bool bOctets,
+        OUString const & rTheUser,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     bool clearPassword();
 
     bool setPassword(
-        OUString const & rThePassword, bool bOctets,
+        OUString const & rThePassword,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Host and Port:
@@ -1085,7 +1081,7 @@ private:
         bool bNetBiosName, OUStringBuffer* pCanonic);
 
     bool setHost(
-        OUString const & rTheHost, bool bOctets,
+        OUString const & rTheHost,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Path:
@@ -1099,7 +1095,7 @@ private:
         OUStringBuffer &rSynPath);
 
     bool setPath(
-        OUString const & rThePath, bool bOctets,
+        OUString const & rThePath,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Hierarchical Path:
@@ -1107,7 +1103,7 @@ private:
     TOOLS_DLLPRIVATE bool checkHierarchical() const;
 
     bool appendSegment(
-        OUString const & rTheSegment, bool bOctets,
+        OUString const & rTheSegment,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     TOOLS_DLLPRIVATE SubString getSegment(
@@ -1123,7 +1119,7 @@ private:
     bool clearQuery();
 
     bool setQuery(
-        OUString const & rTheQuery, bool bOctets,
+        OUString const & rTheQuery,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Fragment:
@@ -1131,7 +1127,7 @@ private:
     bool clearFragment();
 
     bool setFragment(
-        OUString const & rTheMark, bool bOctets,
+        OUString const & rTheMark,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // FILE URLs:
@@ -1270,7 +1266,7 @@ inline OUString INetURLObject::GetRelURL(OUString const & rTheBaseURIRef,
 {
     OUString aTheRelURIRef;
     INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
-        convertAbsToRel(rTheAbsURIRef, false, aTheRelURIRef, eEncodeMechanism,
+        convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
                         eDecodeMechanism, eCharset, eStyle);
     return aTheRelURIRef;
 }
@@ -1303,27 +1299,26 @@ inline bool INetURLObject::SetPass(OUString const & rThePassword)
 {
     return rThePassword.isEmpty() ?
                clearPassword() :
-               setPassword(rThePassword, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8);
+               setPassword(rThePassword, WAS_ENCODED, RTL_TEXTENCODING_UTF8);
 }
 
 inline bool INetURLObject::SetUserAndPass(OUString const & rTheUser,
                                           OUString const & rThePassword)
 {
-    return setUser(rTheUser, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8)
+    return setUser(rTheUser, WAS_ENCODED, RTL_TEXTENCODING_UTF8)
            && (rThePassword.isEmpty() ?
                    clearPassword() :
-                   setPassword(rThePassword, false, WAS_ENCODED, RTL_TEXTENCODING_UTF8));
+                   setPassword(rThePassword, WAS_ENCODED, RTL_TEXTENCODING_UTF8));
 }
 
 inline bool INetURLObject::insertName(OUString const & rTheName,
                                       bool bAppendFinalSlash,
                                       sal_Int32 nIndex,
-                                      bool bIgnoreFinalSlash,
                                       EncodeMechanism eMechanism,
                                       rtl_TextEncoding eCharset)
 {
     return insertName(rTheName, false, bAppendFinalSlash, nIndex,
-                      bIgnoreFinalSlash, eMechanism, eCharset);
+                      true/*bIgnoreFinalSlash*/, eMechanism, eCharset);
 }
 
 inline bool INetURLObject::SetParam(OUString const & rTheQuery,
@@ -1332,7 +1327,7 @@ inline bool INetURLObject::SetParam(OUString const & rTheQuery,
 {
     return rTheQuery.isEmpty() ?
                clearQuery() :
-               setQuery(rTheQuery, false, eMechanism, eCharset);
+               setQuery(rTheQuery, eMechanism, eCharset);
 }
 
 inline bool INetURLObject::SetMark(OUString const & rTheFragment,
@@ -1341,7 +1336,7 @@ inline bool INetURLObject::SetMark(OUString const & rTheFragment,
 {
     return rTheFragment.isEmpty() ?
                clearFragment() :
-               setFragment(rTheFragment, false, eMechanism, eCharset);
+               setFragment(rTheFragment, eMechanism, eCharset);
 }
 
 inline INetURLObject::INetURLObject(OUString const & rFSysPath,

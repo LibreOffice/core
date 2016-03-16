@@ -621,21 +621,19 @@ Polygon::Polygon( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVer
     }
 }
 
-Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoints )
+Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY )
 {
     if( nRadX && nRadY )
     {
+        sal_uInt16 nPoints = 0;
         // Compute default (depends on size)
-        if( !nPoints )
-        {
-            nPoints = (sal_uInt16) MinMax(
-                ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( (double) labs( nRadX * nRadY ) ) ) ),
-                32, 256 );
+        nPoints = (sal_uInt16) MinMax(
+            ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                       sqrt( (double) labs( nRadX * nRadY ) ) ) ),
+            32, 256 );
 
-            if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
-                nPoints >>= 1;
-        }
+        if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
+            nPoints >>= 1;
 
         // Ceil number of points until divisible by four
         mpImplPolygon = new ImplPolygon( nPoints = (nPoints + 3) & ~3 );

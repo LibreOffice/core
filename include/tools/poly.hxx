@@ -91,8 +91,7 @@ public:
                         Polygon( const Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
                         Polygon( const Point& rCenter,
-                                 long nRadX, long nRadY,
-                                 sal_uInt16 nPoints = 0 );
+                                 long nRadX, long nRadY );
                         Polygon( const Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = POLY_ARC,

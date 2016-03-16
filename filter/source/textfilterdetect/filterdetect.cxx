@@ -154,7 +154,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             else
                 pInStream.reset(utl::UcbStreamHelper::CreateStream(xInStream));
             std::unique_ptr<SvMemoryStream> pDecompressedStream(new SvMemoryStream());
-            if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream, false, true))
+            if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream))
             {
                 uno::Reference<io::XStream> xStreamDecompressed(new utl::OStreamWrapper(*pDecompressedStream));
                 pDecompressedStream.release();

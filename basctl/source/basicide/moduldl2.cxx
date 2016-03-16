@@ -1229,7 +1229,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
         OUString aTmpPath = SvtPathOptions().GetTempPath();
         INetURLObject aInetObj( aTmpPath );
-        aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
+        aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, INetURLObject::ENCODE_ALL );
         OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
         if( xSFA->exists( aSourcePath ) )
             xSFA->kill( aSourcePath );
@@ -1261,7 +1261,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
         INetURLObject aMetaInfInetObj( aTmpPath );
         aMetaInfInetObj.insertName( "META-INF",
-            true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
+            true, INetURLObject::LAST_SEGMENT, INetURLObject::ENCODE_ALL );
         OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE );
         if( xSFA->exists( aMetaInfFolder ) )
             xSFA->kill( aMetaInfFolder );
@@ -1288,7 +1288,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
                 &manifest[ 0 ], manifest.size() ) );
 
         aMetaInfInetObj.insertName( "manifest.xml",
-            true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
+            true, INetURLObject::LAST_SEGMENT, INetURLObject::ENCODE_ALL );
 
         // write buffered pipe data to content:
         ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv, comphelper::getProcessComponentContext() );

@@ -834,7 +834,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
             pMemStm.reset( new SvMemoryStream);
             pIStm = pMemStm.get();
             assert(!aData.empty());
-            pMemStm->SetBuffer( &aData.front(), nUncodedSize, false, nUncodedSize );
+            pMemStm->SetBuffer( &aData.front(), nUncodedSize, nUncodedSize );
             nOffset = 0;
         }
         else
