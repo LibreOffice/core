@@ -392,9 +392,8 @@ public:
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DContainer& rSequence ) const;
 
-    // FIXME: EasyHack (refactoring): rename method name in all files
     // retouch, not in the area of the given Rect!
-    void Retouche( const SwPageFrame *pPage, const SwRect &rRect ) const;
+    void Retouch( const SwPageFrame *pPage, const SwRect &rRect ) const;
 
     bool GetBackgroundBrush(
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,

@@ -3635,7 +3635,7 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
             if ( pFrame->IsRetoucheFrame() && bWin && !pFrame->GetNext() )
             {   if ( !pPage )
                     pPage = FindPageFrame();
-               pFrame->Retouche( pPage, rRect );
+               pFrame->Retouch( pPage, rRect );
             }
             pFrame->ResetRetouche();
         }
@@ -7386,7 +7386,7 @@ const vcl::Font& SwPageFrame::GetEmptyPageFont()
  * The whole area of the upper which is located below the Frame will be
  * cleared using PaintBackground.
  */
-void SwFrame::Retouche( const SwPageFrame * pPage, const SwRect &rRect ) const
+void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
 {
     if ( gProp.bSFlyMetafile )
         return;
