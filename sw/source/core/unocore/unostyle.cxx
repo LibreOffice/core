@@ -2705,9 +2705,7 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
     rBaseImpl.GetItemSet().Put(*pNewSetItem);
 }
 
-void SwXPageStyle::SetPropertyValues_Impl(
-    const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues )
+void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<uno::Any>& rValues)
 {
     if(!GetDoc())
         throw uno::RuntimeException();
@@ -2715,44 +2713,36 @@ void SwXPageStyle::SetPropertyValues_Impl(
     if(rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
 
-    const OUString* pNames = rPropertyNames.getConstArray();
-    const uno::Any* pValues = rValues.getConstArray();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); //UUUU add pDfltFrameFormat as parent
-    if(m_pBasePool)
+    if(!m_pBasePool)
     {
-        const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
-        m_pBasePool->SetSearchMask(GetFamily());
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(GetStyleName());
-        m_pBasePool->SetSearchMask(GetFamily(), nSaveMask );
-        OSL_ENSURE(pBase, "where is the style?" );
-        if(pBase)
-        {
-            aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
-        }
-        else
-        {
+        if(!IsDescriptor())
             throw uno::RuntimeException();
-        }
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
+            if(!m_pPropertiesImpl->SetProperty(rPropertyNames[nProp], rValues[nProp]))
+                throw lang::IllegalArgumentException();
+        return;
     }
-
-    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    SfxStyleSheetBase* pBase = GetStyleSheetBase();
+    if(!pBase)
+        throw uno::RuntimeException();
+    aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
     {
-        const OUString& rPropName = pNames[nProp];
+        const OUString& rPropName = rPropertyNames[nProp];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
 
-        if (!pEntry)
-        {
-            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-        }
+        if(!pEntry)
+            throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast<cppu::OWeakObject*>(this));
+        if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            throw beans::PropertyVetoException("Property is read-only: " + rPropName, static_cast<cppu::OWeakObject*>(this));
 
-        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        {
-            throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-        }
-
-        if(m_pBasePool)
+        const bool bHeader(rPropName.startsWith("Header"));
+        const bool bFooter(rPropName.startsWith("Footer"));
+        const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
+        if(bHeader || bFooter || bFirstIsShared)
         {
             switch(pEntry->nWID)
             {
@@ -2768,89 +2758,54 @@ void SwXPageStyle::SetPropertyValues_Impl(
                 case SID_ATTR_PAGE_SIZE:
                 case RES_HEADER_FOOTER_EAT_SPACING:
                 {
-                    // these entries are used in Header, Footer and (partially) in the PageStyle itself.
-                    // Check for Header/Footer entry
-                    const bool bHeader(rPropName.startsWith("Header"));
-                    const bool bFooter(rPropName.startsWith("Footer"));
-
-                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
+                    // it is a Header/Footer entry, access the SvxSetItem containing it's information
+                    const SvxSetItem* pSetItem = nullptr;
+                    if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(), rPropName, bFooter, pSetItem))
                     {
-                        // it is a Header/Footer entry, access the SvxSetItem containing it's information
-                        const SvxSetItem* pSetItem = nullptr;
-                        if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(),
-                                    rPropName, bFooter, pSetItem))
+                        PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
+
+                        if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
                         {
-                            PutItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl);
-
-                            if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
+                            // Need to add this to the other as well
+                            if (SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(
+                                        bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
+                                        false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
                             {
-                                // Need to add this to the other as well
-                                if (SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(
-                                            bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
-                                            false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
-                                {
-                                    PutItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl);
-                                }
-                            }
-                        }
-                        else if(pEntry->nWID == SID_ATTR_PAGE_ON)
-                        {
-                            bool bVal = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
-
-                            if(bVal)
-                            {
-                                // Header/footer gets switched on, create defaults and the needed SfxSetItem
-                                SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
-                                    RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
-
-                                    //UUUU FillAttribute support
-                                    XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
-
-                                    SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
-                                    SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
-                                    SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-                                    SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
-                                    0);
-
-                                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
-                                aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
-
-                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_ON, true));
-                                aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
-                                aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
-                                aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
-                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));
-                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, true));
-                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, true));
-
-                                SvxSetItem aNewSetItem(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, aTempSet);
-                                aBaseImpl.GetItemSet().Put(aNewSetItem);
+                                PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
                             }
                         }
                     }
-                    else
+                    else if(pEntry->nWID == SID_ATTR_PAGE_ON && rValues[nProp].get<bool>())
                     {
-                        switch(pEntry->nWID)
-                        {
-                            case SID_ATTR_PAGE_DYNAMIC:
-                            case SID_ATTR_PAGE_SHARED:
-                            case SID_ATTR_PAGE_SHARED_FIRST:
-                            case SID_ATTR_PAGE_ON:
-                            case RES_HEADER_FOOTER_EAT_SPACING:
-                            {
-                                // these slots are exclusive to Header/Footer, thus this is an error
-                                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
-                            }
-                            default:
-                            {
-                                // part of PageStyle, fallback to default
-                                SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                            }
-                        }
+                        // Header/footer gets switched on, create defaults and the needed SfxSetItem
+                        SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
+                            RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+
+                            //UUUU FillAttribute support
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+
+                            SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
+                            SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
+                            SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
+                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+                            0);
+
+                        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                        aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
+
+                        aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_ON, true));
+                        aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
+                        aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
+                        aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
+                        aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));
+                        aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, true));
+                        aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, true));
+
+                        SvxSetItem aNewSetItem(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, aTempSet);
+                        aBaseImpl.GetItemSet().Put(aNewSetItem);
                     }
-                    break;
                 }
-
+                continue;
                 case XATTR_FILLBMP_SIZELOG:
                 case XATTR_FILLBMP_TILEOFFSETX:
                 case XATTR_FILLBMP_TILEOFFSETY:
@@ -2872,85 +2827,70 @@ void SwXPageStyle::SetPropertyValues_Impl(
                 case XATTR_FILLTRANSPARENCE:
                 case XATTR_FILLFLOATTRANSPARENCE:
                 case XATTR_SECONDARYFILLCOLOR:
+                if(bFirstIsShared) // only special handling for headers/footers here
+                    break;
                 {
-                    // This DrawingLayer FillStyle attributes can be part of Header, Footer and PageStyle
-                    // itself, so decide what to do using the name
-                    const bool bHeader(rPropName.startsWith("Header"));
-                    const bool bFooter(rPropName.startsWith("Footer"));
+                    const SvxSetItem* pSetItem = nullptr;
 
-                    if (bHeader || bFooter)
+                    if(SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
                     {
-                        const SvxSetItem* pSetItem = nullptr;
+                        // create a new SvxSetItem and get it's ItemSet as new target
+                        std::unique_ptr<SvxSetItem> pNewSetItem(static_cast<SvxSetItem*>(pSetItem->Clone()));
+                        SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
-                        if(SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
+                        // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
+                        rSetSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
+
+                        // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
+                        // default method to set the property
                         {
-                            // create a new SvxSetItem and get it's ItemSet as new target
-                            SvxSetItem* pNewSetItem = static_cast< SvxSetItem* >(pSetItem->Clone());
-                            SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
-
-                            // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
-                            rSetSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
-
-                            // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
-                            // default method to set the property
-                            {
-                                SwStyleBase_Impl::ItemSetOverrider o(aBaseImpl, &rSetSet);
-                                SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                            }
-
-                            // reset paret at ItemSet from SetItem
-                            rSetSet.SetParent(nullptr);
-
-                            // set the new SvxSetItem at the real target and delete it
-                            aBaseImpl.GetItemSet().Put(*pNewSetItem);
-                            delete pNewSetItem;
+                            SwStyleBase_Impl::ItemSetOverrider o(aBaseImpl, &rSetSet);
+                            SetStyleProperty(*pEntry, *pPropSet, rValues[nProp], aBaseImpl);
                         }
-                    }
-                    else
-                    {
-                        // part of PageStyle, fallback to default
-                        SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                    }
 
-                    break;
+                        // reset paret at ItemSet from SetItem
+                        rSetSet.SetParent(nullptr);
+
+                        // set the new SvxSetItem at the real target and delete it
+                        aBaseImpl.GetItemSet().Put(*pNewSetItem);
+                    }
                 }
-                case FN_PARAM_FTN_INFO :
-                {
-                    const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
-                    SfxPoolItem* pNewFootnoteItem = rItem.Clone();
-                    bool bPut = pNewFootnoteItem->PutValue(pValues[nProp], pEntry->nMemberId);
-                    aBaseImpl.GetItemSet().Put(*pNewFootnoteItem);
-                    delete pNewFootnoteItem;
-                    if(!bPut)
-                        throw lang::IllegalArgumentException();
-                    break;
-                }
-                case  FN_UNO_HEADER       :
-                case  FN_UNO_HEADER_LEFT  :
-                case  FN_UNO_HEADER_RIGHT :
-                case  FN_UNO_HEADER_FIRST :
-                case  FN_UNO_FOOTER       :
-                case  FN_UNO_FOOTER_LEFT  :
-                case  FN_UNO_FOOTER_RIGHT :
-                case  FN_UNO_FOOTER_FIRST :
-                {
-                    throw lang::IllegalArgumentException();
-                }
-                default:
-                {
-                    SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                    break;
-                }
+                continue;
+                default: ;
             }
         }
-        else if(IsDescriptor())
+        switch(pEntry->nWID)
         {
-            if(!m_pPropertiesImpl->SetProperty(rPropName, pValues[nProp]))
+            case SID_ATTR_PAGE_DYNAMIC:
+            case SID_ATTR_PAGE_SHARED:
+            case SID_ATTR_PAGE_SHARED_FIRST:
+            case SID_ATTR_PAGE_ON:
+            case RES_HEADER_FOOTER_EAT_SPACING:
+                // these slots are exclusive to Header/Footer, thus this is an error
+                throw beans::UnknownPropertyException(OUString("Unknown property: ") + rPropName, static_cast<cppu::OWeakObject*>(this));
+            case FN_UNO_HEADER:
+            case FN_UNO_HEADER_LEFT:
+            case FN_UNO_HEADER_RIGHT:
+            case FN_UNO_HEADER_FIRST:
+            case FN_UNO_FOOTER:
+            case FN_UNO_FOOTER_LEFT:
+            case FN_UNO_FOOTER_RIGHT:
+            case FN_UNO_FOOTER_FIRST:
                 throw lang::IllegalArgumentException();
-        }
-        else
-        {
-            throw uno::RuntimeException();
+            case FN_PARAM_FTN_INFO:
+            {
+                const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
+                const std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
+                if(!pNewFootnoteItem->PutValue(rValues[nProp], pEntry->nMemberId))
+                    throw lang::IllegalArgumentException();
+                aBaseImpl.GetItemSet().Put(*pNewFootnoteItem);
+                break;
+            }
+            default:
+            {
+                SetStyleProperty(*pEntry, *pPropSet, rValues[nProp], aBaseImpl);
+                break;
+            }
         }
     }
 
