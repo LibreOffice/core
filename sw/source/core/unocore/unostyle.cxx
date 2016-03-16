@@ -3183,34 +3183,22 @@ SwXFrameStyle::~SwXFrameStyle()
 
 void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
 {
-    // As I was told, for some entirely unobvious reason getting an
-    // item from a style has to look as follows:
-    SfxStyleSheetBasePool* pBasePool = m_pBasePool;
-    if (pBasePool)
-    {
-        SfxStyleSheetBase* pBase = pBasePool->Find(GetStyleName());
-        if (pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            SfxItemSet& rStyleSet = xStyle->GetItemSet();
-            SfxItemSet aSet(*rStyleSet.GetPool(), eAtr, eAtr);
-            aSet.Put(rItem);
-            xStyle->SetItemSet(aSet);
-        }
-    }
+    SfxStyleSheetBase* pBase = GetStyleSheetBase();
+    if(!pBase)
+        return;
+    rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    SfxItemSet& rStyleSet = xStyle->GetItemSet();
+    SfxItemSet aSet(*rStyleSet.GetPool(), eAtr, eAtr);
+    aSet.Put(rItem);
+    xStyle->SetItemSet(aSet);
 }
 
 const SfxPoolItem* SwXFrameStyle::GetItem(enum RES_FRMATR eAtr)
 {
-    // As I was told, for some entirely unobvious reason getting an
-    // item from a style has to look as follows:
-    SfxStyleSheetBasePool* pBasePool = m_pBasePool;
-    if(!pBasePool)
-        return nullptr;
-    SfxStyleSheetBase* pBase = pBasePool->Find(GetStyleName());
+    SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         return nullptr;
-    rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase)) );
+    rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     return &xStyle->GetItemSet().Get(eAtr);
 }
 
