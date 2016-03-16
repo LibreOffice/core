@@ -847,8 +847,8 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
     if ( aCurrentCommand == nullptr || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
     {
-        bool bOldHasSubmenu = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos) != nullptr;
-        bSubMenuAddedOrRemoved = static_cast<gboolean>(bOldHasSubmenu) != bIsSubmenu;
+        gboolean bOldHasSubmenu = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos) != nullptr;
+        bSubMenuAddedOrRemoved = bOldHasSubmenu != bIsSubmenu;
         if (bSubMenuAddedOrRemoved)
         {
             //tdf#98636 its not good enough to unset the "submenu-action" attribute to change something
