@@ -338,7 +338,9 @@ void LwpSpacingCommonOverride::Read(LwpObjectStream* pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        m_nSpacingType = static_cast<SpacingType>(pStrm->QuickReaduInt16());
+        const sal_uInt16 nSpacingType = pStrm->QuickReaduInt16();
+        //only the bottom pair of bits matter
+        m_nSpacingType = static_cast<SpacingType>(nSpacingType & 0x3);
         m_nAmount = pStrm->QuickReadInt32();
         m_nMultiple = pStrm->QuickReadInt32();
     }
