@@ -1092,8 +1092,8 @@ off_t size;
      * this is on purpose, to avoid cloning the 'key' out of it and our special
      * 'hash' just store the pointer to the key inside of buffer, hence it need
      * to remain allocated
-     * coverity[leaked_storage] - this is on purpose
      */
+    // coverity[leaked_storage] - this is on purpose
     return rc;
 }
 
