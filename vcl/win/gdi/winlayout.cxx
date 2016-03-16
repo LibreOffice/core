@@ -730,7 +730,10 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             if( bSurrogate )
                 nCharCode = 0x10000 + ((pCodes[0] - 0xD800) << 10) + (pCodes[1] - 0xDC00);
             else // or fall back to a replacement character
+            {
+                // FIXME: Surely this is an error situation that should not happen?
                 nCharCode = '?';
+            }
         }
 
         // get the advance width for the current UTF-32 code point
@@ -1513,8 +1516,12 @@ bool SimpleWinLayout::CacheGlyphs(SalGraphics& rGraphics) const
         int nCodePoint;
         if (i < mnGlyphCount-1 && rtl::isHighSurrogate(mpOutGlyphs[i]) && rtl::isLowSurrogate(mpOutGlyphs[i+1]))
         {
+#if 1
+            return false;
+#else
             nCodePoint = rtl::combineSurrogates(mpOutGlyphs[i], mpOutGlyphs[i+1]);
             i++;
+#endif
         }
         else
         {
