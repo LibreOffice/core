@@ -9,7 +9,7 @@
 #ifndef mozilla_Attributes_h
 #define mozilla_Attributes_h
 
-#include "mozilla/Compiler.h"
+#include "Compiler.h"
 
 /*
  * MOZ_ALWAYS_INLINE is a macro which expands to tell the compiler that the
