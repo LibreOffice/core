@@ -337,35 +337,35 @@ String STR_ObjNamePluralOUTLINETEXT
 
 String STR_ObjNameSingulGRAF
 {
-    Text [ en-US ] = "graphic" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_ObjNamePluralGRAF
 {
-    Text [ en-US ] = "graphics" ;
+    Text [ en-US ] = "Images" ;
 };
 String STR_ObjNameSingulGRAFLNK
 {
-    Text [ en-US ] = "Linked graphic" ;
+    Text [ en-US ] = "Linked image" ;
 };
 String STR_ObjNamePluralGRAFLNK
 {
-    Text [ en-US ] = "Linked graphics" ;
+    Text [ en-US ] = "Linked images" ;
 };
 String STR_ObjNameSingulGRAFNONE
 {
-    Text [ en-US ] = "Blank graphic object" ;
+    Text [ en-US ] = "Blank image object" ;
 };
 String STR_ObjNamePluralGRAFNONE
 {
-    Text [ en-US ] = "Blank graphic objects" ;
+    Text [ en-US ] = "Blank image objects" ;
 };
 String STR_ObjNameSingulGRAFNONELNK
 {
-    Text [ en-US ] = "Blank linked graphic" ;
+    Text [ en-US ] = "Blank linked image" ;
 };
 String STR_ObjNamePluralGRAFNONELNK
 {
-    Text [ en-US ] = "Blank linked graphics" ;
+    Text [ en-US ] = "Blank linked images" ;
 };
 String STR_ObjNameSingulGRAFMTF
 {
@@ -385,35 +385,35 @@ String STR_ObjNamePluralGRAFMTFLNK
 };
 String STR_ObjNameSingulGRAFBMP
 {
-    Text [ en-US ] = "Bitmap" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_ObjNameSingulGRAFBMPTRANS
 {
-    Text [ en-US ] = "Bitmap with transparency" ;
+    Text [ en-US ] = "Image with transparency" ;
 };
 String STR_ObjNameSingulGRAFBMPLNK
 {
-    Text [ en-US ] = "Linked Bitmap" ;
+    Text [ en-US ] = "Linked Image" ;
 };
 String STR_ObjNameSingulGRAFBMPTRANSLNK
 {
-    Text [ en-US ] = "Linked bitmap with transparency" ;
+    Text [ en-US ] = "Linked image with transparency" ;
 };
 String STR_ObjNamePluralGRAFBMP
 {
-    Text [ en-US ] = "Bitmaps" ;
+    Text [ en-US ] = "Images" ;
 };
 String STR_ObjNamePluralGRAFBMPTRANS
 {
-    Text [ en-US ] = "Bitmaps with transparency" ;
+    Text [ en-US ] = "Images with transparency" ;
 };
 String STR_ObjNamePluralGRAFBMPLNK
 {
-    Text [ en-US ] = "Linked bitmaps" ;
+    Text [ en-US ] = "Linked images" ;
 };
 String STR_ObjNamePluralGRAFBMPTRANSLNK
 {
-    Text [ en-US ] = "Linked bitmaps with transparency" ;
+    Text [ en-US ] = "Linked images with transparency" ;
 };
 String STR_ObjNameSingulCUSTOMSHAPE
 {
