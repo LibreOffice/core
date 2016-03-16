@@ -197,16 +197,16 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
 }
 
 // Opens a bookmark document
-SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
+SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
 {
     bool bOK = true;
     SdDrawDocument* pBookmarkDoc = nullptr;
-    OUString aBookmarkName = rMedium.GetName();
-    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
+    OUString aBookmarkName = pMedium->GetName();
+    std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
     if ( !pFilter )
     {
-        rMedium.UseInteractionHandler( true );
-        SfxGetpApp()->GetFilterMatcher().GuessFilter( rMedium, pFilter );
+        pMedium->UseInteractionHandler( true );
+        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pMedium, pFilter);
     }
 
     if ( !pFilter )
@@ -231,7 +231,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
                 // Impress
                 mxBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true);
 
-            bOK = mxBookmarkDocShRef->DoLoad(&rMedium);
+            bOK = mxBookmarkDocShRef->DoLoad(pMedium);
             if( bOK )
             {
                 maBookmarkFile = aBookmarkName;
@@ -265,8 +265,8 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile)
 
     if (!rBookmarkFile.isEmpty() && maBookmarkFile != rBookmarkFile)
     {
-        SfxMedium* pMedium = new SfxMedium( rBookmarkFile, StreamMode::READ );
-        pBookmarkDoc = OpenBookmarkDoc(*pMedium);
+        std::unique_ptr<SfxMedium> xMedium(new SfxMedium(rBookmarkFile, StreamMode::READ));
+        pBookmarkDoc = OpenBookmarkDoc(xMedium.release());
     }
     else if (mxBookmarkDocShRef.Is())
     {
