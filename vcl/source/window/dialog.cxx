@@ -1015,7 +1015,7 @@ void Dialog::SetModalInputMode( bool bModal )
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
-            mpPrevExecuteDlg->EnableInput( false, true, true, this );
+            mpPrevExecuteDlg->EnableInput( false, this );
 
         // determine next overlap dialog parent
         vcl::Window* pParent = GetParent();
@@ -1041,7 +1041,7 @@ void Dialog::SetModalInputMode( bool bModal )
         // Enable the prev Modal Dialog
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
         {
-            mpPrevExecuteDlg->EnableInput( true, true, true, this );
+            mpPrevExecuteDlg->EnableInput( true, this );
             // ensure continued modality of prev dialog
             // do not change modality counter
 

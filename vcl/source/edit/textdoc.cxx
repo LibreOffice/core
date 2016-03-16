@@ -514,10 +514,10 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
     return aPaM;
 }
 
-TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs )
+TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM )
 {
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
-    TextNode* pNew = pNode->Split( rPaM.GetIndex(), bKeepEndingAttribs );
+    TextNode* pNew = pNode->Split( rPaM.GetIndex(), true/*bKeepEndingAttribs*/ );
 
     DBG_ASSERT( maTextNodes.size()<SAL_MAX_UINT32, "InsertParaBreak: more than 4Gi paragraphs!" );
     maTextNodes.insert( maTextNodes.begin() + rPaM.GetPara() + 1, pNew );

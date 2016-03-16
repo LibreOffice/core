@@ -319,10 +319,10 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
 
 void TextView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ImpPaint(rRenderContext, rRect, false);
+    ImpPaint(rRenderContext, rRect);
 }
 
-void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bUseVirtDev)
+void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if ( !mpImpl->mpTextEngine->GetUpdateMode() || mpImpl->mpTextEngine->IsInUndo() )
         return;
@@ -331,59 +331,10 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
     if (!mpImpl->mbHighlightSelection && mpImpl->maSelection.HasRange())
         pDrawSelection = &mpImpl->maSelection;
 
-    if (bUseVirtDev)
-    {
-        VirtualDevice* pVDev = GetVirtualDevice();
-
-        const Color& rBackgroundColor = mpImpl->mpWindow->GetBackground().GetColor();
-        if (pVDev->GetFillColor() != rBackgroundColor)
-            pVDev->SetFillColor( rBackgroundColor );
-        if (pVDev->GetBackground().GetColor() != rBackgroundColor)
-            pVDev->SetBackground( rBackgroundColor );
-
-        bool bVDevValid = true;
-        Size aOutSz(pVDev->GetOutputSizePixel());
-        if ((aOutSz.Width() < rRect.GetWidth()) ||
-            (aOutSz.Height() < rRect.GetHeight()))
-        {
-            bVDevValid = pVDev->SetOutputSizePixel(rRect.GetSize());
-        }
-        else
-        {
-            // the VirtDev can get very large on Resize =>
-            // shrink now and then
-            if ((aOutSz.Height() > (rRect.GetHeight() + 20)) ||
-                (aOutSz.Width() > (rRect.GetWidth() + 20)))
-            {
-                bVDevValid = pVDev->SetOutputSizePixel(rRect.GetSize());
-            }
-            else
-            {
-                pVDev->Erase();
-            }
-        }
-        if (!bVDevValid)
-        {
-            ImpPaint(rRenderContext, rRect, false);
-            return;
-        }
-
-        Rectangle aTmpRect(Point(0, 0), rRect.GetSize());
-
-        Point aDocPos(mpImpl->maStartDocPos.X(), mpImpl->maStartDocPos.Y() + rRect.Top());
-        Point aStartPos = ImpGetOutputStartPos(aDocPos);
-        ImpPaint(*pVDev, aStartPos, &aTmpRect, nullptr, pDrawSelection);
-        rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), Point(0,0), rRect.GetSize(), *pVDev);
-        if (mpImpl->mbHighlightSelection)
-            ImpHighlight(mpImpl->maSelection);
-    }
-    else
-    {
-        Point aStartPos = ImpGetOutputStartPos(mpImpl->maStartDocPos);
-        ImpPaint(rRenderContext, aStartPos, &rRect, nullptr, pDrawSelection);
-        if (mpImpl->mbHighlightSelection)
-            ImpHighlight(mpImpl->maSelection);
-    }
+    Point aStartPos = ImpGetOutputStartPos(mpImpl->maStartDocPos);
+    ImpPaint(rRenderContext, aStartPos, &rRect, nullptr, pDrawSelection);
+    if (mpImpl->mbHighlightSelection)
+        ImpHighlight(mpImpl->maSelection);
 }
 
 void TextView::ImpHighlight( const TextSelection& rSel )

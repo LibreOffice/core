@@ -2595,7 +2595,7 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
     pMenu->pWindow = nullptr;
 }
 
-bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
+bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
 {
     bool bDone = false;
 
@@ -2609,7 +2609,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     if (pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && !pWin->IsInModalMode())
     {
         MenuBarWindow* pMenuWin = getMenuBarWindow();
-        bDone = pMenuWin && pMenuWin->HandleKeyEvent(rKEvent, bFromMenu);
+        bDone = pMenuWin && pMenuWin->HandleKeyEvent(rKEvent, false/*bFromMenu*/);
     }
     return bDone;
 }

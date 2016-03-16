@@ -615,14 +615,14 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
    all actions will be played after the last page was recorded
 */
 //--->i56629
-sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );
     mpGlobalSyncData->mParaOUStrings.push_back( sDestName );
     mpGlobalSyncData->mParaRects.push_back( rRect );
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
-    mpGlobalSyncData->mParaDestAreaTypes.push_back( eType );
+    mpGlobalSyncData->mParaDestAreaTypes.push_back( PDFWriter::XYZ );
 
     return mpGlobalSyncData->mCurId++;
 }

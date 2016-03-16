@@ -828,7 +828,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM )
     TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
     bool bFirstParaContentChanged = rPaM.GetIndex() < pNode->GetText().getLength();
 
-    TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, true/*bKeepEndingAttribs*/ ) );
+    TextPaM aPaM( mpDoc->InsertParaBreak( rPaM ) );
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
     DBG_ASSERT( pPortion, "ImpInsertParaBreak: Hidden Portion" );
@@ -2582,7 +2582,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara )
         }
     }
 }
-void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich, bool bIdleFormatAndUpdate )
+void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
 {
     if ( nPara < mpDoc->GetNodes().size() )
     {
@@ -2599,10 +2599,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich, bool bIdleF
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
             pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
             mbFormatted = false;
-            if(bIdleFormatAndUpdate)
-                IdleFormatAndUpdate( nullptr, 0xFFFF );
-            else
-                FormatAndUpdate();
+            IdleFormatAndUpdate( nullptr, 0xFFFF );
         }
     }
 }

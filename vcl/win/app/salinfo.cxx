@@ -169,36 +169,9 @@ Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : Rectangle();
 }
 
-/* We have to map the button identifier to the identifier used by the Win32
-   Platform SDK to specify the default button for the MessageBox API.
-   The first dimension is the button combination, the second dimension
-   is the button identifier.
-*/
-static const int DEFAULT_BTN_MAPPING_TABLE[][8] =
+int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
-    //  Undefined        OK             CANCEL         ABORT          RETRY          IGNORE         YES             NO
-    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK
-    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK_CANCEL
-    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON3, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //ABORT_RETRY_IGNO
-    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON3, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2 }, //YES_NO_CANCEL
-    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2 }, //YES_NO
-    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }  //RETRY_CANCEL
-};
-
-int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage, int nButtonCombination, int nDefaultButton, SAL_UNUSED_PARAMETER bool)
-{
-    DBG_ASSERT( nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
-                nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
-                nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
-                nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, "Invalid arguments!" );
-
-    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | nButtonCombination;
-
-    if (nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
-        nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
-        nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
-        nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO)
-        nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
+    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1;
 
     ImplHideSplash();
     return MessageBoxW(

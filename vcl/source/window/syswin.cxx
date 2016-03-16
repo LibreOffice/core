@@ -144,7 +144,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
             if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
                 bDone = pMBar->ImplHandleCmdEvent(*rNEvt.GetCommandEvent());
             else
-                bDone = pMBar->ImplHandleKeyEvent(*rNEvt.GetKeyEvent(), false);
+                bDone = pMBar->ImplHandleKeyEvent(*rNEvt.GetKeyEvent());
         }
         if (bDone)
             return true;

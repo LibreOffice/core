@@ -729,7 +729,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             aGraphic);
                     }
 
-                    GfxLink     aGfxLink( pBuf.get(), nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
+                    GfxLink     aGfxLink( pBuf.get(), nPSSize, GFX_LINK_TYPE_EPS_BUFFER ) ;
                     pBuf.release();
                     aMtf.AddAction( static_cast<MetaAction*>( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
                                                                       aGfxLink, aGraphic.GetGDIMetaFile() ) ) );

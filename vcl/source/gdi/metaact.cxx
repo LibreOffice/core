@@ -3164,9 +3164,9 @@ void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maRefPoint ).ReadCharAsBool( mbSet );
 }
 
-MetaCommentAction::MetaCommentAction( sal_Int32 nValue ) :
+MetaCommentAction::MetaCommentAction() :
     MetaAction  ( MetaActionType::COMMENT ),
-    mnValue     ( nValue )
+    mnValue     ( 0 )
 {
     ImplInitDynamicData( nullptr, 0UL );
 }

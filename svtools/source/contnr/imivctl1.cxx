@@ -3495,7 +3495,7 @@ void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderConte
             nDecoFlags = DrawHighlightFrameStyle::In;
         else
             nDecoFlags = DrawHighlightFrameStyle::Out;
-        aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags, true/*bTestBackground*/);
+        aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags);
     }
 }
 

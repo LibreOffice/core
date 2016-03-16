@@ -797,8 +797,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // get mimetype
                 OUString aSrcMimetype = getMimetypeForDocument( mxContext, mxSrcDoc );
                 pPDFWriter->AddStream( aSrcMimetype,
-                                       new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword ),
-                                       false
+                                       new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword )
                                        );
             }
 

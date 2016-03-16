@@ -32,6 +32,7 @@ struct MyCallSiteInfo
     std::string returnType;
     std::string nameAndParams;
     std::string paramName;
+    int paramIndex; // because in some declarations the names are empty
     std::string callValue;
     std::string sourceLocation;
 };
@@ -40,6 +41,10 @@ bool operator < (const MyCallSiteInfo &lhs, const MyCallSiteInfo &rhs)
     if (lhs.sourceLocation < rhs.sourceLocation)
         return true;
     else if (lhs.sourceLocation > rhs.sourceLocation)
+        return false;
+    else if (lhs.paramIndex < rhs.paramIndex)
+        return true;
+    else if (lhs.paramIndex > rhs.paramIndex)
         return false;
     else return lhs.callValue < rhs.callValue;
 }
@@ -59,7 +64,21 @@ public:
         // there is a crash here that I can't seem to workaround
         //  clang-3.8: /home/noel/clang/src/tools/clang/lib/AST/Type.cpp:1878: bool clang::Type::isConstantSizeType() const: Assertion `!isDependentType() && "This doesn't make sense for dependent types"' failed.
         FileID mainFileID = compiler.getSourceManager().getMainFileID();
-        if (strstr(compiler.getSourceManager().getFileEntryForID(mainFileID)->getDir()->getName(), "oox/source/dump") != 0) {
+        static const char* prefix = SRCDIR "/oox/source";
+        const FileEntry * fe = compiler.getSourceManager().getFileEntryForID(mainFileID);
+        if (strncmp(prefix, fe->getDir()->getName(), strlen(prefix)) == 0) {
+            return;
+        }
+        if (strcmp(fe->getDir()->getName(), SRCDIR "/sw/source/filter/ww8") == 0)
+        {
+            return;
+        }
+        if (strcmp(fe->getDir()->getName(), SRCDIR "/sc/source/filter/oox") == 0)
+        {
+            return;
+        }
+        if (strcmp(fe->getDir()->getName(), SRCDIR "/sd/source/filter/eppt") == 0)
+        {
             return;
         }
 
@@ -79,14 +98,17 @@ public:
     }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
+    bool shouldVisitImplicitCode () const { return true; }
 
-    bool VisitCallExpr(CallExpr * callExpr);
-    bool VisitDeclRefExpr( const DeclRefExpr* declRefExpr );
+    bool VisitCallExpr( const CallExpr* );
+    bool VisitDeclRefExpr( const DeclRefExpr* );
+    bool VisitCXXConstructExpr( const CXXConstructExpr* );
 private:
-    MyCallSiteInfo niceName(const FunctionDecl* functionDecl, const ParmVarDecl* parmVarDecl, const std::string& callValue);
+    MyCallSiteInfo niceName(const FunctionDecl* functionDecl, int paramIndex, const ParmVarDecl* parmVarDecl, const std::string& callValue);
+    std::string getCallValue(const Expr* arg);
 };
 
-MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, const ParmVarDecl* parmVarDecl, const std::string& callValue)
+MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int paramIndex, const ParmVarDecl* parmVarDecl, const std::string& callValue)
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
@@ -120,6 +142,7 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, const P
         aInfo.nameAndParams += " const";
     }
     aInfo.paramName = parmVarDecl->getName();
+    aInfo.paramIndex = paramIndex;
     aInfo.callValue = callValue;
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
@@ -129,7 +152,22 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, const P
     return aInfo;
 }
 
-bool ConstantParam::VisitCallExpr(CallExpr * callExpr) {
+std::string ConstantParam::getCallValue(const Expr* arg)
+{
+    arg = arg->IgnoreParenCasts();
+    // ignore this, it seems to trigger an infinite recursion
+    if (isa<UnaryExprOrTypeTraitExpr>(arg)) {
+        return "unknown";
+    }
+    APSInt x1;
+    if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
+    {
+        return x1.toString(10);
+    }
+    return "unknown";
+}
+
+bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
     if (ignoreLocation(callExpr)) {
         return true;
     }
@@ -175,29 +213,11 @@ bool ConstantParam::VisitCallExpr(CallExpr * callExpr) {
     for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
         if (i >= functionDecl->getNumParams()) // can happen in template code
             break;
-        Expr* arg = callExpr->getArg(i);
-        bool found = false;
-        std::string callValue;
-        // ignore this, it seems to trigger an infinite recursion
-        if (isa<UnaryExprOrTypeTraitExpr>(arg->IgnoreParenCasts())) {
-            found = true;
-            callValue = "unknown";
-        }
-        if (!found)
-        {
-            APSInt x1;
-            if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
-            {
-                found = true;
-                callValue = x1.toString(10);
-            }
-        }
-        if (!found)
-            callValue = "unknown";
+        const Expr* arg = callExpr->getArg(i);
+        std::string callValue = getCallValue(arg);
         const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
-        MyCallSiteInfo funcInfo = niceName(functionDecl, parmVarDecl, callValue);
+        MyCallSiteInfo funcInfo = niceName(functionDecl, i, parmVarDecl, callValue);
         callSet.insert(funcInfo);
-        break;
     }
     return true;
 }
@@ -205,15 +225,46 @@ bool ConstantParam::VisitCallExpr(CallExpr * callExpr) {
 // this catches places that take the address of a method
 bool ConstantParam::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
-    const Decl* functionDecl = declRefExpr->getDecl();
-    if (!isa<FunctionDecl>(functionDecl)) {
+    const Decl* decl = declRefExpr->getDecl();
+    if (!isa<FunctionDecl>(decl)) {
         return true;
     }
-// TODO
-//    MyCallSiteInfo funcInfo = niceName(dyn_cast<FunctionDecl>(functionDecl));
-//    callSet.insert(funcInfo);
+    const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(decl);
+    for (unsigned i = 0; i < functionDecl->getNumParams(); ++i)
+    {
+        MyCallSiteInfo funcInfo = niceName(functionDecl, i, functionDecl->getParamDecl(i), "unknown");
+        callSet.insert(funcInfo);
+    }
     return true;
 }
+
+bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
+{
+    const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
+    constructorDecl = constructorDecl->getCanonicalDecl();
+
+    // ignore stuff that forms part of the stable URE interface
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
+                              constructorDecl->getNameInfo().getLoc()))) {
+        return true;
+    }
+    if (constructorDecl->getNameInfo().getLoc().isValid() && ignoreLocation(constructorDecl)) {
+        return true;
+    }
+
+    for (unsigned i = 0; i < constructExpr->getNumArgs(); ++i)
+    {
+        if (i >= constructorDecl->getNumParams()) // can happen in template code
+            break;
+        const Expr* arg = constructExpr->getArg(i);
+        std::string callValue = getCallValue(arg);
+        const ParmVarDecl* parmVarDecl = constructorDecl->getParamDecl(i);
+        MyCallSiteInfo funcInfo = niceName(constructorDecl, i, parmVarDecl, callValue);
+        callSet.insert(funcInfo);
+    }
+    return true;
+}
+
 
 loplugin::Plugin::Registration< ConstantParam > X("constantparam", false);
 
