@@ -1112,13 +1112,13 @@ public:
     Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
     bool                        GetTextOutline( tools::PolyPolygon&,
-                                                const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
-                                                sal_Int32 nLen = -1, bool bOptimize = true,
+                                                const OUString& rStr,
+                                                sal_Int32 nLen = -1,
                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
-                                                 sal_Int32 nLen = -1, bool bOptimize = true,
+                                                 sal_Int32 nLen = -1,
                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,

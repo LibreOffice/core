@@ -152,10 +152,10 @@ css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
     return mxToolkit.get();
 }
 
-css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow, bool bCreate )
+css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )
 {
     css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
-    if ( !xPeer.is() && bCreate )
+    if ( !xPeer.is() )
     {
         xPeer = CreateXWindow( pWindow );
         SetWindowInterface( pWindow, xPeer );

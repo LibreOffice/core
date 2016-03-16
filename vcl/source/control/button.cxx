@@ -825,7 +825,7 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 }
 
 void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
-                                           const Rectangle& rRect, bool bLayout, bool bMenuBtnSep)
+                                           const Rectangle& rRect, bool bMenuBtnSep)
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
@@ -880,41 +880,38 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
             aSymbolRect.Right() -= nSymbolSize/2;
             aSymbolRect.Left()  = aSymbolRect.Right() - nSymbolSize;
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
+            ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, nImageSep,
                                   nDrawFlags, nTextStyle, nullptr, true );
         }
         else
             ImplCalcSymbolRect( aSymbolRect );
 
-        if( ! bLayout )
+        long nDistance = (aSymbolRect.GetHeight() > 10) ? 2 : 1;
+        DecorationView aDecoView( pDev );
+        if( bMenuBtnSep && nSeparatorX > 0 )
         {
-            long nDistance = (aSymbolRect.GetHeight() > 10) ? 2 : 1;
-            DecorationView aDecoView( pDev );
-            if( bMenuBtnSep && nSeparatorX > 0 )
-            {
-                Point aStartPt( nSeparatorX, aSymbolRect.Top()+nDistance );
-                Point aEndPt( nSeparatorX, aSymbolRect.Bottom()-nDistance );
-                aDecoView.DrawSeparator( aStartPt, aEndPt );
-            }
-            ImplSetSeparatorX( nSeparatorX );
-
-            aDecoView.DrawSymbol( aSymbolRect, SymbolType::SPIN_DOWN, aColor, nStyle );
+            Point aStartPt( nSeparatorX, aSymbolRect.Top()+nDistance );
+            Point aEndPt( nSeparatorX, aSymbolRect.Bottom()-nDistance );
+            aDecoView.DrawSeparator( aStartPt, aEndPt );
         }
+        ImplSetSeparatorX( nSeparatorX );
+
+        aDecoView.DrawSymbol( aSymbolRect, SymbolType::SPIN_DOWN, aColor, nStyle );
 
     }
     else
     {
         Rectangle aSymbolRect;
-        ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
+        ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, nImageSep, nDrawFlags,
                               nTextStyle, IsSymbol() ? &aSymbolRect : nullptr, true );
 
-        if ( IsSymbol() && ! bLayout )
+        if ( IsSymbol() )
         {
             DecorationView aDecoView( pDev );
             aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
         }
 
-        if ( mnDDStyle == PushButtonDropdownStyle::Toolbox && !bLayout )
+        if ( mnDDStyle == PushButtonDropdownStyle::Toolbox )
         {
             bool bBlack = false;
             Color   aArrowColor( COL_BLACK );
@@ -1087,7 +1084,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent(&rRenderContext, (nState&ControlState::ROLLOVER) ? DrawFlags::NoRollover : DrawFlags::NONE,
-                                  aInRect, false/*bLayout*/, bDrawMenuSep);
+                                  aInRect, bDrawMenuSep);
 
         if (HasFocus())
             ShowFocus(ImplGetFocusRect());
@@ -1112,7 +1109,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         }
 
         // draw content
-        ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, false/*bLayout*/, bDrawMenuSep);
+        ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, bDrawMenuSep);
 
         if (HasFocus())
         {
@@ -1402,7 +1399,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         nButtonStyle |= DrawButtonFlags::Checked;
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
-    ImplDrawPushButtonContent( pDev, nFlags, aRect, false, true );
+    ImplDrawPushButtonContent( pDev, nFlags, aRect, true );
     pDev->Pop();
 }
 
@@ -3074,7 +3071,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize,
                          const Size& rImageSize, Rectangle& rStateRect,
-                         Rectangle& rMouseRect, bool bLayout )
+                         Rectangle& rMouseRect )
 {
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
@@ -3104,7 +3101,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
             aSize.Height() = rImageSize.Height();
         }
 
-        ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
+        ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, 1,
                               nDrawFlags, nTextStyle );
         nLineY = aPos.Y() + aSize.Height()/2;
 
@@ -3183,7 +3180,7 @@ void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext)
     HideFocus();
 
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel(),
-             aImageSize, maStateRect, maMouseRect, false/*bLayout*/);
+             aImageSize, maStateRect, maMouseRect);
 
     ImplDrawCheckBoxState(rRenderContext);
     if (HasFocus())
@@ -3382,7 +3379,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetTextFillColor();
 
     ImplDraw( pDev, nFlags, aPos, aSize,
-              aImageSize, aStateRect, aMouseRect, false );
+              aImageSize, aStateRect, aMouseRect );
 
     pDev->SetLineColor();
     pDev->SetFillColor( Color( COL_BLACK ) );

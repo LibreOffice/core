@@ -725,15 +725,14 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
 }
 
 bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
-    const OUString& rSearchName, AddFontSubstituteFlags nFlags ) const
+    const OUString& rSearchName ) const
 {
     // TODO: get rid of O(N) searches
     FontSubstList::const_iterator it = maFontSubstList.begin();
     for(; it != maFontSubstList.end(); ++it )
     {
         const ImplFontSubstEntry& rEntry = *it;
-        if( ((rEntry.mnFlags & nFlags) || nFlags == AddFontSubstituteFlags::NONE)
-        &&   (rEntry.maSearchName == rSearchName) )
+        if( (rEntry.mnFlags & AddFontSubstituteFlags::ALWAYS) && rEntry.maSearchName == rSearchName )
         {
             rSubstName = rEntry.maSearchReplaceName;
             return true;
@@ -752,7 +751,7 @@ void ImplFontSubstitute( OUString& rFontName )
 
     // apply user-configurable font replacement (eg, from the list in Tools->Options)
     const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
-    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName, AddFontSubstituteFlags::ALWAYS ) )
+    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName ) )
     {
         rFontName = aSubstFontName;
         return;

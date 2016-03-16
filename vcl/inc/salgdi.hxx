@@ -305,7 +305,6 @@ public:
                                     long nDestX, long nDestY,
                                     long nSrcX, long nSrcY,
                                     long nSrcWidth, long nSrcHeight,
-                                    sal_uInt16 nFlags,
                                     const OutputDevice *pOutDev );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion

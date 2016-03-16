@@ -120,7 +120,7 @@ public:
     /// GetAddedHeight( 0 ) @return 0
     /// GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) @return 0
     /// GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
-    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex = 0, long nBeginHeight = 0 ) const;
+    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex = 0 ) const;
     long            GetEntryHeight( sal_Int32  nPos ) const;
 
     sal_Int32       GetEntryCount() const { return (sal_Int32 )maEntries.size(); }
@@ -276,7 +276,7 @@ public:
     sal_uInt16      GetDisplayLineCount() const;
     void            SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
 
-    void            DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32  nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false);
+    void            DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32  nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false);
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            DeselectAll();

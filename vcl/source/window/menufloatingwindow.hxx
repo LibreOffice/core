@@ -78,7 +78,7 @@ protected:
     void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
     long ImplGetStartY() const;
     Rectangle ImplGetItemRect( sal_uInt16 nPos );
-    void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight );
+    void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos );
     long GetInitialItemY( long *pOptStartY = nullptr ) const;
     void InvalidateItem( sal_uInt16 nPos );
 

@@ -89,13 +89,12 @@ public:
         const Size& rSizePixel = Size(),
         bool bUnlimitedSize = false,
         bool bAntiAliase = false,
-        bool bSnapHorVerLines = false,
-        bool bScaleHighQuality = false)
+        bool bSnapHorVerLines = false)
     :   maSizePixel(rSizePixel),
         mbUnlimitedSize(bUnlimitedSize),
         mbAntiAliase(bAntiAliase),
         mbSnapHorVerLines(bSnapHorVerLines),
-        mbScaleHighQuality(bScaleHighQuality)
+        mbScaleHighQuality(false)
     {
     }
 

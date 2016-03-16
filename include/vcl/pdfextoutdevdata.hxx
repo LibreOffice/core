@@ -207,14 +207,11 @@ public:
     number of page the dest is on (as returned by NewPage)
     or -1 in which case the current page is used
 
-    @param eType
-    what dest type to use
-
     @returns
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32 CreateNamedDest( const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 CreateNamedDest( const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1 );
 
     /** registers a destination for which a destinatin ID needs to be known immediately, instead of later on setting it via
         SetLinkDest.

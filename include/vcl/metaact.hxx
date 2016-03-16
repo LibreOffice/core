@@ -1439,7 +1439,7 @@ protected:
     virtual             ~MetaCommentAction();
 
 public:
-    explicit            MetaCommentAction( sal_Int32 nValue = 0L );
+    explicit            MetaCommentAction();
     explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = nullptr, sal_uInt32 nDataSize = 0UL );
 

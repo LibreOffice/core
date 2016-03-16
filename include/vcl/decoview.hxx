@@ -111,7 +111,7 @@ public:
                                    const Color& rLeftTopColor,
                                    const Color& rRightBottomColor );
     void                DrawHighlightFrame( const Rectangle& rRect,
-                                            DrawHighlightFrameStyle nStyle = DrawHighlightFrameStyle::Out, bool bTestBackground = false );
+                                            DrawHighlightFrameStyle nStyle = DrawHighlightFrameStyle::Out );
     Rectangle           DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle = DrawFrameStyle::Out, DrawFrameFlags nFlags = DrawFrameFlags::NONE );
     Rectangle           DrawButton( const Rectangle& rRect, DrawButtonFlags nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );

@@ -937,7 +937,7 @@ PhysicalFontCollection* PhysicalFontCollection::Clone( bool bEmbeddable ) const
     for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFace = (*it).second;
-        pFontFace->UpdateCloneFontList( *pClonedCollection, true/*bScalable*/, bEmbeddable );
+        pFontFace->UpdateCloneFontList( *pClonedCollection, bEmbeddable );
     }
 
     return pClonedCollection;

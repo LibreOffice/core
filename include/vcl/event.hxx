@@ -396,8 +396,7 @@ private:
 public:
                             NotifyEvent( MouseNotifyEvent nEventType,
                                          vcl::Window* pWindow,
-                                         const void* pEvent = nullptr,
-                                         long nRet = 0 );
+                                         const void* pEvent = nullptr );
 
     MouseNotifyEvent        GetType() const { return mnEventType; }
     vcl::Window*            GetWindow() const { return mpWindow; }

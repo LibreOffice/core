@@ -188,7 +188,7 @@ OUString ImplImageTree::fallbackStyle(const OUString &style)
 }
 
 bool ImplImageTree::loadImage(OUString const & name, OUString const & style, BitmapEx & bitmap,
-    bool localized, bool loadMissing)
+    bool localized)
 {
     OUString aStyle(style);
     while (!aStyle.isEmpty())
@@ -207,12 +207,7 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
         aStyle = fallbackStyle(aStyle);
     }
 
-    if (!loadMissing)
-        return false;
-
-    SAL_INFO("vcl", "ImplImageTree::loadImage couldn't load \"" << name << "\", fetching default image");
-
-    return loadDefaultImage(style, bitmap);
+    return false;
 }
 
 bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap)

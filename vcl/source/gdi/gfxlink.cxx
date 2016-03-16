@@ -46,26 +46,17 @@ GfxLink::GfxLink( const GfxLink& rGfxLink ) :
     ImplCopy( rGfxLink );
 }
 
-GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns ) :
+GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType ) :
     mpImpData( new ImpGfxLink )
 {
-    DBG_ASSERT( (pBuf != nullptr && nSize) || (!bOwns && nSize == 0),
+    DBG_ASSERT( pBuf != nullptr && nSize,
                 "GfxLink::GfxLink(): empty/NULL buffer given" );
 
     meType = nType;
     mnBufSize = nSize;
     mpSwap = nullptr;
     mnUserId = 0UL;
-
-    if( bOwns )
-        mpBuf = new ImpBuffer( pBuf );
-    else if( nSize )
-    {
-        mpBuf = new ImpBuffer( nSize );
-        memcpy( mpBuf->mpBuffer, pBuf, nSize );
-    }
-    else
-        mpBuf = nullptr;
+    mpBuf = new ImpBuffer( pBuf );
 }
 
 GfxLink::~GfxLink()
@@ -295,7 +286,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     pBuf = new sal_uInt8[ nSize ];
     rIStream.Read( pBuf, nSize );
 
-    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, true );
+    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType );
     rGfxLink.SetUserId( nUserId );
 
     if( bMapAndSizeValid )

@@ -131,7 +131,7 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
             pDev->SetLineColor();
             pDev->DrawRect( rRect );
             pWin->DrawSelectionBackground( rRect, 2, bool(nState & DrawButtonFlags::Pressed),
-                                            true, false );
+                                            true );
         }
         aTempRect = rRect;
         aTempRect.Left()+=3;

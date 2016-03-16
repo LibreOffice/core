@@ -757,21 +757,10 @@ void TabControl::ImplShowFocus()
 }
 
 void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem, const Rectangle& rCurRect,
-                              bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
+                              bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
 {
     if (pItem->maRect.IsEmpty())
         return;
-
-    if (bLayout)
-    {
-        if (!HasLayoutData())
-        {
-            mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-            mpTabCtrlData->maLayoutLineToPageId.clear();
-            mpTabCtrlData->maLayoutPageIdToLine.clear();
-            mpTabCtrlData->maTabRectangles.clear();
-        }
-    }
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     Rectangle aRect = pItem->maRect;
@@ -844,7 +833,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         }
     }
 
-    if (!bLayout && (bNativeOK = rRenderContext.IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)))
+    if ( (bNativeOK = rRenderContext.IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
     {
         TabitemValue tiValue(Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
                                        pItem->maRect.Top() + TAB_TABOFFSET_Y,
@@ -864,7 +853,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
                                                      aCtrlRegion, nState, tiValue, OUString() );
     }
 
-    if (!bLayout && !bNativeOK)
+    if (!bNativeOK)
     {
         if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
         {
@@ -909,15 +898,6 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         }
     }
 
-    if (bLayout)
-    {
-        int nLine = mpControlData->mpLayoutData->m_aLineIndices.size();
-        mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.getLength() );
-        mpTabCtrlData->maLayoutPageIdToLine[ (int)pItem->mnId ] = nLine;
-        mpTabCtrlData->maLayoutLineToPageId[ nLine ] = (int)pItem->mnId;
-        mpTabCtrlData->maTabRectangles.push_back( aRect );
-    }
-
     // set font accordingly, current item is painted bold
     // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
     vcl::Font aFont(rRenderContext.GetFont());
@@ -954,8 +934,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         Rectangle aOutRect(nXPos + aImageSize.Width(), nYPos,
                            nXPos + aImageSize.Width() + nTextWidth, nYPos + nTextHeight);
         DrawControlText(rRenderContext, aOutRect, pItem->maFormatText, nStyle,
-                        bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr,
-                        bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr);
+                        nullptr, nullptr);
 
         rRenderContext.SetTextColor(aOldColor);
     }
@@ -1239,7 +1218,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
                 aClipRgn.Intersect(rRect);
             if (!aClipRgn.IsEmpty())
             {
-                ImplDrawItem(rRenderContext, pCurItem, aCurRect, false/*bLayout*/,
+                ImplDrawItem(rRenderContext, pCurItem, aCurRect,
                              pCurItem == pFirstTab, pCurItem == pLastTab, true);
             }
         }

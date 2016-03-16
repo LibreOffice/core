@@ -629,12 +629,12 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
 
 
 NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
-                          const void* pEvent, long nRet )
+                          const void* pEvent )
 {
     mpWindow    = pWindow;
     mpData      = const_cast<void*>(pEvent);
     mnEventType  = nEventType;
-    mnRetValue  = nRet;
+    mnRetValue  = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

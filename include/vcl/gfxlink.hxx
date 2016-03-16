@@ -125,7 +125,7 @@ public:
                         GfxLink();
                         GfxLink( const GfxLink& );
                         GfxLink( const OUString& rPath, GfxLinkType nType );
-                        GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType, bool bOwns );
+                        GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType );
                         ~GfxLink();
 
     GfxLink&            operator=( const GfxLink& );

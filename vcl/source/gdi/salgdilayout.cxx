@@ -498,14 +498,14 @@ bool SalGraphics::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradi
 void SalGraphics::CopyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            sal_uInt16 nFlags, const OutputDevice *pOutDev )
+                            const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
         mirror( nDestX, nSrcWidth, pOutDev );
         mirror( nSrcX, nSrcWidth, pOutDev );
     }
-    copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
+    copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, SAL_COPYAREA_WINDOWINVALIDATE );
 }
 
 void SalGraphics::CopyBits( const SalTwoRect& rPosAry,
