@@ -3200,28 +3200,29 @@ const SfxPoolItem* SwXFrameStyle::GetItem(enum RES_FRMATR eAtr)
     return &xStyle->GetItemSet().Get(eAtr);
 }
 
-uno::Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence<uno::Type> SwXFrameStyle::getTypes()
+        throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence< uno::Type > aTypes = SwXStyle::getTypes();
+    uno::Sequence<uno::Type> aTypes = SwXStyle::getTypes();
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 1);
-    aTypes.getArray()[nLen] = cppu::UnoType<XEventsSupplier>::get();
+    aTypes[nLen] = cppu::UnoType<XEventsSupplier>::get();
     return aTypes;
 }
 
-uno::Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
+uno::Any SwXFrameStyle::queryInterface(const uno::Type& rType)
+        throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if(rType == cppu::UnoType<XEventsSupplier>::get())
-        aRet <<= uno::Reference<XEventsSupplier>(this);
-    else
-        aRet = SwXStyle::queryInterface(rType);
-    return aRet;
+        return uno::makeAny(uno::Reference<XEventsSupplier>(this));
+    return SwXStyle::queryInterface(rType);
 }
 
-uno::Reference< container::XNameReplace > SwXFrameStyle::getEvents(  ) throw(uno::RuntimeException, std::exception)
+uno::Reference<container::XNameReplace> SwXFrameStyle::getEvents()
+        throw(uno::RuntimeException, std::exception)
 {
-    return new SwFrameStyleEventDescriptor( *this );
+    return new SwFrameStyleEventDescriptor(*this);
 }
 
 // Already implemented autostyle families: 3
