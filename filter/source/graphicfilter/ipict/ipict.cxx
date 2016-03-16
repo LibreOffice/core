@@ -834,8 +834,19 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if ( nRowBytes < nSrcBPL || nRowBytes > nDestBPL )
             BITMAPERROR;
 
-        if ( nRowBytes < 8 || nPackType == 1 ) {
+        if (nRowBytes < 8 || nPackType == 1)
+        {
             if (nHeight > pPict->remainingSize() / (sizeof(sal_uInt8) * nRowBytes))
+                BITMAPERROR;
+        }
+        else if (nRowBytes > 250)
+        {
+            if (nHeight > pPict->remainingSize() / sizeof(sal_uInt16))
+                BITMAPERROR;
+        }
+        else
+        {
+            if (nHeight > pPict->remainingSize() / sizeof(sal_uInt8))
                 BITMAPERROR;
         }
 
@@ -907,8 +918,19 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if (nWidth > nRowBytes / 2)
             BITMAPERROR;
 
-        if ( nRowBytes < 8 || nPackType == 1 ) {
+        if (nRowBytes < 8 || nPackType == 1)
+        {
             if (nHeight > pPict->remainingSize() / (sizeof(sal_uInt16) * nWidth))
+                BITMAPERROR;
+        }
+        else if (nRowBytes > 250)
+        {
+            if (nHeight > pPict->remainingSize() / sizeof(sal_uInt16))
+                BITMAPERROR;
+        }
+        else
+        {
+            if (nHeight > pPict->remainingSize() / sizeof(sal_uInt8))
                 BITMAPERROR;
         }
 
