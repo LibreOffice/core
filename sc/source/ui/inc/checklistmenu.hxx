@@ -251,7 +251,12 @@ class ScSearchEdit : public Edit
 private:
     ScTabStops*         mpTabStops;
 public:
-    ScSearchEdit(Window* pParent) : Edit(pParent) {}
+    ScSearchEdit(Window* pParent)
+        : Edit(pParent)
+        , mpTabStops(nullptr)
+    {
+    }
+
     virtual ~ScSearchEdit() {}
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
