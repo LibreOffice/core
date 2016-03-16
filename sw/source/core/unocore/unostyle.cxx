@@ -2948,38 +2948,40 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
         throw uno::RuntimeException();
 
     sal_Int32 nLength = rPropertyNames.getLength();
-    const OUString* pNames = rPropertyNames.getConstArray();
-    uno::Sequence< uno::Any > aRet ( nLength );
-
-    uno::Any* pRet = aRet.getArray();
+    uno::Sequence<uno::Any> aRet (nLength);
+    if(!m_pBasePool)
+    {
+        if(!IsDescriptor())
+            throw uno::RuntimeException();
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
+        {
+            const uno::Any* pAny = nullptr;
+            m_pPropertiesImpl->GetProperty(rPropertyNames[nProp], pAny);
+            if (!pAny->hasValue())
+                SwStyleProperties_Impl::GetProperty(rPropertyNames[nProp], m_xStyleData, aRet[nProp]);
+            else
+                aRet[nProp] = *pAny;
+        }
+        return aRet;
+    }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     SwStyleBase_Impl aBase(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); //UUUU add pDfltFrameFormat as parent
-    SfxStyleSheetBase* pBase = nullptr;
-
-    for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
+    SfxStyleSheetBase* pBase = GetStyleSheetBase();
+    if(!pBase)
+        throw uno::RuntimeException();
+    for(sal_Int32 nProp = 0; nProp < nLength; ++nProp)
     {
-        const OUString& rPropName = pNames[nProp];
+        const OUString& rPropName = rPropertyNames[nProp];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
 
         if (!pEntry)
-        {
             throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
-        }
-
-        if(m_pBasePool)
+        const bool bHeader(rPropName.startsWith("Header"));
+        const bool bFooter(rPropName.startsWith("Footer"));
+        const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
+        if(bHeader || bFooter || bFirstIsShared)
         {
-            if(!pBase)
-            {
-                const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
-                m_pBasePool->SetSearchMask(GetFamily());
-                pBase = m_pBasePool->Find(GetStyleName());
-                m_pBasePool->SetSearchMask(GetFamily(), nSaveMask );
-            }
-
-            sal_uInt16 nRes = 0;
-            const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
-
             switch(pEntry->nWID)
             {
                 case SID_ATTR_PAGE_ON:
@@ -2994,57 +2996,27 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 case SID_ATTR_PAGE_SIZE:
                 case RES_HEADER_FOOTER_EAT_SPACING:
                 {
-                    // These slots are used for Header, Footer and (partially) for PageStyle directly.
-                    // Check for Header/Footer entry
-                    const bool bHeader(rPropName.startsWith("Header"));
-                    const bool bFooter(rPropName.startsWith("Footer"));
+                    // slot is a Header/Footer slot
+                    rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
+                    const SfxItemSet& rSet = xStyle->GetItemSet();
+                    const SvxSetItem* pSetItem;
 
-                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
+                    if (lcl_GetHeaderFooterItem(rSet, rPropName, bFooter, pSetItem))
                     {
-                        // slot is a Header/Footer slot
-                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-                        const SfxItemSet& rSet = xStyle->GetItemSet();
-                        const SvxSetItem* pSetItem;
-
-                        if (lcl_GetHeaderFooterItem(rSet, rPropName, bFooter, pSetItem))
+                        // get from SfxItemSet of the corresponding SfxSetItem
+                        const SfxItemSet& rSetSet = pSetItem->GetItemSet();
                         {
-                            // get from SfxItemSet of the corresponding SfxSetItem
-                            const SfxItemSet& rSetSet = pSetItem->GetItemSet();
-                            {
-                                SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast< SfxItemSet& >(rSetSet));
-                                pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-                            }
-                        }
-                        else if(pEntry->nWID == SID_ATTR_PAGE_ON)
-                        {
-                            // header/footer is not available, thus off. Default is <false>, though
-                            pRet[nProp] <<= false;
+                            SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast< SfxItemSet& >(rSetSet));
+                            aRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
                         }
                     }
-                    else
+                    else if(pEntry->nWID == SID_ATTR_PAGE_ON)
                     {
-                        switch(pEntry->nWID)
-                        {
-                            case SID_ATTR_PAGE_DYNAMIC:
-                            case SID_ATTR_PAGE_SHARED:
-                            case SID_ATTR_PAGE_SHARED_FIRST:
-                            case SID_ATTR_PAGE_ON:
-                            case RES_HEADER_FOOTER_EAT_SPACING:
-                            {
-                                // these slots are exclusive to Header/Footer, thus this is an error
-                                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
-                            }
-                            default:
-                            {
-                                // part of PageStyle, fallback to default
-                                pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-                            }
-                        }
+                        // header/footer is not available, thus off. Default is <false>, though
+                        aRet[nProp] <<= false;
                     }
-
-                    break;
                 }
-
+                continue;
                 case XATTR_FILLBMP_SIZELOG:
                 case XATTR_FILLBMP_TILEOFFSETX:
                 case XATTR_FILLBMP_TILEOFFSETY:
@@ -3066,130 +3038,97 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 case XATTR_FILLTRANSPARENCE:
                 case XATTR_FILLFLOATTRANSPARENCE:
                 case XATTR_SECONDARYFILLCOLOR:
-                {
-                    // This DrawingLayer FillStyle attributes can be part of Header, Footer and PageStyle
-                    // itself, so decide what to do using the name
-                    const bool bHeader(rPropName.startsWith("Header"));
-                    const bool bFooter(rPropName.startsWith("Footer"));
-
-                    if (bHeader || bFooter)
-                    {
-                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-                        const SfxItemSet& rSet = xStyle->GetItemSet();
-                        const SvxSetItem* pSetItem;
-                        if(SfxItemState::SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
-                        {
-                            // set at SfxItemSet of the corresponding SfxSetItem
-                            const SfxItemSet& rSetSet = pSetItem->GetItemSet();
-                            {
-                                SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast<SfxItemSet&>(rSetSet));
-                                pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // part of PageStyle, fallback to default
-                        pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-                    }
-
+                if(bFirstIsShared) // only special handling for headers/footers here
                     break;
-                }
-
-                case FN_UNO_HEADER:
-                case FN_UNO_HEADER_LEFT:
-                case FN_UNO_HEADER_FIRST:
-                case FN_UNO_HEADER_RIGHT:
-                case FN_UNO_FOOTER:
-                case FN_UNO_FOOTER_LEFT:
-                case FN_UNO_FOOTER_FIRST:
-                case FN_UNO_FOOTER_RIGHT:
-                {
-                    //UUUU cleanups for readability (undos removed, rearranged)
-                    bool bHeader(false);
-                    bool bLeft(false);
-                    bool bFirst(false);
-
-                    switch(pEntry->nWID)
-                    {
-                        case FN_UNO_HEADER:       bHeader = true;  nRes = RES_HEADER; break;
-                        case FN_UNO_HEADER_LEFT:  bHeader = true;  nRes = RES_HEADER; bLeft = true;  break;
-                        case FN_UNO_HEADER_FIRST: bHeader = true;  nRes = RES_HEADER; bFirst = true; break;
-                        case FN_UNO_HEADER_RIGHT: bHeader = true;  nRes = RES_HEADER; break;
-                        case FN_UNO_FOOTER:       bHeader = false; nRes = RES_FOOTER; break;
-                        case FN_UNO_FOOTER_LEFT:  bHeader = false; nRes = RES_FOOTER; bLeft = true;  break;
-                        case FN_UNO_FOOTER_FIRST: bHeader = false; nRes = RES_FOOTER; bFirst = true; break;
-                        case FN_UNO_FOOTER_RIGHT: bHeader = false; nRes = RES_FOOTER; break;
-                        default: break;
-                    }
-
-                    const SwPageDesc* pDesc = aBase.GetOldPageDesc();
-                    assert(pDesc);
-                    const SwFrameFormat* pFrameFormat = nullptr;
-                    bool bShare = (bHeader && pDesc->IsHeaderShared()) || (!bHeader && pDesc->IsFooterShared());
-                    bool bShareFirst = pDesc->IsFirstShared();
-                    // TextLeft returns the left content if there is one,
-                    // Text and TextRight return the master content.
-                    // TextRight does the same as Text and is for
-                    // compatibility only.
-                    if( bLeft && !bShare )
-                    {
-                        pFrameFormat = &pDesc->GetLeft();
-                    }
-                    else if (bFirst && !bShareFirst)
-                    {
-                        pFrameFormat = &pDesc->GetFirstMaster();
-                        // no need to make GetFirstLeft() accessible
-                        // since it is always shared
-                    }
-                    else
-                    {
-                        pFrameFormat = &pDesc->GetMaster();
-                    }
-                    const uno::Reference< text::XText > xRet =
-                        lcl_makeHeaderFooter(nRes, bHeader, pFrameFormat);
-                    if (xRet.is())
-                    {
-                        pRet[nProp] <<= xRet;
-                    }
-                    break;
-                }
-
-                case FN_PARAM_FTN_INFO :
                 {
                     rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
                     const SfxItemSet& rSet = xStyle->GetItemSet();
-                    const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
-                    rItem.QueryValue(pRet[nProp], nMemberId);
-                    break;
+                    const SvxSetItem* pSetItem;
+                    if(SfxItemState::SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
+                    {
+                        // set at SfxItemSet of the corresponding SfxSetItem
+                        const SfxItemSet& rSetSet = pSetItem->GetItemSet();
+                        {
+                            SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast<SfxItemSet&>(rSetSet));
+                            aRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
+                        }
+                    }
                 }
-                default:
+                continue;
+                default: ;
+            }
+        }
+        switch(pEntry->nWID)
+        {
+            // these slots are exclusive to Header/Footer, thus this is an error
+            case SID_ATTR_PAGE_DYNAMIC:
+            case SID_ATTR_PAGE_SHARED:
+            case SID_ATTR_PAGE_SHARED_FIRST:
+            case SID_ATTR_PAGE_ON:
+            case RES_HEADER_FOOTER_EAT_SPACING:
+                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+            case FN_UNO_HEADER:
+            case FN_UNO_HEADER_LEFT:
+            case FN_UNO_HEADER_FIRST:
+            case FN_UNO_HEADER_RIGHT:
+            case FN_UNO_FOOTER:
+            case FN_UNO_FOOTER_LEFT:
+            case FN_UNO_FOOTER_FIRST:
+            case FN_UNO_FOOTER_RIGHT:
+            {
+                bool bLeft(false);
+                bool bFirst(false);
+                sal_uInt16 nRes = 0;
+                switch(pEntry->nWID)
                 {
-                    //UUUU
-                    pRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
-                    break;
+                    case FN_UNO_HEADER:       nRes = RES_HEADER; break;
+                    case FN_UNO_HEADER_LEFT:  nRes = RES_HEADER; bLeft = true;  break;
+                    case FN_UNO_HEADER_FIRST: nRes = RES_HEADER; bFirst = true; break;
+                    case FN_UNO_HEADER_RIGHT: nRes = RES_HEADER; break;
+                    case FN_UNO_FOOTER:       nRes = RES_FOOTER; break;
+                    case FN_UNO_FOOTER_LEFT:  nRes = RES_FOOTER; bLeft = true;  break;
+                    case FN_UNO_FOOTER_FIRST: nRes = RES_FOOTER; bFirst = true; break;
+                    case FN_UNO_FOOTER_RIGHT: nRes = RES_FOOTER; break;
+                    default: ;
                 }
+
+                const SwPageDesc* pDesc = aBase.GetOldPageDesc();
+                assert(pDesc);
+                const SwFrameFormat* pFrameFormat = nullptr;
+                bool bShare = (nRes == RES_HEADER && pDesc->IsHeaderShared()) || (nRes == RES_FOOTER && pDesc->IsFooterShared());
+                bool bShareFirst = pDesc->IsFirstShared();
+                // TextLeft returns the left content if there is one,
+                // Text and TextRight return the master content.
+                // TextRight does the same as Text and is for
+                // compatibility only.
+                if(bLeft && !bShare)
+                    pFrameFormat = &pDesc->GetLeft();
+                else if(bFirst && !bShareFirst)
+                {
+                    pFrameFormat = &pDesc->GetFirstMaster();
+                    // no need to make GetFirstLeft() accessible
+                    // since it is always shared
+                }
+                else
+                    pFrameFormat = &pDesc->GetMaster();
+                const uno::Reference<text::XText> xRet = lcl_makeHeaderFooter(nRes, nRes == RES_HEADER, pFrameFormat);
+                if (xRet.is())
+                    aRet[nProp] = uno::makeAny(xRet);
             }
-        }
-        else if(IsDescriptor())
-        {
-            const uno::Any* pAny = nullptr;
-            m_pPropertiesImpl->GetProperty(rPropName, pAny);
-            if (!pAny->hasValue())
+            break;
+            case FN_PARAM_FTN_INFO:
             {
-                SwStyleProperties_Impl::GetProperty(rPropName, m_xStyleData, pRet[nProp]);
+                rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+                const SfxItemSet& rSet = xStyle->GetItemSet();
+                const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
+                const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+                rItem.QueryValue(aRet[nProp], nMemberId);
             }
-            else
-            {
-                pRet[nProp] = *pAny;
-            }
-        }
-        else
-        {
-            throw uno::RuntimeException();
+            break;
+            default:
+                aRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
         }
     }
-
     return aRet;
 }
 
