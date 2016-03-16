@@ -397,7 +397,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
         }
 
-        if ( xWindow->IsDisposed() )
+        if ( !xWindow->IsDisposed() )
         {
             // release UI lock
             pWindow->DecrementLockCount();
