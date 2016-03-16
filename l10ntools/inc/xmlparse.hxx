@@ -38,11 +38,13 @@
 class XMLParentNode;
 class XMLElement;
 
-#define XML_NODE_TYPE_FILE          0x001
-#define XML_NODE_TYPE_ELEMENT       0x002
-#define XML_NODE_TYPE_DATA          0x003
-#define XML_NODE_TYPE_COMMENT       0x004
-#define XML_NODE_TYPE_DEFAULT       0x005
+enum class XMLNodeType{
+    FILE    = 0x001,
+    ELEMENT = 0x002,
+    DATA    = 0x003,
+    COMMENT = 0x004,
+    DEFAULT = 0x005
+};
 
 /** Holds data of Attributes
  */
@@ -77,7 +79,7 @@ protected:
     XMLNode(){}
 
 public:
-    virtual sal_uInt16 GetNodeType() const = 0;
+    virtual XMLNodeType GetNodeType() const = 0;
     virtual ~XMLNode(){}
 };
 
@@ -166,7 +168,7 @@ public:
 
     XMLFile& operator=(const XMLFile& rObj);
 
-    virtual sal_uInt16 GetNodeType() const override { return XML_NODE_TYPE_FILE; }
+    virtual XMLNodeType GetNodeType() const override { return XMLNodeType::FILE; }
 
     /// returns file name
     OString GetName() const { return m_sFileName; }
@@ -224,7 +226,7 @@ public:
     XMLElement(const XMLElement&);
 
     XMLElement& operator=(const XMLElement& rObj);
-    virtual sal_uInt16 GetNodeType() const override { return XML_NODE_TYPE_ELEMENT; }
+    virtual XMLNodeType GetNodeType() const override { return XMLNodeType::ELEMENT; }
 
     /// returns element name
     OString GetName() const { return m_sElementName; }
@@ -265,7 +267,7 @@ public:
 
     // Default copy constructor and copy operator work well.
 
-    virtual sal_uInt16 GetNodeType() const override { return XML_NODE_TYPE_DATA; }
+    virtual XMLNodeType GetNodeType() const override { return XMLNodeType::DATA; }
 
     /// returns the data
     OString GetData() const { return m_sData; }
@@ -291,7 +293,7 @@ public:
 
     // Default copy constructor and copy operator work well.
 
-    virtual sal_uInt16 GetNodeType() const override { return XML_NODE_TYPE_COMMENT; }
+    virtual XMLNodeType GetNodeType() const override { return XMLNodeType::COMMENT; }
 
     /// returns the comment
     OString GetComment() const { return m_sComment; }
@@ -314,7 +316,7 @@ public:
 
     // Default copy constructor and copy operator work well.
 
-    virtual sal_uInt16 GetNodeType() const override { return XML_NODE_TYPE_DEFAULT; }
+    virtual XMLNodeType GetNodeType() const override { return XMLNodeType::DEFAULT; }
 
     /// returns the comment
     OString GetDefault() const { return m_sDefault; }
