@@ -2632,10 +2632,10 @@ uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequen
 }
 
 uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
-    return getPropertyDefaults ( aSequence ).getConstArray()[0];
+    const uno::Sequence<OUString> aSequence(&rPropertyName, 1);
+    return getPropertyDefaults(aSequence)[0];
 }
 
 void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
