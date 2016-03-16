@@ -105,7 +105,7 @@ void ScChangeViewSettings::SetTheComment(const OUString& rString)
     if(!rString.isEmpty())
     {
         utl::SearchParam aSearchParam( rString,
-            utl::SearchParam::SRCH_REGEXP,false,false,false );
+            utl::SearchParam::SRCH_REGEXP,false );
 
         pCommentSearcher = new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass );
     }
