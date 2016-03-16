@@ -9,7 +9,7 @@
 #ifndef mozilla_TypeTraits_h
 #define mozilla_TypeTraits_h
 
-#include "mozilla/Types.h"
+#include "Types.h"
 
 /*
  * These traits are approximate copies of the traits and semantics from C++11's

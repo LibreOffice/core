@@ -54,8 +54,8 @@
 
 #include "updatelogging.h"
 
-#include "mozilla/Compiler.h"
-#include "mozilla/Types.h"
+#include <onlineupdate/mozilla/Compiler.h>
+#include <onlineupdate/mozilla/Types.h>
 
 // Amount of the progress bar to use in each of the 3 update stages,
 // should total 100.0.
