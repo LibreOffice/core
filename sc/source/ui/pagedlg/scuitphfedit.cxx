@@ -146,7 +146,6 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     m_pWndLeft->SetGetFocusHdl(setEditFocus);
     m_pWndCenter->SetGetFocusHdl(setEditFocus);
     m_pWndRight->SetGetFocusHdl(setEditFocus);
-    FillCmdArr();
 
     m_pWndLeft->GrabFocus();
     m_pEditFocus = m_pWndLeft; // there's no event from GrabFocus()
@@ -233,27 +232,6 @@ bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )
 
     return true;
 }
-
-#define SET_CMD(i,id) \
-    aCmd  = aDel;                           \
-    aCmd += ScGlobal::GetRscString( id );   \
-    aCmd += aDel;                           \
-    aCmdArr[i] = aCmd;
-
-void ScHFEditPage::FillCmdArr()
-{
-    OUString aDel( ScGlobal::GetRscString( STR_HFCMD_DELIMITER ) );
-    OUString aCmd;
-
-    SET_CMD( 0, STR_HFCMD_PAGE )
-    SET_CMD( 1, STR_HFCMD_PAGES )
-    SET_CMD( 2, STR_HFCMD_DATE )
-    SET_CMD( 3, STR_HFCMD_TIME )
-    SET_CMD( 4, STR_HFCMD_FILE )
-    SET_CMD( 5, STR_HFCMD_TABLE )
-}
-
-#undef SET_CMD
 
 void ScHFEditPage::InitPreDefinedList()
 {
