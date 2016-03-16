@@ -126,6 +126,10 @@ main/NOTICE_aggregated
 # Contains a list of labels used for printing; no header possible
 main/testautomation/framework/optional/input/extras_formats/Labels_en-US.txt
 
+# Used in writerfilter/source/doctok/xmigen.el (1), part of the SGA
+# XEmacs List (config file), comments possible (using ';' at each line start), ALv2 could be added
+main/writerfilter/source/doctok/xmigen.el
+
 # Used in main/extras/source/misc_config/autotbl.fmt (1), part of SGA
 # Excel format file, binary
 main/extras/source/misc_config/autotbl.fmt
@@ -141,6 +145,10 @@ main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb
 # main/scripting/java/org/openoffice/netbeans/editor/OOo.jcs (1), part of SGA
 # binary, file type not clear
 main/scripting/java/org/openoffice/netbeans/editor/OOo.jcs
+
+# main/writerfilter/qa/cppunittests/doctok/doctok.job (1), part of SGA
+# ascii, one line, support of comments not clear
+main/writerfilter/qa/cppunittests/doctok/doctok.job
 
 # used in main/officecfg/registry/schema/oo-common.ldif (1), part of SGA
 # ascii, included in makefiles, ALv2 might be added
@@ -189,6 +197,10 @@ main/testautomation/writer/optional/input/import/amipro3.sam
 # used in main/extras/source/truetype/symbol/OpenSymbol.sfd (1), part of SGA
 # AOO specific OpenSymbol source file, (S)ource(F)orge(D)ata, recently called (S)pline(F)ont(D)ata
 main/extras/source/truetype/symbol/OpenSymbol.sfd
+
+# used in main/writerfilter/source/rtftok/RTFScanner.skl (1), part of SGA 
+# binary file (?)
+main/writerfilter/source/rtftok/RTFScanner.skl
 
 # used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk (1), part of SGA 
 # SYLK spreadsheet, ascii. Comments possible (see in file), ALv2 may be added here
@@ -959,6 +971,15 @@ main/wizards/source/template/delzip
 main/wizards/source/tools/delzip
 main/wizards/source/tutorials/delzip
 main/wizards/source/webwizard/delzip
+main/writerfilter/source/doctok/qnametostrfooter
+main/writerfilter/source/ooxml/modelcleanup
+main/writerfilter/source/ooxml/rngtocxx
+main/writerfilter/source/ooxml/tokenxmlfooter
+main/writerfilter/source/ooxml/tokenxmlheader
+main/writerfilter/source/resourcemodel/analyzerfooter
+main/writerfilter/source/resourcemodel/qnametostrfooter
+main/writerfilter/source/resourcemodel/setdebugflags
+main/writerfilter/source/resourcemodel/sprmcodetostrfooter
 main/xmerge/source/activesync/XMergeFactory.h
 main/xmerge/source/activesync/XMergeFilter.h
 main/xmerge/source/activesync/XMergeSync.h
@@ -1180,6 +1201,7 @@ main/testautomation/writer/optional/input/number/format44.txt
 main/testautomation/writer/optional/input/number/format46.txt
 main/testautomation/writer/optional/input/number/format49.txt
 main/testautomation/writer/optional/input/number/format86.txt
+main/writerfilter/documentation/sprms.txt
 main/xmerge/source/activesync/guids.txt
 main/xmerge/source/bridge/antcall.txt
 main/xmlsecurity/test_docs/CAs/Root_1/demoCA/index.txt
