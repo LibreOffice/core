@@ -51,6 +51,24 @@
       "revId": "659435a982c4ed9d87985cdeb82080c8191718d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c19a46c5",
+        "filename": "sd/source/ui/view/drviewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-16T09:57:17Z",
+      "side": 1,
+      "message": "yes, sorry. I realized after posting, when I read the comments on the bug.",
+      "parentUuid": "9ad45d7e_611a7a70",
+      "revId": "659435a982c4ed9d87985cdeb82080c8191718d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
