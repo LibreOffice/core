@@ -60,7 +60,7 @@
     <DateAcceptancePattern>Y年M月D日</DateAcceptancePattern>
     <DateAcceptancePattern>M月D日</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="short" usage="FIXED_NUMBER" formatindex="0">
-      <FormatCode>Standard</FormatCode>
+      <FormatCode>General</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="false" type="short" usage="FIXED_NUMBER" formatindex="1">
       <FormatCode>0</FormatCode>
