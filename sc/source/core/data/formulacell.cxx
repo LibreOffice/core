@@ -331,6 +331,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     {
         bNewGlobal = bOldGlobal;
         pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+        pRangeData->SetIndex(0);    // needed for insert to assign a new index
         ScTokenArray* pRangeNameToken = pRangeData->GetCode();
         if (rNewDoc.GetPool() != const_cast<ScDocument*>(pOldDoc)->GetPool())
         {
