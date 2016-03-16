@@ -3131,8 +3131,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         }
         else
             bClip = false;
-        rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic,
-                                     nullptr, nullptr );
+        rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength() );
         if (bClip)
             rRenderContext.SetClipRegion();
         rRenderContext.SetFont(aOldFont);
@@ -3286,7 +3285,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         if ( !pItem->mbEnabled )
             nTextStyle |= DrawTextFlags::Disable;
         rRenderContext.DrawCtrlText( Point( nTextOffX, nTextOffY ), pItem->maText,
-                      0, pItem->maText.getLength(), nTextStyle, nullptr, nullptr );
+                      0, pItem->maText.getLength(), nTextStyle );
         if ( bRotate )
             SetFont( aOldFont );
     }

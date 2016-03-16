@@ -2582,7 +2582,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
 
 void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
 {
-    EnableInput( bEnable, true/*bChild*/ );
+    EnableInput( bEnable );
 
     // pExecuteWindow is the first Overlap-Frame --> if this
     // shouldn't be the case, than this must be changed in dialog.cxx
@@ -2597,7 +2597,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
             // Is Window not in the exclude window path or not the
             // exclude window, than change the status
             if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pSysWin, true ) )
-                pSysWin->EnableInput( bEnable, true/*bChild*/ );
+                pSysWin->EnableInput( bEnable );
         }
         pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
     }
@@ -2614,7 +2614,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
                 // Is Window not in the exclude window path or not the
                 // exclude window, than change the status
                 if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, true ) )
-                    pFrameWin->EnableInput( bEnable, true/*bChild*/ );
+                    pFrameWin->EnableInput( bEnable );
             }
         }
         pFrameWin = pFrameWin->mpWindowImpl->mpFrameData->mpNextFrame;
@@ -2633,7 +2633,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
                 // Is Window not in the exclude window path or not the
                 // exclude window, than change the status
                 if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), true ) )
-                    (*p)->EnableInput( bEnable, true/*bChild*/ );
+                    (*p)->EnableInput( bEnable );
             }
             ++p;
         }
