@@ -229,7 +229,7 @@ private:
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                                              DayOfWeek eDayOfWeek, bool bBack = true,
                                              bool bOther = false, sal_uLong nToday = 0);
-    SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint = false);
+    SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     SVT_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );
     SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,

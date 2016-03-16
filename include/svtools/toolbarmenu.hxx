@@ -118,7 +118,7 @@ private:
 
     void            implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly = nullptr, bool bHighlight = false);
 
-    void            implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight);
+    void            implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry);
     void            implHighlightAtPosition(const MouseEvent& rMEvt, bool bMBDown);
 
     void            implChangeHighlightEntry( int nEntry );

@@ -1299,7 +1299,7 @@ IMPL_LINK_TYPED( DataBrowser, SeriesHeaderGotFocus, Control&, rControl, void )
         GoToCell( 0, 0 );
     else
     {
-        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
+        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()) );
         ActivateCell();
         m_aCursorMovedHdlLink.Call( this );
     }

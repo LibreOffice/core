@@ -305,8 +305,7 @@ protected:
 
     bool            CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 );
     void            ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow);
-    void            EnableSelectionAsDropTarget( bool bEnable = true,
-                                                 bool bWithChildren = true );
+    void            EnableSelectionAsDropTarget( bool bEnable = true );
     // Standard impl returns 0; derived classes which support D'n'D must override
     using Window::GetDropTarget;
     virtual SvTreeListEntry* GetDropTarget( const Point& );
@@ -564,12 +563,10 @@ protected:
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext,
-                                             SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL,
-                                             bool bHasClipRegion=false );
+                                             SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL );
 
     SVT_DLLPRIVATE void         InitTreeView();
-    SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab,
-                                              sal_uInt16 nEmptyWidth );
+    SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab );
     SVT_DLLPRIVATE void         ImplInitStyle();
 
 protected:

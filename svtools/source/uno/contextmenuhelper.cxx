@@ -251,11 +251,10 @@ static OUString lcl_GetItemCommandRecursive( const PopupMenu* pPopupMenu, sal_uI
 /*************************************************************************/
 
 ContextMenuHelper::ContextMenuHelper(
-    const uno::Reference< frame::XFrame >& xFrame,
-    bool bAutoRefresh ) :
+    const uno::Reference< frame::XFrame >& xFrame ) :
     m_xWeakFrame( xFrame ),
     m_aSelf( "_self" ),
-    m_bAutoRefresh( bAutoRefresh ),
+    m_bAutoRefresh( true ),
     m_bUICfgMgrAssociated( false )
 {
 }

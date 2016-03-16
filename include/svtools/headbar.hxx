@@ -261,7 +261,7 @@ private:
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh = false,
                                                  bool bDrag = false, const Rectangle* pRect = nullptr);
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
-                                       bool bEnd = false, bool bDirect = false );
+                                       bool bEnd = false );
     SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
     SVT_DLLPRIVATE void             ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void             ImplEndDrag( bool bCancel );

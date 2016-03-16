@@ -102,8 +102,7 @@ public:
 
     sal_uInt32 GetNumber() const;                           // ... as number
     sal_Int32 GetSNumber() const;                           // ... as number
-    void GetNumbers( std::vector<sal_uInt32> &rNumbers,                  // ... as numbers
-                     bool bSpaceDelim=false ) const;
+    void GetNumbers( std::vector<sal_uInt32> &rNumbers ) const; // ... as numbers
     void GetColor( Color& ) const;                      // ... as color
 
     // ... as enum; pOptEnums is an HTMLOptionEnum array

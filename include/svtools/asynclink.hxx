@@ -66,7 +66,7 @@ public:
 
     void CreateMutex();
     void operator=( const Link<void*,void>& rLink ) { _aLink = rLink; }
-    void Call( void* pObj, bool bAllowDoubles = false, bool bUseTimer = false );
+    void Call( void* pObj, bool bAllowDoubles = false );
     void ClearPendingCall( );
 };
 

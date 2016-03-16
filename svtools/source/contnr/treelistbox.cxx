@@ -930,7 +930,7 @@ void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntr
     }
 }
 
-void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable, bool bWithChildren )
+void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
 {
     sal_uInt16 nRefDepth;
     SvTreeListEntry* pTemp;
@@ -941,29 +941,23 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable, bool bWithChildre
         if ( !bEnable )
         {
             pSelEntry->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
-            if ( bWithChildren )
+            nRefDepth = pModel->GetDepth( pSelEntry );
+            pTemp = Next( pSelEntry );
+            while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
             {
-                nRefDepth = pModel->GetDepth( pSelEntry );
-                pTemp = Next( pSelEntry );
-                while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
-                {
-                    pTemp->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
-                    pTemp = Next( pTemp );
-                }
+                pTemp->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
+                pTemp = Next( pTemp );
             }
         }
         else
         {
             pSelEntry->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
-            if ( bWithChildren )
+            nRefDepth = pModel->GetDepth( pSelEntry );
+            pTemp = Next( pSelEntry );
+            while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
             {
-                nRefDepth = pModel->GetDepth( pSelEntry );
-                pTemp = Next( pSelEntry );
-                while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
-                {
-                    pTemp->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
-                    pTemp = Next( pTemp );
-                }
+                pTemp->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
+                pTemp = Next( pTemp );
             }
         }
         pSelEntry = NextSelected( pSelEntry );
@@ -2817,7 +2811,7 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
 }
 
 void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext,
-                                SvLBoxTabFlags nTabFlags, bool bHasClipRegion)
+                                SvLBoxTabFlags nTabFlags)
 {
 
     Rectangle aRect; // multi purpose
@@ -2850,7 +2844,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     bool bInUse = rEntry.HasInUseEmphasis();
     // if a ClipRegion was set from outside, we don't have to reset it
     const WinBits nWindowStyle = GetStyle();
-    const bool bResetClipRegion = !bHasClipRegion;
+    const bool bResetClipRegion = false;
     const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -2859,12 +2853,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     aHighlightFont.SetColor(aHighlightTextColor);
 
     Size aRectSize(0, nTempEntryHeight);
-
-    if (!bHasClipRegion && nWindowStyle & WB_HSCROLL)
-    {
-        rRenderContext.SetClipRegion(vcl::Region(pImp->GetClipRegionRect()));
-        bHasClipRegion = true;
-    }
 
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
 
@@ -2903,11 +2891,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
         if (nFlags & nTabFlags)
         {
-            if (!bHasClipRegion && nX + aSize.Width() >= nMaxRight)
-            {
-                rRenderContext.SetClipRegion(vcl::Region(pImp->GetClipRegionRect()));
-                bHasClipRegion = true;
-            }
             aEntryPos.X() = nX;
             aEntryPos.Y() = nLine;
 
@@ -3134,7 +3117,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         }
     }
 
-    if (bHasClipRegion && bResetClipRegion)
+    if (bResetClipRegion)
         rRenderContext.SetClipRegion();
 }
 
@@ -3251,7 +3234,7 @@ sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 }
 
 SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
-    SvLBoxTab** ppTab, sal_uInt16 nEmptyWidth )
+    SvLBoxTab** ppTab )
 {
     SvLBoxItem* pItemClicked = nullptr;
     sal_uInt16 nTabCount = aTabs.size();
@@ -3287,9 +3270,6 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
             if( nTabWidth < nLen )
                 nLen = nTabWidth;
         }
-
-        if( !nLen )
-            nLen = nEmptyWidth;
 
         if( nX >= nStart && nX < (nStart+nLen ) )
         {
@@ -3391,13 +3371,13 @@ void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
 
 SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX,SvLBoxTab** ppTab)
 {
-    return GetItem_Impl( pEntry, nX, ppTab, 0 );
+    return GetItem_Impl( pEntry, nX, ppTab );
 }
 
 SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX )
 {
     SvLBoxTab* pDummyTab;
-    return GetItem_Impl( pEntry, nX, &pDummyTab, 0 );
+    return GetItem_Impl( pEntry, nX, &pDummyTab );
 }
 
 void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags, void* pUserData )

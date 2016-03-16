@@ -282,8 +282,8 @@ protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 public:
-                    ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
-                    ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
+                    ValueSet( vcl::Window* pParent, WinBits nWinStyle );
+                    ValueSet( vcl::Window* pParent, const ResId& rResId );
     virtual         ~ValueSet();
     virtual void    dispose() override;
 

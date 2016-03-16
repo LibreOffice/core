@@ -800,7 +800,7 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 }
 
 
-void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight)
+void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry)
 {
     Size aSz(GetOutputSizePixel());
     long nX = 0;
@@ -816,14 +816,6 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
             // no highlights for controls only items
             if (pEntry->mpControl)
             {
-                if (!bHighlight)
-                {
-                    ValueSet* pValueSet = dynamic_cast<ValueSet*>(pEntry->mpControl.get());
-                    if (pValueSet)
-                    {
-                        pValueSet->SetNoSelection();
-                    }
-                }
                 break;
             }
 
@@ -846,45 +838,38 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
                 Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
                 rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
                                                  ControlState::ENABLED, ImplControlValue(), OUString());
-                if (bHighlight && rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
+                if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
                 {
                     bDrawItemRect = false;
                     ControlState eState = ControlState::SELECTED | (pEntry->mbEnabled ? ControlState::ENABLED : ControlState::NONE);
                     if (!rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM, aItemRect,
                                                           eState, ImplControlValue(), OUString()))
                     {
-                        bDrawItemRect = bHighlight;
+                        bDrawItemRect = true;
                     }
                 }
                 else
                 {
-                    bDrawItemRect = bHighlight;
+                    bDrawItemRect = true;
                 }
                 rRenderContext.Pop();
             }
             if (bDrawItemRect)
             {
-                if (bHighlight)
+                if (pEntry->mbEnabled)
                 {
-                    if (pEntry->mbEnabled)
-                    {
-                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-                    }
-                    else
-                    {
-                        rRenderContext.SetFillColor();
-                        oldLineColor = rRenderContext.GetLineColor();
-                        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-                        bRestoreLineColor = true;
-                    }
+                    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
                 }
                 else
                 {
-                    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
+                    rRenderContext.SetFillColor();
+                    oldLineColor = rRenderContext.GetLineColor();
+                    rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
+                    bRestoreLineColor = true;
                 }
                 rRenderContext.DrawRect(aItemRect);
             }
-            implPaint(rRenderContext, pEntry, bHighlight);
+            implPaint(rRenderContext, pEntry, true/*bHighlight*/);
             if (bRestoreLineColor)
                 rRenderContext.SetLineColor(oldLineColor);
             break;
@@ -1410,7 +1395,7 @@ void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     implPaint(rRenderContext);
 
     if (mpImpl->mnHighlightedEntry != -1)
-        implHighlightEntry(rRenderContext, mpImpl->mnHighlightedEntry, true);
+        implHighlightEntry(rRenderContext, mpImpl->mnHighlightedEntry);
 }
 
 
