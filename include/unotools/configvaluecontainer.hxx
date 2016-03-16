@@ -92,7 +92,6 @@ namespace utl
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation,
-            const CVCFlags _nAccessFlags = CVCFlags::UPDATE_ACCESS | CVCFlags::LAZY_UPDATE,
             const sal_Int32 _nLevels = -1
         );
 
@@ -142,14 +141,12 @@ namespace utl
             @precond
                 The access must have been created for update access
 
-            @param _bCommit
-                If set to <TRUE/>, an automatic commit is done after the values have been synchronized.<br/>
-                If set to <FALSE/>, you must explicitly call <method>commit</method> to make your changes persistent.
+            You must explicitly call <method>commit</method> to make your changes persistent.
 
             @see read
             @see commit
         */
-        void    write( bool _bCommit = true );
+        void    write();
 
         /** commits any changes done
 

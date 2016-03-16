@@ -293,7 +293,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
 
     // PSName
     OUString aPSName( OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 ) );
-    m_nPSName = pProvider->getAtom( ATOM_PSNAME, aPSName, true );
+    m_nPSName = pProvider->getAtom( ATOM_PSNAME, aPSName );
 
     // family name (if not already set)
     OUString aFamily;
@@ -307,7 +307,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
             aFamily = aFamily.getToken( 0, '-', nIndex );
         }
         familyNameOverride( aPSName, aFamily );
-        m_nFamilyName = pProvider->getAtom( ATOM_FAMILYNAME, aFamily, true );
+        m_nFamilyName = pProvider->getAtom( ATOM_FAMILYNAME, aFamily );
     }
     else
         aFamily = pProvider->getString( ATOM_FAMILYNAME, m_nFamilyName );
@@ -1209,7 +1209,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         {
             if( !aNames.empty() )
             {
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, aNames.front(), true );
+                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, aNames.front() );
                 aNames.pop_front();
             }
             else
@@ -1222,14 +1222,14 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
                  if ( dotIndex == -1 )
                      dotIndex = pTTFontFile->m_aFontFile.getLength();
 
-                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, dotIndex ), aEncoding ), true );
+                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, dotIndex ), aEncoding ) );
             }
         }
         for( ::std::list< OUString >::iterator it = aNames.begin(); it != aNames.end(); ++it )
         {
             if( !it->isEmpty() )
             {
-                int nAlias = m_pAtoms->getAtom( ATOM_FAMILYNAME, *it, true );
+                int nAlias = m_pAtoms->getAtom( ATOM_FAMILYNAME, *it );
                 if( nAlias != pFont->m_nFamilyName )
                 {
                     std::list< int >::const_iterator al_it;
@@ -1250,7 +1250,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
             OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
             m_pAtoms->getString(ATOM_FAMILYNAME, pFont->m_nFamilyName); // poor font does not have a postscript name
 
-        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, sPSName, true );
+        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, sPSName );
 
         switch( aInfo.weight )
         {

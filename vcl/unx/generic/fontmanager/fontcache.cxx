@@ -347,8 +347,7 @@ void FontCache::read()
                     ;
 
                 pFont->m_nFamilyName = pAtoms->getAtom( ATOM_FAMILYNAME,
-                                                        OUString( pLine, nIndex, RTL_TEXTENCODING_UTF8 ),
-                                                        true );
+                                                        OUString( pLine, nIndex, RTL_TEXTENCODING_UTF8 ) );
                 while( nIndex < nLen )
                 {
                     sal_Int32 nLastIndex = nIndex+1;
@@ -357,7 +356,7 @@ void FontCache::read()
                     if( nIndex - nLastIndex )
                     {
                         OUString aAlias( pLine+nLastIndex, nIndex-nLastIndex, RTL_TEXTENCODING_UTF8 );
-                        pFont->m_aAliases.push_back( pAtoms->getAtom( ATOM_FAMILYNAME, aAlias, true ) );
+                        pFont->m_aAliases.push_back( pAtoms->getAtom( ATOM_FAMILYNAME, aAlias ) );
                     }
                 }
                 aStream.ReadLine( aLine );
@@ -384,7 +383,7 @@ void FontCache::read()
                     continue;
                 }
                 int nCollEntry      = atoi( pLine );
-                pFont->m_nPSName    = pAtoms->getAtom( ATOM_PSNAME, OUString( pLine + nTokenPos[1], nTokenPos[2]-nTokenPos[1]-1, RTL_TEXTENCODING_UTF8 ), true );
+                pFont->m_nPSName    = pAtoms->getAtom( ATOM_PSNAME, OUString( pLine + nTokenPos[1], nTokenPos[2]-nTokenPos[1]-1, RTL_TEXTENCODING_UTF8 ) );
                 pFont->m_eItalic    = (FontItalic)atoi( pLine+nTokenPos[2] );
                 pFont->m_eWeight    = (FontWeight)atoi( pLine+nTokenPos[3] );
                 pFont->m_eWidth     = (FontWidth)atoi( pLine+nTokenPos[4] );

@@ -212,10 +212,10 @@ namespace utl
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
-            const sal_Char* _pConfigLocation, const CVCFlags _nAccessFlags, const sal_Int32 _nLevels )
+            const sal_Char* _pConfigLocation, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
-        implConstruct( OUString::createFromAscii( _pConfigLocation ), _nAccessFlags, _nLevels );
+        implConstruct( OUString::createFromAscii( _pConfigLocation ), CVCFlags::UPDATE_ACCESS, _nLevels );
     }
 
     OConfigurationValueContainer::~OConfigurationValueContainer()
@@ -274,7 +274,7 @@ namespace utl
         );
     }
 
-    void OConfigurationValueContainer::write( bool _bCommit )
+    void OConfigurationValueContainer::write()
     {
         // collect the current values in the exchange locations
         std::for_each(
@@ -282,17 +282,13 @@ namespace utl
             m_pImpl->aAccessors.end(),
             UpdateToConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
         );
-
-        // commit the changes done (if requested)
-        if ( _bCommit )
-            commit( false );
     }
 
     void OConfigurationValueContainer::commit( bool _bWrite )
     {
         // write the current values in the exchange locations (if requested)
         if ( _bWrite )
-            write( false );
+            write();
 
         // commit the changes done
         m_pImpl->aConfigRoot.commit( );

@@ -148,7 +148,7 @@ namespace svxform
 #define TA( c )     &c, cppu::UnoType<decltype(c)>::get()
 
     FmSearchConfigItem::FmSearchConfigItem()
-        :OConfigurationValueContainer( ::comphelper::getProcessComponentContext(), m_aMutex, "/org.openoffice.Office.DataAccess/FormSearchOptions", CVCFlags::UPDATE_ACCESS | CVCFlags::LAZY_UPDATE, 2 )
+        :OConfigurationValueContainer( ::comphelper::getProcessComponentContext(), m_aMutex, "/org.openoffice.Office.DataAccess/FormSearchOptions", 2 )
     {
         // register our members so the data exchange with the node values is done automatically
 

@@ -1361,8 +1361,7 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
 }
 
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
-        sal_Int16 nDisplayDayOfWeek, bool bDayOfMonthWithLeadingZero,
-        sal_Int16 nDisplayMonth, bool bTwoDigitYear ) const
+        bool bTwoDigitYear ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     using namespace css::i18n;
@@ -1373,15 +1372,15 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     rCal.setGregorianDateTime( rDate );
     // day of week
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-    aStr += rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, nDisplayDayOfWeek );
+    aStr += rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, 1 );
     aStr += getLongDateDayOfWeekSep();
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-    pBuf = ImplAdd2UNum( aBuf, nVal, bDayOfMonthWithLeadingZero );
+    pBuf = ImplAdd2UNum( aBuf, nVal, false/*bDayOfMonthWithLeadingZero*/ );
     OUString aDay(aBuf, pBuf-aBuf);
     // month of year
     nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-    OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
+    OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, 1 ) );
     // year
     nVal = rCal.getValue( CalendarFieldIndex::YEAR );
     if ( bTwoDigitYear )
