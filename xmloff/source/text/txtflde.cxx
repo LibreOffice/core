@@ -1280,7 +1280,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             // adjust value given as integer in minutes
             ProcessDateTime(XML_TIME_ADJUST,
                             GetIntProperty(sPropertyAdjust, rPropSet),
-                            false, true, true);
+                            false, true);
         }
         ExportElement(XML_TIME, sPresentation);
         break;
@@ -1325,7 +1325,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             // adjust value given as number of days
             ProcessDateTime(XML_DATE_ADJUST,
                             GetIntProperty(sPropertyAdjust, rPropSet),
-                            true, true, true);
+                            true, true);
         }
         ExportElement(XML_DATE, sPresentation);
         break;
@@ -2669,7 +2669,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     if (!(bIsDuration && (nMinutes==0)))
     {
         ProcessDateTime(eName, (double)nMinutes / (double)(24*60),
-                        bIsDate, bIsDuration, true/*bOmitDurationIfZero*/);
+                        bIsDate, bIsDuration);
     }
 }
 
