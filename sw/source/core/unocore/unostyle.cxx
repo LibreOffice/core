@@ -2592,77 +2592,42 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
     pTargetFormat->ResetAllFormatAttr();
 }
 
-uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequence<OUString>& aPropertyNames)
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = aPropertyNames.getLength();
+    uno::Sequence<uno::Any> aRet(nCount);
+    if(!nCount)
+        return aRet;
+    SfxStyleSheetBase* pBase = GetStyleSheetBase();
+    if(!pBase)
+        throw uno::RuntimeException();
+    rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    const sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
 
-    uno::Sequence < uno::Any > aRet(nCount);
-
-    if(nCount)
+    const SfxItemSet &rSet = xStyle->GetItemSet(), *pParentSet = rSet.GetParent();
+    for(sal_Int32 i = 0; i < nCount; ++i)
     {
-        if(m_pBasePool)
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(aPropertyNames[i]);
+
+        if(!pEntry)
+            throw beans::UnknownPropertyException("Unknown property: " + aPropertyNames[i], static_cast < cppu::OWeakObject * >(this));
+        // these cannot be in an item set, especially not the
+        // parent set, so the default value is void
+        if (pEntry->nWID >= RES_UNKNOWNATR_END)
+            continue;
+
+        if(pParentSet)
         {
-            m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-            SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-            OSL_ENSURE(pBase, "Doesn't seem to be a style!");
-
-            if(pBase)
-            {
-                rtl::Reference< SwDocStyleSheet > xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
-                sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
-                switch(m_rEntry.m_eFamily)
-                {
-                    case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
-                    case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE; break;
-                    case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE; break;
-                    case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE; break;
-                    default: ;
-                }
-                const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-                const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-
-                const SfxItemSet &rSet = xStyle->GetItemSet(), *pParentSet = rSet.GetParent();
-                const OUString *pNames = aPropertyNames.getConstArray();
-                uno::Any *pRet = aRet.getArray();
-
-                for(sal_Int32 i = 0; i < nCount; i++)
-                {
-                    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[i]);
-
-                    if(!pEntry)
-                    {
-                        throw beans::UnknownPropertyException("Unknown property: " + pNames[i], static_cast < cppu::OWeakObject * >(this));
-                    }
-
-                    if (pEntry->nWID >= RES_UNKNOWNATR_END)
-                    {
-                        // these cannot be in an item set, especially not the
-                        // parent set, so the default value is void
-                        continue;
-                    }
-
-                    if(pParentSet)
-                    {
-                        aSwMapProvider.GetPropertySet(nPropSetId)->getPropertyValue(pNames[i], *pParentSet, pRet[i]);
-                    }
-                    else if(pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID))
-                    {
-                        const SfxPoolItem& rItem = rSet.GetPool()->GetDefaultItem(pEntry->nWID);
-
-                        rItem.QueryValue(pRet[i], pEntry->nMemberId);
-                    }
-                }
-            }
-            else
-            {
-                throw uno::RuntimeException();
-            }
+            aSwMapProvider.GetPropertySet(nPropSetId)->getPropertyValue(aPropertyNames[i], *pParentSet, aRet[i]);
         }
-        else
+        else if(pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID))
         {
-            throw uno::RuntimeException();
+            const SfxPoolItem& rItem = rSet.GetPool()->GetDefaultItem(pEntry->nWID);
+            rItem.QueryValue(aRet[i], pEntry->nMemberId);
         }
     }
     return aRet;
