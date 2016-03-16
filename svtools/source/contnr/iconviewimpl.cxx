@@ -511,13 +511,10 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
             if (!pNewCursor)
                 pNewCursor = pCursor;
 
-            if( pNewCursor )
-            {
-                aSelEng.CursorPosChanging( bShift, bMod1 );
-                SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
-                if( !IsEntryInView( pNewCursor ) )
-                    KeyUp( false );
-            }
+            aSelEng.CursorPosChanging( bShift, bMod1 );
+            SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
+            if( !IsEntryInView( pNewCursor ) )
+                KeyUp( false );
             break;
 
         case KEY_RIGHT:
