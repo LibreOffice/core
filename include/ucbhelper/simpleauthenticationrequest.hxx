@@ -86,8 +86,6 @@ public:
       * @param rPassword contains a password, if available (for instance from
       *        a previous try).
       * @param rAccount contains an account, if applicable.
-      * @param bAllowPersistentStoring specifies if the credentials should
-      *        be stored in the password container persistently
       * @param bAllowUseSystemCredentials specifies if requesting client is
       *        able to obtain and use system credentials for authentication
       */
@@ -97,7 +95,6 @@ public:
                                  const OUString & rUserName,
                                  const OUString & rPassword,
                                  const OUString & rAccount,
-                                 bool bAllowPersistentStoring,
                                  bool bAllowUseSystemCredentials,
                                  bool bAllowSessionStoring = true );
 
@@ -117,9 +114,6 @@ public:
                modifiable.
       * @param rPassword contains a password, if available (for instance from
       *        a previous try).
-      * @param eAccountType specifies whether an account is applicable and
-               modifiable.
-      * @param rAccount contains an account, if applicable.
       */
     SimpleAuthenticationRequest( const OUString & rURL,
                                  const OUString & rServerName,
@@ -128,10 +122,7 @@ public:
                                  EntityType eUserNameType,
                                  const OUString & rUserName,
                                  EntityType ePasswordType,
-                                 const OUString & rPassword,
-                                 EntityType eAccountType = ENTITY_NA,
-                                 const OUString & rAccount
-                                    = OUString() );
+                                 const OUString & rPassword );
 
     /**
       * This method returns the supplier for the missing authentication data,

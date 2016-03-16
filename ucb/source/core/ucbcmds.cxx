@@ -392,8 +392,7 @@ NameClashContinuation interactiveNameClashResolve(
         new ucbhelper::SimpleNameClashResolveRequest(
             rTargetURL,  // target folder URL
             rClashingName,   // clashing name
-            OUString(), // no proposal for new name
-            true /* bSupportsOverwriteData */ ) );
+            OUString() ) ); // no proposal for new name
 
     rException = xRequest->getRequest();
     if ( xEnv.is() )

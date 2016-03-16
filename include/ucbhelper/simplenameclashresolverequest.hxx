@@ -54,14 +54,10 @@ public:
       * @param rClashingName contains the clashing name.
       * @param rProposedNewName contains a proposal for the new name or is
       *        empty.
-      * @param bSupportsOverwriteData indicates whether an
-      *        InteractionReplaceExistingData continuation shall be supplied
-      *        with the interaction request.
       */
     SimpleNameClashResolveRequest( const OUString & rTargetFolderURL,
                                    const OUString & rClashingName,
-                                   const OUString & rProposedNewName,
-                                   bool bSupportsOverwriteData = true );
+                                   const OUString & rProposedNewName );
     /**
       * This method returns the new name that was supplied by the interaction
       * handler.

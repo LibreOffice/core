@@ -1359,8 +1359,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             // Adapt Additional Core Properties.
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
-                                         xNewId->getContentIdentifier(),
-                                         true );
+                                         xNewId->getContentIdentifier() );
         }
         else
         {

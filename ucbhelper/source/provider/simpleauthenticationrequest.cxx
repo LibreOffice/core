@@ -32,7 +32,6 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rUserName,
                                       const OUString & rPassword,
                                       const OUString & rAccount,
-                                      bool bAllowPersistentStoring,
                                       bool bAllowUseSystemCredentials,
                                       bool bAllowSessionStoring )
 {
@@ -61,7 +60,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        true,
        true,
        aRequest.HasAccount,
-       bAllowPersistentStoring,
+       true/*bAllowPersistentStoring*/,
        bAllowUseSystemCredentials,
        bAllowSessionStoring );
 }
@@ -75,9 +74,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       EntityType eUserNameType,
                                       const OUString & rUserName,
                                       EntityType ePasswordType,
-                                      const OUString & rPassword,
-                                      EntityType eAccountType,
-                                      const OUString & rAccount )
+                                      const OUString & rPassword)
 {
     // Fill request...
     ucb::URLAuthenticationRequest aRequest;
@@ -95,16 +92,14 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     aRequest.HasPassword    = ePasswordType != ENTITY_NA;
     if ( aRequest.HasPassword )
         aRequest.Password = rPassword;
-    aRequest.HasAccount     = eAccountType != ENTITY_NA;
-    if ( aRequest.HasAccount )
-        aRequest.Account = rAccount;
+    aRequest.HasAccount     = false;
     aRequest.URL = rURL;
 
     initialize(aRequest,
        eRealmType == ENTITY_MODIFY,
        eUserNameType == ENTITY_MODIFY,
        ePasswordType == ENTITY_MODIFY,
-       eAccountType == ENTITY_MODIFY,
+       false,
        true,
        false );
 }
@@ -152,8 +147,7 @@ void SimpleAuthenticationRequest::initialize(
                 ucb::RememberAuthentication_SESSION, // eDefaultRememberPasswordMode
                 aRememberModes, // rRememberAccountModes
                 ucb::RememberAuthentication_SESSION, // eDefaultRememberAccountMode
-                bAllowUseSystemCredentials, // bCanUseSystemCredentials,
-                false // bDefaultUseSystemCredentials
+                bAllowUseSystemCredentials // bCanUseSystemCredentials,
             );
 
     uno::Sequence<

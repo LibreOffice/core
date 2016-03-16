@@ -399,8 +399,6 @@ public:
       * @param bCanUseSystemCredentials indicates whether issuer of the
       *        authentication request can obtain and use system credentials
       *        for authentication.
-      * @param bDefaultUseSystemCredentials specifies the default system
-      *        credentials usage preferred by the requesting client
       *
       * @see css::ucb::AuthenticationRequest
       * @see css::ucb::RememberAuthentication
@@ -415,8 +413,7 @@ public:
                     const css::ucb::RememberAuthentication eDefaultRememberPasswordMode,
                     const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
                     const css::ucb::RememberAuthentication  eDefaultRememberAccountMode,
-                    bool bCanUseSystemCredentials,
-                    bool bDefaultUseSystemCredentials );
+                    bool bCanUseSystemCredentials );
 
     // XInterface
     virtual css::uno::Any SAL_CALL
@@ -568,8 +565,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
     const css::ucb::RememberAuthentication eDefaultRememberPasswordMode,
     const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
     const css::ucb::RememberAuthentication eDefaultRememberAccountMode,
-    bool bCanUseSystemCredentials,
-    bool bDefaultUseSystemCredentials )
+    bool bCanUseSystemCredentials )
 : InteractionContinuation( pRequest ),
   m_aRememberPasswordModes( rRememberPasswordModes ),
   m_aRememberAccountModes( rRememberAccountModes ),
@@ -582,8 +578,8 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bCanSetPassword( bCanSetPassword ),
   m_bCanSetAccount( bCanSetAccount ),
   m_bCanUseSystemCredentials( bCanUseSystemCredentials ),
-  m_bDefaultUseSystemCredentials( bDefaultUseSystemCredentials ),
-  m_bUseSystemCredentials( bDefaultUseSystemCredentials && bCanUseSystemCredentials )
+  m_bDefaultUseSystemCredentials( false ),
+  m_bUseSystemCredentials( false )
 {
 }
 
