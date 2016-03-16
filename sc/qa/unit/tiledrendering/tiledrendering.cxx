@@ -46,11 +46,13 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
 #if !defined(WNT) && !defined(MACOSX)
+    void testRowColumnSelections();
     void testSortAscendingDescending();
 #endif
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
+    CPPUNIT_TEST(testRowColumnSelections);
     CPPUNIT_TEST(testSortAscendingDescending);
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -149,6 +151,73 @@ void ScTiledRenderingTest::callbackImpl(int /*nType*/, const char* /*pPayload*/)
     //}
 }
 #endif
+
+void ScTiledRenderingTest::testRowColumnSelections()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("select-row-cols.ods");
+    //ScDocument* pDoc = pModelObj->GetDocument();
+
+    uno::Sequence<beans::PropertyValue> aArgs(2);
+
+    // Select the 5th row with no modifier
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int32>(5 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+    comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+    // Check if it is selected
+    OString aUsedMimeType;
+    OString aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    OString aExpected("1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
+
+    // Select the 10th row with shift modifier
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int32>(10 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+    comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+    // Check if all the rows from 5th to 10th get selected
+    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\n3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\n4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\n5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\n6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\n";
+    CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
+
+    // Select the 10th row with ctrl modifier
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int32>(13 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+    // When we copy this, we don't get anything useful, but we must not crash
+    // (used to happen)
+    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+
+    // TODO check that we really selected what we wanted here
+
+    // Select Column 5 with ctrl modifier
+    aArgs[0].Name = OUString::fromUtf8("Col");
+    aArgs[0].Value <<= static_cast<sal_Int32>(5 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
+
+    // When we copy this, we don't get anything useful, but we must not crash
+    // (used to happen)
+    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+
+    // TODO check that we really selected what we wanted here
+
+    // TODO: Add test for negative selection: .uno:SelectRow/Column on already
+    // selected row/column should deselect it.
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
 
 void ScTiledRenderingTest::testSortAscendingDescending()
 {
