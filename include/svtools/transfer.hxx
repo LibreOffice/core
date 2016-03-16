@@ -100,12 +100,11 @@ struct AcceptDropEvent
 
     AcceptDropEvent( sal_Int8 nAction,
                      const Point& rPosPixel,
-                     const css::datatransfer::dnd::DropTargetDragEvent& rDragEvent,
-                     bool bLeaving = false ) :
+                     const css::datatransfer::dnd::DropTargetDragEvent& rDragEvent ) :
         mnAction( nAction ),
         maPosPixel( rPosPixel ),
         maDragEvent( rDragEvent ),
-        mbLeaving( bLeaving ),
+        mbLeaving( false ),
         mbDefault( false ) {}
 };
 
@@ -256,8 +255,7 @@ public:
     void                CopyToClipboard( vcl::Window *pWindow ) const;
     void                CopyToSelection( vcl::Window *pWindow ) const;
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                   sal_Int32 nDragPointer = DND_POINTER_NONE,
-                                   sal_Int32 nDragImage = DND_IMAGE_NONE );
+                                   sal_Int32 nDragPointer = DND_POINTER_NONE );
 
     static void         ClearSelection( vcl::Window *pWindow );
 

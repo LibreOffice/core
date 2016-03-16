@@ -360,8 +360,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
         // user selects a menu entry than they may get only one notification that
         // a JRE is not selected.
         css::uno::ContextLayer layer(
-            new svt::JavaContext( css::uno::getCurrentContext(),
-                                  true) );
+            new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
         pControllerItem->dispatch( aURL, aArgs, css::uno::Reference < css::frame::XDispatchResultListener >() );
     }
@@ -376,7 +375,7 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
     {
 #if HAVE_FEATURE_JAVA
         // see comment for SfxOfficeDispatch::dispatch
-        css::uno::ContextLayer layer( new svt::JavaContext( css::uno::getCurrentContext(), true) );
+        css::uno::ContextLayer layer( new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
         pControllerItem->dispatch( aURL, aArgs, rListener );
     }

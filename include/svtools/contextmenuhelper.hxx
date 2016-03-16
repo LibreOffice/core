@@ -52,8 +52,7 @@ class SVT_DLLPUBLIC ContextMenuHelper
     public:
         // create context menu helper
         // ARGS: xFrame = frame defines the context of the context menu
-        //       bAutoRefresh = specifies that the context will be constant or not
-        ContextMenuHelper( const css::uno::Reference< css::frame::XFrame >& xFrame, bool bAutoRefresh=true );
+        ContextMenuHelper( const css::uno::Reference< css::frame::XFrame >& xFrame );
         ~ContextMenuHelper();
 
         // methods to complete a popup menu (set images, labels, enable/disable states)

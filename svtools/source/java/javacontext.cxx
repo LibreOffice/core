@@ -28,11 +28,10 @@ using namespace com::sun::star::task;
 namespace svt
 {
 
-JavaContext::JavaContext( const Reference< XCurrentContext > & ctx,
-                          bool bShowErrorsOnce)
+JavaContext::JavaContext( const Reference< XCurrentContext > & ctx)
     : m_aRefCount(0),
       m_xNextContext( ctx ),
-      m_bShowErrorsOnce(bShowErrorsOnce)
+      m_bShowErrorsOnce(true)
 {
 }
 

@@ -190,7 +190,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
     GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
 
     rGrfMgr.SetMaxCacheSize(totalCacheSize);
-    rGrfMgr.SetMaxObjCacheSize(std::min(totalCacheSize, objectCacheSize), true);
+    rGrfMgr.SetMaxObjCacheSize(std::min(totalCacheSize, objectCacheSize));
     rGrfMgr.SetCacheTimeout(objectReleaseTime);
 
     // OLECache

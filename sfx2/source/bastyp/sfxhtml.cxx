@@ -136,7 +136,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
             rOption.GetEnum( nShape, aAreaShapeOptEnums );
             break;
         case HTML_O_COORDS:
-            rOption.GetNumbers( aCoords, true );
+            rOption.GetNumbers( aCoords );
             break;
         case HTML_O_HREF:
             aHRef = INetURLObject::GetAbsURL( rBaseURL, rOption.GetString() );

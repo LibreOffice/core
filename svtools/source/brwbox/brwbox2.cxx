@@ -1915,7 +1915,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                     {
                         SetColumnPos( nColId, nNewPos );
                         ColumnMoved( nColId );
-                        MakeFieldVisible(GetCurRow(), nColId, true);
+                        MakeFieldVisible(GetCurRow(), nColId);
                         if ( bColumnSelected )
                             SelectColumnId(nColId);
                     }

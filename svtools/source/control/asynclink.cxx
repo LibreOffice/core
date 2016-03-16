@@ -33,10 +33,10 @@ void AsynchronLink::CreateMutex()
     if( !_pMutex ) _pMutex = new osl::Mutex;
 }
 
-void AsynchronLink::Call( void* pObj, bool bAllowDoubles, bool bUseTimer )
+void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
 {
 #ifdef DBG_UTIL
-    if ( bUseTimer || !_bInCall )
+    if ( !_bInCall )
         SAL_INFO( "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" );
 #endif
     if( _aLink.IsSet() )
@@ -46,23 +46,9 @@ void AsynchronLink::Call( void* pObj, bool bAllowDoubles, bool bUseTimer )
                     ( !_nEventId && ( !_pIdle || !_pIdle->IsActive() ) ),
                     "Schon ein Call unterwegs" );
         ClearPendingCall();
-        if( bUseTimer )
-        {
-            if( !_pIdle )
-            {
-                _pIdle = new Idle;
-                _pIdle->SetPriority( SchedulerPriority::HIGHEST );
-                _pIdle->SetIdleHdl( LINK(
-                    this, AsynchronLink, HandleCall_Idle) );
-            }
-            _pIdle->Start();
-        }
-        else
-        {
-            if( _pMutex ) _pMutex->acquire();
-            _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
-            if( _pMutex ) _pMutex->release();
-        }
+        if( _pMutex ) _pMutex->acquire();
+        _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
+        if( _pMutex ) _pMutex->release();
     }
 }
 
