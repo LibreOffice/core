@@ -65,9 +65,9 @@ sal_uLong GraphicManager::GetMaxCacheSize() const
     return mpCache->GetMaxDisplayCacheSize();
 }
 
-void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, bool bDestroyGreaterCached )
+void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize )
 {
-    mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, bDestroyGreaterCached );
+    mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, true/*bDestroyGreaterCached*/ );
 }
 
 void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )

@@ -672,9 +672,9 @@ private:
     SVT_DLLPRIVATE void ImplCalc();
     SVT_DLLPRIVATE void ImplFormat(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void ImplInitExtraField( bool bUpdate );
-    SVT_DLLPRIVATE void ImplInvertLines(vcl::RenderContext& rRenderContext, bool bErase = false);
+    SVT_DLLPRIVATE void ImplInvertLines(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE void ImplDrawExtra(vcl::RenderContext& rRenderContext, bool bPaint = false);
+    SVT_DLLPRIVATE void ImplDrawExtra(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void ImplUpdate( bool bMustCalc = false );
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;

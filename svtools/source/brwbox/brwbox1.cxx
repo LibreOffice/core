@@ -1899,15 +1899,13 @@ bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 void BrowseBox::MakeFieldVisible
 (
     long    nRow,       // line number of the field (starting with 0)
-    sal_uInt16  nColId,     // column ID of the field
-    bool    bComplete   // (== false), true => make visible in its entirety
+    sal_uInt16  nColId     // column ID of the field
 )
 
 /*  [Description]
 
     Makes visible the field described in 'nRow' and 'nColId' by scrolling
-    accordingly. If 'bComplete' is set, the field should become visible in its
-    entirety.
+    accordingly.
 
 */
 
@@ -1919,7 +1917,7 @@ void BrowseBox::MakeFieldVisible
         return;
 
     // is it visible already?
-    bool bVisible = IsFieldVisible( nRow, nColId, bComplete );
+    bool bVisible = IsFieldVisible( nRow, nColId, true/*bComplete*/ );
     if ( bVisible )
         return;
 
@@ -1934,9 +1932,7 @@ void BrowseBox::MakeFieldVisible
         ScrollColumns( nColPos - nFirstCol );
 
     // while outside on the right
-    while ( aDataRect.Right() < ( bComplete
-                ? aFieldRect.Right()
-                : aFieldRect.Left()+aFieldRect.GetWidth()/2 ) )
+    while ( aDataRect.Right() < aFieldRect.Right() )
     {
         // => scroll to the left
         if ( ScrollColumns( 1 ) != 1 )

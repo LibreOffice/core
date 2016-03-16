@@ -977,7 +977,7 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 
 
 void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceActions,
-                                    sal_Int32 nDnDPointer, sal_Int32 nDnDImage )
+                                    sal_Int32 nDnDPointer )
 
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
@@ -1010,7 +1010,7 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
             aEvt.DragOriginY = aPt.Y();
             aEvt.DragSource = xDragSource;
 
-            xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, nDnDImage, this, this );
+            xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, DND_IMAGE_NONE, this, this );
         }
         catch( const css::uno::Exception& )
         {

@@ -403,7 +403,7 @@ void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, 
     }
 }
 
-void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext, bool bErase)
+void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
 {
     // Position lines
     if (!mpData->pLines.empty() && mbActive && !mbDrag && !mbFormat && !(mnUpdateFlags & RULER_UPDATE_LINES) )
@@ -436,29 +436,26 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext, bool bErase)
                     aRect.Top()    = n;
                     aRect.Bottom() = n;
                 }
-                if (bErase)
+                Rectangle aTempRect = aRect;
+
+                if (mnWinStyle & WB_HORZ)
+                    aTempRect.Bottom() = RULER_OFF - 1;
+                else
+                    aTempRect.Right() = RULER_OFF - 1;
+
+                rRenderContext.Erase(aTempRect);
+
+                if (mnWinStyle & WB_HORZ)
                 {
-                    Rectangle aTempRect = aRect;
-
-                    if (mnWinStyle & WB_HORZ)
-                        aTempRect.Bottom() = RULER_OFF - 1;
-                    else
-                        aTempRect.Right() = RULER_OFF - 1;
-
-                    rRenderContext.Erase(aTempRect);
-
-                    if (mnWinStyle & WB_HORZ)
-                    {
-                        aTempRect.Bottom() = aRect.Bottom();
-                        aTempRect.Top()    = aTempRect.Bottom() - RULER_OFF + 1;
-                    }
-                    else
-                    {
-                        aTempRect.Right()  = aRect.Right();
-                        aTempRect.Left()   = aTempRect.Right() - RULER_OFF + 1;
-                    }
-                    rRenderContext.Erase(aTempRect);
+                    aTempRect.Bottom() = aRect.Bottom();
+                    aTempRect.Top()    = aTempRect.Bottom() - RULER_OFF + 1;
                 }
+                else
+                {
+                    aTempRect.Right()  = aRect.Right();
+                    aTempRect.Left()   = aTempRect.Right() - RULER_OFF + 1;
+                }
+                rRenderContext.Erase(aTempRect);
                 Invert(aRect);
             }
         }
@@ -1395,11 +1392,11 @@ void Ruler::ImplDraw(vcl::RenderContext& rRenderContext)
         rRenderContext.DrawOutDev(aOffPos, aVirDevSize, Point(), aVirDevSize, *maVirDev.get());
 
         // redraw positionlines
-        ImplInvertLines(rRenderContext, true);
+        ImplInvertLines(rRenderContext);
     }
 }
 
-void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext, bool bPaint)
+void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     Rectangle aRect = maExtraRect;
@@ -1410,18 +1407,10 @@ void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext, bool bPaint)
     aRect.Right()  -= 2;
     aRect.Bottom() -= 2;
 
-    if (!bPaint && !(mnExtraStyle & RULER_STYLE_HIGHLIGHT))
+    if (mnExtraStyle & RULER_STYLE_HIGHLIGHT)
     {
-        rRenderContext.SetFillColor(rStyleSettings.GetWorkspaceColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
         bEraseRect = true;
-    }
-    else
-    {
-        if (mnExtraStyle & RULER_STYLE_HIGHLIGHT)
-        {
-            rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
-            bEraseRect = true;
-        }
     }
 
     if (bEraseRect)
@@ -2145,7 +2134,7 @@ void Ruler::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     // consider extra field
     if (mnWinStyle & WB_EXTRAFIELD)
-        ImplDrawExtra(rRenderContext, true);
+        ImplDrawExtra(rRenderContext);
 }
 
 void Ruler::Resize()

@@ -622,7 +622,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     ImplDrawItem(rRenderContext, nPos, bHigh, bDrag, aRect, pRect, DrawFlags::NONE );
 }
 
-void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd, bool /*bDirect*/)
+void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
 {
     if (IsVisible() && IsUpdateMode())
     {
