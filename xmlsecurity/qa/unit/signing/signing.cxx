@@ -322,7 +322,7 @@ void SigningTest::testODFGood()
              static_cast<std::underlying_type<SignatureState>::type>(nActual))
          .getStr()),
         (nActual == SignatureState::NOTVALIDATED
-         || nActual == SignatureState::PARTIAL_OK));
+         || nActual == SignatureState::OK));
 }
 
 void SigningTest::testODFBroken()
