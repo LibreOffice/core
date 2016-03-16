@@ -607,7 +607,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl
 }
 
 void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& rRegion,
-                                    bool bChildren, bool bParent, bool bSiblings )
+                                    bool bChildren, bool bSiblings )
 {
     vcl::Region  aRegion( rSourceRect );
     if ( mpWindowImpl->mbWinRegion )
@@ -618,29 +618,26 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& r
     ImplCalcOverlapRegionOverlaps( aRegion, rRegion );
 
     // Parent-Boundaries
-    if ( bParent )
+    pWindow = this;
+    if ( !ImplIsOverlapWindow() )
     {
-        pWindow = this;
-        if ( !ImplIsOverlapWindow() )
-        {
-            pWindow = ImplGetParent();
-            do
-            {
-                aTempRegion = aRegion;
-                pWindow->ImplExcludeWindowRegion( aTempRegion );
-                rRegion.Union( aTempRegion );
-                if ( pWindow->ImplIsOverlapWindow() )
-                    break;
-                pWindow = pWindow->ImplGetParent();
-            }
-            while ( pWindow );
-        }
-        if ( pWindow && !pWindow->mpWindowImpl->mbFrame )
+        pWindow = ImplGetParent();
+        do
         {
             aTempRegion = aRegion;
-            aTempRegion.Exclude( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
+            pWindow->ImplExcludeWindowRegion( aTempRegion );
             rRegion.Union( aTempRegion );
+            if ( pWindow->ImplIsOverlapWindow() )
+                break;
+            pWindow = pWindow->ImplGetParent();
         }
+        while ( pWindow );
+    }
+    if ( pWindow && !pWindow->mpWindowImpl->mbFrame )
+    {
+        aTempRegion = aRegion;
+        aTempRegion.Exclude( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
+        rRegion.Union( aTempRegion );
     }
 
     // Siblings

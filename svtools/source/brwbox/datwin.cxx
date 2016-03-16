@@ -47,7 +47,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     {
         vcl::Window *pWin = static_cast<vcl::Window*>( &rDev );
         if( bPressed )
-            pWin->DrawSelectionBackground( aRect, 0, true, false, false );
+            pWin->DrawSelectionBackground( aRect, 0, true, false );
     }
     else
     {

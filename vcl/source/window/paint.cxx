@@ -564,7 +564,7 @@ PaintHelper::~PaintHelper()
 
     // #98943# draw toolbox selection
     if( !m_aSelectionRect.IsEmpty() )
-        m_pWindow->DrawSelectionBackground( m_aSelectionRect, 3, false, true, false );
+        m_pWindow->DrawSelectionBackground( m_aSelectionRect, 3, false, true );
 
     delete m_pChildRegion;
 }
@@ -945,18 +945,15 @@ void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, ValidateFlags 
     }
 }
 
-void Window::ImplValidate( ValidateFlags nFlags )
+void Window::ImplValidate()
 {
     // assemble region
     bool    bValidateAll = true;
-    ValidateFlags nOrgFlags = nFlags;
-    if ( !(nFlags & (ValidateFlags::Children | ValidateFlags::NoChildren)) )
-    {
-        if ( GetStyle() & WB_CLIPCHILDREN )
-            nFlags |= ValidateFlags::NoChildren;
-        else
-            nFlags |= ValidateFlags::Children;
-    }
+    ValidateFlags nFlags = ValidateFlags::NONE;
+    if ( GetStyle() & WB_CLIPCHILDREN )
+        nFlags |= ValidateFlags::NoChildren;
+    else
+        nFlags |= ValidateFlags::Children;
     if ( (nFlags & ValidateFlags::NoChildren) && mpWindowImpl->mpFirstChild )
         bValidateAll = false;
     if ( bValidateAll )
@@ -969,13 +966,8 @@ void Window::ImplValidate( ValidateFlags nFlags )
         if ( nFlags & ValidateFlags::NoChildren )
         {
             nFlags &= ~ValidateFlags::Children;
-            if ( nOrgFlags & ValidateFlags::NoChildren )
-                ImplClipAllChildren( aRegion );
-            else
-            {
-                if ( ImplClipChildren( aRegion ) )
-                    nFlags |= ValidateFlags::Children;
-            }
+            if ( ImplClipChildren( aRegion ) )
+                nFlags |= ValidateFlags::Children;
         }
         if ( !aRegion.IsEmpty() )
             ImplValidateFrameRegion( &aRegion, nFlags );
@@ -1223,7 +1215,7 @@ void Window::Validate()
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
-    ImplValidate( ValidateFlags::NONE );
+    ImplValidate();
 }
 
 bool Window::HasPaintEvent() const
@@ -1565,7 +1557,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( !(nFlags & ScrollFlags::NoInvalidate) )
     {
-        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, true, false );
+        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, false );
 
         // --- RTL ---
         // if the scrolling on the device is performed in the opposite direction
@@ -1646,7 +1638,7 @@ void Window::ImplScroll( const Rectangle& rRect,
             pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
-                                 SAL_COPYAREA_WINDOWINVALIDATE, this );
+                                 this );
         }
 #endif
         if ( mpWindowImpl->mpWinData )

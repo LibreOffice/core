@@ -292,9 +292,9 @@ sal_Int32 ImplEntryList::FindEntry( const void* pData ) const
     return nPos;
 }
 
-long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginIndex, long i_nBeginHeight ) const
+long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginIndex ) const
 {
-    long nHeight = i_nBeginHeight;
+    long nHeight = 0;
     sal_Int32 nStart = i_nEndIndex > i_nBeginIndex ? i_nBeginIndex : i_nEndIndex;
     sal_Int32 nStop  = i_nEndIndex > i_nBeginIndex ? i_nEndIndex : i_nBeginIndex;
     sal_Int32 nEntryCount = GetEntryCount();
@@ -1746,7 +1746,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
 }
 
-void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout)
+void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos)
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(nPos);
     if (!pEntry)
@@ -1760,7 +1760,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     Size aImgSz;
 
-    if (bDrawImage && mpEntryList->HasImages() && !bLayout)
+    if (bDrawImage && mpEntryList->HasImages())
     {
         Image aImage = mpEntryList->GetEntryImage(nPos);
         if (!!aImage)
@@ -1804,8 +1804,6 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
     if (bDrawText)
     {
-        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
-        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
         OUString aStr(mpEntryList->GetEntryText(nPos));
         if (!aStr.isEmpty())
         {
@@ -1823,9 +1821,6 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
                 aTextRect.Left() += nImageWidth + IMG_TXT_DISTANCE;
             }
 
-            if (bLayout)
-                mpControlData->mpLayoutData->m_aLineIndices.push_back(mpControlData->mpLayoutData->m_aDisplayText.getLength());
-
             // pb: #106948# explicit mirroring for calc
             if (mbMirroring)
             {
@@ -1841,25 +1836,22 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             if ((pEntry->mnFlags & ListBoxEntryFlags::DrawDisabled))
                 nDrawStyle |= DrawTextFlags::Disable;
 
-            rRenderContext.DrawText(aTextRect, aStr, nDrawStyle, pVector, pDisplayText);
+            rRenderContext.DrawText(aTextRect, aStr, nDrawStyle);
         }
     }
 
-    if (!bLayout)
+    if ((mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND) &&
+        ((nPos == mnSeparatorPos) || (nPos == mnSeparatorPos + 1)))
     {
-        if ((mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND) &&
-            ((nPos == mnSeparatorPos) || (nPos == mnSeparatorPos + 1)))
-        {
-            Color aOldLineColor(rRenderContext.GetLineColor());
-            rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
-            Point aStartPos(0, nY);
-            if (nPos == mnSeparatorPos)
-                aStartPos.Y() += pEntry->mnHeight - 1;
-            Point aEndPos(aStartPos);
-            aEndPos.X() = GetOutputSizePixel().Width();
-            rRenderContext.DrawLine(aStartPos, aEndPos);
-            rRenderContext.SetLineColor(aOldLineColor);
-        }
+        Color aOldLineColor(rRenderContext.GetLineColor());
+        rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
+        Point aStartPos(0, nY);
+        if (nPos == mnSeparatorPos)
+            aStartPos.Y() += pEntry->mnHeight - 1;
+        Point aEndPos(aStartPos);
+        aEndPos.X() = GetOutputSizePixel().Width();
+        rRenderContext.DrawLine(aStartPos, aEndPos);
+        rRenderContext.SetLineColor(aOldLineColor);
     }
 }
 

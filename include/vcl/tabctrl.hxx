@@ -71,7 +71,7 @@ private:
     SAL_DLLPRIVATE void         ImplActivateTabPage( bool bNext );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem,
-                                             const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false,
+                                             const Rectangle& rCurRect, bool bFirstInGroup = false,
                                              bool bLastInGroup = false, bool bIsCurrentItem = false);
     SAL_DLLPRIVATE void         ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     SAL_DLLPRIVATE void         ImplFreeLayoutData();

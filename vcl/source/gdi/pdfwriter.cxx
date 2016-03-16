@@ -445,9 +445,9 @@ PDFOutputStream::~PDFOutputStream()
 {
 }
 
-void PDFWriter::AddStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress )
+void PDFWriter::AddStream( const OUString& rMimeType, PDFOutputStream* pStream )
 {
-    xImplementation->addStream( rMimeType, pStream, bCompress );
+    xImplementation->addStream( rMimeType, pStream, false/*bCompress*/ );
 }
 
 std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()

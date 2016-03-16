@@ -202,7 +202,7 @@ public:
     }
     bool isFixedPageSize() const
     { return mbPapersizeFromSetup; }
-    PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps, bool bNoNUP );
+    PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
     void resetPaperToLastConfigured();
 };
 
@@ -855,7 +855,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
     return bRet;
 }
 
-PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps, bool bNoNUP )
+PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
 {
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mxPrinter->GetPaperSize();
@@ -890,7 +890,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     if( aSetSize.Width && aSetSize.Height )
     {
         Size aSetPaperSize( aSetSize.Width, aSetSize.Height );
-        Size aRealPaperSize( getRealPaperSize( aSetPaperSize, bNoNUP ) );
+        Size aRealPaperSize( getRealPaperSize( aSetPaperSize, true/*bNoNUP*/ ) );
         if( aRealPaperSize != aCurSize )
             aIsSize = aSetSize;
     }
@@ -900,7 +900,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         aPageSize.aSize.Width() = aIsSize.Width;
         aPageSize.aSize.Height() = aIsSize.Height;
 
-        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize, bNoNUP ) );
+        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize, true/*bNoNUP*/ ) );
         if( aRealPaperSize != aCurSize )
             mxPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
@@ -990,7 +990,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     mpImplData->mxPrinter->SetMapMode( aMapMode );
 
     // modify job setup if necessary
-    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm, true );
+    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm );
 
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );

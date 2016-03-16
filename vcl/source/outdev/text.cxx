@@ -2827,7 +2827,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
-                                        sal_Int32 nIndex, sal_Int32 nLen, bool bOptimize,
+                                        sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nTWidth, const long* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
@@ -2841,7 +2841,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     // get the basegfx polypolygon vector
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
-                         bOptimize, nTWidth, pDXArray ) )
+                         true/*bOptimize*/, nTWidth, pDXArray ) )
         return false;
 
     // convert to a tool polypolygon vector
@@ -2854,8 +2854,8 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 }
 
 bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString& rStr,
-                                       sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
-                                       bool bOptimize, sal_uLong nTWidth, const long* pDXArray ) const
+                                       sal_Int32 nLen,
+                                       sal_uLong nTWidth, const long* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2866,8 +2866,8 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
 
     // get the basegfx polypolygon vector
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
-    if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
-                         bOptimize, nTWidth, pDXArray ) )
+    if( !GetTextOutlines( aB2DPolyPolyVector, rStr, 0/*nBase*/, 0/*nIndex*/, nLen,
+                         true/*bOptimize*/, nTWidth, pDXArray ) )
         return false;
 
     // convert and merge into a tool polypolygon

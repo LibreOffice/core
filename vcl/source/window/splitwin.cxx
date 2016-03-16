@@ -1801,15 +1801,12 @@ void SplitWindow::ImplDrawButtonRect(vcl::RenderContext& rRenderContext, const R
     }
 }
 
-void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext, bool bInPaint)
+void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext)
 {
     if (mbAutoHide)
     {
         Rectangle aTempRect;
         ImplGetAutoHideRect( aTempRect );
-
-        if (!bInPaint)
-            rRenderContext.Erase( aTempRect );
 
         // load ImageListe, if not available
         ImplSVData* pSVData = ImplGetSVData();
@@ -1960,7 +1957,7 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectang
     rRenderContext.SetAntialiasing(nAA);
 }
 
-void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext, bool bInPaint)
+void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext)
 {
     if (mbFadeIn)
     {
@@ -1981,14 +1978,11 @@ void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext, bool bInPai
             break;
         }
 
-        if (!bInPaint)
-            rRenderContext.Erase(aTempRect);
-
         ImplDrawGrip(rRenderContext, aTempRect, (meAlign == WindowAlign::Top) || (meAlign == WindowAlign::Bottom), bLeft);
     }
 }
 
-void SplitWindow::ImplDrawFadeOut(vcl::RenderContext& rRenderContext, bool bInPaint)
+void SplitWindow::ImplDrawFadeOut(vcl::RenderContext& rRenderContext)
 {
     if (mbFadeOut)
     {
@@ -2008,9 +2002,6 @@ void SplitWindow::ImplDrawFadeOut(vcl::RenderContext& rRenderContext, bool bInPa
             bLeft = true;
             break;
         }
-
-        if (!bInPaint)
-            rRenderContext.Erase(aTempRect);
 
         ImplDrawGrip(rRenderContext, aTempRect, (meAlign == WindowAlign::Top) || (meAlign == WindowAlign::Bottom), bLeft);
     }
@@ -2534,9 +2525,9 @@ void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         ImplDrawBorder(rRenderContext);
 
     ImplDrawBorderLine(rRenderContext);
-    ImplDrawFadeOut(rRenderContext, true);
-    ImplDrawFadeIn(rRenderContext, true);
-    ImplDrawAutoHide(rRenderContext, true);
+    ImplDrawFadeOut(rRenderContext);
+    ImplDrawFadeIn(rRenderContext);
+    ImplDrawAutoHide(rRenderContext);
 
     // draw FrameSet-backgrounds
     ImplDrawBack(rRenderContext, mpMainSet);

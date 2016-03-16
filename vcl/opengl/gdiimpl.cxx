@@ -915,7 +915,7 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
     }
 }
 
-bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA)
+bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth)
 {
     if( nColor == SALCOLOR_NONE )
         return false;
@@ -924,8 +924,8 @@ bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLflo
     mpProgram->SetColorf("color", nColor, fTransparency);
     mpProgram->SetUniform1f("line_width", fLineWidth);
     // The width of the feather - area we make lineary transparent in VS.
-    // Good AA value is 0.5, 0.0 means the no AA will be done.
-    mpProgram->SetUniform1f("feather", bUseAA ? 0.5f : 0.0f);
+    // Good AA value is 0.5
+    mpProgram->SetUniform1f("feather", 0.5f);
     // We need blending or AA won't work correctly
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 #ifdef DBG_UTIL
@@ -1855,7 +1855,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
 
     PreDraw(XOROption::IMPLEMENT_XOR);
 
-    if (UseLine(mnLineColor, 0.0f, fLineWidth, true))
+    if (UseLine(mnLineColor, 0.0f, fLineWidth))
     {
         basegfx::B2DPolygon aPolygon(rPolygon);
 

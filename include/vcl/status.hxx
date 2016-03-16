@@ -86,12 +86,10 @@ private:
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE bool      ImplIsItemUpdate();
 
-    SAL_DLLPRIVATE void      ImplDrawText(vcl::RenderContext& rRenderContext, bool bOffScreen,
-                                          long nOldTextWidth);
+    SAL_DLLPRIVATE void      ImplDrawText(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void      ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen,
-                                          sal_uInt16 nPos, bool bDrawText, bool bDrawFrame);
-    SAL_DLLPRIVATE void      ImplDrawProgress(vcl::RenderContext& rRenderContext, bool bPaint,
-                                              sal_uInt16 nOldPerc, sal_uInt16 nNewPerc);
+                                          sal_uInt16 nPos);
+    SAL_DLLPRIVATE void      ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nNewPerc);
     SAL_DLLPRIVATE void      ImplCalcProgressRect();
     SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;

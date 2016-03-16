@@ -113,7 +113,7 @@ public:
     bool UseSolid( SalColor nColor );
     bool UseSolidAA( SalColor nColor, double fTransparency );
     bool UseSolidAA( SalColor nColor );
-    bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
+    bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth);
     bool UseInvert50();
     bool UseInvert(SalInvert nFlags);
 

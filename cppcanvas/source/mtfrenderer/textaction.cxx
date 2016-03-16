@@ -1934,7 +1934,7 @@ namespace cppcanvas
                                                                  static_cast<sal_uInt16>(nStartPos),
                                                                  static_cast<sal_uInt16>(nStartPos),
                                                                  static_cast<sal_uInt16>(nLen),
-                                                                 true, 0, pDXArray ) );
+                                                                 0, pDXArray ) );
                 rVDev.SetFont(aOrigFont);
 
                 if( !bHaveOutlines )

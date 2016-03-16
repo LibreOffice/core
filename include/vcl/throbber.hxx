@@ -46,7 +46,7 @@ public:
     };
 
 public:
-    Throbber(vcl::Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet = IMAGES_AUTO);
+    Throbber(vcl::Window* i_parentWindow, WinBits i_style);
     virtual ~Throbber();
     virtual void dispose() override;
 

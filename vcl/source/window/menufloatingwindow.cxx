@@ -758,7 +758,7 @@ void MenuFloatingWindow::InvalidateItem(sal_uInt16 nPos)
     }
 }
 
-void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight)
+void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos)
 {
     if (!pMenu)
         return;
@@ -803,8 +803,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                     MenupopupValue aVal(pMenu->nTextPos-GUTTERBORDER, aItemRect);
                     rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
                                                      aCtrlRect, ControlState::ENABLED, aVal, OUString());
-                    if (bHighlight &&
-                        rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
+                    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
                     {
                         bDrawItemRect = false;
                         if (!rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM, aItemRect,
@@ -813,33 +812,28 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                                                                                             : ControlState::NONE),
                                                               aVal, OUString()))
                         {
-                            bDrawItemRect = bHighlight;
+                            bDrawItemRect = true;
                         }
                     }
                     else
-                        bDrawItemRect = bHighlight;
+                        bDrawItemRect = true;
                     rRenderContext.Pop();
                 }
                 if (bDrawItemRect)
                 {
-                    if (bHighlight)
-                    {
-                        if (pData->bEnabled)
-                            rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-                        else
-                        {
-                            rRenderContext.SetFillColor();
-                            oldLineColor = rRenderContext.GetLineColor();
-                            rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-                            bRestoreLineColor = true;
-                        }
-                    }
+                    if (pData->bEnabled)
+                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
                     else
-                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
+                    {
+                        rRenderContext.SetFillColor();
+                        oldLineColor = rRenderContext.GetLineColor();
+                        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
+                        bRestoreLineColor = true;
+                    }
 
                     rRenderContext.DrawRect(aItemRect);
                 }
-                pMenu->ImplPaint(rRenderContext, nScrollerHeight, nStartY, pData, bHighlight);
+                pMenu->ImplPaint(rRenderContext, nScrollerHeight, nStartY, pData, true/*bHighlight*/);
                 if (bRestoreLineColor)
                     rRenderContext.SetLineColor(oldLineColor);
             }
@@ -1164,7 +1158,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
     pMenu->ImplPaint(rRenderContext, nScrollerHeight, ImplGetStartY());
     if (nHighlightedItem != ITEMPOS_INVALID)
-        RenderHighlightItem(rRenderContext, nHighlightedItem, true);
+        RenderHighlightItem(rRenderContext, nHighlightedItem);
 
     rRenderContext.Pop();
 }

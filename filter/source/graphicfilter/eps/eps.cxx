@@ -2042,7 +2042,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         bool bOldLineColor = bLineColor;
         bLineColor = false;
         std::vector<tools::PolyPolygon> aPolyPolyVec;
-        if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, true, nWidth, pDXArry ) )
+        if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, nWidth, pDXArry ) )
         {
             // always adjust text position to match baseline alignment
             ImplWriteLine( "pum" );

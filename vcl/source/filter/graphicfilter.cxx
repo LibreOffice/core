@@ -1764,7 +1764,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         if( nStatus == GRFILTER_OK )
         {
-            rGraphic.SetLink( GfxLink( pGraphicContent, nGraphicContentSize, eLinkType, true ) );
+            rGraphic.SetLink( GfxLink( pGraphicContent, nGraphicContentSize, eLinkType ) );
             bGraphicContentOwned = false; //ownership passed to the GfxLink
         }
     }

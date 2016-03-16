@@ -24,22 +24,8 @@
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 
-// Button combinations for ShowNativeMessageBox
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK                 = 0;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL          = 1;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE = 2;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL      = 3;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO             = 4;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL       = 5;
-
 // Button identifier for ShowNativeMessageBox
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK     = 1;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL = 2;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT  = 3;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY  = 4;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE = 5;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES    = 6;
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO     = 7;
 
 class VCL_PLUGIN_PUBLIC SalSystem
 {
@@ -88,29 +74,12 @@ public:
         @param  rMessage
         The message to be shown by the dialog box.
 
-        @param  nButtonCombination
-        Specify which button combination the message box should display.
-        See button combinations above.
-
-        @param  nDefaultButton
-        Specifies which button has the focus initially.
-        See button identifiers above.
-        The effect of specifying a button that doesn't belong
-        to the specified button combination is undefined.
-
-        @param  bUseResources
-        If false, assume initialization of the application failed early and do
-        not try to access any resources.
-
         @returns the identifier of the button that was pressed by the user.
         See button identifier above. If the function fails the
         return value is 0.
     */
     virtual int ShowNativeMessageBox( const OUString& rTitle,
-                                      const OUString& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton,
-                                      bool bUseResources ) = 0;
+                                      const OUString& rMessage ) = 0;
 
 };
 

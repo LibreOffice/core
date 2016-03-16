@@ -60,9 +60,7 @@ public:
     virtual unsigned int GetDisplayBuiltInScreen() override;
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen )  override;
     virtual int ShowNativeMessageBox( const OUString& rTitle,
-                                      const OUString& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton, bool bUseResources)  override;
+                                      const OUString& rMessage)  override;
     bool initMonitors();
     // discards monitorinfo; used by WM_DISPLAYCHANGED handler
     void clearMonitors();

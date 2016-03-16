@@ -504,7 +504,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        if( aAnim.ReduceColors( nPosterCount, BMP_REDUCE_POPULAR ) )
+        if( aAnim.ReduceColors( nPosterCount ) )
             aRet = aAnim;
     }
     else

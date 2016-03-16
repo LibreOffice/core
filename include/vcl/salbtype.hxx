@@ -226,12 +226,11 @@ public:
 
     ColorMask(const ColorMaskElement& rRedMask = ColorMaskElement(),
               const ColorMaskElement& rGreenMask = ColorMaskElement(),
-              const ColorMaskElement& rBlueMask = ColorMaskElement(),
-              sal_uInt32 nAlphaChannel = 0)
+              const ColorMaskElement& rBlueMask = ColorMaskElement())
         : maR(rRedMask)
         , maG(rGreenMask)
         , maB(rBlueMask)
-        , mnAlphaChannel(nAlphaChannel)
+        , mnAlphaChannel(0)
     {
     }
 
