@@ -997,7 +997,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bCancel = false;
 
             // in case of creating a single resulting file this has to be created here
-            SwView* pTargetView = rMergeDescriptor.pMailMergeConfigItem->GetTargetView();
+            SwView* pTargetView = rMergeDescriptor.pMailMergeConfigItem ? rMergeDescriptor.pMailMergeConfigItem->GetTargetView() : nullptr;
             SwWrtShell* pTargetShell = nullptr;
             SwDoc* pTargetDoc = nullptr;
             SfxObjectShellRef xTargetDocShell = nullptr;
