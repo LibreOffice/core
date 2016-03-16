@@ -145,7 +145,7 @@
       <FormatCode>DD-MM-YYYY HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
-      <FormatCode>Standard</FormatCode>
+      <FormatCode>General</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER"  formatindex="1">
       <FormatCode>0</FormatCode>

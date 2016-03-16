@@ -145,7 +145,7 @@
       <FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
-      <FormatCode>Standard</FormatCode>
+      <FormatCode>General</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER"  formatindex="1">
       <FormatCode>0</FormatCode>
@@ -262,7 +262,7 @@
       <FormatCode>[NatNum1]0.00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="50">
-      <FormatCode>[NatNum1]Standard</FormatCode>
+      <FormatCode>[NatNum1]General</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey8" default="false" type="short" usage="FIXED_NUMBER"  formatindex="73">
       <FormatCode>[NatNum1]0</FormatCode>
