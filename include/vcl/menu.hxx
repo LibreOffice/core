@@ -413,7 +413,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     bool mbFloatBtnVisible : 1;
     bool mbHideBtnVisible : 1;
     bool mbDisplayable : 1;
-    SystemWindow* mpAssociatedSystemWindow;
+    VclPtr<SystemWindow> mxAssociatedSystemWindow;
 
     friend class Application;
     friend class Menu;

@@ -2494,9 +2494,9 @@ MenuBar::MenuBar(SystemWindow* pAssociatedSystemWindow)
       mbFloatBtnVisible(false),
       mbHideBtnVisible(false),
       mbDisplayable(true),
-      mpAssociatedSystemWindow(pAssociatedSystemWindow)
+      mxAssociatedSystemWindow(pAssociatedSystemWindow)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this, mpAssociatedSystemWindow);
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this, mxAssociatedSystemWindow.get());
 }
 
 MenuBar::MenuBar( const MenuBar& rMenu )
@@ -2506,7 +2506,7 @@ MenuBar::MenuBar( const MenuBar& rMenu )
       mbHideBtnVisible(false),
       mbDisplayable(true)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this, mpAssociatedSystemWindow);
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this, mxAssociatedSystemWindow.get());
     *this = rMenu;
 }
 
