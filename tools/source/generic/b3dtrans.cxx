@@ -339,8 +339,7 @@ void B3dTransformationSet::SetRatio(double fNew)
     }
 }
 
-void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, double fT,
-                                              bool bBroadCastChange)
+void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, double fT)
 {
     if(fL != mfLeftBound || fR != mfRightBound || fB != mfBottomBound || fT != mfTopBound)
     {
@@ -354,8 +353,7 @@ void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, d
         mbWorldToViewValid = false;
 
         // Broadcast changes
-        if(bBroadCastChange)
-            DeviceRectangleChange();
+        DeviceRectangleChange();
     }
 }
 
@@ -444,14 +442,14 @@ void B3dViewport::CalcOrientation()
 
 B3dCamera::B3dCamera(
     const basegfx::B3DPoint& rPos, const basegfx::B3DVector& rLkAt,
-    double fFocLen, double fBnkAng, bool bUseFocLen)
+    double fFocLen, double fBnkAng)
 :   B3dViewport(),
     aPosition(rPos),
     aCorrectedPosition(rPos),
     aLookAt(rLkAt),
     fFocalLength(fFocLen),
     fBankAngle(fBnkAng),
-    bUseFocalLength(bUseFocLen)
+    bUseFocalLength(false)
 {
     CalcNewViewportValues();
 }

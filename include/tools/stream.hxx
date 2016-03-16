@@ -690,8 +690,9 @@ public:
     const void*     GetData() { Flush(); return pBuf; }
 
     void*           SwitchBuffer();
+    // the buffer is not owned by this class
     void            SetBuffer( void* pBuf, sal_Size nSize,
-                               bool bOwnsData=true, sal_Size nEOF=0 );
+                               sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }

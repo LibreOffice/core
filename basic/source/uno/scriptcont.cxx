@@ -523,7 +523,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
 
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
-                                            INetURLObject::LAST_SEGMENT, true,
+                                            INetURLObject::LAST_SEGMENT,
                                             INetURLObject::ENCODE_ALL );
                 if( bKillUncryptedFiles )
                 {
@@ -720,7 +720,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
             if( bExport )
             {
                 INetURLObject aInetObj( aTargetURL );
-                aInetObj.insertName( aName, true, INetURLObject::LAST_SEGMENT, true,
+                aInetObj.insertName( aName, true, INetURLObject::LAST_SEGMENT,
                                      INetURLObject::ENCODE_ALL );
                 aLibDirPath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -740,7 +740,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
-                                            INetURLObject::LAST_SEGMENT, true,
+                                            INetURLObject::LAST_SEGMENT,
                                             INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( "pba" );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -1038,7 +1038,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
 
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
-                    INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
+                    INetURLObject::LAST_SEGMENT, INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( "pba" );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 

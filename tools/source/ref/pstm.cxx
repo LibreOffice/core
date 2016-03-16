@@ -51,11 +51,11 @@ SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
              (cf. <SvPersistStream::SetStream>).
     @see SvPersistStream::SetStream
 */
-SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, Index nStartIdxP )
+SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream )
     : rClassMgr( rMgr )
     , pStm( pStream )
-    , aPUIdx( nStartIdxP )
-    , nStartIdx( nStartIdxP )
+    , aPUIdx( 1 )
+    , nStartIdx( 1 )
     , pRefStm( nullptr )
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
@@ -446,8 +446,7 @@ SvPersistStream& SvPersistStream::WritePointer
 
 void SvPersistStream::ReadObj
 (
-    SvPersistBase * &   rpObj,
-    bool                bRegister
+    SvPersistBase * &   rpObj
 )
 {
     sal_uInt8   nHdr;
@@ -492,15 +491,12 @@ void SvPersistStream::ReadObj
             // Save reference
             rpObj->AddFirstRef();
 
-            if( bRegister )
-            {
-                // insert into table
-                const Index nNewId = aPUIdx.Insert( rpObj );
-                // in order to restore state after saving
-                aPTable[ rpObj ] = nNewId;
-                DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
-                            "read write id conflict: not the same" );
-            }
+            // insert into table
+            const Index nNewId = aPUIdx.Insert( rpObj );
+            // in order to restore state after saving
+            aPTable[ rpObj ] = nNewId;
+            DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
+                        "read write id conflict: not the same" );
             rpObj->Load( *this );
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != Tell() )
@@ -529,7 +525,7 @@ SvPersistStream& SvPersistStream::ReadPointer
     SvPersistBase * & rpObj
 )
 {
-    ReadObj( rpObj, true );
+    ReadObj( rpObj );
     return *this;
 }
 

@@ -393,11 +393,11 @@ void ZCodec::UpdateCRC ( sal_uInt8* pSource, long nDatSize)
     mnCRC = rtl_crc32( mnCRC, pSource, nDatSize );
 }
 
-bool ZCodec::AttemptDecompression(SvStream& rIStm, SvStream& rOStm, bool updateCrc, bool gzLib)
+bool ZCodec::AttemptDecompression(SvStream& rIStm, SvStream& rOStm)
 {
     assert(meState == STATE_INIT);
     sal_uLong nStreamPos = rIStm.Tell();
-    BeginCompression(ZCODEC_DEFAULT_COMPRESSION, updateCrc, gzLib);
+    BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false/*updateCrc*/, true/*gzLib*/);
     InitDecompress(rIStm);
     EndCompression();
     if ( !mbStatus || rIStm.GetError() )
@@ -406,7 +406,7 @@ bool ZCodec::AttemptDecompression(SvStream& rIStm, SvStream& rOStm, bool updateC
         return false;
     }
     rIStm.Seek(nStreamPos);
-    BeginCompression(ZCODEC_DEFAULT_COMPRESSION, updateCrc, gzLib);
+    BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false/*updateCrc*/, true/*gzLib*/);
     Decompress(rIStm, rOStm);
     EndCompression();
     if( !mbStatus || rIStm.GetError() || rOStm.GetError() )

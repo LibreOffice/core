@@ -464,11 +464,11 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
     INetURLObject aTemplateObj( pImp->GetRootURL() );
 
     aTemplateObj.insertName( aGroupName, false,
-                        INetURLObject::LAST_SEGMENT, true,
+                        INetURLObject::LAST_SEGMENT,
                         INetURLObject::ENCODE_ALL );
 
     aTemplateObj.insertName( aTitle, false,
-                        INetURLObject::LAST_SEGMENT, true,
+                        INetURLObject::LAST_SEGMENT,
                         INetURLObject::ENCODE_ALL );
 
 
@@ -848,7 +848,7 @@ bool SfxDocumentTemplates::CopyFrom
     {
         INetURLObject aTemplObj( pTargetRgn->GetHierarchyURL() );
         aTemplObj.insertName( aTitle, false,
-                              INetURLObject::LAST_SEGMENT, true,
+                              INetURLObject::LAST_SEGMENT,
                               INetURLObject::ENCODE_ALL );
         OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -1257,7 +1257,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
         INetURLObject aTemplateObj( GetParent()->GetHierarchyURL() );
 
         aTemplateObj.insertName( GetTitle(), false,
-                     INetURLObject::LAST_SEGMENT, true,
+                     INetURLObject::LAST_SEGMENT,
                      INetURLObject::ENCODE_ALL );
 
         maOwnURL = aTemplateObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -1374,7 +1374,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
 {
     INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,
-                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::LAST_SEGMENT,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -1414,7 +1414,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
         INetURLObject aRegionObj( GetParent()->GetRootURL() );
 
         aRegionObj.insertName( GetTitle(), false,
-                     INetURLObject::LAST_SEGMENT, true,
+                     INetURLObject::LAST_SEGMENT,
                      INetURLObject::ENCODE_ALL );
 
         maOwnURL = aRegionObj.GetMainURL( INetURLObject::NO_DECODE );
