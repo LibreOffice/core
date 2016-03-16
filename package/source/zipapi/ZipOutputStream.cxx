@@ -93,6 +93,82 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
     m_pCurrentEntry = nullptr;
 }
 
+void ZipOutputStream::consumeScheduledThreadEntry(ZipOutputEntry* pCandidate)
+{
+    //Any exceptions thrown in the threads were caught and stored for now
+    ::css::uno::Any aCaughtException(pCandidate->getParallelDeflateException());
+    if (aCaughtException.hasValue())
+        ::cppu::throwException(aCaughtException);
+
+    writeLOC(pCandidate->getZipEntry(), pCandidate->isEncrypt());
+
+    sal_Int32 nRead;
+    uno::Sequence< sal_Int8 > aSequence(n_ConstBufferSize);
+    uno::Reference< io::XInputStream > xInput = pCandidate->getData();
+    do
+    {
+        nRead = xInput->readBytes(aSequence, n_ConstBufferSize);
+        if (nRead < n_ConstBufferSize)
+            aSequence.realloc(nRead);
+
+        rawWrite(aSequence);
+    }
+    while (nRead == n_ConstBufferSize);
+    xInput.clear();
+
+    rawCloseEntry(pCandidate->isEncrypt());
+
+    pCandidate->getZipPackageStream()->successfullyWritten(pCandidate->getZipEntry());
+    pCandidate->deleteBufferFile();
+    delete pCandidate;
+}
+
+void ZipOutputStream::consumeFinishedScheduledThreadEntries()
+{
+    std::vector< ZipOutputEntry* > aNonFinishedEntries;
+
+    for(auto aIter = m_aEntries.begin(); aIter != m_aEntries.end(); ++aIter)
+    {
+        if((*aIter)->isFinished())
+        {
+            consumeScheduledThreadEntry(*aIter);
+        }
+        else
+        {
+            aNonFinishedEntries.push_back(*aIter);
+        }
+    }
+
+    if(!aNonFinishedEntries.empty())
+    {
+        m_aEntries = aNonFinishedEntries;
+    }
+}
+
+void ZipOutputStream::consumeAllScheduledThreadEntries()
+{
+    while(!m_aEntries.empty())
+    {
+        ZipOutputEntry* pCandidate = m_aEntries.back();
+        m_aEntries.pop_back();
+        consumeScheduledThreadEntry(pCandidate);
+    }
+}
+
+void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThreads, sal_Int32 nWaitTimeInTenthSeconds)
+{
+    while(m_aEntries.size() > nThreads)
+    {
+        consumeFinishedScheduledThreadEntries();
+
+        if(m_aEntries.size() > nThreads)
+        {
+            const TimeValue aTimeValue(0, 100000 * nWaitTimeInTenthSeconds);
+            osl_waitThread(&aTimeValue);
+        }
+    }
+}
+
 void ZipOutputStream::finish()
     throw(IOException, RuntimeException)
 {
@@ -100,35 +176,9 @@ void ZipOutputStream::finish()
 
     // Wait for all threads to finish & write
     m_rSharedThreadPool.waitUntilEmpty();
-    for (size_t i = 0; i < m_aEntries.size(); i++)
-    {
-        //Any exceptions thrown in the threads were caught and stored for now
-        ::css::uno::Any aCaughtException(m_aEntries[i]->getParallelDeflateException());
-        if (aCaughtException.hasValue())
-            ::cppu::throwException(aCaughtException);
 
-        writeLOC(m_aEntries[i]->getZipEntry(), m_aEntries[i]->isEncrypt());
-
-        sal_Int32 nRead;
-        uno::Sequence< sal_Int8 > aSequence(n_ConstBufferSize);
-        uno::Reference< io::XInputStream > xInput = m_aEntries[i]->getData();
-        do
-        {
-            nRead = xInput->readBytes(aSequence, n_ConstBufferSize);
-            if (nRead < n_ConstBufferSize)
-                aSequence.realloc(nRead);
-
-            rawWrite(aSequence);
-        }
-        while (nRead == n_ConstBufferSize);
-        xInput.clear();
-
-        rawCloseEntry(m_aEntries[i]->isEncrypt());
-
-        m_aEntries[i]->getZipPackageStream()->successfullyWritten(m_aEntries[i]->getZipEntry());
-        m_aEntries[i]->deleteBufferFile();
-        delete m_aEntries[i];
-    }
+    // consume all processed entries
+    consumeAllScheduledThreadEntries();
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
     for (size_t i = 0; i < m_aZipList.size(); i++)
