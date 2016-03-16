@@ -9,8 +9,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
-#include "mar_private.h"
-#include "mar.h"
+#include <onlineupdate/mar_private.h>
+#include <onlineupdate/mar.h>
 
 #ifdef _WIN32
 #include <io.h>

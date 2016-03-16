@@ -8,8 +8,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mar_private.h"
-#include "mar.h"
+#include <onlineupdate/mar_private.h>
+#include <onlineupdate/mar.h>
 
 #ifdef _WIN32
 #include <winsock2.h>

@@ -13,10 +13,10 @@
 #define MOZ_DUMP_ASSERTION_STACK
 #endif
 
-#include "mozilla/Attributes.h"
-#include "mozilla/Compiler.h"
-#include "mozilla/Likely.h"
-#include "mozilla/MacroArgs.h"
+#include "Attributes.h"
+#include "Compiler.h"
+#include "Likely.h"
+#include "MacroArgs.h"
 #ifdef MOZ_DUMP_ASSERTION_STACK
 #include "nsTraceRefcnt.h"
 #endif
@@ -309,7 +309,7 @@ __declspec(noreturn) __inline void MOZ_NoReturn() {}
  */
 
 #ifdef __cplusplus
-#  include "mozilla/TypeTraits.h"
+#  include "TypeTraits.h"
 namespace mozilla {
 namespace detail {
 

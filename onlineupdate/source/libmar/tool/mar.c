@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mar.h"
-#include "mar_cmdline.h"
+#include <onlineupdate/mar.h>
+#include <onlineupdate/mar_cmdline.h>
 
 #ifdef _WIN32
 #include <windows.h>
