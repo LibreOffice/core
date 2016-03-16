@@ -1819,7 +1819,7 @@ void CustomAnimationPane::onAdd()
             ParagraphTarget aParaTarget;
             aParaTarget.Shape = xShape;
 
-            std::list< sal_Int16 >::iterator aIter( aParaList.begin() );                for( ; aIter != aParaList.end(); ++aIter )
+            std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
             for( ; aIter != aParaList.end(); ++aIter )
             {
                 aParaTarget.Paragraph = (*aIter);
