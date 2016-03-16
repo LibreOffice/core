@@ -146,13 +146,12 @@ private:
 
 protected:
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
-    void                ReadObj( SvPersistBase * & rpObj, bool bRegister );
+    void                ReadObj( SvPersistBase * & rpObj );
 
 public:
     virtual void        ResetError() override;
 
-                        SvPersistStream( SvClassManager &, SvStream * pStream,
-                                         Index nStartIdx = 1 );
+                        SvPersistStream( SvClassManager &, SvStream * pStream );
                         virtual ~SvPersistStream();
 
     void                ClearStream();

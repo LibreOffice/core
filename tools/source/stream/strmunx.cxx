@@ -379,7 +379,7 @@ void SvFileStream::FlushData()
     // does not exist locally
 }
 
-bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::LockRange()
 {
     int nLockMode = 0;
 
@@ -416,7 +416,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     if (!nLockMode)
         return true;
 
-    if( !lockFile( nByteOffset, nByteOffset+nBytes, this ) )
+    if( !lockFile( 0, 0, this ) )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
@@ -428,24 +428,24 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     return true;
 }
 
-bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::UnlockRange()
 {
     if ( ! IsOpen() )
         return false;
 
-    unlockFile( nByteOffset, nByteOffset+nBytes, this );
+    unlockFile( 0, 0, this );
 
     return true;
 }
 
 bool SvFileStream::LockFile()
 {
-  return LockRange( 0UL, 0UL );
+  return LockRange();
 }
 
 void SvFileStream::UnlockFile()
 {
-    UnlockRange( 0UL, 0UL );
+    UnlockRange();
 }
 
 void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )

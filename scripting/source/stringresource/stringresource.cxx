@@ -1801,7 +1801,7 @@ OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
 {
     OUString aFileName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
     INetURLObject aInetObj( aLocation );
-    aInetObj.insertName( aFileName, true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
+    aInetObj.insertName( aFileName, true, INetURLObject::LAST_SEGMENT, INetURLObject::ENCODE_ALL );
     if( bDefaultFile )
         aInetObj.setExtension( "default" );
     else

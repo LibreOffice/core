@@ -1740,7 +1740,7 @@ sal_uInt64 SvMemoryStream::GetSize()
 }
 
 void SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
-                                 bool bOwnsDat, sal_Size nEOF )
+                                 sal_Size nEOF )
 {
     SetBufferSize( 0 ); // Buffering in der Basisklasse initialisieren
     Seek( 0 );
@@ -1754,7 +1754,7 @@ void SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
     nPos        = 0;
     nSize       = nCount;
     nResize     = 0;
-    bOwnsData   = bOwnsDat;
+    bOwnsData   = false;
 
     if( nEOF > nCount )
         nEOF = nCount;

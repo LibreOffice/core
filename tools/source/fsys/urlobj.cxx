@@ -1869,7 +1869,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 }
 
 bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
-                                    bool bOctets, OUString & rTheRelURIRef,
+                                    OUString & rTheRelURIRef,
                                     EncodeMechanism eEncodeMechanism,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset,
@@ -1886,7 +1886,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // ref:
     INetURLObject aSubject;
     bool bWasAbsolute;
-    if (!convertRelToAbs(rTheAbsURIRef, bOctets, aSubject, bWasAbsolute,
+    if (!convertRelToAbs(rTheAbsURIRef, false/*bOctets*/, aSubject, bWasAbsolute,
                          eEncodeMechanism, eCharset, false, false, false,
                          eStyle))
     {
@@ -2226,7 +2226,7 @@ INetURLObject::SubString INetURLObject::getAuthority() const
 }
 
 bool INetURLObject::setUser(OUString const & rTheUser,
-                            bool bOctets, EncodeMechanism eMechanism,
+                            EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
     if (
@@ -2236,7 +2236,7 @@ bool INetURLObject::setUser(OUString const & rTheUser,
         return false;
     }
 
-    OUString aNewUser(encodeText(rTheUser, bOctets, PART_USER_PASSWORD,
+    OUString aNewUser(encodeText(rTheUser, false/*bOctets*/, PART_USER_PASSWORD,
                                   eMechanism, eCharset, false));
     sal_Int32 nDelta;
     if (m_aUser.isPresent())
@@ -2287,12 +2287,12 @@ bool INetURLObject::clearPassword()
 }
 
 bool INetURLObject::setPassword(OUString const & rThePassword,
-                                bool bOctets, EncodeMechanism eMechanism,
+                                EncodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bPassword)
         return false;
-    OUString aNewAuth(encodeText(rThePassword, bOctets, PART_USER_PASSWORD,
+    OUString aNewAuth(encodeText(rThePassword, false/*bOctets*/, PART_USER_PASSWORD,
                                   eMechanism, eCharset, false));
     sal_Int32 nDelta;
     if (m_aAuth.isPresent())
@@ -2824,7 +2824,7 @@ bool INetURLObject::parseHostOrNetBiosName(
     return true;
 }
 
-bool INetURLObject::setHost(OUString const & rTheHost, bool bOctets,
+bool INetURLObject::setHost(OUString const & rTheHost,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
@@ -2856,7 +2856,7 @@ bool INetURLObject::setHost(OUString const & rTheHost, bool bOctets,
     }
     if (!parseHostOrNetBiosName(
             aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
-            bOctets, eMechanism, eCharset, bNetBiosName, &aSynHost))
+            false/*bOctets*/, eMechanism, eCharset, bNetBiosName, &aSynHost))
         return false;
     sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear());
     m_aPort += nDelta;
@@ -3123,14 +3123,14 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
     return true;
 }
 
-bool INetURLObject::setPath(OUString const & rThePath, bool bOctets,
+bool INetURLObject::setPath(OUString const & rThePath,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
     OUStringBuffer aSynPath;
     sal_Unicode const * p = rThePath.getStr();
     sal_Unicode const * pEnd = p + rThePath.getLength();
-    if (!parsePath(m_eScheme, &p, pEnd, bOctets, eMechanism, eCharset, false,
+    if (!parsePath(m_eScheme, &p, pEnd, false/*bOctets*/, eMechanism, eCharset, false,
                    '/', 0x80000000, 0x80000000, 0x80000000, aSynPath)
         || p != pEnd)
         return false;
@@ -3151,10 +3151,10 @@ bool INetURLObject::checkHierarchical() const {
 }
 
 bool INetURLObject::appendSegment(OUString const & rTheSegment,
-                                  bool bOctets, EncodeMechanism eMechanism,
+                                  EncodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset)
 {
-    return insertName(rTheSegment, bOctets, false, LAST_SEGMENT, true,
+    return insertName(rTheSegment, false/*bOctets*/, false, LAST_SEGMENT, true,
                       eMechanism, eCharset);
 }
 
@@ -3287,7 +3287,7 @@ bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
     }
     aNewPath.append(pSuffixBegin, pPathEnd - pSuffixBegin);
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -3304,13 +3304,13 @@ bool INetURLObject::clearQuery()
     return false;
 }
 
-bool INetURLObject::setQuery(OUString const & rTheQuery, bool bOctets,
+bool INetURLObject::setQuery(OUString const & rTheQuery,
                              EncodeMechanism eMechanism,
                              rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bQuery)
         return false;
-    OUString aNewQuery(encodeText(rTheQuery, bOctets, PART_URIC,
+    OUString aNewQuery(encodeText(rTheQuery, false/*bOctets*/, PART_URIC,
                                    eMechanism, eCharset, true));
     sal_Int32 nDelta;
     if (m_aQuery.isPresent())
@@ -3338,12 +3338,12 @@ bool INetURLObject::clearFragment()
 }
 
 bool INetURLObject::setFragment(OUString const & rTheFragment,
-                                bool bOctets, EncodeMechanism eMechanism,
+                                EncodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset)
 {
     if (HasError())
         return false;
-    OUString aNewFragment(encodeText(rTheFragment, bOctets, PART_URIC,
+    OUString aNewFragment(encodeText(rTheFragment, false/*bOctets*/, PART_URIC,
                                       eMechanism, eCharset, true));
     if (m_aFragment.isPresent())
         m_aFragment.set(m_aAbsURIRef, aNewFragment);
@@ -3985,7 +3985,7 @@ bool INetURLObject::removeSegment(sal_Int32 nIndex, bool bIgnoreFinalSlash)
         aNewPath.append('/');
     }
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4035,7 +4035,7 @@ bool INetURLObject::setName(OUString const & rTheName)
         WAS_ENCODED, RTL_TEXTENCODING_UTF8, true));
     aNewPath.append(p, pPathEnd - p);
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4084,11 +4084,10 @@ OUString INetURLObject::getBase(sal_Int32 nIndex, bool bIgnoreFinalSlash,
 }
 
 bool INetURLObject::setBase(OUString const & rTheBase, sal_Int32 nIndex,
-                            bool bIgnoreFinalSlash,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
-    SubString aSegment(getSegment(nIndex, bIgnoreFinalSlash));
+    SubString aSegment(getSegment(nIndex, true/*bIgnoreFinalSlash*/));
     if (!aSegment.isPresent())
         return false;
 
@@ -4115,7 +4114,7 @@ bool INetURLObject::setBase(OUString const & rTheBase, sal_Int32 nIndex,
         eMechanism, eCharset, true));
     aNewPath.append(pExtension, pPathEnd - pExtension);
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4179,7 +4178,7 @@ bool INetURLObject::setExtension(OUString const & rTheExtension,
         eMechanism, eCharset, true));
     aNewPath.append(p, pPathEnd - p);
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4210,7 +4209,7 @@ bool INetURLObject::removeExtension(sal_Int32 nIndex, bool bIgnoreFinalSlash)
     aNewPath.append(pPathBegin, pExtension - pPathBegin);
     aNewPath.append(p, pPathEnd - p);
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4240,7 +4239,7 @@ bool INetURLObject::setFinalSlash()
     aNewPath.append(pPathBegin, pPathEnd - pPathBegin);
     aNewPath.append('/');
 
-    return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
+    return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4260,7 +4259,7 @@ bool INetURLObject::removeFinalSlash()
         return false;
     OUString aNewPath(pPathBegin, pPathEnd - pPathBegin);
 
-    return setPath(aNewPath, false, NOT_CANONIC, RTL_TEXTENCODING_UTF8);
+    return setPath(aNewPath, NOT_CANONIC, RTL_TEXTENCODING_UTF8);
 }
 
 bool INetURLObject::setFSysPath(OUString const & rFSysPath,
@@ -4924,7 +4923,7 @@ OUString INetURLObject::GetPath() const
 
 void INetURLObject::SetBase(OUString const & rTheBase)
 {
-    setBase(rTheBase, LAST_SEGMENT, true, ENCODE_ALL);
+    setBase(rTheBase, LAST_SEGMENT, ENCODE_ALL);
 }
 
 OUString INetURLObject::GetBase() const
@@ -4938,7 +4937,7 @@ void INetURLObject::SetName(OUString const & rTheName,
 {
     INetURLObject aTemp(*this);
     if (aTemp.removeSegment()
-        && aTemp.insertName(rTheName, false, LAST_SEGMENT, true, eMechanism,
+        && aTemp.insertName(rTheName, false, LAST_SEGMENT, eMechanism,
                             eCharset))
         *this = aTemp;
 }

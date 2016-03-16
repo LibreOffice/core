@@ -165,7 +165,7 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
             SvMemoryStream    aMemStm;
             ConvertDataFormat nCvtType;
 
-            aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnBufSize, false, mnBufSize );
+            aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnBufSize, mnBufSize );
 
             switch( meType )
             {

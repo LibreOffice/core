@@ -128,8 +128,7 @@ public:
 
     // Parameters of ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
-                            double fB=-1.0, double fT=1.0,
-                            bool bBroadCastChange=true);
+                            double fB=-1.0, double fT=1.0);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
 
     void SetPerspective(bool bNew);
@@ -214,8 +213,7 @@ public:
     B3dCamera(
         const basegfx::B3DPoint& rPos = basegfx::B3DPoint(0.0, 0.0, 1.0),
         const basegfx::B3DVector& rLkAt = basegfx::B3DVector(0.0, 0.0, 0.0),
-        double fFocLen = 35.0, double fBnkAng = 0.0,
-        bool bUseFocLen = false);
+        double fFocLen = 35.0, double fBnkAng = 0.0);
     virtual ~B3dCamera();
 
 protected:

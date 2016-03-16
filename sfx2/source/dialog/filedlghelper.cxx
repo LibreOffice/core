@@ -1578,7 +1578,7 @@ void FileDialogHelper_Impl::verifyPath()
         return;
     }
     url.insertName(
-        maFileName, false, INetURLObject::LAST_SEGMENT, true,
+        maFileName, false, INetURLObject::LAST_SEGMENT,
         INetURLObject::ENCODE_ALL);
     OUString sysPathU;
     osl::FileBase::RC e = osl::FileBase::getSystemPathFromFileURL(

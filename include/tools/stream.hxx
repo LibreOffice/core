@@ -611,8 +611,8 @@ private:
     SvFileStream (const SvFileStream&) = delete;
     SvFileStream & operator= (const SvFileStream&) = delete;
 
-    bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
-    bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
+    bool LockRange();
+    bool UnlockRange();
     bool LockFile();
     void UnlockFile();
 
@@ -690,8 +690,9 @@ public:
     const void*     GetData() { Flush(); return pBuf; }
 
     void*           SwitchBuffer();
+    // the buffer is not owned by this class
     void            SetBuffer( void* pBuf, sal_Size nSize,
-                               bool bOwnsData=true, sal_Size nEOF=0 );
+                               sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
