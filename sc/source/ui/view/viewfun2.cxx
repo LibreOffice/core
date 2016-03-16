@@ -157,6 +157,9 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     if ( bPaint && bAnyChanged )
         pDocSh->UpdateOle(&GetViewData());
 
+    if (bAnyChanged && comphelper::LibreOfficeKit::isActive() && rDoc.GetDrawLayer())
+        rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+
     return bAnyChanged;
 }
 
