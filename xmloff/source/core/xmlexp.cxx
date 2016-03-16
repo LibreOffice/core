@@ -159,8 +159,7 @@ public:
     virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
                                   enum ::xmloff::token::XMLTokenEnum i_eValue ) override;
 
-    virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                  const bool i_bIgnoreWhitespace ) override;
+    virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName ) override;
     virtual void    EndElement(   const bool i_bIgnoreWhitespace ) override;
 
     virtual void    Characters( const OUString& i_rCharacters ) override;
@@ -182,10 +181,10 @@ void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eN
     m_rExport.AddAttribute( XML_NAMESPACE_CONFIG, i_eName, i_eValue );
 }
 
-void SettingsExportFacade::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const bool i_bIgnoreWhitespace )
+void SettingsExportFacade::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName )
 {
     const OUString sElementName( m_rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_CONFIG, GetXMLToken( i_eName ) ) );
-    m_rExport.StartElement( sElementName, i_bIgnoreWhitespace );
+    m_rExport.StartElement( sElementName, true/*i_bIgnoreWhitespace*/ );
     m_aElements.push( sElementName );
 }
 

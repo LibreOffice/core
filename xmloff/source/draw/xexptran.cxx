@@ -130,7 +130,7 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
     if(!sNumberString.isEmpty())
     {
         if(bLookForUnits)
-            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear(), true);
+            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear());
         else
         {
             ::sax::Converter::convertDouble(fRetval,
@@ -154,7 +154,7 @@ void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double f
     OUStringBuffer sStringBuffer;
 
     if(bConvertUnits)
-        rConv.convertDouble(sStringBuffer, fValue, true);
+        rConv.convertDouble(sStringBuffer, fValue);
     else
     {
         ::sax::Converter::convertDouble(sStringBuffer, fValue);

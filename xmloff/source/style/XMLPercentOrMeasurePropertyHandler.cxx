@@ -32,8 +32,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler( bool bPercent )
-: mbPercent( bPercent )
+XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler()
+: mbPercent( false )
 {
 }
 

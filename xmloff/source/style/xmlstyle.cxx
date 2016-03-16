@@ -666,7 +666,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         if( ! mxPageImpPropMapper.is() )
         {
             XMLPropertySetMapper *pPropMapper =
-                new XMLPageMasterPropSetMapper( false );
+                new XMLPageMasterPropSetMapper();
             mxPageImpPropMapper =
                 new PageMasterImportPropertyMapper( pPropMapper,
                                     const_cast<SvXMLStylesContext*>(this)->GetImport() );

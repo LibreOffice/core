@@ -734,7 +734,7 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUS
 
 SvXMLImportContext* ODBFilter::CreateScriptContext( const OUString& _rLocalName )
 {
-    return new XMLScriptContext( *this, XML_NAMESPACE_OFFICE, _rLocalName, GetModel() );
+    return new XMLScriptContext( *this, _rLocalName, GetModel() );
 }
 
 

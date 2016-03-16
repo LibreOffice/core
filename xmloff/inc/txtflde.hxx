@@ -287,7 +287,6 @@ protected:
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         enum ::xmloff::token::XMLTokenEnum eValue,          /// attribute token
-        bool bOmitEmpty = false, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
@@ -336,8 +335,7 @@ protected:
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         sal_Int32 nMinutes,             /// date/time value in minutes
         bool bIsDate,           /// export as date?
-        bool bIsDuration,       /// export as duration?
-        bool bOmitDurationIfZero);   /// omit zero-length durations
+        bool bIsDuration);       /// export as duration?
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(

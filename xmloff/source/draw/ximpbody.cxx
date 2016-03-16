@@ -19,6 +19,7 @@
 
 #include "ximpbody.hxx"
 #include <xmloff/prstylei.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include "ximpnote.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -304,8 +305,8 @@ void SdXMLDrawPageContext::EndElement()
 }
 
 SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName )
-:   SvXMLImportContext( rImport, nPrfx, rLocalName )
+    const OUString& rLocalName )
+:   SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLocalName )
 {
 }
 

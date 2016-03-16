@@ -688,7 +688,7 @@ SvXMLImportContext *SdXMLImport::CreateBodyContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>&)
 {
     SvXMLImportContext *pContext = nullptr;
-    pContext = new SdXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName);
+    pContext = new SdXMLBodyContext(*this, rLocalName);
     return pContext;
 }
 
@@ -699,7 +699,7 @@ SvXMLStylesContext *SdXMLImport::CreateStylesContext(const OUString& rLocalName,
         return GetShapeImport()->GetStylesContext();
 
     GetShapeImport()->SetStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, false));
+        *this, rLocalName, xAttrList, false));
 
     return GetShapeImport()->GetStylesContext();
 }
@@ -711,7 +711,7 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
         return GetShapeImport()->GetAutoStylesContext();
 
     GetShapeImport()->SetAutoStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, true));
+        *this, rLocalName, xAttrList, true));
 
     return GetShapeImport()->GetAutoStylesContext();
 }
@@ -723,7 +723,7 @@ SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLoca
         return mpMasterStylesContext;
 
     mpMasterStylesContext = new SdXMLMasterStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName);
+        *this, rLocalName);
     mpMasterStylesContext->AddFirstRef();
 
     return mpMasterStylesContext;
@@ -745,9 +745,7 @@ SvXMLImportContext *SdXMLImport::CreateScriptContext(
 {
     SvXMLImportContext *pContext = nullptr;
 
-    pContext = new XMLScriptContext( *this,
-                                    XML_NAMESPACE_OFFICE, rLocalName,
-                                    GetModel() );
+    pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
     return pContext;
 }
 

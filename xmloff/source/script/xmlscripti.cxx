@@ -97,9 +97,9 @@ void XMLScriptChildContext::EndElement()
 
 // XMLScriptContext: context for <office:scripts> element
 
-XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, const OUString& rLName,
         const Reference<XModel>& rDocModel )
-    :SvXMLImportContext( rImport, nPrfx, rLName )
+    :SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLName )
     ,m_xModel( rDocModel )
 {
 }

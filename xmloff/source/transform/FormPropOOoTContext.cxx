@@ -45,7 +45,6 @@ public:
                            const OUString& rQName );
     XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                              sal_uInt16 nAttrPrefix,
                            XMLTokenEnum eAttrToken );
 
     virtual ~XMLFormPropValueTContext_Impl();
@@ -74,11 +73,10 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
 XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
         const OUString& rQName,
-        sal_uInt16 nAttrPrefix,
         XMLTokenEnum eAttrToken ) :
     XMLTransformerContext( rTransformer, rQName ),
     m_aAttrQName( rTransformer.GetNamespaceMap().GetQNameByKey(
-                    nAttrPrefix, GetXMLToken(eAttrToken) ) ),
+                    XML_NAMESPACE_OFFICE, GetXMLToken(eAttrToken) ) ),
     m_bPersistent( true ),
     m_bIsVoid( false )
 {
@@ -165,7 +163,6 @@ rtl::Reference<XMLTransformerContext> XMLFormPropOOoTransformerContext::CreateCh
         {
             pContext.set(new XMLFormPropValueTContext_Impl( GetTransformer(),
                                                           rQName,
-                                                          XML_NAMESPACE_OFFICE,
                                                           m_eValueToken ));
         }
         else if( !m_xValueContext.is() )

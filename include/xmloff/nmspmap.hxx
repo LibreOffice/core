@@ -119,8 +119,7 @@ public:
 
     /* This will replace the version with the unused 3rd default parameter */
     sal_uInt16 _GetKeyByAttrName( const OUString& rAttrName,
-                             OUString *pLocalName = nullptr,
-                             bool bCache = true) const;
+                             OUString *pLocalName = nullptr) const;
 
     sal_uInt16 GetFirstKey() const;
     sal_uInt16 GetNextKey( sal_uInt16 nOldKey ) const;

@@ -1422,7 +1422,7 @@ void XMLDatabaseNextImportContext::ProcessAttribute(
     {
         OUString sTmp;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap()._GetKeyByAttrName(
-                                    sAttrValue, &sTmp, false );
+                                    sAttrValue, &sTmp );
         if( XML_NAMESPACE_OOOW == nPrefix )
         {
             sCondition = sTmp;
@@ -1966,7 +1966,7 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
     {
         OUString sTmp;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap()._GetKeyByAttrName(
-                                    sAttrValue, &sTmp, false );
+                                    sAttrValue, &sTmp );
         if( XML_NAMESPACE_OOOW == nPrefix )
         {
             sCondition = sTmp;
@@ -2027,7 +2027,7 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        _GetKeyByAttrName( sAttrValue, &sTmp, false );
+                        _GetKeyByAttrName( sAttrValue, &sTmp );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sCondition = sTmp;
@@ -2108,7 +2108,7 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                        _GetKeyByAttrName( sAttrValue, &sTmp, false );
+                                        _GetKeyByAttrName( sAttrValue, &sTmp );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sCondition = sTmp;

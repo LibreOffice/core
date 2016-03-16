@@ -513,10 +513,9 @@ public:
     void collectTextAutoStyles(
         const css::uno::Reference< css::text::XText > & rText,
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
-        bool bIsProgress = false,
-        bool bExportParagraph = true )
+        bool bIsProgress = false )
     {
-        exportText( rText, rBaseSection, true, bIsProgress, bExportParagraph );
+        exportText( rText, rBaseSection, true, bIsProgress, true/*bExportParagraph*/ );
     }
 
     // It the model implements the xAutoStylesSupplier interface, the automatic
@@ -546,10 +545,9 @@ public:
         const css::uno::Reference< css::text::XText > & rText,
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bIsProgress = false,
-        bool bExportParagraph = true,
         TextPNS eExtensionNS = TextPNS::ODF)
     {
-        exportText( rText, rBaseSection, false, bIsProgress, bExportParagraph, eExtensionNS );
+        exportText( rText, rBaseSection, false, bIsProgress, true/*bExportParagraph*/, eExtensionNS );
     }
 
     void exportFramesBoundToPage( bool bIsProgress = false )

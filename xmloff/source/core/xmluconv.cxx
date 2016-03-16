@@ -270,28 +270,21 @@ static sal_Char aHexTab[] = "0123456789abcdef";
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
-    double fNumber, bool bWriteUnits) const
+    double fNumber) const
 {
     ::sax::Converter::convertDouble(rBuffer, fNumber,
-        bWriteUnits, m_pImpl->m_eCoreMeasureUnit, m_pImpl->m_eXMLMeasureUnit);
+        true/*bWriteUnits*/, m_pImpl->m_eCoreMeasureUnit, m_pImpl->m_eXMLMeasureUnit);
 }
 
 /** convert string to double number (using ::rtl::math) */
 bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const OUString& rString, bool bLookForUnits) const
+    const OUString& rString) const
 {
-    if(bLookForUnits)
-    {
-        sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
-                rString, m_pImpl->m_eCoreMeasureUnit);
+    sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
+            rString, m_pImpl->m_eCoreMeasureUnit);
 
-        return ::sax::Converter::convertDouble(rValue, rString,
-            eSrcUnit, m_pImpl->m_eCoreMeasureUnit);
-    }
-    else
-    {
-        return ::sax::Converter::convertDouble(rValue, rString);
-    }
+    return ::sax::Converter::convertDouble(rValue, rString,
+        eSrcUnit, m_pImpl->m_eCoreMeasureUnit);
 }
 
 /** get the Null Date of the XModel and set it to the UnitConverter */
@@ -565,11 +558,11 @@ bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return false;
 
-    if ( !convertDouble( rPosition.PositionX, aContentX, true ) )
+    if ( !convertDouble( rPosition.PositionX, aContentX ) )
         return false;
-    if ( !convertDouble( rPosition.PositionY, aContentY, true ) )
+    if ( !convertDouble( rPosition.PositionY, aContentY ) )
         return false;
-    return convertDouble( rPosition.PositionZ, aContentZ, true );
+    return convertDouble( rPosition.PositionZ, aContentZ );
 }
 
 /** convert Position3D to string */
@@ -577,11 +570,11 @@ void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
                                            const drawing::Position3D& rPosition )
 {
     rBuffer.append( '(' );
-    convertDouble( rBuffer, rPosition.PositionX, true );
+    convertDouble( rBuffer, rPosition.PositionX );
     rBuffer.append( ' ' );
-    convertDouble( rBuffer, rPosition.PositionY, true );
+    convertDouble( rBuffer, rPosition.PositionY );
     rBuffer.append( ' ' );
-    convertDouble( rBuffer, rPosition.PositionZ, true );
+    convertDouble( rBuffer, rPosition.PositionZ );
     rBuffer.append( ')' );
 }
 

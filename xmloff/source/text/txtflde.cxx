@@ -2128,7 +2128,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             else
             {
                 // string: write regardless of default
-                ProcessString(XML_VALUE_TYPE, XML_STRING, false,
+                ProcessString(XML_VALUE_TYPE, XML_STRING,
                               XML_NAMESPACE_OFFICE);
                 ProcessString(XML_STRING_VALUE,
                               GetStringProperty(sPropertyContent, xPropSet),
@@ -2518,17 +2518,11 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
 void XMLTextFieldExport::ProcessString(
     enum XMLTokenEnum eName,
     enum XMLTokenEnum eValue,
-    bool bOmitEmpty,
     sal_uInt16 nPrefix)
 {
     DBG_ASSERT( eName != XML_TOKEN_INVALID, "invalid element token" );
-    DBG_ASSERT( bOmitEmpty || (eValue != XML_TOKEN_INVALID),
-                "invalid value token" );
+    DBG_ASSERT( eValue != XML_TOKEN_INVALID, "invalid value token" );
     if ( XML_TOKEN_INVALID == eName )
-        return;
-
-    // check for empty string, if applicable
-    if (bOmitEmpty && (eValue == XML_TOKEN_INVALID))
         return;
 
     GetExport().AddAttribute(nPrefix, eName, eValue);
@@ -2669,14 +2663,13 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
                                          sal_Int32 nMinutes,
                                          bool bIsDate,
-                                         bool bIsDuration,
-                                         bool bOmitDurationIfZero)
+                                         bool bIsDuration)
 {
     // handle bOmitDurationIfZero here, because we can precisely compare ints
-    if (!(bIsDuration && bOmitDurationIfZero && (nMinutes==0)))
+    if (!(bIsDuration && (nMinutes==0)))
     {
         ProcessDateTime(eName, (double)nMinutes / (double)(24*60),
-                        bIsDate, bIsDuration, bOmitDurationIfZero);
+                        bIsDate, bIsDuration, true/*bOmitDurationIfZero*/);
     }
 }
 

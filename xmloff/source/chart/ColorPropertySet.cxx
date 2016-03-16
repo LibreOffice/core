@@ -84,11 +84,11 @@ namespace xmloff
 namespace chart
 {
 
-ColorPropertySet::ColorPropertySet( sal_Int32 nColor, bool bFillColor /* = true */ ) :
+ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
         // note: length of FillColor and LineColor is 9
-        m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
+        m_aColorPropName( "FillColor", 9, RTL_TEXTENCODING_ASCII_US ),
         m_nColor( nColor ),
-        m_bIsFillColor( bFillColor ),
+        m_bIsFillColor( true ),
         m_nDefaultColor( 0x0099ccff )  // blue 8
 {}
 

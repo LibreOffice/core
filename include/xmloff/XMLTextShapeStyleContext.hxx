@@ -43,8 +43,7 @@ public:
     XMLTextShapeStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-            bool bDefaultStyle = false );
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
     virtual ~XMLTextShapeStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(

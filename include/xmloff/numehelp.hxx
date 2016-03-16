@@ -44,10 +44,10 @@ struct XMLNumberFormat
     {
     }
 
-    XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat, sal_Int16 nTempType)
+    XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat)
         : sCurrency(sTempCurrency)
         , nNumberFormat(nTempFormat)
-        , nType(nTempType)
+        , nType(0)
         , bIsStandard(false)
     {
     }
@@ -117,7 +117,6 @@ public:
     void SetNumberFormatAttributes(const OUString& rValue,
                                           const OUString& rCharacters,
                                           bool bExportValue = true,
-                                          bool bExportTypeAttribute = true,
                                           sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
 };
 
