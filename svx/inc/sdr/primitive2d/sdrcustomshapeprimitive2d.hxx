@@ -61,8 +61,7 @@ namespace drawinglayer
                 const Primitive2DContainer& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
                 bool bWordWrap,
-                bool b3DShape,
-                bool bForceTextClipToTextRange);
+                bool b3DShape);
 
             // data access
             const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }

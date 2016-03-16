@@ -779,9 +779,9 @@ SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
 {
 }
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ ) :
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect) :
     SdrRectObj(rNewRect),
-    mpImpl(new SdrOle2ObjImpl(bFrame_, rNewObjRef))
+    mpImpl(new SdrOle2ObjImpl(false/*bFrame_*/, rNewObjRef))
 {
     mpImpl->aPersistName = rNewObjName;
 

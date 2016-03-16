@@ -2534,13 +2534,13 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
     }
 }
 
-sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj, bool bHideHim)
+sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)
 {
     sal_uInt32 nNewHdl;
 
     if(bNewObj)
     {
-        nNewHdl = NbcInsPoint(0L, rPos, true, bHideHim);
+        nNewHdl = NbcInsPoint(0L, rPos, true, true/*bHideHim*/);
     }
     else
     {
@@ -2559,7 +2559,7 @@ sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj, bool bHid
             nPolyIndex += GetPathPoly().getB2DPolygon(a).count();
         }
 
-        nNewHdl = NbcInsPoint(nPolyIndex, rPos, false, bHideHim);
+        nNewHdl = NbcInsPoint(nPolyIndex, rPos, false, true/*bHideHim*/);
     }
 
     ImpForceKind();

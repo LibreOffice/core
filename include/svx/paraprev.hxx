@@ -61,7 +61,7 @@ protected:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual Size GetOptimalSize() const override;
 
-    void DrawParagraph(vcl::RenderContext& rRenderContext, bool bAll);
+    void DrawParagraph(vcl::RenderContext& rRenderContext);
 
 public:
     SvxParaPrevWindow( vcl::Window* pParent, WinBits nBits);

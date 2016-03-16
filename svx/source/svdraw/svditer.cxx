@@ -32,17 +32,17 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bo
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode, bool bReverse)
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode)
 :   mnIndex(0L),
-    mbReverse(bReverse)
+    mbReverse(false)
 {
     ImpProcessObjectList(rObjList, eMode, bUseZOrder);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, bool bReverse )
+SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode )
 :   mnIndex(0L),
-    mbReverse(bReverse)
+    mbReverse(false)
 {
     if ( dynamic_cast<const SdrObjGroup*>(&rObj) !=  nullptr )
         ImpProcessObjectList(*rObj.GetSubList(), eMode, true);
@@ -51,9 +51,9 @@ SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, bool b
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, bool bReverse )
+SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode )
 :   mnIndex(0L),
-    mbReverse(bReverse)
+    mbReverse(false)
 {
     ImpProcessMarkList(rMarkList, eMode);
     Reset();

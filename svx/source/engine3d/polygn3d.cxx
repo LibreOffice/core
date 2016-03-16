@@ -35,10 +35,9 @@ sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
-    const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    bool bLinOnly)
+    const basegfx::B3DPolyPolygon& rPolyPoly3D)
 :   E3dCompoundObject(rDefault),
-    bLineOnly(bLinOnly)
+    bLineOnly(true)
 {
     // Set geometry
     SetPolyPolygon3D(rPolyPoly3D);

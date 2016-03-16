@@ -109,7 +109,7 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
-    void                ReplaceImageMap( const ImageMap& rNewImageMap, bool bScaleToGraphic );
+    void                ReplaceImageMap( const ImageMap& rNewImageMap );
 
     SdrObject*          CreateObj( const IMapObject* pIMapObj );
     static IMapObject*  GetIMapObj( const SdrObject* pSdrObj );

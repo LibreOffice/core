@@ -261,7 +261,7 @@ protected:
 
 
 public:
-    DbCellControl(DbGridColumn& _rColumn, bool _bText = true);
+    DbCellControl(DbGridColumn& _rColumn);
     virtual ~DbCellControl();
 
 

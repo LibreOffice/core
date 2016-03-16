@@ -124,7 +124,7 @@ public:
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum) override;
 
     // insert point
-    sal_uInt32 NbcInsPointOld(const Point& rPos, bool bNewObj, bool bHideHim);
+    sal_uInt32 NbcInsPointOld(const Point& rPos, bool bNewObj);
     sal_uInt32 NbcInsPoint(sal_uInt32 i, const Point& rPos, bool bNewObj, bool bHideHim);
 
     // rip at given point

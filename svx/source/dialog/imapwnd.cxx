@@ -89,10 +89,10 @@ Size IMapWindow::GetOptimalSize() const
 
 void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 {
-    ReplaceImageMap( rImageMap, false );
+    ReplaceImageMap( rImageMap );
 }
 
-void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, bool /*bScaleToGraphic*/ )
+void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap )
 {
     SdrPage* pPage = nullptr;
     aIMap = rImageMap;

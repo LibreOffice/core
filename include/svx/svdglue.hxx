@@ -137,7 +137,7 @@ public:
     SdrGluePoint&       operator[](sal_uInt16 nPos)                             { return *GetObject(nPos); }
     const SdrGluePoint& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
     sal_uInt16          FindGluePoint(sal_uInt16 nId) const;
-    sal_uInt16          HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack = false, bool bNext = false, sal_uInt16 nId0=0) const;
+    sal_uInt16          HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     // temp for transformations on the reference object
     void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);

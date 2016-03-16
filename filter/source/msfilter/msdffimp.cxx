@@ -7111,7 +7111,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         aObj.SetGraphic( rGrf, OUString() );
 
                         // TODO/MBA: check setting of PersistName
-                        pRet = new SdrOle2Obj( aObj, OUString(), rBoundRect, false);
+                        pRet = new SdrOle2Obj( aObj, OUString(), rBoundRect);
                         // we have the Object, don't create another
                         bValidStorage = false;
                     }
@@ -7203,7 +7203,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 // TODO/LATER: need MediaType
                 aObj.SetGraphic( rGrf, OUString() );
 
-                pRet = new SdrOle2Obj( aObj, aDstStgName, rBoundRect, false);
+                pRet = new SdrOle2Obj( aObj, aDstStgName, rBoundRect);
             }
         }
     }

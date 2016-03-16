@@ -67,7 +67,7 @@ void SdrObjConnection::ResetVars()
     bAutoCorner=false;
 }
 
-bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsPos) const
+bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP) const
 {
     bool bRet = false;
     if (pObj!=nullptr) { // one object has to be docked already!
@@ -88,7 +88,7 @@ bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsPos) const
             }
         }
     }
-    if (bRet && bSetAbsPos) {
+    if (bRet) {
         Point aPt(rGP.GetAbsolutePos(*pObj));
         aPt+=aObjOfs;
         rGP.SetPos(aPt);
@@ -777,14 +777,14 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     sal_uInt16 nCount2=bAuto2 ? 4 : 1;
     for (sal_uInt16 nNum1=0; nNum1<nCount1; nNum1++) {
         if (bAuto1) rCon1.nConId=nNum1;
-        if (bCon1 && rCon1.TakeGluePoint(aGP1,true)) {
+        if (bCon1 && rCon1.TakeGluePoint(aGP1)) {
             aPt1=aGP1.GetPos();
             nEsc1=aGP1.GetEscDir();
             if (nEsc1==SdrEscapeDirection::SMART) nEsc1=ImpCalcEscAngle(rCon1.pObj,aPt1-rCon1.aObjOfs);
         }
         for (sal_uInt16 nNum2=0; nNum2<nCount2; nNum2++) {
             if (bAuto2) rCon2.nConId=nNum2;
-            if (bCon2 && rCon2.TakeGluePoint(aGP2,true)) {
+            if (bCon2 && rCon2.TakeGluePoint(aGP2)) {
                 aPt2=aGP2.GetPos();
                 nEsc2=aGP2.GetEscDir();
                 if (nEsc2==SdrEscapeDirection::SMART) nEsc2=ImpCalcEscAngle(rCon2.pObj,aPt2-rCon2.aObjOfs);

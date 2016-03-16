@@ -122,7 +122,7 @@ protected:
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox, public SvxLanguageBoxBase
 {
 public:
-    SvxLanguageBox( vcl::Window* pParent, WinBits nBits, bool bCheck = false );
+    SvxLanguageBox( vcl::Window* pParent, WinBits nBits );
 
 private:
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) override;
@@ -147,7 +147,7 @@ private:
 class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase
 {
 public:
-    SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits, bool bCheck = false );
+    SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits );
 
     enum EditedAndValid
     {

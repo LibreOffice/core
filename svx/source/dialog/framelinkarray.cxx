@@ -47,7 +47,7 @@ struct Cell
 
     inline bool         IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
 
-    void                MirrorSelfX( bool bSwapDiag );
+    void                MirrorSelfX();
 };
 
 typedef std::vector< long >     LongVec;
@@ -64,18 +64,12 @@ Cell::Cell() :
 {
 }
 
-void Cell::MirrorSelfX( bool bSwapDiag )
+void Cell::MirrorSelfX()
 {
     std::swap( maLeft, maRight );
     std::swap( mnAddLeft, mnAddRight );
     maLeft.MirrorSelf();
     maRight.MirrorSelf();
-    if( bSwapDiag )
-    {
-        std::swap( maTLBR, maBLTR );
-        maTLBR.MirrorSelf();
-        maBLTR.MirrorSelf();
-    }
 }
 
 
@@ -562,16 +556,14 @@ const Style& Array::GetCellStyleBottom( size_t nCol, size_t nRow ) const
     return std::max( ORIGCELL( nCol, nRow ).maBottom, ORIGCELL( nCol, nRow + 1 ).maTop );
 }
 
-const Style& Array::GetCellStyleTLBR( size_t nCol, size_t nRow, bool bSimple ) const
+const Style& Array::GetCellStyleTLBR( size_t nCol, size_t nRow ) const
 {
-    return bSimple ? CELL( nCol, nRow ).maTLBR :
-        (mxImpl->IsInClipRange( nCol, nRow ) ? ORIGCELL( nCol, nRow ).maTLBR : OBJ_STYLE_NONE);
+    return CELL( nCol, nRow ).maTLBR;
 }
 
-const Style& Array::GetCellStyleBLTR( size_t nCol, size_t nRow, bool bSimple ) const
+const Style& Array::GetCellStyleBLTR( size_t nCol, size_t nRow ) const
 {
-    return bSimple ? CELL( nCol, nRow ).maBLTR :
-        (mxImpl->IsInClipRange( nCol, nRow ) ? ORIGCELL( nCol, nRow ).maBLTR : OBJ_STYLE_NONE);
+    return CELL( nCol, nRow ).maBLTR;
 }
 
 const Style& Array::GetCellStyleTL( size_t nCol, size_t nRow ) const
@@ -862,7 +854,7 @@ void Array::MirrorSelfX()
         for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
         {
             aNewCells.push_back( CELL( mxImpl->GetMirrorCol( nCol ), nRow ) );
-            aNewCells.back().MirrorSelfX( false/*bSwapDiag*/ );
+            aNewCells.back().MirrorSelfX();
         }
     }
     for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )
@@ -914,13 +906,13 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                     size_t _nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
                     size_t _nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
 
-                    const Style aTlbrStyle = GetCellStyleTLBR( _nFirstCol, _nFirstRow, true );
+                    const Style aTlbrStyle = GetCellStyleTLBR( _nFirstCol, _nFirstRow );
                     if ( aTlbrStyle.GetWidth( ) )
                         pProcessor->process( CreateClippedBorderPrimitives(
                                     aRect.TopLeft(), aRect.BottomRight(),
                                     aTlbrStyle, aRect ) );
 
-                    const Style aBltrStyle = GetCellStyleBLTR( _nFirstCol, _nFirstRow, true );
+                    const Style aBltrStyle = GetCellStyleBLTR( _nFirstCol, _nFirstRow );
                     if ( aBltrStyle.GetWidth( ) )
                         pProcessor->process( CreateClippedBorderPrimitives(
                                     aRect.BottomLeft(), aRect.TopRight(),
@@ -1122,7 +1114,7 @@ void Array::DrawRange( OutputDevice& rDev,
                     size_t _nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
 
                     DrawDiagFrameBorders( rDev, aRect,
-                        GetCellStyleTLBR( _nFirstCol, _nFirstRow, true ), GetCellStyleBLTR( _nFirstCol, _nFirstRow, true ),
+                        GetCellStyleTLBR( _nFirstCol, _nFirstRow ), GetCellStyleBLTR( _nFirstCol, _nFirstRow ),
                         GetCellStyleLeft( _nFirstCol, _nFirstRow ), GetCellStyleTop( _nFirstCol, _nFirstRow ),
                         GetCellStyleRight( _nLastCol, _nLastRow ), GetCellStyleBottom( _nLastCol, _nLastRow ),
                         GetCellStyleLeft( _nFirstCol, _nLastRow ), GetCellStyleBottom( _nFirstCol, _nLastRow ),
