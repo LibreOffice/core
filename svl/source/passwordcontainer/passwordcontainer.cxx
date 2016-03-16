@@ -1402,8 +1402,7 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
                 RememberAuthentication_NO, // eDefaultRememberPasswordMode
                 aRememberModes, // rRememberAccountModes
                 RememberAuthentication_NO, // eDefaultRememberAccountMode
-                false, // bCanUseSystemCredentials
-                false  // bDefaultUseSystemCredentials
+                false // bCanUseSystemCredentials
             );
 
     Sequence<

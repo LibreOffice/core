@@ -146,8 +146,7 @@ SimpleNameClashResolveRequest::~SimpleNameClashResolveRequest() {}
 SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
                                     const OUString & rTargetFolderURL,
                                     const OUString & rClashingName,
-                                    const OUString & rProposedNewName,
-                                    bool bSupportsOverwriteData )
+                                    const OUString & rProposedNewName )
 {
     // Fill request...
     ucb::NameClashResolveRequest aRequest;
@@ -164,12 +163,10 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
     m_xNameSupplier = new InteractionSupplyName( this );
 
     uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-                            aContinuations( bSupportsOverwriteData ? 3 : 2 );
+                            aContinuations( 3 );
     aContinuations[ 0 ] = new InteractionAbort( this );
     aContinuations[ 1 ] = m_xNameSupplier.get();
-
-    if ( bSupportsOverwriteData )
-        aContinuations[ 2 ] = new InteractionReplaceExistingData( this );
+    aContinuations[ 2 ] = new InteractionReplaceExistingData( this );
 
     setContinuations( aContinuations );
 }

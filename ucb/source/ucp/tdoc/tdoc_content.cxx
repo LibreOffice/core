@@ -1321,8 +1321,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             // Adapt Additional Core Properties.
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
-                                         xNewId->getContentIdentifier(),
-                                         true );
+                                         xNewId->getContentIdentifier() );
         }
         else
         {
@@ -2080,8 +2079,7 @@ void Content::transfer(
     else
         aTargetUri += aSourceUri.getName();
 
-    if ( !copyAdditionalPropertySet(
-            aSourceUri.getUri(), aTargetUri, true ) )
+    if ( !copyAdditionalPropertySet( aSourceUri.getUri(), aTargetUri ) )
     {
         uno::Any aProps
             = uno::makeAny(

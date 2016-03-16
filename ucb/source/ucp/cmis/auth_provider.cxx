@@ -38,7 +38,7 @@ namespace cmis
                         m_sUrl, m_sBindingUrl, OUString(),
                         STD_TO_OUSTR( username ),
                         STD_TO_OUSTR( password ),
-                        OUString(), true, false, false );
+                        OUString(), false, false );
                 xIH->handle( xRequest.get() );
 
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection

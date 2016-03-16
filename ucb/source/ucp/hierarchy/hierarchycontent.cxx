@@ -1297,8 +1297,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
             // Adapt Additional Core Properties.
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
-                                         xNewId->getContentIdentifier(),
-                                         true );
+                                         xNewId->getContentIdentifier() );
         }
         else
         {

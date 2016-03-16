@@ -657,20 +657,18 @@ ContentImplHelper::getAdditionalPropertySet( bool bCreate )
 
 bool ContentImplHelper::renameAdditionalPropertySet(
     const OUString& rOldKey,
-    const OUString& rNewKey,
-    bool bRecursive )
+    const OUString& rNewKey )
 {
     return m_xProvider->renameAdditionalPropertySet(
-                                            rOldKey, rNewKey, bRecursive );
+                                            rOldKey, rNewKey, true/*bRecursive*/ );
 }
 
 bool ContentImplHelper::copyAdditionalPropertySet(
     const OUString& rSourceKey,
-    const OUString& rTargetKey,
-    bool bRecursive )
+    const OUString& rTargetKey )
 {
     return m_xProvider->copyAdditionalPropertySet(
-                                        rSourceKey, rTargetKey, bRecursive );
+                                        rSourceKey, rTargetKey, true/*bRecursive*/ );
 }
 
 bool ContentImplHelper::removeAdditionalPropertySet()

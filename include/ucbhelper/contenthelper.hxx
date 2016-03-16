@@ -255,13 +255,10 @@ protected:
       *
       * @param  rOldKey is the old key of the propertyset.
       * @param  rNewKey is the new key for the propertyset.
-      * @param  bRecursive is a flag indicating whether propertysets for
-      *         children described by rOldKey shall be renamed too.
       * @return True, if the operation succeeded - False, otherwise.
       */
     bool renameAdditionalPropertySet( const OUString& rOldKey,
-                                          const OUString& rNewKey,
-                                          bool bRecursive );
+                                          const OUString& rNewKey );
 
     /**
       * This method copies the propertyset containing the Additional Core
@@ -269,13 +266,10 @@ protected:
       *
       * @param  rSourceKey is the key of the source propertyset.
       * @param  rTargetKey is the key of the target propertyset.
-      * @param  bRecursive is a flag indicating whether propertysets for
-      *         children described by rSourceKey shall be copied too.
       * @return True, if the operation succeeded - False, otherwise.
       */
     bool copyAdditionalPropertySet( const OUString& rSourceKey,
-                                        const OUString& rTargetKey,
-                                        bool bRecursive );
+                                        const OUString& rTargetKey );
 
     /**
       * This method removes the propertyset containing the Additional Core

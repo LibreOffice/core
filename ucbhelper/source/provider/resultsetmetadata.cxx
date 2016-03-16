@@ -80,12 +80,11 @@ namespace ucbhelper {
 
 ResultSetMetaData::ResultSetMetaData(
                         const Reference< XComponentContext >& rxContext,
-                        const Sequence< Property >& rProps,
-                        bool bReadOnly )
+                        const Sequence< Property >& rProps )
 : m_pImpl( new ResultSetMetaData_Impl( rProps.getLength() ) ),
   m_xContext( rxContext ),
   m_aProps( rProps ),
-  m_bReadOnly( bReadOnly )
+  m_bReadOnly( true )
 {
 }
 

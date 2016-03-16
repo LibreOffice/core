@@ -150,18 +150,15 @@ protected:
 public:
 
     /**
-      * Constructor.
+      * Constructor. ResultSet is readonly by default.
       *
       * @param rxSMgr is a Servive Manager.
       * @param rProps is a sequence of properties (partially) describing the
       *        columns of a resultset.
-      * @param bReadOnly is used to specify whether the whole(!) resultset
-      *        is read-only.
       */
     ResultSetMetaData(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const css::uno::Sequence< css::beans::Property >& rProps,
-            bool bReadOnly = true );
+            const css::uno::Sequence< css::beans::Property >& rProps );
 
     /**
       * Constructor.
