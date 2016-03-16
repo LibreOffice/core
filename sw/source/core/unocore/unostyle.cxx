@@ -2908,9 +2908,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
     }
 }
 
-void SwXPageStyle::setPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues )
+void SwXPageStyle::setPropertyValues(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<uno::Any>& rValues)
         throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -2918,7 +2916,7 @@ void SwXPageStyle::setPropertyValues(
     // workaround for bad designed API
     try
     {
-        SetPropertyValues_Impl( rPropertyNames, rValues );
+        SetPropertyValues_Impl(rPropertyNames, rValues);
     }
     catch (const beans::UnknownPropertyException &rException)
     {
@@ -2930,27 +2928,20 @@ void SwXPageStyle::setPropertyValues(
     }
 }
 
-static uno::Reference<text::XText>
-lcl_makeHeaderFooter(
-    const sal_uInt16 nRes, const bool bHeader, SwFrameFormat const*const pFrameFormat)
+static uno::Reference<text::XText> lcl_makeHeaderFooter(const sal_uInt16 nRes, const bool bHeader, SwFrameFormat const*const pFrameFormat)
 {
-    if (!pFrameFormat) { return nullptr; }
-
+    if (!pFrameFormat)
+        return nullptr;
     const SfxItemSet& rSet = pFrameFormat->GetAttrSet();
     const SfxPoolItem* pItem;
-    if (SfxItemState::SET == rSet.GetItemState(nRes, true, &pItem))
-    {
-        SwFrameFormat *const pHeadFootFormat = (bHeader)
-            ? static_cast<SwFormatHeader*>(const_cast<SfxPoolItem*>(pItem))->
-                    GetHeaderFormat()
-            : static_cast<SwFormatFooter*>(const_cast<SfxPoolItem*>(pItem))->
-                    GetFooterFormat();
-        if (pHeadFootFormat)
-        {
-            return SwXHeadFootText::CreateXHeadFootText(*pHeadFootFormat, bHeader);
-        }
-    }
-    return nullptr;
+    if(SfxItemState::SET != rSet.GetItemState(nRes, true, &pItem))
+        return nullptr;
+    SwFrameFormat* const pHeadFootFormat = (bHeader)
+        ? static_cast<SwFormatHeader*>(const_cast<SfxPoolItem*>(pItem))->GetHeaderFormat()
+        : static_cast<SwFormatFooter*>(const_cast<SfxPoolItem*>(pItem))->GetFooterFormat();
+    if(!pHeadFootFormat)
+        return nullptr;
+    return SwXHeadFootText::CreateXHeadFootText(*pHeadFootFormat, bHeader);
 }
 
 uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames)
