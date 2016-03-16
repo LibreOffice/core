@@ -45,8 +45,8 @@ namespace svgio
         {
             if (SVGTokenDefs == getType())
             {
-                // #i125258# call parent for SVGTokenDefs
-                return SvgNode::getSvgStyleAttributes();
+                // tdf#98599 attributes may be inherit by the children, therefore read them
+                return checkForCssStyle("defs", maSvgStyleAttributes);
             }
             else
             {
