@@ -3132,59 +3132,53 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
     return aRet;
 }
 
-uno::Sequence< uno::Any > SwXPageStyle::getPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames )
+uno::Sequence<uno::Any> SwXPageStyle::getPropertyValues(const uno::Sequence<OUString>& rPropertyNames)
         throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< uno::Any > aValues;
+    uno::Sequence<uno::Any> aValues;
 
     // workaround for bad designed API
     try
     {
-        aValues = GetPropertyValues_Impl( rPropertyNames );
+        aValues = GetPropertyValues_Impl(rPropertyNames);
     }
-    catch (beans::UnknownPropertyException &)
+    catch(beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException("Unknown property exception caught", static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Unknown property exception caught", static_cast<cppu::OWeakObject*>(this));
     }
-    catch (lang::WrappedTargetException &)
+    catch(lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException("WrappedTargetException caught", static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("WrappedTargetException caught", static_cast<cppu::OWeakObject*>(this));
     }
 
     return aValues;
 }
 
-uno::Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(
-    beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName)
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
-    return GetPropertyValues_Impl(aProperties).getConstArray()[0];
+    return GetPropertyValues_Impl(aProperties)[0];
 }
 
 void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
-    throw( beans::UnknownPropertyException,
-        beans::PropertyVetoException,
-        lang::IllegalArgumentException,
-        lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     const uno::Sequence<uno::Any> aValues(&rValue, 1);
-    SetPropertyValues_Impl( aProperties, aValues );
+    SetPropertyValues_Impl(aProperties, aValues);
 }
 
-SwXFrameStyle::SwXFrameStyle ( SwDoc *pDoc )
-: SwXStyle ( pDoc, SFX_STYLE_FAMILY_FRAME, false)
-{
-}
+SwXFrameStyle::SwXFrameStyle(SwDoc *pDoc)
+    : SwXStyle(pDoc, SFX_STYLE_FAMILY_FRAME, false)
+{ }
 
 SwXFrameStyle::~SwXFrameStyle()
-{
-}
+{ }
+
 void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
 {
     // As I was told, for some entirely unobvious reason getting an
