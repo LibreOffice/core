@@ -2671,23 +2671,16 @@ void SwXStyle::Invalidate()
     m_xStyleFamily.clear();
 }
 
-SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool,
-        SwDocShell* pDocSh, SfxStyleFamily eFam,
-        const OUString& rStyleName):
-    SwXStyle(&rPool, eFam, pDocSh->GetDoc(), rStyleName)
-{
+SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rStyleName)
+    : SwXStyle(&rPool, eFam, pDocSh->GetDoc(), rStyleName)
+{ }
 
-}
-
-SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh) :
-    SwXStyle(pDocSh->GetDoc(), SFX_STYLE_FAMILY_PAGE)
-{
-}
+SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)
+    : SwXStyle(pDocSh->GetDoc(), SFX_STYLE_FAMILY_PAGE)
+{ }
 
 SwXPageStyle::~SwXPageStyle()
-{
-
-}
+{ }
 
 void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
