@@ -1024,13 +1024,13 @@ void Window::SetCompoundControl( bool bCompound )
 
 void Window::IncrementLockCount()
 {
-    assert( mpWindowImpl != NULL );
+    assert( mpWindowImpl != nullptr );
     mpWindowImpl->mnLockCount++;
 }
 
 void Window::DecrementLockCount()
 {
-    assert( mpWindowImpl != NULL );
+    assert( mpWindowImpl != nullptr );
     if (mpWindowImpl)
         mpWindowImpl->mnLockCount--;
 }
