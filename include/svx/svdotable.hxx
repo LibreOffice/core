@@ -126,7 +126,7 @@ public:
     const sdr::table::TableStyleSettings& getTableStyleSettings() const;
     void setTableStyleSettings( const sdr::table::TableStyleSettings& rStyle );
 
-    TableHitKind CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, int nTol ) const;
+    TableHitKind CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY ) const;
 
     void uno_lock();
     void uno_unlock();

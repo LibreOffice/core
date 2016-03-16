@@ -239,8 +239,7 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
     SvxObjectItem(long nStartX, long nEndX,
-                  long nStartY, long nEndY,
-                  bool bLimits = false);
+                  long nStartY, long nEndY);
     SvxObjectItem(const SvxObjectItem& rCopy);
 
     bool HasLimits() const { return bLimits;}

@@ -708,13 +708,13 @@ SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 }
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,
-                              long nSY, long nEY, bool limits ) :
+                              long nSY, long nEY ) :
     SfxPoolItem (SID_RULER_OBJECT),
     nStartX     (nSX),
     nEndX       (nEX),
     nStartY     (nSY),
     nEndY       (nEY),
-    bLimits     (limits)
+    bLimits     (false)
 {}
 
 SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :

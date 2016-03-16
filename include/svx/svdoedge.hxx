@@ -65,7 +65,7 @@ public:
     SVX_DLLPUBLIC ~SdrObjConnection();
 
     void ResetVars();
-    bool TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsolutePos) const;
+    bool TakeGluePoint(SdrGluePoint& rGP) const;
 
     inline void SetBestConnection( bool rB ) { bBestConn = rB; };
     inline void SetBestVertex( bool rB ) { bBestVertex = rB; };

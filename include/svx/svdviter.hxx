@@ -81,8 +81,8 @@ private:
     SVX_DLLPRIVATE bool          ImpCheckPageView(SdrPageView* pPV) const;
 
 public:
-    SdrViewIter(const SdrPage* pPage, bool bNoMasterPage = false);
-    SdrViewIter(const SdrObject* pObject, bool bNoMasterPage = false);
+    SdrViewIter(const SdrPage* pPage);
+    SdrViewIter(const SdrObject* pObject);
 
     SdrView* FirstView();
     SdrView* NextView();

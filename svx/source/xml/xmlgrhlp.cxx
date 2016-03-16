@@ -432,8 +432,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
 }
 
 SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUString& rPictureStorageName,
-                                                              const OUString& rPictureStreamName,
-                                                              bool bTruncate )
+                                                              const OUString& rPictureStreamName )
 {
     SvxGraphicHelperStream_Impl aRet;
     aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
@@ -444,8 +443,6 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
         if ( GRAPHICHELPER_MODE_WRITE == meCreateMode )
         {
             nMode = embed::ElementModes::READWRITE;
-            if ( bTruncate )
-                nMode |= embed::ElementModes::TRUNCATE;
         }
 
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
@@ -500,7 +497,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
                                              const OUString& rPictureStreamName )
 {
     Graphic             aGraphic;
-    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, false ) );
+    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName ) );
     if( aStream.xStream.is() )
     {
         std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
@@ -520,7 +517,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
-        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, false ) );
+        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName ) );
         if( aStream.xStream.is() )
         {
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );

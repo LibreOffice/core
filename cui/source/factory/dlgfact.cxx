@@ -1265,17 +1265,16 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmo
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (vcl::Window* pParent,
-                                            const Graphic& rGraphic, sal_uInt8 nGreyThreshold, bool bInvert)
+                                            const Graphic& rGraphic, sal_uInt8 nGreyThreshold)
 {
-    VclPtrInstance<GraphicFilterSolarize> pDlg( pParent, rGraphic, nGreyThreshold, bInvert );
+    VclPtrInstance<GraphicFilterSolarize> pDlg( pParent, rGraphic, nGreyThreshold, false/*bInvert*/ );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (vcl::Window* pParent,
-                                            const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
-                                            bool bEnhanceEdges)
+                                            const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight)
 {
-    VclPtrInstance<GraphicFilterMosaic> pDlg(pParent, rGraphic, nTileWidth, nTileHeight, bEnhanceEdges);
+    VclPtrInstance<GraphicFilterMosaic> pDlg(pParent, rGraphic, nTileWidth, nTileHeight, false/*bEnhanceEdges*/);
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 

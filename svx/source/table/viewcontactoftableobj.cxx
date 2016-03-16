@@ -198,8 +198,7 @@ namespace drawinglayer
                 bool bLeftIsOutside,
                 bool bBottomIsOutside,
                 bool bRightIsOutside,
-                bool bTopIsOutside,
-                bool bInTwips)
+                bool bTopIsOutside)
             :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maLeftLine(rLeftLine),
@@ -218,7 +217,7 @@ namespace drawinglayer
                 mbBottomIsOutside(bBottomIsOutside),
                 mbRightIsOutside(bRightIsOutside),
                 mbTopIsOutside(bTopIsOutside),
-                mbInTwips(bInTwips)
+                mbInTwips(true)
             {
             }
 
@@ -665,8 +664,7 @@ namespace sdr
                                             bIsRTL ? nX == nColCount : 0 == nX,
                                             nRowCount == nYBottom,
                                             bIsRTL ? 0 == nXRight : nXRight == nColCount,
-                                            0 == nY,
-                                            true));
+                                            0 == nY));
                                 }
                             }
                         }

@@ -54,14 +54,14 @@ public:
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */
-    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
-    explicit SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    explicit SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS);
 
     /** Iterates over a list of marked objects received from the SdrMarkView. */
-    explicit SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    explicit SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.size() : 0L); }
     bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.size())); }

@@ -463,7 +463,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 
                 bool bClosed0(mpPathObj->IsClosedObj());
 
-                sal_uInt32 nInsPointNum = mpPathObj->NbcInsPointOld(aPt, bNewObj, true);
+                sal_uInt32 nInsPointNum = mpPathObj->NbcInsPointOld(aPt, bNewObj);
 
                 if(bClosed0 != mpPathObj->IsClosedObj())
                 {

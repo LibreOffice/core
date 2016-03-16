@@ -41,7 +41,7 @@ namespace sdr
 
         public:
             // constructor/destructor
-            SAL_DLLPRIVATE explicit Event(sal_uInt32 nTime);
+            SAL_DLLPRIVATE explicit Event();
             virtual ~Event();
 
             // access to mpNext

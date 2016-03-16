@@ -1880,7 +1880,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( rGraf, OUString() );
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, false );
+                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect );
                                     }
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
@@ -1939,7 +1939,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( aGraphic, OUString() );
 
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, false );
+                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect );
                                     }
                                 }
                             }

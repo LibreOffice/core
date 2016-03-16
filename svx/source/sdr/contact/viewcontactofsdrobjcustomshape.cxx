@@ -225,8 +225,7 @@ namespace sdr
                         xGroup,
                         aTextBoxMatrix,
                         bWordWrap,
-                        b3DShape,
-                        false));        // #SJ# New parameter to force to clipped BlockText for SC
+                        b3DShape));
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
 

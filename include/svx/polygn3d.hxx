@@ -46,8 +46,7 @@ public:
 
     E3dPolygonObj(
         E3dDefaultAttributes& rDefault,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        bool bLinOnly=false);
+        const basegfx::B3DPolyPolygon& rPolyPoly3D);
 
     E3dPolygonObj();
     virtual ~E3dPolygonObj();

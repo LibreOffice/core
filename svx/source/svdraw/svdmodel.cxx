@@ -236,22 +236,22 @@ SdrModel::SdrModel():
     maMaPag(),
     maPages()
 {
-    ImpCtor(nullptr, nullptr, false, LOADREFCOUNTS);
+    ImpCtor(nullptr, nullptr, false, false);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
     maMaPag(),
     maPages()
 {
-    ImpCtor(pPool,pPers,bUseExtColorTable, bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, false/*bLoadRefCounts*/);
 }
 
-SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts):
+SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
     maMaPag(),
     maPages(),
     aTablePath(rPath)
 {
-    ImpCtor(pPool,pPers,bUseExtColorTable, bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, false/*bLoadRefCounts*/);
 }
 
 SdrModel::~SdrModel()

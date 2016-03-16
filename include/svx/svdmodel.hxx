@@ -141,11 +141,6 @@ public:
 };
 
 
-// Flag for cleaning up after the loading of the pools, meaning the
-// recalculate the RefCounts and dispose unused items)
-// sal_False == active
-#define LOADREFCOUNTS (false)
-
 struct SdrModelImpl;
 
 class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >, public OutlinerSearchable
@@ -288,8 +283,8 @@ public:
     // If, however, you use objects inheriting from SdrObject you are free
     // to chose a pool of your liking.
     explicit SdrModel();
-    explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts);
-    explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts);
+    explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
+    explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
     virtual ~SdrModel();
     void ClearModel(bool bCalledFromDestructor);
 

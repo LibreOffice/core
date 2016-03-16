@@ -53,7 +53,7 @@ struct FmFormModelImplData
 };
 
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(pPool, pPers, false, LOADREFCOUNTS)
+    : SdrModel(pPool, pPers, false)
     , m_pImpl(nullptr)
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
@@ -65,7 +65,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
 }
 
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(rPath, pPool, pPers, false, LOADREFCOUNTS)
+    : SdrModel(rPath, pPool, pPers, false)
     , m_pImpl(nullptr)
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
@@ -78,7 +78,7 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
 
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          bool bUseExtColorTable)
-    : SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
+    : SdrModel(rPath, pPool, pPers, bUseExtColorTable)
     , m_pImpl(nullptr)
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
@@ -168,9 +168,9 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 }
 
 
-void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce )
+void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode )
 {
-    if( ( _bOpenDesignMode != m_bOpenInDesignMode ) || _bForce )
+    if( _bOpenDesignMode != m_bOpenInDesignMode )
     {
         m_bOpenInDesignMode = _bOpenDesignMode;
 
@@ -184,7 +184,7 @@ void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce )
 
 void FmFormModel::SetOpenInDesignMode( bool bOpenDesignMode )
 {
-    implSetOpenInDesignMode( bOpenDesignMode, false );
+    implSetOpenInDesignMode( bOpenDesignMode );
 }
 
 

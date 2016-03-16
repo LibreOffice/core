@@ -1719,7 +1719,7 @@ namespace svxform
             // but normally only direct controls, no indirect ones, are marked in a marked form,
             // I have to do it later
             if (bIsForm)
-                MarkViewObj(static_cast<FmFormData*>(pCurrent), true, true);     // second sal_True means "deep"
+                MarkViewObj(static_cast<FmFormData*>(pCurrent), true/*deep*/);
 
             // a hidden control ?
             bool bIsHidden = IsHiddenControl(pCurrent);
@@ -1971,7 +1971,7 @@ namespace svxform
             SvTreeListEntry* pSelectionLoop = *it;
             // When form selection, mark all controls of form
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
-                MarkViewObj(static_cast<FmFormData*>(pSelectionLoop->GetUserData()), true);
+                MarkViewObj(static_cast<FmFormData*>(pSelectionLoop->GetUserData()), false/*deep*/);
 
             // When control selection, mark Control-SdrObjects
             else if (IsFormComponentEntry(pSelectionLoop))
@@ -1990,7 +1990,7 @@ namespace svxform
 
                     sal_uInt16 nClassId = ::comphelper::getINT16(xSet->getPropertyValue(FM_PROP_CLASSID));
                     if (nClassId != FormComponentType::HIDDENCONTROL)
-                        MarkViewObj(pControlData, true, true);
+                        MarkViewObj(pControlData);
                 }
             }
         }
@@ -2052,7 +2052,7 @@ namespace svxform
         pFormView->UnMarkAll();
     }
 
-    void NavigatorTree::MarkViewObj(FmFormData* pFormData, bool bMark, bool bDeep )
+    void NavigatorTree::MarkViewObj(FmFormData* pFormData, bool bDeep )
     {
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if( !pFormShell )
@@ -2078,26 +2078,23 @@ namespace svxform
                 continue;
 
             Reference< XFormComponent > xControlModel( pFormObject->GetUnoControlModel(),UNO_QUERY );
-            if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && bMark != pFormView->IsObjMarked( pSdrObject ) )
+            if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && !pFormView->IsObjMarked( pSdrObject ) )
             {
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark );
+                pFormView->MarkObj( pSdrObject, pPageView );
             }
         } // while ( aIter.IsMore() )
-        if ( bMark )
+        // make the mark visible
+        ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
+        for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         {
-            // make the mark visible
-            ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
-            for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
+            SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
+            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+            if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
             {
-                SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
-                OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-                if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
-                {
-                    pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
-                }
-            } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
-        }
+                pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
+            }
+        } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
     }
 
     void NavigatorTree::CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
@@ -2117,7 +2114,7 @@ namespace svxform
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }
 
-    void NavigatorTree::MarkViewObj( FmControlData* pControlData, bool bMarkHandles, bool bMark)
+    void NavigatorTree::MarkViewObj( FmControlData* pControlData)
     {
         if( !pControlData )
             return;
@@ -2146,12 +2143,9 @@ namespace svxform
                 continue;
 
             // mark the object
-            if ( bMark != pFormView->IsObjMarked( pSdrObject ) )
+            if ( !pFormView->IsObjMarked( pSdrObject ) )
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark );
-
-            if ( !bMarkHandles || !bMark )
-                continue;
+                pFormView->MarkObj( pSdrObject, pPageView );
 
             bPaint = true;
 

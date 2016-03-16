@@ -28,8 +28,8 @@ namespace sdr
 {
     namespace animation
     {
-        Event::Event(sal_uInt32 nTime)
-        :   mnTime(nTime),
+        Event::Event()
+        :   mnTime(0),
             mpNext(nullptr)
         {
         }

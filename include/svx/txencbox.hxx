@@ -75,8 +75,7 @@ public:
             <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromDbTextEncodingMap(
                             bool bExcludeImportSubsets = false,
-                            sal_uInt32 nExcludeInfoFlags = 0,
-                            sal_uInt32 nButIncludeInfoFlags = 0
+                            sal_uInt32 nExcludeInfoFlags = 0
                             );
 
     /** Fill with all known MIME encodings and select the best according to
