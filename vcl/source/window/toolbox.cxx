@@ -1370,6 +1370,7 @@ void ToolBox::ImplInitToolBoxData()
     mnCurLines        = 1;
     mnVisLines        = 1;
     mnFloatLines      = 0;
+    mnDockLines       = 0;
     mnConfigItem      = 0;
     mnMouseClicks     = 0;
     mnMouseModifier   = 0;
@@ -1384,6 +1385,7 @@ void ToolBox::ImplInitToolBoxData()
     mbFullPaint       = false;
     mbHorz            = true;
     mbScroll          = false;
+    mbLastFloatMode   = false;
     mbCustomize       = false;
     mbCustomizeMode   = false;
     mbDragging        = false;
@@ -1391,14 +1393,17 @@ void ToolBox::ImplInitToolBoxData()
     mbIsShift         = false;
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
+    mbImagesMirrored  = false;
     meButtonType      = ButtonType::SYMBOLONLY;
     meAlign           = WindowAlign::Top;
+    meDockAlign       = WindowAlign::Top;
     meLastStyle       = PointerStyle::Arrow;
     mnWinStyle        = 0;
     meLayoutMode      = TBX_LAYOUT_NORMAL;
     mnLastFocusItemId = 0;
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
+    mnImagesRotationAngle = 0;
     mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
 
     mpIdle = new Idle("toolbox update");
