@@ -2685,7 +2685,7 @@ SwXPageStyle::~SwXPageStyle()
 void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
-    SvxSetItem* pNewSetItem = static_cast< SvxSetItem* >(pSetItem->Clone());
+    const std::unique_ptr<SvxSetItem> pNewSetItem(static_cast<SvxSetItem*>(pSetItem->Clone()));
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
     // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
@@ -2703,7 +2703,6 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
 
     // set the new SvxSetItem at the real target and delete it
     rBaseImpl.GetItemSet().Put(*pNewSetItem);
-    delete pNewSetItem;
 }
 
 void SwXPageStyle::SetPropertyValues_Impl(
