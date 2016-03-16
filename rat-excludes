@@ -28,34 +28,6 @@ main/swext/mediawiki/src/filter/odt2mediawiki.xsl
 main/testautomation/writer/optional/input/clipboard/dummy.txt
 main/ure/source/THIRDPARTYLICENSEREADME.html
 
-main/writerperfect/source/filter/DocumentCollector.cxx
-main/writerperfect/source/filter/DocumentCollector.hxx
-main/writerperfect/source/filter/DocumentElement.cxx
-main/writerperfect/source/filter/DocumentElement.hxx
-main/writerperfect/source/filter/DocumentHandler.cxx
-main/writerperfect/source/filter/FilterInternal.hxx
-main/writerperfect/source/filter/FontStyle.cxx
-main/writerperfect/source/filter/FontStyle.hxx
-main/writerperfect/source/filter/ListStyle.cxx
-main/writerperfect/source/filter/ListStyle.hxx
-main/writerperfect/source/filter/PageSpan.cxx
-main/writerperfect/source/filter/PageSpan.hxx
-main/writerperfect/source/filter/SectionStyle.cxx
-main/writerperfect/source/filter/SectionStyle.hxx
-main/writerperfect/source/filter/Style.hxx
-main/writerperfect/source/filter/TableStyle.cxx
-main/writerperfect/source/filter/TableStyle.hxx
-main/writerperfect/source/filter/TextRunStyle.cxx
-main/writerperfect/source/filter/TextRunStyle.hxx
-main/writerperfect/source/filter/WriterProperties.hxx
-main/writerperfect/source/stream/WPXSvStream.cxx
-main/writerperfect/source/stream/WPXSvStream.h
-main/writerperfect/source/wpdimp/WordPerfectCollector.cxx
-main/writerperfect/source/wpdimp/WordPerfectCollector.hxx
-main/writerperfect/source/wpdimp/WordPerfectImportFilter.cxx
-main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
-
-
 ##############################################################################
 #
 # small files with no creative content

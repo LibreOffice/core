@@ -163,7 +163,6 @@ MODULES_WITH_WARNINGS := \
     starmath \
     svx \
     sw \
-    writerperfect \
     xmlsecurity
 
 

@@ -233,7 +233,6 @@ application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.database; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
-application/vnd.writerperfect; %unixfilename -view %s
 application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
