@@ -1121,7 +1121,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLCaptionEscapeRelative();
                 break;
             case XML_SD_TYPE_CAPTION_ESC_ABS:
-                pHdl = new XMLPercentOrMeasurePropertyHandler( false );
+                pHdl = new XMLPercentOrMeasurePropertyHandler;
                 break;
             case XML_SD_TYPE_CAPTION_ESC_DIR:
                 pHdl = new XMLEnumPropertyHdl( pXML_Caption_Esc_Dir_Enum , ::cppu::UnoType<sal_Int32>::get());

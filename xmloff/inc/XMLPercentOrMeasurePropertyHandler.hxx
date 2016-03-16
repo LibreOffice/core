@@ -30,7 +30,7 @@ class XMLPercentOrMeasurePropertyHandler : public XMLPropertyHandler
 private:
     bool mbPercent;
 public:
-    XMLPercentOrMeasurePropertyHandler( bool bPercent );
+    XMLPercentOrMeasurePropertyHandler();
     virtual ~XMLPercentOrMeasurePropertyHandler ();
 
     virtual bool importXML(

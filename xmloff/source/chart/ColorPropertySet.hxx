@@ -34,8 +34,7 @@ class ColorPropertySet : public ::cppu::WeakImplHelper<
         css::beans::XPropertyState >
 {
 public:
-    // if bFillColor == false, the color is a LineColor
-    explicit ColorPropertySet( sal_Int32 nColor, bool bFillColor = true );
+    explicit ColorPropertySet( sal_Int32 nColor );
     virtual ~ColorPropertySet();
 
 protected:

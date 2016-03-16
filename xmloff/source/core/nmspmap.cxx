@@ -271,10 +271,9 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
 
 sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName(
                             const OUString& rAttrName,
-                            OUString *pLocalName,
-                            bool bCache) const
+                            OUString *pLocalName) const
 {
-    return _GetKeyByAttrName( rAttrName, nullptr, pLocalName, nullptr, bCache );
+    return _GetKeyByAttrName( rAttrName, nullptr, pLocalName, nullptr, false/*bCache*/ );
 }
 
 sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,

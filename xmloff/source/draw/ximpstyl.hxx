@@ -210,7 +210,6 @@ public:
 
     SdXMLStylesContext(
         SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         bool bIsAutoStyle);
@@ -238,7 +237,6 @@ public:
 
     SdXMLMasterStylesContext(
         SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
         const OUString& rLName);
     virtual ~SdXMLMasterStylesContext();
 

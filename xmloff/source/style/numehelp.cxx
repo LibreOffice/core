@@ -78,7 +78,7 @@ XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
 
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, OUString& sCurrency, bool& bIsStandard)
 {
-    XMLNumberFormat aFormat("", nNumberFormat, 0);
+    XMLNumberFormat aFormat("", nNumberFormat);
     XMLNumberFormatSet::iterator aItr(aNumberFormats.find(aFormat));
     XMLNumberFormatSet::iterator aEndItr(aNumberFormats.end());
     if (aItr != aEndItr)
@@ -503,13 +503,12 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     const OUString& rValue, const OUString& rCharacters,
-    bool bExportValue, bool bExportTypeAttribute,
+    bool bExportValue,
     sal_uInt16 nNamespace)
 {
     if (pExport)
     {
-        if (bExportTypeAttribute)
-            pExport->AddAttribute(nNamespace, XML_VALUE_TYPE, XML_STRING);
+        pExport->AddAttribute(nNamespace, XML_VALUE_TYPE, XML_STRING);
         if (bExportValue && !rValue.isEmpty() && (rValue != rCharacters))
             pExport->AddAttribute(sAttrStringValue, rValue);
     }

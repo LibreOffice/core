@@ -275,7 +275,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 {
                     OUString sTmp;
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    _GetKeyByAttrName( sAttr, &sTmp, false );
+                                    _GetKeyByAttrName( sAttr, &sTmp );
                     if( XML_NAMESPACE_OOOW == nPrefix )
                     {
                         sCond = sTmp;

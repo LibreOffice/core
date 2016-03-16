@@ -35,7 +35,6 @@ private:
 
 public:
     XMLScriptContext( SvXMLImport& rImport,
-                      sal_uInt16 nPrfx,
                       const OUString& rLName,
                       const css::uno::Reference< css::frame::XModel>& rDocModel );
     virtual ~XMLScriptContext();

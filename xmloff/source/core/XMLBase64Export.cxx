@@ -69,18 +69,16 @@ bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
 
 bool XMLBase64Export::exportElement(
             const Reference < XInputStream > & rIn,
-            sal_uInt16 nNamespace,
             enum ::xmloff::token::XMLTokenEnum eName )
 {
-    SvXMLElementExport aElem( GetExport(), nNamespace, eName, true, true );
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE, eName, true, true );
     return exportXML( rIn );
 }
 
 bool XMLBase64Export::exportOfficeBinaryDataElement(
             const Reference < XInputStream > & rIn )
 {
-    return exportElement( rIn, XML_NAMESPACE_OFFICE,
-                             ::xmloff::token::XML_BINARY_DATA );
+    return exportElement( rIn, ::xmloff::token::XML_BINARY_DATA );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -246,8 +246,7 @@ public:
     SdXMLTextBoxShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLTextBoxShapeContext();
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
 
@@ -389,8 +388,7 @@ public:
     SdXMLGraphicObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLGraphicObjectShapeContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -439,8 +437,7 @@ public:
     SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLObjectShapeContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -470,8 +467,7 @@ public:
     SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLAppletShapeContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -500,8 +496,7 @@ public:
     SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLPluginShapeContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -531,8 +526,7 @@ public:
     SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLFloatingFrameShapeContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -589,8 +583,7 @@ public:
 
     SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLCustomShapeContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;

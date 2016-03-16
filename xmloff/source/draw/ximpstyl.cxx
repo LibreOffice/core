@@ -936,11 +936,10 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
 
 SdXMLStylesContext::SdXMLStylesContext(
     SdXMLImport& rImport,
-    sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     bool bIsAutoStyle)
-:   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
+:   SvXMLStylesContext(rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
     Reference< uno::XComponentContext > xContext = rImport.GetComponentContext();
@@ -1459,9 +1458,8 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(
     SdXMLImport& rImport,
-    sal_uInt16 nPrfx,
     const OUString& rLName)
-:   SvXMLImportContext( rImport, nPrfx, rLName)
+:   SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLName)
 {
 }
 

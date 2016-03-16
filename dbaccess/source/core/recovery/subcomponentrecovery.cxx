@@ -185,7 +185,7 @@ namespace dbaccess
     public:
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue ) override;
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, enum ::xmloff::token::XMLTokenEnum i_eValue ) override;
-        virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const bool i_bIgnoreWhitespace ) override;
+        virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName ) override;
         virtual void    EndElement  ( const bool i_bIgnoreWhitespace ) override;
         virtual void    Characters( const OUString& i_rCharacters ) override;
 
@@ -214,10 +214,9 @@ namespace dbaccess
         m_rDelegator.addAttribute( impl_prefix( i_eName ), ::xmloff::token::GetXMLToken( i_eValue ) );
     }
 
-    void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const bool i_bIgnoreWhitespace )
+    void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName )
     {
-        if ( i_bIgnoreWhitespace )
-            m_rDelegator.ignorableWhitespace( " " );
+        m_rDelegator.ignorableWhitespace( " " );
 
         m_rDelegator.startElement( impl_prefix( i_eName ) );
     }

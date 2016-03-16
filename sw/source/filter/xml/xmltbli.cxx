@@ -495,7 +495,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             {
                 OUString sTmp;
                 const sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().
-                        _GetKeyByAttrName( rValue, &sTmp, false );
+                        _GetKeyByAttrName( rValue, &sTmp );
                 sFormula = XML_NAMESPACE_OOOW == nPrefix2 ? sTmp : rValue;
             }
             break;

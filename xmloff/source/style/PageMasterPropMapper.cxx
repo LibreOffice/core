@@ -28,16 +28,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper( bool bForExport ):
-    XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory(), bForExport)
+XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
+    XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory(), false/*bForExport*/)
 {
 }
 
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
         const XMLPropertyMapEntry* pEntries,
-        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,
-        bool bForExport ) :
-    XMLPropertySetMapper( pEntries, rFactory, bForExport )
+        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory ) :
+    XMLPropertySetMapper( pEntries, rFactory, true/*bForExport*/ )
 {
 }
 

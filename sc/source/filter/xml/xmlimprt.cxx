@@ -2302,9 +2302,7 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext(
 
     if( !(IsStylesOnlyMode()) )
     {
-        pContext = new XMLScriptContext( *this,
-            XML_NAMESPACE_OFFICE, rLocalName,
-            GetModel() );
+        pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
     }
 
     if( !pContext )

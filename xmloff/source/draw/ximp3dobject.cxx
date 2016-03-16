@@ -110,9 +110,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
-    bool bTemporaryShape)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0),
     mbMinEdgeUsed(false),
@@ -211,9 +210,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
-    bool bTemporaryShape)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     maCenter(0.0, 0.0, 0.0),
     maSize(5000.0, 5000.0, 5000.0),
     mbCenterUsed(false),
@@ -395,9 +393,8 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
-    bool bTemporaryShape)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
 
@@ -429,9 +426,8 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
-    bool bTemporaryShape)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
 

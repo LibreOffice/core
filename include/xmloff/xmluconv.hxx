@@ -145,10 +145,10 @@ public:
     /** convert double number to string (using ::rtl::math) and DO
         convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */
     void convertDouble(OUStringBuffer& rBuffer,
-        double fNumber, bool bWriteUnits) const;
+        double fNumber) const;
 
     /** convert string to double number (using ::rtl::math) and DO convert. */
-    bool convertDouble(double& rValue, const OUString& rString, bool bLookForUnits) const;
+    bool convertDouble(double& rValue, const OUString& rString) const;
 
     /** get the Null Date of the XModel and set it to the UnitConverter */
     bool setNullDate (

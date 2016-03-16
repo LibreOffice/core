@@ -4298,7 +4298,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                             double fDepth = 0;
                                             if ( aDepthParaPair.First.Value >>= fDepth )
                                             {
-                                                rExport.GetMM100UnitConverter().convertDouble( aStrBuffer, fDepth, true );
+                                                rExport.GetMM100UnitConverter().convertDouble( aStrBuffer, fDepth );
                                                 ExportParameter( aStrBuffer, aDepthParaPair.Second );
                                                 aStr = aStrBuffer.makeStringAndClear();
                                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DEPTH, aStr );
