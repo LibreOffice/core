@@ -1024,12 +1024,15 @@ void Window::SetCompoundControl( bool bCompound )
 
 void Window::IncrementLockCount()
 {
+    assert( mpWindowImpl != NULL );
     mpWindowImpl->mnLockCount++;
 }
 
 void Window::DecrementLockCount()
 {
-    mpWindowImpl->mnLockCount--;
+    assert( mpWindowImpl != NULL );
+    if (mpWindowImpl)
+        mpWindowImpl->mnLockCount--;
 }
 
 WinBits Window::GetStyle() const
