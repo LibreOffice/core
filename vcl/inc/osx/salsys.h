@@ -36,9 +36,7 @@ public:
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
 
     virtual int ShowNativeMessageBox( const OUString& rTitle,
-                                      const OUString& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton, bool bUseResources) override;
+                                      const OUString& rMessage) override;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALSYS_H

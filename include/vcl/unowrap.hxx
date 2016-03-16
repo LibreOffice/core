@@ -67,7 +67,7 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) = 0;
+    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
     virtual void                SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer > xIFace ) = 0;
 
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;

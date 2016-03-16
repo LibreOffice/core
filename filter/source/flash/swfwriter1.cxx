@@ -498,7 +498,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     {
         // todo: optimize me as this will generate a huge amount of duplicate polygons
         tools::PolyPolygon aPolyPoygon;
-        mpVDev->GetTextOutline( aPolyPoygon, rText, 0, 0, (sal_uInt16)nLen, true, nWidth, pDXArray );
+        mpVDev->GetTextOutline( aPolyPoygon, rText, (sal_uInt16)nLen, nWidth, pDXArray );
         aPolyPoygon.Translate( rPos );
         Impl_writePolyPolygon( aPolyPoygon, true, aTextColor, aTextColor );
     }

@@ -34,8 +34,8 @@
 // document closing button
 #define IID_DOCUMENTCLOSE 1
 
-DecoToolBox::DecoToolBox( vcl::Window* pParent, WinBits nStyle ) :
-    ToolBox( pParent, nStyle )
+DecoToolBox::DecoToolBox( vcl::Window* pParent ) :
+    ToolBox( pParent, 0 )
 {
     ImplInit();
 }
@@ -583,7 +583,7 @@ static void ImplAddNWFSeparator(vcl::RenderContext& rRenderContext, const Size& 
     }
 }
 
-void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight)
+void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos)
 {
     if (!pMenu)
         return;
@@ -601,73 +601,45 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                 Rectangle aRect = Rectangle(Point(nX, 1), Size(pData->aSz.Width(), GetOutputSizePixel().Height() - 2));
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
-                bool bRollover = bHighlight && nPos != nHighlightedItem;
-                if (bHighlight)
+                bool bRollover = nPos != nHighlightedItem;
+                if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_MENU_ITEM) &&
+                    rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
                 {
-                    if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_MENU_ITEM) &&
-                        rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
-                    {
-                        // draw background (transparency)
-                        MenubarValue aControlValue;
-                        aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
+                    // draw background (transparency)
+                    MenubarValue aControlValue;
+                    aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        if (!Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
-                            Erase(rRenderContext);
-                        else
-                        {
-                            Rectangle aBgRegion(Point(), GetOutputSizePixel());
-                            rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_ENTIRE_CONTROL, aBgRegion,
-                                                             ControlState::ENABLED, aControlValue, OUString());
-                        }
-
-                        ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aControlValue);
-
-                        // draw selected item
-                        ControlState nState = ControlState::ENABLED;
-                        if (bRollover)
-                            nState |= ControlState::ROLLOVER;
-                        else
-                            nState |= ControlState::SELECTED;
-                        rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_MENU_ITEM,
-                                                         aRect, nState, aControlValue, OUString() );
-                    }
+                    if (!Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
+                         Erase(rRenderContext);
                     else
                     {
-                        if (bRollover)
-                            rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuBarRolloverColor());
-                        else
-                            rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-                        rRenderContext.SetLineColor();
-                        rRenderContext.DrawRect(aRect);
+                        Rectangle aBgRegion(Point(), GetOutputSizePixel());
+                        rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_ENTIRE_CONTROL, aBgRegion,
+                                                         ControlState::ENABLED, aControlValue, OUString());
                     }
+
+                    ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aControlValue);
+
+                    // draw selected item
+                    ControlState nState = ControlState::ENABLED;
+                    if (bRollover)
+                        nState |= ControlState::ROLLOVER;
+                    else
+                        nState |= ControlState::SELECTED;
+                    rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_MENU_ITEM,
+                                                     aRect, nState, aControlValue, OUString() );
                 }
                 else
                 {
-                    if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
-                    {
-                        MenubarValue aMenubarValue;
-                        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-
-                        if (!Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
-                            rRenderContext.Erase(aRect);
-                        else
-                        {
-                            // use full window size to get proper gradient
-                            // but clip accordingly
-                            Point aPt;
-                            Rectangle aCtrlRect(aPt, GetOutputSizePixel());
-
-                            rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_ENTIRE_CONTROL,
-                                                             aCtrlRect, ControlState::ENABLED, aMenubarValue, OUString());
-                        }
-
-                        ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aMenubarValue);
-                    }
+                    if (bRollover)
+                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuBarRolloverColor());
                     else
-                        rRenderContext.Erase(aRect);
+                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
+                    rRenderContext.SetLineColor();
+                    rRenderContext.DrawRect(aRect);
                 }
                 rRenderContext.Pop();
-                pMenu->ImplPaint(rRenderContext, 0, 0, pData, bHighlight, false, bRollover);
+                pMenu->ImplPaint(rRenderContext, 0, 0, pData, true/*bHighlight*/, false, bRollover);
             }
             return;
         }
@@ -902,7 +874,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     pMenu->ImplPaint(rRenderContext, 0);
     if (nHighlightedItem != ITEMPOS_INVALID)
-        HighlightItem(rRenderContext, nHighlightedItem, true);
+        HighlightItem(rRenderContext, nHighlightedItem);
 
     // in high contrast mode draw a separating line on the lower edge
     if (!rRenderContext.IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&

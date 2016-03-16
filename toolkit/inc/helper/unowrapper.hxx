@@ -52,7 +52,7 @@ public:
     virtual void        ReleaseAllGraphics( OutputDevice* pOutDev ) override;
 
     // Window
-    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) override;
+    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
     virtual void        SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace ) override;
 
     void                WindowDestroyed( vcl::Window* pWindow ) override;

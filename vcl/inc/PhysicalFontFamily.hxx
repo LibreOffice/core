@@ -66,7 +66,7 @@ public:
 
     void                UpdateDevFontList( ImplDeviceFontList& ) const;
     void                UpdateCloneFontList( PhysicalFontCollection&,
-                                             bool bScalable, bool bEmbeddable ) const;
+                                             bool bEmbeddable ) const;
 
 static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                   FontFamily eFamily, const utl::FontNameAttr* pFontAttr );

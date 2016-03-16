@@ -558,7 +558,7 @@ bool Animation::Convert( BmpConversion eConversion )
     return bRet;
 }
 
-bool Animation::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
+bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
@@ -569,9 +569,9 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
         bRet = true;
 
         for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount, eReduce );
+            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
 
-        maBitmapEx.ReduceColors( nNewColorCount, eReduce );
+        maBitmapEx.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
     }
     else
         bRet = false;

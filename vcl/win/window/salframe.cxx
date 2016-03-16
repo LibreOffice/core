@@ -5682,7 +5682,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                     ImplHideSplash();
                     if( pWin )
                     {
-                        pWin->EnableInput( FALSE, TRUE, TRUE, NULL );
+                        pWin->EnableInput( FALSE, nullptr );
                         pWin->ImplIncModalCount();  // #106303# support frame based modal count
                     }
                 }
@@ -5691,7 +5691,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                     ImplGetSVData()->maAppData.mnModalMode--;
                     if( pWin )
                     {
-                        pWin->EnableInput( TRUE, TRUE, TRUE, NULL );
+                        pWin->EnableInput( TRUE, nullptr );
                         pWin->ImplDecModalCount();  // #106303# support frame based modal count
                     }
                 }

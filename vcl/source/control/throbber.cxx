@@ -42,12 +42,12 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet )
+Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
     :ImageControl( i_parentWindow, i_style )
     ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
-    ,meImageSet( i_imageSet )
+    ,meImageSet( IMAGES_AUTO )
 {
     maWaitTimer.SetTimeout( mnStepTime );
     maWaitTimer.SetTimeoutHdl( LINK( this, Throbber, TimeOutHdl ) );

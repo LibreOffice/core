@@ -2917,7 +2917,7 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
     }
 }
 
-void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bool bLowerIn)
+void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)
 {
     bool    bTmpUpper;
     bool    bTmpLower;
@@ -2942,7 +2942,7 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bo
     }
 
     ImplDrawUpDownButtons(rRenderContext, maUpperRect, maLowerRect,
-                          bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz);
+                          false/*bUpperIn*/, false/*bLowerIn*/, bTmpUpper, bTmpLower, !mbHorz);
 }
 
 void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect)
@@ -3018,7 +3018,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
                                                   bChecked, true, bIsWindow, nullptr, 2);
 }
 
-void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
+void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight)
 {
     if (nPos >= mpData->m_aItems.size())
         return;
@@ -3031,8 +3031,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
     rRenderContext.SetFillColor();
 
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
-    MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : nullptr;
-    OUString* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : nullptr;
 
     if (!pItem->mbEnabled)
         nHighlight = 0;
@@ -3078,8 +3076,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
     DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
     // draw separators in flat style only
-    if ( !bLayout &&
-         (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
+    if ( (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
          (pItem->meType == ToolBoxItemType::SEPARATOR) &&
          nPos > 0
          )
@@ -3112,8 +3109,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         rRenderContext.SetLineColor(Color(COL_BLACK));
         rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
-        if (!bLayout)
-            rRenderContext.DrawRect(pItem->maRect);
+        rRenderContext.DrawRect(pItem->maRect);
 
         Size aSize( GetCtrlTextWidth( pItem->maText ), GetTextHeight() );
         Point aPos( pItem->maRect.Left()+2, pItem->maRect.Top() );
@@ -3130,21 +3126,15 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         }
         else
             bClip = false;
-        if (bLayout)
-        {
-            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.getLength() );
-            mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
-            mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
-        }
         rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic,
-                                     pVector, pDisplayText );
+                                     nullptr, nullptr );
         if (bClip)
             rRenderContext.SetClipRegion();
         rRenderContext.SetFont(aOldFont);
         rRenderContext.SetTextColor(aOldTextColor);
 
         // draw Config-Frame if required
-        if (pMgr && !bLayout)
+        if (pMgr)
             pMgr->UpdateDragRect();
         return;
     }
@@ -3162,20 +3152,14 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         nStyle |= DrawButtonFlags::Pressed;
     }
 
-    if( ! bLayout )
+    if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
     {
-        if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
-        {
-            if ( (pItem->meState != TRISTATE_FALSE) || !bPaint )
-            {
-                ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
-            }
-        }
-        else
-        {
-            DecorationView aDecoView(&rRenderContext);
-            aDecoView.DrawButton(aButtonRect, nStyle);
-        }
+        ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
+    }
+    else
+    {
+        DecorationView aDecoView(&rRenderContext);
+        aDecoView.DrawButton(aButtonRect, nStyle);
     }
 
     nOffX += pItem->maRect.Left();
@@ -3199,7 +3183,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         aTxtSize.Height() = GetTextHeight();
     }
 
-    if ( bImage && ! bLayout )
+    if ( bImage )
     {
         const Image* pImage = &(pItem->maImage);
         aImageSize = pImage->GetSizePixel();
@@ -3284,7 +3268,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         }
 
         // draw selection only if not already drawn during image output (see above)
-        if ( !bLayout && !bImage && (nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) ) )
+        if ( !bImage && (nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) ) )
         {
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder(rRenderContext, pItem);
@@ -3296,20 +3280,11 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         DrawTextFlags nTextStyle = DrawTextFlags::NONE;
         if ( !pItem->mbEnabled )
             nTextStyle |= DrawTextFlags::Disable;
-        if( bLayout )
-        {
-            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.getLength() );
-            mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
-            mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
-        }
         rRenderContext.DrawCtrlText( Point( nTextOffX, nTextOffY ), pItem->maText,
-                      0, pItem->maText.getLength(), nTextStyle, pVector, pDisplayText );
+                      0, pItem->maText.getLength(), nTextStyle, nullptr, nullptr );
         if ( bRotate )
             SetFont( aOldFont );
     }
-
-    if( bLayout )
-        return;
 
     // paint optional drop down arrow
     if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
@@ -4141,7 +4116,7 @@ void ToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintR
     if (mnWinStyle & WB_SCROLL)
     {
         if (mnCurLines > mnLines)
-            ImplDrawSpin(rRenderContext, false, false);
+            ImplDrawSpin(rRenderContext);
     }
 
     // draw buttons

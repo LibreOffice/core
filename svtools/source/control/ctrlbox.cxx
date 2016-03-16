@@ -280,13 +280,13 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
                 }
             }
 
-            ListBox::DrawEntry( rUDEvt, false, true );
+            ListBox::DrawEntry( rUDEvt, false, false );
         }
         else
-            ListBox::DrawEntry( rUDEvt, false, true, true );
+            ListBox::DrawEntry( rUDEvt, false, true );
     }
     else
-        ListBox::DrawEntry( rUDEvt, true, true );
+        ListBox::DrawEntry( rUDEvt, true, false );
 }
 
 BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, double nRate2, double nRateGap ):

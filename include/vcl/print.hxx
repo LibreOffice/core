@@ -636,14 +636,13 @@ public:
 
                          UIControlOptions( const OUString& i_rDependsOnName = OUString(),
                              sal_Int32 i_nDependsOnEntry = -1, bool i_bAttachToDependency = false,
-                             const OUString& i_rGroupHint = OUString(), bool i_bInternalOnly = false,
-                             bool i_bEnabled = true)
+                             const OUString& i_rGroupHint = OUString())
                              : maDependsOnName( i_rDependsOnName )
                              , mnDependsOnEntry( i_nDependsOnEntry )
                              , mbAttachToDependency( i_bAttachToDependency )
                              , maGroupHint( i_rGroupHint )
-                             , mbInternalOnly( i_bInternalOnly )
-                             , mbEnabled( i_bEnabled ) {}
+                             , mbInternalOnly( false )
+                             , mbEnabled( true ) {}
     };
 
     // note: in the following helper functions HelpIds are expected as an OUString

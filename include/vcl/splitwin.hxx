@@ -99,9 +99,9 @@ private:
     SAL_DLLPRIVATE void ImplGetFadeInRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplGetFadeOutRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplDrawButtonRect(vcl::RenderContext& rRenderContext, const Rectangle& rRect, long nSize);
-    SAL_DLLPRIVATE void ImplDrawAutoHide(vcl::RenderContext& rRenderContext, bool bInPaint);
-    SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext, bool bInPaint);
-    SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext, bool bInPaint);
+    SAL_DLLPRIVATE void ImplDrawAutoHide(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplNewAlign();
     SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorz, bool bLeft);
     SAL_DLLPRIVATE void ImplStartSplit( const MouseEvent& rMEvt );

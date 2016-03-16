@@ -168,9 +168,9 @@ private:
     SAL_DLLPRIVATE bool            ImplCalcItem();
     SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
-    SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bool bLowerIn);
+    SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect);
-    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false );
+    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight = 0 );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );

@@ -103,7 +103,7 @@ public:
     void    RemoveFontSubstitute( int nIndex );
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
 
-    bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName, AddFontSubstituteFlags nFlags ) const;
+    bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName ) const;
 };
 
 // PreMatchFontSubstitution

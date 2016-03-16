@@ -41,7 +41,7 @@ class DecoToolBox : public ToolBox
 
     using Window::ImplInit;
 public:
-             DecoToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+             DecoToolBox( vcl::Window* pParent );
     virtual ~DecoToolBox() {}
 
     void    ImplInit();
@@ -91,7 +91,7 @@ private:
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
-    void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight);
+    void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos);
     void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true);
 
     sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;
