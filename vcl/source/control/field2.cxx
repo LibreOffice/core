@@ -1180,7 +1180,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     {
         case XTDATEF_SYSTEM_LONG:
         {
-            return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, false, 1, !bShowCentury );
+            return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), !bShowCentury );
         }
         case XTDATEF_SHORT_DDMMYY:
         case XTDATEF_SHORT_DDMMYYYY:

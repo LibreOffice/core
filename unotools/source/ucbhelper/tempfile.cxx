@@ -328,13 +328,13 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
     aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
-TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent, bool bDirectory)
+TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent)
     : pStream( nullptr )
-    , bIsDirectory( bDirectory )
+    , bIsDirectory( false )
     , bKillingFileEnabled( false )
 {
     SequentialTokens t(_bStartWithZero);
-    aName = lcl_createName(rLeadingChars, t, pExtension, pParent, bDirectory, true, true);
+    aName = lcl_createName(rLeadingChars, t, pExtension, pParent, false/*bDirectory*/, true, true);
 }
 
 TempFile::~TempFile()

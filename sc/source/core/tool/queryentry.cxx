@@ -171,7 +171,7 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( utl::SearchParam::SearchType eS
     {
         OUString aStr = maQueryItems[0].maString.getString();
         pSearchParam = new utl::SearchParam(
-            aStr, eSearchType, bCaseSens, false, false, '~', bWildMatchSel);
+            aStr, eSearchType, bCaseSens, '~', bWildMatchSel);
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;

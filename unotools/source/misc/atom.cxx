@@ -63,20 +63,16 @@ MultiAtomProvider::~MultiAtomProvider()
         delete it->second;
 }
 
-int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, bool bCreate )
+int MultiAtomProvider::getAtom( int atomClass, const OUString& rString )
 {
     std::unordered_map<int, AtomProvider*>::iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
-        return it->second->getAtom( rString, bCreate );
+        return it->second->getAtom( rString, true/*bCreate*/ );
 
-    if( bCreate )
-    {
-        AtomProvider* pNewClass;
-        m_aAtomLists[ atomClass ] = pNewClass = new AtomProvider();
-        return pNewClass->getAtom( rString, bCreate );
-    }
-    return INVALID_ATOM;
+    AtomProvider* pNewClass;
+    m_aAtomLists[ atomClass ] = pNewClass = new AtomProvider();
+    return pNewClass->getAtom( rString, true/*bCreate*/ );
 }
 
 const OUString& MultiAtomProvider::getString( int atomClass, int atom ) const

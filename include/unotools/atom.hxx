@@ -51,7 +51,7 @@ namespace utl {
         MultiAtomProvider();
         ~MultiAtomProvider();
 
-        int getAtom( int atomClass, const OUString& rString, bool bCreate = false );
+        int getAtom( int atomClass, const OUString& rString );
 
         const OUString& getString( int atomClass, int atom ) const;
     };

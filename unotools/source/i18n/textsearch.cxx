@@ -40,8 +40,6 @@ namespace utl
 SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
                                 bool bCaseSensitive,
-                                bool bWrdOnly,
-                                bool bSearchInSel,
                                 sal_uInt32 cWildEscChar,
                                 bool bWildMatchSel )
 {
@@ -50,8 +48,8 @@ SearchParam::SearchParam( const OUString &rText,
 
     m_cWildEscChar  = cWildEscChar;
 
-    m_bWordOnly     = bWrdOnly;
-    m_bSrchInSel    = bSearchInSel;
+    m_bWordOnly     = false;
+    m_bSrchInSel    = false;
     m_bCaseSense    = bCaseSensitive;
     m_bWildMatchSel = bWildMatchSel;
 

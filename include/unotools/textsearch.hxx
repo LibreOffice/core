@@ -116,8 +116,6 @@ public:
     SearchParam( const OUString &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
                     bool bCaseSensitive = true,
-                    bool bWordOnly = false,
-                    bool bSearchInSelection = false,
                     sal_uInt32 cWildEscChar = '\\',
                     bool bWildMatchSel = false );
 

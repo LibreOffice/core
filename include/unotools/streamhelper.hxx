@@ -47,10 +47,9 @@ class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public InputStreamHelper_Base
 
 public:
     OInputStreamHelper(const SvLockBytesRef& _xLockBytes,
-                       sal_uInt32 _nAvailable,
-                       sal_uInt64 _nPos = 0)
+                       sal_uInt32 _nAvailable)
         :m_xLockBytes(_xLockBytes)
-        ,m_nActPos(_nPos)
+        ,m_nActPos(0)
         ,m_nAvailable(_nAvailable){}
 
 // css::uno::XInterface

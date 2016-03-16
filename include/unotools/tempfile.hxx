@@ -67,7 +67,7 @@ public:
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
                         @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
                     */
-                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr, const OUString* pParent=nullptr, bool bDirectory=false);
+                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr, const OUString* pParent=nullptr);
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.

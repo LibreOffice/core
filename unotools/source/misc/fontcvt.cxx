@@ -1032,7 +1032,7 @@ class StarSymbolToMSMultiFontImpl : public StarSymbolToMSMultiFont
 private:
     ::std::multimap<sal_Unicode, SymbolEntry> maMagicMap;
 public:
-    explicit StarSymbolToMSMultiFontImpl(bool bPerfectOnly);
+    explicit StarSymbolToMSMultiFontImpl();
     OUString ConvertChar(sal_Unicode &rChar) override;
 };
 
@@ -1123,7 +1123,7 @@ ExtraTable aTNRExtraTab[] =
     {0xe0a9, '\\'}
 };
 
-StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
+StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
 {
     struct ConvertTable
     {
@@ -1185,10 +1185,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
     };
 
      //Allow extra conversions that are not perfect, but "good enough"
-    if (!bPerfectOnly)
-        nEntries = SAL_N_ELEMENTS(aAgressiveTable);
-    else
-        nEntries = 1;
+    nEntries = SAL_N_ELEMENTS(aAgressiveTable);
 
     for (i = 0; i < nEntries; ++i)
     {
@@ -1240,7 +1237,7 @@ OUString StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
 
 StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont()
 {
-    return new StarSymbolToMSMultiFontImpl(false/*bPerfectOnly*/);
+    return new StarSymbolToMSMultiFontImpl;
 }
 
 sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const

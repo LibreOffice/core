@@ -245,24 +245,12 @@ public:
 
                         /** The CalendarWrapper already <b>MUST</b>
                             have loaded a calendar.
-                            @param nDisplayDayOfWeek
-                                0 := abbreviated name
-                                1 := full name
-                            @param bDayOfMonthWithLeadingZero
-                                <FALSE/> := without leading zero
-                                <TRUE/>  := with leading zero if <10
-                            @param nDisplayMonth
-                                0 := abbreviated name
-                                1 := full name
                             @param bTwoDigitYear
                                 <FALSE/> := full year
                                 <TRUE/>  := year % 100
                          */
     OUString       getLongDate( const Date& rDate,
                             CalendarWrapper& rCal,
-                            sal_Int16 nDisplayDayOfWeek = 1,
-                            bool bDayOfMonthWithLeadingZero = false,
-                            sal_Int16 nDisplayMonth = 1,
                             bool bTwoDigitYear = false
                             ) const;
 
