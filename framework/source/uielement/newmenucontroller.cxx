@@ -471,12 +471,14 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& ) thr
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
             bool bShowImages( rSettings.GetUseImagesInMenus() );
+            OUString aIconTheme( rSettings.DetermineIconTheme() );
 
             PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
-            if ( m_bShowImages != bShowImages )
+            if ( m_bShowImages != bShowImages || m_aIconTheme != aIconTheme )
             {
                 m_bShowImages = bShowImages;
+                m_aIconTheme = aIconTheme;
                 setMenuImages( pVCLPopupMenu, m_bShowImages );
             }
 
@@ -540,6 +542,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
+            m_aIconTheme    = rSettings.DetermineIconTheme();
             m_bNewMenu      = m_aCommandURL == aSlotNewDocDirect;
         }
     }

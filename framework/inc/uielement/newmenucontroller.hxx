@@ -96,6 +96,7 @@ namespace framework
                                                                       m_bNewMenu    : 1,
                                                                       m_bModuleIdentified : 1,
                                                                       m_bAcceleratorCfg : 1;
+            OUString                                                  m_aIconTheme;
             OUString                                                  m_aTargetFrame;
             OUString                                                  m_aModuleIdentifier;
             OUString                                                  m_aEmptyDocURL;
