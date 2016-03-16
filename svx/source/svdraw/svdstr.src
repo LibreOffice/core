@@ -337,35 +337,35 @@ String STR_ObjNamePluralOUTLINETEXT
 
 String STR_ObjNameSingulGRAF
 {
-    Text [ en-US ] = "Graphic" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_ObjNamePluralGRAF
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Images" ;
 };
 String STR_ObjNameSingulGRAFLNK
 {
-    Text [ en-US ] = "Linked graphic" ;
+    Text [ en-US ] = "Linked image" ;
 };
 String STR_ObjNamePluralGRAFLNK
 {
-    Text [ en-US ] = "Linked graphics" ;
+    Text [ en-US ] = "Linked images" ;
 };
 String STR_ObjNameSingulGRAFNONE
 {
-    Text [ en-US ] = "Blank graphic object" ;
+    Text [ en-US ] = "Blank image object" ;
 };
 String STR_ObjNamePluralGRAFNONE
 {
-    Text [ en-US ] = "Blank graphic objects" ;
+    Text [ en-US ] = "Blank image objects" ;
 };
 String STR_ObjNameSingulGRAFNONELNK
 {
-    Text [ en-US ] = "Blank linked graphic" ;
+    Text [ en-US ] = "Blank linked image" ;
 };
 String STR_ObjNamePluralGRAFNONELNK
 {
-    Text [ en-US ] = "Blank linked graphics" ;
+    Text [ en-US ] = "Blank linked images" ;
 };
 String STR_ObjNameSingulGRAFMTF
 {
