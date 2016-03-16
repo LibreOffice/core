@@ -85,12 +85,10 @@ private:
     ScEditWindow * m_pEditFocus; ///one of m_pWndLeft, m_pWndCenter, m_pWndRight
 
     sal_uInt16       nWhich;
-    OUString         aCmdArr[6];
 
     DECL_LINK_TYPED( ObjectSelectHdl, ScEditWindow&, void );
 
 private:
-    void FillCmdArr();
     void InitPreDefinedList();
     void ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling = false);
     void InsertToDefinedList();
