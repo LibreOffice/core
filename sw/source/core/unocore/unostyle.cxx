@@ -2640,29 +2640,27 @@ uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
     return getPropertyDefaults(aSequence)[0];
 }
 
-void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SwXStyle::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if( pHint )
+    if(!pHint)
+        return;
+    if((pHint->GetId() & SFX_HINT_DYING) || (pHint->GetId() & SfxStyleSheetHintId::ERASED))
     {
-        if(( pHint->GetId() & SFX_HINT_DYING ) || ( pHint->GetId() & SfxStyleSheetHintId::ERASED))
+        m_pBasePool = nullptr;
+        EndListening(rBC);
+    }
+    else if(pHint->GetId() & (SfxStyleSheetHintId::CHANGED))
+    {
+        static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_rEntry.m_eFamily);
+        SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
+        if(!pOwnBase)
         {
-            m_pBasePool = nullptr;
             EndListening(rBC);
-        }
-        else if( pHint->GetId() &(SfxStyleSheetHintId::CHANGED|SfxStyleSheetHintId::ERASED) )
-        {
-            static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_rEntry.m_eFamily);
-            SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
-            if(!pOwnBase)
-            {
-                EndListening(rBC);
-                Invalidate();
-            }
+            Invalidate();
         }
     }
 }
-
 
 void SwXStyle::Invalidate()
 {
