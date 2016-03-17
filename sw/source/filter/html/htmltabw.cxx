@@ -51,6 +51,7 @@
 #include <htmlnum.hxx>
 #include <wrthtml.hxx>
 #include <wrtswtbl.hxx>
+//#include <swtable.hxx>
 #ifdef DBG_UTIL
 #include <viewsh.hxx>
 #include <viewopt.hxx>

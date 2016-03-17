@@ -190,12 +190,12 @@ namespace
             FndLines_t &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
             const SwTableLine* pLine = rFndLines.front()->GetLine();
-            const sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
+            const sal_uInt16 nStartLn = rTable.GetLinePos( pLine );
             sal_uInt16 nEndLn = nStartLn;
             if( rFndLines.size() > 1 )
             {
                 pLine = rFndLines.back()->GetLine();
-                nEndLn = rTable.GetTabLines().GetPos( pLine );
+                nEndLn = rTable.GetLinePos( pLine );
             }
             if( nStartLn < USHRT_MAX && nEndLn < USHRT_MAX )
             {
@@ -779,7 +779,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
         SwTableLine* pNxtLine = pMyBox->GetUpper();
         while( pNxtLine->GetUpper() )
             pNxtLine = pNxtLine->GetUpper()->GetUpper();
-        const SwTableLines::size_type nPos = GetTabLines().GetPos( pNxtLine ) + 1;
+        const SwTableLines::size_type nPos = GetLinePos( pNxtLine ) + 1;
         // Is there a next?
         if( nPos >= GetTabLines().size() )
             bDelContent = false;      // there is none, all goes into the last Box
@@ -836,7 +836,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
         // Check if we have enough space for all Lines and Boxes
         SwTableLines::size_type nTstLns = 0;
         pFLine = aFndBox.GetLines().front().get();
-        sal_uInt16 nSttLine = GetTabLines().GetPos( pFLine->GetLine() );
+        sal_uInt16 nSttLine = GetLinePos( pFLine->GetLine() );
         // Do we have as many rows, actually?
         if( 1 == nFndCnt )
         {

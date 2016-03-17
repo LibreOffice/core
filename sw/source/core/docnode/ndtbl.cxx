@@ -125,7 +125,8 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
         aLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
         aLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
-    SvxBoxItem aBox(RES_BOX); aBox.SetDistance( 55 );
+    SvxBoxItem aBox(RES_BOX);
+    aBox.SetAllDistances(55);
     if ( bTop )
         aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
     if ( bBottom )
@@ -1657,7 +1658,6 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                 if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
                 {
                     pSNd->MakeFrames( &aFrameIdx, &aDelRg.aEnd );
-                    pFrameNd = pSNd;
                     break;
                 }
                 aDelRg.aStart = *pSNd->EndOfSectionNode();
@@ -3163,7 +3163,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                 pLine = pLine->GetUpper()->GetUpper();
 
             // pLine contains the top-level Line now
-            aMsgHint.m_nSplitLine = rTable.GetTabLines().GetPos( pLine );
+            aMsgHint.m_nSplitLine = rTable.GetLinePos( pLine );
         }
 
         OUString sNewTableNm( GetUniqueTableName() );
@@ -3392,7 +3392,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         pLine = pLine->GetUpper()->GetUpper();
 
     // pLine now contains the top-level line
-    sal_uInt16 nLinePos = rTable.GetTabLines().GetPos( pLine );
+    sal_uInt16 nLinePos = rTable.GetLinePos( pLine );
     if( USHRT_MAX == nLinePos ||
         ( bAfter ? ++nLinePos >= rTable.GetTabLines().size() : !nLinePos ))
         return nullptr; // Not found or last Line!
@@ -3742,7 +3742,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
     return true;
 }
 
-bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect)
+bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect, bool const isSetStyleName)
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -3779,6 +3779,11 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
         pUndo = new SwUndoTableAutoFormat( *pTableNd, rNew );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         GetIDocumentUndoRedo().DoUndo(false);
+    }
+
+    if (isSetStyleName)
+    {   // tdf#98226 do this here where undo can record it
+        pTableNd->GetTable().SetTableStyleName(rNew.GetName());
     }
 
     rNew.RestoreTableProperties(table);

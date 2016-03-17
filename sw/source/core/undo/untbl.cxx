@@ -1409,9 +1409,10 @@ void SwUndoAttrTable::RedoImpl(::sw::UndoRedoContext & rContext)
 // UndoObject for AutoFormat on Table
 SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
                                     const SwTableAutoFormat& rAFormat )
-    : SwUndo( UNDO_TABLE_AUTOFMT ),
-    nSttNode( rTableNd.GetIndex() ),
-    bSaveContentAttr( false )
+    : SwUndo( UNDO_TABLE_AUTOFMT )
+    , m_TableStyleName(rTableNd.GetTable().GetTableStyleName())
+    , nSttNode( rTableNd.GetIndex() )
+    , bSaveContentAttr( false )
     , m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
 {
     pSaveTable = new SaveTable( rTableNd.GetTable() );
@@ -1444,6 +1445,12 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTable& table = pTableNd->GetTable();
+    if (table.GetTableStyleName() != m_TableStyleName)
+    {
+        OUString const temp(table.GetTableStyleName());
+        table.SetTableStyleName(m_TableStyleName);
+        m_TableStyleName = temp;
+    }
     SaveTable* pOrig = new SaveTable( table );
     // than go also over the ContentNodes of the EndBoxes and collect
     // all paragraph attributes
@@ -1563,19 +1570,19 @@ static SwTableLine* lcl_FindTableLine( const SwTable& rTable,
                                   rBox.GetUpper()->GetUpper()->GetTabLines()
                                 : rTable.GetTabLines();
     const SwTableLine* pLine = rBox.GetUpper();
-    sal_uInt16 nLineNo = rTableLines.GetPos( pLine );
+    sal_uInt16 nLineNo = rBox.GetLinePos( pLine );
     pRet = rTableLines[nLineNo - 1];
 
     return pRet;
 }
 
-static const SwTableLines& lcl_FindParentLines( const SwTable& rTable,
-                                       const SwTableBox& rBox )
+static sal_uInt16 lcl_FindParentLines( const SwTable& rTable,
+                                       const SwTableBox& rBox, const SwTableLine* pLine )
 {
-    const SwTableLines& rRet =
+    sal_uInt16 rRet =
         ( rBox.GetUpper()->GetUpper() != nullptr ) ?
-            rBox.GetUpper()->GetUpper()->GetTabLines() :
-            rTable.GetTabLines();
+            rBox.GetLinePos( pLine ) :
+            rTable.GetLinePos( pLine );
 
     return rRet;
 }
@@ -1614,7 +1621,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
             const SwTableBox* pSourceBox = nullptr;
             const SwTableBox* pCheckBox = nullptr;
             const SwTableLine* pBoxLine = pBox->GetUpper();
-            sal_uInt16 nLineDiff = lcl_FindParentLines(rTable,*pBox).GetPos(pBoxLine);
+            sal_uInt16 nLineDiff = lcl_FindParentLines(rTable,*pBox, pBoxLine);
             sal_uInt16 nLineNo = 0;
             for (size_t j = 0; j < rBoxes.size(); ++j)
             {
@@ -1622,8 +1629,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
                 if( pCheckBox->GetUpper()->GetUpper() == pBox->GetUpper()->GetUpper() )
                 {
                     const SwTableLine* pCheckLine = pCheckBox->GetUpper();
-                    sal_uInt16 nCheckLine = lcl_FindParentLines( rTable, *pCheckBox ).
-                    GetPos( pCheckLine );
+                    sal_uInt16 nCheckLine = lcl_FindParentLines( rTable, *pCheckBox, pCheckLine );
                     if( ( !pSourceBox || nCheckLine > nLineNo ) && nCheckLine < nLineDiff )
                     {
                         nLineNo = nCheckLine;

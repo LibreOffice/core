@@ -59,10 +59,9 @@ class SwBoxSelection;
 struct SwSaveRowSpan;
 struct Parm;
 class SwServerObject;
-
 void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
-class SwTableLines : public std::vector<SwTableLine*> {
+/*class SwTableLines : public std::vector<SwTableLine*> {
 public:
     // free's any remaining child objects
     ~SwTableLines();
@@ -74,7 +73,9 @@ public:
         return it == end() ? USHRT_MAX : it - begin();
     }
 };
-
+*/
+//using SwTableLines = std::vector<SwTableLine*>;
+typedef std::vector<SwTableLine*> SwTableLines;
 using SwTableBoxes = std::vector<SwTableBox*>;
 
 // Save content-bearing box-pointers additionally in a sorted array
@@ -120,6 +121,11 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
+    sal_uInt16 GetLinePos(const SwTableLine* pBox) const
+    {
+        SwTableLines::const_iterator it = std::find(m_aLines.begin(), m_aLines.end(), pBox);
+        return it == m_aLines.end() ? USHRT_MAX : it - m_aLines.begin();
+    }
     enum SearchType
     {
         SEARCH_NONE, // Default: expand to rectangle
@@ -137,8 +143,6 @@ public:
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &) = delete;
-    // no default ctor.
-    SwTable();
     bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTableMerge* );
     bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
@@ -340,8 +344,6 @@ class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
 
 public:
 
-    SwTableLine() : m_pUpper(nullptr) {}
-
     SwTableLine( SwTableLineFormat*, sal_uInt16 nBoxes, SwTableBox *pUp );
     virtual ~SwTableLine();
 
@@ -403,9 +405,11 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     static SwTableBoxFormat* CheckBoxFormat( SwTableBoxFormat* );
 
 public:
-
-    SwTableBox();
-
+    sal_uInt16 GetLinePos(const SwTableLine* pBox) const
+    {
+        SwTableLines::const_iterator it = std::find(m_aLines.begin(), m_aLines.end(), pBox);
+        return it == m_aLines.end() ? USHRT_MAX : it - m_aLines.begin();
+    }
     SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = nullptr );
     SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = nullptr );
     SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp = nullptr );

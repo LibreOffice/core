@@ -22,6 +22,7 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include<swtable.hxx>
 
 #include <swdllapi.h>
 
@@ -30,10 +31,9 @@
 
 class SwTableBox;
 class SwTableLine;
-class SwTableLines;
 class SwHTMLTableLayout;
 class SvxBrushItem;
-
+//class SwTableLines;
 namespace editeng { class SvxBorderLine; }
 
 //       Code aus dem HTML-Filter fuers schreiben von Tabellen
@@ -100,9 +100,6 @@ class SW_DLLPUBLIC SwWriteTableRow
 
     long nPos;                  // End-Position (twips) der Zeile
     bool mbUseLayoutHeights;
-
-    // Forbidden and not implemented.
-    SwWriteTableRow();
 
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
 

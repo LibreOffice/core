@@ -81,7 +81,7 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& rCellName ) throw (u
     const SwTableLine* pLine = pBox->GetUpper();
     const SwTableLines* pLines = pLine->GetUpper()
                      ? &pLine->GetUpper()->GetTabLines() : &pTable->GetTabLines();
-    nRet = pLines->GetPos( pLine );
+    nRet = pBox->GetLinePos( pLine );
     return nRet;
 }
 
