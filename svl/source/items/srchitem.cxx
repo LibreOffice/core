@@ -127,8 +127,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     m_bContent        ( false ),
     m_bAsianOptions   ( false ),
     m_nStartPointX(0),
-    m_nStartPointY(0),
-    m_bSearchInShapes(false)
+    m_nStartPointY(0)
 {
     EnableNotification( lcl_GetNotifyNames() );
 
@@ -227,8 +226,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     m_bContent        ( rItem.m_bContent ),
     m_bAsianOptions   ( rItem.m_bAsianOptions ),
     m_nStartPointX(rItem.m_nStartPointX),
-    m_nStartPointY(rItem.m_nStartPointY),
-    m_bSearchInShapes(rItem.m_bSearchInShapes)
+    m_nStartPointY(rItem.m_nStartPointY)
 {
     EnableNotification( lcl_GetNotifyNames() );
 }
@@ -672,11 +670,6 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             bRet = (rVal >>= m_nStartPointY);
             break;
         }
-        case MID_SEARCH_INSHAPES:
-        {
-            bRet = (rVal >>= m_bSearchInShapes);
-            break;
-        }
         default:
             OSL_FAIL( "Unknown MemberId" );
     }
@@ -697,11 +690,6 @@ sal_Int32 SvxSearchItem::GetStartPointY() const
 bool SvxSearchItem::HasStartPoint() const
 {
     return m_nStartPointX > 0 || m_nStartPointY > 0;
-}
-
-bool SvxSearchItem::IsSearchInShapes() const
-{
-    return m_bSearchInShapes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -301,10 +301,6 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
             SwWrtShell *const pWrtShell = (pDocShell) ? pDocShell->GetWrtShell() : nullptr;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : nullptr;
 
-            SvxSearchItem* pSearchItem = SwView::GetSearchItem();
-            if (pSearchItem && pSearchItem->IsSearchInShapes())
-            {
-            // Search in shapes only if explicitly requested.
             SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
             aSearchItem.SetSearchOptions(rSearchOpt);
             aSearchItem.SetBackward(!bSrchForward);
@@ -348,6 +344,7 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
             }
 
             // Writer and editeng selections are not supported in parallel.
+            SvxSearchItem* pSearchItem = SwView::GetSearchItem();
             // If we just finished search in shape text, don't attempt to do that again.
             if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
             {
@@ -377,7 +374,6 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
                         }
                     }
                 }
-            }
             }
 
             sal_Int32 aStart = 0;

@@ -61,7 +61,6 @@
 #define MID_SEARCH_STARTPOINTY          21
 #define MID_SEARCH_SEARCHFORMATTED      22
 #define MID_SEARCH_ALGORITHMTYPE2       23
-#define MID_SEARCH_INSHAPES             24
 
 #endif
 

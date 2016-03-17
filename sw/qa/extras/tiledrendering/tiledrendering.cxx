@@ -328,8 +328,7 @@ void lcl_search(bool bBackward)
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-        {"SearchItem.Backward", uno::makeAny(bBackward)},
-        {"SearchItem.SearchInShapes", uno::makeAny(true)}
+        {"SearchItem.Backward", uno::makeAny(bBackward)}
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }

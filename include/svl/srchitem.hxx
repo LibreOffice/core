@@ -90,9 +90,6 @@ class SVL_DLLPUBLIC SvxSearchItem :
     sal_Int32       m_nStartPointX;
     sal_Int32       m_nStartPointY;
 
-    /// Writer-specific: search in shape text.
-    bool            m_bSearchInShapes;
-
     virtual void    ImplCommit() override;
 
 public:
@@ -201,7 +198,6 @@ public:
     sal_Int32 GetStartPointY() const;
     /// Either x or y start point is set.
     bool HasStartPoint() const;
-    bool IsSearchInShapes() const;
 };
 
 const OUString& SvxSearchItem::GetSearchString() const
