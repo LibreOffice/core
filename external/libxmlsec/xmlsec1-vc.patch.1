@@ -1,4 +1,4 @@
-From de1c40ec9621c4100bc4153a947f2e67be0c42e5 Mon Sep 17 00:00:00 2001
+From 3f9ccaa6ac3113c45a6e021e35b2c81cf541fc1b Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:12:29 +0100
 Subject: [PATCH 08/14] xmlsec1-vc.patch
@@ -37,7 +37,7 @@ index 49dd127..f46eeee 100644
  #endif
  
 diff --git a/apps/xmlsec.c b/apps/xmlsec.c
-index 72d68fa..364ed5e 100644
+index 3aa6ebd..548cdf9 100644
 --- a/apps/xmlsec.c
 +++ b/apps/xmlsec.c
 @@ -9,7 +9,7 @@
@@ -50,10 +50,10 @@ index 72d68fa..364ed5e 100644
  #endif
  
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index cfa0a46..2f4c3e7 100644
+index 5269202..9309c3a 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -305,6 +305,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"
+@@ -311,6 +311,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
@@ -64,7 +64,7 @@ index cfa0a46..2f4c3e7 100644
  
  !if "$(UNICODE)" == "1"
  CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
-@@ -359,7 +363,11 @@ LIBS 			=
+@@ -365,7 +369,11 @@ LIBS 			=
  !if "$(DEBUG)" == "1"
  LDFLAGS 		= $(LDFLAGS) /DEBUG
  !else
