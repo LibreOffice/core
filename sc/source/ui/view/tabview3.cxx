@@ -1392,12 +1392,10 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
     SCTAB nTab = aViewData.GetTabNo();
     bool bTestNeg = true;
 
-    switch( nModifier )
+    if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
     {
-        case KEY_SHIFT:
-        case KEY_MOD1 + KEY_SHIFT:
-            nStartCol = aViewData.GetCurX();
-            bTestNeg = false;
+        nStartCol = aViewData.GetCurX();
+        bTestNeg = false;
     }
 
     DoneBlockMode( nModifier != 0 );
@@ -1413,12 +1411,10 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
     SCTAB nTab = aViewData.GetTabNo();
     bool bTestNeg = true;
 
-    switch ( nModifier )
+    if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
     {
-        case KEY_SHIFT:
-        case KEY_MOD1 + KEY_SHIFT:
-            nStartRow = aViewData.GetCurY();
-            bTestNeg = false;
+        nStartRow = aViewData.GetCurY();
+        bTestNeg = false;
     }
 
     DoneBlockMode( nModifier != 0 );
