@@ -8902,9 +8902,11 @@ dnl ===================================================================
 dnl Check for system glew
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([glew], [GLEW], [glew >= 1.10.0])
-AS_IF([test "$with_system_glew" = "yes"],
-    [PKG_CHECK_EXISTS([glew >= 1.12.0], [AC_DEFINE([HAVE_GLEW_1_12])])],
-    [AC_DEFINE([HAVE_GLEW_1_12])])
+if test "$with_system_glew" = "yes"; then
+    PKG_CHECK_EXISTS([glew >= 1.12.0], [AC_DEFINE(HAVE_GLEW_1_12)])
+else
+    AC_CHECK_LIB([GL], [glBegin], [:], [AC_MSG_ERROR(libGL required. Install libgl1-mesa-dev)])
+fi
 
 dnl ===================================================================
 dnl Check for system glyphy
