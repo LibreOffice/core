@@ -23,6 +23,7 @@
 #include <xmloff/xmlexp.hxx>
 #include "xmlitmap.hxx"
 #include <xmloff/xmltoken.hxx>
+#include<swtable.hxx>
 #include <vector>
 
 class SwDoc;
@@ -32,7 +33,6 @@ class SvXMLUnitConverter;
 class SvXMLExportItemMapper;
 class SvXMLAutoStylePoolP;
 class SwTableLine;
-class SwTableLines;
 class SwTableBox;
 class SwXMLTableColumn_Impl;
 class SwXMLTableLines_Impl;

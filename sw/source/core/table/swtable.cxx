@@ -1217,7 +1217,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     if( bCurRowOnly )
     {
         const SwTableLine* pCurrLine = pStart->GetUpper();
-        sal_uInt16 nCurr = rLines.GetPos( pCurrLine );
+        sal_uInt16 nCurr = GetLinePos( pCurrLine );
         if( nCurr >= USHRT_MAX )
             return;
 
@@ -1820,10 +1820,11 @@ Point SwTableBox::GetCoordinates() const
     do {
         const SwTableLine* pLine = pBox->GetUpper();
         // at the first level?
-        const SwTableLines* pLines = pLine->GetUpper()
-                ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
+        if( pLine->GetUpper() )
+            nY = pLine->GetUpper()->GetLinePos( pLine ) + 1 ;
+        else
+            nY = rTable.GetLinePos( pLine );
 
-        nY = pLines->GetPos( pLine ) + 1 ;
         nX = pBox->GetUpper()->GetBoxPos( pBox ) + 1;
         pBox = pLine->GetUpper();
     } while( pBox );
@@ -1845,10 +1846,12 @@ OUString SwTableBox::GetName() const
     do {
         const SwTableLine* pLine = pBox->GetUpper();
         // at the first level?
-        const SwTableLines* pLines = pLine->GetUpper()
-                ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
+        if( pLine->GetUpper() )
+            nPos = pLine->GetUpper()->GetLinePos( pLine ) + 1;
+        else
+            nPos = rTable.GetLinePos( pLine ) + 1;
 
-        sTmp = OUString::number( nPos = pLines->GetPos( pLine ) + 1 );
+        sTmp = OUString::number( nPos );
         if( !sNm.isEmpty() )
             sNm = sTmp + "." + sNm;
         else
@@ -2725,13 +2728,6 @@ void SwTableLine::RegisterToFormat( SwFormat& rFormat )
 void SwTableBox::RegisterToFormat( SwFormat& rFormat )
 {
     rFormat.Add( this );
-}
-
-// free's any remaining child objects
-SwTableLines::~SwTableLines()
-{
-    for ( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
