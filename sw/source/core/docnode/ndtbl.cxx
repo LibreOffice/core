@@ -3163,7 +3163,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                 pLine = pLine->GetUpper()->GetUpper();
 
             // pLine contains the top-level Line now
-            aMsgHint.m_nSplitLine = rTable.GetTabLines().GetPos( pLine );
+            aMsgHint.m_nSplitLine = rTable.GetLinePos( pLine );
         }
 
         OUString sNewTableNm( GetUniqueTableName() );
@@ -3392,7 +3392,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         pLine = pLine->GetUpper()->GetUpper();
 
     // pLine now contains the top-level line
-    sal_uInt16 nLinePos = rTable.GetTabLines().GetPos( pLine );
+    sal_uInt16 nLinePos = rTable.GetLinePos( pLine );
     if( USHRT_MAX == nLinePos ||
         ( bAfter ? ++nLinePos >= rTable.GetTabLines().size() : !nLinePos ))
         return nullptr; // Not found or last Line!
