@@ -493,7 +493,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         // user-defined macro name.
                         aStack << aPool.Store(ocMacro, pName->GetXclName());
                     else
-                        aStack << aPool.StoreName(nUINT16, pName->IsGlobal());
+                        aStack << aPool.StoreName(nUINT16, pName->IsGlobal() ? -1 : pName->GetScTab());
                 }
                 break;
             }
@@ -680,7 +680,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     if (pName)
                     {
                         if (pName->GetScRangeData())
-                            aStack << aPool.StoreName( nNameIdx, pName->IsGlobal());
+                            aStack << aPool.StoreName( nNameIdx, pName->IsGlobal() ? -1 : pName->GetScTab());
                         else
                             aStack << aPool.Store(ocMacro, pName->GetXclName());
                     }

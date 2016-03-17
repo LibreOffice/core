@@ -154,8 +154,8 @@ public:
     virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
-    virtual bool                IsGlobal() const;
-    virtual void                SetGlobal( bool b );
+    virtual sal_Int16           GetSheet() const;
+    virtual void                SetSheet( sal_Int16 n );
     virtual short*              GetJump() const;
     virtual const OUString&     GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
@@ -310,18 +310,18 @@ class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
 {
 private:
             sal_uInt16          nIndex;
-            bool                mbGlobal;
+            sal_Int16           mnSheet;
 public:
-                                FormulaIndexToken( OpCode e, sal_uInt16 n, bool bGlobal = true ) :
-                                    FormulaToken(  svIndex, e ), nIndex( n ), mbGlobal( bGlobal ) {}
+                                FormulaIndexToken( OpCode e, sal_uInt16 n, sal_Int16 nSheet = -1 ) :
+                                    FormulaToken(  svIndex, e ), nIndex( n ), mnSheet( nSheet ) {}
                                 FormulaIndexToken( const FormulaIndexToken& r ) :
-                                    FormulaToken( r ), nIndex( r.nIndex ), mbGlobal( r.mbGlobal ) {}
+                                    FormulaToken( r ), nIndex( r.nIndex ), mnSheet( r.mnSheet ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaIndexToken(*this); }
     virtual sal_uInt16          GetIndex() const override;
     virtual void                SetIndex( sal_uInt16 n ) override;
-    virtual bool                IsGlobal() const override;
-    virtual void                SetGlobal( bool b ) override;
+    virtual sal_Int16           GetSheet() const override;
+    virtual void                SetSheet( sal_Int16 n ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

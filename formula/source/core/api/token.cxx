@@ -221,15 +221,15 @@ void FormulaToken::SetIndex( sal_uInt16 )
     SAL_WARN( "formula.core", "FormulaToken::SetIndex: virtual dummy called" );
 }
 
-bool FormulaToken::IsGlobal() const
+sal_Int16 FormulaToken::GetSheet() const
 {
-    SAL_WARN( "formula.core", "FormulaToken::IsGlobal: virtual dummy called" );
-    return true;
+    SAL_WARN( "formula.core", "FormulaToken::GetSheet: virtual dummy called" );
+    return -1;
 }
 
-void FormulaToken::SetGlobal( bool )
+void FormulaToken::SetSheet( sal_Int16 )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetGlobal: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetSheet: virtual dummy called" );
 }
 
 short* FormulaToken::GetJump() const
@@ -1724,12 +1724,12 @@ bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 
 sal_uInt16  FormulaIndexToken::GetIndex() const             { return nIndex; }
 void        FormulaIndexToken::SetIndex( sal_uInt16 n )     { nIndex = n; }
-bool        FormulaIndexToken::IsGlobal() const             { return mbGlobal; }
-void        FormulaIndexToken::SetGlobal( bool b )          { mbGlobal = b; }
+sal_Int16   FormulaIndexToken::GetSheet() const             { return mnSheet; }
+void        FormulaIndexToken::SetSheet( sal_Int16 n )      { mnSheet = n; }
 bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nIndex == r.GetIndex() &&
-        mbGlobal == r.IsGlobal();
+        mnSheet == r.GetSheet();
 }
 const OUString& FormulaExternalToken::GetExternal() const       { return aExternal; }
 sal_uInt8       FormulaExternalToken::GetByte() const           { return nByte; }

@@ -126,7 +126,7 @@ private:
         struct RangeName
         {
             sal_uInt16 mnIndex;
-            bool mbGlobal;
+            sal_Int16  mnSheet;
         };
         ::std::vector<RangeName> maRangeNames;
 
@@ -205,7 +205,7 @@ public:
                                         // 4 externals (e.g. AddIns, Macros...)
         const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix();
-        const TokenId               StoreName( sal_uInt16 nIndex, bool bGlobal );
+        const TokenId               StoreName( sal_uInt16 nIndex, sal_Int16 nSheet );
         const TokenId               StoreExtName( sal_uInt16 nFileId, const OUString& rName );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );

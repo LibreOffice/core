@@ -234,6 +234,12 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString*
     return pData;
 }
 
+ScRangeData* ScDocument::FindRangeNameByIndexAndSheet( sal_uInt16 nIndex, SCTAB nTab ) const
+{
+    const ScRangeName* pRN = (nTab < 0 ? GetRangeName() : GetRangeName(nTab));
+    return (pRN ? pRN->findByIndex( nIndex) : nullptr);
+}
+
 void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemoveAutoFilter )
 {
     if (pDBCollection && bRemoveAutoFilter)

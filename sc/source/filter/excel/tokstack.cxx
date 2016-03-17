@@ -425,7 +425,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                 if (n < maRangeNames.size())
                 {
                     const RangeName& r = maRangeNames[n];
-                    pScToken->AddRangeName(r.mnIndex, r.mbGlobal);
+                    pScToken->AddRangeName(r.mnIndex, r.mnSheet);
                 }
             }
             break;
@@ -623,7 +623,7 @@ const TokenId TokenPool::Store( const double& rDouble )
 
 const TokenId TokenPool::Store( const sal_uInt16 nIndex )
 {
-    return StoreName(nIndex, true);
+    return StoreName(nIndex, -1);
 }
 
 const TokenId TokenPool::Store( const OUString& rString )
@@ -790,7 +790,7 @@ const TokenId TokenPool::StoreMatrix()
     return static_cast<const TokenId>(nElementAkt);
 }
 
-const TokenId TokenPool::StoreName( sal_uInt16 nIndex, bool bGlobal )
+const TokenId TokenPool::StoreName( sal_uInt16 nIndex, sal_Int16 nSheet )
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
@@ -802,7 +802,7 @@ const TokenId TokenPool::StoreName( sal_uInt16 nIndex, bool bGlobal )
     maRangeNames.push_back(RangeName());
     RangeName& r = maRangeNames.back();
     r.mnIndex = nIndex;
-    r.mbGlobal = bGlobal;
+    r.mnSheet = nSheet;
 
     ++nElementAkt;
 

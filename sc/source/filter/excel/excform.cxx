@@ -544,7 +544,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 if(pName && !pName->GetScRangeData())
                     aStack << aPool.Store( ocMacro, pName->GetXclName() );
                 else
-                    aStack << aPool.StoreName(nUINT16, true);
+                    aStack << aPool.StoreName(nUINT16, -1);
             }
                 break;
             case 0x44:
@@ -733,7 +733,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     aPool >> aStack;
                 }
                 else
-                    aStack << aPool.StoreName( nUINT16, true );
+                    aStack << aPool.StoreName( nUINT16, -1 );
                 aIn.Ignore( 12 );
                 break;
             }

@@ -422,16 +422,22 @@ bool lcl_isReference(const FormulaToken& rToken)
 
 void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
 {
-    bool bOldGlobal = pToken->IsGlobal();
-    SCTAB aOldTab = aOldPos.Tab();
+    bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(pOldDoc)->GetPool());
+    SCTAB nOldSheet = pToken->GetSheet();
+    if (bSameDoc && (nOldSheet < 0 || nOldSheet != aOldPos.Tab()))
+        // Same doc and global name or sheet-local name on other sheet stays
+        // the same.
+        return;
+
     OUString aRangeName;
     int nOldIndex = pToken->GetIndex();
     ScRangeData* pOldRangeData = nullptr;
 
     //search the name of the RangeName
-    if (!bOldGlobal)
+    if (nOldSheet >= 0)
     {
-        pOldRangeData = pOldDoc->GetRangeName(aOldTab)->findByIndex(nOldIndex);
+        const ScRangeName* pRangeName = pOldDoc->GetRangeName(nOldSheet);
+        pOldRangeData = pRangeName ? pRangeName->findByIndex(nOldIndex) : nullptr;
         if (!pOldRangeData)
             return;     //might be an error in the formula array
         aRangeName = pOldRangeData->GetUpperName();
@@ -444,12 +450,15 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
         aRangeName = pOldRangeData->GetUpperName();
     }
 
+    SAL_WARN_IF( !bSameDoc && nOldSheet >= 0 && nOldSheet != aOldPos.Tab(),
+            "sc.core", "adjustRangeName - sheet-local name was on other sheet in other document");
+    /* TODO: can we do something about that? e.g. loop over sheets? */
+
     //find corresponding range name in new document
     //first search for local range name then global range names
-    SCTAB aNewTab = aNewPos.Tab();
-    ScRangeName* pRangeName = rNewDoc.GetRangeName(aNewTab);
+    SCTAB nNewSheet = aNewPos.Tab();
+    ScRangeName* pRangeName = rNewDoc.GetRangeName(nNewSheet);
     ScRangeData* pRangeData = nullptr;
-    bool bNewGlobal = false;
     //search local range names
     if (pRangeName)
     {
@@ -458,7 +467,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     //search global range names
     if (!pRangeData)
     {
-        bNewGlobal = true;
+        nNewSheet = -1;
         pRangeName = rNewDoc.GetRangeName();
         if (pRangeName)
             pRangeData = pRangeName->findByUpperName(aRangeName);
@@ -466,21 +475,24 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     //if no range name was found copy it
     if (!pRangeData)
     {
-        bNewGlobal = bOldGlobal;
+        if (nOldSheet < 0)
+            nNewSheet = -1;
+        else
+            nNewSheet = aNewPos.Tab();
         pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
         pRangeData->SetIndex(0);    // needed for insert to assign a new index
         ScTokenArray* pRangeNameToken = pRangeData->GetCode();
-        if (rNewDoc.GetPool() != const_cast<ScDocument*>(pOldDoc)->GetPool())
+        if (!bSameDoc)
         {
             pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
             pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, false, true);
         }
 
         bool bInserted;
-        if (bNewGlobal)
+        if (nNewSheet < 0)
             bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
         else
-            bInserted = rNewDoc.GetRangeName(aNewTab)->insert(pRangeData);
+            bInserted = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
         if (!bInserted)
         {
             //if this happened we have a real problem
@@ -492,7 +504,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     }
     sal_Int32 nIndex = pRangeData->GetIndex();
     pToken->SetIndex(nIndex);
-    pToken->SetGlobal(bNewGlobal);
+    pToken->SetSheet(nNewSheet);
 }
 
 void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)
@@ -3603,7 +3615,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if( t->GetOpCode() == ocName )
         {
-            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
+            const ScRangeData* pName = pDocument->FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
             if (pName)
             {
                 if (pName->IsModified())
@@ -3657,7 +3669,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     {
         if( t->GetOpCode() == ocName )
         {
-            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
+            const ScRangeData* pName = pDocument->FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
             if (pName)
             {
                 if (pName->IsModified())
@@ -3694,6 +3706,12 @@ static void lcl_FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes, ScTokenArray
     {
         if (p->GetOpCode() == ocName)
         {
+            /* TODO: this should collect also sheet-local names, currently it
+             * collects only global names. But looking even for indexes of
+             * local names.. this always was wrong. Probably use
+             * UpdatedRangeNames instead of the set, but doing so would also
+             * need more work in copying things over clipboard and such. */
+
             sal_uInt16 nTokenIndex = p->GetIndex();
             rIndexes.insert( nTokenIndex );
 

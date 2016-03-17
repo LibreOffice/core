@@ -120,7 +120,7 @@ public:
             sal_Unicode cName[MAXSTRLEN+1];
         } extname;
         struct {
-            bool        bGlobal;
+            sal_Int16   nSheet;
             sal_uInt16  nIndex;
         } name;
         struct {
@@ -157,7 +157,7 @@ public:
     void SetErrorConstant( sal_uInt16 nErr );
 
     // These methods are ok to use, reference count not cleared.
-    void SetName(bool bGlobal, sal_uInt16 nIndex);
+    void SetName(sal_Int16 nSheet, sal_uInt16 nIndex);
     void SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const OUString& rName );
@@ -271,6 +271,9 @@ private:
     ScAddress   aPos;
 
     SvNumberFormatter* mpFormatter;
+
+    SCTAB       mnCurrentSheetTab;      // indicates current sheet number parsed so far
+    sal_Int32   mnCurrentSheetEndPos;   // position after current sheet name if parsed
 
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
     css::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;

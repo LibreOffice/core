@@ -424,7 +424,8 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     {
                         sheet::NameToken aNameToken;
                         aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
-                        aNameToken.Global = rToken.IsGlobal();
+                        /* FIXME: we need a new token with sheet number */
+                        aNameToken.Global = (rToken.GetSheet() < 0);
                         rAPI.Data <<= aNameToken;
                     }
                     break;

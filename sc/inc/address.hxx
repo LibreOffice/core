@@ -308,11 +308,19 @@ public:
         nTabP = nTab;
     }
 
+    /**
+        @param  pSheetEndPos
+                If given and Parse() sucessfully parsed a sheet name it returns
+                the end position (exclusive) behind the sheet name AND a
+                following sheet name separator. This independent of whether the
+                resulting reference is fully valid or not.
+     */
     SC_DLLPUBLIC ScRefFlags Parse(
                     const OUString&, ScDocument* = nullptr,
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
-                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
+                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
+                    sal_Int32* pSheetEndPos = nullptr );
 
     SC_DLLPUBLIC void Format( OStringBuffer& r, ScRefFlags nFlags = ScRefFlags::ZERO,
                                   const ScDocument* pDocument = nullptr,

@@ -2079,10 +2079,8 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
 void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
 {
-    SCTAB nTab = SCTAB_GLOBAL;
-    bool bGlobal = rTokData.mpScToken->IsGlobal();
-    if (!bGlobal)
-        nTab = GetCurrScTab();
+    sal_Int16 nSheet = rTokData.mpScToken->GetSheet();
+    SCTAB nTab = (nSheet < 0 ? SCTAB_GLOBAL : nSheet);
 
     XclExpNameManager& rNameMgr = GetNameManager();
     sal_uInt16 nNameIdx = rNameMgr.InsertName(nTab, rTokData.mpScToken->GetIndex());
