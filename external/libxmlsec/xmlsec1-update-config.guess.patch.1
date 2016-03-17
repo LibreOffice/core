@@ -1,26 +1,29 @@
-From 23a37fb61ca6eaa5b5cdb98b5ed559896012dc7c Mon Sep 17 00:00:00 2001
+From e557de8d785f87426fdc62bc387640904832f00a Mon Sep 17 00:00:00 2001
 From: David Tardon <dtardon@redhat.com>
 Date: Tue, 13 May 2014 16:35:04 +0200
 Subject: [PATCH 13/14] update config.* to support ppc64le
 
+Conflicts:
+	config.guess
+	config.sub
 ---
- config.guess | 541 +++++++++++++++++++++++++++++------------------------------
- config.sub   | 301 ++++++++++++++++++++++-----------
- 2 files changed, 472 insertions(+), 370 deletions(-)
+ config.guess | 489 +++++++++++++++++++++++++++++++----------------------------
+ config.sub   | 294 +++++++++++++++++++++++------------
+ 2 files changed, 453 insertions(+), 330 deletions(-)
 
 diff --git a/config.guess b/config.guess
-index da83314..b79252d 100755
+index e3a2116..b79252d 100755
 --- a/config.guess
 +++ b/config.guess
 @@ -1,14 +1,12 @@
  #! /bin/sh
  # Attempt to guess a canonical system name.
 -#   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
--#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+-#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 -#   Free Software Foundation, Inc.
 +#   Copyright 1992-2013 Free Software Foundation, Inc.
  
--timestamp='2009-04-27'
+-timestamp='2009-06-10'
 +timestamp='2013-06-10'
  
  # This file is free software; you can redistribute it and/or modify it
@@ -30,7 +33,7 @@ index da83314..b79252d 100755
  # (at your option) any later version.
  #
  # This program is distributed in the hope that it will be useful, but
-@@ -17,26 +15,22 @@ timestamp='2009-04-27'
+@@ -17,26 +15,22 @@ timestamp='2009-06-10'
  # General Public License for more details.
  #
  # You should have received a copy of the GNU General Public License
@@ -51,17 +54,17 @@ index da83314..b79252d 100755
 +# the same distribution terms that you use for the rest of that
 +# program.  This Exception is an additional permission under section 7
 +# of the GNU General Public License, version 3 ("GPLv3").
-+#
-+# Originally written by Per Bothner.
  #
 -# This script attempts to guess a canonical system name similar to
 -# config.sub.  If it succeeds, it prints the system name on stdout, and
 -# exits with 0.  Otherwise, it exits with 1.
-+# You can get the latest version of this script from:
-+# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
++# Originally written by Per Bothner.
  #
 -# The plan is that this can be called by configure scripts if you
 -# don't specify an explicit build system type.
++# You can get the latest version of this script from:
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
++#
 +# Please send patches with a ChangeLog entry to config-patches@gnu.org.
 +
  
@@ -112,15 +115,6 @@ index da83314..b79252d 100755
  	# *-*-netbsdecoff* and *-*-netbsd*.  For targets that recently
  	# switched to ELF, *-*-netbsd* would select the old
  	# object file format.  This provides both forward
-@@ -170,7 +184,7 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
- 		eval $set_cc_for_build
- 		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
--			| grep __ELF__ >/dev/null
-+			| grep -q __ELF__
- 		then
- 		    # Once all utilities can be ECOFF (netbsdecoff) or a.out (netbsdaout).
- 		    # Return netbsd for either.  FIX?
 @@ -180,7 +194,7 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
  		fi
  		;;
@@ -341,15 +335,6 @@ index da83314..b79252d 100755
  EOF
  		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
  		    test -z "$HP_ARCH" && HP_ARCH=hppa
-@@ -656,7 +680,7 @@ EOF
- 	    # => hppa64-hp-hpux11.23
- 
- 	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) |
--		grep __LP64__ >/dev/null
-+		grep -q __LP64__
- 	    then
- 		HP_ARCH="hppa2.0w"
- 	    else
 @@ -727,22 +751,22 @@ EOF
  	exit ;;
      C1*:ConvexOS:*:* | convex:ConvexOS:C1*:*)
@@ -449,17 +434,7 @@ index da83314..b79252d 100755
  		echo x86_64-unknown-interix${UNAME_RELEASE}
  		exit ;;
  	    IA64)
-@@ -822,6 +851,9 @@ EOF
-     [345]86:Windows_95:* | [345]86:Windows_98:* | [345]86:Windows_NT:*)
- 	echo i${UNAME_MACHINE}-pc-mks
- 	exit ;;
-+    8664:Windows_NT:*)
-+	echo x86_64-pc-mks
-+	exit ;;
-     i*:Windows_NT*:* | Pentium*:Windows_NT*:*)
- 	# How do we know it's Interix rather than the generic POSIX subsystem?
- 	# It also conflicts with pre-2.0 versions of AT&T UWIN. Should we
-@@ -842,210 +874,157 @@ EOF
+@@ -845,45 +874,81 @@ EOF
  	exit ;;
      *:GNU:*:*)
  	# the GNU system
@@ -550,47 +525,9 @@ index da83314..b79252d 100755
 -	echo ${UNAME_MACHINE}-unknown-linux-gnu
 +	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
  	exit ;;
--    mips:Linux:*:*)
--	eval $set_cc_for_build
--	sed 's/^	//' << EOF >$dummy.c
--	#undef CPU
--	#undef mips
--	#undef mipsel
--	#if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL)
--	CPU=mipsel
--	#else
--	#if defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB)
--	CPU=mips
--	#else
--	CPU=
--	#endif
--	#endif
--EOF
--	eval "`$CC_FOR_BUILD -E $dummy.c 2>/dev/null | sed -n '
--	    /^CPU/{
--		s: ::g
--		p
--	    }'`"
--	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-gnu"; exit; }
--	;;
--    mips64:Linux:*:*)
-+    mips:Linux:*:* | mips64:Linux:*:*)
+     mips:Linux:*:* | mips64:Linux:*:*)
  	eval $set_cc_for_build
- 	sed 's/^	//' << EOF >$dummy.c
- 	#undef CPU
--	#undef mips64
--	#undef mips64el
-+	#undef ${UNAME_MACHINE}
-+	#undef ${UNAME_MACHINE}el
- 	#if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL)
--	CPU=mips64el
-+	CPU=${UNAME_MACHINE}el
- 	#else
- 	#if defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB)
--	CPU=mips64
-+	CPU=${UNAME_MACHINE}
- 	#else
- 	CPU=
+@@ -901,123 +966,65 @@ EOF
  	#endif
  	#endif
  EOF
@@ -608,12 +545,12 @@ index da83314..b79252d 100755
 -	exit ;;
 -    ppc:Linux:*:*)
 -	echo powerpc-unknown-linux-gnu
+-	exit ;;
+-    ppc64:Linux:*:*)
+-	echo powerpc64-unknown-linux-gnu
 +    or1k:Linux:*:*)
 +	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
  	exit ;;
--    ppc64:Linux:*:*)
--	echo powerpc64-unknown-linux-gnu
--	exit ;;
 -    alpha:Linux:*:*)
 -	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
 -	  EV5)   UNAME_MACHINE=alphaev5 ;;
@@ -624,7 +561,7 @@ index da83314..b79252d 100755
 -	  EV67)  UNAME_MACHINE=alphaev67 ;;
 -	  EV68*) UNAME_MACHINE=alphaev68 ;;
 -        esac
--	objdump --private-headers /bin/sh | grep ld.so.1 >/dev/null
+-	objdump --private-headers /bin/sh | grep -q ld.so.1
 -	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
 -	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
 +    or32:Linux:*:*)
@@ -708,14 +645,6 @@ index da83314..b79252d 100755
 -	  elf32-i386)
 -		TENTATIVE="${UNAME_MACHINE}-pc-linux-gnu"
 -		;;
--	  a.out-i386-linux)
--		echo "${UNAME_MACHINE}-pc-linux-gnuaout"
--		exit ;;
--	  "")
--		# Either a pre-BFD a.out linker (linux-gnuoldld) or
--		# one that does not give us useful --help.
--		echo "${UNAME_MACHINE}-pc-linux-gnuoldld"
--		exit ;;
 -	esac
 -	# Determine whether the default compiler is a.out or elf
 -	eval $set_cc_for_build
@@ -756,7 +685,7 @@ index da83314..b79252d 100755
      i*86:DYNIX/ptx:4*:*)
  	# ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.
  	# earlier versions are messed up and put the nodename in both
-@@ -1053,11 +1032,11 @@ EOF
+@@ -1025,11 +1032,11 @@ EOF
  	echo i386-sequent-sysv4
  	exit ;;
      i*86:UNIX_SV:4.2MP:2.*)
@@ -772,16 +701,7 @@ index da83314..b79252d 100755
  	echo ${UNAME_MACHINE}-pc-sysv4.2uw${UNAME_VERSION}
  	exit ;;
      i*86:OS/2:*:*)
-@@ -1074,7 +1053,7 @@ EOF
-     i*86:syllable:*:*)
- 	echo ${UNAME_MACHINE}-pc-syllable
- 	exit ;;
--    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.0*:*)
-+    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.[02]*:*)
- 	echo i386-unknown-lynxos${UNAME_RELEASE}
- 	exit ;;
-     i*86:*DOS:*:*)
-@@ -1089,7 +1068,7 @@ EOF
+@@ -1061,7 +1068,7 @@ EOF
  	fi
  	exit ;;
      i*86:*:5:[678]*)
@@ -790,7 +710,7 @@ index da83314..b79252d 100755
  	case `/bin/uname -X | grep "^Machine"` in
  	    *486*)	     UNAME_MACHINE=i486 ;;
  	    *Pentium)	     UNAME_MACHINE=i586 ;;
-@@ -1117,13 +1096,13 @@ EOF
+@@ -1089,13 +1096,13 @@ EOF
  	exit ;;
      pc:*:*:*)
  	# Left here for compatibility:
@@ -807,7 +727,7 @@ index da83314..b79252d 100755
      Intel:Mach:3*:*)
  	echo i386-pc-mach3
  	exit ;;
-@@ -1158,8 +1137,8 @@ EOF
+@@ -1130,8 +1137,8 @@ EOF
  	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
  	  && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
      3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
@@ -818,16 +738,7 @@ index da83314..b79252d 100755
      NCR*:*:4.2:* | MPRAS*:*:4.2:*)
  	OS_REL='.3'
  	test -r /etc/.relid \
-@@ -1182,7 +1161,7 @@ EOF
-     rs6000:LynxOS:2.*:*)
- 	echo rs6000-unknown-lynxos${UNAME_RELEASE}
- 	exit ;;
--    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.0*:*)
-+    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.[02]*:*)
- 	echo powerpc-unknown-lynxos${UNAME_RELEASE}
- 	exit ;;
-     SM[BE]S:UNIX_SV:*:*)
-@@ -1202,10 +1181,10 @@ EOF
+@@ -1174,10 +1181,10 @@ EOF
  		echo ns32k-sni-sysv
  	fi
  	exit ;;
@@ -842,7 +753,7 @@ index da83314..b79252d 100755
      *:UNIX_System_V:4*:FTX*)
  	# From Gerald Hewes <hewes@openmarket.com>.
  	# How about differentiating between stratus architectures? -djm
-@@ -1231,11 +1210,11 @@ EOF
+@@ -1203,11 +1210,11 @@ EOF
  	exit ;;
      R[34]000:*System_V*:*:* | R4000:UNIX_SYSV:*:* | R*000:UNIX_SV:*:*)
  	if [ -d /usr/nec ]; then
@@ -857,7 +768,7 @@ index da83314..b79252d 100755
      BeBox:BeOS:*:*)	# BeOS running on hardware made by Be, PPC only.
  	echo powerpc-be-beos
  	exit ;;
-@@ -1248,6 +1227,9 @@ EOF
+@@ -1220,6 +1227,9 @@ EOF
      BePC:Haiku:*:*)	# Haiku running on Intel PC compatible.
  	echo i586-pc-haiku
  	exit ;;
@@ -867,7 +778,7 @@ index da83314..b79252d 100755
      SX-4:SUPER-UX:*:*)
  	echo sx4-nec-superux${UNAME_RELEASE}
  	exit ;;
-@@ -1274,9 +1256,21 @@ EOF
+@@ -1246,9 +1256,21 @@ EOF
  	exit ;;
      *:Darwin:*:*)
  	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
@@ -892,7 +803,7 @@ index da83314..b79252d 100755
  	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
  	exit ;;
      *:procnto*:*:* | *:QNX:[0123456789]*:*)
-@@ -1290,7 +1284,10 @@ EOF
+@@ -1262,7 +1284,10 @@ EOF
      *:QNX:*:4*)
  	echo i386-pc-qnx
  	exit ;;
@@ -904,7 +815,7 @@ index da83314..b79252d 100755
  	echo nse-tandem-nsk${UNAME_RELEASE}
  	exit ;;
      NSR-?:NONSTOP_KERNEL:*:*)
-@@ -1335,13 +1332,13 @@ EOF
+@@ -1307,13 +1332,13 @@ EOF
  	echo pdp10-unknown-its
  	exit ;;
      SEI:*:*:SEIUX)
@@ -920,7 +831,7 @@ index da83314..b79252d 100755
  	case "${UNAME_MACHINE}" in
  	    A*) echo alpha-dec-vms ; exit ;;
  	    I*) echo ia64-dec-vms ; exit ;;
-@@ -1359,11 +1356,11 @@ EOF
+@@ -1331,11 +1356,11 @@ EOF
      i*86:AROS:*:*)
  	echo ${UNAME_MACHINE}-pc-aros
  	exit ;;
@@ -935,7 +846,7 @@ index da83314..b79252d 100755
  eval $set_cc_for_build
  cat >$dummy.c <<EOF
  #ifdef _SEQUENT_
-@@ -1381,11 +1378,11 @@ main ()
+@@ -1353,11 +1378,11 @@ main ()
  #include <sys/param.h>
    printf ("m68k-sony-newsos%s\n",
  #ifdef NEWSOS4
@@ -951,18 +862,18 @@ index da83314..b79252d 100755
  #endif
  
 diff --git a/config.sub b/config.sub
-index 45bad78..d2a9613 100755
+index f0c82d4..d2a9613 100755
 --- a/config.sub
 +++ b/config.sub
 @@ -1,44 +1,40 @@
  #! /bin/sh
  # Configuration validation subroutine script.
 -#   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
--#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+-#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 -#   Free Software Foundation, Inc.
 +#   Copyright 1992-2013 Free Software Foundation, Inc.
  
--timestamp='2009-04-17'
+-timestamp='2009-06-11'
 +timestamp='2013-08-10'
  
 -# This file is (in principle) common to ALL GNU software.
@@ -1047,7 +958,7 @@ index 45bad78..d2a9613 100755
    *)
      basic_machine=`echo $1 | sed 's/-[^-]*$//'`
      if [ $basic_machine != $1 ]
-@@ -149,10 +149,13 @@ case $os in
+@@ -149,12 +149,12 @@ case $os in
  	-convergent* | -ncr* | -news | -32* | -3600* | -3100* | -hitachi* |\
  	-c[123]* | -convex* | -sun | -crds | -omron* | -dg | -ultra | -tti* | \
  	-harris | -dolphin | -highlevel | -gould | -cbm | -ns | -masscomp | \
@@ -1056,13 +967,14 @@ index 45bad78..d2a9613 100755
  		os=
  		basic_machine=$1
  		;;
+-        -bluegene*)
+-	        os=-cnk
 +	-bluegene*)
 +		os=-cnk
-+		;;
+ 		;;
  	-sim | -cisco | -oki | -wec | -winbond)
  		os=
- 		basic_machine=$1
-@@ -167,10 +170,10 @@ case $os in
+@@ -170,10 +170,10 @@ case $os in
  		os=-chorusos
  		basic_machine=$1
  		;;
@@ -1076,7 +988,7 @@ index 45bad78..d2a9613 100755
  	-hiux*)
  		os=-hiuxwe2
  		;;
-@@ -215,6 +218,12 @@ case $os in
+@@ -218,6 +218,12 @@ case $os in
  	-isc*)
  		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
  		;;
@@ -1089,7 +1001,7 @@ index 45bad78..d2a9613 100755
  	-lynx*)
  		os=-lynxos
  		;;
-@@ -239,20 +248,27 @@ case $basic_machine in
+@@ -242,20 +248,27 @@ case $basic_machine in
  	# Some are omitted here because they have special meanings below.
  	1750a | 580 \
  	| a29k \
@@ -1120,7 +1032,7 @@ index 45bad78..d2a9613 100755
  	| mips | mipsbe | mipseb | mipsel | mipsle \
  	| mips16 \
  	| mips64 | mips64el \
-@@ -270,32 +286,45 @@ case $basic_machine in
+@@ -273,32 +286,45 @@ case $basic_machine in
  	| mipsisa64r2 | mipsisa64r2el \
  	| mipsisa64sb1 | mipsisa64sb1el \
  	| mipsisa64sr71k | mipsisa64sr71kel \
@@ -1175,7 +1087,7 @@ index 45bad78..d2a9613 100755
  		basic_machine=$basic_machine-unknown
  		os=-none
  		;;
-@@ -305,6 +334,21 @@ case $basic_machine in
+@@ -308,6 +334,21 @@ case $basic_machine in
  		basic_machine=mt-unknown
  		;;
  
@@ -1197,7 +1109,7 @@ index 45bad78..d2a9613 100755
  	# We use `pc' rather than `unknown'
  	# because (1) that's what they normally are, and
  	# (2) the word "unknown" tends to confuse beginning users.
-@@ -319,25 +363,30 @@ case $basic_machine in
+@@ -322,25 +363,30 @@ case $basic_machine in
  	# Recognize the basic CPU types with company name.
  	580-* \
  	| a29k-* \
@@ -1231,7 +1143,7 @@ index 45bad78..d2a9613 100755
  	| mips-* | mipsbe-* | mipseb-* | mipsel-* | mipsle-* \
  	| mips16-* \
  	| mips64-* | mips64el-* \
-@@ -355,28 +404,34 @@ case $basic_machine in
+@@ -358,28 +404,34 @@ case $basic_machine in
  	| mipsisa64r2-* | mipsisa64r2el-* \
  	| mipsisa64sb1-* | mipsisa64sb1el-* \
  	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
@@ -1274,7 +1186,7 @@ index 45bad78..d2a9613 100755
  	| xstormy16-* | xtensa*-* \
  	| ymp-* \
  	| z8k-* | z80-*)
-@@ -401,7 +456,7 @@ case $basic_machine in
+@@ -404,7 +456,7 @@ case $basic_machine in
  		basic_machine=a29k-amd
  		os=-udi
  		;;
@@ -1283,14 +1195,10 @@ index 45bad78..d2a9613 100755
  		basic_machine=abacus-unknown
  		;;
  	adobe68k)
-@@ -467,11 +522,24 @@ case $basic_machine in
- 		basic_machine=bfin-`echo $basic_machine | sed 's/^[^-]*-//'`
- 		os=-linux
+@@ -474,11 +526,20 @@ case $basic_machine in
+ 		basic_machine=powerpc-ibm
+ 		os=-cnk
  		;;
-+	bluegene*)
-+		basic_machine=powerpc-ibm
-+		os=-cnk
-+		;;
 +	c54x-*)
 +		basic_machine=tic54x-`echo $basic_machine | sed 's/^[^-]*-//'`
 +		;;
@@ -1309,7 +1217,7 @@ index 45bad78..d2a9613 100755
  		basic_machine=arm-unknown
  		os=-cegcc
  		;;
-@@ -503,7 +571,7 @@ case $basic_machine in
+@@ -510,7 +571,7 @@ case $basic_machine in
  		basic_machine=craynv-cray
  		os=-unicosmp
  		;;
@@ -1318,7 +1226,7 @@ index 45bad78..d2a9613 100755
  		basic_machine=cr16-unknown
  		os=-elf
  		;;
-@@ -661,7 +729,6 @@ case $basic_machine in
+@@ -668,7 +729,6 @@ case $basic_machine in
  	i370-ibm* | ibm*)
  		basic_machine=i370-ibm
  		;;
@@ -1326,7 +1234,7 @@ index 45bad78..d2a9613 100755
  	i*86v32)
  		basic_machine=`echo $1 | sed -e 's/86.*/86-pc/'`
  		os=-sysv32
-@@ -719,8 +786,15 @@ case $basic_machine in
+@@ -726,8 +786,15 @@ case $basic_machine in
  		basic_machine=ns32k-utek
  		os=-sysv
  		;;
@@ -1343,7 +1251,7 @@ index 45bad78..d2a9613 100755
  		os=-mingw32
  		;;
  	mingw32ce)
-@@ -755,10 +829,18 @@ case $basic_machine in
+@@ -762,10 +829,18 @@ case $basic_machine in
  	ms1-*)
  		basic_machine=`echo $basic_machine | sed -e 's/ms1-/mt-/'`
  		;;
@@ -1362,7 +1270,7 @@ index 45bad78..d2a9613 100755
  	ncr3000)
  		basic_machine=i486-ncr
  		os=-sysv4
-@@ -823,6 +905,12 @@ case $basic_machine in
+@@ -830,6 +905,12 @@ case $basic_machine in
  	np1)
  		basic_machine=np1-gould
  		;;
@@ -1375,7 +1283,7 @@ index 45bad78..d2a9613 100755
  	nsr-tandem)
  		basic_machine=nsr-tandem
  		;;
-@@ -905,9 +993,10 @@ case $basic_machine in
+@@ -912,9 +993,10 @@ case $basic_machine in
  		;;
  	power)	basic_machine=power-ibm
  		;;
@@ -1388,7 +1296,7 @@ index 45bad78..d2a9613 100755
  		;;
  	ppcle | powerpclittle | ppc-le | powerpc-little)
  		basic_machine=powerpcle-unknown
-@@ -917,7 +1006,7 @@ case $basic_machine in
+@@ -924,7 +1006,7 @@ case $basic_machine in
  		;;
  	ppc64)	basic_machine=powerpc64-unknown
  		;;
@@ -1397,7 +1305,7 @@ index 45bad78..d2a9613 100755
  		;;
  	ppc64le | powerpc64little | ppc64-le | powerpc64-little)
  		basic_machine=powerpc64le-unknown
-@@ -932,7 +1021,11 @@ case $basic_machine in
+@@ -939,7 +1021,11 @@ case $basic_machine in
  		basic_machine=i586-unknown
  		os=-pw32
  		;;
@@ -1410,7 +1318,7 @@ index 45bad78..d2a9613 100755
  		basic_machine=i386-pc
  		os=-rdos
  		;;
-@@ -1001,6 +1094,9 @@ case $basic_machine in
+@@ -1008,6 +1094,9 @@ case $basic_machine in
  		basic_machine=i860-stratus
  		os=-sysv4
  		;;
@@ -1420,7 +1328,7 @@ index 45bad78..d2a9613 100755
  	sun2)
  		basic_machine=m68000-sun
  		;;
-@@ -1057,20 +1153,8 @@ case $basic_machine in
+@@ -1064,20 +1153,8 @@ case $basic_machine in
  		basic_machine=t90-cray
  		os=-unicos
  		;;
@@ -1442,7 +1350,7 @@ index 45bad78..d2a9613 100755
  		os=-linux-gnu
  		;;
  	tx39)
-@@ -1140,6 +1224,9 @@ case $basic_machine in
+@@ -1147,6 +1224,9 @@ case $basic_machine in
  	xps | xps100)
  		basic_machine=xps100-honeywell
  		;;
@@ -1452,7 +1360,7 @@ index 45bad78..d2a9613 100755
  	ymp)
  		basic_machine=ymp-cray
  		os=-unicos
-@@ -1237,9 +1324,12 @@ esac
+@@ -1244,9 +1324,12 @@ esac
  if [ x"$os" != x"" ]
  then
  case $os in
@@ -1467,14 +1375,12 @@ index 45bad78..d2a9613 100755
  	-solaris1 | -solaris1.*)
  		os=`echo $os | sed -e 's|solaris1|sunos4|'`
  		;;
-@@ -1260,22 +1350,23 @@ case $os in
- 	# Each alternative MUST END IN A *, to match a version number.
+@@ -1268,21 +1351,22 @@ case $os in
  	# -sysv* is not here because it comes later, after sysvr4.
  	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
--	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -sunos | -sunos[34]*\
+ 	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -cnk* | -sunos | -sunos[34]*\
 -	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -solaris* | -sym* \
 -	      | -kopensolaris* \
-+	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -cnk* | -sunos | -sunos[34]*\
 +	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
 +	      | -sym* | -kopensolaris* | -plan9* \
  	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
@@ -1497,7 +1403,7 @@ index 45bad78..d2a9613 100755
  	      | -uxpv* | -beos* | -mpeix* | -udk* \
  	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
  	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
-@@ -1283,7 +1374,7 @@ case $os in
+@@ -1290,7 +1374,7 @@ case $os in
  	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
  	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
  	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
@@ -1506,7 +1412,7 @@ index 45bad78..d2a9613 100755
  	# Remember, each alternative MUST END IN *, to match a version number.
  		;;
  	-qnx*)
-@@ -1322,7 +1413,7 @@ case $os in
+@@ -1329,7 +1413,7 @@ case $os in
  	-opened*)
  		os=-openedition
  		;;
@@ -1515,7 +1421,7 @@ index 45bad78..d2a9613 100755
  		os=-os400
  		;;
  	-wince*)
-@@ -1371,7 +1462,7 @@ case $os in
+@@ -1378,7 +1462,7 @@ case $os in
  	-sinix*)
  		os=-sysv4
  		;;
@@ -1524,7 +1430,7 @@ index 45bad78..d2a9613 100755
  		os=-tpf
  		;;
  	-triton*)
-@@ -1407,15 +1498,14 @@ case $os in
+@@ -1414,15 +1498,14 @@ case $os in
  	-aros*)
  		os=-aros
  		;;
@@ -1542,7 +1448,7 @@ index 45bad78..d2a9613 100755
  	-none)
  		;;
  	*)
-@@ -1438,10 +1528,10 @@ else
+@@ -1445,10 +1528,10 @@ else
  # system, and we'll never get to this point.
  
  case $basic_machine in
@@ -1555,7 +1461,7 @@ index 45bad78..d2a9613 100755
  		os=-elf
  		;;
  	*-acorn)
-@@ -1453,8 +1543,23 @@ case $basic_machine in
+@@ -1460,8 +1543,23 @@ case $basic_machine in
  	arm*-semi)
  		os=-aout
  		;;
@@ -1581,7 +1487,7 @@ index 45bad78..d2a9613 100755
  		;;
  	# This must come before the *-dec entry.
  	pdp10-*)
-@@ -1474,14 +1579,11 @@ case $basic_machine in
+@@ -1481,14 +1579,11 @@ case $basic_machine in
  		;;
  	m68000-sun)
  		os=-sunos3
@@ -1597,7 +1503,7 @@ index 45bad78..d2a9613 100755
  		os=-elf
  		;;
  	mips*-cisco)
-@@ -1490,6 +1592,9 @@ case $basic_machine in
+@@ -1497,6 +1592,9 @@ case $basic_machine in
  	mips*-*)
  		os=-elf
  		;;
@@ -1607,7 +1513,7 @@ index 45bad78..d2a9613 100755
  	or32-*)
  		os=-coff
  		;;
-@@ -1508,7 +1613,7 @@ case $basic_machine in
+@@ -1515,7 +1613,7 @@ case $basic_machine in
  	*-ibm)
  		os=-aix
  		;;
@@ -1616,15 +1522,6 @@ index 45bad78..d2a9613 100755
  		os=-mmixware
  		;;
  	*-wec)
-@@ -1613,7 +1718,7 @@ case $basic_machine in
- 			-sunos*)
- 				vendor=sun
- 				;;
--			-aix*)
-+			-cnk*|-aix*)
- 				vendor=ibm
- 				;;
- 			-beos*)
 -- 
 2.6.2
 

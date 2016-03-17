@@ -1,4 +1,4 @@
-From 26f650d3eb4b0c633d1dc44c7180aff836ee13b5 Mon Sep 17 00:00:00 2001
+From bb769e0ff1ca9018005ce833c17cc2061c550001 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:11:52 +0100
 Subject: [PATCH 07/14] xmlsec1-mingw-keymgr-mscrypto.patch
@@ -11,10 +11,10 @@ Conflicts:
  2 files changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/src/mscrypto/Makefile.am b/src/mscrypto/Makefile.am
-index 1099e3f..ccb9715 100644
+index 5cea654..3dc6452 100644
 --- a/src/mscrypto/Makefile.am
 +++ b/src/mscrypto/Makefile.am
-@@ -37,6 +37,7 @@ libxmlsec1_mscrypto_la_SOURCES =\
+@@ -39,6 +39,7 @@ libxmlsec1_mscrypto_la_SOURCES =\
  	csp_calg.h \
  	csp_oid.h \
  	xmlsec-mingw.h \
@@ -23,20 +23,20 @@ index 1099e3f..ccb9715 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/mscrypto/Makefile.in b/src/mscrypto/Makefile.in
-index e3d1607..4336fe0 100644
+index 594760d..0a79e76 100644
 --- a/src/mscrypto/Makefile.in
 +++ b/src/mscrypto/Makefile.in
 @@ -72,7 +72,8 @@ am__DEPENDENCIES_1 =
  am__libxmlsec1_mscrypto_la_SOURCES_DIST = globals.h private.h app.c \
  	certkeys.c ciphers.c crypto.c digests.c hmac.c keysstore.c \
- 	kt_rsa.c signatures.c symkeys.c x509.c x509vfy.c csp_calg.h \
--	csp_oid.h xmlsec-mingw.h ../strings.c
-+	csp_oid.h xmlsec-mingw.h ../strings.c \
+ 	kw_aes.c kw_des.c kt_rsa.c signatures.c symkeys.c x509.c \
+-	x509vfy.c csp_calg.h csp_oid.h xmlsec-mingw.h ../strings.c
++	x509vfy.c csp_calg.h csp_oid.h xmlsec-mingw.h ../strings.c \
 +	akmngr.c
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 =  \
  @SHAREDLIB_HACK_TRUE@	libxmlsec1_mscrypto_la-strings.lo
-@@ -87,7 +88,8 @@ am_libxmlsec1_mscrypto_la_OBJECTS = libxmlsec1_mscrypto_la-app.lo \
+@@ -89,7 +90,8 @@ am_libxmlsec1_mscrypto_la_OBJECTS = libxmlsec1_mscrypto_la-app.lo \
  	libxmlsec1_mscrypto_la-signatures.lo \
  	libxmlsec1_mscrypto_la-symkeys.lo \
  	libxmlsec1_mscrypto_la-x509.lo \
@@ -46,15 +46,15 @@ index e3d1607..4336fe0 100644
  	$(am__objects_2)
  libxmlsec1_mscrypto_la_OBJECTS = $(am_libxmlsec1_mscrypto_la_OBJECTS)
  libxmlsec1_mscrypto_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-@@ -339,6 +341,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
+@@ -348,6 +350,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
  libxmlsec1_mscrypto_la_SOURCES = globals.h private.h app.c certkeys.c \
- 	ciphers.c crypto.c digests.c hmac.c keysstore.c kt_rsa.c \
- 	signatures.c symkeys.c x509.c x509vfy.c csp_calg.h csp_oid.h \
+ 	ciphers.c crypto.c digests.c hmac.c keysstore.c kw_aes.c \
+ 	kw_des.c kt_rsa.c signatures.c symkeys.c x509.c x509vfy.c \
 +	akmngr.c \
- 	xmlsec-mingw.h $(NULL) $(am__append_1)
+ 	csp_calg.h csp_oid.h xmlsec-mingw.h $(NULL) $(am__append_1)
  libxmlsec1_mscrypto_la_LIBADD = \
- 	../libxmlsec1.la \
-@@ -443,6 +446,7 @@ distclean-compile:
+ 	$(MSCRYPTO_LIBS) \
+@@ -454,6 +457,7 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509vfy.Plo@am__quote@
@@ -62,7 +62,7 @@ index e3d1607..4336fe0 100644
  
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -472,6 +476,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
+@@ -483,6 +487,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
