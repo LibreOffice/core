@@ -62,7 +62,9 @@ class SwServerObject;
 
 void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
-class SwTableLines : public std::vector<SwTableLine*> {
+class SwTableLines {
+private:
+    std::vector<SwTableLine*> SwT;
 public:
     // free's any remaining child objects
     ~SwTableLines();
@@ -70,9 +72,53 @@ public:
     // return USHRT_MAX if not found, else index of position
     sal_uInt16 GetPos(const SwTableLine* pBox) const
     {
-        const_iterator it = std::find(begin(), end(), pBox);
-        return it == end() ? USHRT_MAX : it - begin();
+        std::vector<SwTableLine*>::const_iterator it = std::find(SwT.begin(), SwT.end(), pBox);
+        return it == SwT.end() ? USHRT_MAX : it - SwT.begin();
     }
+    size_t size() const
+    {
+        return SwT.size();
+    }
+    SwTableLine *operator[](size_t i) const {return SwT[i];}
+    const SwTableLine* front() const { return SwT.front();}
+    SwTableLine* front() { return SwT.front(); }
+    const SwTableLine* back() const { return SwT.back();}
+    SwTableLine* back() { return SwT.back(); }
+    std::vector<SwTableLine*>::const_iterator begin() const { return SwT.begin(); }
+    std::vector<SwTableLine*>::iterator begin() { return SwT.begin(); }
+    std::vector<SwTableLine*>::const_iterator end() const { return SwT.end(); }
+    std::vector<SwTableLine*>::iterator end() { return SwT.end(); }
+    void clear() { SwT.clear(); }
+    bool empty() const {return SwT.empty();}
+    void push_back(SwTableLine* S) {SwT.push_back(S);}
+    void erase(std::vector<SwTableLine*>::iterator it)
+    {
+        SwT.erase(it);
+    }
+     void erase(std::vector<SwTableLine*>::iterator first  , std::vector<SwTableLine*>::iterator last)
+    {
+        SwT.erase(first , last);
+    }
+    void erase(size_t index)
+    {
+        SwT.erase(SwT.begin() + index);
+    }
+    std::vector<SwTableLine*>::iterator insert(std::vector<SwTableLine*>::iterator pos , SwTableLine* S)
+    {
+        return SwT.insert(pos , S);
+    }
+    typedef std::vector<SwTableLine*>::size_type size_type;
+    void insert(std::vector<SwTableLine*>::iterator pos , std::vector<SwTableLine*>::iterator first , std::vector<SwTableLine*>::iterator last)
+    {
+        SwT.insert(pos , first , last);
+    }
+    typedef std::vector<SwTableLine*>::iterator iterator;
+    typedef std::vector<SwTableLine*>::const_iterator const_iterator;
+    void reserve(size_type n)
+    {
+        SwT.reserve(n);
+    }
+    SwTableLine* &operator[](size_t i) { return SwT[i]; }
 };
 
 class SwTableBoxes : public std::vector<SwTableBox*> {
