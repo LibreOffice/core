@@ -1,7 +1,7 @@
-From 249eb9792617b159bff3ea7fbc7ee1ef7716f7e4 Mon Sep 17 00:00:00 2001
+From 20e5f77bd3139482e9348fcb9f814b294af373aa Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:19:12 +0100
-Subject: [PATCH] xmlsec1-customkeymanage.patch
+Subject: [PATCH 12/14] xmlsec1-customkeymanage.patch
 
 Conflicts:
 	include/xmlsec/nss/app.h
@@ -59,10 +59,10 @@ index 18dff94..44837b6 100644
  certkeys.h \
  crypto.h \
 diff --git a/include/xmlsec/mscrypto/Makefile.in b/include/xmlsec/mscrypto/Makefile.in
-index 4bc1320..689971b 100644
+index 4a5a4f9..147b4f8 100644
 --- a/include/xmlsec/mscrypto/Makefile.in
 +++ b/include/xmlsec/mscrypto/Makefile.in
-@@ -281,6 +281,7 @@ top_srcdir = @top_srcdir@
+@@ -288,6 +288,7 @@ top_srcdir = @top_srcdir@
  NULL = 
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  xmlsecmscryptoinc_HEADERS = \
@@ -162,10 +162,10 @@ index e352162..997ca7f 100644
  
  install-exec-hook:
 diff --git a/include/xmlsec/nss/Makefile.in b/include/xmlsec/nss/Makefile.in
-index 4b70b00..815d1da 100644
+index 64865e5..8e97e1a 100644
 --- a/include/xmlsec/nss/Makefile.in
 +++ b/include/xmlsec/nss/Makefile.in
-@@ -288,6 +288,9 @@ bignum.h \
+@@ -295,6 +295,9 @@ bignum.h \
  keysstore.h \
  pkikeys.h \
  x509.h \
@@ -768,7 +768,7 @@ index 8cd8586..48a6bf9 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/nss/Makefile.in b/src/nss/Makefile.in
-index d10f05f..7275b4a 100644
+index 0003297..3b53588 100644
 --- a/src/nss/Makefile.in
 +++ b/src/nss/Makefile.in
 @@ -72,7 +72,8 @@ am__DEPENDENCIES_1 =
@@ -790,7 +790,7 @@ index d10f05f..7275b4a 100644
  	$(am__objects_1) $(am__objects_2)
  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
  libxmlsec1_nss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-@@ -333,6 +336,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
+@@ -340,6 +343,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
  libxmlsec1_nss_la_SOURCES = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -798,7 +798,7 @@ index d10f05f..7275b4a 100644
  	$(NULL) $(am__append_1)
  libxmlsec1_nss_la_LIBADD = \
  	$(NSS_LIBS) \
-@@ -439,6 +443,9 @@ distclean-compile:
+@@ -446,6 +450,9 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509vfy.Plo@am__quote@
@@ -808,7 +808,7 @@ index d10f05f..7275b4a 100644
  
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -468,6 +475,27 @@ libxmlsec1_nss_la-app.lo: app.c
+@@ -475,6 +482,27 @@ libxmlsec1_nss_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
@@ -6107,10 +6107,10 @@ index 8a6e97a..d1b2850 100644
  
  
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index 2f4c3e7..601d379 100644
+index 9309c3a..3fd562e 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -224,6 +224,9 @@ XMLSEC_OPENSSL_OBJS_A = \
+@@ -226,6 +226,9 @@ XMLSEC_OPENSSL_OBJS_A = \
  	$(XMLSEC_OPENSSL_INTDIR_A)\x509vfy.obj 
  
  XMLSEC_NSS_OBJS = \
@@ -6120,7 +6120,7 @@ index 2f4c3e7..601d379 100644
  	$(XMLSEC_NSS_INTDIR)\app.obj\
  	$(XMLSEC_NSS_INTDIR)\bignum.obj\
  	$(XMLSEC_NSS_INTDIR)\ciphers.obj \
-@@ -259,6 +262,7 @@ XMLSEC_NSS_OBJS_A = \
+@@ -261,6 +264,7 @@ XMLSEC_NSS_OBJS_A = \
  	$(XMLSEC_NSS_INTDIR_A)\strings.obj
  
  XMLSEC_MSCRYPTO_OBJS = \

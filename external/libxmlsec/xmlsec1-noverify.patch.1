@@ -1,4 +1,4 @@
-From 9a28fa3b996be34b72548456c9877a9e0e0460ab Mon Sep 17 00:00:00 2001
+From 90dc858561bdb830a8dcc9ada71a67839feb41e0 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:10:16 +0100
 Subject: [PATCH 06/14] xmlsec1-noverify.patch
@@ -11,10 +11,10 @@ Conflicts:
  2 files changed, 31 insertions(+), 10 deletions(-)
 
 diff --git a/src/mscrypto/x509vfy.c b/src/mscrypto/x509vfy.c
-index ab6fe0f..5a91bdf 100644
+index cf31787..80de2c9 100644
 --- a/src/mscrypto/x509vfy.c
 +++ b/src/mscrypto/x509vfy.c
-@@ -564,9 +564,16 @@ xmlSecMSCryptoX509StoreVerify(xmlSecKeyDataStorePtr store, HCERTSTORE certs,
+@@ -560,9 +560,16 @@ xmlSecMSCryptoX509StoreVerify(xmlSecKeyDataStorePtr store, HCERTSTORE certs,
              CertFreeCertificateContext(nextCert);
          }
  
