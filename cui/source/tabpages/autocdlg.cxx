@@ -329,8 +329,7 @@ class OfaImpBrwString : public SvLBoxString
 {
 public:
 
-    OfaImpBrwString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
+    OfaImpBrwString( SvTreeListEntry* pEntry, const OUString& rStr ) : SvLBoxString(pEntry,0,rStr){}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -484,7 +483,7 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
         pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));
     else
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
-    pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString( pEntry, 0, rTxt)));
+    pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString( pEntry, rTxt)));
 
     return pEntry;
 }
@@ -1816,7 +1815,7 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
             pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
-    pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString(pEntry, 0, rTxt)));
+    pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString(pEntry, rTxt)));
 
     return pEntry;
 }

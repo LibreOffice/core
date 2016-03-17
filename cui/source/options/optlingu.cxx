@@ -259,8 +259,7 @@ class BrwStringDic_Impl : public SvLBoxString
 {
 public:
 
-    BrwStringDic_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+    BrwStringDic_Impl( SvTreeListEntry* pEntry, const OUString& rStr ) : SvLBoxString( pEntry, 0, rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -436,8 +435,7 @@ class BrwString_Impl : public SvLBoxString
 {
 public:
 
-    BrwString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+    BrwString_Impl( SvTreeListEntry* pEntry, const OUString& rStr ) : SvLBoxString( pEntry, 0, rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -1792,7 +1790,7 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
             pEntry, 0, Image(), Image(), false)));
     pEntry->AddItem(std::unique_ptr<BrwString_Impl>(new BrwString_Impl(
-            pEntry, 0, rTxt)));
+            pEntry, rTxt)));
 
     return pEntry;
 }
@@ -1921,7 +1919,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));    // empty column
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)));
-    pEntry->AddItem(std::unique_ptr<BrwStringDic_Impl>(new BrwStringDic_Impl(pEntry, 0, rTxt)));
+    pEntry->AddItem(std::unique_ptr<BrwStringDic_Impl>(new BrwStringDic_Impl(pEntry, rTxt)));
 
     return pEntry;
 }
