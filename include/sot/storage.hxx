@@ -78,8 +78,7 @@ protected:
    void                 CreateStorage( bool bUCBStorage, StreamMode, bool transacted );
 public:
                         SotStorage( const OUString &,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    bool transacted = false );
+                                    StreamMode = STREAM_STD_READWRITE );
                         SotStorage( bool bUCBStorage, const OUString &,
                                     StreamMode = STREAM_STD_READWRITE );
                         SotStorage( BaseStorage * );

@@ -294,11 +294,11 @@ SotStorage::SotStorage()
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
 
-SotStorage::SotStorage( const OUString & rName, StreamMode nMode, bool transacted )
+SotStorage::SotStorage( const OUString & rName, StreamMode nMode )
     INIT_SotStorage()
 {
     m_aName = rName; // Namen merken
-    CreateStorage( true, nMode, transacted );
+    CreateStorage( true, nMode, false );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;
 }

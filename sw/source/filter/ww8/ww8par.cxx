@@ -4885,7 +4885,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 
-        tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, true );
+        tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, STREAM_STD_READWRITE );
 
         BasicProjImportHelper aBasicImporter( *m_pDocShell );
         // Import vba via oox filter

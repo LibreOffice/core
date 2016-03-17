@@ -871,11 +871,11 @@ bool StgDataStrm::SetSize( sal_Int32 nBytes )
 // If bForce = true, a read of non-existent data causes
 // a read fault.
 
-void* StgDataStrm::GetPtr( sal_Int32 Pos, bool bForce, bool bDirty )
+void* StgDataStrm::GetPtr( sal_Int32 Pos, bool bDirty )
 {
     if( Pos2Page( Pos ) )
     {
-        rtl::Reference< StgPage > pPg = m_rIo.Get( m_nPage, bForce );
+        rtl::Reference< StgPage > pPg = m_rIo.Get( m_nPage, true/*bForce*/ );
         if (pPg.is() && m_nOffset < pPg->GetSize())
         {
             if( bDirty )
@@ -919,7 +919,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 }
                 else
                     // do a direct (unbuffered) read
-                    nRes = (short) m_rIo.Read( m_nPage, p, 1 ) * m_nPageSize;
+                    nRes = (short) m_rIo.Read( m_nPage, p ) * m_nPageSize;
             }
             else
             {
@@ -979,7 +979,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 }
                 else
                     // do a direct (unbuffered) write
-                    nRes = (short) m_rIo.Write( m_nPage, const_cast<void*>(p), 1 ) * m_nPageSize;
+                    nRes = (short) m_rIo.Write( m_nPage, const_cast<void*>(p) ) * m_nPageSize;
             }
             else
             {
@@ -1012,9 +1012,9 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
 // is also a StgStream. The start of the FAT is in the header at DataRootPage,
 // the stream itself is pointed to by the root entry (it holds start & size).
 
-StgSmallStrm::StgSmallStrm( StgIo& r, sal_Int32 nBgn, sal_Int32 nLen ) : StgStrm( r )
+StgSmallStrm::StgSmallStrm( StgIo& r, sal_Int32 nBgn ) : StgStrm( r )
 {
-    Init( nBgn, nLen );
+    Init( nBgn, 0 );
 }
 
 StgSmallStrm::StgSmallStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )

@@ -116,7 +116,7 @@ class StgDataStrm : public StgStrm      // a physical data stream
 public:
     StgDataStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen=-1 );
     StgDataStrm( StgIo&, StgDirEntry& );
-    void* GetPtr( sal_Int32 nPos, bool bForce, bool bDirty );
+    void* GetPtr( sal_Int32 nPos, bool bDirty );
     void SetIncrement( short n ) { m_nIncr = n ; }
     virtual bool SetSize( sal_Int32 ) override;
     virtual sal_Int32 Read( void*, sal_Int32 ) override;
@@ -133,7 +133,7 @@ class StgSmallStrm : public StgStrm     // a logical data stream
     StgStrm* m_pData;                     // the data stream
     void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
-    StgSmallStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen );
+    StgSmallStrm( StgIo&, sal_Int32 nBgn );
     StgSmallStrm( StgIo&, StgDirEntry& );
     virtual sal_Int32 Read( void*, sal_Int32 ) override;
     virtual sal_Int32 Write( const void*, sal_Int32 ) override;
