@@ -390,7 +390,7 @@ void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
 
 #else // not ENABLE_GMENU_INTEGRATION
 
-SalMenu*     GtkInstance::CreateMenu( bool, Menu* )          { return nullptr; }
+SalMenu*     GtkInstance::CreateMenu( bool, Menu*, SystemWindow* ) { return nullptr; }
 void         GtkInstance::DestroyMenu( SalMenu* )                {}
 SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return nullptr; }
 void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}
