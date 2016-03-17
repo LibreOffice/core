@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_5ce4793a",
+        "filename": "vcl/source/filter/sgfbram.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-17T11:32:14Z",
+      "side": 1,
+      "message": "returning something different when the debug level changes? heck no!\n\neither just remove this code, or make it a WARN/assert, but changing debug levels should never change behaviour.",
+      "revId": "f9e32f44245d9b88133d8d46a9cbe66d05620f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_bccf75b2",
+        "filename": "vcl/source/gdi/configsettings.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-17T11:32:14Z",
+      "side": 1,
+      "message": "the getConstArray() call isnt needed anymore, just remove it.",
+      "revId": "f9e32f44245d9b88133d8d46a9cbe66d05620f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_9cd43148",
+        "filename": "vcl/source/gdi/configsettings.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-17T11:32:14Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "f9e32f44245d9b88133d8d46a9cbe66d05620f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
