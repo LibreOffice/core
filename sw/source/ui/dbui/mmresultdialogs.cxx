@@ -228,9 +228,12 @@ SwMMResultSaveDialog::SwMMResultSaveDialog(vcl::Window* pParent)
     get(m_pToNF, "to-nospin");
     get(m_pOKButton, "ok");
 
-    m_pSaveAsOneRB->SetClickHdl(LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl));
-    m_pSaveIndividualRB->SetClickHdl(LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl));
-    m_pFromRB->SetClickHdl(LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl));
+    Link<Button*,void> aLink = LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl);
+    m_pSaveAsOneRB->SetClickHdl(aLink);
+    m_pSaveIndividualRB->SetClickHdl(aLink);
+    m_pFromRB->SetClickHdl(aLink);
+    // m_pSaveAsOneRB is the default, so disable m_pFromNF and m_pToNF initially.
+    aLink.Call(m_pSaveAsOneRB);
 
     m_pOKButton->SetClickHdl(LINK(this, SwMMResultSaveDialog, SaveOutputHdl_Impl));
 }
