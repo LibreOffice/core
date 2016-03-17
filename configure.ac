@@ -3793,8 +3793,13 @@ AC_SUBST(COM_IS_CLANG)
 
 if test "$CCACHE" != "" -a "$COM_IS_CLANG" = TRUE; then
     if test -z "$CCACHE_CPP2"; then
-        AC_MSG_WARN([Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings.])
-        add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings."
+        if test "$enable_ccache" = "" ; then
+            AC_MSG_WARN([Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings/errors.])
+            add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings/errors. Disabling it."
+            CCACHE=
+        else
+            AC_MSG_ERROR([Using --enable-ccache with Clang without CCACHE_CPP2 set causes spurious warnings/errors.])
+        fi
     fi
 fi
 
