@@ -51,7 +51,7 @@ class AlternativesString : public SvLBoxString
 public:
 
     AlternativesString( ThesaurusAlternativesCtrl &rControl,
-        SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr );
+        SvTreeListEntry* pEntry, const OUString& rStr );
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

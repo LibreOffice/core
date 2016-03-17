@@ -581,8 +581,7 @@ public:
     virtual void dispose() override;
 
     void            AddFunction( SvTreeListEntry* pTarget = nullptr,
-                                             bool bFront = false,
-                                             bool bAllowDuplicates = true );
+                                             bool bFront = false );
 
     void            MoveEntry( bool bMoveUp ) override;
 

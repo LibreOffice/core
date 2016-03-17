@@ -139,9 +139,9 @@ void ReplaceEdit::SetText( const OUString& rStr, const Selection& rNewSelection 
 
 AlternativesString::AlternativesString(
     ThesaurusAlternativesCtrl &rControl,
-    SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr ) :
+    SvTreeListEntry* pEntry, const OUString& rStr ) :
 
-    SvLBoxString( pEntry, nFlags, rStr ),
+    SvLBoxString( pEntry, 0, rStr ),
     m_rControlImpl( rControl )
 {
 }
@@ -236,7 +236,7 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUS
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
         new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false))); // otherwise crash
     pEntry->AddItem(std::unique_ptr<AlternativesString>(
-        new AlternativesString( *this, pEntry, 0, aText)));
+        new AlternativesString( *this, pEntry, aText)));
 
     SetExtraData( pEntry, AlternativesExtraData( rText, bIsHeader ) );
     GetModel()->Insert( pEntry );

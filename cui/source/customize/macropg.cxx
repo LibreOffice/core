@@ -446,16 +446,16 @@ class IconLBoxString : public SvLBoxString
     int m_nxImageOffset;
 
 public:
-    IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText,
+    IconLBoxString( SvTreeListEntry* pEntry, const OUString& sText,
         Image* pMacroImg, Image* pComponentImg );
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 };
 
 
-IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText,
+IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, const OUString& sText,
     Image* pMacroImg, Image* pComponentImg )
-        : SvLBoxString( pEntry, nFlags, sText )
+        : SvLBoxString( pEntry, 0, sText )
         , m_pMacroImg( pMacroImg )
         , m_pComponentImg( pComponentImg )
 {
@@ -553,7 +553,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         _pE->SetUserData( static_cast<void*>(pEventName) );
         OUString sNew( eventURL );
         _pE->ReplaceItem(std::unique_ptr<IconLBoxString>(new IconLBoxString(
-                _pE, 0, sNew, &mpImpl->aMacroImg, &mpImpl->aComponentImg)),
+                _pE, sNew, &mpImpl->aMacroImg, &mpImpl->aComponentImg)),
             LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
@@ -700,7 +700,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( false );
     pE->ReplaceItem(std::unique_ptr<IconLBoxString>(new IconLBoxString(
-                pE, 0, sEventURL, &pImpl->aMacroImg, &pImpl->aComponentImg)),
+                pE, sEventURL, &pImpl->aMacroImg, &pImpl->aComponentImg)),
         LB_MACROS_ITEMPOS );
 
     rListBox.GetModel()->InvalidateEntry( pE );

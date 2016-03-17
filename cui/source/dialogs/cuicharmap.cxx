@@ -173,10 +173,10 @@ short SvxCharacterMap::Execute()
 
 // class SvxShowText =====================================================
 
-SvxShowText::SvxShowText(vcl::Window* pParent, bool bCenter)
+SvxShowText::SvxShowText(vcl::Window* pParent)
     : Control(pParent)
     , mnY(0)
-    , mbCenter(bCenter)
+    , mbCenter(false)
 {}
 
 VCL_BUILDER_FACTORY(SvxShowText)
