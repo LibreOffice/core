@@ -452,7 +452,7 @@ private:
     virtual bool HandleDbData() override;
     virtual bool HandleTableRef() override;
 
-    virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef ) override;
+    virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2 ) override;
     virtual void CreateStringFromExternal( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromSingleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;

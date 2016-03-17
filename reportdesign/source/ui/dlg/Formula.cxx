@@ -49,7 +49,7 @@ FormulaDialog::FormulaDialog(vcl::Window* pParent
                              , const OUString& _sFormula
                              , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
                              , svl::SharedStringPool& rStrPool )
-    : FormulaModalDialog( pParent, false,false,false,_pFunctionMgr.get(),this)
+    : FormulaModalDialog( pParent, _pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_pFormulaData(new FormEditData())
     ,m_pAddField(nullptr)

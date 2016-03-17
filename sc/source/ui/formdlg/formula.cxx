@@ -62,7 +62,7 @@ using namespace com::sun::star;
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                     vcl::Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
-    : formula::FormulaDlg( pB, pCW, pParent, true,true,true, _pFunctionMgr,this)
+    : formula::FormulaDlg( pB, pCW, pParent, _pFunctionMgr,this)
     , m_aHelper(this,pB)
 {
     m_aHelper.SetWindow(this);

@@ -1706,14 +1706,11 @@ void FormulaDlg_Impl::SetEdSelection()
 }
 
 FormulaModalDialog::FormulaModalDialog(   vcl::Window* pParent
-                                        , bool _bSupportFunctionResult
-                                        , bool _bSupportResult
-                                        , bool _bSupportMatrix
                                         , IFunctionManager* _pFunctionMgr
                                         , IControlReferenceHandler* _pDlg )
     : ModalDialog(pParent, "FormulaDialog", "formula/ui/formuladialog.ui")
-    , m_pImpl(new FormulaDlg_Impl(this,_bSupportFunctionResult,
-                                  _bSupportResult, _bSupportMatrix,
+    , m_pImpl(new FormulaDlg_Impl(this, false/*_bSupportFunctionResult*/,
+                                  false/*_bSupportResult*/, false/*_bSupportMatrix*/,
                                   this, _pFunctionMgr, _pDlg))
 {
     SetText(m_pImpl->aTitle1);
@@ -1797,14 +1794,11 @@ void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
 
 FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                              vcl::Window* pParent
-                            , bool _bSupportFunctionResult
-                            , bool _bSupportResult
-                            , bool _bSupportMatrix
                             , IFunctionManager* _pFunctionMgr, IControlReferenceHandler* _pDlg ) :
         SfxModelessDialog( pB, pCW, pParent, "FormulaDialog", "formula/ui/formuladialog.ui" ),
-        m_pImpl( new FormulaDlg_Impl(this, _bSupportFunctionResult
-                                            , _bSupportResult
-                                            , _bSupportMatrix
+        m_pImpl( new FormulaDlg_Impl(this, true/*_bSupportFunctionResult*/
+                                            , true/*_bSupportResult*/
+                                            , true/*_bSupportMatrix*/
                                             , this, _pFunctionMgr, _pDlg))
 {
     //undo SfxModelessDialog HelpId clear hack
