@@ -93,7 +93,7 @@ namespace offapp
                 ++aLoopDrivers
             )
         {
-            aSettings.push_back(DriverPooling(*aLoopDrivers, false, 120));
+            aSettings.push_back(DriverPooling(*aLoopDrivers, 120));
         }
 
         // then look for which of them settings are stored in the configuration
@@ -121,7 +121,7 @@ namespace offapp
 
             if (aLookup == aSettings.end())
             {   // do not know the driver - add it
-                aSettings.push_back(DriverPooling(sThisDriverName, false, 120));
+                aSettings.push_back(DriverPooling(sThisDriverName, 120));
 
                 // and the position of the new entry
                 aLookup = aSettings.end();

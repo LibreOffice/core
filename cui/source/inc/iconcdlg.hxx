@@ -51,12 +51,12 @@ struct IconChoicePageData
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges, bool bDemand )
+    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges )
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
           fnGetRanges   ( fnRanges ),
           pPage         ( nullptr ),
-          bOnDemand     ( bDemand ),
+          bOnDemand     ( false ),
           bRefresh      ( false )
     {}
 };

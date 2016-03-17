@@ -4698,10 +4698,10 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDi
 }
 
 void SvxToolbarConfigPage::AddFunction(
-    SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
+    SvTreeListEntry* pTarget, bool bFront )
 {
     SvTreeListEntry* pNewLBEntry =
-        SvxConfigPage::AddFunction( pTarget, bFront, bAllowDuplicates );
+        SvxConfigPage::AddFunction( pTarget, bFront, true/*bAllowDuplicates*/ );
 
     SvxConfigEntry* pEntry = static_cast<SvxConfigEntry*>(pNewLBEntry->GetUserData());
 

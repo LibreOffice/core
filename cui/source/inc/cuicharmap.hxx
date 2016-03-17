@@ -39,7 +39,7 @@ namespace svx
 class SvxShowText : public Control
 {
 public:
-    SvxShowText(vcl::Window* pParent, bool bCenter = false);
+    SvxShowText(vcl::Window* pParent);
 
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) override;
