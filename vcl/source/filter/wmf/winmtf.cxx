@@ -30,7 +30,7 @@
 #include <rtl/tencinfo.h>
 #include <vcl/virdev.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #define EMFP_DEBUG(x) x
 #else
 #define EMFP_DEBUG(x)

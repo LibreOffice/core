@@ -669,7 +669,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 
     // setup click handler on the various buttons
     mpOKButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    #if OSL_DEBUG_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 0
     mpCancelButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     #endif
     mpHelpButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );

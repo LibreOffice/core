@@ -772,9 +772,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             if ( pEntry->fd )
             {
                 if ( FD_ISSET( nFD, &ExceptionFDS ) ) {
-#if OSL_DEBUG_LEVEL > 1
-                    std::fprintf( stderr, "SalXLib::Yield exception\n" );
-#endif
+                    SAL_WARN("vcl.app", "SalXLib::Yield exception");
                     nFound--;
                 }
                 if ( FD_ISSET( nFD, &ReadFDS ) )

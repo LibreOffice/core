@@ -505,7 +505,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 
         if ( !hWndChild )
         {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             char *msg = NULL;
             FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER
                           |FORMAT_MESSAGE_IGNORE_INSERTS

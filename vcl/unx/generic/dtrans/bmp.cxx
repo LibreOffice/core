@@ -376,9 +376,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
      */
     if( ! XMatchVisualInfo( m_pDisplay, DefaultScreen( m_pDisplay ), 24, TrueColor, &m_aInfo ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PixmapHolder reverting to default visual\n" );
-#endif
+        SAL_INFO("vcl.unx.dtrans", "PixmapHolder reverting to default visual");
         Visual* pVisual     = DefaultVisual( m_pDisplay, DefaultScreen( m_pDisplay ) );
         m_aInfo.screen      = DefaultScreen( m_pDisplay );
         m_aInfo.visual      = pVisual;
@@ -390,7 +388,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
         m_aInfo.depth       = DefaultDepth( m_pDisplay, m_aInfo.screen );
     }
     m_aColormap         = DefaultColormap( m_pDisplay, m_aInfo.screen );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static const char* pClasses[] =
         { "StaticGray", "GrayScale", "StaticColor", "PseudoColor", "TrueColor", "DirectColor" };
     fprintf( stderr, "PixmapHolder visual: id = 0x%lx, class = %s (%d), depth=%d; color map = 0x%lx\n",

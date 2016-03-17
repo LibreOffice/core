@@ -1121,11 +1121,11 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     for(; it != rInfo.m_aAliases.end(); ++it )
         aDFA.AddMapName( *it );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     if( aDFA.HasMapNames() )
     {
         OString aOrigName(OUStringToOString(aDFA.GetFamilyName(), osl_getThreadTextEncoding()));
-        OString aAliasNames(OUStringToOString(aDFA.GetAliasNames(), osl_getThreadTextEncoding()));
+        OString aAliasNames(OUStringToOString(aDFA.GetMapNames(), osl_getThreadTextEncoding()));
         SAL_INFO( "vcl.fonts", "using alias names " << aAliasNames.getStr() << " for font family " << aOrigName.getStr() );
     }
 #endif

@@ -328,9 +328,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
     if ( maContext == nullptr )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "input context creation failed\n");
-#endif
+        SAL_WARN("vcl.app", "input context creation failed");
 
         mbUseable = False;
 
@@ -511,12 +509,6 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    char pBuf[ 128 ];
-    fprintf( stderr, "selected inputmethod style = %s\n",
-             GetMethodName(mnPreeditStyle | mnStatusStyle, pBuf, sizeof(pBuf)) );
-#endif
-
     return (mnPreeditStyle != 0) && (mnStatusStyle != 0) ;
 }
 
@@ -542,10 +534,8 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUT,    static_cast<void*>(&aTextEvent));
         maClientData.pFrame->CallCallback(SALEVENT_ENDEXTTEXTINPUT, nullptr);
     }
-#if OSL_DEBUG_LEVEL > 1
     else
-        fprintf(stderr, "CommitKeyEvent without frame\n" );
-#endif
+        SAL_WARN("vcl.app", "CommitKeyEvent without frame");
 }
 
 int

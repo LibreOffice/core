@@ -1680,9 +1680,6 @@ private:
 {
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        // fprintf( stderr, "SalFrameView: doCommandBySelector %s\n", (char*)aSelector );
-        #endif
         if( (mpFrame->mnICOptions & InputContextFlags::Text) &&
             aSelector != nullptr && [self respondsToSelector: aSelector] )
         {

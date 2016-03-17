@@ -102,11 +102,7 @@ SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
             break;
 
         default:
-
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "Got unrequested XkbAnyEvent %#x/%i\n",
-                    static_cast<unsigned int>(nXKBType), static_cast<int>(nXKBType) );
-            #endif
+            SAL_WARN("vcl.app", "Got unrequested XkbAnyEvent " << (unsigned int)nXKBType << "/" << nXKBType);
             break;
     }
 }

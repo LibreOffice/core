@@ -741,7 +741,7 @@ bool CUPSManager::printJobs( const PendingJob& job, const std::vector< OString >
         for( int n = 0; n < nNumOptions; n++ )
             SAL_INFO("vcl.unx.print",
                 "    option " << pOptions[n].name << "=" << pOptions[n].value);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OString aCmd( "cp " );
         aCmd = aCmd + files.front();
         aCmd = aCmd + OString( " $HOME/cupsprint.ps" );

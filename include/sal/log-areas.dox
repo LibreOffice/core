@@ -418,6 +418,7 @@ certain functionality.
 @li @c vcl.eventtesting
 @li @c vcl.filter
 @li @c vcl.fonts - font-specific code
+@li @c vcl.fontsubset
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
 @li @c vcl.gdi.fontmetric
 @li @c vcl.gtk - Gtk+ 2/3 plugin
@@ -441,6 +442,7 @@ certain functionality.
 @li @c vcl.sm - Session Manager
 @li @c vcl.unity
 @li @c vcl.unx.print
+@li @c vcl.unx.printer
 @li @c vcl.unx.dtrans
 @li @c vcl.virdev
 @li @c vcl.window

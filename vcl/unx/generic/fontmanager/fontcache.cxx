@@ -33,7 +33,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#if OSL_DEBUG_LEVEL >1
+#if OSL_DEBUG_LEVEL > 0
 #include <cstdio>
 #endif
 
@@ -96,9 +96,7 @@ void FontCache::flush()
     aStream.Open( m_aCacheFile, StreamMode::WRITE | StreamMode::TRUNC );
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontCache::flush: opening cache file %s failed\n", OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
-#endif
+        SAL_INFO("vcl.fontmanager", "FontCache::flush: opening cache file " << m_aCacheFile << " failed");
         return;
     }
 
@@ -238,9 +236,7 @@ void FontCache::read()
     SvFileStream aStream( m_aCacheFile, StreamMode::READ );
     if( ! aStream.IsOpen() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontCache::read: opening cache file %s failed\n", OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
-#endif
+        SAL_INFO("vcl.fontmanager", "FontCache::read: opening cache file " << m_aCacheFile);
         return;
     }
 
@@ -248,9 +244,7 @@ void FontCache::read()
     aStream.ReadLine( aLine );
     if ( !(aLine == CACHE_MAGIC) )
     {
-        #if OSL_DEBUG_LEVEL >1
-        fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
-        #endif
+        SAL_INFO("vcl.fontmanager", "FontCache::read: cache file " << m_aCacheFile << " fails magic test");
         return;
     }
 
@@ -445,11 +439,9 @@ void FontCache::read()
                         {
                             bObsolete = true;
                         }
-                        #if OSL_DEBUG_LEVEL > 2
                         else
-                            fprintf( stderr, "keeping file %s in outdated cache entry due to user override\n",
-                                     aFilePath.getStr() );
-                        #endif
+                            SAL_INFO("vcl.fontmanager", "keeping file " << aFilePath.getStr() <<
+                                     " in outdated cache entry due to user override");
                     }
                     else
                         bObsolete = true;
@@ -457,9 +449,7 @@ void FontCache::read()
                 if( bObsolete )
                 {
                     m_bDoFlush = true;
-#if OSL_DEBUG_LEVEL > 2
-                    fprintf( stderr, "removing obsolete font %s\n", aFile.getStr() );
-#endif
+                    SAL_INFO("vcl.fontmanager", "removing obsolete font " << aFile.getStr());
                     delete pFont;
                     continue;
                 }

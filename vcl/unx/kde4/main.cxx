@@ -62,7 +62,7 @@ extern "C" {
             nMinor = aVersion.getToken( 0, '.', nIndex ).toInt32();
         if( nMajor != 4 || nMinor < 1 )
         {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             sal_Int32 nMicro = 0;
             if( nIndex > 0 )
                 nMicro = aVersion.getToken( 0, '.', nIndex ).toInt32();

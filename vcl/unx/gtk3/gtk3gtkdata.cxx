@@ -552,7 +552,7 @@ void GtkData::Init()
         g_free( pCmdLineAry[i] );
     delete [] pCmdLineAry;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if (g_getenv("SAL_DEBUG_UPDATES"))
         gdk_window_set_debug_updates (TRUE);
 #endif

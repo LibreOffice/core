@@ -487,14 +487,13 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 *************************************************************************/
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
 {
-#if OSL_DEBUG_LEVEL > 1 // check record size, new Compiler had different alignment!
-    if (sizeof(SgfHeader)!=SgfHeaderSize ||
+    SAL_WARN_IF(sizeof(SgfHeader)!=SgfHeaderSize ||
         sizeof(SgfEntry) !=SgfEntrySize  ||
         sizeof(SgfVector)!=SgfVectorSize ||
         sizeof(BmpFileHeader)!=BmpFileHeaderSize ||
         sizeof(BmpInfoHeader)!=BmpInfoHeaderSize ||
-        sizeof(RGBQuad  )!=RGBQuadSize   )  return SGF_DONTKNOW;
-#endif
+        sizeof(RGBQuad  )!=RGBQuadSize   , "vcl.filter", "Check record size, new Compiler had different alignment");
+
 
     sal_uLong     nPos;
     SgfHeader aHead;
