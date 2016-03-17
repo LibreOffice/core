@@ -147,7 +147,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
-	ui-previewer \
+	$(if $(ENABLE_OPENGL),ui-previewer) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \
@@ -288,7 +288,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
 	chartcore \
 	chartcontroller \
-	chartopengl \
+	$(if $(ENABLE_OPENGL),chartopengl) \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
@@ -845,8 +845,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicsrvtools \
 	wizards_basicsrvtutorials \
 	xmlsec \
-	chart2_opengl_shader \
-	vcl_opengl_shader \
+    $(if $(ENABLE_OPENGL),chart2_opengl_shader) \
+    $(if $(ENABLE_OPENGL),vcl_opengl_shader) \
 	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
 ))
 
