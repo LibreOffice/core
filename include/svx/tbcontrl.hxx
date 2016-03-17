@@ -293,11 +293,14 @@ public:
 class SVX_DLLPUBLIC SvxCurrencyToolBoxControl : public SfxToolBoxControl
 {
 private:
-    sal_uInt16 m_nSelectedEntry;
+    OUString     m_aFormatString;
+    LanguageType m_eLanguage;
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     virtual ~SvxCurrencyToolBoxControl();
+    virtual void Select( sal_uInt16 nSelectModifier ) override;
+    virtual void Click() override;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
