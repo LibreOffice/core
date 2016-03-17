@@ -216,17 +216,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     bool returnVal = true;
 
     QRect widgetRect = region2QRect(rControlRegion);
-    if( type == CTRL_SPINBOX && part == PART_ALL_BUTTONS )
-        type = CTRL_SPINBUTTONS;
-    if( type == CTRL_SPINBUTTONS )
-    {
-        OSL_ASSERT( value.getType() != CTRL_SPINBUTTONS );
-        const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
-        Rectangle aButtonRect( pSpinVal->maUpperRect);
-        aButtonRect.Union( pSpinVal->maLowerRect );
-        widgetRect = QRect( aButtonRect.Left(), aButtonRect.Top(),
-                            aButtonRect.Right(), aButtonRect.Bottom() );
-    }
 
     //if no image, or resized, make a new image
     if (!m_image || m_image->size() != widgetRect.size())
