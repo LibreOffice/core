@@ -476,19 +476,21 @@ public:
     void            MarkRows();
 
     /**
-     * @brief Called to select a full column
+     * Called to select the specified full column.
      *
      * @param nCol: Column number to do operation on
-     * @param nModifier:
+     * @param nModifier: 0, KEY_SHIFT, KEY_MOD1, KEY_SHIFT | KEY_MOD1
      */
+
     void            MarkColumns(SCCOL nCol, sal_Int16 nModifier);
     /**
-     * @brief Called to select a full row
+     * Called to select the specified full row.
      *
      * @param nRow: Row number to do operation on
-     * @param nModifier:
+     * @param nModifier: 0, KEY_SHIFT, KEY_MOD1, KEY_SHIFT | KEY_MOD1
      */
     void            MarkRows(SCROW nRow, sal_Int16 nModifier);
+
     void            MarkDataArea( bool bIncludeCursor = true );
     void            MarkMatrixFormula();
     void            Unmark();
