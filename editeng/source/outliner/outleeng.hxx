@@ -51,7 +51,6 @@ public:
                               const SvxFieldData* pFieldData,
                               bool bEndOfLine,
                               bool bEndOfParagraph,
-                              bool bEndOfBullet,
                               const css::lang::Locale* pLocale,
                               const Color& rOverlineColor,
                               const Color& rTextLineColor) override;

@@ -1408,7 +1408,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, OUString(), EE_FORMAT_BIN, false, mpDocSh->GetHeaderAttributes() );
+                    pOLV->Read( *xStm, OUString(), EE_FORMAT_BIN, mpDocSh->GetHeaderAttributes() );
                     bReturn = true;
                 }
             }
@@ -1443,7 +1443,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read( *xStm, OUString(), EE_FORMAT_RTF, false, mpDocSh->GetHeaderAttributes() );
+                        pOLV->Read( *xStm, OUString(), EE_FORMAT_RTF, mpDocSh->GetHeaderAttributes() );
                         bReturn = true;
                     }
                 }

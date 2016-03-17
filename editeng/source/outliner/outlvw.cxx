@@ -374,21 +374,16 @@ void OutlinerView::ImpToggleExpand( Paragraph* pPara )
     pEditView->ShowCursor();
 }
 
-sal_Int32 OutlinerView::Select( Paragraph* pParagraph, bool bSelect,
-    bool bWithChildren )
+sal_Int32 OutlinerView::Select( Paragraph* pParagraph, bool bSelect )
 {
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pParagraph );
     sal_Int32 nEnd = 0;
     if ( bSelect )
         nEnd = SAL_MAX_INT32;
 
-    sal_Int32 nChildCount = 0;
-    if ( bWithChildren )
-        nChildCount = pOwner->pParaList->GetChildCount( pParagraph );
-
-    ESelection aSel( nPara, 0, nPara + nChildCount, nEnd );
+    ESelection aSel( nPara, 0, nPara, nEnd );
     pEditView->SetSelection( aSel );
-    return nChildCount+1;
+    return 1;
 }
 
 
@@ -1387,13 +1382,13 @@ void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallback
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }
 
-sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Int32 nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
-    sal_uLong nRet = pEditView->Read( rInput, rBaseURL, eFormat, bSelect, pHTTPHeaderAttrs );
+    sal_uLong nRet = pEditView->Read( rInput, rBaseURL, eFormat, false/*bSelect*/, pHTTPHeaderAttrs );
 
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;

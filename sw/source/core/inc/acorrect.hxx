@@ -84,7 +84,7 @@ public:
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord, sal_Unicode cChar ) override;
-    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara ) const override;
+    virtual LanguageType GetLanguage( sal_Int32 nPos ) const override;
 };
 
 class SwAutoCorrExceptWord

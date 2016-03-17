@@ -1987,7 +1987,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             {
                 // handled together because both need the cell border information for decisions
                 Color aCol = 0;
-                editeng::SvxBorderLine aLine(nullptr,0,0,false);
+                editeng::SvxBorderLine aLine(nullptr,0,0);
                 bool bCol = false;
                 bool bColDisable = false, bStyleDisable = false;
                 SvxBoxItem aBoxItem(ATTR_BORDER);

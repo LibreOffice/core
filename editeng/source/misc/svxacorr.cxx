@@ -178,7 +178,7 @@ void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, sal_Int32, const OUString&,
 {
 }
 
-LanguageType SvxAutoCorrDoc::GetLanguage( sal_Int32, bool ) const
+LanguageType SvxAutoCorrDoc::GetLanguage( sal_Int32 ) const
 {
     return LANGUAGE_SYSTEM;
 }

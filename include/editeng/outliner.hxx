@@ -247,9 +247,7 @@ public:
     void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
     // Retruns the number of selected paragraphs
-    sal_Int32   Select( Paragraph* pParagraph,
-                    bool bSelect = true,
-                    bool bWChildren = true);
+    sal_Int32   Select( Paragraph* pParagraph, bool bSelect = true);
 
     OUString    GetSelected() const;
     void        SelectRange( sal_Int32 nFirst, sal_Int32 nCount );
@@ -259,7 +257,7 @@ public:
 
     void        AdjustHeight( long nDY );
 
-    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
+    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
     void        InsertText( const OUString& rNew, bool bSelect = false );
     void        InsertText( const OutlinerParaObject& rParaObj );

@@ -528,7 +528,7 @@ void SvxAccessibleTextAdapter::SetParaAttribs( sal_Int32 nPara, const SfxItemSet
     mpTextForwarder->SetParaAttribs( nPara, rSet );
 }
 
-void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , bool , sal_uInt16 )
+void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_uInt16 )
 {
 }
 

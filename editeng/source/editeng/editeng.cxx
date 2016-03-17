@@ -810,9 +810,9 @@ EditPaM EditEngine::GetPaM(const Point& aDocPos, bool bSmart)
 }
 
 EditSelection EditEngine::SelectWord(
-        const EditSelection& rCurSelection, sal_Int16 nWordType, bool bAcceptStartOfWord)
+        const EditSelection& rCurSelection, sal_Int16 nWordType)
 {
-    return pImpEditEngine->SelectWord(rCurSelection, nWordType, bAcceptStartOfWord);
+    return pImpEditEngine->SelectWord(rCurSelection, nWordType);
 }
 
 long EditEngine::GetXPos(
@@ -2407,7 +2407,7 @@ css::uno::Reference< css::datatransfer::XTransferable >
 
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
                               const long*, const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
-                              const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
+                              const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool,
                               const css::lang::Locale*, const Color&, const Color&)
 
 {

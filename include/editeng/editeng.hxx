@@ -181,8 +181,7 @@ private:
 
     EDITENG_DLLPRIVATE EditSelection SelectWord(
         const EditSelection& rCurSelection,
-        sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES,
-        bool bAcceptStartOfWord = true);
+        sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
 
     EDITENG_DLLPRIVATE long GetXPos(
         const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
@@ -486,7 +485,6 @@ public:
                               const SvxFieldData* pFieldData,
                               bool bEndOfLine,
                               bool bEndOfParagraph,
-                              bool bEndOfBullet,
                               const css::lang::Locale* pLocale,
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);

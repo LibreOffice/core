@@ -112,7 +112,7 @@ public:
                                     sal_Unicode cChar );
 
     // which language at the position?
-    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara = false ) const;
+    virtual LanguageType GetLanguage( sal_Int32 nPos ) const;
 };
 
 

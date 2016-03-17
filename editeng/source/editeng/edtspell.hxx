@@ -146,7 +146,7 @@ public:
     virtual bool        ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect, OUString* pPara ) override;
 
-    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara = false ) const override;
+    virtual LanguageType GetLanguage( sal_Int32 nPos ) const override;
 
     sal_Int32       GetCursor() const { return nCursor; }
 

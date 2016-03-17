@@ -1139,12 +1139,12 @@ void OutlineView::FillOutliner()
 
     // place cursor at the start
     Paragraph* pFirstPara = mrOutliner.GetParagraph( 0 );
-    mpOutlinerView[0]->Select( pFirstPara, true, false );
-    mpOutlinerView[0]->Select( pFirstPara, false, false );
+    mpOutlinerView[0]->Select( pFirstPara );
+    mpOutlinerView[0]->Select( pFirstPara, false );
 
     // select title of slide that was selected
     if (pTitleToSelect)
-        mpOutlinerView[0]->Select(pTitleToSelect, true, false);
+        mpOutlinerView[0]->Select(pTitleToSelect);
 
     SetLinks();
 
@@ -1263,7 +1263,7 @@ void OutlineView::SetActualPage( SdPage* pActual )
         // if we found a paragraph, select its text at the outliner view
         Paragraph* pPara = GetParagraphForPage( mrOutliner, pActual );
         if( pPara )
-            mpOutlinerView[0]->Select( pPara, true, false );
+            mpOutlinerView[0]->Select( pPara );
     }
 }
 
