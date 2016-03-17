@@ -173,7 +173,7 @@ rtl::Reference< StgPage > StgCache::Get( sal_Int32 nPage, bool bForce )
     if( !p.is() )
     {
         p = Create( nPage );
-        if( !Read( nPage, p->GetData(), 1 ) && bForce )
+        if( !Read( nPage, p->GetData() ) && bForce )
         {
             Erase( p );
             p.clear();
@@ -223,7 +223,7 @@ bool StgCache::Commit()
               aWr != aToWrite.end(); ++aWr)
         {
             const rtl::Reference< StgPage > &pPage = *aWr;
-            if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
+            if ( !Write( pPage->GetPage(), pPage->GetData() ) )
                 return false;
         }
     }
@@ -318,7 +318,7 @@ void StgCache::Close()
 
 // low level I/O
 
-bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
+bool StgCache::Read( sal_Int32 nPage, void* pBuf )
 {
     if( Good() )
     {
@@ -331,21 +331,21 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
         else if ( nPage < m_nPages )
         {
             sal_uInt32 nPos = Page2Pos( nPage );
-            sal_Int32 nPg2 = ( ( nPage + nPg ) > m_nPages ) ? m_nPages - nPage : nPg;
+            sal_Int32 nPg2 = ( ( nPage + 1 ) > m_nPages ) ? m_nPages - nPage : 1;
             sal_uInt32 nBytes = nPg2 * m_nPageSize;
             // fixed address and size for the header
             if( nPage == -1 )
             {
                 nPos = 0L;
                 nBytes = 512;
-                nPg2 = nPg;
+                nPg2 = 1;
             }
             if( m_pStrm->Tell() != nPos )
             {
                 m_pStrm->Seek(nPos);
             }
             m_pStrm->Read( pBuf, nBytes );
-            if ( nPg != nPg2 )
+            if ( 1 != nPg2 )
                 SetError( SVSTREAM_READ_ERROR );
             else
                 SetError( m_pStrm->GetError() );
@@ -354,14 +354,12 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
     return Good();
 }
 
-bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
+bool StgCache::Write( sal_Int32 nPage, void* pBuf )
 {
     if( Good() )
     {
         sal_uInt32 nPos = Page2Pos( nPage );
-        sal_uInt32 nBytes = 0;
-        if ( SAL_MAX_INT32 / nPg > m_nPageSize )
-            nBytes = nPg * m_nPageSize;
+        sal_uInt32 nBytes = m_nPageSize;
 
         // fixed address and size for the header
         // nPageSize must be >= 512, otherwise the header can not be written here, we check it on import

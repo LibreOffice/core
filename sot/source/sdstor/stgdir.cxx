@@ -346,7 +346,7 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
         {
             pOld = m_pStgStrm;
             nOldSize = (sal_uInt16) nNewSize;
-            m_pStgStrm = new StgSmallStrm( rIo, STG_EOF, 0 );
+            m_pStgStrm = new StgSmallStrm( rIo, STG_EOF );
         }
         // now set the new size
         if( m_pStgStrm->SetSize( nNewSize ) )
@@ -635,9 +635,9 @@ bool StgDirEntry::Tmp2Strm()
         StgIo& rIo = m_pStgStrm->GetIo();
         sal_uLong nThreshold = (sal_uLong) rIo.m_aHdr.GetThreshold();
         if( n < nThreshold )
-            pNewStrm = new StgSmallStrm( rIo, STG_EOF, 0 );
+            pNewStrm = new StgSmallStrm( rIo, STG_EOF );
         else
-            pNewStrm = new StgDataStrm( rIo, STG_EOF, 0 );
+            pNewStrm = new StgDataStrm( rIo, STG_EOF );
         if( pNewStrm->SetSize( n ) )
         {
             sal_uInt8 p[ 4096 ];
@@ -924,7 +924,7 @@ bool StgDirStrm::Store()
 void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
 {
     return n < 0 || n >= m_nSize / STGENTRY_SIZE
-        ? nullptr : GetPtr( n * STGENTRY_SIZE, true, bDirty );
+        ? nullptr : GetPtr( n * STGENTRY_SIZE, bDirty );
 }
 
 // Find a dir entry.
