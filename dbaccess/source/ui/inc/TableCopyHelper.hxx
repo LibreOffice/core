@@ -36,10 +36,8 @@ namespace dbaui
     struct TAppSupportedSotFunctor : ::std::unary_function<DataFlavorExVector::value_type,bool>
     {
         ElementType eEntryType;
-        bool    bQueryDrop;
-        TAppSupportedSotFunctor(const ElementType& _eEntryType,bool _bQueryDrop)
+        TAppSupportedSotFunctor(const ElementType& _eEntryType)
             : eEntryType(_eEntryType)
-            , bQueryDrop(_bQueryDrop)
         {
         }
 
@@ -53,7 +51,7 @@ namespace dbaui
                     return (E_TABLE == eEntryType);
                 case SotClipboardFormatId::DBACCESS_QUERY:   // query descriptor
                 case SotClipboardFormatId::DBACCESS_COMMAND: // SQL command
-                    return ((E_QUERY == eEntryType) || ( !bQueryDrop && E_TABLE == eEntryType));
+                    return E_QUERY == eEntryType;
                 default: break;
             }
             return false;

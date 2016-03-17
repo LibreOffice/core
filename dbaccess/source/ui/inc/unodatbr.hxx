@@ -389,12 +389,9 @@ namespace dbaui
                 If not <NULL/>, the data source tree entry will be returned here
             @param _ppContainerEntry
                 If not <NULL/>, the object container tree entry will be returned here
-            @param _bExpandAncestors
-                If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
         SvTreeListEntry* getObjectEntry(const svx::ODataAccessDescriptor& _rDescriptor,
-            SvTreeListEntry** _ppDataSourceEntry = nullptr, SvTreeListEntry** _ppContainerEntry = nullptr,
-            bool _bExpandAncestors = true
+            SvTreeListEntry** _ppDataSourceEntry = nullptr, SvTreeListEntry** _ppContainerEntry = nullptr
         );
         /** retrieves the tree entry for the object described by data source name, command and command type
             @param _rDataSource

@@ -282,7 +282,7 @@ namespace dbaui
         m_pSQL->GrabFocus();
     }
 
-    void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos, bool _bUpdateListBox)
+    void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos)
     {
         CHECK_INVARIANTS("DirectSQLDialog::switchToHistory");
 
@@ -292,14 +292,6 @@ namespace dbaui
             OUString sStatement = m_aStatementHistory[_nHistoryPos];
             m_pSQL->SetText(sStatement);
             OnStatementModified(*m_pSQL);
-
-            if (_bUpdateListBox)
-            {
-                // select the normalized statement in the list box
-                m_pSQLHistory->SelectEntryPos((sal_uInt16)_nHistoryPos);
-                OSL_ENSURE(m_pSQLHistory->GetSelectEntry() == m_aNormalizedHistory[_nHistoryPos],
-                    "DirectSQLDialog::switchToHistory: inconsistent listbox entries!");
-            }
 
             m_pSQL->GrabFocus();
             m_pSQL->SetSelection(Selection(sStatement.getLength(), sStatement.getLength()));
@@ -333,7 +325,7 @@ namespace dbaui
         {
             const sal_Int32 nSelected = m_pSQLHistory->GetSelectEntryPos();
             if (LISTBOX_ENTRY_NOTFOUND != nSelected)
-                switchToHistory(nSelected, false);
+                switchToHistory(nSelected);
         }
     }
 
