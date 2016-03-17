@@ -452,6 +452,17 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(true);
         else if ( !mpImpl->pGraphic )
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(false);
+
+        if(!mpImpl->bNeedUpdate && (!mpImpl->pGraphic || GRAPHIC_NONE == mpImpl->pGraphic->GetType()))
+        {
+            // tdf#98136 imported/loaded graphic is probably malformed. For
+            // the purpose of trying to self-repair at import, try again with
+            // re-creating replacement this time (but only once).
+            // Self-repair may when needed be guarded with settings in the
+            // global configuration.
+            SAL_WARN("svtools", "Probably EmbeddedGraphic imported with Document is corrupt (hint to corrupt ODF file)");
+            const_cast < EmbeddedObjectRef* >(this)->GetReplacement(true);
+        }
     }
     catch( const uno::Exception& ex )
     {

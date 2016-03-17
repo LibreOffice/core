@@ -1524,7 +1524,8 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     rIStm.ResetError();
                     ReadGDIMetaFile( rIStm, aMtf );
 
-                    if( !rIStm.GetError() )
+                    // tdf#98136 empty metafile is also an error, try to get evtl. other formats
+                    if( !rIStm.GetError() && aMtf.GetActionSize())
                     {
                         rImpGraphic = aMtf;
                     }

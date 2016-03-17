@@ -189,7 +189,7 @@ void MetaAction::Read( SvStream&, ImplMetaReadData* )
     // DO NOT read mnType - ReadMetaAction already did that!
 }
 
-MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
+MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData& rData )
 {
     MetaAction* pAction = nullptr;
     sal_uInt16 nTmp = 0;
@@ -257,13 +257,25 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
 
         default:
         {
-            VersionCompat aCompat(rIStm, StreamMode::READ);
+            if(nType > MetaActionType::LAST)
+            {
+                // tdf#98136 error: unknown action, invalid Metafile. This condition could
+                // be expanded to be more precise if needed, the problem is that
+                // the VersionCompat read in these cases usually has invalid
+                // mnCompatPos and mnTotalSize settings and thus will Seek the
+                // stream to nirvana at destruction time.
+                rData.mbError = true;
+            }
+            else
+            {
+                VersionCompat aCompat(rIStm, StreamMode::READ);
+            }
         }
         break;
     }
 
     if( pAction )
-        pAction->Read( rIStm, pData );
+        pAction->Read( rIStm, &rData );
 
     return pAction;
 }

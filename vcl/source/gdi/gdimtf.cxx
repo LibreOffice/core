@@ -2759,6 +2759,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         aId[ 0 ] = 0;
         aId[ 6 ] = 0;
         rIStm.Read( aId, 6 );
+        ImplMetaReadData aReadData;
 
         if ( !strcmp( aId, "VCLMTF" ) )
         {
@@ -2772,12 +2773,13 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             ReadPair( rIStm, rGDIMetaFile.aPrefSize );
             rIStm.ReadUInt32( nCount );
 
-            ImplMetaReadData aReadData;
             aReadData.meActualCharSet = rIStm.GetStreamCharSet();
 
-            for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
+            for( sal_uInt32 nAction = 0UL;
+                ( nAction < nCount ) && !rIStm.IsEof() && !aReadData.mbError;
+                nAction++ )
             {
-                MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
+                MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, aReadData );
                 if( pAction )
                 {
                     if (pAction->GetType() == MetaActionType::COMMENT)
@@ -2798,7 +2800,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         }
 
         // check for errors
-        if( rIStm.GetError() )
+        if( rIStm.GetError() || aReadData.mbError)
         {
             rGDIMetaFile.Clear();
             rIStm.Seek( nStmPos );

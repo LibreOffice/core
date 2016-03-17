@@ -43,9 +43,11 @@ enum class DrawTextFlags;
 struct ImplMetaReadData
 {
     rtl_TextEncoding meActualCharSet;
+    bool mbError;
 
     ImplMetaReadData() :
-        meActualCharSet( RTL_TEXTENCODING_ASCII_US )
+        meActualCharSet( RTL_TEXTENCODING_ASCII_US ),
+        mbError(false)
     {}
 };
 
@@ -88,7 +90,7 @@ public:
     void                Delete() { if ( 0 == --mnRefCount ) delete this; }
 
 public:
-    static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData );
+    static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData& rData );
 };
 
 class VCL_DLLPUBLIC MetaPixelAction : public MetaAction
