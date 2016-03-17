@@ -567,11 +567,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
             SwView* pSourceView = pMMConfig->GetSourceView();
             if(pSourceView)
             {
-                SwDocShell* pDocShell = pSourceView->GetDocShell();
-                if(pDocShell->HasName() && !pDocShell->IsModified())
-                    pMMConfig->GetSourceView()->GetViewFrame()->DoClose();
-                else
-                    pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
+                pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
             }
             ExecutionFinished();
             break;
