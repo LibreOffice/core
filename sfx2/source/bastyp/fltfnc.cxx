@@ -398,7 +398,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, std::shared_ptr<c
 }
 
 
-sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter, SfxFilterFlags nMust, SfxFilterFlags nDont, bool /*bDefUI*/ ) const
+sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     std::shared_ptr<const SfxFilter> pOldFilter = rpFilter;
 

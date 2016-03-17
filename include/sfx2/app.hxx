@@ -147,7 +147,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, bool bCopy=true, SfxItemSet* pArgs = nullptr );
+    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, SfxItemSet* pArgs = nullptr );
     vcl::Window*                     GetTopWindow() const;
 
     // members

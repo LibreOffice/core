@@ -535,7 +535,7 @@ SfxApplication::ChooseScript()
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
         std::unique_ptr<AbstractScriptSelectorDialog> pDlg(
-            pFact->CreateScriptSelectorDialog( nullptr, false, xFrame ));
+            pFact->CreateScriptSelectorDialog( nullptr, xFrame ));
 
         SAL_INFO( "sfx.appl", "done, now exec it");
 

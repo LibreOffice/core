@@ -199,7 +199,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
-    SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) override;
+    SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL ) override;
     SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const override;
     SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(vcl::Window *pParent, const SfxItemSet &rOptions ) override;
 

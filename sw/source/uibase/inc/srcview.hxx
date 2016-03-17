@@ -76,7 +76,7 @@ public:
 
     void            Load(SwDocShell* pDocShell);
 
-    virtual sal_uInt16  SetPrinter( SfxPrinter* pNew, SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false ) override;
+    virtual sal_uInt16  SetPrinter( SfxPrinter* pNew, SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL ) override;
     virtual SfxPrinter* GetPrinter( bool bCreate = false ) override;
 
     sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );

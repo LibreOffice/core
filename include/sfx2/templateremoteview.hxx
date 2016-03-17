@@ -27,7 +27,7 @@ public:
 
     virtual void showRegion (ThumbnailViewItem *pItem) override;
 
-    bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
+    bool loadRepository (TemplateRepository* pRepository);
 
     virtual sal_uInt16 createRegion (const OUString &rName) override;
 

@@ -384,7 +384,7 @@ public:
     virtual ErrCode         DoVerb( long nVerb ) override;
 
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
-                                        SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) override;
+                                        SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL) override;
     ShellModes              GetShellMode();
 
     css::view::XSelectionSupplier*       GetUNOObject();
@@ -575,7 +575,7 @@ public:
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
-    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
+    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& ) override;
     virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& ) override;
 
     void SetCursorAtTop( bool bFlag, bool bCenter = false )

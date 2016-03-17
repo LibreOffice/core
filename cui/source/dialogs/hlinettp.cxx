@@ -404,7 +404,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, Button*, void
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, nullptr };
-    static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+    static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetBindings()->Execute( SID_OPENDOC, ppItems, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 }
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()

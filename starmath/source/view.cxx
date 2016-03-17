@@ -1277,7 +1277,7 @@ SfxPrinter* SmViewShell::GetPrinter(bool bCreate)
     return nullptr;
 }
 
-sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags, bool )
+sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags )
 {
     SfxPrinter *pOld = GetDoc()->GetPrinter();
     if ( pOld && pOld->IsPrinting() )

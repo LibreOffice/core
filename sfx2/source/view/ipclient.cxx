@@ -73,9 +73,9 @@ class SfxBooleanFlagGuard
     bool& m_rFlag;
     bool  m_bLifeValue;
 public:
-    SfxBooleanFlagGuard( bool& bFlag, bool bLifeValue )
+    SfxBooleanFlagGuard( bool& bFlag )
     : m_rFlag( bFlag )
-    , m_bLifeValue( bLifeValue )
+    , m_bLifeValue( true )
     {
         m_rFlag = m_bLifeValue;
     }
@@ -499,7 +499,7 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
     {
         // the calculation of the object area has not changed the object size
         // it should be done here then
-        SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
+        SfxBooleanFlagGuard aGuard( m_bResizeNoScale );
 
         // new size of the object area without scaling
         Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,

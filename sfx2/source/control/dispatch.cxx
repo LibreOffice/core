@@ -179,13 +179,13 @@ void SfxDispatcher::Push(SfxShell& rShell)
 /** This method checks whether a particular <SfxShell> instance is
     on the SfxDispatcher.
 
-    @returns sal_True   The SfxShell instance is on the SfxDispatcher.
-             sal_False  The SfxShell instance is not on the SfxDispatcher.
+    @returns true   The SfxShell instance is on the SfxDispatcher.
+             false  The SfxShell instance is not on the SfxDispatcher.
 */
 bool SfxDispatcher::IsActive(const SfxShell& rShell)
 
 {
-    return CheckVirtualStack(rShell, true);
+    return CheckVirtualStack(rShell);
 }
 
 /** With this method it can be determined whether the SfxDispatcher is
@@ -515,7 +515,7 @@ IMPL_LINK_NOARG_TYPED( SfxDispatcher, EventHdl_Impl, Idle *, void )
     This method is intended among other things to make assertions possible
     without the side effect of having to flush the SfxDispathcer.
 */
-bool SfxDispatcher::CheckVirtualStack(const SfxShell& rShell, bool bDeep)
+bool SfxDispatcher::CheckVirtualStack(const SfxShell& rShell)
 {
     SFX_STACK(SfxDispatcher::CheckVirtualStack);
 
@@ -538,11 +538,7 @@ bool SfxDispatcher::CheckVirtualStack(const SfxShell& rShell, bool bDeep)
         }
     }
 
-    bool bReturn;
-    if ( bDeep )
-        bReturn = std::find(aStack.begin(), aStack.end(), &rShell) != aStack.end();
-    else
-        bReturn = aStack.back() == &rShell;
+    bool bReturn = std::find(aStack.begin(), aStack.end(), &rShell) != aStack.end();
     return bReturn;
 }
 
@@ -990,12 +986,6 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         const SfxItemSet &rArgs)
 {
-    return Execute( nSlot, eCall, 0, rArgs );
-}
-
-const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
-        sal_uInt16 nModi, const SfxItemSet &rArgs)
-{
     if ( IsLocked(nSlot) )
         return nullptr;
 
@@ -1011,7 +1001,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
               pArg = aIter.NextItem() )
             MappedPut_Impl( aSet, *pArg );
         SfxRequest aReq( nSlot, eCall, aSet );
-        aReq.SetModifier( nModi );
+        aReq.SetModifier( 0 );
         _Execute( *pShell, *pSlot, aReq, eCall );
         return aReq.GetReturnValue();
     }

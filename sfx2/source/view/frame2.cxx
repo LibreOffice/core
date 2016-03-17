@@ -285,12 +285,12 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( i_rFrame->getContainerWindow() );
     ENSURE_OR_THROW( pWindow, "frame without container window not allowed" );
 
-    SfxFrame* pFrame = new SfxFrame( *pWindow, false );
+    SfxFrame* pFrame = new SfxFrame( *pWindow );
     pFrame->SetFrameInterface_Impl( i_rFrame );
     return pFrame;
 }
 
-SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow, bool i_bHidden )
+SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow )
     :SvCompatWeakBase<SfxFrame>( this )
     ,pParentFrame( nullptr )
     ,pChildArr( nullptr )
@@ -299,7 +299,7 @@ SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow, bool i_bHidden )
 {
     Construct_Impl();
 
-    pImp->bHidden = i_bHidden;
+    pImp->bHidden = false;
     InsertTopFrame_Impl( this );
     pImp->pExternalContainerWindow = &i_rContainerWindow;
 

@@ -205,7 +205,7 @@ protected:
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
     virtual void    WriteUserDataSequence (css::uno::Sequence < css::beans::PropertyValue >& ) override;
-    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >& ) override;
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient ) override;
 
@@ -322,7 +322,7 @@ public:
     // Drucken:
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter,
-                                          SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false ) override;
+                                          SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL ) override;
 
     virtual bool            HasPrintOptionsPage() const override;
     virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) override;

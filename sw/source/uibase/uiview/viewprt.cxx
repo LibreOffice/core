@@ -104,7 +104,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, bool bWeb )
     }
 }
 
-sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags, bool  )
+sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags  )
 {
     SwWrtShell &rSh = GetWrtShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess().getPrinter( false );

@@ -170,11 +170,9 @@ public:
 
     const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr,
-                                 sal_uInt16 nModi = 0,
                                  const SfxPoolItem **pInternalArgs = nullptr);
     bool             Execute( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr,
-                                 sal_uInt16 nModi = 0,
                                  SfxCallMode nCall = SfxCallMode::SLOT,
                                  const SfxPoolItem **pInternalArgs = nullptr);
 

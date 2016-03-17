@@ -884,7 +884,7 @@ SfxPrinter* SfxViewShell::GetPrinter( bool /*bCreate*/ )
     return nullptr;
 }
 
-sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, SfxPrinterChangeFlags /*nDiffFlags*/, bool )
+sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, SfxPrinterChangeFlags /*nDiffFlags*/ )
 {
     return 0;
 }

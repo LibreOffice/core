@@ -405,7 +405,6 @@ public:
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             vcl::Window* pParent,
-            bool bShowSlots,
             const css::uno::Reference< css::frame::XFrame >& _rxFrame
         ) override = 0;
 

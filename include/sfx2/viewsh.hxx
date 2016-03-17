@@ -238,7 +238,7 @@ public:
 
     // Printing Interface
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
-    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
     virtual bool                HasPrintOptionsPage() const;
     virtual VclPtr<SfxTabPage>  CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
     static JobSetup             GetJobSetup();
@@ -248,7 +248,7 @@ public:
     virtual void                WriteUserData( OUString&, bool bBrowse = false );
     virtual void                ReadUserData( const OUString&, bool bBrowse = false );
     virtual void                WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& );
-    virtual void                ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void                ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell() override;
