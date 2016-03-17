@@ -448,27 +448,18 @@ class SfxSaveGuard
 
     public:
         SfxSaveGuard(const Reference< frame::XModel >&             xModel                      ,
-                           IMPL_SfxBaseModel_DataContainer* pData                       ,
-                           bool                             bRejectConcurrentSaveRequest);
+                           IMPL_SfxBaseModel_DataContainer* pData);
         ~SfxSaveGuard();
 };
 
 SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel                      ,
-                                 IMPL_SfxBaseModel_DataContainer* pData                       ,
-                                 bool                             bRejectConcurrentSaveRequest)
+                                 IMPL_SfxBaseModel_DataContainer* pData)
     : m_xModel     (xModel)
     , m_pData      (pData )
     , m_pFramesLock(nullptr     )
 {
     if ( m_pData->m_bClosed )
         throw lang::DisposedException("Object already disposed.");
-
-    if (
-        bRejectConcurrentSaveRequest &&
-        m_pData->m_bSaving
-       )
-        throw io::IOException(
-                "Concurrent save requests on the same document are not possible.");
 
     m_pData->m_bSaving = true;
     m_pFramesLock = new SfxOwnFramesLocker(m_pData->m_pObjectShell);
@@ -1522,7 +1513,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "storeSelf" );
-        SfxSaveGuard aSaveGuard(this, m_pData, false);
+        SfxSaveGuard aSaveGuard(this, m_pData);
 
         bool bCheckIn = false;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
@@ -1651,7 +1642,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "storeAsURL" );
-        SfxSaveGuard aSaveGuard(this, m_pData, false);
+        SfxSaveGuard aSaveGuard(this, m_pData);
 
         impl_store( rURL, rArgs, false );
 
@@ -1692,7 +1683,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "storeToURL" );
-        SfxSaveGuard aSaveGuard(this, m_pData, false);
+        SfxSaveGuard aSaveGuard(this, m_pData);
         try {
             impl_store(rURL, rArgs, true);
         }
@@ -1717,7 +1708,7 @@ void SAL_CALL SfxBaseModel::storeToRecoveryFile( const OUString& i_TargetLocatio
     SfxModelGuard aGuard( *this );
 
     // delegate
-    SfxSaveGuard aSaveGuard( this, m_pData, false );
+    SfxSaveGuard aSaveGuard( this, m_pData );
     impl_store( i_TargetLocation, i_MediaDescriptor, true );
 
     // no need for subsequent calls to storeToRecoveryFile, unless we're modified, again

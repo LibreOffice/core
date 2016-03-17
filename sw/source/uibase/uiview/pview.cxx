@@ -509,7 +509,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
             mrView.SetNewCursorPos( sNewCursorPos );
 
             SfxViewFrame *pTmpFrame = mrView.GetViewFrame();
-            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr, 0,
+            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
                                                     SfxCallMode::ASYNCHRON );
         }
         else if ( bIsDocPos || bPosInEmptyPage )
@@ -957,7 +957,7 @@ MOVEPAGE:
                 nSelPage +=2;
             SetNewPage( nSelPage );
             SfxViewFrame *pTmpFrame = GetViewFrame();
-            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr, 0,
+            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
                                                     SfxCallMode::ASYNCHRON );
         }
         break;
@@ -1668,7 +1668,7 @@ SfxPrinter*  SwPagePreview::GetPrinter( bool bCreate )
     return pViewWin->GetViewShell()->getIDocumentDeviceAccess().getPrinter( bCreate );
 }
 
-sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, SfxPrinterChangeFlags nDiffFlags, bool )
+sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, SfxPrinterChangeFlags nDiffFlags )
 {
     SwViewShell &rSh = *GetViewShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess().getPrinter( false );

@@ -82,7 +82,7 @@ class SFX2_DLLPUBLIC SfxDispatcher
 
 private:
     // Search for temporary evaluated Todos
-    SAL_DLLPRIVATE bool CheckVirtualStack( const SfxShell& rShell, bool bDeep );
+    SAL_DLLPRIVATE bool CheckVirtualStack( const SfxShell& rShell );
 
 friend class SfxApplication;
 friend class SfxViewFrame;
@@ -135,11 +135,6 @@ public:
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
-                                 const SfxItemSet &rArgs );
-
-    const SfxPoolItem*  Execute( sal_uInt16 nSlot,
-                                 SfxCallMode nCall,
-                                 sal_uInt16 nModi,
                                  const SfxItemSet &rArgs );
 
     const SfxSlot*      GetSlot( const OUString& rCommand );

@@ -72,7 +72,7 @@ protected:
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
 
     virtual void    WriteUserDataSequence (css::uno::Sequence < css::beans::PropertyValue >& ) override;
-    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >& ) override;
 
 public:
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
@@ -104,7 +104,7 @@ public:
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
-    virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) override;
+    virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL ) override;
     virtual bool            HasPrintOptionsPage() const override;
     virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) override;
 

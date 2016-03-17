@@ -278,7 +278,7 @@ sal_uInt32 CheckPasswd_Impl
 }
 
 
-sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, bool bCopy, SfxItemSet* pSet )
+sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, SfxItemSet* pSet )
 {
     std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
@@ -348,34 +348,29 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         }
     }
 
-    if( bCopy )
+    try
     {
-        try
-        {
-            // TODO: introduce error handling
+        // TODO: introduce error handling
 
-            uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-            if( !xTempStorage.is() )
-                throw uno::RuntimeException();
+        uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+        if( !xTempStorage.is() )
+            throw uno::RuntimeException();
 
-               xDoc->GetStorage()->copyToStorage( xTempStorage );
+        xDoc->GetStorage()->copyToStorage( xTempStorage );
 
-            if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, OUString() ) ) )
-                throw uno::RuntimeException();
-        }
-        catch( uno::Exception& )
-        {
-            xDoc->DoClose();
-            xDoc.Clear();
-
-            // TODO: transfer correct error outside
-            return ERRCODE_SFX_GENERAL;
-        }
-
-        SetTemplate_Impl( rFileName, OUString(), xDoc );
+        if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, OUString() ) ) )
+            throw uno::RuntimeException();
     }
-    else
-        SetTemplate_Impl( rFileName, OUString(), xDoc );
+    catch( uno::Exception& )
+    {
+        xDoc->DoClose();
+        xDoc.Clear();
+
+        // TODO: transfer correct error outside
+        return ERRCODE_SFX_GENERAL;
+    }
+
+    SetTemplate_Impl( rFileName, OUString(), xDoc );
 
     xDoc->SetNoName();
     xDoc->InvalidateName();

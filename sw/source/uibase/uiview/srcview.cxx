@@ -660,7 +660,7 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     }
 }
 
-sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags, bool )
+sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags )
 {
     SwDocShell* pDocSh = GetDocShell();
     if ( (SfxPrinterChangeFlags::JOBSETUP | SfxPrinterChangeFlags::PRINTER) & nDiffFlags )

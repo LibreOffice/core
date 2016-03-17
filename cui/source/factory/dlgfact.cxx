@@ -1006,9 +1006,9 @@ AbstractDialogFactory_Impl::CreateScriptErrorDialog(const css::uno::Any& rExcept
 
 AbstractScriptSelectorDialog*
 AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
-    vcl::Window* pParent, bool bShowSlots, const Reference< frame::XFrame >& _rxFrame )
+    vcl::Window* pParent, const Reference< frame::XFrame >& _rxFrame )
 {
-    VclPtrInstance<SvxScriptSelectorDialog> pDlg(pParent, bShowSlots, _rxFrame);
+    VclPtrInstance<SvxScriptSelectorDialog> pDlg(pParent, false/*bShowSlots*/, _rxFrame);
     return new AbstractScriptSelectorDialog_Impl(pDlg);
 }
 

@@ -70,12 +70,12 @@ void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
     //TODO:
 }
 
-bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefresh)
+bool TemplateRemoteView::loadRepository (TemplateRepository* pItem)
 {
     if (!pItem)
         return false;
 
-    if (!pItem->getTemplates().empty() && !bRefresh)
+    if (!pItem->getTemplates().empty())
     {
         insertItems(pItem->getTemplates());
         return true;

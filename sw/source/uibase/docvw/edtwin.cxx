@@ -3318,7 +3318,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 if (!comphelper::LibreOfficeKit::isActive())
                                 {
                                     GetView().GetViewFrame()->GetBindings().Execute(
-                                        FN_FORMAT_GRAFIC_DLG, nullptr, 0,
+                                        FN_FORMAT_GRAFIC_DLG, nullptr,
                                         SfxCallMode::RECORD|SfxCallMode::SLOT);
                                 }
                                 return;
@@ -3337,7 +3337,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 if (!comphelper::LibreOfficeKit::isActive())
                                 {
                                     GetView().GetViewFrame()->GetBindings().Execute(
-                                        FN_FORMAT_FRAME_DLG, nullptr, 0,
+                                        FN_FORMAT_FRAME_DLG, nullptr,
                                         SfxCallMode::RECORD|SfxCallMode::SLOT);
                                 }
                                 return;

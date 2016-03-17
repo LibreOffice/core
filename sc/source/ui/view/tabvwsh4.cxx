@@ -483,7 +483,7 @@ void ScTabViewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
         DoReadUserData( rData );
 }
 
-void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, bool /* bBrowse */ )
+void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings )
 {
     if ( !GetViewData().GetDocShell()->IsPreview() )
         DoReadUserDataSequence( rSettings );
@@ -1040,7 +1040,7 @@ SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )
     return GetViewData().GetDocShell()->GetPrinter(bCreate);
 }
 
-sal_uInt16 ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags, bool )
+sal_uInt16 ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags )
 {
     return GetViewData().GetDocShell()->SetPrinter( pNewPrinter, nDiffFlags );
 }

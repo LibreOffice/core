@@ -59,10 +59,10 @@ struct SfxObjectUI_Impl
     bool        bContext;
     sal_uInt32  nFeature;
 
-    SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, bool bVis, sal_uInt32 nFeat) :
+    SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, sal_uInt32 nFeat) :
         nPos(n),
         nResId(nId),
-        bVisible(bVis),
+        bVisible(true),
         bContext(false),
         nFeature(nFeat)
     {
@@ -381,7 +381,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, sal
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
 
-    return new SfxObjectUI_Impl(nPos, nResId, true, nFeature);
+    return new SfxObjectUI_Impl(nPos, nResId, nFeature);
 }
 
 sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
@@ -437,7 +437,7 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext)
 
 void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, sal_uInt32 nFeature)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, true, nFeature);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, nFeature);
     pUI->bContext = bContext;
     pImpData->aChildWindows.push_back(pUI);
 }

@@ -528,8 +528,7 @@ SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 
 sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
-    SfxPrinterChangeFlags nDiffFlags,
-    bool bIsAPI)
+    SfxPrinterChangeFlags nDiffFlags)
 {
     OSL_ASSERT(mpImpl.get()!=nullptr);
 
@@ -545,14 +544,6 @@ sal_uInt16 ViewShellBase::SetPrinter (
         Size aNewSize = pNewPrinter->GetOutputSize();
 
         bool bScaleAll = false;
-        if ( bIsAPI )
-        {
-            ScopedVclPtrInstance<WarningBox> aWarnBox (
-                GetWindow(),
-                (WinBits)(WB_YES_NO | WB_DEF_YES),
-                SD_RESSTR(STR_SCALE_OBJS_TO_PAGE));
-            bScaleAll = (aWarnBox->Execute() == RET_YES);
-        }
 
         std::shared_ptr<DrawViewShell> pDrawViewShell (
             std::dynamic_pointer_cast<DrawViewShell>(GetMainViewShell()));
@@ -696,14 +687,13 @@ void ViewShellBase::WriteUserDataSequence (
 }
 
 void ViewShellBase::ReadUserDataSequence (
-    const css::uno::Sequence< css::beans::PropertyValue >& rSequence,
-    bool bBrowse)
+    const css::uno::Sequence< css::beans::PropertyValue >& rSequence)
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
     {
-        pShell->ReadUserDataSequence (rSequence, bBrowse);
+        pShell->ReadUserDataSequence (rSequence, true/*bBrowse*/);
 
         // For certain shell types ReadUserDataSequence may have changed the
         // type to another one.  Make sure that the center pane shows the

@@ -519,7 +519,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
                 nullptr
     };
 
-    pViewFrame->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr, 0,
+    pViewFrame->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
 }
 

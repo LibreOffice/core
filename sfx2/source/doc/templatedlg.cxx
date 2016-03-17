@@ -644,7 +644,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu, bo
             }
         }
 
-        if (mpRemoteView->loadRepository(pRepository,false))
+        if (mpRemoteView->loadRepository(pRepository))
             switchMainView(false);
     }
 

@@ -86,7 +86,7 @@ SfxPrinter* Shell::GetPrinter( bool bCreate )
     return nullptr;
 }
 
-sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags , bool )
+sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags )
 {
     DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame()->GetObjectShell());
     assert(pDocShell && "DocShell ?!");

@@ -97,7 +97,7 @@ public:
 
     sal_uInt32               GuessFilterIgnoringContent( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& ) const;
     sal_uInt32               GuessFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& , SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
-    sal_uInt32               GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>&, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED, bool bDefUI = true ) const;
+    sal_uInt32               GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>&, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     sal_uInt32               DetectFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& ) const;
 
     std::shared_ptr<const SfxFilter>    GetFilter4Mime( const OUString& rMime, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED) const;

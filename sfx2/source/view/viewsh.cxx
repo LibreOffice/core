@@ -1399,7 +1399,7 @@ void SfxViewShell::ReadUserData(const OUString&, bool )
 {
 }
 
-void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >&, bool )
+void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& )
 {
 }
 
