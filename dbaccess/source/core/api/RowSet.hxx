@@ -124,6 +124,7 @@ namespace dbaccess
         sal_Int32                   m_nPrivileges;
         sal_Int32                   m_nLastKnownRowCount;
         oslInterlockedCount         m_nInAppend;
+        bool                        m_bInsertingRow;
         bool                        m_bLastKnownRowCountFinal;
         bool                        m_bUseEscapeProcessing ;
         bool                        m_bApplyFilter ;

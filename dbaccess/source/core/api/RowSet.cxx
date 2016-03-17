@@ -148,6 +148,7 @@ ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
     ,m_nPrivileges(0)
     ,m_nLastKnownRowCount(0)
     ,m_nInAppend(0)
+    ,m_bInsertingRow(false)
     ,m_bLastKnownRowCountFinal(false)
     ,m_bUseEscapeProcessing(true)
     ,m_bApplyFilter(false)
@@ -861,9 +862,33 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     aNotify.firePropertyChange();
 }
 
-// XResultSetUpdate
-void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException, std::exception)
+namespace
 {
+    class ProtectFlag
+    {
+        bool& m_rInsertingRow;
+    public:
+        ProtectFlag(bool& rInsertingRow)
+            : m_rInsertingRow(rInsertingRow)
+        {
+            if (m_rInsertingRow)
+            {
+                throw std::runtime_error("recursion in insertRow");
+            }
+            m_rInsertingRow = true;
+        }
+        ~ProtectFlag()
+        {
+            m_rInsertingRow = false;
+        }
+    };
+}
+
+// XResultSetUpdate
+void SAL_CALL ORowSet::insertRow() throw(SQLException, RuntimeException, std::exception)
+{
+    ProtectFlag aFlagControl(m_bInsertingRow);
+
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     // insertRow is not allowed when
     // standing not on the insert row nor
