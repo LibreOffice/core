@@ -288,6 +288,7 @@ void MissingPluginInstallerThread::execute() {
 Player::Player() :
     GstPlayer_BASE( m_aMutex ),
     mpPlaybin( nullptr ),
+    mpVolumeControl( nullptr ),
 #if defined(ENABLE_GTKSINK)
     mpGtkWidget( nullptr ),
 #endif
@@ -361,6 +362,7 @@ void SAL_CALL Player::disposing()
             g_object_unref( G_OBJECT( mpPlaybin ) );
 
             mpPlaybin = nullptr;
+            mpVolumeControl = nullptr;
         }
 
         if( mpXOverlay ) {
@@ -609,6 +611,20 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
     }
 
     mpPlaybin = gst_element_factory_make( "playbin", nullptr );
+
+    //tdf#96989 on systems with flat-volumes setting the volume directly on the
+    //playbin to 100% results in setting the global volums to 100% of the
+    //maximum. We expect to set as % of the current volume.
+    mpVolumeControl = gst_element_factory_make( "volume", nullptr );
+    GstElement *pAudioSink = gst_element_factory_make( "autoaudiosink", nullptr );
+    GstElement* pAudioOutput = gst_bin_new("audio-output-bin");
+    gst_bin_add_many(GST_BIN(pAudioOutput), mpVolumeControl, pAudioSink, nullptr);
+    gst_element_link(mpVolumeControl, pAudioSink);
+    GstPad *pPad = gst_element_get_static_pad(mpVolumeControl, "sink");
+    gst_element_add_pad(GST_ELEMENT(pAudioOutput), gst_ghost_pad_new("sink", pPad));
+    gst_object_unref(GST_OBJECT(pPad));
+    g_object_set(G_OBJECT(mpPlaybin), "audio-sink", pAudioOutput, nullptr);
+
     if( pSink != nullptr ) // used for getting preferred size etc.
     {
         g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, nullptr );
@@ -802,7 +818,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
             nVolume = 0.0;
         }
 
-        g_object_set( G_OBJECT( mpPlaybin ), "volume", nVolume, nullptr );
+        g_object_set( G_OBJECT( mpVolumeControl ), "volume", nVolume, nullptr );
 
         mbMuted = bSet;
     }
@@ -828,10 +844,10 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     SAL_INFO( "avmedia.gstreamer", AVVERSION "set volume: " << nVolumeDB << " gst volume: " << mnUnmutedVolume );
 
     // change volume
-     if( !mbMuted && mpPlaybin )
-     {
-         g_object_set( G_OBJECT( mpPlaybin ), "volume", (gdouble) mnUnmutedVolume, nullptr );
-     }
+    if( !mbMuted && mpPlaybin )
+    {
+        g_object_set( G_OBJECT( mpVolumeControl ), "volume", mnUnmutedVolume, nullptr );
+    }
 }
 
 
@@ -845,7 +861,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
     if( mpPlaybin ) {
         double nGstVolume = 0.0;
 
-        g_object_get( G_OBJECT( mpPlaybin ), "volume", &nGstVolume, nullptr );
+        g_object_get( G_OBJECT( mpVolumeControl ), "volume", &nGstVolume, nullptr );
 
         nVolumeDB = (sal_Int16) ( 20.0*log10 ( nGstVolume ) );
     }

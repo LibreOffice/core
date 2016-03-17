@@ -82,6 +82,7 @@ protected:
 
     // Add elements and pipeline here
     GstElement*             mpPlaybin;  // the playbin is also a pipeline
+    GstElement*             mpVolumeControl;  // the playbin is also a pipeline
 #if defined(ENABLE_GTKSINK)
     GtkWidget*              mpGtkWidget;
 #endif
