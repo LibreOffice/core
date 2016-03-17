@@ -279,6 +279,20 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
     return buttonRect;
 }
 
+static GtkWidget* gCacheWindow;
+static GtkWidget* gDumbContainer;
+static GtkWidget* gSpinBox;
+static GtkWidget* gEntryBox;
+static GtkWidget* gComboBox;
+static GtkWidget* gComboBoxButtonWidget;
+static GtkWidget* gComboBoxEntryWidget;
+static GtkWidget* gListBox;
+static GtkWidget* gListBoxButtonWidget;
+static GtkWidget* gMenuBarWidget;
+static GtkWidget* gMenuItemMenuBarWidget;
+static GtkWidget* gCheckMenuItemWidget;
+static GtkWidget* gTreeViewWidget;
+
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
                                     const Rectangle& rControlRectangle,
@@ -424,6 +438,10 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     // ----------------- CONTENTS
     GtkStyleContext* pScrollbarContentsStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
                                               mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
+
+    gtk_render_background(gtk_widget_get_style_context(gCacheWindow), cr, 0, 0,
+                          scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
+
     gtk_render_background(pScrollbarContentsStyle, cr, 0, 0,
                           scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
     gtk_render_frame(pScrollbarContentsStyle, cr, 0, 0,
@@ -1160,20 +1178,6 @@ void GtkSalGraphics::PaintRadio(cairo_t *cr, GtkStyleContext *context,
 {
     PaintCheckOrRadio(cr, context, rControlRectangle, false, bInMenu);
 }
-
-static GtkWidget* gCacheWindow;
-static GtkWidget* gDumbContainer;
-static GtkWidget* gSpinBox;
-static GtkWidget* gEntryBox;
-static GtkWidget* gComboBox;
-static GtkWidget* gComboBoxButtonWidget;
-static GtkWidget* gComboBoxEntryWidget;
-static GtkWidget* gListBox;
-static GtkWidget* gListBoxButtonWidget;
-static GtkWidget* gMenuBarWidget;
-static GtkWidget* gMenuItemMenuBarWidget;
-static GtkWidget* gCheckMenuItemWidget;
-static GtkWidget* gTreeViewWidget;
 
 void parent_styles_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
 {
