@@ -362,10 +362,9 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(sal_uInt8  nRecordType,
  * for initializing the <SvULong> members.
  */
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*  pStream,
-                                                 sal_uInt16 nRecordTag,
-                                                 sal_uInt8  nRecordVer)
+                                                 sal_uInt16 nRecordTag)
 :   SfxMultiFixRecordWriter( SFX_REC_TYPE_VARSIZE,
-                             pStream, nRecordTag, nRecordVer ),
+                             pStream, nRecordTag, 0 ),
     _nContentVer( 0 )
 {
 }

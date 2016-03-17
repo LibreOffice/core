@@ -236,11 +236,11 @@ protected:
         , _nPreTag(0)
     {
     }
-    void                 Construct_Impl( SvStream *pStream, sal_uInt8 nTag )
+    void                 Construct_Impl( SvStream *pStream )
                         {
                             _pStream = pStream;
                             _bSkipped = false;
-                            _nPreTag = nTag;
+                            _nPreTag = SFX_REC_PRETAG_EXT;
                         }
     inline bool         SetHeader_Impl( sal_uInt32 nHeader );
 
@@ -319,8 +319,7 @@ protected:
     }
     void                Construct_Impl( SvStream *pStream )
                         {
-                            SfxMiniRecordReader::Construct_Impl(
-                                    pStream, SFX_REC_PRETAG_EXT );
+                            SfxMiniRecordReader::Construct_Impl( pStream );
                         }
     bool                FindHeader_Impl( sal_uInt16 nTypes, sal_uInt16 nTag );
 };
@@ -444,8 +443,7 @@ protected:
 
 public:
                         SfxMultiVarRecordWriter( SvStream *pStream,
-                                                 sal_uInt16 nRecordTag,
-                                                 sal_uInt8 nRecordVer );
+                                                 sal_uInt16 nRecordTag );
     virtual             ~SfxMultiVarRecordWriter();
 
     void                NewContent();
@@ -484,8 +482,7 @@ class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
 {
 public:
     inline              SfxMultiMixRecordWriter( SvStream *pStream,
-                                                 sal_uInt16 nRecordTag,
-                                                 sal_uInt8 nRecordVer );
+                                                 sal_uInt16 nRecordTag );
 
     void                NewContent( sal_uInt16 nTag, sal_uInt8 nVersion );
 };
@@ -627,12 +624,10 @@ inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
  *
  * @param pStream    target stream in which the record will be created
  * @param nRecordTag tag for the total record
- * @param nRecordVer version for the total record
  */
 inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter( SvStream* pStream,
-                                                         sal_uInt16 nRecordTag,
-                                                         sal_uInt8 nRecordVer )
-: SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS, pStream, nRecordTag, nRecordVer )
+                                                         sal_uInt16 nRecordTag )
+: SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS, pStream, nRecordTag, 0 )
 {
 }
 

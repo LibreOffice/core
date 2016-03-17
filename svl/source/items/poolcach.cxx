@@ -59,7 +59,7 @@ SfxItemPoolCache::~SfxItemPoolCache()
 }
 
 
-const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool bNew )
+const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
 {
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
     DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
@@ -75,8 +75,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
             if ( rMapEntry.pPoolItem != &rOrigItem )
             {
                 rMapEntry.pPoolItem->AddRef(2); // One for the cache
-                if ( bNew )
-                    pPool->Put( rOrigItem );    //FIXME: AddRef?
+                pPool->Put( rOrigItem );    //FIXME: AddRef?
             }
             return *rMapEntry.pPoolItem;
         }
@@ -98,8 +97,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
 
     // Adapt refcount; one each for the cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
-    if ( bNew )
-        pPool->Put( rOrigItem );    //FIXME: AddRef?
+    pPool->Put( rOrigItem );    //FIXME: AddRef?
 
     // Add the transformation to the cache
     SfxItemModifyImpl aModify;

@@ -1339,7 +1339,7 @@ void SfxItemSet::Load
     {
         // Load Surrogate/Item and resolve Surrogate
         const SfxPoolItem *pItem =
-                m_pPool->LoadItem( rStream, false/*bDirect*/, pRefPool );
+                m_pPool->LoadItem( rStream, pRefPool );
 
         // Did we load an Item or resolve a Surrogate?
         if ( pItem )
