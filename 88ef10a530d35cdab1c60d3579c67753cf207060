@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_9c2a717d",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-17T09:07:38Z",
+      "side": 1,
+      "message": "You should not keep code you remove in comments.",
+      "revId": "88ef10a530d35cdab1c60d3579c67753cf207060",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_fc1f2d59",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-17T09:07:38Z",
+      "side": 1,
+      "message": "That is definitely not a good name for the field. Look at the naming convention in nearby code.",
+      "revId": "88ef10a530d35cdab1c60d3579c67753cf207060",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
