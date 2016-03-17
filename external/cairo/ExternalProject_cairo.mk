@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		ZLIB3RDLIB="$(if $(SYSTEM_ZLIB),,-L$(WORKDIR)/LinkTarget/StaticLibrary) -lz" \
 		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
 		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
-		FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include" \
+		FREETYPE_CFLAGS="$(FREETYPE_CFLAGS) -I$(call gb_UnpackedTarball_get_dir,freetype)/include" \
 		FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)" \
 		$(if $(filter IOS,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static) \
