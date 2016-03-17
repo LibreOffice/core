@@ -607,11 +607,11 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     SwTableLine* pLine = pFndBox->GetLines()[ bBehind ?
                     pFndBox->GetLines().size()-1 : 0 ]->GetLine();
     if( &aFndBox == pFndBox )
-        aCpyPara.nInsPos = GetTabLines().GetPos( pLine );
+        aCpyPara.nInsPos = GetLinePos( pLine );
     else
     {
         aCpyPara.pInsBox = pFndBox->GetBox();
-        aCpyPara.nInsPos = pFndBox->GetBox()->GetTabLines().GetPos( pLine );
+        aCpyPara.nInsPos = pFndBox->GetBox()->GetLinePos( pLine );
     }
 
     if( bBehind )
@@ -814,7 +814,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
         if( !pUpperBox )
         {
             // Also delete the Line from the Table
-            nDelPos = rTable.GetTabLines().GetPos( pLine );
+            nDelPos = rTable.GetLinePos( pLine );
             if( pShareFormats )
                 pShareFormats->RemoveFormat( *rTable.GetTabLines()[ nDelPos ]->GetFrameFormat() );
 
@@ -829,7 +829,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
 
         // finally also delete the Line
         pBox = pUpperBox;
-        nDelPos = pBox->GetTabLines().GetPos( pLine );
+        nDelPos = pBox->GetLinePos( pLine );
         if( pShareFormats )
             pShareFormats->RemoveFormat( *pBox->GetTabLines()[ nDelPos ]->GetFrameFormat() );
 
@@ -921,13 +921,15 @@ lcl_SaveUpperLowerBorder( SwTable& rTable, const SwTableBox& rBox,
     {
         bool bChgd = false;
         const SwTableLines* pTableLns;
-        if( pUpperBox )
+        sal_uInt16 nLnPos;
+        if( pUpperBox ) {
             pTableLns = &pUpperBox->GetTabLines();
-        else
+            nLnPos = pUpperBox->GetLinePos( pLine );
+        }
+        else {
             pTableLns = &rTable.GetTabLines();
-
-        sal_uInt16 nLnPos = pTableLns->GetPos( pLine );
-
+            nLnPos = rTable.GetLinePos( pLine );
+        }
         // Calculate the attribute position of the top-be-deleted Box and then
         // search in the top/bottom Line of the respective counterparts.
         SwTwips nBoxStt = 0;
@@ -1473,12 +1475,12 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
             if( pULPara->bUL )  // Upper ?
             {
                 // If there are Lines before it, move them
-                if( 0 != ( nPos = pLines->GetPos( pFndLn )) )
+                if( 0 != ( nPos = pFndLn->GetUpper()->GetLinePos( pFndLn )) )
                     lcl_CpyLines( 0, nPos, *pLines, pULPara->pInsBox );
             }
             else
                 // If there are Lines after it, move them
-                if( (nPos = pLines->GetPos( pFndLn )) + 1 < (sal_uInt16)pLines->size() )
+                if( (nPos = pFndLn->GetUpper()->GetLinePos( pFndLn )) + 1 < (sal_uInt16)pLines->size() )
                 {
                     nInsPos = pULPara->pInsBox->GetTabLines().size();
                     lcl_CpyLines( nPos+1, pLines->size(), *pLines,
@@ -1507,12 +1509,12 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
             if( pULPara->bUL )  // Upper ?
             {
                 // If there are Lines before it, move them
-                if( 0 != ( nPos = pLines->GetPos( pFndLn )) )
+                if( 0 != ( nPos = pFndLn->GetUpper()->GetLinePos( pFndLn )) )
                     lcl_CpyLines( 0, nPos, *pLines, pLMBox, 0 );
             }
             else
                 // If there are Lines after it, move them
-                if( (nPos = pLines->GetPos( pFndLn )) + 1 < (sal_uInt16)pLines->size() )
+                if( (nPos = pFndLn->GetUpper()->GetLinePos( pFndLn )) + 1 < (sal_uInt16)pLines->size() )
                     lcl_CpyLines( nPos+1, pLines->size(), *pLines,
                                         pLMBox );
             lcl_CalcWidth( pLMBox );        // calculate the Box's width
@@ -1594,11 +1596,18 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     pInsLine->ClaimFrameFormat()->ResetFormatAttr( RES_FRM_SIZE );
 
     // Add the new Line
-    SwTableLines* pLines =  pFndBox->GetUpper() ?
-                  &pFndBox->GetBox()->GetTabLines() :  &GetTabLines();
-
     SwTableLine* pNewLine = pFndBox->GetLines().front()->GetLine();
-    sal_uInt16 nInsPos = pLines->GetPos( pNewLine );
+    sal_uInt16 nInsPos;
+    SwTableLines* pLines;
+    if(pFndBox->GetUpper()) {
+        pLines = &pFndBox->GetBox()->GetTabLines();
+        nInsPos = pFndBox->GetBox()->GetLinePos( pNewLine );
+    }
+    else {
+        pLines = &GetTabLines();
+        nInsPos = GetLinePos( pNewLine );
+    }
+
     pLines->insert( pLines->begin() + nInsPos, pInsLine );
 
     SwTableBox* pLeftBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pMergeBox->GetFrameFormat()), 0, pInsLine );
@@ -2144,7 +2153,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         FndLine_* pFndLn = aFndBox.GetLines().front().get();
         SwTableLine* pLn = pFndLn->GetLine();
         const SwTableLine* pTmp = pLn;
-        sal_uInt16 nLnPos = GetTabLines().GetPos( pTmp );
+        sal_uInt16 nLnPos = GetLinePos( pTmp );
         if( USHRT_MAX != nLnPos && nLnPos )
         {
             // There is a Line before it
@@ -2169,7 +2178,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pFndLn = aFndBox.GetLines().back().get();
         pLn = pFndLn->GetLine();
         pTmp = pLn;
-        nLnPos = GetTabLines().GetPos( pTmp );
+        nLnPos = GetLinePos( pTmp );
         if( nLnPos < GetTabLines().size() - 1 )
         {
             // There is a Line following it
@@ -2227,7 +2236,7 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTable,
 
     if( GetUpper() )
     {
-        nFndPos = GetUpper()->GetTabLines().GetPos( pLine );
+        nFndPos = GetUpper()->GetLinePos( pLine );
         OSL_ENSURE( USHRT_MAX != nFndPos, "Line is not in the Table" );
         // Is there another Line?
         if( nFndPos+1 >= (sal_uInt16)GetUpper()->GetTabLines().size() )
@@ -2237,7 +2246,7 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTable,
     else if( bOvrTableLns )       // Over a Table's the "BaseLines"??
     {
         // Search for the next Line in the Table
-        nFndPos = rTable.GetTabLines().GetPos( pLine );
+        nFndPos = rTable.GetLinePos( pLine );
         if( nFndPos + 1 >= (sal_uInt16)rTable.GetTabLines().size() )
             return nullptr;           // there are no more Boxes
 
@@ -2278,7 +2287,7 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTable,
 
     if( GetUpper() )
     {
-        nFndPos = GetUpper()->GetTabLines().GetPos( pLine );
+        nFndPos = GetUpper()->GetLinePos( pLine );
         OSL_ENSURE( USHRT_MAX != nFndPos, "Line is not in the Table" );
         // Is there another Line?
         if( !nFndPos )
@@ -2288,7 +2297,7 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTable,
     else if( bOvrTableLns )       // Over a Table's the "BaseLines"??
     {
         // Search for the next Line in the Table
-        nFndPos = rTable.GetTabLines().GetPos( pLine );
+        nFndPos = rTable.GetLinePos( pLine );
         if( !nFndPos )
             return nullptr;           // there are no more Boxes
 
@@ -4047,11 +4056,16 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
             SwTableLine* pNewLine = new SwTableLine( static_cast<SwTableLineFormat*>(pLine->GetFrameFormat()),
                                         rBoxes.size(), pLine->GetUpper() );
             SwTableLines* pLines;
-            if( pLine->GetUpper() )
+            sal_uInt16 nPos;
+            if( pLine->GetUpper() ) {
                 pLines = &pLine->GetUpper()->GetTabLines();
-            else
+                nPos = pLine->GetUpper()->GetLinePos( pLine );
+            }
+            else {
                 pLines = &rParam.pTableNd->GetTable().GetTabLines();
-            sal_uInt16 nPos = pLines->GetPos( pLine );
+                nPos = rParam.pTableNd->GetTable().GetLinePos( pLine );
+            }
+            //sal_uInt16 nPos = pLines->GetPos( pLine );
             if( !rParam.bTop )
                 ++nPos;
             pLines->insert( pLines->begin() + nPos, pNewLine );
@@ -4134,7 +4148,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         bTop = nsTableChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||
                 nsTableChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff ),
         bInsDel = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL );
-    sal_uInt16 nBaseLinePos = GetTabLines().GetPos( pBaseLine );
+    sal_uInt16 nBaseLinePos = GetLinePos( pBaseLine );
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
     CR_SetLineHeight aParam( eType,
@@ -4159,7 +4173,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
         // Is a nested Line (Box!)
         pLines = &pLine->GetUpper()->GetTabLines();
-        nBaseLinePos = pLines->GetPos( pLine );
+        nBaseLinePos = pLine->GetUpper()->GetLinePos( pLine );
         pBaseLine = pLine;
         SAL_FALLTHROUGH;
 

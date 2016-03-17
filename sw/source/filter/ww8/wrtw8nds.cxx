@@ -2709,7 +2709,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                                 else if ( bDontSplit )
                                 {
                                     // check if pLine isn't last line in table
-                                    if ( rTable.GetTabLines().size() - rTable.GetTabLines().GetPos( pLine ) != 1 )
+                                    if ( rTable.GetTabLines().size() - rTable.GetLinePos( pLine ) != 1 )
                                         bSetAtPara = true;
                                 }
 

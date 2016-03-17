@@ -385,7 +385,7 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, GCLinePara* pGCPara)
             SwTableLines::size_type nLines = pBox->GetTabLines().size();
 
             SwTableLines& rLns = *pGCPara->pLns;
-            sal_uInt16 nInsPos = rLns.GetPos( pLn );
+            sal_uInt16 nInsPos = pBox->GetLinePos( pLn );
             OSL_ENSURE( USHRT_MAX != nInsPos, "Could not find Line!" );
 
             SwTableBox* pUpper = pLn->GetUpper();

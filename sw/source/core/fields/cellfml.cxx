@@ -777,7 +777,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
             pLine = pBox->GetUpper();
         }
         sal_uInt16 nSttBox = pLine->GetBoxPos( pBox );
-        sal_uInt16 nSttLine = rTable.GetTabLines().GetPos( pLine );
+        sal_uInt16 nSttLine = rTable.GetLinePos( pLine );
 
         const sal_Int32 nBoxOffset = lcl_GetLongBoxNum( sGetName ) + nSttBox;
         const sal_Int32 nLineOffset = lcl_GetLongBoxNum( sGetName ) + nSttLine;
@@ -1038,7 +1038,7 @@ sal_uInt16 SwTableFormula::GetLnPosInTable( const SwTable& rTable, const SwTable
         const SwTableLine* pLn = pBox->GetUpper();
         while( pLn->GetUpper() )
             pLn = pLn->GetUpper()->GetUpper();
-        nRet = rTable.GetTabLines().GetPos( pLn );
+        nRet = rTable.GetLinePos( pLn );
     }
     return nRet;
 }

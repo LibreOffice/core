@@ -240,7 +240,7 @@ void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrame *pFrame 
                 //return ;
 
                 //if the current line is now header line, then return ;
-                sal_Int16 iCurrentRowIndex = mpTabFrame->GetTable()->GetTabLines().GetPos( pLine);
+                sal_Int16 iCurrentRowIndex = mpTabFrame->GetTable()->GetLinePos( pLine);
                 if(iCurrentRowIndex >= mpTabFrame->GetTable()->GetRowsToRepeat_())
                     return ;
 
@@ -1519,7 +1519,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         while( pUpper->GetUpper() != nullptr )
             pUpper = pUpper->GetUpper()->GetUpper();
         sal_uInt16 nPos =
-            pSelectedTable->GetTable().GetTabLines().GetPos( pUpper );
+            pSelectedTable->GetTable().GetLinePos( pUpper );
         if( nPos == USHRT_MAX )
             pSelectedTable = nullptr;
     }

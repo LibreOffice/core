@@ -22,6 +22,7 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include<swtable.hxx>
 
 #include <swdllapi.h>
 
@@ -30,10 +31,8 @@
 
 class SwTableBox;
 class SwTableLine;
-class SwTableLines;
 class SwHTMLTableLayout;
 class SvxBrushItem;
-
 namespace editeng { class SvxBorderLine; }
 
 //       Code aus dem HTML-Filter fuers schreiben von Tabellen
