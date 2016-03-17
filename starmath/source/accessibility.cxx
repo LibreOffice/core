@@ -240,10 +240,10 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
-    OSL_ENSURE( aSz == aSz2, "mismatch in width" );
+    assert(aSz == aSz2 && "mismatch in width" );
 #endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
@@ -1718,10 +1718,10 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
-    OSL_ENSURE( aSz == aSz2, "mismatch in width" );
+    assert(aSz == aSz2 && "mismatch in width");
 #endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }

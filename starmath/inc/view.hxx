@@ -161,9 +161,6 @@ protected:
 
 public:
     SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
-#if OSL_DEBUG_LEVEL > 1
-    virtual ~SmEditController();
-#endif
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
 };
@@ -215,10 +212,6 @@ class SmCmdBoxWrapper : public SfxChildWindow
 
 protected:
     SmCmdBoxWrapper(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo);
-
-#if OSL_DEBUG_LEVEL > 1
-    virtual ~SmCmdBoxWrapper();
-#endif
 
 public:
 
