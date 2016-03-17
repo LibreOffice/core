@@ -29,7 +29,7 @@
 #include "xlconst.hxx"
 #include <oox/core/xmlfilterbase.hxx>
 
-// Paper size =================================================================
+namespace{
 
 struct XclPaperSize
 {
@@ -38,24 +38,33 @@ struct XclPaperSize
     long                mnHeight;           /// Paper height in twips.
 };
 
-#define IN2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH + 0.5))
-#define MM2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0 + 0.5))
-#define TWIPS2MM( v )      ((long)((v - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0))
+SAL_CONSTEXPR long in2twips(double n_inch)
+{
+    return static_cast<long>( (n_inch * EXC_TWIPS_PER_INCH) + 0.5);
+}
+SAL_CONSTEXPR long mm2twips(double n_mm)
+{
+    return static_cast<long>( (n_mm * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0) + 0.5);
+}
+SAL_CONSTEXPR long twips2mm(long n_twips)
+{
+    return static_cast<long>((static_cast<double>(n_twips) - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0);
+}
 
-static const XclPaperSize pPaperSizeTable[] =
+SAL_CONSTEXPR XclPaperSize pPaperSizeTable[] =
 {
 /*  0*/ { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_LETTER,     IN2TWIPS( 8.5 ),    IN2TWIPS( 11 )      },  // Letter
-        { PAPER_USER,       IN2TWIPS( 8.5 ),    IN2TWIPS( 11 )      },  // Letter Small
-        { PAPER_TABLOID,    IN2TWIPS( 11 ),     IN2TWIPS( 17 )      },  // Tabloid
-        { PAPER_LEDGER,     IN2TWIPS( 17 ),     IN2TWIPS( 11 )      },  // Ledger
-/*  5*/ { PAPER_LEGAL,      IN2TWIPS( 8.5 ),    IN2TWIPS( 14 )      },  // Legal
-        { PAPER_STATEMENT,  IN2TWIPS( 5.5 ),    IN2TWIPS( 8.5 )     },  // Statement
-        { PAPER_EXECUTIVE,  IN2TWIPS( 7.25 ),   IN2TWIPS( 10.5 )    },  // Executive
-        { PAPER_A3,         MM2TWIPS( 297 ),    MM2TWIPS( 420 )     },  // A3
-        { PAPER_A4,         MM2TWIPS( 210 ),    MM2TWIPS( 297 )     },  // A4
-/* 10*/ { PAPER_USER,       MM2TWIPS( 210 ),    MM2TWIPS( 297 )     },  // A4 Small
-        { PAPER_A5,         MM2TWIPS( 148 ),    MM2TWIPS( 210 )     },  // A5
+        { PAPER_LETTER,     in2twips( 8.5 ),    in2twips( 11 )      },  // Letter
+        { PAPER_USER,       in2twips( 8.5 ),    in2twips( 11 )      },  // Letter Small
+        { PAPER_TABLOID,    in2twips( 11 ),     in2twips( 17 )      },  // Tabloid
+        { PAPER_LEDGER,     in2twips( 17 ),     in2twips( 11 )      },  // Ledger
+/*  5*/ { PAPER_LEGAL,      in2twips( 8.5 ),    in2twips( 14 )      },  // Legal
+        { PAPER_STATEMENT,  in2twips( 5.5 ),    in2twips( 8.5 )     },  // Statement
+        { PAPER_EXECUTIVE,  in2twips( 7.25 ),   in2twips( 10.5 )    },  // Executive
+        { PAPER_A3,         mm2twips( 297 ),    mm2twips( 420 )     },  // A3
+        { PAPER_A4,         mm2twips( 210 ),    mm2twips( 297 )     },  // A4
+/* 10*/ { PAPER_USER,       mm2twips( 210 ),    mm2twips( 297 )     },  // A4 Small
+        { PAPER_A5,         mm2twips( 148 ),    mm2twips( 210 )     },  // A5
         //See: http://wiki.openoffice.org/wiki/DefaultPaperSize comments
         //near DMPAPER_B4 in vcl
         //i.e.
@@ -73,89 +82,88 @@ static const XclPaperSize pPaperSizeTable[] =
         //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
         //claims that the MS DMPAPER_B4 and DMPAPER_B5 truly are the JIS sizes
         //which at least makes some sort of sense. (cmc)
-        { PAPER_B4_JIS,     MM2TWIPS( 257 ),    MM2TWIPS( 364 )     },  // B4 (JIS)
-        { PAPER_B5_JIS,     MM2TWIPS( 182 ),    MM2TWIPS( 257 )     },  // B5 (JIS)
-        { PAPER_USER,       IN2TWIPS( 8.5 ),    IN2TWIPS( 13 )      },  // Folio
-/* 15*/ { PAPER_QUARTO,     MM2TWIPS( 215 ),    MM2TWIPS( 275 )     },  // Quarto
-        { PAPER_10x14,      IN2TWIPS( 10 ),     IN2TWIPS( 14 )      },  // 10x14
-        { PAPER_USER,       IN2TWIPS( 11 ),     IN2TWIPS( 17 )      },  // 11x17
-        { PAPER_USER,       IN2TWIPS( 8.5 ),    IN2TWIPS( 11 )      },  // Note
-        { PAPER_ENV_9,       IN2TWIPS( 3.875 ),  IN2TWIPS( 8.875 )   },  // Envelope #9
-/* 20*/ { PAPER_ENV_10,      IN2TWIPS( 4.125 ),  IN2TWIPS( 9.5 )     },  // Envelope #10
-        { PAPER_ENV_11,      IN2TWIPS( 4.5 ),    IN2TWIPS( 10.375 )  },  // Envelope #11
-        { PAPER_ENV_12,      IN2TWIPS( 4.75 ),   IN2TWIPS( 11 )      },  // Envelope #12
-        { PAPER_ENV_14,      IN2TWIPS( 5 ),      IN2TWIPS( 11.5 )    },  // Envelope #14
-        { PAPER_C,          IN2TWIPS( 17 ),     IN2TWIPS( 22 )      },  // ANSI-C
-/* 25*/ { PAPER_D,          IN2TWIPS( 22 ),     IN2TWIPS( 34 )      },  // ANSI-D
-        { PAPER_E,          IN2TWIPS( 34 ),     IN2TWIPS( 44 )      },  // ANSI-E
-        { PAPER_ENV_DL,         MM2TWIPS( 110 ),    MM2TWIPS( 220 )     },  // Envelope DL
-        { PAPER_ENV_C5,         MM2TWIPS( 162 ),    MM2TWIPS( 229 )     },  // Envelope C5
-        { PAPER_ENV_C3,         MM2TWIPS( 324 ),    MM2TWIPS( 458 )     },  // Envelope C3
-/* 30*/ { PAPER_ENV_C4,         MM2TWIPS( 229 ),    MM2TWIPS( 324 )     },  // Envelope C4
-        { PAPER_ENV_C6,         MM2TWIPS( 114 ),    MM2TWIPS( 162 )     },  // Envelope C6
-        { PAPER_ENV_C65,        MM2TWIPS( 114 ),    MM2TWIPS( 229 )     },  // Envelope C65
-        { PAPER_B4_ISO,     MM2TWIPS( 250 ),    MM2TWIPS( 353 )     },  // B4 (ISO)
-        { PAPER_B5_ISO,     MM2TWIPS( 176 ),    MM2TWIPS( 250 )     },  // B5 (ISO)
-/* 35*/ { PAPER_B6_ISO,     MM2TWIPS( 125 ),    MM2TWIPS( 176 )     },  // B6 (ISO)
-        { PAPER_ENV_ITALY,    MM2TWIPS( 110 ),    MM2TWIPS( 230 )     },  // Envelope Italy
-        { PAPER_ENV_MONARCH,    IN2TWIPS( 3.875 ),  IN2TWIPS( 7.5 )     },  // Envelope Monarch
-        { PAPER_ENV_PERSONAL,     IN2TWIPS( 3.625 ),  IN2TWIPS( 6.5 )     },  // 6 3/4 Envelope
-        { PAPER_FANFOLD_US, IN2TWIPS( 14.875 ), IN2TWIPS( 11 )      },  // US Std Fanfold
-/* 40*/ { PAPER_FANFOLD_DE, IN2TWIPS( 8.5 ),    IN2TWIPS( 12 )      },  // German Std Fanfold
-        { PAPER_FANFOLD_LEGAL_DE,     IN2TWIPS( 8.5 ),    IN2TWIPS( 13 )      },  // German Legal Fanfold
-        { PAPER_B4_ISO,     MM2TWIPS( 250 ),    MM2TWIPS( 353 )     },  // B4 (ISO)
-        { PAPER_POSTCARD_JP,MM2TWIPS( 100 ),    MM2TWIPS( 148 )     },  // Japanese Postcard
-        { PAPER_9x11,       IN2TWIPS( 9 ),      IN2TWIPS( 11 )      },  // 9x11
-/* 45*/ { PAPER_10x11,      IN2TWIPS( 10 ),     IN2TWIPS( 11 )      },  // 10x11
-        { PAPER_15x11,      IN2TWIPS( 15 ),     IN2TWIPS( 11 )      },  // 15x11
-        { PAPER_ENV_INVITE,     MM2TWIPS( 220 ),    MM2TWIPS( 220 )     },  // Envelope Invite
+        { PAPER_B4_JIS,     mm2twips( 257 ),    mm2twips( 364 )     },  // B4 (JIS)
+        { PAPER_B5_JIS,     mm2twips( 182 ),    mm2twips( 257 )     },  // B5 (JIS)
+        { PAPER_USER,       in2twips( 8.5 ),    in2twips( 13 )      },  // Folio
+/* 15*/ { PAPER_QUARTO,     mm2twips( 215 ),    mm2twips( 275 )     },  // Quarto
+        { PAPER_10x14,      in2twips( 10 ),     in2twips( 14 )      },  // 10x14
+        { PAPER_USER,       in2twips( 11 ),     in2twips( 17 )      },  // 11x17
+        { PAPER_USER,       in2twips( 8.5 ),    in2twips( 11 )      },  // Note
+        { PAPER_ENV_9,       in2twips( 3.875 ),  in2twips( 8.875 )   },  // Envelope #9
+/* 20*/ { PAPER_ENV_10,      in2twips( 4.125 ),  in2twips( 9.5 )     },  // Envelope #10
+        { PAPER_ENV_11,      in2twips( 4.5 ),    in2twips( 10.375 )  },  // Envelope #11
+        { PAPER_ENV_12,      in2twips( 4.75 ),   in2twips( 11 )      },  // Envelope #12
+        { PAPER_ENV_14,      in2twips( 5 ),      in2twips( 11.5 )    },  // Envelope #14
+        { PAPER_C,          in2twips( 17 ),     in2twips( 22 )      },  // ANSI-C
+/* 25*/ { PAPER_D,          in2twips( 22 ),     in2twips( 34 )      },  // ANSI-D
+        { PAPER_E,          in2twips( 34 ),     in2twips( 44 )      },  // ANSI-E
+        { PAPER_ENV_DL,         mm2twips( 110 ),    mm2twips( 220 )     },  // Envelope DL
+        { PAPER_ENV_C5,         mm2twips( 162 ),    mm2twips( 229 )     },  // Envelope C5
+        { PAPER_ENV_C3,         mm2twips( 324 ),    mm2twips( 458 )     },  // Envelope C3
+/* 30*/ { PAPER_ENV_C4,         mm2twips( 229 ),    mm2twips( 324 )     },  // Envelope C4
+        { PAPER_ENV_C6,         mm2twips( 114 ),    mm2twips( 162 )     },  // Envelope C6
+        { PAPER_ENV_C65,        mm2twips( 114 ),    mm2twips( 229 )     },  // Envelope C65
+        { PAPER_B4_ISO,     mm2twips( 250 ),    mm2twips( 353 )     },  // B4 (ISO)
+        { PAPER_B5_ISO,     mm2twips( 176 ),    mm2twips( 250 )     },  // B5 (ISO)
+/* 35*/ { PAPER_B6_ISO,     mm2twips( 125 ),    mm2twips( 176 )     },  // B6 (ISO)
+        { PAPER_ENV_ITALY,    mm2twips( 110 ),    mm2twips( 230 )     },  // Envelope Italy
+        { PAPER_ENV_MONARCH,    in2twips( 3.875 ),  in2twips( 7.5 )     },  // Envelope Monarch
+        { PAPER_ENV_PERSONAL,     in2twips( 3.625 ),  in2twips( 6.5 )     },  // 6 3/4 Envelope
+        { PAPER_FANFOLD_US, in2twips( 14.875 ), in2twips( 11 )      },  // US Std Fanfold
+/* 40*/ { PAPER_FANFOLD_DE, in2twips( 8.5 ),    in2twips( 12 )      },  // German Std Fanfold
+        { PAPER_FANFOLD_LEGAL_DE,     in2twips( 8.5 ),    in2twips( 13 )      },  // German Legal Fanfold
+        { PAPER_B4_ISO,     mm2twips( 250 ),    mm2twips( 353 )     },  // B4 (ISO)
+        { PAPER_POSTCARD_JP,mm2twips( 100 ),    mm2twips( 148 )     },  // Japanese Postcard
+        { PAPER_9x11,       in2twips( 9 ),      in2twips( 11 )      },  // 9x11
+/* 45*/ { PAPER_10x11,      in2twips( 10 ),     in2twips( 11 )      },  // 10x11
+        { PAPER_15x11,      in2twips( 15 ),     in2twips( 11 )      },  // 15x11
+        { PAPER_ENV_INVITE,     mm2twips( 220 ),    mm2twips( 220 )     },  // Envelope Invite
         { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
-/* 50*/ { PAPER_USER,       IN2TWIPS( 9.5 ),    IN2TWIPS( 12 )      },  // Letter Extra
-        { PAPER_USER,       IN2TWIPS( 9.5 ),    IN2TWIPS( 15 )      },  // Legal Extra
-        { PAPER_USER,       IN2TWIPS( 11.69 ),  IN2TWIPS( 18 )      },  // Tabloid Extra
-        { PAPER_USER,       MM2TWIPS( 235 ),    MM2TWIPS( 322 )     },  // A4 Extra
-        { PAPER_USER,       IN2TWIPS( 8.5 ),    IN2TWIPS( 11 )      },  // Letter Transverse
-/* 55*/ { PAPER_USER,       MM2TWIPS( 210 ),    MM2TWIPS( 297 )     },  // A4 Transverse
-        { PAPER_USER,       IN2TWIPS( 9.5 ),    IN2TWIPS( 12 )      },  // Letter Extra Transverse
-        { PAPER_A_PLUS,     MM2TWIPS( 227 ),    MM2TWIPS( 356 )     },  // Super A/A4
-        { PAPER_B_PLUS,     MM2TWIPS( 305 ),    MM2TWIPS( 487 )     },  // Super B/A3
-        { PAPER_LETTER_PLUS,IN2TWIPS( 8.5 ),    IN2TWIPS( 12.69 )   },  // Letter Plus
-/* 60*/ { PAPER_A4_PLUS,    MM2TWIPS( 210 ),    MM2TWIPS( 330 )     },  // A4 Plus
-        { PAPER_USER,       MM2TWIPS( 148 ),    MM2TWIPS( 210 )     },  // A5 Transverse
-        { PAPER_USER,       MM2TWIPS( 182 ),    MM2TWIPS( 257 )     },  // B5 (JIS) Transverse
-        { PAPER_USER,       MM2TWIPS( 322 ),    MM2TWIPS( 445 )     },  // A3 Extra
-        { PAPER_USER,       MM2TWIPS( 174 ),    MM2TWIPS( 235 )     },  // A5 Extra
-/* 65*/ { PAPER_USER,       MM2TWIPS( 201 ),    MM2TWIPS( 276 )     },  // B5 (ISO) Extra
-        { PAPER_A2,         MM2TWIPS( 420 ),    MM2TWIPS( 594 )     },  // A2
-        { PAPER_USER,       MM2TWIPS( 297 ),    MM2TWIPS( 420 )     },  // A3 Transverse
-        { PAPER_USER,       MM2TWIPS( 322 ),    MM2TWIPS( 445 )     },  // A3 Extra Transverse
-        { PAPER_DOUBLEPOSTCARD_JP,       MM2TWIPS( 200 ),    MM2TWIPS( 148 )     },  // Double Japanese Postcard
-/* 70*/ { PAPER_A6,         MM2TWIPS( 105 ),    MM2TWIPS( 148 )     },  // A6
+/* 50*/ { PAPER_USER,       in2twips( 9.5 ),    in2twips( 12 )      },  // Letter Extra
+        { PAPER_USER,       in2twips( 9.5 ),    in2twips( 15 )      },  // Legal Extra
+        { PAPER_USER,       in2twips( 11.69 ),  in2twips( 18 )      },  // Tabloid Extra
+        { PAPER_USER,       mm2twips( 235 ),    mm2twips( 322 )     },  // A4 Extra
+        { PAPER_USER,       in2twips( 8.5 ),    in2twips( 11 )      },  // Letter Transverse
+/* 55*/ { PAPER_USER,       mm2twips( 210 ),    mm2twips( 297 )     },  // A4 Transverse
+        { PAPER_USER,       in2twips( 9.5 ),    in2twips( 12 )      },  // Letter Extra Transverse
+        { PAPER_A_PLUS,     mm2twips( 227 ),    mm2twips( 356 )     },  // Super A/A4
+        { PAPER_B_PLUS,     mm2twips( 305 ),    mm2twips( 487 )     },  // Super B/A3
+        { PAPER_LETTER_PLUS,in2twips( 8.5 ),    in2twips( 12.69 )   },  // Letter Plus
+/* 60*/ { PAPER_A4_PLUS,    mm2twips( 210 ),    mm2twips( 330 )     },  // A4 Plus
+        { PAPER_USER,       mm2twips( 148 ),    mm2twips( 210 )     },  // A5 Transverse
+        { PAPER_USER,       mm2twips( 182 ),    mm2twips( 257 )     },  // B5 (JIS) Transverse
+        { PAPER_USER,       mm2twips( 322 ),    mm2twips( 445 )     },  // A3 Extra
+        { PAPER_USER,       mm2twips( 174 ),    mm2twips( 235 )     },  // A5 Extra
+/* 65*/ { PAPER_USER,       mm2twips( 201 ),    mm2twips( 276 )     },  // B5 (ISO) Extra
+        { PAPER_A2,         mm2twips( 420 ),    mm2twips( 594 )     },  // A2
+        { PAPER_USER,       mm2twips( 297 ),    mm2twips( 420 )     },  // A3 Transverse
+        { PAPER_USER,       mm2twips( 322 ),    mm2twips( 445 )     },  // A3 Extra Transverse
+        { PAPER_DOUBLEPOSTCARD_JP,       mm2twips( 200 ),    mm2twips( 148 )     },  // Double Japanese Postcard
+/* 70*/ { PAPER_A6,         mm2twips( 105 ),    mm2twips( 148 )     },  // A6
         { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
-/* 75*/ { PAPER_USER,       IN2TWIPS( 11 ),     IN2TWIPS( 8.5 )     },  // Letter Rotated
-        { PAPER_USER,       MM2TWIPS( 420 ),    MM2TWIPS( 297 )     },  // A3 Rotated
-        { PAPER_USER,       MM2TWIPS( 297 ),    MM2TWIPS( 210 )     },  // A4 Rotated
-        { PAPER_USER,       MM2TWIPS( 210 ),    MM2TWIPS( 148 )     },  // A5 Rotated
-        { PAPER_USER,       MM2TWIPS( 364 ),    MM2TWIPS( 257 )     },  // B4 (JIS) Rotated
-/* 80*/ { PAPER_USER,       MM2TWIPS( 257 ),    MM2TWIPS( 182 )     },  // B5 (JIS) Rotated
-        { PAPER_USER,       MM2TWIPS( 148 ),    MM2TWIPS( 100 )     },  // Japanese Postcard Rotated
-        { PAPER_USER,       MM2TWIPS( 148 ),    MM2TWIPS( 200 )     },  // Double Japanese Postcard Rotated
-        { PAPER_USER,       MM2TWIPS( 148 ),    MM2TWIPS( 105 )     },  // A6 Rotated
+/* 75*/ { PAPER_USER,       in2twips( 11 ),     in2twips( 8.5 )     },  // Letter Rotated
+        { PAPER_USER,       mm2twips( 420 ),    mm2twips( 297 )     },  // A3 Rotated
+        { PAPER_USER,       mm2twips( 297 ),    mm2twips( 210 )     },  // A4 Rotated
+        { PAPER_USER,       mm2twips( 210 ),    mm2twips( 148 )     },  // A5 Rotated
+        { PAPER_USER,       mm2twips( 364 ),    mm2twips( 257 )     },  // B4 (JIS) Rotated
+/* 80*/ { PAPER_USER,       mm2twips( 257 ),    mm2twips( 182 )     },  // B5 (JIS) Rotated
+        { PAPER_USER,       mm2twips( 148 ),    mm2twips( 100 )     },  // Japanese Postcard Rotated
+        { PAPER_USER,       mm2twips( 148 ),    mm2twips( 200 )     },  // Double Japanese Postcard Rotated
+        { PAPER_USER,       mm2twips( 148 ),    mm2twips( 105 )     },  // A6 Rotated
         { PAPER_USER,       0,                  0                   },  // undefined
 /* 85*/ { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_B6_JIS,     MM2TWIPS( 128 ),    MM2TWIPS( 182 )     },  // B6 (JIS)
-        { PAPER_USER,       MM2TWIPS( 182 ),    MM2TWIPS( 128 )     },  // B6 (JIS) Rotated
-/* 90*/ { PAPER_12x11,      IN2TWIPS( 12 ),     IN2TWIPS( 11 )      }   // 12x11
+        { PAPER_B6_JIS,     mm2twips( 128 ),    mm2twips( 182 )     },  // B6 (JIS)
+        { PAPER_USER,       mm2twips( 182 ),    mm2twips( 128 )     },  // B6 (JIS) Rotated
+/* 90*/ { PAPER_12x11,      in2twips( 12 ),     in2twips( 11 )      }   // 12x11
 };
 
-#undef IN2TWIPS
-#undef MM2TWIPS
+} //namespace
 
 // Page settings ==============================================================
 
@@ -226,8 +234,8 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
     long nMaxWDiff = 80;
     long nMaxHDiff = 50;
 
-    mnPaperWidth = TWIPS2MM( nWidth );
-    mnPaperHeight = TWIPS2MM( nHeight );
+    mnPaperWidth = twips2mm( nWidth );
+    mnPaperHeight = twips2mm( nHeight );
     if( bStrictSize )
     {
         nMaxWDiff = 5;
