@@ -142,38 +142,7 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if( searchTerm.isEmpty( ) )
         return;
 
-    // TODO FIXME!
-    // Before the release, the allizom.org url should be changed to:
-    // OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    // The problem why it cannot be done just now is that the SSL negotiation
-    // with services.addons.mozilla.org fails very early - during an early
-    // propfind, SSL returns X509_V_ERR_CERT_UNTRUSTED to neon, causing the
-    // NE_SSL_UNTRUSTED being set in verify_callback in neon/src/ne_openssl.c
-    //
-    // This is not cleared anywhere during the init, and so later, even though
-    // we have found the certificate, this triggers
-    // NeonSession_CertificationNotify callback, that
-    // causes that NE_SSL_UNTRUSTED is ignored in cases when the condition
-    //   if ( pSession->isDomainMatch(
-    //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
-    // is true; but that is only when getSubjectName() actually returns a
-    // wildcard, or the exact name.
-    //
-    // In the case of services.addons.mozilla.com, the certificate is for
-    // versioncheck.addons.mozilla.com, but it also has
-    //   X509v3 Subject Alternative Name:
-    //       DNS:services.addons.mozilla.org, DNS:versioncheck-bg.addons.mozilla.org, DNS:pyrepo.addons.mozilla.org, DNS:versioncheck.addons.mozilla.org
-    // So it is all valid; but the early X509_V_ERR_CERT_UNTRUSTED failure
-    // described above just makes this being ignored.
-    //
-    // My suspicion is that this never actually worked, and the
-    //   if ( pSession->isDomainMatch(
-    //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
-    // works around the root cause that is there for years, and which makes it
-    // work in most cases.  I guess that we initialize something wrongly or
-    // too late; but I have already spent few hours debugging, and
-    // give up for the moment - need to return to this at some stage.
-    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
+    OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_rSearchThread->launch();
 }
