@@ -173,7 +173,8 @@ void SwMailDispatcherListener_Impl::stopped(
 void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
     SolarMutexGuard aGuard;
-    m_pSendMailDialog->AllMailsSent();
+    if (!m_pSendMailDialog->isDisposed())
+        m_pSendMailDialog->AllMailsSent();
 }
 
 void SwMailDispatcherListener_Impl::mailDelivered(
