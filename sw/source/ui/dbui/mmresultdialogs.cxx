@@ -323,8 +323,11 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(vcl::Window* pParent)
     m_pSendAsPB->SetClickHdl(LINK(this, SwMMResultEmailDialog, SendAsHdl_Impl));
     m_pSendAsLB->SetSelectHdl(LINK(this, SwMMResultEmailDialog, SendTypeHdl_Impl));
 
-    m_pSendAllRB->SetClickHdl(LINK(this, SwMMResultEmailDialog, DocumentSelectionHdl_Impl));
-    m_pFromRB->SetClickHdl(LINK(this, SwMMResultEmailDialog, DocumentSelectionHdl_Impl));
+    Link<Button*,void> aLink = LINK(this, SwMMResultEmailDialog, DocumentSelectionHdl_Impl);
+    m_pSendAllRB->SetClickHdl(aLink);
+    m_pFromRB->SetClickHdl(aLink);
+    // m_pSendAllRB is the default, so disable m_pFromNF and m_pToNF initially.
+    aLink.Call(m_pSendAllRB);
 
     m_pOKButton->SetClickHdl(LINK(this, SwMMResultEmailDialog, SendDocumentsHdl_Impl));
 
