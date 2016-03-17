@@ -274,8 +274,11 @@ SwMMResultPrintDialog::SwMMResultPrintDialog(vcl::Window* pParent)
     m_pPrinterLB->SetSelectHdl(LINK(this, SwMMResultPrintDialog, PrinterChangeHdl_Impl));
     m_pPrinterSettingsPB->SetClickHdl(LINK(this, SwMMResultPrintDialog, PrinterSetupHdl_Impl));
 
-    m_pPrintAllRB->SetClickHdl(LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl));
-    m_pFromRB->SetClickHdl(LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl));
+    Link<Button*,void> aLink = LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl);
+    m_pPrintAllRB->SetClickHdl(aLink);
+    m_pFromRB->SetClickHdl(aLink);
+    // m_pPrintAllRB is the default, so disable m_pFromNF and m_pToNF initially.
+    aLink.Call(m_pPrintAllRB);
 
     m_pOKButton->SetClickHdl(LINK(this, SwMMResultPrintDialog, PrintHdl_Impl));
 
