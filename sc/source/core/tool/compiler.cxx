@@ -4847,9 +4847,9 @@ sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eT
     return pConv->getSpecialSymbol(eType);
 }
 
-FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
+FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 )
 {
-    return extendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
+    return extendRangeReference( rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );
 }
 
 void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const

@@ -900,7 +900,7 @@ void FormulaCompiler::OpCodeMap::putCopyOpCode( const OUString& rSymbol, OpCode 
     }
 }
 
-void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKnownBad )
+void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
 {
     delete mpHashMap;
     mpHashMap = new OpCodeHashMap( mnSymbols);
@@ -919,7 +919,7 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKno
     // For bOverrideKnownBad when copying from the English core map (ODF 1.1
     // and API) to the native map (UI "use English function names") replace the
     // known bad legacy function names with correct ones.
-    if (bOverrideKnownBad && r.mbCore &&
+    if (r.mbCore &&
             FormulaGrammar::extractFormulaLanguage( meGrammar) == sheet::FormulaLanguage::NATIVE &&
             FormulaGrammar::extractFormulaLanguage( r.meGrammar) == sheet::FormulaLanguage::ENGLISH)
     {
@@ -1710,8 +1710,7 @@ void FormulaCompiler::SetError( sal_uInt16 /*nError*/ )
 {
 }
 
-FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/, FormulaToken & /*rTok2*/,
-        bool /*bReuseDoubleRef*/ )
+FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/, FormulaToken & /*rTok2*/ )
 {
     return FormulaTokenRef();
 }
@@ -1724,7 +1723,7 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
             ((p1 = *pCode1) == nullptr) || ((p2 = *pCode2) == nullptr) )
         return false;
 
-    FormulaTokenRef p = ExtendRangeReference( *p1, *p2, true);
+    FormulaTokenRef p = ExtendRangeReference( *p1, *p2);
     if (!p)
         return false;
 
@@ -2115,7 +2114,7 @@ void FormulaCompiler::SetNativeSymbols( const OpCodeMapPtr& xMap )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
     lcl_fillNativeSymbols( xSymbolsNative);
-    xSymbolsNative->copyFrom( *xMap, true);
+    xSymbolsNative->copyFrom( *xMap );
 }
 
 

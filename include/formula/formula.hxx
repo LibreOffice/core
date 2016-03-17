@@ -50,9 +50,6 @@ class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formul
     friend class FormulaDlg_Impl;
 public:
                     FormulaModalDialog( vcl::Window* pParent
-                                            , bool _bSupportFunctionResult
-                                            , bool _bSupportResult
-                                            , bool _bSupportMatrix
                                             ,IFunctionManager* _pFunctionMgr
                                             ,IControlReferenceHandler* _pDlg = nullptr );
     virtual ~FormulaModalDialog();
@@ -90,9 +87,6 @@ public:
                     FormulaDlg( SfxBindings* pB
                                     , SfxChildWindow* pCW
                                     , vcl::Window* pParent
-                                    , bool _bSupportFunctionResult
-                                    , bool _bSupportResult
-                                    , bool _bSupportMatrix
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = nullptr );
     virtual ~FormulaDlg();

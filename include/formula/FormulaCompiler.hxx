@@ -105,12 +105,11 @@ public:
 
         /** Copy mappings from r into this map, effectively replacing this map.
 
-            @param  bOverrideKnownBad
-                    If TRUE, override known legacy bad function names with
-                    correct ones if the conditions can be derived from the
-                    current maps.
+            Override known legacy bad function names with
+            correct ones if the conditions can be derived from the
+            current maps.
          */
-        void copyFrom( const OpCodeMap& r, bool bOverrideKnownBad );
+        void copyFrom( const OpCodeMap& r );
 
         /// Get the symbol String -> OpCode hash map for finds.
         inline const OpCodeHashMap* getHashMap() const { return mpHashMap; }
@@ -278,7 +277,7 @@ protected:
     virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec, bool _bIsEnglish) const;
 
     virtual void SetError(sal_uInt16 nError);
-    virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef );
+    virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 );
     virtual bool HandleExternalReference(const FormulaToken& _aToken);
     virtual bool HandleRange();
     virtual bool HandleColRowName();
