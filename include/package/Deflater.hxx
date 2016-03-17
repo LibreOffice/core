@@ -38,7 +38,7 @@ protected:
     sal_Int64               nOffset, nLength;
     z_stream*               pStream;
 
-    void init (sal_Int32 nLevel, sal_Int32 nStrategy, bool bNowrap);
+    void init (sal_Int32 nLevel, bool bNowrap);
     sal_Int32 doDeflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
