@@ -51,6 +51,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
@@ -3436,6 +3437,27 @@ Content::ResourceType Content::getResourceType(
     }
     else
     {
+        // In case xEnv is present, uses the interaction handler provided
+        // in xEnv.
+        // In case xEnv is not present, supply a command env to PROPFIND()
+        // that contains an interaction handler in order to activate the
+        // credential dialog if the server request them.
+        // The command env is needed by lower level function for examples as
+        // NeonSession_CertificationNotify where it is used to check the server
+        // certificate or ask the user for a manual confirmation if the certificate
+        // needs the user visual check.
+        // xEnv is still used in cancelCommandExecution(), so the cancelling operates
+        // as the client application (e.g. framework) requested.
+        css::uno::Reference< css::ucb::XCommandEnvironment > xAuthEnv( xEnv );
+        if( !xAuthEnv.is() )
+        {
+            css:: uno::Reference< task::XInteractionHandler > xIH(
+                css::task::InteractionHandler::createWithParent( m_xContext, nullptr ), css::uno::UNO_QUERY_THROW );
+
+            xAuthEnv = css::ucb::CommandEnvironment::create(
+                m_xContext, xIH, css::uno::Reference< ucb::XProgressHandler >() ) ;
+        }
+
         try
         {
             // Try to fetch some frequently used property value, e.g. those
@@ -3452,7 +3474,7 @@ Content::ResourceType Content::getResourceType(
 
             ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
 
-            rResAccess->PROPFIND( DAVZERO, aPropNames, resources, xEnv );
+            rResAccess->PROPFIND( DAVZERO, aPropNames, resources, xAuthEnv );
 
             if ( resources.size() == 1 )
             {
