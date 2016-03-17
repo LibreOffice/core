@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_dccea9b3",
+        "filename": "sdext/source/presenter/PresenterAccessibility.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-17T11:46:25Z",
+      "side": 1,
+      "message": "OSL_THIS_FUNC shouldnt be used with SAL_INFO, as it already prints the context IIRC ..",
+      "revId": "be2c79c0fab348ade79f20f7a3727be818997d7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
