@@ -1516,7 +1516,9 @@ bool SimpleWinLayout::CacheGlyphs(SalGraphics& rGraphics) const
         int nCodePoint;
         if (i < mnGlyphCount-1 && rtl::isHighSurrogate(mpOutGlyphs[i]) && rtl::isLowSurrogate(mpOutGlyphs[i+1]))
         {
-#if 1
+#if 1 // Don't remove the #else branch in case somebody wants to
+      // continue trying to figure out why sequential non-BMP glyphs
+      // get scribbled on top of each others if caching is used.
             return false;
 #else
             nCodePoint = rtl::combineSurrogates(mpOutGlyphs[i], mpOutGlyphs[i+1]);
