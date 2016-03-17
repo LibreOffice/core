@@ -79,9 +79,9 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& rCellName ) throw (u
         throw uno::RuntimeException();
 
     const SwTableLine* pLine = pBox->GetUpper();
-    const SwTableLines* pLines = pLine->GetUpper()
-                     ? &pLine->GetUpper()->GetTabLines() : &pTable->GetTabLines();
-    nRet = pLines->GetPos( pLine );
+    nRet = pLine->GetUpper()
+                     ? pLine->GetUpper()->GetLinePos( pLine ) : pTable->GetLinePos( pLine );
+    //nRet = pBox->GetLinePos( pLine );
     return nRet;
 }
 
