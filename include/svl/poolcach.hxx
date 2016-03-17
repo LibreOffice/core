@@ -50,7 +50,7 @@ public:
                                               const SfxItemSet *pPutSet );
                             ~SfxItemPoolCache();
 
-    const SfxSetItem&       ApplyTo( const SfxSetItem& rSetItem, bool bNew = false );
+    const SfxSetItem&       ApplyTo( const SfxSetItem& rSetItem );
 };
 
 

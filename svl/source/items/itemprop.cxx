@@ -142,8 +142,7 @@ void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >
         SfxItemPropertySimpleEntry aTemp(
             sal::static_int_cast< sal_Int16 >( pPropArray[nElement].Handle ), //nWID
             pPropArray[nElement].Type, //aType
-            pPropArray[nElement].Attributes, //nFlags
-            0 ); //nMemberId
+            pPropArray[nElement].Attributes); //nFlags
         (*m_pImpl)[pPropArray[nElement].Name] = aTemp;
     }
 }

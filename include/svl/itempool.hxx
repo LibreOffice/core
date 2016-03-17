@@ -151,7 +151,6 @@ public:
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,
-                                              bool bDirect = false,
                                               const SfxItemPool *pRefPool = nullptr );
     bool                            StoreItem( SvStream &rStream,
                                                const SfxPoolItem &rItem,

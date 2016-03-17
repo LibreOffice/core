@@ -57,11 +57,11 @@ struct SfxItemPropertySimpleEntry
         }
 
     SfxItemPropertySimpleEntry(sal_uInt16 _nWID, css::uno::Type const & _rType,
-                               long _nFlags, sal_uInt8 _nMemberId)
+                               long _nFlags)
         : nWID(      _nWID )
         , aType(     _rType )
         , nFlags(    _nFlags )
-        , nMemberId( _nMemberId )
+        , nMemberId( 0 )
         {
         }
 
