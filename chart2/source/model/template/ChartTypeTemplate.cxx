@@ -457,9 +457,8 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
                 if( xAxisProp.is())
                 {
                     // set number format to source format
-                    uno::Any aValue( xAxisProp->getPropertyValue("NumberFormat"));
-                    if( aValue.hasValue())
-                        xAxisProp->setPropertyValue("NumberFormat", uno::Any());
+                    xAxisProp->setPropertyValue("LinkNumberFormatToSource", uno::makeAny(true));
+                    xAxisProp->setPropertyValue("NumberFormat", uno::Any());
                 }
             }
         }
@@ -761,9 +760,8 @@ void ChartTypeTemplate::adaptAxes(
                             if( xAxisProp.is())
                             {
                                 // set number format to source format
-                                uno::Any aValue( xAxisProp->getPropertyValue("NumberFormat"));
-                                if( aValue.hasValue())
-                                    xAxisProp->setPropertyValue("NumberFormat", uno::Any());
+                                xAxisProp->setPropertyValue("LinkNumberFormatToSource", uno::makeAny(true));
+                                xAxisProp->setPropertyValue("NumberFormat", uno::Any());
                             }
                         }
                     }

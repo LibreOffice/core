@@ -102,7 +102,10 @@ public:
     // Bei Paste muss - falls in eine Scene eingefuegt wird - die
     // Objekte der Szene eingefuegt werden, die Szene selbst aber nicht
     using SdrView::Paste;
-    virtual sal_Bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual sal_Bool Paste(
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+        const OUString& rSrcShellID, const OUString& rDestShellID );
+
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
     bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);

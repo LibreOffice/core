@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_datatransfer_XTransferable2_idl__
+#define __com_sun_star_datatransfer_XTransferable2_idl__
+
+#include <com/sun/star/datatransfer/XTransferable.idl>
+
+module com { module sun { module star { module datatransfer {
+
+interface XTransferable2 : com::sun::star::datatransfer::XTransferable
+{
+    /** This is equivalent of getTransferData of XTransferable, but takes an
+        additional parameter that specifies the destination document type.
+
+        @param aFlavor requested data format
+        @param aDestShellID destination document shell ID.  The ID of each
+        individual shell must be unique.
+
+        @returns data in specified data format.
+
+        @throws com::sun::star::io::IOException
+        if the data is no longer available in the requested flavor.
+
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+        if the requested DataFlavor is not supported.
+     */
+    any getTransferData2( [in] DataFlavor aFlavor, [in] string aDestShellID )
+        raises ( UnsupportedFlavorException, com::sun::star::io::IOException );
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

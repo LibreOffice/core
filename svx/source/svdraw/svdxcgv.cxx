@@ -119,9 +119,9 @@ sal_Bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerI
     return bRet;
 }
 
-sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+sal_Bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
-    if(!rStr.Len())
+    if (rStr.isEmpty())
         return sal_False;
 
     Point aPos(rPos);
@@ -159,7 +159,7 @@ sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObj
     return sal_True;
 }
 
-sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+sal_Bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
@@ -217,7 +217,9 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uI
     return sal_True;
 }
 
-sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+sal_Bool SdrExchangeView::Paste(
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+    const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     const SdrModel* pSrcMod=&rMod;
     if (pSrcMod==pMod)
@@ -292,7 +294,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            SdrObject* pNeuObj = pSrcOb->Clone();
+            SdrObject* pNeuObj = pSrcOb->CloneWithShellIDs(rSrcShellID, rDestShellID);
 
             if (pNeuObj!=NULL)
             {

@@ -627,6 +627,9 @@ public:
       Note that this function uses operator= internally.
     */
     virtual SdrObject* Clone() const;
+
+     virtual SdrObject* CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const;
+
     /**
       Implemented mainly for the purposes of Clone().
     */

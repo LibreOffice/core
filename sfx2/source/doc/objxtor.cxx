@@ -479,7 +479,24 @@ sal_Bool SfxObjectShell::Close()
     return sal_True;
 }
 
-//--------------------------------------------------------------------
+OUString SfxObjectShell::CreateShellID( const SfxObjectShell* pShell )
+{
+    if (!pShell)
+        return OUString();
+
+    OUString aShellID;
+
+    SfxMedium* pMedium = pShell->GetMedium();
+    if (pMedium)
+        aShellID = pMedium->GetBaseURL();
+
+    if (!aShellID.isEmpty())
+        return aShellID;
+
+    sal_Int64 nShellID = reinterpret_cast<sal_Int64>(pShell);
+    aShellID = "0x" + OUString::number(nShellID, 16);
+    return aShellID;
+}
 
 // returns a pointer the first SfxDocument of specified type
 

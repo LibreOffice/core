@@ -145,6 +145,8 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 
     SdrOle2Obj* Clone() const;
+    virtual SdrOle2Obj* CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const SAL_OVERRIDE;
+    SdrOle2Obj& assignFrom( const SdrOle2Obj& rObj, const OUString& rSrcShellID, const OUString& rDestShellID );
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
     virtual void NbcMove(const Size& rSize);

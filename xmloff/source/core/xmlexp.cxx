@@ -266,6 +266,9 @@ public:
     /// name of stream in package, e.g., "content.xml"
     OUString mStreamName;
 
+    OUString maSrcShellID;
+    OUString maDestShellID;
+
     /// stack of backed up namespace maps
     /// long: depth at which namespace map has been backed up into the stack
     ::std::stack< ::std::pair< SvXMLNamespaceMap *, long > > mNamespaceMaps;
@@ -812,13 +815,15 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 
     try
     {
+        const sal_Int32 nPropCount = aDescriptor.getLength();
+
         const sal_uInt32 nTest =
             EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS;
         if( (mnExportFlags & nTest) == nTest && msOrigFileName.isEmpty() )
         {
             // evaluate descriptor only for flat files and if a base URI
             // has not been provided already
-            const sal_Int32 nPropCount = aDescriptor.getLength();
+
             const beans::PropertyValue* pProps = aDescriptor.getConstArray();
 
             for( sal_Int32 nIndex = 0; nIndex < nPropCount; nIndex++, pProps++ )
@@ -839,21 +844,24 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             }
         }
 
-#ifdef TIMELOG
-        if (GetModel().is())
+        const beans::PropertyValue* pProps = aDescriptor.getConstArray();
+        for (sal_Int32 nIndex = 0; nIndex < nPropCount; ++nIndex, ++pProps)
         {
-            // print a trace message with the URL
-            OString aUrl(OUStringToOString(GetModel()->getURL(),
-                             RTL_TEXTENCODING_ASCII_US));
-            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.getStr() );
+            const OUString& rPropName = pProps->Name;
+            const Any& rValue = pProps->Value;
 
-            // we also want a trace message with the document class
-            OString aClass(OUStringToOString(GetXMLToken(meClass),
-                               RTL_TEXTENCODING_ASCII_US));
-            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
-                                        aClass.getStr() );
+            if (rPropName == "SourceShellID")
+            {
+                if (!(rValue >>= mpImpl->maSrcShellID))
+                    return false;
+            }
+            else if (rPropName == "DestinationShellID")
+            {
+                if (!(rValue >>= mpImpl->maDestShellID))
+                    return false;
+            }
         }
-#endif
+
 
         exportDoc( meClass );
     }
@@ -1444,6 +1452,16 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 void SvXMLExport::ResetNamespaceMap()
 {
     delete mpNamespaceMap;    mpNamespaceMap = new SvXMLNamespaceMap;
+}
+
+OUString SvXMLExport::GetSourceShellID() const
+{
+    return mpImpl->maSrcShellID;
+}
+
+OUString SvXMLExport::GetDestinationShellID() const
+{
+    return mpImpl->maDestShellID;
 }
 
 void SvXMLExport::_ExportMeta()
