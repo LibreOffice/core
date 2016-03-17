@@ -25,7 +25,6 @@
 
 class Edit;
 class PopupMenu;
-class SfxTemplateInfoDlg;
 class TemplateAbstractView;
 class TemplateLocalView;
 class TemplateRemoteView;
@@ -87,7 +86,6 @@ private:
     static void OnTemplateLink ();
     void OnTemplateOpen ();
     void OnTemplateEdit ();
-    void OnTemplateProperties ();
     void OnTemplateDelete ();
     void OnTemplateAsDefault ();
     void OnTemplateExport ();

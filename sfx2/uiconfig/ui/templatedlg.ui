@@ -193,20 +193,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="properties">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">properties</property>
-                                <property name="label" translatable="yes">Properties</property>
-                                <property name="use_underline">True</property>
-                                <property name="icon_name">sfx2/imglst/actiontemplates016.png</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkToolButton" id="default">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
