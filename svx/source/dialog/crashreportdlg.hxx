@@ -17,7 +17,7 @@ class CrashReportDialog : public Dialog
 {
 public:
 
-    CrashReportDialog(vcl::Window* pParent);
+    explicit CrashReportDialog(vcl::Window* pParent);
 
     virtual ~CrashReportDialog();
 

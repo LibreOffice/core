@@ -56,7 +56,7 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
     DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
-    ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
+    explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
     virtual ~ClassificationCategoriesController();
 
     // XServiceInfo

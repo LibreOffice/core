@@ -24,7 +24,7 @@ class CrashReportUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
                                                    css::frame::XSynchronousDispatch > // => XDispatch!
 {
 public:
-    CrashReportUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit CrashReportUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~CrashReportUI();
 
     // css.lang.XServiceInfo

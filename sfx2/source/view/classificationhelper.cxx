@@ -324,7 +324,7 @@ public:
     std::vector<SfxClassificationCategory> m_aCategories;
     const uno::Reference<document::XDocumentProperties>& m_xDocumentProperties;
 
-    Impl(const uno::Reference<document::XDocumentProperties>& xDocumentProperties);
+    explicit Impl(const uno::Reference<document::XDocumentProperties>& xDocumentProperties);
     void parsePolicy();
     /// Synchronize m_aLabels back to the document properties.
     void pushToDocumentProperties();
