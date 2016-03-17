@@ -508,7 +508,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
     return aNewName;
 }
 
-OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< XPropertySet >& column, bool bOrderBy)
+OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Reference< XPropertySet >& column)
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -537,8 +537,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
 
     // Nope, it is an unrelated column.
     // Is that supported?
-    if ( bOrderBy &&
-         !m_xMetaData->supportsOrderByUnrelated() )
+    if ( !m_xMetaData->supportsOrderByUnrelated() )
     {
         OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
         throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
@@ -551,7 +550,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
 void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OUString sColumnName( impl_getColumnName_throw(column, true) );
+    OUString sColumnName( impl_getColumnNameOrderBy_throw(column) );
     OUString sOrder = getOrder();
     if ( !(sOrder.isEmpty() || sColumnName.isEmpty()) )
         sOrder += COMMA;

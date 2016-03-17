@@ -33,7 +33,7 @@ namespace dbaui
         sal_uInt32 m_nNumberFormatId;
 
     public:
-        SbaSbAttrDlg(vcl::Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat, bool bRow = false);
+        SbaSbAttrDlg(vcl::Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat);
         virtual ~SbaSbAttrDlg();
         virtual void dispose() override;
 

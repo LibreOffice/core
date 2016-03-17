@@ -187,15 +187,13 @@ namespace dbaccess
         */
         OUString impl_getColumnRealName_throw(const css::uno::Reference< css::beans::XPropertySet >& column, bool bGroupBy);
 
-        /** return the name of the column in the *query*
+        /** return the name of the column in the *query* for ORDER BY clause.
 
             That is, for (SELECT a AS b FROM t), it returns "b"
 
-            Use e.g. for ORDER BY clause.
-
-            @param bOrderBy: for ORDER BY clause? In that case, throw exception if trying to use an unrelated column and the database does not support that.
+            Throws exception if trying to use an unrelated column and the database does not support that.
         */
-        OUString impl_getColumnName_throw(const css::uno::Reference< css::beans::XPropertySet >& column, bool bOrderBy);
+        OUString impl_getColumnNameOrderBy_throw(const css::uno::Reference< css::beans::XPropertySet >& column);
 
     protected:
         virtual ~OSingleSelectQueryComposer();

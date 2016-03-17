@@ -1035,7 +1035,7 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
 {
     SvTreeListEntry* pDataSourceEntry = nullptr;
     SvTreeListEntry* pContainerEntry = nullptr;
-    SvTreeListEntry* pObjectEntry = getObjectEntry( m_aDocumentDataSource, &pDataSourceEntry, &pContainerEntry, false );
+    SvTreeListEntry* pObjectEntry = getObjectEntry( m_aDocumentDataSource, &pDataSourceEntry, &pContainerEntry );
     bool bKnownDocDataSource = (nullptr != pObjectEntry);
     if (!bKnownDocDataSource)
     {
@@ -1251,8 +1251,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
 }
 
 SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const svx::ODataAccessDescriptor& _rDescriptor,
-        SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry,
-        bool _bExpandAncestors)
+        SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry)
 {
     // extract the props from the descriptor
     OUString sDataSource;
@@ -1261,7 +1260,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const svx::ODataAccessDesc
     bool bEscapeProcessing = true;
     extractDescriptorProps(_rDescriptor, sDataSource, sCommand, nCommandType, bEscapeProcessing);
 
-    return getObjectEntry( sDataSource, sCommand, nCommandType, _ppDataSourceEntry, _ppContainerEntry, _bExpandAncestors );
+    return getObjectEntry( sDataSource, sCommand, nCommandType, _ppDataSourceEntry, _ppContainerEntry, false/*_bExpandAncestors*/ );
 }
 
 void SbaTableQueryBrowser::connectExternalDispatches()

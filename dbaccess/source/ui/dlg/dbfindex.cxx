@@ -167,7 +167,7 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.SelectEntryPos(0);
 }
 
-OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName, bool _bMustExist )
+OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName )
 {
     OTableIndex aReturn;
 
@@ -176,7 +176,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
     if (!GetTable(_rTableName, aTablePos))
         return aReturn;
 
-    return implRemoveIndex(_rIndexName, aTablePos->aIndexList, *m_pLB_TableIndexes, _bMustExist);
+    return implRemoveIndex(_rIndexName, aTablePos->aIndexList, *m_pLB_TableIndexes, true/*_bMustExist*/);
 }
 
 void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex)
@@ -215,7 +215,7 @@ IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveClickHdl, Button*, void )
 {
     OUString aSelection = m_pLB_TableIndexes->GetSelectEntry();
     OUString aTableName = m_pCB_Tables->GetText();
-    OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, true );
+    OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection );
     InsertFreeIndex( aIndex );
 
     checkButtons();
@@ -238,7 +238,7 @@ IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveAllClickHdl, Button*, void )
     OUString aTableName = m_pCB_Tables->GetText();
 
     for( sal_Int32 nPos = 0; nPos < nCnt; ++nPos )
-        InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0), true ) );
+        InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0) ) );
 
     checkButtons();
 }
