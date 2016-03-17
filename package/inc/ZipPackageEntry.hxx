@@ -61,7 +61,7 @@ public:
 
     const OUString& GetMediaType () const { return msMediaType; }
     void SetMediaType ( const OUString & sNewType) { msMediaType = sNewType; }
-    void doSetParent ( ZipPackageFolder * pNewParent, bool bInsert );
+    void doSetParent ( ZipPackageFolder * pNewParent );
     bool IsFolder ( ) { return mbIsFolder; }
     void SetFolder ( bool bSetFolder ) { mbIsFolder = bSetFolder; }
 

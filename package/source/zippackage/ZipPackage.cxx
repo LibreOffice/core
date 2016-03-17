@@ -535,7 +535,7 @@ void ZipPackage::getZipFileContents()
                 {
                     pPkgFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
                     pPkgFolder->setName( sTemp );
-                    pPkgFolder->doSetParent( pCurrent, true );
+                    pPkgFolder->doSetParent( pCurrent );
                     pCurrent = pPkgFolder;
                 }
                 else
@@ -553,7 +553,7 @@ void ZipPackage::getZipFileContents()
             pPkgStream->SetPackageMember( true );
             pPkgStream->setZipEntryOnLoading( rEntry );
             pPkgStream->setName( sTemp );
-            pPkgStream->doSetParent( pCurrent, true );
+            pPkgStream->doSetParent( pCurrent );
         }
     }
 

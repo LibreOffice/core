@@ -83,11 +83,11 @@ uno::Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
     return uno::Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( mpParent ), UNO_QUERY );
 }
 
-void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, bool bInsert )
+void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent )
 {
     // xParent = mpParent = pNewParent;
     mpParent = pNewParent;
-    if ( bInsert && !msName.isEmpty() && !pNewParent->hasByName ( msName ) )
+    if ( !msName.isEmpty() && !pNewParent->hasByName ( msName ) )
         pNewParent->doInsertByName ( this, false );
 }
 
@@ -105,7 +105,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
     {
         if ( mpParent && !msName.isEmpty() && mpParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
             mpParent->removeByName( msName );
-        doSetParent ( pNewParent, true );
+        doSetParent ( pNewParent );
     }
 }
     //XPropertySet

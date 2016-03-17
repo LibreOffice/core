@@ -35,14 +35,14 @@ Deflater::~Deflater()
 {
     end();
 }
-void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, bool bNowrap)
+void Deflater::init (sal_Int32 nLevelArg, bool bNowrap)
 {
     pStream = new z_stream;
     /* Memset it to 0...sets zalloc/zfree/opaque to NULL */
     memset (pStream, 0, sizeof(*pStream));
 
     switch (deflateInit2(pStream, nLevelArg, Z_DEFLATED, bNowrap? -MAX_WBITS : MAX_WBITS,
-                DEF_MEM_LEVEL, nStrategyArg))
+                DEF_MEM_LEVEL, DEFAULT_STRATEGY))
     {
         case Z_OK:
             break;
@@ -63,7 +63,7 @@ Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
 , nOffset(0)
 , nLength(0)
 {
-    init(nSetLevel, DEFAULT_STRATEGY, bNowrap);
+    init(nSetLevel, bNowrap);
 }
 
 sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
