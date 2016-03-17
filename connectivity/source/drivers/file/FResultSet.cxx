@@ -536,7 +536,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, st
     // we know that we append new rows at the end
     // so we have to know where the end is
     (void)m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,false);
-    m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, true, m_xColsIdx);
+    m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, m_xColsIdx);
     if(m_bRowInserted && m_pFileSet.is())
     {
         sal_Int32 nPos = (m_aInsertRow->get())[0]->getValue();
@@ -798,11 +798,11 @@ again:
 
     if (!bEvaluate) // If no evaluation runs, then just fill the results-row
     {
-        m_pTable->fetchRow(m_aRow,rTableCols, true,bRetrieveData);
+        m_pTable->fetchRow(m_aRow,rTableCols, bRetrieveData);
     }
     else
     {
-        m_pTable->fetchRow(m_aEvaluateRow, rTableCols, true,bRetrieveData || bHasRestriction);
+        m_pTable->fetchRow(m_aEvaluateRow, rTableCols, bRetrieveData || bHasRestriction);
 
         if  (   (   !m_bShowDeleted
                 &&  m_aEvaluateRow->isDeleted()
@@ -869,7 +869,7 @@ again:
         if (bEvaluate)
         {
             // read the actual result-row
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), true,true);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), true);
         }
 
         if (bOK)
@@ -884,7 +884,7 @@ again:
         bool bOK = true;
         if (bEvaluate)
         {
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), true,true);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), true);
         }
         if (bOK)
         {
@@ -985,7 +985,7 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                     if (bOK)
                     {
                         // read the results again
-                        m_pTable->fetchRow(m_aRow, *(m_pTable->getTableColumns()), true,bRetrieveData);
+                        m_pTable->fetchRow(m_aRow, *(m_pTable->getTableColumns()), bRetrieveData);
 
                         // now set the bookmark for outside
                         *(*m_aRow->get().begin()) = sal_Int32(m_nRowPos + 1);
@@ -1390,7 +1390,7 @@ bool OResultSet::OpenImpl()
             m_nRowCountResult = 0;
 
             OSL_ENSURE(m_aAssignValues.is(),"No assign values set!");
-            if(!m_pTable->InsertRow(*m_aAssignValues, true,m_xColsIdx))
+            if(!m_pTable->InsertRow(*m_aAssignValues, m_xColsIdx))
             {
                 m_nFilePos  = 0;
                 return false;

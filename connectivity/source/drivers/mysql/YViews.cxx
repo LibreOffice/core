@@ -60,7 +60,6 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
     return new ::connectivity::sdbcx::OView(isCaseSensitive(),
                             sTable,
                             m_xMetaData,
-                            0,
                             OUString(),
                             sSchema,
                             sCatalog

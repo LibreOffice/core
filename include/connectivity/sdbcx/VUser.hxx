@@ -61,8 +61,8 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
-            OUser(bool _bCase);
-            OUser(const OUString& _Name,bool _bCase);
+            OUser();
+            OUser(const OUString& _Name);
 
             virtual ~OUser( );
 

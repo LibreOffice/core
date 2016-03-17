@@ -67,7 +67,6 @@ namespace connectivity
             OView(  bool _bCase,
                     const OUString& _rName,
                     const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
-                    sal_Int32 _nCheckOption = 0,
                     const OUString& _rCommand = OUString(),
                     const OUString& _rSchemaName = OUString(),
                     const OUString& _rCatalogName = OUString());

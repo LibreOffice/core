@@ -65,13 +65,12 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:
-            OIndex(bool _bCase);
+            OIndex();
             OIndex( const OUString& _Name,
                     const OUString& _Catalog,
                     bool _isUnique,
                     bool _isPrimaryKeyIndex,
-                    bool _isClustered,
-                    bool _bCase);
+                    bool _isClustered);
 
             virtual ~OIndex( );
 

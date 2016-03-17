@@ -56,9 +56,6 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const OUString& _rName)
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
-                                                    ,false
-                                                    ,false
-                                                    ,false
                                                     ,pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME)))
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)))

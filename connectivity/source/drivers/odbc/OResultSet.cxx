@@ -726,28 +726,28 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException, std::e
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::FIRST,0,true);
+    return moveImpl(IResultSetHelper::FIRST,0);
 }
 
 
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::LAST,0,true);
+    return moveImpl(IResultSetHelper::LAST,0);
 }
 
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::ABSOLUTE1,row,true);
+    return moveImpl(IResultSetHelper::ABSOLUTE1,row);
 }
 
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::RELATIVE1,row,true);
+    return moveImpl(IResultSetHelper::RELATIVE1,row);
 }
 
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::PRIOR,0,true);
+    return moveImpl(IResultSetHelper::PRIOR,0);
 }
 
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException, std::exception)
@@ -792,7 +792,7 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
 
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::NEXT,1,true);
+    return moveImpl(IResultSetHelper::NEXT,1);
 }
 
 
@@ -1763,13 +1763,13 @@ bool OResultSet::isRowDeleted() const
     return m_pRowStatusArray[0] == SQL_ROW_DELETED;
 }
 
-bool OResultSet::moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData)
+bool OResultSet::moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return (m_pSkipDeletedSet != nullptr)
-                ?   m_pSkipDeletedSet->skipDeleted(_eCursorPosition,_nOffset,_bRetrieveData)
-                :   move(_eCursorPosition,_nOffset,_bRetrieveData);
+                ?   m_pSkipDeletedSet->skipDeleted(_eCursorPosition,_nOffset,true/*_bRetrieveData*/)
+                :   move(_eCursorPosition,_nOffset,true/*_bRetrieveData*/);
 }
 
 void OResultSet::fillNeededData(SQLRETURN _nRet)

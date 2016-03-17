@@ -59,7 +59,7 @@ namespace dbaccess
     // View
     View::View( const Reference< XConnection >& _rxConnection, bool _bCaseSensitive,
         const OUString& _rCatalogName,const OUString& _rSchemaName, const OUString& _rName )
-        :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, _rCatalogName )
+        :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), OUString(), _rSchemaName, _rCatalogName )
     {
         m_nCommandHandle = getProperty(PROPERTY_COMMAND).Handle;
         try
