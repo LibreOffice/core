@@ -21,7 +21,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/templateinfodlg.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateremoteview.hxx>
@@ -75,7 +74,6 @@ const char VIEWBAR_NEW_FOLDER[] = "new_folder";
 const char TEMPLATEBAR_SAVE[] = "template_save";
 const char TEMPLATEBAR_OPEN[] = "open";
 const char TEMPLATEBAR_EDIT[] = "edit";
-const char TEMPLATEBAR_PROPERTIES[] = "properties";
 const char TEMPLATEBAR_DEFAULT[] = "default";
 const char TEMPLATEBAR_MOVE[] = "move";
 const char TEMPLATEBAR_EXPORT[] = "export";
@@ -353,7 +351,6 @@ void SfxTemplateManagerDlg::setSaveMode()
     mpViewBar->HideItem(VIEWBAR_REPOSITORY);
 
     mpTemplateBar->ShowItem(TEMPLATEBAR_SAVE);
-    mpTemplateBar->ShowItem(TEMPLATEBAR_PROPERTIES);
     mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
     mpTemplateBar->HideItem(TEMPLATEBAR_OPEN);
     mpTemplateBar->HideItem(TEMPLATEBAR_EDIT);
@@ -486,8 +483,6 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXTemplateHdl, ToolBox *, void)
         OnTemplateOpen();
     else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EDIT))
         OnTemplateEdit();
-    else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_PROPERTIES))
-        OnTemplateProperties();
     else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DELETE))
         OnTemplateDelete();
     else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DEFAULT))
@@ -797,13 +792,11 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
             {
                 mpTemplateBar->HideItem(TEMPLATEBAR_OPEN);
                 mpTemplateBar->HideItem(TEMPLATEBAR_EDIT);
-                mpTemplateBar->HideItem(TEMPLATEBAR_PROPERTIES);
                 mpTemplateBar->HideItem(TEMPLATEBAR_DEFAULT);
             }
             else
             {
                 mpTemplateBar->HideItem(TEMPLATEBAR_SAVE);
-                mpTemplateBar->HideItem(TEMPLATEBAR_PROPERTIES);
                 mpTemplateBar->HideItem(TEMPLATEBAR_DEFAULT);
             }
         }
@@ -828,13 +821,11 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
                 {
                     mpTemplateBar->ShowItem(TEMPLATEBAR_OPEN);
                     mpTemplateBar->ShowItem(TEMPLATEBAR_EDIT);
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_PROPERTIES);
                     mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
                 }
                 else
                 {
                     mpTemplateBar->ShowItem(TEMPLATEBAR_SAVE);
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_PROPERTIES);
                     mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
                 }
             }
@@ -1140,15 +1131,6 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
     }
 
     Close();
-}
-
-void SfxTemplateManagerDlg::OnTemplateProperties ()
-{
-    const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
-
-    ScopedVclPtrInstance< SfxTemplateInfoDlg > aDlg;
-    aDlg->loadDocument(pItem->getPath());
-    aDlg->Execute();
 }
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
