@@ -2185,7 +2185,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
 
         // set properties for the new text portion
         ESelection aSel( nPara, nStart, nPara, nEnd );
-        pTextForwarder->RemoveAttribs( aSel, false, 0 );
+        pTextForwarder->RemoveAttribs( aSel, 0 );
         pEditSource->UpdateData();
 
         SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
@@ -2415,7 +2415,7 @@ void SvxDummyTextSource::SetParaAttribs( sal_Int32, const SfxItemSet& )
 {
 }
 
-void SvxDummyTextSource::RemoveAttribs( const ESelection& , bool , sal_uInt16 )
+void SvxDummyTextSource::RemoveAttribs( const ESelection& , sal_uInt16 )
 {
 }
 

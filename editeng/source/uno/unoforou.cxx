@@ -180,9 +180,9 @@ void SvxOutlinerForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rS
         const_cast<SfxItemSet*>(&rSet)->SetParent( pOldParent );
 }
 
-void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich )
 {
-    rOutliner.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
+    rOutliner.RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, nWhich );
 }
 
 SfxItemPool* SvxOutlinerForwarder::GetPool() const

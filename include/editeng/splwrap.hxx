@@ -74,8 +74,7 @@ private:
 
 public:
     SvxSpellWrapper( vcl::Window* pWn,
-                     const bool bStart = false, const bool bIsAllRight = false,
-                     const bool bOther = false, const bool bRevAllow = true );
+                     const bool bStart = false, const bool bIsAllRight = false );
     SvxSpellWrapper( vcl::Window* pWn,
                      css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphenator,
                      const bool bStart = false, const bool bOther = false );

@@ -3347,7 +3347,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         aTmpFont, n, rTextPortion.GetRightToLeft(),
                                         aWrongSpellVector.size() ? &aWrongSpellVector : nullptr,
                                         pFieldData,
-                                        bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
+                                        bEndOfLine, bEndOfParagraph, // support for EOL/EOP TEXT comments
                                         &aLocale,
                                         aOverlineColor,
                                         aTextLineColor);
@@ -3595,7 +3595,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         aTmpFont, n, 0,
                                         nullptr,
                                         nullptr,
-                                        bEndOfLine, bEndOfParagraph, false,
+                                        bEndOfLine, bEndOfParagraph,
                                         nullptr,
                                         aOverlineColor,
                                         aTextLineColor);
@@ -3652,7 +3652,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                     aTmpFont, n, 0,
                     nullptr,
                     nullptr,
-                    false, true, false, // support for EOL/EOP TEXT comments
+                    false, true, // support for EOL/EOP TEXT comments
                     nullptr,
                     aOverlineColor,
                     aTextLineColor);

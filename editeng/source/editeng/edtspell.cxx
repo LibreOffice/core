@@ -730,7 +730,7 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
     return bRet;
 }
 
-LanguageType EdtAutoCorrDoc::GetLanguage( sal_Int32 nPos, bool ) const
+LanguageType EdtAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 {
     return mpEditEngine->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
 }

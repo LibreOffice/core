@@ -112,9 +112,9 @@ void SvxEditEngineForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& 
     rEditEngine.SetParaAttribs( nPara, rSet );
 }
 
-void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich )
 {
-    rEditEngine.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
+    rEditEngine.RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, nWhich );
 }
 
 SfxItemPool* SvxEditEngineForwarder::GetPool() const

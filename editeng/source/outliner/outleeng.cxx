@@ -152,13 +152,12 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText
                                    const SvxFieldData* pFieldData,
                                    bool bEndOfLine,
                                    bool bEndOfParagraph,
-                                   bool bEndOfBullet,
                                    const css::lang::Locale* pLocale,
                                    const Color& rOverlineColor,
                                    const Color& rTextLineColor)
 {
     pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nRightToLeft,
-        pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
+        pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, false/*bEndOfBullet*/, pLocale, rOverlineColor, rTextLineColor);
 }
 
 void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,

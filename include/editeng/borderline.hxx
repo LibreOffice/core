@@ -71,7 +71,6 @@ namespace editeng {
         SvxBorderLine( const Color *pCol = nullptr,
                 long nWidth = 0,
                 SvxBorderStyle nStyle = css::table::BorderLineStyle::SOLID,
-                bool bUseLeftTop = false,
                 Color (*pColorOutFn)( Color ) = &darkColor,
                 Color (*pColorInFn)( Color ) = &darkColor,
                 Color (*pColorGapFn)( Color ) = nullptr );

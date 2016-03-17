@@ -311,7 +311,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     if( nEndPos == rSttPos )
         return bRet;
 
-    LanguageType eLang = GetLanguage(nEndPos, false);
+    LanguageType eLang = GetLanguage(nEndPos);
     if(LANGUAGE_SYSTEM == eLang)
         eLang = GetAppLanguage();
     LanguageTag aLanguageTag( eLang);
@@ -410,18 +410,16 @@ void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                             sal_Unicode cChar )
 {
     sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCursor.GetPoint()->nNode.GetIndex();
-    LanguageType eLang = GetLanguage(nPos, false);
+    LanguageType eLang = GetLanguage(nPos);
     rEditSh.GetDoc()->SetAutoCorrExceptWord( new SwAutoCorrExceptWord( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
 }
 
-LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, bool bPrevPara ) const
+LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 {
     LanguageType eRet = LANGUAGE_SYSTEM;
 
-    SwTextNode* pNd = (( bPrevPara && pIdx )
-                            ? *pIdx
-                            : rCursor.GetPoint()->nNode ).GetNode().GetTextNode();
+    SwTextNode* pNd = rCursor.GetPoint()->nNode.GetNode().GetTextNode();
 
     if( pNd )
         eRet = pNd->GetLang( nPos );
