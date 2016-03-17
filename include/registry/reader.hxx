@@ -59,23 +59,11 @@ public:
 
        @param length the size in bytes of the binary blob representing the type
 
-       @param copy if true, the type reader creates an internal copy of the
-       given buffer, and the given buffer is not accessed after this constructor
-       returns; if false, the type reader works directly on the given buffer,
-       which must remain available unmodified until the underlying type reader
-       is destroyed (note that the lifetime of the underlying type reader can be
-       different from the lifetime of this <code>Reader</code> instance)
-
-       @param maxVersion the maximum binary blob version the client is prepared
-       to handle; must not be negative
-
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
-    Reader(
-        void const * buffer, sal_uInt32 length, bool copy,
-        typereg_Version maxVersion)
+    Reader(void const * buffer, sal_uInt32 length)
     {
-        if (!typereg_reader_create(buffer, length, copy, maxVersion, &m_handle))
+        if (!typereg_reader_create(buffer, length, false/*copy*/, TYPEREG_VERSION_1, &m_handle))
         {
             throw std::bad_alloc();
         }
