@@ -558,12 +558,10 @@ public:
 
         @param[in]  keyName specifies the name of the key which will be resolved relative to this key.
                         The resolved name will be prefixed with the name of this key.
-        @param[in]  firstLinkOnly ignored
         @param[out] rResolvedName the resolved name.
         @return RegError::NO_ERROR if succeeds else an error code.
      */
     inline RegError getResolvedKeyName(const rtl::OUString& keyName,
-                                       bool firstLinkOnly,
                                            rtl::OUString& rResolvedName) const;
 
     /// returns the name of the registry in which the key is defined.
@@ -994,13 +992,12 @@ inline RegError RegistryKey::getLinkTarget(const rtl::OUString& ,
 
 
 inline RegError RegistryKey::getResolvedKeyName(const rtl::OUString& keyName,
-                                                bool firstLinkOnly,
-                                                       rtl::OUString& rResolvedName) const
+                                                      rtl::OUString& rResolvedName) const
     {
         if (m_registry.isValid())
             return m_registry.m_pApi->getResolvedKeyName(m_hImpl,
                                                          keyName.pData,
-                                                         firstLinkOnly,
+                                                         true,
                                                          &rResolvedName.pData);
         else
             return RegError::INVALID_KEY;

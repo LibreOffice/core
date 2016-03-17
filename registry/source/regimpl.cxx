@@ -1074,7 +1074,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                               sal_uInt8* pSrcBuffer,
                               bool bReport)
 {
-    RegistryTypeReader reader(pSrcBuffer, srcValueSize, false);
+    RegistryTypeReader reader(pSrcBuffer, srcValueSize);
 
     if (reader.getTypeClass() == RT_TYPE_INVALID)
     {
@@ -1101,7 +1101,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
             if (!rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, rwBytes) &&
                 (rwBytes == valueSize))
             {
-                RegistryTypeReader reader2(pBuffer, valueSize, false);
+                RegistryTypeReader reader2(pBuffer, valueSize);
 
                 if ((reader.getTypeClass() != reader2.getTypeClass())
                     || reader2.getTypeClass() == RT_TYPE_INVALID)
@@ -1212,9 +1212,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         RegistryTypeWriter writer(reader.getTypeClass(),
                                   reader.getTypeName(),
                                   reader.getSuperTypeName(),
-                                  (sal_uInt16)count,
-                                  0,
-                                  0);
+                                  (sal_uInt16)count);
 
         for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
         {
@@ -1502,8 +1500,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     sal::static_int_cast< unsigned long >(valueSize));
                 fprintf(stdout, "%s       Data = ", indent);
                 dumpType(
-                    typereg::Reader(
-                        pBuffer, valueSize, false, TYPEREG_VERSION_1),
+                    typereg::Reader(pBuffer, valueSize),
                     sIndent + "              ");
             }
             break;

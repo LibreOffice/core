@@ -196,7 +196,7 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
             ("legacy format: cannot get binary value of key " + key.getName()
              + ": " + OUString::number(static_cast<int>(e))));
     }
-    typereg::Reader reader(&(*buffer)[0], size, false, TYPEREG_VERSION_1);
+    typereg::Reader reader(&(*buffer)[0], size);
     if (!reader.isValid()) {
         throw FileFormatException(
             key.getRegistryName(),

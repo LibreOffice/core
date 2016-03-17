@@ -47,16 +47,11 @@ public:
                              with '/' as separator.
         @param fieldCount specifies the number of fields (eg. number of attrbutes/properties,
                           enum values or constants).
-        @param methodCount specifies the number of methods.
-        @param referenceCount specifies the number of references (eg. number of supported interfaces,
-                              exported services ...)
      */
     RegistryTypeWriter(RTTypeClass               RTTypeClass,
                               const rtl::OUString&    typeName,
                               const rtl::OUString&    superTypeName,
-                              sal_uInt16                fieldCount,
-                              sal_uInt16                methodCount,
-                              sal_uInt16                referenceCount);
+                              sal_uInt16                fieldCount);
 
     /** Destructor. The Destructor frees the internal data block.
 

@@ -43,13 +43,9 @@ public:
 
         @param buffer points to the binary data block.
         @param bufferLen specifies the size of the binary data block.
-        @param copyData specifies if the data block should be copied.
-                        The block can be copied to ensure that the data
-                        is valid for the lifetime of this instance.
      */
     RegistryTypeReader(const sal_uInt8* buffer,
-                              sal_uInt32 bufferLen,
-                              bool copyData);
+                              sal_uInt32 bufferLen);
 
     /// Destructor. The Destructor frees the data block if the copyData flag was TRUE.
     ~RegistryTypeReader();

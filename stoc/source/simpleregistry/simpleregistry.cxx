@@ -975,7 +975,7 @@ OUString Key::getResolvedName(OUString const & aKeyName)
 {
     osl::MutexGuard guard(registry_->mutex_);
     OUString resolved;
-    RegError err = key_.getResolvedKeyName(aKeyName, true, resolved);
+    RegError err = key_.getResolvedKeyName(aKeyName, resolved);
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (("com.sun.star.registry.SimpleRegistry key getResolvedName:"

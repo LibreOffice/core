@@ -1337,17 +1337,15 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
 RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
                                               const rtl::OUString&    typeName,
                                               const rtl::OUString&    superTypeName,
-                                              sal_uInt16                fieldCount,
-                                              sal_uInt16                methodCount,
-                                              sal_uInt16                referenceCount)
+                                              sal_uInt16                fieldCount)
     : m_hImpl(nullptr)
 {
     m_hImpl = createEntry(RTTypeClass,
                                   typeName.pData,
                                   superTypeName.pData,
                                   fieldCount,
-                                  methodCount,
-                                  referenceCount);
+                                  0,
+                                  0);
 }
 
 RegistryTypeWriter::~RegistryTypeWriter()
