@@ -78,9 +78,7 @@ namespace dbaui
         DECL_LINK_TYPED( ScrollDownHdl, LinkParamNone*, void );
 
     public:
-        DBTreeListBox( vcl::Window* pParent
-            ,WinBits nWinStyle=0
-            ,bool _bHandleEnterKey = false);
+        DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0);
         virtual ~DBTreeListBox();
         virtual void dispose() override;
 

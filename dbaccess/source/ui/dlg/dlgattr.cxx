@@ -35,14 +35,12 @@ using namespace dbaui;
 
 
 SbaSbAttrDlg::SbaSbAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs,
-    SvNumberFormatter* pFormatter, bool bHasFormat, bool bRow)
+    SvNumberFormatter* pFormatter, bool bHasFormat)
     : SfxTabDialog(pParent, "FieldDialog", "dbaccess/ui/fielddialog.ui", pCellAttrs)
     , m_nNumberFormatId(0)
 {
     pNumberInfoItem = new SvxNumberInfoItem( pFormatter, 0 );
 
-    if (bRow)
-        SetText(get<FixedText>("alttitle")->GetText());
     if (bHasFormat)
         m_nNumberFormatId = AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
     else

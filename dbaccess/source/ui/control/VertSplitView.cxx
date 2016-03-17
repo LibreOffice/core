@@ -28,11 +28,11 @@
 using namespace ::dbaui;
 
 // class OSplitterView
-OSplitterView::OSplitterView(vcl::Window* _pParent,bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
+OSplitterView::OSplitterView(vcl::Window* _pParent) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( nullptr )
     ,m_pLeft(nullptr)
     ,m_pRight(nullptr)
-    ,m_bVertical(_bVertical)
+    ,m_bVertical(false)
 {
     ImplInitSettings();
 }
