@@ -244,6 +244,10 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
                           rSearchOpt.searchString == "$^" );
     const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString == "$";
 
+    SvxSearchItem aSearchItem(SID_SEARCH_ITEM); // this is a very expensive operation (calling configmgr etc.)
+    aSearchItem.SetSearchOptions(rSearchOpt);
+    aSearchItem.SetBackward(!bSrchForward);
+
     // LanguageType eLastLang = 0;
     while( nullptr != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
@@ -300,10 +304,6 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
             SwWrtShell *const pWrtShell = (pDocShell) ? pDocShell->GetWrtShell() : nullptr;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : nullptr;
-
-            SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
-            aSearchItem.SetSearchOptions(rSearchOpt);
-            aSearchItem.SetBackward(!bSrchForward);
 
             // If there is an active text edit, then search there.
             bool bEndedTextEdit = false;
