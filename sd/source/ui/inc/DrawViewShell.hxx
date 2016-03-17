@@ -221,8 +221,14 @@ public:
 
     void            ExecuteAnnotation (SfxRequest& rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
+    
+    void            ExecLineBreak(SfxRequest& rRequest);
+    void            GetStateLineBreak (SfxItemSet& rItemSet);
 
     void            StartRulerDrag (const Ruler& rRuler, const MouseEvent& rMEvt);
+    void StartRulerDrag (
+        const Ruler& rRuler,
+        const MouseEvent& rMEvt);
 
     virtual bool    PrepareClose( bool bUI = true ) override;
 

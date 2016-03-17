@@ -16,6 +16,8 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:WrapText"/>
+  <menu:menuseparator/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>

@@ -43,6 +43,8 @@
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:helpid="10030"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:helpid="10029"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:helpid="10031"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>

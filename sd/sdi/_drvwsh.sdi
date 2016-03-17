@@ -2750,5 +2750,10 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
     ]
+    SID_ATTR_ALIGN_LINEBREAK
+    [
+        ExecMethod = ExecLineBreak;
+        StateMethod = GetStateLineBreak;
+    ]
 
 }

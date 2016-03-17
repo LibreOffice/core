@@ -768,6 +768,38 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
         mpAnnotationManager->GetAnnotationState( rItemSet );
 }
 
+void DrawViewShell::ExecLineBreak (SfxRequest& /*rRequest*/)
+{
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 ) {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        bool bChecked = static_cast<const SdrOnOffItem&>(pObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP)).GetValue();
+        pObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_WORDWRAP, !bChecked) );
+        GetViewFrame()->GetBindings().Invalidate(SID_ATTR_ALIGN_LINEBREAK);
+    }
+}
+
+void DrawViewShell::GetStateLineBreak (SfxItemSet& rItemSet )
+{
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 ) {
+        // Is button enabled
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
+        if ( pObj->GetObjInventor() == SdrInventor && eKind == OBJ_CUSTOMSHAPE ) {
+            // Is button checked
+            const SfxItemSet aSet = mpDrawView->GetAttrFromMarked(false);
+            bool bChecked = static_cast<const SdrOnOffItem&>(aSet.Get(SDRATTR_TEXT_WORDWRAP)).GetValue();
+            rItemSet.Put( SdrOnOffItem(SID_ATTR_ALIGN_LINEBREAK, bChecked) );
+        } else {
+            rItemSet.DisableItem(SID_ATTR_ALIGN_LINEBREAK);
+        }
+    } else {
+        rItemSet.DisableItem(SID_ATTR_ALIGN_LINEBREAK);
+    }
+}
+
 ::rtl::OUString DrawViewShell::GetSidebarContextName() const
 {
     svx::sidebar::SelectionAnalyzer::ViewType eViewType (svx::sidebar::SelectionAnalyzer::VT_Standard);

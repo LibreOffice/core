@@ -399,6 +399,8 @@
                     <menu:menuitem menu:id=".uno:FormatLine"/>
                     <menu:menuitem menu:id=".uno:FormatArea"/>
                     <menu:menuitem menu:id=".uno:TextAttributes"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:WrapText"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:FormatFormMenu">
