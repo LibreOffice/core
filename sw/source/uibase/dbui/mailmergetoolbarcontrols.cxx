@@ -64,12 +64,12 @@ public:
         return ::cppu::queryInterface(aType, static_cast<lang::XServiceInfo*>(this));
     }
 
-    void SAL_CALL acquire() throw ()
+    void SAL_CALL acquire() throw () override
     {
         ToolboxController::acquire();
     }
 
-    void SAL_CALL release() throw ()
+    void SAL_CALL release() throw () override
     {
         ToolboxController::release();
     }
@@ -132,12 +132,12 @@ public:
         return ::cppu::queryInterface(aType, static_cast<lang::XServiceInfo*>(this));
     }
 
-    void SAL_CALL acquire() throw ()
+    void SAL_CALL acquire() throw () override
     {
         ToolboxController::acquire();
     }
 
-    void SAL_CALL release() throw ()
+    void SAL_CALL release() throw () override
     {
         ToolboxController::release();
     }
