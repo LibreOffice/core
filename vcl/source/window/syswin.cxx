@@ -940,9 +940,9 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     }
 }
 
-void SystemWindow::CreateNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
+VclPtr<vcl::Window> SystemWindow::CreateNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
-    static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBarWindow(rUIXMLDescription, rFrame);
+    return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->CreateNotebookBarWindow(rUIXMLDescription, rFrame);
 }
 
 void SystemWindow::SetMenuBarMode( MenuBarMode nMode )

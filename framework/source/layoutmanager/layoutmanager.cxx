@@ -1528,11 +1528,6 @@ throw (RuntimeException, std::exception)
                                 }
                             }
                         }
-                        if (getenv("LO_USE_NOTEBOOKBAR"))
-                        {
-                            pSysWindow->CreateNotebookBar("vcl/ui/notebookbar.ui", m_xFrame);
-                            pSysWindow->SetMenuBarMode(MenuBarMode::Hide);
-                        }
                     }
                 }
             }

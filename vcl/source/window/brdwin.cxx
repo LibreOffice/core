@@ -2177,11 +2177,12 @@ void ImplBorderWindow::SetMenuBarMode( bool bHide )
     UpdateMenuHeight();
 }
 
-void ImplBorderWindow::SetNotebookBarWindow(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
+VclPtr<vcl::Window> ImplBorderWindow::CreateNotebookBarWindow(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
     mpNotebookBarWindow = VclPtr<NotebookBarWindow>::Create(this, "NotebookBar", rUIXMLDescription, rFrame);
     Resize();
-    mpNotebookBarWindow->Show();
+
+    return mpNotebookBarWindow;
 }
 
 void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
@@ -2192,7 +2193,7 @@ void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
     if (mpMenuBarWindow && !mbMenuHide)
         rTopBorder += mpMenuBarWindow->GetSizePixel().Height();
 
-    if (mpNotebookBarWindow)
+    if (mpNotebookBarWindow && mpNotebookBarWindow->IsVisible())
         rTopBorder += mpNotebookBarWindow->GetSizePixel().Height();
 }
 

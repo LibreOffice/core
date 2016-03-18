@@ -25,6 +25,8 @@ public:
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+
+    virtual void StateChanged(StateChangedType nType) override;
 };
 
 #endif // VCL_SOURCE_WINDOW_NOTEBOOKBARWINDOW_HXX

@@ -2606,6 +2606,24 @@ SfxBoolItem Sidebar SID_SIDEBAR
 ]
 
 
+SfxBoolItem Notebookbar SID_NOTEBOOKBAR
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+
 SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
 
 [

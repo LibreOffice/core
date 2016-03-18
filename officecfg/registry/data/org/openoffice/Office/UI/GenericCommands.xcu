@@ -3877,6 +3877,11 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:Notebookbar" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Notebookbar</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Sidebar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sidebar</value>

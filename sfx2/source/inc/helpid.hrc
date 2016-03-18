@@ -61,6 +61,7 @@
 #define HID_TASKPANE_VIEW_MENU                                  "SFX2_HID_TASKPANE_VIEW_MENU"
 
 #define HID_SIDEBAR_WINDOW                                     "SFX2_HID_SIDEBAR_WINDOW"
+#define HID_NOTEBOOKBAR_WINDOW                                 "SFX2_HID_NOTEBOOKBAR_WINDOW"
 
 #endif // #ifndef _SFX_HELPID_HRC
 
