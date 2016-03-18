@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_10daea78",
+        "filename": "sc/qa/unit/ucalc_column.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-18T14:26:22Z",
+      "side": 1,
+      "message": "Don\u0027t include column.hxx. See below how to remove the ScColumn use.\n\nAlso no need to include sal/types.h",
+      "range": {
+        "startLine": 13,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "40b23aaa91118af9d7e62a5f1177fbd86a670d32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_709c016a",
+        "filename": "sc/qa/unit/ucalc_column.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-18T14:26:22Z",
+      "side": 1,
+      "message": "Test against ScDocument and not against ScColumn. Most of the code can be the same except that we are working through the interface provided by ScDocument.",
+      "revId": "40b23aaa91118af9d7e62a5f1177fbd86a670d32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
