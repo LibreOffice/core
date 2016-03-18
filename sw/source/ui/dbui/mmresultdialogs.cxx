@@ -872,7 +872,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK_TYPED(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, /*pButton*/, void)
+IMPL_STATIC_LINK_TYPED(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, /*pButton*/, void)
 {
     /* TODO FIXME this currently tries to connect to the wizard, fix that, or
        instantiate it when needed or something
