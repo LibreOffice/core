@@ -70,6 +70,8 @@ SHL1STDLIBS=\
     $(CPPULIB)			\
     $(SALLIB)
 
+CFLAGS+=-DBOOST_SYSTEM_NO_DEPRECATED
+
 .IF "$(GUI)" == "UNX"
     SHL1STDLIBS+=-lbasegfx_s
 .ELSE
