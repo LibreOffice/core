@@ -50,7 +50,7 @@ all:
 
 TARFILE_NAME=silgraphite-2.3.1
 TARFILE_MD5=d35724900f6a4105550293686688bbb3
-PATCH_FILES=graphite-2.3.1.patch graphite-2.3.1_debug.patch graphite-2.3.1_stlportemu.patch
+PATCH_FILES=graphite-2.3.1.patch graphite-2.3.1_debug.patch graphite-2.3.1_stlportemu.patch graphite-2.3.1-CVE-2016-1521.patch
 
 # convert line-endings to avoid problems when patching
 CONVERTFILES=\
