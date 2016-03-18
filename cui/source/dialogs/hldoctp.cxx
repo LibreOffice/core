@@ -41,11 +41,15 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     get(m_pCbbPath, "path");
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtFileopen, "fileopen");
-    m_pBtFileopen->SetModeImage(Image(CUI_RES(RID_SVXBMP_FILEOPEN)));
+    BitmapEx aBitmap = Image(CUI_RES(RID_SVXBMP_FILEOPEN)).GetBitmapEx();
+    aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
+    m_pBtFileopen->SetModeImage(Image(aBitmap));
     get(m_pEdTarget, "target");
     get(m_pFtFullURL, "url");
     get(m_pBtBrowse, "browse");
-    m_pBtBrowse->SetModeImage(Image(CUI_RES(RID_SVXBMP_TARGET)));
+    aBitmap = Image(CUI_RES(RID_SVXBMP_TARGET)).GetBitmapEx();
+    aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
+    m_pBtBrowse->SetModeImage(Image(aBitmap));
 
     // Disable display of bitmap names.
     m_pBtBrowse->EnableTextDisplay (false);
