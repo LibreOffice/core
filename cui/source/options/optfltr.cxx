@@ -339,12 +339,12 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
         new SvLBoxContextBmp(Image(), Image(), false)));
     pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(loadEnabled ? SvLBoxButtonKind_enabledCheckbox
-                                     : SvLBoxButtonKind_disabledCheckbox,
+        new SvLBoxButton(loadEnabled ? SvLBoxButtonKind::EnabledCheckbox
+                                     : SvLBoxButtonKind::DisabledCheckbox,
                pCheckButtonData)));
     pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(saveEnabled ? SvLBoxButtonKind_enabledCheckbox
-                                     : SvLBoxButtonKind_disabledCheckbox,
+        new SvLBoxButton(saveEnabled ? SvLBoxButtonKind::EnabledCheckbox
+                                     : SvLBoxButtonKind::DisabledCheckbox,
                pCheckButtonData)));
     pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(_rTxt)));
 

@@ -1980,7 +1980,7 @@ SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
     OUString aStr;
     Image aCollEntryBmp;
     Image aExpEntryBmp;
-    SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox;
+    SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox;
 
     SvLBoxString* pStringItem = static_cast<SvLBoxString*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     if( pStringItem )

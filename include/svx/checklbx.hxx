@@ -51,8 +51,7 @@ public:
     void            InsertEntry         ( const OUString& rStr,
                                           sal_uLong  nPos = TREELIST_APPEND,
                                           void* pUserData = nullptr,
-                                          SvLBoxButtonKind eButtonKind =
-                                              SvLBoxButtonKind_enabledCheckbox );
+                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
     void            RemoveEntry         ( sal_uLong  nPos );
 
     void            SelectEntryPos      ( sal_uLong  nPos );

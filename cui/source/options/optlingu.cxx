@@ -1783,7 +1783,7 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
         pCheckButtonData = new SvLBoxButtonData(m_pLinguOptionsCLB);
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
@@ -1912,7 +1912,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     }
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));

@@ -477,12 +477,12 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
 
     if (nCol == CBCOL_FIRST)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
     pEntry->AddItem(o3tl::make_unique<OfaImpBrwString>(rTxt));
 
     return pEntry;
@@ -1806,12 +1806,12 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
 
     if (nCol == CBCOL_FIRST)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
 
     pEntry->AddItem(o3tl::make_unique<OfaImpBrwString>(rTxt));
 

@@ -671,7 +671,7 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
                 if ( p->m_eKind == ENABLED_UPDATE )
                 {
                     RemoveEntry( nEntryPos );
-                    m_dialog.addAdditional( p, SvLBoxButtonKind_disabledCheckbox );
+                    m_dialog.addAdditional( p, SvLBoxButtonKind::DisabledCheckbox );
                 }
                 if ( aCmd == CMD_IGNORE_UPDATE )
                     m_dialog.setIgnoredUpdate( p, true, false );
@@ -685,7 +685,7 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
                 if ( p->m_eKind == ENABLED_UPDATE )
                 {
                     RemoveEntry( nEntryPos );
-                    m_dialog.insertItem( p, SvLBoxButtonKind_enabledCheckbox );
+                    m_dialog.insertItem( p, SvLBoxButtonKind::EnabledCheckbox );
                 }
                 m_dialog.setIgnoredUpdate( p, false, false );
             }
@@ -738,11 +738,11 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
 
     if ( ! isIgnoredUpdate( pEntry ) )
     {
-        sal_uInt16 nPos = insertItem( pEntry, SvLBoxButtonKind_enabledCheckbox );
+        sal_uInt16 nPos = insertItem( pEntry, SvLBoxButtonKind::EnabledCheckbox );
         m_pUpdates->CheckEntryPos( nPos );
     }
     else
-        addAdditional( pEntry, SvLBoxButtonKind_disabledCheckbox );
+        addAdditional( pEntry, SvLBoxButtonKind::DisabledCheckbox );
 
     m_pUpdate->Enable();
     m_pUpdates->Enable();
@@ -763,7 +763,7 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
     m_ListboxEntries.push_back( pEntry );
 
     isIgnoredUpdate( pEntry );
-    addAdditional( pEntry, SvLBoxButtonKind_disabledCheckbox );
+    addAdditional( pEntry, SvLBoxButtonKind::DisabledCheckbox );
 }
 
 
@@ -778,7 +778,7 @@ void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
     m_specificErrors.push_back( data );
     m_ListboxEntries.push_back( pEntry );
 
-    addAdditional( pEntry, SvLBoxButtonKind_staticImage);
+    addAdditional( pEntry, SvLBoxButtonKind::StaticImage);
 }
 
 void UpdateDialog::checkingDone() {
@@ -1248,7 +1248,7 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, allHandler, CheckBox&, void)
              i != m_ListboxEntries.end(); ++i )
         {
             if ( (*i)->m_bIgnored || ( (*i)->m_eKind != ENABLED_UPDATE ) )
-                insertItem( (*i), SvLBoxButtonKind_disabledCheckbox );
+                insertItem( (*i), SvLBoxButtonKind::DisabledCheckbox );
         }
     }
     else

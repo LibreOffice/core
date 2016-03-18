@@ -95,7 +95,7 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, m_pCheckButton));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_pCheckButton));
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));    // otherwise boom!
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rPageName));
 

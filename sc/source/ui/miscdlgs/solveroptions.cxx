@@ -265,7 +265,7 @@ void ScSolverOptionsDialog::FillListBox()
             // check box entry
             pEntry = new SvTreeListEntry;
             std::unique_ptr<SvLBoxButton> pButton(new SvLBoxButton(
-                SvLBoxButtonKind_enabledCheckbox, mpCheckButtonData));
+                SvLBoxButtonKind::EnabledCheckbox, mpCheckButtonData));
             if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
                 pButton->SetStateChecked();
             else

@@ -76,7 +76,7 @@ public:
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox ) override;
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox ) override;
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
@@ -84,7 +84,7 @@ public:
                                          SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox ) override;
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox ) override;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );

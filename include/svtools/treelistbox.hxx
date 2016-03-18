@@ -59,11 +59,11 @@ namespace utl {
     class AccessibleStateSetHelper;
 }
 
-enum SvLBoxButtonKind
+enum class SvLBoxButtonKind
 {
-    SvLBoxButtonKind_enabledCheckbox,
-    SvLBoxButtonKind_disabledCheckbox,
-    SvLBoxButtonKind_staticImage
+    EnabledCheckbox,
+    DisabledCheckbox,
+    StaticImage
 };
 
 enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE };
@@ -649,7 +649,7 @@ public:
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
@@ -657,7 +657,7 @@ public:
                                          SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;

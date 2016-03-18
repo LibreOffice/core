@@ -126,8 +126,8 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise boom!
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont1));
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont2));
