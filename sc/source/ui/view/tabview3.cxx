@@ -1423,7 +1423,7 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
     }
 
     DoneBlockMode( nModifier != 0 );
-    InitBlockMode( nStartCol, 0, nTab, bTestNeg, true, false );
+    InitBlockMode( nStartCol, 0, nTab, bTestNeg, true );
     MarkCursor( nCol, MAXROW, nTab );
     SetCursor( nCol, 0 );
     SelectionChanged();
