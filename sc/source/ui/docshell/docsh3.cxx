@@ -63,6 +63,9 @@
 #include "markdata.hxx"
 #include <memory>
 
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 //          Redraw - Benachrichtigungen
 
 void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos )
@@ -159,6 +162,11 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
     }
 
     Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
+
+    // LOK: we are supposed to update the row / columns headers (and actually
+    // the document size too - cell size affects that, obviously)
+    if ((nPart & (PAINT_TOP | PAINT_LEFT)) && comphelper::LibreOfficeKit::isActive() && aDocument.GetDrawLayer())
+        aDocument.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
 }
 
 void ScDocShell::PostPaintGridAll()
