@@ -2632,9 +2632,9 @@ public:
 
 class UsedRangeNameFinder
 {
-    std::set<sal_uInt16>& mrIndexes;
+    sc::UpdatedRangeNames& mrIndexes;
 public:
-    explicit UsedRangeNameFinder(std::set<sal_uInt16>& rIndexes) : mrIndexes(rIndexes) {}
+    explicit UsedRangeNameFinder(sc::UpdatedRangeNames& rIndexes) : mrIndexes(rIndexes) {}
 
     void operator() (size_t /*nRow*/, const ScFormulaCell* pCell)
     {
@@ -3060,7 +3060,7 @@ void ScColumn::SetTabNo(SCTAB nNewTab)
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const
+void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, sc::UpdatedRangeNames& rIndexes) const
 {
     UsedRangeNameFinder aFunc(rIndexes);
     sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);

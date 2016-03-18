@@ -2328,7 +2328,8 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
 
 namespace {
 
-void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, const std::set<sal_uInt16>& rUsedNames)
+void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName,
+        const sc::UpdatedRangeNames::NameIndicesType& rUsedNames)
 {
     pClipRangeName->clear();
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
@@ -2352,7 +2353,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
     if (!pRangeName || pRangeName->empty())
         return;
 
-    std::set<sal_uInt16> aUsedNames;        // indexes of named ranges that are used in the copied cells
+    sc::UpdatedRangeNames aUsedNames;        // indexes of named ranges that are used in the copied cells
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pClipDoc->maTabs.size()));
     for (SCTAB i = 0; i < nMinSizeBothTabs; ++i)
         if (maTabs[i] && pClipDoc->maTabs[i])
@@ -2361,7 +2362,9 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
                     rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames);
 
-    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedNames);
+    /* TODO: handle also sheet-local names */
+    sc::UpdatedRangeNames::NameIndicesType aUsedGlobalNames( aUsedNames.getUpdatedNames(-1));
+    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedGlobalNames);
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc) :

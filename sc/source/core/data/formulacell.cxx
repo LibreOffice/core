@@ -3700,31 +3700,26 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument ); // Listener as previous
 }
 
-static void lcl_FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes, ScTokenArray* pCode, ScRangeName* pNames)
+static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc)
 {
     for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
     {
         if (p->GetOpCode() == ocName)
         {
-            /* TODO: this should collect also sheet-local names, currently it
-             * collects only global names. But looking even for indexes of
-             * local names.. this always was wrong. Probably use
-             * UpdatedRangeNames instead of the set, but doing so would also
-             * need more work in copying things over clipboard and such. */
-
             sal_uInt16 nTokenIndex = p->GetIndex();
-            rIndexes.insert( nTokenIndex );
+            SCTAB nTab = p->GetSheet();
+            rIndexes.setUpdatedName( nTab, nTokenIndex);
 
-            ScRangeData* pSubName = pNames->findByIndex(p->GetIndex());
+            ScRangeData* pSubName = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTab);
             if (pSubName)
-                lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pNames);
+                lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pDoc);
         }
     }
 }
 
-void ScFormulaCell::FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const
+void ScFormulaCell::FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const
 {
-    lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
+    lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument );
 }
 
 void ScFormulaCell::SetChanged(bool b)

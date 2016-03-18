@@ -14,6 +14,11 @@ namespace sc {
 
 void UpdatedRangeNames::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
 {
+    // Map anything <-1 to global names. Unless we really want to come up with
+    // some classification there..
+    if (nTab < -1)
+        nTab = -1;
+
     UpdatedNamesType::iterator it = maUpdatedNames.find(nTab);
     if (it == maUpdatedNames.end())
     {
@@ -42,6 +47,15 @@ bool UpdatedRangeNames::isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const
     const NameIndicesType& rIndices = it->second;
     return rIndices.count(nIndex) > 0;
 }
+
+UpdatedRangeNames::NameIndicesType UpdatedRangeNames::getUpdatedNames(SCTAB nTab) const
+{
+    UpdatedNamesType::const_iterator it = maUpdatedNames.find(nTab);
+    if (it == maUpdatedNames.end())
+        return NameIndicesType();
+    return it->second;
+}
+
 
 RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
     mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}

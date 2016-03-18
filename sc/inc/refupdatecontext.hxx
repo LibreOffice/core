@@ -24,17 +24,22 @@ namespace sc {
 /**
  * Keep track of all named expressions that have been updated during
  * reference update.
+ *
+ * Can also be used to collect any set of named expressions / ranges.
  */
 class UpdatedRangeNames
 {
+public:
     typedef std::unordered_set<sal_uInt16> NameIndicesType;
+
+    void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
+    bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
+    NameIndicesType getUpdatedNames(SCTAB nTab) const;
+
+private:
     typedef std::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;
 
     UpdatedNamesType maUpdatedNames;
-
-public:
-    void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
-    bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
 };
 
 /**

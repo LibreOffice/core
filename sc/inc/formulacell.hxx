@@ -46,6 +46,7 @@ struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 class CompileFormulaContext;
 class FormulaGroupAreaListener;
+class UpdatedRangeNames;
 
 }
 
@@ -276,7 +277,7 @@ public:
     void            UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
-    void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
+    void            FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const;
     bool            IsSubTotal() const { return bSubTotal;}
     bool            IsChanged() const { return bChanged;}
     void            SetChanged(bool b);

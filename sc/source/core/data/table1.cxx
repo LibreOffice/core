@@ -1709,7 +1709,7 @@ void ScTable::SetTabNo(SCTAB nNewTab)
 }
 
 void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                               std::set<sal_uInt16>& rIndexes) const
+                               sc::UpdatedRangeNames& rIndexes) const
 {
     for (SCCOL i = nCol1; i <= nCol2 && ValidCol(i); i++)
         aCol[i].FindRangeNamesInUse(nRow1, nRow2, rIndexes);
