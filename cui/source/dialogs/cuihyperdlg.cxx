@@ -25,6 +25,7 @@
 #include "hldoctp.hxx"
 #include "hldocntp.hxx"
 #include <svx/svxids.hrc>
+#include <vector>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
@@ -91,25 +92,31 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     SetUniqueId( HID_HYPERLINK_DIALOG );
     mbGrabFocus = true;
     // insert pages
-    Image aImage;
+    std::vector<Image> imgVector;
     OUString aStrTitle;
     SvxIconChoiceCtrlEntry *pEntry;
+    imgVector.push_back( Image( CUI_RES ( RID_SVXBMP_HLINETTP ) ) );
+    imgVector.push_back( Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) ) );
+    imgVector.push_back( Image( CUI_RES ( RID_SVXBMP_HLDOCTP  ) ) );
+    imgVector.push_back( Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) ) );
 
+    for(Image &aImage : imgVector )
+    {
+        BitmapEx aBitmap = aImage.GetBitmapEx();
+        aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
+        aImage = Image(aBitmap);
+    }
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, imgVector[0], SvxHyperlinkInternetTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, SvxHyperlinkMailTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, imgVector[1], SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, SvxHyperlinkDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // set OK/Cancel - button

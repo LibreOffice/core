@@ -80,7 +80,6 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
 
 {
     SetLineColor();
-    _pImp->SetGrid( Size( 100, 70 ) );
     _pImp->InitSettings();
     _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
 }

@@ -94,7 +94,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
-    aImageSize( 32, 32 ),
+    aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
     m_pColumns( nullptr )
 {
     bChooseWithCursor = false;
@@ -147,8 +147,12 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-
-    SetGrid( Size(100, 70) );
+    Size gridSize(100,70);
+    if(pView->GetDPIScaleFactor() > 1)
+    {
+      gridSize.Height() *= pView->GetDPIScaleFactor();
+    }
+    SetGrid(gridSize);
 }
 
 SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
@@ -2420,6 +2424,10 @@ void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
     long nHeight = pView->GetTextHeight();
     if (nDY < nHeight)
         nDY = nHeight;
+    if(pView->GetDPIScaleFactor() > 1)
+    {
+      nDY*=2;
+    }
     aDefaultTextSize = Size(nDX, nDY);
 }
 
