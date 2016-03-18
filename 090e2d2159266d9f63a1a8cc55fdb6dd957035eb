@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_90c89576",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 8930,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-18T14:27:29Z",
+      "side": 1,
+      "message": "You can.",
+      "parentUuid": "9ad45d7e_d0732db3",
+      "range": {
+        "startLine": 8930,
+        "startChar": 37,
+        "endLine": 8930,
+        "endChar": 41
+      },
+      "revId": "090e2d2159266d9f63a1a8cc55fdb6dd957035eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_5041fd38",
         "filename": "configure.ac",
         "patchSetId": 3
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "Could you please give some hints on which things required libGL?",
       "parentUuid": "9ad45d7e_5041fd38",
+      "range": {
+        "startLine": 8934,
+        "startChar": 4,
+        "endLine": 8934,
+        "endChar": 16
+      },
+      "revId": "090e2d2159266d9f63a1a8cc55fdb6dd957035eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d087ad10",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 8934,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-18T14:27:29Z",
+      "side": 1,
+      "message": "OpenGL is always required on Linux/*BSD/etc. So the check should be done where we check for X11.\n\nBtw, there is another problem with your patch I did not realize: on OS X it would have to check for OpenGL framework, not a library. But that is a part of the system and always present. And I think it is similar on Windows.",
+      "parentUuid": "9ad45d7e_5068ddba",
       "range": {
         "startLine": 8934,
         "startChar": 4,
