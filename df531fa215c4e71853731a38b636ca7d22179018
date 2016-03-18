@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_f0e11100",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "Don\u0027t add braces when there is only one statement following",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_30e4490c",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2186,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_90f1b5d0",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_10b4a5f0",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "I think we use 6px and 12px spacing, not 5.\nSee https://wiki.documentfoundation.org/Development/WidgetLayout#Widgets_requiring_HIG_guidelines_review",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f0b8f1e7",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_70eec1ed",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "Please remove these empty nodes",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d0b96dee",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T14:04:57Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "df531fa215c4e71853731a38b636ca7d22179018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
