@@ -16,6 +16,24 @@
       "revId": "b506a3f0d6906c0f929fa55e9588f7297c4c938c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_70c5215a",
+        "filename": "package/inc/ZipOutputEntry.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-03-18T14:09:46Z",
+      "side": 1,
+      "message": "It is private and setFinished() can only be called by friend class DeflateThread. Only one DeflateThread has the data (ptr to ZipOutputEntry) to do so, no other thread can access it.",
+      "parentUuid": "9ad45d7e_fc9e0d06",
+      "revId": "b506a3f0d6906c0f929fa55e9588f7297c4c938c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
