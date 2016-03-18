@@ -20,6 +20,16 @@
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ChartWindowState" oor:package="org.openoffice.Office.UI">
   <node oor:name="UIElements">
     <node oor:name="States">
+      <node oor:name="private:resource/popupmenu/draw" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Shape</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/drawtext" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Shape Text</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>

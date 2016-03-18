@@ -55,9 +55,8 @@ class SVT_DLLPUBLIC ContextMenuHelper
         ContextMenuHelper( const css::uno::Reference< css::frame::XFrame >& xFrame );
         ~ContextMenuHelper();
 
-        // methods to complete a popup menu (set images, labels, enable/disable states)
+        // method to complete a popup menu (set images, labels, enable/disable states)
         // ATTENTION: The item ID's must be unique for the whole popup (inclusive the sub menus!)
-        void completeAndExecute( const Point& aPos, PopupMenu& aPopupMenu );
         void completeAndExecute( const Point& aPos, const css::uno::Reference< css::awt::XPopupMenu >& xPopupMenu );
 
     private:

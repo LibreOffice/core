@@ -13,6 +13,11 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/schart,\
 	chart2/uiconfig/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/schart,\
+	chart2/uiconfig/popupmenu/draw \
+	chart2/uiconfig/popupmenu/drawtext \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/schart,\
 	chart2/uiconfig/statusbar/statusbar \
 ))
