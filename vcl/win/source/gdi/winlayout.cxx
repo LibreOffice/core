@@ -3694,7 +3694,11 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
         return false;
 
     if (!BindFont(hDC))
-        return false;
+    {
+        // If for any reason we can't bind fallback to legacy APIs.
+        return ExTextOutRenderer()(rLayout, hDC, pRectToErase, pPos, pGetNextGlypInfo);
+    }
+
 #if 0
     // Gather glyph positioning data.
     std::vector<uint16_t> indices;
