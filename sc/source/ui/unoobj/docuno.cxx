@@ -753,7 +753,7 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
 
-    if (!xTransferable->isDataFlavorSupported(aFlavor))
+    if (!xTransferable.is() || !xTransferable->isDataFlavorSupported(aFlavor))
         return OString();
 
     uno::Any aAny(xTransferable->getTransferData(aFlavor));
