@@ -3799,15 +3799,13 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
         return false;
 
     if (!BindFont(hDC))
-        return false;
+    {
+        // If for any reason we can't bind fallback to legacy APIs.
+        return ExTextOutRenderer()(rLayout, hDC, pRectToErase, pPos, pGetNextGlypInfo);
+    }
+
     Rectangle bounds;
     bool succeeded = GetDWriteInkBox(*mpFontFace, rLayout, mlfEmHeight, bounds);
-    if (pRectToErase)
-    {
-        // Isn't this equivalent to simply doing: bounds = *pRectToErase ?
-        bounds.Intersection(*pRectToErase);
-        bounds.Union(*pRectToErase);
-    }
     succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
 
     ID2D1SolidColorBrush* pBlackBrush = NULL;
