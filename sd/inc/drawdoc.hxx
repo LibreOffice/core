@@ -264,7 +264,7 @@ public:
     SAL_DLLPRIVATE void InsertBookmark(const std::vector<OUString> &rBookmarkList,
                             std::vector<OUString> &rExchangeList, bool bLink,
                             bool bReplace, sal_uInt16 nPgPos, bool bNoDialogs,
-                            ::sd::DrawDocShell* pBookmarkDocSh, bool bCopy,
+                            ::sd::DrawDocShell* pBookmarkDocSh,
                             Point* pObjPos);
 
     SAL_DLLPRIVATE bool IsStartWithPresentation() const { return mbStartWithPresentation;}

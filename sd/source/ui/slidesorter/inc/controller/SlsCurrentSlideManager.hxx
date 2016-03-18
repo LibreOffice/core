@@ -62,13 +62,10 @@ public:
         slide change has been initiated by someone else.
         @param nSlideIndex
             Zero based index in the range [0,number-of-slides).
-        @param bUpdateSelection
-            When <TRUE/> then the page selection is cleared and only the new
+         The page selection is cleared and only the new
             current slide is selected.
     */
-    void SwitchCurrentSlide (
-        const sal_Int32 nSlideIndex,
-        const bool bUpdateSelection = false);
+    void SwitchCurrentSlide (const sal_Int32 nSlideIndex);
     void SwitchCurrentSlide (
         const model::SharedPageDescriptor& rpSlide,
         const bool bUpdateSelection = false);

@@ -135,9 +135,9 @@ SfxViewFrame* ViewShell::GetViewFrame() const
 
 /// declare SFX-Slotmap and standard interface
 
-ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
+ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
 :   SfxShell(&rViewShellBase)
-,   mbCenterAllowed(bAllowCenter)
+,   mbCenterAllowed(true)
 ,   mpParentWindow(pParentWindow)
 {
     construct();
@@ -796,7 +796,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         SetZoom( nNewZoom );
                         // Keep mouse at same doc point before zoom
                         Point aNewMousePos = GetActiveWindow()->PixelToLogic(rCEvt.GetMousePosPixel());
-                        SetWinViewPos(GetWinViewPos() - (aNewMousePos - aOldMousePos), true);
+                        SetWinViewPos(GetWinViewPos() - (aNewMousePos - aOldMousePos));
 
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );

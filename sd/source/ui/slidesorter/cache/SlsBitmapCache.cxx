@@ -115,7 +115,7 @@ typedef ::std::vector<
 
 //=====  BitmapCache  =========================================================
 
-BitmapCache::BitmapCache (const sal_Int32 nMaximalNormalCacheSize)
+BitmapCache::BitmapCache ()
     : maMutex(),
       mpBitmapContainer(new CacheBitmapContainer()),
       mnNormalCacheSize(0),
@@ -125,14 +125,9 @@ BitmapCache::BitmapCache (const sal_Int32 nMaximalNormalCacheSize)
       mpCacheCompactor(),
       mbIsFull(false)
 {
-    if (nMaximalNormalCacheSize > 0)
-        mnMaximalNormalCacheSize = nMaximalNormalCacheSize;
-    else
-    {
-        Any aCacheSize (CacheConfiguration::Instance()->GetValue("CacheSize"));
-        if (aCacheSize.has<sal_Int32>())
-            aCacheSize >>= mnMaximalNormalCacheSize;
-    }
+    Any aCacheSize (CacheConfiguration::Instance()->GetValue("CacheSize"));
+    if (aCacheSize.has<sal_Int32>())
+        aCacheSize >>= mnMaximalNormalCacheSize;
 
     mpCacheCompactor = CacheCompactor::Create(*this,mnMaximalNormalCacheSize);
 }

@@ -61,8 +61,8 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 #endif
 
 
-SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
-    SdFilter( rMedium, rDocShell, bShowProgress ),
+SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
+    SdFilter( rMedium, rDocShell, true/*bShowProgress*/ ),
     pBas    ( nullptr )
 {
 }

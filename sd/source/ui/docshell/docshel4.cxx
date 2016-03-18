@@ -287,7 +287,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     bRet = SfxObjectShell::Load( rMedium );
     if( bRet )
     {
-        bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
     if( bRet )
@@ -351,7 +351,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     // TODO/LATER: nobody is interested in the error code?!
     ErrCode nError = ERRCODE_NONE;
-    bool bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+    bool bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
@@ -450,7 +450,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         || aFilterName == pFilterPowerPoint97AutoPlay)
     {
         mpDoc->StopWorkStartupDelay();
-        bRet = SdPPTFilter( rMedium, *this, true ).Import();
+        bRet = SdPPTFilter( rMedium, *this ).Import();
     }
     else if (aFilterName.indexOf("impress8") >= 0 ||
              aFilterName.indexOf("draw8") >= 0)
@@ -459,7 +459,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( rMedium, *this, true ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this ).Import( nError );
 
     }
     else if (aFilterName.indexOf("StarOffice XML (Draw)") >= 0 ||
@@ -469,13 +469,13 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
     else if( aFilterName == "CGM - Computer Graphics Metafile" )
     {
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
-        bRet = SdCGMFilter( rMedium, *this, true ).Import();
+        bRet = SdCGMFilter( rMedium, *this ).Import();
     }
     else
     {
@@ -521,7 +521,7 @@ bool DrawDocShell::Save()
     bool bRet = SfxObjectShell::Save();
 
     if( bRet )
-        bRet = SdXMLFilter( *GetMedium(), *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
+        bRet = SdXMLFilter( *GetMedium(), *this, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
 
     return bRet;
 }
@@ -555,7 +555,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     bool    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
-        bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
+        bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
 
     if( GetError() == ERRCODE_NONE )
         SetError( nVBWarning, OSL_LOG_PREFIX );
@@ -578,26 +578,26 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
         {
-            pFilter = new SdHTMLFilter( rMedium, *this, true );
+            pFilter = new SdHTMLFilter( rMedium, *this );
         }
         else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
-            pFilter = new SdPPTFilter( rMedium, *this, true );
+            pFilter = new SdPPTFilter( rMedium, *this );
             static_cast<SdPPTFilter*>(pFilter)->PreSaveBasic();
         }
         else if ( aTypeName.indexOf( "CGM_Computer_Graphics_Metafile" ) >= 0 )
         {
-            pFilter = new SdCGMFilter( rMedium, *this, true );
+            pFilter = new SdCGMFilter( rMedium, *this );
         }
         else if( aTypeName.indexOf( "draw8" ) >= 0 ||
                  aTypeName.indexOf( "impress8" ) >= 0 )
         {
-            pFilter = new SdXMLFilter( rMedium, *this, true );
+            pFilter = new SdXMLFilter( rMedium, *this );
         }
         else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
                  aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
-            pFilter = new SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
+            pFilter = new SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
         }
         else
         {

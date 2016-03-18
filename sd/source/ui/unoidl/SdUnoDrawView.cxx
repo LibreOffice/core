@@ -487,7 +487,7 @@ void SdUnoDrawView::SetViewOffset(const awt::Point& rWinPos )
 {
     Point aWinPos( rWinPos.X, rWinPos.Y );
     aWinPos += mrDrawViewShell.GetViewOrigin();
-    mrDrawViewShell.SetWinViewPos( aWinPos, true );
+    mrDrawViewShell.SetWinViewPos( aWinPos );
 }
 
 awt::Point SdUnoDrawView::GetViewOffset() const

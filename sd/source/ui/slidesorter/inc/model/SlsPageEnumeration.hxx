@@ -65,19 +65,6 @@ public:
 
     virtual ~PageEnumeration();
 
-    /** Create a new enumeration object.  The ownership of the
-        implementation object goes to the new object.  Use this copy
-        constructor only when you know what you are doing.  When in doubt,
-        use the one argument version.
-        @param bCloneImpl
-            When <TRUE/> is given this constructor behaves exactly like its
-            one argument version.  When <FALSE/> is given then the
-            implementation object is not copied but moved from the given
-            enumeration to the newly created one.  The given enumeration
-            thus becomes empty.
-    */
-    PageEnumeration (PageEnumeration& rEnumeration, bool bCloneImpl);
-
     /** Create and return an exact copy of the called object.
     */
     virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;

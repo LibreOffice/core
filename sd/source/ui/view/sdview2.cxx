@@ -845,7 +845,7 @@ IMPL_LINK_TYPED( View, ExecuteNavigatorDrop, void*, p, void )
             mrDoc.InsertBookmark( aBookmarkList, aExchangeList,
                                   bLink, bReplace, nPgPos, false,
                                   &pPageObjsTransferable->GetDocShell(),
-                                  true, &aPos );
+                                  &aPos );
         }
     }
 

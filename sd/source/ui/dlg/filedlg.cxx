@@ -64,8 +64,8 @@ private:
                                 DECL_LINK_TYPED( IsMusicStoppedHdl, Idle *, void );
 
 public:
-                                SdFileDialog_Imp( const short nDialogType, bool bUsableSelection );
-                                   virtual ~SdFileDialog_Imp();
+                                SdFileDialog_Imp( const short nDialogType );
+                       virtual ~SdFileDialog_Imp();
 
     ErrCode                     Execute();
 
@@ -213,11 +213,10 @@ void SdFileDialog_Imp::CheckSelectionState()
     }
 }
 
-SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
-                                    bool        bUsableSelection    ) :
+SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType    ) :
     FileDialogHelper( nDialogType, 0 ),
     mnPlaySoundEvent( nullptr ),
-    mbUsableSelection( bUsableSelection ),
+    mbUsableSelection( false ),
     mbLabelPlaying(false)
 {
     maUpdateIdle.SetIdleHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
@@ -278,9 +277,7 @@ ErrCode SdFileDialog_Imp::Execute()
 
 // these are simple forwarders
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
-    mpImpl(
-        new SdFileDialog_Imp(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY, false ) )
+    mpImpl( new SdFileDialog_Imp( css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY ) )
 {
     OUString aDescr;
     aDescr = SD_RESSTR(STR_ALL_FILES);
