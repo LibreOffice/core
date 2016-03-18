@@ -16,6 +16,24 @@
       "revId": "183307cfcd21abb021816b0eb0c9fa55c43af9d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7c817d8f",
+        "filename": "sw/source/core/tox/ToxTextGenerator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-18T07:32:55Z",
+      "side": 1,
+      "message": "Just to be clear, since this file is a mess, \"case TOKEN_ENTRY_TEXT\" shows how we like to do it.",
+      "parentUuid": "9ad45d7e_5c90f9ec",
+      "revId": "183307cfcd21abb021816b0eb0c9fa55c43af9d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
