@@ -83,7 +83,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         const OUString aToken = GetToken(aCurEntry, nIndex);
-        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(pEntry, 0, aToken));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aToken));
     }
 }
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )

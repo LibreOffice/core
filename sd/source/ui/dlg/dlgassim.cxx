@@ -26,6 +26,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
+#include <o3tl/make_unique.hxx>
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
 
@@ -94,12 +95,9 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
-                pEntry, SvLBoxButtonKind_enabledCheckbox, 0, m_pCheckButton)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-                pEntry, 0, Image(), Image(), false)));    // otherwise boom!
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-                pEntry, 0, rPageName)));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, m_pCheckButton));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));    // otherwise boom!
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rPageName));
 
     GetModel()->Insert( pEntry );
 
@@ -109,12 +107,9 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const OUString& rTitle )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-                    pEntry, 0, OUString())));
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-                    pEntry, 0, Image(), Image(), false)));    // otherwise boom!
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-                    pEntry, 0, rTitle)));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(OUString()));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));    // otherwise boom!
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rTitle));
     GetModel()->Insert( pEntry,pParent );
 }
 

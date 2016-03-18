@@ -111,8 +111,8 @@ public:
 class LibLBoxString : public SvLBoxString
 {
 public:
-    LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
-        SvLBoxString( pEntry, nFlags, rTxt ) {}
+    LibLBoxString( const OUString& rTxt ) :
+        SvLBoxString( rTxt ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -253,7 +253,7 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
         for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
             SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-            pEntry->ReplaceItem(o3tl::make_unique<LibLBoxString>( pEntry, 0, rCol.GetText() ), nCol);
+            pEntry->ReplaceItem(o3tl::make_unique<LibLBoxString>( rCol.GetText() ), nCol);
         }
     }
 }

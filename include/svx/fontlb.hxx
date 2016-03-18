@@ -36,8 +36,6 @@ private:
 public:
                                 SvLBoxFontString();
                                 SvLBoxFontString(
-                                    SvTreeListEntry* pEntry,
-                                    sal_uInt16 nFlags,
                                     const OUString& rString,
                                     const vcl::Font& rFont,
                                     const Color* pColor = nullptr );

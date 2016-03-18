@@ -57,9 +57,8 @@ SvxRedlinEntry::~SvxRedlinEntry()
     delete pRedDat;
 }
 
-SvLBoxColorString::SvLBoxColorString(SvTreeListEntry*pEntry, sal_uInt16 nFlags, const OUString& rStr,
-    const Color& rCol)
-    : SvLBoxString(pEntry, nFlags, rStr)
+SvLBoxColorString::SvLBoxColorString(const OUString& rStr, const Color& rCol)
+    : SvLBoxString(rStr)
 {
     aPrivColor=rCol;
     SetText( rStr );
@@ -337,21 +336,21 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     if (nTreeFlags & SvTreeFlags::CHKBTN)
     {
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-                new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData)));
+                new SvLBoxButton(eButtonKind, pCheckButtonData)));
     }
 
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-                new SvLBoxContextBmp(pEntry, 0, rColl, rExp, true)));
+                new SvLBoxContextBmp(rColl, rExp, true)));
 
     // the type of the change
     assert((rStr.isEmpty() && !!maEntryImage) || (!rStr.isEmpty() && !maEntryImage));
 
     if (rStr.isEmpty())
         pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-                        pEntry, 0, maEntryImage, maEntryImage, true)));
+                        maEntryImage, maEntryImage, true)));
     else
         pEntry->AddItem(std::unique_ptr<SvLBoxColorString>(
-                    new SvLBoxColorString(pEntry, 0, rStr, maEntryColor)));
+                    new SvLBoxColorString(rStr, maEntryColor)));
 
     // the change tracking entries
     sal_Int32 nIndex = 0;
@@ -360,7 +359,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     {
         const OUString aToken = GetToken(maEntryString, nIndex);
         pEntry->AddItem(std::unique_ptr<SvLBoxColorString>(
-                    new SvLBoxColorString(pEntry, 0, aToken, maEntryColor)));
+                    new SvLBoxColorString(aToken, maEntryColor)));
     }
 }
 

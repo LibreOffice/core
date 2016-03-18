@@ -31,8 +31,8 @@ namespace svx
 class OptLBoxString_Impl : public SvLBoxString
 {
 public:
-    OptLBoxString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
-        SvLBoxString( pEntry, nFlags, rTxt ) {}
+    OptLBoxString_Impl( const OUString& rTxt ) :
+        SvLBoxString( rTxt ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -70,7 +70,7 @@ void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rT
     {
         // initialize all columns with own class (column 0 == Bitmap)
         SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-        pEntry->ReplaceItem(o3tl::make_unique<OptLBoxString_Impl>(pEntry, 0, rCol.GetText()), nCol);
+        pEntry->ReplaceItem(o3tl::make_unique<OptLBoxString_Impl>(rCol.GetText()), nCol);
     }
 }
 

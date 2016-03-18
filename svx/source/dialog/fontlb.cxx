@@ -30,10 +30,9 @@ SvLBoxFontString::SvLBoxFontString()
 {
 }
 
-SvLBoxFontString::SvLBoxFontString(
-        SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rString,
+SvLBoxFontString::SvLBoxFontString( const OUString& rString,
         const vcl::Font& rFont, const Color* pColor ) :
-    SvLBoxString( pEntry, nFlags, rString ),
+    SvLBoxString( rString ),
     maFont( rFont ),
     mbUseColor( pColor != nullptr )
 {
@@ -135,11 +134,11 @@ void SvxFontListBox::InitEntry(
     {
         if( nTreeFlags & SvTreeFlags::CHKBTN )
             pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
-                        pEntry, eButtonKind, 0, pCheckButtonData)));
+                        eButtonKind, pCheckButtonData)));
         pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-                        pEntry, 0, rCollImg, rExpImg, true)));
+                        rCollImg, rExpImg, true)));
         pEntry->AddItem(std::unique_ptr<SvLBoxFontString>(new SvLBoxFontString(
-                        pEntry, 0, rEntryText, maEntryFont, mpEntryColor)));
+                        rEntryText, maEntryFont, mpEntryColor)));
     }
     else
         SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg,

@@ -33,8 +33,8 @@ namespace dbaui
         bool    m_bEmphasized;
 
     public:
-        OBoldListboxString(SvTreeListEntry* _pEntry, sal_uInt16 _nFlags, const OUString& _rStr)
-            :SvLBoxString(_pEntry, _nFlags, _rStr)
+        OBoldListboxString(const OUString& _rStr)
+            :SvLBoxString(_rStr)
             ,m_bEmphasized(false)
         {
         }

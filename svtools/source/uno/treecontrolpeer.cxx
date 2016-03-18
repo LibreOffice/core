@@ -71,8 +71,8 @@ public:
 class ImplContextGraphicItem : public SvLBoxContextBmp
 {
 public:
-    ImplContextGraphicItem( SvTreeListEntry* pEntry,sal_uInt16 nFlags,Image& rI1,Image& rI2, bool bExpanded)
-        : SvLBoxContextBmp(pEntry, nFlags, rI1, rI2, bExpanded) {}
+    ImplContextGraphicItem( Image& rI1,Image& rI2, bool bExpanded)
+        : SvLBoxContextBmp(rI1, rI2, bExpanded) {}
 
     OUString msExpandedGraphicURL;
     OUString msCollapsedGraphicURL;
@@ -105,7 +105,6 @@ private:
 class UnoTreeListItem : public SvLBoxString
 {
 public:
-    explicit        UnoTreeListItem( SvTreeListEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
@@ -225,12 +224,9 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
     {
         Image aImage;
         pEntry = new UnoTreeListEntry( xNode, this );
-        {
+        pEntry->AddItem(o3tl::make_unique<ImplContextGraphicItem>(aImage, aImage, true));
 
-            pEntry->AddItem(o3tl::make_unique<ImplContextGraphicItem>(pEntry, 0, aImage, aImage, true));
-        }
-
-        std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem(pEntry));
+        std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem);
 
         if( !xNode->getNodeGraphicURL().isEmpty() )
         {
@@ -1510,14 +1506,8 @@ bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUString& r
 // class UnoTreeListItem
 
 
-UnoTreeListItem::UnoTreeListItem( SvTreeListEntry* pEntry )
-: SvLBoxString(pEntry, 0, OUString())
-{
-}
-
-
 UnoTreeListItem::UnoTreeListItem()
-: SvLBoxString()
+: SvLBoxString(OUString())
 {
 }
 

@@ -1233,7 +1233,7 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    pEntry->ReplaceItem(o3tl::make_unique<SwLBoxString>(pEntry, 0, rCol.GetText()), nColToHilite);
+    pEntry->ReplaceItem(o3tl::make_unique<SwLBoxString>(rCol.GetText()), nColToHilite);
 }
 
 void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,

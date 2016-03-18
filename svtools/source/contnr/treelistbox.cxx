@@ -327,10 +327,6 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
 // ***************************************************************
 
 
-SvLBoxItem::SvLBoxItem( SvTreeListEntry*, sal_uInt16 )
-{
-}
-
 SvLBoxItem::SvLBoxItem()
 {
 }
@@ -1724,12 +1720,12 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
 {
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(pEntry, eButtonKind, 0, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(eButtonKind, pCheckButtonData));
     }
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>( pEntry,0, aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>( aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded));
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(pEntry, 0, aStr));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aStr));
 }
 
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const

@@ -35,6 +35,7 @@
 #include "headertablistbox.hxx"
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
+#include <o3tl/make_unique.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
@@ -340,7 +341,7 @@ bool _SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
     }
 
     mpImpl->pEventLB->SetUpdateMode( false );
-    pE->ReplaceItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pE, 0, sScriptURI)), LB_MACROS_ITEMPOS);
+    pE->ReplaceItem(o3tl::make_unique<SvLBoxString>(sScriptURI), LB_MACROS_ITEMPOS);
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
@@ -433,8 +434,7 @@ void _SfxMacroTabPage::FillEvents()
 
             if( sOld != sNew )
             {
-                pE->ReplaceItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-                                    pE, 0, sNew)), LB_MACROS_ITEMPOS);
+                pE->ReplaceItem(o3tl::make_unique<SvLBoxString>(sNew), LB_MACROS_ITEMPOS);
                 rListBox.GetModel()->InvalidateEntry( pE );
             }
         }

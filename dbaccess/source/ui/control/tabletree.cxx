@@ -43,6 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include "svtools/treelistentry.hxx"
+#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 
@@ -408,8 +409,7 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
     size_t nTextPos = _pEntry->GetPos(pTextItem);
     OSL_ENSURE(SvTreeListEntry::ITEM_NOT_FOUND != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
 
-    _pEntry->ReplaceItem(std::unique_ptr<OBoldListboxString>(
-                new OBoldListboxString(_pEntry, 0, _rString)), nTextPos);
+    _pEntry->ReplaceItem(o3tl::make_unique<OBoldListboxString>(_rString), nTextPos);
 }
 
 SvTreeListEntry* OTableTreeListBox::implAddEntry(

@@ -83,9 +83,7 @@ class StyleLBoxString : public SvLBoxString
     SvViewDataItem* mpViewData;
 
 public:
-    StyleLBoxString(SvTreeListEntry* pEntry,
-                    sal_uInt16 nFlags,
-                    const OUString& sText,
+    StyleLBoxString(const OUString& sText,
                     const SfxStyleFamily& eStyleFamily);
 
     virtual ~StyleLBoxString();
@@ -102,8 +100,8 @@ public:
 };
 
 
-StyleLBoxString::StyleLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText, const SfxStyleFamily& eStyleFamily)
-    : SvLBoxString(pEntry, nFlags, sText)
+StyleLBoxString::StyleLBoxString(const OUString& sText, const SfxStyleFamily& eStyleFamily)
+    : SvLBoxString(sText)
     , meStyleFamily(eStyleFamily)
     , mpViewData(nullptr)
 {}
@@ -632,7 +630,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
     {
-        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(pTreeListEntry, 0, pEntry->getName(), eStyleFamily), 1);
+        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(pEntry->getName(), eStyleFamily), 1);
     }
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
@@ -1248,7 +1246,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                     SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], nullptr, false, nPos);
                     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
                     {
-                        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(pTreeListEntry, 0, aStrings[nPos], eFam), 1);
+                        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(aStrings[nPos], eFam), 1);
                     }
                     aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
                 }

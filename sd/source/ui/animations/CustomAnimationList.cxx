@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "sdresid.hxx"
 
@@ -203,7 +204,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
 class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
-    CustomAnimationListEntryItem(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& aDescription,
+    CustomAnimationListEntryItem(const OUString& aDescription,
                                  CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
     virtual ~CustomAnimationListEntryItem();
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
@@ -222,8 +223,8 @@ private:
     const long nItemMinHeight = 38;
 };
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
-: SvLBoxString( pEntry, nFlags, aDescription )
+CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
+: SvLBoxString( aDescription )
 , mpParent( pParent )
 , msDescription( aDescription )
 , msEffectName( OUString() )
@@ -376,7 +377,7 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription );
+                    CustomAnimationTriggerEntryItem( const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     SvLBoxItem*     Create() const override;
@@ -389,8 +390,8 @@ private:
     const long nIconWidth = 19;
 };
 
-CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription )
-: SvLBoxString( pEntry, nFlags, aDescription ), msDescription( aDescription )
+CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( const OUString& aDescription )
+: SvLBoxString( aDescription ), msDescription( aDescription )
 {
 }
 
@@ -656,13 +657,11 @@ void CustomAnimationList::update()
             if( xShape.is() )
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
-                pLBoxEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-                    new SvLBoxContextBmp(pLBoxEntry, 0, Image(), Image(), false)));
+                pLBoxEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
                 OUString aDescription = SD_RESSTR(STR_CUSTOMANIMATION_TRIGGER);
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
-                pLBoxEntry->AddItem(std::unique_ptr<CustomAnimationTriggerEntryItem>(
-                    new CustomAnimationTriggerEntryItem(pLBoxEntry, 0, aDescription)));
+                pLBoxEntry->AddItem(o3tl::make_unique<CustomAnimationTriggerEntryItem>(aDescription));
                 Insert( pLBoxEntry );
                 SvViewDataEntry* pViewData = GetViewData( pLBoxEntry );
                 if( pViewData )
@@ -766,10 +765,8 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         // create an entry for the effect
         SvTreeListEntry* pEntry = new CustomAnimationListEntry( pEffect );
 
-        pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-                            pEntry, 0, Image(), Image(), false)));
-        pEntry->AddItem(std::unique_ptr<CustomAnimationListEntryItem>(
-            new CustomAnimationListEntryItem(pEntry, 0, aDescription, pEffect, this)));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+        pEntry->AddItem(o3tl::make_unique<CustomAnimationListEntryItem>(aDescription, pEffect, this));
 
         if( pParentEntry )
         {

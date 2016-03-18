@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <osl/file.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <stack>
 #include <algorithm>
@@ -137,11 +138,8 @@ void ReplaceEdit::SetText( const OUString& rStr, const Selection& rNewSelection 
 
 // class ThesaurusAlternativesCtrl ----------------------------------
 
-AlternativesString::AlternativesString(
-    ThesaurusAlternativesCtrl &rControl,
-    SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr ) :
-
-    SvLBoxString( pEntry, nFlags, rStr ),
+AlternativesString::AlternativesString( ThesaurusAlternativesCtrl &rControl, const OUString& rStr ) :
+    SvLBoxString( rStr ),
     m_rControlImpl( rControl )
 {
 }
@@ -230,13 +228,10 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUS
     {
         aText = OUString::number( nVal ) + ". ";
     }
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(
-        new SvLBoxString(pEntry, 0, OUString()))); // add empty column
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(OUString())); // add empty column
     aText += rText;
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-        new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false))); // otherwise crash
-    pEntry->AddItem(std::unique_ptr<AlternativesString>(
-        new AlternativesString( *this, pEntry, 0, aText)));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise crash
+    pEntry->AddItem(o3tl::make_unique<AlternativesString>(*this, aText));
 
     SetExtraData( pEntry, AlternativesExtraData( rText, bIsHeader ) );
     GetModel()->Insert( pEntry );

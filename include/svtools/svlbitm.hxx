@@ -106,7 +106,7 @@ protected:
     OUString maText;
 
 public:
-    SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rText);
+    SvLBoxString(const OUString& rText);
     SvLBoxString();
     virtual ~SvLBoxString();
 
@@ -162,9 +162,7 @@ public:
     // (which cannot be modified via UI), or a static image
     // (see SV_BMP_STATICIMAGE; nFlags are effectively ignored
     // for that kind).
-    SvLBoxButton( SvTreeListEntry* pEntry,
-                  SvLBoxButtonKind eTheKind, sal_uInt16 nFlags,
-                  SvLBoxButtonData* pBData );
+    SvLBoxButton( SvLBoxButtonKind eTheKind, SvLBoxButtonData* pBData );
     SvLBoxButton();
     virtual ~SvLBoxButton();
     virtual void InitViewData(SvTreeListBox* pView,
@@ -245,9 +243,7 @@ class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     SvLBoxContextBmp_Impl*  m_pImpl;
 public:
-    SvLBoxContextBmp(SvTreeListEntry* pEntry,
-                     sal_uInt16 nItemFlags,
-                     Image aBmp1,
+    SvLBoxContextBmp(Image aBmp1,
                      Image aBmp2,
                      bool bExpanded);
     SvLBoxContextBmp();

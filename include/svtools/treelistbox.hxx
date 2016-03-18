@@ -159,7 +159,6 @@ public:
 class SVT_DLLPUBLIC SvLBoxItem
 {
 public:
-                        SvLBoxItem( SvTreeListEntry*, sal_uInt16 nFlags );
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
     virtual sal_uInt16 GetType() const = 0;

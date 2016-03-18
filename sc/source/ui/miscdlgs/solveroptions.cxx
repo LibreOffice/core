@@ -28,6 +28,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svtools/treelistentry.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 
@@ -59,8 +60,8 @@ class ScSolverOptionsString : public SvLBoxString
     sal_Int32   mnIntValue;
 
 public:
-    ScSolverOptionsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr ) :
-        SvLBoxString( pEntry, nFlags, rStr ),
+    ScSolverOptionsString( const OUString& rStr ) :
+        SvLBoxString( rStr ),
         mbIsDouble( false ),
         mfDoubleValue( 0.0 ),
         mnIntValue( 0 ) {}
@@ -264,27 +265,23 @@ void ScSolverOptionsDialog::FillListBox()
             // check box entry
             pEntry = new SvTreeListEntry;
             std::unique_ptr<SvLBoxButton> pButton(new SvLBoxButton(
-                pEntry, SvLBoxButtonKind_enabledCheckbox, 0, mpCheckButtonData));
+                SvLBoxButtonKind_enabledCheckbox, mpCheckButtonData));
             if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
                 pButton->SetStateChecked();
             else
                 pButton->SetStateUnchecked();
             pEntry->AddItem(std::move(pButton));
-            pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-                new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
-            pEntry->AddItem(std::unique_ptr<SvLBoxString>(
-                new SvLBoxString( pEntry, 0, aVisName)));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aVisName));
         }
         else
         {
             // value entry
             pEntry = new SvTreeListEntry;
-            pEntry->AddItem(std::unique_ptr<SvLBoxString>(
-                new SvLBoxString(pEntry, 0, ""))); // empty column
-            pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-                new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>("")); // empty column
+            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
             std::unique_ptr<ScSolverOptionsString> pItem(
-                new ScSolverOptionsString(pEntry, 0, aVisName));
+                new ScSolverOptionsString(aVisName));
             if ( eClass == uno::TypeClass_DOUBLE )
             {
                 double fDoubleValue = 0.0;

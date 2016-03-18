@@ -334,8 +334,8 @@ class OColumnString : public SvLBoxString
 {
     bool m_bReadOnly;
 public:
-    OColumnString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr, bool _RO)
-        :SvLBoxString(pEntry,nFlags,rStr)
+    OColumnString( const OUString& rStr, bool _RO )
+        :SvLBoxString(rStr)
         ,m_bReadOnly(_RO)
     {
     }
@@ -373,7 +373,7 @@ VCL_BUILDER_FACTORY(OColumnTreeBox)
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
     DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
-    pEntry->ReplaceItem(o3tl::make_unique<OColumnString>(pEntry, 0, rStr,false), pEntry->ItemCount() - 1);
+    pEntry->ReplaceItem(o3tl::make_unique<OColumnString>(rStr,false), pEntry->ItemCount() - 1);
 }
 
 bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, bool bSelect )

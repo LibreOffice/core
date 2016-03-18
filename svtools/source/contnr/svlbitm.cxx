@@ -167,8 +167,7 @@ bool SvLBoxButtonData::IsRadio() {
 // ***************************************************************
 
 
-SvLBoxString::SvLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr)
-    : SvLBoxItem(pEntry, nFlags)
+SvLBoxString::SvLBoxString(const OUString& rStr)
 {
     SetText(rStr);
 }
@@ -286,10 +285,9 @@ void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 // ***************************************************************
 
 
-SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
-                            sal_uInt16 nFlags, SvLBoxButtonData* pBData )
-    : SvLBoxItem( pEntry, nFlags )
-    , isVis(true)
+SvLBoxButton::SvLBoxButton( SvLBoxButtonKind eTheKind,
+                            SvLBoxButtonData* pBData )
+    : isVis(true)
     , pData(pBData)
     , eKind(eTheKind)
     , nItemFlags(SvItemStateFlags::NONE)
@@ -447,11 +445,9 @@ struct SvLBoxContextBmp_Impl
 
 // ***************************************************************
 
-SvLBoxContextBmp::SvLBoxContextBmp(
-    SvTreeListEntry* pEntry, sal_uInt16 nItemFlags, Image aBmp1, Image aBmp2,
+SvLBoxContextBmp::SvLBoxContextBmp(Image aBmp1, Image aBmp2,
     bool bExpanded)
-    :SvLBoxItem( pEntry, nItemFlags )
-    ,m_pImpl( new SvLBoxContextBmp_Impl )
+    :m_pImpl( new SvLBoxContextBmp_Impl )
 {
 
     m_pImpl->m_bExpanded = bExpanded;

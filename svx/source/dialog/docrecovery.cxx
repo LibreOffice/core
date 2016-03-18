@@ -756,10 +756,8 @@ void SaveProgressDialog::end()
 }
 
 
-RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
-                                           sal_uInt16       nFlags,
-                                     const OUString&        sText )
-    : SvLBoxString( pEntry, nFlags, sText )
+RecovDocListEntry::RecovDocListEntry( const OUString&        sText )
+    : SvLBoxString( sText )
 {
 }
 
@@ -845,7 +843,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure missmatch" );
 
     SvLBoxString&       rCol = static_cast<SvLBoxString&>(pEntry->GetItem(2));
-    pEntry->ReplaceItem(o3tl::make_unique<RecovDocListEntry>(pEntry, 0, rCol.GetText()), 2);
+    pEntry->ReplaceItem(o3tl::make_unique<RecovDocListEntry>(rCol.GetText()), 2);
 }
 
 

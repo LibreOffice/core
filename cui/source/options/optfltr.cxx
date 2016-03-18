@@ -337,16 +337,16 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-        new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
+        new SvLBoxContextBmp(Image(), Image(), false)));
     pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(pEntry, loadEnabled ? SvLBoxButtonKind_enabledCheckbox
-                                             : SvLBoxButtonKind_disabledCheckbox,
-               0, pCheckButtonData)));
+        new SvLBoxButton(loadEnabled ? SvLBoxButtonKind_enabledCheckbox
+                                     : SvLBoxButtonKind_disabledCheckbox,
+               pCheckButtonData)));
     pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(pEntry, saveEnabled ? SvLBoxButtonKind_enabledCheckbox
-                                             : SvLBoxButtonKind_disabledCheckbox,
-               0, pCheckButtonData)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, _rTxt)));
+        new SvLBoxButton(saveEnabled ? SvLBoxButtonKind_enabledCheckbox
+                                     : SvLBoxButtonKind_disabledCheckbox,
+               pCheckButtonData)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(_rTxt)));
 
     pEntry->SetUserData( reinterpret_cast<void*>(_nType) );
     m_pCheckLB->Insert( pEntry );

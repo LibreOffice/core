@@ -984,8 +984,8 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 class FmFilterItemsString : public SvLBoxString
 {
 public:
-    FmFilterItemsString( SvTreeListEntry* pEntry, const OUString& rStr )
-        :SvLBoxString(pEntry,0,rStr){}
+    FmFilterItemsString( const OUString& rStr )
+        :SvLBoxString(rStr) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -1041,8 +1041,8 @@ class FmFilterString : public SvLBoxString
     OUString m_aName;
 
 public:
-    FmFilterString( SvTreeListEntry* pEntry, const OUString& rStr, const OUString& aName)
-        : SvLBoxString(pEntry,0,rStr)
+    FmFilterString( const OUString& rStr, const OUString& aName)
+        : SvLBoxString(rStr)
         , m_aName(aName)
     {
         m_aName += ": ";
@@ -1386,10 +1386,10 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
     std::unique_ptr<SvLBoxString> pString;
 
     if (dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-        pString.reset(new FmFilterString(pEntry, rStr,
+        pString.reset(new FmFilterString(rStr,
             static_cast<FmFilterItem*>(pEntry->GetUserData())->GetFieldName()));
     else if (dynamic_cast<const FmFilterItems*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-        pString.reset(new FmFilterItemsString(pEntry, rStr));
+        pString.reset(new FmFilterItemsString(rStr));
 
     if (pString)
         pEntry->ReplaceItem(std::move(pString), 1 );

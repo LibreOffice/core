@@ -634,7 +634,7 @@ static long AccCfgTabs[] =
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
 public:
-    SfxAccCfgLBoxString_Impl(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText);
+    SfxAccCfgLBoxString_Impl(const OUString& sText);
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
@@ -643,8 +643,8 @@ public:
 };
 
 
-SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText)
-    : SvLBoxString(pEntry, nFlags, sText)
+SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(const OUString& sText)
+    : SvLBoxString(sText)
 {}
 
 SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
@@ -925,10 +925,8 @@ void SfxAcceleratorConfigPage::CreateCustomItems(SvTreeListEntry* pEntry,
                                                  const OUString& sCol1 ,
                                                  const OUString& sCol2)
 {
-
-    pEntry->ReplaceItem(o3tl::make_unique<SfxAccCfgLBoxString_Impl>(pEntry, 0, sCol1), 1);
-
-    pEntry->ReplaceItem(o3tl::make_unique<SfxAccCfgLBoxString_Impl>(pEntry, 0, sCol2), 2);
+    pEntry->ReplaceItem(o3tl::make_unique<SfxAccCfgLBoxString_Impl>(sCol1), 1);
+    pEntry->ReplaceItem(o3tl::make_unique<SfxAccCfgLBoxString_Impl>(sCol2), 2);
 }
 
 

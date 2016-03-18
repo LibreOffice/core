@@ -139,7 +139,7 @@ void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, co
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
     SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-    _pEntry->ReplaceItem(o3tl::make_unique<OBoldListboxString>(_pEntry, 0, aStr), _pEntry->GetPos(pTextItem));
+    _pEntry->ReplaceItem(o3tl::make_unique<OBoldListboxString>(aStr), _pEntry->GetPos(pTextItem));
 }
 
 void DBTreeListBox::implStopSelectionTimer()

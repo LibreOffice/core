@@ -233,8 +233,7 @@ class SwLBoxString : public SvLBoxString
 {
 public:
 
-    SwLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr)
+    SwLBoxString( const OUString& rStr ) : SvLBoxString(rStr)
     {
     }
 

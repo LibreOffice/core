@@ -30,6 +30,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -259,8 +260,7 @@ class BrwStringDic_Impl : public SvLBoxString
 {
 public:
 
-    BrwStringDic_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+    BrwStringDic_Impl( const OUString& rStr ) : SvLBoxString( rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -436,8 +436,7 @@ class BrwString_Impl : public SvLBoxString
 {
 public:
 
-    BrwString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+    BrwString_Impl( const OUString& rStr ) : SvLBoxString( rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -1784,15 +1783,11 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
         pCheckButtonData = new SvLBoxButtonData(m_pLinguOptionsCLB);
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
-            pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-            pEntry, 0, "")));    // empty column
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-            pEntry, 0, Image(), Image(), false)));
-    pEntry->AddItem(std::unique_ptr<BrwString_Impl>(new BrwString_Impl(
-            pEntry, 0, rTxt)));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+    pEntry->AddItem(o3tl::make_unique<BrwString_Impl>(rTxt));
 
     return pEntry;
 }
@@ -1917,11 +1912,11 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     }
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));    // empty column
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)));
-    pEntry->AddItem(std::unique_ptr<BrwStringDic_Impl>(new BrwStringDic_Impl(pEntry, 0, rTxt)));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+    pEntry->AddItem(o3tl::make_unique<BrwStringDic_Impl>(rTxt));
 
     return pEntry;
 }

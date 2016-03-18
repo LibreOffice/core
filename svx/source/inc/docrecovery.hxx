@@ -445,11 +445,8 @@ class RecovDocListEntry : public SvLBoxString
 {
 public:
 
-
     /** @short TODO */
-    RecovDocListEntry(      SvTreeListEntry* pEntry,
-                            sal_uInt16       nFlags,
-                      const OUString&      sText );
+    RecovDocListEntry( const OUString&      sText );
 
 
     /** @short TODO */

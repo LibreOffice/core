@@ -29,6 +29,7 @@
 #include <dialmgr.hxx>
 #include "helpid.hrc"
 #include <cuires.hrc>
+#include <o3tl/make_unique.hxx>
 
 /*********************************************************************/
 /*                                                                   */
@@ -123,18 +124,13 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-            pEntry, 0, Image(), Image(), false))); // otherwise boom!
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise boom!
 
-    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry,
-           SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry,
-           SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind_enabledCheckbox, pCheckButtonData));
 
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-                    pEntry, 0, rFont1)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-                    pEntry, 0, rFont2)));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont1));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont2));
 
     return pEntry;
 }

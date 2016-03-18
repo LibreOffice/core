@@ -3408,8 +3408,7 @@ bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 class SwContentLBoxString : public SvLBoxString
 {
 public:
-    SwContentLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
+    SwContentLBoxString( const OUString& rStr ) : SvLBoxString(rStr) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -3422,7 +3421,7 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    pEntry->ReplaceItem(o3tl::make_unique<SwContentLBoxString>(pEntry, 0, rCol.GetText()), nColToHilite);
+    pEntry->ReplaceItem(o3tl::make_unique<SwContentLBoxString>(rCol.GetText()), nColToHilite);
 }
 
 void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,

@@ -64,6 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -1554,8 +1555,8 @@ void ContextMenuSaveInData::Reset()
 class PopupPainter : public SvLBoxString
 {
 public:
-    PopupPainter( SvTreeListEntry* pEntry, const OUString& rStr )
-        : SvLBoxString( pEntry, 0, rStr )
+    PopupPainter( const OUString& rStr )
+        : SvLBoxString( rStr )
     { }
 
     virtual ~PopupPainter() { }
@@ -2335,9 +2336,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
              pNewEntryData->GetStyle() & css::ui::ItemStyle::DROP_DOWN )
         {
             // add new popup painter, it gets destructed by the entry
-            pNewEntry->ReplaceItem(
-                std::unique_ptr<PopupPainter>(new PopupPainter(pNewEntry, aName)),
-                pNewEntry->ItemCount() - 1 );
+            pNewEntry->ReplaceItem( o3tl::make_unique<PopupPainter>(aName), pNewEntry->ItemCount() - 1 );
         }
     }
 
