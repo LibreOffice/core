@@ -994,6 +994,11 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             if( xPopupMenu.is())
             {
                 sal_Int16 nUniqueId = 1;
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
+                xPopupMenu->insertSeparator( -1 );
+
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
                 Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( getModel() );
 
@@ -1232,10 +1237,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DataRanges" );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramData" );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:View3D" );
-                xPopupMenu->insertSeparator( -1 );
-                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
-                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
-                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
 
                 ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
                 aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
