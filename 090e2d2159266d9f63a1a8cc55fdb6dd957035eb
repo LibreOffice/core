@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_10578503",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 8930,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-18T09:08:28Z",
+      "side": 1,
+      "message": "Why have you changed AS_IF to if?",
+      "range": {
+        "startLine": 8930,
+        "startChar": 37,
+        "endLine": 8930,
+        "endChar": 41
+      },
+      "revId": "090e2d2159266d9f63a1a8cc55fdb6dd957035eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5041fd38",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 8934,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-18T09:08:28Z",
+      "side": 1,
+      "message": "There are more things that require libGL. So if a check for it is added, it should not be limited to glew.",
+      "range": {
+        "startLine": 8934,
+        "startChar": 4,
+        "endLine": 8934,
+        "endChar": 16
+      },
+      "revId": "090e2d2159266d9f63a1a8cc55fdb6dd957035eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f05bd12c",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 8934,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-18T09:08:28Z",
+      "side": 1,
+      "message": "libgl1-mesa-dev is Debian/Ubuntu-specific.",
+      "range": {
+        "startLine": 8934,
+        "startChar": 69,
+        "endLine": 8934,
+        "endChar": 76
+      },
+      "revId": "090e2d2159266d9f63a1a8cc55fdb6dd957035eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
