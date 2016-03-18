@@ -95,6 +95,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     OUString aStrTitle;
     SvxIconChoiceCtrlEntry *pEntry;
 
+    sal_Int32 DpiScale = GetDPIScaleFactor();
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
@@ -140,8 +141,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     aSize = pBox->get_preferred_size();
     aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
     aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
-    pBox->set_width_request(aMaxPrefSize.Width());
-    pBox->set_height_request(aMaxPrefSize.Height());
+    pBox->set_width_request(aMaxPrefSize.Width() * DpiScale);
+    pBox->set_height_request(aMaxPrefSize.Height() * DpiScale);
 
     SetCurPageId(RID_SVXPAGE_HYPERLINK_INTERNET);
 
