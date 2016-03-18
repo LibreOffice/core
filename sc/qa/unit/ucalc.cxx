@@ -1732,6 +1732,32 @@ void Test::testNamedRange()
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].mpName));
     }
 
+    // Test using an other-sheet-local name, scope Sheet1.
+    ScRangeData* pLocal1 = new ScRangeData( m_pDoc, "local1", ScAddress(0,0,0));
+    ScRangeData* pLocal2 = new ScRangeData( m_pDoc, "local2", "$Sheet1.$A$1");
+    ScRangeData* pLocal3 = new ScRangeData( m_pDoc, "local3", "Sheet1.$A$1");
+    ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "$A$1"); // implicit relative sheet reference
+    ScRangeName* pLocalRangeName1 = new ScRangeName;
+    pLocalRangeName1->insert(pLocal1);
+    pLocalRangeName1->insert(pLocal2);
+    pLocalRangeName1->insert(pLocal3);
+    pLocalRangeName1->insert(pLocal4);
+    m_pDoc->SetRangeName(0, pLocalRangeName1);
+
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (1, "Sheet2"));
+
+    // Use other-sheet-local name of Sheet1 on Sheet2.
+    ScAddress aPos(1,0,1);
+    OUString aFormula("=Sheet1.local1+Sheet1.local2+Sheet1.local3+Sheet1.local4");
+    m_pDoc->SetString(aPos, aFormula);
+    OUString aString;
+    m_pDoc->GetFormula(1,0,1, aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("formula string should be equal", aFormula, aString);
+    double fValue = m_pDoc->GetValue(aPos);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("value should be 4 times Sheet1.A1", 404.0, fValue);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->SetRangeName(0,nullptr); // Delete the names.
     m_pDoc->SetRangeName(nullptr); // Delete the names.
     m_pDoc->DeleteTab(0);
 }
