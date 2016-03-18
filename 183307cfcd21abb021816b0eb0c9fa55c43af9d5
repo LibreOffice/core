@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_5c90f9ec",
+        "filename": "sw/source/core/tox/ToxTextGenerator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-18T07:23:48Z",
+      "side": 1,
+      "message": "Please follow our code style guide (look at the other case statement). You use a different style for  {} \n\nStyle may not seem important, but when we are many maintaining the code, it becomes important, in order to keep readability",
+      "revId": "183307cfcd21abb021816b0eb0c9fa55c43af9d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
