@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_fc9e0d06",
+        "filename": "package/inc/ZipOutputEntry.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-18T06:24:53Z",
+      "side": 1,
+      "message": "if m_bFinished is read/write from multiple threads, surely it needs some kind of protection?\n\ni.e. mutex/guard around access to it, or change it to std::atomic_flag/std::atomic\u003cbool\u003e ?",
+      "revId": "b506a3f0d6906c0f929fa55e9588f7297c4c938c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
