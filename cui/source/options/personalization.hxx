@@ -118,18 +118,18 @@ private:
 
     VclPtr<SelectPersonaDialog> m_pPersonaDialog;
     OUString m_aURL;
-    bool m_bExecute;
+    bool m_bExecute, m_bDirectURL;
 
     virtual ~SearchAndParseThread();
     virtual void execute() override;
-    void getPreviewFile( const OUString&, OUString *, OUString * );
 
 public:
 
     SearchAndParseThread( SelectPersonaDialog* pDialog,
-                          const OUString& rURL );
+                          const OUString& rURL, bool rDirectURL );
 
     void StopExecution() { m_bExecute = false; }
+    bool getPreviewFile( const OUString&, OUString *, OUString * );
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX

@@ -142,39 +142,13 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if( searchTerm.isEmpty( ) )
         return;
 
-    // TODO FIXME!
-    // Before the release, the allizom.org url should be changed to:
-    // OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    // The problem why it cannot be done just now is that the SSL negotiation
-    // with services.addons.mozilla.org fails very early - during an early
-    // propfind, SSL returns X509_V_ERR_CERT_UNTRUSTED to neon, causing the
-    // NE_SSL_UNTRUSTED being set in verify_callback in neon/src/ne_openssl.c
-    //
-    // This is not cleared anywhere during the init, and so later, even though
-    // we have found the certificate, this triggers
-    // NeonSession_CertificationNotify callback, that
-    // causes that NE_SSL_UNTRUSTED is ignored in cases when the condition
-    //   if ( pSession->isDomainMatch(
-    //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
-    // is true; but that is only when getSubjectName() actually returns a
-    // wildcard, or the exact name.
-    //
-    // In the case of services.addons.mozilla.com, the certificate is for
-    // versioncheck.addons.mozilla.com, but it also has
-    //   X509v3 Subject Alternative Name:
-    //       DNS:services.addons.mozilla.org, DNS:versioncheck-bg.addons.mozilla.org, DNS:pyrepo.addons.mozilla.org, DNS:versioncheck.addons.mozilla.org
-    // So it is all valid; but the early X509_V_ERR_CERT_UNTRUSTED failure
-    // described above just makes this being ignored.
-    //
-    // My suspicion is that this never actually worked, and the
-    //   if ( pSession->isDomainMatch(
-    //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
-    // works around the root cause that is there for years, and which makes it
-    // work in most cases.  I guess that we initialize something wrongly or
-    // too late; but I have already spent few hours debugging, and
-    // give up for the moment - need to return to this at some stage.
-    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
+    OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
+
+    if ( searchTerm.startsWith( "https://addons.mozilla.org/en-US/firefox/addon" ) )
+        m_rSearchThread = new SearchAndParseThread( this, searchTerm, true );
+    else
+        m_rSearchThread = new SearchAndParseThread( this, rSearchURL, false );
+
     m_rSearchThread->launch();
 }
 
@@ -184,7 +158,7 @@ IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
 
     if( !aSelectedPersona.isEmpty() )
     {
-        m_rSearchThread = new SearchAndParseThread( this, aSelectedPersona );
+        m_rSearchThread = new SearchAndParseThread( this, aSelectedPersona, false );
         m_rSearchThread->launch();
     }
 
@@ -579,12 +553,13 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
 }
 
 SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
-                          const OUString& rURL ) :
+                          const OUString& rURL, bool rDirectURL ) :
             Thread( "cuiPersonasSearchThread" ),
             m_pPersonaDialog( pDialog ),
             m_aURL( rURL ),
             m_bExecute( true )
 {
+    m_bDirectURL = rDirectURL;
 }
 
 SearchAndParseThread::~SearchAndParseThread()
@@ -593,7 +568,7 @@ SearchAndParseThread::~SearchAndParseThread()
 
 void SearchAndParseThread::execute()
 {
-    if( m_aURL.startsWith( "https://" ) )
+    if( m_aURL.startsWith( "https://" ) && !m_bDirectURL )
     {
         m_pPersonaDialog->ClearSearchResults();
         OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) );
@@ -664,6 +639,46 @@ void SearchAndParseThread::execute()
         m_pPersonaDialog->setOptimalLayoutSize();
     }
 
+    else if( m_aURL.startsWith( "https://" ) && m_bDirectURL )
+    {
+        OUString sPreviewFile, aPersonaSetting;
+        GraphicFilter aFilter;
+        Graphic aGraphic;
+        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) );
+        m_pPersonaDialog->SetProgress( sProgress );
+
+        bool aValidURL = getPreviewFile( m_aURL, &sPreviewFile, &aPersonaSetting );
+
+        if( !aValidURL )
+        {
+            sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
+            sProgress = sProgress.replaceAll("%1", m_aURL);
+            m_pPersonaDialog->SetProgress(sProgress);
+            return;
+        }
+
+        INetURLObject aURLObj( sPreviewFile );
+        aFilter.ImportGraphic( aGraphic, aURLObj );
+        Bitmap aBmp = aGraphic.GetBitmap();
+
+        if( !m_bExecute )
+            return;
+
+        SolarMutexGuard aGuard;
+        m_pPersonaDialog->SetImages( Image( aBmp ), 0 );
+        m_pPersonaDialog->setOptimalLayoutSize();
+        m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
+
+        if( !m_bExecute )
+            return;
+
+        SolarMutexGuard aGuard_new;
+        sProgress.clear();
+        m_pPersonaDialog->SetProgress( sProgress );
+        m_pPersonaDialog->setOptimalLayoutSize();
+
+    }
+
     else
     {
         OUString sProgress( CUI_RES( RID_SVXSTR_APPLYPERSONA ) );
@@ -732,11 +747,11 @@ void SearchAndParseThread::execute()
     }
 }
 
-void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
+bool SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
     if ( !xFileAccess.is() )
-        return;
+        return false;
 
     uno::Reference< io::XInputStream > xStream;
     try {
@@ -747,10 +762,10 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
         OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHERROR ) );
         sProgress = sProgress.replaceAll("%1", m_aURL);
         m_pPersonaDialog->SetProgress( sProgress );
-        return;
+        return false;
     }
     if ( !xStream.is() )
-        return;
+        return false;
 
     // read the persona specification
     // NOTE: Parsing for real is an overkill here; and worse - I tried, and
@@ -772,7 +787,7 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
     OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
 
     if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
-        return;
+        return false;
 
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
@@ -788,10 +803,11 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
     }
     catch ( const uno::Exception & )
     {
-        return;
+        return false;
     }
     *pPreviewFile = gallery + aPreviewFile;
     *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
