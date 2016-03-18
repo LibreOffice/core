@@ -138,7 +138,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                     Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
                 } else {
                     // TODO: can't open the file
-                    Log.e(LOGTAG, "couldn't create temporary file from "+getIntent().getData());
+                    Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
                 }
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = new File(getIntent().getData().getPath());
@@ -203,7 +203,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             try {
                 AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(getIntent().getData(), "r");
                 if (assetFD == null) {
-                    Log.e(LOGTAG, "couldn't create assetfiledescriptor from "+getIntent().getDataString());
+                    Log.e(LOGTAG, "couldn't create assetfiledescriptor from " + getIntent().getDataString());
                     return false;
                 }
                 inputChannel = assetFD.createInputStream().getChannel();
@@ -215,7 +215,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 while (bytesTransferred < inputChannel.size()) {
                     bytesTransferred += outputChannel.transferFrom(inputChannel, bytesTransferred, inputChannel.size());
                 }
-                Log.e(LOGTAG, "Success copying "+bytesTransferred+ " bytes");
+                Log.e(LOGTAG, "Success copying " + bytesTransferred + " bytes");
                 return true;
             } finally {
                 if (inputChannel != null) inputChannel.close();
@@ -336,7 +336,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
         if (isFinishing()) { // Not an orientation change
             if (mTempFile != null) {
-                //noinspection ResultOfMethodCallIgnored
+                // noinspection ResultOfMethodCallIgnored
                 mTempFile.delete();
             }
         }
@@ -560,9 +560,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
             boolean res = true;
             for (String file : files) {
-                String[] dirOrFile = assetManager.list(fromAssetPath+"/"+file);
+                String[] dirOrFile = assetManager.list(fromAssetPath + "/" + file);
                 if ( dirOrFile.length == 0) {
-                    //noinspection ResultOfMethodCallIgnored
+                    // noinspection ResultOfMethodCallIgnored
                     new File(targetDir).mkdirs();
                     res &= copyAsset(assetManager,
                             fromAssetPath + "/" + file,
@@ -588,14 +588,14 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 source = Channels.newChannel(assetManager.open(fromAssetPath));
                 dest = new FileOutputStream(toPath).getChannel();
                 long bytesTransferred = 0;
-                // might not  copy all at once, so make sure everything gets copied....
+                // might not copy all at once, so make sure everything gets copied....
                 ByteBuffer buffer = ByteBuffer.allocate(4096);
-                while (source.read(buffer)>0) {
+                while (source.read(buffer) > 0) {
                     buffer.flip();
                     bytesTransferred += dest.write(buffer);
                     buffer.clear();
                 }
-                Log.v(LOGTAG, "Success copying "+fromAssetPath+" to "+toPath + " bytes: "+bytesTransferred);
+                Log.v(LOGTAG, "Success copying " + fromAssetPath + " to " + toPath + " bytes: " + bytesTransferred);
                 return true;
             } finally {
                 if (dest != null) dest.close();
