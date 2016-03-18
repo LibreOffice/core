@@ -238,7 +238,7 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
-                bCheck = SV_BUTTON_CHECKED ==
+                bCheck = SvButtonState::Checked ==
                         SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
 
                 if( bCheck != (rOpt.*pArr->FnIs)() )
@@ -397,15 +397,15 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
     {
         switch( eState )
         {
-            case SV_BUTTON_CHECKED:
+            case SvButtonState::Checked:
                 rItem.SetStateChecked();
                 break;
 
-            case SV_BUTTON_UNCHECKED:
+            case SvButtonState::Unchecked:
                 rItem.SetStateUnchecked();
                 break;
 
-            case SV_BUTTON_TRISTATE:
+            case SvButtonState::Tristate:
                 rItem.SetStateTristate();
                 break;
         }
@@ -416,7 +416,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
 SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
                                     SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
-    SvButtonState eState = SV_BUTTON_UNCHECKED;
+    SvButtonState eState = SvButtonState::Unchecked;
     SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem(nCol + 1));
 
     if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -434,8 +434,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_u
         SetCheckButtonState(
             GetEntry(nPos),
             nCol,
-            bChecked ? SvButtonState( SV_BUTTON_CHECKED ) :
-                                       SvButtonState( SV_BUTTON_UNCHECKED ) );
+            bChecked ? SvButtonState::Checked : SvButtonState::Unchecked );
 }
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
@@ -448,14 +447,14 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         if ( nCol < 2 )
         {
             SvTreeListEntry* pEntry = GetEntry( nSelPos );
-            bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED );
+            bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SvButtonState::Checked );
             CheckEntryPos( nSelPos, nCol, !bIsChecked );
             CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, static_cast<void*>(pEntry) );
         }
         else
         {
-            sal_uInt16 nCheck = GetCheckButtonState( GetEntry(nSelPos), 1 ) == SV_BUTTON_CHECKED ? 1 : 0;
-            if(GetCheckButtonState( GetEntry(nSelPos), 0 ))
+            sal_uInt16 nCheck = GetCheckButtonState( GetEntry(nSelPos), 1 ) == SvButtonState::Checked ? 1 : 0;
+            if(GetCheckButtonState( GetEntry(nSelPos), 0 ) != SvButtonState::Unchecked)
                 nCheck += 2;
             nCheck--;
             nCheck &= 3;

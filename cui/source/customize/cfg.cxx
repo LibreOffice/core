@@ -3455,7 +3455,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
 
                 m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
                     pEntry->IsVisible() ?
-                        SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                        SvButtonState::Checked : SvButtonState::Unchecked );
 
                 m_pContentsListBox->Select( pNewLBEntry );
                 m_pContentsListBox->MakeVisible( pNewLBEntry );
@@ -3477,7 +3477,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
 
             m_pContentsListBox->SetCheckButtonInvisible( pNewLBEntry );
             m_pContentsListBox->SetCheckButtonState(
-                pNewLBEntry, SV_BUTTON_TRISTATE );
+                pNewLBEntry, SvButtonState::Tristate );
 
             bNeedsApply = true;
             break;
@@ -3560,7 +3560,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
 
                         m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
                             pEntry->IsVisible() ?
-                                SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                                SvButtonState::Checked : SvButtonState::Unchecked );
 
                         m_pContentsListBox->Select( pNewLBEntry );
                         m_pContentsListBox->MakeVisible( pNewLBEntry );
@@ -3616,7 +3616,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
 
                 m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
                     pEntry->IsVisible() ?
-                        SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                        SvButtonState::Checked : SvButtonState::Unchecked );
 
                 m_pContentsListBox->Select( pNewLBEntry );
                 m_pContentsListBox->MakeVisible( pNewLBEntry );
@@ -4602,12 +4602,12 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
         if (pEntry->IsBinding())
         {
             m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
-                pEntry->IsVisible() ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                pEntry->IsVisible() ? SvButtonState::Checked : SvButtonState::Unchecked );
         }
         else
         {
             m_pContentsListBox->SetCheckButtonState(
-                pNewLBEntry, SV_BUTTON_TRISTATE );
+                pNewLBEntry, SvButtonState::Tristate );
         }
     }
 
@@ -4709,12 +4709,12 @@ void SvxToolbarConfigPage::AddFunction(
     {
         pEntry->SetVisible( true );
         m_pContentsListBox->SetCheckButtonState(
-            pNewLBEntry, SV_BUTTON_CHECKED );
+            pNewLBEntry, SvButtonState::Checked );
     }
     else
     {
         m_pContentsListBox->SetCheckButtonState(
-            pNewLBEntry, SV_BUTTON_TRISTATE );
+            pNewLBEntry, SvButtonState::Tristate );
     }
 
     // get currently selected toolbar and apply change
@@ -4837,7 +4837,7 @@ void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
                pToolbarSaveInData->ApplyToolbar( pToolbar );
 
             SetCheckButtonState( pEntry, pEntryData->IsVisible() ?
-                SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                SvButtonState::Checked : SvButtonState::Unchecked );
         }
     }
 }

@@ -122,16 +122,14 @@ sal_uLong SvxCheckListBox::GetCheckedEntryCount() const
 void SvxCheckListBox::CheckEntryPos( sal_uLong nPos, bool bCheck )
 {
     if ( nPos < GetEntryCount() )
-        SetCheckButtonState(
-            GetEntry( nPos ), bCheck ? SvButtonState( SV_BUTTON_CHECKED ) :
-                                       SvButtonState( SV_BUTTON_UNCHECKED ) );
+        SetCheckButtonState( GetEntry( nPos ), bCheck ? SvButtonState::Checked : SvButtonState::Unchecked );
 }
 
 
 bool SvxCheckListBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
-        return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
+        return GetCheckButtonState( GetEntry( nPos ) ) == SvButtonState::Checked;
     else
         return false;
 }
@@ -180,7 +178,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( pEntry )
         {
-            bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            bool bCheck = GetCheckButtonState( pEntry ) == SvButtonState::Checked;
             SvLBoxItem* pItem = GetItem( pEntry, aPnt.X() );
 
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -200,7 +198,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( pNewEntry != pEntry )
                     return;
 
-                if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
+                if ( bCheck != ( GetCheckButtonState( pEntry ) == SvButtonState::Checked ) )
                     CheckButtonHdl();
                 return;
             }
@@ -220,9 +218,9 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
         if ( pEntry )
         {
-            bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            bool bCheck = GetCheckButtonState( pEntry ) == SvButtonState::Checked;
             ToggleCheckButton( pEntry );
-            if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
+            if ( bCheck != ( GetCheckButtonState( pEntry ) == SvButtonState::Checked ) )
                 CheckButtonHdl();
         }
     }

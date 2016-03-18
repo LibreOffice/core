@@ -1921,15 +1921,15 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
             return ;
         switch( eState )
         {
-            case SV_BUTTON_CHECKED:
+            case SvButtonState::Checked:
                 pItem->SetStateChecked();
                 break;
 
-            case SV_BUTTON_UNCHECKED:
+            case SvButtonState::Unchecked:
                 pItem->SetStateUnchecked();
                 break;
 
-            case SV_BUTTON_TRISTATE:
+            case SvButtonState::Tristate:
                 pItem->SetStateTristate();
                 break;
         }
@@ -1949,12 +1949,12 @@ void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 
 SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) const
 {
-    SvButtonState eState = SV_BUTTON_UNCHECKED;
+    SvButtonState eState = SvButtonState::Unchecked;
     if( pEntry && ( nTreeFlags & SvTreeFlags::CHKBTN ) )
     {
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!pItem)
-            return SV_BUTTON_TRISTATE;
+            return SvButtonState::Tristate;
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
         eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
@@ -3821,7 +3821,7 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl:
             rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
     }
 
-    if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
+    if ( GetCheckButtonState( pEntry ) == SvButtonState::Checked )
         rStateSet.AddState( AccessibleStateType::CHECKED );
     if ( IsEntryVisible( pEntry ) )
         rStateSet.AddState( AccessibleStateType::VISIBLE );

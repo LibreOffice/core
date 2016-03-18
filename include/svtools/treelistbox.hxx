@@ -66,7 +66,7 @@ enum class SvLBoxButtonKind
     StaticImage
 };
 
-enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE };
+enum class SvButtonState { Unchecked, Checked, Tristate };
 
 // *********************************************************************
 // *************************** Tabulators ******************************

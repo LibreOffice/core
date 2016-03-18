@@ -42,7 +42,7 @@ void SvLBoxButtonData::InitData( bool _bRadioBtn, const Control* pCtrl )
     aBmps.resize((int)SvBmp::STATICIMAGE+1);
 
     bDataOk = false;
-    eState = SV_BUTTON_UNCHECKED;
+    eState = SvButtonState::Unchecked;
     pImpl->bDefaultImages = true;
     pImpl->bShowRadioButton = _bRadioBtn;
 
@@ -113,13 +113,13 @@ SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlag
     switch( nItemFlags )
     {
         case SvItemStateFlags::UNCHECKED:
-            return SV_BUTTON_UNCHECKED;
+            return SvButtonState::Unchecked;
         case SvItemStateFlags::CHECKED:
-            return SV_BUTTON_CHECKED;
+            return SvButtonState::Checked;
         case SvItemStateFlags::TRISTATE:
-            return SV_BUTTON_TRISTATE;
+            return SvButtonState::Tristate;
         default:
-            return SV_BUTTON_UNCHECKED;
+            return SvButtonState::Unchecked;
     }
 }
 

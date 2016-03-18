@@ -49,9 +49,9 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
     if ( !rKEvt.GetKeyCode().GetModifier() && KEY_SPACE == rKEvt.GetKeyCode().GetCode() )
     {
         SvTreeListEntry* pEntry = FirstSelected();
-        if ( GetCheckButtonState( pEntry ) == SV_BUTTON_UNCHECKED )
+        if ( GetCheckButtonState( pEntry ) == SvButtonState::Unchecked )
         {
-            SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+            SetCheckButtonState( pEntry, SvButtonState::Checked );
             GetCheckButtonHdl().Call( nullptr );
             return ;
         }
@@ -65,19 +65,19 @@ void SvxRadioButtonListBox::HandleEntryChecked( SvTreeListEntry* _pEntry )
     Select( _pEntry );
     SvButtonState eState = GetCheckButtonState( _pEntry );
 
-    if ( SV_BUTTON_CHECKED == eState )
+    if ( SvButtonState::Checked == eState )
     {
         // we have radio button behavior -> so uncheck the other entries
         SvTreeListEntry* pEntry = First();
         while ( pEntry )
         {
             if ( pEntry != _pEntry )
-                SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
+                SetCheckButtonState( pEntry, SvButtonState::Unchecked );
             pEntry = Next( pEntry );
         }
     }
     else
-        SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
+        SetCheckButtonState( _pEntry, SvButtonState::Checked );
 }
 
 

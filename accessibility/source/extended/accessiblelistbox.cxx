@@ -87,7 +87,7 @@ namespace accessibility
                     uno::Any aValue;
                     aValue <<= AccessibleStateType::CHECKED;
 
-                    if ( getListBox()->GetCheckButtonState( pCurOpEntry->GetSvLBoxEntry() ) == SV_BUTTON_CHECKED )
+                    if ( getListBox()->GetCheckButtonState( pCurOpEntry->GetSvLBoxEntry() ) == SvButtonState::Checked )
                     {
                         pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aValue );
                     }

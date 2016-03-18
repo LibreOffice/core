@@ -543,7 +543,7 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 
 bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
-    SvButtonState eState = SV_BUTTON_UNCHECKED;
+    SvButtonState eState = SvButtonState::Unchecked;
     SvLBoxButton& rItem = static_cast<SvLBoxButton&>( pEntry->GetItem( nCol + 1 ) );
 
     if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -552,7 +552,7 @@ bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol
         eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 
-    return ( eState == SV_BUTTON_CHECKED );
+    return ( eState == SvButtonState::Checked );
 }
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(

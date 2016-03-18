@@ -542,19 +542,19 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
     m_pJavaList->Select( _pEntry );
     SvButtonState eState = m_pJavaList->GetCheckButtonState( _pEntry );
 
-    if ( SV_BUTTON_CHECKED == eState )
+    if ( SvButtonState::Checked == eState )
     {
         // we have radio button behavior -> so uncheck the other entries
         SvTreeListEntry* pEntry = m_pJavaList->First();
         while ( pEntry )
         {
             if ( pEntry != _pEntry )
-                m_pJavaList->SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
+                m_pJavaList->SetCheckButtonState( pEntry, SvButtonState::Unchecked );
             pEntry = m_pJavaList->Next( pEntry );
         }
     }
     else
-        m_pJavaList->SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
+        m_pJavaList->SetCheckButtonState( _pEntry, SvButtonState::Checked );
 }
 
 
@@ -606,7 +606,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
         SvTreeListEntry* pEntry = m_pJavaList->GetEntry( nPos );
         m_pJavaList->Select( pEntry );
-        m_pJavaList->SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+        m_pJavaList->SetCheckButtonState( pEntry, SvButtonState::Checked );
         HandleCheckEntry( pEntry );
         bStartAgain = false;
     }
@@ -691,7 +691,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     sal_uLong nCount = m_pJavaList->GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; ++i )
     {
-        if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SV_BUTTON_CHECKED )
+        if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SvButtonState::Checked )
         {
             JavaInfo* pInfo = nullptr;
             if ( i < static_cast< sal_uLong >( m_nInfoSize ) )

@@ -93,7 +93,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
     SvTreeListEntry *pEntry = m_pCertPathList->GetEntry(0);
     if (pEntry)
     {
-        m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+        m_pCertPathList->SetCheckButtonState(pEntry, SvButtonState::Checked);
         HandleCheckEntry(pEntry);
     }
 
@@ -174,19 +174,19 @@ void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )
     m_pCertPathList->Select( _pEntry );
     SvButtonState eState = m_pCertPathList->GetCheckButtonState( _pEntry );
 
-    if (SV_BUTTON_CHECKED == eState)
+    if (SvButtonState::Checked == eState)
     {
         // uncheck the other entries
         SvTreeListEntry* pEntry = m_pCertPathList->First();
         while (pEntry)
         {
             if (pEntry != _pEntry)
-                m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_UNCHECKED);
+                m_pCertPathList->SetCheckButtonState(pEntry, SvButtonState::Unchecked);
             pEntry = m_pCertPathList->Next(pEntry);
         }
     }
     else
-        m_pCertPathList->SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
+        m_pCertPathList->SetCheckButtonState(_pEntry, SvButtonState::Checked);
 }
 
 void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath)
@@ -198,7 +198,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
         //already exists, just select the original one
         if (pCertPath->equals(rPath))
         {
-            m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+            m_pCertPathList->SetCheckButtonState(pEntry, SvButtonState::Checked);
             HandleCheckEntry(pEntry);
             return;
         }
@@ -210,7 +210,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
     pEntry = m_pCertPathList->InsertEntry(sEntry.makeStringAndClear());
     OUString* pCertPath = new OUString(rPath);
     pEntry->SetUserData(pCertPath);
-    m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+    m_pCertPathList->SetCheckButtonState(pEntry, SvButtonState::Checked);
     HandleCheckEntry(pEntry);
 }
 

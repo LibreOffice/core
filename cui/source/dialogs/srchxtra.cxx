@@ -169,7 +169,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
 
             if ( pEntry )
             {
-                m_pAttrLB->SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                m_pAttrLB->SetCheckButtonState( pEntry, bChecked ? SvButtonState::Checked : SvButtonState::Unchecked );
                 pEntry->SetUserData( reinterpret_cast<void*>(nSlot) );
             }
         }

@@ -984,7 +984,7 @@ namespace svx
             DBG_ASSERT( xDict.is(), "-HangulHanjaOptionsDialog::OkHdl(): someone is evaporated..." );
             DBG_ASSERT( pEntry, "-HangulHanjaOptionsDialog::OkHdl(): no one there in list?" );
 
-            bool    bActive = m_pDictsLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
+            bool    bActive = m_pDictsLB->GetCheckButtonState( pEntry ) == SvButtonState::Checked;
             xDict->setActive( bActive );
             Reference< util::XFlushable > xFlush( xDict, uno::UNO_QUERY );
             if( xFlush.is() )
@@ -1180,7 +1180,7 @@ namespace svx
     void HangulHanjaOptionsDialog::AddDict( const OUString& _rName, bool _bChecked )
     {
         SvTreeListEntry*    pEntry = m_pDictsLB->SvTreeListBox::InsertEntry( _rName );
-        m_pDictsLB->SetCheckButtonState( pEntry, _bChecked? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+        m_pDictsLB->SetCheckButtonState( pEntry, _bChecked? SvButtonState::Checked : SvButtonState::Unchecked );
         pEntry->SetUserData( new OUString( _rName ) );
     }
 

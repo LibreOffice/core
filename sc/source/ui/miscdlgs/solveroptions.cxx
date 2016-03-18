@@ -204,7 +204,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
             }
             if ( !bHasData )
                 ScUnoHelpFunctions::SetBoolInAny( rValue,
-                                    m_pLbSettings->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+                                    m_pLbSettings->GetCheckButtonState( pEntry ) == SvButtonState::Checked );
         }
     }
     else

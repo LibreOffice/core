@@ -66,13 +66,13 @@ IMPL_LINK_NOARG_TYPED(SdPageListControl, CheckButtonClickHdl, SvTreeListBox*, vo
 
     while( pEntry )
     {
-        if(pTreeModel->IsAtRootDepth(pEntry) && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
+        if(pTreeModel->IsAtRootDepth(pEntry) && GetCheckButtonState( pEntry ) == SvButtonState::Checked )
             return;
         pEntry = pTreeModel->Next( pEntry );
     }
 
     pEntry = pTreeModel->First();
-    SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+    SetCheckButtonState( pEntry, SvButtonState::Checked );
 }
 
 SdPageListControl::~SdPageListControl()
@@ -125,7 +125,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
         if( pPage->GetPageKind() == PK_STANDARD )
         {
             SvTreeListEntry* pEntry = InsertPage( pPage->GetName() );
-            SetCheckButtonState(pEntry, SvButtonState( SV_BUTTON_CHECKED ) );
+            SetCheckButtonState(pEntry, SvButtonState( SvButtonState::Checked ) );
 
             SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TEXT));
             if(!pTO)
@@ -199,7 +199,7 @@ sal_uInt16 SdPageListControl::GetSelectedPage()
 bool SdPageListControl::IsPageChecked( sal_uInt16 nPage )
 {
     SvTreeListEntry* pEntry = GetModel()->GetEntry(nPage);
-    return pEntry && (GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED);
+    return pEntry && (GetCheckButtonState( pEntry ) == SvButtonState::Checked);
 }
 
 void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )

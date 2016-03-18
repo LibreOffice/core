@@ -132,7 +132,7 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pRadioLB->FirstSelected();
     delete static_cast<OUString*>(pEntry->GetUserData());
-    bool bChecked = m_pRadioLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
+    bool bChecked = m_pRadioLB->GetCheckButtonState( pEntry ) == SvButtonState::Checked;
     sal_uLong nPos = m_pRadioLB->GetEntryPos( pEntry );
     m_pRadioLB->RemoveEntry( pEntry );
     sal_uLong nCnt = m_pRadioLB->GetEntryCount();
@@ -144,7 +144,7 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
         pEntry = m_pRadioLB->GetEntry( nPos );
         if ( bChecked )
         {
-            m_pRadioLB->SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+            m_pRadioLB->SetCheckButtonState( pEntry, SvButtonState::Checked );
             m_pRadioLB->HandleEntryChecked( pEntry );
         }
         else
@@ -269,7 +269,7 @@ OUString SvxMultiPathDialog::GetPath() const
     for ( sal_uLong i = 0; i < m_pRadioLB->GetEntryCount(); ++i )
     {
         SvTreeListEntry* pEntry = m_pRadioLB->GetEntry(i);
-        if ( m_pRadioLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
+        if ( m_pRadioLB->GetCheckButtonState( pEntry ) == SvButtonState::Checked )
             sWritable = *static_cast<OUString*>(pEntry->GetUserData());
         else
         {
@@ -325,7 +325,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
         SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nCount - 1 );
         if ( pEntry )
         {
-            m_pRadioLB->SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+            m_pRadioLB->SetCheckButtonState( pEntry, SvButtonState::Checked );
             m_pRadioLB->HandleEntryChecked( pEntry );
         }
     }

@@ -1261,7 +1261,7 @@ IMPL_LINK_TYPED( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void 
         return;
     SvTreeListEntry* pEntry = pChecks->GetHdlEntry();
     if ( pEntry )
-        maChecks->CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
+        maChecks->CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SvButtonState::Checked ) );
     size_t nNumChecked = maChecks->GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
@@ -1573,7 +1573,7 @@ void ScCheckListBox::Init()
 bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
-    if ( pEntry && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED)
+    if ( pEntry && GetCheckButtonState( pEntry ) == SvButtonState::Checked)
         return true;
     return false;
 }
@@ -1591,8 +1591,7 @@ void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, bool bCheck )
     if ( pParent )
     {
         SetCheckButtonState(
-            pParent, bCheck ? SvButtonState( SV_BUTTON_CHECKED ) :
-                                           SvButtonState( SV_BUTTON_UNCHECKED ) );
+            pParent, bCheck ? SvButtonState::Checked : SvButtonState::Unchecked );
     }
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
     while ( pEntry )
@@ -1621,16 +1620,14 @@ void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
 
             while ( pChild )
             {
-                if ( GetCheckButtonState( pChild ) == SV_BUTTON_CHECKED )
+                if ( GetCheckButtonState( pChild ) == SvButtonState::Checked )
                 {
                     bChildChecked = true;
                     break;
                 }
                 pChild = NextSibling( pChild );
             }
-            SetCheckButtonState(
-                pAncestor, bChildChecked ? SvButtonState( SV_BUTTON_CHECKED ) :
-                                           SvButtonState( SV_BUTTON_UNCHECKED ) );
+            SetCheckButtonState( pAncestor, bChildChecked ? SvButtonState::Checked : SvButtonState::Unchecked );
             pAncestor = GetParent(pAncestor);
         }
     }
@@ -1647,7 +1644,7 @@ void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pPa
                 sName);
 
             SetCheckButtonState(
-                pEntry, bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
+                pEntry, bCheck ? SvButtonState::Checked : SvButtonState::Unchecked);
         }
         else
             CheckEntry( pEntry, bCheck );
@@ -1658,7 +1655,7 @@ void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pPa
 
 void ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const
 {
-    if ( pParent && GetCheckButtonState( pParent ) == SV_BUTTON_CHECKED  )
+    if ( pParent && GetCheckButtonState( pParent ) == SvButtonState::Checked  )
         nCount++;
     // Iterate over the children
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
@@ -1698,9 +1695,9 @@ void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListEntry* pEntry = GetCurEntry();
         if ( pEntry )
         {
-            bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            bool bCheck = ( GetCheckButtonState( pEntry ) == SvButtonState::Checked );
             CheckEntry( pEntry, !bCheck );
-            if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
+            if ( bCheck != ( GetCheckButtonState( pEntry ) == SvButtonState::Checked ) )
                 CheckButtonHdl();
         }
     }
@@ -1762,7 +1759,7 @@ void ScCheckListMenuWindow::initMembers()
                 aLabel);
 
             maChecks->SetCheckButtonState(
-                pEntry, maMembers[i].mbVisible ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
+                pEntry, maMembers[i].mbVisible ? SvButtonState::Checked : SvButtonState::Unchecked);
         }
 
         if (maMembers[i].mbVisible)

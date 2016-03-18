@@ -229,15 +229,15 @@ void CheckBox::CheckEntryPos( sal_uLong nPos )
     {
         SvTreeListEntry* pEntry = GetEntry( nPos );
 
-        if ( GetCheckButtonState( pEntry ) != SV_BUTTON_CHECKED )
-            SetCheckButtonState( pEntry, SvButtonState(SV_BUTTON_CHECKED) );
+        if ( GetCheckButtonState( pEntry ) != SvButtonState::Checked )
+            SetCheckButtonState( pEntry, SvButtonState::Checked );
     }
 }
 
 bool CheckBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
-        return GetCheckButtonState(GetEntry(nPos)) == SV_BUTTON_CHECKED;
+        return GetCheckButtonState(GetEntry(nPos)) == SvButtonState::Checked;
     return false;
 }
 

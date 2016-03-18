@@ -79,10 +79,10 @@ void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
         if(pCurrentHandlerEntry)
         {
             SvButtonState eState = GetCheckButtonState( pCurrentHandlerEntry);
-            if(eState == SV_BUTTON_CHECKED)
-                SetCheckButtonState( pCurrentHandlerEntry, SV_BUTTON_UNCHECKED);
+            if(eState == SvButtonState::Checked)
+                SetCheckButtonState( pCurrentHandlerEntry, SvButtonState::Unchecked);
             else
-                SetCheckButtonState( pCurrentHandlerEntry, SV_BUTTON_CHECKED);
+                SetCheckButtonState( pCurrentHandlerEntry, SvButtonState::Checked);
 
             CheckButtonHdl();
         }
@@ -108,10 +108,10 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
     while (pChildLoop)
     {
         SvButtonState eChildState = implDetermineState(pChildLoop);
-        if (SV_BUTTON_TRISTATE == eChildState)
+        if (SvButtonState::Tristate == eChildState)
             break;
 
-        if (SV_BUTTON_CHECKED == eChildState)
+        if (SvButtonState::Checked == eChildState)
             ++nCheckedChildren;
         ++nChildrenOverall;
 
@@ -121,7 +121,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
     if (pChildLoop)
     {
         // we did not finish the loop because at least one of the children is in tristate
-        eState = SV_BUTTON_TRISTATE;
+        eState = SvButtonState::Tristate;
 
         // but this means that we did not finish all the siblings of pChildLoop,
         // so their checking may be incorrect at the moment
@@ -138,13 +138,13 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
             // we have at least one child checked
             if (nCheckedChildren != nChildrenOverall)
                 // not all children are checked
-                eState = SV_BUTTON_TRISTATE;
+                eState = SvButtonState::Tristate;
             else
                 // all children are checked
-                eState = SV_BUTTON_CHECKED;
+                eState = SvButtonState::Checked;
         else
             // no children are checked
-            eState = SV_BUTTON_UNCHECKED;
+            eState = SvButtonState::Unchecked;
 
     // finally set the entry to the state we just determined
     SetCheckButtonState(_pEntry, eState);

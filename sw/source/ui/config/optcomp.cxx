@@ -107,7 +107,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
         SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
         {
-            m_pOptionsLB->SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
+            m_pOptionsLB->SetCheckButtonState( pEntry, SvButtonState::Unchecked );
         }
     }
     m_sUserEntry = m_pFormattingLB->GetEntry(m_pFormattingLB->GetEntryCount()-1);
