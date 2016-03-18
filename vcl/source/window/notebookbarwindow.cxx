@@ -66,4 +66,15 @@ void NotebookBarWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHei
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
+void NotebookBarWindow::StateChanged(StateChangedType nType)
+{
+    if (nType == StateChangedType::Visible)
+    {
+        // visibility changed, update the container
+        GetParent()->Resize();
+    }
+
+    Control::StateChanged(nType);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
