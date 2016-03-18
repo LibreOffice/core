@@ -143,7 +143,12 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
         return;
 
     OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
+
+    if ( searchTerm.startsWith( "https://addons.mozilla.org/en-US/firefox/addon" ) )
+        m_rSearchThread = new SearchAndParseThread( this, searchTerm, true );
+    else
+        m_rSearchThread = new SearchAndParseThread( this, rSearchURL, false );
+
     m_rSearchThread->launch();
 }
 
@@ -153,7 +158,7 @@ IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
 
     if( !aSelectedPersona.isEmpty() )
     {
-        m_rSearchThread = new SearchAndParseThread( this, aSelectedPersona );
+        m_rSearchThread = new SearchAndParseThread( this, aSelectedPersona, false );
         m_rSearchThread->launch();
     }
 
@@ -248,6 +253,7 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     // persona
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
+    get( m_pAppliedThemeLabel, "applied_theme" );
 
     get( m_pOwnPersona, "own_persona" );
     m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
@@ -271,6 +277,7 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
 
     get ( m_pExtensionLabel, "extensions_label" );
 
+    CheckAppliedTheme();
     LoadDefaultImages();
     LoadExtensionThemes();
 }
@@ -359,7 +366,30 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet * )
 void SvxPersonalizationTabPage::SetPersonaSettings( const OUString& aPersonaSettings )
 {
     m_aPersonaSettings = aPersonaSettings;
+    ShowAppliedThemeLabel();
     m_pOwnPersona->Check();
+}
+
+void SvxPersonalizationTabPage::CheckAppliedTheme()
+{
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    OUString aPersona( "default" ), aPersonaSetting;
+    if ( xContext.is())
+    {
+        aPersona = officecfg::Office::Common::Misc::Persona::get( xContext );
+        m_aPersonaSettings = officecfg::Office::Common::Misc::PersonaSettings::get( xContext );
+    }
+    if(aPersona == "own")
+        ShowAppliedThemeLabel();
+}
+
+void SvxPersonalizationTabPage::ShowAppliedThemeLabel()
+{
+    sal_Int32 nNameIndex = m_aPersonaSettings.indexOf( '/' );
+    OUString aName = m_aPersonaSettings.copy( 0, nNameIndex );
+    SolarMutexGuard aGuard;
+    m_pAppliedThemeLabel->Show();
+    m_pAppliedThemeLabel->SetText( aName );
 }
 
 void SvxPersonalizationTabPage::LoadDefaultImages()
@@ -548,12 +578,13 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
 }
 
 SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
-                          const OUString& rURL ) :
+                          const OUString& rURL, bool rDirectURL ) :
             Thread( "cuiPersonasSearchThread" ),
             m_pPersonaDialog( pDialog ),
             m_aURL( rURL ),
             m_bExecute( true )
 {
+    m_bDirectURL = rDirectURL;
 }
 
 SearchAndParseThread::~SearchAndParseThread()
@@ -562,7 +593,7 @@ SearchAndParseThread::~SearchAndParseThread()
 
 void SearchAndParseThread::execute()
 {
-    if( m_aURL.startsWith( "https://" ) )
+    if( m_aURL.startsWith( "https://" ) && !m_bDirectURL )
     {
         m_pPersonaDialog->ClearSearchResults();
         OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) );
@@ -633,6 +664,46 @@ void SearchAndParseThread::execute()
         m_pPersonaDialog->setOptimalLayoutSize();
     }
 
+    else if( m_aURL.startsWith( "https://" ) && m_bDirectURL )
+    {
+        OUString sPreviewFile, aPersonaSetting;
+        GraphicFilter aFilter;
+        Graphic aGraphic;
+        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) );
+        m_pPersonaDialog->SetProgress( sProgress );
+
+        bool aValidURL = getPreviewFile( m_aURL, &sPreviewFile, &aPersonaSetting );
+
+        if( !aValidURL )
+        {
+            sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
+            sProgress = sProgress.replaceAll("%1", m_aURL);
+            m_pPersonaDialog->SetProgress(sProgress);
+            return;
+        }
+
+        INetURLObject aURLObj( sPreviewFile );
+        aFilter.ImportGraphic( aGraphic, aURLObj );
+        Bitmap aBmp = aGraphic.GetBitmap();
+
+        if( !m_bExecute )
+            return;
+
+        SolarMutexGuard aGuard;
+        m_pPersonaDialog->SetImages( Image( aBmp ), 0 );
+        m_pPersonaDialog->setOptimalLayoutSize();
+        m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
+
+        if( !m_bExecute )
+            return;
+
+        SolarMutexGuard aGuard_new;
+        sProgress.clear();
+        m_pPersonaDialog->SetProgress( sProgress );
+        m_pPersonaDialog->setOptimalLayoutSize();
+
+    }
+
     else
     {
         OUString sProgress( CUI_RES( RID_SVXSTR_APPLYPERSONA ) );
@@ -701,11 +772,11 @@ void SearchAndParseThread::execute()
     }
 }
 
-void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
+bool SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
     if ( !xFileAccess.is() )
-        return;
+        return false;
 
     uno::Reference< io::XInputStream > xStream;
     try {
@@ -716,10 +787,10 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
         OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHERROR ) );
         sProgress = sProgress.replaceAll("%1", m_aURL);
         m_pPersonaDialog->SetProgress( sProgress );
-        return;
+        return false;
     }
     if ( !xStream.is() )
-        return;
+        return false;
 
     // read the persona specification
     // NOTE: Parsing for real is an overkill here; and worse - I tried, and
@@ -741,7 +812,7 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
     OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
 
     if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
-        return;
+        return false;
 
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
@@ -757,10 +828,11 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
     }
     catch ( const uno::Exception & )
     {
-        return;
+        return false;
     }
     *pPreviewFile = gallery + aPreviewFile;
     *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
