@@ -28,10 +28,8 @@ namespace connectivity
 {
     namespace ado
     {
-        typedef sdbcx::OIndex OIndex_ADO;
-
         class OConnection;
-        class OAdoIndex :    public OIndex_ADO
+        class OAdoIndex : public sdbcx::OIndex
         {
             WpADOIndex      m_aIndex;
             OConnection*    m_pConnection;
