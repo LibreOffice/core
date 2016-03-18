@@ -220,8 +220,32 @@ void ScTiledRenderingTest::testRowColumnSelections()
 
     // TODO check that we really selected what we wanted here
 
-    // TODO: Add test for negative selection: .uno:SelectRow/Column on already
-    // selected row/column should deselect it.
+    // Test for deselection of already selected rows
+    // First Deselect Row 13 because copy doesn't work for multiple selections
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int32>(13 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+    // Deselect row 10
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int32>(10 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+    // Click at row 6 holding shift
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int32>(6 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+    comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+    //  only row 5 should remain selected
+    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n";
+    CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
