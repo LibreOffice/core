@@ -91,9 +91,9 @@ SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv
 ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                     const EditTextObject* pCenter,
                                                     const EditTextObject* pRight ) :
-    mxLeftText(new ScHeaderFooterTextObj(this, SC_HDFT_LEFT, pLeft)),
-    mxCenterText(new ScHeaderFooterTextObj(this, SC_HDFT_CENTER, pCenter)),
-    mxRightText(new ScHeaderFooterTextObj(this, SC_HDFT_RIGHT, pRight))
+    mxLeftText(new ScHeaderFooterTextObj(this, ScHeaderFooterPart::LEFT, pLeft)),
+    mxCenterText(new ScHeaderFooterTextObj(this, ScHeaderFooterPart::CENTER, pCenter)),
+    mxRightText(new ScHeaderFooterTextObj(this, ScHeaderFooterPart::RIGHT, pRight))
 {
 }
 
@@ -182,7 +182,7 @@ void ScHeaderFooterContentObj::dispose()
 }
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
-    rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    rtl::Reference<ScHeaderFooterContentObj> const & rContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
     rContentObj( rContent ),
     nPart( nP ),
@@ -257,7 +257,7 @@ void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 }
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
-    rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    rtl::Reference<ScHeaderFooterContentObj> const & rContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     aTextData(rContent, nP, pTextObj)
 {
     //  ScHeaderFooterTextData acquires rContent
@@ -325,15 +325,21 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
     OUString aRet;
     const EditTextObject* pData;
 
-    sal_uInt16 nPart = aTextData.GetPart();
     rtl::Reference<ScHeaderFooterContentObj> rContentObj = aTextData.GetContentObj();
 
-    if (nPart == SC_HDFT_LEFT)
-        pData = rContentObj->GetLeftEditObject();
-    else if (nPart == SC_HDFT_CENTER)
-        pData = rContentObj->GetCenterEditObject();
-    else
-        pData = rContentObj->GetRightEditObject();
+    switch ( aTextData.GetPart() )
+    {
+        case ScHeaderFooterPart::LEFT:
+            pData = rContentObj->GetLeftEditObject();
+        break;
+        case ScHeaderFooterPart::CENTER:
+            pData = rContentObj->GetCenterEditObject();
+        break;
+        case ScHeaderFooterPart::RIGHT:
+            pData = rContentObj->GetRightEditObject();
+        break;
+    }
+
     if (pData)
     {
         // for pure text, no font info is needed in pool defaults
@@ -420,28 +426,19 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.nEndPos = aSelection.nStartPos + 1;
 
             uno::Reference<text::XTextRange> xTextRange;
-            switch (aTextData.GetPart())
+            switch ( aTextData.GetPart() )
             {
-                case SC_HDFT_LEFT:
-                {
-                    uno::Reference<text::XTextRange> xTemp(
-                        aTextData.GetContentObj()->getLeftText(), uno::UNO_QUERY);
-                    xTextRange = xTemp;
-                }
+                case ScHeaderFooterPart::LEFT:
+                    xTextRange = uno::Reference<text::XTextRange>(
+                                  aTextData.GetContentObj()->getLeftText(), uno::UNO_QUERY);
                 break;
-                case SC_HDFT_CENTER:
-                {
-                    uno::Reference<text::XTextRange> xTemp(
-                        aTextData.GetContentObj()->getCenterText(), uno::UNO_QUERY);
-                    xTextRange = xTemp;
-                }
+                case ScHeaderFooterPart::CENTER:
+                    xTextRange = uno::Reference<text::XTextRange>(
+                                  aTextData.GetContentObj()->getCenterText(), uno::UNO_QUERY);
                 break;
-                case SC_HDFT_RIGHT:
-                {
-                    uno::Reference<text::XTextRange> xTemp(
-                        aTextData.GetContentObj()->getRightText(), uno::UNO_QUERY);
-                    xTextRange = xTemp;
-                }
+                case ScHeaderFooterPart::RIGHT:
+                    xTextRange = uno::Reference<text::XTextRange>(
+                                  aTextData.GetContentObj()->getRightText(), uno::UNO_QUERY);
                 break;
             }
 
