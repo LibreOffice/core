@@ -1494,7 +1494,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     bool isMissingHatching(false);
     bool isMissingGradient(false);
     bool isMissingBitmap(false);
-    drawing::FillStyle eXFS;
+    drawing::FillStyle eXFS = drawing::FillStyle_NONE;
     if( rAttrs->GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
     {
         eXFS = (drawing::FillStyle) ( static_cast<const XFillStyleItem&>( rAttrs->
@@ -1796,7 +1796,8 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
         ClickBitmapHdl_Impl();
 
     m_pTypeLB->SaveValue();
-    m_pLbColor->SaveValue();
+    if(eXFS == drawing::FillStyle_SOLID)
+        m_pLbColor->SaveValue();
     if (!isMissingGradient)
         m_pLbGradient->SaveValue();
     if (!isMissingHatching)
