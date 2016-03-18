@@ -2581,9 +2581,9 @@ SfxBoolItem InfoBar SID_INFOBAR
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_DOCUMENT;
 ]
 
