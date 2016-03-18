@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_301d6910",
+        "filename": "sfx2/source/dialog/dialog.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-18T13:25:09Z",
+      "side": 1,
+      "message": "I would write \"Notebookbar\" instead of \"NotebookBar\" to keep in line with Sidebar.",
+      "revId": "50149f9791588cefac37bfb50317c35c3b4f4f2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
