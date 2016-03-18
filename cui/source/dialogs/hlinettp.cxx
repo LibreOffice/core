@@ -46,7 +46,9 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     get(m_pCbbTarget, "target");
     m_pCbbTarget->SetSmartProtocol(INetProtocol::Http);
     get(m_pBtBrowse, "browse");
-    m_pBtBrowse->SetModeImage(Image(CUI_RES (RID_SVXBMP_BROWSE)));
+    BitmapEx b = Image(CUI_RES (RID_SVXBMP_BROWSE)).GetBitmapEx();
+    b.Scale(2,2,BmpScaleFlag::Fast);
+    m_pBtBrowse->SetModeImage(Image(b));
     get(m_pFtLogin, "login_label");
     get(m_pEdLogin, "login");
     get(m_pFtPassword, "password_label");

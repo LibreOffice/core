@@ -91,27 +91,42 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     SetUniqueId( HID_HYPERLINK_DIALOG );
     mbGrabFocus = true;
     // insert pages
-    Image aImage;
-    OUString aStrTitle;
     SvxIconChoiceCtrlEntry *pEntry;
 
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, SvxHyperlinkMailTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, SvxHyperlinkDocTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-    aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
+    sal_Int32 DpiScale = GetDPIScaleFactor();
+    Image imgList[4];
+    OUString titleList[4];
+    OUString helpTextList[4];
+    sal_uInt16 IDList[4];
+    CreatePage pageList[4];
 
+    titleList[0] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
+    titleList[1] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
+    titleList[2] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP  );
+    titleList[3] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
+    imgList[0] = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
+    imgList[1] = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
+    imgList[2] = Image( CUI_RES ( RID_SVXBMP_HLDOCTP  ) );
+    imgList[3] = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
+    helpTextList[0] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP );
+    helpTextList[1] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP );
+    helpTextList[2] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP  );
+    helpTextList[3] = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP );
+    IDList[0] = RID_SVXPAGE_HYPERLINK_INTERNET;
+    IDList[1] = RID_SVXPAGE_HYPERLINK_MAIL;
+    IDList[2] = RID_SVXPAGE_HYPERLINK_DOCUMENT;
+    IDList[3] = RID_SVXPAGE_HYPERLINK_NEWDOCUMENT;
+    pageList[0] = SvxHyperlinkInternetTp::Create;
+    pageList[1] = SvxHyperlinkMailTp::Create;
+    pageList[2] = SvxHyperlinkDocTp::Create;
+    pageList[3] = SvxHyperlinkNewDocTp::Create;
+    for (short i = 0; i < 4; i++){
+        BitmapEx b = imgList[i].GetBitmapEx();
+        b.Scale(DpiScale, DpiScale, BmpScaleFlag::Fast);
+        imgList[i] = Image(b);
+        pEntry = AddTabPage ( IDList[i], titleList[i], imgList[i], pageList[i]);
+        pEntry->SetQuickHelpText( helpTextList[i] );
+    }
     // set OK/Cancel - button
     GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
