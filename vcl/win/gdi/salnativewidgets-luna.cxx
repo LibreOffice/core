@@ -666,9 +666,6 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     }
     if( nType == CTRL_SPINBOX )
     {
-        // decrease spinbutton rects a little
-        //rc.right--;
-        //rc.bottom--;
         if( nPart == PART_ALL_BUTTONS )
         {
             if( aValue.getType() == CTRL_SPINBUTTONS )
