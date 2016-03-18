@@ -143,7 +143,8 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
                                         bool bDeep );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode );
+                                 sal_uInt16 nMode,
+                                 const OUString *pGraphicName );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
                                      sal_uInt16 nMode );
@@ -535,7 +536,7 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
     }
 }
 
-void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
+void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
 {
     m_bFirstCSS1Rule = true;
 
@@ -604,7 +605,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
     {
         const SwTextFormatColl* pColl = (*pDoc->GetTextFormatColls())[i];
         sal_uInt16 nPoolId = pColl->GetPoolFormatId();
-        if( nPoolId == RES_POOLCOLL_TEXT ||
+        if( !bUsed || nPoolId == RES_POOLCOLL_TEXT ||
             pDoc->IsUsed( *pColl ) )
             OutCSS1_SwFormat( *this, *pColl, &pDoc->getIDocumentStylePoolAccess(), m_pTemplate );
     }
@@ -615,7 +616,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
     {
         const SwCharFormat *pCFormat = (*pDoc->GetCharFormats())[i];
         sal_uInt16 nPoolId = pCFormat->GetPoolFormatId();
-        if( nPoolId == RES_POOLCHR_INET_NORMAL ||
+        if( !bUsed || nPoolId == RES_POOLCHR_INET_NORMAL ||
             nPoolId == RES_POOLCHR_INET_VISIT ||
             pDoc->IsUsed( *pCFormat ) )
             OutCSS1_SwFormat( *this, *pCFormat, &pDoc->getIDocumentStylePoolAccess(), m_pTemplate );
@@ -1833,7 +1834,8 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
     return rWrt;
 }
 
-Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
+Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet,
+                                    const OUString& rEmbeddedGraphicName )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -1848,7 +1850,7 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                &pItem ) )
     {
-        OutCSS1_SvxBrush( rWrt, *pItem, CSS1_BACKGROUND_PAGE );
+        OutCSS1_SvxBrush( rWrt, *pItem, CSS1_BACKGROUND_PAGE, &rEmbeddedGraphicName );
     }
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BOX, false,
@@ -1917,7 +1919,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
                                    CSS1_OUTMODE_TABLEBOX );
-    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE, 0 );
 
     if( !rHTMLWrt.m_bFirstCSS1Property )
         rWrt.Strm().WriteChar( '\"' );
@@ -2164,7 +2166,7 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE );
+        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE, 0 );
 
     if( IsHTMLMode( HTMLMODE_PRINT_EXT ) )
         OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, false );
@@ -2196,7 +2198,7 @@ void SwHTMLWriter::OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameForm
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION );
+        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION, 0 );
 
     if (pCol)
     {
@@ -2218,7 +2220,7 @@ static bool OutCSS1_FrameFormatBrush( SwHTMLWriter& rWrt,
         nullptr != rBrushItem.GetGraphicLink() ||
         0 != rBrushItem.GetGraphicPos() )
     {
-        OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY );
+        OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY, 0 );
         bWritten = true;
     }
     return bWritten;
@@ -3196,12 +3198,13 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
 // Wrapper for OutCSS1_SfxItemSet etc.
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, 0 );
     return rWrt;
 }
 
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode)
+                                 sal_uInt16 nMode,
+                                 const OUString* pGraphicName)
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -3214,7 +3217,15 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     // start getting a few values
 //  const Brush &rBrush = static_cast<const SvxBrushItem &>(rHt).GetBrush();
     const Color & rColor = static_cast<const SvxBrushItem &>(rHt).GetColor();
+    OUString aLink = pGraphicName ? *pGraphicName
+                            : ((const SvxBrushItem &)rHt).GetGraphicLink();
     SvxGraphicPosition ePos = static_cast<const SvxBrushItem &>(rHt).GetGraphicPos();
+    if( CSS1_BACKGROUND_PAGE==nMode && !rHTMLWrt.mbEmbedImages )
+    {
+        // page style images are exported if not tiled
+        if( aLink.isEmpty() || GPOS_TILED==ePos )
+            return rWrt;
+    }
 
     // get the color
     bool bColor = false;
@@ -3229,24 +3240,35 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // and now the Graphic
     OUString aGraphicInBase64;
+    OUString aGraphicAsLink;
 
     // Embedded Grafic -> export WriteEmbedded
-    const Graphic* pGrf = static_cast<const SvxBrushItem &>(rHt).GetGraphic();
-    if( pGrf )
+    const Graphic* pGrf = 0;
+    if( rHTMLWrt.mbEmbedImages || aLink.isEmpty())
     {
-        if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
+        pGrf = static_cast<const SvxBrushItem &>(rHt).GetGraphic();
+        if( pGrf )
         {
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
+            {
+                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            }
         }
+        aLink.clear();
     }
-
+    else if( !pGraphicName && rHTMLWrt.m_bCfgCpyLinkedGrfs )
+    {
+        aGraphicAsLink = aLink;
+        rWrt.CopyLocalFileToINet( aGraphicAsLink );
+        aLink = aGraphicAsLink;
+    }
     // In tables we only export something if there is a Graphic
-    if( CSS1_BACKGROUND_TABLE==nMode && !pGrf )
+    if( CSS1_BACKGROUND_TABLE==nMode && !pGrf && !aLink.isEmpty())
         return rWrt;
 
     // if necessary, add the orientation of the Graphic
     const sal_Char *pRepeat = nullptr, *pHori = nullptr, *pVert = nullptr;
-    if( pGrf )
+    if( pGrf || !aLink.isEmpty() )
     {
         if( GPOS_TILED==ePos )
         {
@@ -3309,7 +3331,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // now build the string
     OUString sOut;
-    if( !pGrf && !bColor )
+    if( !pGrf && aLink.isEmpty() && !bColor )
     {
         // no color and no Link, but a transparent Brush
         if( bTransparent && CSS1_BACKGROUND_FLY != nMode )
@@ -3323,13 +3345,22 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             sOut += OStringToOUString(sTmp, RTL_TEXTENCODING_ASCII_US);
         }
 
-        if( pGrf )
+        if( pGrf || !aLink.isEmpty() )
         {
             if( bColor )
                 sOut += " ";
 
-            sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US) +
-                "(\'" OOO_STRING_SVTOOLS_HTML_O_data ":" + aGraphicInBase64 + "\')";
+            if(pGrf)
+            {
+                sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US) +
+                    "(\'" OOO_STRING_SVTOOLS_HTML_O_data ":" + aGraphicInBase64 + "\')";
+            }
+            else
+            {
+                sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US)+
+                     "(" +  URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
+                             aLink) + ")";
+            }
 
             if( pRepeat )
             {

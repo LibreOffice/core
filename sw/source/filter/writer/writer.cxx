@@ -63,6 +63,7 @@ struct Writer_Impl
 {
     SvStream * m_pStream;
 
+    std::auto_ptr< std::map<OUString, OUString> > pFileNameMap;
     std::vector<const SvxFontItem*> aFontRemoveLst;
     SwBookmarkNodeTable aBkmkNodePos;
 
@@ -301,6 +302,59 @@ sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, cons
     return ERR_SWG_WRITE_ERROR;
 }
 
+bool Writer::CopyLocalFileToINet( OUString& rFileNm )
+{
+    if( !pOrigFileName )                // can be happen, by example if we
+        return false;                   // write into the clipboard
+
+    bool bRet = false;
+    INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
+
+// this is our old without the Mail-Export
+    if( ! ( INetProtocol::File == aFileUrl.GetProtocol() &&
+            INetProtocol::File != aTargetUrl.GetProtocol() &&
+            INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
+            INetProtocol::VndSunStarWebdav >= aTargetUrl.GetProtocol() ) )
+        return bRet;
+
+    if (m_pImpl->pFileNameMap.get())
+    {
+        // has the file been moved?
+        std::map<OUString, OUString>::iterator it = m_pImpl->pFileNameMap->find( rFileNm );
+        if ( it != m_pImpl->pFileNameMap->end() )
+        {
+            rFileNm = it->second;
+            return true;
+        }
+    }
+    else
+    {
+        m_pImpl->pFileNameMap.reset( new std::map<OUString, OUString>() );
+    }
+
+    OUString aSrc  = rFileNm;
+    OUString aDest = aTargetUrl.GetPartBeforeLastName();
+    aDest += OUString(aFileUrl.GetName());
+
+    SfxMedium aSrcFile( aSrc, StreamMode::READ );
+    SfxMedium aDstFile( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
+
+    aDstFile.GetOutStream()->WriteStream( *aSrcFile.GetInStream() );
+
+    aSrcFile.Close();
+    aDstFile.Commit();
+
+    bRet = 0 == aDstFile.GetError();
+
+    if( bRet )
+    {
+        m_pImpl->pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
+        rFileNm = aDest;
+    }
+
+    return bRet;
+}
+
 void Writer::PutNumFormatFontsInAttrPool()
 {
     // then there are a few fonts in the NumRules
@@ -337,14 +391,17 @@ void Writer::PutNumFormatFontsInAttrPool()
                 }
 }
 
-void Writer::PutEditEngFontsInAttrPool()
+void Writer::PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL )
 {
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
     {
         _AddFontItems( rPool, EE_CHAR_FONTINFO );
-        _AddFontItems( rPool, EE_CHAR_FONTINFO_CJK );
-        _AddFontItems( rPool, EE_CHAR_FONTINFO_CTL );
+        if( bIncl_CJK_CTL )
+        {
+            _AddFontItems( rPool, EE_CHAR_FONTINFO_CJK );
+            _AddFontItems( rPool, EE_CHAR_FONTINFO_CTL );
+        }
     }
 }
 

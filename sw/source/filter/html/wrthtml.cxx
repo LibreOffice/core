@@ -155,6 +155,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_bCfgNetscape4( false )
     , mbSkipImages(false)
     , mbSkipHeaderFooter(false)
+    , mbEmbedImages(false)
     , m_bCfgPrintLayout( false )
     , m_bParaDotLeaders( false )
 {
@@ -185,6 +186,10 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     else if (sFilterOptions == "SkipHeaderFooter")
     {
         mbSkipHeaderFooter = true;
+    }
+    else if (sFilterOptions == "EmbedImages" )
+    {
+        mbEmbedImages = true;
     }
 }
 
@@ -1057,8 +1062,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         OutDirection( m_nDirection );
 
         if( m_bCfgOutStyles )
-            OutCSS1_BodyTagStyleOpt( *this, rItemSet );
-
+        {
+            OUString dummy;
+            OutCSS1_BodyTagStyleOpt( *this, rItemSet, dummy );
+        }
         // Events anhaengen
         if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
             OutBasicBodyEvents();
@@ -1230,15 +1237,31 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
 
     OUString aGraphicInBase64;
     const Graphic* pGrf = pBrushItem->GetGraphic();
-    if( pGrf )
+    OUString GraphicURL = pBrushItem->GetGraphicLink();
+    if( mbEmbedImages || GraphicURL.isEmpty())
     {
-        if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
+        if( pGrf )
         {
-            m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
+            {
+                m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            }
+            Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
+            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_data ":" );
+            HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64, m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '\"' );
         }
-        Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
-        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_data ":" );
-        HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64, m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '\"' );
+    }
+    else
+    {
+        if( m_bCfgCpyLinkedGrfs )
+        {
+            CopyLocalFileToINet( GraphicURL );
+        }
+        OUString s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), GraphicURL));
+        Strm().WriteCharPtr(" " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
+        HTMLOutFuncs::Out_String( Strm(), s, m_eDestEnc, &m_aNonConvertableCharacters );
+        Strm().WriteCharPtr("\"");
+
     }
 }
 
