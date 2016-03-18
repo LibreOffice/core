@@ -4462,6 +4462,14 @@ bool ScCompiler::HandleRange()
             PushTokenArray( pNew, true );
             if( pRangeData->HasReferences() )
             {
+                // Relative sheet references in sheet-local named expressions
+                // shall still point to the same sheet as if used on the
+                // original sheet, not shifted to the current position where
+                // they are used.
+                SCTAB nSheetTab = mpToken->GetSheet();
+                if (nSheetTab >= 0 && nSheetTab != aPos.Tab())
+                    AdjustSheetLocalNameRelReferences( nSheetTab - aPos.Tab());
+
                 SetRelNameReference();
                 MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             }
@@ -4524,6 +4532,23 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             return false;
     }
     return true;
+}
+
+void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
+{
+    pArr->Reset();
+    for (formula::FormulaToken* t = pArr->GetNextReference(); t; t = pArr->GetNextReference())
+    {
+        ScSingleRefData& rRef1 = *t->GetSingleRef();
+        if (rRef1.IsTabRel())
+            rRef1.IncTab( nDelta);
+        if ( t->GetType() == svDoubleRef )
+        {
+            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+            if (rRef2.IsTabRel())
+                rRef2.IncTab( nDelta);
+        }
+    }
 }
 
 // reference of named range with relative references

@@ -324,6 +324,7 @@ private:
     bool IsBoolean( const OUString& );
     void AutoCorrectParsedSymbol();
 
+    void AdjustSheetLocalNameRelReferences( SCTAB nDelta );
     void SetRelNameReference();
 
     /** Obtain range data for ocName token, global or sheet local.
