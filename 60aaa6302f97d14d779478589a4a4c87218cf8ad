@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_bc9495e8",
+        "filename": "sc/source/filter/excel/xlpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-18T06:21:02Z",
+      "side": 1,
+      "message": "I don\u0027t see the benefit of using constexpr for a global variable declaration over just using const.\n\nMaybe I am missing something?",
+      "revId": "60aaa6302f97d14d779478589a4a4c87218cf8ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
