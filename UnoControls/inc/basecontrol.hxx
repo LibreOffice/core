@@ -83,6 +83,7 @@
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/mutex.hxx>
+#include <tools/colordata.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
 
@@ -95,11 +96,6 @@ namespace com { namespace sun { namespace star { namespace uno {
 //  "namespaces"
 
 namespace unocontrols{
-
-//  macros
-
-#define TRGB_COLORDATA(TRANSPARENCE,RED,GREEN,BLUE) \
-        ((sal_Int32)(((sal_uInt32)((sal_uInt8)(BLUE))))|(((sal_uInt32)((sal_uInt8)(GREEN)))<<8)|(((sal_uInt32)((sal_uInt8)(RED)))<<16)|(((sal_uInt32)((sal_uInt8)(TRANSPARENCE)))<<24))
 
 //  structs
 
