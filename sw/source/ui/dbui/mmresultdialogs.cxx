@@ -21,6 +21,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <mailconfigpage.hxx>
+#include <mmgreetingspage.hxx>
 #include <swmessdialog.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -872,17 +873,14 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
     }
 }
 
-IMPL_STATIC_LINK_TYPED(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, /*pButton*/, void)
+IMPL_LINK_TYPED(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, pButton, void)
 {
-    /* TODO FIXME this currently tries to connect to the wizard, fix that, or
-       instantiate it when needed or something
-    VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton, m_pWizard);
+    VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton);
     pDlg->SetBody(m_sBody);
     if(RET_OK == pDlg->Execute())
     {
         m_sBody = pDlg->GetBody();
     }
-    */
 }
 
 // Send documents as e-mail

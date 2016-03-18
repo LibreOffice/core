@@ -57,6 +57,13 @@ protected:
     bool                m_bIsTabPage;
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
+    /// The mail merge state, available even when m_pWizard is nullptr.
+    SwMailMergeConfigItem& m_rConfigItem;
+
+    SwGreetingsHandler(SwMailMergeConfigItem& rConfigItem)
+        : m_rConfigItem(rConfigItem)
+    {
+    }
 
     ~SwGreetingsHandler() {}
 
@@ -106,7 +113,7 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
     DECL_LINK_TYPED(ContainsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(OKHdl, Button*, void);
 public:
-    SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* pWizard);
+    SwMailBodyDialog(vcl::Window* pParent);
     virtual ~SwMailBodyDialog();
     virtual void dispose() override;
 
