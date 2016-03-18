@@ -2867,7 +2867,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
             case SID_ATTR_PAGE_ON:
             case RES_HEADER_FOOTER_EAT_SPACING:
                 // these slots are exclusive to Header/Footer, thus this is an error
-                throw beans::UnknownPropertyException(OUString("Unknown property: ") + rPropName, static_cast<cppu::OWeakObject*>(this));
+                throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast<cppu::OWeakObject*>(this));
             case FN_UNO_HEADER:
             case FN_UNO_HEADER_LEFT:
             case FN_UNO_HEADER_RIGHT:
