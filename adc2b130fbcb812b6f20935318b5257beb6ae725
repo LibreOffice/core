@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_b0d79922",
+        "filename": "cui/source/dialogs/hldocntp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000579
+      },
+      "writtenOn": "2016-03-18T13:46:18Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be hard-coded to 2, but should use the DPI scale factor.",
+      "range": {
+        "startLine": 109,
+        "startChar": 12,
+        "endLine": 109,
+        "endChar": 14
+      },
+      "revId": "adc2b130fbcb812b6f20935318b5257beb6ae725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
