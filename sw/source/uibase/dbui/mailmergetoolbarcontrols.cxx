@@ -109,7 +109,7 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
 {
     VclPtr<CheckBox> m_pExcludeCheckbox;
 
-    DECL_LINK_TYPED(ExcludeHdl, CheckBox&, void);
+    DECL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, void);
 
 public:
     MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
@@ -274,7 +274,7 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pExcludeCheckbox));
 }
 
-IMPL_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
+IMPL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
 {
     SwView* pView = ::GetActiveView();
     SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
