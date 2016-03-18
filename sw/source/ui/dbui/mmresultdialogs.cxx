@@ -1049,6 +1049,10 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
         aOpt.SetParaFlags( LINEEND_CR );
         aOpt.WriteUserData( sFilterOptions );
     }
+    else if(MM_DOCTYPE_HTML == nDocType)
+    {
+        sFilterOptions = "EmbedImages";
+    }
     OUString sTargetTempURL = URIHelper::SmartRel2Abs(
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
@@ -1106,11 +1110,12 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
                     URIHelper::GetMaybeFileHdl()) );
 
         {
-            uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
+            bool withFilterOptions = MM_DOCTYPE_TEXT == nDocType || MM_DOCTYPE_HTML == nDocType;
+            uno::Sequence< beans::PropertyValue > aFilterValues(withFilterOptions ? 2 : 1);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
             pFilterValues[0].Name = "FilterName";
             pFilterValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
-            if(MM_DOCTYPE_TEXT == nDocType)
+            if(withFilterOptions)
             {
                 pFilterValues[1].Name = "FilterOptions";
                 pFilterValues[1].Value <<= sFilterOptions;

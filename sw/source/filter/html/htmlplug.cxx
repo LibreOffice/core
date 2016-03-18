@@ -1315,9 +1315,30 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     }
 
     Graphic aGraphic( *pOLENd->GetGraphic() );
+    OUString aGraphicURL;
+    if(!rHTMLWrt.mbEmbedImages)
+    {
+        const OUString* pTempFileName = rHTMLWrt.GetOrigFileName();
+        if(pTempFileName)
+            aGraphicURL = *pTempFileName;
+
+        sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
+                                    OUString("JPG"),
+                                    (XOUTBMP_USE_GIF_IF_POSSIBLE |
+                                     XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
+        if( nErr )              // fehlerhaft, da ist nichts auszugeben
+        {
+            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            return rWrt;
+        }
+        aGraphicURL = URIHelper::SmartRel2Abs(
+            INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
+            URIHelper::GetMaybeFileHdl() );
+
+    }
     sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
         : HTML_FRMOPTS_GENIMG;
-    OutHTML_Image( rWrt, rFrameFormat, aGraphic,
+    OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
             nFlags, "ole" );
 

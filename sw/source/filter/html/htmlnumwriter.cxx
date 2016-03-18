@@ -219,7 +219,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm().WriteOString( sOut );
             OutHTML_BulletImage( rWrt,
                                     nullptr,
-                                    rNumFormat.GetBrush() );
+                                    rNumFormat.GetBrush(),
+                                    rWrt.m_aBulletGrfs[i]);
         }
         else
         {
