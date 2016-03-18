@@ -2480,6 +2480,54 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
     }
 }
 
+void ScTokenArray::AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab )
+{
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, false);
+    for (size_t j=0; j<2; ++j)
+    {
+        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; pp != pEnd; ++pp)
+        {
+            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            if (!p)
+                continue;
+
+            switch ( p->GetType() )
+            {
+                case svDoubleRef :
+                    {
+                        ScComplexRefData& rRef = *p->GetDoubleRef();
+                        ScSingleRefData& rRef2 = rRef.Ref2;
+                        ScSingleRefData& rRef1 = rRef.Ref1;
+
+                        if (!rRef1.IsTabRel() && rRef1.Tab() == nOldTab)
+                            rRef1.SetAbsTab( nNewTab);
+                        if (!rRef2.IsTabRel() && rRef2.Tab() == nOldTab)
+                            rRef2.SetAbsTab( nNewTab);
+                        if (!rRef1.IsTabRel() && !rRef2.IsTabRel() && rRef1.Tab() > rRef2.Tab())
+                        {
+                            SCTAB nTab = rRef1.Tab();
+                            rRef1.SetAbsTab( rRef2.Tab());
+                            rRef2.SetAbsTab( nTab);
+                        }
+                    }
+                    break;
+                case svSingleRef :
+                    {
+                        ScSingleRefData& rRef = *p->GetSingleRef();
+
+                        if (!rRef.IsTabRel() && rRef.Tab() == nOldTab)
+                            rRef.SetAbsTab( nNewTab);
+                    }
+                    break;
+                default:
+                    ;
+            }
+        }
+    }
+}
+
 namespace {
 
 ScRange getSelectedRange( const sc::RefUpdateContext& rCxt )

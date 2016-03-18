@@ -136,6 +136,11 @@ public:
      */
     void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName = false, bool bCheckCopyArea = false );
 
+    /** When copying a sheet-local named expression, move sheet references that
+        point to the originating sheet to point to the new sheet instead.
+     */
+    void AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab );
+
     /**
      * Adjust all references in response to shifting of cells during cell
      * insertion and deletion.

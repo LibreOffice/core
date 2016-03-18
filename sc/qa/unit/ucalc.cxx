@@ -3292,23 +3292,29 @@ void Test::testCopyPaste()
     ScAddress aAdr (0, 0, 0);
 
     //create some range names, local and global
-    ScRangeData* pLocal1 = new ScRangeData(m_pDoc, OUString("local1"), aAdr);
-    ScRangeData* pLocal2 = new ScRangeData(m_pDoc, OUString("local2"), aAdr);
-    ScRangeData* pGlobal = new ScRangeData(m_pDoc, OUString("global"), aAdr);
+    ScRangeData* pLocal1 = new ScRangeData( m_pDoc, "local1", aAdr);
+    ScRangeData* pLocal2 = new ScRangeData( m_pDoc, "local2", aAdr);
+    ScRangeData* pLocal3 = new ScRangeData( m_pDoc, "local3", "$Sheet1.$A$1");
+    ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "Sheet1.$A$1");
+    ScRangeData* pLocal5 = new ScRangeData( m_pDoc, "local5", "$A$1"); // implicit relative sheet reference
+    ScRangeData* pGlobal = new ScRangeData( m_pDoc, "global", aAdr);
     ScRangeName* pGlobalRangeName = new ScRangeName();
     pGlobalRangeName->insert(pGlobal);
     ScRangeName* pLocalRangeName1 = new ScRangeName();
     pLocalRangeName1->insert(pLocal1);
     pLocalRangeName1->insert(pLocal2);
+    pLocalRangeName1->insert(pLocal3);
+    pLocalRangeName1->insert(pLocal4);
+    pLocalRangeName1->insert(pLocal5);
     m_pDoc->SetRangeName(pGlobalRangeName);
     m_pDoc->SetRangeName(0, pLocalRangeName1);
 
     // Add formula to B1.
-    OUString aFormulaString("=local1+global+SUM($C$1:$D$4)");
+    OUString aFormulaString("=local1+global+SUM($C$1:$D$4)+local3+local4+local5");
     m_pDoc->SetString(1, 0, 0, aFormulaString);
 
     double fValue = m_pDoc->GetValue(ScAddress(1,0,0));
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", fValue, 8);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 11", fValue, 11);
 
     // add notes to A1:C1
     ScAddress aAdrA1 (0, 0, 0); // empty cell content
@@ -3339,22 +3345,48 @@ void Test::testCopyPaste()
 
     //check values after copying
     OUString aString;
-    fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     m_pDoc->GetFormula(1,1,1, aString);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", 2.0, fValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula string was not copied correctly", aString, aFormulaString);
+    // Only the global range points to Sheet1.A1, all copied sheet-local ranges
+    // to Sheet2.A1 that is empty, hence the result is 1, not 2.
+    fValue = m_pDoc->GetValue(ScAddress(1,1,1));
+    ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 1", 1.0, fValue);
     fValue = m_pDoc->GetValue(ScAddress(0,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("copied value should be 1", 1.0, fValue);
+
+    ScRange aSheet2A1(0,0,1,0,0,1);
 
     //check local range name after copying
     pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("local range name 1 should be copied", pLocal1);
     ScRange aRangeLocal1;
-    bool bIsValidRef = pLocal1->IsValidReference(aRangeLocal1);
-    CPPUNIT_ASSERT_MESSAGE("local range name 1 should be valid", bIsValidRef);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 1 should still point to Sheet1.A1",ScRange(0,0,0,0,0,0), aRangeLocal1);
+    bool bIsValidRef1 = pLocal1->IsValidReference(aRangeLocal1);
+    CPPUNIT_ASSERT_MESSAGE("local range name 1 should be valid", bIsValidRef1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 1 should now point to Sheet2.A1", aSheet2A1, aRangeLocal1);
+
     pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", pLocal2 == nullptr);
+
+    pLocal3 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL3"));
+    CPPUNIT_ASSERT_MESSAGE("local range name 3 should be copied", pLocal3);
+    ScRange aRangeLocal3;
+    bool bIsValidRef3 = pLocal3->IsValidReference(aRangeLocal3);
+    CPPUNIT_ASSERT_MESSAGE("local range name 3 should be valid", bIsValidRef3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 3 should now point to Sheet2.A1", aSheet2A1, aRangeLocal3);
+
+    pLocal4 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL4"));
+    CPPUNIT_ASSERT_MESSAGE("local range name 4 should be copied", pLocal4);
+    ScRange aRangeLocal4;
+    bool bIsValidRef4 = pLocal4->IsValidReference(aRangeLocal4);
+    CPPUNIT_ASSERT_MESSAGE("local range name 4 should be valid", bIsValidRef4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 4 should now point to Sheet2.A1", aSheet2A1, aRangeLocal4);
+
+    pLocal5 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL5"));
+    CPPUNIT_ASSERT_MESSAGE("local range name 5 should be copied", pLocal5);
+    ScRange aRangeLocal5;
+    bool bIsValidRef5 = pLocal5->IsValidReference(aRangeLocal5);
+    CPPUNIT_ASSERT_MESSAGE("local range name 5 should be valid", bIsValidRef5);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 5 should now point to Sheet2.A1", aSheet2A1, aRangeLocal5);
 
     // check notes after copying
     CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.A2", m_pDoc->HasNote(ScAddress(0, 1, 1)));
@@ -3379,11 +3411,11 @@ void Test::testCopyPaste()
 
     pUndo->Redo();
     fValue = m_pDoc->GetValue(ScAddress(1,1,1));
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", fValue, 2);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 1 after redo", 1.0, fValue);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell Sheet2.C2 should contain: test", OUString("test"), aString);
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula should be correct again", aString, aFormulaString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula should be correct again", aFormulaString, aString);
 
     CPPUNIT_ASSERT_MESSAGE("After Redo, there should be a note on Sheet2.A2", m_pDoc->HasNote(ScAddress(0, 1, 1)));
     CPPUNIT_ASSERT_MESSAGE("After Redo, there should be a note on Sheet2.B2", m_pDoc->HasNote(ScAddress(1, 1, 1)));

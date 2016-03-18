@@ -126,11 +126,11 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         eType |= RT_ABSPOS;
 }
 
-ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument) :
+ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument, const ScAddress* pPos) :
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
     pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),   // make real copy (not copy-ctor)
-    aPos        (rScRangeData.aPos),
+    aPos        (pPos ? *pPos : rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
     eTempGrammar(rScRangeData.eTempGrammar),

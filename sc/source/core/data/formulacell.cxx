@@ -475,13 +475,23 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     //if no range name was found copy it
     if (!pRangeData)
     {
+        ScAddress aRangePos( pOldRangeData->GetPos());
         if (nOldSheet < 0)
+        {
             nNewSheet = -1;
+        }
         else
+        {
             nNewSheet = aNewPos.Tab();
-        pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+            aRangePos.SetTab( nNewSheet);
+        }
+        pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc, &aRangePos);
         pRangeData->SetIndex(0);    // needed for insert to assign a new index
         ScTokenArray* pRangeNameToken = pRangeData->GetCode();
+        if (bSameDoc && nNewSheet >= 0)
+        {
+            pRangeNameToken->AdjustSheetLocalNameReferences( nOldSheet, nNewSheet);
+        }
         if (!bSameDoc)
         {
             pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);

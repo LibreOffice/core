@@ -94,7 +94,11 @@ public:
                                  const OUString& rName,
                                  const ScAddress& rTarget );
                                 // rTarget is ABSPOS jump label
-                    ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument = nullptr);
+
+    /* Exact copy, not recompiled, no other index (!), nothing.. except if
+     * pDocument or pPos are passed, those values are assigned instead of the
+     * copies. */
+    ScRangeData( const ScRangeData& rScRangeData, ScDocument* pDocument = nullptr, const ScAddress* pPos = nullptr );
 
     SC_DLLPUBLIC ~ScRangeData();
 
