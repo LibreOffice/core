@@ -57,13 +57,11 @@ public:
     typedef ::std::vector<CacheKey> CacheIndex;
 
     /** Create a new cache for bitmap objects.
-        @param nMaximalNormalCacheSize
-            When a size larger then zero is given then that size is used.
-            Otherwise the default value from the configuration is used.
-            When that does not exist either then a internal default value is
-            used.
+        The default value from the configuration is used.
+        When that does not exist then a internal default value is
+        used.
     */
-    explicit BitmapCache (const sal_Int32 nMaximalNormalCacheSize = 0);
+    explicit BitmapCache ();
 
     /** The destructor clears the cache and releases all bitmaps still in it.
     */

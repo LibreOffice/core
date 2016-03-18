@@ -393,7 +393,6 @@ void PageObjectRun::RestartAnimation()
     auto sharedThis(shared_from_this());
     mnAnimationId = mrAnimatorAccess.GetAnimator()->AddAnimation(
         [this] (double const val) { (*this)(val); },
-        0,
         300,
         [sharedThis] () { sharedThis->mrAnimatorAccess.RemoveRun(sharedThis); }
         );

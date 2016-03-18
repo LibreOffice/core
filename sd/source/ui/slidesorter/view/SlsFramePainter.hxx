@@ -38,10 +38,9 @@ public:
     /** Special functionality that takes the color from the center
         bitmap and replaces that color in all bitmaps by the given new
         color.  Alpha values are not modified.
-        @param bClearCenterBitmap
-            When <TRUE/> then the center bitmap is erased.
+        The center bitmap is erased.
     */
-    void AdaptColor (const Color aNewColor, const bool bClearCenterBitmap);
+    void AdaptColor (const Color aNewColor);
 
 private:
     /** Bitmap with offset that is used when the bitmap is painted.  The bitmap

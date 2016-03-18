@@ -203,7 +203,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
 class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
-    CustomAnimationListEntryItem(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& aDescription,
+    CustomAnimationListEntryItem(SvTreeListEntry*, const OUString& aDescription,
                                  CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
     virtual ~CustomAnimationListEntryItem();
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
@@ -222,8 +222,8 @@ private:
     const long nItemMinHeight = 38;
 };
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
-: SvLBoxString( pEntry, nFlags, aDescription )
+CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
+: SvLBoxString( pEntry, 0, aDescription )
 , mpParent( pParent )
 , msDescription( aDescription )
 , msEffectName( OUString() )
@@ -376,7 +376,7 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription );
+                    CustomAnimationTriggerEntryItem( SvTreeListEntry*, const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     SvLBoxItem*     Create() const override;
@@ -389,8 +389,8 @@ private:
     const long nIconWidth = 19;
 };
 
-CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription )
-: SvLBoxString( pEntry, nFlags, aDescription ), msDescription( aDescription )
+CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, const OUString& aDescription )
+: SvLBoxString( pEntry, 0, aDescription ), msDescription( aDescription )
 {
 }
 
@@ -662,7 +662,7 @@ void CustomAnimationList::update()
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem(std::unique_ptr<CustomAnimationTriggerEntryItem>(
-                    new CustomAnimationTriggerEntryItem(pLBoxEntry, 0, aDescription)));
+                    new CustomAnimationTriggerEntryItem(pLBoxEntry, aDescription)));
                 Insert( pLBoxEntry );
                 SvViewDataEntry* pViewData = GetViewData( pLBoxEntry );
                 if( pViewData )
@@ -769,7 +769,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
                             pEntry, 0, Image(), Image(), false)));
         pEntry->AddItem(std::unique_ptr<CustomAnimationListEntryItem>(
-            new CustomAnimationListEntryItem(pEntry, 0, aDescription, pEffect, this)));
+            new CustomAnimationListEntryItem(pEntry, aDescription, pEffect, this)));
 
         if( pParentEntry )
         {

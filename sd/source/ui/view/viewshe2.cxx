@@ -982,17 +982,14 @@ void ViewShell::VisAreaChanged(const Rectangle& rRect)
     GetViewShell()->VisAreaChanged(rRect);
 }
 
-void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
+void ViewShell::SetWinViewPos(const Point& rWinPos)
 {
     if (mpContentWindow.get() != nullptr)
     {
         mpContentWindow->SetWinViewPos(rWinPos);
 
-        if ( bUpdate )
-        {
-            mpContentWindow->UpdateMapOrigin();
-            mpContentWindow->Invalidate();
-        }
+        mpContentWindow->UpdateMapOrigin();
+        mpContentWindow->Invalidate();
     }
 
     if (mbHasRulers)
