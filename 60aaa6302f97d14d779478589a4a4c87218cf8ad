@@ -16,6 +16,24 @@
       "revId": "60aaa6302f97d14d779478589a4a4c87218cf8ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_903415df",
+        "filename": "sc/source/filter/excel/xlpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-18T08:57:35Z",
+      "side": 1,
+      "message": "I had a static_assert in the code to check compile time evaluation. This failed without constexpr:\n\nstatic_assert( pPaperSizeTable[90].mnHeight \u003d\u003d 15840,\n                   \"dang!\");\n\n/home/joni/lo/core/sc/source/filter/excel/xlpage.cxx: In member function ‘void XclPageData::SetDefaults()’:\n/home/joni/lo/core/sc/source/filter/excel/xlpage.cxx:182:5: error: non-constant condition for static assertion\n     static_assert( pPaperSizeTable[90].mnHeight \u003d\u003d 15840,\n     ^\n/home/joni/lo/core/sc/source/filter/excel/xlpage.cxx:182:5: error: the value of ‘{anonymous}::pPaperSizeTable’ is not usable in a constant expression\n/home/joni/lo/core/sc/source/filter/excel/xlpage.cxx:54:20: note: ‘{anonymous}::pPaperSizeTable’ was not declared ‘constexpr’\n const XclPaperSize pPaperSizeTable[] \u003d",
+      "parentUuid": "9ad45d7e_bc9495e8",
+      "revId": "60aaa6302f97d14d779478589a4a4c87218cf8ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
