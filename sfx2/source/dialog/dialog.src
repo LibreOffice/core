@@ -98,6 +98,11 @@ String SID_SIDEBAR
     Text [ en-US ] = "Sidebar";
 };
 
+String SID_NOTEBOOKBAR
+{
+    Text [ en-US ] = "NotebookBar";
+};
+
 String STR_ERROR_WRONG_CONFIRM
 {
     Text [ en-US ] = "Faulty password confirmation";
