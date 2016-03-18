@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_f072b1ac",
+        "filename": "external/cairo/ExternalProject_cairo.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-03-18T09:18:51Z",
+      "side": 1,
+      "message": "It would make more sense to only change FREETYPE_CFLAGS if bundled freetype is used. Or set it for this case in configure already, like it\u0027s done for other external projects (libxml2, libpng, etc.).",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 17
+      },
+      "revId": "248901a5f2e4d8969327a001887d8c1660101570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
