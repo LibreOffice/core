@@ -134,8 +134,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
         if (xProperties->getPropertyValue("Number") >>= nPageNumber)
         {
             mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
-                nPageNumber-1,
-                true);
+                nPageNumber-1);
         }
     }
 }

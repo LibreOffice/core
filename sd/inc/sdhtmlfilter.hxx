@@ -29,8 +29,7 @@ class SdHTMLFilter
 public:
     SdHTMLFilter (
         SfxMedium& rMedium,
-        ::sd::DrawDocShell& rDocShell,
-        bool bShowProgress);
+        ::sd::DrawDocShell& rDocShell);
     virtual ~SdHTMLFilter();
 
     virtual bool        Export() override;

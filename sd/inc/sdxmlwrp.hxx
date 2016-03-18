@@ -36,7 +36,6 @@ public:
     SdXMLFilter(
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
-        bool bShowProgress,
         SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
         sal_uLong nStoreVer = SOFFICE_FILEFORMAT_8 );
     virtual ~SdXMLFilter();

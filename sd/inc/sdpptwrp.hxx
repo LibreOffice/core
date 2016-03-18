@@ -28,8 +28,7 @@ class SdPPTFilter : public SdFilter
 public:
     SdPPTFilter (
         SfxMedium& rMedium,
-        ::sd::DrawDocShell& rDocShell,
-        bool bShowProgress);
+        ::sd::DrawDocShell& rDocShell);
     virtual ~SdPPTFilter();
 
     /// these methods are necessary for the export to PowerPoint

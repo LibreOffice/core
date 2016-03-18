@@ -28,8 +28,7 @@ class SdCGMFilter : public SdFilter
 public:
     SdCGMFilter (
         SfxMedium& rMedium,
-        ::sd::DrawDocShell& rDocShell,
-        bool bShowProgress );
+        ::sd::DrawDocShell& rDocShell );
     virtual ~SdCGMFilter();
 
     bool        Import();

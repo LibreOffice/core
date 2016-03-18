@@ -115,10 +115,9 @@ void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
 }
 
 void CurrentSlideManager::SwitchCurrentSlide (
-    const sal_Int32 nSlideIndex,
-    const bool bUpdateSelection)
+    const sal_Int32 nSlideIndex)
 {
-    SwitchCurrentSlide(mrSlideSorter.GetModel().GetPageDescriptor(nSlideIndex), bUpdateSelection);
+    SwitchCurrentSlide(mrSlideSorter.GetModel().GetPageDescriptor(nSlideIndex), true/*bUpdateSelection*/);
 }
 
 void CurrentSlideManager::SwitchCurrentSlide (

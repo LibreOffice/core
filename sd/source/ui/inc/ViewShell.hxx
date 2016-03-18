@@ -112,8 +112,7 @@ public:
     ViewShell (
         SfxViewFrame *pFrame,
         vcl::Window* pParentWindow,
-        ViewShellBase& rViewShellBase,
-        bool bAllowCenter = true);
+        ViewShellBase& rViewShellBase);
     virtual ~ViewShell();
 
     /** The Init method has to be called from the outside directly
@@ -298,7 +297,7 @@ public:
     // Move these two methods from DrawViewShell to enable slide show view
     void    NotifyAccUpdate();
     void    fireSwitchCurrentPage(sal_Int32 pageIndex);
-    void SetWinViewPos(const Point& rWinPos, bool bUpdate);
+    void SetWinViewPos(const Point& rWinPos);
     Point GetWinViewPos() const;
     Point GetViewOrigin() const;
 

@@ -99,7 +99,6 @@ void Animator::Dispose()
 
 Animator::AnimationId Animator::AddAnimation (
     const AnimationFunctor& rAnimation,
-    const sal_Int32 nStartOffset,
     const sal_Int32 nDuration,
     const FinishFunctor& rFinishFunctor)
 {
@@ -112,7 +111,7 @@ Animator::AnimationId Animator::AddAnimation (
     std::shared_ptr<Animation> pAnimation (
         new Animation(
             rAnimation,
-            nStartOffset / 1000.0,
+            0,
             nDuration / 1000.0,
             maElapsedTime.getElapsedTime(),
             ++mnNextAnimationId,

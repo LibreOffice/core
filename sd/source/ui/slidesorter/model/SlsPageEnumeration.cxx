@@ -85,21 +85,6 @@ PageEnumeration::PageEnumeration (
 {
 }
 
-PageEnumeration::PageEnumeration (
-    PageEnumeration& rEnumeration,
-    bool bCloneImpl)
-{
-
-    if( bCloneImpl )
-    {
-        mpImpl = rEnumeration.mpImpl->Clone();
-    }
-    else
-    {
-        mpImpl = std::move(rEnumeration.mpImpl);
-    }
-}
-
 PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration )
 : sd::slidesorter::model::Enumeration<sd::slidesorter::model::SharedPageDescriptor>()
 {
@@ -120,7 +105,7 @@ PageEnumeration& PageEnumeration::operator= (
 ::std::unique_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone()
 {
     return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
-        new PageEnumeration (*this, true));
+        new PageEnumeration (*this));
 }
 
 bool PageEnumeration::HasMoreElements() const

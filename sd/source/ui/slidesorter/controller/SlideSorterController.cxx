@@ -900,8 +900,7 @@ void SlideSorterController::CheckForMasterPageAssignment()
         if (pDescriptor->UpdateMasterPage())
         {
             mrView.GetPreviewCache()->InvalidatePreviewBitmap (
-                pDescriptor->GetPage(),
-                true);
+                pDescriptor->GetPage());
         }
     }
 }
@@ -917,8 +916,7 @@ void SlideSorterController::CheckForSlideTransitionAssignment()
         if (pDescriptor->UpdateTransitionFlag())
         {
             mrView.GetPreviewCache()->InvalidatePreviewBitmap (
-                pDescriptor->GetPage(),
-                true);
+                pDescriptor->GetPage());
         }
     }
 }

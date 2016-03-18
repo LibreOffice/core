@@ -157,8 +157,8 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 }
 
 
-SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
-    SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
+    SdFilter( rMedium, rDocShell, true/*bShowProgress*/ ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
 {
 }
 

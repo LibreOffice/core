@@ -73,8 +73,7 @@ void FramePainter::PaintFrame (
 }
 
 void FramePainter::AdaptColor (
-    const Color aNewColor,
-    const bool bEraseCenter)
+    const Color aNewColor)
 {
     // Get the source color.
     if (maCenter.maBitmap.IsEmpty())
@@ -86,8 +85,7 @@ void FramePainter::AdaptColor (
     Bitmap::ReleaseAccess(pReadAccess);
 
     // Erase the center bitmap.
-    if (bEraseCenter)
-        maCenter.maBitmap.SetEmpty();
+    maCenter.maBitmap.SetEmpty();
 
     // Replace the color in all bitmaps.
     maTopLeft.maBitmap.Replace(aSourceColor, aNewColor);
