@@ -558,7 +558,8 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
+SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen,
+                                   rtl_TextEncoding )
 {                                                  // in einen Stream aus
     sal_Char aNToABuf[] = "0000000000000000";
 
@@ -975,6 +976,18 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         aStrTD.append('\"');
     }
     return aStrTD.makeStringAndClear();
+}
+
+bool HTMLOutFuncs::PrivateURLToInternalImg( OUString& rURL )
+{
+    if( rURL.getLength() > 14 &&
+        rURL.compareTo( OOO_STRING_SVTOOLS_HTML_private_image, 14 ) == 0 )
+    {
+        rURL = rURL.copy( 14 );
+        return true;
+    }
+
+    return false;
 }
 
 void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, const OString &aAttributeName, const Color& rColor)

@@ -388,6 +388,7 @@ public:
     bool mbSkipImages : 1;
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
+    bool mbEmbedImages : 1;
 
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
@@ -434,7 +435,7 @@ public:
 
     void OutAndSetDefList( sal_uInt16 nNewLvl );
 
-    void OutStyleSheet( const SwPageDesc& rPageDesc );
+    void OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed=true );
 
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const sal_Char *pVal );
@@ -451,8 +452,8 @@ public:
     void OutBasicBodyEvents();
 
     // BACKGROUND/BGCOLOR-Option
-    void OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic );
-    void OutBackground( const SfxItemSet& rItemSet, bool bGraphic );
+    void OutBackground( const SvxBrushItem *pBrushItem, const OUString& rGraphicURL, bool bGraphic );
+    void OutBackground( const SfxItemSet& rItemSet, const OUString& rGraphicURL, bool bGraphic );
 
     void OutLanguage( LanguageType eLang );
     sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
@@ -464,7 +465,7 @@ public:
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
     OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
-        sal_uInt32 nFrameOpts );
+        sal_uInt32 nFrameOpts, const OString& rEndTags = OString() );
 
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, sal_uInt32 nFrameOpts);
 
@@ -644,19 +645,21 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                               bool bHeader );
 
 Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
+                       const OUString& rGraphicURL,
                        Graphic& rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, sal_uInt32 nFrameOpts,
                        const sal_Char *pMarkType = nullptr,
                        const ImageMap *pGenImgMap = nullptr );
 
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
-                             const SvxBrushItem* pBrush );
+                             const SvxBrushItem* pBrush,
+                             const OUString& rGraphicURL);
 
 Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutHTML_INetFormat( Writer&, const SwFormatINetFormat& rINetFormat, bool bOn );
 
-Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
+Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet, const OUString& rGraphicURL );
 Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );

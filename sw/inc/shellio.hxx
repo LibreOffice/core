@@ -374,7 +374,7 @@ protected:
     bool CopyNextPam( SwPaM ** );
 
     void PutNumFormatFontsInAttrPool();
-    void PutEditEngFontsInAttrPool();
+    void PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL = true );
 
     virtual sal_uLong WriteStream() = 0;
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
@@ -415,6 +415,8 @@ public:
 
     void SetShowProgress( bool bFlag )  { bShowProgress = bFlag; }
 
+    const OUString* GetOrigFileName() const       { return pOrigFileName; }
+
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
 
@@ -433,6 +435,9 @@ public:
     // Create new PaM at position.
     static SwPaM * NewSwPaM(SwDoc & rDoc,
                             sal_uLong const nStartIdx, sal_uLong const nEndIdx);
+
+    // If applicable copy a local file into internet.
+    bool CopyLocalFileToINet( OUString& rFileNm );
 
     // Stream-specific routines. Do not use in storage-writer!
 

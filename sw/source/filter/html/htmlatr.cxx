@@ -981,7 +981,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         OSL_ENSURE( aNumInfo.GetNumRule(), "Wo ist die Numerierung geblieben???" );
         OSL_ENSURE( nBulletGrfLvl < MAXLEVEL, "So viele Ebenen gibt's nicht" );
         const SwNumFormat& rNumFormat = aNumInfo.GetNumRule()->Get(nBulletGrfLvl);
-        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, rNumFormat.GetBrush() );
+        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, rNumFormat.GetBrush(),
+                rHWrt.m_aBulletGrfs[nBulletGrfLvl]);
     }
 
     rHWrt.GetNumInfo() = aNumInfo;

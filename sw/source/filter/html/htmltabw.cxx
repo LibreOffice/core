@@ -425,7 +425,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( pBrushItem )
     {
         // Hintergrund ausgeben
-        rWrt.OutBackground( pBrushItem, false );
+        OUString dummy;
+        rWrt.OutBackground( pBrushItem, dummy, false );
 
         if( rWrt.m_bCfgOutStyles )
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
@@ -532,7 +533,8 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     rWrt.Strm().WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow );
     if( pBrushItem )
     {
-        rWrt.OutBackground( pBrushItem, false );
+        OUString dummy;
+        rWrt.OutBackground( pBrushItem, dummy, false );
 
         rWrt.m_bTextAttr = false;
         rWrt.m_bOutOpts = true;
@@ -712,7 +714,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // Hintergrund ausgeben
     if( pFrameFormat )
     {
-        rWrt.OutBackground( pFrameFormat->GetAttrSet(), false );
+        OUString dummy;
+        rWrt.OutBackground( pFrameFormat->GetAttrSet(), dummy, false );
 
         if( rWrt.m_bCfgOutStyles && pFrameFormat )
             rWrt.OutCSS1_TableFrameFormatOptions( *pFrameFormat );
