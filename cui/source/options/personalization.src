@@ -21,7 +21,7 @@
 
 String RID_SVXSTR_SEARCHTERM
 {
-    Text [ en-US ] = "Search term";
+    Text [ en-US ] = "Search term or URL: https://addons.mozilla.org...";
 };
 
 String RID_SVXSTR_SELECTEDPERSONA
