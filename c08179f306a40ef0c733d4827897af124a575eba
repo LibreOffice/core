@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_f372bbac",
+        "filename": "cui/uiconfig/ui/select_persona_dialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-03-19T21:09:16Z",
+      "side": 1,
+      "message": "Please do not concatenate strings. It won’t work for l10n.\n\nInstead of inserting a button here, just drop this GtkFrame (because it doesn’t group more than one widget, the “search_term” GtkEntry that follows), and add a “placeholder_text” property to the “search_term” entry that reads something like: “Search term or Firefox Theme URL”",
+      "revId": "c08179f306a40ef0c733d4827897af124a575eba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
