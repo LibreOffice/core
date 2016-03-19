@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_add_exception_objects,genlang,\
     l10ntools/source/gL10nMem   \
     l10ntools/source/gConvProp  \
     l10ntools/source/gConv      \
-    l10ntools/source/gConvDB    \
     l10ntools/source/gConvPo    \
     l10ntools/source/gConvSrc   \
     l10ntools/source/gConvXrm   \

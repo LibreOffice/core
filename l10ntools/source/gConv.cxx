@@ -21,7 +21,6 @@
 
 #include "gL10nMem.hxx"
 #include "gConv.hxx"
-#include "gConvDB.hxx"
 #include "gConvPo.hxx"
 #include "gConvProp.hxx"
 #include "gConvSrc.hxx"

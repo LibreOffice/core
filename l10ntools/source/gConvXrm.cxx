@@ -40,9 +40,10 @@ convert_xrm::~convert_xrm()
 
 
 
+extern int xrmlex(void);
 void convert_xrm::execute()
 {
-    ////  XrmWrap::yylex();
+    xrmlex();
 
     // write last part of file.
     if (mbMergeMode)

@@ -131,12 +131,13 @@ void convert_po::handleNL()
 
 
 
+extern int polex(void);
 void convert_po::execute()
 {
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
 
-    //  PoWrap::yylex();
+    polex();
     startLook();
 }
 

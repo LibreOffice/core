@@ -47,6 +47,7 @@ convert_xhp::~convert_xhp()
 
 
 
+extern int xhplex(void);
 void convert_xhp::execute()
 {
     std::string sLang;
@@ -75,7 +76,7 @@ void convert_xhp::execute()
     }
 
     // run analyzer
-    //  XhpWrap::yylex();
+    xhplex();
 
     // dump last line
     copySourceSpecial(nullptr,3);

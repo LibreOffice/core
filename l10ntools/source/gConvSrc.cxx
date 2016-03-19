@@ -43,10 +43,10 @@ convert_src::~convert_src()
 {}
 
 
-
+extern int srclex(void);
 void convert_src::execute()
 {
-    //  SrcWrap::yylex();
+    srclex();
 }
 
 

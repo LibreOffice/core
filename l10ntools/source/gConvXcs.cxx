@@ -38,13 +38,14 @@ convert_xcs::~convert_xcs()
 
 
 
+extern int xcslex(void);
 void convert_xcs::execute()
 {
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
 
     // currently no .xcs files generate en-US translation, so stop trying
-    //  XcsWrap::yylex();
+    xcslex();
 }
 
 

@@ -28,10 +28,10 @@ convert_ulf::convert_ulf(l10nMem& crMemory) : convert_gen(crMemory) {}
 convert_ulf::~convert_ulf()                                              {}
 
 
-
+extern int ulflex(void);
 void convert_ulf::execute()
 {
-    //  UlfWrap::yylex();
+    ulflex();
 }
 
 

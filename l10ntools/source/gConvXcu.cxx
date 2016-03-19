@@ -37,9 +37,10 @@ convert_xcu::~convert_xcu()
 
 
 
+extern int xculex(void);
 void convert_xcu::execute()
 {
-    //  XcuWrap::yylex();
+    xculex();
 }
 
 

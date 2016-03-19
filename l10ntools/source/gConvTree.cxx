@@ -48,6 +48,7 @@ convert_tree::~convert_tree()
 
 
 
+extern int treelex(void);
 void convert_tree::execute()
 {
     std::string sLang;
@@ -77,7 +78,7 @@ void convert_tree::execute()
     }
 
     // run analyzer
-    //  TreeWrap::yylex();
+    treelex();
 
     // dump last line
     copySourceSpecial(nullptr,3);
