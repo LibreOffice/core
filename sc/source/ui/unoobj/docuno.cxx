@@ -2449,29 +2449,32 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
     OUString const & aServiceSpecifier,
     css::uno::Sequence<css::uno::Any> const * arguments)
 {
+    using ServiceType = ScServiceProvider::Type;
+
     uno::Reference<uno::XInterface> xRet;
     OUString aNameStr(aServiceSpecifier);
-    sal_uInt16 nType = ScServiceProvider::GetProviderType(aNameStr);
-    if ( nType != SC_SERVICE_INVALID )
+    ServiceType nType = ScServiceProvider::GetProviderType(aNameStr);
+    if ( nType != ServiceType::INVALID )
     {
         //  drawing layer tables must be kept as long as the model is alive
         //  return stored instance if already set
         switch ( nType )
         {
-            case SC_SERVICE_GRADTAB:    xRet.set(xDrawGradTab);     break;
-            case SC_SERVICE_HATCHTAB:   xRet.set(xDrawHatchTab);    break;
-            case SC_SERVICE_BITMAPTAB:  xRet.set(xDrawBitmapTab);   break;
-            case SC_SERVICE_TRGRADTAB:  xRet.set(xDrawTrGradTab);   break;
-            case SC_SERVICE_MARKERTAB:  xRet.set(xDrawMarkerTab);   break;
-            case SC_SERVICE_DASHTAB:    xRet.set(xDrawDashTab);     break;
-            case SC_SERVICE_CHDATAPROV: xRet.set(xChartDataProv);   break;
-            case SC_SERVICE_VBAOBJECTPROVIDER: xRet.set(xObjProvider); break;
+            case ServiceType::GRADTAB:    xRet.set(xDrawGradTab);     break;
+            case ServiceType::HATCHTAB:   xRet.set(xDrawHatchTab);    break;
+            case ServiceType::BITMAPTAB:  xRet.set(xDrawBitmapTab);   break;
+            case ServiceType::TRGRADTAB:  xRet.set(xDrawTrGradTab);   break;
+            case ServiceType::MARKERTAB:  xRet.set(xDrawMarkerTab);   break;
+            case ServiceType::DASHTAB:    xRet.set(xDrawDashTab);     break;
+            case ServiceType::CHDATAPROV: xRet.set(xChartDataProv);   break;
+            case ServiceType::VBAOBJECTPROVIDER: xRet.set(xObjProvider); break;
+            default: break;
         }
 
         // #i64497# If a chart is in a temporary document during clipoard paste,
         // there should be no data provider, so that own data is used
         bool bCreate =
-            ! ( nType == SC_SERVICE_CHDATAPROV &&
+            ! ( nType == ServiceType::CHDATAPROV &&
                 ( pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
         // loaded, because this unlinks the data
@@ -2484,14 +2487,15 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
             //  store created instance
             switch ( nType )
             {
-                case SC_SERVICE_GRADTAB:    xDrawGradTab.set(xRet);     break;
-                case SC_SERVICE_HATCHTAB:   xDrawHatchTab.set(xRet);    break;
-                case SC_SERVICE_BITMAPTAB:  xDrawBitmapTab.set(xRet);   break;
-                case SC_SERVICE_TRGRADTAB:  xDrawTrGradTab.set(xRet);   break;
-                case SC_SERVICE_MARKERTAB:  xDrawMarkerTab.set(xRet);   break;
-                case SC_SERVICE_DASHTAB:    xDrawDashTab.set(xRet);     break;
-                case SC_SERVICE_CHDATAPROV: xChartDataProv.set(xRet);   break;
-                case SC_SERVICE_VBAOBJECTPROVIDER: xObjProvider.set(xRet); break;
+                case ServiceType::GRADTAB:    xDrawGradTab.set(xRet);     break;
+                case ServiceType::HATCHTAB:   xDrawHatchTab.set(xRet);    break;
+                case ServiceType::BITMAPTAB:  xDrawBitmapTab.set(xRet);   break;
+                case ServiceType::TRGRADTAB:  xDrawTrGradTab.set(xRet);   break;
+                case ServiceType::MARKERTAB:  xDrawMarkerTab.set(xRet);   break;
+                case ServiceType::DASHTAB:    xDrawDashTab.set(xRet);     break;
+                case ServiceType::CHDATAPROV: xChartDataProv.set(xRet);   break;
+                case ServiceType::VBAOBJECTPROVIDER: xObjProvider.set(xRet); break;
+                default: break;
             }
         }
     }
