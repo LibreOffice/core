@@ -78,16 +78,9 @@ struct MultiMarkTestData
     std::vector<std::pair<SCCOL,SCCOL>> aColsWithUnequalMarksList;
 };
 
-class Test : public test::BootstrapFixture
+class Test : public CppUnit::TestFixture
 {
 public:
-    Test()
-    {
-    }
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
                          const ScRangeList& rLeftEnvelope, const ScRangeList& rRightEnvelope,
                          const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope );
@@ -122,17 +115,6 @@ static void lcl_GetSortedRanges( const ScRangeList& rRangeList, ScRangeList& rRa
     std::sort( aRanges.begin(), aRanges.end() );
     for ( size_t nIdx = 0; nIdx < nSize; ++nIdx )
         rRangeListOut.Append( aRanges[nIdx] );
-}
-
-void Test::setUp()
-{
-    BootstrapFixture::setUp();
-    ScDLL::Init();
-}
-
-void Test::tearDown()
-{
-    BootstrapFixture::tearDown();
 }
 
 void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
