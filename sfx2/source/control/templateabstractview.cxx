@@ -72,11 +72,12 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
         return isValid(pTempItem->getPath());
 
     TemplateContainerItem *pContainerItem = const_cast<TemplateContainerItem*>(dynamic_cast<const TemplateContainerItem*>(pItem));
+
+    size_t nVisCount = 0;
+
     if (pContainerItem)
     {
         std::vector<TemplateItemProperties> &rTemplates = pContainerItem->maTemplates;
-
-        size_t nVisCount = 0;
 
         // Clear thumbnails
         pContainerItem->maPreview1.Clear();
@@ -116,7 +117,7 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
             }
         }
     }
-    return true;
+    return (nVisCount>0);
 }
 
 TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
