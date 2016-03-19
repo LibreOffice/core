@@ -31,19 +31,19 @@
 
 #include <boost/rational.hpp>
 
-template<typename T>
-static boost::rational<T> rational_FromDouble(double dVal);
+template< typename T >
+static boost::rational< T > rational_FromDouble( double value );
 
-template<typename T>
-static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits);
+template< typename T >
+static void rational_ReduceInaccurate( boost::rational<T>& rRational, size_t nSignificantBits );
 
 struct Fraction::Impl
 {
-    bool                        valid;
-    boost::rational<sal_Int64>  value;
+    bool                          okay;
+    boost::rational< sal_Int64 >  value;
 
     Impl()
-        : valid(false)
+        : okay(false)
     {
     }
     Impl(const Impl&) = delete;
@@ -52,13 +52,13 @@ struct Fraction::Impl
 
 Fraction::Fraction() : mpImpl(new Impl)
 {
-    mpImpl->valid = true;
+    mpImpl->okay = true;
 }
 
 Fraction::Fraction( const Fraction& rFrac ) : mpImpl(new Impl)
 {
-    mpImpl->valid = rFrac.mpImpl->valid;
-    if (mpImpl->valid)
+    mpImpl->okay = rFrac.mpImpl->okay;
+    if ( mpImpl->okay )
         mpImpl->value.assign( rFrac.mpImpl->value.numerator(), rFrac.mpImpl->value.denominator() );
 }
 
@@ -70,31 +70,37 @@ Fraction::Fraction( Fraction&& rFrac ) : mpImpl(std::move(rFrac.mpImpl))
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
 // in order to return the correct value.
-Fraction::Fraction( long nNum, long nDen ) : mpImpl(new Impl)
+Fraction::Fraction( sal_Int32 nNum, sal_Int32 nDen ) : mpImpl(new Impl)
 {
     if ( nDen == 0 )
     {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
+        mpImpl->okay = false;
+        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' created fraction with zero denominator" );
         return;
     }
     mpImpl->value.assign( nNum, nDen);
-    mpImpl->valid = true;
+    mpImpl->okay = true;
 }
 
 Fraction::Fraction( double dVal ) : mpImpl(new Impl)
 {
-    try
+    try {
+        mpImpl->value = rational_FromDouble< sal_Int64 >( dVal );
+    } catch ( const boost::bad_rational & )
     {
-        mpImpl->value = rational_FromDouble<sal_Int64>( dVal );
-        if ( HasOverflowValue() )
-            throw boost::bad_rational();
-        mpImpl->valid = true;
+        // outside of range for underlying integer sal_Int64 type
+        mpImpl->okay = false;
+        SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' can't create fraction" );
+        return;
     }
-    catch (const boost::bad_rational&)
+
+    mpImpl->okay = true;
+
+    if ( HasOutsideOf32bitValue() )
     {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' invalid fraction created" );
+        // outside of range for 32-bit integer type
+        mpImpl->okay = false;
+        SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' created outside of 32-bit fraction" );
     }
 }
 
@@ -102,47 +108,55 @@ Fraction::~Fraction()
 {
 }
 
-bool Fraction::HasOverflowValue()
+bool Fraction::HasOutsideOf32bitValue()
 {
-    //coverity[result_independent_of_operands]
-    return mpImpl->value.numerator() < std::numeric_limits<long>::min() ||
-        mpImpl->value.numerator() > std::numeric_limits<long>::max() ||
-        mpImpl->value.denominator() < std::numeric_limits<long>::min() ||
-        mpImpl->value.denominator() > std::numeric_limits<long>::max();
+    if (  mpImpl->value.numerator()  < std::numeric_limits< sal_Int32 >::min() ||
+          mpImpl->value.numerator()  > std::numeric_limits< sal_Int32 >::max() )
+    {
+        SAL_INFO( "tools.fraction",
+                  "numerator " << mpImpl->value.numerator() << " / " << "denominator " << mpImpl->value.denominator()
+                      << " ~ numerator is outside of 32-bit" );
+        return true;
+    }
+    if ( mpImpl->value.denominator() < std::numeric_limits< sal_Int32 >::min() ||
+         mpImpl->value.denominator() > std::numeric_limits< sal_Int32 >::max() )
+    {
+        SAL_INFO( "tools.fraction",
+                  "numerator " << mpImpl->value.numerator() << " / " << "denominator " << mpImpl->value.denominator()
+                      << " ~ denominator is outside of 32-bit" );
+        return true;
+    }
+
+    return false;
 }
 
 Fraction::operator double() const
 {
-    if (!mpImpl->valid)
+    if ( ! mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'double()' on invalid fraction" );
-        return 0.0;
+        SAL_WARN( "tools.fraction", "'operator double' on strange fraction" );
     }
 
-    return boost::rational_cast<double>(mpImpl->value);
+    return boost::rational_cast< double >( mpImpl->value );
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// After computation detect if result overflows a long value
-// which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mpImpl->okay )
+        mpImpl->okay = false;
 
-    if ( !mpImpl->valid )
+    if ( !mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator +=' with invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator +=' with too precise fraction" );
         return *this;
     }
 
     mpImpl->value += rVal.mpImpl->value;
 
-    if ( HasOverflowValue() )
+    if ( HasOutsideOf32bitValue() )
     {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator +=' detected overflow" );
+        mpImpl->okay = false;
+        SAL_INFO( "tools.fraction", "'operator +=' with outside of 32-bit fraction" );
     }
 
     return *this;
@@ -150,21 +164,21 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mpImpl->okay )
+        mpImpl->okay = false;
 
-    if ( !mpImpl->valid )
+    if ( !mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator -=' with invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator -=' with too precise fraction" );
         return *this;
     }
 
     mpImpl->value -= rVal.mpImpl->value;
 
-    if ( HasOverflowValue() )
+    if ( HasOutsideOf32bitValue() )
     {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator -=' detected overflow" );
+        mpImpl->okay = false;
+        SAL_INFO( "tools.fraction", "'operator -=' with outside of 32-bit fraction" );
     }
 
     return *this;
@@ -172,20 +186,21 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mpImpl->okay )
+        mpImpl->okay = false;
 
-    if ( !mpImpl->valid )
+    if ( !mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator *=' with invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator *=' with too precise fraction" );
         return *this;
     }
 
     mpImpl->value *= rVal.mpImpl->value;
 
-    if ( HasOverflowValue() )
+    if ( HasOutsideOf32bitValue() )
     {
-        mpImpl->valid = false;
+        mpImpl->okay = false;
+        SAL_INFO( "tools.fraction", "'operator *=' with outside of 32-bit fraction" );
     }
 
     return *this;
@@ -193,21 +208,21 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mpImpl->okay )
+        mpImpl->okay = false;
 
-    if ( !mpImpl->valid )
+    if ( !mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator /=' with invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator /=' with too precise fraction" );
         return *this;
     }
 
     mpImpl->value /= rVal.mpImpl->value;
 
-    if ( HasOverflowValue() )
+    if ( HasOutsideOf32bitValue() )
     {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator /=' detected overflow" );
+        mpImpl->okay = false;
+        SAL_INFO( "tools.fraction", "'operator /=' with outside of 32-bit fraction" );
     }
 
     return *this;
@@ -231,41 +246,25 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-void Fraction::ReduceInaccurate( unsigned nSignificantBits )
+void Fraction::ReduceInaccurate( size_t nSignificantBits )
 {
-    if ( !mpImpl->valid )
-    {
-        SAL_WARN( "tools.fraction", "'ReduceInaccurate' on invalid fraction" );
-        return;
-    }
-
     if ( !mpImpl->value.numerator() )
         return;
 
-    rational_ReduceInaccurate(mpImpl->value, nSignificantBits);
+    rational_ReduceInaccurate( mpImpl->value, nSignificantBits );
 }
 
-long Fraction::GetNumerator() const
+sal_Int64 Fraction::GetNumerator() const
 {
-    if ( !mpImpl->valid )
-    {
-        SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
-        return 0;
-    }
     return mpImpl->value.numerator();
 }
 
-long Fraction::GetDenominator() const
+sal_Int64 Fraction::GetDenominator() const
 {
-    if ( !mpImpl->valid )
-    {
-        SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
-        return -1;
-    }
     return mpImpl->value.denominator();
 }
 
-Fraction& Fraction::operator=( const Fraction& rFrac )
+Fraction& Fraction::operator = ( const Fraction& rFrac )
 {
     if (this == &rFrac)
         return *this;
@@ -281,69 +280,59 @@ Fraction& Fraction::operator=( Fraction&& rFrac )
     return *this;
 }
 
-bool Fraction::IsValid() const
+bool Fraction::IsOkay() const
 {
-    return mpImpl->valid;
+    return mpImpl->okay;
 }
 
-Fraction::operator long() const
-{
-    if ( !mpImpl->valid )
-    {
-        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
-        return 0;
-    }
-    return boost::rational_cast<long>(mpImpl->value);
-}
-
-Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
+Fraction operator + ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     Fraction aErg( rVal1 );
     aErg += rVal2;
     return aErg;
 }
 
-Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 )
+Fraction operator - ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     Fraction aErg( rVal1 );
     aErg -= rVal2;
     return aErg;
 }
 
-Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 )
+Fraction operator * ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     Fraction aErg( rVal1 );
     aErg *= rVal2;
     return aErg;
 }
 
-Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 )
+Fraction operator / ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     Fraction aErg( rVal1 );
     aErg /= rVal2;
     return aErg;
 }
 
-bool operator !=( const Fraction& rVal1, const Fraction& rVal2 )
+bool operator != ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     return !(rVal1 == rVal2);
 }
 
-bool operator <=( const Fraction& rVal1, const Fraction& rVal2 )
+bool operator <= ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     return !(rVal1 > rVal2);
 }
 
-bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
+bool operator >= ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     return !(rVal1 < rVal2);
 }
 
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    if ( !rVal1.mpImpl->okay || !rVal2.mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator ==' with an invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator ==' with too precise fraction" );
         return false;
     }
 
@@ -352,9 +341,9 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    if ( !rVal1.mpImpl->okay || !rVal2.mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator <' with an invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator <' with too precise fraction" );
         return false;
     }
 
@@ -363,9 +352,9 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    if ( !rVal1.mpImpl->okay || !rVal2.mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'operator >' with an invalid fraction" );
+        SAL_INFO( "tools.fraction", "'operator >' with too precise fraction" );
         return false;
     }
 
@@ -379,30 +368,30 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction const & rFract )
     rIStream.ReadInt32( den );
     if ( den <= 0 )
     {
-        SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction" );
-        rFract.mpImpl->valid = false;
+        SAL_WARN( "tools.fraction", "'ReadFraction()' read fraction with zero or negative denominator" );
+        rFract.mpImpl->okay = false;
     }
     else
     {
         rFract.mpImpl->value.assign( num, den );
-        rFract.mpImpl->valid = true;
+        rFract.mpImpl->okay = true;
     }
     return rIStream;
 }
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
-    if ( !rFract.mpImpl->valid )
+    if ( !rFract.mpImpl->okay )
     {
-        SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
+        SAL_WARN( "tools.fraction", "'WriteFraction()' with too precise fraction" );
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
     } else {
 #if OSL_DEBUG_LEVEL > 0
-        // can only write 32 bits - check that no data is lost!
-        boost::rational<sal_Int64> copy(rFract.mpImpl->value);
-        rational_ReduceInaccurate(copy, 32);
-        assert(copy == rFract.mpImpl->value && "data loss in WriteFraction!");
+        // can only write 32 bits, so check that no data is lost
+        boost::rational< sal_Int64 > copy( rFract.mpImpl->value );
+        rational_ReduceInaccurate( copy, 32 );
+        assert( copy == rFract.mpImpl->value && "data loss in WriteFraction" );
 #endif
         rOStream.WriteInt32( rFract.mpImpl->value.numerator() );
         rOStream.WriteInt32( rFract.mpImpl->value.denominator() );
@@ -410,25 +399,22 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
     return rOStream;
 }
 
-// If dVal > LONG_MAX or dVal < LONG_MIN, the rational throws a boost::bad_rational.
-// Otherwise, dVal and denominator are multiplied by 10, until one of them
-// is larger than (LONG_MAX / 10).
-//
-// NOTE: here we use 'long' due that only values in long range are valid.
-template<typename T>
-static boost::rational<T> rational_FromDouble(double dVal)
+template< typename T >
+static boost::rational< T > rational_FromDouble( double value )
 {
-    if ( dVal > std::numeric_limits<long>::max() ||
-            dVal < std::numeric_limits<long>::min() )
-        throw boost::bad_rational();
+    if ( value > std::numeric_limits< T >::max() ||
+            value < std::numeric_limits< T >::min() )
+        throw boost::bad_rational( "value is outside of range for underlying integer type" );
 
-    const long nMAX = std::numeric_limits<long>::max() / 10;
-    long nDen = 1;
-    while ( std::abs( dVal ) < nMAX && nDen < nMAX ) {
-        dVal *= 10;
-        nDen *= 10;
+    // multiply value and denominator by 10 until one of them is larger than one tenth of max32
+    const sal_Int32 tenthOfMax32 = std::numeric_limits< sal_Int32 >::max() / 10;
+    sal_Int32 denominator = 1;
+    while ( std::abs( value ) < tenthOfMax32 && denominator < tenthOfMax32 ) {
+        value *= 10;
+        denominator *= 10;
     }
-    return boost::rational<T>( long(dVal), nDen );
+
+    return boost::rational< T >( T(value), T(denominator) );
 }
 
 // Similar to clz_table that can be googled
@@ -512,36 +498,36 @@ static int impl_NumberOfBits( unsigned long nNum )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-template<typename T>
-static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits)
+template< typename T >
+static void rational_ReduceInaccurate( boost::rational< T > & rRational, size_t nSignificantBits )
 {
     if ( !rRational )
         return;
 
     // http://www.boost.org/doc/libs/release/libs/rational/rational.html#Internal%20representation
     const bool bNeg = ( rRational.numerator() < 0 );
-    T nMul = bNeg? -rRational.numerator(): rRational.numerator();
+    T nMul = bNeg ? -rRational.numerator() : rRational.numerator();
     T nDiv = rRational.denominator();
 
-    DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
+    DBG_ASSERT( nSignificantBits < 65, "More than 64 bit of significance is overkill" );
 
     // How much bits can we lose?
-    const int nMulBitsToLose = std::max( ( impl_NumberOfBits( nMul ) - int( nSignificantBits ) ), 0 );
-    const int nDivBitsToLose = std::max( ( impl_NumberOfBits( nDiv ) - int( nSignificantBits ) ), 0 );
+    const size_t nMulBitsToLose = std::max( ( impl_NumberOfBits( nMul ) - signed( nSignificantBits ) ), 0 );
+    const size_t nDivBitsToLose = std::max( ( impl_NumberOfBits( nDiv ) - signed( nSignificantBits ) ), 0 );
 
-    const int nToLose = std::min( nMulBitsToLose, nDivBitsToLose );
+    const size_t nToLose = std::min( nMulBitsToLose, nDivBitsToLose );
 
     // Remove the bits
     nMul >>= nToLose;
     nDiv >>= nToLose;
 
-    if ( !nMul || !nDiv ) {
-        // Return without reduction
-        OSL_FAIL( "Oops, we reduced too much..." );
+    if ( nMul == 0 || nDiv == 0 ) {
+        // return without reduction
+        OSL_FAIL( "Oops, reduced too much..." );
         return;
     }
 
-    rRational.assign( bNeg? -T( nMul ): T( nMul ), nDiv );
+    rRational.assign( bNeg ? -T( nMul ) : T( nMul ), nDiv );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

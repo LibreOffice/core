@@ -125,7 +125,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                 pModel->TakeMetricStr(nLen, aTmp, true, nNumDigits);
                 aStr = aTmp;
 
-                if(!aFact.IsValid())
+                if( !aFact.IsOkay() )
                 {
                     aStr = "?";
                 }

@@ -133,7 +133,7 @@ private:
         @param _aNewZoom
         input parameter - new zoom percentage
     */
-    void ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom );
+    void ApplyNewZoomAtViewShell( sal_uInt16 _aNewZoom );
 
     /** calculate additional paint offset
 

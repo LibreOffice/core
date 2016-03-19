@@ -91,15 +91,15 @@ public:
     }
 
     void testMinLongDouble() {
-        Fraction f(double(SAL_MIN_INT32));
-        CPPUNIT_ASSERT_EQUAL(long(SAL_MIN_INT32), f.GetNumerator());
-        CPPUNIT_ASSERT_EQUAL(1L, f.GetDenominator());
+        Fraction f( double(SAL_MIN_INT32) );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32(SAL_MIN_INT32), sal_Int32(f.GetNumerator()) );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32(1), sal_Int32(f.GetDenominator()) );
     }
 
     void testCreateFromDoubleIn32BitsPlatform() {
         // This pass in 64 bits but fail in 32 bits
-        Fraction f(0.960945);
-        CPPUNIT_ASSERT_EQUAL(true, f.IsValid());
+        Fraction f( 0.960945 );
+        CPPUNIT_ASSERT_EQUAL( true, f.IsOkay() );
     }
 
     CPPUNIT_TEST_SUITE(FractionTest);

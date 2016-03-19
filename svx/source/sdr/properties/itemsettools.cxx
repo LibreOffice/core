@@ -99,10 +99,8 @@ namespace sdr
             sal_Int32 nMul(rScale.GetNumerator());
             sal_Int32 nDiv(rScale.GetDenominator());
 
-            if(!rScale.IsValid() || !nDiv)
-            {
+            if ( !rScale.IsOkay() || nDiv == 0 )
                 return;
-            }
 
             SfxWhichIter aIter(rSet);
             sal_uInt16 nWhich(aIter.FirstWhich());

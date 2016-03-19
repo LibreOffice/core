@@ -113,8 +113,15 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
 
 inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
-    double nxFract = xFract.IsValid() ? static_cast<double>(xFract) : 1.0;
-    double nyFract = yFract.IsValid() ? static_cast<double>(yFract) : 1.0;
+#if OSL_DEBUG_LEVEL > 0
+    if ( !xFract.IsOkay() )
+        SAL_WARN( "svx", "fraction xFact looks too precise so use 1.0 as don't scale" );
+    if ( !yFract.IsOkay() )
+        SAL_WARN( "svx", "fraction yFact looks too precise so use 1.0 as don't scale" );
+#endif
+
+    double nxFract = xFract.IsOkay() ? static_cast<double>(xFract) : 1.0;
+    double nyFract = yFract.IsOkay() ? static_cast<double>(yFract) : 1.0;
     rPnt.X() = rRef.X() + svx::Round( (rPnt.X() - rRef.X()) * nxFract );
     rPnt.Y() = rRef.Y() + svx::Round( (rPnt.Y() - rRef.Y()) * nyFract );
 }

@@ -60,7 +60,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 
     Fraction aF = Fraction( i*nN1, nD1 ) * Fraction( nN2, nD2 );
 
-    while ( !aF.IsValid() ) {
+    while ( !aF.IsOkay() ) {
         if ( nN1 > nN2 )
             nN1 = (nN1 + 1) / 2;
         else

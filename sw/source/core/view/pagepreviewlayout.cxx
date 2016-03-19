@@ -217,12 +217,12 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     {
         // adjust scaling for Drawing layer.
         aYScale *= Fraction( 1000, 1 );
-        long nNewNuminator = aYScale.operator long();
+        sal_Int64 nNewNuminator = aYScale.GetNumerator() / aYScale.GetDenominator();
         if( nNewNuminator < 1 )
-            nNewNuminator = 1;
+                nNewNuminator = 1;
         aYScale = Fraction( nNewNuminator, 1000 );
         // propagate scaling as zoom percentage to view options for font cache
-        ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
+        ApplyNewZoomAtViewShell( static_cast< sal_uInt16 >( nNewNuminator / 10 ) );
 
         aMapMode.SetScaleY( aYScale );
         aMapMode.SetScaleX( aYScale );
@@ -241,7 +241,7 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
 }
 
 /** apply new zoom at given view shell */
-void SwPagePreviewLayout::ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
+void SwPagePreviewLayout::ApplyNewZoomAtViewShell( sal_uInt16 _aNewZoom )
 {
     SwViewOption aNewViewOptions = *(mrParentViewShell.GetViewOptions());
     if ( aNewViewOptions.GetZoom() != _aNewZoom )
