@@ -96,11 +96,11 @@ void Test::testColumnFindEditCells()
 
 void Test::testSetFormula()
 {
+    m_pDoc->InsertTab(0, "Test");
 
     struct aInputs
     {
         const char* aName;
-        SCTAB nTab;
         SCROW nRow;
         SCCOL nCol;
         const char* aFormula1;      // Represents the formula that is input to SetFormula function.
@@ -108,21 +108,22 @@ void Test::testSetFormula()
         formula::FormulaGrammar::Grammar eGram;
 
     } aTest[] = {
-        { "Rock and Roll" ,0 ,5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },
-        { "Blues"         ,1 ,5 , 5 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE      },
-        { "Acoustic"      ,2 ,6 , 6 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_A1},
-        { "Nursery Rhymes",3 ,7 , 8 , "=[.A1]-[.$C2]+[.G$3]-[.$F$4]","=A1-$C2+G$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_ODFF        }
+        { "Rock and Roll" ,5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },
+        { "Blues"         ,5 , 5 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE      },
+        { "Acoustic"      ,6 , 6 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_A1},
+        { "Nursery Rhymes",7 , 8 , "=[.A1]-[.$C2]+[.G$3]-[.$F$4]","=A1-$C2+G$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_ODFF        }
     };
 
-    for(size_t i = 0 ; i < SAL_N_ELEMENTS(aTest) ;++i)
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
     {
-        m_pDoc->InsertTab(aTest[i].nTab,OUString::createFromAscii(aTest[i].aName));
-        OUString aBuffer("123");
-        m_pDoc->SetFormula(ScAddress(aTest[i].nCol,aTest[i].nRow,aTest[i].nTab) , OUString::createFromAscii(aTest[i].aFormula1) ,aTest[i].eGram);
-        m_pDoc->GetFormula(aTest[i].nCol,aTest[i].nRow,aTest[i].nTab, aBuffer);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to set formula",OUString::createFromAscii(aTest[i].aFormula2),aBuffer);
+        OUString aBuffer;
+        m_pDoc->SetFormula(ScAddress(aTest[i].nCol, aTest[i].nRow, 0), OUString::createFromAscii(aTest[i].aFormula1), aTest[i].eGram);
+        m_pDoc->GetFormula(aTest[i].nCol, aTest[i].nRow, 0, aBuffer);
 
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to set formula", OUString::createFromAscii(aTest[i].aFormula2), aBuffer);
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
