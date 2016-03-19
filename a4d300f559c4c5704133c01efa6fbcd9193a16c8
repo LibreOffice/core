@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_50261d17",
+        "filename": "sc/source/ui/unoobj/servuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-19T00:42:32Z",
+      "side": 0,
+      "message": "SAL_N_ELEMENTS(aProvNamesId)",
+      "range": {
+        "startLine": 375,
+        "startChar": 35,
+        "endLine": 375,
+        "endChar": 43
+      },
+      "revId": "a4d300f559c4c5704133c01efa6fbcd9193a16c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3023a907",
+        "filename": "sc/source/ui/unoobj/servuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-19T00:42:32Z",
+      "side": 0,
+      "message": "SAL_N_ELEMENTS(aOldNames)",
+      "range": {
+        "startLine": 384,
+        "startChar": 20,
+        "endLine": 384,
+        "endChar": 36
+      },
+      "revId": "a4d300f559c4c5704133c01efa6fbcd9193a16c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d0784dfb",
+        "filename": "sc/source/ui/unoobj/servuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-19T00:42:32Z",
+      "side": 0,
+      "message": ".pName",
+      "range": {
+        "startLine": 387,
+        "startChar": 54,
+        "endLine": 387,
+        "endChar": 55
+      },
+      "revId": "a4d300f559c4c5704133c01efa6fbcd9193a16c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_902095f9",
+        "filename": "sc/source/ui/unoobj/servuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-19T00:42:32Z",
+      "side": 0,
+      "message": "aOldNames[i].nType",
+      "range": {
+        "startLine": 390,
+        "startChar": 23,
+        "endLine": 390,
+        "endChar": 24
+      },
+      "revId": "a4d300f559c4c5704133c01efa6fbcd9193a16c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

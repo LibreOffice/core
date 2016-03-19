@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_d0116db1",
+        "filename": "sc/source/ui/unoobj/servuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-19T00:42:32Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is still needed.\naOldNames was full of empty strings, wouldn\u0027t they trigger all the time?",
+      "range": {
+        "startLine": 379,
+        "startChar": 12,
+        "endLine": 379,
+        "endChar": 103
+      },
+      "revId": "7c293fc6bc494cd0ae5c795507c4eed790ca5ddb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
