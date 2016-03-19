@@ -33,6 +33,7 @@
 
 #include "starmath.hrc"
 #include "smdll.hxx"
+#include "smmod.hxx"
 #include "format.hxx"
 
 using namespace com::sun::star::uno;
@@ -435,11 +436,11 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
             if (bPredefined)
             {
                 OUString aTmp;
-                aTmp = GetUiSymbolName( rSymbolName );
+                aTmp = SmLocalizedSymbolData::GetUiSymbolName( rSymbolName );
                 OSL_ENSURE( !aTmp.isEmpty(), "localized symbol-name not found" );
                 if (!aTmp.isEmpty())
                     aUiName = aTmp;
-                aTmp = GetUiSymbolSetName( aSet );
+                aTmp = SmLocalizedSymbolData::GetUiSymbolSetName( aSet );
                 OSL_ENSURE( !aTmp.isEmpty(), "localized symbolset-name not found" );
                 if (!aTmp.isEmpty())
                     aUiSetName = aTmp;
@@ -533,7 +534,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         pVal->Name += *pName++;
         OUString aTmp( rSymbol.GetSymbolSetName() );
         if (rSymbol.IsPredefined())
-            aTmp = GetExportSymbolSetName( aTmp );
+            aTmp = SmLocalizedSymbolData::GetExportSymbolSetName( aTmp );
         pVal->Value <<= aTmp;
         pVal++;
         // Predefined

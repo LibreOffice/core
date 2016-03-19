@@ -2659,7 +2659,7 @@ static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
     {
         OUString aName( rTokenText.copy(1) );
         SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
-        if (pSymbol && GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
+        if (pSymbol && SmLocalizedSymbolData::GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
             bRes = true;
     }
 
