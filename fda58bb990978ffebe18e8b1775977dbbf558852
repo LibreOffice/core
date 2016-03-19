@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_533aa7ce",
+        "filename": "bridges/inc/bridges/cpp_uno/shared/except.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-03-19T19:22:38Z",
+      "side": 0,
+      "message": "Why remove these useful comments?",
+      "revId": "fda58bb990978ffebe18e8b1775977dbbf558852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
