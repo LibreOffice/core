@@ -112,40 +112,6 @@ bool convert_gen::execute(const bool bMerge, const bool bKid)
 
 
 
-void convert_gen::startSave(const std::string& sLanguage,
-                            const std::string& sFile)
-{
-    std::string x;
-
-    x = sLanguage;
-    x = sFile;
-    throw l10nMem::showError("startSave called with non .po file");
-}
-
-
-
-void convert_gen::save(const std::string& sFileName,
-                       const std::string& sKey,
-                       const std::string& sENUStext,
-                       const std::string& sText,
-                       bool               bFuzzy)
-{
-    std::string x;
-
-    if (bFuzzy)
-        x = sFileName + sKey + sENUStext + sText;
-    throw l10nMem::showError("save called with non .po file");
-}
-
-
-
-void convert_gen::endSave()
-{
-    throw l10nMem::showError("endSave called with non .po file");
-}
-
-
-
 bool convert_gen::checkAccess(std::string& sFile)
 {
     return (OS_ACCESS(sFile.c_str(), 0) == 0);
@@ -236,13 +202,14 @@ void convert_gen::lexRead(char *sBuf, int *nResult, int nMax_size)
 
     // space enough for the whole line ?
     if (*nResult <= nMax_size) {
-        //    msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
+        msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
         l10nMem::showDebug(sBuf);
         miSourceReadIndex = -1;
     }
     else {
-        //    msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
-        *nResult           = nMax_size;
+        msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
+        l10nMem::showDebug(sBuf);
+        *nResult = nMax_size;
         miSourceReadIndex += nMax_size;
     }
 }

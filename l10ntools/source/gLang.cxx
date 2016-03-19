@@ -346,7 +346,7 @@ void handler::runExtract()
     }
 
     // and generate language file
-    mcMemory.saveTemplates(msPoDir, false, mbForceSave);
+    mcMemory.saveTemplates(msTargetDir, false, mbForceSave);
 }
 
 

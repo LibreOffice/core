@@ -41,6 +41,16 @@ class convert_po : public convert_gen
         void setMsgStr ();
         void handleNL  ();
 
+        // Used to save .pot files
+        void startSave(const std::string& sLanguage,
+                       const std::string& sFile);
+        void save(const std::string& sFileName,
+                  const std::string& sKey,
+                  const std::string& sENUStext,
+                  const std::string& sText,
+                  bool               bFuzzy);
+        void endSave();
+
     private:
         std::string  msId;
         std::string  msStr;
@@ -49,14 +59,5 @@ class convert_po : public convert_gen
         std::filebuf outBuffer;
 
         void execute() override;
-
-        void startSave(const std::string& sLanguage,
-                       const std::string& sFile) override;
-        void save(const std::string& sFileName,
-                  const std::string& sKey,
-                  const std::string& sENUStext,
-                  const std::string& sText,
-                  bool               bFuzzy) override;
-        void endSave() override;
 };
 #endif

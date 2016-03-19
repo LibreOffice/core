@@ -41,18 +41,6 @@ class convert_gen
         // all converters MUST implement this function
         virtual void execute() = 0;
 
-        // ONLY po should implement these functions
-        virtual void startSave(const std::string& sLanguage,
-                               const std::string& sFile);
-        virtual void save(const std::string& sFileName,
-                          const std::string& sKey,
-                          const std::string& sENUStext,
-                          const std::string& sText,
-                          bool               bFuzzy);
-        virtual void endSave();
-        static bool checkAccess(std::string& sFile);
-        static bool createDir(std::string& sDir, std::string& sFile);
-
         // utility functions for converters
         void lexRead(char *sBuf, int *nResult, int nMax_size);
         std::string& copySource(char const *yyText, bool bDoClear = true);
@@ -74,8 +62,9 @@ class convert_gen
 
         // utility functions for converters
         void writeSourceFile(const std::string& line);
-
-    private:
+        static bool checkAccess(std::string& sFile);
+        static bool createDir(std::string& sDir, std::string& sFile);
+private:
         std::ofstream mcOutputFile;
 };
 #endif

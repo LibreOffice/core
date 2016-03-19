@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include "gL10nMem.hxx"
+#include "gConvPO.hxx"
 
 l10nMem *myMem;
 
@@ -134,6 +135,7 @@ l10nMem::l10nMem()
     mcFileList.push_back(l10nMem_file_entry("-genLang-", 0));
     mcLangList.push_back(l10nMem_lang_list_entry("-genLang-"));
     mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", 0, 0, 0, l10nMem::ENTRY_DELETED));
+    msModuleName = "default";
 }
 
 
@@ -323,13 +325,15 @@ void l10nMem::setSourceKey(int                iLineNo,
 
 void l10nMem::saveTemplates(const std::string& sTargetDir, bool bKid, bool bForce)
 {
-    //    int iEsize = mcENUSlist.size();
-    std::string sFileName = msModuleName + ".pot";
+    int iE, iEsize = mcENUSlist.size();
+    // std::string sFileName = msModuleName + ".pot";
+
+    // Fix for new LO standard, at least valid for xrm
+    std::string sFileName = sTargetDir;
 
     // Dummy to satisfy compiler
     if (bKid)
-        return;
-    showError(sTargetDir);
+        throw "-k not implemented";
 
     // and reorganize db if needed
     miCurFileInx = 0;
@@ -342,8 +346,7 @@ void l10nMem::saveTemplates(const std::string& sTargetDir, bool bKid, bool bForc
     //JIX save HANDLE KID
 
     // Save en-US
-#if 0
-    convert_gen savePo(cMem, sTargetDir, sTargetDir, sFileName);
+    convert_po savePo(*this);
 
     savePo.startSave("templates/", sFileName);
     for (iE = 1; iE < iEsize; ++iE) {
@@ -356,7 +359,6 @@ void l10nMem::saveTemplates(const std::string& sTargetDir, bool bKid, bool bForc
         savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", false);
     }
     savePo.endSave();
-#endif
 }
 
 
