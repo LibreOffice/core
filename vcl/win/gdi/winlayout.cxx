@@ -3967,7 +3967,9 @@ bool D2DWriteTextOutRenderer::DrawGlyphs(const Point & origin, uint16_t * pGid, 
         {
             std::copy(pGid, pGidEnd, glyphIndices);
             std::copy_n(pAdvances, nGlyphs, glyphAdvances);
-            std::transform(pOffsets, pOffsets + nGlyphs, glyphOffsets, [](Point &o) { return DWRITE_GLYPH_OFFSET{ o.X(), o.Y() }; });
+            std::transform(pOffsets, pOffsets + nGlyphs,
+                glyphOffsets,
+                [](Point &o) { return DWRITE_GLYPH_OFFSET{static_cast<FLOAT>(o.X()), static_cast<FLOAT>(o.Y()) }; });
             D2D1_POINT_2F baseline = { origin.X() - bounds.Left(), origin.Y() - bounds.Top() };
             DWRITE_GLYPH_RUN glyphs = {
                 mpFontFace,
