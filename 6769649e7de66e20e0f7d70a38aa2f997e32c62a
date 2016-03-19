@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_b062f9ab",
+        "filename": "vcl/win/gdi/salnativewidgets-luna.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-03-19T20:37:28Z",
+      "side": 1,
+      "message": "Lest kill these two lines too \u003d)",
+      "revId": "6769649e7de66e20e0f7d70a38aa2f997e32c62a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
