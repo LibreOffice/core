@@ -26,8 +26,6 @@
 #include <map>
 #include <vector>
 #include <set>
-#include <functional>
-#include <algorithm>
 
 #include "unomodel.hxx"
 #include "utility.hxx"
@@ -93,14 +91,6 @@ typedef std::map< OUString, SmSym >    SymbolMap_t;
 
 // vector of pointers to the actual symbols in the above container
 typedef std::vector< const SmSym * >            SymbolPtrVec_t;
-
-struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
-{
-    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 ) const
-    {
-        return pSym1->GetCharacter() < pSym2->GetCharacter();
-    }
-};
 
 
 class SmSymbolManager : public SfxListener
