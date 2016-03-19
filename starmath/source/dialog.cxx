@@ -51,6 +51,7 @@
 #include "document.hxx"
 #include "unomodel.hxx"
 
+#include <algorithm>
 
 namespace
 {
@@ -1611,7 +1612,11 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
         aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
 
         // sort symbols by Unicode position (useful for displaying Greek characters alphabetically)
-        std::sort( aSymbolSet.begin(), aSymbolSet.end(), lt_SmSymPtr() );
+        std::sort( aSymbolSet.begin(), aSymbolSet.end(),
+                   [](const SmSym *pSym1, const SmSym *pSym2)
+                   {
+                       return pSym1->GetCharacter() < pSym2->GetCharacter();
+                   } );
 
         m_pSymbolSetDisplay->SetSymbolSet( aSymbolSet );
         if (aSymbolSet.size() > 0)
