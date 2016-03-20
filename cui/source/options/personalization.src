@@ -69,4 +69,9 @@ String RID_SVXSTR_PERSONA_NATURE
     Text [ en-US ] = "Nature";
 };
 
+String RID_SVXSTR_PERSONA_SOLID
+{
+    Text [ en-US ] = "Solid";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
