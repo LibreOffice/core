@@ -1209,14 +1209,14 @@ AC_ARG_ENABLE(split-app-modules,
 
 AC_ARG_ENABLE(split-opt-features,
     AS_HELP_STRING([--enable-split-opt-features],
-        [Split file lists for some optional features, .e.g. pyuno, testtool.
+        [Split file lists for some optional features, e.g. pyuno, testtool.
          Has effect only with make distro-pack-install]),
 ,)
 
 AC_ARG_ENABLE(cairo-canvas,
-[  --disable-cairo-canvas  Determines whether to build the Cairo canvas on
-                          platforms where Cairo is available.
-])
+    AS_HELP_STRING([--disable-cairo-canvas],
+        [Determines whether to build the Cairo canvas on platforms where Cairo is available.]),
+,)
 
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
@@ -1318,10 +1318,7 @@ AC_ARG_ENABLE(chart-tests,
 AC_ARG_ENABLE(build-unowinreg,
     AS_HELP_STRING([--enable-build-unowinreg],
         [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
-         compiler is needed on Linux.])
-    [
-                          Usage:     --enable-build-unowinreg
-    ],
+         compiler is needed on Linux.]),
 ,)
 
 AC_ARG_ENABLE(dependency-tracking,
@@ -1582,10 +1579,10 @@ AC_ARG_WITH(theme,
 ,)
 
 AC_ARG_WITH(helppack-integration,
-[
-  --without-helppack-integration      It will not integrate the helppacks to the installer
-                          of the product.
-                          Please use this switch to use the online help or separate help packages.],
+    AS_HELP_STRING([--without-helppack-integration],
+        [It will not integrate the helppacks to the installer
+         of the product. Please use this switch to use the online help
+         or separate help packages.]),
 ,)
 
 AC_ARG_WITH(fonts,
@@ -1763,13 +1760,9 @@ AC_ARG_WITH(system-postgresql,
     [with_system_postgresql="$with_system_libs"])
 
 AC_ARG_WITH(libpq-path,
-    AS_HELP_STRING([--with-libpq-path],
+    AS_HELP_STRING([--with-libpq-path=<absolute path to your libpq installation>],
         [Use this PostgreSQL C interface (libpq) installation for building
-         the PostgreSQL-SDBC extension.])
-    [
-                          Usage:     --with-libpq-path=<absolute path to
-                                                  your libpq installation>
-    ],
+         the PostgreSQL-SDBC extension.]),
 ,)
 
 AC_ARG_WITH(system-firebird,
@@ -1987,13 +1980,10 @@ AC_ARG_WITH(linker-hash-style,
          if supported on the build system, and "sysv" otherwise.]))
 
 AC_ARG_WITH(jdk-home,
-    AS_HELP_STRING([--with-jdk-home],
+    AS_HELP_STRING([--with-jdk-home=<absolute path to JDK home>],
         [If you have installed JDK 1.3 or later on your system please supply the
          path here. Note that this is not the location of the java command but the
-         location of the entire distribution.])
-    [
-                          Usage:     --with-jdk-home=<absolute path to JDK home>
-    ],
+         location of the entire distribution.]),
 ,)
 
 AC_ARG_WITH(help,
@@ -2010,99 +2000,68 @@ AC_ARG_WITH(help,
 ,)
 
 AC_ARG_WITH(java,
-    AS_HELP_STRING([--with-java],
+    AS_HELP_STRING([--with-java=<java command>],
         [Specify the name of the Java interpreter command. Typically "java"
          which is the default.
 
          To build without support for Java components, applets, accessibility
-         or the XML filters written in Java, use --without-java or --with-java=no.])
-    [
-                          Usage:     --with-java==<java command>
-                                     --without-java
-    ],
+         or the XML filters written in Java, use --without-java or --with-java=no.]),
     [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ],
     [ with_java=java ]
 )
 
 AC_ARG_WITH(jvm-path,
-    AS_HELP_STRING([--with-jvm-path],
-        [Use a specific JVM search path at runtime.])
-    [
-                          Usage:     --with-jvm-path=<absolute path to parent of jvm home>
-
-                          e. g.: --with-jvm-path=/usr/lib/
-                                 to find JRE/JDK in /usr/lib/jvm/
-    ],
+    AS_HELP_STRING([--with-jvm-path=<absolute path to parent of jvm home>],
+        [Use a specific JVM search path at runtime.
+         e.g. use --with-jvm-path=/usr/lib/ to find JRE/JDK in /usr/lib/jvm/]),
 ,)
 
 AC_ARG_WITH(ant-home,
-    AS_HELP_STRING([--with-ant-home],
+    AS_HELP_STRING([--with-ant-home=<absolute path to Ant home>],
         [If you have installed Jakarta Ant on your system, please supply the path here.
          Note that this is not the location of the Ant binary but the location
-         of the entire distribution.])
-    [
-                          Usage:     --with-ant-home=<absolute path to Ant home>
-    ],
+         of the entire distribution.]),
 ,)
 
 AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--with-export-validation],
         [If you want the exported files to be validated. Right now limited to OOXML and ODF files.
          Note: You need executable scripts officeotron and odfvalidator that take the path to the file.
-         See https://cgit.freedesktop.org/libreoffice/contrib/dev-tools/tree/export-validation])
-    [
-                            Usage: --with-export-validation
-    ],
+         See https://cgit.freedesktop.org/libreoffice/contrib/dev-tools/tree/export-validation]),
 ,)
 
 AC_ARG_WITH(junit,
-    AS_HELP_STRING([--with-junit],
+    AS_HELP_STRING([--with-junit=<absolute path to JUnit 4 jar>],
         [Specifies the JUnit 4 jar file to use for JUnit-based tests.
-         --without-junit disables those tests. Not relevant in the --without-java case.])
-    [
-                          Usage:     --with-junit=<absolute path to JUnit 4 jar>
-    ],
+         --without-junit disables those tests. Not relevant in the --without-java case.]),
 ,with_junit=yes)
 
 AC_ARG_WITH(hamcrest,
-    AS_HELP_STRING([--with-hamcrest],
+    AS_HELP_STRING([--with-hamcrest=<absolute path to hamcrest jar>],
         [Specifies the hamcrest jar file to use for JUnit-based tests.
-         --without-junit disables those tests. Not relevant in the --without-java case.])
-    [
-                          Usage:     --with-hamcrest=<absolute path to hamcrest jar>
-    ],
+         --without-junit disables those tests. Not relevant in the --without-java case.]),
 ,with_hamcrest=yes)
 
 AC_ARG_WITH(perl-home,
-    AS_HELP_STRING([--with-perl-home],
+    AS_HELP_STRING([--with-perl-home=<abs. path to Perl 5 home>],
         [If you have installed Perl 5 Distribution, on your system, please
          supply the path here. Note that this is not the location of the Perl
-         binary but the location of the entire distribution.])
-    [
-                          Usage:     --with-perl-home=<abs. path to Perl 5 home>
-    ],
+         binary but the location of the entire distribution.]),
 ,)
 
-AC_ARG_WITH(
-    [doxygen],
+AC_ARG_WITH(doxygen,
     AS_HELP_STRING(
-        [--with-doxygen],
+        [--with-doxygen=<absolute path to doxygen executable>],
         [Specifies the doxygen executable to use when generating ODK C/C++
          documentation. --without-doxygen disables generation of ODK C/C++
-         documentation. Not relevant in the --disable-odk case.])
-    [
-                          Usage:     --with-doxygen=<absolute path to doxygen executable>
-    ],,
-    [with_doxygen=yes])
+         documentation. Not relevant in the --disable-odk case.]),
+,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
     AS_HELP_STRING([--with-visual-studio=<2013/2015>],
         [Specify which Visual Studio version to use in case several are
          installed. If not specified, only 2013 is detected automatically
-         because 2015 support is currently experimental.])
-    [
-                          Usage:     --with-visual-studio=<2013/2015>
-    ],
+         because 2015 support is currently experimental.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
@@ -2111,25 +2070,19 @@ AC_ARG_WITH(windows-sdk,
          in case the one that came with the selected Visual Studio
          is not what you want for some reason. Note that not all compiler/SDK
          combinations are supported. The intent is that this option should not
-         be needed.])
-    [
-                          Usage:     --with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)/10>
-    ],
+         be needed.]),
 ,)
 
 AC_ARG_WITH(lang,
-    AS_HELP_STRING([--with-lang],
+    AS_HELP_STRING([--with-lang="es sw tu cs sk"],
         [Use this option to build LibreOffice with additional UI language support.
          English (US) is always included by default.
          Separate multiple languages with space.
-         For all languages, use --with-lang=ALL.])
-    [
-                          Usage:     --with-lang="es sw tu cs sk"
-    ],
+         For all languages, use --with-lang=ALL.]),
 ,)
 
 AC_ARG_WITH(locales,
-    AS_HELP_STRING([--with-locales],
+    AS_HELP_STRING([--with-locales="en es pt fr zh kr ja"],
         [Use this option to limit the locale information built in.
          Separate multiple locales with space.
          Very experimental and might well break stuff.
@@ -2148,8 +2101,6 @@ AC_ARG_WITH(locales,
                           For the default, all locales, don't use this switch at all.
                           Specifying just the language part of a locale means all matching
                           locales will be included.
-
-                          Usage:     --with-locales="en es pt fr zh kr ja"
     ],
 ,)
 
@@ -2179,7 +2130,7 @@ dnl Branding
 dnl ===================================================================
 
 AC_ARG_WITH(branding,
-    AS_HELP_STRING([--with-branding],
+    AS_HELP_STRING([--with-branding=/path/to/images],
         [Use given path to retrieve branding images set.])
     [
                           Search for intro.png about.svg and flat_logo.svg.
@@ -2202,35 +2153,24 @@ AC_ARG_WITH(branding,
                           progress bar text from top. Decimal value.
 
                           Default values will be used if not found.
-
-                          Usage:     --with-branding=/path/to/images
     ],
 ,)
 
 
 AC_ARG_WITH(extra-buildid,
-    AS_HELP_STRING([--with-extra-buildid],
-        [Show addition build identification in about dialog.])
-    [
-                          Usage:     --with-extra-buildid="Tinderbox: Win-x86@6, Branch:master, Date:2012-11-26_00.29.34"
-    ],
+    AS_HELP_STRING([--with-extra-buildid="Tinderbox: Win-x86@6, Branch:master, Date:2012-11-26_00.29.34"],
+        [Show addition build identification in about dialog.]),
 ,)
 
 
 AC_ARG_WITH(vendor,
-    AS_HELP_STRING([--with-vendor],
-        [Set vendor of the build.])
-    [
-                          Usage:     --with-vendor="John the Builder"
-    ],
+    AS_HELP_STRING([--with-vendor="John the Builder"],
+        [Set vendor of the build.]),
 ,)
 
 AC_ARG_WITH(android-package-name,
-    AS_HELP_STRING([--with-android-package-name],
-        [Set Android package name of the build.])
-    [
-                          Usage:     --with-android-package-name="org.libreoffice"
-    ],
+    AS_HELP_STRING([--with-android-package-name="org.libreoffice"],
+        [Set Android package name of the build.]),
 ,)
 
 AC_ARG_WITH(compat-oowrappers,
@@ -2241,42 +2181,27 @@ AC_ARG_WITH(compat-oowrappers,
 ,)
 
 AC_ARG_WITH(os-version,
-    AS_HELP_STRING([--with-os-version],
-        [For FreeBSD users, use this option option to override the detected OSVERSION.])
-    [
-                          Usage:     --with-os-version=<OSVERSION>
-    ],
+    AS_HELP_STRING([--with-os-version=<OSVERSION>],
+        [For FreeBSD users, use this option option to override the detected OSVERSION.]),
 ,)
 
 AC_ARG_WITH(mingw-cross-compiler,
-    AS_HELP_STRING([--with-mingw-cross-compiler],
-        [Specify the MinGW cross-compiler to use.])
-    [
-                          Usage:     --with-mingw-cross-compiler=<mingw32-g++ command>
-
-                          When building on the ODK on Unix and building unowinreg.dll,
-                          specify the MinGW C++ cross-compiler.
-    ],
+    AS_HELP_STRING([--with-mingw-cross-compiler=<mingw32-g++ command>],
+        [Specify the MinGW cross-compiler to use.
+         When building on the ODK on Unix and building unowinreg.dll,
+         specify the MinGW C++ cross-compiler.]),
 ,)
 
 AC_ARG_WITH(idlc-cpp,
-    AS_HELP_STRING([--with-idlc-cpp],
-        [Specify the C Preprocessor to use for idlc.])
-    [
-                          Usage:     --with-idlc-cpp=cpp
-
-                          Default is ucpp.
-    ]
+    AS_HELP_STRING([--with-idlc-cpp=<cpp/ucpp>],
+        [Specify the C Preprocessor to use for idlc. Default is ucpp.]),
 ,)
 
 AC_ARG_WITH(build-version,
-    AS_HELP_STRING([--with-build-version],
+    AS_HELP_STRING([--with-build-version="Built by Jim"],
         [Allows the builder to add a custom version tag that will appear in the
-         Help/About box for QA purposes.])
-    [
-                          Usage:     --with-build-version="Built by Jim"
-    ],
-    with_build_version=$withval ,
+         Help/About box for QA purposes.]),
+with_build_version=$withval,
 )
 
 AC_ARG_WITH(alloc,
@@ -2385,11 +2310,9 @@ dnl MacOSX build and runtime environment options
 dnl ===================================================================
 
 AC_ARG_WITH(macosx-sdk,
-    AS_HELP_STRING([--with-macosx-sdk],
+    AS_HELP_STRING([--with-macosx-sdk=<version>],
         [Use a specific SDK for building.])
     [
-                          Usage:     --with-macosx-sdk=<version>
-
                           e. g.: --with-macosx-sdk=10.8
 
                           there are 3 options to control the MacOSX build:
@@ -2423,22 +2346,18 @@ AC_ARG_WITH(macosx-sdk,
 ,)
 
 AC_ARG_WITH(macosx-version-min-required,
-    AS_HELP_STRING([--with-macosx-version-min-required],
+    AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          Usage:     --with-macosx-version-min-required=<version>
-
                           e. g.: --with-macos-version-min-required=10.8
                           see --with-macosx-sdk for more info
     ],
 ,)
 
 AC_ARG_WITH(macosx-version-max-allowed,
-    AS_HELP_STRING([--with-macosx-version-max-allowed],
+    AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
         [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
     [
-                          Usage:     --with-macosx-version-max-allowed=<version>
-
                           e. g.: --with-macos-version-max-allowed=10.8
                           see --with-macosx-sdk for more info
     ],
