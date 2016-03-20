@@ -16,6 +16,24 @@
       "revId": "c08179f306a40ef0c733d4827897af124a575eba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b3ede327",
+        "filename": "cui/uiconfig/ui/select_persona_dialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1001174
+      },
+      "writtenOn": "2016-03-20T04:43:06Z",
+      "side": 1,
+      "message": "I talked to @Yousuf and he suggested me to make a label like this and make the \"Firefox Theme\" part as an URL to the Firefox Theme store.",
+      "parentUuid": "9ad45d7e_f372bbac",
+      "revId": "c08179f306a40ef0c733d4827897af124a575eba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
