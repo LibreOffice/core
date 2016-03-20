@@ -34,6 +34,7 @@ private:
     VclPtr<ListBox> m_pPersonaList;                    ///< The ListBox to show the list of installed personas
     OUString m_aPersonaSettings;                ///< Header and footer images + color to be set in the settings.
     VclPtr<FixedText> m_pExtensionLabel;               ///< The "select persona installed via extensions" label
+    VclPtr<FixedText> m_pAppliedThemeLabel;        ///< The label for showing applied custom theme
 
     std::vector<OUString> m_vDefaultPersonaSettings;
     std::vector<OUString> m_vExtensionPersonaSettings;
@@ -52,6 +53,8 @@ public:
     virtual void Reset( const SfxItemSet *rSet ) override;
 
     void SetPersonaSettings( const OUString& );
+    void CheckAppliedTheme();
+    void ShowAppliedThemeLabel( OUString& );
 
     void LoadDefaultImages();
     void LoadExtensionThemes();
@@ -82,7 +85,7 @@ private:
     VclPtr<PushButton> m_pSearchButton;            ///< The search button
     VclPtr<FixedText> m_pProgressLabel;            ///< The label for showing progress of search
     VclPtr<PushButton> m_vResultList[9];           ///< List of buttons to show search results
-    VclPtr<PushButton> m_vSearchSuggestions[5];    ///< List of buttons for the search suggestions
+    VclPtr<PushButton> m_vSearchSuggestions[6];    ///< List of buttons for the search suggestions
     VclPtr<PushButton> m_pOkButton;                ///< The OK button
     VclPtr<PushButton> m_pCancelButton;            ///< The Cancel button
 
@@ -118,16 +121,16 @@ private:
 
     VclPtr<SelectPersonaDialog> m_pPersonaDialog;
     OUString m_aURL;
-    bool m_bExecute;
+    bool m_bExecute, m_bDirectURL;
 
     virtual ~SearchAndParseThread();
     virtual void execute() override;
-    void getPreviewFile( const OUString&, OUString *, OUString * );
+    bool getPreviewFile( const OUString&, OUString *, OUString * );
 
 public:
 
     SearchAndParseThread( SelectPersonaDialog* pDialog,
-                          const OUString& rURL );
+                          const OUString& rURL, bool rDirectURL );
 
     void StopExecution() { m_bExecute = false; }
 };
