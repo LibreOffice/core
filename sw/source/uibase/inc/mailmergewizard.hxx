@@ -45,9 +45,6 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
     OUString                m_sAddressList;
     OUString                m_sGreetingsLine;
     OUString                m_sLayout;
-    OUString                m_sPrepareMerge;
-    OUString                m_sMerge;
-    OUString                m_sOutput;
     OUString                m_sFinish;
 
     sal_uInt16              m_nRestartPage;
