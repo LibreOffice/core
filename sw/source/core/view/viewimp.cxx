@@ -57,8 +57,7 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
             pRoot->GetDrawPage()->SetSize( pRoot->Frame().SSize() );
 
         m_pSdrPageView = m_pDrawView->ShowSdrPage( pRoot->GetDrawPage());
-        // OD 26.06.2003 #108784# - notify drawing page view about invisible
-        // layers.
+        // Notify drawing page view about invisible layers
         rIDDMA.NotifyInvisibleLayers( *m_pSdrPageView );
     }
     m_pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
@@ -101,7 +100,6 @@ SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
     m_bSmoothUpdate( false ),
     m_bStopSmooth( false ),
     m_nRestoreActions( 0 ),
-    // OD 12.12.2002 #103492#
     m_pPagePreviewLayout( nullptr )
 {
 }
@@ -110,10 +108,9 @@ SwViewShellImp::~SwViewShellImp()
 {
     delete m_pAccessibleMap;
 
-    // OD 12.12.2002 #103492#
     delete m_pPagePreviewLayout;
 
-    //JP 29.03.96: after ShowSdrPage  HideSdrPage must also be executed!!!
+    // Make sure HideSdrPage is also executed after ShowSdrPage.
     if( m_pDrawView )
          m_pDrawView->HideSdrPage();
 
@@ -423,7 +420,7 @@ void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFra
     }
 }
 
-// OD 15.01.2003 #103492# - method signature change due to new page preview functionality
+// Method signature changes due to new page preview functionality
 void SwViewShellImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                          const Fraction&  _rScale,
                                          const SwPageFrame* _pSelectedPageFrame,
