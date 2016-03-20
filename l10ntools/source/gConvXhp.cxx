@@ -54,6 +54,8 @@ void convert_xhp::doExecute()
     string sLang;
     string sFile, sFile2;
 
+    mcMemory.setResourceName("help");
+
     // prepare list with languages
     miCntLanguages = mcMemory.prepareMerge();
     if (mbMergeMode) {
@@ -245,8 +247,12 @@ void convert_xhp::closeTransTag(char *yytext)
 
 
     if (meExpectValue == VALUE_IS_VALUE || meExpectValue == VALUE_IS_VALUE_TAG) {
-        if (msCollector.size() && msCollector != "-")
-            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, msCollector, mbMergeMode);
+        if (msCollector.size() && msCollector != "-") {
+            string newString(msCollector);
+            if (newString[newString.length() - 1] == ' ')
+                newString = newString.substr(0, newString.length() - 1);
+            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, newString, mbMergeMode);
+        }
         msKey.clear();
         iType = 2;
     }

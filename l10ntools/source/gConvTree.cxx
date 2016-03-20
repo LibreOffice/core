@@ -55,8 +55,6 @@ void convert_tree::doExecute()
     string sLang;
     string sFile, sFile2;
 
-    mcMemory.setResourceName("help_section");
-
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
 
