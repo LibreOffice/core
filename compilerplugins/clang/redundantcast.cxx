@@ -32,7 +32,7 @@ namespace {
 
 bool isVoidPointer(QualType type) {
     return type->isPointerType()
-        && type->getAs<PointerType>()->getPointeeType()->isVoidType();
+        && type->getAs<clang::PointerType>()->getPointeeType()->isVoidType();
 }
 
 class RedundantCast:
@@ -120,10 +120,10 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
             Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
             while (isa<CXXConstCastExpr>(e)) {
                 auto cc = dyn_cast<CXXConstCastExpr>(e);
-                if (expr->getType()->getAs<PointerType>()->getPointeeType()
-                    .isAtLeastAsQualifiedAs(
+                if (expr->getType()->getAs<clang::PointerType>()
+                    ->getPointeeType().isAtLeastAsQualifiedAs(
                         cc->getSubExpr()->getType()
-                        ->getAs<PointerType>()->getPointeeType()))
+                        ->getAs<clang::PointerType>()->getPointeeType()))
                 {
                     report(
                         DiagnosticsEngine::Warning,
@@ -164,10 +164,10 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
             Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
             while (isa<CXXConstCastExpr>(e)) {
                 auto cc = dyn_cast<CXXConstCastExpr>(e);
-                if (expr->getType()->getAs<PointerType>()->getPointeeType()
-                    .isAtLeastAsQualifiedAs(
+                if (expr->getType()->getAs<clang::PointerType>()
+                    ->getPointeeType().isAtLeastAsQualifiedAs(
                         cc->getSubExpr()->getType()
-                        ->getAs<PointerType>()->getPointeeType()))
+                        ->getAs<clang::PointerType>()->getPointeeType()))
                 {
                     report(
                         DiagnosticsEngine::Warning,
@@ -213,7 +213,7 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
         return true;
     }
     if (expr->getSubExpr()->getType()->isVoidPointerType()) {
-        auto t = expr->getType()->getAs<PointerType>();
+        auto t = expr->getType()->getAs<clang::PointerType>();
         if (t == nullptr || !t->getPointeeType()->isObjectType()) {
             return true;
         }
@@ -250,7 +250,7 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
             << expr->getSubExprAsWritten()->getType() << expr->getType()
             << expr->getSourceRange();
     } else if (expr->getType()->isVoidPointerType()) {
-        auto t = expr->getSubExpr()->getType()->getAs<PointerType>();
+        auto t = expr->getSubExpr()->getType()->getAs<clang::PointerType>();
         if (t == nullptr || !t->getPointeeType()->isObjectType()) {
             return true;
         }
