@@ -119,10 +119,10 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     //Filling a table
     for (int i = 1; i < mMaxFieldIndex; i++)
     {
-        oSheet->getCellByPosition(i, 0)->setFormula(OUString("Col") + OUString::number(i));
-        oSheet->getCellByPosition(0, i)->setFormula(OUString("Row") + OUString::number(i));
-        oSheet2->getCellByPosition(i, 0)->setFormula(OUString("Col") + OUString::number(i));
-        oSheet2->getCellByPosition(0, i)->setFormula(OUString("Row") + OUString::number(i));
+        oSheet->getCellByPosition(i, 0)->setFormula("Col" + OUString::number(i));
+        oSheet->getCellByPosition(0, i)->setFormula("Row" + OUString::number(i));
+        oSheet2->getCellByPosition(i, 0)->setFormula("Col" + OUString::number(i));
+        oSheet2->getCellByPosition(0, i)->setFormula("Row" + OUString::number(i));
     }
 
     for (int i = 1; i < mMaxFieldIndex; i++)
