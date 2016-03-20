@@ -44,11 +44,11 @@ class convert_src : public convert_gen
         void stopBlock     (char *syyText);
 
     private:
-        std::vector<std::string> mcStack;
-        std::string              msValue;
-        std::string              msName;
-        std::string              msTextName;
-        std::string              msCmd;
+        vector<string> mcStack;
+        string              msValue;
+        string              msName;
+        string              msTextName;
+        string              msCmd;
         bool                     mbEnUs;
         bool                     mbExpectName;
         bool                     mbExpectMacro;
@@ -59,8 +59,8 @@ class convert_src : public convert_gen
         int                      miListCount;
         int                      miMacroLevel;
         void doExecute() override;
-        void trim(std::string& sText);
-        void buildKey(std::string& sKey);
-        void insertLanguagePart(std::string& sKey, std::string& sTextType);
+        void trim(string& sText);
+        void buildKey(string& sKey);
+        void insertLanguagePart(string& sKey, string& sTextType);
 };
 #endif

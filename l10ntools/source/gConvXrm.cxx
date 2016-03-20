@@ -18,6 +18,7 @@
  */
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXrm.hxx"
@@ -54,14 +55,14 @@ void convert_xrm::doExecute()
 
 void convert_xrm::setId(char *yytext)
 {
-    std::string& sText = copySource(yytext, mbNoCollectingData);
+    string& sText = copySource(yytext, mbNoCollectingData);
     int          nL, nE;
 
 
     if (mbIsTag) {
         nL = sText.find("\"");
         nE = sText.find("\"", nL+1);
-        if (nL == (int)std::string::npos || nE == (int)std::string::npos)
+        if (nL == (int)string::npos || nE == (int)string::npos)
             return;
 
         msKey = sText.substr(nL+1, nE - nL -1);
@@ -72,15 +73,15 @@ void convert_xrm::setId(char *yytext)
 
 void convert_xrm::setLang(char *yytext)
 {
-    std::string& sText = copySource(yytext, mbNoCollectingData);
-    std::string  sLang;
+    string& sText = copySource(yytext, mbNoCollectingData);
+    string  sLang;
     int          nL, nE;
 
 
     if (mbIsTag) {
         nL = sText.find("\"");
         nE = sText.find("\"", nL+1);
-        if (nL == (int)std::string::npos || nE == (int)std::string::npos)
+        if (nL == (int)string::npos || nE == (int)string::npos)
             return;
 
         sLang = sText.substr(nL+1, nE - nL -1);
@@ -118,7 +119,7 @@ void convert_xrm::startCollectData(char *yytext)
 
 void convert_xrm::stopCollectData(char *yytext)
 {
-    std::string sTagText, sTagEnd, sLang, sText = msCollector;
+    string sTagText, sTagEnd, sLang, sText = msCollector;
 
     copySource(yytext);
     if (!mbNoCollectingData) {
@@ -132,7 +133,7 @@ void convert_xrm::stopCollectData(char *yytext)
             mcMemory.prepareMerge();
             for (; mcMemory.getMergeLang(sLang, sText);) {
                 // replace \" with "
-                for (int i = 0; (i = sText.find("\\\"", i)) != (int)std::string::npos;)
+                for (int i = 0; (i = sText.find("\\\"", i)) != (int)string::npos;)
                     sText.erase(i,1);
 
                 // Prepare tag start and end

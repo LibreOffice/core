@@ -18,6 +18,7 @@
  */
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvUlf.hxx"
@@ -38,7 +39,7 @@ void convert_ulf::doExecute()
 
 void convert_ulf::setKey(char *syyText)
 {
-    std::string sText = copySource(syyText);
+    string sText = copySource(syyText);
 
     // locate key (is any)
     msKey = sText.substr(1,sText.size()-2);
@@ -48,7 +49,7 @@ void convert_ulf::setKey(char *syyText)
 
 void convert_ulf::setText(char *syyText, bool bIsEnUs)
 {
-    std::string sText = copySource(syyText) + " is not en-US";
+    string sText = copySource(syyText) + " is not en-US";
 
 
     if (!bIsEnUs)
@@ -59,7 +60,7 @@ void convert_ulf::setText(char *syyText, bool bIsEnUs)
 
 void convert_ulf::setValue(char *syyText)
 {
-    std::string sLang, sText = copySource(syyText);
+    string sLang, sText = copySource(syyText);
     int         nL;
 
     sText.erase(0,1);

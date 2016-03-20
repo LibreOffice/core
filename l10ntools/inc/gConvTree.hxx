@@ -45,14 +45,14 @@ class convert_tree : public convert_gen
         void         setString         (char *yytext);
         void         setState          (char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL);
         void         setValue          (char *yytext);
-        std::string& copySourceSpecial (char *yytext, int iType);
-        void         writeSourceFile   (std::string& sText, int inx);
+        string& copySourceSpecial (char *yytext, int iType);
+        void         writeSourceFile   (string& sText, int inx);
 
     private:
-        std::string     msLine;
-        std::string     msId;
-        std::string     msAppl;
-        std::ofstream  *mcOutputFiles;
+        string     msLine;
+        string     msId;
+        string     msAppl;
+        ofstream  *mcOutputFiles;
         STATE_TAG       meStateTag;
         STATE_VAL       meStateVal;
         int             miCntLanguages;

@@ -31,9 +31,9 @@ class convert_gen
 
         // Create instance
         static convert_gen& createInstance(l10nMem&           cMemory,
-                                           const std::string& sSourceDir,
-                                           const std::string& sTargetDir,
-                                           const std::string& sSourceFile);
+                                           const string& sSourceDir,
+                                           const string& sTargetDir,
+                                           const string& sSourceFile);
 
         // do extract/merge
         bool execute(const bool bMerge);
@@ -43,28 +43,28 @@ class convert_gen
 
         // utility functions for converters
         void lexRead(char *sBuf, int *nResult, int nMax_size);
-        std::string& copySource(char const *yyText, bool bDoClear = true);
+        string& copySource(char const *yyText, bool bDoClear = true);
 
     protected:
         // generic variables
         bool         mbMergeMode;
         bool         mbLoadMode;
-        std::string  msSourcePath;
-        std::string  msTargetPath;
-        std::string  msSourceFile;
+        string  msSourcePath;
+        string  msTargetPath;
+        string  msSourceFile;
         l10nMem&     mcMemory;
-        std::string  msCollector;
+        string  msCollector;
         int          miLineNo;
-        std::string  msSourceBuffer, msCopyText;
+        string  msSourceBuffer, msCopyText;
         int          miSourceReadIndex;
 
         bool prepareFile();
 
         // utility functions for converters
-        void writeSourceFile(const std::string& line);
-        bool createDir(const std::string& sDir, const std::string& sFile);
+        void writeSourceFile(const string& line);
+        bool createDir(const string& sDir, const string& sFile);
 private:
-        std::ofstream mcOutputFile;
-        bool checkAccess(std::string& sFile);
+        ofstream mcOutputFile;
+        bool checkAccess(string& sFile);
 };
 #endif

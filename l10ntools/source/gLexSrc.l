@@ -22,6 +22,7 @@
 %top{
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvSrc.hxx"
@@ -29,7 +30,7 @@
 #define IMPLptr convert_gen::mcImpl
 #define LOCptr ((convert_src *)convert_gen::mcImpl)
 
-/* enlarge token buffer to tokenize whole std::strings */
+/* enlarge token buffer to tokenize whole strings */
 #undef  YYLMAX
 #define YYLMAX 64000
 

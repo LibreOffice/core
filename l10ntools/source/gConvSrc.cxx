@@ -18,6 +18,7 @@
  */
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "gL10nMem.hxx"
 
@@ -68,7 +69,7 @@ void convert_src::setValue(char *syyText, char *sbuildValue)
 
 void convert_src::setLang(char *syyText, bool bEnUs)
 {
-    std::string useText = copySource(syyText) + " is no en-US language";
+    string useText = copySource(syyText) + " is no en-US language";
 
     mbEnUs = bEnUs;
     if (!bEnUs && mbExpectValue)
@@ -98,7 +99,7 @@ void convert_src::setText(char *syyText)
 
 void convert_src::setName(char *syyText)
 {
-    std::string useText = copySource(syyText);
+    string useText = copySource(syyText);
 
     trim(useText);
     if (mbExpectName) {
@@ -152,7 +153,7 @@ void convert_src::setList(char *syyText)
 void convert_src::setNL(char *syyText, bool bMacro)
 {
     int         nL;
-    std::string sKey;
+    string sKey;
 
     copySource(syyText);
 
@@ -162,13 +163,13 @@ void convert_src::setNL(char *syyText, bool bMacro)
 
         for (nL = -1;;) {
             nL = msValue.find("\\\"", nL+1);
-            if (nL == (int)std::string::npos)
+            if (nL == (int)string::npos)
                 break;
             msValue.erase(nL,1);
         }
         for (nL = -1;;) {
             nL = msValue.find("\\\\", nL+1);
-            if (nL == (int)std::string::npos)
+            if (nL == (int)string::npos)
                 break;
             msValue.erase(nL,1);
         }
@@ -240,8 +241,8 @@ void convert_src::setListItem(char const *syyText, bool bIsStart)
     else
     {
         if (mbInListItem) {
-            std::stringstream ssBuf;
-            std::string       myKey;
+            stringstream ssBuf;
+            string       myKey;
 
             ++miListCount;
             mcStack.pop_back();
@@ -261,7 +262,7 @@ void convert_src::setListItem(char const *syyText, bool bIsStart)
 
 
 
-void convert_src::trim(std::string& sText)
+void convert_src::trim(string& sText)
 {
     int nL;
 
@@ -275,7 +276,7 @@ void convert_src::trim(std::string& sText)
 
 
 
-void convert_src::buildKey(std::string& sKey)
+void convert_src::buildKey(string& sKey)
 {
     int nL;
 
@@ -288,9 +289,9 @@ void convert_src::buildKey(std::string& sKey)
 
 
 
-void convert_src::insertLanguagePart(std::string& sKey, std::string& sTextType)
+void convert_src::insertLanguagePart(string& sKey, string& sTextType)
 {
-    std::string sLang, sText, sTagText;
+    string sLang, sText, sTagText;
 
 
     // just to please compiler

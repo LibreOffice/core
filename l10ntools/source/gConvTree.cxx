@@ -18,6 +18,7 @@
  */
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvTree.hxx"
@@ -51,8 +52,8 @@ convert_tree::~convert_tree()
 extern int treelex(void);
 void convert_tree::doExecute()
 {
-    std::string sLang;
-    std::string sFile, sFile2;
+    string sLang;
+    string sFile, sFile2;
 
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
@@ -60,17 +61,17 @@ void convert_tree::doExecute()
     // prepare list with languages
     if (mbMergeMode) {
         miCntLanguages = mcMemory.prepareMerge();
-        mcOutputFiles  = new std::ofstream[miCntLanguages];
+        mcOutputFiles  = new ofstream[miCntLanguages];
 
         for (int i = 0; mcMemory.getMergeLang(sLang, sFile); ++i) {
             sFile2 = sLang + "/" + msSourceFile;
             sFile  = msTargetPath + sFile2;
-            mcOutputFiles[i].open(sFile.c_str(), std::ios::binary);
+            mcOutputFiles[i].open(sFile.c_str(), ios::binary);
             if (!mcOutputFiles[i].is_open()) {
                 if (!convert_gen::createDir(msTargetPath, sFile2))
                     throw l10nMem::showError("Cannot create missing directories (" + sFile + ") for writing");
 
-                mcOutputFiles[i].open(sFile.c_str(), std::ios::binary);
+                mcOutputFiles[i].open(sFile.c_str(), ios::binary);
                 if (!mcOutputFiles[i].is_open())
                     throw l10nMem::showError("Cannot open file (" + sFile + ") for writing");
             }
@@ -103,7 +104,7 @@ void convert_tree::setString(char *yytext)
              break;
 
         case STATE_VAL_TITLE:
-             std::string sText = copySourceSpecial(yytext, 1);
+             string sText = copySourceSpecial(yytext, 1);
              sText.erase(sText.size()-1);
              mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, mbMergeMode);
              break;
@@ -134,10 +135,10 @@ void convert_tree::setValue(char *yytext)
 
 
 
-std::string& convert_tree::copySourceSpecial(char *yytext, int iType)
+string& convert_tree::copySourceSpecial(char *yytext, int iType)
 {
-    std::string& sText = copySource(yytext, false);
-    std::string  sLang, sTemp;
+    string& sText = copySource(yytext, false);
+    string  sLang, sTemp;
     int          i;
 
     // Handling depends on iType
@@ -172,7 +173,7 @@ std::string& convert_tree::copySourceSpecial(char *yytext, int iType)
                       writeSourceFile(msLine, i);
                       mcMemory.getMergeLang(sLang, sTemp);
                       writeSourceFile(sTemp,i);
-                      std::string sYY(yytext);
+                      string sYY(yytext);
                       writeSourceFile(sYY, i);
                  }
                  msLine.clear();
@@ -191,7 +192,7 @@ std::string& convert_tree::copySourceSpecial(char *yytext, int iType)
 
 
 
-void convert_tree::writeSourceFile(std::string& sText, int inx)
+void convert_tree::writeSourceFile(string& sText, int inx)
 {
     if (sText.size() && mcOutputFiles[inx].is_open())
         mcOutputFiles[inx].write(sText.c_str(), sText.size());

@@ -200,7 +200,8 @@ void convert_po::save(const string& sFileName,
     outFile << "#. xxxxx" << endl
             << "#: " << sName << endl
             << "msgctxt \"\"" << endl
-            << "\"" << sName << "\\n\"" << endl;
+            << "\"" << sName << "\\n\"" << endl
+            << "\"" << sKey << "\\n\"" << endl;
     if (bFuzzy)
         outFile << "#, fuzzy" << endl;
     outFile << "msgid  \"" << sENUStext << "\"" << endl

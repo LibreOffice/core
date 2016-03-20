@@ -34,7 +34,7 @@ class convert_xcs : public convert_gen
         void stopCollectData(char *syyText);
 
     private:
-        std::string msKey;
+        string msKey;
         bool        mbCollectingData;
 
         void doExecute() override;

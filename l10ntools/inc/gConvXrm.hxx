@@ -36,10 +36,10 @@ class convert_xrm : public convert_gen
         void stopCollectData(char *yytext);
 
     private:
-        std::string msKey;
+        string msKey;
         bool        mbIsTag;
         bool        mbIsLang;
-        std::string msTag;
+        string msTag;
 
         void doExecute() override;
 };

@@ -18,6 +18,7 @@
  */
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXcs.hxx"
@@ -53,15 +54,15 @@ void convert_xcs::doExecute()
 void convert_xcs::setKey(char *syyText)
 {
     int    nL;
-    std::string sHead, sText = copySource(syyText);
+    string sHead, sText = copySource(syyText);
 
     // is it to be translated
-    if (sText.find("oor:localized=") == std::string::npos)
+    if (sText.find("oor:localized=") == string::npos)
         return;
 
     // locate key (is any)
     nL = sText.find("oor:name=\"");
-    if (nL == (int)std::string::npos)
+    if (nL == (int)string::npos)
         return;
     sHead = sText.substr(nL+10);
     nL    = sHead.find("\"");
@@ -88,14 +89,14 @@ void convert_xcs::startCollectData(char *syyText)
 
 void convert_xcs::stopCollectData(char *syyText)
 {
-    std::string sHead, sKey, sLang, sText, sCollectedText = copySource(syyText, false);
+    string sHead, sKey, sLang, sText, sCollectedText = copySource(syyText, false);
     int    nL;
 
 
     // get type of tag
     msCollector += sCollectedText;
     nL = msCollector.find("<p");
-    if (nL != (int)std::string::npos)
+    if (nL != (int)string::npos)
         sHead = msCollector.substr(nL+1, 1);
     else {
         nL = msCollector.find("<h");
@@ -114,8 +115,8 @@ void convert_xcs::stopCollectData(char *syyText)
     if (mbMergeMode) {
 #if 0
         // get all languages (includes en-US)
-        std::vector<l10nMem_entry *>& cExtraLangauges = mcMemory.getLanguagesForKey(sKey);
-        std::string                   sNewLine;
+        vector<l10nMem_entry *>& cExtraLangauges = mcMemory.getLanguagesForKey(sKey);
+        string                   sNewLine;
         nL = cExtraLangauges.size();
 
         for (int i = 0; i < nL; ++i) {

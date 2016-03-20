@@ -33,7 +33,7 @@ class convert_ulf : public convert_gen
         void setValue(char *syyText);
 
     private:
-        std::string msKey;
+        string msKey;
 
         void doExecute() override;
         void handleLines();

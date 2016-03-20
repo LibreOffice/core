@@ -41,7 +41,7 @@ class convert_xcu : public convert_gen
         void addLevel();
 
     private:
-        std::vector<std::string> mcStack;
+        vector<string> mcStack;
         int                      miLevel;
         bool                     mbNoTranslate;
 
