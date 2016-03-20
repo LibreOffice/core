@@ -420,7 +420,6 @@ void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFra
     }
 }
 
-// Method signature changes due to new page preview functionality
 void SwViewShellImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                          const Fraction&  _rScale,
                                          const SwPageFrame* _pSelectedPageFrame,
