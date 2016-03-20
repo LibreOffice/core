@@ -201,7 +201,6 @@ _Comp CompareMatrixElemFunc<_Comp>::maComp;
 /* TODO: it would be good if mdds had get/set<sal_uInt8> additionally to
  * get/set<bool>, we're abusing double here. */
 typedef double TMatFlag;
-const TMatFlag SC_MATFLAG_EMPTYCELL   = 0.0;
 const TMatFlag SC_MATFLAG_EMPTYRESULT = 1.0;
 const TMatFlag SC_MATFLAG_EMPTYPATH   = 2.0;
 
@@ -316,7 +315,7 @@ private:
 };
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nR, nC), maMatFlag(nR, nC, SC_MATFLAG_EMPTYCELL), pErrorInterpreter(nullptr) {}
+    maMat(nR, nC), maMatFlag(nR, nC), pErrorInterpreter(nullptr) {}
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
     maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(nullptr) {}
@@ -483,7 +482,7 @@ void ScMatrixImpl::PutEmpty(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
     {
         maMat.set_empty(nR, nC);
-        maMatFlag.set(nR, nC, SC_MATFLAG_EMPTYCELL);
+        maMatFlag.set_empty(nR, nC);
     }
     else
     {
@@ -611,7 +610,8 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
             return maMat.get_string(aPos).getString();
         case mdds::mtm::element_empty:
         {
-            if (maMatFlag.get<TMatFlag>(nR, nC) != SC_MATFLAG_EMPTYPATH)
+            if (maMatFlag.get_type(nR, nC) == mdds::mtm::element_numeric ||
+                    maMatFlag.get<TMatFlag>(nR, nC) != SC_MATFLAG_EMPTYPATH)
                 // not an empty path.
                 return svl::SharedString::getEmptyString();
 
@@ -669,8 +669,18 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
             case mdds::mtm::element_empty:
                 /* TODO: do we need to pass the differentiation of 'empty' and
                  * 'empty result' to the outer world anywhere? */
-                aVal.nType = maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYPATH ? SC_MATVAL_EMPTYPATH :
-                    SC_MATVAL_EMPTY;
+                switch (maMatFlag.get_type(nR, nC))
+                {
+                    case mdds::mtm::element_empty:
+                        aVal.nType = SC_MATVAL_EMPTY;
+                    break;
+                    case mdds::mtm::element_numeric:
+                        aVal.nType = maMatFlag.get<TMatFlag>(nR, nC)
+                            == SC_MATFLAG_EMPTYPATH ? SC_MATVAL_EMPTYPATH : SC_MATVAL_EMPTY;
+                    break;
+                    default:
+                        assert(false);
+                }
                 aVal.fVal = 0.0;
             default:
                 ;
@@ -710,7 +720,8 @@ bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
     // but not an 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get<TMatFlag>(nR, nC) != SC_MATFLAG_EMPTYPATH;
+        (maMatFlag.get_type(nR, nC) == mdds::mtm::element_empty ||
+        maMatFlag.get<TMatFlag>(nR, nC) != SC_MATFLAG_EMPTYPATH);
 }
 
 bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
@@ -719,7 +730,7 @@ bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
     // 'empty' or 'empty result' or 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYCELL;
+        maMatFlag.get_type(nR, nC) == mdds::mtm::element_empty;
 }
 
 bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
@@ -728,6 +739,7 @@ bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
     // 'empty' or 'empty cell' or 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
+        maMatFlag.get_type(nR, nC) == mdds::mtm::element_numeric &&
         maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYRESULT;
 }
 
@@ -736,6 +748,7 @@ bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
     // Flag must indicate an 'empty path' element.
     if (ValidColRowOrReplicated( nC, nR ))
         return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
+            maMatFlag.get_type(nR, nC) == mdds::mtm::element_numeric &&
             maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYPATH;
     else
         return true;
@@ -853,8 +866,7 @@ void ScMatrixImpl::PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
     {
         maMat.set_empty(nR, nC, nCount);
         // Flag to indicate that this is 'empty', not 'empty result' or 'empty path'.
-        std::vector<TMatFlag> aVals(nCount, SC_MATFLAG_EMPTYCELL);
-        maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
+        maMatFlag.set_empty(nR, nC, nCount);
     }
     else
     {
