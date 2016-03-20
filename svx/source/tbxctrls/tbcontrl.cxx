@@ -1919,7 +1919,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     {
         m_pCurrencyLb->InsertEntry (*i);
         OUString *pFormatStr = &m_aFormatEntries[nPos];
-        m_pCurrencyLb->SetEntryData( nPos, reinterpret_cast<void*>( pFormatStr ) );
+        m_pCurrencyLb->SetEntryData( nPos, static_cast<void*>( pFormatStr ) );
         if( *pFormatStr == m_rSelectedFormat )
             nSelectedPos = nPos;
     }
@@ -2001,7 +2001,7 @@ IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
     if (!m_xControl.is())
         return;
 
-    OUString* pFormat = reinterpret_cast<OUString*> (
+    OUString* pFormat = static_cast<OUString*> (
         m_pCurrencyLb->GetEntryData( m_pCurrencyLb->GetSelectEntryPos() ) );
 
     assert( pFormat );
