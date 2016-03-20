@@ -1163,7 +1163,6 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
 {
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;
-    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     nMinC = lcl_GetMinExtent( nC1, nC2);
@@ -1171,9 +1170,9 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
-        for (i = 0; i < nMinC; i++)
+        for (SCSIZE i = 0; i < nMinC; i++)
         {
-            for (j = 0; j < nMinR; j++)
+            for (SCSIZE j = 0; j < nMinR; j++)
             {
                 sal_uInt16 nErr = pMat1->GetErrorIfNotString( i, j);
                 if (!nErr)
