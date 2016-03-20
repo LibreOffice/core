@@ -43,7 +43,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    uno::Reference< uno::XInterface > init();
+    uno::Reference< uno::XInterface > init() override;
 
     CPPUNIT_TEST_SUITE(CheckDataPilotTable);
     // _XNamed
