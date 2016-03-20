@@ -39,7 +39,7 @@ class handler
 
     private:
         bool mbForceSave;
-        enum {DO_CONVERT, DO_EXTRACT, DO_MERGE_KID, DO_MERGE} meWorkMode;
+        enum {DO_CONVERT, DO_EXTRACT, DO_MERGE} meWorkMode;
         string         msTargetDir;
         string         msPoDir;
         vector<string> mvSourceFiles;
@@ -49,7 +49,7 @@ class handler
         void loadL10MEM(bool onlyTemplates);
         void runConvert();
         void runExtract();
-        void runMerge(bool bKid);
+        void runMerge();
 };
 
 
@@ -78,7 +78,6 @@ void handler::showUsage(string sErr)
         "      merge     merge po files back to sources\n"
         "   <options> is a combination of\n"
         "      -d        show debug information\n"
-        "      -k        generate key identifier version\n"
         "      -s        save unconditionally\n"
         "      -v        show progress information\n"
         "\n"
@@ -122,7 +121,7 @@ void handler::showManual()
         "\n\n";
 
     cout <<
-        "  genLang merge [-v] [-d] [-s] [-k]\n"
+        "  genLang merge [-v] [-d] [-s]\n"
         "                --files <files>\n"
         "                --target <directory>\n"
         "                --po     <directory>\n"
@@ -177,13 +176,6 @@ void handler::checkCommandLine(int argc, char *argv[])
         if (sWorkText == "-d") {
             // show debug information
             mcMemory.setDebug(true);
-            mcMemory.setVerbose(true);
-        }
-        else if (sWorkText == "-k") {
-            // generate key identifier version
-            if (meWorkMode != DO_MERGE)
-                throw "-k requires \"merge\"";
-            meWorkMode = DO_MERGE_KID;
         }
         else if (sWorkText == "-v") {
             // show progress information
@@ -222,7 +214,6 @@ void handler::checkCommandLine(int argc, char *argv[])
         case DO_EXTRACT:
              bSourceFiles = bTargetDir = true;
              break;
-        case DO_MERGE_KID:
         case DO_MERGE:
              bPoDir = bTargetDir = true;
              break;
@@ -241,10 +232,9 @@ void handler::run()
     // use workMode to start correct control part
     switch (meWorkMode)
     {
-        case DO_EXTRACT:     runExtract();      break;
-        case DO_MERGE:       runMerge(false);   break;
-        case DO_MERGE_KID:   runMerge(true);    break;
-        case DO_CONVERT:     runConvert();      break;
+        case DO_EXTRACT:     runExtract(); break;
+        case DO_MERGE:       runMerge();   break;
+        case DO_CONVERT:     runConvert(); break;
     }
 }
 
@@ -264,7 +254,7 @@ void handler::loadL10MEM(bool onlyTemplates)
 
     // and load file
     mcMemory.setLanguage("", true);
-    convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false, false);
+    convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false);
 
     if (onlyTemplates)
       return;
@@ -302,7 +292,7 @@ void handler::runConvert()
 
         // get converter and extract files
         convert_gen& convertObj = convert_gen::createInstance(mcMemory, "./", msTargetDir, *siSource);
-        convertObj.execute(false, false);
+        convertObj.execute(false);
 
         mcMemory.showNOconvert();
 
@@ -331,6 +321,7 @@ void handler::runConvert()
 void handler::runExtract()
 {
     vector<string>::iterator siSource;
+    int newPos;
 
     // no convert
     mcMemory.setConvert(false, false);
@@ -340,9 +331,13 @@ void handler::runExtract()
         // tell system
         l10nMem::showDebug("genLang extracting text from file " + *siSource);
 
+        // set module name
+        newPos = (*siSource).find_last_of("/\\", (*siSource).length());
+        mcMemory.setModuleName((*siSource).substr(0, newPos));
+
         // get converter and extract file
         convert_gen& convertObj = convert_gen::createInstance(mcMemory, "", msTargetDir, *siSource);
-        convertObj.execute(false, false);
+        convertObj.execute(false);
     }
 
     // and generate language file
@@ -351,7 +346,7 @@ void handler::runExtract()
 
 
 
-void handler::runMerge(bool bKid)
+void handler::runMerge()
 {
     vector<string>::iterator siSource;
 
@@ -365,7 +360,7 @@ void handler::runMerge(bool bKid)
 
         // get converter and extract file
         convert_gen& convertObj = convert_gen::createInstance(mcMemory, "", msTargetDir, *siSource);
-        convertObj.execute(true, bKid);
+        convertObj.execute(true);
     }
 }
 

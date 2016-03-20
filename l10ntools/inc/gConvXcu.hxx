@@ -45,6 +45,6 @@ class convert_xcu : public convert_gen
         int                      miLevel;
         bool                     mbNoTranslate;
 
-        void execute() override;
+        void doExecute() override;
 };
 #endif

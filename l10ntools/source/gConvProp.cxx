@@ -37,7 +37,7 @@ convert_prop::~convert_prop()
 
 
 
-void convert_prop::execute()
+void convert_prop::doExecute()
 {
     throw l10nMem::showError(std::string("convert_prop::execute not implemented"));
 }

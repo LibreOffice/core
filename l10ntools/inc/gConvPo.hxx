@@ -42,7 +42,8 @@ class convert_po : public convert_gen
         void handleNL  ();
 
         // Used to save .pot files
-        void startSave(const std::string& sLanguage,
+        void startSave(const std::string& sName,
+                       const std::string& sTargetDir,
                        const std::string& sFile);
         void save(const std::string& sFileName,
                   const std::string& sKey,
@@ -58,6 +59,6 @@ class convert_po : public convert_gen
         bool         mbFuzzy;
         std::filebuf outBuffer;
 
-        void execute() override;
+        void doExecute() override;
 };
 #endif

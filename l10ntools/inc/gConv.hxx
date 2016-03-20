@@ -36,10 +36,10 @@ class convert_gen
                                            const std::string& sSourceFile);
 
         // do extract/merge
-        bool execute(const bool bMerge, const bool bKid);
+        bool execute(const bool bMerge);
 
         // all converters MUST implement this function
-        virtual void execute() = 0;
+        virtual void doExecute() = 0;
 
         // utility functions for converters
         void lexRead(char *sBuf, int *nResult, int nMax_size);
@@ -62,9 +62,9 @@ class convert_gen
 
         // utility functions for converters
         void writeSourceFile(const std::string& line);
-        static bool checkAccess(std::string& sFile);
-        static bool createDir(std::string& sDir, std::string& sFile);
+        bool createDir(const std::string& sDir, const std::string& sFile);
 private:
         std::ofstream mcOutputFile;
+        bool checkAccess(std::string& sFile);
 };
 #endif

@@ -49,7 +49,7 @@ convert_tree::~convert_tree()
 
 
 extern int treelex(void);
-void convert_tree::execute()
+void convert_tree::doExecute()
 {
     std::string sLang;
     std::string sFile, sFile2;

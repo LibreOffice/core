@@ -58,7 +58,7 @@ class convert_src : public convert_gen
         bool                     mbInListItem;
         int                      miListCount;
         int                      miMacroLevel;
-        void execute() override;
+        void doExecute() override;
         void trim(std::string& sText);
         void buildKey(std::string& sKey);
         void insertLanguagePart(std::string& sKey, std::string& sTextType);

@@ -39,7 +39,7 @@ convert_xcs::~convert_xcs()
 
 
 extern int xcslex(void);
-void convert_xcs::execute()
+void convert_xcs::doExecute()
 {
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");

@@ -44,7 +44,7 @@ convert_src::~convert_src()
 
 
 extern int srclex(void);
-void convert_src::execute()
+void convert_src::doExecute()
 {
     srclex();
 }

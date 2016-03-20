@@ -29,7 +29,7 @@ convert_ulf::~convert_ulf()                                              {}
 
 
 extern int ulflex(void);
-void convert_ulf::execute()
+void convert_ulf::doExecute()
 {
     ulflex();
 }

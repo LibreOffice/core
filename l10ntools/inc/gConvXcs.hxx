@@ -37,6 +37,6 @@ class convert_xcs : public convert_gen
         std::string msKey;
         bool        mbCollectingData;
 
-        void execute() override;
+        void doExecute() override;
 };
 #endif

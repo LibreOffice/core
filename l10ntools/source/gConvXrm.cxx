@@ -41,7 +41,7 @@ convert_xrm::~convert_xrm()
 
 
 extern int xrmlex(void);
-void convert_xrm::execute()
+void convert_xrm::doExecute()
 {
     xrmlex();
 

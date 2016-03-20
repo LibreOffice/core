@@ -29,6 +29,6 @@ class convert_prop : public convert_gen
         ~convert_prop();
 
     private:
-        void execute() override;
+        void doExecute() override;
 };
 #endif

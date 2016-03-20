@@ -38,7 +38,7 @@ convert_xcu::~convert_xcu()
 
 
 extern int xculex(void);
-void convert_xcu::execute()
+void convert_xcu::doExecute()
 {
     xculex();
 }

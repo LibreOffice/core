@@ -48,7 +48,7 @@ convert_xhp::~convert_xhp()
 
 
 extern int xhplex(void);
-void convert_xhp::execute()
+void convert_xhp::doExecute()
 {
     std::string sLang;
     std::string sFile, sFile2;

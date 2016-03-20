@@ -41,6 +41,6 @@ class convert_xrm : public convert_gen
         bool        mbIsLang;
         std::string msTag;
 
-        void execute() override;
+        void doExecute() override;
 };
 #endif

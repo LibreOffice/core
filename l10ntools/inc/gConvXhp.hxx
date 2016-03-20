@@ -60,6 +60,6 @@ class convert_xhp : public convert_gen
         std::string    *msLangText;
         std::ofstream  *mcOutputFiles;
         int             miCntLanguages;
-        void            execute() override;
+        void            doExecute() override;
 };
 #endif

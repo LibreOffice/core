@@ -57,6 +57,6 @@ class convert_tree : public convert_gen
         STATE_VAL       meStateVal;
         int             miCntLanguages;
 
-        void execute() override;
+        void doExecute() override;
 };
 #endif
