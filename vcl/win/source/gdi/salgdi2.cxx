@@ -29,13 +29,13 @@
 #include <win/salids.hrc>
 #include <win/salgdi.h>
 #include <win/salframe.h>
+#include <opengl/salbmp.hxx>
 
 #include "vcl/salbtype.hxx"
 #include "vcl/bmpacc.hxx"
 #include "outdata.hxx"
 #include "salgdiimpl.hxx"
 #include "opengl/win/gdiimpl.hxx"
-
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
@@ -76,9 +76,15 @@ namespace
 
 void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 {
-        BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BITMAP_READ_ACCESS);
+        BitmapPalette aBitmapPalette;
+        OpenGLSalBitmap* pGLSalBitmap = dynamic_cast<OpenGLSalBitmap*>(&rSalBitmap);
+        if (pGLSalBitmap != nullptr)
+        {
+            aBitmapPalette = pGLSalBitmap->GetBitmapPalette();
+        }
 
-        rWinSalBitmap.Create(rSalBitmap.GetSize(), rSalBitmap.GetBitCount(), BitmapPalette());
+        BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BITMAP_READ_ACCESS);
+        rWinSalBitmap.Create(rSalBitmap.GetSize(), rSalBitmap.GetBitCount(), aBitmapPalette);
         BitmapBuffer* pWrite = rWinSalBitmap.AcquireBuffer(BITMAP_WRITE_ACCESS);
 
         sal_uInt8* pSource(pRead->mpBits);
