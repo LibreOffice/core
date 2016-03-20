@@ -90,49 +90,49 @@ IDENT [\.a-zA-Z0-9_-]+
 
 
 \> {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_VALUE, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_VALUE, convert_tree::STATE_VAL_NONE, NULL);
 }
 
 
 
 "id=" {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_ID);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_ID, NULL);
 }
 
 
 
 "application=" {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_APPL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_APPL, NULL);
 }
 
 
 
 "title=" {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_TITLE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_TITLE, NULL);
 }
 
 
 
 "<help_section " {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_HELPSEC, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_HELPSEC, convert_tree::STATE_VAL_NONE, "help_section");
 }
 
 
 
 "<node " {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NODE, convert_tree::STATE_VAL_NONE);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NODE, convert_tree::STATE_VAL_NONE, "node");
 }
 
 
 
 "<topic " {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_TOPIC, convert_tree::STATE_VAL_NONE);
+    //NOT NOW LOCptr->setState(yytext, convert_tree::STATE_TAG_TOPIC, convert_tree::STATE_VAL_NONE, NULL);
 }
 
 
 
 "</topic" {
-    LOCptr->setValue(yytext);
+    // NOT NOW LOCptr->setValue(yytext);
 }
 
 
@@ -153,7 +153,5 @@ IDENT [\.a-zA-Z0-9_-]+
 
 void tree_dummyJustForCompiler()
 {
-    char *txt = NULL;
-    //  yy_flex_strlen(txt);
-    yyunput(0, txt);
+    yyunput(0, NULL);
 }

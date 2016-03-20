@@ -89,11 +89,13 @@ class l10nMem_enus_entry
     public:
         l10nMem_enus_entry(const string&   sKey,
                            const string&   sMsgId,
+                           const string&   sResource,
                            int                  iLineNo,
                            int                  iFileInx,
                            int                  iLangSize,
                            l10nMem::ENTRY_STATE eState)
                           : msMsgId(sMsgId),
+                            msResId(sResource),
                             meState(eState),
                             miFileInx(iFileInx),
                             miLineNo(iLineNo)
@@ -113,6 +115,7 @@ class l10nMem_enus_entry
 
         string                     msKey;      // key in po file and source file
         string                     msMsgId;    // en-US text from source file
+        string                     msResId;    // Resource Id (to be used in msgcstr)
         l10nMem::ENTRY_STATE            meState;    // status information
         int                             miFileInx;  // index of file name
         int                             miLineNo;   // line number
@@ -133,10 +136,11 @@ l10nMem::l10nMem()
                   mbStrictMode(false)
 {
     myMem = this;
+    msModuleName   = "default";
+    msResourceName = "";
     mcFileList.push_back(l10nMem_file_entry("-genLang-", 0));
     mcLangList.push_back(l10nMem_lang_list_entry("-genLang-"));
-    mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", 0, 0, 0, l10nMem::ENTRY_DELETED));
-    msModuleName = "default";
+    mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", "", 0, 0, 0, l10nMem::ENTRY_DELETED));
 }
 
 
@@ -196,6 +200,20 @@ void l10nMem::setModuleName(const string& sModuleName)
 const string& l10nMem::getModuleName()
 {
     return msModuleName;
+}
+
+
+
+void l10nMem::setResourceName(const string& sResourceName)
+{
+    msResourceName = sResourceName;
+}
+
+
+
+const string& l10nMem::getResourceName()
+{
+    return msResourceName;
 }
 
 
@@ -354,7 +372,7 @@ void l10nMem::saveTemplates(const string& sTargetDir, bool bKid, bool bForce)
         if (cE.meState == ENTRY_DELETED)
             continue;
 
-        savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", false);
+        savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", cE.msResId, false);
     }
     savePo.endSave();
 }
@@ -899,7 +917,7 @@ void l10nMem::addKey(int                  iLineNo,
         mcFileList.push_back(l10nMem_file_entry(sSourceFile, miCurENUSinx));
 
         // and add entry at the back (no problem since it is a new file)
-        mcENUSlist.push_back(l10nMem_enus_entry(sKey, sMsgId, iLineNo, miCurFileInx,
+        mcENUSlist.push_back(l10nMem_enus_entry(sKey, sMsgId, msResourceName, iLineNo, miCurFileInx,
             mcLangList.size(), eStat));
         mcFileList[miCurFileInx].miEnd = miCurENUSinx;
     }
@@ -912,7 +930,7 @@ void l10nMem::addKey(int                  iLineNo,
         curF.miEnd++;
         miCurENUSinx = curF.miEnd;
         mcENUSlist.insert(it + curF.miEnd,
-                          l10nMem_enus_entry(sKey, sMsgId, iLineNo, miCurFileInx,
+            l10nMem_enus_entry(sKey, sMsgId, msResourceName, iLineNo, miCurFileInx,
                           mcLangList.size(), eStat));
         for (int i = miCurFileInx + 1; i < iFsize; ++i) {
             l10nMem_file_entry& curF2 = mcFileList[i];

@@ -55,6 +55,8 @@ void convert_tree::doExecute()
     string sLang;
     string sFile, sFile2;
 
+    mcMemory.setResourceName("help_section");
+
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
 
@@ -114,12 +116,14 @@ void convert_tree::setString(char *yytext)
 
 
 
-void convert_tree::setState(char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL)
+void convert_tree::setState(char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL, char *sModule)
 {
     copySourceSpecial(yytext, 0);
     msCollector.clear();
     meStateTag = eNewStateTag;
     meStateVal = eNewStateVAL;
+    if (sModule)
+        mcMemory.setResourceName(sModule);
 }
 
 

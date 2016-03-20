@@ -49,6 +49,7 @@ class convert_po : public convert_gen
                   const string& sKey,
                   const string& sENUStext,
                   const string& sText,
+                  const string& sResource,
                   bool               bFuzzy);
         void endSave();
 

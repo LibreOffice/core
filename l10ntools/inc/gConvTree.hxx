@@ -43,7 +43,7 @@ class convert_tree : public convert_gen
         ~convert_tree();
 
         void         setString         (char *yytext);
-        void         setState          (char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL);
+        void         setState          (char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL, char *sModule);
         void         setValue          (char *yytext);
         string& copySourceSpecial (char *yytext, int iType);
         void         writeSourceFile   (string& sText, int inx);

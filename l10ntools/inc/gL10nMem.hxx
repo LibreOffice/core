@@ -43,6 +43,8 @@ class l10nMem
 
         void setModuleName(const string& sModuleName);
         const string& getModuleName(void);
+        void setResourceName(const string& sResourceName);
+        const string& getResourceName(void);
         void setLanguage(const string& sLanguage,
                          bool               bCreate);
         void setConvert(bool               bConvert,
@@ -82,6 +84,7 @@ class l10nMem
         bool        mbDebug;
         bool        mbInError;
         string msModuleName;
+        string msResourceName;
         int                                  miCurFileInx;
         int                                  miCurLangInx;
         int                                  miCurENUSinx;

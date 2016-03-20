@@ -188,6 +188,7 @@ void convert_po::save(const string& sFileName,
                       const string& sKey,
                       const string& sENUStext,
                       const string& sText,
+                      const string& sResource,
                       bool               bFuzzy)
 {
     string sName;
@@ -204,7 +205,7 @@ void convert_po::save(const string& sFileName,
             << "msgctxt \"\"" << endl
             << "\"" << sName << "\\n\"" << endl
             << "\"" << sKey << "\\n\"" << endl
-            << "\"readmeitem.text\"" << endl;
+            << "\"" << sResource << ".text\"" << endl;
     if (bFuzzy)
         outFile << "#, fuzzy" << endl;
     outFile << "msgid \"" << sENUStext << "\"" << endl
