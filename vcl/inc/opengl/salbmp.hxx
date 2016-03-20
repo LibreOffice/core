@@ -85,6 +85,7 @@ public:
     bool            Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight );
     OpenGLTexture&  GetTexture() const;
     static rtl::Reference<OpenGLContext> GetBitmapContext();
+    const BitmapPalette& GetBitmapPalette() const { return maPalette; }
 
 private:
 
