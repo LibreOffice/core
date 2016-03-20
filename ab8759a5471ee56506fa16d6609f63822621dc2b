@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_336f3394",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-03-20T11:17:03Z",
+      "side": 1,
+      "message": "SwT.erase(it); is a better solution I think",
+      "range": {
+        "startLine": 96,
+        "startChar": 9,
+        "endLine": 96,
+        "endChar": 52
+      },
+      "revId": "ab8759a5471ee56506fa16d6609f63822621dc2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5372a77d",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-03-20T11:17:03Z",
+      "side": 1,
+      "message": "SwT.earase(fist, last); should do the job I think. I don\u0027t know exactly what this code does.",
+      "range": {
+        "startLine": 100,
+        "startChar": 10,
+        "endLine": 100,
+        "endChar": 88
+      },
+      "revId": "ab8759a5471ee56506fa16d6609f63822621dc2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
