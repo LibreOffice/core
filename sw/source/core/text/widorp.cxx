@@ -117,7 +117,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
 
     SwTwips nLineHeight = (*fnRect->fnYDiff)( nTmpY , m_nOrigin );
 
-    // 7455 und 6114: Calculate extra space for bottom border.
+    // Calculate extra space for bottom border.
     nLineHeight += (m_pFrame->*fnRect->fnGetBottomMargin)();
 
     if( m_nRstHeight )
@@ -137,7 +137,6 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
         // If everything is inside the existing frame the result is true;
         bFit = nDiff >= 0;
 
-        // --> OD #i103292#
         if ( !bFit )
         {
             if ( rLine.GetNext() &&
@@ -149,7 +148,6 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
                 bFit = nHeight >= nLineHeight;
             }
         }
-        // <--
         if( !bFit )
         {
             // The LineHeight exceeds the current Frame height.
@@ -184,7 +182,7 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
          * Special case: with DummyPortions there is LineNr == 1, though we
          * want to split.
          */
-        // 6010: include DropLines
+        // Include DropLines
 
         bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
         m_bBreak = true;
@@ -205,10 +203,9 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
     return m_bBreak;
 }
 
-/// OD 2004-02-27 #106629# - no longer inline
 void SwTextFrameBreak::SetRstHeight( const SwTextMargin &rLine )
 {
-    // OD, FME 2004-02-27 #106629# - consider bottom margin
+    // Consider bottom margin
     SWRECTFN( m_pFrame )
 
     m_nRstHeight = (m_pFrame->*fnRect->fnGetBottomMargin)();
@@ -232,7 +229,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
 
     if( m_bKeep )
     {
-        // 5652: If pararagraph should not be split but is larger than
+        // If pararagraph should not be split but is larger than
         // the page, then bKeep is overruled.
         if( bChkKeep && !m_pFrame->GetPrev() && !m_pFrame->IsInFootnote() &&
             m_pFrame->IsMoveable() &&
@@ -306,7 +303,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
 bool WidowsAndOrphans::FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine,
     bool bHasToFit )
 {
-    // OD 2004-02-25 #i16128# - Why member <pFrame> _*and*_ parameter <pFrame>??
+    // i#16128 - Why member <pFrame> _*and*_ parameter <pFrame>??
     // Thus, assertion on situation, that these are different to figure out why.
     OSL_ENSURE( m_pFrame == pFrame, "<WidowsAndOrphans::FindBreak> - pFrame != pFrame" );
 
@@ -317,13 +314,13 @@ bool WidowsAndOrphans::FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine,
     if( bHasToFit )
         nOrphLines = 0;
     rLine.Bottom();
-    // OD 2004-02-25 #i16128# - method renamed
+
     if( !IsBreakNowWidAndOrp( rLine ) )
         bRet = false;
     if( !FindWidows( pFrame, rLine ) )
     {
         bool bBack = false;
-        // OD 2004-02-25 #i16128# - method renamed
+
         while( IsBreakNowWidAndOrp( rLine ) )
         {
             if( rLine.PrevLine() )
@@ -370,7 +367,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     if( !pMaster )
         return false;
 
-    // 5156: If the first line of the Follow does not fit, the master
+    // If the first line of the Follow does not fit, the master
     // probably is full of Dummies. In this case a PREP_WIDOWS would be fatal.
     if( pMaster->GetOfst() == pFrame->GetOfst() )
         return false;
@@ -395,7 +392,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     // below the Widows-treshold...
     if( rLine.GetLineNr() >= nWidLines )
     {
-        // 8575: Follow to Master I
+        // Follow to Master I
         // If the Follow *grows*, there is the chance for the Master to
         // receive lines, that it was forced to hand over to the Follow lately:
         // Prepare(Need); check that below nChg!
@@ -423,7 +420,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         return false;
     }
 
-    // 8575: Follow to Master II
+    // Follow to Master II
     // If the Follow *shrinks*, maybe the Master can absorb the whole Orphan.
     // (0W, 2O, 2M, 1F) - 1F = 3M, 0F     -> PREP_ADJUST_FRM
     // (0W, 2O, 3M, 2F) - 1F = 2M, 2F     -> PREP_WIDOWS
@@ -460,7 +457,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     sal_uInt16 nNeed = 1; // was: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow
-    // #i91421#
+    // i#91421
     if ( !pMaster->GetIndPrev() )
     {
         sal_uLong nLines = pMaster->GetThisLines();
@@ -519,7 +516,7 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
     }
 
     // After Orphans/Initials, do enough lines remain for Widows?
-    // #111937#: If we are currently doing a test formatting, we may not
+    // If we are currently doing a test formatting, we may not
     // consider the widows rule for two reasons:
     // 1. The columns may have different widths.
     //    Widow lines would have wrong width.
