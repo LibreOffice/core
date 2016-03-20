@@ -75,7 +75,7 @@ void convert_xrm::setLang(char *yytext)
 {
     string& sText = copySource(yytext, mbNoCollectingData);
     string  sLang;
-    int          nL, nE;
+    int     nL, nE;
 
 
     if (mbIsTag) {

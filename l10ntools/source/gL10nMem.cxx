@@ -106,7 +106,7 @@ class l10nMem_enus_entry
 
             // convert key to upper case
             msKey = sKey;
-            l10nMem::keyToUpper(msKey);
+            //FIX l10nMem::keyToUpper(msKey);
         }
 
         ~l10nMem_enus_entry() {};

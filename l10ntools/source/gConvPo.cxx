@@ -162,6 +162,7 @@ void convert_po::startSave(const string& sName,
     ostream outFile(&outBuffer);
 
     // Set license header
+//FIX JAN POT-Creation-Date
     outFile << "#. extracted from " << sName                       << endl
             << "msgid \"\""                                        << endl
             << "msgstr \"\""                                       << endl
@@ -197,14 +198,16 @@ void convert_po::save(const string& sFileName,
     newPos = sFileName.find_last_of("/\\", sFileName.length());
     sName = sFileName.substr(newPos + 1, sFileName.length());
 
-    outFile << "#. xxxxx" << endl
+    outFile << endl
+            << "#. xxxxx" << endl
             << "#: " << sName << endl
             << "msgctxt \"\"" << endl
             << "\"" << sName << "\\n\"" << endl
-            << "\"" << sKey << "\\n\"" << endl;
+            << "\"" << sKey << "\\n\"" << endl
+            << "\"readmeitem.text\"" << endl;
     if (bFuzzy)
         outFile << "#, fuzzy" << endl;
-    outFile << "msgid  \"" << sENUStext << "\"" << endl
+    outFile << "msgid \"" << sENUStext << "\"" << endl
             << "msgstr \"" << sText     << "\"" << endl;
 }
 
