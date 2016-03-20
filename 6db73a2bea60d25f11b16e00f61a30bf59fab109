@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_33929358",
+        "filename": "cui/source/tabpages/align.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-03-20T18:30:05Z",
+      "side": 1,
+      "message": "You can remove this line as it is already set to \u0027visible\u0027 in the Glade file.",
+      "range": {
+        "startLine": 214,
+        "startChar": 4,
+        "endLine": 214,
+        "endChar": 28
+      },
+      "revId": "6db73a2bea60d25f11b16e00f61a30bf59fab109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_939fff5e",
+        "filename": "cui/source/tabpages/paragrph.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-03-20T18:30:05Z",
+      "side": 1,
+      "message": "Same here!",
+      "range": {
+        "startLine": 1042,
+        "startChar": 4,
+        "endLine": 1042,
+        "endChar": 28
+      },
+      "revId": "6db73a2bea60d25f11b16e00f61a30bf59fab109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
