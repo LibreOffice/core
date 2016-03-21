@@ -271,16 +271,6 @@ bool Fraction::IsValid() const
     return mpImpl->valid;
 }
 
-Fraction::operator long() const
-{
-    if ( !mpImpl->valid )
-    {
-        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
-        return 0;
-    }
-    return boost::rational_cast<long>(mpImpl->value);
-}
-
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
 {
     Fraction aErg( rVal1 );
