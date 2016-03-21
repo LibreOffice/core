@@ -310,9 +310,9 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
     return pRes;
 }
 
+namespace {
 
-
-static const sal_Unicode aDelimiterTable[] =
+const sal_Unicode aDelimiterTable[] =
 {
     ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
     '%',    '\\',   '"',    '~',    '`',    '>',    '<',    '&',    '|',    '(',
@@ -320,7 +320,7 @@ static const sal_Unicode aDelimiterTable[] =
     '\0'    // end of list symbol
 };
 
-bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
+bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     // returns 'true' iff cChar is '\0' or a delimiter
 {
     assert(nPos <= rTxt.getLength()); //index out of range
@@ -345,6 +345,7 @@ bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     return bIsDelim;
 }
 
+}
 
 void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
 {
