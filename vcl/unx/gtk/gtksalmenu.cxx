@@ -286,7 +286,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
         {
-            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
+            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, false );
             NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
             NativeSetEnableItem( aNativeCommand, bEnabled );
 
@@ -297,7 +297,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
-            bool bNonMenuChangedToMenu = NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+            bool bNonMenuChangedToMenu = NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, false, true );
             pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
 
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -803,8 +803,8 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
                                        sal_uInt16 nId,
                                        const gchar* aCommand,
                                        MenuItemBits nBits,
-                                       gboolean bChecked,
-                                       gboolean bIsSubmenu )
+                                       bool bChecked,
+                                       bool bIsSubmenu )
 {
     bool bSubMenuAddedOrRemoved = false;
 
@@ -847,7 +847,7 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
     if ( aCurrentCommand == nullptr || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
     {
-        gboolean bOldHasSubmenu = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos) != nullptr;
+        bool bOldHasSubmenu = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos) != nullptr;
         bSubMenuAddedOrRemoved = bOldHasSubmenu != bIsSubmenu;
         if (bSubMenuAddedOrRemoved)
         {

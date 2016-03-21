@@ -92,8 +92,8 @@ public:
                                                       sal_uInt16 nId,
                                                       const gchar* aCommand,
                                                       MenuItemBits nBits,
-                                                      gboolean bChecked,
-                                                      gboolean bIsSubmenu );
+                                                      bool bChecked,
+                                                      bool bIsSubmenu );
     void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
