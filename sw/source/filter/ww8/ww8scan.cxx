@@ -4607,7 +4607,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     if( MAN_MAINTEXT == nType )
     {
         // search order of the attributes
-        nPLCF = MAN_ANZ_PLCF;
+        nPLCF = MAN_PLCF_COUNT;
         pField = &aD[0];
         pBkm = &aD[1];
         pEdn = &aD[2];

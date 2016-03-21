@@ -903,7 +903,7 @@ struct WW8PLCFxSaveAll;
 class WW8PLCFMan
 {
 public:
-    enum WW8PLCFManLimits {MAN_ANZ_PLCF = 12};
+    enum WW8PLCFManLimits {MAN_PLCF_COUNT = 12};
 
 private:
     wwSprmParser maSprmParser;
@@ -918,7 +918,7 @@ private:
                                     //before the para end mark, but for
                                     //drawboxes we want the true offsets
 
-    WW8PLCFxDesc aD[MAN_ANZ_PLCF];
+    WW8PLCFxDesc aD[MAN_PLCF_COUNT];
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pField, *pFootnote, *pEdn, *pBkm, *pPcd,
         *pPcdA, *pAnd, *pAtnBkm, *pFactoidBkm;
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
@@ -990,7 +990,7 @@ public:
 
 struct WW8PLCFxSaveAll
 {
-    WW8PLCFxSave1 aS[WW8PLCFMan::MAN_ANZ_PLCF];
+    WW8PLCFxSave1 aS[WW8PLCFMan::MAN_PLCF_COUNT];
     WW8PLCFxSaveAll()
     {
         memset(aS, 0, sizeof(aS));
