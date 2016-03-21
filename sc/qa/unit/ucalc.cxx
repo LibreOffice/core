@@ -3298,8 +3298,11 @@ void Test::testCopyPaste()
     ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "Sheet1.$A$1");
     ScRangeData* pLocal5 = new ScRangeData( m_pDoc, "local5", "$A$1"); // implicit relative sheet reference
     ScRangeData* pGlobal = new ScRangeData( m_pDoc, "global", aAdr);
+    const OUString aGlobal2Symbol("$Sheet1.$A$1:$A$23");
+    ScRangeData* pGlobal2 = new ScRangeData( m_pDoc, "global2", aGlobal2Symbol);
     ScRangeName* pGlobalRangeName = new ScRangeName();
     pGlobalRangeName->insert(pGlobal);
+    pGlobalRangeName->insert(pGlobal2);
     ScRangeName* pLocalRangeName1 = new ScRangeName();
     pLocalRangeName1->insert(pLocal1);
     pLocalRangeName1->insert(pLocal2);
@@ -3426,6 +3429,24 @@ void Test::testCopyPaste()
             m_pDoc->GetNote(ScAddress(1, 0, 0))->GetText(), m_pDoc->GetNote(ScAddress(1, 1, 1))->GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("After Redo, note again on Sheet2.C2, string cell content",
             m_pDoc->GetNote(ScAddress(2, 0, 0))->GetText(), m_pDoc->GetNote(ScAddress(2, 1, 1))->GetText());
+
+
+    // Copy Sheet1.A11:A13 to Sheet1.A7:A9, both within global2 range.
+    aRange = ScRange(0,10,0,0,12,0);
+    ScDocument aClipDoc2(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, aRange, &aClipDoc2);
+
+    aRange = ScRange(0,6,0,0,8,0);
+    aMark.SetMarkArea(aRange);
+    m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc2);
+
+    // The global2 range must not have changed.
+    pGlobal2 = m_pDoc->GetRangeName()->findByUpperName("GLOBAL2");
+    CPPUNIT_ASSERT_MESSAGE("GLOBAL2 name not found", pGlobal2);
+    OUString aSymbol;
+    pGlobal2->GetSymbol(aSymbol);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GLOBAL2 named range changed", aGlobal2Symbol, aSymbol);
+
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
