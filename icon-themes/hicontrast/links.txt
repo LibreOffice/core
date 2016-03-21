@@ -1,3 +1,5 @@
+cmd/lc_savesimple.png cmd/lc_save.png
+cmd/sc_savesimple.png cmd/sc_save.png
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
 

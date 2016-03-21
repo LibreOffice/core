@@ -1,3 +1,5 @@
+cmd/lc_savesimple.png cmd/lc_save.png
+cmd/sc_savesimple.png cmd/sc_save.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 res/sx03129.png dbaccess/res/db.png
 cmd/sc_refresh.png cmd/sc_reload.png

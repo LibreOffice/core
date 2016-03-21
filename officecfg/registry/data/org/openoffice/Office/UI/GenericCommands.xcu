@@ -2141,6 +2141,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SaveSimple" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Save Document</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:Save</value>
+        </prop>
+      </node>
       <node oor:name=".uno:BezierInsert" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Points</value>
