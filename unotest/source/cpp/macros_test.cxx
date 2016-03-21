@@ -13,6 +13,7 @@
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/LinkUpdateModes.hpp>
 
 #include "cppunit/TestAssert.h"
 #include <rtl/ustrbuf.hxx>
@@ -28,12 +29,20 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
     uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
     std::vector<beans::PropertyValue> args;
+
     beans::PropertyValue aMacroValue;
     aMacroValue.Name = "MacroExecutionMode";
     aMacroValue.Handle = -1;
     aMacroValue.Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
     args.push_back(aMacroValue);
+
+    beans::PropertyValue aLinkValue;
+    aLinkValue.Name = "LinkUpdateMode";
+    aLinkValue.Handle = -1;
+    aLinkValue.Value <<= document::LinkUpdateModes::NEVER;
+    aLinkValue.State = beans::PropertyState_DIRECT_VALUE;
+    args.push_back(aLinkValue);
 
     if (!rDocService.isEmpty())
     {

@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <set>
+#include <vector>
 
 #include <swmodeltestbase.hxx>
 
@@ -66,7 +67,7 @@ public:
      * The 'verify' method actually has to execute the mail merge by
      * calling executeMailMerge() after modifying the job arguments.
      */
-    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename, bool file)
+    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename, bool file, int selection)
     {
         header();
         preTest(filename);
@@ -74,9 +75,17 @@ public:
 
         utl::TempFile aTempDir(nullptr, true);
         const OUString aWorkDir = aTempDir.GetURL();
-        const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
-        OUString aDBName = registerDBsource( aURI, aWorkDir );
-        initMailMergeJobAndArgs( filename, tablename, aDBName, "LOMM_", aWorkDir, file );
+        OUString aDBName;
+        if (nullptr != datasource)
+        {
+            const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
+            aDBName = registerDBsource( aURI, aWorkDir );
+        }
+        else
+        {
+            aDBName = "Bibliography";
+        }
+        initMailMergeJobAndArgs( filename, (nullptr != datasource) ? tablename : "biblio", aDBName, "LOMM_", aWorkDir, file, selection );
 
         postTest(filename);
         verify();
@@ -106,13 +115,14 @@ public:
     }
 
     void initMailMergeJobAndArgs( const char* filename, const char* tablename, const OUString &aDBName,
-                                          const OUString &aPrefix, const OUString &aWorkDir, bool file )
+                                          const OUString &aPrefix, const OUString &aWorkDir, bool file, int nDataSets )
     {
         uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
         mxJob.set( xJob );
 
         int seq_id = 5;
         if (tablename) seq_id += 2;
+        if (nDataSets > 0) seq_id += 1;
         mSeqMailMergeArgs.realloc( seq_id );
 
         seq_id = 0;
@@ -126,6 +136,15 @@ public:
         {
             mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND_TYPE ), uno::Any( sdb::CommandType::TABLE ) );
             mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND ), uno::Any( OUString::createFromAscii(tablename) ) );
+        }
+
+        if (nDataSets > 0)
+        {
+            std::vector<uno::Any> vResult;
+            vResult.reserve( nDataSets );
+            for (sal_Int32 i = 0; i < nDataSets; i++)
+                vResult.push_back(uno::makeAny<sal_Int32>( i ));
+            mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_SELECTION ), uno::Any( comphelper::containerToSequence(vResult) ) );
         }
     }
 
@@ -208,7 +227,7 @@ protected:
     uno::Reference< lang::XComponent > mxMMComponent;
 };
 
-#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass) \
+#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass, selection) \
     class TestName : public BaseClass { \
     protected: \
         virtual OUString getTestName() override { return OUString(#TestName); } \
@@ -218,7 +237,7 @@ protected:
         CPPUNIT_TEST_SUITE_END(); \
     \
         void MailMerge() { \
-            executeMailMergeTest(filename, datasource, tablename, file); \
+            executeMailMergeTest(filename, datasource, tablename, file, selection); \
         } \
         void verify() override; \
     }; \
@@ -227,11 +246,14 @@ protected:
 
 // Will generate the resulting document in mxMMDocument.
 #define DECLARE_SHELL_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, 0)
 
 // Will generate documents as files, use loadMailMergeDocument().
 #define DECLARE_FILE_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest, 0)
+
+#define DECLARE_SHELL_MAILMERGE_TEST_BIBLIO(TestName, filename, selection) \
+    DECLARE_MAILMERGE_TEST(TestName, filename, nullptr, nullptr, true, MMTest, selection)
 
 int MMTest::documentStartPageNumber( int document ) const
 {   // See documentStartPageNumber() .
@@ -461,6 +483,17 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
             CPPUNIT_ASSERT_EQUAL( sal_Int32(markType), sal_Int32(IDocumentMarkAccess::MarkType::UNO_BOOKMARK) );
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), countFieldMarks);
+}
+
+DECLARE_SHELL_MAILMERGE_TEST_BIBLIO(testTdf95292, "linked-labels.odt", 5)
+{
+    // A docuument with two labes merged with 5 datasets should result in three pages
+    executeMailMerge();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT( pTextDoc );
+    SwWrtShell *pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 3 ), pWrtShell->GetPhyPageNum() );
+    CPPUNIT_ASSERT( pWrtShell->IsLabelDoc() );
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
