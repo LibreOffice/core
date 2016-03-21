@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_86905f97",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3740,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-21T15:29:11Z",
+      "side": 1,
+      "message": "it looks like every line you changed in this file now has \"TAB\" characters in it - we generally use spaces for indentation (except when that\u0027s not possible as in Makefiles), please replace the TABs here",
+      "revId": "cf58832915f5266b1f4ba338166d5571897f8edb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_269373a5",
+        "filename": "sc/qa/unit/opencl-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-21T15:29:11Z",
+      "side": 1,
+      "message": "i think this test probably fails due to GPU drivers and OpenCL problems, not due to ATL",
+      "revId": "cf58832915f5266b1f4ba338166d5571897f8edb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
