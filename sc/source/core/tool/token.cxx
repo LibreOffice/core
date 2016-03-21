@@ -3474,6 +3474,10 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
     sc::RefUpdateResult aRes;
 
+    if (rCxt.meMode == URM_COPY)
+        // Copying cells does not modify named expressions.
+        return aRes;
+
     TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
     for (size_t j=0; j<2; ++j)
     {

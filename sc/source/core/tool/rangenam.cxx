@@ -729,6 +729,10 @@ ScRangeData* ScRangeName::findByIndex(sal_uInt16 i) const
 
 void ScRangeName::UpdateReference(sc::RefUpdateContext& rCxt, SCTAB nLocalTab )
 {
+    if (rCxt.meMode == URM_COPY)
+        // Copying cells does not modify named expressions.
+        return;
+
     for (auto const& itr : m_Data)
     {
         itr.second->UpdateReference(rCxt, nLocalTab);
