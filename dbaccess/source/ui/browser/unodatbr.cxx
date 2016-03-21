@@ -512,6 +512,46 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         //   }
         //   enum SQLFilterOperand { Column, Literal, ... }
         // ... or something like this ....
+        Sequence< Sequence< XPropertySet > > SAL_CALL XSingleSelectQueryComposer::getStructuredFilter( )
+        {
+            XPropertySet structuredFilter = xComposer.getNormalizedFilter();
+            for (int i = 0; i < structuredFilter.length; ++i)
+            {
+                for (int j = 0; j < structuredFilter[i].length; ++j)
+                {
+                    if (!(structuredFilter[i][j].Value = static_cast<String>))
+                    {
+                        continue;
+                    }
+                    stringstream textualValue;
+                    switch(structuredFilter[i][j].Handle)
+                    {
+                        case SQLFilterOperator.EQUAL:
+                            break;
+                        case SQLFilterOperator.NOT_EQUAL:
+                            textualValue.erase(0, 2);
+                        case SQLFilterOperator.LESS_EQUAL:
+                        case SQLFilterOperator.GREATER_EQUAL:
+                        case SQLFilterOperator.LESS:
+                        case SQLFilterOperator.GREATER:
+                        case SQLFilterOperator.NOT_LIKE:
+                            textualValue.erase(0, 8);
+                            break;
+                        case SQLFilterOperator.LIKE:
+                            textualValue.erase(0, 4);
+                            break;
+                        case SQLFilterOperator.SQLNULL:
+                            textualValue.erase(0, 7);
+                            break;
+                        case SQLFilterOperator.NOT_SQLNULL:
+                            textualValue.erase(0, 11);
+                            break;
+                    }
+                    structuredFilter[i][j].Value = textualValue.toString().trim();
+                }
+            }
+            return structuredFilter;
+        }
     }
     catch( const Exception& )
     {
