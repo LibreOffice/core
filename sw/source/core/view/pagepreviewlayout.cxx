@@ -221,16 +221,16 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
         Fraction aYScale( aWinSize.Height(), mnPreviewLayoutHeight );
         if( aXScale < aYScale )
             aYScale = aXScale;
-        {
-            // adjust scaling for Drawing layer.
-            aYScale *= Fraction( 1000, 1 );
-            long nNewNuminator = aYScale.operator long();
-            if( nNewNuminator < 1 )
-                nNewNuminator = 1;
-            aYScale = Fraction( nNewNuminator, 1000 );
-            // propagate scaling as zoom percentage to view options for font cache
-            _ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
-        }
+
+        // adjust scaling for Drawing layer.
+        aYScale *= Fraction( 1000, 1 );
+        long nNewNuminator = aYScale.operator long();
+        if( nNewNuminator < 1 )
+            nNewNuminator = 1;
+        aYScale = Fraction( nNewNuminator, 1000 );
+        // propagate scaling as zoom percentage to view options for font cache
+        _ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
+
         aMapMode.SetScaleY( aYScale );
         aMapMode.SetScaleX( aYScale );
         // set created mapping mode with calculated scaling at output device.
