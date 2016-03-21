@@ -83,6 +83,7 @@ void handler::showUsage(string sErr)
         "\n"
         "      --files     <files>       input file list\n"
         "      --target    <directory>   target root directory\n"
+        "      --base      <directory>   base directory for files\n"
         "      --po        <directory>   po root directory\n";
 
     if (sErr.size())
@@ -115,27 +116,32 @@ void handler::showManual()
     cout <<
         "\n"
         "  genLang extract [-v] [-d] [-s]\n"
-        "                  --files <files> --target <directory>\n"
+        "                  --base <directory> --files <files> --target <directory>\n"
         "    extract text from source (.ui etc) <files>, result is .pot\n"
         "    templates files written to <directory> with a structure\n"
+        "    files are expanded with --base, to shorten command line"
         "\n\n";
 
     cout <<
         "  genLang merge [-v] [-d] [-s]\n"
+        "                --base  <directory>"
         "                --files <files>\n"
         "                --target <directory>\n"
         "                --po     <directory>\n"
         "  merges translations (--po) with source files (--files)\n"
         "  and write the result to --target\n"
+        "  files are expanded with --base, to shorten command line"
         "\n\n";
 
     cout <<
         "  genLang convert [-v] [-d] [-s]\n"
+        "                  --base  <directory>"
         "                  --files <files>\n"
         "                  --po     <directory>\n"
         "                  --target <directory>\n"
         "  read old po (--po) and new po (--files) files and\n"
         "  write po files (--target), ready to be loaded\n"
+        "  files are expanded with --base, to shorten command line"
         "  in Pootle\n"
         "\n\n";
 
@@ -150,7 +156,7 @@ void handler::showManual()
 
 void handler::checkCommandLine(int argc, char *argv[])
 {
-    string sWorkText;
+    string sWorkText, sBaseDir("");
     int    i;
     bool   bSourceFiles, bTargetDir, bPoDir;
 
@@ -193,13 +199,24 @@ void handler::checkCommandLine(int argc, char *argv[])
             if (sWorkText == "--files") {
                 // Loop through filenames
                 for (++i; i < argc && argv[i][0] != '-'; ++i)
-                    mvSourceFiles.push_back(argv[i]);
+                    mvSourceFiles.push_back(sBaseDir + argv[i]);
                 --i;
             }
-            else if (sWorkText == "--target")
+            else if (sWorkText == "--base") {
+                sBaseDir = argv[++i];
+                if (sBaseDir[sBaseDir.length() - 1] != '/')
+                    sBaseDir += "/";
+            }
+            else if (sWorkText == "--target") {
                 msTargetDir = argv[++i];
-            else if (sWorkText == "--po")
+                if (msTargetDir[msTargetDir.length() - 1] != '/')
+                    msTargetDir += "/";
+            }
+            else if (sWorkText == "--po") {
                 msPoDir = argv[++i];
+                if (msPoDir[msPoDir.length() - 1] != '/')
+                    msPoDir += "/";
+            }
             else
                 throw "unknown argument";
         }
