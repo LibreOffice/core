@@ -208,7 +208,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_LAST_ENTRY:
             {
                 SwView* pView = ::GetActiveView();
-                SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+                SwMailMergeConfigItem* pConfigItem = pView?pView->GetMailMergeConfigItem():nullptr;
                 if (!pConfigItem)
                     rSet.DisableItem(nWhich);
                 else
