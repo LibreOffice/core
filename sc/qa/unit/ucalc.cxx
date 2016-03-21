@@ -6817,7 +6817,8 @@ bool Test::insertRangeNames(
             pDoc,
             OUString::createFromAscii(p->mpName),
             OUString::createFromAscii(p->mpExpr),
-            aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
+            aA1, ScRangeData::Type::Name,
+            formula::FormulaGrammar::GRAM_ENGLISH);
         pNew->SetIndex(p->mnIndex);
         bool bSuccess = pNames->insert(pNew);
         if (!bSuccess)

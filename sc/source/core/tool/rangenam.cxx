@@ -49,7 +49,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const OUString& rName,
                           const OUString& rSymbol,
                           const ScAddress& rAddress,
-                          RangeType nType,
+                          Type nType,
                           const FormulaGrammar::Grammar eGrammar ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->uppercase( rName ) ),
@@ -82,7 +82,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const OUString& rName,
                           const ScTokenArray& rArr,
                           const ScAddress& rAddress,
-                          RangeType nType ) :
+                          Type nType ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->uppercase( rName ) ),
                 pCode       ( new ScTokenArray( rArr ) ),
@@ -106,7 +106,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aUpperName  ( ScGlobal::pCharClass->uppercase( rName ) ),
                 pCode       ( new ScTokenArray() ),
                 aPos        ( rTarget ),
-                eType       ( RT_NAME ),
+                eType       ( Type::Name ),
                 pDoc        ( pDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
@@ -123,7 +123,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     aComp.SetGrammar(pDoc->GetGrammar());
     aComp.CompileTokenArray();
     if ( !pCode->GetCodeError() )
-        eType |= RT_ABSPOS;
+        eType |= Type::AbsPos;
 }
 
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument) :
@@ -174,9 +174,9 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
             // first token is a reference
             /* FIXME: wouldn't that need a check if it's exactly one reference? */
             if( p->GetType() == svSingleRef )
-                eType = eType | RT_ABSPOS;
+                eType = eType | Type::AbsPos;
             else
-                eType = eType | RT_ABSAREA;
+                eType = eType | Type::AbsArea;
         }
         // For manual input set an error for an incomplete formula.
         if (!pDoc->IsImportingXML())
@@ -381,7 +381,7 @@ bool ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 
 bool ScRangeData::IsReference( ScRange& rRange ) const
 {
-    if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS )) && pCode )
+    if ( (eType & ( Type::AbsArea | Type::RefArea | Type::AbsPos )) && pCode )
         return pCode->IsReference(rRange, aPos);
 
     return false;
@@ -389,7 +389,7 @@ bool ScRangeData::IsReference( ScRange& rRange ) const
 
 bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
+    if ( (eType & ( Type::AbsArea | Type::RefArea | Type::AbsPos ) ) && pCode )
         return pCode->IsReference(rRange, rPos);
 
     return false;
@@ -397,7 +397,7 @@ bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 
 bool ScRangeData::IsValidReference( ScRange& rRange ) const
 {
-    if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
+    if ( (eType & ( Type::AbsArea | Type::RefArea | Type::AbsPos ) ) && pCode )
         return pCode->IsValidReference(rRange, aPos);
 
     return false;
@@ -528,10 +528,10 @@ bool ScRangeData::HasReferences() const
 sal_uInt32 ScRangeData::GetUnoType() const
 {
     sal_uInt32 nUnoType = 0;
-    if ( HasType(RT_CRITERIA) )  nUnoType |= css::sheet::NamedRangeFlag::FILTER_CRITERIA;
-    if ( HasType(RT_PRINTAREA) ) nUnoType |= css::sheet::NamedRangeFlag::PRINT_AREA;
-    if ( HasType(RT_COLHEADER) ) nUnoType |= css::sheet::NamedRangeFlag::COLUMN_HEADER;
-    if ( HasType(RT_ROWHEADER) ) nUnoType |= css::sheet::NamedRangeFlag::ROW_HEADER;
+    if ( HasType(Type::Criteria) )  nUnoType |= css::sheet::NamedRangeFlag::FILTER_CRITERIA;
+    if ( HasType(Type::PrintArea) ) nUnoType |= css::sheet::NamedRangeFlag::PRINT_AREA;
+    if ( HasType(Type::ColHeader) ) nUnoType |= css::sheet::NamedRangeFlag::COLUMN_HEADER;
+    if ( HasType(Type::RowHeader) ) nUnoType |= css::sheet::NamedRangeFlag::ROW_HEADER;
     return nUnoType;
 }
 
@@ -638,9 +638,9 @@ void ScRangeData::InitCode()
         if( p )   // exact one reference at first
         {
             if( p->GetType() == svSingleRef )
-                eType = eType | RT_ABSPOS;
+                eType = eType | Type::AbsPos;
             else
-                eType = eType | RT_ABSAREA;
+                eType = eType | Type::AbsArea;
         }
     }
 }

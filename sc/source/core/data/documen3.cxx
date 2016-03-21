@@ -219,7 +219,7 @@ bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPo
     if (!pGlobalNames)
         return false;
 
-    ScRangeData* pName = new ScRangeData(this, rName, rExpr, rPos, RT_NAME, GetGrammar());
+    ScRangeData* pName = new ScRangeData(this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar());
     return pGlobalNames->insert(pName);
 }
 

@@ -43,26 +43,28 @@ class CompileFormulaContext;
 
 }
 
-typedef sal_uInt16 RangeType;
-
-#define RT_NAME             ((RangeType)0x0000)
-#define RT_DATABASE         ((RangeType)0x0001)
-#define RT_CRITERIA         ((RangeType)0x0002)
-#define RT_PRINTAREA        ((RangeType)0x0004)
-#define RT_COLHEADER        ((RangeType)0x0008)
-#define RT_ROWHEADER        ((RangeType)0x0010)
-#define RT_ABSAREA          ((RangeType)0x0020)
-#define RT_REFAREA          ((RangeType)0x0040)
-#define RT_ABSPOS           ((RangeType)0x0080)
-
 class ScRangeData
 {
+public:
+    enum class Type //specialization to typed_flags outside of class
+    {
+        Name       = 0x0000,
+        Database   = 0x0001,
+        Criteria   = 0x0002,
+        PrintArea  = 0x0004,
+        ColHeader  = 0x0008,
+        RowHeader  = 0x0010,
+        AbsArea    = 0x0020,
+        RefArea    = 0x0040,
+        AbsPos     = 0x0080
+    };
+
 private:
     OUString   aName;
     OUString   aUpperName;     // #i62977# for faster searching (aName is never modified after ctor)
     ScTokenArray*   pCode;
     ScAddress       aPos;
-    RangeType       eType;
+    Type            eType;
     ScDocument*     pDoc;
     formula::FormulaGrammar::Grammar    eTempGrammar;   // needed for unresolved XML compiles
     sal_uInt16      nIndex;
@@ -83,13 +85,13 @@ public:
                                  const OUString& rName,
                                  const OUString& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
-                                 RangeType nType = RT_NAME,
+                                 Type nType = Type::Name,
                                  const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const OUString& rName,
                                  const ScTokenArray& rArr,
                                  const ScAddress& rAdr = ScAddress(),
-                                 RangeType nType = RT_NAME );
+                                 Type nType = Type::Name );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const OUString& rName,
                                  const ScAddress& rTarget );
@@ -112,9 +114,9 @@ public:
     const ScTokenArray* GetCode() const             { return pCode; }
     SC_DLLPUBLIC sal_uInt16 GetErrCode() const;
     bool            HasReferences() const;
-    void            AddType( RangeType nType )      { eType = eType|nType; }
-    RangeType       GetType() const                 { return eType; }
-    bool            HasType( RangeType nType ) const;
+    void            AddType( Type nType );
+    Type            GetType() const                 { return eType; }
+    bool            HasType( Type nType ) const;
     sal_uInt32      GetUnoType() const;
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
@@ -156,8 +158,18 @@ public:
     void Dump() const;
 #endif
 };
+namespace o3tl
+{
+    template<> struct typed_flags<ScRangeData::Type> : is_typed_flags<ScRangeData::Type, 0xff> {};
+}
 
-inline bool ScRangeData::HasType( RangeType nType ) const
+
+inline void ScRangeData::AddType( Type nType )
+{
+    eType = eType|nType;
+}
+
+inline bool ScRangeData::HasType( Type nType ) const
 {
     return ( ( eType & nType ) == nType );
 }

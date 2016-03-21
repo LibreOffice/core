@@ -78,7 +78,7 @@ static bool lcl_UserVisibleName(const ScRangeData& rData)
 {
     //! as method to ScRangeData
 
-    return !rData.HasType(RT_DATABASE);
+    return !rData.HasType(ScRangeData::Type::Database);
 }
 
 ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const OUString& rNm, Reference<container::XNamed> xSheet):
@@ -150,7 +150,7 @@ SCTAB ScNamedRangeObj::GetTab_Impl()
 // sheet::XNamedRange
 
 void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray* pNewTokens, const OUString* pNewContent,
-                                    const ScAddress* pNewPos, const sal_uInt16* pNewType,
+                                    const ScAddress* pNewPos, const ScRangeData::Type* pNewType,
                                     const formula::FormulaGrammar::Grammar eGrammar )
 {
     if (!pDocShell)
@@ -185,7 +185,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (pNewPos)
         aPos = *pNewPos;
 
-    sal_uInt16 nType = pOld->GetType();
+    ScRangeData::Type nType = pOld->GetType();
     if (pNewType)
         nType = *pNewType;
 
@@ -293,12 +293,11 @@ sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException, std::
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
     {
-        // do not return internal RT_* flags
-        // see property 'IsSharedFormula' for RT_SHARED
-        if ( pData->HasType(RT_CRITERIA) )  nType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
-        if ( pData->HasType(RT_PRINTAREA) ) nType |= sheet::NamedRangeFlag::PRINT_AREA;
-        if ( pData->HasType(RT_COLHEADER) ) nType |= sheet::NamedRangeFlag::COLUMN_HEADER;
-        if ( pData->HasType(RT_ROWHEADER) ) nType |= sheet::NamedRangeFlag::ROW_HEADER;
+        // do not return internal ScRangeData::Type flags
+        if ( pData->HasType(ScRangeData::Type::Criteria) )  nType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
+        if ( pData->HasType(ScRangeData::Type::PrintArea) ) nType |= sheet::NamedRangeFlag::PRINT_AREA;
+        if ( pData->HasType(ScRangeData::Type::ColHeader) ) nType |= sheet::NamedRangeFlag::COLUMN_HEADER;
+        if ( pData->HasType(ScRangeData::Type::RowHeader) ) nType |= sheet::NamedRangeFlag::ROW_HEADER;
     }
     return nType;
 }
@@ -306,13 +305,12 @@ sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException, std::
 void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
     throw (uno::RuntimeException, std::exception)
 {
-    // see property 'IsSharedFormula' for RT_SHARED
     SolarMutexGuard aGuard;
-    sal_uInt16 nNewType = RT_NAME;
-    if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
-    if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= RT_PRINTAREA;
-    if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
-    if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
+    ScRangeData::Type nNewType = ScRangeData::Type::Name;
+    if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= ScRangeData::Type::Criteria;
+    if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
+    if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
+    if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
 
     // GRAM_PODF_A1 for API compatibility.
     Modify_Impl( nullptr, nullptr, nullptr, nullptr, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
@@ -503,11 +501,11 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     SolarMutexGuard aGuard;
     ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );
 
-    sal_uInt16 nNewType = RT_NAME;
-    if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
-    if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= RT_PRINTAREA;
-    if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
-    if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
+    ScRangeData::Type nNewType = ScRangeData::Type::Name;
+    if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= ScRangeData::Type::Criteria;
+    if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
+    if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
+    if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
 
     bool bDone = false;
     if (pDocShell)

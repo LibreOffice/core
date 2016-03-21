@@ -2186,9 +2186,9 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
         const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->uppercase(aPos));
         if (pData)
         {
-            if( pData->HasType( RT_REFAREA )
-                || pData->HasType( RT_ABSAREA )
-                || pData->HasType( RT_ABSPOS ) )
+            if( pData->HasType( ScRangeData::Type::RefArea    )
+                || pData->HasType( ScRangeData::Type::AbsArea )
+                || pData->HasType( ScRangeData::Type::AbsPos  ) )
                 pData->GetSymbol( aPos );           // continue with the name's contents
         }
     }

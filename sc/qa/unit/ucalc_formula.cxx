@@ -114,7 +114,7 @@ void Test::testFormulaCreateStringFromTokens()
     {
         ScRangeData* pName = new ScRangeData(
             m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
-            ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+            ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
 
         if (aNames[i].bGlobal)
         {
@@ -2678,7 +2678,8 @@ void Test::testFormulaRefUpdateName()
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     ScRangeData* pName = new ScRangeData(
-        m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
+        m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0),
+        ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
 
     bool bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
@@ -2720,7 +2721,7 @@ void Test::testFormulaRefUpdateName()
 
     // Insert a new named expression that references these values as absolute range.
     pName = new ScRangeData(
-        m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+        m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
@@ -2777,7 +2778,7 @@ void Test::testFormulaRefUpdateName()
     pGlobalNames->clear();
 
     pName = new ScRangeData(
-        m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+        m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
     pName->GetSymbol(aExpr);
@@ -5826,7 +5827,7 @@ void Test::testFuncTableRef()
             // proper rows.
             ScRangeData* pName = new ScRangeData(
                     m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
-                    ScAddress(2,4,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+                    ScAddress(2,4,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
                     OString("Failed to insert named expression "+ OString(aNames[i].pName) +".").getStr(), bInserted);
@@ -6003,7 +6004,7 @@ void Test::testFuncTableRef()
             // proper rows.
             ScRangeData* pName = new ScRangeData(
                     m_pDoc, OUString::createFromAscii(aHlNames[i].pName), OUString::createFromAscii(aHlNames[i].pExpr),
-                    ScAddress(6,12,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+                    ScAddress(6,12,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
                     OString("Failed to insert named expression "+ OString(aHlNames[i].pName) +".").getStr(), bInserted);

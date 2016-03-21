@@ -26,7 +26,6 @@
 #include "vbarange.hxx"
 #include "vbaglobals.hxx"
 #include <vector>
-#include <rangenam.hxx>
 #include <vcl/msgbox.hxx>
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -205,7 +204,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         uno::Any xAny2 ;
         if ( mxNames.is() )
         {
-            RangeType nType = RT_NAME;
+            sal_Int32 nUnoType = 0;
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
@@ -220,7 +219,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                     sTmp += ",";
                 sTmp = sTmp + "'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd;
             }
-            mxNames->addNewByName( sName , sTmp , aCellAddr , (sal_Int32)nType);
+            mxNames->addNewByName( sName , sTmp , aCellAddr , nUnoType);
             return Item( uno::makeAny( sName ), uno::Any() );
         }
     }
