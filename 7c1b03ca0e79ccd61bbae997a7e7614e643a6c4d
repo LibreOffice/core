@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e645db17",
+        "filename": "sc/inc/fielduno.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-21T16:53:16Z",
+      "side": 1,
+      "message": "but you should still leave an empty line here to separate the deleted member functions from the following member variables, especially as those member variables are themselves split into multiple blocks separated by empty lines",
+      "revId": "7c1b03ca0e79ccd61bbae997a7e7614e643a6c4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
