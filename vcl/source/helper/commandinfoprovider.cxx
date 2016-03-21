@@ -166,7 +166,10 @@ OUString CommandInfoProvider::GetTooltipForCommand (
     if (sLabel.isEmpty())
         sLabel = GetCommandProperty("Name", rsCommandName);
 
-    const OUString sShortCut(GetCommandShortcut(rsCommandName, rxFrame));
+    // Command can be just an alias to another command,
+    // so need to get the shortcut of the "real" command.
+    const OUString sRealCommand(GetRealCommandForCommand(rsCommandName, rxFrame));
+    const OUString sShortCut(GetCommandShortcut(!sRealCommand.isEmpty() ? sRealCommand : rsCommandName, rxFrame));
     if (!sShortCut.isEmpty())
         return sLabel + " (" + sShortCut + ")";
     return sLabel;
