@@ -492,6 +492,9 @@
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:AnchorMenu</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetAnchorToPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
