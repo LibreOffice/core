@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_d317b752",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-21T10:54:17Z",
+      "side": 1,
+      "message": "This should be\n\n SvNumberFormatter aFormatter( rxContext, LANGUAGE_SYSTEM);\n\ninstead.",
+      "range": {
+        "startLine": 1895,
+        "startChar": 4,
+        "endLine": 1895,
+        "endChar": 81
+      },
+      "revId": "bf17a8dfbb9f966c90b5d6eb0a7b8e7838392d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_732c0bac",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-21T10:54:17Z",
+      "side": 1,
+      "message": "This loop and the following two still is a copy\u0026paste duplication of SvxNumberFormatShell::GetCurrencySymbols() in svx/source/items/numfmtsh.cxx, like I already mentioned for patch set 1. But it now even has the calls to ApplyLreOrRleEmbedding() removed, why? They are needed in Ritgh-to-Left context to correctly display mix of text and currency symbols in different scripts, e.g. Latin and Arabic.\n\nSo please add the ApplyLreOrRleEmbedding() calls back. I\u0027d also still like to see the entire common code of this and SvxNumberFormatShell::GetCurrencySymbols() factored out into a static method that can be called by both instead of having this code duplication.",
+      "revId": "bf17a8dfbb9f966c90b5d6eb0a7b8e7838392d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b31cc378",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3054,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-21T10:54:17Z",
+      "side": 1,
+      "message": "HELLO? Please remove!",
+      "revId": "bf17a8dfbb9f966c90b5d6eb0a7b8e7838392d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f3163b54",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3067,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-21T10:54:17Z",
+      "side": 1,
+      "message": "Btw, nitpick, if the locale wasn\u0027t remembered as a LanguageType value but a LanguageTag instead, this conversion would not be necessary.",
+      "revId": "bf17a8dfbb9f966c90b5d6eb0a7b8e7838392d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
