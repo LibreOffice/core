@@ -54,8 +54,6 @@ void convert_xhp::doExecute()
     string sLang;
     string sFile, sFile2;
 
-    mcMemory.setResourceName("help");
-
     // prepare list with languages
     miCntLanguages = mcMemory.prepareMerge();
     if (mbMergeMode) {
@@ -251,7 +249,7 @@ void convert_xhp::closeTransTag(char *yytext)
             string newString(msCollector);
             if (newString[newString.length() - 1] == ' ')
                 newString = newString.substr(0, newString.length() - 1);
-            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, newString, mbMergeMode);
+            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, newString, "", "help", mbMergeMode);
         }
         msKey.clear();
         iType = 2;

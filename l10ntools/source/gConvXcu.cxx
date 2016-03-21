@@ -32,12 +32,6 @@ convert_xcu::convert_xcu(l10nMem& crMemory)
 
 
 
-convert_xcu::~convert_xcu()
-{
-}
-
-
-
 extern int xculex(void);
 void convert_xcu::doExecute()
 {
@@ -129,7 +123,7 @@ void convert_xcu::stopCollectData(char *syyText)
         // locate key and extract it
         for (nL = 0; nL < (int)mcStack.size(); ++nL)
             useKey += (useKey.size() ? "." : "" ) + mcStack[nL];
-        mcMemory.setSourceKey(miLineNo, msSourceFile, useKey, useText, mbMergeMode);
+        mcMemory.setSourceKey(miLineNo, msSourceFile, useKey, useText, "", "", mbMergeMode);
     }
 
     if (mbMergeMode) {

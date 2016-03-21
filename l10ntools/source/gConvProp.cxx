@@ -25,19 +25,6 @@ using namespace std;
 
 
 
-convert_prop::convert_prop(l10nMem& crMemory) : convert_gen(crMemory)
-{
-    //  throw l10nMem::showError(string("convert_prop not implemented"));
-}
-
-
-
-convert_prop::~convert_prop()
-{
-}
-
-
-
 void convert_prop::doExecute()
 {
     throw l10nMem::showError(string("convert_prop::execute not implemented"));

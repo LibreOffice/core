@@ -40,12 +40,6 @@ convert_po::convert_po(l10nMem& crMemory)
 
 
 
-convert_po::~convert_po()
-{
-}
-
-
-
 void convert_po::startLook()
 {
     string sFileName, sNewKey;
@@ -62,7 +56,7 @@ void convert_po::startLook()
 
     // load in db
     if (msId.size())
-        mcMemory.loadEntryKey(miLineNo, sFileName, sNewKey, msId, msStr, mbFuzzy);
+        mcMemory.loadEntryKey(miLineNo, sFileName, sNewKey, msId, msStr, "", "", mbFuzzy);
 
     // and prepare for new entry
     msKey.clear();
@@ -188,6 +182,7 @@ void convert_po::save(const string& sFileName,
                       const string& sKey,
                       const string& sENUStext,
                       const string& sText,
+                      const string& sComment,
                       const string& sResource,
                       bool               bFuzzy)
 {
@@ -199,9 +194,10 @@ void convert_po::save(const string& sFileName,
     newPos = sFileName.find_last_of("/\\", sFileName.length());
     sName = sFileName.substr(newPos + 1, sFileName.length());
 
-    outFile << endl
-            << "#. xxxxx" << endl
-            << "#: " << sName << endl
+    outFile << endl << "#. xxxxx" << endl;
+    if (sComment.length())
+        outFile << "#. " << sComment << endl;
+    outFile << "#: " << sName << endl
             << "msgctxt \"\"" << endl
             << "\"" << sName << "\\n\"" << endl
             << "\"" << sKey << "\\n\"" << endl

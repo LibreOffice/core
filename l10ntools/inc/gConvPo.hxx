@@ -31,7 +31,7 @@ class convert_po : public convert_gen
 
 
         convert_po(l10nMem& crMemory);
-        ~convert_po();
+        ~convert_po()  {};
 
         void startLook ();
         void setValue  (char *syyText, int iLineCnt);
@@ -49,6 +49,7 @@ class convert_po : public convert_gen
                   const string& sKey,
                   const string& sENUStext,
                   const string& sText,
+                  const string& sComment,
                   const string& sResource,
                   bool               bFuzzy);
         void endSave();

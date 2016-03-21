@@ -35,41 +35,42 @@ class l10nMem
             ENTRY_NORMAL
         } ENTRY_STATE;
 
-        static int  showError(const string& sText, int iLineNo = 0);
+        static int  showError  (const string& sText, int iLineNo = 0);
         static void showWarning(const string& sText, int iLineNo = 0);
-        static void showDebug(const string& sText, int iLineNo = 0);
+        static void showDebug  (const string& sText, int iLineNo = 0);
         static void showVerbose(const string& sText, int iLineNo = 0);
-        static void keyToUpper(string& sKey);
+        static void keyToUpper (string& sKey);
 
         void setModuleName(const string& sModuleName);
         const string& getModuleName(void);
-        void setResourceName(const string& sResourceName);
-        const string& getResourceName(void);
         void setLanguage(const string& sLanguage,
-                         bool               bCreate);
-        void setConvert(bool               bConvert,
-                        bool               bStrict);
+                         bool          bCreate);
+        void setConvert(bool bConvert,
+                        bool bStrict);
         void setVerbose(const bool doVerbose);
         void setDebug(const bool doDebug);
 
-        void loadEntryKey(int                iLineNo,
+        void loadEntryKey(int           iLineNo,
                           const string& sSourceFile,
                           const string& sKey,
                           const string& sOrgText,
                           const string& sText,
-                          bool               bIsFuzzy);
-        void setSourceKey(int                iLineNo,
+                          const string& sComment,
+                          const string& sResource,
+                          bool          bIsFuzzy);
+        void setSourceKey(int           iLineNo,
                           const string& sFilename,
                           const string& sKey,
                           const string& sText,
-                          bool               bMustExist);
+                          const string& sComment,
+                          const string& sResource,
+                          bool          bMustExist);
 
         void saveTemplates(const string& sTargetDir,
-                           bool               bKid,
-                           bool               bForce);
-        void saveLanguages(l10nMem&           cMem,
+                           bool          bForce);
+        void saveLanguages(l10nMem&      cMem,
                            const string& sTargetDir,
-                           bool               bForce);
+                           bool          bForce);
         void dumpMem(const string& sTargetDir);
         int  prepareMerge();
         bool getMergeLang(string& sLang,
@@ -80,17 +81,16 @@ class l10nMem
         void convertFromInetString(string& sText);
 
     private:
-        bool        mbVerbose;
-        bool        mbDebug;
-        bool        mbInError;
+        bool  mbVerbose;
+        bool  mbDebug;
+        bool  mbInError;
         string msModuleName;
-        string msResourceName;
-        int                                  miCurFileInx;
-        int                                  miCurLangInx;
-        int                                  miCurENUSinx;
-        bool                                 mbNeedWrite;
-        bool                                 mbConvertMode;
-        bool                                 mbStrictMode;
+        int  miCurFileInx;
+        int  miCurLangInx;
+        int  miCurENUSinx;
+        bool mbNeedWrite;
+        bool mbConvertMode;
+        bool mbStrictMode;
         vector<l10nMem_enus_entry>      mcENUSlist;
         vector<l10nMem_file_entry>      mcFileList;
         vector<l10nMem_lang_list_entry> mcLangList;
@@ -105,31 +105,31 @@ class l10nMem
                           const string& sKey,
                           const string& sMsgId,
                           const string& sMsgStr,
-                          bool               bIsFuzzy);
-        void saveTemplates(l10nMem&           cMem,
-                           const string& sTargetDir,
-                           bool               bKid,
-                           bool               bForce);
-        void loadENUSkey(int                iLineNo,
+                          bool          bIsFuzzy);
+        void loadENUSkey(int           iLineNo,
                          const string& sSourceFile,
                          const string& sKey,
-                         const string& sMsgId);
-        void loadLangKey(int                iLineNo,
+                         const string& sMsgId,
+                         const string& sComment,
+                         const string& sResource);
+        void loadLangKey(int           iLineNo,
                          const string& sSourceFile,
                          const string& sKey,
                          const string& sMsgId,
                          const string& sMsgStr,
-                         bool               bFuzzy);
-        void reorganize(bool               bConvert);
-        bool locateKey(int                iLineNo,
+                         bool          bFuzzy);
+        void reorganize(bool           bConvert);
+        bool locateKey(int           iLineNo,
                        const string& sSourceFile,
                        const string& sKey,
                        const string& sMsgId,
-                       bool               bThrow);
-        void addKey(int                  iLineNo,
-                    const string&   sSourceFile,
-                    const string&   sKey,
-                    const string&   sMsgId,
+                       bool          bThrow);
+        void addKey(int           iLineNo,
+                    const string& sSourceFile,
+                    const string& sKey,
+                    const string& sMsgId,
+                    const string& sComment,
+                    const string& sResource,
                     l10nMem::ENTRY_STATE eStat);
         bool findFileName(const string& sSourceFile);
 };

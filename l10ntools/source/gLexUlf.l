@@ -131,7 +131,5 @@ KEYID [a-zA-Z0-9_-]+
 
 void ulf_dummyJustForCompiler()
 {
-    char *txt = NULL;
-    //  yy_flex_strlen(txt);
-    yyunput(0, txt);
+    yyunput(0, NULL);
 }

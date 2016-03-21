@@ -25,10 +25,6 @@ using namespace std;
 
 
 
-convert_ulf::convert_ulf(l10nMem& crMemory) : convert_gen(crMemory) {}
-convert_ulf::~convert_ulf()                                              {}
-
-
 extern int ulflex(void);
 void convert_ulf::doExecute()
 {
@@ -49,11 +45,11 @@ void convert_ulf::setKey(char *syyText)
 
 void convert_ulf::setText(char *syyText, bool bIsEnUs)
 {
-    string sText = copySource(syyText) + " is not en-US";
+    string sText = copySource(syyText);
 
 
-    if (!bIsEnUs)
-        l10nMem::showError(sText);
+    if (!bIsEnUs && sText != "x-comment =")
+        l10nMem::showError(sText + " is not en-US");
 }
 
 
@@ -67,7 +63,7 @@ void convert_ulf::setValue(char *syyText)
     nL = sText.rfind("\"");
     sText.erase(nL);
 
-    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "", mbMergeMode);
 
     if (mbMergeMode) {
         // prepare to read all languages

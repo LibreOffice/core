@@ -89,13 +89,15 @@ class l10nMem_enus_entry
     public:
         l10nMem_enus_entry(const string&   sKey,
                            const string&   sMsgId,
+                           const string&   sComment,
                            const string&   sResource,
                            int                  iLineNo,
                            int                  iFileInx,
                            int                  iLangSize,
                            l10nMem::ENTRY_STATE eState)
                           : msMsgId(sMsgId),
-                            msResId(sResource),
+                            msComment(sComment),
+                            msResource(sResource),
                             meState(eState),
                             miFileInx(iFileInx),
                             miLineNo(iLineNo)
@@ -115,10 +117,11 @@ class l10nMem_enus_entry
 
         string                     msKey;      // key in po file and source file
         string                     msMsgId;    // en-US text from source file
-        string                     msResId;    // Resource Id (to be used in msgcstr)
-        l10nMem::ENTRY_STATE            meState;    // status information
-        int                             miFileInx;  // index of file name
-        int                             miLineNo;   // line number
+        string                     msComment;  // Comment (to be used in msgcstr)
+        string                     msResource; // Resource Id (to be used in msgcstr)
+        l10nMem::ENTRY_STATE       meState;    // status information
+        int                        miFileInx;  // index of file name
+        int                        miLineNo;   // line number
         vector<l10nMem_lang_entry> mcLangText; // language texts (index is languageId)
 };
 
@@ -137,10 +140,9 @@ l10nMem::l10nMem()
 {
     myMem = this;
     msModuleName   = "default";
-    msResourceName = "";
     mcFileList.push_back(l10nMem_file_entry("-genLang-", 0));
     mcLangList.push_back(l10nMem_lang_list_entry("-genLang-"));
-    mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", "", 0, 0, 0, l10nMem::ENTRY_DELETED));
+    mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", "", "", 0, 0, 0, l10nMem::ENTRY_DELETED));
 }
 
 
@@ -200,20 +202,6 @@ void l10nMem::setModuleName(const string& sModuleName)
 const string& l10nMem::getModuleName()
 {
     return msModuleName;
-}
-
-
-
-void l10nMem::setResourceName(const string& sResourceName)
-{
-    msResourceName = sResourceName;
-}
-
-
-
-const string& l10nMem::getResourceName()
-{
-    return msResourceName;
 }
 
 
@@ -284,28 +272,32 @@ void l10nMem::setDebug(bool doDebug)
 
 
 
-void l10nMem::loadEntryKey(int                iLineNo,
+void l10nMem::loadEntryKey(int           iLineNo,
                            const string& sSourceFile,
                            const string& sKey,
                            const string& sMsgId,
                            const string& sMsgStr,
-                           bool               bIsFuzzy)
+                           const string& sComment,
+                           const string& sResource,
+                           bool          bIsFuzzy)
 {
     if (mbConvertMode)
         convEntryKey(iLineNo, sSourceFile, sKey, sMsgId, sMsgStr, bIsFuzzy);
     else if (!miCurLangInx)
-        loadENUSkey(iLineNo, sSourceFile, sKey, sMsgId);
+        loadENUSkey(iLineNo, sSourceFile, sKey, sMsgId, sComment, sResource);
     else
         loadLangKey(iLineNo, sSourceFile, sKey, sMsgId, sMsgStr, bIsFuzzy);
 }
 
 
 
-void l10nMem::setSourceKey(int                iLineNo,
+void l10nMem::setSourceKey(int           iLineNo,
                            const string& sSourceFile,
                            const string& sKey,
                            const string& sMsgId,
-                           bool               bMustExist)
+                           const string& sComment,
+                           const string& sResource,
+                           bool          bMustExist)
 {
     string newText(sMsgId);
     int         i;
@@ -336,20 +328,16 @@ void l10nMem::setSourceKey(int                iLineNo,
             throw showError("key " + sKey + " does not exist");
 
         // add key, if changed text, this is wrong but handled in reorganize
-        addKey(iLineNo, sSourceFile, sKey, newText, ENTRY_ADDED);
+        addKey(iLineNo, sSourceFile, sKey, newText, sComment, sResource, ENTRY_ADDED);
     }
 }
 
 
 
-void l10nMem::saveTemplates(const string& sTargetDir, bool bKid, bool bForce)
+void l10nMem::saveTemplates(const string& sTargetDir, bool bForce)
 {
     string target(msModuleName + ".pot");
     int iE, iEsize = mcENUSlist.size();
-
-    // Dummy to satisfy compiler
-    if (bKid)
-        throw "-k not implemented";
 
     // and reorganize db if needed
     miCurFileInx = 0;
@@ -358,8 +346,6 @@ void l10nMem::saveTemplates(const string& sTargetDir, bool bKid, bool bForce)
     // no save if there has been errors
     if (!needWrite(target, bForce))
         return;
-
-    //JIX save HANDLE KID
 
     // Save en-US
     convert_po savePo(*this);
@@ -372,7 +358,7 @@ void l10nMem::saveTemplates(const string& sTargetDir, bool bKid, bool bForce)
         if (cE.meState == ENTRY_DELETED)
             continue;
 
-        savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", cE.msResId, false);
+        savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", cE.msComment, cE.msResource, false);
     }
     savePo.endSave();
 }
@@ -679,12 +665,12 @@ bool l10nMem::convFilterWarning(const string& sSourceFile,
 
 
 
-void l10nMem::convEntryKey(int                iLineNo,
+void l10nMem::convEntryKey(int           iLineNo,
                            const string& sSourceFile,
                            const string& sKey,
                            const string& sMsgId,
                            const string& sMsgStr,
-                           bool               bIsFuzzy)
+                           bool          bIsFuzzy)
 {
     vector<int> ivEntryList;
     string      curFileName;
@@ -774,23 +760,25 @@ void l10nMem::convEntryKey(int                iLineNo,
 
 
 
-void l10nMem::loadENUSkey(int                iLineNo,
-    const string& sSourceFile,
-    const string& sKey,
-    const string& sMsgId)
+void l10nMem::loadENUSkey(int           iLineNo,
+                          const string& sSourceFile,
+                          const string& sKey,
+                          const string& sMsgId,
+                          const string& sComment,
+                          const string& sResource)
 {
     // add it to vector and update file pointer
-    addKey(iLineNo, sSourceFile, sKey, sMsgId, ENTRY_DELETED);
+    addKey(iLineNo, sSourceFile, sKey, sMsgId, sComment, sResource, ENTRY_DELETED);
 }
 
 
 
-void l10nMem::loadLangKey(int                iLineNo,
+void l10nMem::loadLangKey(int           iLineNo,
                           const string& sSourceFile,
                           const string& sKey,
                           const string& sMsgId,
                           const string& sMsgStr,
-                          bool               bFuzzy)
+                          bool          bFuzzy)
 {
     if (!locateKey(iLineNo, sSourceFile, sKey, sMsgId, true))
         throw l10nMem::showError(".po file contains unknown filename: " + sSourceFile + " or key: " + sKey);
@@ -901,10 +889,12 @@ bool l10nMem::locateKey(int                iLineNo,
 
 
 
-void l10nMem::addKey(int                  iLineNo,
+void l10nMem::addKey(int             iLineNo,
                      const string&   sSourceFile,
                      const string&   sKey,
                      const string&   sMsgId,
+                     const string&   sComment,
+                     const string&   sResource,
                      l10nMem::ENTRY_STATE eStat)
 {
     // check file
@@ -917,7 +907,7 @@ void l10nMem::addKey(int                  iLineNo,
         mcFileList.push_back(l10nMem_file_entry(sSourceFile, miCurENUSinx));
 
         // and add entry at the back (no problem since it is a new file)
-        mcENUSlist.push_back(l10nMem_enus_entry(sKey, sMsgId, msResourceName, iLineNo, miCurFileInx,
+        mcENUSlist.push_back(l10nMem_enus_entry(sKey, sMsgId, sComment, sResource, iLineNo, miCurFileInx,
             mcLangList.size(), eStat));
         mcFileList[miCurFileInx].miEnd = miCurENUSinx;
     }
@@ -930,7 +920,7 @@ void l10nMem::addKey(int                  iLineNo,
         curF.miEnd++;
         miCurENUSinx = curF.miEnd;
         mcENUSlist.insert(it + curF.miEnd,
-            l10nMem_enus_entry(sKey, sMsgId, msResourceName, iLineNo, miCurFileInx,
+            l10nMem_enus_entry(sKey, sMsgId, sComment, sResource, iLineNo, miCurFileInx,
                           mcLangList.size(), eStat));
         for (int i = miCurFileInx + 1; i < iFsize; ++i) {
             l10nMem_file_entry& curF2 = mcFileList[i];

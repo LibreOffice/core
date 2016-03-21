@@ -106,7 +106,7 @@ void convert_tree::setString(char *yytext)
         case STATE_VAL_TITLE:
              string sText = copySourceSpecial(yytext, 1);
              sText.erase(sText.size()-1);
-             mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, mbMergeMode);
+             mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, "", "", mbMergeMode);
              break;
     }
     meStateVal = STATE_VAL_NONE;
@@ -121,14 +121,14 @@ void convert_tree::setState(char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNew
     meStateTag = eNewStateTag;
     meStateVal = eNewStateVAL;
     if (sModule)
-        mcMemory.setResourceName(sModule);
+        msModule = sModule;
 }
 
 
 
 void convert_tree::setValue(char *yytext)
 {
-    mcMemory.setSourceKey(miLineNo, msSourceFile, msId, msCollector, mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, msId, msCollector, "", msModule, mbMergeMode);
     copySourceSpecial(yytext, 2);
 
     meStateTag = STATE_TAG_NONE;

@@ -33,12 +33,6 @@ convert_xcs::convert_xcs(l10nMem& crMemory)
 
 
 
-convert_xcs::~convert_xcs()
-{
-}
-
-
-
 extern int xcslex(void);
 void convert_xcs::doExecute()
 {
@@ -130,6 +124,6 @@ void convert_xcs::stopCollectData(char *syyText)
 #endif
     }
 
-    mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, sText, mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, sText, "", "", mbMergeMode);
     mbCollectingData = false;
 }

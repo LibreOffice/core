@@ -35,16 +35,9 @@ convert_xrm::convert_xrm(l10nMem& crMemory)
 
 
 
-convert_xrm::~convert_xrm()
-{
-}
-
-
-
 extern int xrmlex(void);
 void convert_xrm::doExecute()
 {
-    mcMemory.setResourceName("readmeitem");
     xrmlex();
 
     // write last part of file.
@@ -124,7 +117,7 @@ void convert_xrm::stopCollectData(char *yytext)
 
     copySource(yytext);
     if (!mbNoCollectingData) {
-        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
+        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "readmeitem", mbMergeMode);
         mbNoCollectingData = true;
         if (mbMergeMode) {
             sTagEnd  = "</" + msTag.substr(1,msTag.size()-2) + ">\n";

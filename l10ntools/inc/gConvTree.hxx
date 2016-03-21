@@ -42,20 +42,21 @@ class convert_tree : public convert_gen
         convert_tree(l10nMem& crMemory);
         ~convert_tree();
 
-        void         setString         (char *yytext);
-        void         setState          (char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL, char *sModule);
-        void         setValue          (char *yytext);
-        string& copySourceSpecial (char *yytext, int iType);
-        void         writeSourceFile   (string& sText, int inx);
+        void setString(char *yytext);
+        void setState(char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL, char *sModule);
+        void setValue(char *yytext);
+        void writeSourceFile(string& sText, int inx);
+        string& copySourceSpecial(char *yytext, int iType);
 
     private:
-        string     msLine;
-        string     msId;
-        string     msAppl;
+        string msLine;
+        string msModule;
+        string msId;
+        string msAppl;
         ofstream  *mcOutputFiles;
-        STATE_TAG       meStateTag;
-        STATE_VAL       meStateVal;
-        int             miCntLanguages;
+        STATE_TAG  meStateTag;
+        STATE_VAL  meStateVal;
+        int        miCntLanguages;
 
         void doExecute() override;
 };

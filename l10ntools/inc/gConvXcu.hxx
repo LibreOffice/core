@@ -29,7 +29,7 @@ class convert_xcu : public convert_gen
         bool mbNoCollectingData;
 
         convert_xcu(l10nMem& crMemory);
-        ~convert_xcu();
+        ~convert_xcu() {};
 
         void pushKey(char *syyText);
         void popKey(char *syyText);
