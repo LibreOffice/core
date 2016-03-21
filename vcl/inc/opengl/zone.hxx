@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
-#include <vcl/dllapi.h>
+
 
 class OpenGLZoneTest;
 class OpenGLWatchdogThread;

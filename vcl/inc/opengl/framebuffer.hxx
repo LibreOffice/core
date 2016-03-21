@@ -11,11 +11,11 @@
 #define INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H
 
 #include <GL/glew.h>
-#include <vcl/dllapi.h>
+
 
 #include <opengl/texture.hxx>
 
-class VCL_DLLPUBLIC OpenGLFramebuffer
+class  OpenGLFramebuffer
 {
 private:
     GLuint      mnId;

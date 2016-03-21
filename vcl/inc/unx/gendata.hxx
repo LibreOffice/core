@@ -22,7 +22,7 @@ enum SalGenericDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
                           SAL_DATA_ANDROID, SAL_DATA_IOS,
                           SAL_DATA_HEADLESS };
 
-class VCL_DLLPUBLIC SalGenericData : public SalData
+class  SalGenericData : public SalData
 {
  protected:
     SalGenericDataType m_eType;
