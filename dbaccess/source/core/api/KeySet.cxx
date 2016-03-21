@@ -944,7 +944,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     for(sal_Int32 i = 1;aParaIter != aParaEnd;++aParaIter,++aParaValuesIter,++i)
     {
         ORowSetValue aValue(*aParaValuesIter);
-        aValue.setSigned(m_aSignedFlags[aParaIter->second.nPosition]);
+        aValue.setSigned(m_aSignedFlags[aParaIter->second.nPosition-1]);
         if ( (_rInsertRow->get())[aParaIter->second.nPosition] != aValue )
         {
             ORowSetValueVector aCopy(m_aParameterValueForCache);
