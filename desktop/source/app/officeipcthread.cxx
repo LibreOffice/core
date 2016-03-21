@@ -747,9 +747,7 @@ void OfficeIPCThread::execute()
             }
             catch ( const CommandLineArgs::Supplier::Exception & )
             {
-#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
                 SAL_WARN("desktop.app", "Error in received command line arguments");
-#endif
                 continue;
             }
 
@@ -966,9 +964,7 @@ void OfficeIPCThread::execute()
                 }
             }
 
-#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
             SAL_WARN( "desktop.app", "Error on accept: " << (int)nError);
-#endif
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;
