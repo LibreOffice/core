@@ -181,11 +181,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     SvxAuthorField* pData = new SvxAuthorField(
                             aFirstName, aLastName, OUString(), bIsFixed ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR);
 
-                    if (!bFullName)
-                    {
-                        pData->SetFormat(SVXAUTHORFORMAT_SHORTNAME);
-                    }
-                    else if (nFmt >= SVXAUTHORFORMAT_FULLNAME || nFmt <= SVXAUTHORFORMAT_SHORTNAME)
+                    if(nFmt >= SVXAUTHORFORMAT_FULLNAME && nFmt <= SVXAUTHORFORMAT_SHORTNAME)
                     {
                         pData->SetFormat(static_cast<SvxAuthorFormat>(nFmt));
                     }

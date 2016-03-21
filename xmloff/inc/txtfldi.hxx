@@ -221,8 +221,10 @@ protected:
 class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 {
     bool bAuthorFullName;
+    sal_Int16 nFormat;
     const OUString sServiceAuthor;
     const OUString sPropertyAuthorFullName;
+    const OUString sPropertyAuthorFormat;
     const OUString sPropertyFixed;
     const OUString sPropertyContent;
 
@@ -239,6 +241,10 @@ protected:
     /// start element
     virtual void StartElement(
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
