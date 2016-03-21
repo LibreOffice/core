@@ -14,6 +14,7 @@
 
 #include <osl/thread.hxx>
 #include <salhelper/thread.hxx>
+#include <chrono>
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -39,10 +40,7 @@ public:
     }
     virtual void SAL_CALL run() override
     {
-        TimeValue aWait;
-        aWait.Seconds = mnSeconds;
-        aWait.Nanosec = 1000000; // +1ms
-        osl::Thread::wait( aWait );
+        osl::Thread::wait( std::chrono::seconds(mnSeconds) );
         fprintf(stderr, "ERROR: WatchDog timer thread expired, failing the test!\n");
         fflush(stderr);
         CPPUNIT_ASSERT_MESSAGE("watchdog triggered", false);
@@ -90,10 +88,7 @@ public:
 void TimerTest::testWatchdog()
 {
     // out-wait the watchdog.
-    TimeValue aWait;
-    aWait.Seconds = 12;
-    aWait.Nanosec = 0;
-    osl::Thread::wait( aWait );
+    osl::Thread::wait( std::chrono::seconds(12) );
 }
 #endif
 
@@ -339,10 +334,7 @@ public:
     }
     virtual void Invoke() override
     {
-        TimeValue aWait;
-        aWait.Seconds = 1;
-        aWait.Nanosec = 0;
-        osl::Thread::wait( aWait );
+        osl::Thread::wait( std::chrono::seconds(1) );
         mbSlow = true;
     }
 };
