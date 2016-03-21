@@ -47,7 +47,6 @@ public:
     long            GetNumerator() const;
     long            GetDenominator() const;
 
-    operator        long() const;
     operator        double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac );
