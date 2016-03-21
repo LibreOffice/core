@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_93fc1f40",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-03-21T07:54:08Z",
+      "side": 1,
+      "message": "I would say it makes sense to keep it if it\u0027s already there.",
+      "parentUuid": "9ad45d7e_f39d9b5a",
+      "revId": "ac83647ec5b4cd33312091d1df4ac89c33de9ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_53a3c79e",
         "filename": "sw/source/core/text/widorp.cxx",
         "patchSetId": 1
