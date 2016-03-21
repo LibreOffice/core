@@ -151,7 +151,7 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
         for (i = 0;  i < SmFontStyles::GetCount(); ++i)
             if (rStyleName == rStyles.GetStyleName(i))
                 break;
-        assert(i < rStyles.GetCount() && "style-name unknown");
+        assert(i < SmFontStyles::GetCount() && "style-name unknown");
         nIndex = i;
     }
 
