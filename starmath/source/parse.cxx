@@ -312,14 +312,6 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 
 namespace {
 
-const sal_Unicode aDelimiterTable[] =
-{
-    ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
-    '%',    '\\',   '"',    '~',    '`',    '>',    '<',    '&',    '|',    '(',
-    ')',    '{',    '}',    '[',    ']',    '^',    '_',
-    '\0'    // end of list symbol
-};
-
 bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     // returns 'true' iff cChar is '\0' or a delimiter
 {
@@ -331,6 +323,13 @@ bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     sal_Unicode cChar = rTxt[nPos];
 
     // check if 'cChar' is in the delimiter table
+    static const sal_Unicode aDelimiterTable[] =
+    {
+        ' ',  '\t', '\n', '\r', '+',  '-',  '*',  '/',  '=',  '#',
+        '%',  '\\', '"',  '~',  '`',  '>',  '<',  '&',  '|',  '(',
+        ')',  '{',  '}',  '[',  ']',  '^',  '_',
+        '\0'    // end of list symbol
+    };
     const sal_Unicode *pDelim = &aDelimiterTable[0];
     for ( ;  *pDelim != 0;  pDelim++)
         if (*pDelim == cChar)
