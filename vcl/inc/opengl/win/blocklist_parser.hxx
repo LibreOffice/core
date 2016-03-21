@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/dllapi.h>
+
 #include <xmlreader/xmlreader.hxx>
 #include <vector>
 #include "opengl/win/WinDeviceInfo.hxx"
@@ -16,7 +16,7 @@ class InvalidFileException
 {
 };
 
-class VCL_DLLPUBLIC WinBlocklistParser
+class  WinBlocklistParser
 {
 public:
     WinBlocklistParser(const OUString& rURL, std::vector<wgl::DriverInfo>& rDriverList);

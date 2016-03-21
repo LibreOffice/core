@@ -33,7 +33,7 @@ enum class ConvolutionKernelType
     Lanczos3  = 3,
 };
 
-class VCL_DLLPUBLIC BitmapScaleConvolution : public BitmapFilter
+class BitmapScaleConvolution : public BitmapFilter
 {
 public:
 

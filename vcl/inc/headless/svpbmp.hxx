@@ -25,7 +25,7 @@
 
 #include <salbmp.hxx>
 
-class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
+class  SvpSalBitmap : public SalBitmap
 {
     BitmapBuffer*   mpDIB;
 public:

@@ -28,7 +28,7 @@
 
 class SalGraphics;
 
-class VCL_DLLPUBLIC SvpSalObject : public SalObject
+class SvpSalObject : public SalObject
 {
 public:
     SystemEnvData m_aSystemChildData;
@@ -48,7 +48,7 @@ public:
     virtual const SystemEnvData*    GetSystemData() const override;
 };
 
-class VCL_DLLPUBLIC SvpImeStatus : public SalI18NImeStatus
+class SvpImeStatus : public SalI18NImeStatus
 {
   public:
         SvpImeStatus() {}
@@ -58,7 +58,7 @@ class VCL_DLLPUBLIC SvpImeStatus : public SalI18NImeStatus
         virtual void toggle() override;
 };
 
-class VCL_DLLPUBLIC SvpSalSystem : public SalGenericSystem
+class SvpSalSystem : public SalGenericSystem
 {
 public:
     SvpSalSystem() {}
