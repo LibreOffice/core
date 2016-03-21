@@ -5059,7 +5059,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
     {
         const ScRangeData& r = *itr->second;
-        if (!r.HasType(RT_DATABASE))
+        if (!r.HasType(ScRangeData::Type::Database))
             ++nValidCount;
     }
     ScRangeName* pList = rDoc.GetRangeName();
@@ -5067,7 +5067,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         const ScRangeData& r = *itr->second;
-        if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(r.GetUpperName()))
+        if (!r.HasType(ScRangeData::Type::Database) && !pLocalList->findByUpperName(r.GetUpperName()))
             ++nValidCount;
     }
 
@@ -5098,13 +5098,13 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
             for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
             {
                 ScRangeData& r = *itr->second;
-                if (!r.HasType(RT_DATABASE))
+                if (!r.HasType(ScRangeData::Type::Database))
                     ppSortArray[j++] = &r;
             }
             for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
                 ScRangeData& r = *itr->second;
-                if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(itr->first))
+                if (!r.HasType(ScRangeData::Type::Database) && !pLocalList->findByUpperName(itr->first))
                     ppSortArray[j++] = &r;
             }
             qsort( static_cast<void*>(ppSortArray.get()), nValidCount, sizeof(ScRangeData*),

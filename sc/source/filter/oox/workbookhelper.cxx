@@ -372,11 +372,11 @@ namespace {
 ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, const Sequence<FormulaToken>& rTokens, sal_Int16 nIndex, sal_Int32 nUnoType )
 {
     bool bDone = false;
-    sal_uInt16 nNewType = RT_NAME;
-    if ( nUnoType & NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
-    if ( nUnoType & NamedRangeFlag::PRINT_AREA )         nNewType |= RT_PRINTAREA;
-    if ( nUnoType & NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
-    if ( nUnoType & NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
+    ScRangeData::Type nNewType = ScRangeData::Type::Name;
+    if ( nUnoType & NamedRangeFlag::FILTER_CRITERIA )    nNewType |= ScRangeData::Type::Criteria;
+    if ( nUnoType & NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
+    if ( nUnoType & NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
+    if ( nUnoType & NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
     ScTokenArray aTokenArray;
     (void)ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
     ScRangeData* pNew = new ScRangeData( &rDoc, rName, aTokenArray, ScAddress(), nNewType );

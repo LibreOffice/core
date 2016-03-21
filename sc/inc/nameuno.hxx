@@ -22,6 +22,7 @@
 
 #include <svl/lstner.hxx>
 #include "address.hxx"
+#include "rangenam.hxx"
 #include <formula/grammar.hxx>
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
@@ -40,9 +41,6 @@
 #include <rtl/ref.hxx>
 
 class ScDocShell;
-class ScRangeName;
-class ScRangeData;
-class ScTokenArray;
 class ScNamedRangesObj;
 
 class SC_DLLPUBLIC ScNamedRangeObj : public ::cppu::WeakImplHelper<
@@ -65,7 +63,7 @@ friend class ScVbaName;
     ScRangeData*            GetRangeData_Impl();
     void                    Modify_Impl( const OUString* pNewName,
                                         const ScTokenArray* pNewTokens, const OUString* pNewContent,
-                                        const ScAddress* pNewPos, const sal_uInt16* pNewType,
+                                        const ScAddress* pNewPos, const ScRangeData::Type* pNewType,
                                         const formula::FormulaGrammar::Grammar eGrammar );
     SCTAB                   GetTab_Impl();
 

@@ -2640,19 +2640,19 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     SCTAB nTab = GetViewData().GetTabNo();
     ScRangeName* pList = rDoc.GetRangeName();
 
-    RangeType nType = RT_NAME;
+    ScRangeData::Type nType = ScRangeData::Type::Name;
     ScRangeData* pNewEntry = new ScRangeData( &rDoc, rName, rSymbol,
             ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(),
                 nTab), nType );
     OUString aUpType = rType.toAsciiUpperCase();
     if ( aUpType.indexOf( 'P' ) != -1 )
-        nType |= RT_PRINTAREA;
+        nType |= ScRangeData::Type::PrintArea;
     if ( aUpType.indexOf( 'R' ) != -1 )
-        nType |= RT_ROWHEADER;
+        nType |= ScRangeData::Type::RowHeader;
     if ( aUpType.indexOf( 'C' ) != -1 )
-        nType |= RT_COLHEADER;
+        nType |= ScRangeData::Type::ColHeader;
     if ( aUpType.indexOf( 'F' ) != -1 )
-        nType |= RT_CRITERIA;
+        nType |= ScRangeData::Type::Criteria;
     pNewEntry->AddType(nType);
 
     if ( !pNewEntry->GetErrCode() )     //  text valid?

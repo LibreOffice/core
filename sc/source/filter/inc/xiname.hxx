@@ -66,7 +66,7 @@ private:
     const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
     sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
     SCTAB               mnScTab;        /// Calc sheet index of local names.
-    RangeType           meNameType;
+    ScRangeData::Type   meNameType;
     sal_uInt16          mnXclTab;
     sal_uInt16          mnNameIndex;
     bool                mbVBName:1;     /// true = Visual Basic procedure or function.
