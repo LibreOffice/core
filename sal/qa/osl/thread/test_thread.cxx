@@ -24,6 +24,7 @@
 #include "osl/conditn.hxx"
 #include "osl/thread.hxx"
 #include "osl/time.h"
+#include <chrono>
 
 namespace {
 
@@ -62,8 +63,7 @@ public:
         // terminates:
         global.set();
         // Give the spawned threads enough time to terminate:
-        TimeValue const twentySeconds = { 20, 0 };
-        osl::Thread::wait(twentySeconds);
+        osl::Thread::wait(std::chrono::seconds(20));
     }
 
     CPPUNIT_TEST_SUITE(Test);

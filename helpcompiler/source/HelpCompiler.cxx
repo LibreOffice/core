@@ -28,14 +28,11 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <osl/thread.hxx>
+#include <chrono>
 
 static void impl_sleep( sal_uInt32 nSec )
 {
-    TimeValue aTime;
-    aTime.Seconds = nSec;
-    aTime.Nanosec = 0;
-
-    osl::Thread::wait( aTime );
+    osl::Thread::wait( std::chrono::seconds(nSec) );
 }
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resCompactStylesheet,
