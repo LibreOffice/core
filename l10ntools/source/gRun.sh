@@ -13,7 +13,6 @@ ${MYCMD} --base swext/mediawiki/help --files help.tree wiki.xhp wikiaccount.xhp 
 ${MYCMD} --base dictionaries/da_DK/help --files da/help.tree en/help.tree da/org.openoffice.da.hunspell.dictionaries/page1.xhp da/org.openoffice.da.hunspell.dictionaries/page2.xhp
 
 ${MYCMD} --base dictionaries/hu_HU/help --files en/help.tree hu/help.tree hu/org.openoffice.hu.hunspell.dictionaries/page1.xhp
-exit
 
 ${MYCMD} --base helpcontent2/source/auxiliary --files sbasic.tree scalc.tree schart.tree shared.tree simpress.tree smath.tree swriter.tree
 
@@ -25,7 +24,7 @@ ${MYCMD} --base helpcontent2/source/text/sbasic/shared --files 00000002.xhp 0000
 
 ${MYCMD} --base helpcontent2/source/text/sbasic/shared/01 --files 06130000.xhp 06130100.xhp 06130500.xhp
 
-${MYCMD} --base helpcontent2/source/text/sbasic/shared/02 --file 11010000.xhp 11020000.xhp 11030000.xhp 11040000.xhp 11050000.xhp 11060000.xhp 11070000.xhp 11080000.xhp 11090000.xhp 11100000.xhp 11110000.xhp 11120000.xhp 11140000.xhp 11150000.xhp 11160000.xhp 11170000.xhp 11180000.xhp 11190000.xhp 20000000.xhp
+${MYCMD} --base helpcontent2/source/text/sbasic/shared/02 --files 11010000.xhp 11020000.xhp 11030000.xhp 11040000.xhp 11050000.xhp 11060000.xhp 11070000.xhp 11080000.xhp 11090000.xhp 11100000.xhp 11110000.xhp 11120000.xhp 11140000.xhp 11150000.xhp 11160000.xhp 11170000.xhp 11180000.xhp 11190000.xhp 20000000.xhp
 
 ${MYCMD} --base helpcontent2/source/text/scalc/00 --files 00000004.xhp 00000402.xhp 00000403.xhp 00000404.xhp 00000405.xhp 00000406.xhp 00000407.xhp 00000412.xhp sheet_menu.xhp
 
@@ -135,7 +134,7 @@ ${MYCMD} --base helpcontent2/source/text/swriter/menu --files insert_footnote_en
 
 ${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/help/de --files com.foocorp.foo-ext/page1.xhp com.foocorp.foo-ext/page2.xhp com.foocorp.foo-ext/subfolder/anotherpage.xhp
 
-${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/help/en --fles com.foocorp.foo-ext/page1.xhp com.foocorp.foo-ext/page2.xhp com.foocorp.foo-ext/subfolder/anotherpage.xhp
+${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/help/en --files com.foocorp.foo-ext/page1.xhp com.foocorp.foo-ext/page2.xhp com.foocorp.foo-ext/subfolder/anotherpage.xhp
 
 ${MYCMD} --base nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver --files Options.xhp Usage.xhp
 
@@ -485,9 +484,614 @@ ${MYCMD} --files xmlsecurity/inc/xmlsecurity/global.hrc
 
 ${MYCMD} --base xmlsecurity/source/dialogs --files dialogs.hrc digitalsignaturesdialog.hrc helpids.hrc
 
+${MYCMD} --files android/source/gradle/wrapper/gradle-wrapper.properties
 
+${MYCMD} --files dictionaries/en/dialog/en_en_US.properties
 
+${MYCMD} --base dictionaries/hu_HU/dialog --files hu_HU_en_US.properties hu_HU_hu_HU.properties
 
-    640 filelist_properties.txt
-    718 filelist_src.txt
-    916 filelist_xcu.txt
+${MYCMD} --files dictionaries/pt_BR/dialog/pt_BR_pt_BR.properties
+
+${MYCMD} --base dictionaries/ru_RU/dialog --files ru_RU_en_US.properties dialog/ru_RU_ru_RU.properties
+
+${MYCMD} --files instdir/share/Scripts/python/LibreLogo/LibreLogo_en_US.properties
+
+${MYCMD} --files librelogo/source/pythonpath/LibreLogo_en_US.properties
+
+${MYCMD} --base nlpsolver/src/locale --files NLPSolverCommon_en_US.properties NLPSolverStatusDialog_en_US.properties
+
+${MYCMD} --base officecfg/registry/schema --files oo-ldap-attr-map.properties oo-org-map.properties
+
+${MYCMD} --base reportbuilder/java --files jfreereport.properties libformula.properties loader.properties
+
+${MYCMD} --base reportbuilder/java/org/libreoffice/report/function/metadata --files Author-Function.properties Author-Function_en_US.properties category.properties category_en_US.properties Title-Function.properties Title-Function_en_US.properties
+
+${MYCMD} --base reportbuilder/java/org/libreoffice/report/pentaho --files configuration.properties module.properties
+
+${MYCMD} --files solenv/inc/ant.properties
+
+${MYCMD} --files xmerge/source/xmerge/java/org/openoffice/xmerge/converter/xml/xslt/XsltPlugin.properties
+
+${MYCMD} --files xmerge/source/xmerge/java/org/openoffice/xmerge/test/ConverterInfoList.properties
+
+${MYCMD} --base xmerge/source/xmerge/java/org/openoffice/xmerge/util --files Debug.properties resources.properties
+
+${MYCMD} --base xmlsecurity/test_docs/tools/httpserv/nbproject --files genfiles.properties project.properties
+
+${MYCMD} --files accessibility/source/helper/accessiblestrings.src
+
+${MYCMD} --base avmedia/source/framework --files mediacontrol.src mediawindow.src
+
+${MYCMD} --base basctl/source/basicide --files basicprint.src basidesh.src basicide/macrodlg.src moduldlg.src objdlg.src
+
+${MYCMD} --files basctl/source/dlged/dlgresid.src
+
+${MYCMD} --files basic/source/classes/sb.src
+
+${MYCMD} --files basic/source/sbx/format.src
+
+${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.src Strings.src Strings_AdditionalControls.src Strings_ChartTypes.src Strings_Scale.src Strings_Statistic.src
+
+${MYCMD} --base chart2/source/controller/menus --files ShapeContextMenu.src ShapeEditContextMenu.src
+
+${MYCMD} --base connectivity/source/resource --files conn_error_message.src conn_log_res.src conn_shared_res.src
+
+${MYCMD} --base cui/source/customize --files acccfg.src cfg.src macropg.src
+
+${MYCMD} --base cui/source/dialogs --files cuires.src fmsearch.src gallery.src hyperdlg.src multipat.src passwdomdlg.src scriptdlg.src svuidlg.src
+
+${MYCMD} --base cui/source/options --files connpooloptions.src dbregister.src doclinkdialog.src optchart.src optcolor.src optdict.src optfltr.src optgdlg.src optinet2.src optjava.src optlingu.src optpath.src personalization.src treeopt.src
+
+${MYCMD} --base cui/source/tabpages --files align.src border.src frmdirlbox.src page.src paragrph.src strings.src
+
+${MYCMD} --files dbaccess/source/core/resource/strings.src
+
+${MYCMD} --files dbaccess/source/ext/macromigration/macromigration.src
+
+${MYCMD} --files dbaccess/source/sdbtools/resource/sdbt_strings.src
+
+${MYCMD} --files dbaccess/source/ui/app/app.src
+
+${MYCMD} --base dbaccess/source/ui/browser --files sbabrw.src sbagrid.src
+
+${MYCMD} --base dbaccess/source/ui/control --files TableGrantCtrl.src tabletree.src undosqledit.src
+
+${MYCMD} --base dbaccess/source/ui/dlg --files AutoControls.src ConnectionPage.src dbadmin.src dbadmin2.src dbadminsetup.src directsql.src indexdialog.src paramdialog.src sqlmessage.src UserAdmin.src
+
+${MYCMD} --files dbaccess/source/ui/imagelists/dbimagelists.src
+
+${MYCMD} --base dbaccess/source/ui/misc --files dbumiscres.src WizardPages.src
+
+${MYCMD} --base dbaccess/source/ui/querydesign --files query.src querydlg.src
+
+${MYCMD} --files dbaccess/source/ui/relationdesign/relation.src
+
+${MYCMD} --files dbaccess/source/ui/tabledesign/table.src
+
+${MYCMD} --base dbaccess/source/ui/uno --files copytablewizard.src dbinteraction.src
+
+${MYCMD} --files desktop/source/app/desktop.src
+
+${MYCMD} --base desktop/source/deployment/gui --files dp_gui_backend.src dp_gui_dialog.src dp_gui_dialog2.src dp_gui_updatedialog.src dp_gui_updateinstalldialog.src dp_gui_versionboxes.src
+
+${MYCMD} --files desktop/source/deployment/manager/dp_manager.src
+
+${MYCMD} --files desktop/source/deployment/misc/dp_misc.src
+
+${MYCMD} --files desktop/source/deployment/registry/component/dp_component.src
+
+${MYCMD} --files desktop/source/deployment/registry/configuration/dp_configuration.src
+
+${MYCMD} --files desktop/source/deployment/registry/dp_registry.src
+
+${MYCMD} --files desktop/source/deployment/registry/help/dp_help.src
+
+${MYCMD} --files desktop/source/deployment/registry/package/dp_package.src
+
+${MYCMD} --files desktop/source/deployment/registry/script/dp_script.src
+
+${MYCMD} --files desktop/source/deployment/registry/sfwk/dp_sfwk.src
+
+${MYCMD} --files desktop/source/deployment/unopkg/unopkg.src
+
+${MYCMD} --files editeng/source/accessibility/accessibility.src
+
+${MYCMD} --files editeng/source/editeng/editeng.src
+
+${MYCMD} --base editeng/source/items --files page.src svxitems.src
+
+${MYCMD} --files editeng/source/misc/lingu.src
+
+${MYCMD} --files editeng/source/outliner/outliner.src
+
+${MYCMD} --base extensions/qa/complex/extensions --files orl_de.src orl_en-US.src
+
+${MYCMD} --files extensions/source/abpilot/abspilot.src
+
+${MYCMD} --base extensions/source/bibliography --files bib.src sections.src toolbar.src
+
+${MYCMD} --base extensions/source/dbpilots --files commonpagesdbp.src dpilots.src gridpages.src groupboxpages.src listcombopages.src
+
+${MYCMD} --base extensions/source/propctrlr --files formlinkdialog.src formres.src pcrmiscres.src propres.src selectlabeldialog.src
+
+${MYCMD} --files extensions/source/scanner/strings.src
+
+${MYCMD} --files extensions/source/update/check/updatehdl.src
+
+${MYCMD} --files extensions/source/update/ui/updatecheckui.src
+
+${MYCMD} --files extensions/workben/testresource.src
+
+${MYCMD} --files filter/source/graphicfilter/eps/epsstr.src
+
+${MYCMD} --base filter/source/pdf --files impdialog.src pdf.src
+
+${MYCMD} --files filter/source/t602/t602filter.src
+
+${MYCMD} --files filter/source/xsltdialog/xmlfilterdialogstrings.src
+
+${MYCMD} --base forms/source/resource --files strings.src xforms.src
+
+${MYCMD} --files formula/source/core/resource/core_resource.src
+
+${MYCMD} --base formula/source/ui/dlg --files formdlgs.src parawin.src
+
+${MYCMD} --base fpicker/source/office --files iodlg.src OfficeFilePicker.src
+
+${MYCMD} --files framework/source/classes/resource.src
+
+${MYCMD} --files reportdesign/source/core/resource/strings.src
+
+${MYCMD} --base reportdesign/source/ui/dlg --files CondFormat.src GroupsSorting.src Navigator.src PageNumber.src
+
+${MYCMD} --files reportdesign/source/ui/inspection/inspection.src
+
+${MYCMD} --files reportdesign/source/ui/report/report.src
+
+${MYCMD} --files sc/source/core/src/compiler.src
+
+${MYCMD} --files sc/source/ui/cctrl/checklistmenu.src
+
+${MYCMD} --base sc/source/ui/dbgui --files outline.src pvfundlg.src
+
+${MYCMD} --files sc/source/ui/formdlg/dwfunctr.src
+
+${MYCMD} --base sc/source/ui/miscdlgs --files acredlin.src conflictsdlg.src retypepassdlg.src
+
+${MYCMD} --files sc/source/ui/navipi/navipi.src
+
+${MYCMD} --files sc/source/ui/pagedlg/pagedlg.src
+
+${MYCMD} --base sc/source/ui/sidebar --files CellAppearancePropertyPanel.src NumberFormatPropertyPanel.src
+
+${MYCMD} --base sc/source/ui/src --files condformatdlg.src filter.src globstr.src iconsets.src sc.src scerrors.src scfuncs.src scstring.src scwarngs.src toolbox.src
+
+${MYCMD} --files sc/source/ui/StatisticsDialogs/StatisticsDialogs.src
+
+${MYCMD} --files sc/source/ui/styleui/scstyles.src
+
+${MYCMD} --base scaddins/source/analysis --files analysis.src analysis_deffuncnames.src analysis_funcnames.src
+
+${MYCMD} --files scaddins/source/datefunc/datefunc.src
+
+${MYCMD} --files scaddins/source/pricing/pricing.src
+
+${MYCMD} --files sccomp/source/solver/solver.src
+
+${MYCMD} --files sd/source/core/glob.src
+
+${MYCMD} --files sd/source/ui/accessibility/accessibility.src
+
+${MYCMD} --files sd/source/ui/animations/CustomAnimation.src
+
+${MYCMD} --files sd/source/ui/annotations/annotations.src
+
+${MYCMD} --base sd/source/ui/app --files popup.src res_bmp.src sdstring.src strings.src toolbox.src
+
+${MYCMD} --files sd/source/ui/dlg/navigatr.src
+
+${MYCMD} --files sd/source/ui/slideshow/slideshow.src
+
+${MYCMD} --files sd/source/ui/slidesorter/view/SlsResource.src
+
+${MYCMD} --files sd/source/ui/view/DocumentRenderer.src
+
+${MYCMD} --base sfx2/source/appl --files app.src newhelp.src sfx.src
+
+${MYCMD} --base sfx2/source/bastyp --files bastyp.src fltfnc.src
+
+${MYCMD} --files sfx2/source/control/templateview.src
+
+${MYCMD} --base sfx2/source/dialog --files dialog.src dinfdlg.src filedlghelper.src newstyle.src recfloat.src taskpane.src templdlg.src itledockwin.src versdlg.src
+
+${MYCMD} --base sfx2/source/doc --files doc.src doctempl.src graphhelp.src templatelocnames.src
+
+${MYCMD} --files sfx2/source/sidebar/Sidebar.src
+
+${MYCMD} --files sfx2/source/view/view.src
+
+${MYCMD} --base starmath/source --files commands.src smres.src symbol.src
+
+${MYCMD} --files svl/source/misc/mediatyp.src
+
+${MYCMD} --files svtools/source/brwbox/editbrowsebox.src
+
+${MYCMD} --base svtools/source/contnr --files fileview.src svcontnr.src contnr/templwin.src
+
+${MYCMD} --base svtools/source/control --files calendar.src ctrlbox.src ctrltool.src filectrl.src ruler.src
+
+${MYCMD} --base svtools/source/dialogs --files addresstemplate.src filedlg2.src formats.src so3res.src wizardmachine.src
+
+${MYCMD} --files svtools/source/java/javaerror.src
+
+${MYCMD} --base svtools/source/misc --files ehdl.src imagemgr.src langtab.src svtools.src undo.src
+
+${MYCMD} --files svx/source/accessibility/accessibility.src
+
+${MYCMD} --files svx/source/core/graphichelper.src
+
+${MYCMD} --base svx/source/dialog --files bmpmask.src compressgraphicdialog.src dlgctrl.src docrecovery.src frmsel.src imapdlg.src langbox.src language.src passwd.src prtqry.src ruler.src sdstring.src srchdlg.src svxbmpnumvalueset.src swframeposstrings.src txenctab.src ucsubset.src
+
+${MYCMD} --base svx/source/engine3d --files float3d.src string3d.src
+
+${MYCMD} --files svx/source/fmcomp/gridctrl.src
+
+${MYCMD} --base svx/source/form --files datanavi.src filtnav.src fmexpl.src fmstring.src
+
+${MYCMD} --base svx/source/gallery2 --files gallery.src galtheme.src
+
+${MYCMD} --base svx/source/items --files svxerr.src svxitems.src
+
+${MYCMD} --files svx/source/sidebar/area/AreaPropertyPanel.src
+
+${MYCMD} --files svx/source/sidebar/EmptyPanel.src
+
+${MYCMD} --files svx/source/sidebar/line/LinePropertyPanel.src
+
+${MYCMD} --files svx/source/sidebar/paragraph/ParaPropertyPanel.src
+
+${MYCMD} --files svx/source/sidebar/text/TextPropertyPanel.src
+
+${MYCMD} --files svx/source/src/errtxt.src
+
+${MYCMD} --files svx/source/stbctrls/stbctrls.src
+
+${MYCMD} --files svx/source/svdraw/svdstr.src
+
+${MYCMD} --files svx/source/table/table.src
+
+${MYCMD} --base svx/source/tbxctrls --files colrctrl.src extrusioncontrols.src fontworkgallery.src grafctrl.src lboxctrl.src tbcontrl.src tbunosearchcontrollers.src
+
+${MYCMD} --base svx/source/toolbars --files extrusionbar.src fontworkbar.src
+
+${MYCMD} --files svx/source/unodraw/unodraw.src
+
+${MYCMD} --files sw/source/core/layout/pagefrm.src
+
+${MYCMD} --files sw/source/core/undo/undo.src
+
+${MYCMD} --files sw/source/core/unocore/unocore.src
+
+${MYCMD} --base sw/source/ui/app --files app.src error.src mn.src
+
+${MYCMD} --files sw/source/ui/chrdlg/chrdlg.src
+
+${MYCMD} --base sw/source/ui/config --files optdlg.src optload.src
+
+${MYCMD} --base sw/source/ui/dbui --files dbui.src mailmergewizard.src mmaddressblockpage.src selectdbtabledialog.src
+
+${MYCMD} --files sw/source/ui/dialog/dialog.src
+
+${MYCMD} --files sw/source/ui/dochdl/dochdl.src
+
+${MYCMD} --base sw/source/ui/docvw --files access.src annotation.src
+
+${MYCMD} --base sw/source/ui/envelp --files envelp.src envprt.src label.src labfmt.src
+
+${MYCMD} --files sw/source/ui/fldui/fldui.src
+
+${MYCMD} --files sw/source/ui/frmdlg/frmui.src
+
+${MYCMD} --files sw/source/ui/globdoc/globdoc.src
+
+${MYCMD} --base sw/source/ui/index --files cnttab.src idxmrk.src
+
+${MYCMD} --base sw/source/ui/misc --files glossary.src numberingtypelistbox.src swruler.src
+
+${MYCMD} --files sw/source/ui/shells/shells.src
+
+${MYCMD} --files sw/source/ui/sidebar/PagePropertyPanel.src
+
+${MYCMD} --base sw/source/ui/utlui --files poolfmt.src utlui.src
+
+${MYCMD} --files sw/source/ui/web/web.src
+
+${MYCMD} --files sw/source/uibase/dbui/mailmergechildwindow.src
+
+${MYCMD} --files sw/source/uibase/dialog/regionsw.src
+
+${MYCMD} --files sw/source/uibase/docvw/docvw.src
+
+${MYCMD} --files sw/source/uibase/lingu/olmenu.src
+
+${MYCMD} --files sw/source/uibase/misc/redlndlg.src
+
+${MYCMD} --base sw/source/uibase/ribbar --files inputwin.src workctrl.src
+
+${MYCMD} --files sw/source/uibase/uiview/view.src
+
+${MYCMD} --base sw/source/uibase/utlui --files attrdesc.src initui.src navipi.src statusbar.src unotools.src
+
+${MYCMD} --files sw/source/uibase/wrtsh/wrtsh.src
+
+${MYCMD} --base uui/source --files alreadyopen.src filechanged.src ids.src lockfailed.src nameclashdlg.src openlocked.src passworddlg.src passworderrs.src trylater.src
+
+${MYCMD} --files vcl/source/edit/textundo.src
+
+${MYCMD} --base vcl/source/src --files app.src btntext.src fpicker.src helptext.src images.src menu.src print.src stdtext.src throbber.src units.src
+
+${MYCMD} --files wizards/source/euro/euro.src
+
+${MYCMD} --files wizards/source/formwizard/dbwizres.src
+
+${MYCMD} --files wizards/source/imagelists/imagelists.src
+
+${MYCMD} --files wizards/source/importwizard/importwi.src
+
+${MYCMD} --files wizards/source/template/template.src
+
+${MYCMD} --files writerperfect/source/common/strings.src
+
+${MYCMD} --files xmlsecurity/source/component/warnbox.src
+
+${MYCMD} --base xmlsecurity/source/dialogs --files certificateviewer.src digitalsignaturesdialog.src
+
+${MYCMD} --files connectivity/registry/ado/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/calc/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/dbase/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/evoab2/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/firebird/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/flat/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/hsqldb/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/jdbc/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/macab/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/mork/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/mysql/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/odbc/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/postgresql/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --files connectivity/registry/tdeab/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --base desktop/test/deployment/active --files Addons.xcu ProtocolHandler.xcu
+
+${MYCMD} --base desktop/test/deployment/passive --files Addons.xcu ProtocolHandler.xcu
+
+${MYCMD} --files dictionaries/af_ZA/dictionaries.xcu
+
+${MYCMD} --files dictionaries/an_ES/dictionaries.xcu
+
+${MYCMD} --files dictionaries/ar/dictionaries.xcu
+
+${MYCMD} --files dictionaries/be_BY/dictionaries.xcu
+
+${MYCMD} --files dictionaries/bg_BG/dictionaries.xcu
+
+${MYCMD} --files dictionaries/bn_BD/dictionaries.xcu
+
+${MYCMD} --files dictionaries/br_FR/dictionaries.xcu
+
+${MYCMD} --files dictionaries/bs_BA/dictionaries.xcu
+
+${MYCMD} --files dictionaries/ca/dictionaries.xcu
+
+${MYCMD} --files dictionaries/cs_CZ/dictionaries.xcu
+
+${MYCMD} --files dictionaries/da_DK/dictionaries.xcu
+
+${MYCMD} --files dictionaries/de/dictionaries.xcu
+
+${MYCMD} --files dictionaries/el_GR/dictionaries.xcu
+
+${MYCMD} --files dictionaries/en/dialog/registry/data/org/openoffice/Office/OptionsDialog.xcu
+
+${MYCMD} --base dictionaries/en --files dictionaries.xcu Linguistic.xcu
+
+${MYCMD} --files dictionaries/es/dictionaries.xcu
+
+${MYCMD} --files dictionaries/et_EE/dictionaries.xcu
+
+${MYCMD} --files dictionaries/fr_FR/dictionaries.xcu
+
+${MYCMD} --files dictionaries/gd_GB/dictionaries.xcu
+
+${MYCMD} --files dictionaries/gl/dictionaries.xcu
+
+${MYCMD} --files dictionaries/gug/dictionaries.xcu
+
+${MYCMD} --files dictionaries/gu_IN/dictionaries.xcu
+
+${MYCMD} --files dictionaries/he_IL/dictionaries.xcu
+
+${MYCMD} --files dictionaries/hi_IN/dictionaries.xcu
+
+${MYCMD} --files dictionaries/hr_HR/dictionaries.xcu
+
+${MYCMD} --files dictionaries/hu_HU/dialog/registry/data/org/openoffice/Office/OptionsDialog.xcu
+
+${MYCMD} --base dictionaries/hu_HU --files dictionaries.xcu Linguistic.xcu
+
+${MYCMD} --files dictionaries/is/dictionaries.xcu
+
+${MYCMD} --files dictionaries/it_IT/dictionaries.xcu
+
+${MYCMD} --files dictionaries/kmr_Latn/dictionaries.xcu
+
+${MYCMD} --files dictionaries/lo_LA/dictionaries.xcu
+
+${MYCMD} --files dictionaries/lt_LT/dictionaries.xcu
+
+${MYCMD} --files dictionaries/lv_LV/dictionaries.xcu
+
+${MYCMD} --files dictionaries/ne_NP/dictionaries.xcu
+
+${MYCMD} --files dictionaries/nl_NL/dictionaries.xcu
+
+${MYCMD} --files dictionaries/no/dictionaries.xcu
+
+${MYCMD} --files dictionaries/oc_FR/dictionaries.xcu
+
+${MYCMD} --files dictionaries/pl_PL/dictionaries.xcu
+
+${MYCMD} --base dictionaries/pt_BR/dialog --files OptionsDialog.xcu registry/data/org/openoffice/Office/OptionsDialog.xcu dictionaries.xcu Linguistic.xcu
+
+${MYCMD} --files dictionaries/pt_PT/dictionaries.xcu
+
+${MYCMD} --files dictionaries/ro/dictionaries.xcu
+
+${MYCMD} --base dictionaries/ru_RU/dialog --files registry/data/org/openoffice/Office/OptionsDialog.xcu dictionaries.xcu Linguistic.xcu
+
+${MYCMD} --files dictionaries/si_LK/dictionaries.xcu
+
+${MYCMD} --files dictionaries/sk_SK/dictionaries.xcu
+
+${MYCMD} --files dictionaries/sl_SI/dictionaries.xcu
+
+${MYCMD} --files dictionaries/sr/dictionaries.xcu
+
+${MYCMD} --files dictionaries/sv_SE/dictionaries.xcu
+
+${MYCMD} --files dictionaries/sw_TZ/dictionaries.xcu
+
+${MYCMD} --files dictionaries/te_IN/dictionaries.xcu
+
+${MYCMD} --files dictionaries/th_TH/dictionaries.xcu
+
+${MYCMD} --files dictionaries/uk_UA/dictionaries.xcu
+
+${MYCMD} --files dictionaries/vi/dictionaries.xcu
+
+${MYCMD} --files dictionaries/zu_ZA/dictionaries.xcu
+
+${MYCMD} --base extensions/source/update/check/org/openoffice/Office --files Addons.xcu Jobs.xcu
+
+${MYCMD} --files filter/qa/complex/filter/misc/TypeDetection6FileFormat.xcu
+
+${MYCMD} --base filter/source/config/fragments/contenthandlers --files com_sun_star_comp_framework_oxt_handler.xcu com_sun_star_comp_framework_SoundHandler.xcu
+
+${MYCMD} --base filter/source/config/fragments/filters --files AbiWord.xcu AppleKeynote.xcu AppleNumbers.xcu ApplePages.xcu BMP___MS_Windows.xcu BroadBand_eBook.xcu calc8.xcu calc8_template.xcu calc_Gnumeric.xcu calc_HTML_WebQuery.xcu calc_MS_Excel_2007_Binary.xcu calc_MS_Excel_2007_VBA_XML.xcu calc_MS_Excel_2007_XML.xcu calc_MS_Excel_2007_XML_Template.xcu calc_OOXML.xcu calc_OOXML_Template.xcu calc_pdf_Export.xcu calc_png_Export.xcu calc_StarOffice_XML_Calc_Template.xcu CGM___Computer_Graphics_Metafile.xcu chart8.xcu ClarisWorks.xcu ClarisWorks_Calc.xcu ClarisWorks_Draw.xcu ClarisWorks_Impress.xcu Claris_Resolve_Calc.xcu CorelDrawDocument.xcu CorelPresentationExchange.xcu dBase.xcu DIF.xcu DocBook_File.xcu DosWord.xcu draw8.xcu draw8_template.xcu draw_bmp_Export.xcu draw_emf_Export.xcu draw_eps_Export.xcu draw_flash_Export.xcu draw_gif_Export.xcu draw_html_Export.xcu draw_jpg_Export.xcu draw_PCD_Photo_CD_Base.xcu draw_PCD_Photo_CD_Base16.xcu draw_PCD_Photo_CD_Base4.xcu draw_pdf_Export.xcu draw_png_Export.xcu draw_StarOffice_XML_Draw_Template.xcu draw_svg_Export.xcu draw_tif_Export.xcu draw_wmf_Export.xcu DXF___AutoCAD_Interchange.xcu EMF___MS_Windows_Metafile.xcu EPS___Encapsulated_PostScript.xcu FictionBook_2.xcu FreehandDocument.xcu GIF___Graphics_Interchange.xcu HTML.xcu HTML_MasterDoc.xcu HTML__StarCalc_.xcu HTML__StarWriter_.xcu impress8.xcu impress8_draw.xcu impress8_template.xcu impress_bmp_Export.xcu impress_emf_Export.xcu impress_eps_Export.xcu impress_flash_Export.xcu impress_gif_Export.xcu impress_html_Export.xcu impress_jpg_Export.xcu impress_MS_PowerPoint_2007_XML.xcu impress_MS_PowerPoint_2007_XML_AutoPlay.xcu impress_MS_PowerPoint_2007_XML_Template.xcu impress_OOXML.xcu impress_OOXML_AutoPlay.xcu impress_OOXML_Template.xcu impress_pdf_Export.xcu impress_png_Export.xcu impress_StarOffice_XML_Draw.xcu impress_StarOffice_XML_Impress_Template.xcu impress_svg_Export.xcu impress_tif_Export.xcu impress_wmf_Export.xcu JPG___JPEG.xcu Lotus.xcu LotusWordPro.xcu MacWrite.xcu Mac_Word.xcu Mac_Works.xcu Mac_Works_Calc.xcu Mariner_Write.xcu math8.xcu MathML_XML__Math_.xcu MathType_3_x.xcu math_pdf_Export.xcu MET___OS_2_Metafile.xcu mov__MOV.xcu MS_Excel_2003_XML.xcu MS_Excel_4_0.xcu MS_Excel_4_0_Vorlage_Template.xcu MS_Excel_5_0_95.xcu MS_Excel_5_0_95_Vorlage_Template.xcu MS_Excel_95.xcu MS_Excel_95_Vorlage_Template.xcu MS_Excel_97.xcu MS_Excel_97_Vorlage_Template.xcu MS_PowerPoint_97.xcu MS_PowerPoint_97_AutoPlay.xcu MS_PowerPoint_97_Vorlage.xcu MS_WinWord_5.xcu MS_WinWord_6_0.xcu MS_Word_2003_XML.xcu MS_Word_2007_XML.xcu MS_Word_2007_XML_Template.xcu MS_Word_95.xcu MS_Word_95_Vorlage.xcu MS_Word_97.xcu MS_Word_97_Vorlage.xcu MS_Works.xcu MS_Works_Calc.xcu MS_Write.xcu MWAW_Bitmap.xcu MWAW_Database.xcu MWAW_Drawing.xcu MWAW_Presentation.xcu MWAW_Spreadsheet.xcu MWAW_Text_Document.xcu ODG_FlatXML.xcu ODP_FlatXML.xcu ODS_FlatXML.xcu ODT_FlatXML.xcu OOXML_Text.xcu OOXML_Text_Template.xcu PageMakerDocument.xcu PalmDoc.xcu Palm_Text_Document.xcu PBM___Portable_Bitmap.xcu PCT___Mac_Pict.xcu PCX___Zsoft_Paintbrush.xcu PGM___Portable_Graymap.xcu placeware_Export.xcu Plucker_eBook.xcu PNG___Portable_Network_Graphic.xcu PPM___Portable_Pixelmap.xcu PSD___Adobe_Photoshop.xcu PublisherDocument.xcu QPro.xcu RAS___Sun_Rasterfile.xcu Rich_Text_Format.xcu Rich_Text_Format__StarCalc_.xcu SGF___StarOffice_Writer_SGF.xcu SGV___StarDraw_2_0.xcu StarBaseReport.xcu StarBaseReportChart.xcu StarOffice_XML__Base_.xcu StarOffice_XML__Calc_.xcu StarOffice_XML__Chart_.xcu StarOffice_XML__Draw_.xcu StarOffice_XML__Impress_.xcu StarOffice_XML__Math_.xcu StarOffice_XML__Writer_.xcu SVG___Scalable_Vector_Graphics.xcu SVM___StarView_Metafile.xcu SYLK.xcu T602Document.xcu Text.xcu Text__encoded_.xcu Text__encoded___StarWriter_GlobalDocument_.xcu Text__encoded___StarWriter_Web_.xcu Text__StarWriter_Web_.xcu Text___txt___csv__StarCalc_.xcu TGA___Truevision_TARGA.xcu TIF___Tag_Image_File.xcu UOF_presentation.xcu UOF_spreadsheet.xcu UOF_text.xcu VisioDocument.xcu WMF___MS_Windows_Metafile.xcu WordPerfect.xcu WordPerfectGraphics.xcu WPS_Lotus_Calc.xcu WPS_QPro_Calc.xcu WriteNow.xcu writer8.xcu writer8_template.xcu writerglobal8.xcu writerglobal8_HTML.xcu writerglobal8_template.xcu writerglobal8_writer.xcu writerweb8_writer.xcu writerweb8_writer_template.xcu writer_globaldocument_pdf_Export.xcu writer_globaldocument_StarOffice_XML_Writer.xcu writer_globaldocument_StarOffice_XML_Writer_GlobalDocument.xcu writer_jpg_Export.xcu writer_layout_dump.xcu writer_MIZI_Hwp_97.xcu writer_pdf_Export.xcu writer_png_Export.xcu writer_StarOffice_XML_Writer_Template.xcu writer_web_HTML_help.xcu writer_web_jpg_Export.xcu writer_web_pdf_Export.xcu writer_web_png_Export.xcu writer_web_StarOffice_XML_Writer.xcu writer_web_StarOffice_XML_Writer_Web_Template.xcu XBM___X_Consortium.xcu XHTML_Calc_File.xcu XHTML_Draw_File.xcu XHTML_Impress_File.xcu XHTML_Writer_File.xcu XPM.xcu
+
+${MYCMD} --base filter/source/config/fragments/frameloaders --files com_sun_star_comp_chart2_ChartFrameLoader.xcu com_sun_star_frame_Bibliography.xcu com_sun_star_sdb_ContentLoader.xcu org_openoffice_comp_dbflt_DBContentLoader2.xcu
+
+${MYCMD} --base filter/source/config/fragments/internalgraphicfilters --files bmp_Export.xcu bmp_Import.xcu dxf_Import.xcu emf_Export.xcu emf_Import.xcu eps_Export.xcu eps_Import.xcu gif_Export.xcu gif_Import.xcu jpg_Export.xcu jpg_Import.xcu met_Import.xcu mov_Import.xcu pbm_Import.xcu pcd_Import_Base.xcu pcd_Import_Base16.xcu pcd_Import_Base4.xcu pct_Import.xcu pcx_Import.xcu pgm_Import.xcu png_Export.xcu png_Import.xcu ppm_Import.xcu psd_Import.xcu ras_Import.xcu sgf_Import.xcu sgv_Import.xcu svg_Export.xcu svg_Import.xcu svm_Export.xcu svm_Import.xcu tga_Import.xcu tif_Export.xcu tif_Import.xcu wmf_Export.xcu wmf_Import.xcu xbm_Import.xcu xpm_Import.xcu
+
+${MYCMD} --base filter/source/config/fragments/types --files bmp_MS_Windows.xcu calc8.xcu calc8_template.xcu calc_AppleNumbers.xcu calc_ClarisWorks.xcu calc_Claris_Resolve.xcu calc_dBase.xcu calc_DIF.xcu calc_Gnumeric.xcu calc_HTML.xcu calc_Lotus.xcu calc_Mac_Works.xcu calc_MS_Excel_2003_XML.xcu calc_MS_Excel_40.xcu calc_MS_Excel_40_VorlageTemplate.xcu calc_MS_Excel_5095.xcu calc_MS_Excel_5095_VorlageTemplate.xcu calc_MS_Excel_95.xcu calc_MS_Excel_95_VorlageTemplate.xcu calc_MS_Excel_97.xcu calc_MS_Excel_97_VorlageTemplate.xcu calc_MS_Works_Document.xcu calc_ODS_FlatXML.xcu calc_OOXML.xcu calc_OOXML_Template.xcu calc_QPro.xcu calc_StarOffice_XML_Calc.xcu calc_StarOffice_XML_Calc_Template.xcu calc_SYLK.xcu calc_WPS_Lotus_Document.xcu calc_WPS_QPro_Document.xcu chart8.xcu chart_StarOffice_XML_Chart.xcu component_Bibliography.xcu component_DB.xcu draw8.xcu draw8_template.xcu draw_ClarisWorks.xcu draw_CorelDraw_Document.xcu draw_Corel_Presentation_Exchange.xcu draw_Freehand_Document.xcu draw_ODG_FlatXML.xcu draw_PageMaker_Document.xcu draw_Publisher_Document.xcu draw_StarOffice_XML_Draw.xcu draw_StarOffice_XML_Draw_Template.xcu draw_Visio_Document.xcu draw_WordPerfect_Graphics.xcu dxf_AutoCAD_Interchange.xcu emf_MS_Windows_Metafile.xcu eps_Encapsulated_PostScript.xcu generic_HTML.xcu generic_Text.xcu gif_Graphics_Interchange.xcu graphic_HTML.xcu graphic_SWF.xcu impress8.xcu impress8_template.xcu impress_AppleKeynote.xcu impress_CGM_Computer_Graphics_Metafile.xcu impress_ClarisWorks.xcu impress_MS_PowerPoint_97.xcu impress_MS_PowerPoint_97_AutoPlay.xcu impress_MS_PowerPoint_97_Vorlage.xcu impress_ODP_FlatXML.xcu impress_OOXML_Presentation.xcu impress_OOXML_Presentation_AutoPlay.xcu impress_OOXML_Presentation_Template.xcu impress_StarOffice_XML_Impress.xcu impress_StarOffice_XML_Impress_Template.xcu jpg_JPEG.xcu math8.xcu math_MathML_XML_Math.xcu math_MathType_3x.xcu math_StarOffice_XML_Math.xcu met_OS2_Metafile.xcu mov_MOV.xcu MS_Excel_2007_Binary.xcu MS_Excel_2007_VBA_XML.xcu MS_Excel_2007_XML.xcu MS_Excel_2007_XML_Template.xcu MS_PowerPoint_2007_XML.xcu MS_PowerPoint_2007_XML_AutoPlay.xcu MS_PowerPoint_2007_XML_Template.xcu MWAW_Bitmap.xcu MWAW_Database.xcu MWAW_Drawing.xcu MWAW_Presentation.xcu MWAW_Spreadsheet.xcu MWAW_Text_Document.xcu oxt_OpenOffice_Extension.xcu Palm_Text_Document.xcu pbm_Portable_Bitmap.xcu pcd_Photo_CD_Base.xcu pcd_Photo_CD_Base16.xcu pcd_Photo_CD_Base4.xcu pct_Mac_Pict.xcu pcx_Zsoft_Paintbrush.xcu pdf_Portable_Document_Format.xcu pgm_Portable_Graymap.xcu png_Portable_Network_Graphic.xcu ppm_Portable_Pixelmap.xcu psd_Adobe_Photoshop.xcu pwp_PlaceWare.xcu ras_Sun_Rasterfile.xcu sgf_StarOffice_Writer_SGF.xcu sgv_StarDraw_20.xcu StarBase.xcu StarBaseReport.xcu StarBaseReportChart.xcu svg_Scalable_Vector_Graphics.xcu svm_StarView_Metafile.xcu tga_Truevision_TARGA.xcu tif_Tag_Image_File.xcu Unified_Office_Format_presentation.xcu Unified_Office_Format_spreadsheet.xcu Unified_Office_Format_text.xcu wav_Wave_Audio_File.xcu wmf_MS_Windows_Metafile.xcu writer8.xcu writer8_template.xcu writerglobal8.xcu writerglobal8_template.xcu writerweb8_writer_template.xcu writer_AbiWord_Document.xcu writer_ApplePages.xcu writer_BroadBand_eBook.xcu writer_ClarisWorks.xcu writer_DocBook_File.xcu writer_DosWord.xcu writer_FictionBook_2.xcu writer_globaldocument_StarOffice_XML_Writer_GlobalDocument.xcu writer_layout_dump_xml.xcu writer_LotusWordPro_Document.xcu writer_MacWrite.xcu writer_Mac_Word.xcu writer_Mac_Works.xcu writer_Mariner_Write.xcu writer_MIZI_Hwp_97.xcu writer_MS_WinWord_5.xcu writer_MS_WinWord_60.xcu writer_MS_Word_2003_XML.xcu writer_MS_Word_2007_XML.xcu writer_MS_Word_2007_XML_Template.xcu writer_MS_Word_95.xcu writer_MS_Word_95_Vorlage.xcu writer_MS_Word_97.xcu writer_MS_Word_97_Vorlage.xcu writer_MS_Works_Document.xcu writer_MS_Write.xcu writer_ODT_FlatXML.xcu writer_OOXML.xcu writer_OOXML_Template.xcu writer_PalmDoc.xcu writer_Plucker_eBook.xcu writer_Rich_Text_Format.xcu writer_StarOffice_XML_Writer.xcu writer_StarOffice_XML_Writer_Template.xcu writer_T602_Document.xcu writer_web_HTML_help.xcu writer_web_StarOffice_XML_Writer_Web_Template.xcu writer_WordPerfect_Document.xcu writer_WriteNow.xcu xbm_X_Consortium.xcu XHTML_File.xcu xpm_XPM.xcu
+
+${MYCMD} --base instdir/sdk/examples/cpp/complextoolbarcontrols --files Addons.xcu CalcWindowState.xcu Jobs.xcu ProtocolHandler.xcu WriterWindowState.xcu
+
+${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Components/Addons/JobsAddon --files Addons.xcu Jobs.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp/Addons.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java/Addons.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java/ProtocolHandler.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/Addons.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter/TypeDetection.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection/FlatXmlTypeDetection.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXmlFilter_cpp.xcu
+
+${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXmlFilter_java.xcu
+
+${MYCMD} --files instdir/sdk/examples/java/EmbedDocument/EmbeddedObject/EmbeddedObject.xcu
+
+${MYCMD} --base instdir/sdk/examples/java/Inspector --files Addons.xcu ObjectInspector.xcu ProtocolHandler.xcu
+
+${MYCMD} --base instdir/sdk/examples/python/toolpanel --files CalcWindowState.xcu Factory.xcu
+
+${MYCMD} --base lingucomponent/config --files Linguistic-lingucomponent-hyphenator.xcu Linguistic-lingucomponent-spellchecker.xcu Linguistic-lingucomponent-thesaurus.xcu
+
+${MYCMD} --files mysqlc/source/DataAccess.xcu
+
+${MYCMD} --files mysqlc/source/registry/data/org/openoffice/Office/DataAccess/Drivers.xcu
+
+${MYCMD} --base odk/examples/cpp/complextoolbarcontrols --files Addons.xcu CalcWindowState.xcu Jobs.xcu ProtocolHandler.xcu WriterWindowState.xcu
+
+${MYCMD} --base odk/examples/cpp/custompanel --files CalcWindowState.xcu DrawWindowState.xcu Factories.xcu ImpressWindowState.xcu WriterWindowState.xcu
+
+${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/JobsAddon --files Addons.xcu JobsAddon/Jobs.xcu
+
+${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp --files Addons.xcu ProtocolHandlerAddon_cpp/ProtocolHandler.xcu
+
+${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java --files Addons.xcu ProtocolHandler.xcu
+
+${MYCMD} --files odk/examples/DevelopersGuide/Extensions/DialogWithHelp/Addons.xcu
+
+${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter/TypeDetection.xcu
+
+${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection/FlatXmlTypeDetection.xcu
+
+${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXmlFilter_cpp.xcu
+
+${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXmlFilter_java.xcu
+
+${MYCMD} --files odk/examples/java/EmbedDocument/EmbeddedObject/EmbeddedObject.xcu
+
+${MYCMD} --base odk/examples/java/Inspector --files Addons.xcu ObjectInspector.xcu ProtocolHandler.xcu
+
+${MYCMD} --base odk/examples/python/toolpanel --files CalcWindowState.xcu Factory.xcu
+
+${MYCMD} --base officecfg/registry/data/org/openoffice --files FirstStartWizard.xcu Inet.xcu Interaction.xcu
+
+${MYCMD} --base officecfg/registry/data/org/openoffice/Office --files Accelerators.xcu Addons.xcu BasicIDE.xcu Calc.xcu Canvas.xcu Common.xcu Compatibility.xcu DataAccess.xcu Embedding.xcu ExtendedColorScheme.xcu ExtensionDependencies.xcu ExtensionManager.xcu FormWizard.xcu Histories.xcu Impress.xcu Jobs.xcu Linguistic.xcu Logging.xcu Math.xcu Paths.xcu PresentationMinimizer.xcu PresenterScreen.xcu ProtocolHandler.xcu Recovery.xcu ReportDesign.xcu Scripting.xcu Security.xcu TableWizard.xcu TypeDetection.xcu
+
+${MYCMD} --base officecfg/registry/data/org/openoffice/Office/UI --files BaseWindowState.xcu BasicIDECommands.xcu BasicIDEWindowState.xcu BibliographyCommands.xcu CalcCommands.xcu CalcWindowState.xcu ChartCommands.xcu ChartWindowState.xcu Controller.xcu DbBrowserWindowState.xcu DbQueryWindowState.xcu DbRelationWindowState.xcu DbReportWindowState.xcu DbTableDataWindowState.xcu DbTableWindowState.xcu DbuCommands.xcu DrawImpressCommands.xcu DrawWindowState.xcu Effects.xcu Factories.xcu GenericCategories.xcu GenericCommands.xcu ImpressWindowState.xcu MathCommands.xcu MathWindowState.xcu ReportCommands.xcu Sidebar.xcu StartModuleCommands.xcu StartModuleWindowState.xcu WriterCommands.xcu WriterFormWindowState.xcu WriterGlobalWindowState.xcu WriterReportWindowState.xcu WriterWebWindowState.xcu WriterWindowState.xcu XFormsWindowState.xcu
+
+${MYCMD} --files officecfg/registry/data/org/openoffice/Office/UI.xcu
+
+${MYCMD} --base officecfg/registry/data/org/openoffice/Office --files Views.xcu WebWizard.xcu Writer.xcu
+
+${MYCMD} --base officecfg/registry/data/org/openoffice --files Setup.xcu System.xcu
+
+${MYCMD} --files officecfg/registry/data/org/openoffice/TypeDetection/UISort.xcu
+
+${MYCMD} --files officecfg/registry/data/org/openoffice/ucb/Configuration.xcu
+
+${MYCMD} --base officecfg/registry/data/org/openoffice --files UserProfile.xcu VCL.xcu
+
+${MYCMD} --files pyuno/demo/Addons.xcu
+
+${MYCMD} --files qadevOOo/qa/registrymodifications.xcu
+
+${MYCMD} --base reportbuilder/registry/data/org/openoffice/Office --files Accelerators.xcu DataAccess.xcu Embedding.xcu Controller.xcu
+
+${MYCMD} --files reportbuilder/registry/data/org/openoffice/Setup.xcu
+
+${MYCMD} --files reportbuilder/template/registry/data/org/openoffice/Office/Paths.xcu
+
+${MYCMD} --base sdext/source/pdfimport/config --files pdf_import_filter.xcu pdf_types.xcu
+
+${MYCMD} --files swext/mediawiki/src/registry/data/org/openoffice/Office/Addons.xcu
+
+${MYCMD} --files swext/mediawiki/src/registry/data/org/openoffice/Office/Custom/WikiExtension.xcu
+
+${MYCMD} --base swext/mediawiki/src/registry/data/org/openoffice/Office --files OptionsDialog.xcu Paths.xcu ProtocolHandler.xcu
+
+${MYCMD} --base swext/mediawiki/src/registry/data/org/openoffice/TypeDetection --files Filter.xcu Types.xcu
