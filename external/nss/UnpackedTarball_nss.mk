@@ -36,13 +36,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss-winXP-sdk.patch.1) \
 ))
 
-# nss-pem is only needed for internal curl to read the NSS CA database
-ifeq ($(SYSTEM_CURL),)
-$(eval $(call gb_UnpackedTarball_add_patches,nss,\
-	external/nss/nss-pem.patch \
-))
-endif
-
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
