@@ -653,7 +653,6 @@ OfficeIPCThread::OfficeIPCThread() :
 
 OfficeIPCThread::~OfficeIPCThread()
 {
-    maPipe.close();
 }
 
 void OfficeIPCThread::SetReady()
