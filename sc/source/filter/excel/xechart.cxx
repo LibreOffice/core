@@ -1112,11 +1112,11 @@ XclExpChFrLabelProps::XclExpChFrLabelProps( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet, bool bShowSeries,
+void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet,
         bool bShowCateg, bool bShowValue, bool bShowPercent, bool bShowBubble )
 {
     // label value flags
-    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWSERIES,  bShowSeries );
+    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWSERIES,  false );
     ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWCATEG,   bShowCateg );
     ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWVALUE,   bShowValue );
     ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWPERCENT, bShowPercent );
@@ -1282,7 +1282,7 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
     if( bShowAny && (GetBiff() == EXC_BIFF8) )
     {
         mxLabelProps.reset( new XclExpChFrLabelProps( GetChRoot() ) );
-        mxLabelProps->Convert( rPropSet, false, bShowCateg, bShowValue, bShowPercent, bShowBubble );
+        mxLabelProps->Convert( rPropSet, bShowCateg, bShowValue, bShowPercent, bShowBubble );
     }
 
     // restrict to combinations allowed in CHTEXT

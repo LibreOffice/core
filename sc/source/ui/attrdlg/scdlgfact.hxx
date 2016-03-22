@@ -437,15 +437,13 @@ public:
                                                             double          fMax,
                                                             sal_uInt16       nPossDir) override;
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( vcl::Window* pParent,
-                                                            bool bUnGroup = false,
-                                                            bool bRows = true) override;
+                                                            bool bUnGroup = false) override;
 
     virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( vcl::Window* pParent,
                                                              int nId,
                                                              bool bDisallowCellMove = false ) override;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
                                                                     const OUString* pStrTitle = nullptr ) override;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
@@ -487,8 +485,7 @@ public:
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData,
-                                                                const ScDPNameVec& rDataFields,
-                                                                bool bEnableLayout ) override;
+                                                                const ScDPNameVec& rDataFields ) override;
 
     virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( vcl::Window* pParent,
                                                                 int nId,

@@ -324,7 +324,7 @@ void XclExpDffEmbeddedAnchor::ImplSetFlags( const SdrObject& /*rSdrObj*/ )
 
 void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit )
 {
-    maAnchor.SetRect( maPageSize, mnScaleX, mnScaleY, rRect, eMapUnit, true );
+    maAnchor.SetRect( maPageSize, mnScaleX, mnScaleY, rRect, eMapUnit );
 }
 
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :

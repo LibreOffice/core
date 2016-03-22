@@ -159,7 +159,7 @@ class ScCaptionCreator
 {
 public:
     /** Create a new caption. The caption will not be inserted into the document. */
-    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bShown, bool bTailFront );
+    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bTailFront );
     /** Manipulate an existing caption. */
     explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj& rCaption );
 
@@ -199,13 +199,13 @@ private:
     bool                mbNegPage;
 };
 
-ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bShown, bool bTailFront ) :
+ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bTailFront ) :
     mrDoc( rDoc ),
     maPos( rPos ),
     mpCaption( nullptr )
 {
     Initialize();
-    CreateCaption( bShown, bTailFront );
+    CreateCaption( true/*bShown*/, bTailFront );
 }
 
 ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj& rCaption ) :
@@ -475,9 +475,9 @@ ScNoteData::~ScNoteData()
 {
 }
 
-ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, bool bShown ) :
+ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos ) :
     mrDoc( rDoc ),
-    maNoteData( bShown )
+    maNoteData( false )
 {
     AutoStamp();
     CreateCaption( rPos );
@@ -775,7 +775,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         rVisRect.Bottom() - SC_NOTECAPTION_BORDERDIST_TEMP );
 
     // create the caption object
-    ScCaptionCreator aCreator( rDoc, rPos, true, bTailFront );
+    ScCaptionCreator aCreator( rDoc, rPos, bTailFront );
     SdrCaptionObj* pCaption = aCreator.GetCaption();
 
     // insert caption into page (needed to set caption text)

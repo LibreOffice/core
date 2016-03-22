@@ -2169,14 +2169,14 @@ void ScHorizontalCellIterator::SkipInvalid()
 }
 
 ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
-        const ScRange& rRange, bool bTextZero ) :
+        const ScRange& rRange ) :
     pDoc( pDocument ),
     nNumFmtIndex(0),
     nEndTab( rRange.aEnd.Tab() ),
     nNumFmtType( css::util::NumberFormat::UNDEFINED ),
     bNumValid( false ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
-    bTextAsZero( bTextZero )
+    bTextAsZero( false )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();

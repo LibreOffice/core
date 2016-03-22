@@ -2108,24 +2108,18 @@ void ScTabView::SplitAtCursor()
     RepeatResize();
 }
 
-void ScTabView::SplitAtPixel( const Point& rPixel, bool bHor, bool bVer )
+void ScTabView::SplitAtPixel( const Point& rPixel )
 {
     // pixel is relative to the entire View, not to the first GridWin
 
-    if (bHor)
-    {
-        if ( rPixel.X() > 0 )
-            DoHSplit( rPixel.X() );
-        else
-            DoHSplit( 0 );
-    }
-    if (bVer)
-    {
-        if ( rPixel.Y() > 0 )
-            DoVSplit( rPixel.Y() );
-        else
-            DoVSplit( 0 );
-    }
+    if ( rPixel.X() > 0 )
+        DoHSplit( rPixel.X() );
+    else
+        DoHSplit( 0 );
+    if ( rPixel.Y() > 0 )
+        DoVSplit( rPixel.Y() );
+    else
+        DoVSplit( 0 );
     RepeatResize();
 }
 
@@ -2234,7 +2228,7 @@ void ScTabView::StartDataSelect()
     if (pAttr->HasAutoFilter())
         pWin->LaunchAutoFilterMenu(nCol, nRow);
     else
-        pWin->LaunchDataSelectMenu(nCol, nRow, true);
+        pWin->LaunchDataSelectMenu(nCol, nRow);
 }
 
 void ScTabView::EnableRefInput(bool bFlag)

@@ -136,10 +136,10 @@ XclAddressConverterBase::~XclAddressConverterBase()
 {
 }
 
-void XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
+void XclAddressConverterBase::CheckScTab( SCTAB nScTab )
 {
     bool bValid = (0 <= nScTab) && (nScTab <= maMaxPos.Tab());
-    if( !bValid && bWarn )
+    if( !bValid )
     {
         mbTabTrunc |= (nScTab > maMaxPos.Tab());  // do not warn for deleted refs
         mrTracer.TraceInvalidTab( nScTab, maMaxPos.Tab() );

@@ -102,7 +102,7 @@ public:
     void            AutoOutline();
 
     void            SelectLevel( bool bColumns, sal_uInt16 nLevel,
-                                    bool bRecord = true, bool bPaint = true );
+                                    bool bRecord = true );
     void            ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord = true, bool bPaint = true );
     void            HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,

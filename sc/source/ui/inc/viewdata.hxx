@@ -245,7 +245,7 @@ public:
     ScDrawView*     GetScDrawView();            // from View
     bool            IsMinimized();              // from View
 
-    void            UpdateInputHandler( bool bForce = false, bool bStopEditing = true );
+    void            UpdateInputHandler( bool bForce = false );
 
     void            WriteUserData(OUString& rData);
     void            ReadUserData(const OUString& rData);
@@ -349,8 +349,7 @@ public:
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
     void            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCsCOL& rPosX, SCsROW& rPosY,
-                                        bool bTestMerge = true, bool bRepair = false,
-                                        bool bNextIfLarge = true );
+                                        bool bTestMerge = true, bool bRepair = false );
     void            GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
                                         SCsCOL nPosX, SCsROW nPosY, bool& rLeft, bool& rTop );
 

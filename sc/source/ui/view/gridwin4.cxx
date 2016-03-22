@@ -138,7 +138,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
     long nBHeight = nVer + aTextSize.Height() + 1;
     Size aButSize( nBWidth, nBHeight );
     long nButtonPos = bLayoutRTL ? aOuter.Left() : aOuter.Right()-nBWidth+1;
-    aComboButton.Draw( Point(nButtonPos, nButtonY), aButSize, false );
+    aComboButton.Draw( Point(nButtonPos, nButtonY), aButSize );
     if (pButtonViewData)
         pButtonViewData->SetScenButSize( aButSize );
 

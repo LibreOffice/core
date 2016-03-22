@@ -209,9 +209,9 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
         const ScPatternAttr* pOldPattern = rDoc.GetPattern( nCol, nRow, nTab );
         const ScStyleSheet* pSrcStyle = pSource->GetStyleSheet();
         if ( pSrcStyle && pSrcStyle != pOldPattern->GetStyleSheet() )
-            rFunc.ApplyStyle( aMark, pSrcStyle->GetName(), true, false );
+            rFunc.ApplyStyle( aMark, pSrcStyle->GetName(), false );
 
-        rFunc.ApplyAttributes( aMark, *pSource, true, false );
+        rFunc.ApplyAttributes( aMark, *pSource, false );
     }
 
     if ( bAttrChanged )                             // value entered with number format?
@@ -949,7 +949,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         bFrame = false;
 
     if (!bFrame)
-        ApplySelectionPattern( aNewAttrs );                // standard only
+        ApplySelectionPattern( aNewAttrs );            // standard only
     else
     {
         // if new items are default-items, overwrite the old items:
@@ -1082,8 +1082,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 
 //  pattern only
 
-void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
-                                            bool bRecord, bool bCursorOnly )
+void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursorOnly )
 {
     ScViewData& rViewData   = GetViewData();
     ScDocShell* pDocSh      = rViewData.GetDocShell();
@@ -1091,7 +1090,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
 
-    if (bRecord && !rDoc.IsUndoEnabled())
+    bool bRecord = true;
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
     //  State from old ItemSet doesn't matter for paint flags, as any change will be
@@ -1208,7 +1208,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         if (bRecord)
         {
             ScUndoCursorAttr* pUndo = new ScUndoCursorAttr(
-                pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr, false );
+                pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr );
             pUndo->SetEditData(pOldEditData, pNewEditData);
             pDocSh->GetUndoManager()->AddUndoAction(pUndo);
         }
@@ -1503,14 +1503,14 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             }
             while ( nCount > 0 )
             {
-                pDocSh->GetDocFunc().DeleteCells( aDelRange, &rMark, eCmd, true/*bRecord*/, false );
+                pDocSh->GetDocFunc().DeleteCells( aDelRange, &rMark, eCmd, false );
                 --nCount;
             }
         }
         else
 #endif
         {
-            pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, true/*bRecord*/, false );
+            pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, false );
         }
 
         pDocSh->UpdateOle(&GetViewData());
@@ -1784,7 +1784,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 
     ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
     if (bSimple)
-        rDocFunc.DeleteCell(aMarkRange.aStart, aFuncMark, nFlags, bRecord, false);
+        rDocFunc.DeleteCell(aMarkRange.aStart, aFuncMark, nFlags, bRecord);
     else
         rDocFunc.DeleteContents(aFuncMark, nFlags, bRecord, false);
 
@@ -1820,7 +1820,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 
 void ScViewFunc::SetWidthOrHeight(
     bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
-    sal_uInt16 nSizeTwips, bool bRecord, bool bPaint, ScMarkData* pMarkData )
+    sal_uInt16 nSizeTwips, bool bRecord, ScMarkData* pMarkData )
 {
     if (rRanges.empty())
         return;
@@ -2051,7 +2051,6 @@ void ScViewFunc::SetWidthOrHeight(
 
     GetViewData().GetView()->UpdateScrollBars();
 
-    if (bPaint)
     {
         itr = aMarkData.begin();
         for (; itr != itrEnd; ++itr)

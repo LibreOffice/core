@@ -449,7 +449,7 @@ public:
 
     /** Converts separator and the passed data label flags. */
     void                Convert(
-                            const ScfPropertySet& rPropSet, bool bShowSeries,
+                            const ScfPropertySet& rPropSet,
                             bool bShowCateg, bool bShowValue,
                             bool bShowPercent, bool bShowBubble );
 

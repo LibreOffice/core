@@ -60,7 +60,7 @@ public:
 
     /** Creates an empty note and its caption object and places it according to
         the passed cell position. */
-    explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, bool bShown );
+    explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos );
 
     /** Copy constructor. Clones the note and its caption to a new document. */
     explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNote );

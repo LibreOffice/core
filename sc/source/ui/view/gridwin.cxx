@@ -237,7 +237,6 @@ public:
     bool            IsInInit() const        { return bInit; }
     void            SetCancelled()          { bCancelled = true; }
     bool            IsInSelect() const      { return bInSelect; }
-    void            SetListHasDates(bool b) { mbListHasDates = b; }
     bool            HasDates() const        { return mbListHasDates; }
 };
 
@@ -737,7 +736,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     // Populate the check box list.
     bool bHasDates = false;
     std::vector<ScTypedStrData> aStrings;
-    pDoc->GetFilterEntries(nCol, nRow, nTab, true, aStrings, bHasDates);
+    pDoc->GetFilterEntries(nCol, nRow, nTab, aStrings, bHasDates);
 
     mpAutoFilterPopup->setMemberSize(aStrings.size());
     std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
@@ -757,20 +756,20 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     // Populate the menu.
     mpAutoFilterPopup->addMenuItem(
         SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC),
-        true, new AutoFilterAction(this, SortAscending));
+        new AutoFilterAction(this, SortAscending));
     mpAutoFilterPopup->addMenuItem(
         SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_DESC),
-        true, new AutoFilterAction(this, SortDescending));
+        new AutoFilterAction(this, SortDescending));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
-        SC_RESSTR(SCSTR_TOP10FILTER), true, new AutoFilterAction(this, Top10));
+        SC_RESSTR(SCSTR_TOP10FILTER), new AutoFilterAction(this, Top10));
     mpAutoFilterPopup->addMenuItem(
-        SC_RESSTR(SCSTR_FILTER_EMPTY), true, new AutoFilterAction(this, Empty));
+        SC_RESSTR(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, Empty));
     mpAutoFilterPopup->addMenuItem(
-        SC_RESSTR(SCSTR_FILTER_NOTEMPTY), true, new AutoFilterAction(this, NonEmpty));
+        SC_RESSTR(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, NonEmpty));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
-        SC_RESSTR(SCSTR_STDFILTER), true, new AutoFilterAction(this, Custom));
+        SC_RESSTR(SCSTR_STDFILTER), new AutoFilterAction(this, Custom));
 
     ScCheckListMenuWindow::Config aConfig;
     aConfig.mbAllowEmptySet = false;
@@ -1092,12 +1091,11 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     CaptureMouse();
 }
 
-void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
+void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 {
     mpFilterBox.disposeAndClear();
     mpFilterFloat.disposeAndClear();
 
-    sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
@@ -1117,7 +1115,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
-    ScFilterBoxMode eFilterMode = bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER;
+    ScFilterBoxMode eFilterMode = SC_FILTERBOX_DATASELECT;
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
     // Fix for bug fdo#44925
     if (AllSettings::GetLayoutRTL() != bLayoutRTL)
@@ -1142,62 +1140,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     bool bEmpty = false;
     std::vector<ScTypedStrData> aStrings; // case sensitive
-    if ( bDataSelect )                    // selection List
-    {
-        // Fill List
-        pDoc->GetDataEntries(nCol, nRow, nTab, true, aStrings);
-        if (aStrings.empty())
-            bEmpty = true;
-    }
-    else                                                // AutoFilter
-    {
-        //! Will the Titel be evaluated ???
-        OUString aString = pDoc->GetString(nCol, nRow, nTab);
-        mpFilterBox->SetText(aString);
-
-        long nMaxText = 0;
-
-        //  default entries
-        static const sal_uInt16 nDefIDs[] = { SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_FILTER_EMPTY, SCSTR_FILTER_NOTEMPTY };
-        const size_t nDefCount = SAL_N_ELEMENTS(nDefIDs);
-        for (i=0; i<nDefCount; i++)
-        {
-            OUString aEntry( static_cast<ScResId>(nDefIDs[i]) );
-            mpFilterBox->InsertEntry(aEntry);
-            long nTextWidth = mpFilterBox->GetTextWidth(aEntry);
-            if ( nTextWidth > nMaxText )
-                nMaxText = nTextWidth;
-        }
-        mpFilterBox->SetSeparatorPos(nDefCount - 1);
-
-        //  get list entries
-        bool bHasDates = false;
-        pDoc->GetFilterEntries( nCol, nRow, nTab, true, aStrings, bHasDates);
-        mpFilterBox->SetListHasDates(bHasDates);
-
-        //  check widths of numerical entries (string entries are not included)
-        //  so all numbers are completely visible
-        std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
-        for (; it != itEnd; ++it)
-        {
-            if (!it->IsStrData())              // only numerical entries
-            {
-                long nTextWidth = mpFilterBox->GetTextWidth(it->GetString());
-                if ( nTextWidth > nMaxText )
-                    nMaxText = nTextWidth;
-            }
-        }
-
-        //  add scrollbar width if needed (string entries are counted here)
-        //  (scrollbar is shown if the box is exactly full?)
-        if (aStrings.size() + nDefCount >= SC_FILTERLISTBOX_LINES)
-            nMaxText += GetSettings().GetStyleSettings().GetScrollBarSize();
-
-        nMaxText += 4;              // for borders
-
-        if ( nMaxText > nSizeX )
-            nSizeX = nMaxText;      // just modify width - starting position is unchanged
-    }
+    // Fill List
+    pDoc->GetDataEntries(nCol, nRow, nTab, true, aStrings);
+    if (aStrings.empty())
+        bEmpty = true;
 
     if (!bEmpty)
     {
@@ -1237,94 +1183,46 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
 
-    if (!bDataSelect)                       // AutoFilter: Select active entry
+    sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
+                            nCol, nRow, nTab, ATTR_VALIDDATA ))->GetValue();
+    if ( nIndex )
     {
-        ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
-        if (pDBData)
+        const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
+        if (pData)
         {
-            ScQueryParam aParam;
-            pDBData->GetQueryParam( aParam );       // Can only result in MAXQUERY entries
-
-            bool bValid = true;
-            SCSIZE nCount = aParam.GetEntryCount();
-            for (SCSIZE j = 0; j < nCount && bValid; ++j)         // Current Filter settings
-                if (aParam.GetEntry(j).bDoQuery)
-                {
-                    //!         Summarises DrawButtons queries!
-
-                    ScQueryEntry& rEntry = aParam.GetEntry(j);
-                    if (j>0)
-                        if (rEntry.eConnect != SC_AND)
-                            bValid = false;
-                    if (rEntry.nField == nCol)
-                    {
-                        OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
-                        if (rEntry.eOp == SC_EQUAL)
-                        {
-                            if (!aQueryStr.isEmpty())
-                            {
-                                nSelPos = mpFilterBox->GetEntryPos(aQueryStr);
-                            }
-                        }
-                        else if ( rEntry.eOp == SC_TOPVAL && aQueryStr == "10" )
-                            nSelPos = SC_AUTOFILTER_TOP10;
-                        else
-                            nSelPos = SC_AUTOFILTER_CUSTOM;
-                    }
-                }
-
-            if (!bValid)
-                nSelPos = SC_AUTOFILTER_CUSTOM;
-        }
-    }
-    else
-    {
-
-        sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
-                                nCol, nRow, nTab, ATTR_VALIDDATA ))->GetValue();
-        if ( nIndex )
-        {
-            const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
-            if (pData)
+            std::unique_ptr<ScTypedStrData> pNew;
+            OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+            if ( pDoc->HasValueData( nCol, nRow, nTab ) )
             {
-                std::unique_ptr<ScTypedStrData> pNew;
-                OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
-                if ( pDoc->HasValueData( nCol, nRow, nTab ) )
-                {
-                    double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));
-                    pNew.reset(new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value));
-                }
-                else
-                    pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
+                double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));
+                pNew.reset(new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value));
+            }
+            else
+                pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
 
-                bool bSortList = ( pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING);
-                if ( bSortList )
+            bool bSortList = ( pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING);
+            if ( bSortList )
+            {
+                std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
+                std::vector<ScTypedStrData>::const_iterator it =
+                    std::find_if(itBeg, itEnd, FindTypedStrData(*pNew, true));
+                if (it != itEnd)
+                    // Found!
+                    nSelPos = std::distance(itBeg, it);
+            }
+            else
+            {
+                ScTypedStrData::EqualCaseSensitive aHdl;
+                std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
+                std::vector<ScTypedStrData>::const_iterator it = itBeg;
+                for (; it != itEnd && LISTBOX_ENTRY_NOTFOUND == nSelPos; ++it)
                 {
-                    std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
-                    std::vector<ScTypedStrData>::const_iterator it =
-                        std::find_if(itBeg, itEnd, FindTypedStrData(*pNew, true));
-                    if (it != itEnd)
-                        // Found!
+                    if (aHdl(*it, *pNew))
                         nSelPos = std::distance(itBeg, it);
-                }
-                else
-                {
-                    ScTypedStrData::EqualCaseSensitive aHdl;
-                    std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
-                    std::vector<ScTypedStrData>::const_iterator it = itBeg;
-                    for (; it != itEnd && LISTBOX_ENTRY_NOTFOUND == nSelPos; ++it)
-                    {
-                        if (aHdl(*it, *pNew))
-                            nSelPos = std::distance(itBeg, it);
-                    }
                 }
             }
         }
     }
-
-        // new (309): Something must always be selected
-    if (LISTBOX_ENTRY_NOTFOUND == nSelPos && mpFilterBox->GetEntryCount() > 0 && !bDataSelect)
-        nSelPos = 0;
 
     // Do not show an empty selection List:
 
@@ -1342,19 +1240,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             mpFilterBox->SelectEntryPos(nSelPos);
         else
         {
-            if (bDataSelect)
-                mpFilterBox->SetNoSelection();
+            mpFilterBox->SetNoSelection();
         }
 
         mpFilterBox->EndInit();
-
-        if (!bDataSelect)
-        {
-            // AutoFilter (from MouseButtonDown):
-            // The next MouseMove on the FilterBox is like a ButtonDown
-            nMouseStatus = SC_GM_FILTER;
-            CaptureMouse();
-        }
     }
 }
 
@@ -2019,7 +1908,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             Rectangle aButtonRect = GetListValButtonRect( aListValPos );
             if ( aButtonRect.IsInside( aPos ) )
             {
-                LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row(), true );
+                LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
                 CaptureMouse();
@@ -2265,7 +2154,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( aEndPos != aBlockRange.aEnd )
         {
-            pViewData->GetDocShell()->GetDocFunc().ResizeMatrix( aBlockRange, aEndPos, false );
+            pViewData->GetDocShell()->GetDocFunc().ResizeMatrix( aBlockRange, aEndPos );
             pViewData->GetView()->MarkRange( ScRange( aBlockRange.aStart, aEndPos ) );
         }
     }
@@ -3012,7 +2901,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
         if ( pHdl )
         {
-            pHdl->InputCommand( rCEvt, true );
+            pHdl->InputCommand( rCEvt );
             return;                                     // done
         }
 
@@ -4287,13 +4176,11 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 {
                     if ( bIsLink )
                     {
-                        // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pView->LinkBlock( aSource, aDest.aStart, true /*bApi*/ );
+                        bDone = pView->LinkBlock( aSource, aDest.aStart );
                     }
                     else
                     {
-                        // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pView->MoveBlockTo( aSource, aDest.aStart, bIsMove, true /*bRecord*/, true /*bPaint*/, true /*bApi*/ );
+                        bDone = pView->MoveBlockTo( aSource, aDest.aStart, bIsMove );
                     }
                 }
 
@@ -4313,7 +4200,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                          ( eCmd == DEL_CELLSLEFT && nDestPosY == aSource.aStart.Row() ) )
                     {
                         // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, nullptr, eCmd, true /*bRecord*/, true /*bApi*/ );
+                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, nullptr, eCmd, true /*bApi*/ );
                         if ( bDone )
                         {
                             if ( eCmd == DEL_CELLSUP && nDestPosY > aSource.aEnd.Row() )
@@ -4529,7 +4416,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 pView->MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, false, false );
 
                 pView->InsertAreaLink( rData.aLinkDoc, EMPTY_OUSTRING, EMPTY_OUSTRING,
-                                        rData.aLinkArea, 0 );
+                                        rData.aLinkArea );
             }
             else
             {

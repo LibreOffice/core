@@ -305,10 +305,10 @@ void ScBlockUndo::ShowBlock()
 }
 
 ScMultiBlockUndo::ScMultiBlockUndo(
-    ScDocShell* pDocSh, const ScRangeList& rRanges, ScBlockUndoMode eBlockMode) :
+    ScDocShell* pDocSh, const ScRangeList& rRanges) :
     ScSimpleUndo(pDocSh),
     maBlockRanges(rRanges),
-    meMode(eBlockMode)
+    meMode(SC_UNDO_SIMPLE)
 {
     mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }

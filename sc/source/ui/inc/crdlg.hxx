@@ -29,7 +29,7 @@ class ScColOrRowDlg : public ModalDialog
 {
 public:
     ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
-        const OUString& rStrLabel, bool bColDefault = true);
+        const OUString& rStrLabel);
     virtual ~ScColOrRowDlg();
     virtual void dispose() override;
 private:

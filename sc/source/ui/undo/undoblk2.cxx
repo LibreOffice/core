@@ -150,7 +150,7 @@ void ScUndoWidthOrHeight::Redo()
 
         // SetWidthOrHeight changes current sheet!
         pViewShell->SetWidthOrHeight(
-            bWidth, maRanges, eMode, nNewSize, false, true, &aMarkData);
+            bWidth, maRanges, eMode, nNewSize, false, &aMarkData);
     }
 
     // paint grid if selection was changed directly at the MarkData

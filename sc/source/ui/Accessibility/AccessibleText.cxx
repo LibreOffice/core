@@ -1436,7 +1436,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, true );
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode( MAP_TWIP );

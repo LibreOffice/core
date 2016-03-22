@@ -61,8 +61,7 @@ public:
     void            UpdateImport( const OUString& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
 
     bool DoImport( SCTAB nTab, const ScImportParam& rParam,
-                   const svx::ODataAccessDescriptor* pDescriptor,      // used for selection an existing ResultSet
-                   bool bRecord );
+                   const svx::ODataAccessDescriptor* pDescriptor);      // used for selection an existing ResultSet
 
     bool DoImportUno( const ScAddress& rPos,
                       const css::uno::Sequence<css::beans::PropertyValue>& aArgs );
@@ -86,7 +85,7 @@ public:
 
     void ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList );
 
-    bool RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
+    bool RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
     bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                           bool bRecord, bool bApi, bool bAllowMove = false );

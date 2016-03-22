@@ -372,15 +372,13 @@ public:
                                                             sal_uInt16          nPossDir) = 0;
 
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( vcl::Window* pParent,
-                                                            bool bUnGroup = false,
-                                                            bool bRows    = true ) = 0;
+                                                            bool bUnGroup = false ) = 0;
 
     virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( vcl::Window* pParent,
                                                              int nId,
                                                              bool bDisallowCellMove = false ) = 0;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
                                                                     const OUString* pStrTitle = nullptr ) = 0;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
@@ -421,8 +419,7 @@ public:
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData,
-                                                                const ScDPNameVec& rDataFields,
-                                                                bool bEnableLayout ) = 0;
+                                                                const ScDPNameVec& rDataFields ) = 0;
 
     virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( vcl::Window* pParent,
                                                                 int nId,

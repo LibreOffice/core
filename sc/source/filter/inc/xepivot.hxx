@@ -237,7 +237,7 @@ class XclExpPTItem : public XclExpRecord
 {
 public:
     explicit            XclExpPTItem( const XclExpPCField& rCacheField, sal_uInt16 nCacheIdx );
-    explicit            XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx, bool bUseCache );
+    explicit            XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx );
 
     /** Returns the internal name of this item. */
     OUString       GetItemName() const;

@@ -300,7 +300,7 @@ struct XclObjAnchor : public XclRange
 
     /** Initializes the anchor coordinates for an embedded draw page. */
     void                SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
-                            const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
+                            const Rectangle& rRect, MapUnit eMapUnit );
 };
 
 inline SvStream& operator>>( SvStream& rStrm, XclObjAnchor& rAnchor )

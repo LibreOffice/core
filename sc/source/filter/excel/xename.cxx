@@ -156,7 +156,7 @@ private:
 
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const OUString& rName,
-                            const XclTokenArray& rTokArr, bool bDBRange ) const;
+                            const XclTokenArray& rTokArr ) const;
     /** Returns an unused name for the passed name. */
     OUString            GetUnusedName( const OUString& rName ) const;
 
@@ -471,12 +471,11 @@ sal_uInt16 XclExpNameManagerImpl::FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScI
 }
 
 sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
-        const OUString& rName, const XclTokenArray& rTokArr, bool bDBRange ) const
+        const OUString& rName, const XclTokenArray& rTokArr ) const
 {
     /*  Get built-in index from the name. Special case: the database range
         'unnamed' will be mapped to Excel's built-in '_FilterDatabase' name. */
-    sal_Unicode cBuiltIn = (bDBRange && (rName == STR_DB_LOCAL_NONAME)) ?
-        EXC_BUILTIN_FILTERDATABASE : XclTools::GetBuiltInDefNameIndex( rName );
+    sal_Unicode cBuiltIn = XclTools::GetBuiltInDefNameIndex( rName );
 
     if( cBuiltIn < EXC_BUILTIN_UNKNOWN )
     {
@@ -557,7 +556,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
             cannot be done earlier. If a built-in name is found, the created NAME
             record for this name and all following records in the list must be
             deleted, otherwise they may contain wrong name list indexes. */
-        sal_uInt16 nBuiltInIdx = FindBuiltInNameIdx( rName, *xTokArr, false );
+        sal_uInt16 nBuiltInIdx = FindBuiltInNameIdx( rName, *xTokArr );
         if( nBuiltInIdx != 0 )
         {
             // delete the new NAME records

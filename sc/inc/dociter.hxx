@@ -470,8 +470,7 @@ private:
 public:
 
                     ScHorizontalValueIterator( ScDocument* pDocument,
-                                               const ScRange& rRange,
-                                               bool bTextAsZero = false );
+                                               const ScRange& rRange );
                     ~ScHorizontalValueIterator();
     /// Does NOT reset rValue if no value found!
     bool            GetNext( double& rValue, sal_uInt16& rErr );

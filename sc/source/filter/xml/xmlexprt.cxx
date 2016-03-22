@@ -2569,7 +2569,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
                             }
                             sal_Int32 nOld(nRow);
-                            nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow), false);
+                            nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow));
                             if (nRow > nOld + 1)
                                 pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
                         }

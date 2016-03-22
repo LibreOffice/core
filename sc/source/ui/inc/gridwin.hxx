@@ -354,7 +354,7 @@ public:
 
     void            UpdateFormulas();
 
-    void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect );
+    void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow );
     void            DoScenarioMenu( const ScRange& rScenRange );
 
     void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);

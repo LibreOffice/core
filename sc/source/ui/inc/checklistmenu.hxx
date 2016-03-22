@@ -58,7 +58,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-    void addMenuItem(const OUString& rText, bool bEnabled, Action* pAction);
+    void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
 
     ScMenuFloatingWindow* addSubMenuItem(const OUString& rText, bool bEnabled);

@@ -161,14 +161,14 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bI
     {
        ScRangeList aRangeList;
        aRangeList.Append( aRange );
-       bDone = CopyToClip( pClipDoc, aRangeList, bCut, bApi, bIncludeObjects, bStopEdit, false );
+       bDone = CopyToClip( pClipDoc, aRangeList, bCut, bApi, bIncludeObjects, bStopEdit );
     }
     else if (eMarkType == SC_MARK_MULTI)
     {
         ScRangeList aRangeList;
         rMark.MarkToSimple();
         rMark.FillRangeListWithMarks(&aRangeList, false);
-        bDone = CopyToClip( pClipDoc, aRangeList, bCut, bApi, bIncludeObjects, bStopEdit, false );
+        bDone = CopyToClip( pClipDoc, aRangeList, bCut, bApi, bIncludeObjects, bStopEdit );
     }
     else
     {
@@ -180,7 +180,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bI
 }
 
 // Copy the content of the Range into clipboard.
-bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut, bool bApi, bool bIncludeObjects, bool bStopEdit, bool bUseRangeForVBA )
+bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut, bool bApi, bool bIncludeObjects, bool bStopEdit )
 {
     if ( rRanges.empty() )
         return false;
@@ -220,11 +220,10 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
             }
 
-            if ( !bUseRangeForVBA )
-                // is this necessary?, will setting the doc id upset the
-                // following paste operation with range? would be nicer to just set this always
-                // and lose the 'if' above
-                aClipParam.setSourceDocID( pDoc->GetDocumentID() );
+            // is this necessary?, will setting the doc id upset the
+            // following paste operation with range? would be nicer to just set this always
+            // and lose the 'if' above
+            aClipParam.setSourceDocID( pDoc->GetDocumentID() );
 
             if (SfxObjectShell* pObjectShell = pDoc->GetDocumentShell())
             {
@@ -236,8 +235,8 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 pClipDoc->SetClipOptions(aOptions);
             }
 
-            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects, true, bUseRangeForVBA );
-            if ( !bUseRangeForVBA && pDoc && pClipDoc )
+            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects );
+            if ( pDoc && pClipDoc )
             {
                 ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
                 if ( pDrawLayer )
@@ -366,7 +365,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
             }
             if (!bValidRanges)
                 break;
-            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects, true, bUseRangeForVBA );
+            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects );
 
             ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
             if ( pChangeTrack )
@@ -1796,7 +1795,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 //  inside the doc
 
 bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
-                                bool bCut, bool bRecord, bool bPaint, bool bApi )
+                                bool bCut )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     HideAllCursors();
@@ -1808,11 +1807,8 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
     {
         //  moving within one table and several tables selected -> apply to all selected tables
 
-        if ( bRecord )
-        {
-            OUString aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
-            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
-        }
+        OUString aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
         //  collect ranges of consecutive selected tables
 
@@ -1835,20 +1831,19 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
                 aLocalDest.SetTab( nStartTab );
 
                 bSuccess = pDocSh->GetDocFunc().MoveBlock(
-                                aLocalSource, aLocalDest, bCut, bRecord, bPaint, bApi );
+                                aLocalSource, aLocalDest, bCut, true/*bRecord*/, true/*bPaint*/, true/*bApi*/ );
 
                 nStartTab = nEndTab + 1;
             }
         }
 
-        if ( bRecord )
-            pDocSh->GetUndoManager()->LeaveListAction();
+        pDocSh->GetUndoManager()->LeaveListAction();
     }
     else
     {
         //  move the block as specified
         bSuccess = pDocSh->GetDocFunc().MoveBlock(
-                                rSource, rDestPos, bCut, bRecord, bPaint, bApi );
+                                rSource, rDestPos, bCut, true/*bRecord*/, true/*bPaint*/, true/*bApi*/ );
     }
 
     ShowAllCursors();
@@ -1883,7 +1878,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 
 //  link inside the doc
 
-bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, bool bApi )
+bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos )
 {
     //  check overlapping
 
@@ -1895,8 +1890,6 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
         if ( rSource.aStart.Col() <= nDestEndCol && rDestPos.Col() <= rSource.aEnd.Col() &&
              rSource.aStart.Row() <= nDestEndRow && rDestPos.Row() <= rSource.aEnd.Row() )
         {
-            if (!bApi)
-                ErrorMessage( STR_ERR_LINKOVERLAP );
             return false;
         }
     }
@@ -1979,8 +1972,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                                                 nStartCol, nCurrentRow, nStartTab,
                                                                 nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                                                 pUndoDoc, pRedoDoc, nUndoFlags,
-                                                                pUndoData, nullptr, nullptr, nullptr,
-                                                                false );           // FALSE = Redo data not yet copied
+                                                                pUndoData, nullptr, nullptr, nullptr );
         pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
 
         sal_uInt16 nPaint = PAINT_GRID;

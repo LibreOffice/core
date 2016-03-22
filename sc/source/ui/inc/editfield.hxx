@@ -30,8 +30,7 @@ public:
 
     bool                GetValue( double& rfValue ) const;
     void                SetValue( double fValue,
-                            sal_Int32 nDecPlaces = 12,
-                            bool bEraseTrailingDecZeros = true );
+                                  sal_Int32 nDecPlaces = 12 );
 };
 
 #endif

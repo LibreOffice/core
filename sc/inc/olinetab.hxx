@@ -111,7 +111,7 @@ public:
         SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rFindLevel) const;
 
     bool Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, bool& rSizeChanged,
-                 bool bHidden = false, bool bVisible = true );
+                 bool bHidden = false );
     bool Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSizeChanged );
 
     ScOutlineEntry* GetEntry(size_t nLevel, size_t nIndex);
@@ -136,7 +136,7 @@ public:
     bool ManualAction(
         SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, const ScTable& rTable, bool bCol);
 
-    void finalizeImport(ScTable& rTable, bool bCol);
+    void finalizeImport(ScTable& rTable);
 
     void RemoveAll();
 };

@@ -1025,9 +1025,9 @@ ScFormulaCell* ScFormulaCell::Clone() const
     return new ScFormulaCell(*this, *pDocument, aPos);
 }
 
-ScFormulaCell* ScFormulaCell::Clone( const ScAddress& rPos, int nCloneFlags ) const
+ScFormulaCell* ScFormulaCell::Clone( const ScAddress& rPos ) const
 {
-    return new ScFormulaCell(*this, *pDocument, rPos, nCloneFlags);
+    return new ScFormulaCell(*this, *pDocument, rPos, SC_CLONECELL_DEFAULT);
 }
 
 size_t ScFormulaCell::GetHash() const

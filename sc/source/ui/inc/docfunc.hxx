@@ -89,10 +89,10 @@ public:
         const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
 
     bool DeleteCell(
-        const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
+        const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord );
 
     bool            TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
-                                               bool bRecord, bool bApi );
+                                               bool bApi );
 
     bool            SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );
     bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
@@ -118,15 +118,15 @@ public:
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
 
     bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                             bool bRecord, bool bApi );
+                                           bool bApi );
     bool            ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
-                                        bool bRecord, bool bApi );
+                                        bool bApi );
 
     bool            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
                               InsCellCmd eCmd, bool bRecord, bool bApi, bool bPartOfPaste = false );
 
     bool            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
-                              DelCellCmd eCmd, bool bRecord, bool bApi );
+                              DelCellCmd eCmd, bool bApi );
 
     bool            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                        bool bCut, bool bRecord, bool bPaint, bool bApi );
@@ -136,7 +136,7 @@ public:
     bool            DeleteTable( SCTAB nTab, bool bRecord, bool bApi );
 
     bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
-    bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi );
+    bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bApi );
 
     void            SetTableVisible( SCTAB nTab, bool bVisible, bool bApi );
 
@@ -159,7 +159,7 @@ public:
     void            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi );
     bool            ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi );
     bool            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
-                                        sal_uInt16 nFormatNo, bool bRecord, bool bApi );
+                                        sal_uInt16 nFormatNo, bool bApi );
 
     SC_DLLPUBLIC bool
                     EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
@@ -172,20 +172,20 @@ public:
                                    const ScTabOpParam& rParam, bool bRecord, bool bApi );
 
     bool            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
-                                        FillDir eDir, bool bRecord, bool bApi );
+                                        FillDir eDir, bool bApi );
     bool            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                                         FillDir    eDir, FillCmd eCmd, FillDateCmd    eDateCmd,
                                         double fStart, double fStep, double fMax,
-                                        bool bRecord, bool bApi );
+                                        bool bApi );
 
     // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
     SC_DLLPUBLIC bool
                     FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, sal_uLong nCount, double fStep, double fMax, bool bRecord, bool bApi );
 
     bool            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
-                                      FillDir eDir, sal_uLong nCount, bool bRecord, bool bApi );
+                                      FillDir eDir, sal_uLong nCount, bool bApi );
 
-    void            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi );
+    void            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd );
 
     bool            MergeCells( const ScCellMergeOption& rOption, bool bContents,
                                         bool bRecord, bool bApi );
@@ -224,7 +224,7 @@ public:
      */
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 
-    void ConvertFormulaToValue( const ScRange& rRange, bool bRecord, bool bInteraction );
+    void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
 };
 
 class ScDocFuncDirect : public ScDocFunc

@@ -185,7 +185,7 @@ public:
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
     void            AddRefEntry();
 
-    void            InputCommand( const CommandEvent& rCEvt, bool bForce );
+    void            InputCommand( const CommandEvent& rCEvt );
 
     void            InsertFunction( const OUString& rFuncName, bool bAddPar = true );
     void            ClearText();

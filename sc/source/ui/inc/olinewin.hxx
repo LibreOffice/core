@@ -162,9 +162,9 @@ private:
         @return  true = focus wrapped from end to start or vice versa. */
     bool                        ImplMoveFocusByLevel( bool bForward );
     /** Calculates position of focus button in tab order.
-        @param bFindVisible  true = repeats until a visible button has been found.
+        Repeats until a visible button has been found.
         @return  true = focus wrapped from end to start or vice versa. */
-    bool                        ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible );
+    bool                        ImplMoveFocusByTabOrder( bool bForward );
 
     /** If the focused entry is invisible, tries to move to visible position. */
     void                        ImplMoveFocusToVisible( bool bForward );

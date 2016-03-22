@@ -1471,8 +1471,8 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
 }
 
 OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
-        FilterType eFilter, BiffType eBiff, bool bImportFilter, bool bCallerKnowsAboutMacroExport ) :
-    FunctionProvider( eFilter, eBiff, bImportFilter, bCallerKnowsAboutMacroExport ),
+        FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
+    FunctionProvider( eFilter, eBiff, bImportFilter, true/*bCallerKnowsAboutMacroExport*/ ),
     mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxModelFactory ) )
 {
 }

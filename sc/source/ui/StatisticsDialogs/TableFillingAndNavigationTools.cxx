@@ -90,11 +90,11 @@ void FormulaTemplate::applyNumber(const OUString& aVariable, sal_Int32 aValue)
     mTemplate = mTemplate.replaceAll(aVariable, OUString::number(aValue));
 }
 
-AddressWalker::AddressWalker(ScAddress aInitialAddress, bool aTrackRange) :
+AddressWalker::AddressWalker(ScAddress aInitialAddress) :
     mCurrentAddress(aInitialAddress),
     mMinimumAddress(aInitialAddress),
     mMaximumAddress(aInitialAddress),
-    mTrackRange(aTrackRange)
+    mTrackRange(true)
 {
     mAddressStack.push_back(mCurrentAddress);
 }
@@ -157,7 +157,7 @@ void AddressWalker::push(SCCOL aRelativeCol, SCROW aRelativeRow, SCTAB aRelative
 
 AddressWalkerWriter::AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
         formula::FormulaGrammar::Grammar eGrammar ) :
-    AddressWalker(aInitialAddress, true),
+    AddressWalker(aInitialAddress),
     mpDocShell(pDocShell),
     mpDocument(pDocument),
     meGrammar(eGrammar)

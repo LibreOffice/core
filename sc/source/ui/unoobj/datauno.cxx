@@ -1915,12 +1915,12 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException, std::ex
             SCCOL nDummyCol;
             SCROW nDummyRow;
             pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
-            bContinue = aFunc.DoImport( nTab, aImportParam, nullptr, true );   //! Api-Flag as parameter
+            bContinue = aFunc.DoImport( nTab, aImportParam, nullptr );   //! Api-Flag as parameter
         }
 
         // interne Operationen (sort, query, subtotal) nur, wenn kein Fehler
         if (bContinue)
-            aFunc.RepeatDB( pData->GetName(), true, true, bIsUnnamed, aTab );
+            aFunc.RepeatDB( pData->GetName(), true, bIsUnnamed, aTab );
     }
 }
 

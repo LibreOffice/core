@@ -255,7 +255,7 @@ bool ScStyleSheet::IsUsed() const
         // Always query the document to let it decide if a rescan is necessary,
         // and store the state.
         ScDocument* pDoc = static_cast<ScStyleSheetPool*>(pPool)->GetDocument();
-        if ( pDoc && pDoc->IsStyleSheetUsed( *this, true ) )
+        if ( pDoc && pDoc->IsStyleSheetUsed( *this ) )
             eUsage = USED;
         else
             eUsage = NOTUSED;

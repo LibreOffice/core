@@ -1551,9 +1551,9 @@ void XclImpChDataFormat::ConvertLine( ScfPropertySet& rPropSet, XclChObjectType 
     ConvertLineBase( GetChRoot(), rPropSet, eObjType );
 }
 
-void XclImpChDataFormat::ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, bool bUsePicFmt ) const
+void XclImpChDataFormat::ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
 {
-    ConvertAreaBase( GetChRoot(), rPropSet, EXC_CHOBJTYPE_FILLEDSERIES, nFormatIdx, bUsePicFmt );
+    ConvertAreaBase( GetChRoot(), rPropSet, EXC_CHOBJTYPE_FILLEDSERIES, nFormatIdx );
 }
 
 void XclImpChDataFormat::RemoveUnusedFormats( const XclChExtTypeInfo& rTypeInfo )
@@ -2070,7 +2070,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
             for( sal_uInt16 nPointIdx = 0, nPointCount = mxValueLink->GetCellCount(); nPointIdx < nPointCount; ++nPointIdx )
             {
                 ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIdx );
-                mxSeriesFmt->ConvertArea( aPointProp, bVarPointFmt ? nPointIdx : mnSeriesIdx, false );
+                mxSeriesFmt->ConvertArea( aPointProp, bVarPointFmt ? nPointIdx : mnSeriesIdx );
             }
         }
 

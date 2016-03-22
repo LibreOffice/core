@@ -44,7 +44,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         Size aSize( (long) ( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
                     (long) ( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
         // Also adjust start here
-        SetVisAreaOrSize( Rectangle( Point(), aSize ), true );
+        SetVisAreaOrSize( Rectangle( Point(), aSize ) );
     }
 
     // InitOptions sets the document languages, must be called before CreateStandardStyles

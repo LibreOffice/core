@@ -70,14 +70,14 @@ namespace HelperNotifyChanges
 ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
-            const ScPatternAttr* pApplyPat, bool bAutomatic ) :
+            const ScPatternAttr* pApplyPat ) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
     pOldEditData( static_cast<EditTextObject*>(nullptr) ),
     pNewEditData( static_cast<EditTextObject*>(nullptr) ),
-    bIsAutomatic( bAutomatic )
+    bIsAutomatic( false )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
     pNewPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewPat ) ));
@@ -111,7 +111,7 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     ScAddress aPos(nCol, nRow, nTab);
-    rDoc.SetPattern( nCol, nRow, nTab, *pWhichPattern, true );
+    rDoc.SetPattern( nCol, nRow, nTab, *pWhichPattern );
 
     if (rDoc.GetCellType(aPos) == CELLTYPE_EDIT && pEditData)
         rDoc.SetEditText(aPos, *pEditData, nullptr);
@@ -255,7 +255,7 @@ void ScUndoEnterData::Undo()
         {
             ScPatternAttr aPattern(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab));
             aPattern.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
-            rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, aPattern, true);
+            rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, aPattern);
         }
         pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), rVal.mnTab);
     }

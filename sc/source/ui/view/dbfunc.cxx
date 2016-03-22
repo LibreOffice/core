@@ -451,7 +451,7 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam )
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData().GetDocShell() );
-    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr, true/*bRecord*/ );
+    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

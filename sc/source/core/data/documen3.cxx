@@ -1488,7 +1488,7 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
  * Entries for AutoFilter listbox
  */
 void ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
@@ -1510,17 +1510,15 @@ void ScDocument::GetFilterEntries(
             pDBData->GetQueryParam( aParam );
 
             // Return all filter entries, if a filter condition is connected with a boolean OR
-            if ( bFilter )
+            bool bFilter = true;
+            SCSIZE nEntryCount = aParam.GetEntryCount();
+            for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
             {
-                SCSIZE nEntryCount = aParam.GetEntryCount();
-                for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
+                ScQueryEntry& rEntry = aParam.GetEntry(i);
+                if ( rEntry.eConnect != SC_AND )
                 {
-                    ScQueryEntry& rEntry = aParam.GetEntry(i);
-                    if ( rEntry.eConnect != SC_AND )
-                    {
-                        bFilter = false;
-                        break;
-                    }
+                    bFilter = false;
+                    break;
                 }
             }
 

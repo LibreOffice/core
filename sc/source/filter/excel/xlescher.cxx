@@ -178,7 +178,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle&
 }
 
 void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
-        const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor )
+        const Rectangle& rRect, MapUnit eMapUnit )
 {
     double fScale = 1.0;
     switch( eMapUnit )
@@ -191,16 +191,13 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
     /*  In objects with DFF client anchor, the position of the shape is stored
         in the cell address components of the client anchor. In old BIFF3-BIFF5
         objects, the position is stored in the offset components of the anchor. */
-    (bDffAnchor ? maFirst.mnCol : mnLX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Left(),   fScale );
-    (bDffAnchor ? maFirst.mnRow : mnTY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Top(),    fScale );
-    (bDffAnchor ? maLast.mnCol  : mnRX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Right(),  fScale );
-    (bDffAnchor ? maLast.mnRow  : mnBY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Bottom(), fScale );
+    maFirst.mnCol = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Left(),   fScale );
+    maFirst.mnRow = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Top(),    fScale );
+    maLast.mnCol = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Right(),  fScale );
+    maLast.mnRow = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Bottom(), fScale );
 
     // for safety, clear the other members
-    if( bDffAnchor )
-        mnLX = mnTY = mnRX = mnBY = 0;
-    else
-        Set( 0, 0, 0, 0 );
+    mnLX = mnTY = mnRX = mnBY = 0;
 }
 
 XclObjLineData::XclObjLineData() :

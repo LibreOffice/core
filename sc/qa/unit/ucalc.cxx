@@ -4184,7 +4184,7 @@ void Test::testCopyPasteRepeatOneFormula()
     }
 
     // Delete row at row 1 to shift the cells up.
-    rFunc.DeleteCells(aRowOne, &aMark, DEL_DELROWS, true, true);
+    rFunc.DeleteCells(aRowOne, &aMark, DEL_DELROWS, true);
 
     // Check the formula results again.
     for (SCROW i = 0; i < 10; ++i)
@@ -4637,7 +4637,7 @@ void Test::testAutoFill()
     m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
     ScRange aRange(0,0,0,0,5,0);
     aMarkData.SetMarkArea(aRange);
-    rFunc.FillSeries(aRange, &aMarkData, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, MAXDOUBLE, 1.0, MAXDOUBLE, true, true);
+    rFunc.FillSeries(aRange, &aMarkData, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, MAXDOUBLE, 1.0, MAXDOUBLE, true);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
@@ -5092,7 +5092,7 @@ void Test::testNoteDeleteRow()
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
+    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true);
 
     // Check to make sure the notes have shifted upward.
     pNote = m_pDoc->GetNote(ScAddress(1,1,0));
@@ -5121,7 +5121,7 @@ void Test::testNoteDeleteRow()
     CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
 
     // Delete row 3.
-    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
+    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
 
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
@@ -5767,7 +5767,7 @@ void Test::testTransliterateText()
     aMark.SetMarkArea(ScRange(0,0,0,0,2,0));
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     rFunc.TransliterateText(
-        aMark, i18n::TransliterationModules_LOWERCASE_UPPERCASE, true, true);
+        aMark, i18n::TransliterationModules_LOWERCASE_UPPERCASE, true);
 
     CPPUNIT_ASSERT_EQUAL(OUString("MIKE"), m_pDoc->GetString(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));
@@ -5828,7 +5828,7 @@ void Test::testFormulaToValue()
     // Convert B5:C6 to static values, and check the result.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScRange aConvRange(1,4,0,2,5,0); // B5:C6
-    rFunc.ConvertFormulaToValue(aConvRange, true, false);
+    rFunc.ConvertFormulaToValue(aConvRange, false);
 
     {
         // Expected output table content.  0 = empty cell
@@ -5987,7 +5987,7 @@ void Test::testFormulaToValue2()
     // Convert B3:B5 to a value.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScRange aConvRange(1,2,0,1,4,0); // B3:B5
-    rFunc.ConvertFormulaToValue(aConvRange, true, false);
+    rFunc.ConvertFormulaToValue(aConvRange, false);
 
     {
         // Expected output table content.  0 = empty cell

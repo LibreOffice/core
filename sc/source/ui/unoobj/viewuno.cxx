@@ -1655,7 +1655,7 @@ void SAL_CALL ScTabViewObj::splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixel
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ), true, true );
+        pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ) );
         pViewSh->FreezeSplitters( false );
         pViewSh->InvalidateSplit();
     }
@@ -1681,7 +1681,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
         Point aSplit(rViewData.GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, true ));
         aSplit += aWinStart;
 
-        pViewSh->SplitAtPixel( aSplit, true, true );
+        pViewSh->SplitAtPixel( aSplit );
         pViewSh->FreezeSplitters( true );
         pViewSh->InvalidateSplit();
     }

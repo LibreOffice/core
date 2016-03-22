@@ -1744,7 +1744,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
 
 void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCsCOL& rPosX, SCsROW& rPosY,
-                                        bool bTestMerge, bool bRepair, bool bNextIfLarge )
+                                        bool bTestMerge, bool bRepair )
 {
     //  special handling of 0 is now in ScViewFunctionSet::SetCursorAtPoint
 
@@ -1796,22 +1796,20 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         }
     }
 
-    if (bNextIfLarge)       //  cells to big?
+    //  cells to big?
+    if ( rPosX == nStartPosX && nClickX > 0 )
     {
-        if ( rPosX == nStartPosX && nClickX > 0 )
-        {
-            if (pView)
-                aScrSize.Width() = pView->GetGridWidth(eHWhich);
-            if ( nClickX > aScrSize.Width() )
-                ++rPosX;
-        }
-        if ( rPosY == nStartPosY && nClickY > 0 )
-        {
-            if (pView)
-                aScrSize.Height() = pView->GetGridHeight(eVWhich);
-            if ( nClickY > aScrSize.Height() )
-                ++rPosY;
-        }
+         if (pView)
+            aScrSize.Width() = pView->GetGridWidth(eHWhich);
+         if ( nClickX > aScrSize.Width() )
+            ++rPosX;
+    }
+    if ( rPosY == nStartPosY && nClickY > 0 )
+    {
+        if (pView)
+            aScrSize.Height() = pView->GetGridHeight(eVWhich);
+        if ( nClickY > aScrSize.Height() )
+            ++rPosY;
     }
 
     if (rPosX<0) rPosX=0;
@@ -2931,10 +2929,10 @@ Point ScViewData::GetMousePosPixel()
     return pView->GetMousePosPixel();
 }
 
-void ScViewData::UpdateInputHandler( bool bForce, bool bStopEditing )
+void ScViewData::UpdateInputHandler( bool bForce )
 {
     if (pViewShell)
-        pViewShell->UpdateInputHandler( bForce, bStopEditing );
+        pViewShell->UpdateInputHandler( bForce );
 }
 
 bool ScViewData::IsOle()

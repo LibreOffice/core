@@ -515,7 +515,7 @@ public:
     void            FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod = SC_SPLIT_METHOD_CURSOR );
     void            RemoveSplit();
     void            SplitAtCursor();
-    void            SplitAtPixel( const Point& rPixel, bool bHor, bool bVer );
+    void            SplitAtPixel( const Point& rPixel );
     void            InvalidateSplit();
 
     void            ErrorMessage( sal_uInt16 nGlobStrId );

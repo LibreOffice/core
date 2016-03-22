@@ -394,7 +394,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
     return eBiff;
 }
 
-XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bContLookup ) :
+XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot ) :
     mrStrm( rInStrm ),
     mrRoot( rRoot ),
     mnGlobRecId( EXC_ID_UNKNOWN ),
@@ -410,7 +410,7 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bCo
     mnRawRecSize( 0 ),
     mnRawRecLeft( 0 ),
     mcNulSubst( '?' ),
-    mbCont( bContLookup ),
+    mbCont( true ),
     mbUseDecr( false ),
     mbValidRec( false ),
     mbValid( false )

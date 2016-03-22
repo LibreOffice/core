@@ -1631,7 +1631,7 @@ ScVbaRange::ClearFormats() throw (uno::RuntimeException, std::exception)
 }
 
 void
-ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram, bool bFireEvent ) throw (uno::RuntimeException)
+ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram ) throw (uno::RuntimeException)
 {
     // If this is a multiple selection apply setFormula over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1642,7 +1642,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
         return;
     }
     CellFormulaValueSetter formulaValueSetter( rFormula, &getScDocument(), eGram );
-    setValue( rFormula, formulaValueSetter, bFireEvent );
+    setValue( rFormula, formulaValueSetter, true/*bFireEvent*/ );
 }
 
 uno::Any
@@ -1666,7 +1666,7 @@ void
 ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException, std::exception)
 {
     // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 uno::Any
@@ -1678,7 +1678,7 @@ ScVbaRange::getFormulaR1C1() throw (css::uno::RuntimeException, std::exception)
 void
 ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeException, std::exception)
 {
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 uno::Any

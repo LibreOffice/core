@@ -70,7 +70,7 @@ void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
     //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
     //  use both the size and position of the VisArea
-    SetVisAreaOrSize( rVisArea, true );
+    SetVisAreaOrSize( rVisArea );
 }
 
 static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
@@ -82,44 +82,33 @@ static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
     rRect.Bottom() = rPos.Y() + aSize.Height() - 1;
 }
 
-void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart )
+void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea )
 {
     bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
 
     Rectangle aArea = rVisArea;
-    if (bModifyStart)
+    // when loading, don't check for negative values, because the sheet orientation
+    // might be set later
+    if ( !aDocument.IsImportingXML() )
     {
-        // when loading, don't check for negative values, because the sheet orientation
-        // might be set later
-        if ( !aDocument.IsImportingXML() )
+        if ( ( bNegativePage ? (aArea.Right() > 0) : (aArea.Left() < 0) ) || aArea.Top() < 0 )
         {
-            if ( ( bNegativePage ? (aArea.Right() > 0) : (aArea.Left() < 0) ) || aArea.Top() < 0 )
-            {
-                //  VisArea start position can't be negative.
-                //  Move the VisArea, otherwise only the upper left position would
-                //  be changed in SnapVisArea, and the size would be wrong.
+            //  VisArea start position can't be negative.
+            //  Move the VisArea, otherwise only the upper left position would
+            //  be changed in SnapVisArea, and the size would be wrong.
 
-                Point aNewPos( 0, std::max( aArea.Top(), (long) 0 ) );
-                if ( bNegativePage )
-                {
-                    aNewPos.X() = std::min( aArea.Right(), (long) 0 );
-                    lcl_SetTopRight( aArea, aNewPos );
-                }
-                else
-                {
-                    aNewPos.X() = std::max( aArea.Left(), (long) 0 );
-                    aArea.SetPos( aNewPos );
-                }
+            Point aNewPos( 0, std::max( aArea.Top(), (long) 0 ) );
+            if ( bNegativePage )
+            {
+                aNewPos.X() = std::min( aArea.Right(), (long) 0 );
+                lcl_SetTopRight( aArea, aNewPos );
+            }
+            else
+            {
+                aNewPos.X() = std::max( aArea.Left(), (long) 0 );
+                aArea.SetPos( aNewPos );
             }
         }
-    }
-    else
-    {
-        Rectangle aOldVisArea = SfxObjectShell::GetVisArea();
-        if ( bNegativePage )
-            lcl_SetTopRight( aArea, aOldVisArea.TopRight() );
-        else
-            aArea.SetPos( aOldVisArea.TopLeft() );
     }
 
     //      hier Position anpassen!
@@ -207,7 +196,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
     }
 
     if (aNewArea != aOldArea)
-        SetVisAreaOrSize( aNewArea, true ); // hier muss auch der Start angepasst werden
+        SetVisAreaOrSize( aNewArea ); // hier muss auch der Start angepasst werden
 }
 
 //  Style-Krempel fuer Organizer etc.

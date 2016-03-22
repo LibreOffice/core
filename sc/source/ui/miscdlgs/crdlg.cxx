@@ -24,7 +24,7 @@
 #include "miscdlgs.hrc"
 
 ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
-    const OUString& rStrLabel, bool bColDefault)
+    const OUString& rStrLabel)
     : ModalDialog(pParent, "ColOrRowDialog",
         "modules/scalc/ui/colorrowdialog.ui")
 {
@@ -36,10 +36,7 @@ ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
     SetText(rStrTitle);
     m_pFrame->set_label(rStrLabel);
 
-    if (bColDefault)
-        m_pBtnCols->Check();
-    else
-        m_pBtnRows->Check();
+    m_pBtnCols->Check();
 
     m_pBtnOk->SetClickHdl( LINK( this, ScColOrRowDlg, OkHdl ) );
 }

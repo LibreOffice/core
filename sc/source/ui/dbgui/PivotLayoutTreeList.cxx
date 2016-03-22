@@ -57,7 +57,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     std::unique_ptr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames, true));
+        pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
 
     if (pDialog->Execute() == RET_OK)
     {

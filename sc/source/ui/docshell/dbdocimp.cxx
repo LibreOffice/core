@@ -116,13 +116,14 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 }
 
 bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
-        const svx::ODataAccessDescriptor* pDescriptor, bool bRecord )
+        const svx::ODataAccessDescriptor* pDescriptor )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     ScChangeTrack *pChangeTrack = nullptr;
     ScRange aChangedRange;
 
-    if (bRecord && !rDoc.IsUndoEnabled())
+    bool bRecord = true;
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,

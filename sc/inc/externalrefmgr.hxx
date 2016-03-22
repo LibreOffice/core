@@ -266,7 +266,7 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets, bool bPermanent );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets );
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const { return maReferenced.mbAllReferenced;}
 

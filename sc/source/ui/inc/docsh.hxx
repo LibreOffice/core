@@ -218,7 +218,7 @@ public:
 
     virtual void    SetModified( bool = true ) override;
 
-    void            SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart );
+    void            SetVisAreaOrSize( const Rectangle& rVisArea );
 
     virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet &rSet ) override;
 

@@ -24,8 +24,8 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 
-ScCbWarningBox::ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
-    WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
+ScCbWarningBox::ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr ) :
+    WarningBox( pParent, WB_YES_NO | WB_DEF_YES, rMsgStr )
 {
     // By default, the check box is ON, and the user needs to un-check it to
     // disable all future warnings.
@@ -55,7 +55,7 @@ void ScCbWarningBox::DisableDialog()
 }
 
 ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
-    ScCbWarningBox( pParent, OUString( ScResId( STR_REPLCELLSWARN ) ), true )
+    ScCbWarningBox( pParent, OUString( ScResId( STR_REPLCELLSWARN ) ) )
 {
     SetHelpId( HID_SC_REPLCELLSWARN );
 }
