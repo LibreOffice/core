@@ -133,36 +133,40 @@ struct SmCfgOther
 
 
 SmCfgOther::SmCfgOther()
+    : ePrintSize(PRINT_SIZE_NORMAL)
+    , nPrintZoomFactor(100)
+    , bPrintTitle(true)
+    , bPrintFormulaText(true)
+    , bPrintFrame(true)
+    , bIsSaveOnlyUsedSymbols(true)
+    , bIsAutoCloseBrackets(true)
+    , bIgnoreSpacesRight(true)
+    , bToolboxVisible(true)
+    , bAutoRedraw(true)
+    , bFormulaCursor(true)
 {
-    ePrintSize          = PRINT_SIZE_NORMAL;
-    nPrintZoomFactor    = 100;
-    bPrintTitle         = bPrintFormulaText   =
-    bPrintFrame         = bIgnoreSpacesRight  =
-    bToolboxVisible     = bAutoRedraw         =
-    bIsAutoCloseBrackets = bFormulaCursor
-    = bIsSaveOnlyUsedSymbols = true;
 }
 
 
 SmFontFormat::SmFontFormat()
+    : aName(FONTNAME_MATH)
+    , nCharSet(RTL_TEXTENCODING_UNICODE)
+    , nFamily(FAMILY_DONTKNOW)
+    , nPitch(PITCH_DONTKNOW)
+    , nWeight(WEIGHT_DONTKNOW)
+    , nItalic(ITALIC_NONE)
 {
-    aName       = FONTNAME_MATH;
-    nCharSet    = RTL_TEXTENCODING_UNICODE;
-    nFamily     = FAMILY_DONTKNOW;
-    nPitch      = PITCH_DONTKNOW;
-    nWeight     = WEIGHT_DONTKNOW;
-    nItalic     = ITALIC_NONE;
 }
 
 
 SmFontFormat::SmFontFormat( const vcl::Font &rFont )
+    : aName(rFont.GetFamilyName())
+    , nCharSet(static_cast<sal_Int16>(rFont.GetCharSet()))
+    , nFamily(static_cast<sal_Int16>(rFont.GetFamilyType()))
+    , nPitch(static_cast<sal_Int16>(rFont.GetPitch()))
+    , nWeight(static_cast<sal_Int16>(rFont.GetWeight()))
+    , nItalic(static_cast<sal_Int16>(rFont.GetItalic()))
 {
-    aName       = rFont.GetFamilyName();
-    nCharSet    = static_cast<sal_Int16>(rFont.GetCharSet());
-    nFamily     = static_cast<sal_Int16>(rFont.GetFamilyType());
-    nPitch      = static_cast<sal_Int16>(rFont.GetPitch());
-    nWeight     = static_cast<sal_Int16>(rFont.GetWeight());
-    nItalic     = static_cast<sal_Int16>(rFont.GetItalic());
 }
 
 
@@ -198,8 +202,8 @@ SmFntFmtListEntry::SmFntFmtListEntry( const OUString &rId, const SmFontFormat &r
 
 
 SmFontFormatList::SmFontFormatList()
+    : bModified(false)
 {
-    bModified = false;
 }
 
 
