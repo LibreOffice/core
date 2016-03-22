@@ -95,6 +95,8 @@
 #include <svx/ofaitem.hxx>
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <svtools/restartdialog.hxx>
+#include <comphelper/solarmutex.hxx>
 
 #include <config_vclplug.h>
 
@@ -1276,8 +1278,10 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             // display info
-            ScopedVclPtrInstance< MessageDialog > aBox(this, CUI_RES(RID_SVXSTR_LANGUAGE_RESTART), VCL_MESSAGE_INFO);
-            aBox->Execute();
+            SolarMutexGuard aGuard;
+            svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), nullptr,
+                svtools::RESTART_REASON_LANGUAGE_CHANGE);
 
             // tell quickstarter to stop being a veto listener
 
