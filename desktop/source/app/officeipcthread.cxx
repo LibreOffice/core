@@ -243,7 +243,6 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
 }
 
 rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
-    namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
@@ -526,15 +525,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
         do
         {
-            osl::Security &rSecurity = Security::get();
+            osl::Security security;
 
             // Try to create pipe
-            if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
+            if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, security ))
             {
                 // Pipe created
                 nPipeMode = PIPEMODE_CREATED;
             }
-            else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successful, now we try to connect
+            else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, security )) // Creation not successful, now we try to connect
             {
                 osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
                 if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
