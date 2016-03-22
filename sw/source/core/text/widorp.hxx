@@ -46,7 +46,6 @@ public:
     // to call TruncLines() without IsBreakNow() returning another value.
     // We assume that rLine is pointing to the last non-fitting line.
 
-    // OD 2004-02-27 #106629# - no longer inline
     void SetRstHeight( const SwTextMargin &rLine );
 };
 
@@ -67,8 +66,8 @@ public:
 
     bool FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine, bool bHasToFit );
     bool WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTest );
-    // OD 2004-02-25 #i16128# - rename method to avoid confusion with base class
-    // method <SwTextFrameBreak::IsBreakNow>, which isn't virtual.
+    // i#16128 - This method is named this way to avoid confusion with
+    // base class method <SwTextFrameBreak::IsBreakNow>, which isn't virtual.
     bool IsBreakNowWidAndOrp( SwTextMargin &rLine )
     {
         bool isOnFirstLine = (rLine.GetLineNr() == 1 && !rLine.GetPrev());
