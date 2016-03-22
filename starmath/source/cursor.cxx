@@ -145,13 +145,12 @@ void SmCursor::BuildGraph(){
     OSL_ENSURE(mpAnchor->CaretPos.IsValid(), "Anchor must be valid");
 }
 
-bool SmCursor::SetCaretPosition(SmCaretPos pos, bool moveAnchor){
+bool SmCursor::SetCaretPosition(SmCaretPos pos){
     SmCaretPosGraphIterator it = mpGraph->GetIterator();
     while(it.Next()){
         if(it->CaretPos == pos){
             mpPosition = it.Current();
-            if(moveAnchor)
-                mpAnchor = it.Current();
+            mpAnchor = it.Current();
             return true;
         }
     }
@@ -218,8 +217,8 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         BuildGraph();
         AnnotateSelection();
         //Set caret position
-        if(!SetCaretPosition(PosAfterDelete, true))
-            SetCaretPosition(SmCaretPos(pLine, 0), true);
+        if(!SetCaretPosition(PosAfterDelete))
+            SetCaretPosition(SmCaretPos(pLine, 0));
         //Finish editing
         EndEdit();
 
@@ -644,8 +643,8 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup) {
     AnnotateSelection();
 
     //Set caret position
-    if(!SetCaretPosition(PosAfterLimit, true))
-        SetCaretPosition(SmCaretPos(pLine, 0), true);
+    if(!SetCaretPosition(PosAfterLimit))
+        SetCaretPosition(SmCaretPos(pLine, 0));
 
     EndEdit();
 
@@ -1403,8 +1402,8 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
     AnnotateSelection(); //Update selection annotation!
 
     //Set caret position
-    if(!SetCaretPosition(PosAfterEdit, true))
-        SetCaretPosition(SmCaretPos(pStartLine, 0), true);
+    if(!SetCaretPosition(PosAfterEdit))
+        SetCaretPosition(SmCaretPos(pStartLine, 0));
 
     //End edit section
     EndEdit();

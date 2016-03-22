@@ -299,7 +299,7 @@ private:
      *
      * @returns false on failure to find the position in pGraph.
      */
-    bool SetCaretPosition(SmCaretPos pos, bool moveAnchor = false);
+    bool SetCaretPosition(SmCaretPos pos);
 
     /** Set selected on nodes of the tree */
     void AnnotateSelection();
