@@ -306,6 +306,9 @@ public:
     template<typename T>
     std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
 
+    void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
+            SvNumberFormatter& rFormatter);
+
 #if DEBUG_MATRIX
     void Dump() const;
 #endif
@@ -2370,6 +2373,108 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
     rR = nIndex - rC*nRowSize;
 }
 
+void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
+            SvNumberFormatter& rFormatter)
+{
+    SCSIZE nC1, nC2;
+    SCSIZE nR1, nR2;
+    xMat1->GetDimensions(nC1, nR1);
+    xMat2->GetDimensions(nC2, nR2);
+
+    sal_uLong nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::NUMBER,
+            ScGlobal::eLnge);
+
+    std::vector<OUString> aString(nMaxCol * nMaxRow);
+    std::vector<bool> aValid(nMaxCol * nMaxRow, true);
+    std::vector<sal_uInt16> nErrors(nMaxCol * nMaxRow, 0);
+
+    size_t nRowOffset = 0;
+    size_t nColOffset = 0;
+    std::function<void(size_t, size_t, double)> aDoubleFunc =
+        [&](size_t nRow, size_t nCol, double nVal)
+        {
+            sal_uInt16 nErr = GetDoubleErrorValue(nVal);
+            if (nErr)
+            {
+                aValid[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = false;
+                nErrors[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = nErr;
+                return;
+            }
+            OUString aStr;
+            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] + aStr;
+        };
+
+    std::function<void(size_t, size_t, bool)> aBoolFunc =
+        [&](size_t nRow, size_t nCol, double nVal)
+        {
+            OUString aStr;
+            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] + aStr;
+        };
+
+    std::function<void(size_t, size_t, svl::SharedString)> aStringFunc =
+        [&](size_t nRow, size_t nCol, svl::SharedString aStr)
+        {
+            aString[(nRow + nRowOffset) * nMaxCol + nCol + nColOffset] = aString[(nRow + nRowOffset) * nMaxCol + nCol + nColOffset] + aStr.getString();
+        };
+
+    if (nC1 == 1 || nR1 == 1)
+    {
+        size_t nRowRep = nR1 == 1 ? nMaxRow : 1;
+        size_t nColRep = nC1 == 1 ? nMaxCol : 1;
+
+        for (size_t i = 0; i < nRowRep; ++i)
+        {
+            nRowOffset = i;
+            for (size_t j = 0; j < nColRep; ++j)
+            {
+                nColOffset = j;
+                xMat1->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(std::min(nR1, nMaxRow) - 1, std::min(nC1, nMaxCol) - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+            }
+        }
+    }
+    else
+        xMat1->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+
+    nRowOffset = 0;
+    nColOffset = 0;
+    if (nC2 == 1 || nR2 == 1)
+    {
+        size_t nRowRep = nR2 == 1 ? nMaxRow : 1;
+        size_t nColRep = nC2 == 1 ? nMaxCol : 1;
+
+        for (size_t i = 0; i < nRowRep; ++i)
+        {
+            nRowOffset = i;
+            for (size_t j = 0; j < nColRep; ++j)
+            {
+                nColOffset = j;
+                xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(std::min(nR2, nMaxRow) - 1, std::min(nC2, nMaxCol) - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+            }
+        }
+    }
+    else
+        xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+
+    MatrixImplType::position_type pos = maMat.position(0, 0);
+    for (SCSIZE i = 0; i < nMaxCol; ++i)
+    {
+        for (SCSIZE j = 0; j < nMaxRow; ++j)
+        {
+            if (aValid[nMaxCol * j + i])
+            {
+                pos = maMat.set(pos, aString[nMaxCol * j + i]);
+            }
+            else
+            {
+                pos = maMat.set(pos, CreateDoubleError(nErrors[nMaxCol * j + i]));
+            }
+            pos = maMat.next_position(pos);
+        }
+    }
+}
+
 void ScMatrix::IncRef() const
 {
     ++nRefCnt;
@@ -3749,6 +3854,19 @@ void ScVectorRefMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStart
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
     mpFullMatrix->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc);
+}
+
+void ScFullMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
+        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter)
+{
+    pImpl->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter);
+}
+
+void ScVectorRefMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
+        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter)
+{
+    ensureFullMatrix();
+    mpFullMatrix->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
