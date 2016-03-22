@@ -69,7 +69,7 @@ css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool is
             OUString menuCommand = iEntry->msMenuCommand;
 
             OUString visibility;
-            if (isEnabled)
+            if (iEntry->mbIsInitiallyVisible)
                 visibility = "visible";
             else
                 visibility = "hidden";
