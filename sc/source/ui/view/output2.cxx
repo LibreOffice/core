@@ -44,6 +44,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "output.hxx"
 #include "document.hxx"
@@ -1466,6 +1467,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                 "LayoutStrings: unterschiedliche MapUnits ?!?!" );
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
+    bool bExportFormulaAnnotation = officecfg::Office::Common::Filter::PDF::Export::ExportFormulaAsAnnotation::get();
 
     sc::IdleSwitch aIdleSwitch(*mpDoc, false);
     ScDrawStringsVars aVars( this, bPixelToLogic );
@@ -2136,7 +2138,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
                             if (bHasURL)
                                 lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
-                            else
+                            else if (bExportFormulaAnnotation)
                                 lcl_DoFormulaAnnotation(mpDev, aURLRect, aCell);
                         }
                     }
