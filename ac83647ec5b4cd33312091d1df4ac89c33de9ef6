@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_c65ff773",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-03-22T08:09:47Z",
+      "side": 1,
+      "message": "I see your point. Thanks for the explanation.",
+      "parentUuid": "9ad45d7e_466dc731",
+      "revId": "ac83647ec5b4cd33312091d1df4ac89c33de9ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_53a3c79e",
         "filename": "sw/source/core/text/widorp.cxx",
         "patchSetId": 1
