@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_26e4130c",
+        "filename": "unotest/source/cpp/macros_test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-22T00:18:40Z",
+      "side": 1,
+      "message": "I think that should be moved to the caller. This is going to cause strange issues in some calc tests at some point. IMHO it is one of the reasons that we have rExtraArgs.\n\nMacroExecutionMode is special as it enables a feature that should never cause any harm in any test.",
+      "revId": "10fcd75cc08711acebb617686841f88ce257bf5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
