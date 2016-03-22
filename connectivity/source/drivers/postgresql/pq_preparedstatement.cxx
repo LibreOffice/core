@@ -46,7 +46,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -169,8 +169,8 @@ PreparedStatement::PreparedStatement(
     const Reference< XConnection > & conn,
     struct ConnectionSettings *pSettings,
     const OString & stmt )
-    : OComponentHelper(refMutex->mutex)
-    , OPropertySetHelper(OComponentHelper::rBHelper)
+    : PreparedStatement_BASE(refMutex->mutex)
+    , OPropertySetHelper(PreparedStatement_BASE::rBHelper)
     , m_connection(conn)
     , m_pSettings(pSettings)
     , m_stmt(stmt)
@@ -240,49 +240,29 @@ void PreparedStatement::checkClosed() throw (SQLException, RuntimeException )
             *this, OUString(),1,Any());
 }
 
-Any PreparedStatement::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any PreparedStatement::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
-    Any ret;
-
-    ret = OComponentHelper::queryInterface( reqType );
-    if( ! ret.hasValue() )
-        ret = ::cppu::queryInterface( reqType,
-                                    static_cast< XWarningsSupplier * > ( this  ),
-                                    static_cast< XPreparedStatement * > ( this ),
-                                    static_cast< com::sun::star::sdbc::XResultSetMetaDataSupplier * > ( this ),
-                                    static_cast< XParameters * > ( this ),
-                                    static_cast< XCloseable * > ( this ),
-                                    static_cast< XGeneratedResultSet * > ( this ),
-                                    static_cast< XPropertySet * > ( this ),
-                                    static_cast< XMultiPropertySet * > ( this ),
-                                    static_cast< XFastPropertySet * > ( this ) );
-    return ret;
+    Any aRet = PreparedStatement_BASE::queryInterface(rType);
+    return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
 
 Sequence< Type > PreparedStatement::getTypes() throw ( RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection *pCollection;
+    static Sequence< Type > *pCollection;
     if( ! pCollection )
     {
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
         if( !pCollection )
         {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<XWarningsSupplier>::get(),
-                cppu::UnoType<XPreparedStatement>::get(),
-                cppu::UnoType<com::sun::star::sdbc::XResultSetMetaDataSupplier>::get(),
-                cppu::UnoType<XParameters>::get(),
-                cppu::UnoType<XCloseable>::get(),
-                cppu::UnoType<XGeneratedResultSet>::get(),
-                cppu::UnoType<XPropertySet>::get(),
-                cppu::UnoType<XFastPropertySet>::get(),
-                cppu::UnoType<XMultiPropertySet>::get(),
-                OComponentHelper::getTypes());
+            static Sequence< Type > collection(
+                ::comphelper::concatSequences(
+                    OPropertySetHelper::getTypes(),
+                    PreparedStatement_BASE::getTypes()));
             pCollection = &collection;
         }
     }
-    return pCollection->getTypes();
+    return *pCollection;
 }
 
 Sequence< sal_Int8> PreparedStatement::getImplementationId() throw ( RuntimeException, std::exception )
