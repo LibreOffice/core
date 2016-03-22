@@ -164,26 +164,37 @@ void ImplOpenGLTexture::Dispose()
 {
     if( mnTexture != 0 )
     {
-        OpenGLVCLContextZone aContextZone;
-
-        // FIXME: this is really not optimal performance-wise.
-
-        // Check we have been correctly un-bound from all framebuffers.
-        ImplSVData* pSVData = ImplGetSVData();
-        rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
-        if( pContext.is() )
+        // During shutdown GL is already de-initialized, so we should not try to create a new context.
+        OpenGLZone aZone;
+        rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext(false);
+        if( xContext.is() )
         {
-            pContext->makeCurrent();
-            pContext->UnbindTextureFromFramebuffers( mnTexture );
+            // FIXME: this is really not optimal performance-wise.
+
+            // Check we have been correctly un-bound from all framebuffers.
+            ImplSVData* pSVData = ImplGetSVData();
+            rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
+
+            if( pContext.is() )
+            {
+                pContext->makeCurrent();
+                pContext->UnbindTextureFromFramebuffers( mnTexture );
+            }
+
+            if( mnOptStencil != 0 )
+            {
+                glDeleteRenderbuffers( 1, &mnOptStencil );
+                mnOptStencil = 0;
+            }
+            glDeleteTextures( 1, &mnTexture );
+
+            mnTexture = 0;
         }
-
-        if( mnOptStencil != 0 )
+        else
         {
-            glDeleteRenderbuffers( 1, &mnOptStencil );
             mnOptStencil = 0;
+            mnTexture = 0;
         }
-        glDeleteTextures( 1, &mnTexture );
-        mnTexture = 0;
     }
 }
 
