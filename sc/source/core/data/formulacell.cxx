@@ -3881,7 +3881,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
             break;
             case formula::svIndex:
             {
-                if(pThisTok->GetIndex() != pOtherTok->GetIndex())
+                if(pThisTok->GetIndex() != pOtherTok->GetIndex() || pThisTok->IsGlobal() != pOtherTok->IsGlobal())
                     return NotEqual;
             }
             break;
@@ -3900,6 +3900,51 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     return NotEqual;
             }
             break;
+            default:
+                ;
+        }
+    }
+
+    // If still the same, check lexical names as different names may result in
+    // identical RPN code.
+
+    pThis = pCode->GetArray();
+    nThisLen = pCode->GetLen();
+    pOther = rOther.pCode->GetArray();
+    nOtherLen = rOther.pCode->GetLen();
+
+    if ( !pThis || !pOther )
+    {
+        // Error: no code for cells !"
+        return NotEqual;
+    }
+
+    if ( nThisLen != nOtherLen )
+        return NotEqual;
+
+    for ( sal_uInt16 i = 0; i < nThisLen; i++ )
+    {
+        formula::FormulaToken *pThisTok = pThis[i];
+        formula::FormulaToken *pOtherTok = pOther[i];
+
+        if ( pThisTok->GetType() != pOtherTok->GetType() ||
+             pThisTok->GetOpCode() != pOtherTok->GetOpCode() ||
+             pThisTok->GetParamCount() != pOtherTok->GetParamCount() )
+        {
+            // Incompatible type, op-code or param counts.
+            return NotEqual;
+        }
+
+        switch (pThisTok->GetType())
+        {
+            // All index tokens are names. Different categories already had
+            // different OpCode values.
+            case formula::svIndex:
+                {
+                    if (pThisTok->GetIndex() != pOtherTok->GetIndex() || pThisTok->IsGlobal() != pOtherTok->IsGlobal())
+                        return NotEqual;
+                }
+                break;
             default:
                 ;
         }
