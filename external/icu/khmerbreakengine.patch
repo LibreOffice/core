@@ -15,8 +15,8 @@ index f1c874d..3ad1b3f 100644
 +    fViramaSet.applyPattern(UNICODE_STRING_SIMPLE("[[:ccc=VR:]]"), status);
 +
 +    // note Skip Sets contain fIgnoreSet characters too.
-+    fSkipStartSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=OP:][:lb=QU:]]\\u200C\\u200D\\u2060"), status);
-+    fSkipEndSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]]\\u200C\\u200D\\u2060"), status);
++    fSkipStartSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=OP:][:lb=QU:]\\u200C\\u200D\\u2060]"), status);
++    fSkipEndSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]\\u200C\\u200D\\u2060]"), status);
 +    fNBeforeSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CR:][:lb=LF:][:lb=NL:][:lb=SP:][:lb=ZW:][:lb=IS:][:lb=BA:][:lb=NS:]]"), status);
  }
  
@@ -332,10 +332,10 @@ index f1c874d..3ad1b3f 100644
 +        startZwsp = scanBeforeStart(text, scanStart, breakStart);
 +    }
 +    utext_setNativeIndex(text, rangeStart);
-+    scanFwdClusters(text, rangeStart, initAfter);
++    scanFwdClusters(text, rangeEnd, initAfter);
 +    bool endZwsp = scanAfterEnd(text, utext_nativeLength(text), scanEnd, breakEnd);
 +    utext_setNativeIndex(text, rangeEnd - 1);
-+    scanBackClusters(text, rangeEnd, finalBefore);
++    scanBackClusters(text, rangeStart, finalBefore);
 +    if (finalBefore < initAfter) {   // the whole run is tented so no breaks
 +        if (breakStart || fTypes < UBRK_LINE)
 +            foundBreaks.push(rangeStart, status);
@@ -539,7 +539,7 @@ index f1c874d..3ad1b3f 100644
 +            int32_t ln = lengths.elementAti(j);
 +            utext_setNativeIndex(text, ln+ix);
 +            int32_t c = utext_current32(text);
-+            while (fPuncSet.contains(c) || fIgnoreSet.contains(c)) {
++            while ((fPuncSet.contains(c) || fIgnoreSet.contains(c)) && ln + i < numCodePts) {
 +                ++ln;
 +                utext_next32(text);
 +                c = utext_current32(text);
