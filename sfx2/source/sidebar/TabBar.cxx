@@ -337,7 +337,17 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 
         DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
         if (pDeckDescriptor)
+        {
             pDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
+
+            Context aContext;
+            aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
+            // leave aContext.msContext on default 'any' ... this func is used only for decks
+            // and we don't have context-sensitive decks anyway
+
+            pDeckDescriptor->maContextList.ToggleVisibilityForContext(
+                aContext, pDeckDescriptor->mbIsEnabled );
+        }
 
         Layout();
     }
