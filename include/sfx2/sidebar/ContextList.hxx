@@ -55,6 +55,7 @@ public:
         const bool bIsInitiallyVisible,
         const ::rtl::OUString& rsMenuCommand);
 
+    void ToggleVisibilityForContext( const Context& rContext,const bool bIsInitiallyVisible );
     const ::std::vector<Entry>& GetEntries() const {return maEntries;};
 
 private:

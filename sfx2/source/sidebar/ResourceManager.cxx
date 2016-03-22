@@ -54,7 +54,7 @@ bool getBool(utl::OConfigurationNode const & aNode, const char* pNodeName)
     return comphelper::getBOOL(aNode.getNodeValue(pNodeName));
 }
 
-css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool isEnabled)
+css::uno::Sequence<OUString> BuildContextList (ContextList rContextList)
 {
     const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
 
@@ -69,7 +69,7 @@ css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool is
             OUString menuCommand = iEntry->msMenuCommand;
 
             OUString visibility;
-            if (isEnabled)
+            if (iEntry->mbIsInitiallyVisible)
                 visibility = "visible";
             else
                 visibility = "hidden";
@@ -323,7 +323,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     // save deck settings
 
-    ::uno::Sequence< OUString > sContextList = BuildContextList(pDeckDesc->maContextList, pDeckDesc->mbIsEnabled);
+    ::uno::Sequence< OUString > sContextList = BuildContextList(pDeckDesc->maContextList);
 
     utl::OConfigurationNode aDeckNode (aDeckRootNode.openNode(pDeckDesc->msNodeName));
 
@@ -353,10 +353,9 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
             {
                 Panel* aPanel = *iPanel;
                 OUString panelId = aPanel->GetId();
-                bool isExpanded = aPanel->IsExpanded();
                 const PanelDescriptor* pPanelDesc = GetPanelDescriptor(panelId);
 
-                ::uno::Sequence< OUString > sPanelContextList = BuildContextList(pPanelDesc->maContextList, isExpanded);
+                ::uno::Sequence< OUString > sPanelContextList = BuildContextList(pPanelDesc->maContextList);
 
                 utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(pPanelDesc->msNodeName));
 
