@@ -518,14 +518,6 @@ bool ImpOptimizer::Optimize()
     if ( !maCustomShowName.isEmpty() )
         ImpExtractCustomShow( mxModel, maCustomShowName );
 
-    if ( mbDeleteUnusedMasterPages )
-    {
-        SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
-        DispatchStatus();
-        ImpDeleteUnusedMasterPages( mxModel );
-    }
-
     if ( mbDeleteHiddenSlides )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
@@ -539,6 +531,14 @@ bool ImpOptimizer::Optimize()
         SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
         DispatchStatus();
         ImpDeleteNotesPages( mxModel );
+    }
+
+    if ( mbDeleteUnusedMasterPages )
+    {
+        SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
+        DispatchStatus();
+        ImpDeleteUnusedMasterPages( mxModel );
     }
 
     if ( mbOLEOptimization )
