@@ -208,6 +208,8 @@ class SectionPropertyMap : public PropertyMap
 
     bool                                    m_bPageNoRestart;
     sal_Int32                               m_nPageNumber;
+    /// Page number type is a value from css::style::NumberingType.
+    sal_Int16                               m_nPageNumberType;
     sal_Int32                               m_nBreakType;
     sal_Int32                               m_nPaperBin;
     sal_Int32                               m_nFirstPaperBin;
@@ -302,6 +304,7 @@ public:
     void SetEvenlySpaced( bool bSet ) {    m_bEvenlySpaced = bSet; }
     void SetLandscape( bool bSet ) { m_bIsLandscape = bSet; }
     void SetPageNumber( sal_Int32 nSet ) { m_nPageNumber = nSet; }
+    void SetPageNumberType(sal_Int32 nSet) { m_nPageNumberType = nSet; }
     void SetBreakType( sal_Int32 nSet ) { m_nBreakType = nSet; }
     sal_Int32 GetBreakType( ) { return m_nBreakType; }
 

@@ -403,6 +403,7 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_bIsLandscape( false )
     ,m_bPageNoRestart( false )
     ,m_nPageNumber( -1 )
+    ,m_nPageNumberType(-1)
     ,m_nBreakType( -1 )
     ,m_nPaperBin( -1 )
     ,m_nFirstPaperBin( -1 )
@@ -1232,6 +1233,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if(nRubyHeight < 0 )
             nRubyHeight = 0;
         Insert(PROP_GRID_RUBY_HEIGHT, uno::makeAny( nRubyHeight ));
+
+        if (m_nPageNumberType >= 0)
+            Insert(PROP_NUMBERING_TYPE, uno::makeAny(m_nPageNumberType));
 
         // #i119558#, force to set document as standard page mode,
         // refer to ww8 import process function "SwWW8ImplReader::SetDocumentGrid"

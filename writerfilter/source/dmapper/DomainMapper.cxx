@@ -984,6 +984,18 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (pSectionContext != nullptr)
                 pSectionContext->SetPageNumber(nIntValue);
         break;
+        case NS_ooxml::LN_CT_PageNumber_fmt:
+            if (pSectionContext)
+            {
+                switch (nIntValue)
+                {
+                case NS_ooxml::LN_Value_ST_NumberFormat_upperLetter:
+                    // A, B, ...
+                    pSectionContext->SetPageNumberType(style::NumberingType::CHARS_UPPER_LETTER_N);
+                break;
+                }
+            }
+        break;
         case NS_ooxml::LN_CT_FtnEdn_type:
             // This is the "separator" footnote, ignore its linebreak.
             if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
