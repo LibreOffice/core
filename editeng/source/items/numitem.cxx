@@ -246,10 +246,11 @@ SvxNumberFormat::~SvxNumberFormat()
 void SvxNumberFormat::SetNumberingType(sal_Int16 nSet)
 {
     // Right align Roman numbers, tdf#42788
-    if((nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER) && meLabelFollowedBy == LISTTAB)
-        eNumAdjust = SVX_ADJUST_RIGHT;
-    else if((nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER) && meLabelFollowedBy == SPACE)
-        eNumAdjust = SVX_ADJUST_LEFT;
+    if(nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER)
+        if (meLabelFollowedBy == LISTTAB)
+            eNumAdjust = SVX_ADJUST_RIGHT;
+        else
+            eNumAdjust = SVX_ADJUST_LEFT;
     else if (eNumAdjust == SVX_ADJUST_RIGHT)
             eNumAdjust = SVX_ADJUST_LEFT;
 
@@ -481,10 +482,11 @@ short SvxNumberFormat::GetCharTextDistance() const
 void SvxNumberFormat::SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy )
 {
     // Right align Roman numbers, tdf#42788
-    if((GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER) && eLabelFollowedBy == LISTTAB)
-        eNumAdjust = SVX_ADJUST_RIGHT;
-    else if((GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER) && eLabelFollowedBy == SPACE)
-        eNumAdjust = SVX_ADJUST_LEFT;
+    if(GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER)
+        if (eLabelFollowedBy == LISTTAB)
+            eNumAdjust = SVX_ADJUST_RIGHT;
+        else
+            eNumAdjust = SVX_ADJUST_LEFT;
     else if (eNumAdjust == SVX_ADJUST_RIGHT)
             eNumAdjust = SVX_ADJUST_LEFT;
     meLabelFollowedBy = eLabelFollowedBy;
