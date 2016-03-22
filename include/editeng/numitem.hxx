@@ -99,7 +99,6 @@ private:
     OUString       sSuffix;
 
     SvxAdjust           eNumAdjust;
-    bool                mbNumAdjustChanged;
 
     sal_uInt8           nInclUpperLevels;   // Take over numbers from the previous level.
     sal_uInt16          nStart;             // Start of counting
@@ -156,7 +155,7 @@ public:
     bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
 
     void            SetNumberingType(sal_Int16 nSet) override;
-    void            SetNumAdjust(SvxAdjust eSet);
+    void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
     void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
     const OUString&   GetPrefix() const { return sPrefix;}
