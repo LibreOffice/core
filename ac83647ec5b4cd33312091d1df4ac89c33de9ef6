@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_466dc731",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-03-22T08:01:14Z",
+      "side": 1,
+      "message": "My concern is that there is no information in the comment that tells what part of the code below is related to the bug in question. (And no guarantee that the code hasn\u0027t been further edited later, to fix other bugs, or to add new features.) If one needs to figure out the history of a part of the source code, one needs to use version control. There is no way around that. In-line comments are never 100% reliable.",
+      "parentUuid": "9ad45d7e_26237307",
+      "revId": "ac83647ec5b4cd33312091d1df4ac89c33de9ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_53a3c79e",
         "filename": "sw/source/core/text/widorp.cxx",
         "patchSetId": 1
