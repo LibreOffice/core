@@ -1170,23 +1170,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
-        for (SCSIZE i = 0; i < nMinC; i++)
-        {
-            for (SCSIZE j = 0; j < nMinR; j++)
-            {
-                sal_uInt16 nErr = pMat1->GetErrorIfNotString( i, j);
-                if (!nErr)
-                    nErr = pMat2->GetErrorIfNotString( i, j);
-                if (nErr)
-                    xResMat->PutError( nErr, i, j);
-                else
-                {
-                    OUString aTmp = pMat1->GetString(*pFormatter, i, j).getString();
-                    aTmp += pMat2->GetString(*pFormatter, i, j).getString();
-                    xResMat->PutString(mrStrPool.intern(aTmp), i, j);
-                }
-            }
-        }
+        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter);
     }
     return xResMat;
 }
