@@ -64,15 +64,16 @@ static const sal_Int32 PREPARED_STATEMENT_RESULT_SET_TYPE = 8;
 
 #define PREPARED_STATEMENT_SIZE 9
 
-class PreparedStatement : public cppu::OComponentHelper,
-                          public cppu::OPropertySetHelper,
-                          public com::sun::star::sdbc::XPreparedStatement,
-                          public com::sun::star::sdbc::XParameters,
-                          public com::sun::star::sdbc::XCloseable,
-                          public com::sun::star::sdbc::XWarningsSupplier,
-                          public com::sun::star::sdbc::XMultipleResults,
-                          public com::sun::star::sdbc::XGeneratedResultSet,
-                          public com::sun::star::sdbc::XResultSetMetaDataSupplier
+typedef ::cppu::WeakComponentImplHelper<    ::com::sun::star::sdbc::XPreparedStatement,
+                                            ::com::sun::star::sdbc::XParameters,
+                                            ::com::sun::star::sdbc::XCloseable,
+                                            ::com::sun::star::sdbc::XWarningsSupplier,
+                                            ::com::sun::star::sdbc::XMultipleResults,
+                                            ::com::sun::star::sdbc::XGeneratedResultSet,
+                                            ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                            > PreparedStatement_BASE;
+class PreparedStatement : public PreparedStatement_BASE,
+                          public cppu::OPropertySetHelper
 {
 private:
     com::sun::star::uno::Any m_props[PREPARED_STATEMENT_SIZE];
@@ -102,8 +103,8 @@ public:
 
      virtual ~PreparedStatement();
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() override { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() override { PreparedStatement_BASE::acquire(); }
+    virtual void SAL_CALL release() throw() override { PreparedStatement_BASE::release(); }
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
