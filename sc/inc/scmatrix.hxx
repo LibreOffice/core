@@ -406,6 +406,9 @@ public:
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const = 0;
 
+    virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
+            SvNumberFormatter& rFormatter) = 0;
+
 #if DEBUG_MATRIX
     virtual void Dump() const = 0;
 #endif
@@ -614,6 +617,9 @@ public:
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const override;
     ScFullMatrix& operator+= ( const ScFullMatrix& r );
+
+    virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
+            SvNumberFormatter& rFormatter) override;
 
 #if DEBUG_MATRIX
     virtual void Dump() const override;
@@ -825,6 +831,9 @@ public:
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const override;
 
     ScVectorRefMatrix& operator+=(const ScVectorRefMatrix& r);
+
+    virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
+            SvNumberFormatter& rFormatter) override;
 
 #if DEBUG_MATRIX
     virtual void Dump() const override
