@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,svx_unit))
 
 $(eval $(call gb_CppunitTest_use_external,svx_unit,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,svx_unit, \
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svx_unit, ))
 
 $(eval $(call gb_CppunitTest_set_include,svx_unit,\
 	$$(INCLUDE) \

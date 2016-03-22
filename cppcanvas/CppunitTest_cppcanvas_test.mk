@@ -33,10 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,cppcanvas_test,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,cppcanvas_test,))
 
 $(eval $(call gb_CppunitTest_use_ure,cppcanvas_test))
 $(eval $(call gb_CppunitTest_use_vcl,cppcanvas_test))

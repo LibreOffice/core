@@ -16,10 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,smoketest,\
 
 $(eval $(call gb_CppunitTest_use_external,smoketest,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,smoketest,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,smoketest,))
 
 $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 	cppu \

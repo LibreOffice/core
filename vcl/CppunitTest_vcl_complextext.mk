@@ -34,10 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_complextext, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,vcl_complextext,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,vcl_complextext,))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_complextext))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_complextext))

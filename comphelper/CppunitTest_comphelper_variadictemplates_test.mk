@@ -13,10 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_variadictemplates_
     comphelper/qa/unit/variadictemplates \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,comphelper_variadictemplates_test, \
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,comphelper_variadictemplates_test, ))
 
 $(eval $(call gb_CppunitTest_use_externals,comphelper_variadictemplates_test, \
 	boost_headers \

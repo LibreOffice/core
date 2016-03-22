@@ -51,9 +51,6 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_borderline,\
     icuuc \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,editeng_borderline,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,editeng_borderline,))
 
 # vim: set noet sw=4 ts=4:

@@ -14,10 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/container/testifcontainer \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,comphelper_test, \
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,comphelper_test, ))
 
 $(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
     comphelper \

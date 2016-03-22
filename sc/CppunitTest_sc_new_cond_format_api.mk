@@ -58,10 +58,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_new_cond_format_api,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_new_cond_format_api,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_new_cond_format_api,))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_new_cond_format_api))
 $(eval $(call gb_CppunitTest_use_vcl,sc_new_cond_format_api))

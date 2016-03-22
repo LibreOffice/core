@@ -9,10 +9,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sdext_pdfimport))
 
-$(eval $(call gb_CppunitTest_use_api,sdext_pdfimport,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sdext_pdfimport,))
 
 $(eval $(call gb_CppunitTest_set_include,sdext_pdfimport,\
     -I$(SRCDIR)/sdext/source/pdfimport/inc \

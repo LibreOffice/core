@@ -33,10 +33,7 @@ $(eval $(call gb_CppunitTest_set_include,chart2_common_functors,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,chart2_common_functors,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,chart2_common_functors,))
 
 $(eval $(call gb_CppunitTest_use_ure,chart2_common_functors))
 

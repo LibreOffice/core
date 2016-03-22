@@ -45,10 +45,7 @@ $(eval $(call gb_CppunitTest_set_include,sw_filters_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_filters_test,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sw_filters_test,))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_filters_test))
 $(eval $(call gb_CppunitTest_use_vcl,sw_filters_test))

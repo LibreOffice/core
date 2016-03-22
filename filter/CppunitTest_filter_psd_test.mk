@@ -25,10 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_psd_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,filter_psd_test,\
-    udkapi \
-    offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,filter_psd_test,))
 
 $(eval $(call gb_CppunitTest_use_ure,filter_psd_test))
 $(eval $(call gb_CppunitTest_use_vcl,filter_psd_test))

@@ -30,10 +30,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_mailmerge, \
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_mailmerge,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sw_mailmerge,))
 
 $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     basic/util/sb \

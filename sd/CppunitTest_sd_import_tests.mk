@@ -57,10 +57,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_import_tests,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_import_tests,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sd_import_tests,))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_import_tests))
 $(eval $(call gb_CppunitTest_use_vcl,sd_import_tests))

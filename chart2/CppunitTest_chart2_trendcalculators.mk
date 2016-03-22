@@ -63,10 +63,7 @@ $(eval $(call gb_CppunitTest_set_include,chart2_trendcalculators,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,chart2_trendcalculators,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,chart2_trendcalculators,))
 
 $(eval $(call gb_CppunitTest_use_ure,chart2_trendcalculators))
 $(eval $(call gb_CppunitTest_use_vcl,chart2_trendcalculators))

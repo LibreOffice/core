@@ -57,10 +57,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_check_xcell_ranges_query,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_check_xcell_ranges_query,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_check_xcell_ranges_query,))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_check_xcell_ranges_query))
 $(eval $(call gb_CppunitTest_use_vcl,sc_check_xcell_ranges_query))

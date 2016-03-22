@@ -9,10 +9,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,writerfilter_misc))
 
-$(eval $(call gb_CppunitTest_use_api,writerfilter_misc,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_misc,))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,writerfilter_misc,\
 	writerfilter/source \

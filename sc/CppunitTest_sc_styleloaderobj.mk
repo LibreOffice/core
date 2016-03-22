@@ -59,10 +59,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_styleloaderobj,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_styleloaderobj,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_styleloaderobj,))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_styleloaderobj))
 $(eval $(call gb_CppunitTest_use_vcl,sc_styleloaderobj))

@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,basegfx))
 
 $(eval $(call gb_CppunitTest_use_external,basegfx,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,basegfx,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,basegfx,))
 
 $(eval $(call gb_CppunitTest_use_libraries,basegfx,\
     basegfx \

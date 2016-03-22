@@ -35,10 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,writerfilter_rtftok,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_rtftok,))
 
 $(eval $(call gb_CppunitTest_use_ure,writerfilter_rtftok))
 $(eval $(call gb_CppunitTest_use_vcl,writerfilter_rtftok))

@@ -25,10 +25,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_rectangle \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,tools_test, \
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,tools_test, ))
 
 $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
     sal \

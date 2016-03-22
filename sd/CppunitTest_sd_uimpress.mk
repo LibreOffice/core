@@ -14,10 +14,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
     -I$(SRCDIR)/sd/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_uimpress,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sd_uimpress,))
 
 $(eval $(call gb_CppunitTest_use_library_objects,sd_uimpress,sd))
 

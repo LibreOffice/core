@@ -34,10 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_mapmode, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,vcl_mapmode,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,vcl_mapmode,))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_mapmode))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_mapmode))

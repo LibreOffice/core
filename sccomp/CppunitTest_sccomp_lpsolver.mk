@@ -35,10 +35,7 @@ $(eval $(call gb_CppunitTest_set_include,sccomp_lpsolver,\
 ))
 
 
-$(eval $(call gb_CppunitTest_use_api,sccomp_lpsolver,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sccomp_lpsolver,))
 
 $(eval $(call gb_CppunitTest_use_ure,sccomp_lpsolver))
 $(eval $(call gb_CppunitTest_use_vcl,sccomp_lpsolver))

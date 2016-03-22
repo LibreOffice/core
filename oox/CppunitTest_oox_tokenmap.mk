@@ -16,10 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,oox_tokenmap,\
 
 $(eval $(call gb_CppunitTest_use_custom_headers,oox_tokenmap,oox/generated))
 
-$(eval $(call gb_CppunitTest_use_api,oox_tokenmap,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,oox_tokenmap,))
 
 $(eval $(call gb_CppunitTest_use_library_objects,oox_tokenmap,oox))
 

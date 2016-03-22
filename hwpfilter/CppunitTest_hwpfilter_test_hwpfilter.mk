@@ -26,10 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,hwpfilter_test_hwpfilter, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,hwpfilter_test_hwpfilter,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,hwpfilter_test_hwpfilter,))
 
 $(eval $(call gb_CppunitTest_use_ure,hwpfilter_test_hwpfilter))
 $(eval $(call gb_CppunitTest_use_vcl,hwpfilter_test_hwpfilter))

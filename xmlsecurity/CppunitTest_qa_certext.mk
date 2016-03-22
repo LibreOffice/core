@@ -9,10 +9,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,xmlsecurity_qa_certext))
 
-$(eval $(call gb_CppunitTest_use_api,xmlsecurity_qa_certext,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,xmlsecurity_qa_certext,))
 
 $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_qa_certext,\
 	cppu \

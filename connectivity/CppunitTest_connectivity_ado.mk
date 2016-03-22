@@ -17,10 +17,7 @@ $(eval $(call gb_CppunitTest_set_include,connectivity_ado,\
 
 $(eval $(call gb_CppunitTest_use_external,connectivity_ado,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,connectivity_ado,\
-    udkapi \
-    offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,connectivity_ado,))
 
 $(eval $(call gb_CppunitTest_use_ure,connectivity_ado))
 $(eval $(call gb_CppunitTest_use_vcl,connectivity_ado))

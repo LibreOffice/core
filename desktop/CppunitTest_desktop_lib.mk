@@ -36,10 +36,7 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_lib, \
     cairo \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,desktop_lib,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,desktop_lib,))
 
 $(eval $(call gb_CppunitTest_use_ure,desktop_lib))
 

@@ -18,10 +18,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,svl_qa_cppunit))
 
-$(eval $(call gb_CppunitTest_use_api,svl_qa_cppunit, \
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svl_qa_cppunit, ))
 
 $(eval $(call gb_CppunitTest_use_externals,svl_qa_cppunit, \
 	boost_headers \

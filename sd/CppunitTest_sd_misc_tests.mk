@@ -62,10 +62,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_misc_tests,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_misc_tests,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sd_misc_tests,))
 
 $(eval $(call gb_CppunitTest_use_externals,sd_misc_tests,\
     boost_headers \

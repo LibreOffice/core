@@ -14,10 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,oox_vba_encryption,\
     oox/qa/unit/vba_encryption \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,oox_vba_encryption,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,oox_vba_encryption,))
 
 $(eval $(call gb_CppunitTest_use_libraries,oox_vba_encryption,\
     basegfx \

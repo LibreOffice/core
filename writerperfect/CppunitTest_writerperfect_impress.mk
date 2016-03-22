@@ -13,10 +13,7 @@ $(eval $(call gb_CppunitTest_use_externals,writerperfect_impress,\
 	boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,writerperfect_impress,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,writerperfect_impress,))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerperfect_impress,\
 	comphelper \

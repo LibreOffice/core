@@ -38,10 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,vcl_wmf_test,\
-    udkapi \
-    offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,vcl_wmf_test,))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_wmf_test))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_wmf_test))

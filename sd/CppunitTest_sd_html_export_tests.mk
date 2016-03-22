@@ -59,10 +59,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_html_export_tests,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_html_export_tests,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sd_html_export_tests,))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_html_export_tests))
 $(eval $(call gb_CppunitTest_use_vcl,sd_html_export_tests))

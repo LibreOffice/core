@@ -33,10 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_outdev, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,vcl_outdev,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,vcl_outdev,))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_outdev))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_outdev))

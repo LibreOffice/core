@@ -34,10 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_lifecycle, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,vcl_lifecycle,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,vcl_lifecycle,))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_lifecycle))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_lifecycle))

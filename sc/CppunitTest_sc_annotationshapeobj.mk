@@ -59,10 +59,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_annotationshapeobj,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_annotationshapeobj,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_annotationshapeobj,))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_annotationshapeobj))
 $(eval $(call gb_CppunitTest_use_vcl,sc_annotationshapeobj))

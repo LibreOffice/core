@@ -64,10 +64,7 @@ $(eval $(call gb_CppunitTest_set_include,chart2_export,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,chart2_export,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,chart2_export,))
 
 $(eval $(call gb_CppunitTest_use_ure,chart2_export))
 $(eval $(call gb_CppunitTest_use_vcl,chart2_export))

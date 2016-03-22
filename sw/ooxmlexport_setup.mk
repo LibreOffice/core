@@ -102,10 +102,7 @@ $(eval $(call gb_CppunitTest_set_include,sw_ooxmlexport$(1),\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_ooxmlexport$(1),\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sw_ooxmlexport$(1),))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlexport$(1)))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmlexport$(1)))

@@ -21,10 +21,7 @@ $(eval $(call gb_CppunitTest_set_include,xmloff_uxmloff,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,xmloff_uxmloff,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,xmloff_uxmloff,))
 
 $(eval $(call gb_CppunitTest_use_ure,xmloff_uxmloff))
 $(eval $(call gb_CppunitTest_use_vcl,xmloff_uxmloff))

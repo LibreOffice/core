@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,svtools_html))
 
 $(eval $(call gb_CppunitTest_use_external,svtools_html,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,svtools_html, \
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svtools_html, ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svtools_html, \
     svtools/qa/unit/testHtmlWriter \

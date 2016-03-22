@@ -26,10 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sot_test_sot,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sot_test_sot,))
 
 $(eval $(call gb_CppunitTest_use_ure,sot_test_sot))
 

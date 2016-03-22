@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,svl_urihelper))
 
 $(eval $(call gb_CppunitTest_use_external,svl_urihelper,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,svl_urihelper, \
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svl_urihelper, ))
 
 $(eval $(call gb_CppunitTest_use_components,svl_urihelper, \
     ucb/source/core/ucb1 \

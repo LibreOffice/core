@@ -14,10 +14,7 @@ $(eval $(call gb_CppunitTest_use_externals,svtools_graphic,\
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,svtools_graphic, \
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svtools_graphic, ))
 
 $(eval $(call gb_CppunitTest_use_ure,svtools_graphic))
 
