@@ -148,7 +148,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                        std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, true, RC_DLG_SWWRAPDLG ));
+                        std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, RC_DLG_SWWRAPDLG ));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         if (pDlg->Execute() == RET_OK)

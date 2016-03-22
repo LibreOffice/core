@@ -56,6 +56,15 @@ namespace nsSwCursorSelOverFlags
     const SwCursorSelOverFlags SELOVER_CHANGEPOS           = 0x08;
 }
 
+// define for cursor travelling normally in western text cells and chars do
+// the same, but in complex text cell skip over ligatures and char skip
+// into it.
+// These defines exist only to cut off the dependencies to I18N project.
+const sal_uInt16 CRSR_SKIP_CHARS  = 0;
+const sal_uInt16 CRSR_SKIP_CELLS  = 1;
+const sal_uInt16 CRSR_SKIP_HIDDEN = 2;
+
+
 class SW_DLLPUBLIC SwCursor : public SwPaM
 {
     friend class SwCursorSaveState;
@@ -85,7 +94,7 @@ protected:
 
 public:
     // single argument ctors shall be explicit.
-    SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel );
+    SwCursor( const SwPosition &rPos, SwPaM* pRing );
     virtual ~SwCursor();
 
     /// this takes a second parameter, which indicates the Ring that
@@ -164,10 +173,8 @@ public:
     bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 
-    bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual, bool bSkipHidden )
-                                    { return LeftRight( true, nCnt, nMode, bAllowVisual, bSkipHidden, false ); }
-    bool Right( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual, bool bSkipHidden )
-                                    { return LeftRight( false, nCnt, nMode, bAllowVisual, bSkipHidden, false ); }
+    bool Left( sal_uInt16 nCnt )   { return LeftRight( true, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false ); }
+    bool Right( sal_uInt16 nCnt )  { return LeftRight( false, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false ); }
     bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( true, nCnt ); }
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
     virtual bool GotoTable( const OUString& rName );

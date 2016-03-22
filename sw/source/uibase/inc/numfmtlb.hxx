@@ -41,8 +41,8 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
     DECL_DLLPRIVATE_LINK_TYPED( SelectHdl, ListBox&, void );
 
     SAL_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
-    SAL_DLLPRIVATE void            Init(short nFormatType, bool bUsrFormats);
-    SAL_DLLPRIVATE SwView*           GetView();
+    SAL_DLLPRIVATE void            Init(short nFormatType);
+    SAL_DLLPRIVATE SwView*         GetView();
 
 public:
     NumFormatListBox(vcl::Window* pWin, WinBits nStyle);

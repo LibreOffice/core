@@ -559,8 +559,7 @@ void SvxCSS1PropertyInfo::CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat )
 
 void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                                       sal_uInt16 nMinBorderDist,
-                                      const SvxBoxItem *pDfltItem,
-                                      bool bTable )
+                                      const SvxBoxItem *pDfltItem )
 {
     bool bChg = nTopBorderDistance != USHRT_MAX ||
                 nBottomBorderDistance != USHRT_MAX ||
@@ -630,10 +629,7 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
             if( USHRT_MAX == nDist )
                 nDist = aBoxItem.GetDistance( nLine );
 
-            if( !bTable )
-                nDist = 0U;
-            else if( nDist && nDist < nMinBorderDist )
-                nDist = nMinBorderDist;
+            nDist = 0U;
         }
 
         aBoxItem.SetDistance( nDist, nLine );

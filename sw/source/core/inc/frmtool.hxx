@@ -397,7 +397,7 @@ class SwOrderIter
     const bool m_bFlysOnly;
 
 public:
-    SwOrderIter( const SwPageFrame *pPage, bool bFlysOnly = true );
+    SwOrderIter( const SwPageFrame *pPage );
 
     void             Current( const SdrObject *pNew ) { m_pCurrent = pNew; }
     const SdrObject *operator()() const { return m_pCurrent; }

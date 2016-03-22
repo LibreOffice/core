@@ -53,7 +53,6 @@
 #include <unoport.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <crsskip.hxx>
 #include <txtatr.hxx>
 #include <acchyperlink.hxx>
 #include <acchypertextdata.hxx>

@@ -252,7 +252,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // den aktuellen Absatz erst einmal nicht numerieren
     {
         sal_uInt8 nLvl = nLevel;
-        SetNodeNum( nLvl, false );
+        SetNodeNum( nLvl );
     }
 
     // einen neuen Kontext anlegen
@@ -406,7 +406,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         else
         {
             // the next paragraph not numbered first
-            SetNodeNum( rInfo.GetLevel(), false );
+            SetNodeNum( rInfo.GetLevel() );
         }
     }
 
@@ -597,7 +597,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
         SetTextCollAttrs();
 }
 
-void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
+void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
 {
     SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
     OSL_ENSURE( pTextNode, "Kein Text-Node an PaM-Position" );
@@ -607,7 +607,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
     static_cast<SwContentNode *>(pTextNode)->SetAttr( SwNumRuleItem(rName) );
 
     pTextNode->SetAttrListLevel( nLevel );
-    pTextNode->SetCountedInList( bCountedInList );
+    pTextNode->SetCountedInList( false );
 
     // NumRule invalidieren, weil sie durch ein EndAction bereits
     // auf valid geschaltet worden sein kann.

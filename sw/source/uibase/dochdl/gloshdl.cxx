@@ -45,7 +45,6 @@
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
 #include <docsh.hxx>
-#include <crsskip.hxx>
 
 #include <dochdl.hrc>
 #include <swerror.h>
@@ -408,7 +407,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         for(size_t i = 0; i < nGroupCount; ++i)
         {
             // get group name with path-extension
-            const OUString sGroupName = pGlossaryList->GetGroupName(i, false);
+            const OUString sGroupName = pGlossaryList->GetGroupName(i);
             if(sGroupName == pGlossary->GetName())
                 continue;
             const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i);

@@ -1139,7 +1139,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         // The last case branch which needs a table manager!!
         case FN_TABLE_SET_COL_WIDTH:
         {
-            SwTableFUNC aMgr( &rSh, false);
+            SwTableFUNC aMgr( &rSh );
             aMgr.ColWidthDlg(GetView().GetWindow());
             break;
         }

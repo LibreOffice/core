@@ -2590,7 +2590,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     if ( pContent && pContent->IsTextFrame() )
     {
         const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
-        const SwCursor aTmpCursor( aPos, nullptr, false );
+        const SwCursor aTmpCursor( aPos, nullptr );
         ::GetTableSel( aTmpCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
     }
 
@@ -2884,7 +2884,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
                                             aNew.SetHeightSizeType( ATT_MIN_SIZE );
                                         // This position must not be in an overlapped box
                                         const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
-                                        const SwCursor aTmpCursor( aPos, nullptr, false );
+                                        const SwCursor aTmpCursor( aPos, nullptr );
                                         SetRowHeight( aTmpCursor, aNew );
                                         // For the new table model we're done, for the old one
                                         // there might be another (sub)row to adjust...
@@ -4225,7 +4225,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
                 SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
                 aRegH.RegisterInModify( pTextNode , *pTextNode );
                 if ( pUndo )
-                    pUndo->AddNode( *pTextNode , false );
+                    pUndo->AddNode( *pTextNode );
                 SfxStringItem * pNewItem = static_cast<SfxStringItem*>(pFormatItem->Clone());
                 pNewItem->SetValue(OUString());
                 rSet.Put( *pNewItem );

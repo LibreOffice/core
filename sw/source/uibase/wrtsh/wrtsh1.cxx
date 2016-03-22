@@ -80,7 +80,6 @@
 #include <caption.hxx>
 #include <viscrs.hxx>
 #include <swdtflvr.hxx>
-#include <crsskip.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hrc>
@@ -339,7 +338,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
 // if no object is transferred, then one will be created.
 
 void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,
-                               bool bActivate, sal_uInt16 nSlotId )
+                               sal_uInt16 nSlotId )
 {
     ResetCursorStack();
     if( !CanInsert() )
@@ -401,7 +400,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
         if ( xObj.is() )
         {
-            if( InsertOleObject( xObj ) && bActivate && bDoVerb )
+            if( InsertOleObject( xObj ) && bDoVerb )
             {
                 SfxInPlaceClient* pClient = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
                 if ( !pClient )
@@ -947,7 +946,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
 //                  - of deleting selected content;
 //                  - of reset of the Cursorstack if necessary.
 
-void SwWrtShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
+void SwWrtShell::SplitNode( bool bAutoFormat )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -962,7 +961,7 @@ void SwWrtShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
             DelRight();
         }
 
-        SwFEShell::SplitNode( bAutoFormat, bCheckTableStart );
+        SwFEShell::SplitNode( bAutoFormat );
         if( bHasSel )
             EndUndo( UNDO_INSERT );
     }

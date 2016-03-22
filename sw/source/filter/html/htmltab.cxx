@@ -3405,7 +3405,7 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
         // 1. Absatz auf nicht numeriert setzen
         sal_uInt8 nLvl = GetNumInfo().GetLevel();
 
-        SetNodeNum( nLvl, false );
+        SetNodeNum( nLvl );
     }
 
     // Attributierungs-Anfang neu setzen

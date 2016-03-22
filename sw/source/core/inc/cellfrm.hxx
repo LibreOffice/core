@@ -57,7 +57,7 @@ public:
     SwCellFrame* GetPreviousCell() const;
 
     // used for rowspan stuff:
-    const SwCellFrame& FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTab ) const;
+    const SwCellFrame& FindStartEndOfRowSpanCell( bool bStart ) const;
     long GetLayoutRowSpan() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwCellFrame)

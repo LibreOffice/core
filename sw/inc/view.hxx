@@ -624,8 +624,7 @@ public:
     //public fuer D&D
     int     InsertGraphic( const OUString &rPath, const OUString &rFilter,
                             bool bLink = true, GraphicFilter *pFlt = nullptr,
-                            Graphic* pPreviewGrf = nullptr,
-                            bool bRule = false );
+                            Graphic* pPreviewGrf = nullptr );
 
     void ExecuteScan( SfxRequest& rReq );
 

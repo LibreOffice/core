@@ -45,7 +45,6 @@ class SwSrcView: public SfxViewShell
 
 protected:
     void                StartSearchAndReplace(const SvxSearchItem& rItem,
-                                                  bool bFromStart,
                                                   bool bApi,
                                                   bool bRecursive = false);
 

@@ -402,7 +402,6 @@ public:
     virtual SfxAbstractTabDialog* CreateSwParaDlg ( vcl::Window *pParent,
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
-                                                    sal_uInt8 nDialogMode,
                                                     const OUString *pCollName = nullptr,
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) override;
@@ -416,7 +415,7 @@ public:
                                                             const SwTableAutoFormat* pSelFormat = nullptr ) override;
     virtual SfxAbstractDialog * CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) override;
 
-    virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) override;
+    virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, int nResId ) override;
     virtual VclAbstractDialog * CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc) override;
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg(vcl::Window* pParent, SfxItemPool& Pool,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;

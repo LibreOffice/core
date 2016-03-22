@@ -441,8 +441,7 @@ public:
     // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =nullptr,
                             bool bOvrTableLns=true ) const;
-    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =nullptr,
-                            bool bOvrTableLns=true ) const;
+    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =nullptr ) const;
     // Return name of this box. It is determined dynamically and
     // is calculated from the position in the lines/boxes/table.
     OUString GetName() const;

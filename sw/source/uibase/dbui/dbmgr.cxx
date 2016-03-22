@@ -2183,7 +2183,7 @@ bool SwDBManager::ToNextMergeRecord()
 }
 
 bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
-                                         sal_uInt16 nLanguage, bool asString, SwCalc &rCalc )
+                                         sal_uInt16 nLanguage, SwCalc &rCalc )
 {
     if (!(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is()))
         return false;
@@ -2232,10 +2232,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                 if( bValidValue )
                 {
                     SwSbxValue aValue;
-                    if( !asString )
-                        aValue.PutDouble( aNumber );
-                    else
-                        aValue.PutString( aString );
+                    aValue.PutString( aString );
                     SAL_INFO( "sw.ui", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
                     rCalc.VarChange( pColNames[nCol], aValue );
                 }
@@ -2911,8 +2908,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 }
 
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
-                        const uno::Sequence<beans::PropertyValue>& rProperties,
-                        bool bWithDataSourceBrowser)
+                        const uno::Sequence<beans::PropertyValue>& rProperties)
 {
     //prevent second call
     if(pImpl->pMergeDialog)
@@ -2953,8 +2949,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                                                         sDataSource,
                                                         sDataTableOrQuery,
                                                         nCmdType,
-                                                        xConnection,
-                                                        bWithDataSourceBrowser ? nullptr : &aSelection);
+                                                        xConnection);
     OSL_ENSURE(pImpl->pMergeDialog, "Dialog creation failed!");
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {

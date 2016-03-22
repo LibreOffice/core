@@ -61,7 +61,7 @@ public:
                                        OUString& rShortName, OUString& rGroupName );
 
     size_t          GetGroupCount();
-    OUString        GetGroupName(size_t nPos, bool bNoPath = true);
+    OUString        GetGroupName(size_t nPos);
     OUString        GetGroupTitle(size_t nPos);
 
     sal_uInt16      GetBlockCount(size_t nGroup);

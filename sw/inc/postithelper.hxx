@@ -125,9 +125,8 @@ class SwAnnotationItem: public SwSidebarItem
 public:
     SwAnnotationItem(
         SwFormatField& rFormatField,
-        const bool aShow,
         const bool aFocus)
-        : SwSidebarItem( aShow, aFocus )
+        : SwSidebarItem( true/*aShow*/, aFocus )
         , mrFormatField( rFormatField )
     {
     }

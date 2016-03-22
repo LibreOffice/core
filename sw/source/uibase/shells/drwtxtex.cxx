@@ -422,7 +422,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, nullptr, true ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr, nullptr, true ));
                 assert(pDlg && "Dialog creation failed!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)

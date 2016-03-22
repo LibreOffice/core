@@ -365,8 +365,8 @@ public:
 
     void UpdateFields( SwField & );   ///< One single field.
 
-    size_t GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
-    SwFieldType* GetFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
+    size_t GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
+    SwFieldType* GetFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX) const;
     SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
 
     void RemoveFieldType(size_t nField);
@@ -539,7 +539,6 @@ public:
      in case a list style is found, <sListId> holds the list id, to which the
      text node belongs, which applies the found list style. */
     const SwNumRule * SearchNumRule(const bool bNum,
-                                    const bool bOutline,
                                     int nNonEmptyAllowed,
                                     OUString& sListId );
 
@@ -716,7 +715,7 @@ public:
      Can Merge checks if Prev or Next are possible.
         If pointer pChkNxtPrv is passed possible direction is given. */
     bool CanMergeTable( bool bWithPrev = true, bool* pChkNxtPrv = nullptr ) const;
-    bool MergeTable( bool bWithPrev = true, sal_uInt16 nMode = 0 );
+    bool MergeTable( bool bWithPrev = true );
 
     /// Set up InsertDB as table Undo.
     void AppendUndoForInsertFromDB( bool bIsTable );

@@ -540,7 +540,7 @@ void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
 SwShellCursor::SwShellCursor(
     const SwCursorShell& rCShell,
     const SwPosition &rPos )
-    : SwCursor(rPos,nullptr,false)
+    : SwCursor(rPos,nullptr)
     , SwSelPaintRects(rCShell)
     , m_pInitialPoint(SwPaM::GetPoint())
 {}
@@ -550,7 +550,7 @@ SwShellCursor::SwShellCursor(
     const SwPosition &rPos,
     const Point& rPtPos,
     SwPaM* pRing )
-    : SwCursor(rPos, pRing, false)
+    : SwCursor(rPos, pRing)
     , SwSelPaintRects(rCShell)
     , m_MarkPt(rPtPos)
     , m_PointPt(rPtPos)
@@ -715,14 +715,14 @@ bool SwShellCursor::IsAtValidPos( bool bPoint ) const
 
 SwShellTableCursor::SwShellTableCursor( const SwCursorShell& rCursorSh,
                                     const SwPosition& rPos )
-    : SwCursor(rPos,nullptr,false), SwShellCursor(rCursorSh, rPos), SwTableCursor(rPos)
+    : SwCursor(rPos,nullptr), SwShellCursor(rCursorSh, rPos), SwTableCursor(rPos)
 {
 }
 
 SwShellTableCursor::SwShellTableCursor( const SwCursorShell& rCursorSh,
                     const SwPosition& rMkPos, const Point& rMkPt,
                     const SwPosition& rPtPos, const Point& rPtPt )
-    : SwCursor(rPtPos,nullptr,false), SwShellCursor(rCursorSh, rPtPos), SwTableCursor(rPtPos)
+    : SwCursor(rPtPos,nullptr), SwShellCursor(rCursorSh, rPtPos), SwTableCursor(rPtPos)
 {
     SetMark();
     *GetMark() = rMkPos;

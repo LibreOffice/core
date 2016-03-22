@@ -106,7 +106,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
         // true = create group if not already available
-        xGroup = pGlossaries->GetAutoTextGroup( GroupName, true );
+        xGroup = pGlossaries->GetAutoTextGroup( GroupName );
 
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
@@ -178,7 +178,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     }
     pGlossaries->NewGroupDoc(sGroup, sGroup.getToken(0, GLOS_DELIM));
 
-    uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
+    uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup );
     OSL_ENSURE( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
         // We just inserted the group into the glossaries, so why doesn't it exist?
 
@@ -412,7 +412,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     try
     {
         xEntry = pGlossaries ?
-            pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true ) :
+            pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName ) :
             uno::Reference< text::XAutoTextEntry >();
         OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
             // we just inserted the entry into the group, so why doesn't it exist?
@@ -540,7 +540,7 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName, true );
+    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName );
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
         // we told it to create the object, so why didn't it?
     return makeAny( xEntry );

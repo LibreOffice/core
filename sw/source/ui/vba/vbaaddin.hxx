@@ -32,7 +32,7 @@ private:
     bool mbInstalled;
 
 public:
-    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const OUString& rFileURL, bool bAutoload ) throw ( css::uno::RuntimeException );
+    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const OUString& rFileURL ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaAddin();
 
     // Attributes

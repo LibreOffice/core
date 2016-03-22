@@ -178,7 +178,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                 // by simulated cursor movements from the given first insert position
                 if( nMove )
                 {
-                    SwCursor aCursor( *pPos, nullptr, false);
+                    SwCursor aCursor( *pPos, nullptr);
                     if( aCursor.UpDown( false, nMove, nullptr, 0 ) )
                     {
                         pInsertPos.reset( new SwPosition( *aCursor.GetPoint() ) );

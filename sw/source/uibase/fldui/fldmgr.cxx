@@ -72,7 +72,6 @@
 #include <authfld.hxx>
 #include <flddat.hxx>
 #include <fldmgr.hxx>
-#include <crsskip.hxx>
 #include <flddropdown.hxx>
 #include <fldui.hrc>
 #include <tox.hxx>
@@ -523,7 +522,7 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
 
 // determine format
 //  ACCESS over TYP_....
-sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtmlMode) const
+sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
     {
@@ -534,9 +533,6 @@ sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHt
 
         sal_uLong nStart = aSwFields[nPos].nFormatBegin;
         sal_uLong nEnd   = aSwFields[nPos].nFormatEnd;
-
-        if (bIsText && nEnd - nStart >= 2)
-            return 2;
 
         if (nTypeId == TYP_FILENAMEFLD)
             nEnd -= 2;  // no range or template

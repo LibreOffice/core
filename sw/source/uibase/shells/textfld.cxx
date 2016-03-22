@@ -18,7 +18,6 @@
  */
 
 #include <chrdlgmodes.hxx>
-#include <crsskip.hxx>
 #include <hintids.hxx>
 #include <SidebarWin.hxx>
 #include <IDocumentFieldsAccess.hxx>

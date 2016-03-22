@@ -66,7 +66,6 @@
 #include <IMark.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
-#include <crsskip.hxx>
 #include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
@@ -468,9 +467,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         OTextCursorHelper *const pCursor =
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
 
-        SwCursor aCursor(*aPam.GetPoint(), nullptr, false);
+        SwCursor aCursor(*aPam.GetPoint(), nullptr);
         SwUnoCursorHelper::SelectPam(aCursor, true);
-        aCursor.Left(1, CRSR_SKIP_CHARS, false, false);
+        aCursor.Left(1);
         // here, the PaM needs to be moved:
         if (pRange)
         {
@@ -1615,7 +1614,7 @@ SwXText::convertToTextFrame(
             // if not - remove the additional paragraphs and throw
             if (bParaBeforeInserted)
             {
-                SwCursor aDelete(*aStartPam.GetPoint(), nullptr, false);
+                SwCursor aDelete(*aStartPam.GetPoint(), nullptr);
                 *aStartPam.GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
@@ -1625,7 +1624,7 @@ SwXText::convertToTextFrame(
             }
             if (bParaAfterInserted)
             {
-                SwCursor aDelete(*pEndPam->GetPoint(), nullptr, false);
+                SwCursor aDelete(*pEndPam->GetPoint(), nullptr);
                 *pEndPam->GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);

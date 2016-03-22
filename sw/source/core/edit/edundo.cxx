@@ -78,7 +78,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
                 pPageFrame->InvalidateFlyLayout();
                 pPageFrame->InvalidateContent();
 
-                static_cast<SwFEShell*>(this)->SelectFlyFrame(*pFly, true);
+                static_cast<SwFEShell*>(this)->SelectFlyFrame(*pFly);
             }
         }
     }

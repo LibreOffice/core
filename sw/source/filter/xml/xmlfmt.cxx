@@ -718,7 +718,7 @@ public:
 
 
     SwXMLStylesContext_Impl(
-            SwXMLImport& rImport, sal_uInt16 nPrfx,
+            SwXMLImport& rImport,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             bool bAuto );
@@ -798,10 +798,10 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
 }
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
-        SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+        SwXMLImport& rImport, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         bool bAuto ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList, bAuto )
+    SvXMLStylesContext( rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList, bAuto )
 {
 }
 
@@ -898,7 +898,7 @@ public:
 
 
     SwXMLMasterStylesContext_Impl(
-            SwXMLImport& rImport, sal_uInt16 nPrfx,
+            SwXMLImport& rImport,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLMasterStylesContext_Impl();
@@ -907,10 +907,10 @@ public:
 
 
 SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
-        SwXMLImport& rImport, sal_uInt16 nPrfx,
+        SwXMLImport& rImport,
         const OUString& rLName ,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
-    XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
+    XMLTextMasterStylesContext( rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList )
 {
 }
 
@@ -944,7 +944,7 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
         bool bAuto )
 {
     SvXMLStylesContext *pContext =
-        new SwXMLStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
+        new SwXMLStylesContext_Impl( *this, rLocalName,
                                        xAttrList, bAuto );
     if( bAuto )
         SetAutoStyles( pContext );
@@ -959,8 +959,7 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStylesContext *pContext =
-        new SwXMLMasterStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
-                                          xAttrList );
+        new SwXMLMasterStylesContext_Impl( *this, rLocalName, xAttrList );
     SetMasterStyles( pContext );
 
     return pContext;

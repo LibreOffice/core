@@ -668,14 +668,10 @@ void SwTextFormatColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLe
     }
 }
 
-void SwTextFormatColl::DeleteAssignmentToListLevelOfOutlineStyle(
-    const bool bResetOutlineLevel)
+void SwTextFormatColl::DeleteAssignmentToListLevelOfOutlineStyle()
 {
     mbAssignedToOutlineStyle = false;
-    if (bResetOutlineLevel)
-    {
-        ResetFormatAttr(RES_PARATR_OUTLINELEVEL);
-    }
+    ResetFormatAttr(RES_PARATR_OUTLINELEVEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

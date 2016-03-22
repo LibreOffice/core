@@ -204,7 +204,7 @@ void SwUndoDelNum::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().DelNumRules(rContext.GetRepeatPaM());
 }
 
-void SwUndoDelNum::AddNode( const SwTextNode& rNd, bool )
+void SwUndoDelNum::AddNode( const SwTextNode& rNd )
 {
     if( rNd.GetNumRule() )
     {

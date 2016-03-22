@@ -544,7 +544,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, nullptr, true ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr, nullptr, true ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)

@@ -349,8 +349,7 @@ public:
     inline bool     IsInMerge() const   { return bInMerge; }
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
-                        const css::uno::Sequence< css::beans::PropertyValue>& rProperties,
-                        bool bWithDataSourceBrowser = false);
+                        const css::uno::Sequence< css::beans::PropertyValue>& rProperties);
 
     static void     InsertText(SwWrtShell& rSh,
                         const css::uno::Sequence< css::beans::PropertyValue>& rProperties);
@@ -380,7 +379,7 @@ public:
     bool            GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
                                       OUString &rResult, double *pNumber);
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
-                                          sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
+                                          sal_uInt16 nLanguage, SwCalc &aCalc);
     bool            ToNextMergeRecord();
     bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 

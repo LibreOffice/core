@@ -116,7 +116,6 @@
 #include <swcalwrp.hxx>
 #include <swdtflvr.hxx>
 #include <wdocsh.hxx>
-#include <crsskip.hxx>
 #include <breakit.hxx>
 #include <checkit.hxx>
 #include <pagefrm.hxx>

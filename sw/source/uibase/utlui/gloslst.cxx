@@ -186,15 +186,13 @@ size_t SwGlossaryList::GetGroupCount()
     return aGroupArr.size();
 }
 
-OUString SwGlossaryList::GetGroupName(size_t nPos, bool bNoPath)
+OUString SwGlossaryList::GetGroupName(size_t nPos)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
     if(nPos < aGroupArr.size())
     {
         AutoTextGroup* pGroup = aGroupArr[nPos];
         OUString sRet = pGroup->sName;
-        if(bNoPath)
-            sRet = sRet.getToken(0, GLOS_DELIM);
         return sRet;
     }
     return OUString();

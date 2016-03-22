@@ -37,7 +37,6 @@
 #include <breakit.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
-#include <crsskip.hxx>
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
 #include <svl/ctloptions.hxx>

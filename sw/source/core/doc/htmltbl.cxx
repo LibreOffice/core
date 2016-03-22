@@ -974,7 +974,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     if( nRel+nColWidth > 100 )
                     {
                         nColWidth = 100 - nRel;
-                        pColumn->SetWidthOption( nColWidth, true, false );
+                        pColumn->SetWidthOption( nColWidth );
                     }
                     nRelMax += pColumn->GetMax();
                     nRel = nRel + nColWidth;
@@ -1008,7 +1008,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                         // the next column gets the rest
                         sal_uInt16 nColWidth =
                             (sal_uInt16)((pColumn->GetMax() * nRelLeft) / nFixMax);
-                        pColumn->SetWidthOption( nColWidth, true, false );
+                        pColumn->SetWidthOption( nColWidth );
                     }
                 }
             }
@@ -1817,11 +1817,11 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
     return true;
 }
 
-void SwHTMLTableLayout::BordersChanged( sal_uInt16 nAbsAvail, bool bRecalc )
+void SwHTMLTableLayout::BordersChanged( sal_uInt16 nAbsAvail )
 {
     m_bBordersChanged = true;
 
-    Resize( nAbsAvail, bRecalc );
+    Resize( nAbsAvail, true/*bRecalc*/ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

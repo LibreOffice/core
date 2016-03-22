@@ -180,8 +180,7 @@ void SwPagePreviewLayout::_CalcPreviewLayoutSizes()
 */
 bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
                                 const sal_uInt16 _nRows,
-                                const Size&      _rPxWinSize,
-                                const bool       _bCalcScale
+                                const Size&      _rPxWinSize
                               )
 {
     // check environment and parameters
@@ -212,16 +211,14 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     // validate layout information
     mbLayoutInfoValid = true;
 
-    if ( _bCalcScale )
+    // calculate scaling
+    MapMode aMapMode( MAP_TWIP );
+    Size aWinSize = mrParentViewShell.GetOut()->PixelToLogic( _rPxWinSize, aMapMode );
+    Fraction aXScale( aWinSize.Width(), mnPreviewLayoutWidth );
+    Fraction aYScale( aWinSize.Height(), mnPreviewLayoutHeight );
+    if( aXScale < aYScale )
+        aYScale = aXScale;
     {
-        // calculate scaling
-        MapMode aMapMode( MAP_TWIP );
-        Size aWinSize = mrParentViewShell.GetOut()->PixelToLogic( _rPxWinSize, aMapMode );
-        Fraction aXScale( aWinSize.Width(), mnPreviewLayoutWidth );
-        Fraction aYScale( aWinSize.Height(), mnPreviewLayoutHeight );
-        if( aXScale < aYScale )
-            aYScale = aXScale;
-
         // adjust scaling for Drawing layer.
         aYScale *= Fraction( 1000, 1 );
         long nNewNuminator = aYScale.operator long();

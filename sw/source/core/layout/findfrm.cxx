@@ -1529,7 +1529,7 @@ SwCellFrame* SwCellFrame::GetFollowCell() const
 
         if ( !pRow->GetNext() )
         {
-            pThisCell = &pThisCell->FindStartEndOfRowSpanCell( false, true );
+            pThisCell = &pThisCell->FindStartEndOfRowSpanCell( false );
             pRow = pThisCell->GetUpper();
         }
     }
@@ -1576,7 +1576,7 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
                 if ( pMasterRow )
                     pRet = lcl_FindCorrespondingCellFrame( *static_cast<const SwRowFrame*>(pRow), *this, *pMasterRow, false );
                 if ( pRet && pRet->GetTabBox()->getRowSpan() < 1 )
-                    pRet = &const_cast<SwCellFrame&>(pRet->FindStartEndOfRowSpanCell( true, true ));
+                    pRet = &const_cast<SwCellFrame&>(pRet->FindStartEndOfRowSpanCell( true ));
             }
         }
     }
@@ -1585,7 +1585,7 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
 }
 
 // --> NEW TABLES
-const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTableOnly ) const
+const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
 {
     const SwCellFrame* pRet = nullptr;
 
@@ -1604,31 +1604,28 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart, bool bCu
         const SwTable* pTable = pTableFrame->GetTable();
 
         sal_uInt16 nMax = USHRT_MAX;
-        if ( bCurrentTableOnly )
-        {
-            const SwFrame* pCurrentRow = GetUpper();
-            const bool bDoNotEnterHeadline = bStart && pTableFrame->IsFollow() &&
+        const SwFrame* pCurrentRow = GetUpper();
+        const bool bDoNotEnterHeadline = bStart && pTableFrame->IsFollow() &&
                                         !pTableFrame->IsInHeadline( *pCurrentRow );
 
-            // check how many rows we are allowed to go up or down until we reach the end of
-            // the current table frame:
-            nMax = 0;
-            while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
+        // check how many rows we are allowed to go up or down until we reach the end of
+        // the current table frame:
+        nMax = 0;
+        while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
+        {
+            if ( bStart )
             {
-                if ( bStart )
-                {
-                    // do not enter a repeated headline:
-                    if ( bDoNotEnterHeadline && pTableFrame->IsFollow() &&
-                         pTableFrame->IsInHeadline( *pCurrentRow->GetPrev() ) )
-                        break;
+                // do not enter a repeated headline:
+                if ( bDoNotEnterHeadline && pTableFrame->IsFollow() &&
+                     pTableFrame->IsInHeadline( *pCurrentRow->GetPrev() ) )
+                    break;
 
-                    pCurrentRow = pCurrentRow->GetPrev();
-                }
-                else
-                    pCurrentRow = pCurrentRow->GetNext();
-
-                ++nMax;
+                pCurrentRow = pCurrentRow->GetPrev();
             }
+            else
+               pCurrentRow = pCurrentRow->GetNext();
+
+            ++nMax;
         }
 
         // By passing the nMax value for Find*OfRowSpan (in case of bCurrentTableOnly
@@ -1646,23 +1643,10 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart, bool bCu
             {
                 const SwTabFrame* pMasterTable = static_cast<const SwTabFrame*>(pMasterCell->GetUpper()->GetUpper());
 
-                if ( bCurrentTableOnly )
+                if ( pMasterTable == pTableFrame )
                 {
-                    if ( pMasterTable == pTableFrame )
-                    {
-                        pRet = pMasterCell;
-                        break;
-                    }
-                }
-                else
-                {
-                    if ( pMasterTable == pTableFrame ||
-                         (  (bStart && pMasterTable->IsAnFollow(pTableFrame)) ||
-                           (!bStart && pTableFrame->IsAnFollow(pMasterTable)) ) )
-                    {
-                        pRet = pMasterCell;
-                        break;
-                    }
+                    pRet = pMasterCell;
+                    break;
                 }
             }
         }

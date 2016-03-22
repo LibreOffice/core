@@ -42,22 +42,13 @@
 #include <IDocumentContentOperations.hxx>
 
 /// count field types with a ResId, if 0 count all
-size_t SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
+size_t SwEditShell::GetFieldTypeCount(sal_uInt16 nResId ) const
 {
     const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
 
     if(nResId == USHRT_MAX)
     {
-        if(!bUsed)
-            return static_cast<sal_uInt16>(pFieldTypes->size());
-
-        size_t nUsed = 0;
-        for ( const auto pFieldType : *pFieldTypes )
-        {
-            if(IsUsed(*pFieldType))
-                nUsed++;
-        }
-        return nUsed;
+        return static_cast<sal_uInt16>(pFieldTypes->size());
     }
 
     // all types with the same ResId
@@ -72,26 +63,13 @@ size_t SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 }
 
 /// get field types with a ResId, if 0 get all
-SwFieldType* SwEditShell::GetFieldType(size_t nField, sal_uInt16 nResId, bool bUsed ) const
+SwFieldType* SwEditShell::GetFieldType(size_t nField, sal_uInt16 nResId ) const
 {
     const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
 
     if(nResId == USHRT_MAX && nField < pFieldTypes->size())
     {
-        if(!bUsed)
-            return (*pFieldTypes)[nField];
-
-        size_t nUsed = 0;
-        for ( const auto pFieldType : *pFieldTypes )
-        {
-            if(IsUsed(*pFieldType))
-            {
-                if(nUsed == nField)
-                    return pFieldType;
-                nUsed++;
-            }
-        }
-        return nullptr;
+        return (*pFieldTypes)[nField];
     }
 
     size_t nIdx = 0;
@@ -100,12 +78,9 @@ SwFieldType* SwEditShell::GetFieldType(size_t nField, sal_uInt16 nResId, bool bU
         // same ResId -> increment index
         if(pFieldType->Which() == nResId)
         {
-            if (!bUsed || IsUsed(*pFieldType))
-            {
-                if(nIdx == nField)
-                    return pFieldType;
-                nIdx++;
-            }
+            if(nIdx == nField)
+                return pFieldType;
+            nIdx++;
         }
     }
     return nullptr;

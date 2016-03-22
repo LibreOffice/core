@@ -1314,7 +1314,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
             aRegH.RegisterInModify( pTNd, *pTNd );
 
             if( pUndo )
-                pUndo->AddNode( *pTNd, false );
+                pUndo->AddNode( *pTNd );
 
             // directly set list style attribute is reset, otherwise empty
             // list style is applied

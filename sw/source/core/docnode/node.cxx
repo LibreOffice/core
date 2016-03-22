@@ -54,7 +54,6 @@
 #include <pagedesc.hxx>
 #include <fmtpdsc.hxx>
 #include <breakit.hxx>
-#include <crsskip.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <scriptinfo.hxx>
 #include <rootfrm.hxx>
@@ -67,6 +66,7 @@
 #include <calbck.hxx>
 #include "ndole.hxx"
 #include <memory>
+#include <swcrsr.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -1112,12 +1112,11 @@ SwContentFrame *SwContentNode::getLayoutFrame( const SwRootFrame* _pRoot,
                                             pPoint, pPos, bCalcFrame ));
 }
 
-SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
-                                    const bool bCalcFrame ) const
+SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
 {
     SwRect aRet;
     SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
-                                            FRM_CNTNT, pPoint, nullptr, bCalcFrame ) );
+                                            FRM_CNTNT, pPoint ) );
     if( pFrame )
         aRet = bPrtArea ? pFrame->Prt() : pFrame->Frame();
     return aRet;

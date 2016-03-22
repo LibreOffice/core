@@ -144,7 +144,7 @@ public:
     ~SwHTMLTableLayoutColumn() {}
 
     inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPrc );
-    inline void SetWidthOption( sal_uInt16 nWidth, bool bRelWidth, bool bTest );
+    inline void SetWidthOption( sal_uInt16 nWidth );
 
     sal_uInt16 GetWidthOption() const { return nWidthOption; }
     bool IsRelWidthOption() const { return bRelWidthOption; }
@@ -319,7 +319,7 @@ public:
     bool Resize( sal_uInt16 nAbsAvail, bool bRecalc=false, bool bForce=false,
                  sal_uLong nDelay=0 );
 
-    void BordersChanged( sal_uInt16 nAbsAvail, bool bRecalc=false );
+    void BordersChanged( sal_uInt16 nAbsAvail );
 
     /** Calculate available width. This works only if a layout or a
      SwViewShell exists. Otherwise returns 0.
@@ -417,17 +417,10 @@ inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( sal_uInt16 nCol ) 
     return m_aColumns[nCol];
 }
 
-inline void SwHTMLTableLayoutColumn::SetWidthOption(
-    sal_uInt16 nWidth, bool bRelWidth, bool bTest )
+inline void SwHTMLTableLayoutColumn::SetWidthOption( sal_uInt16 nWidth )
 {
-    if( bTest && bRelWidthOption==bRelWidth )
-    {
-        if( nWidth > nWidthOption )
-            nWidthOption = nWidth;
-    }
-    else
-        nWidthOption = nWidth;
-    bRelWidthOption = bRelWidth;
+    nWidthOption = nWidth;
+    bRelWidthOption = true;
 }
 
 inline void SwHTMLTableLayout::SetColumn( SwHTMLTableLayoutColumn *pCol, sal_uInt16 nCol )

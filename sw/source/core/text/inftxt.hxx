@@ -270,7 +270,7 @@ public:
                       sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
                       vcl::TextLayoutCache const* = nullptr) const;
     inline SwPosSize GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
-                                 const sal_Int32 nLen, const sal_uInt16 nComp ) const;
+                                 const sal_Int32 nLen ) const;
     inline SwPosSize GetTextSize( const OUString &rText ) const;
 
     sal_Int32 GetTextBreak( const long nLineWidth,
@@ -415,13 +415,11 @@ public:
     inline void DrawText( const SwLinePortion &rPor, const sal_Int32 nLen,
                           const bool bKern = false ) const;
     inline void DrawMarkedText( const SwLinePortion &rPor, const sal_Int32 nLen,
-                                const bool bKern,
                                 const bool bWrong,
                                 const bool bSmartTags,
                                 const bool bGrammarCheck ) const;
 
-    void DrawRect( const SwRect &rRect, bool bNoGraphic = false,
-                   bool bRetouche = true ) const;
+    void DrawRect( const SwRect &rRect, bool bRetouche ) const;
 
     void DrawTab( const SwLinePortion &rPor ) const;
     void DrawLineBreak( const SwLinePortion &rPor ) const;
@@ -747,10 +745,9 @@ inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,
                                             const sal_Int32 nNewIdx,
-                                            const sal_Int32 nNewLen,
-                                            const sal_uInt16 nCompress ) const
+                                            const sal_Int32 nNewLen ) const
 {
-    return GetTextSize( m_pOut, pSI, *m_pText, nNewIdx, nNewLen, nCompress );
+    return GetTextSize( m_pOut, pSI, *m_pText, nNewIdx, nNewLen, 0/*nCompress*/ );
 }
 
 inline SwTwips SwTextPaintInfo::GetPaintOfst() const
@@ -779,12 +776,11 @@ inline void SwTextPaintInfo::DrawText( const SwLinePortion &rPor,
 
 inline void SwTextPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
                                             const sal_Int32 nLength,
-                                            const bool bKern,
                                             const bool bWrong,
                                             const bool bSmartTags,
                                             const bool bGrammarCheck ) const
 {
-    const_cast<SwTextPaintInfo*>(this)->_DrawText( *m_pText, rPor, m_nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
+    const_cast<SwTextPaintInfo*>(this)->_DrawText( *m_pText, rPor, m_nIdx, nLength, false/*bKern*/, bWrong, bSmartTags, bGrammarCheck );
 }
 
 inline sal_Int32 SwTextFormatInfo::GetReformatStart() const

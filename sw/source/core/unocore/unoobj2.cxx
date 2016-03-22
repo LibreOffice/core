@@ -103,7 +103,6 @@
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
-#include <crsskip.hxx>
 #include <vector>
 #include <sortedobjs.hxx>
 #include <sortopt.hxx>
@@ -811,7 +810,7 @@ throw (uno::RuntimeException)
     }
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
-    SwCursor aCursor(aPos, nullptr, false);
+    SwCursor aCursor(aPos, nullptr);
     if (GetPositions(aCursor))
     {
         UnoActionContext aAction(& m_pImpl->m_rDoc);
@@ -827,7 +826,7 @@ throw (uno::RuntimeException)
                     m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
 
             SwUnoCursorHelper::SelectPam(aCursor, true);
-            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, false, false);
+            aCursor.Left(rText.getLength());
         }
         SetPositions(aCursor);
         m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
@@ -1590,7 +1589,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
-        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, false, false);
+        rCursor.Left(rString.getLength());
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
 }

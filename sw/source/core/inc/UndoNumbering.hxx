@@ -76,7 +76,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void AddNode( const SwTextNode& rNd, bool bResetLRSpace );
+    void AddNode( const SwTextNode& rNd );
     SwHistory* GetHistory() { return pHistory; }
 };
 

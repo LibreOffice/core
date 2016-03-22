@@ -34,9 +34,7 @@ public:
     virtual void addListItem( const SwNodeNum& rNodeNum ) = 0;
     virtual void removeListItem( const SwNodeNum& rNodeNum ) = 0;
 
-    virtual OUString getListItemText( const SwNodeNum& rNodeNum,
-                                    const bool bWithNumber = true,
-                                    const bool bWithSpacesForLevel = false ) const = 0;
+    virtual OUString getListItemText( const SwNodeNum& rNodeNum ) const = 0;
 
     /** get vector of all list items, which are numbered
     */

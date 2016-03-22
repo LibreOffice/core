@@ -67,9 +67,7 @@ public:
     SwLayoutFrame* UpperFrame( SwFrame* &rpFrame, const SwNode& rNode );
     void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
-    SwFrame *GetFrame( const Point* pDocPos = nullptr,
-                    const SwPosition *pPos = nullptr,
-                    const bool bCalcFrame = true ) const;
+    SwFrame *GetFrame( const Point* pDocPos, const SwPosition *pPos ) const;
 };
 
 #endif

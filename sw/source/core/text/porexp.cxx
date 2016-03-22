@@ -85,7 +85,7 @@ void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     // ST2
     if ( rInf.GetSmartTags() || rInf.GetGrammarCheckList() )
-        rInf.DrawMarkedText( *this, rInf.GetLen(), false, false,
+        rInf.DrawMarkedText( *this, rInf.GetLen(), false,
             nullptr != rInf.GetSmartTags(), nullptr != rInf.GetGrammarCheckList() );
     else
         rInf.DrawText( *this, rInf.GetLen() );

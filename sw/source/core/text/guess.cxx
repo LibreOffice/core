@@ -453,8 +453,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if( nBreakPos > nCutPos && nBreakPos != COMPLETE_STRING )
         {
             const sal_Int32 nHangingLen = nBreakPos - nCutPos;
-            SwPosSize aTmpSize = rInf.GetTextSize( &rSI, nCutPos,
-                                                  nHangingLen, 0 );
+            SwPosSize aTmpSize = rInf.GetTextSize( &rSI, nCutPos, nHangingLen );
             aTmpSize.Width(aTmpSize.Width() + nLeftRightBorderSpace);
             OSL_ENSURE( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );

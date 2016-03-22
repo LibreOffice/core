@@ -2299,7 +2299,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
             SwFlyFrame* pFly = pFndFormat->GetFrame(&aPt);
             if( pFly )
             {
-                static_cast<SwFEShell*>(this)->SelectFlyFrame( *pFly, true );
+                static_cast<SwFEShell*>(this)->SelectFlyFrame( *pFly );
                 MakeSelVisible();
                 bRet = true;
             }

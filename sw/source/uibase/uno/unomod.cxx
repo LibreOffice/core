@@ -209,7 +209,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings() throw( uno::RuntimeExcep
     if(!mxViewSettings.is())
     {
         OSL_FAIL("Web or Text?");
-        mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, nullptr ) );
+        mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( nullptr ) );
     }
     return mxViewSettings;
 }
@@ -537,13 +537,13 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames() throw( Runtime
     return aRet;
 }
 
-SwXViewSettings::SwXViewSettings(bool bWebView, SwView* pVw)
+SwXViewSettings::SwXViewSettings(SwView* pVw)
     : ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
     , pView(pVw)
     , mpViewOption(nullptr)
     , mpConstViewOption(nullptr)
     , bObjectValid(true)
-    , bWeb(bWebView)
+    , bWeb(false)
     , mbApplyZoom(false)
     , eHRulerUnit(FUNIT_CM)
     , mbApplyHRulerMetric(false)

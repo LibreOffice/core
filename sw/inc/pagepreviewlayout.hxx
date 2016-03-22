@@ -267,17 +267,11 @@ public:
         input parameter - window size in which the preview will be displayed and
         for which the scaling will be calculated.
 
-        @param _bCalcScale
-        input parameter - control, if method should calculate the needed
-        scaling for the proposed preview layout for the given window size
-        and sets the scaling at the output device and the view options.
-
         @return boolean, indicating, if preview layout is successful initialized.
     */
     bool Init( const sal_uInt16 _nCols,
                const sal_uInt16 _nRows,
-               const Size&      _rPxWinSize,
-               const bool       _bCalcScale
+               const Size&      _rPxWinSize
               );
 
     /** method to adjust page preview layout to document changes

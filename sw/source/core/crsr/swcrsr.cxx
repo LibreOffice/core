@@ -45,7 +45,6 @@
 #include <viewsh.hxx>
 #include <frmatr.hxx>
 #include <breakit.hxx>
-#include <crsskip.hxx>
 #include <vcl/msgbox.hxx>
 #include <mdiexp.hxx>
 #include <statstr.hrc>
@@ -115,12 +114,12 @@ struct _PercentHdl
         }
 };
 
-SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel )
+SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwPaM( rPos, pRing )
     , m_pSavePos(nullptr)
     , m_nRowSpanOffset(0)
     , m_nCursorBidiLevel(0)
-    , m_bColumnSelection(bColumnSel)
+    , m_bColumnSelection(false)
 {
 }
 
@@ -146,7 +145,7 @@ SwCursor::~SwCursor()
 
 SwCursor* SwCursor::Create( SwPaM* pRing ) const
 {
-    return new SwCursor( *GetPoint(), pRing, false );
+    return new SwCursor( *GetPoint(), pRing );
 }
 
 bool SwCursor::IsReadOnlyAvailable() const
@@ -1224,7 +1223,7 @@ bool SwCursor::IsStartEndSentence( bool bEnd ) const
 
     if( !bRet )
     {
-        SwCursor aCursor(*GetPoint(), nullptr, false);
+        SwCursor aCursor(*GetPoint(), nullptr);
         SwPosition aOrigPos = *aCursor.GetPoint();
         aCursor.GoSentence( bEnd ? SwCursor::END_SENT : SwCursor::START_SENT );
         bRet = aOrigPos == *aCursor.GetPoint();
@@ -2110,7 +2109,7 @@ void SwCursor::RestoreSavePos()
 }
 
 SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing, false )
+    : SwCursor( rPos, pRing )
 {
     m_bParked = false;
     m_bChanged = false;

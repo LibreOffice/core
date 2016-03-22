@@ -228,7 +228,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             // hier auch geweohnlich attributiert !!!
             sal_uInt16 nUpper=0, nLower=0;
             GetULSpaceFromContext( nUpper, nLower );
-            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), false, true );
+            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), true );
 
             AppendTextNode( AM_NOSPACE );
 

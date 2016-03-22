@@ -502,7 +502,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
         {
             const Point aPt(GetCursorDocPos());
             if (SwFlyFrame* pFrame = pFlyFormat->GetFrame(&aPt))
-                SelectFlyFrame(*pFrame, true);
+                SelectFlyFrame(*pFrame);
         }
         EndUndo();
         EndAllActionAndCall();

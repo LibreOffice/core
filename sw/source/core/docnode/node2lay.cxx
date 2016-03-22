@@ -452,10 +452,9 @@ SwNode2Layout::~SwNode2Layout()
 }
 
 SwFrame* SwNode2Layout::GetFrame( const Point* pDocPos,
-                              const SwPosition *pPos,
-                              const bool bCalcFrame ) const
+                              const SwPosition *pPos ) const
 {
-    return pImpl->GetFrame( pDocPos, pPos, bCalcFrame );
+    return pImpl->GetFrame( pDocPos, pPos, false/*bCalcFrame*/ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

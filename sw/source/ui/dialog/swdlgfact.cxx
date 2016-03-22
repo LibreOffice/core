@@ -781,12 +781,11 @@ SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( vcl::Window *pParent, SwView& rVw,
                                                     const SfxItemSet& rCoreSet  ,
-                                                    sal_uInt8 nDialogMode,
                                                     const OUString *pCollName,
                                                     bool bDraw ,
                                                     const OString& sDefPage)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwParaDlg>::Create( pParent, rVw, rCoreSet,nDialogMode, pCollName, bDraw, sDefPage );
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwParaDlg>::Create( pParent, rVw, rCoreSet, DLG_STD, pCollName, bDraw, sDefPage );
     return new AbstractTabDialog_Impl( pDlg );
 }
 
@@ -851,13 +850,13 @@ SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window*
     return nullptr;
 }
 
-SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId )
+SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, int nResId )
 {
     VclPtr<SfxModalDialog> pDlg;
     switch ( nResId )
     {
         case RC_DLG_SWWRAPDLG :
-            pDlg = VclPtr<SwWrapDlg>::Create( pParent, rSet, pSh, bDrawMode );
+            pDlg = VclPtr<SwWrapDlg>::Create( pParent, rSet, pSh, true/*bDrawMode*/ );
             break;
         default:
             break;

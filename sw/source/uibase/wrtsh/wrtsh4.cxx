@@ -18,7 +18,6 @@
  */
 
 #include <wrtsh.hxx>
-#include <crsskip.hxx>
 
 // Private methods, which move the cursor over search.
 // The removal of the selection must be made on the level above.

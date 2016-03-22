@@ -99,7 +99,6 @@
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <crsskip.hxx>
 #include <sortopt.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <memory>
@@ -750,8 +749,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
                 (void) bSuccess;
 
                 SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
-                pCurrent->Left(rText.getLength(),
-                        CRSR_SKIP_CHARS, false, false);
+                pCurrent->Left(rText.getLength());
             }
             pCurrent = static_cast<SwCursor*>(pCurrent->GetNext());
         } while (pCurrent != pUnoCursor);
@@ -940,7 +938,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    bool bRet = rUnoCursor.Left( nCount, CRSR_SKIP_CHARS, false, false);
+    bool bRet = rUnoCursor.Left( nCount);
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -959,7 +957,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    bool bRet = rUnoCursor.Right(nCount, CRSR_SKIP_CHARS, false, false);
+    bool bRet = rUnoCursor.Right(nCount);
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -1241,7 +1239,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException, std::
     if (rUnoCursor.GetContentNode() &&
             (pPoint->nContent == rUnoCursor.GetContentNode()->Len()))
     {
-        rUnoCursor.Right(1, CRSR_SKIP_CHARS, false, false);
+        rUnoCursor.Right(1);
     }
     else
     {
@@ -1284,14 +1282,14 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw (uno::RuntimeException, s
     // start of paragraph?
     if (pPoint->nContent == 0)
     {
-        rUnoCursor.Left(1, CRSR_SKIP_CHARS, false, false);
+        rUnoCursor.Left(1);
     }
     else
     {
         rUnoCursor.GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
         if (pPoint->nContent == 0)
         {
-            rUnoCursor.Left(1, CRSR_SKIP_CHARS, false, false);
+            rUnoCursor.Left(1);
         }
     }
 
@@ -1394,7 +1392,7 @@ SwXTextCursor::isStartOfSentence() throw (uno::RuntimeException, std::exception)
     if (!bRet && (!rUnoCursor.HasMark() ||
                     *rUnoCursor.GetPoint() == *rUnoCursor.GetMark()))
     {
-        SwCursor aCursor(*rUnoCursor.GetPoint(),nullptr,false);
+        SwCursor aCursor(*rUnoCursor.GetPoint(),nullptr);
         SwPosition aOrigPos = *aCursor.GetPoint();
         aCursor.GoSentence(SwCursor::START_SENT );
         bRet = aOrigPos == *aCursor.GetPoint();
@@ -1418,7 +1416,7 @@ SwXTextCursor::isEndOfSentence() throw (uno::RuntimeException, std::exception)
     if (!bRet && (!rUnoCursor.HasMark() ||
                     *rUnoCursor.GetPoint() == *rUnoCursor.GetMark()))
     {
-        SwCursor aCursor(*rUnoCursor.GetPoint(), nullptr, false);
+        SwCursor aCursor(*rUnoCursor.GetPoint(), nullptr);
         SwPosition aOrigPos = *aCursor.GetPoint();
         aCursor.GoSentence(SwCursor::END_SENT);
         bRet = aOrigPos == *aCursor.GetPoint();

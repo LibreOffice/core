@@ -91,7 +91,6 @@
 #include <statstr.hrc>
 #include <globals.h>
 #include <unotxdoc.hxx>
-#include <crsskip.hxx>
 #include <fmtinfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -612,7 +611,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( rSh.IsCursorInTable() )
                 {
                     if( !rSh.IsTableComplexForChart() )
-                        SwTableFUNC( &rSh, false).UpdateChart();
+                        SwTableFUNC( &rSh ).UpdateChart();
                     rSh.ClearTableBoxContent();
                     rSh.SaveTableBoxContent();
                 }

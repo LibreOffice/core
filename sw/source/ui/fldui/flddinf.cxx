@@ -397,7 +397,7 @@ sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     }
     else
     {
-        nSize = GetFieldMgr().GetFormatCount(nTypeId, false, IsFieldDlgHtmlMode());
+        nSize = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
             sal_Int32 nPos = m_pSelectionLB->InsertEntry(GetFieldMgr().GetFormatStr(nTypeId, i));

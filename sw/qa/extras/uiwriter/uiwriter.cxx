@@ -15,7 +15,6 @@
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
-#include <crsskip.hxx>
 #include <shellio.hxx>
 #include <expfld.hxx>
 #include <drawdoc.hxx>
@@ -365,7 +364,7 @@ void SwUiWriterTest::testBookmarkCopy()
     IDocumentMarkAccess & rIDMA(*pDoc->getIDocumentMarkAccess());
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwCursor aPaM(SwPosition(aIdx), nullptr, false);
+    SwCursor aPaM(SwPosition(aIdx), nullptr);
     rIDCO.InsertString(aPaM, "foo");
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
     rIDCO.InsertString(aPaM, "bar");

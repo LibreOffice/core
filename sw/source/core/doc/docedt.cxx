@@ -557,7 +557,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             {
                                 SwIndex aStartIndex( dynamic_cast< SwTextNode* >( pNd ), nBeginGrammarCheck );
                                 SwPosition aStart( *pNd, aStartIndex );
-                                SwCursor aCursor(aStart, nullptr, false);
+                                SwCursor aCursor(aStart, nullptr);
                                 SwPosition aOrigPos = *aCursor.GetPoint();
                                 aCursor.GoSentence( SwCursor::START_SENT );
                                 if( aOrigPos != *aCursor.GetPoint() )

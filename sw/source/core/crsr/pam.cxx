@@ -31,12 +31,12 @@
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
-#include <crsskip.hxx>
 #include <flyfrm.hxx>
 #include <fmteiro.hxx>
 #include <section.hxx>
 #include <sectfrm.hxx>
 #include <ndtxt.hxx>
+#include <swcrsr.hxx>
 
 #include <IMark.hxx>
 #include <DocumentSettingManager.hxx>

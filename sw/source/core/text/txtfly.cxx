@@ -388,14 +388,13 @@ void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
     nIndex = ULONG_MAX;
 }
 
-SwRect SwTextFly::_GetFrame( const SwRect &rRect, bool bTop ) const
+SwRect SwTextFly::_GetFrame( const SwRect &rRect ) const
 {
     SwRect aRet;
     if( ForEach( rRect, &aRet, true ) )
     {
         SWRECTFN( pCurrFrame )
-        if( bTop )
-            (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
+        (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
 
         // Do not always adapt the bottom
         const SwTwips nRetBottom = (aRet.*fnRect->fnGetBottom)();

@@ -548,8 +548,9 @@ void SwGlossaries::InvalidateUNOOjects()
     m_aGlossaryEntries.swap( aTmpe );
 }
 
-Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString& _rGroupName, bool _bCreate )
+Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString& _rGroupName )
 {
+    bool _bCreate = true;
     // first, find the name with path-extension
     const OUString sCompleteGroupName = GetCompleteGroupName( _rGroupName );
 
@@ -605,8 +606,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString
 Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     const OUString& rCompleteGroupName,
     const OUString& rGroupName,
-    const OUString& rEntryName,
-    bool _bCreate )
+    const OUString& rEntryName )
 {
     //standard must be created
     bool bCreate = ( rCompleteGroupName == GetDefName() );
@@ -650,7 +650,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
         ++aSearch;
     }
 
-    if ( !xReturn.is() && _bCreate )
+    if ( !xReturn.is() )
     {
         xReturn = new SwXAutoTextEntry( this, rGroupName, rEntryName );
         // cache it

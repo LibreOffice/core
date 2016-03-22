@@ -60,7 +60,6 @@
 #include <shellio.hxx>
 #include <ndtxt.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <crsskip.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <editeng/outliner.hxx>
@@ -514,7 +513,7 @@ uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings() throw( uno
     {
         if(!mxViewSettings.is())
         {
-            mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, m_pView ) );
+            mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( m_pView ) );
         }
     }
     else
@@ -1621,7 +1620,7 @@ sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
-            bRet = m_pView->GetWrtShell().Down( bExpand, 1, true );
+            bRet = m_pView->GetWrtShell().Down( bExpand, true );
     }
     else
         throw uno::RuntimeException();
@@ -1639,7 +1638,7 @@ sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
-            bRet = m_pView->GetWrtShell().Up( bExpand, 1, true );
+            bRet = m_pView->GetWrtShell().Up( bExpand, true );
     }
     else
         throw uno::RuntimeException();

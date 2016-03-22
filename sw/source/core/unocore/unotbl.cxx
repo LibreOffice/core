@@ -94,7 +94,6 @@
 #include <osl/mutex.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <frmatr.hxx>
-#include <crsskip.hxx>
 #include <unochart.hxx>
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
@@ -1569,7 +1568,7 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool bExpand) throw( un
     SwUnoCursor& rUnoCursor = GetCursor();
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     lcl_CursorSelect(rTableCursor, bExpand);
-    return rTableCursor.Left(Count, CRSR_SKIP_CHARS, false, false);
+    return rTableCursor.Left(Count);
 }
 
 sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
@@ -1578,7 +1577,7 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool bExpand) throw( u
     SwUnoCursor& rUnoCursor = GetCursor();
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     lcl_CursorSelect(rTableCursor, bExpand);
-    return rTableCursor.Right(Count, CRSR_SKIP_CHARS, false, false);
+    return rTableCursor.Right(Count);
 }
 
 sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )

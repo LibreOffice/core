@@ -35,7 +35,6 @@
 #include <fldfunc.hxx>
 #include <fldref.hxx>
 #include <fldedt.hxx>
-#include <crsskip.hxx>
 
 #include <cmdid.h>
 #include <helpid.h>

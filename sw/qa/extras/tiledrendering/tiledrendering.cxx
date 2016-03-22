@@ -22,7 +22,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/srchitem.hxx>
-#include <crsskip.hxx>
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>

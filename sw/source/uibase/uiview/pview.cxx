@@ -252,7 +252,7 @@ void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
     if( mnSttPage > nLastSttPg )
         mnSttPage = nLastSttPg;
 
-    mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize, true );
+    mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize );
     mpPgPreviewLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
                               mnSttPage, maPaintedPreviewDocRect );
     SetSelectedPage( mnSttPage );
@@ -399,7 +399,7 @@ void SwPagePreviewWin::SetWinSize( const Size& rNewSize )
 
     if ( mbCalcScaleForPreviewLayout )
     {
-        mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize, true );
+        mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize );
         maScale = GetMapMode().GetScaleX();
     }
     mpPgPreviewLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
@@ -1763,7 +1763,7 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
     {
         mnRow = 1;
         mnCol = 1;
-        mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize, true );
+        mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize );
         mpPgPreviewLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
                                   mnSttPage, maPaintedPreviewDocRect );
         SetSelectedPage( mnSttPage );

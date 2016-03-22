@@ -644,7 +644,7 @@ void SwHTMLParser::Continue( int nToken )
 
                 SwScriptField aField( pType, m_aScriptType, m_aScriptSource,
                                     false );
-                InsertAttr( SwFormatField( aField ) );
+                InsertAttr( SwFormatField( aField ), false );
             }
 
             if( m_pAppletImpl )
@@ -1523,7 +1523,7 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_DEFLIST_OFF:
         if( m_nOpenParaToken )
             EndPara();
-        EndDefListItem( 0, false, 1==m_nDefListDeep );
+        EndDefListItem( 0, 1==m_nDefListDeep );
         EndDefList();
         break;
 
@@ -1531,7 +1531,7 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_DT_ON:
         if( m_nOpenParaToken )
             EndPara();
-        EndDefListItem( 0, false );// close <DD>/<DT> and set no template
+        EndDefListItem();// close <DD>/<DT> and set no template
         NewDefListItem( nToken );
         break;
 
@@ -1540,7 +1540,7 @@ void SwHTMLParser::NextToken( int nToken )
         // c.f. HTML_LI_OFF
         // Actually we should close a DD/DT now.
         // But neither Netscape nor Microsoft do this and so don't we.
-        EndDefListItem( nToken, false );
+        EndDefListItem( nToken );
         break;
 
     // divisions
@@ -2262,7 +2262,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         if( GetNumInfo().GetDepth() )
         {
             sal_uInt8 nLvl = GetNumInfo().GetLevel();
-            SetNodeNum( nLvl, false );
+            SetNodeNum( nLvl );
         }
         else
             m_pPam->GetNode().GetTextNode()->ResetAttr( RES_PARATR_NUMRULE );
@@ -3402,13 +3402,10 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab )
     }
 }
 
-void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, bool bLikePara,
-                               bool bInsAtStart )
+void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart )
 {
     _HTMLAttr* pTmp = new _HTMLAttr( *m_pPam->GetPoint(),
                                      rItem );
-    if( bLikePara )
-        pTmp->SetLikePara();
     if (bInsAtStart)
         m_aSetAttrTab.push_front( pTmp );
     else
@@ -3420,7 +3417,7 @@ void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
     while( !rAttrs.empty() )
     {
         _HTMLAttr *pAttr = rAttrs.front();
-        InsertAttr( pAttr->GetItem() );
+        InsertAttr( pAttr->GetItem(), false );
         rAttrs.pop_front();
         delete pAttr;
     }
@@ -4415,8 +4412,7 @@ void SwHTMLParser::NewDefListItem( int nToken )
                                               : RES_POOLCOLL_HTML_DT) );
 }
 
-void SwHTMLParser::EndDefListItem( int nToken, bool bSetColl,
-                                   bool /*bLastPara*/ )
+void SwHTMLParser::EndDefListItem( int nToken, bool /*bLastPara*/ )
 {
     // einen neuen Absatz aufmachen
     if( !nToken && m_pPam->GetPoint()->nContent.GetIndex() )
@@ -4458,10 +4454,6 @@ void SwHTMLParser::EndDefListItem( int nToken, bool bSetColl,
         SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
-
-    // und die bisherige Vorlage setzen
-    if( bSetColl )
-        SetTextCollAttrs();
 }
 
 bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
@@ -5442,7 +5434,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
         static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
         aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     SwFormatField aFormatField( aPostItField );
-    InsertAttr( aFormatField );
+    InsertAttr( aFormatField,  false );
 }
 
 _HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,

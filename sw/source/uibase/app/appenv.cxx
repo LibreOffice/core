@@ -58,7 +58,6 @@
 #include <poolfmt.hxx>
 #include <expfld.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <crsskip.hxx>
 #include <fmtpdsc.hxx>
 
 #include <cmdid.h>

@@ -132,7 +132,7 @@ void SwFEShell::ParkCursorInTab()
     /* Set cursor to end of selection to ensure IsLastCellInRow works
        properly. */
     {
-        SwCursor aTmpCursor( aEndPos, nullptr, false );
+        SwCursor aTmpCursor( aEndPos, nullptr );
         *pSwCursor = aTmpCursor;
     }
 
@@ -146,13 +146,13 @@ void SwFEShell::ParkCursorInTab()
            it to the next cell. */
 
         {
-            SwCursor aTmpCursor( aStartPos, nullptr, false );
+            SwCursor aTmpCursor( aStartPos, nullptr );
             *pSwCursor = aTmpCursor;
         }
 
         if (! pSwCursor->GoPrevCell())
         {
-            SwCursor aTmpCursor( aEndPos, nullptr, false );
+            SwCursor aTmpCursor( aEndPos, nullptr );
             *pSwCursor = aTmpCursor;
             pSwCursor->GoNextCell();
         }
@@ -164,13 +164,13 @@ void SwFEShell::ParkCursorInTab()
            to the previous cell. */
 
         {
-            SwCursor aTmpCursor( aEndPos, nullptr, false );
+            SwCursor aTmpCursor( aEndPos, nullptr );
             *pSwCursor = aTmpCursor;
         }
 
         if (! pSwCursor->GoNextCell())
         {
-            SwCursor aTmpCursor( aStartPos, nullptr, false );
+            SwCursor aTmpCursor( aStartPos, nullptr );
             *pSwCursor = aTmpCursor;
             pSwCursor->GoPrevCell();
         }

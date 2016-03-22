@@ -234,7 +234,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, TypeHdl, ListBox&, void)
         // fill Format-Listbox
         m_pFormatLB->Clear();
 
-        const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, false, IsFieldDlgHtmlMode());
+        const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
 
         for (sal_uInt16 i = 0; i < nSize; i++)
         {

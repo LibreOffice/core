@@ -176,7 +176,7 @@ protected:
     virtual ~SwXViewSettings()
         throw();
 public:
-    SwXViewSettings(bool bWeb, SwView*  pView);
+    SwXViewSettings(SwView*  pView);
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
