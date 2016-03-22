@@ -653,11 +653,7 @@ OfficeIPCThread::OfficeIPCThread() :
 
 OfficeIPCThread::~OfficeIPCThread()
 {
-    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
-
-    mpDispatchWatcher.clear();
     maPipe.close();
-    pGlobalOfficeIPCThread.clear();
 }
 
 void OfficeIPCThread::SetReady()
