@@ -1885,43 +1885,40 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     SetOutputSizePixel( Size( 304, 144 ) );
 
     std::vector< OUString > aList;
+    std::vector< sal_uInt16 > aCurrencyList;
     const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
-    sal_uInt16 nCount = rCurrencyTable.size();
+    sal_uInt16 nLen = rCurrencyTable.size();
 
-    CollatorWrapper aCollator( ::comphelper::getProcessComponentContext());
-    aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0);
-
-    const OUString aTwoSpace("  ");
-    SvNumberFormatter aFormatter = SvNumberFormatter(rxContext, LANGUAGE_SYSTEM);
+    SvNumberFormatter aFormatter( rxContext, LANGUAGE_SYSTEM );
     m_eFormatLanguage = aFormatter.GetLanguage();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
-    {
-        OUString aStr( rCurrencyTable[i].GetBankSymbol() );
-        aStr += aTwoSpace;
-        aStr += rCurrencyTable[i].GetSymbol();
-        aStr += aTwoSpace;
-        aStr += SvtLanguageTable::GetLanguageString( rCurrencyTable[i].GetLanguage() );
-        NfWSStringsDtor aStringsDtor;
-        sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, rCurrencyTable[i], false );
 
-        sal_uInt16 j = 0;
-        for(; j < aList.size(); ++j)
-            if ( aCollator.compareString( aStr, aList[j] ) < 0 )
-                break;
+    SvxCurrencyToolBoxControl::GetCurrencySymbols( aList, true, aCurrencyList );
 
-        aList.insert( aList.begin() + j, aStr );
-        m_aFormatEntries.insert( m_aFormatEntries.begin() + j, aStringsDtor[nDefaultFormat] );
-    }
-
-    sal_uInt16 nPos = 0;
+    sal_uInt16 nPos = 0, nCount = 0;
     sal_Int32 nSelectedPos = -1;
-    for(std::vector< OUString >::iterator i = aList.begin(); i != aList.end(); ++i, ++nPos)
+    bool bIsSymbol;
+    NfWSStringsDtor aStringsDtor;
+
+    for( std::vector< OUString >::iterator i = aList.begin(); i != aList.end(); ++i, ++nCount )
     {
-        m_pCurrencyLb->InsertEntry (*i);
-        OUString *pFormatStr = &m_aFormatEntries[nPos];
-        m_pCurrencyLb->SetEntryData( nPos, pFormatStr );
-        if( *pFormatStr == m_rSelectedFormat )
-            nSelectedPos = nPos;
+        sal_uInt16& rCurrencyIndex = aCurrencyList[ nCount ];
+        if ( rCurrencyIndex < nLen )
+        {
+            m_pCurrencyLb->InsertEntry( *i );
+            const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
+
+            if ( nPos < nLen )
+                bIsSymbol = false;
+            else
+                bIsSymbol = true;
+
+            sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol );
+            OUString& pFormatStr = aStringsDtor[ nDefaultFormat ];
+            m_aFormatEntries.push_back( pFormatStr );
+            if( pFormatStr == m_rSelectedFormat )
+                nSelectedPos = nPos;
+            ++nPos;
+        }
     }
     m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
     SetText( SVX_RESSTR( RID_SVXSTR_TBLAFMT_CURRENCY ) );
@@ -2001,15 +1998,8 @@ IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
     if (!m_xControl.is())
         return;
 
-    OUString* pFormat = static_cast<OUString*> (
-        m_pCurrencyLb->GetEntryData( m_pCurrencyLb->GetSelectEntryPos() ) );
-
-    assert( pFormat );
-    if ( pFormat )
-    {
-        m_rSelectedFormat = *pFormat;
-        m_eSelectedLanguage = m_eFormatLanguage;
-    }
+    m_rSelectedFormat = m_aFormatEntries[ m_pCurrencyLb->GetSelectEntryPos() ];
+    m_eSelectedLanguage = m_eFormatLanguage;
 
     m_xControl->Select( m_pCurrencyLb->GetSelectEntryPos() + 1 );
 }
@@ -3050,9 +3040,6 @@ VclPtr<SfxPopupWindow> SvxCurrencyToolBoxControl::CreatePopupWindow()
 
 void SvxCurrencyToolBoxControl::Select( sal_uInt16 nSelectModifier )
 {
-    if (getenv("DO_NOTHING"))
-        return;
-
     sal_uInt32 nFormatKey;
     if (m_aFormatString.isEmpty())
         nFormatKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -3115,6 +3102,82 @@ Reference< css::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessib
 {
     FillList();
     return FontNameBox::CreateAccessible();
+}
+
+//static
+void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
+                                                    std::vector<sal_uInt16>& rCurrencyList )
+{
+    rCurrencyList.clear();
+
+    const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
+    sal_uInt16 nCount = rCurrencyTable.size();
+
+    sal_uInt16 nStart = 1;
+
+    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) );
+    aString += " ";
+    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
+                                       rCurrencyTable[0].GetLanguage() ) );
+
+    rList.push_back( aString );
+    sal_uInt16 nAuto = ( sal_uInt16 )-1;
+    rCurrencyList.push_back( nAuto );
+
+    if( bFlag )
+    {
+        rList.push_back( aString );
+        rCurrencyList.push_back( 0 );
+        ++nStart;
+    }
+
+    CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
+    aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
+
+    const OUString aTwoSpace("  ");
+
+    for( sal_uInt16 i = 1; i < nCount; ++i )
+    {
+        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
+        aStr += aTwoSpace;
+        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol() );
+        aStr += aTwoSpace;
+        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
+                                        rCurrencyTable[i].GetLanguage() ) );
+
+        sal_uInt16 j = nStart;
+        for( ; j < rList.size(); ++j )
+            if ( aCollator.compareString( aStr, rList[j] ) < 0 )
+                break;  // insert before first greater than
+
+        rList.insert( rList.begin() + j, aStr );
+        rCurrencyList.insert( rCurrencyList.begin() + j, i );
+    }
+
+    // Append ISO codes to symbol list.
+    // XXX If this is to be changed, various other places would had to be
+    // adapted that assume this order!
+    sal_uInt16 nCont = rList.size();
+
+    for ( sal_uInt16 i = 1; i < nCount; ++i )
+    {
+        bool bInsert = true;
+        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
+
+        sal_uInt16 j = nCont;
+        for ( ; j < rList.size() && bInsert; ++j )
+        {
+            if( rList[j] == aStr )
+                bInsert = false;
+            else if ( aCollator.compareString( aStr, rList[j] ) < 0 )
+                break;  // insert before first greater than
+        }
+        if ( bInsert )
+        {
+            rList.insert( rList.begin() + j, aStr );
+            rCurrencyList.insert( rCurrencyList.begin() + j, i );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -170,7 +170,6 @@ public:
     short               GetListPos4Entry( const OUString& rFmtString );
 
     void                GetCurrencySymbols(std::vector<OUString>& rList, sal_uInt16* pPos );
-    void                GetCurrencySymbols(std::vector<OUString>& rList, bool bFlag );
 
     sal_uInt16          FindCurrencyTableEntry( const OUString& rFmtString, bool &bTestBanking );
     bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,

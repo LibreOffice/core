@@ -297,6 +297,8 @@ private:
     LanguageType m_eLanguage;
     sal_uInt32   m_nFormatKey;
 public:
+    static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
+                                    std::vector<sal_uInt16>& rCurrencyList );
     SFX_DECL_TOOLBOX_CONTROL();
     SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     virtual ~SvxCurrencyToolBoxControl();
