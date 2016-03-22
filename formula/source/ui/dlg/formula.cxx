@@ -590,7 +590,7 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult, 
 void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
 {
     OUString aStrResult;
-    if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
+    if ( pFuncDesc &&  CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
         m_pWndResult->SetText( aStrResult );
 
     if (bMakingTree) return;
