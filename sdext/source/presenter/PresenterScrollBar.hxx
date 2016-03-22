@@ -228,8 +228,7 @@ protected:
     void SetThumbPosition (
         double nPosition,
         const bool bAsynchronousRepaint,
-        const bool bValidate,
-        const bool bNotify);
+        const bool bValidate);
 
 private:
     class MousePressRepeater;

@@ -101,7 +101,7 @@ private:
 
     void ActivatePage( sal_Int16 nStep );
     void DeactivatePage( sal_Int16 nStep );
-    void InsertRoadmapItem( const sal_Int32 nIndex, const bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID );
+    void InsertRoadmapItem( const sal_Int32 nIndex, const OUString& rLabel, const sal_Int32 nItemID );
 
 public:
 
