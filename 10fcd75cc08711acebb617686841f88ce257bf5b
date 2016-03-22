@@ -16,6 +16,24 @@
       "revId": "10fcd75cc08711acebb617686841f88ce257bf5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c6ed3790",
+        "filename": "unotest/source/cpp/macros_test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2016-03-22T09:05:14Z",
+      "side": 1,
+      "message": "I\u0027m not sure it\u0027s really needed. I thought it might be the reason for the crash, so this should have prevented the \"Update links\" dialog. Just after that I realized there is also the \"synchronize labels\" dialog.",
+      "parentUuid": "9ad45d7e_26e4130c",
+      "revId": "10fcd75cc08711acebb617686841f88ce257bf5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
