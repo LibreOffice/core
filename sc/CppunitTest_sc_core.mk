@@ -13,10 +13,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_core, \
 	boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_core, \
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_core))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_core, \
 	sc/qa/unit/test_ScChartListenerCollection \

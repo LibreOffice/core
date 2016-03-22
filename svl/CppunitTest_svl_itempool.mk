@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,svl_itempool))
 
 $(eval $(call gb_CppunitTest_use_external,svl_itempool,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,svl_itempool, \
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svl_itempool))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_itempool, \
 	svl/qa/unit/items/test_itempool \

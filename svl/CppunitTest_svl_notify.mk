@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,svl_notify))
 
 $(eval $(call gb_CppunitTest_use_external,svl_notify,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,svl_notify, \
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svl_notify))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_notify, \
 	svl/qa/unit/notify/test_SfxBroadcaster \

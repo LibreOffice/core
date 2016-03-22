@@ -15,10 +15,7 @@ $(eval $(call gb_CppunitTest_set_include,writerperfect_stream,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,writerperfect_stream,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,writerperfect_stream))
 
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_stream))
 $(eval $(call gb_CppunitTest_use_vcl,writerperfect_stream))

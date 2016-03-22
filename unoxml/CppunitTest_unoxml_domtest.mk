@@ -13,10 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,unoxml_domtest, \
     unoxml/qa/unit/domtest \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,unoxml_domtest,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,unoxml_domtest))
 
 $(eval $(call gb_CppunitTest_use_components,unoxml_domtest,\
     configmgr/source/configmgr \
