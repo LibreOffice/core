@@ -7150,4 +7150,61 @@ void Test::testTdf97587()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMatConcat()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    for (SCCOL nCol = 0; nCol < 10; ++nCol)
+    {
+        for (SCROW nRow = 0; nRow < 10; ++nRow)
+        {
+            m_pDoc->SetValue(ScAddress(nCol, nRow, 0), nCol*nRow);
+        }
+    }
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 12, 9, 21, aMark, "=A1:J10&A1:J10");
+
+    for (SCCOL nCol = 0; nCol < 10; ++nCol)
+    {
+        for (SCROW nRow = 12; nRow < 22; ++nRow)
+        {
+            OUString aStr = m_pDoc->GetString(ScAddress(nCol, nRow, 0));
+            CPPUNIT_ASSERT_EQUAL(OUString(OUString::number(nCol * (nRow - 12)) + OUString::number(nCol * (nRow - 12))), aStr);
+        }
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testMatConcatReplication()
+{
+    // if one of the matrices is an one column or row matrix
+    // the matrix is replicated across the larger matrix
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    for (SCCOL nCol = 0; nCol < 10; ++nCol)
+    {
+        for (SCROW nRow = 0; nRow < 10; ++nRow)
+        {
+            m_pDoc->SetValue(ScAddress(nCol, nRow, 0), nCol*nRow);
+        }
+    }
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 12, 9, 21, aMark, "=A1:J10&A1:J1");
+
+    for (SCCOL nCol = 0; nCol < 10; ++nCol)
+    {
+        for (SCROW nRow = 12; nRow < 22; ++nRow)
+        {
+            OUString aStr = m_pDoc->GetString(ScAddress(nCol, nRow, 0));
+            CPPUNIT_ASSERT_EQUAL(OUString(OUString::number(nCol * (nRow - 12)) + "0"), aStr);
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
