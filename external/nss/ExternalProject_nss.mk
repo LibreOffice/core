@@ -88,7 +88,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnss3.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssckbi.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssdbm3.dylib \
-				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnsspem.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssutil3.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplc4.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplds4.dylib \
