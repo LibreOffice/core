@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e9ce4cb3",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-22T16:37:41Z",
+      "side": 1,
+      "message": "Empty line here",
+      "revId": "072db7ddb48552ac90897962212e6f3e2477ac1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_09cac0a1",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-22T16:37:41Z",
+      "side": 1,
+      "message": "for (size_t i \u003d 0; i \u003c imgList.size(); ... ) \n\nor something along that line, don\u0027t use magic constants as array limits (and next time someone changes the array size, they don\u0027t have to remember to change this loop too)",
+      "revId": "072db7ddb48552ac90897962212e6f3e2477ac1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_89beb0fd",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-22T16:37:41Z",
+      "side": 1,
+      "message": "Use some less silly variable name that is longer than 1 character and that matches some naming conventions ... aBitmap for example",
+      "revId": "072db7ddb48552ac90897962212e6f3e2477ac1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_69bb7c0f",
+        "filename": "cui/source/dialogs/hldoctp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-22T16:37:41Z",
+      "side": 1,
+      "message": "The same thing about variable naming applies here",
+      "revId": "072db7ddb48552ac90897962212e6f3e2477ac1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c936e8b3",
+        "filename": "cui/source/dialogs/hlinettp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-22T16:37:41Z",
+      "side": 1,
+      "message": "everywhere :)",
+      "revId": "072db7ddb48552ac90897962212e6f3e2477ac1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
