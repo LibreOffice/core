@@ -1068,6 +1068,8 @@ bool OfficeIPCThread::ExecuteCmdLineRequests(
         {
             pGlobalOfficeIPCThread->mpDispatchWatcher = new DispatchWatcher;
         }
+        rtl::Reference<DispatchWatcher> dispatchWatcher(
+            pGlobalOfficeIPCThread->mpDispatchWatcher);
 
         // copy for execute
         std::vector<DispatchWatcher::DispatchRequest> aTempList( aDispatchList );
@@ -1076,7 +1078,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests(
         aGuard.clear();
 
         // Execute dispatch requests
-        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
+        bShutdown = dispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
 
         // set processed flag
         if (aRequest.pcProcessed != nullptr)
