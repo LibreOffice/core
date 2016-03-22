@@ -11,10 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,svl_items))
 
 $(eval $(call gb_CppunitTest_use_external,svl_items,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_api,svl_items, \
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,svl_items))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_items, \
 	svl/qa/unit/items/test_IndexedStyleSheets \
