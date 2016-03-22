@@ -26,12 +26,8 @@
 #include <svl/zformat.hxx>
 #include <svl/currencytable.hxx>
 
-#include <svtools/langtab.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <comphelper/processfactory.hxx>
-
 #include <svx/numfmtsh.hxx>
+#include <svx/tbcontrl.hxx>
 
 #include <limits>
 
@@ -1369,7 +1365,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_
 
     bool bFlag=(pTmpCurrencyEntry==nullptr);
 
-    GetCurrencySymbols(rList, bFlag);
+    SvxCurrencyToolBoxControl::GetCurrencySymbols( rList, bFlag, aCurCurrencyList );
 
     if(pPos!=nullptr)
     {
@@ -1402,77 +1398,6 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_
 
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool bFlag)
-{
-    aCurCurrencyList.clear();
-
-    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
-    sal_uInt16 nCount=rCurrencyTable.size();
-
-    sal_uInt16 nStart=1;
-
-    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol()));
-    aString += " ";
-    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( rCurrencyTable[0].GetLanguage()));
-
-    rList.push_back(aString);
-    sal_uInt16 nAuto=(sal_uInt16)-1;
-    aCurCurrencyList.push_back(nAuto);
-
-    if(bFlag)
-    {
-        rList.push_back(aString);
-        aCurCurrencyList.push_back(0);
-        ++nStart;
-    }
-
-    CollatorWrapper aCollator( ::comphelper::getProcessComponentContext());
-    aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0);
-
-    const OUString aTwoSpace("  ");
-
-    for(sal_uInt16 i = 1; i < nCount; ++i)
-    {
-        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol()));
-        aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol());
-        aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( rCurrencyTable[i].GetLanguage()));
-
-        sal_uInt16 j = nStart;
-        for(; j < rList.size(); ++j)
-            if (aCollator.compareString(aStr, rList[j]) < 0)
-                break;  // insert before first greater than
-
-        rList.insert(rList.begin() + j, aStr);
-        aCurCurrencyList.insert(aCurCurrencyList.begin() + j, i);
-    }
-
-    // Append ISO codes to symbol list.
-    // XXX If this is to be changed, various other places would had to be
-    // adapted that assume this order!
-    sal_uInt16 nCont = rList.size();
-
-    for(sal_uInt16 i = 1; i < nCount; ++i)
-    {
-        bool bInsert = true;
-        OUString aStr(ApplyLreOrRleEmbedding(rCurrencyTable[i].GetBankSymbol()));
-
-        sal_uInt16 j = nCont;
-        for(; j < rList.size() && bInsert; ++j)
-        {
-            if(rList[j] == aStr)
-                bInsert = false;
-            else if (aCollator.compareString(aStr, rList[j]) < 0)
-                break;  // insert before first greater than
-        }
-        if(bInsert)
-        {
-            rList.insert(rList.begin() + j, aStr);
-            aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
-        }
-    }
-}
 
 void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
 {
