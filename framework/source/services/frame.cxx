@@ -840,7 +840,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // create progress helper
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
-        css::task::StatusIndicatorFactory::createWithFrame(xContext, xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
+        css::task::StatusIndicatorFactory::createWithFrame(xContext, xThis, sal_True/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
 
     // SAFE -> ----------------------------------
     aWriteLock.reset();
