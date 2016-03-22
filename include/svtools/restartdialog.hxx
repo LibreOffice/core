@@ -32,8 +32,11 @@ enum RestartReason {
     RESTART_REASON_BIBLIOGRAPHY_INSTALL,
         // "For the bibliography to work properly,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_MAILMERGE_INSTALL
+    RESTART_REASON_MAILMERGE_INSTALL,
         // "For the mail merge to work properly,
+        // %PRODUCTNAME must be restarted."
+    RESTART_REASON_LANGUAGE_CHANGE
+        // "For the updated language settings to take effect,
         // %PRODUCTNAME must be restarted."
 };
 
