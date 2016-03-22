@@ -376,7 +376,9 @@ inline Scanline BitmapReadAccess::GetScanline(long nY) const
 inline BitmapColor BitmapReadAccess::GetPixel(long nY, long nX) const
 {
     assert(mpBuffer && mpScanBuf && "Access is not valid!");
+    assert(nX >= 0 && "x-coordinate out of range!");
     assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
+    assert(nY >= 0 && "y-coordinate out of range!");
     assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
     return mFncGetPixel(mpScanBuf[nY], nX, maColorMask );
