@@ -84,15 +84,8 @@ namespace slideshow
                 This method activates the LayerManager. Prior to
                 activation, this instance will be passive, i.e. won't
                 render anything to any view.
-
-                @param bSlideBackgoundPainted
-                When true, the initial slide content on the background
-                layer is already rendered (e.g. from a previous slide
-                transition). When false, LayerManager also renders
-                initial content of background layer on next update()
-                call.
              */
-            void activate( bool bSlideBackgoundPainted );
+            void activate();
 
             /** Deactivate the LayerManager
 

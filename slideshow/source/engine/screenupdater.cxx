@@ -31,7 +31,7 @@ namespace {
     class UpdateLock : public ::slideshow::internal::ScreenUpdater::UpdateLock
     {
     public:
-        UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater, const bool bStartLocked);
+        UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater);
         virtual ~UpdateLock();
         virtual void Activate() override;
     private:
@@ -214,7 +214,7 @@ namespace internal
 
     ::std::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock()
     {
-        return ::std::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this, false/*bStartLocked*/));
+        return ::std::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this));
     }
 
 
@@ -224,13 +224,10 @@ namespace internal
 namespace {
 
 UpdateLock::UpdateLock (
-    ::slideshow::internal::ScreenUpdater& rUpdater,
-    const bool bStartLocked)
+    ::slideshow::internal::ScreenUpdater& rUpdater)
     : mrUpdater(rUpdater),
       mbIsActivated(false)
 {
-    if (bStartLocked)
-        Activate();
 }
 
 

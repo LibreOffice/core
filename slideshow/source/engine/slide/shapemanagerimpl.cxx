@@ -72,7 +72,7 @@ void ShapeManagerImpl::activate()
             this->cursorChanged( rListener.first, rListener.second );
 
         if( mpLayerManager )
-            mpLayerManager->activate( true/*bSlideBackgoundPainted*/ );
+            mpLayerManager->activate();
     }
 }
 
