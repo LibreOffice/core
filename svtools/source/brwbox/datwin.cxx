@@ -140,13 +140,13 @@ void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZ
     }
 }
 
-void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos, bool bCurs  )
+void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos  )
 {
     if ( _nId == 0 )
     {
         // paint handle column
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
-                     "", false, bCurs, false ).Draw( rDev );
+                     "", false/*bCurs*/, false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
         rDev.SetLineColor( Color( COL_BLACK ) );
         rDev.DrawLine(

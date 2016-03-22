@@ -959,7 +959,7 @@ void SAL_CALL TreeControlPeer::treeNodesChanged( const css::awt::tree::TreeDataM
     if( mnEditLock != 0 )
         return;
 
-    updateTree( rEvent, true );
+    updateTree( rEvent );
 }
 
 void SAL_CALL TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
@@ -969,7 +969,7 @@ void SAL_CALL TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeData
     if( mnEditLock != 0 )
         return;
 
-    updateTree( rEvent, true );
+    updateTree( rEvent );
 }
 
 void SAL_CALL TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
@@ -979,7 +979,7 @@ void SAL_CALL TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataM
     if( mnEditLock != 0 )
         return;
 
-    updateTree( rEvent, true );
+    updateTree( rEvent );
 }
 
 void SAL_CALL TreeControlPeer::treeStructureChanged( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
@@ -989,10 +989,10 @@ void SAL_CALL TreeControlPeer::treeStructureChanged( const css::awt::tree::TreeD
     if( mnEditLock != 0 )
         return;
 
-    updateTree( rEvent, true );
+    updateTree( rEvent );
 }
 
-void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive )
+void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEvent )
 {
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -1004,7 +1004,7 @@ void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEve
     }
 
     if( xNode.is() )
-        updateNode( rTree, xNode, bRecursive );
+        updateNode( rTree, xNode, true/*bRecursive*/ );
 }
 
 void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XTreeNode >& xNode, bool bRecursive )

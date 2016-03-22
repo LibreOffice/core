@@ -615,7 +615,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
             {
                 ButtonFrame aButtonFrame( Point( nX, 0 ),
                     Size( pCol->Width()-1, GetTitleHeight()-1 ),
-                    pCol->Title(), false, false, !IsEnabled());
+                    pCol->Title(), false, !IsEnabled());
                 aButtonFrame.Draw(rRenderContext);
                 rRenderContext.DrawLine(Point(nX + pCol->Width() - 1, 0),
                                         Point(nX + pCol->Width() - 1, GetTitleHeight() - 1));
@@ -739,7 +739,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         {
             ButtonFrame aButtonFrame( aRealPos,
                 Size( pFirstCol->Width()-1, nTitleHeight-1 ),
-                pFirstCol->Title(), false, false, !IsEnabled());
+                pFirstCol->Title(), false, !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
             pDev->Push( PushFlags::LINECOLOR );
@@ -924,7 +924,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
                     vcl::Region aClipToField(Rectangle(aPos, aFieldSize));
                     _rOut.SetClipRegion(aClipToField);
                 }
-                pCol->Draw( *this, _rOut, aPos, false );
+                pCol->Draw( *this, _rOut, aPos );
                 if (_bForeignDevice)
                     _rOut.SetClipRegion();
             }

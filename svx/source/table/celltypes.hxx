@@ -53,12 +53,12 @@ class RangeIterator
 {
 public:
     /** creates an iterator from rStart (including) to rEnd (excluding) if
-        bForeward is true or from nEnd (excluding to nStart (including).
+        bForward is true or from nEnd (excluding to nStart (including).
         rStart must be <= rEnd.
     */
-    RangeIterator( const T& rStart, const T& rEnd, bool bForeward = true )
+    RangeIterator( const T& rStart, const T& rEnd, bool bForward = true )
     {
-        if( bForeward )
+        if( bForward )
         {
             maIter = rStart;
             maEnd = rEnd;

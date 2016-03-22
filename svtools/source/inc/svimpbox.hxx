@@ -270,7 +270,7 @@ public:
     void                Resize();
     void                GetFocus();
     void                LoseFocus();
-    virtual void        UpdateAll( bool bInvalidateCompleteView= true, bool bUpdateVerSBar = true );
+    virtual void        UpdateAll( bool bInvalidateCompleteView= true );
     void                SetEntryHeight( short nHeight );
     void                InvalidateEntry( SvTreeListEntry* );
     virtual void        RecalcFocusRect();

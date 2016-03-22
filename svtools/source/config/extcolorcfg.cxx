@@ -80,7 +80,7 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     virtual void                    ImplCommit() override;
 
 public:
-    explicit ExtendedColorConfig_Impl(bool bEditMode = false);
+    explicit ExtendedColorConfig_Impl();
     virtual ~ExtendedColorConfig_Impl();
 
     void                            Load(const OUString& rScheme);
@@ -195,9 +195,9 @@ OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
 
 bool ExtendedColorConfig_Impl::m_bLockBroadcast = false;
 bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = false;
-ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(bool bEditMode) :
+ExtendedColorConfig_Impl::ExtendedColorConfig_Impl() :
     ConfigItem(OUString("Office.ExtendedColorScheme")),
-    m_bEditMode(bEditMode),
+    m_bEditMode(false),
     m_bIsBroadcastEnabled(true)
 {
     if(!m_bEditMode)
