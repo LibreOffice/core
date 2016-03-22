@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_c649b790",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-22T12:24:14Z",
+      "side": 1,
+      "message": "\"Added 7 files\" is not terribly helpful in a commit message",
+      "revId": "1a19200b63a47c71edc1a2ed395a7a09184b817e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_86817f92",
+        "filename": "sc/qa/unit/opencl-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-22T12:24:14Z",
+      "side": 1,
+      "message": "there is still an unnecessary whitespace change here, but that doesn\u0027t bother me enough not to merge it...",
+      "revId": "1a19200b63a47c71edc1a2ed395a7a09184b817e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
