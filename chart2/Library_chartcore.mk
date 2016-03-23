@@ -28,8 +28,13 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/p
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 	glm_headers \
-	glew \
 ))
+
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,chartcore,\
+    glew \
+))
+endif
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
 	officecfg/registry \
@@ -82,7 +87,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/axes/VPolarCoordinateSystem \
     chart2/source/view/axes/VPolarGrid \
     chart2/source/view/axes/VPolarRadiusAxis \
-    chart2/source/view/charttypes/GL3DBarChart \
     chart2/source/view/charttypes/AreaChart \
     chart2/source/view/charttypes/BarChart \
     chart2/source/view/charttypes/BarPositionHelper \
@@ -94,14 +98,11 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/charttypes/Splines \
     chart2/source/view/charttypes/VSeriesPlotter \
     chart2/source/view/diagram/VDiagram \
-    chart2/source/view/main/3DChartObjects \
     chart2/source/view/main/ChartItemPool \
     chart2/source/view/main/ChartView \
     chart2/source/view/main/Clipping \
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DrawModelWrapper \
-    chart2/source/view/main/GL3DPlotterBase \
-    chart2/source/view/main/GL3DRenderer \
     chart2/source/view/main/LabelPositionHelper \
     chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \
@@ -118,6 +119,14 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/VPolarTransformation \
     chart2/source/view/main/VTitle \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_add_exception_objects,chartcore,\
+    chart2/source/view/main/3DChartObjects \
+    chart2/source/view/main/GL3DPlotterBase \
+    chart2/source/view/main/GL3DRenderer \
+    chart2/source/view/charttypes/GL3DBarChart \
+))
+endif
 
 # model pieces ...
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
@@ -256,9 +265,14 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,chartcore,\
 else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,chartcore,\
 	$(DLOPEN_LIBS) \
-	-lGL \
-	-lX11 \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_add_libs,chartcore,\
+    -lGL \
+    -lX11 \
+))
+endif #ENABLE_OPENGL
+
 endif
 
 # vim: set noet sw=4 ts=4:

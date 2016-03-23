@@ -24,8 +24,10 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapscalesuper.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
-
+#endif
 #include <memory>
 
 #include "impbmp.hxx"
@@ -1007,7 +1009,11 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 
 bool Bitmap::HasFastScale()
 {
+#if HAVE_FEATURE_OPENGL
     return OpenGLHelper::isVCLOpenGLEnabled();
+#else
+    return false;
+#endif
 }
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
