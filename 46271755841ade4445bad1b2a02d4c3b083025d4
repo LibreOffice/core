@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e4e83319",
+        "filename": "chart2/uiconfig/popupmenu/draw.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T14:48:23Z",
+      "side": 0,
+      "message": "again mixing different things into the same commit",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "46271755841ade4445bad1b2a02d4c3b083025d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

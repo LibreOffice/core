@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_a490fb96",
+        "filename": "chart2/source/controller/main/ChartController_Window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T14:48:23Z",
+      "side": 1,
+      "message": "The whole change in this file seems to be unrelated to OpenGL.",
+      "revId": "d1268b6f1d718d07d94521275fa2e149b56dabf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
