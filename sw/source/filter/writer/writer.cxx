@@ -63,7 +63,7 @@ struct Writer_Impl
 {
     SvStream * m_pStream;
 
-    std::auto_ptr< std::map<OUString, OUString> > pFileNameMap;
+    std::unique_ptr< std::map<OUString, OUString> > pFileNameMap;
     std::vector<const SvxFontItem*> aFontRemoveLst;
     SwBookmarkNodeTable aBkmkNodePos;
 
