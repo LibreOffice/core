@@ -1016,40 +1016,35 @@ void ScInterpreter::ScMatMult()
         ScMatrixRef pRMat;
         if (pMat1 && pMat2)
         {
-            if ( pMat1->IsNumeric() && pMat2->IsNumeric() )
-            {
-                SCSIZE nC1, nC2;
-                SCSIZE nR1, nR2;
-                pMat1->GetDimensions(nC1, nR1);
-                pMat2->GetDimensions(nC2, nR2);
-                if (nC1 != nR2)
-                    PushIllegalArgument();
-                else
-                {
-                    pRMat = GetNewMat(nC2, nR1);
-                    if (pRMat)
-                    {
-                        double sum;
-                        for (SCSIZE i = 0; i < nR1; i++)
-                        {
-                            for (SCSIZE j = 0; j < nC2; j++)
-                            {
-                                sum = 0.0;
-                                for (SCSIZE k = 0; k < nC1; k++)
-                                {
-                                    sum += pMat1->GetDouble(k,i)*pMat2->GetDouble(j,k);
-                                }
-                                pRMat->PutDouble(sum, j, i);
-                            }
-                        }
-                        PushMatrix(pRMat);
-                    }
-                    else
-                        PushIllegalArgument();
-                }
-            }
+            SCSIZE nC1, nC2;
+            SCSIZE nR1, nR2;
+            pMat1->GetDimensions(nC1, nR1);
+            pMat2->GetDimensions(nC2, nR2);
+            if (nC1 != nR2)
+                PushIllegalArgument();
             else
-                PushNoValue();
+            {
+                pRMat = GetNewMat(nC2, nR1);
+                if (pRMat)
+                {
+                    double sum;
+                    for (SCSIZE i = 0; i < nR1; i++)
+                    {
+                        for (SCSIZE j = 0; j < nC2; j++)
+                        {
+                            sum = 0.0;
+                            for (SCSIZE k = 0; k < nC1; k++)
+                            {
+                                sum += pMat1->GetDouble(k,i)*pMat2->GetDouble(j,k);
+                            }
+                            pRMat->PutDouble(sum, j, i);
+                        }
+                    }
+                    PushMatrix(pRMat);
+                }
+                else
+                    PushIllegalArgument();
+            }
         }
         else
             PushIllegalParameter();
