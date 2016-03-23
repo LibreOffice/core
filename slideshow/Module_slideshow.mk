@@ -10,10 +10,14 @@
 $(eval $(call gb_Module_Module,slideshow))
 
 $(eval $(call gb_Module_add_targets,slideshow,\
-    $(if $(filter TRUE,$(ENABLE_OPENGL)),Library_OGLTrans) \
     Library_slideshow \
-	Package_opengl \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Module_add_targets,slideshow,\
+    Library_OGLTrans \
+    Package_opengl \
+ ))
+endif
 
 # not working
     # CppunitTest_slideshow \

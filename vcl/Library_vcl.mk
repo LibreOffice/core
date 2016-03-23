@@ -113,7 +113,6 @@ endif
 $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
 	gio \
-	glew \
 	glm_headers \
 	harfbuzz \
 	icu_headers \
@@ -121,20 +120,14 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	lcms2 \
 	mdds_headers \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,vcl,\
+     glew \
+ ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-	vcl/opengl/DeviceInfo \
-	vcl/opengl/gdiimpl \
-	vcl/opengl/salbmp \
-	vcl/opengl/scale \
-	vcl/opengl/framebuffer \
-	vcl/opengl/program \
-	vcl/opengl/texture \
-	vcl/opengl/FixedTextureAtlas \
-    vcl/source/opengl/OpenGLContext \
-    vcl/source/opengl/OpenGLHelper \
     vcl/source/window/cairo_cairo \
-    vcl/source/window/openglwin \
     vcl/source/window/settings \
     vcl/source/window/paint \
     vcl/source/window/resource \
@@ -613,9 +606,32 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	freetype \
 ))
 ifneq ($(OS),EMSCRIPTEN)
-	$(eval $(call gb_Library_use_externals,vcl,\
-		fontconfig \
-	))
+$(eval $(call gb_Library_use_externals,vcl,\
+	fontconfig \
+))
+endif
+else
+ $(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/opengl/DeviceInfo \
+	vcl/opengl/gdiimpl \
+	vcl/opengl/salbmp \
+	vcl/opengl/scale \
+	vcl/opengl/framebuffer \
+	vcl/opengl/program \
+	vcl/opengl/texture \
+	vcl/opengl/FixedTextureAtlas \
+    vcl/source/opengl/OpenGLContext \
+    vcl/source/opengl/OpenGLHelper \
+    vcl/source/window/openglwin \
+ ))
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,vcl,\
+	-lm \
+	-ldl \
+	-lpthread \
+    -lGL \
+    -lX11 \
+))
 endif
 endif
 
@@ -727,10 +743,11 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lX11 \
 	-lXext \
 ))
-
+ifneq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/x11/X11DeviceInfo \
 ))
+endif
 endif
 
 # Runtime dependency for unit-tests

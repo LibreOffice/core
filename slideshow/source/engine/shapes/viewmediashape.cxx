@@ -46,7 +46,9 @@
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/modeltools.hxx>
 
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
+#endif
 
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -449,7 +451,7 @@ namespace slideshow
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
-#if !HAVE_FEATURE_GLTF
+#if !HAVE_FEATURE_GLTF || !HAVE_FEATURE_OPENGL
                             (void)rMimeType;
 #else
                             if( avmedia::IsModel(rMimeType) )

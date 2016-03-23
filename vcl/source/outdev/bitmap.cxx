@@ -22,7 +22,10 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
+#endif
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
@@ -688,8 +691,10 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         }
 
         // we need to make sure OpenGL never reaches this slow code path
-        assert(!OpenGLHelper::isVCLOpenGLEnabled());
 
+#if HAVE_FEATURE_OPENGL
+        assert(!OpenGLHelper::isVCLOpenGLEnabled());
+#endif
         Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
         if (!aBmpRect.Intersection(Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         {
