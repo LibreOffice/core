@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_2499ab6f",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2148,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T20:57:16Z",
+      "side": 1,
+      "message": "i don\u0027t see how these nsSwGetSetExpType constants are related to the format of that field, which is a number format?\n\nEike says that SVX_NUM_ARABIC should work fine here",
+      "revId": "b12b25ce266bab94fbcae5176f36dd5678d20c61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
