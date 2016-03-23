@@ -49,36 +49,6 @@ class EventListener(XDocumentEventListener,unohelper.Base):
     def disposing(event):
         pass
 
-class Screenshot(object):
-
-    def __init__(self):
-        pass
-
-    def _create_python_path(self):
-        """ creates a clean PATH env variable
-
-        We need to avoid picking the LibreOffice python and
-        the corresponding PYTHONPATH, PYTHONHOME variables
-        """
-        env = os.environ.copy()
-
-        # remove any python properties pointing to soffice internal python
-        del env['PYTHONPATH']
-        del env['PYTHONHOME']
-
-        # remove path pointing to instdir to avoid picking up the soffice provided python
-        path = env['PATH']
-        path_parts = path.split(':')
-        cleaned_path = (path for path in path_parts if path.find("instdir") == -1)
-        new_path = ":".join( cleaned_path )
-        env['PATH'] = new_path
-        return env
-
-    def take_screenshot(self, x1, y1, x2, y2):
-        env = self._create_python_path()
-        popen = subprocess.Popen(" ".join(["./screenshot.py", x1, y1, x2, y2]), shell=True, env=env)
-        popen.wait()
-
 def mkPropertyValue(name, value):
     """ Create a UNO ProertyValue from two input values.
     """
