@@ -330,6 +330,7 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
     SwCellFrm* pCurrMasterCell = static_cast<SwCellFrm*>(rRow.Lower());
     SWRECTFN( pCurrMasterCell )
 
+    bool bAllCellsCollapsed = true;
     while ( pCurrMasterCell )
     {
         // NEW TABLES
@@ -346,6 +347,7 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
         // we have to start with the last lower frame, otherwise
         // the shrink will not shrink the current cell
         SwFrm* pTmp = rToAdjust.GetLastLower();
+        bool bAllLowersCollapsed = true;
 
         if ( pTmp && pTmp->IsRowFrm() )
         {
@@ -361,17 +363,36 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
                 if ( pTmp->IsTabFrm() )
                 {
                     SwRowFrm* pTmpRow = static_cast<SwRowFrm*>(static_cast<SwTabFrm*>(pTmp)->Lower());
+                    bool bAllRowsCollapsed = true;
+
                     while ( pTmpRow )
                     {
                         lcl_ShrinkCellsAndAllContent( *pTmpRow );
+
+                        if ((pTmpRow->Frm().*fnRect->fnGetHeight)() > 0)
+                            bAllRowsCollapsed = false;
+
                         pTmpRow = static_cast<SwRowFrm*>(pTmpRow->GetNext());
                     }
+
+                    if (bAllRowsCollapsed)
+                    {
+                        // All rows of this table have 0 height -> set height of the table itself as well.
+                        (pTmp->Frm().*fnRect->fnSetHeight)(0);
+                        (pTmp->Prt().*fnRect->fnSetTop)(0);
+                        (pTmp->Prt().*fnRect->fnSetHeight)(0);
+                    }
+                    else
+                        bAllLowersCollapsed = false;
                 }
                 else
                 {
                     pTmp->Shrink( (pTmp->Frm().*fnRect->fnGetHeight)() );
                     (pTmp->Prt().*fnRect->fnSetTop)( 0 );
                     (pTmp->Prt().*fnRect->fnSetHeight)( 0 );
+
+                    if ((pTmp->Frm().*fnRect->fnGetHeight)() > 0)
+                        bAllLowersCollapsed = false;
                 }
 
                 pTmp = pTmp->GetPrev();
@@ -383,7 +404,25 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
                                false );
         }
 
+        if (bAllLowersCollapsed)
+        {
+            // All lower frame of this cell have 0 height -> set height of the cell itself as well.
+            (pCurrMasterCell->Frm().*fnRect->fnSetHeight)(0);
+            (pCurrMasterCell->Prt().*fnRect->fnSetTop)(0);
+            (pCurrMasterCell->Prt().*fnRect->fnSetHeight)(0);
+        }
+        else
+            bAllCellsCollapsed = false;
+
         pCurrMasterCell = static_cast<SwCellFrm*>(pCurrMasterCell->GetNext());
+    }
+
+    if (bAllCellsCollapsed)
+    {
+        // All cells have 0 height -> set height of row as well.
+        (rRow.Frm().*fnRect->fnSetHeight)(0);
+        (rRow.Prt().*fnRect->fnSetTop)(0);
+        (rRow.Prt().*fnRect->fnSetHeight)(0);
     }
 }
 
