@@ -13,7 +13,7 @@
 #include "salbmp.hxx"
 #include <vcl/salbtype.hxx>
 
-#include <cairo-svg.h>
+#include <cairo.h>
 
 OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(X11SalGraphics& rParent)
     : X11CairoTextRender(rParent)
@@ -22,9 +22,6 @@ OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(X11SalGraphics& rParent)
 
 cairo_t* OpenGLX11CairoTextRender::getCairoContext()
 {
-    // static size_t id = 0;
-    // OString aFileName = OString("/tmp/libo_logs/text_rendering") + OString::number(id++) + OString(".svg");
-    // cairo_surface_t* surface = cairo_svg_surface_create(aFileName.getStr(), GetWidth(), GetHeight());
     cairo_surface_t* surface = nullptr;
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
     if( pImpl )
