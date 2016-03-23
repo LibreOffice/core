@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_64dd6370",
+        "filename": "sc/qa/unit/data/README.cellborders",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T15:18:42Z",
+      "side": 1,
+      "message": "Whitespace error.",
+      "revId": "2be7cabb9d4b599653a8b8a8257bbc3b67f00b9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
