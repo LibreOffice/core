@@ -25,6 +25,46 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_6472837e",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T16:38:03Z",
+      "side": 0,
+      "message": "Looks like a merge error.",
+      "range": {
+        "startLine": 3762,
+        "startChar": 19,
+        "endLine": 3762,
+        "endChar": 22
+      },
+      "revId": "46271755841ade4445bad1b2a02d4c3b083025d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_045d87e9",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10440,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T16:38:03Z",
+      "side": 0,
+      "message": "This looks still like there are a number of merge errors.",
+      "revId": "46271755841ade4445bad1b2a02d4c3b083025d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_04cf47b1",
         "filename": "sw/qa/extras/rtfimport/data/tdf65642.rtf",
         "patchSetId": 1

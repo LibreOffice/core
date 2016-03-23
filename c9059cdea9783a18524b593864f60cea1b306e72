@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_8469778e",
+        "filename": "avmedia/Module_avmedia.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T16:38:03Z",
+      "side": 1,
+      "message": "ENABLE_GLTF can only be true with ENABLE_OPENGL being true.",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 19
+      },
+      "revId": "c9059cdea9783a18524b593864f60cea1b306e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_24588bfa",
+        "filename": "chart2/Module_chart2.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T16:38:03Z",
+      "side": 1,
+      "message": "whitespace error",
+      "revId": "c9059cdea9783a18524b593864f60cea1b306e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a46c7b9d",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-23T16:38:03Z",
+      "side": 1,
+      "message": "This makes no sense. A ENABLE_OPENGL \u003d 0 implies ENABLE_GLTF \u003d 0",
+      "revId": "c9059cdea9783a18524b593864f60cea1b306e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
