@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <osl/module.h>
 #include <osl/module.hxx>
 
@@ -33,7 +32,12 @@ void _FinitCore();
 namespace sw {
 
 // basflt/fltini.cxx
-class Filters: private boost::noncopyable {
+class Filters
+{
+private:
+    Filters(Filters const&) = delete;
+    Filters& operator=(Filters const&) = delete;
+
 public:
     Filters();
 

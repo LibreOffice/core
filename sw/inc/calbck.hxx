@@ -21,7 +21,6 @@
 #define INCLUDED_SW_INC_CALBCK_HXX
 
 #include "swdllapi.h"
-#include <boost/noncopyable.hpp>
 #include <ring.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
@@ -72,13 +71,17 @@ namespace sw
         const SfxPoolItem* m_pNew;
     };
     /// refactoring out the some of the more sane SwClient functionality
-    class SW_DLLPUBLIC WriterListener : private ::boost::noncopyable
+    class SW_DLLPUBLIC WriterListener
     {
         friend class ::SwModify;
         friend class ::sw::ClientIteratorBase;
         private:
             WriterListener* m_pLeft;
             WriterListener* m_pRight; ///< double-linked list of other clients
+
+            WriterListener(WriterListener const&) = delete;
+            WriterListener& operator=(WriterListener const&) = delete;
+
         protected:
             WriterListener()
                 : m_pLeft(nullptr), m_pRight(nullptr)

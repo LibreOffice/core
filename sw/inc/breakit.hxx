@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_BREAKIT_HXX
 #define INCLUDED_SW_INC_BREAKIT_HXX
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -31,7 +30,7 @@
 
 enum class SvtScriptType;
 
-class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
+class SW_DLLPUBLIC SwBreakIt
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     mutable css::uno::Reference< css::i18n::XBreakIterator > xBreak;
@@ -46,6 +45,9 @@ class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
     void _GetForbidden( const LanguageType  aLang );
 
     void createBreakIterator() const;
+
+    SwBreakIt(SwBreakIt const&) = delete;
+    SwBreakIt& operator=(SwBreakIt const&) = delete;
 
     // private (see @ _Create, _Delete).
     explicit SwBreakIt(

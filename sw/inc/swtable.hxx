@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_SW_INC_SWTABLE_HXX
 #define INCLUDED_SW_INC_SWTABLE_HXX
+
 #include <tools/mempool.hxx>
 #include <tools/ref.hxx>
 #include <tblenum.hxx>
@@ -27,7 +28,6 @@
 #include <swtblfmt.hxx>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <vector>
 #include <algorithm>
 #include <o3tl/sorted_vector.hxx>
@@ -496,12 +496,15 @@ public:
 };
 
 class SwCellFrame;
-class SW_DLLPUBLIC SwTableCellInfo : public ::boost::noncopyable
+class SW_DLLPUBLIC SwTableCellInfo
 {
     struct Impl;
     ::std::unique_ptr<Impl> m_pImpl;
 
-    const SwCellFrame * getCellFrame() const ;
+    const SwCellFrame * getCellFrame() const;
+
+    SwTableCellInfo(SwTableCellInfo const&) = delete;
+    SwTableCellInfo& operator=(SwTableCellInfo const&) = delete;
 
 public:
     SwTableCellInfo(const SwTable * pTable);

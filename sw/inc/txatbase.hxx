@@ -33,12 +33,11 @@
 #include <fchrfmt.hxx>
 #include <tox.hxx>
 
-#include <boost/noncopyable.hpp>
 
 class SfxItemPool;
 class SvXMLAttrContainerItem;
 
-class SwTextAttr : private boost::noncopyable
+class SwTextAttr
 {
 private:
     SfxPoolItem * const m_pAttr;
@@ -56,6 +55,9 @@ private:
     bool m_bFormatIgnoreStart   : 1;    ///< text formatting should ignore start
     bool m_bFormatIgnoreEnd     : 1;    ///< text formatting should ignore end
     bool m_bHasContent          : 1;    // text attribute with content
+
+    SwTextAttr(SwTextAttr const&) = delete;
+    SwTextAttr& operator=(SwTextAttr const&) = delete;
 
 protected:
     SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart );

@@ -27,7 +27,6 @@
 
 #include <IDocumentRedlineAccess.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <svl/smplhint.hxx>
 #include <vector>
 
@@ -293,9 +292,13 @@ public:
 };
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
-class SW_DLLPUBLIC SwExtraRedline : private boost::noncopyable
+class SW_DLLPUBLIC SwExtraRedline
 {
+private:
+    SwExtraRedline(SwExtraRedline const&) = delete;
+    SwExtraRedline& operator=(SwExtraRedline const&) = delete;
 public:
+    SwExtraRedline() = default;
     virtual ~SwExtraRedline();
 };
 

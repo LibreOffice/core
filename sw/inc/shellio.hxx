@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_SHELLIO_HXX
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -355,7 +354,6 @@ class IDocumentStylePoolAccess;
 
 class SW_DLLPUBLIC Writer
     : public SvRefBase
-    , private ::boost::noncopyable
 {
     SwAsciiOptions aAscOpts;
     OUString       sBaseURL;
@@ -364,6 +362,9 @@ class SW_DLLPUBLIC Writer
     void _AddFontItems( SfxItemPool& rPool, sal_uInt16 nWhichId );
 
     ::std::unique_ptr<Writer_Impl> m_pImpl;
+
+    Writer(Writer const&) = delete;
+    Writer& operator=(Writer const&) = delete;
 
 protected:
 

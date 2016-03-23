@@ -23,8 +23,6 @@
 #include <vector>
 #include <memory>
 
-#include <boost/noncopyable.hpp>
-
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svtools/embedhlp.hxx>
@@ -87,7 +85,6 @@ public:
 
 class SW_DLLPUBLIC SwNodes
     : private BigPtrArray
-    , private ::boost::noncopyable
 {
     friend class SwDoc;
     friend class SwNode;
@@ -128,6 +125,9 @@ class SW_DLLPUBLIC SwNodes
     void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
                     bool bNewFrames = true, bool bTableInsDummyNode = false ) const;
     void _DelDummyNodes( const SwNodeRange& rRg );
+
+    SwNodes(SwNodes const&) = delete;
+    SwNodes& operator=(SwNodes const&) = delete;
 
 protected:
     SwNodes( SwDoc* pDoc );
