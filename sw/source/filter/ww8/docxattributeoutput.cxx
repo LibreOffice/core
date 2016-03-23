@@ -2206,22 +2206,16 @@ void DocxAttributeOutput::RawText(const OUString& /*rText*/, rtl_TextEncoding /*
 
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )
 {
-    OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
     EndRun(); // end run before starting ruby to avoid nested runs, and overlap
     assert(!m_closeHyperlinkInThisRun); // check that no hyperlink overlaps ruby
     assert(!m_closeHyperlinkInPreviousRun);
+    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_rubyPr, FSEND );
-    // hps
-    // hpsBaseText
-    // hpsRaise
-    // lid
+    long nHps,nHpsRaise,nHpsBaseText;
     lang::Locale aLocale( SwBreakIt::Get()->GetLocale(
                 rNode.GetLang( nPos ) ) );
     OUString sLang( LanguageTag::convertToBcp47( aLocale) );
-    m_pSerializer->singleElementNS( XML_w, XML_lid,
-            FSNS( XML_w, XML_val ),
-            OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
 
     OString sAlign ( "center" );
     switch ( rRuby.GetAdjustment( ) )
@@ -2244,36 +2238,103 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
         default:
             break;
     }
+    /*
+     MS needs to know the name and size of the font used in the ruby item,
+     but we could have written it in a mixture of asian and western
+     scripts, and each of these can be a different font and size than the
+     other, so we make a guess based upon the first character of the text,
+     defaulting to asian.
+     */
+    sal_uInt16 nRubyScript;
+    if (g_pBreakIt->GetBreakIter().is())
+        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
+    else
+        nRubyScript = i18n::ScriptType::ASIAN;
+
+    const SwTextRuby* pRubyText = rRuby.GetTextRuby();
+    const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : nullptr;
+    OUString sFamilyName;
+    long nHeight;
+    if (pFormat)
+    {
+        const SvxFontItem& rFont = ItemGet< SvxFontItem >(*pFormat,
+                                   GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
+        sFamilyName = rFont.GetFamilyName();
+
+        const SvxFontHeightItem& rHeight = ItemGet< SvxFontHeightItem >(*pFormat,
+                                           GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        nHeight = rHeight.GetHeight();
+    }
+    else
+    {
+        /*Get defaults if no formatting on ruby text*/
+
+        const SfxItemPool* pPool = rNode.GetSwAttrSet().GetPool();
+        pPool = pPool ? pPool : &m_rExport.m_pDoc->GetAttrPool();
+
+        const SvxFontItem& rFont  = DefaultItemGet< SvxFontItem >(*pPool,
+                                    GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
+        sFamilyName = rFont.GetFamilyName();
+
+        const SvxFontHeightItem& rHeight = DefaultItemGet< SvxFontHeightItem >
+                                           (*pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        nHeight = rHeight.GetHeight();
+    }
+
+    nHps = nHeight /5;
+    const SwAttrSet& rSet = rNode.GetSwAttrSet();
+    const SvxFontHeightItem& rHeightItem  =
+        static_cast< const SvxFontHeightItem& >(rSet.Get(
+                    GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
+    nHpsRaise = rHeightItem.GetHeight() /5 ;
+    nHpsBaseText = rHeightItem.GetHeight() /5;
+
     m_pSerializer->singleElementNS( XML_w, XML_rubyAlign,
             FSNS( XML_w, XML_val ), sAlign.getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_hps,
+            FSNS( XML_w, XML_val ), OString::number( nHps ).getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_hpsRaise,
+            FSNS( XML_w, XML_val ), OString::number( nHpsRaise ).getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_hpsBaseText,
+            FSNS( XML_w, XML_val ), OString::number( nHpsBaseText ).getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_lid,
+            FSNS( XML_w, XML_val ),
+            OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
     m_pSerializer->endElementNS( XML_w, XML_rubyPr );
 
     m_pSerializer->startElementNS( XML_w, XML_rt, FSEND );
     StartRun( nullptr );
-    StartRunProperties( );
-    SwWW8AttrIter aAttrIt( m_rExport, rNode );
-    aAttrIt.OutAttr( nPos, true );
 
-    sal_uInt16 nStyle = m_rExport.GetId( rRuby.GetTextRuby()->GetCharFormat() );
-    OString aStyleId(m_rExport.m_pStyles->GetStyleId(nStyle));
-    m_pSerializer->singleElementNS( XML_w, XML_rStyle,
-            FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_rFonts,
+            FSNS( XML_w, XML_ascii ), OUStringToOString( sFamilyName, RTL_TEXTENCODING_UTF8 ).getStr( ),
+            FSNS( XML_w, XML_hAnsi ), OUStringToOString( sFamilyName, RTL_TEXTENCODING_UTF8 ).getStr( ),
+            FSNS( XML_w, XML_hint ), "eastAsia",
+            FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_sz,
+            FSNS( XML_w, XML_val ), OString::number( nHps ).getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_szCs,
+            FSNS( XML_w, XML_val ), OString::number( nHps ).getStr(), FSEND );
 
-    EndRunProperties( nullptr );
+    m_pSerializer->endElementNS( XML_w, XML_rPr );
     RunText( rRuby.GetText( ) );
     EndRun( );
+
     m_pSerializer->endElementNS( XML_w, XML_rt );
 
     m_pSerializer->startElementNS( XML_w, XML_rubyBase, FSEND );
+
     StartRun( nullptr );
+    StartRunProperties( );
+    EndRunProperties( nullptr );
 }
 
 void DocxAttributeOutput::EndRuby()
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::EndRuby()" );
     EndRun( );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
+    m_pSerializer->endElementNS( XML_w, XML_r );
     StartRun(nullptr); // open Run again so OutputTextNode loop can close it
 }
 
