@@ -411,7 +411,8 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     // the setting does not trigger encryption,
                     // it just provides the format for the case that contents should be encrypted
                     uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
-                    xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
+                    if ( xEncr.is() )
+                        xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
                 }
                 catch( uno::Exception& )
                 {
