@@ -65,6 +65,6 @@ class convert_gen
         bool createDir(const string& sDir, const string& sFile);
 private:
         ofstream mcOutputFile;
-        bool checkAccess(string& sFile);
+        static bool checkAccess(string& sFile);
 };
 #endif

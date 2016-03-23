@@ -25,7 +25,6 @@ using namespace std;
 
 
 
-extern int ulflex(void);
 void convert_ulf::doExecute()
 {
     ulflex();

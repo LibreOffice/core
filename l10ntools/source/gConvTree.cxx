@@ -49,7 +49,6 @@ convert_tree::~convert_tree()
 
 
 
-extern int treelex(void);
 void convert_tree::doExecute()
 {
     string sLang;

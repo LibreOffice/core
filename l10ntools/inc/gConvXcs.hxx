@@ -22,11 +22,15 @@
 
 
 
+extern int xcslex(void);
+
+
+
 class convert_xcs : public convert_gen
 {
     public:
         convert_xcs(l10nMem& crMemory);
-        ~convert_xcs() {};
+        ~convert_xcs() override {};
 
         void setKey(char *syyText);
         void unsetKey(char *syyText);

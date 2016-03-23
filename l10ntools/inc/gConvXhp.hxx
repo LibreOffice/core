@@ -22,11 +22,15 @@
 
 
 
+extern int xhplex(void);
+
+
+
 class convert_xhp : public convert_gen
 {
     public:
         convert_xhp(l10nMem& crMemory);
-        ~convert_xhp();
+        ~convert_xhp() override;
 
         void setString(char *yytext);
         void openTag(char *yytext);

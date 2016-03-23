@@ -21,6 +21,8 @@
 #include "gConv.hxx"
 
 
+extern int treelex(void);
+
 
 class convert_tree : public convert_gen
 {
@@ -40,7 +42,7 @@ class convert_tree : public convert_gen
         } STATE_VAL;
 
         convert_tree(l10nMem& crMemory);
-        ~convert_tree();
+        ~convert_tree() override;
 
         void setString(char *yytext);
         void setState(char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNewStateVAL, char *sModule);

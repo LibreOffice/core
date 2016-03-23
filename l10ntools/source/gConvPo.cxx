@@ -95,12 +95,14 @@ void convert_po::setKey(char *syyText)
     startLook();
 
     // skip "#:" and any blanks
-    for (syyText += 2; *syyText == ' ' || *syyText == '\t'; ++syyText) ;
-        msKey = syyText;
+    for (syyText += 2; *syyText == ' ' || *syyText == '\t'; ++syyText)
+        ;
+    msKey = syyText;
 
     // remove trailing blanks
-    for (i = msKey.size() -1; msKey[i] == '\r' || msKey[i] == ' ' || msKey[i] == '\t'; --i) ;
-        msKey.erase(i+1);
+    for (i = msKey.size() -1; msKey[i] == '\r' || msKey[i] == ' ' || msKey[i] == '\t'; --i)
+        ;
+    msKey.erase(i+1);
 }
 
 
@@ -146,7 +148,7 @@ void convert_po::startSave(const string& sName,
 
     // create directories as needed
     createDir(string(""), sFilePath);
-    outBuffer.open(sFilePath.c_str(), ios::out + ios::binary);
+    outBuffer.open(sFilePath.c_str(), ios::out | ios::binary);
 
     if (!outBuffer.is_open())
         throw l10nMem::showError("Cannot open " + sFilePath + " for writing");

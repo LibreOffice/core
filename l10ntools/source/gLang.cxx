@@ -32,8 +32,8 @@ class handler
         handler()  {};
         ~handler() {};
 
-        void showRunTimeError(string sErr);
-        void showUsage(string        sErr);
+        static void showRunTimeError(string sErr);
+        static void showUsage(string        sErr);
         void checkCommandLine(int argc, char *argv[]);
         void run();
 
@@ -300,6 +300,7 @@ void handler::runConvert()
 
 
     // convert
+    loadL10MEM(true);
     mcMemory.setConvert(true, false);
 
     // loop through all source files, and extract messages from each file

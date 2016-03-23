@@ -47,7 +47,7 @@ using namespace std;
 
 
 
-convert_gen * convert_gen::mcImpl = NULL;
+convert_gen * convert_gen::mcImpl;
 
 
 

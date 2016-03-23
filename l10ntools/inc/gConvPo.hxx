@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef GCONPO_HXX
 #define GCONPO_HXX
 #include "gConv.hxx"
@@ -31,7 +30,7 @@ class convert_po : public convert_gen
 
 
         convert_po(l10nMem& crMemory);
-        ~convert_po()  {};
+        ~convert_po() override {};
 
         void startLook ();
         void setValue  (char *syyText, int iLineCnt);

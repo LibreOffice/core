@@ -33,7 +33,6 @@ convert_xcs::convert_xcs(l10nMem& crMemory)
 
 
 
-extern int xcslex(void);
 void convert_xcs::doExecute()
 {
     if (mbMergeMode)

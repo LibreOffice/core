@@ -35,7 +35,6 @@ convert_xrm::convert_xrm(l10nMem& crMemory)
 
 
 
-extern int xrmlex(void);
 void convert_xrm::doExecute()
 {
     xrmlex();

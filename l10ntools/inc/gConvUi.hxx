@@ -22,11 +22,15 @@
 
 
 
+extern int uilex(void);
+
+
+
 class convert_ui : public convert_gen
 {
     public:
         convert_ui(l10nMem& crMemory);
-        ~convert_ui() {};
+        ~convert_ui() override {};
 
 
     private:

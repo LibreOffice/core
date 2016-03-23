@@ -22,12 +22,16 @@
 
 
 
+extern int xrmlex(void);
+
+
+
 class convert_xrm : public convert_gen
 {
     public:
         bool mbNoCollectingData;
         convert_xrm(l10nMem& crMemory);
-        ~convert_xrm() {};
+        ~convert_xrm() override {};
 
         void setId(char *yytext);
         void setLang(char *yytext);

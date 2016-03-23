@@ -269,9 +269,10 @@ void convert_src::trim(string& sText)
 
     while (sText[0] == ' ' || sText[0] == '\t')
         sText.erase(0,1);
-    for (nL = sText.size(); sText[nL-1] == ' ' || sText[nL-1] == '\t'; --nL);
-        if (nL != (int)sText.size())
-            sText.erase(nL);
+    for (nL = sText.size(); sText[nL-1] == ' ' || sText[nL-1] == '\t'; --nL)
+        ;
+    if (nL != (int)sText.size())
+        sText.erase(nL);
 }
 
 

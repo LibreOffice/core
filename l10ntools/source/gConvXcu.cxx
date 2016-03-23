@@ -32,7 +32,6 @@ convert_xcu::convert_xcu(l10nMem& crMemory)
 
 
 
-extern int xculex(void);
 void convert_xcu::doExecute()
 {
     xculex();

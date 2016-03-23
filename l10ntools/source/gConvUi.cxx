@@ -20,9 +20,11 @@
 #include <vector>
 using namespace std;
 
-#include "gL10nMem.hxx"
 
+
+#include "gL10nMem.hxx"
 #include "gConvUi.hxx"
+
 
 
 convert_ui::convert_ui(l10nMem& crMemory)
@@ -32,7 +34,6 @@ convert_ui::convert_ui(l10nMem& crMemory)
 
 
 
-extern int uilex(void);
 void convert_ui::doExecute()
 {
     uilex();

@@ -22,6 +22,9 @@ using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXhp.hxx"
+
+
+
 convert_xhp::convert_xhp(l10nMem& crMemory)
                         : convert_gen(crMemory),
                           meExpectValue(VALUE_NOT_USED),
@@ -48,7 +51,6 @@ convert_xhp::~convert_xhp()
 
 
 
-extern int xhplex(void);
 void convert_xhp::doExecute()
 {
     string sLang;

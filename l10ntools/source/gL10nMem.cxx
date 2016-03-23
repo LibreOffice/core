@@ -24,7 +24,9 @@
 using namespace std;
 
 #include "gL10nMem.hxx"
-#include "gConvPO.hxx"
+#include "gConvPo.hxx"
+
+
 
 l10nMem *myMem;
 

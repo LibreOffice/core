@@ -22,14 +22,21 @@
 
 
 
+extern int xculex(void);
+
+
+
 class xcu_stack_entry;
+
+
+
 class convert_xcu : public convert_gen
 {
     public:
         bool mbNoCollectingData;
 
         convert_xcu(l10nMem& crMemory);
-        ~convert_xcu() {};
+        ~convert_xcu() override {};
 
         void pushKey(char *syyText);
         void popKey(char *syyText);

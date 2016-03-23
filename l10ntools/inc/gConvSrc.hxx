@@ -28,7 +28,7 @@ class convert_src : public convert_gen
         bool mbExpectValue;
 
         convert_src(l10nMem& crMemory);
-        ~convert_src() {};
+        ~convert_src() override {};
 
         void setValue      (char *syyText, char *sbuildValue);
         void setLang       (char *syyText, bool bEnUs);

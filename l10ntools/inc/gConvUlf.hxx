@@ -22,11 +22,14 @@
 
 
 
+extern int ulflex(void);
+
+
 class convert_ulf : public convert_gen
 {
     public:
         convert_ulf(l10nMem& crMemory) : convert_gen(crMemory) {};
-        ~convert_ulf() {};
+        ~convert_ulf() override {};
 
         void setKey(char *syyText);
         void setText(char *syyText, bool bIsEnUs);
