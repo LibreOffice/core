@@ -187,6 +187,7 @@ public:
     void testTdf96536();
     void testTdf96479();
     void testTdf96961();
+    void testTdf88453();
     void testClassificationPaste();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -278,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf96536);
     CPPUNIT_TEST(testTdf96479);
     CPPUNIT_TEST(testTdf96961);
+    CPPUNIT_TEST(testTdf88453);
     CPPUNIT_TEST(testClassificationPaste);
     CPPUNIT_TEST_SUITE_END();
 
@@ -3246,6 +3248,16 @@ void SwUiWriterTest::testTdf96961()
     sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
     sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT(nLast > nOther);
+}
+
+void SwUiWriterTest::testTdf88453()
+{
+    createDoc("tdf88453.odt");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 0: the table does not fit the first page, but it wasn't split
+    // to continue on the second page.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
 }
 
 namespace
