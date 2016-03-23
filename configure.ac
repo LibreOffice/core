@@ -3760,7 +3760,6 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to use ATL])
     if test "$enable_atl" = "yes" -o "$enable_atl" = "" -a "$vcexpress" != Express; then
         DISABLE_ATL=""
-        AC_DEFINE(HAVE_FEATURE_ATL, 1)
         AC_MSG_RESULT([yes])
     else
         DISABLE_ATL="TRUE"
@@ -4572,12 +4571,17 @@ if test "$with_x" = "no"; then
     AC_MSG_ERROR([Use --disable-gui instead. How can we get rid of this option? No idea where it comes from.])
 fi
 
+ENABLE_HEADLESS=""
 if test "$enable_gui" = "no"; then
     if test "$USING_X11" != TRUE; then
         AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --disable-gui.])
     fi
     USING_X11=
+    ENABLE_HEADLESS=TRUE
+    AC_DEFINE(HAVE_HEADLESS_MODE,1)
+    test_cairo=yes
 fi
+AC_SUBST(ENABLE_HEADLESS)
 
 WORKDIR="${BUILDDIR}/workdir"
 INSTDIR="${BUILDDIR}/instdir"
@@ -10138,13 +10142,6 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
-ENABLE_HEADLESS=""
-if test "x$with_x" = "xno" -o "$CXX" = "emcc"; then
-    ENABLE_HEADLESS="TRUE"
-    SCPDEFS="$SCPDEFS -DLIBO_HEADLESS"
-    R="headless"
-fi
-AC_SUBST(ENABLE_HEADLESS)
 
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
@@ -10431,16 +10428,18 @@ if test $_os = iOS -o $_os = Android; then
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
+    AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 elif test $_os = WINNT; then
     ENABLE_OPENGL=TRUE
+    AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 else
     if test "$USING_X11" = TRUE; then
         ENABLE_OPENGL=TRUE
-        AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
+        AC_DEFINE(HAVE_FEATURE_OPENGL,1)
+        ENABLE_OPENGL_CANVAS=TRUE
     fi
-    ENABLE_OPENGL_CANVAS=TRUE
 fi
 
 AC_SUBST(ENABLE_OPENGL)

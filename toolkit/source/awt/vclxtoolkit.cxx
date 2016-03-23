@@ -22,6 +22,7 @@
 #include <prewin.h>
 #include <postwin.h>
 #endif
+#include <config_features.h>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -113,7 +114,9 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#endif
 #include "toolkit/awt/vclxspinbutton.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1922,7 +1925,11 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
 sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
     throw (css::uno::RuntimeException, std::exception)
 {
+#if HAVE_FEATURE_OPENGL
      return OpenGLWrapper::getBufferSwapCounter();
+#else
+     return 0;
+#endif
 }
 
 // css:awt:XToolkitRobot

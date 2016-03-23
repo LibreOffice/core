@@ -33,8 +33,11 @@
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
 #include "BubbleChartTypeTemplate.hxx"
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include "GL3DBarChartTypeTemplate.hxx"
 #include <cppuhelper/component_context.hxx>
+#endif
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -534,14 +537,16 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             case TEMPLATE_BUBBLE:
                 xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
                 break;
-
+#if HAVE_FEATURE_OPENGL
             case TEMPLATE_GL3DBAR:
                 xTemplate.set(new GL3DBarChartTypeTemplate(m_xContext, aServiceSpecifier));
                 break;
             case TEMPLATE_GL3DBAR_ROUNDED_RECTANGLE:
                 xTemplate.set(new GL3DBarChartTypeTemplate(m_xContext, aServiceSpecifier));
                 break;
-
+#else
+            default: break;
+#endif
 //            case TEMPLATE_SURFACE:
 //            case TEMPLATE_ADDIN:
 //               break;

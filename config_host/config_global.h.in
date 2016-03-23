@@ -28,5 +28,7 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_ATTRIBUTE_WARN_UNUSED 0
 /* C++ library uses __attribute__((warn_unused)) for basic types like std::string. */
 #define HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL 0
+/* detect headless mode */
+#define HAVE_HEADLESS_MODE 0
 
 #endif

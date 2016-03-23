@@ -21,7 +21,10 @@
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
+#endif
 
 #include "BitmapSymmetryCheck.hxx"
 
@@ -55,8 +58,10 @@ void BitmapTest::testConvert()
         //it would be nice to find and change the stride for quartz to be the same as everyone else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
 #else
+#if HAVE_FEATURE_OPENGL
         if (!OpenGLHelper::isVCLOpenGLEnabled())
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
+#endif
 #endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
