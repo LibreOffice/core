@@ -1784,7 +1784,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             // create a (mirrored) jpeg file
             if( rHTMLWrt.GetOrigFileName() )
                 aGraphicURL = *rHTMLWrt.GetOrigFileName();
-            pGrfNd->GetGrf( sal_True );
+            pGrfNd->GetGrf( true );
 
             sal_uLong nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE |
                            XOUTBMP_USE_NATIVE_IF_POSSIBLE;
