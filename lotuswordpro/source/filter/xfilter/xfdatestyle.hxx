@@ -101,7 +101,7 @@ public:
 
     void    AddMinute( bool bLongFmt = true );
 
-    void    AddSecond( bool bLongFmt = true, sal_Int16 nDecimalPos = 2);
+    void    AddSecond( bool bLongFmt = true );
 
     void    AddAmPm();
 
@@ -187,12 +187,12 @@ inline void XFDateStyle::AddMinute( bool bLongFmt )
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddSecond( bool bLongFmt, sal_Int16 pos)
+inline void XFDateStyle::AddSecond( bool bLongFmt )
 {
     XFDatePart  *part = new XFDatePart();
     part->SetPartType(enumXFDateSecond);
     part->SetLongFmt(bLongFmt);
-    part->SetDecimalPos(pos);
+    part->SetDecimalPos(0);
     m_aParts.AddStyle(part);
 }
 

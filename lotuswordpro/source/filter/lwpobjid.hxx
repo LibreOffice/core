@@ -77,7 +77,7 @@ class LwpObject;
 class LwpObjectID
 {
 public:
-    LwpObjectID(sal_uInt32 low=0, sal_uInt16 high=0);
+    LwpObjectID();
 private:
     sal_uInt32 m_nLow;
     sal_uInt16 m_nHigh;

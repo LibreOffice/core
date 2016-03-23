@@ -227,21 +227,21 @@ void    XFBorders::SetWidth(enumXFBorder side, double width)
     }
 }
 
-void    XFBorders::SetDoubleLine(enumXFBorder side, bool dual,bool bSameWidth)
+void    XFBorders::SetDoubleLine(enumXFBorder side)
 {
     switch(side)
     {
     case enumXFBorderLeft:
-        m_aBorderLeft.SetDoubleLine(dual,bSameWidth);
+        m_aBorderLeft.SetDoubleLine(true/*dual*/,false/*bSameWidth*/);
         break;
     case enumXFBorderRight:
-        m_aBorderRight.SetDoubleLine(dual,bSameWidth);
+        m_aBorderRight.SetDoubleLine(true/*dual*/,false/*bSameWidth*/);
         break;
     case enumXFBorderTop:
-        m_aBorderTop.SetDoubleLine(dual,bSameWidth);
+        m_aBorderTop.SetDoubleLine(true/*dual*/,false/*bSameWidth*/);
         break;
     case enumXFBorderBottom:
-        m_aBorderBottom.SetDoubleLine(dual,bSameWidth);
+        m_aBorderBottom.SetDoubleLine(true/*dual*/,false/*bSameWidth*/);
         break;
     default:
         break;

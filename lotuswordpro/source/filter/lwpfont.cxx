@@ -236,7 +236,7 @@ void LwpFontTableEntry::RegisterFontDecl()
 {
     if(m_FaceName.str().isEmpty()) return;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    XFFontDecl aFontDecl1( m_FaceName.str(), m_FaceName.str(), false );
+    XFFontDecl aFontDecl1( m_FaceName.str(), m_FaceName.str() );
     pXFStyleManager->AddFontDecl(aFontDecl1);
 }
 

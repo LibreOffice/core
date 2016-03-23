@@ -148,9 +148,8 @@ public:
 
     /**
      * @descr   Set border side as double line.
-     * @param   bSameWidth whether two borders are same width.
      */
-    void    SetDoubleLine(enumXFBorder side, bool dual,bool bSameWidth);
+    void    SetDoubleLine(enumXFBorder side);
 
     /**
      * @descr   Set inner border with of border side.

@@ -252,7 +252,7 @@ void LwpDrawObj::SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 n
 
     if (nLineStyle == LS_DOT)
     {
-        pStyle->SetLineDashStyle(enumXFLineDash, 1, 1, 0.05, 0.05, 0.05);
+        pStyle->SetLineDashStyle(enumXFLineDash, 0.05, 0.05, 0.05);
     }
 
     // line width
@@ -317,11 +317,11 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
 
     if (nLeftArrow)
     {
-        pOpenedObjStyle->SetArrowStart( GetArrowName(nLeftArrow), fArrowSize, true);
+        pOpenedObjStyle->SetArrowStart( GetArrowName(nLeftArrow), fArrowSize);
     }
     if (nRightArrow)
     {
-        pOpenedObjStyle->SetArrowEnd( GetArrowName(nRightArrow), fArrowSize, true);
+        pOpenedObjStyle->SetArrowEnd( GetArrowName(nRightArrow), fArrowSize);
     }
 
 }

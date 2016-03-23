@@ -59,11 +59,11 @@
  ************************************************************************/
 #include "xffontdecl.hxx"
 
-XFFontDecl::XFFontDecl(const OUString& name, const OUString& family, bool fixed)
+XFFontDecl::XFFontDecl(const OUString& name, const OUString& family)
 {
     m_strFontName = name;
     m_strFontFamily = family;
-    m_bPitchFixed = fixed;
+    m_bPitchFixed = false;
 }
 
 

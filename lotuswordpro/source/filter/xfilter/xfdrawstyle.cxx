@@ -89,7 +89,7 @@ XFDrawStyle::~XFDrawStyle()
     }
 }
 
-void    XFDrawStyle::SetLineStyle(double width, XFColor color, sal_Int32 transparency)
+void    XFDrawStyle::SetLineStyle(double width, XFColor color)
 {
     if( !m_pLineStyle )
     {
@@ -98,10 +98,10 @@ void    XFDrawStyle::SetLineStyle(double width, XFColor color, sal_Int32 transpa
     }
     m_pLineStyle->SetWidth(width);
     m_pLineStyle->SetColor(color);
-    m_pLineStyle->SetTransparency(transparency);
+    m_pLineStyle->SetTransparency(0);
 }
 
-void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space )
+void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, double len1, double len2, double space )
 {
     if( !m_pLineStyle )
     {
@@ -109,9 +109,9 @@ void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, int num1, int num2,
         m_pLineStyle->SetStyleName( XFGlobal::GenStrokeDashName());
     }
     m_pLineStyle->SetLineStyle(style);
-    m_pLineStyle->SetDot1Number(num1);
+    m_pLineStyle->SetDot1Number(1);
     m_pLineStyle->SetDot1Length(len1);
-    m_pLineStyle->SetDot2Number(num2);
+    m_pLineStyle->SetDot2Number(1);
     m_pLineStyle->SetDot2Length(len2);
     m_pLineStyle->SetSpace(space);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
