@@ -28,6 +28,7 @@
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <memory>
+#include <map>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -74,6 +75,11 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     bool                        bLocaleDataItemValid;
     bool                        bReservedWordValid;
     mutable ::utl::ReadWriteMutex   aMutex;
+    struct Locale_Compare
+    {
+        bool operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const;
+    };
+    mutable std::map<css::lang::Locale, css::i18n::LocaleDataItem, Locale_Compare> maDataItemCache;
 
     // dummies, to be implemented or provided by XML locale data
     sal_Unicode                 cCurrZeroChar;
