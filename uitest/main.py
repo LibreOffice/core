@@ -57,7 +57,7 @@ if __name__ == "__main__":
                 generic_test(opts, line)
 
     elif "--calc-demo" in opts:
-        generic_test(opts, "calc_tests.about_test.test_about_dlg_with_screenshot")
+        generic_test(opts, "calc_tests.about_test.test_about_dlg")
         generic_test(opts, "calc_tests.create_range_name.create_range_name")
     else:
         usage()
