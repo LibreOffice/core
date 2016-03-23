@@ -181,11 +181,11 @@ VCLXAccessibleToolBox::~VCLXAccessibleToolBox()
 {
 }
 
-VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( sal_Int32 _nPos, bool _bMustHaveFocus )
+VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( sal_Int32 _nPos )
 {
     VCLXAccessibleToolBoxItem* pItem = nullptr;
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( pToolBox && ( !_bMustHaveFocus || pToolBox->HasFocus() ) )
+    if ( pToolBox )
     {
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
         // returns only toolbox buttons, not windows
@@ -308,7 +308,7 @@ void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( sal_Int32 _nPos )
 }
 
 void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _rMapPos,
-        bool _bNotifyRemoval, bool _bDispose )
+        bool _bNotifyRemoval )
 {
     Reference< XAccessible > xItemAcc( _rMapPos->second );
     if ( !xItemAcc.is() )
@@ -323,23 +323,19 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _
     if ( !OToolBoxWindowItem::isWindowItem( xItemAcc, &pWindowItem ) )
     {
         static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() )->ReleaseToolBox();
-        if ( _bDispose )
-            ::comphelper::disposeComponent( xItemAcc );
+        ::comphelper::disposeComponent( xItemAcc );
     }
     else
     {
-        if ( _bDispose )
+        if ( pWindowItem )
         {
-            if ( pWindowItem )
-            {
-                Reference< XAccessibleContext > xContext( pWindowItem->getContextNoCreate() );
-                ::comphelper::disposeComponent( xContext );
-            }
+            Reference< XAccessibleContext > xContext( pWindowItem->getContextNoCreate() );
+            ::comphelper::disposeComponent( xContext );
         }
     }
 }
 
-void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
+void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos)
 {
     if ( _nPos < sal_Int32( m_aAccessibleChildren.size() ) )
     {
@@ -350,17 +346,6 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
     if ( pToolBox )
     {
-        if ( !_bItemAdded )
-        {   // the item was removed
-            // -> destroy the old item
-            ToolBoxItemsMap::iterator aItemPos = m_aAccessibleChildren.find( _nPos );
-            if ( m_aAccessibleChildren.end() != aItemPos )
-            {
-                implReleaseToolboxItem( aItemPos, true, true );
-                m_aAccessibleChildren.erase( aItemPos );
-            }
-        }
-
         // adjust the "index-in-parent"s
         ToolBoxItemsMap::iterator aIndexAdjust = m_aAccessibleChildren.upper_bound( _nPos );
         while ( m_aAccessibleChildren.end() != aIndexAdjust )
@@ -374,7 +359,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
                 if ( pItem )
                 {
                     sal_Int32 nIndex = pItem->getIndexInParent( );
-                    nIndex += (_bItemAdded ? +1 : -1);
+                    nIndex++;
                     pItem->setIndexInParent( nIndex );
                 }
             }
@@ -383,7 +368,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
                 if ( pWindowItem )
                 {
                     sal_Int32 nIndex = pWindowItem->getIndexInParent( );
-                    nIndex += (_bItemAdded ? +1 : -1);
+                    nIndex++;
                     pWindowItem->setIndexInParent( nIndex );
                 }
             }
@@ -391,13 +376,10 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
             ++aIndexAdjust;
         }
 
-        if ( _bItemAdded )
-        {
-            // TODO: we should make this dependent on the existence of event listeners
-            // with the current implementation, we always create accessible object
-            Any aNewChild = makeAny( getAccessibleChild( (sal_Int32)_nPos ) );
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewChild );
-        }
+        // TODO: we should make this dependent on the existence of event listeners
+        // with the current implementation, we always create accessible object
+        Any aNewChild = makeAny( getAccessibleChild( (sal_Int32)_nPos ) );
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewChild );
     }
 }
 
@@ -410,7 +392,7 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
         for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
                 aIter != m_aAccessibleChildren.end(); ++aIter )
         {
-            implReleaseToolboxItem( aIter, true, true );
+            implReleaseToolboxItem( aIter, true );
         }
         m_aAccessibleChildren.clear();
 
@@ -450,19 +432,19 @@ void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, b
 
 void VCLXAccessibleToolBox::UpdateItemName_Impl( sal_Int32 _nPos )
 {
-    VCLXAccessibleToolBoxItem* pItem = GetItem_Impl( _nPos, false );
+    VCLXAccessibleToolBoxItem* pItem = GetItem_Impl( _nPos );
     if ( pItem )
         pItem->NameChanged();
 }
 
 void VCLXAccessibleToolBox::UpdateItemEnabled_Impl( sal_Int32 _nPos )
 {
-    VCLXAccessibleToolBoxItem* pItem = GetItem_Impl( _nPos, false );
+    VCLXAccessibleToolBoxItem* pItem = GetItem_Impl( _nPos );
     if ( pItem )
         pItem->ToggleEnableState();
 }
 
-void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow )
+void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent )
 {
     vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
@@ -479,7 +461,7 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
             VCLXAccessibleToolBoxItem* pItem =
                 static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
             pItem->SetChild( xChild );
-            pItem->NotifyChildEvent( xChild, _bShow );
+            pItem->NotifyChildEvent( xChild, true/*_bShow*/ );
         }
     }
 }
@@ -571,7 +553,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
 
         case VCLEVENT_TOOLBOX_ITEMADDED :
-            UpdateItem_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()), true );
+            UpdateItem_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMREMOVED :
@@ -587,7 +569,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             ToolBoxItemsMap::iterator aAccessiblePos( m_aAccessibleChildren.find( nPos ) );
             if ( m_aAccessibleChildren.end() != aAccessiblePos )
             {
-                implReleaseToolboxItem( aAccessiblePos, false, true );
+                implReleaseToolboxItem( aAccessiblePos, false );
                 m_aAccessibleChildren.erase (aAccessiblePos);
             }
 
@@ -631,7 +613,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
                   aIter != m_aAccessibleChildren.end(); ++aIter )
             {
-                implReleaseToolboxItem( aIter, false, true );
+                implReleaseToolboxItem( aIter, false );
             }
             m_aAccessibleChildren.clear();
 
@@ -653,7 +635,7 @@ void VCLXAccessibleToolBox::ProcessWindowChildEvent( const VclWindowEvent& rVclW
             if ( xReturn.is() )
                 NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny(xReturn) );
             else
-                HandleSubToolBarEvent( rVclWindowEvent, true );
+                HandleSubToolBarEvent( rVclWindowEvent );
         }
         break;
 
@@ -678,7 +660,7 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
     for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
           aIter != m_aAccessibleChildren.end(); ++aIter )
     {
-        implReleaseToolboxItem( aIter, false, true );
+        implReleaseToolboxItem( aIter, false );
     }
     m_aAccessibleChildren.clear();
 }

@@ -39,18 +39,18 @@ class VCLXAccessibleToolBox : public VCLXAccessibleComponent, public VCLXAccessi
 private:
     ToolBoxItemsMap             m_aAccessibleChildren;
 
-    VCLXAccessibleToolBoxItem*  GetItem_Impl( sal_Int32 _nPos, bool _bMustHaveFocus );
+    VCLXAccessibleToolBoxItem*  GetItem_Impl( sal_Int32 _nPos );
 
     void                        UpdateFocus_Impl();
     void                        ReleaseFocus_Impl( sal_Int32 _nPos );
     void                        UpdateChecked_Impl( sal_Int32 _nPos );
     void                        UpdateIndeterminate_Impl( sal_Int32 _nPos );
-    void                        UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded );
+    void                        UpdateItem_Impl( sal_Int32 _nPos );
     void                        UpdateAllItems_Impl();
     void                        UpdateItemName_Impl( sal_Int32 _nPos );
     void                        UpdateItemEnabled_Impl( sal_Int32 _nPos );
     void                        UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, bool bOpen );
-    void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow );
+    void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 
 protected:
@@ -96,8 +96,7 @@ public:
 private:
     void implReleaseToolboxItem(
             ToolBoxItemsMap::iterator& _rMapPos,
-            bool _bNotifyRemoval,
-            bool _bDispose
+            bool _bNotifyRemoval
         );
 };
 
