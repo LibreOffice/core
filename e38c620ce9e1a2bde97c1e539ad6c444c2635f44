@@ -16,6 +16,24 @@
       "revId": "e38c620ce9e1a2bde97c1e539ad6c444c2635f44",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_44377fe3",
+        "filename": "sd/source/ui/animations/SlideTransitionPane.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-03-23T12:52:46Z",
+      "side": 1,
+      "message": "In patch 4, I took the value directly from textfield as selecting an entry from listbox sets the same value in textfield.",
+      "parentUuid": "9ad45d7e_295b4456",
+      "revId": "e38c620ce9e1a2bde97c1e539ad6c444c2635f44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
