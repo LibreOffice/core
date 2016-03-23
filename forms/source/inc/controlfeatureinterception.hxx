@@ -69,7 +69,7 @@ namespace frm
         /** queries the interceptor chain for the given dispatch
         */
         css::uno::Reference< css::frame::XDispatch >
-            queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags );
+            queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName );
 
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */

@@ -1448,7 +1448,7 @@ Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  ) throw (RuntimeEx
 }
 
 
-void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount, bool bVetoable )
+void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount )
 {
     // same as in getFastPropertyValue(sal_Int32) : if we're resetting currently don't fire any changes of the
     // IsModified property from sal_False to sal_True, as this is only temporary 'til the reset is done
@@ -1474,15 +1474,15 @@ void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any
                 --nCount;
             else
             {   // split into two base class calls
-                OPropertySetAggregationHelper::fire(pnHandles, pNewValues, pOldValues, nPos, bVetoable);
+                OPropertySetAggregationHelper::fire(pnHandles, pNewValues, pOldValues, nPos, false/*bVetoable*/);
                 ++nPos;
-                OPropertySetAggregationHelper::fire(pnHandles + nPos, pNewValues + nPos, pOldValues + nPos, nCount - nPos, bVetoable);
+                OPropertySetAggregationHelper::fire(pnHandles + nPos, pNewValues + nPos, pOldValues + nPos, nCount - nPos, false/*bVetoable*/);
                 return;
             }
         }
     }
 
-    OPropertySetAggregationHelper::fire(pnHandles, pNewValues, pOldValues, nCount, bVetoable);
+    OPropertySetAggregationHelper::fire(pnHandles, pNewValues, pOldValues, nCount, false/*bVetoable*/);
 }
 
 
@@ -2337,7 +2337,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
         // the rowset changed its active connection itself (without interaction from our side), so
         // we need to fire this event, too
         sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
-        fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, false);
+        fire(&nHandle, &evt.NewValue, &evt.OldValue, 1);
     }
     else // it was one of the statement relevant props
     {
