@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_295b4456",
+        "filename": "sd/source/ui/animations/SlideTransitionPane.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-23T11:19:57Z",
+      "side": 1,
+      "message": "Like with the other patch, just do mpCBX_duration-\u003eGetValue( nPos ) here",
+      "revId": "e38c620ce9e1a2bde97c1e539ad6c444c2635f44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
