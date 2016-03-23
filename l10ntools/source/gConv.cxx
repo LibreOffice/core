@@ -25,6 +25,7 @@ using namespace std;
 #include "gConvPo.hxx"
 #include "gConvProp.hxx"
 #include "gConvSrc.hxx"
+#include "gConvUi.hxx"
 #include "gConvTree.hxx"
 #include "gConvUlf.hxx"
 #include "gConvXcs.hxx"
@@ -79,6 +80,7 @@ convert_gen& convert_gen::createInstance(l10nMem&           cMemory,
     else if (sExtension == "pot")        x = new convert_po(cMemory);
     else if (sExtension == "tree")       x = new convert_tree(cMemory);
     else if (sExtension == "ulf")        x = new convert_ulf(cMemory);
+    else if (sExtension == "ui")         x = new convert_ui(cMemory);
     else if (sExtension == "xcu")        x = new convert_xcu(cMemory);
     else if (sExtension == "xhp")        x = new convert_xhp(cMemory);
     else if (sExtension == "xrm")        x = new convert_xrm(cMemory);

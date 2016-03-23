@@ -2,7 +2,7 @@
 
 cd ${LODE_HOME}/dev/work
 
-MYCMD='./workdir/LinkTarget/Executable/genlang.exe extract --target workdir/jan '
+MYCMD='./workdir/LinkTarget/Executable/genlang.exe extract -s --target workdir/jan '
 
 # .xrm files
 ${MYCMD} --base readlicense_oo/docs --files readme.xrm
@@ -132,10 +132,6 @@ ${MYCMD} --base helpcontent2/source/text/swriter --files main0000.xhp main0100.x
 
 ${MYCMD} --base helpcontent2/source/text/swriter/menu --files insert_footnote_endnote.xhp insert_frame.xhp insert_header_footer.xhp
 
-${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/help/de --files com.foocorp.foo-ext/page1.xhp com.foocorp.foo-ext/page2.xhp com.foocorp.foo-ext/subfolder/anotherpage.xhp
-
-${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/help/en --files com.foocorp.foo-ext/page1.xhp com.foocorp.foo-ext/page2.xhp com.foocorp.foo-ext/subfolder/anotherpage.xhp
-
 ${MYCMD} --base nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver --files Options.xhp Usage.xhp
 
 ${MYCMD} --base odk/examples/DevelopersGuide/Extensions/DialogWithHelp/help/de/com.foocorp.foo-ext --files page1.xhp page2.xhp subfolder/anotherpage.xhp
@@ -198,291 +194,293 @@ ${MYCMD} --base sysui/desktop/share --files documents.ulf launcher_comment.ulf l
 # .hrc files
 
 
-${MYCMD} --files accessibility/inc/accessibility/helper/accessiblestrings.hrc
+#${MYCMD} --files accessibility/inc/accessibility/helper/accessiblestrings.hrc
 
-${MYCMD} --files avmedia/inc/helpids.hrc
+#${MYCMD} --files avmedia/inc/helpids.hrc
 
-${MYCMD} --files avmedia/source/framework/mediacontrol.hrc
+#${MYCMD} --files avmedia/source/framework/mediacontrol.hrc
 
-${MYCMD} --files avmedia/source/viewer/mediawindow.hrc
+#${MYCMD} --files avmedia/source/viewer/mediawindow.hrc
 
-${MYCMD} --files basctl/inc/basidesh.hrc basctl/inc/helpid.hrc
+#${MYCMD} --files basctl/inc/basidesh.hrc basctl/inc/helpid.hrc
 
-${MYCMD} --files basctl/sdi/basslots.hrc
+#${MYCMD} --files basctl/sdi/basslots.hrc
 
-${MYCMD} --base basctl/source/basicide --files baside2.hrc macrodlg.hrc objdlg.hrc
+#${MYCMD} --base basctl/source/basicide --files baside2.hrc macrodlg.hrc objdlg.hrc
 
-${MYCMD} --files basctl/source/inc/dlgresid.hrc
+#${MYCMD} --files basctl/source/inc/dlgresid.hrc
 
-${MYCMD} --files basic/inc/sb.hrc
+#${MYCMD} --files basic/inc/sb.hrc
 
-${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.hrc ResourceIds.hrc
+#${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.hrc ResourceIds.hrc
 
-${MYCMD} --base chart2/source/controller/inc --files HelpIds.hrc MenuResIds.hrc ShapeController.hrc
+#${MYCMD} --base chart2/source/controller/inc --files HelpIds.hrc ShapeController.hrc
 
-${MYCMD} --files chart2/source/controller/main/DrawCommandDispatch.hrc
+#${MYCMD} --files chart2/source/controller/main/DrawCommandDispatch.hrc
 
-${MYCMD} --files chart2/source/inc/Strings.hrc
+#${MYCMD} --files chart2/source/inc/Strings.hrc
 
-${MYCMD} --files connectivity/source/drivers/hsqldb/hsqlui.hrc
+#${MYCMD} --files connectivity/source/drivers/hsqldb/hsqlui.hrc
 
-${MYCMD} --base connectivity/source/inc/resource --files ado_res.hrc calc_res.hrc common_res.hrc conn_shared_res.hrc dbase_res.hrc evoab2_res.hrc file_res.hrc hsqldb_res.hrc jdbc_log.hrc kab_res.hrc macab_res.hrc mork_res.hrc
+#${MYCMD} --base connectivity/source/inc/resource --files ado_res.hrc calc_res.hrc common_res.hrc conn_shared_res.hrc dbase_res.hrc evoab2_res.hrc file_res.hrc hsqldb_res.hrc jdbc_log.hrc kab_res.hrc macab_res.hrc mork_res.hrc
 
-${MYCMD} --base cui/source/customize --files acccfg.hrc cfg.hrc
+#${MYCMD} --base cui/source/customize --files acccfg.hrc cfg.hrc
 
-${MYCMD} --base cui/source/dialogs --files fmsearch.hrc scriptdlg.hrc svuidlg.hrc
+#${MYCMD} --base cui/source/dialogs --files fmsearch.hrc scriptdlg.hrc svuidlg.hrc
 
-${MYCMD} --base cui/source/inc --files cuires.hrc gallery.hrc helpid.hrc
+#${MYCMD} --base cui/source/inc --files cuires.hrc gallery.hrc helpid.hrc
 
-${MYCMD} --files cui/source/options/optsave.hrc
+#${MYCMD} --files cui/source/options/optsave.hrc
 
-${MYCMD} --base cui/source/tabpages --files align.hrc border.hrc numpages.hrc paragrph.hrc
+#${MYCMD} --base cui/source/tabpages --files align.hrc border.hrc numpages.hrc paragrph.hrc
 
-${MYCMD} --files dbaccess/inc/dbaccess_helpid.hrc dbaccess/inc/dbaccess_slotid.hrc
+#${MYCMD} --files dbaccess/inc/dbaccess_helpid.hrc dbaccess/inc/dbaccess_slotid.hrc
 
-${MYCMD} --base dbaccess/source/core/inc --files core_resource.hrc dbamiscres.hrc
+#${MYCMD} --base dbaccess/source/core/inc --files core_resource.hrc dbamiscres.hrc
 
-${MYCMD} --base dbaccess/source/ext/macromigration --files dbmm_global.hrc macromigration.hrc
+#${MYCMD} --base dbaccess/source/ext/macromigration --files dbmm_global.hrc macromigration.hrc
 
-${MYCMD} --base dbaccess/source/inc --files dbastrings.hrc dbustrings.hrc sdbtstrings.hrc stringconstants.hrc xmlstrings.hrc
+#${MYCMD} --base dbaccess/source/inc --files dbastrings.hrc dbustrings.hrc sdbtstrings.hrc stringconstants.hrc xmlstrings.hrc
 
-${MYCMD} --files dbaccess/source/sdbtools/inc/sdbt_resource.hrc
+#${MYCMD} --files dbaccess/source/sdbtools/inc/sdbt_resource.hrc
 
-${MYCMD} --files dbaccess/source/ui/app/dbu_app.hrc
+#${MYCMD} --files dbaccess/source/ui/app/dbu_app.hrc
 
-${MYCMD} --base dbaccess/source/ui/inc --files dbu_brw.hrc dbu_control.hrc dbu_dlg.hrc dbu_misc.hrc dbu_qry.hrc dbu_rel.hrc dbu_resource.hrc dbu_tbl.hrc dbu_uno.hrc sbagrid.hrc
+#${MYCMD} --base dbaccess/source/ui/inc --files dbu_brw.hrc dbu_control.hrc dbu_dlg.hrc dbu_misc.hrc dbu_qry.hrc dbu_rel.hrc dbu_resource.hrc dbu_tbl.hrc dbu_uno.hrc sbagrid.hrc
 
-${MYCMD} --files dbaccess/source/ui/querydesign/Query.hrc
+#${MYCMD} --files dbaccess/source/ui/querydesign/Query.hrc
 
-${MYCMD} --files desktop/inc/deployment.hrc
+#${MYCMD} --files desktop/inc/deployment.hrc
 
-${MYCMD} --files desktop/source/app/desktop.hrc
+#${MYCMD} --files desktop/source/app/desktop.hrc
 
-${MYCMD} --files desktop/source/deployment/gui/dp_gui.hrc
+#${MYCMD} --files desktop/source/deployment/gui/dp_gui.hrc
 
-${MYCMD} --files desktop/source/deployment/manager/dp_manager.hrc
+#${MYCMD} --files desktop/source/deployment/manager/dp_manager.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/component/dp_component.hrc
+#${MYCMD} --files desktop/source/deployment/registry/component/dp_component.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/configuration/dp_configuration.hrc
+#${MYCMD} --files desktop/source/deployment/registry/configuration/dp_configuration.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/help/dp_help.hrc
+#${MYCMD} --files desktop/source/deployment/registry/help/dp_help.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/inc/dp_registry.hrc
+#${MYCMD} --files desktop/source/deployment/registry/inc/dp_registry.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/package/dp_package.hrc
+#${MYCMD} --files desktop/source/deployment/registry/package/dp_package.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/script/dp_script.hrc
+#${MYCMD} --files desktop/source/deployment/registry/script/dp_script.hrc
 
-${MYCMD} --files desktop/source/deployment/registry/sfwk/dp_sfwk.hrc
+#${MYCMD} --files desktop/source/deployment/registry/sfwk/dp_sfwk.hrc
 
-${MYCMD} --files desktop/source/inc/helpid.hrc
+#${MYCMD} --files desktop/source/inc/helpid.hrc
 
-${MYCMD} --files editeng/inc/editeng.hrc editeng/inc/helpid.hrc
+#${MYCMD} --files editeng/inc/editeng.hrc editeng/inc/helpid.hrc
 
-${MYCMD} --base extensions/inc --files abpilot.hrc bibliography.hrc dbpilots.hrc extensio.hrc propctrlr.hrc update.hrc
+#${MYCMD} --base extensions/inc --files abpilot.hrc bibliography.hrc dbpilots.hrc extensio.hrc propctrlr.hrc update.hrc
 
-${MYCMD} --files extensions/source/abpilot/abpresid.hrc
+#${MYCMD} --files extensions/source/abpilot/abpresid.hrc
 
-${MYCMD} --base extensions/source/bibliography --files bib.hrc bibprop.hrc
+#${MYCMD} --base extensions/source/bibliography --files bib.hrc bibprop.hrc
 
-${MYCMD} --files extensions/source/dbpilots/dbpresid.hrc
+#${MYCMD} --files extensions/source/dbpilots/dbpresid.hrc
 
-${MYCMD} --base extensions/source/propctrlr --files formlocalid.hrc formresid.hrc listselectiondlg.hrc propresid.hrc
+#${MYCMD} --base extensions/source/propctrlr --files formlocalid.hrc formresid.hrc listselectiondlg.hrc propresid.hrc
 
-${MYCMD} --files extensions/source/scanner/strings.hrc
+#${MYCMD} --files extensions/source/scanner/strings.hrc
 
-${MYCMD} --base extensions/source/update/check --files updatehdl.hrc updatecheckui.hrc
+#${MYCMD} --files extensions/source/update/check/updatehdl.hrc
 
-${MYCMD} --files filter/inc/filter.hrc
+#${MYCMD} --files extensions/source/update/ui/updatecheckui.hrc
 
-${MYCMD} --files filter/source/graphicfilter/eps/strings.hrc
+#${MYCMD} --files filter/inc/filter.hrc
 
-${MYCMD} --files filter/source/pdf/impdialog.hrc filter/source/pdf/pdf.hrc
+#${MYCMD} --files filter/source/graphicfilter/eps/strings.hrc
 
-${MYCMD} --files filter/source/t602/t602filter.hrc
+#${MYCMD} --files filter/source/pdf/impdialog.hrc filter/source/pdf/pdf.hrc
 
-${MYCMD} --files filter/source/xsltdialog/xmlfilterdialogstrings.hrc
+#${MYCMD} --files filter/source/t602/t602filter.hrc
 
-${MYCMD} --files forms/source/inc/frm_resource.hrc forms/source/inc/property.hrc
+#${MYCMD} --files filter/source/xsltdialog/xmlfilterdialogstrings.hrc
 
-${MYCMD} --files formula/inc/helpids.hrc
+#${MYCMD} --files forms/source/inc/frm_resource.hrc forms/source/inc/property.hrc
 
-${MYCMD} --files formula/source/core/inc/core_resource.hrc
+#${MYCMD} --files formula/inc/helpids.hrc
 
-${MYCMD} --files formula/source/ui/dlg/formdlgs.hrc
+#${MYCMD} --files formula/source/core/inc/core_resource.hrc
 
-${MYCMD} --files formula/source/ui/inc/ForResId.hrc
+#${MYCMD} --files formula/source/ui/dlg/formdlgs.hrc
 
-${MYCMD} --base fpicker/source/office --files iodlg.hrc OfficeFilePicker.hrc
+#${MYCMD} --files formula/source/ui/inc/ForResId.hrc
 
-${MYCMD} --files framework/inc/classes/resource.hrc
+#${MYCMD} --base fpicker/source/office --files iodlg.hrc OfficeFilePicker.hrc
 
-${MYCMD} --files framework/inc/helpid.hrc
+#${MYCMD} --files framework/inc/classes/resource.hrc
 
-${MYCMD} --base include/editeng --files editids.hrc include/editeng/editrids.hrc include/editeng/memberids.hrc
+#${MYCMD} --files framework/inc/helpid.hrc
 
-${MYCMD} --files include/formula/compiler.hrc
+#${MYCMD} --base include/editeng --files editids.hrc editrids.hrc memberids.hrc
 
-${MYCMD} --base include/sfx2 --files cntids.hrc dialogs.hrc sfx.hrc sfxsids.hrc
+#${MYCMD} --files include/formula/compiler.hrc
 
-${MYCMD} --base include/sfx2/sidebar --files ResourceDefinitions.hrc Sidebar.hrc
+#${MYCMD} --base include/sfx2 --files cntids.hrc dialogs.hrc sfx.hrc sfxsids.hrc
 
-${MYCMD} --files include/sfx2/templatelocnames.hrc
+#${MYCMD} --base include/sfx2/sidebar --files ResourceDefinitions.hrc Sidebar.hrc
 
-${MYCMD} --base include/svl --files memberid.hrc solar.hrc style.hrc svl.hrc
+#${MYCMD} --files include/sfx2/templatelocnames.hrc
 
-${MYCMD} --base include/svtools --files controldims.hrc filedlg2.hrc helpid.hrc imagemgr.hrc svtools.hrc
+#${MYCMD} --base include/svl --files memberid.hrc solar.hrc style.hrc svl.hrc
 
-${MYCMD} --base include/svx --files dialogs.hrc exthelpid.hrc fmresids.hrc svdstr.hrc svxids.hrc svxitems.hrc ucsubset.hrc
+#${MYCMD} --base include/svtools --files controldims.hrc filedlg2.hrc helpid.hrc imagemgr.hrc svtools.hrc
 
-${MYCMD} --files include/vcl/fpicker.hrc
+#${MYCMD} --base include/svx --files dialogs.hrc exthelpid.hrc fmresids.hrc svdstr.hrc svxids.hrc svxitems.hrc ucsubset.hrc
 
-${MYCMD} --files include/version.hrc
+#${MYCMD} --files include/vcl/fpicker.hrc
 
-${MYCMD} --base reportdesign/inc --files helpids.hrc RptResId.hrc rptui_slotid.hrc
+#${MYCMD} --files include/version.hrc
 
-${MYCMD} --files reportdesign/source/core/inc/core_resource.hrc
+#${MYCMD} --base reportdesign/inc --files helpids.hrc RptResId.hrc rptui_slotid.hrc
 
-${MYCMD} --base reportdesign/source/inc --files corestrings.hrc stringconstants.hrc uistrings.hrc xmlstrings.hrc
+#${MYCMD} --files reportdesign/source/core/inc/core_resource.hrc
 
-${MYCMD} --files reportdesign/source/ui/dlg/CondFormat.hrc
+#${MYCMD} --base reportdesign/source/inc --files corestrings.hrc stringconstants.hrc uistrings.hrc xmlstrings.hrc
 
-${MYCMD} --base sc/inc --files globstr.hrc sc.hrc scfuncs.hrc
+#${MYCMD} --files reportdesign/source/ui/dlg/CondFormat.hrc
 
-${MYCMD} --files sc/sdi/scslots.hrc
+#${MYCMD} --base sc/inc --files globstr.hrc sc.hrc scfuncs.hrc
 
-${MYCMD} --base sc/source/ui/dbgui --files asciiopt.hrc pvfundlg.hrc
+#${MYCMD} --files sc/sdi/scslots.hrc
 
-${MYCMD} --files sc/source/ui/formdlg/dwfunctr.hrc
+#${MYCMD} --base sc/source/ui/dbgui --files asciiopt.hrc pvfundlg.hrc
 
-${MYCMD} --base sc/source/ui/inc --files acredlin.hrc checklistmenu.hrc condformatdlg.hrc filter.hrc iconsets.hrc miscdlgs.hrc
+#${MYCMD} --files sc/source/ui/formdlg/dwfunctr.hrc
 
-${MYCMD} --files sc/source/ui/navipi/navipi.hrc
+#${MYCMD} --base sc/source/ui/inc --files acredlin.hrc checklistmenu.hrc condformatdlg.hrc filter.hrc iconsets.hrc miscdlgs.hrc
 
-${MYCMD} --files sc/source/ui/pagedlg/pagedlg.hrc
+#${MYCMD} --files sc/source/ui/navipi/navipi.hrc
 
-${MYCMD} --base sc/source/ui/sidebar --files CellAppearancePropertyPanel.hrc NumberFormatPropertyPanel.hrc
+#${MYCMD} --files sc/source/ui/pagedlg/pagedlg.hrc
 
-${MYCMD} --files sc/source/ui/StatisticsDialogs/StatisticsDialogs.hrc
+#${MYCMD} --base sc/source/ui/sidebar --files CellAppearancePropertyPanel.hrc NumberFormatPropertyPanel.hrc
 
-${MYCMD} --files scaddins/source/analysis/analysis.hrc
+#${MYCMD} --files sc/source/ui/StatisticsDialogs/StatisticsDialogs.hrc
 
-${MYCMD} --files scaddins/source/datefunc/datefunc.hrc
+#${MYCMD} --files scaddins/source/analysis/analysis.hrc
 
-${MYCMD} --files scaddins/source/pricing/pricing.hrc
+#${MYCMD} --files scaddins/source/datefunc/datefunc.hrc
 
-${MYCMD} --files sccomp/source/solver/solver.hrc
+#${MYCMD} --files scaddins/source/pricing/pricing.hrc
 
-${MYCMD} --base sd/inc --files app.hrc glob.hrc sdattr.hrc
+#${MYCMD} --files sccomp/source/solver/solver.hrc
 
-${MYCMD} --files sd/sdi/sdslots.hrc
+#${MYCMD} --base sd/inc --files app.hrc glob.hrc sdattr.hrc
 
-${MYCMD} --files sd/source/ui/accessibility/accessibility.hrc
+#${MYCMD} --files sd/sdi/sdslots.hrc
 
-${MYCMD} --files sd/source/ui/animations/CustomAnimation.hrc
+#${MYCMD} --files sd/source/ui/accessibility/accessibility.hrc
 
-${MYCMD} --files sd/source/ui/annotations/annotations.hrc
+#${MYCMD} --files sd/source/ui/animations/CustomAnimation.hrc
 
-${MYCMD} --base sd/source/ui/inc --files dialogs.hrc navigatr.hrc prltempl.hrc res_bmp.hrc sdstring.hrc strings.hrc
+#${MYCMD} --files sd/source/ui/annotations/annotations.hrc
 
-${MYCMD} --files sd/source/ui/slideshow/slideshow.hrc
+#${MYCMD} --base sd/source/ui/inc --files dialogs.hrc navigatr.hrc prltempl.hrc res_bmp.hrc sdstring.hrc strings.hrc
 
-${MYCMD} --files sd/source/ui/slidesorter/inc/view/SlsResource.hrc
+#${MYCMD} --files sd/source/ui/slideshow/slideshow.hrc
 
-${MYCMD} --files sd/source/ui/view/DocumentRenderer.hrc
+#${MYCMD} --files sd/source/ui/slidesorter/inc/view/SlsResource.hrc
 
-${MYCMD} --files sdext/source/minimizer/optimizerdialog.hrc
+#${MYCMD} --files sd/source/ui/view/DocumentRenderer.hrc
 
-${MYCMD} --files sfx2/inc/filedlghelper.hrc
+#${MYCMD} --files sdext/source/minimizer/optimizerdialog.hrc
 
-${MYCMD} --base sfx2/source/appl --files app.hrc newhelp.hrc
+#${MYCMD} --files sfx2/inc/filedlghelper.hrc
 
-${MYCMD} --files sfx2/source/bastyp/bastyp.hrc
+#${MYCMD} --base sfx2/source/appl --files app.hrc newhelp.hrc
 
-${MYCMD} --files sfx2/source/control/templateview.hrc
+#${MYCMD} --files sfx2/source/bastyp/bastyp.hrc
 
-${MYCMD} --base sfx2/source/dialog --files dialog.hrc dinfdlg.hrc
+#${MYCMD} --files sfx2/source/control/templateview.hrc
 
-${MYCMD} --files sfx2/source/doc/doc.hrc
+#${MYCMD} --base sfx2/source/dialog --files dialog.hrc dinfdlg.hrc
 
-${MYCMD} --base sfx2/source/inc --files helpid.hrc sfxlocal.hrc
+#${MYCMD} --files sfx2/source/doc/doc.hrc
 
-${MYCMD} --files sfx2/source/view/view.hrc
+#${MYCMD} --base sfx2/source/inc --files helpid.hrc sfxlocal.hrc
 
-${MYCMD} --files starmath/inc/starmath.hrc
+#${MYCMD} --files sfx2/source/view/view.hrc
 
-${MYCMD} --files svtools/source/brwbox/editbrowsebox.hrc
+#${MYCMD} --files starmath/inc/starmath.hrc
 
-${MYCMD} --base svtools/source/contnr --files fileview.hrc templwin.hrc
+#${MYCMD} --files svtools/source/brwbox/editbrowsebox.hrc
 
-${MYCMD} --files svtools/source/dialogs/addresstemplate.hrc
+#${MYCMD} --base svtools/source/contnr --files fileview.hrc templwin.hrc
 
-${MYCMD} --files svtools/source/inc/filectrl.hrc
+#${MYCMD} --files svtools/source/dialogs/addresstemplate.hrc
 
-${MYCMD} --base svx/inc --files accessibility.hrc float3d.hrc fmhelp.hrc gallery.hrc galtheme.hrc helpid.hrc
+#${MYCMD} --files svtools/source/inc/filectrl.hrc
 
-${MYCMD} --files svx/sdi/svxslots.hrc
+#${MYCMD} --base svx/inc --files accessibility.hrc float3d.hrc fmhelp.hrc gallery.hrc galtheme.hrc helpid.hrc
 
-${MYCMD} --base svx/source/dialog --files bmpmask.hrc compressgraphicdialog.hrc docrecovery.hrc imapdlg.hrc ruler.hrc
+#${MYCMD} --files svx/sdi/svxslots.hrc
 
-${MYCMD} --base svx/source/inc --files datanavi.hrc fmprop.hrc frmsel.hrc
+#${MYCMD} --base svx/source/dialog --files bmpmask.hrc compressgraphicdialog.hrc docrecovery.hrc imapdlg.hrc ruler.hrc
 
-${MYCMD} --files svx/source/sidebar/area/AreaPropertyPanel.hrc
+#${MYCMD} --base svx/source/inc --files datanavi.hrc fmprop.hrc frmsel.hrc
 
-${MYCMD} --files svx/source/sidebar/EmptyPanel.hrc
+#${MYCMD} --files svx/source/sidebar/area/AreaPropertyPanel.hrc
 
-${MYCMD} --files svx/source/sidebar/line/LinePropertyPanel.hrc
+#${MYCMD} --files svx/source/sidebar/EmptyPanel.hrc
 
-${MYCMD} --files svx/source/sidebar/text/TextPropertyPanel.hrc
+#${MYCMD} --files svx/source/sidebar/line/LinePropertyPanel.hrc
 
-${MYCMD} --files svx/source/tbxctrls/extrusioncontrols.hrc
+#${MYCMD} --files svx/source/sidebar/text/TextPropertyPanel.hrc
 
-${MYCMD} --base sw/inc --files access.hrc chrdlg.hrc comcore.hrc dbui.hrc dialog.hrc dochdl.hrc envelp.hrc fldui.hrc globals.hrc index.hrc poolfmt.hrc rcid.hrc statstr.hrc unocore.hrc
+#${MYCMD} --files svx/source/tbxctrls/extrusioncontrols.hrc
 
-${MYCMD} --files sw/sdi/swslots.hrc
+#${MYCMD} --base sw/inc --files access.hrc chrdlg.hrc comcore.hrc dbui.hrc dialog.hrc dochdl.hrc envelp.hrc fldui.hrc globals.hrc index.hrc poolfmt.hrc rcid.hrc statstr.hrc unocore.hrc
 
-${MYCMD} --files sw/source/core/inc/pagefrm.hrc
+#${MYCMD} --files sw/sdi/swslots.hrc
 
-${MYCMD} --files sw/source/core/undo/undo.hrc
+#${MYCMD} --files sw/source/core/inc/pagefrm.hrc
 
-${MYCMD} --files sw/source/ui/config/config.hrc
+#${MYCMD} --files sw/source/core/undo/undo.hrc
 
-${MYCMD} --files sw/source/ui/envelp/envprt.hrc sw/source/ui/envelp/labfmt.hrc
+#${MYCMD} --files sw/source/ui/config/config.hrc
 
-${MYCMD} --files sw/source/uibase/dialog/regionsw.hrc
+#${MYCMD} --files sw/source/ui/envelp/envprt.hrc sw/source/ui/envelp/labfmt.hrc
 
-${MYCMD} --base sw/source/uibase/docvw --files annotation.hrc docvw.hrc
+#${MYCMD} --files sw/source/uibase/dialog/regionsw.hrc
 
-${MYCMD} --files sw/source/uibase/envelp/label.hrc
+#${MYCMD} --base sw/source/uibase/docvw --files annotation.hrc docvw.hrc
 
-${MYCMD} --base sw/source/uibase/inc --files app.hrc frmui.hrc globdoc.hrc misc.hrc popup.hrc ribbar.hrc shells.hrc table.hrc utlui.hrc web.hrc
+#${MYCMD} --files sw/source/uibase/envelp/label.hrc
 
-${MYCMD} --files sw/source/uibase/lingu/olmenu.hrc
+#${MYCMD} --base sw/source/uibase/inc --files app.hrc frmui.hrc globdoc.hrc misc.hrc popup.hrc ribbar.hrc shells.hrc table.hrc utlui.hrc web.hrc
 
-${MYCMD} --files sw/source/uibase/misc/redlndlg.hrc
+#${MYCMD} --files sw/source/uibase/lingu/olmenu.hrc
 
-${MYCMD} --base sw/source/uibase/ribbar --files inputwin.hrc workctrl.hrc
+#${MYCMD} --files sw/source/uibase/misc/redlndlg.hrc
 
-${MYCMD} --base sw/source/uibase/sidebar --files PagePropertyPanel.hrc PropertyPanel.hrc
+#${MYCMD} --base sw/source/uibase/ribbar --files inputwin.hrc workctrl.hrc
 
-${MYCMD} --files sw/source/uibase/uiview/view.hrc
+#${MYCMD} --base sw/source/uibase/sidebar --files PagePropertyPanel.hrc PropertyPanel.hrc
 
-${MYCMD} --base sw/source/uibase/utlui --files attrdesc.hrc initui.hrc navipi.hrc unotools.hrc
+#${MYCMD} --files sw/source/uibase/uiview/view.hrc
 
-${MYCMD} --files sw/source/uibase/wrtsh/wrtsh.hrc
+#${MYCMD} --base sw/source/uibase/utlui --files attrdesc.hrc initui.hrc navipi.hrc unotools.hrc
 
-${MYCMD} --files uui/source/ids.hrc
+#${MYCMD} --files sw/source/uibase/wrtsh/wrtsh.hrc
 
-${MYCMD} --base vcl/inc --files svids.hrc win/salids.hrc
+#${MYCMD} --files uui/source/ids.hrc
 
-${MYCMD} --files vcl/source/edit/textundo.hrc
+#${MYCMD} --base vcl/inc --files svids.hrc win/salids.hrc
 
-${MYCMD} --files writerperfect/inc/strings.hrc
+#${MYCMD} --files vcl/source/edit/textundo.hrc
 
-${MYCMD} --files xmlsecurity/inc/xmlsecurity/global.hrc
+#${MYCMD} --files writerperfect/inc/strings.hrc
 
-${MYCMD} --base xmlsecurity/source/dialogs --files dialogs.hrc digitalsignaturesdialog.hrc helpids.hrc
+#${MYCMD} --files xmlsecurity/inc/xmlsecurity/global.hrc
+
+#${MYCMD} --base xmlsecurity/source/dialogs --files dialogs.hrc digitalsignaturesdialog.hrc helpids.hrc
 
 ${MYCMD} --files android/source/gradle/wrapper/gradle-wrapper.properties
 
@@ -493,8 +491,6 @@ ${MYCMD} --base dictionaries/hu_HU/dialog --files hu_HU_en_US.properties hu_HU_h
 ${MYCMD} --files dictionaries/pt_BR/dialog/pt_BR_pt_BR.properties
 
 ${MYCMD} --base dictionaries/ru_RU/dialog --files ru_RU_en_US.properties dialog/ru_RU_ru_RU.properties
-
-${MYCMD} --files instdir/share/Scripts/python/LibreLogo/LibreLogo_en_US.properties
 
 ${MYCMD} --files librelogo/source/pythonpath/LibreLogo_en_US.properties
 
@@ -520,9 +516,11 @@ ${MYCMD} --base xmlsecurity/test_docs/tools/httpserv/nbproject --files genfiles.
 
 ${MYCMD} --files accessibility/source/helper/accessiblestrings.src
 
-${MYCMD} --base avmedia/source/framework --files mediacontrol.src mediawindow.src
+${MYCMD} --files avmedia/source/framework/mediacontrol.src
 
-${MYCMD} --base basctl/source/basicide --files basicprint.src basidesh.src basicide/macrodlg.src moduldlg.src objdlg.src
+${MYCMD} --files avmedia/source/viewer/mediawindow.src
+
+${MYCMD} --base basctl/source/basicide --files basicprint.src basidesh.src macrodlg.src moduldlg.src objdlg.src
 
 ${MYCMD} --files basctl/source/dlged/dlgresid.src
 
@@ -531,8 +529,6 @@ ${MYCMD} --files basic/source/classes/sb.src
 ${MYCMD} --files basic/source/sbx/format.src
 
 ${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.src Strings.src Strings_AdditionalControls.src Strings_ChartTypes.src Strings_Scale.src Strings_Statistic.src
-
-${MYCMD} --base chart2/source/controller/menus --files ShapeContextMenu.src ShapeEditContextMenu.src
 
 ${MYCMD} --base connectivity/source/resource --files conn_error_message.src conn_log_res.src conn_shared_res.src
 
@@ -558,7 +554,7 @@ ${MYCMD} --base dbaccess/source/ui/control --files TableGrantCtrl.src tabletree.
 
 ${MYCMD} --base dbaccess/source/ui/dlg --files AutoControls.src ConnectionPage.src dbadmin.src dbadmin2.src dbadminsetup.src directsql.src indexdialog.src paramdialog.src sqlmessage.src UserAdmin.src
 
-${MYCMD} --files dbaccess/source/ui/imagelists/dbimagelists.src
+#${MYCMD} --files dbaccess/source/ui/imagelists/dbimagelists.src
 
 ${MYCMD} --base dbaccess/source/ui/misc --files dbumiscres.src WizardPages.src
 
@@ -604,23 +600,23 @@ ${MYCMD} --files editeng/source/misc/lingu.src
 
 ${MYCMD} --files editeng/source/outliner/outliner.src
 
-${MYCMD} --base extensions/qa/complex/extensions --files orl_de.src orl_en-US.src
+#${MYCMD} --base extensions/qa/complex/extensions --files orl_de.src orl_en-US.src
 
 ${MYCMD} --files extensions/source/abpilot/abspilot.src
 
 ${MYCMD} --base extensions/source/bibliography --files bib.src sections.src toolbar.src
 
-${MYCMD} --base extensions/source/dbpilots --files commonpagesdbp.src dpilots.src gridpages.src groupboxpages.src listcombopages.src
+${MYCMD} --base extensions/source/dbpilots --files commonpagesdbp.src dbpilots.src gridpages.src groupboxpages.src listcombopages.src
 
 ${MYCMD} --base extensions/source/propctrlr --files formlinkdialog.src formres.src pcrmiscres.src propres.src selectlabeldialog.src
 
 ${MYCMD} --files extensions/source/scanner/strings.src
 
-${MYCMD} --files extensions/source/update/check/updatehdl.src
+#${MYCMD} --files extensions/source/update/check/updatehdl.src
 
-${MYCMD} --files extensions/source/update/ui/updatecheckui.src
+#${MYCMD} --files extensions/source/update/ui/updatecheckui.src
 
-${MYCMD} --files extensions/workben/testresource.src
+#${MYCMD} --files extensions/workben/testresource.src
 
 ${MYCMD} --files filter/source/graphicfilter/eps/epsstr.src
 
@@ -660,7 +656,7 @@ ${MYCMD} --base sc/source/ui/miscdlgs --files acredlin.src conflictsdlg.src rety
 
 ${MYCMD} --files sc/source/ui/navipi/navipi.src
 
-${MYCMD} --files sc/source/ui/pagedlg/pagedlg.src
+#${MYCMD} --files sc/source/ui/pagedlg/pagedlg.src
 
 ${MYCMD} --base sc/source/ui/sidebar --files CellAppearancePropertyPanel.src NumberFormatPropertyPanel.src
 
@@ -692,7 +688,7 @@ ${MYCMD} --files sd/source/ui/dlg/navigatr.src
 
 ${MYCMD} --files sd/source/ui/slideshow/slideshow.src
 
-${MYCMD} --files sd/source/ui/slidesorter/view/SlsResource.src
+#${MYCMD} --files sd/source/ui/slidesorter/view/SlsResource.src
 
 ${MYCMD} --files sd/source/ui/view/DocumentRenderer.src
 
@@ -702,7 +698,7 @@ ${MYCMD} --base sfx2/source/bastyp --files bastyp.src fltfnc.src
 
 ${MYCMD} --files sfx2/source/control/templateview.src
 
-${MYCMD} --base sfx2/source/dialog --files dialog.src dinfdlg.src filedlghelper.src newstyle.src recfloat.src taskpane.src templdlg.src itledockwin.src versdlg.src
+${MYCMD} --base sfx2/source/dialog --files dialog.src dinfdlg.src filedlghelper.src newstyle.src recfloat.src taskpane.src templdlg.src titledockwin.src versdlg.src
 
 ${MYCMD} --base sfx2/source/doc --files doc.src doctempl.src graphhelp.src templatelocnames.src
 
@@ -714,9 +710,9 @@ ${MYCMD} --base starmath/source --files commands.src smres.src symbol.src
 
 ${MYCMD} --files svl/source/misc/mediatyp.src
 
-${MYCMD} --files svtools/source/brwbox/editbrowsebox.src
+#${MYCMD} --files svtools/source/brwbox/editbrowsebox.src
 
-${MYCMD} --base svtools/source/contnr --files fileview.src svcontnr.src contnr/templwin.src
+${MYCMD} --base svtools/source/contnr --files fileview.src svcontnr.src templwin.src
 
 ${MYCMD} --base svtools/source/control --files calendar.src ctrlbox.src ctrltool.src filectrl.src ruler.src
 
@@ -764,7 +760,7 @@ ${MYCMD} --base svx/source/tbxctrls --files colrctrl.src extrusioncontrols.src f
 
 ${MYCMD} --base svx/source/toolbars --files extrusionbar.src fontworkbar.src
 
-${MYCMD} --files svx/source/unodraw/unodraw.src
+#${MYCMD} --files svx/source/unodraw/unodraw.src
 
 ${MYCMD} --files sw/source/core/layout/pagefrm.src
 
@@ -834,13 +830,13 @@ ${MYCMD} --files wizards/source/euro/euro.src
 
 ${MYCMD} --files wizards/source/formwizard/dbwizres.src
 
-${MYCMD} --files wizards/source/imagelists/imagelists.src
+#${MYCMD} --files wizards/source/imagelists/imagelists.src
 
 ${MYCMD} --files wizards/source/importwizard/importwi.src
 
 ${MYCMD} --files wizards/source/template/template.src
 
-${MYCMD} --files writerperfect/source/common/strings.src
+#${MYCMD} --files writerperfect/source/common/strings.src
 
 ${MYCMD} --files xmlsecurity/source/component/warnbox.src
 
@@ -874,9 +870,9 @@ ${MYCMD} --files connectivity/registry/postgresql/org/openoffice/Office/DataAcce
 
 ${MYCMD} --files connectivity/registry/tdeab/org/openoffice/Office/DataAccess/Drivers.xcu
 
-${MYCMD} --base desktop/test/deployment/active --files Addons.xcu ProtocolHandler.xcu
+#${MYCMD} --base desktop/test/deployment/active --files Addons.xcu ProtocolHandler.xcu
 
-${MYCMD} --base desktop/test/deployment/passive --files Addons.xcu ProtocolHandler.xcu
+#${MYCMD} --base desktop/test/deployment/passive --files Addons.xcu ProtocolHandler.xcu
 
 ${MYCMD} --files dictionaries/af_ZA/dictionaries.xcu
 
@@ -894,9 +890,9 @@ ${MYCMD} --files dictionaries/br_FR/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/bs_BA/dictionaries.xcu
 
-${MYCMD} --files dictionaries/ca/dictionaries.xcu
+#${MYCMD} --files dictionaries/ca/dictionaries.xcu
 
-${MYCMD} --files dictionaries/cs_CZ/dictionaries.xcu
+#${MYCMD} --files dictionaries/cs_CZ/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/da_DK/dictionaries.xcu
 
@@ -914,11 +910,11 @@ ${MYCMD} --files dictionaries/et_EE/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/fr_FR/dictionaries.xcu
 
-${MYCMD} --files dictionaries/gd_GB/dictionaries.xcu
+#${MYCMD} --files dictionaries/gd_GB/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/gl/dictionaries.xcu
 
-${MYCMD} --files dictionaries/gug/dictionaries.xcu
+#${MYCMD} --files dictionaries/gug/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/gu_IN/dictionaries.xcu
 
@@ -954,13 +950,21 @@ ${MYCMD} --files dictionaries/oc_FR/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/pl_PL/dictionaries.xcu
 
-${MYCMD} --base dictionaries/pt_BR/dialog --files OptionsDialog.xcu registry/data/org/openoffice/Office/OptionsDialog.xcu dictionaries.xcu Linguistic.xcu
+${MYCMD} --files dictionaries/pt_BR --files dictionaries.xcu Linguistic.xcu
+
+${MYCMD} --files dictionaries/pt_BR/dialog/OptionsDialog.xcu
+
+${MYCMD} --files dictionaries/pt_BR/dialog/registry/data/org/openoffice/Office/OptionsDialog.xcu
 
 ${MYCMD} --files dictionaries/pt_PT/dictionaries.xcu
 
 ${MYCMD} --files dictionaries/ro/dictionaries.xcu
 
-${MYCMD} --base dictionaries/ru_RU/dialog --files registry/data/org/openoffice/Office/OptionsDialog.xcu dictionaries.xcu Linguistic.xcu
+${MYCMD} --base dictionaries/ru_RU --files dictionaries.xcu Linguistic.xcu
+
+${MYCMD} --files dictionaries/ru_RU/dialog/registry/data/org/openoffice/Office/OptionsDialog.xcu
+
+${MYCMD} --files dictionaries/ru_RU/dialog/registry/data/org/openoffice/Office/OptionsDialog.xcu
 
 ${MYCMD} --files dictionaries/si_LK/dictionaries.xcu
 
@@ -986,77 +990,51 @@ ${MYCMD} --files dictionaries/zu_ZA/dictionaries.xcu
 
 ${MYCMD} --base extensions/source/update/check/org/openoffice/Office --files Addons.xcu Jobs.xcu
 
-${MYCMD} --files filter/qa/complex/filter/misc/TypeDetection6FileFormat.xcu
+#${MYCMD} --files filter/qa/complex/filter/misc/TypeDetection6FileFormat.xcu
 
-${MYCMD} --base filter/source/config/fragments/contenthandlers --files com_sun_star_comp_framework_oxt_handler.xcu com_sun_star_comp_framework_SoundHandler.xcu
+#${MYCMD} --base filter/source/config/fragments/contenthandlers --files com_sun_star_comp_framework_oxt_handler.xcu com_sun_star_comp_framework_SoundHandler.xcu
 
 ${MYCMD} --base filter/source/config/fragments/filters --files AbiWord.xcu AppleKeynote.xcu AppleNumbers.xcu ApplePages.xcu BMP___MS_Windows.xcu BroadBand_eBook.xcu calc8.xcu calc8_template.xcu calc_Gnumeric.xcu calc_HTML_WebQuery.xcu calc_MS_Excel_2007_Binary.xcu calc_MS_Excel_2007_VBA_XML.xcu calc_MS_Excel_2007_XML.xcu calc_MS_Excel_2007_XML_Template.xcu calc_OOXML.xcu calc_OOXML_Template.xcu calc_pdf_Export.xcu calc_png_Export.xcu calc_StarOffice_XML_Calc_Template.xcu CGM___Computer_Graphics_Metafile.xcu chart8.xcu ClarisWorks.xcu ClarisWorks_Calc.xcu ClarisWorks_Draw.xcu ClarisWorks_Impress.xcu Claris_Resolve_Calc.xcu CorelDrawDocument.xcu CorelPresentationExchange.xcu dBase.xcu DIF.xcu DocBook_File.xcu DosWord.xcu draw8.xcu draw8_template.xcu draw_bmp_Export.xcu draw_emf_Export.xcu draw_eps_Export.xcu draw_flash_Export.xcu draw_gif_Export.xcu draw_html_Export.xcu draw_jpg_Export.xcu draw_PCD_Photo_CD_Base.xcu draw_PCD_Photo_CD_Base16.xcu draw_PCD_Photo_CD_Base4.xcu draw_pdf_Export.xcu draw_png_Export.xcu draw_StarOffice_XML_Draw_Template.xcu draw_svg_Export.xcu draw_tif_Export.xcu draw_wmf_Export.xcu DXF___AutoCAD_Interchange.xcu EMF___MS_Windows_Metafile.xcu EPS___Encapsulated_PostScript.xcu FictionBook_2.xcu FreehandDocument.xcu GIF___Graphics_Interchange.xcu HTML.xcu HTML_MasterDoc.xcu HTML__StarCalc_.xcu HTML__StarWriter_.xcu impress8.xcu impress8_draw.xcu impress8_template.xcu impress_bmp_Export.xcu impress_emf_Export.xcu impress_eps_Export.xcu impress_flash_Export.xcu impress_gif_Export.xcu impress_html_Export.xcu impress_jpg_Export.xcu impress_MS_PowerPoint_2007_XML.xcu impress_MS_PowerPoint_2007_XML_AutoPlay.xcu impress_MS_PowerPoint_2007_XML_Template.xcu impress_OOXML.xcu impress_OOXML_AutoPlay.xcu impress_OOXML_Template.xcu impress_pdf_Export.xcu impress_png_Export.xcu impress_StarOffice_XML_Draw.xcu impress_StarOffice_XML_Impress_Template.xcu impress_svg_Export.xcu impress_tif_Export.xcu impress_wmf_Export.xcu JPG___JPEG.xcu Lotus.xcu LotusWordPro.xcu MacWrite.xcu Mac_Word.xcu Mac_Works.xcu Mac_Works_Calc.xcu Mariner_Write.xcu math8.xcu MathML_XML__Math_.xcu MathType_3_x.xcu math_pdf_Export.xcu MET___OS_2_Metafile.xcu mov__MOV.xcu MS_Excel_2003_XML.xcu MS_Excel_4_0.xcu MS_Excel_4_0_Vorlage_Template.xcu MS_Excel_5_0_95.xcu MS_Excel_5_0_95_Vorlage_Template.xcu MS_Excel_95.xcu MS_Excel_95_Vorlage_Template.xcu MS_Excel_97.xcu MS_Excel_97_Vorlage_Template.xcu MS_PowerPoint_97.xcu MS_PowerPoint_97_AutoPlay.xcu MS_PowerPoint_97_Vorlage.xcu MS_WinWord_5.xcu MS_WinWord_6_0.xcu MS_Word_2003_XML.xcu MS_Word_2007_XML.xcu MS_Word_2007_XML_Template.xcu MS_Word_95.xcu MS_Word_95_Vorlage.xcu MS_Word_97.xcu MS_Word_97_Vorlage.xcu MS_Works.xcu MS_Works_Calc.xcu MS_Write.xcu MWAW_Bitmap.xcu MWAW_Database.xcu MWAW_Drawing.xcu MWAW_Presentation.xcu MWAW_Spreadsheet.xcu MWAW_Text_Document.xcu ODG_FlatXML.xcu ODP_FlatXML.xcu ODS_FlatXML.xcu ODT_FlatXML.xcu OOXML_Text.xcu OOXML_Text_Template.xcu PageMakerDocument.xcu PalmDoc.xcu Palm_Text_Document.xcu PBM___Portable_Bitmap.xcu PCT___Mac_Pict.xcu PCX___Zsoft_Paintbrush.xcu PGM___Portable_Graymap.xcu placeware_Export.xcu Plucker_eBook.xcu PNG___Portable_Network_Graphic.xcu PPM___Portable_Pixelmap.xcu PSD___Adobe_Photoshop.xcu PublisherDocument.xcu QPro.xcu RAS___Sun_Rasterfile.xcu Rich_Text_Format.xcu Rich_Text_Format__StarCalc_.xcu SGF___StarOffice_Writer_SGF.xcu SGV___StarDraw_2_0.xcu StarBaseReport.xcu StarBaseReportChart.xcu StarOffice_XML__Base_.xcu StarOffice_XML__Calc_.xcu StarOffice_XML__Chart_.xcu StarOffice_XML__Draw_.xcu StarOffice_XML__Impress_.xcu StarOffice_XML__Math_.xcu StarOffice_XML__Writer_.xcu SVG___Scalable_Vector_Graphics.xcu SVM___StarView_Metafile.xcu SYLK.xcu T602Document.xcu Text.xcu Text__encoded_.xcu Text__encoded___StarWriter_GlobalDocument_.xcu Text__encoded___StarWriter_Web_.xcu Text__StarWriter_Web_.xcu Text___txt___csv__StarCalc_.xcu TGA___Truevision_TARGA.xcu TIF___Tag_Image_File.xcu UOF_presentation.xcu UOF_spreadsheet.xcu UOF_text.xcu VisioDocument.xcu WMF___MS_Windows_Metafile.xcu WordPerfect.xcu WordPerfectGraphics.xcu WPS_Lotus_Calc.xcu WPS_QPro_Calc.xcu WriteNow.xcu writer8.xcu writer8_template.xcu writerglobal8.xcu writerglobal8_HTML.xcu writerglobal8_template.xcu writerglobal8_writer.xcu writerweb8_writer.xcu writerweb8_writer_template.xcu writer_globaldocument_pdf_Export.xcu writer_globaldocument_StarOffice_XML_Writer.xcu writer_globaldocument_StarOffice_XML_Writer_GlobalDocument.xcu writer_jpg_Export.xcu writer_layout_dump.xcu writer_MIZI_Hwp_97.xcu writer_pdf_Export.xcu writer_png_Export.xcu writer_StarOffice_XML_Writer_Template.xcu writer_web_HTML_help.xcu writer_web_jpg_Export.xcu writer_web_pdf_Export.xcu writer_web_png_Export.xcu writer_web_StarOffice_XML_Writer.xcu writer_web_StarOffice_XML_Writer_Web_Template.xcu XBM___X_Consortium.xcu XHTML_Calc_File.xcu XHTML_Draw_File.xcu XHTML_Impress_File.xcu XHTML_Writer_File.xcu XPM.xcu
 
-${MYCMD} --base filter/source/config/fragments/frameloaders --files com_sun_star_comp_chart2_ChartFrameLoader.xcu com_sun_star_frame_Bibliography.xcu com_sun_star_sdb_ContentLoader.xcu org_openoffice_comp_dbflt_DBContentLoader2.xcu
+#${MYCMD} --base filter/source/config/fragments/frameloaders --files com_sun_star_comp_chart2_ChartFrameLoader.xcu com_sun_star_frame_Bibliography.xcu com_sun_star_sdb_ContentLoader.xcu org_openoffice_comp_dbflt_DBContentLoader2.xcu
 
 ${MYCMD} --base filter/source/config/fragments/internalgraphicfilters --files bmp_Export.xcu bmp_Import.xcu dxf_Import.xcu emf_Export.xcu emf_Import.xcu eps_Export.xcu eps_Import.xcu gif_Export.xcu gif_Import.xcu jpg_Export.xcu jpg_Import.xcu met_Import.xcu mov_Import.xcu pbm_Import.xcu pcd_Import_Base.xcu pcd_Import_Base16.xcu pcd_Import_Base4.xcu pct_Import.xcu pcx_Import.xcu pgm_Import.xcu png_Export.xcu png_Import.xcu ppm_Import.xcu psd_Import.xcu ras_Import.xcu sgf_Import.xcu sgv_Import.xcu svg_Export.xcu svg_Import.xcu svm_Export.xcu svm_Import.xcu tga_Import.xcu tif_Export.xcu tif_Import.xcu wmf_Export.xcu wmf_Import.xcu xbm_Import.xcu xpm_Import.xcu
 
 ${MYCMD} --base filter/source/config/fragments/types --files bmp_MS_Windows.xcu calc8.xcu calc8_template.xcu calc_AppleNumbers.xcu calc_ClarisWorks.xcu calc_Claris_Resolve.xcu calc_dBase.xcu calc_DIF.xcu calc_Gnumeric.xcu calc_HTML.xcu calc_Lotus.xcu calc_Mac_Works.xcu calc_MS_Excel_2003_XML.xcu calc_MS_Excel_40.xcu calc_MS_Excel_40_VorlageTemplate.xcu calc_MS_Excel_5095.xcu calc_MS_Excel_5095_VorlageTemplate.xcu calc_MS_Excel_95.xcu calc_MS_Excel_95_VorlageTemplate.xcu calc_MS_Excel_97.xcu calc_MS_Excel_97_VorlageTemplate.xcu calc_MS_Works_Document.xcu calc_ODS_FlatXML.xcu calc_OOXML.xcu calc_OOXML_Template.xcu calc_QPro.xcu calc_StarOffice_XML_Calc.xcu calc_StarOffice_XML_Calc_Template.xcu calc_SYLK.xcu calc_WPS_Lotus_Document.xcu calc_WPS_QPro_Document.xcu chart8.xcu chart_StarOffice_XML_Chart.xcu component_Bibliography.xcu component_DB.xcu draw8.xcu draw8_template.xcu draw_ClarisWorks.xcu draw_CorelDraw_Document.xcu draw_Corel_Presentation_Exchange.xcu draw_Freehand_Document.xcu draw_ODG_FlatXML.xcu draw_PageMaker_Document.xcu draw_Publisher_Document.xcu draw_StarOffice_XML_Draw.xcu draw_StarOffice_XML_Draw_Template.xcu draw_Visio_Document.xcu draw_WordPerfect_Graphics.xcu dxf_AutoCAD_Interchange.xcu emf_MS_Windows_Metafile.xcu eps_Encapsulated_PostScript.xcu generic_HTML.xcu generic_Text.xcu gif_Graphics_Interchange.xcu graphic_HTML.xcu graphic_SWF.xcu impress8.xcu impress8_template.xcu impress_AppleKeynote.xcu impress_CGM_Computer_Graphics_Metafile.xcu impress_ClarisWorks.xcu impress_MS_PowerPoint_97.xcu impress_MS_PowerPoint_97_AutoPlay.xcu impress_MS_PowerPoint_97_Vorlage.xcu impress_ODP_FlatXML.xcu impress_OOXML_Presentation.xcu impress_OOXML_Presentation_AutoPlay.xcu impress_OOXML_Presentation_Template.xcu impress_StarOffice_XML_Impress.xcu impress_StarOffice_XML_Impress_Template.xcu jpg_JPEG.xcu math8.xcu math_MathML_XML_Math.xcu math_MathType_3x.xcu math_StarOffice_XML_Math.xcu met_OS2_Metafile.xcu mov_MOV.xcu MS_Excel_2007_Binary.xcu MS_Excel_2007_VBA_XML.xcu MS_Excel_2007_XML.xcu MS_Excel_2007_XML_Template.xcu MS_PowerPoint_2007_XML.xcu MS_PowerPoint_2007_XML_AutoPlay.xcu MS_PowerPoint_2007_XML_Template.xcu MWAW_Bitmap.xcu MWAW_Database.xcu MWAW_Drawing.xcu MWAW_Presentation.xcu MWAW_Spreadsheet.xcu MWAW_Text_Document.xcu oxt_OpenOffice_Extension.xcu Palm_Text_Document.xcu pbm_Portable_Bitmap.xcu pcd_Photo_CD_Base.xcu pcd_Photo_CD_Base16.xcu pcd_Photo_CD_Base4.xcu pct_Mac_Pict.xcu pcx_Zsoft_Paintbrush.xcu pdf_Portable_Document_Format.xcu pgm_Portable_Graymap.xcu png_Portable_Network_Graphic.xcu ppm_Portable_Pixelmap.xcu psd_Adobe_Photoshop.xcu pwp_PlaceWare.xcu ras_Sun_Rasterfile.xcu sgf_StarOffice_Writer_SGF.xcu sgv_StarDraw_20.xcu StarBase.xcu StarBaseReport.xcu StarBaseReportChart.xcu svg_Scalable_Vector_Graphics.xcu svm_StarView_Metafile.xcu tga_Truevision_TARGA.xcu tif_Tag_Image_File.xcu Unified_Office_Format_presentation.xcu Unified_Office_Format_spreadsheet.xcu Unified_Office_Format_text.xcu wav_Wave_Audio_File.xcu wmf_MS_Windows_Metafile.xcu writer8.xcu writer8_template.xcu writerglobal8.xcu writerglobal8_template.xcu writerweb8_writer_template.xcu writer_AbiWord_Document.xcu writer_ApplePages.xcu writer_BroadBand_eBook.xcu writer_ClarisWorks.xcu writer_DocBook_File.xcu writer_DosWord.xcu writer_FictionBook_2.xcu writer_globaldocument_StarOffice_XML_Writer_GlobalDocument.xcu writer_layout_dump_xml.xcu writer_LotusWordPro_Document.xcu writer_MacWrite.xcu writer_Mac_Word.xcu writer_Mac_Works.xcu writer_Mariner_Write.xcu writer_MIZI_Hwp_97.xcu writer_MS_WinWord_5.xcu writer_MS_WinWord_60.xcu writer_MS_Word_2003_XML.xcu writer_MS_Word_2007_XML.xcu writer_MS_Word_2007_XML_Template.xcu writer_MS_Word_95.xcu writer_MS_Word_95_Vorlage.xcu writer_MS_Word_97.xcu writer_MS_Word_97_Vorlage.xcu writer_MS_Works_Document.xcu writer_MS_Write.xcu writer_ODT_FlatXML.xcu writer_OOXML.xcu writer_OOXML_Template.xcu writer_PalmDoc.xcu writer_Plucker_eBook.xcu writer_Rich_Text_Format.xcu writer_StarOffice_XML_Writer.xcu writer_StarOffice_XML_Writer_Template.xcu writer_T602_Document.xcu writer_web_HTML_help.xcu writer_web_StarOffice_XML_Writer_Web_Template.xcu writer_WordPerfect_Document.xcu writer_WriteNow.xcu xbm_X_Consortium.xcu XHTML_File.xcu xpm_XPM.xcu
 
-${MYCMD} --base instdir/sdk/examples/cpp/complextoolbarcontrols --files Addons.xcu CalcWindowState.xcu Jobs.xcu ProtocolHandler.xcu WriterWindowState.xcu
-
-${MYCMD} --base instdir/sdk/examples/DevelopersGuide/Components/Addons/JobsAddon --files Addons.xcu Jobs.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp/Addons.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java/Addons.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java/ProtocolHandler.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/Extensions/DialogWithHelp/Addons.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter/TypeDetection.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection/FlatXmlTypeDetection.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXmlFilter_cpp.xcu
-
-${MYCMD} --files instdir/sdk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXmlFilter_java.xcu
-
-${MYCMD} --files instdir/sdk/examples/java/EmbedDocument/EmbeddedObject/EmbeddedObject.xcu
-
-${MYCMD} --base instdir/sdk/examples/java/Inspector --files Addons.xcu ObjectInspector.xcu ProtocolHandler.xcu
-
-${MYCMD} --base instdir/sdk/examples/python/toolpanel --files CalcWindowState.xcu Factory.xcu
-
-${MYCMD} --base lingucomponent/config --files Linguistic-lingucomponent-hyphenator.xcu Linguistic-lingucomponent-spellchecker.xcu Linguistic-lingucomponent-thesaurus.xcu
+#${MYCMD} --base lingucomponent/config --files Linguistic-lingucomponent-hyphenator.xcu Linguistic-lingucomponent-spellchecker.xcu Linguistic-lingucomponent-thesaurus.xcu
 
 ${MYCMD} --files mysqlc/source/DataAccess.xcu
 
 ${MYCMD} --files mysqlc/source/registry/data/org/openoffice/Office/DataAccess/Drivers.xcu
 
-${MYCMD} --base odk/examples/cpp/complextoolbarcontrols --files Addons.xcu CalcWindowState.xcu Jobs.xcu ProtocolHandler.xcu WriterWindowState.xcu
+#${MYCMD} --base odk/examples/cpp/complextoolbarcontrols --files Addons.xcu CalcWindowState.xcu Jobs.xcu ProtocolHandler.xcu WriterWindowState.xcu
 
-${MYCMD} --base odk/examples/cpp/custompanel --files CalcWindowState.xcu DrawWindowState.xcu Factories.xcu ImpressWindowState.xcu WriterWindowState.xcu
+#${MYCMD} --base odk/examples/cpp/custompanel --files CalcWindowState.xcu DrawWindowState.xcu Factories.xcu ImpressWindowState.xcu WriterWindowState.xcu
 
-${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/JobsAddon --files Addons.xcu JobsAddon/Jobs.xcu
+#${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/JobsAddon --files Addons.xcu Jobs.xcu
 
-${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp --files Addons.xcu ProtocolHandlerAddon_cpp/ProtocolHandler.xcu
+${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons --files ProtocolHandlerAddon_cpp Addons.xcu
 
-${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java --files Addons.xcu ProtocolHandler.xcu
+#${MYCMD} --files odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu
 
-${MYCMD} --files odk/examples/DevelopersGuide/Extensions/DialogWithHelp/Addons.xcu
+#${MYCMD} --base odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java --files Addons.xcu ProtocolHandler.xcu
 
-${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter/TypeDetection.xcu
+#${MYCMD} --files odk/examples/DevelopersGuide/Extensions/DialogWithHelp/Addons.xcu
 
-${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection/FlatXmlTypeDetection.xcu
+#${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter/TypeDetection.xcu
 
-${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXmlFilter_cpp.xcu
+#${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection/FlatXmlTypeDetection.xcu
 
-${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXmlFilter_java.xcu
+#${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXmlFilter_cpp.xcu
 
-${MYCMD} --files odk/examples/java/EmbedDocument/EmbeddedObject/EmbeddedObject.xcu
+#${MYCMD} --files odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXmlFilter_java.xcu
 
-${MYCMD} --base odk/examples/java/Inspector --files Addons.xcu ObjectInspector.xcu ProtocolHandler.xcu
+#${MYCMD} --files odk/examples/java/EmbedDocument/EmbeddedObject/EmbeddedObject.xcu
 
-${MYCMD} --base odk/examples/python/toolpanel --files CalcWindowState.xcu Factory.xcu
+#${MYCMD} --base odk/examples/java/Inspector --files Addons.xcu ObjectInspector.xcu ProtocolHandler.xcu
+
+#${MYCMD} --base odk/examples/python/toolpanel --files CalcWindowState.xcu Factory.xcu
 
 ${MYCMD} --base officecfg/registry/data/org/openoffice --files FirstStartWizard.xcu Inet.xcu Interaction.xcu
 
@@ -1070,21 +1048,23 @@ ${MYCMD} --base officecfg/registry/data/org/openoffice/Office --files Views.xcu 
 
 ${MYCMD} --base officecfg/registry/data/org/openoffice --files Setup.xcu System.xcu
 
-${MYCMD} --files officecfg/registry/data/org/openoffice/TypeDetection/UISort.xcu
+#${MYCMD} --files officecfg/registry/data/org/openoffice/TypeDetection/UISort.xcu
 
-${MYCMD} --files officecfg/registry/data/org/openoffice/ucb/Configuration.xcu
+#${MYCMD} --files officecfg/registry/data/org/openoffice/ucb/Configuration.xcu
 
 ${MYCMD} --base officecfg/registry/data/org/openoffice --files UserProfile.xcu VCL.xcu
 
-${MYCMD} --files pyuno/demo/Addons.xcu
+#${MYCMD} --files pyuno/demo/Addons.xcu
 
-${MYCMD} --files qadevOOo/qa/registrymodifications.xcu
+#${MYCMD} --files qadevOOo/qa/registrymodifications.xcu
 
-${MYCMD} --base reportbuilder/registry/data/org/openoffice/Office --files Accelerators.xcu DataAccess.xcu Embedding.xcu Controller.xcu
+#${MYCMD} --base reportbuilder/registry/data/org/openoffice/Office --files Accelerators.xcu DataAccess.xcu Embedding.xcu
 
-${MYCMD} --files reportbuilder/registry/data/org/openoffice/Setup.xcu
+#${MYCMD} --files reportbuilder/registry/data/org/openoffice/Office/UI/Controller.xcu
 
-${MYCMD} --files reportbuilder/template/registry/data/org/openoffice/Office/Paths.xcu
+#${MYCMD} --files reportbuilder/registry/data/org/openoffice/Setup.xcu
+
+#${MYCMD} --files reportbuilder/template/registry/data/org/openoffice/Office/Paths.xcu
 
 ${MYCMD} --base sdext/source/pdfimport/config --files pdf_import_filter.xcu pdf_types.xcu
 
@@ -1095,3 +1075,58 @@ ${MYCMD} --files swext/mediawiki/src/registry/data/org/openoffice/Office/Custom/
 ${MYCMD} --base swext/mediawiki/src/registry/data/org/openoffice/Office --files OptionsDialog.xcu Paths.xcu ProtocolHandler.xcu
 
 ${MYCMD} --base swext/mediawiki/src/registry/data/org/openoffice/TypeDetection --files Filter.xcu Types.xcu
+
+
+${MYCMD} --base basctl/uiconfig/basicide/ui --files basicmacrodialog.ui defaultlanguage.ui deletelangdialog.ui dialogpage.ui exportdialog.ui gotolinedialog.ui importlibdialog.ui libpage.ui managebreakpoints.ui managelanguages.ui modulepage.ui newlibdialog.ui organizedialog.ui
+
+${MYCMD} --base chart2/uiconfig/ui --files 3dviewdialog.ui attributedialog.ui chardialog.ui chartdatadialog.ui charttypedialog.ui datarangedialog.ui dlg_DataLabel.ui dlg_InsertErrorBars.ui dlg_InsertLegend.ui insertaxisdlg.ui insertgriddlg.ui inserttitledlg.ui paradialog.ui sidebaraxis.ui sidebarelements.ui sidebarerrorbar.ui sidebarseries.ui smoothlinesdlg.ui steppedlinesdlg.ui titlerotationtabpage.ui tp_3D_SceneAppearance.ui tp_3D_SceneGeometry.ui tp_3D_SceneIllumination.ui tp_axisLabel.ui tp_AxisPositions.ui tp_ChartType.ui tp_DataLabel.ui tp_DataSource.ui tp_ErrorBars.ui tp_LegendPosition.ui tp_PolarOptions.ui tp_RangeChooser.ui tp_Scale.ui tp_SeriesToAxis.ui tp_Trendline.ui wizelementspage.ui
+
+${MYCMD} --base cui/uiconfig/ui --files aboutconfigdialog.ui aboutconfigvaluedialog.ui aboutdialog.ui accelconfigpage.ui acorexceptpage.ui acoroptionspage.ui acorreplacepage.ui agingdialog.ui applyautofmtpage.ui applylocalizedpage.ui areadialog.ui areatabpage.ui asiantypography.ui assigncomponentdialog.ui autocorrectdialog.ui backgroundpage.ui baselinksdialog.ui bitmaptabpage.ui blackorwhitelistentrydialog.ui borderareatransparencydialog.ui borderbackgrounddialog.ui borderpage.ui breaknumberoption.ui calloutdialog.ui calloutpage.ui cellalignment.ui certdialog.ui charnamepage.ui colorconfigwin.ui colorpage.ui colorpickerdialog.ui comment.ui connectortabpage.ui connpooloptions.ui croppage.ui cuiimapdlg.ui customizedialog.ui databaselinkdialog.ui dbregisterpage.ui dimensionlinestabpage.ui distributiondialog.ui distributionpage.ui editdictionarydialog.ui editmodulesdialog.ui effectspage.ui embossdialog.ui eventassigndialog.ui eventassignpage.ui eventsconfigpage.ui fmsearchdialog.ui formatcellsdialog.ui formatnumberdialog.ui galleryapplyprogress.ui galleryfilespage.ui gallerygeneralpage.ui gallerysearchprogress.ui gallerythemedialog.ui gallerythemeiddialog.ui gallerytitledialog.ui galleryupdateprogress.ui gradientpage.ui hangulhanjaadddialog.ui hangulhanjaconversiondialog.ui hangulhanjaeditdictdialog.ui hangulhanjaoptdialog.ui hatchpage.ui hyperlinkdialog.ui hyperlinkdocpage.ui hyperlinkinternetpage.ui hyperlinkmailpage.ui hyperlinkmarkdialog.ui hyperlinknewdocpage.ui hyphenate.ui iconchangedialog.ui iconselectordialog.ui insertfloatingframe.ui insertoleobject.ui insertrowcolumn.ui javaclasspathdialog.ui javastartparametersdialog.ui javastartparameterseditdialog.ui linedialog.ui lineendstabpage.ui linestyletabpage.ui linetabpage.ui macroassigndialog.ui macroassignpage.ui macroselectordialog.ui menuassignpage.ui messbox.ui mosaicdialog.ui movemenu.ui multipathdialog.ui namedialog.ui newlibdialog.ui newtabledialog.ui newtoolbardialog.ui numberingformatpage.ui numberingoptionspage.ui numberingpositionpage.ui objectnamedialog.ui objecttitledescdialog.ui optaccessibilitypage.ui optadvancedpage.ui optappearancepage.ui optasianpage.ui optbasicidepage.ui optchartcolorspage.ui optctlpage.ui optemailpage.ui optfltrembedpage.ui optfltrpage.ui optfontspage.ui optgeneralpage.ui opthtmlpage.ui optionsdialog.ui optjsearchpage.ui optlanguagespage.ui optlingupage.ui optmemorypage.ui optnewdictionarydialog.ui optonlineupdatepage.ui optopenclpage.ui optpathspage.ui optproxypage.ui optsavepage.ui optsecuritypage.ui optuserpage.ui optviewpage.ui pageformatpage.ui paragalignpage.ui paraindentspacing.ui paratabspage.ui password.ui pastespecial.ui percentdialog.ui personalization_tab.ui pickbulletpage.ui pickgraphicpage.ui picknumberingpage.ui pickoutlinepage.ui positionpage.ui positionsizedialog.ui possizetabpage.ui posterdialog.ui querychangelineenddialog.ui querydeletebitmapdialog.ui querydeletechartcolordialog.ui querydeletecolordialog.ui querydeletedictionarydialog.ui querydeletegradientdialog.ui querydeletehatchdialog.ui querydeletelineenddialog.ui querydeletelinestyledialog.ui queryduplicatedialog.ui querynoloadedfiledialog.ui querynosavefiledialog.ui querysavelistdialog.ui queryupdategalleryfilelistdialog.ui recordnumberdialog.ui rotationtabpage.ui scriptorganizer.ui searchattrdialog.ui searchformatdialog.ui securityoptionsdialog.ui selectpathdialog.ui select_persona_dialog.ui shadowtabpage.ui showcoldialog.ui similaritysearchdialog.ui slantcornertabpage.ui smarttagoptionspage.ui smoothdialog.ui solarizedialog.ui specialcharacters.ui spellingdialog.ui spelloptionsdialog.ui splitcellsdialog.ui storedwebconnectiondialog.ui swpossizepage.ui textanimtabpage.ui textattrtabpage.ui textdialog.ui textflowpage.ui thesaurus.ui transparencytabpage.ui tsaurldialog.ui twolinespage.ui wordcompletionpage.ui zoomdialog.ui
+
+${MYCMD} --base dbaccess/uiconfig/ui --files admindialog.ui advancedsettingsdialog.ui applycolpage.ui authentificationpage.ui autocharsetpage.ui backuppage.ui choosedatasourcedialog.ui collectionviewdialog.ui colwidthdialog.ui connectionpage.ui copytablepage.ui dbaseindexdialog.ui dbasepage.ui dbwizconnectionpage.ui dbwizmysqlintropage.ui dbwizmysqlnativepage.ui dbwizspreadsheetpage.ui dbwiztextpage.ui deleteallrowsdialog.ui designsavemodifieddialog.ui directsqldialog.ui emptypage.ui fielddialog.ui finalpagewizard.ui generalpagedialog.ui generalpagewizard.ui generalspecialjdbcdetailspage.ui generatedvaluespage.ui indexdesigndialog.ui jdbcconnectionpage.ui joindialog.ui ldapconnectionpage.ui ldappage.ui migratepage.ui mysqlnativepage.ui mysqlnativesettings.ui namematchingpage.ui odbcpage.ui parametersdialog.ui password.ui preparepage.ui queryfilterdialog.ui querypropertiesdialog.ui relationdialog.ui rowheightdialog.ui rtfcopytabledialog.ui savedialog.ui saveindexdialog.ui savemodifieddialog.ui sortdialog.ui specialjdbcconnectionpage.ui specialsettingspage.ui sqlexception.ui summarypage.ui tabledesignsavemodifieddialog.ui tablesfilterdialog.ui tablesfilterpage.ui tablesjoindialog.ui textconnectionsettings.ui textpage.ui typeselectpage.ui useradmindialog.ui useradminpage.ui userdetailspage.ui
+
+${MYCMD} --base desktop/uiconfig/ui --files cmdlinehelp.ui dependenciesdialog.ui extensionmanager.ui installforalldialog.ui licensedialog.ui showlicensedialog.ui updatedialog.ui updateinstalldialog.ui updaterequireddialog.ui
+
+${MYCMD} --base extensions/uiconfig/sabpilot/ui --files contentfieldpage.ui contenttablepage.ui datasourcepage.ui defaultfieldselectionpage.ui fieldassignpage.ui fieldlinkpage.ui gridfieldsselectionpage.ui groupradioselectionpage.ui invokeadminpage.ui optiondbfieldpage.ui optionsfinalpage.ui optionvaluespage.ui selecttablepage.ui selecttypepage.ui tableselectionpage.ui
+
+${MYCMD} --base extensions/uiconfig/sbibliography/ui --files choosedatasourcedialog.ui generalpage.ui mappingdialog.ui toolbar.ui
+
+${MYCMD} --base extensions/uiconfig/scanner/ui --files griddialog.ui sanedialog.ui
+
+${MYCMD} --base extensions/uiconfig/spropctrlr/ui --files controlfontdialog.ui datatypedialog.ui fieldlinkrow.ui formlinksdialog.ui labelselectiondialog.ui listselectdialog.ui taborder.ui
+
+${MYCMD} --base filter/uiconfig/ui --files impswfdialog.ui pdfgeneralpage.ui pdflinkspage.ui pdfoptionsdialog.ui pdfsecuritypage.ui pdfsignpage.ui pdfuserinterfacepage.ui pdfviewpage.ui testxmlfilter.ui warnpdfdialog.ui xmlfiltersettings.ui xmlfiltertabpagegeneral.ui xmlfiltertabpagetransformation.ui xsltfilterdialog.ui
+
+${MYCMD} --base formula/uiconfig/ui --files formuladialog.ui functionpage.ui parameter.ui structpage.ui
+
+${MYCMD} --base fpicker/uiconfig/ui --files explorerfiledialog.ui foldernamedialog.ui remotefilesdialog.ui
+
+${MYCMD} --base reportdesign/uiconfig/dbreport/ui --files backgrounddialog.ui chardialog.ui condformatdialog.ui conditionwin.ui datetimedialog.ui floatingnavigator.ui floatingsort.ui pagedialog.ui pagenumberdialog.ui
+
+${MYCMD} --base sc/uiconfig/scalc/ui --files advancedfilterdialog.ui allheaderfooterdialog.ui analysisofvariancedialog.ui autoformattable.ui cellprotectionpage.ui changesourcedialog.ui chardialog.ui chisquaretestdialog.ui colorrowdialog.ui colwidthdialog.ui condformatmanager.ui conditionalformatdialog.ui conflictsdialog.ui consolidatedialog.ui correlationdialog.ui covariancedialog.ui createnamesdialog.ui dapiservicedialog.ui databaroptions.ui datafielddialog.ui datafieldoptionsdialog.ui dataform.ui datastreams.ui definedatabaserangedialog.ui definename.ui deletecells.ui deletecontents.ui descriptivestatisticsdialog.ui doubledialog.ui erroralerttabpage.ui exponentialsmoothingdialog.ui externaldata.ui filldlg.ui footerdialog.ui formatcellsdialog.ui formulacalculationoptions.ui goalseekdlg.ui groupbydate.ui groupbynumber.ui groupdialog.ui headerdialog.ui headerfootercontent.ui headerfooterdialog.ui imoptdialog.ui inputstringdialog.ui insertcells.ui insertname.ui insertsheet.ui integerdialog.ui leftfooterdialog.ui leftheaderdialog.ui managenamesdialog.ui movecopysheet.ui movingaveragedialog.ui multipleoperationsdialog.ui namerangesdialog.ui nosolutiondialog.ui optcalculatepage.ui optchangespage.ui optcompatibilitypage.ui optdefaultpage.ui optdlg.ui optformula.ui optimalcolwidthdialog.ui optimalrowheightdialog.ui optsortlists.ui pagetemplatedialog.ui paradialog.ui paratemplatedialog.ui pastespecial.ui pivotfielddialog.ui pivotfilterdialog.ui pivottablelayoutdialog.ui printareasdialog.ui printeroptions.ui protectsheetdlg.ui queryrunstreamscriptdialog.ui randomnumbergenerator.ui regressiondialog.ui retypepassdialog.ui retypepassworddialog.ui rightfooterdialog.ui rightheaderdialog.ui rowheightdialog.ui samplingdialog.ui scenariodialog.ui scgeneralpage.ui searchresults.ui selectdatasource.ui selectrange.ui selectsource.ui sharedfooterdialog.ui sharedheaderdialog.ui sharedocumentdlg.ui sheetprintpage.ui showchangesdialog.ui showdetaildialog.ui showsheetdialog.ui sidebaralignment.ui sidebarcellappearance.ui sidebarnumberformat.ui simplerefdialog.ui solverdlg.ui solveroptionsdialog.ui solverprogressdialog.ui solversuccessdialog.ui sortcriteriapage.ui sortdialog.ui sortkey.ui sortoptionspage.ui sortwarning.ui standardfilterdialog.ui statisticsinfopage.ui subtotaldialog.ui subtotalgrppage.ui subtotaloptionspage.ui tabcolordialog.ui textimportcsv.ui textimportoptions.ui tpviewpage.ui ttestdialog.ui ungroupdialog.ui validationcriteriapage.ui validationdialog.ui validationhelptabpage.ui xmlsourcedialog.ui ztestdialog.ui
+
+${MYCMD} --base sd/uiconfig/sdraw/ui --files breakdialog.ui bulletsandnumbering.ui copydlg.ui crossfadedialog.ui dlgsnap.ui drawchardialog.ui drawpagedialog.ui drawparadialog.ui drawprtldialog.ui insertlayer.ui insertslidesdialog.ui namedesign.ui paranumberingtab.ui printeroptions.ui queryunlinkimagedialog.ui tabledesigndialog.ui vectorize.ui
+
+${MYCMD} --base sd/uiconfig/simpress/ui --files assistentdialog.ui customanimationeffecttab.ui customanimationproperties.ui customanimationspanel.ui customanimationtexttab.ui customanimationtimingtab.ui customslideshows.ui definecustomslideshow.ui dlgfield.ui dockinganimation.ui headerfooterdialog.ui headerfootertab.ui insertslides.ui interactiondialog.ui interactionpage.ui masterlayoutdlg.ui optimpressgeneralpage.ui photoalbum.ui presentationdialog.ui printeroptions.ui prntopts.ui publishingdialog.ui remotedialog.ui sdviewpage.ui slidedesigndialog.ui slidetransitionspanel.ui tabledesignpanel.ui templatedialog.ui
+
+${MYCMD} --base sfx2/uiconfig/ui --files alienwarndialog.ui bookmarkdialog.ui checkin.ui cmisinfopage.ui cmisline.ui custominfopage.ui descriptioninfopage.ui documentfontspage.ui documentinfopage.ui documentpropertiesdialog.ui editdurationdialog.ui errorfindemaildialog.ui floatingrecord.ui helpbookmarkpage.ui helpcontentpage.ui helpcontrol.ui helpindexpage.ui helpsearchpage.ui inputdialog.ui licensedialog.ui linkeditdialog.ui loadtemplatedialog.ui managestylepage.ui newstyle.ui optprintpage.ui password.ui printeroptionsdialog.ui querysavedialog.ui searchdialog.ui securityinfopage.ui singletabdialog.ui startcenter.ui templatedlg.ui templateinfodialog.ui versioncommentdialog.ui versionscmis.ui versionsofdialog.ui
+
+${MYCMD} --base starmath/uiconfig/smath/ui --files alignmentdialog.ui catalogdialog.ui dockingelements.ui fontdialog.ui fontsizedialog.ui fonttypedialog.ui printeroptions.ui savedefaultsdialog.ui smathsettings.ui spacingdialog.ui symdefinedialog.ui
+
+${MYCMD} --base svtools/uiconfig/ui --files addresstemplatedialog.ui graphicexport.ui GraphicExportOptionsDialog.ui javadisableddialog.ui placeedit.ui printersetupdialog.ui querydeletedialog.ui restartdialog.ui wizarddialog.ui
+
+${MYCMD} --base svx/uiconfig/ui --files acceptrejectchangesdialog.ui addconditiondialog.ui adddataitemdialog.ui addinstancedialog.ui addmodeldialog.ui addnamespacedialog.ui addsubmissiondialog.ui asianphoneticguidedialog.ui chineseconversiondialog.ui chinesedictionary.ui colorwindow.ui compressgraphicdialog.ui crashreportdlg.ui datanavigator.ui deletefooterdialog.ui deleteheaderdialog.ui docking3deffects.ui dockingcolorreplace.ui dockingfontwork.ui docrecoverybrokendialog.ui docrecoveryprogressdialog.ui docrecoveryrecoverdialog.ui docrecoverysavedialog.ui extrustiondepthdialog.ui findreplacedialog.ui floatingcontour.ui floatingundoredo.ui fontworkgallerydialog.ui fontworkspacingdialog.ui formlinkwarndialog.ui headfootformatpage.ui imapdialog.ui linkwarndialog.ui namespacedialog.ui optgridpage.ui paralinespacingcontrol.ui passwd.ui querydeletecontourdialog.ui querydeleteobjectdialog.ui querydeletethemedialog.ui querymodifyimagemapchangesdialog.ui querynewcontourdialog.ui querysavecontchangesdialog.ui querysaveimagemapchangesdialog.ui queryunlinkgraphicsdialog.ui redlinecontrol.ui redlinefilterpage.ui redlineviewpage.ui savemodifieddialog.ui sidebararea.ui sidebargraphic.ui sidebarinsert.ui sidebarline.ui sidebarparagraph.ui sidebarpossize.ui sidebarshadow.ui sidebarstylespanel.ui sidebartextpanel.ui textcontrolchardialog.ui textcontrolparadialog.ui xformspage.ui
+
+${MYCMD} --base sw/uiconfig/swriter/ui --files abstractdialog.ui addentrydialog.ui addressblockdialog.ui alreadyexistsdialog.ui asciifilterdialog.ui asksearchdialog.ui assignfieldsdialog.ui assignstylesdialog.ui attachnamedialog.ui authenticationsettingsdialog.ui autoformattable.ui autotext.ui bibliographyentry.ui bulletsandnumbering.ui businessdatapage.ui cannotsavelabeldialog.ui captiondialog.ui captionoptions.ui cardformatpage.ui cardmediumpage.ui ccdialog.ui characterproperties.ui charurlpage.ui columndialog.ui columnpage.ui columnwidth.ui conditionpage.ui converttexttable.ui createaddresslist.ui createauthorentry.ui createautomarkdialog.ui customizeaddrlistdialog.ui datasourcesunavailabledialog.ui dropcapspage.ui dropdownfielddialog.ui editcategories.ui editfielddialog.ui editsectiondialog.ui endnotepage.ui envaddresspage.ui envdialog.ui envformatpage.ui envprinterpage.ui exchangedatabases.ui fielddialog.ui findentrydialog.ui flddbpage.ui flddocinfopage.ui flddocumentpage.ui fldfuncpage.ui fldrefpage.ui fldvarpage.ui floatingnavigation.ui floatingsync.ui footendnotedialog.ui footnoteareapage.ui footnotepage.ui footnotesendnotestabpage.ui formatsectiondialog.ui formattablepage.ui framedialog.ui frmaddpage.ui frmtypepage.ui frmurlpage.ui indentpage.ui indexentry.ui infonotfounddialog.ui inforeadonlydialog.ui inputfielddialog.ui insertautotextdialog.ui insertbookmark.ui insertbreak.ui insertcaption.ui insertdbcolumnsdialog.ui insertfootnote.ui insertscript.ui insertsectiondialog.ui inserttable.ui labeldialog.ui labelformatpage.ui labeloptionspage.ui linenumbering.ui mailconfigpage.ui mailmerge.ui mailmergedialog.ui managechangessidebar.ui mergeconnectdialog.ui mergetabledialog.ui mmaddressblockpage.ui mmcreatingdialog.ui mmlayoutpage.ui mmmailbody.ui mmoutputtypepage.ui mmresultemaildialog.ui mmresultprintdialog.ui mmresultsavedialog.ui mmsalutationpage.ui mmselectpage.ui mmsendmails.ui newuserindexdialog.ui numberingnamedialog.ui numparapage.ui objectdialog.ui optcaptionpage.ui optcomparison.ui optcompatpage.ui optfonttabpage.ui optformataidspage.ui optgeneralpage.ui optredlinepage.ui opttablepage.ui opttestpage.ui outlinenumbering.ui outlinenumberingpage.ui outlinepositionpage.ui paradialog.ui picturedialog.ui picturepage.ui previewzoomdialog.ui printeroptions.ui printmergedialog.ui printmonitordialog.ui printoptionspage.ui privateuserpage.ui querycontinuebegindialog.ui querycontinueenddialog.ui querydefaultcompatdialog.ui queryrotateintostandarddialog.ui querysavelabeldialog.ui queryshowchangesdialog.ui renameautotextdialog.ui renameentrydialog.ui renameobjectdialog.ui rowheight.ui saveashtmldialog.ui savelabeldialog.ui sectionpage.ui selectaddressdialog.ui selectautotextdialog.ui selectblockdialog.ui selectindexdialog.ui selecttabledialog.ui sidebarpage.ui sidebarstylepresets.ui sidebartheme.ui sidebarwrap.ui sortdialog.ui splittable.ui statisticsinfopage.ui stringinput.ui subjectdialog.ui tablecolumnpage.ui tablepreviewdialog.ui tableproperties.ui tabletextflowpage.ui templatedialog1.ui templatedialog16.ui templatedialog2.ui templatedialog4.ui templatedialog8.ui testmailsettings.ui textgridpage.ui titlepage.ui tocdialog.ui tocentriespage.ui tocindexpage.ui tocstylespage.ui tokenwidget.ui viewoptionspage.ui warndatasourcedialog.ui warnemaildialog.ui wordcount.ui wrapdialog.ui wrappage.ui
+
+${MYCMD} --files tubes/uiconfig/ui/contacts.ui
+
+${MYCMD} --base uui/uiconfig/ui --files authfallback.ui filterselect.ui logindialog.ui macrowarnmedium.ui masterpassworddlg.ui password.ui setmasterpassworddlg.ui simplenameclash.ui sslwarndialog.ui unknownauthdialog.ui
+
+#${MYCMD} --files vcl/qa/cppunit/builder/demo.ui
+
+${MYCMD} --base vcl/uiconfig/ui --files cupspassworddialog.ui errornocontentdialog.ui errornoprinterdialog.ui notebookbar.ui printdialog.ui printerdevicepage.ui printerpaperpage.ui printerpropertiesdialog.ui printprogressdialog.ui querydialog.ui
+
+#${MYCMD} --files writerperfect/uiconfig/ui/wpftencodingdialog.ui
+
+${MYCMD} --base xmlsecurity/uiconfig/ui --files certdetails.ui certgeneral.ui certpage.ui digitalsignaturesdialog.ui macrosecuritydialog.ui securitylevelpage.ui securitytrustpage.ui selectcertificatedialog.ui viewcertdialog.ui

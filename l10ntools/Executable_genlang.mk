@@ -16,6 +16,7 @@ $(eval $(call gb_Executable_set_include,genlang,\
 
 $(eval $(call gb_Executable_add_scanners,genlang,\
     l10ntools/source/gLexPo   \
+    l10ntools/source/gLexUi   \
     l10ntools/source/gLexSrc  \
     l10ntools/source/gLexXcu  \
     l10ntools/source/gLexXcs  \
@@ -32,6 +33,7 @@ $(eval $(call gb_Executable_add_exception_objects,genlang,\
     l10ntools/source/gConv      \
     l10ntools/source/gConvPo    \
     l10ntools/source/gConvSrc   \
+    l10ntools/source/gConvUi    \
     l10ntools/source/gConvXrm   \
     l10ntools/source/gConvXhp   \
     l10ntools/source/gConvXcs   \
