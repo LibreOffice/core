@@ -172,7 +172,7 @@ void PackageManagerImpl::initActivationLayer(
             dbName = m_registrationData_expanded + "/extensions.pmap";
         }
         // The data base can always be written because it is always in the user installation
-        m_activePackagesDB.reset( new ActivePackages( dbName, false ) );
+        m_activePackagesDB.reset( new ActivePackages( dbName ) );
 
         if (! m_readOnly && ! (m_context == "bundled"))
         {
