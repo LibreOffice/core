@@ -60,20 +60,8 @@ bool Idle::IsIdle() const
 
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ ) const
 {
-    switch (mePriority) {
-    case SchedulerPriority::HIGHEST:
-    case SchedulerPriority::HIGH:
-    case SchedulerPriority::RESIZE:
-    case SchedulerPriority::REPAINT:
-        nMinPeriod = ImmediateTimeoutMs; // don't wait.
-        break;
-    default:
-        // FIXME: tdf#92036 workaround, I should be 1 too - wait 5ms
-        if (nMinPeriod > 5) // only shrink the min. period if nothing is quicker.
-            nMinPeriod = 5;
-        break;
-    }
-    return nMinPeriod;
+    assert(false); // idles currently don't hit this.
+    return ImmediateTimeoutMs;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
