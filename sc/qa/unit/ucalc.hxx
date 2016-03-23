@@ -197,6 +197,7 @@ public:
     void testFuncMDETERM();
     void testMatConcat();
     void testMatConcatReplication();
+    void testMatMultiplication();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -549,6 +550,7 @@ public:
     CPPUNIT_TEST(testFuncMDETERM);
     CPPUNIT_TEST(testMatConcat);
     CPPUNIT_TEST(testMatConcatReplication);
+    CPPUNIT_TEST(testMatMultiplication);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRangeName);
     CPPUNIT_TEST(testExternalRefFunctions);

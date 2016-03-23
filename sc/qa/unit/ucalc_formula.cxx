@@ -7206,4 +7206,31 @@ void Test::testMatConcatReplication()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMatMultiplication()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 3.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(2, 2, 3, 3, aMark, "=MMULT(A1:B2;A1:B2)");
+
+    ASSERT_DOUBLES_EQUAL(7.0, m_pDoc->GetValue(ScAddress(2, 2, 0)));
+    ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+    ASSERT_DOUBLES_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 3, 0)));
+    ASSERT_DOUBLES_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+
+    m_pDoc->SetString(ScAddress(1, 1, 0), "test");
+
+    ASSERT_DOUBLES_EQUAL(7.0, m_pDoc->GetValue(ScAddress(2, 2, 0)));
+    ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+    ASSERT_DOUBLES_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 3, 0)));
+    ASSERT_DOUBLES_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
