@@ -66,6 +66,14 @@ PersonasDocHandler::startElement( const OUString& aName,
             m_hasResults = true;
     }
 
+    // Whether the result personas xml is exactly one theme addon
+    if( !m_hasResults && aName == "type")
+    {
+        OUString aTypeId = xAttribs->getValueByName( "id" );
+        if(aTypeId == "9")
+            m_hasResults = true;
+    }
+
     if ( aName == "learnmore" )
         m_isLearnmoreTag = true;
     else
