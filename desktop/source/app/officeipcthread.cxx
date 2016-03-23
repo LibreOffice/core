@@ -54,7 +54,7 @@ using namespace ::com::sun::star::frame;
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
+#if HAVE_FEATURE_DESKTOP
 
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
@@ -101,7 +101,7 @@ namespace desktop
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
+#if HAVE_FEATURE_DESKTOP
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -435,15 +435,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if( pGlobalOfficeIPCThread.is() )
         return IPC_STATUS_OK;
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
+#if HAVE_FEATURE_DESKTOP
     OUString aUserInstallPath;
     OUString aDummy;
 
     rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
 
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
-
-#ifndef ANDROID // On Android it might be that we still for some reason need the pipe?
 
     // In LibreOfficeKit-based programs we want to be totally independent from any other LibreOffice
     // instance or LOKit-using program. Certainly no need for any IPC pipes by definition, as we
@@ -459,7 +457,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         nPipeMode = PIPEMODE_CREATED;
     }
     else
-#endif
     {
         // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
         // this information from a unotools implementation.
@@ -685,12 +682,10 @@ bool OfficeIPCThread::IsEnabled()
 
 void OfficeIPCThread::execute()
 {
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
+#if HAVE_FEATURE_DESKTOP
 
-#ifndef ANDROID
     if (comphelper::LibreOfficeKit::isActive())
         return;
-#endif
 
     do
     {

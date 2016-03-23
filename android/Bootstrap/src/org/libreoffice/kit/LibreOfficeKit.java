@@ -64,8 +64,7 @@ public final class LibreOfficeKit
         Log.i(LOGTAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
 
         redirectStdio(true);
-        // ToDo: ugly workaround - find out why it segfaults with existing cachedir
-        deleteRecursive(activity.getApplication().getCacheDir());
+
         String cacheDir = activity.getApplication().getCacheDir().getAbsolutePath();
         String apkFile = activity.getApplication().getPackageResourcePath();
 
@@ -92,20 +91,6 @@ public final class LibreOfficeKit
             return;
         }
         initializeDone = true;
-    }
-    /**
-     * Deletes files and recursively deletes directories.
-     *
-     * @param file
-     *            File or directory to be deleted.
-     */
-    private static void deleteRecursive(File file) {
-        Log.d(LOGTAG, "deleting cacheDir recursively - this is only a workaround - fixme please");
-        if (file.isDirectory()) {
-            for (File child : file.listFiles())
-                deleteRecursive(child);
-        }
-        file.delete();
     }
 
     // Now with static loading we always have all native code in one native
