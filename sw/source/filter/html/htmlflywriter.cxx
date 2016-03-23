@@ -1733,7 +1733,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
             GraphicURL = *rHTMLWrt.GetOrigFileName();
         if( aGraphic.GetType() == GRAPHIC_NONE ||
             XOutBitmap::WriteGraphic( aGraphic, GraphicURL,
-                                      OUString("JPG"),
+                                      "JPG",
                                       (XOUTBMP_USE_GIF_IF_POSSIBLE|
                                        XOUTBMP_USE_NATIVE_IF_POSSIBLE) ) != 0 )
         {
@@ -1803,7 +1803,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                             MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
 
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGraphicURL,
-                    OUString("JPG"), nFlags, &aMM100Size );
+                    "JPG", nFlags, &aMM100Size );
             if( nErr )
             {
                 rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;

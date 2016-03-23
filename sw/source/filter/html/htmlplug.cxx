@@ -1323,7 +1323,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             aGraphicURL = *pTempFileName;
 
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
-                                    OUString("JPG"),
+                                    "JPG",
                                     (XOUTBMP_USE_GIF_IF_POSSIBLE |
                                      XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
