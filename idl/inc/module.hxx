@@ -25,13 +25,10 @@
 
 class SvMetaModule : public SvMetaObject
 {
-    bool                            bImported;
 public:
     SvRefMemberList<SvMetaClass *>  aClassList;
 
-                        SvMetaModule( bool bImported );
-
-    bool                IsImported() const { return bImported; }
+                        SvMetaModule();
 
     void                WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
 };

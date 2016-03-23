@@ -461,8 +461,7 @@ bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     for( n = 0; n < GetModuleList().size(); n++ )
     {
         SvMetaModule * pModule = GetModuleList()[n];
-        if( !pModule->IsImported() )
-            pModule->WriteSfx( *this, aTmpStm );
+        pModule->WriteSfx( *this, aTmpStm );
         aTmpStm.Seek( 0 );
     }
     for( n = 0; n < aUsedTypes.size(); n++ )
