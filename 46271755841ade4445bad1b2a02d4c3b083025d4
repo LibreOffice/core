@@ -22,6 +22,23 @@
       "revId": "46271755841ade4445bad1b2a02d4c3b083025d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_04cf47b1",
+        "filename": "sw/qa/extras/rtfimport/data/tdf65642.rtf",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-03-23T15:42:06Z",
+      "side": 0,
+      "message": "This sounds like a mismerge, i.e. an accidental revert of an earlier, unrelated change.",
+      "revId": "46271755841ade4445bad1b2a02d4c3b083025d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
