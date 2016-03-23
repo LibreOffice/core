@@ -63,6 +63,21 @@ namespace
     {};
 }
 
+bool LocaleDataWrapper::Locale_Compare::operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const
+{
+    if (rLocale1.Language < rLocale2.Language)
+        return true;
+    else if (rLocale1.Language > rLocale2.Language)
+        return false;
+
+    if (rLocale1.Country < rLocale2.Country)
+        return true;
+    else if (rLocale1.Country > rLocale2.Country)
+        return false;
+
+    return rLocale1.Variant < rLocale2.Variant;
+}
+
 sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
 
 LocaleDataWrapper::LocaleDataWrapper(
@@ -157,17 +172,32 @@ css::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
     return css::i18n::LanguageCountryInfo();
 }
 
-css::i18n::LocaleDataItem LocaleDataWrapper::getLocaleItem() const
+const css::i18n::LocaleDataItem& LocaleDataWrapper::getLocaleItem() const
 {
+    {
+        ::utl::ReadWriteGuard aGuard( aMutex );
+        const css::lang::Locale& rLocal = getMyLocale();
+        auto itr = maDataItemCache.find(rLocal);
+        if (itr != maDataItemCache.end())
+            return itr->second;
+    }
+
     try
     {
-        return xLD->getLocaleItem( getMyLocale() );
+        ::utl::ReadWriteGuard aGuard( aMutex );
+
+        const css::lang::Locale& rLocal = getMyLocale();
+        css::i18n::LocaleDataItem aItem = xLD->getLocaleItem( rLocal );
+        auto aRet = maDataItemCache.insert(std::make_pair(rLocal, aItem));
+        assert(aRet.second);
+        return aRet.first->second;
     }
     catch (const Exception& e)
     {
         SAL_WARN( "unotools.i18n", "getLocaleItem: Exception caught " << e.Message );
     }
-    return css::i18n::LocaleDataItem();
+    static css::i18n::LocaleDataItem aEmptyItem;
+    return aEmptyItem;
 }
 
 css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
