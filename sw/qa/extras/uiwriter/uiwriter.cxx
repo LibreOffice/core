@@ -105,6 +105,8 @@ public:
     void testTdf89954();
     void testTdf89720();
     void testTdf96479();
+    void testTdf88453();
+    void testTdf88453Table();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -148,7 +150,8 @@ public:
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf96479);
-
+    CPPUNIT_TEST(testTdf88453);
+    CPPUNIT_TEST(testTdf88453Table);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1245,6 +1248,25 @@ void SwUiWriterTest::testTdf96479()
         SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
         CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
     }
+}
+
+void SwUiWriterTest::testTdf88453()
+{
+    createDoc("tdf88453.odt");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 0: the table does not fit the first page, but it wasn't split
+    // to continue on the second page.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
+}
+
+void SwUiWriterTest::testTdf88453Table()
+{
+    createDoc("tdf88453-table.odt");
+    calcLayout();
+    // This was 2: layout could not split the large outer table in the document
+    // into 3 pages.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
