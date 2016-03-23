@@ -92,7 +92,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
-                                     bool loadEnabled, bool saveEnabled );
+                                     bool saveEnabled );
     SvTreeListEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
 
 public:
