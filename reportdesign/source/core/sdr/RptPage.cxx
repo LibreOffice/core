@@ -30,9 +30,8 @@ using namespace ::com::sun::star;
 
 
 OReportPage::OReportPage( OReportModel& _rModel
-                         ,const uno::Reference< report::XSection >& _xSection
-                         ,bool bMasterPage )
-    :SdrPage( _rModel, bMasterPage )
+                         ,const uno::Reference< report::XSection >& _xSection )
+    :SdrPage( _rModel, false/*bMasterPage*/ )
     ,rModel(_rModel)
     ,m_xSection(_xSection)
      ,m_bSpecialInsertMode(false)

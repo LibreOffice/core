@@ -3793,14 +3793,12 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
                                                             ,::std::mem_fun(&OReportHelper::getReportHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
-                                                            ,0
                                                             ));
 
             addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fun(&OReportHelper::getReportFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
-                                                            ,0
                                                             ));
         }
 
@@ -3843,7 +3841,6 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
                                                             ,::std::mem_fun(&OReportHelper::getPageHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
-                                                            ,0
                                                             ));
 
             addUndoAction(new OReportSectionUndo(*m_aReportModel
@@ -3851,7 +3848,6 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
                                                             ,::std::mem_fun(&OReportHelper::getPageFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
-                                                            ,0
                                                             ));
         }
         switch( _nId )
