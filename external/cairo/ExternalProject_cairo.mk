@@ -53,7 +53,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(filter IOS,$(OS)),--enable-quartz --enable-quartz-font) \
 		--disable-valgrind \
 		$(if $(filter IOS,$(OS)),--disable-ft,--enable-ft --enable-fc) \
-		--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no \
+		--enable-gtk-doc=no --enable-test-surfaces=no \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no ax_cv_c_float_words_bigendian=no)) \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
