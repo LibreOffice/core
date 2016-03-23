@@ -1454,6 +1454,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                 // read compat info
                 std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+                pCompat.reset(); // destructor writes stuff into the header
 
                 ReadGfxLink( rIStm, aLink );
 
@@ -1594,6 +1595,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                 // write compat info
                 std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 1 ));
+                pCompat.reset(); // destructor writes stuff into the header
 
                 rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
                 rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );
