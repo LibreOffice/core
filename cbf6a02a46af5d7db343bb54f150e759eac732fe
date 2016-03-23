@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_247c0b72",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T14:47:06Z",
+      "side": 1,
+      "message": "ok so this gives the \"Illustration\" sequence field type (because it is apparently the first one)\n\n... better to make that explicit by calling the other overload, GetFieldType(RES_SETEXPFLD, \"Illustration\")",
+      "revId": "cbf6a02a46af5d7db343bb54f150e759eac732fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_6468c3bb",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2148,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T14:47:06Z",
+      "side": 1,
+      "message": "why GSE_EXPR? not GSE_SEQ? ... actually that parameter is a format id, not one of these types at all...\n\nso the value is not that important, it just determines what characters to use for numbering, but GSE_* is very misleading",
+      "revId": "cbf6a02a46af5d7db343bb54f150e759eac732fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_64af23e4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2154,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T14:47:06Z",
+      "side": 1,
+      "message": "do we need to put in a real string like \"Illustration\" ?\n\n... yes we do, that\u0027s how the _RefIdMap stuff connects the reference fields to the sequence fields.",
+      "revId": "cbf6a02a46af5d7db343bb54f150e759eac732fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_84b6973b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T14:47:06Z",
+      "side": 1,
+      "message": "at this point we clearly should be doing something in _RefIdsMap ... but no mapping operations seem to happen.",
+      "revId": "cbf6a02a46af5d7db343bb54f150e759eac732fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_0481074b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T14:47:06Z",
+      "side": 1,
+      "message": "this doesn\u0027t do anything: i get\n\nwarn:legacy.osl:10921:1:sw/source/core/fields/fldbas.cxx:302: illegal property\n\napparently this field doesn\u0027t have SHORT1 property\n\nit would be much easier to understand to call the getter methods of class SwSetExpField instead of QueryValue anyway",
+      "revId": "cbf6a02a46af5d7db343bb54f150e759eac732fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_64960396",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T14:47:06Z",
+      "side": 1,
+      "message": "... and this will erroneously succeed because aAny still has the value of the last successful assignment from line 2234",
+      "revId": "cbf6a02a46af5d7db343bb54f150e759eac732fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
