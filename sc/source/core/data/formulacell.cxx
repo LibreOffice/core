@@ -3710,7 +3710,8 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument ); // Listener as previous
 }
 
-static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc)
+static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc,
+        int nRecursion)
 {
     for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
     {
@@ -3720,16 +3721,19 @@ static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArra
             SCTAB nTab = p->GetSheet();
             rIndexes.setUpdatedName( nTab, nTokenIndex);
 
-            ScRangeData* pSubName = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTab);
-            if (pSubName)
-                lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pDoc);
+            if (nRecursion < 126)   // whatever.. 42*3
+            {
+                ScRangeData* pSubName = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTab);
+                if (pSubName)
+                    lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pDoc, nRecursion+1);
+            }
         }
     }
 }
 
 void ScFormulaCell::FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const
 {
-    lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument );
+    lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument, 0);
 }
 
 void ScFormulaCell::SetChanged(bool b)
