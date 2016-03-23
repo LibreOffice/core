@@ -140,7 +140,7 @@ namespace connectivity
 
             virtual sal_Int32 getCurrentLastPos() const override;
             virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
-            virtual bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) override;
+            virtual bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, bool bRetrieveData) override;
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             //XTypeProvider
@@ -160,7 +160,7 @@ namespace connectivity
             bool    CreateImpl();
 
 
-            virtual bool InsertRow(OValueRefVector& rRow, bool bFlush, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
+            virtual bool InsertRow(OValueRefVector& rRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
             virtual bool DeleteRow(const OSQLColumns& _rCols) override;
             virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
 

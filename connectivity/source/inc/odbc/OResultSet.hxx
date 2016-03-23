@@ -170,7 +170,7 @@ namespace connectivity
             void releaseBuffer();
             void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void fillNeededData(SQLRETURN _nRet);
-            bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData);
+            bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset);
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
             SQLRETURN unbind(bool _bUnbindHandle = true);
             SWORD impl_getColumnType_nothrow(sal_Int32 columnIndex);

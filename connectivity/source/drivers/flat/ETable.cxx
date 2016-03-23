@@ -577,7 +577,7 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 : OFlatTable_BASE::getSomething(rId);
 }
 
-bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bIsTable, bool bRetrieveData)
+bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bRetrieveData)
 {
     *(_rRow->get())[0] = m_nFilePos;
 
@@ -618,16 +618,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
         }
         else
         {
-            sal_Int32 nType = 0;
-            if(bIsTable)
-            {
-                nType   = m_aTypes[i-1];
-            }
-            else
-            {
-                Reference< XPropertySet> xColumn = *aIter;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
-            }
+            sal_Int32 nType   = m_aTypes[i-1];
             switch(nType)
             {
                 case DataType::TIMESTAMP:

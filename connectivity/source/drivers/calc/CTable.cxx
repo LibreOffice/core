@@ -783,7 +783,7 @@ End:
 }
 
 bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
-                           bool _bUseTableDefs, bool bRetrieveData )
+                           bool bRetrieveData )
 {
     // read the bookmark
 
@@ -804,12 +804,7 @@ bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     {
         if ( (_rRow->get())[i]->isBound() )
         {
-            sal_Int32 nType = 0;
-            if ( _bUseTableDefs )
-                nType = m_aTypes[i-1];
-            else
-                (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
-
+            sal_Int32 nType = m_aTypes[i-1];
 
             lcl_SetValue( (_rRow->get())[i]->get(), m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
                                 m_aNullDate, m_nFilePos, i, nType );
