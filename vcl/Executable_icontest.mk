@@ -11,9 +11,13 @@ $(eval $(call gb_Executable_Executable,icontest))
 
 $(eval $(call gb_Executable_use_externals,icontest,\
     boost_headers \
-    glew \
 	glm_headers \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Executable_use_externals,icontest,\
+    glew \
+))
+endif
 
 $(eval $(call gb_Executable_use_api,icontest,\
     offapi \

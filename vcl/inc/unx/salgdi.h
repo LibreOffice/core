@@ -259,15 +259,12 @@ public:
                                         long nHeight, sal_uInt8 nTransparency ) override;
 
     virtual SystemGraphicsData      GetGraphicsData() const override;
-
-#if ENABLE_CAIRO_CANVAS
     virtual bool                    SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const override;
     virtual css::uno::Any           GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const override;
-#endif
 
     bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,
                                       int nX, int nY);

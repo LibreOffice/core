@@ -28,8 +28,12 @@ $(eval $(call gb_Library_set_precompiled_header,slideshow,$(SRCDIR)/slideshow/in
 
 $(eval $(call gb_Library_use_externals,slideshow,\
 	boost_headers \
-	glew \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,slideshow,\
+     glew \
+ ))
+endif
 
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 

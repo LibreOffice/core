@@ -84,9 +84,13 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
 	icuuc \
 	icu_headers \
-	glew \
 	libxml2 \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,svxcore,\
+     glew \
+ ))
+endif
 
 ifeq ($(OS),MACOSX)
 

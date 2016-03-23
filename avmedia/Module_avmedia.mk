@@ -55,7 +55,7 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 endif
 
-ifeq ($(ENABLE_GLTF),TRUE)
+ifeq ($(ENABLE_OPENGL),TRUE)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaogl \
 ))
