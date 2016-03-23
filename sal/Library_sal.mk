@@ -87,6 +87,8 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/all/filepath \
 	sal/osl/all/loadmodulerelative \
 	sal/osl/all/log  \
+	sal/osl/all/signal \
+	sal/osl/all/signalimpl \
 	sal/osl/all/utility \
 	sal/rtl/alloc_arena \
 	sal/rtl/alloc_cache \
@@ -167,7 +169,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/random \
 	sal/osl/unx/readwrite_helper \
 	sal/osl/unx/security \
-	sal/osl/unx/signal \
+	sal/osl/unx/signaluniximpl \
 	sal/osl/unx/socket \
 	sal/osl/unx/system \
 	sal/osl/unx/tempfile \
@@ -227,7 +229,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/procimpl \
 	sal/osl/w32/profile \
 	sal/osl/w32/salinit \
-	sal/osl/w32/signal \
+	sal/osl/w32/signalwinimpl \
 	sal/osl/w32/socket \
 	sal/osl/w32/tempfile \
 ))
