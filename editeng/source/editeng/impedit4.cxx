@@ -1499,7 +1499,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
         bIsStart = true;
 
     EditSpellWrapper* pWrp = new EditSpellWrapper( Application::GetDefDialogParent(),
-            bIsStart, false, pEditView );
+            bIsStart, pEditView );
     pWrp->SpellDocument();
     delete pWrp;
 

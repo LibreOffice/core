@@ -55,7 +55,7 @@ protected:
 public:
     EditSpellWrapper( vcl::Window* pWin,
             bool bIsStart,
-            bool bIsAllRight, EditView* pView );
+            EditView* pView );
 
 };
 

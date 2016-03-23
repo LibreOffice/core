@@ -84,8 +84,6 @@ using namespace ::com::sun::star::linguistic2;
 
 #define CH_HYPH     '-'
 
-#define RESDIFF     10
-
 #define WRONG_SHOW_MIN       5
 
 struct TabInfo
@@ -2573,7 +2571,7 @@ void ImpEditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
     }
 }
 
-void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut, sal_uInt16 nIgnoreWhich )
+void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut )
 {
     // It was planned, SeekCursor( nStartPos, nEndPos, ... ), so that it would
     // only be searched anew at the StartPosition.
@@ -2644,7 +2642,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             // are considered (used) as these are just set. But do not use empty
             // attributes: When just set and empty => no effect on font
             // In a blank paragraph, set characters take effect immediately.
-            if ( ( pAttrib->Which() != nIgnoreWhich ) &&
+            if ( ( pAttrib->Which() != 0 ) &&
                  ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                      || ( !pNode->Len() ) ) )
             {
@@ -3679,7 +3677,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
         pOutDev->SetFont( aOldFont );
 }
 
-void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice, bool bUseVirtDev )
+void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     DBG_ASSERT( pView, "No View - No Paint!" );
 
@@ -3692,196 +3690,48 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
 
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow();
 
-    if ( bUseVirtDev )
+    Point aStartPos;
+    if ( !IsVertical() )
     {
-        Rectangle aClipRecPixel( pTarget->LogicToPixel( aClipRect ) );
-        if ( !IsVertical() )
-        {
-            // etwas mehr, falls abgerundet!
-            aClipRecPixel.Right() += 1;
-            aClipRecPixel.Bottom() += 1;
-        }
-        else
-        {
-            aClipRecPixel.Left() -= 1;
-            aClipRecPixel.Bottom() += 1;
-        }
-
-        // If aClipRecPixel > XXXX, then invalidate?!
-
-        VirtualDevice* pVDev = GetVirtualDevice( pTarget->GetMapMode(), pTarget->GetDrawMode() );
-        pVDev->SetDigitLanguage( GetRefDevice()->GetDigitLanguage() );
-
-        /*
-         * Set the appropriate background color according
-         * to text criteria
-        */
-        {
-
-            Color aBackgroundColor( pView->GetBackgroundColor() );
-            // #i47161# Check if text is visible on background
-            SvxFont aTmpFont;
-            ContentNode* pNode = GetEditDoc().GetObject( 0 );
-            SeekCursor( pNode, 1, aTmpFont );
-
-
-            Color aFontColor( aTmpFont.GetColor() );
-            if( (aFontColor == COL_AUTO) || IsForceAutoColor() )
-                aFontColor = GetAutoColor();
-
-            // #i69346# check for reverse color of input method attribute
-            if( mpIMEInfos && (mpIMEInfos->aPos.GetNode() == pNode &&
-                mpIMEInfos->pAttribs))
-            {
-                sal_uInt16 nAttr = mpIMEInfos->pAttribs[ 0 ];
-                if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
-                {
-                    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                    aFontColor = rStyleSettings.GetHighlightColor() ;
-                }
-            }
-
-            sal_uInt8 nColorDiff = aFontColor.GetColorError( aBackgroundColor );
-            if( nColorDiff < 8 )
-                aBackgroundColor = aFontColor.IsDark() ? COL_WHITE : COL_BLACK;
-
-            pVDev->SetBackground( aBackgroundColor );
-        }
-
-        bool bVDevValid = true;
-        Size aOutSz( pVDev->GetOutputSizePixel() );
-        if ( (  aOutSz.Width() < aClipRecPixel.GetWidth() ) ||
-             (  aOutSz.Height() < aClipRecPixel.GetHeight() ) )
-        {
-            bVDevValid = pVDev->SetOutputSizePixel( aClipRecPixel.GetSize() );
-        }
-        else
-        {
-            // The VirtDev can become very big during a Resize =>
-            // eventually make it smaller!
-            if ( ( aOutSz.Height() > ( aClipRecPixel.GetHeight() + RESDIFF ) ) ||
-                 ( aOutSz.Width() > ( aClipRecPixel.GetWidth() + RESDIFF ) ) )
-            {
-                bVDevValid = pVDev->SetOutputSizePixel( aClipRecPixel.GetSize() );
-            }
-            else
-            {
-                pVDev->Erase();
-            }
-        }
-        DBG_ASSERT( bVDevValid, "VDef could not be enlarged!" );
-        if ( !bVDevValid )
-        {
-            Paint( pView, rRect );
-            return;
-        }
-
-        // PaintRect for VDev not with aligned size,
-        // Otherwise, the line below must also be printed out:
-        Rectangle aTmpRect( Point( 0, 0 ), aClipRect.GetSize() );
-
-        aClipRect = pTarget->PixelToLogic( aClipRecPixel );
-        Point aStartPos;
-        if ( !IsVertical() )
-        {
-            aStartPos = aClipRect.TopLeft();
-            aStartPos = pView->GetDocPos( aStartPos );
-            aStartPos.X() *= (-1);
-            aStartPos.Y() *= (-1);
-        }
-        else
-        {
-            aStartPos = aClipRect.TopRight();
-            Point aDocPos( pView->GetDocPos( aStartPos ) );
-            aStartPos.X() = aClipRect.GetSize().Width() + aDocPos.Y();
-            aStartPos.Y() = -aDocPos.X();
-        }
-
-        Paint( pVDev, aTmpRect, aStartPos );
-
-        bool bClipRegion = false;
-        vcl::Region aOldRegion;
-        MapMode aOldMapMode;
-        if ( GetTextRanger() )
-        {
-            // Some problems here with push/pop, why?!
-//          pTarget->Push( PushFlags::CLIPREGION|PushFlags::MAPMODE );
-            bClipRegion = pTarget->IsClipRegion();
-            aOldRegion = pTarget->GetClipRegion();
-            // How do I get the polygon to the right place??
-            // The polygon is based on the view, not the Window
-            // => reset origin...
-            aOldMapMode = pTarget->GetMapMode();
-            Point aOrigin = aOldMapMode.GetOrigin();
-            Point aViewPos = pView->GetOutputArea().TopLeft();
-            aOrigin.Move( aViewPos.X(), aViewPos.Y() );
-            aClipRect.Move( -aViewPos.X(), -aViewPos.Y() );
-            MapMode aNewMapMode( aOldMapMode );
-            aNewMapMode.SetOrigin( aOrigin );
-            pTarget->SetMapMode( aNewMapMode );
-            pTarget->SetClipRegion( vcl::Region( GetTextRanger()->GetPolyPolygon() ) );
-        }
-
-        pTarget->DrawOutDev( aClipRect.TopLeft(), aClipRect.GetSize(),
-                            Point(0,0), aClipRect.GetSize(), *pVDev );
-
-        if ( GetTextRanger() )
-        {
-//          pTarget->Pop();
-            if ( bClipRegion )
-                pTarget->SetClipRegion( aOldRegion );
-            else
-                pTarget->SetClipRegion();
-            pTarget->SetMapMode( aOldMapMode );
-        }
-
-        pView->DrawSelection(pView->GetEditSelection(), nullptr, pTarget);
+        aStartPos = pView->GetOutputArea().TopLeft();
+        aStartPos.X() -= pView->GetVisDocLeft();
+        aStartPos.Y() -= pView->GetVisDocTop();
     }
     else
     {
-        Point aStartPos;
-        if ( !IsVertical() )
-        {
-            aStartPos = pView->GetOutputArea().TopLeft();
-            aStartPos.X() -= pView->GetVisDocLeft();
-            aStartPos.Y() -= pView->GetVisDocTop();
-        }
-        else
-        {
-            aStartPos = pView->GetOutputArea().TopRight();
-            aStartPos.X() += pView->GetVisDocTop();
-            aStartPos.Y() -= pView->GetVisDocLeft();
-        }
-
-        // If Doc-width < Output Area,Width and not wrapped fields,
-        // the fields usually protrude if > line.
-        // (Not at the top, since there the Doc-width from formatting is already
-        // there)
-        if ( !IsVertical() && ( pView->GetOutputArea().GetWidth() > GetPaperSize().Width() ) )
-        {
-            long nMaxX = pView->GetOutputArea().Left() + GetPaperSize().Width();
-            if ( aClipRect.Left() > nMaxX )
-                return;
-            if ( aClipRect.Right() > nMaxX )
-                aClipRect.Right() = nMaxX;
-        }
-
-        bool bClipRegion = pTarget->IsClipRegion();
-        vcl::Region aOldRegion = pTarget->GetClipRegion();
-        pTarget->IntersectClipRegion( aClipRect );
-
-        Paint( pTarget, aClipRect, aStartPos );
-
-        if ( bClipRegion )
-            pTarget->SetClipRegion( aOldRegion );
-        else
-            pTarget->SetClipRegion();
-
-        // In case of tiled rendering pass a region to DrawSelection(), so that
-        // selection callbacks are not emitted during every repaint.
-        vcl::Region aRegion;
-        pView->DrawSelection(pView->GetEditSelection(), comphelper::LibreOfficeKit::isActive() ? &aRegion : nullptr, pTarget);
+        aStartPos = pView->GetOutputArea().TopRight();
+        aStartPos.X() += pView->GetVisDocTop();
+        aStartPos.Y() -= pView->GetVisDocLeft();
     }
+
+    // If Doc-width < Output Area,Width and not wrapped fields,
+    // the fields usually protrude if > line.
+    // (Not at the top, since there the Doc-width from formatting is already
+    // there)
+    if ( !IsVertical() && ( pView->GetOutputArea().GetWidth() > GetPaperSize().Width() ) )
+    {
+        long nMaxX = pView->GetOutputArea().Left() + GetPaperSize().Width();
+        if ( aClipRect.Left() > nMaxX )
+            return;
+        if ( aClipRect.Right() > nMaxX )
+            aClipRect.Right() = nMaxX;
+    }
+
+    bool bClipRegion = pTarget->IsClipRegion();
+    vcl::Region aOldRegion = pTarget->GetClipRegion();
+    pTarget->IntersectClipRegion( aClipRect );
+
+    Paint( pTarget, aClipRect, aStartPos );
+
+    if ( bClipRegion )
+        pTarget->SetClipRegion( aOldRegion );
+    else
+        pTarget->SetClipRegion();
+
+    // In case of tiled rendering pass a region to DrawSelection(), so that
+    // selection callbacks are not emitted during every repaint.
+    vcl::Region aRegion;
+    pView->DrawSelection(pView->GetEditSelection(), comphelper::LibreOfficeKit::isActive() ? &aRegion : nullptr, pTarget);
 }
 
 void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
