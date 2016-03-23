@@ -1563,14 +1563,14 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
     if( true || !bTextSpecial )
     {
-        implWriteTextPortion( rPos, rText, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+        implWriteTextPortion( rPos, rText, mpVDev->GetTextColor() );
     }
     else
     {
         // to be implemented
     }
 #else
-    implWriteTextPortion( rPos, rText, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+    implWriteTextPortion( rPos, rText, mpVDev->GetTextColor() );
 #endif
 
     if( bStandAloneTextPortion )
@@ -1582,8 +1582,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
 void SVGTextWriter::implWriteTextPortion( const Point& rPos,
                                           const OUString& rText,
-                                          Color aTextColor,
-                                          bool bApplyMapping )
+                                          Color aTextColor )
 {
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
@@ -1595,10 +1594,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     else if( rFont.GetAlignment() == ALIGN_BOTTOM )
         aBaseLinePos.Y() -= aMetric.GetDescent();
 
-    if( bApplyMapping )
-        implMap( rPos, aPos );
-    else
-        aPos = rPos;
+    implMap( rPos, aPos );
 
     if( mbPositioningNeeded )
     {
@@ -1858,20 +1854,12 @@ BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
 
 
 void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
-                                     const Color* pLineColor, bool bApplyMapping )
+                                     const Color* pLineColor )
 {
     Point aPt1, aPt2;
 
-    if( bApplyMapping )
-    {
-        ImplMap( rPt1, aPt1 );
-        ImplMap( rPt2, aPt2 );
-    }
-    else
-    {
-        aPt1 = rPt1;
-        aPt2 = rPt2;
-    }
+    ImplMap( rPt1, aPt1 );
+    ImplMap( rPt2, aPt2 );
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::number( aPt1.X() ) );
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::number( aPt1.Y() ) );
@@ -1890,15 +1878,11 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
 }
 
 
-void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nRadY,
-                                     bool bApplyMapping )
+void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nRadY )
 {
     Rectangle aRect;
 
-    if( bApplyMapping )
-        ImplMap( rRect, aRect );
-    else
-        aRect = rRect;
+    ImplMap( rRect, aRect );
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aRect.Left() ) );
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aRect.Top() ) );
@@ -1906,14 +1890,12 @@ void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nR
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aRect.GetHeight() ) );
 
     if( nRadX )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRX, OUString::number( bApplyMapping ? ImplMap( nRadX ) : nRadX ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRX, OUString::number( ImplMap( nRadX ) ) );
 
     if( nRadY )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, OUString::number( bApplyMapping ? ImplMap( nRadY ) : nRadY ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, OUString::number( ImplMap( nRadY ) ) );
 
-    {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, true, true );
-    }
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, true, true );
 }
 
 
@@ -2394,7 +2376,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     if( !bTextSpecial )
     {
-        ImplWriteText( rPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+        ImplWriteText( rPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
     }
     else
     {
@@ -2422,8 +2404,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 aPos += aOffset;
             }
 
-            ImplWriteText( aPos, rText, pDXArray, nWidth, aReliefColor, true/*bApplyMapping*/ );
-            ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor, true/*bApplyMapping*/ );
+            ImplWriteText( aPos, rText, pDXArray, nWidth, aReliefColor );
+            ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor );
         }
         else
         {
@@ -2441,34 +2423,34 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
                 Point aPos( rPos );
                 aPos += Point( nOff, nOff );
-                ImplWriteText( aPos, rText, pDXArray, nWidth, aShadowColor, true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, aShadowColor );
 
                 if( !aMetric.IsOutline() )
                 {
-                    ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor, true/*bApplyMapping*/ );
+                    ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor );
                 }
             }
 
             if( aMetric.IsOutline() )
             {
                 Point aPos = rPos + Point( -6, -6 );
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( +6, +6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( -6, +0);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( -6, +6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( +0, +6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( +0, -6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( +6, -1);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
                 aPos = rPos + Point( +6, +0);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), true/*bApplyMapping*/ );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
 
-                ImplWriteText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ), true/*bApplyMapping*/ );
+                ImplWriteText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ) );
             }
         }
     }
@@ -2477,7 +2459,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                                      const long* pDXArray, long nWidth,
-                                     Color aTextColor, bool bApplyMapping )
+                                     Color aTextColor )
 {
     sal_Int32                               nLen = rText.getLength();
     Size                                    aNormSize;
@@ -2491,10 +2473,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     else if( rFont.GetAlignment() == ALIGN_BOTTOM )
         aBaseLinePos.Y() -= aMetric.GetDescent();
 
-    if( bApplyMapping )
-        ImplMap( rPos, aPos );
-    else
-        aPos = rPos;
+    ImplMap( rPos, aPos );
 
     std::unique_ptr<long[]> xTmpArray(new long[nLen]);
     // get text sizes
@@ -2604,8 +2583,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                         {
                             // #118796# do NOT access pDXArray, it may be zero (!)
                             sal_Int32 nDXWidth = pDX[ nCurPos - 1 ];
-                            if ( bApplyMapping )
-                                nDXWidth = ImplMap( nDXWidth );
+                            nDXWidth = ImplMap( nDXWidth );
                             nX = aPos.X() + nDXWidth;
                         }
                     }

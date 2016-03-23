@@ -154,7 +154,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 
 sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 EscherSolverContainer& rSolverContainer,
-                                ImplEESdrPageType ePageType, const bool bOOxmlExport )
+                                const bool bOOxmlExport )
 {
     sal_uInt32 nShapeID = 0;
     sal_uInt16 nShapeType = 0;
@@ -216,7 +216,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     if( aObj.IsValid() )
                     {
                         aObj.SetOOXML(bOOxmlExport);
-                        ImplWriteShape( aObj, rSolverContainer, ePageType, bOOxmlExport );
+                        ImplWriteShape( aObj, rSolverContainer, bOOxmlExport );
                     }
                 }
                 mpEscherEx->LeaveGroup();
@@ -518,7 +518,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
 
             // a GraphicObject can also be a ClickMe element
-            if( rObj.IsEmptyPresObj() && ( ePageType == NORMAL ) )
+            if( rObj.IsEmptyPresObj() )
             {
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
                 sal_uInt32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
@@ -584,7 +584,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType() == "drawing.OLE2" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            if( rObj.IsEmptyPresObj() && ( ePageType == NORMAL ) )
+            if( rObj.IsEmptyPresObj() )
             {
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
                 sal_uInt32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
@@ -821,8 +821,7 @@ bool ImplEESdrWriter::ImplInitPageValues()
 }
 
 void ImplEESdrWriter::ImplWritePage(
-            EscherSolverContainer& rSolverContainer,
-            ImplEESdrPageType ePageType )
+            EscherSolverContainer& rSolverContainer )
 {
     ImplInitPageValues();
 
@@ -844,7 +843,7 @@ void ImplEESdrWriter::ImplWritePage(
                                     mXShapes->getByIndex( n ).getValue()) );
         if( aObj.IsValid() )
         {
-            ImplWriteShape( aObj, rSolverContainer, ePageType );
+            ImplWriteShape( aObj, rSolverContainer );
         }
     }
     mnPagesWritten++;
@@ -934,14 +933,14 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
 void ImplEscherExSdr::ImplWriteCurrentPage()
 {
     assert(mpSolverContainer && "ImplEscherExSdr::ImplWriteCurrentPage: no SolverContainer");
-    ImplWritePage( *mpSolverContainer, NORMAL );
+    ImplWritePage( *mpSolverContainer );
     ImplExitPage();
 }
 
 sal_uInt32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj , bool ooxmlExport )
 {
     assert(mpSolverContainer && "ImplEscherExSdr::ImplWriteShape: no SolverContainer");
-    return ImplWriteShape( rObj, *mpSolverContainer, NORMAL, ooxmlExport );
+    return ImplWriteShape( rObj, *mpSolverContainer, ooxmlExport );
 }
 
 void EscherEx::AddSdrPage( const SdrPage& rPage )

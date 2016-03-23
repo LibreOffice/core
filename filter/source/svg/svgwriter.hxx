@@ -215,7 +215,7 @@ class SVGTextWriter
     void implWriteEmbeddedBitmaps();
     void writeTextPortion( const Point& rPos, const OUString& rText );
     void implWriteTextPortion( const Point& rPos, const OUString& rText,
-                               Color aTextColor, bool bApplyMapping );
+                               Color aTextColor );
 
     void setVirtualDevice( VirtualDevice* pVDev, MapMode& rTargetMapMode )
     {
@@ -298,10 +298,8 @@ private:
     tools::Polygon&         ImplMap( const tools::Polygon& rPoly, tools::Polygon& rDstPoly ) const;
     tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
-    void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr,
-                                           bool bApplyMapping = true );
-    void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0,
-                                           bool bApplyMapping = true );
+    void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr );
+    void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0 );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY );
     void                    ImplWritePattern( const tools::PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplAddLineAttr( const LineInfo &rAttrs );
@@ -315,7 +313,7 @@ private:
     static Color            ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz );
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,

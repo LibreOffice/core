@@ -427,7 +427,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     aT.TransDir(DXFVector(1,0,0),aV);
     if ( SetFontAttribute( rE,nAng, nHeight, aV. Abs() ) )
     {
-        OUString const aUString(pDXF->ToOUString(rE.m_sText, true));
+        OUString const aUString(pDXF->ToOUString(rE.m_sText));
         aT.Transform( DXFVector( 0, 0, 0 ), aPt );
         pVirDev->DrawText( aPt, aUString );
     }
@@ -485,7 +485,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         aT.TransDir(DXFVector(1,0,0),aV);
         if (SetFontAttribute(rE,nAng,nHeight,aV.Abs()))
         {
-            OUString const aUString(pDXF->ToOUString(rE.m_sText, true));
+            OUString const aUString(pDXF->ToOUString(rE.m_sText));
             aT.Transform( DXFVector( 0, 0, 0 ), aPt );
             pVirDev->DrawText( aPt, aUString );
         }

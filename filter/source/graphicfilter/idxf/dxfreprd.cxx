@@ -400,44 +400,42 @@ namespace {
     }
 }
 
-OUString DXFRepresentation::ToOUString(const OString& s, bool bSpecials) const
+OUString DXFRepresentation::ToOUString(const OString& s) const
 {
     OUString result = OStringToOUString(s, getTextEncoding());
-    if (bSpecials) {
-        result = result.replaceAll("%%o", "")                     // Overscore - simply remove
-                       .replaceAll("%%u", "")                     // Underscore - simply remove
-                       .replaceAll("%%d", OUString(sal_Unicode(L'\u00B0'))) // Degrees symbol (°)
-                       .replaceAll("%%p", OUString(sal_Unicode(L'\u00B1'))) // Tolerance symbol (±)
-                       .replaceAll("%%c", OUString(sal_Unicode(L'\u2205'))) // Diameter symbol
-                       .replaceAll("%%%", "%");                   // Percent symbol
+    result = result.replaceAll("%%o", "")                     // Overscore - simply remove
+                   .replaceAll("%%u", "")                     // Underscore - simply remove
+                   .replaceAll("%%d", OUString(sal_Unicode(L'\u00B0'))) // Degrees symbol (Â°)
+                   .replaceAll("%%p", OUString(sal_Unicode(L'\u00B1'))) // Tolerance symbol (Â±)
+                   .replaceAll("%%c", OUString(sal_Unicode(L'\u2205'))) // Diameter symbol
+                   .replaceAll("%%%", "%");                   // Percent symbol
 
-        sal_Int32 pos = result.indexOf("%%"); // %%nnn, where nnn - 3-digit decimal ASCII code
-        while (pos != -1 && pos <= result.getLength() - 5) {
-            OUString asciiNum = result.copy(pos + 2, 3);
-            if (lcl_isDec(asciiNum[0]) &&
-                lcl_isDec(asciiNum[1]) &&
-                lcl_isDec(asciiNum[2]))
-            {
-                char ch = static_cast<char>(asciiNum.toUInt32());
-                OUString codePt(&ch, 1, mEnc);
-                result = result.replaceAll(result.copy(pos, 5), codePt, pos);
-            }
-            pos = result.indexOf("%%", pos + 1);
+    sal_Int32 pos = result.indexOf("%%"); // %%nnn, where nnn - 3-digit decimal ASCII code
+    while (pos != -1 && pos <= result.getLength() - 5) {
+        OUString asciiNum = result.copy(pos + 2, 3);
+        if (lcl_isDec(asciiNum[0]) &&
+            lcl_isDec(asciiNum[1]) &&
+            lcl_isDec(asciiNum[2]))
+        {
+            char ch = static_cast<char>(asciiNum.toUInt32());
+            OUString codePt(&ch, 1, mEnc);
+            result = result.replaceAll(result.copy(pos, 5), codePt, pos);
         }
+        pos = result.indexOf("%%", pos + 1);
+    }
 
-        pos = result.indexOf("\\U+"); // \U+XXXX, where XXXX - 4-digit hex unicode
-        while (pos != -1 && pos <= result.getLength() - 7) {
-            OUString codePtNum = result.copy(pos + 3, 4);
-            if (lcl_isHex(codePtNum[0]) &&
-                lcl_isHex(codePtNum[1]) &&
-                lcl_isHex(codePtNum[2]) &&
-                lcl_isHex(codePtNum[3]))
-            {
-                OUString codePt(static_cast<sal_Unicode>(codePtNum.toUInt32(16)));
-                result = result.replaceAll(result.copy(pos, 7), codePt, pos);
-            }
-            pos = result.indexOf("\\U+", pos + 1);
+    pos = result.indexOf("\\U+"); // \U+XXXX, where XXXX - 4-digit hex unicode
+    while (pos != -1 && pos <= result.getLength() - 7) {
+        OUString codePtNum = result.copy(pos + 3, 4);
+        if (lcl_isHex(codePtNum[0]) &&
+            lcl_isHex(codePtNum[1]) &&
+            lcl_isHex(codePtNum[2]) &&
+            lcl_isHex(codePtNum[3]))
+        {
+            OUString codePt(static_cast<sal_Unicode>(codePtNum.toUInt32(16)));
+            result = result.replaceAll(result.copy(pos, 7), codePt, pos);
         }
+        pos = result.indexOf("\\U+", pos + 1);
     }
     return result;
 }

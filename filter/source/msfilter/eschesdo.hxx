@@ -140,12 +140,11 @@ protected:
     bool                ImplInitPageValues();
 
     void                ImplWritePage(
-                            EscherSolverContainer& rSolver,
-                            ImplEESdrPageType ePageType );
+                            EscherSolverContainer& rSolver );
 
     sal_uInt32          ImplWriteShape( ImplEESdrObject& rObj,
                             EscherSolverContainer& rSolver,
-                            ImplEESdrPageType ePageType, const bool bOOxmlExport = false );  // returns ShapeID
+                            const bool bOOxmlExport = false );  // returns ShapeID
 
     static void         ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
     void                ImplWriteAdditionalText(
