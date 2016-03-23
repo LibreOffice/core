@@ -103,12 +103,15 @@ using ::oox::drawingml::DrawingML;
 using ::oox::drawingml::ChartExport;
 using namespace oox;
 
-#define  HMM2XL(x)        ((x)/26.5)+0.5
+namespace
+{
 
-#if 1//def XLSX_OOXML_FUTURE
-// these function are only used within that context
-// Static Function Helpers
-static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
+inline long lcl_hmm2px(long nHmm)
+{
+    return static_cast<long>(nHmm*PIXEL_PER_INCH/1000.0/CM_PER_INCH)+0.5;
+}
+
+const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
 {
     switch( eAdjust )
     {
@@ -124,7 +127,7 @@ static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
     }
 }
 
-static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
+const char *ToVertAlign( SdrTextVertAdjust eAdjust )
 {
     switch( eAdjust )
     {
@@ -140,7 +143,7 @@ static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
     }
 }
 
-static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
+void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
 {
     rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
     rComments->writeEscaped( OUString::number( aRect.Left() ) );
@@ -155,9 +158,8 @@ static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectan
     rComments->writeEscaped( OUString::number( aRect.Bottom() ) );
     rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
 }
-#endif
 
-static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
+void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
 {
     sal_Int32 nCol = 0, nRow = 0;
     sal_Int32 nColOff = 0, nRowOff= 0;
@@ -180,8 +182,8 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
             }
             if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
             {
-                aFrom = Rectangle( nCol-1, static_cast<long>(HMM2XL( nColOff )),
-                                   nRow-1, static_cast<long>(HMM2XL( nRowOff )) );
+                aFrom = Rectangle( nCol-1, static_cast<long>(lcl_hmm2px( nColOff )),
+                                   nRow-1, static_cast<long>(lcl_hmm2px( nRowOff )) );
                 break;
             }
         }
@@ -203,8 +205,8 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
             }
             if( r.Left() < aRect.Left() && r.Top() > aRect.Top() )
             {
-                aFrom = Rectangle( nCol-1, static_cast<long>(HMM2XL( nColOff )),
-                                   nRow-1, static_cast<long>(HMM2XL( nRowOff )) );
+                aFrom = Rectangle( nCol-1, static_cast<long>(lcl_hmm2px( nColOff )),
+                                   nRow-1, static_cast<long>(lcl_hmm2px( nRowOff )) );
                 break;
             }
         }
@@ -220,8 +222,8 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
                 nRow++;
             if( r.Right() >= aRect.Right() && r.Bottom() >= aRect.Bottom() )
             {
-                aTo = Rectangle( nCol, static_cast<long>(HMM2XL( aRect.Right() - r.Left() )),
-                                 nRow, static_cast<long>(HMM2XL( aRect.Bottom() - r.Top() )));
+                aTo = Rectangle( nCol, static_cast<long>(lcl_hmm2px( aRect.Right() - r.Left() )),
+                                 nRow, static_cast<long>(lcl_hmm2px( aRect.Bottom() - r.Top() )));
                 break;
             }
         }
@@ -237,13 +239,15 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
                 nRow++;
             if( r.Right() < aRect.Right() && r.Bottom() >= aRect.Bottom() )
             {
-                aTo = Rectangle( nCol, static_cast<long>(HMM2XL( r.Left() - aRect.Right() )),
-                                 nRow, static_cast<long>(HMM2XL( aRect.Bottom() - r.Top() )));
+                aTo = Rectangle( nCol, static_cast<long>(lcl_hmm2px( r.Left() - aRect.Right() )),
+                                 nRow, static_cast<long>(lcl_hmm2px( aRect.Bottom() - r.Top() )));
                 break;
             }
         }
     }
 }
+
+} // namespace
 
 // Escher client anchor =======================================================
 
