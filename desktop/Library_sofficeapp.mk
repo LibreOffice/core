@@ -140,6 +140,13 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/lokclipboard \
 ))
 endif
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+    desktop/source/lib/init \
+    desktop/source/lib/lokinteractionhandler \
+    desktop/source/lib/lokclipboard \
+))
+endif
 endif
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
