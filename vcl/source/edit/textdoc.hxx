@@ -85,7 +85,7 @@ public:
     void                InsertText( sal_Int32 nPos, sal_Unicode c );
     void                RemoveText( sal_Int32 nPos, sal_Int32 nChars );
 
-    TextNode*           Split( sal_Int32 nPos, bool bKeepEndigAttribs );
+    TextNode*           Split( sal_Int32 nPos );
     void                Append( const TextNode& rNode );
 };
 

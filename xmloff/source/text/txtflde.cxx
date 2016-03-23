@@ -2606,7 +2606,6 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
                                          double dValue,
                                          bool bIsDate,
                                          bool bIsDuration,
-                                         bool bOmitDurationIfZero,
                                          sal_uInt16 nPrefix)
 {
     // truncate for date granularity
@@ -2619,7 +2618,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     if (bIsDuration)
     {
         // date/time duration handle bOmitDurationIfZero
-        if (!bOmitDurationIfZero || !::rtl::math::approxEqual(dValue, 0.0))
+        if (!::rtl::math::approxEqual(dValue, 0.0))
         {
             ::sax::Converter::convertDuration(aBuffer, dValue);
         }

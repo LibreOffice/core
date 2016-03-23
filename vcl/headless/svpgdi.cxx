@@ -902,8 +902,7 @@ void SvpSalGraphics::copyArea( long nDestX,
                                       long nSrcX,
                                       long nSrcY,
                                       long nSrcWidth,
-                                      long nSrcHeight,
-                                      sal_uInt16 /*nFlags*/ )
+                                      long nSrcHeight )
 {
     SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
     copyBits(aTR, this);

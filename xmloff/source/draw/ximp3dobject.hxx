@@ -107,8 +107,7 @@ public:
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
-        bool bTemporaryShape);
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXML3DPolygonBasedShapeContext();
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;

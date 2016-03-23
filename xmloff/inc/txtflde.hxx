@@ -326,8 +326,7 @@ protected:
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         double dValue,              /// date/time value
         bool bIsDate,           /// export as date (rather than date/time)?
-        bool bIsDuration = false,           /// export as duration
-        bool bOmitDurationIfZero = true,    /// omit zero-length durat.
+        bool bIsDuration,           /// export as duration
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a date, time, or duration

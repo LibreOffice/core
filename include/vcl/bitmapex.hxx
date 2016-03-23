@@ -104,19 +104,15 @@ public:
      */
     bool                Convert( BmpConversion eConversion );
 
-    /** Reduce number of colors for the bitmap
+    /** Reduce number of colors for the bitmap, using the popular algorithm.
 
         @param nNewColorCount
         Maximal number of bitmap colors after the reduce operation
 
-        @param eReduce
-        Algorithm to use for color reduction
-
         @return true, if the color reduction operation was completed successfully.
      */
     bool                ReduceColors(
-                            sal_uInt16 nNewColorCount,
-                            BmpReduce eReduce = BMP_REDUCE_SIMPLE );
+                            sal_uInt16 nNewColorCount );
 
     /** Apply a dither algorithm to the bitmap
 

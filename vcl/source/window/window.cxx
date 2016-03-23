@@ -3318,14 +3318,13 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder )
 {
-    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, false/*bDrawExtBorderOnly*/, nullptr, nullptr );
+    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, nullptr, nullptr );
 }
 
 void Window::DrawSelectionBackground( const Rectangle& rRect,
                                       sal_uInt16 highlight,
                                       bool bChecked,
                                       bool bDrawBorder,
-                                      bool bDrawExtBorderOnly,
                                       Color* pSelectionTextColor,
                                       Color* pPaintColor
                                       )
@@ -3357,13 +3356,6 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     }
 
     Rectangle aRect( rRect );
-    if( bDrawExtBorderOnly )
-    {
-        --aRect.Left();
-        --aRect.Top();
-        ++aRect.Right();
-        ++aRect.Bottom();
-    }
     Color oldFillCol = GetFillColor();
     Color oldLineCol = GetLineColor();
 
@@ -3426,23 +3418,14 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
         }
     }
 
-    if( bDark && bDrawExtBorderOnly )
+    SetFillColor( aSelectionFillCol );
+    if( pSelectionTextColor )
     {
-        SetFillColor();
-        if( pSelectionTextColor )
-            *pSelectionTextColor = rStyles.GetHighlightTextColor();
-    }
-    else
-    {
-        SetFillColor( aSelectionFillCol );
-        if( pSelectionTextColor )
-        {
-            Color aTextColor = IsControlBackground() ? GetControlForeground() : rStyles.GetButtonTextColor();
-            Color aHLTextColor = rStyles.GetHighlightTextColor();
-            int nTextDiff = abs(aSelectionFillCol.GetLuminance() - aTextColor.GetLuminance());
-            int nHLDiff = abs(aSelectionFillCol.GetLuminance() - aHLTextColor.GetLuminance());
-            *pSelectionTextColor = (nHLDiff >= nTextDiff) ? aHLTextColor : aTextColor;
-        }
+        Color aTextColor = IsControlBackground() ? GetControlForeground() : rStyles.GetButtonTextColor();
+        Color aHLTextColor = rStyles.GetHighlightTextColor();
+        int nTextDiff = abs(aSelectionFillCol.GetLuminance() - aTextColor.GetLuminance());
+        int nHLDiff = abs(aSelectionFillCol.GetLuminance() - aHLTextColor.GetLuminance());
+        *pSelectionTextColor = (nHLDiff >= nTextDiff) ? aHLTextColor : aTextColor;
     }
 
     if( bDark )

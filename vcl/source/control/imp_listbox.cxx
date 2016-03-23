@@ -2738,7 +2738,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
     }
     else
     {
-        DrawEntry(rRenderContext, true, true, false, bLayout);
+        DrawEntry(rRenderContext, true, false, bLayout);
     }
 }
 
@@ -2767,7 +2767,7 @@ void ImplWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
     ImplDraw(rRenderContext);
 }
 
-void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout)
+void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, bool bDrawTextAtImagePos, bool bLayout)
 {
     long nBorder = 1;
     Size aOutSz(GetOutputSizePixel());
@@ -2810,7 +2810,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, boo
         }
     }
 
-    if( bDrawText && !maString.isEmpty() )
+    if( !maString.isEmpty() )
     {
         DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 

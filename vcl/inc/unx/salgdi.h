@@ -204,8 +204,7 @@ public:
                                         long nSrcX,
                                         long nSrcY,
                                         long nSrcWidth,
-                                        long nSrcHeight,
-                                        sal_uInt16 nFlags ) override;
+                                        long nSrcHeight ) override;
 
     virtual void                    copyBits(
                                         const SalTwoRect& rPosAry,

@@ -248,7 +248,7 @@ DrawTextFlags Button::ImplGetTextStyle(OUString& rText, WinBits nWinStyle, DrawF
 }
 
 void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
-                                  Size& rSize, bool bLayout,
+                                  Size& rSize,
                                   sal_uLong nImageSep, DrawFlags nDrawFlags,
                                   DrawTextFlags nTextStyle, Rectangle *pSymbolRect,
                                   bool bAddImageSep)
@@ -264,8 +264,6 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     WinBits nWinStyle = GetStyle();
     Rectangle aOutRect( rPos, rSize );
-    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
-    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
     ImageAlign eImageAlign = mpButtonData->meImageAlign;
     Size aImageSize = mpButtonData->maImage.GetSizePixel();
 
@@ -287,7 +285,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     }
     else if (bDrawText && !bDrawImage && !bHasSymbol)
     {
-        DrawControlText(*pDev, aOutRect, aText, nTextStyle, pVector, pDisplayText);
+        DrawControlText(*pDev, aOutRect, aText, nTextStyle, nullptr, nullptr);
 
         ImplSetFocusRect(aOutRect);
         rSize = aOutRect.GetSize();
@@ -514,7 +512,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     {
         Rectangle       aTOutRect( aTextPos, aTextSize );
         ImplSetFocusRect( aTOutRect );
-        DrawControlText( *pDev, aTOutRect, aText, nTextStyle, pVector, pDisplayText );
+        DrawControlText( *pDev, aTOutRect, aText, nTextStyle, nullptr, nullptr );
     }
     else
     {
@@ -880,7 +878,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
             aSymbolRect.Right() -= nSymbolSize/2;
             aSymbolRect.Left()  = aSymbolRect.Right() - nSymbolSize;
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, nImageSep,
+            ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep,
                                   nDrawFlags, nTextStyle, nullptr, true );
         }
         else
@@ -902,7 +900,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     else
     {
         Rectangle aSymbolRect;
-        ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, nImageSep, nDrawFlags,
+        ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep, nDrawFlags,
                               nTextStyle, IsSymbol() ? &aSymbolRect : nullptr, true );
 
         if ( IsSymbol() )
@@ -2046,7 +2044,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                 aSize.Height() = rImageSize.Height();
             }
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, 1,
+            ImplDrawAlignedImage( pDev, aPos, aSize, 1,
                                   nDrawFlags, nTextStyle );
 
             rMouseRect          = Rectangle( aPos, aSize );
@@ -3101,7 +3099,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
             aSize.Height() = rImageSize.Height();
         }
 
-        ImplDrawAlignedImage( pDev, aPos, aSize, false/*bLayout*/, 1,
+        ImplDrawAlignedImage( pDev, aPos, aSize, 1,
                               nDrawFlags, nTextStyle );
         nLineY = aPos.Y() + aSize.Height()/2;
 

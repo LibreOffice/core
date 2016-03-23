@@ -1391,7 +1391,7 @@ void ListBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawTe
     if (rEvt.GetWindow() == mpImplLB->GetMainWindow())
         mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), bDrawImage, true/*bDrawText*/, bDrawTextAtImagePos );
     else if (rEvt.GetWindow() == mpImplWin)
-        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), bDrawImage, true/*bDrawText*/, bDrawTextAtImagePos);
+        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), bDrawImage, bDrawTextAtImagePos);
 }
 
 void ListBox::SetUserItemSize( const Size& rSz )

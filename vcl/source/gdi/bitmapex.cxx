@@ -474,9 +474,9 @@ bool BitmapEx::Convert( BmpConversion eConversion )
     return !!aBitmap && aBitmap.Convert( eConversion );
 }
 
-bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
+bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount )
 {
-    return !!aBitmap && aBitmap.ReduceColors( nNewColorCount, eReduce );
+    return !!aBitmap && aBitmap.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
 }
 
 bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor, bool bExpandTransparent )

@@ -569,9 +569,9 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
         bRet = true;
 
         for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
+            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount );
 
-        maBitmapEx.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
+        maBitmapEx.ReduceColors( nNewColorCount );
     }
     else
         bRet = false;

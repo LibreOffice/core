@@ -505,7 +505,7 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
         mirror( nDestX, nSrcWidth, pOutDev );
         mirror( nSrcX, nSrcWidth, pOutDev );
     }
-    copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, SAL_COPYAREA_WINDOWINVALIDATE );
+    copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight );
 }
 
 void SalGraphics::CopyBits( const SalTwoRect& rPosAry,

@@ -264,12 +264,11 @@ class ImplChain
 {
 private:
 
-    tools::Polygon maPoly;
+    tools::Polygon  maPoly;
     Point           maStartPt;
-    sal_uLong           mnArraySize;
-    sal_uLong           mnCount;
-    long            mnResize;
-    sal_uInt8*          mpCodes;
+    sal_uLong       mnArraySize;
+    sal_uLong       mnCount;
+    sal_uInt8*      mpCodes;
 
     void            ImplGetSpace();
 
@@ -277,7 +276,7 @@ private:
 
 public:
 
-                    ImplChain( sal_uLong nInitCount = 1024UL, long nResize = -1L );
+                    ImplChain( sal_uLong nInitCount = 1024UL );
                     ~ImplChain();
 
     void            ImplBeginAdd( const Point& rStartPt );
@@ -287,12 +286,11 @@ public:
     const tools::Polygon& ImplGetPoly() const { return maPoly; }
 };
 
-ImplChain::ImplChain( sal_uLong nInitCount, long nResize ) :
+ImplChain::ImplChain( sal_uLong nInitCount ) :
     mnArraySize ( nInitCount ),
-    mnCount     ( 0UL ),
-    mnResize    ( nResize )
+    mnCount     ( 0UL )
 {
-    DBG_ASSERT( nInitCount && nResize, "ImplChain::ImplChain(): invalid parameters!" );
+    DBG_ASSERT( nInitCount, "ImplChain::ImplChain(): invalid parameters!" );
     mpCodes = new sal_uInt8[ mnArraySize ];
 }
 
@@ -306,7 +304,7 @@ void ImplChain::ImplGetSpace()
     const sal_uLong nOldArraySize = mnArraySize;
     sal_uInt8*      pNewCodes;
 
-    mnArraySize = ( mnResize < 0L ) ? ( mnArraySize << 1UL ) : ( mnArraySize + (sal_uLong) mnResize );
+    mnArraySize = mnArraySize << 1UL;
     pNewCodes = new sal_uInt8[ mnArraySize ];
     memcpy( pNewCodes, mpCodes, nOldArraySize );
     delete[] mpCodes;
