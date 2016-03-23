@@ -93,7 +93,7 @@ private:
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy );
+    void                RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName );
     void                UpdateWindows();
     static void         InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
