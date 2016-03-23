@@ -126,8 +126,8 @@ namespace bib
             m_xComponent = nullptr;
     }
 
-    OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable, bool _bAutoRelease )
-        :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ), _bAutoRelease )
+    OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable )
+        :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ), true/*_bAutoRelease*/ )
     {
     }
 
