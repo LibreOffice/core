@@ -9,7 +9,7 @@ import time
 
 from uitest_helper import UITest
 
-def test_about_dlg_with_screenshot(xContext):
+def test_about_dlg(xContext):
     xUITest = xContext.ServiceManager.createInstanceWithContext(
             "org.libreoffice.uitest.UITest", xContext)
 
