@@ -787,7 +787,7 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
     }
 }
 
-bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt )
+bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
 {
     // delete the old user filter and create a new one
     DELETEZ( _pImp->_pUserFilter );
@@ -817,13 +817,10 @@ bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAll
             bUseCurFilterExt = false;
     }
 
-    if ( !_bAllowUserDefExt || bUseCurFilterExt )
-    {
-        if ( _pImp->GetCurFilter( ) )
-            SetDefaultExt( _pImp->GetCurFilter( )->GetExtension() );
-        else
-            EraseDefaultExt();
-    }
+    if ( _pImp->GetCurFilter( ) )
+        SetDefaultExt( _pImp->GetCurFilter( )->GetExtension() );
+    else
+        EraseDefaultExt();
 
     // outta here
     return bIsAllFiles;
@@ -861,7 +858,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
         {
             nReturn |= FLT_USERFILTER;
             // no filter found : use it as user defined filter
-            if ( createNewUserFilter( _rFilter, false ) )
+            if ( createNewUserFilter( _rFilter ) )
             {   // it's the "all files" filter
                 nReturn |= FLT_ALLFILESFILTER;
 
@@ -1386,7 +1383,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
             // activate filter
             _rFilterChanged = _pImp->_pUserFilter || ( _pImp->GetCurFilter() != pFilter );
 
-            createNewUserFilter( _rFilter, false );
+            createNewUserFilter( _rFilter );
 
             break;
         }
