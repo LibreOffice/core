@@ -853,19 +853,15 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 vector < const SmSym * > aVector;
 
                 const SymbolPtrVec_t aSymbols( rManager.GetSymbols() );
-                size_t nCount = 0;
                 for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
                     const SmSym * pSymbol = aSymbols[ i ];
                     if (pSymbol && !pSymbol->IsPredefined() &&
                         (!bUsedSymbolsOnly ||
                          rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end()))
-                    {
                         aVector.push_back ( pSymbol );
-                        nCount++;
-                    }
                 }
-                Sequence < SymbolDescriptor > aSequence ( nCount );
+                Sequence < SymbolDescriptor > aSequence ( aVector.size() );
                 SymbolDescriptor * pDescriptor = aSequence.getArray();
 
                 vector < const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
