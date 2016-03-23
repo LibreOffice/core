@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include "openglgdiimpl.hxx"
+#endif
 #include "salgdi.hxx"
 #include "salframe.hxx"
 
@@ -50,7 +53,7 @@ SalGraphics::SalGraphics()
 SalGraphics::~SalGraphics()
 {
 }
-
+#if HAVE_FEATURE_OPENGL
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
@@ -59,6 +62,7 @@ rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 
     return nullptr;
 }
+#endif
 
 bool SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& /* rNull */,

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_OUTDEV_HXX
 #define INCLUDED_VCL_OUTDEV_HXX
 
+#include <config_features.h>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/rc.hxx>
@@ -612,6 +613,7 @@ public:
      * the underlying SalGraphics and it's implementation
      * changing.
      */
+#if HAVE_FEATURE_OPENGL
     class PaintScope {
         void *pHandle;
     public:
@@ -619,7 +621,7 @@ public:
         ~PaintScope();
         void flush();
     };
-
+#endif
 protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate = false);
