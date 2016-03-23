@@ -228,7 +228,7 @@ sal_Bool SAL_CALL
         throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, true );
+    return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties );
 }
 
 
@@ -238,7 +238,7 @@ Reference< XSpellAlternatives > SAL_CALL
         throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, true );
+    return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties );
 }
 
 
@@ -279,8 +279,7 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
 bool SpellCheckerDispatcher::isValid_Impl(
             const OUString& rWord,
             LanguageType nLanguage,
-            const PropertyValues& rProperties,
-            bool bCheckDics)
+            const PropertyValues& rProperties)
         throw( RuntimeException, IllegalArgumentException, std::exception )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -419,8 +418,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
         }
 
         // cross-check against results from dictionaries which have precedence!
-        if (bCheckDics  &&
-            GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
+        if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
             if (xTmp.is()) {
@@ -445,8 +443,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
 Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             const OUString& rWord,
             LanguageType nLanguage,
-            const PropertyValues& rProperties,
-            bool bCheckDics )
+            const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -642,7 +639,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             xDList = GetDicList();
 
         // cross-check against results from user-dictionaries which have precedence!
-        if (bCheckDics  &&  xDList.is())
+        if (xDList.is())
         {
             Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
             if (xTmp.is())
@@ -722,7 +719,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
             // remove entries listed in negative dictionaries
             // (we don't want to display suggestions that will be regarded as misspelled later on)
-            if (bCheckDics  &&  xDList.is())
+            if (xDList.is())
                 SeqRemoveNegEntries( aProposals, xDList, nLanguage );
 
             uno::Reference< linguistic2::XSetSpellAlternatives > xSetAlt( xRes, uno::UNO_QUERY );

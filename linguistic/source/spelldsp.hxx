@@ -75,15 +75,13 @@ class SpellCheckerDispatcher :
     void    ClearSvcList();
 
     bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,
-                    const css::beans::PropertyValues& aProperties,
-                    bool bCheckDics)
+                    const css::beans::PropertyValues& aProperties)
                 throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception );
 
     css::uno::Reference<
         css::linguistic2::XSpellAlternatives >
             spell_Impl(const OUString& aWord, LanguageType nLanguage,
-                    const css::beans::PropertyValues& aProperties,
-                    bool bCheckDics)
+                    const css::beans::PropertyValues& aProperties)
                 throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception );
 
 public:
