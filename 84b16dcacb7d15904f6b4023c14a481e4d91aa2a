@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_49b0388c",
+        "filename": "sd/source/ui/animations/CustomAnimationDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-23T11:08:57Z",
+      "side": 1,
+      "message": "Can this ever be any other value than 1? Afaik those comboboxes don\u0027t have multiselection enabled ...\n\nMaybe I\u0027m not getting what are you trying to achieve here. Is this an alternative way of making sure that GetSelectEntryPos doesn\u0027t return LISTBOX_ENTRY_NOTFOUND?",
+      "revId": "84b16dcacb7d15904f6b4023c14a481e4d91aa2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_29ad0432",
+        "filename": "sd/source/ui/animations/CustomAnimationDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-23T11:08:57Z",
+      "side": 1,
+      "message": "Why so complicated? You can as well do:\n\nmpCBXDuration-\u003eGetValue( nPos) \n\n+ transform the value (divide by 100?) if needed",
+      "revId": "84b16dcacb7d15904f6b4023c14a481e4d91aa2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_e9712ce2",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-23T11:08:57Z",
+      "side": 1,
+      "message": "the same here (see my comments to CustomAnimationsDialog.cxx)",
+      "revId": "84b16dcacb7d15904f6b4023c14a481e4d91aa2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_497798d4",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-23T11:08:57Z",
+      "side": 1,
+      "message": "and here ... just use GetValue( nPos )",
+      "revId": "84b16dcacb7d15904f6b4023c14a481e4d91aa2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
