@@ -276,12 +276,10 @@ public:
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
     RscTop  *         GetRoot()         { return pRoot; }
-    sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
-                                  sal_uInt32 nId, bool bFirst );
+    sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName );
     void              ClearSysNames();
     ERRTYPE           WriteRc( WriteRcContext& rContext );
-    void              WriteSrc( FILE * fOutput, RscFileTab::Index nFileIndex,
-                                bool bName = true );
+    void              WriteSrc( FILE * fOutput, RscFileTab::Index nFileIndex );
     void              PutTranslatorKey( sal_uInt64 nKey );
     void              IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
