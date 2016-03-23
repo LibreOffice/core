@@ -177,6 +177,8 @@ public:
     void testTdf96479();
     void testTdf96536();
     void testTdf96961();
+    void testTdf88453();
+    void testTdf88453Table();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -262,6 +264,8 @@ public:
     CPPUNIT_TEST(testTdf96479);
     CPPUNIT_TEST(testTdf96536);
     CPPUNIT_TEST(testTdf96961);
+    CPPUNIT_TEST(testTdf88453);
+    CPPUNIT_TEST(testTdf88453Table);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3070,6 +3074,25 @@ void SwUiWriterTest::testTdf96961()
     sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
     sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT(nLast > nOther);
+}
+
+void SwUiWriterTest::testTdf88453()
+{
+    createDoc("tdf88453.odt");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 0: the table does not fit the first page, but it wasn't split
+    // to continue on the second page.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
+}
+
+void SwUiWriterTest::testTdf88453Table()
+{
+    createDoc("tdf88453-table.odt");
+    calcLayout();
+    // This was 2: layout could not split the large outer table in the document
+    // into 3 pages.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
