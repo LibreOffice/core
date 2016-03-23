@@ -2325,7 +2325,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         // functions depend on VCL being ready -- the deadlocks would happen
         // if you try to use loadDocument too early.
 
-        // The OfficeIPCThread is specifically set to be read when all the other
+        // The OfficeIPCThread is specifically set to be ready when all the other
         // init in Desktop::Main (run from soffice_main) is done. We can "enable"
         // the Thread from wherever (it's done again in Desktop::Main), and can
         // then use it to wait until we're definitely ready to continue.
