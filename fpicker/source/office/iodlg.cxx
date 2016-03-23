@@ -803,20 +803,6 @@ bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
         // is always "*.<something>". But changing this would take some more time than I have now...
 
     // now, the default extension is set to the one of the user filter (or empty)
-    // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter
-    // (if possible)
-    bool bUseCurFilterExt = true;
-    OUString sUserFilter = _pImp->_pUserFilter->GetType();
-    sal_Int32 nSepPos = sUserFilter.lastIndexOf( '.' );
-    if ( nSepPos != -1 )
-    {
-        OUString sUserExt = sUserFilter.copy( nSepPos + 1 );
-        if  (   ( -1 == sUserExt.indexOf( '*' ) )
-            &&  ( -1 == sUserExt.indexOf( '?' ) )
-            )
-            bUseCurFilterExt = false;
-    }
-
     if ( _pImp->GetCurFilter( ) )
         SetDefaultExt( _pImp->GetCurFilter( )->GetExtension() );
     else
