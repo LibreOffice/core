@@ -232,10 +232,10 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     css::uno::Reference< css::io::XStream > xStreamNoLang;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT, true); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT); // open or create!
         try
         {
-            xStreamNoLang = m_aPresetHandler.openPreset(PRESET_DEFAULT, true);
+            xStreamNoLang = m_aPresetHandler.openPreset(PRESET_DEFAULT);
         }
         catch(const css::io::IOException&) {} // does not have to exist
     }
@@ -273,7 +273,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT, true); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT); // open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -329,7 +329,7 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT, true); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT); // open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;

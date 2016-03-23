@@ -486,9 +486,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   TransactionBase             (                                                   )
-        ,   PropertySetHelper           ( m_aMutex,
-                                          &m_aTransactionManager,
-                                          false) // sal_False => don't release shared mutex on calling us!
+        ,   PropertySetHelper           ( m_aMutex, &m_aTransactionManager)
         //  init member
         ,   m_xContext                  ( xContext                                          )
         ,   m_aListenerContainer        ( m_aMutex )
@@ -1022,7 +1020,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator(xContext);
-        xTarget = aCreator.createTask(sTargetFrameName,false);
+        xTarget = aCreator.createTask(sTargetFrameName);
     }
 
     // I.II) "_parent"
@@ -1219,7 +1217,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
            )
         {
             TaskCreator aCreator(xContext);
-            xTarget = aCreator.createTask(sTargetFrameName,false);
+            xTarget = aCreator.createTask(sTargetFrameName);
         }
     }
 

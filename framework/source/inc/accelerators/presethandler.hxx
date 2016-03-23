@@ -277,13 +277,11 @@ class PresetHandler
             @param  sPreset
                     the ALIAS name of an existing preset.
 
-            @param  bNoLangGlobal
-                    access the global language-independent storage instead of the preset storage
+            Accesses the global language-independent storage instead of the preset storage
 
             @return The opened preset stream ... or NULL if the preset does not exists.
          */
-        css::uno::Reference< css::io::XStream > openPreset(const OUString& sPreset,
-                                                           bool bUseNoLangGlobal = false);
+        css::uno::Reference< css::io::XStream > openPreset(const OUString& sPreset);
 
         /** @short  open the specified target as stream object
                     and return it.
@@ -296,15 +294,10 @@ class PresetHandler
             @param  sTarget
                     the ALIAS name of the target.
 
-            @param  bCreateIfMissing
-                    create target file, if it does not still exists.
-                    Note: That does not means reseting of an existing file!
-
             @return The opened target stream ... or NULL if the target does not exists
                     or couldnt be created as new one.
          */
-        css::uno::Reference< css::io::XStream > openTarget(const OUString& sTarget         ,
-                                                                 bool         bCreateIfMissing);
+        css::uno::Reference< css::io::XStream > openTarget(const OUString& sTarget);
 
         /** @short  do anything which is necessary to flush all changes
                     back to disk.

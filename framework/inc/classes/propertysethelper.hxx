@@ -60,8 +60,6 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         ListenerHash m_lSimpleChangeListener;
         ListenerHash m_lVetoChangeListener;
 
-        bool m_bReleaseLockOnCall;
-
         // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
         css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
 
@@ -76,13 +74,9 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *          this helper must be used as a baseclass ...
          *          but then it should synchronize its own calls
          *          with the same transaction manager then it's superclass.
-         *
-         *  @param  bReleaseLockOnCall
-         *          see member m_bReleaseLockOnCall
          */
         PropertySetHelper(      osl::Mutex & mutex,
-                                TransactionManager*                                     pExternalTransactionManager ,
-                                bool                                                bReleaseLockOnCall          );
+                                TransactionManager*                                     pExternalTransactionManager);
 
         /** free all needed memory.
          */
