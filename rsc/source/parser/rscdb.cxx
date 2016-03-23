@@ -258,13 +258,10 @@ sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
 {
     RscSysEntry *pSysEntry;
     RscSysEntry *pFoundEntry = nullptr;
-    bool         bId1 = false;
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
         pSysEntry = aSysLst[ i ];
-        if( pSysEntry->nKey == 1 )
-            bId1 = true;
         if( !strcmp( pSysEntry->aFileName.getStr(), pFileName ) )
             if(  pSysEntry->nRscTyp == nRscTyp &&
                  pSysEntry->nTyp    == 0 &&
