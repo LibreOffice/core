@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_89aa3018",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T10:53:16Z",
+      "side": 1,
+      "message": "UNO_QUERY_THROW means that xEncr cannot be null",
+      "revId": "000025542da65d05a0cb6771b79482007f760fbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_69a7fc4f",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T10:53:16Z",
+      "side": 1,
+      "message": "... so this check is completely pointless",
+      "revId": "000025542da65d05a0cb6771b79482007f760fbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c9626816",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-23T10:53:16Z",
+      "side": 1,
+      "message": "this should catch the RuntimeException if xStorage does not implement the XEncryption... interface",
+      "revId": "000025542da65d05a0cb6771b79482007f760fbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
