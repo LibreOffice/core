@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
@@ -774,6 +775,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
     }
     CPPUNIT_ASSERT(bFound);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTdf49073, "tdf49073.docx")
+{
+    // test case for Asisan phontic guide ( ruby text.)
+    sal_Unicode aRuby[3] = {0x304D,0x3082,0x3093};
+    OUString sRuby = OUString(aRuby, SAL_N_ELEMENTS(aRuby));
+    CPPUNIT_ASSERT_EQUAL(sRuby,getProperty<OUString>(getParagraph(1)->getStart(), "RubyText"));
+    OUString sStyle = getProperty<OUString>( getParagraph(1)->getStart(), "RubyCharStyleName");
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("CharacterStyles")->getByName(sStyle), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL(5.f, getProperty<float>(xPropertySet, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_CENTER) ,getProperty<sal_Int16>(getParagraph(2)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_BLOCK)  ,getProperty<sal_Int16>(getParagraph(3)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_INDENT_BLOCK),getProperty<sal_Int16>(getParagraph(4)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_LEFT)   ,getProperty<sal_Int16>(getParagraph(5)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_RIGHT)  ,getProperty<sal_Int16>(getParagraph(6)->getStart(),"RubyAdjust"));
+}
+
 
 DECLARE_OOXMLEXPORT_TEST(testTdf91594, "tdf91594.docx")
 {
