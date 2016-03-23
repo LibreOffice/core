@@ -38,6 +38,8 @@ namespace frm
         ToggleState         m_eDefaultChecked;          // the default check state
         // </properties>
 
+        bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
+
     protected:
         const OUString& getReferenceValue() const { return m_sReferenceValue; }
         void                   setReferenceValue( const OUString& _rRefValue );
@@ -51,7 +53,8 @@ namespace frm
         OReferenceValueComponent(
             const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
-            const OUString& _rDefault
+            const OUString& _rDefault,
+            bool _bSupportNoCheckRefValue = false
         );
         DECLARE_DEFAULT_CLONE_CTOR( OReferenceValueComponent )
         virtual ~OReferenceValueComponent();

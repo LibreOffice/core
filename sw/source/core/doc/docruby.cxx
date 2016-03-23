@@ -36,7 +36,7 @@
 #include <pam.hxx>
 #include <swundo.hxx>
 #include <breakit.hxx>
-#include <swcrsr.hxx>
+#include <crsskip.hxx>
 
 using namespace ::com::sun::star::i18n;
 

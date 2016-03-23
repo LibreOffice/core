@@ -25,10 +25,10 @@
 class convert_prop : public convert_gen
 {
     public:
-        convert_prop(l10nMem& crMemory) : convert_gen(crMemory) {};
-        ~convert_prop() {};
+        convert_prop(l10nMem& crMemory);
+        ~convert_prop();
 
     private:
-        void doExecute() override;
+        void execute() override;
 };
 #endif

@@ -1919,7 +1919,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     {
         m_pCurrencyLb->InsertEntry (*i);
         OUString *pFormatStr = &m_aFormatEntries[nPos];
-        m_pCurrencyLb->SetEntryData( nPos, pFormatStr );
+        m_pCurrencyLb->SetEntryData( nPos, static_cast<void*>( pFormatStr ) );
         if( *pFormatStr == m_rSelectedFormat )
             nSelectedPos = nPos;
     }

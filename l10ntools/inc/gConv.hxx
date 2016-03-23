@@ -31,40 +31,51 @@ class convert_gen
 
         // Create instance
         static convert_gen& createInstance(l10nMem&           cMemory,
-                                           const string& sSourceDir,
-                                           const string& sTargetDir,
-                                           const string& sSourceFile);
+                                           const std::string& sSourceDir,
+                                           const std::string& sTargetDir,
+                                           const std::string& sSourceFile);
 
         // do extract/merge
-        bool execute(const bool bMerge);
+        bool execute(const bool bMerge, const bool bKid);
 
         // all converters MUST implement this function
-        virtual void doExecute() = 0;
+        virtual void execute() = 0;
+
+        // ONLY po should implement these functions
+        virtual void startSave(const std::string& sLanguage,
+                               const std::string& sFile);
+        virtual void save(const std::string& sFileName,
+                          const std::string& sKey,
+                          const std::string& sENUStext,
+                          const std::string& sText,
+                          bool               bFuzzy);
+        virtual void endSave();
+        static bool checkAccess(std::string& sFile);
+        static bool createDir(std::string& sDir, std::string& sFile);
 
         // utility functions for converters
         void lexRead(char *sBuf, int *nResult, int nMax_size);
-        string& copySource(char const *yyText, bool bDoClear = true);
+        std::string& copySource(char const *yyText, bool bDoClear = true);
 
     protected:
         // generic variables
         bool         mbMergeMode;
         bool         mbLoadMode;
-        string  msSourcePath;
-        string  msTargetPath;
-        string  msSourceFile;
+        std::string  msSourcePath;
+        std::string  msTargetPath;
+        std::string  msSourceFile;
         l10nMem&     mcMemory;
-        string  msCollector;
+        std::string  msCollector;
         int          miLineNo;
-        string  msSourceBuffer, msCopyText;
+        std::string  msSourceBuffer, msCopyText;
         int          miSourceReadIndex;
 
         bool prepareFile();
 
         // utility functions for converters
-        void writeSourceFile(const string& line);
-        bool createDir(const string& sDir, const string& sFile);
-private:
-        ofstream mcOutputFile;
-        bool checkAccess(string& sFile);
+        void writeSourceFile(const std::string& line);
+
+    private:
+        std::ofstream mcOutputFile;
 };
 #endif

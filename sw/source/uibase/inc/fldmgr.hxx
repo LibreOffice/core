@@ -184,7 +184,7 @@ public:
     void            GetSubTypes(sal_uInt16 nId, std::vector<OUString>& rToFill);
 
     // format to a type
-    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const;
+    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtmlMode = false) const;
     OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter);

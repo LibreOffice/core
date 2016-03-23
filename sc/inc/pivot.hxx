@@ -120,7 +120,7 @@ struct ScPivotField
 
     css::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit ScPivotField( SCCOL nNewCol = 0 );
+    explicit ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
     ScPivotField( const ScPivotField& r );
 
     long getOriginalDim() const;

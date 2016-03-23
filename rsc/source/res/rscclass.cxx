@@ -788,7 +788,8 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
         if( aTmpMem.Size() && pTC && (*aTmpMem.GetUTF8( 0 ) != '\0') )
         {
             nId = pTC->PutSysName( rInst.pClass->GetTypId(),
-                                   aTmpMem.GetUTF8( 0 ) );
+                                   aTmpMem.GetUTF8( 0 ),
+                                   0, 0, false/*bFirst*/ );
         }
         rMem.Put( nId );
         aError = aFileName.pClass->WriteRcHeader( aFileName, rMem, pTC,

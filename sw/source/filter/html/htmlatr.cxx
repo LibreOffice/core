@@ -230,7 +230,7 @@ SwHTMLTextCollOutputInfo::~SwHTMLTextCollOutputInfo()
 SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               bool bOutStyles,
                               LanguageType eDfltLang,
-                              sal_uInt16 nCSS1Script )
+                              sal_uInt16 nCSS1Script, bool bHardDrop )
     : pFormat(pF)
     , pItemSet(nullptr)
     , nLeftMargin(0)
@@ -372,6 +372,33 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
             }
         }
 
+        // Ggf. noch ein DropCap-Attribut uebernehmen
+        if( bOutStyles && bHardDrop && nDeep != 0 )
+        {
+            const SfxPoolItem *pItem;
+            if( SfxItemState::SET==pFormat->GetAttrSet().GetItemState(
+                                    RES_PARATR_DROP, true, &pItem ) )
+            {
+                bool bPut = true;
+                if( pTemplate )
+                {
+                    pReferenceFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
+                    const SfxPoolItem *pRefItem;
+                    bool bRefItemSet =
+                        SfxItemState::SET==pReferenceFormat->GetAttrSet().GetItemState(
+                                        RES_PARATR_DROP, true, &pRefItem );
+                    bPut = !bRefItemSet || *pItem!=*pRefItem;
+                }
+                if( bPut )
+                {
+                    if( !pItemSet )
+                        pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                                   pFormat->GetAttrSet().GetRanges() );
+                    pItemSet->Put( *pItem );
+                }
+            }
+        }
+
         // Die diversen default-Abstaende aus der Vorlage oder der
         // Vergleischs-Vorlage merken
         const SvxLRSpaceItem &rLRSpace =
@@ -506,7 +533,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     {
         pFormatInfo = new SwHTMLFormatInfo( &rFormat, rWrt.pDoc, rHWrt.m_pTemplate,
                                       rHWrt.m_bCfgOutStyles, rHWrt.m_eLang,
-                                      rHWrt.m_nCSS1Script );
+                                      rHWrt.m_nCSS1Script,
+                                      false );
         rHWrt.m_TextCollInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
         if( rHWrt.m_aScriptParaStyles.count( rFormat.GetName() ) )
             pFormatInfo->bScriptDependent = true;

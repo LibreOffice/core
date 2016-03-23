@@ -18,24 +18,27 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvUlf.hxx"
 
 
 
-extern int ulflex(void);
-void convert_ulf::doExecute()
+convert_ulf::convert_ulf(l10nMem& crMemory) : convert_gen(crMemory) {}
+convert_ulf::~convert_ulf()                                              {}
+
+
+
+void convert_ulf::execute()
 {
-    ulflex();
+    //  UlfWrap::yylex();
 }
 
 
 
 void convert_ulf::setKey(char *syyText)
 {
-    string sText = copySource(syyText);
+    std::string sText = copySource(syyText);
 
     // locate key (is any)
     msKey = sText.substr(1,sText.size()-2);
@@ -45,25 +48,25 @@ void convert_ulf::setKey(char *syyText)
 
 void convert_ulf::setText(char *syyText, bool bIsEnUs)
 {
-    string sText = copySource(syyText);
+    std::string sText = copySource(syyText) + " is not en-US";
 
 
-    if (!bIsEnUs && sText != "x-comment =")
-        l10nMem::showError(sText + " is not en-US");
+    if (!bIsEnUs)
+        l10nMem::showError(sText);
 }
 
 
 
 void convert_ulf::setValue(char *syyText)
 {
-    string sLang, sText = copySource(syyText);
+    std::string sLang, sText = copySource(syyText);
     int         nL;
 
     sText.erase(0,1);
     nL = sText.rfind("\"");
     sText.erase(nL);
 
-    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "", mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
 
     if (mbMergeMode) {
         // prepare to read all languages

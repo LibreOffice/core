@@ -67,30 +67,30 @@ struct SfxProgress_Impl
     SfxViewFrame*           pView;
 
     explicit                SfxProgress_Impl( const OUString& );
-    void                    Enable_Impl();
+    void                    Enable_Impl( bool );
 
 };
 
 
-void SfxProgress_Impl::Enable_Impl()
+void SfxProgress_Impl::Enable_Impl( bool bEnable )
 {
     SfxObjectShell* pDoc = bAllDocs ? nullptr : static_cast<SfxObjectShell*>(xObjSh);
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {
-        pFrame->Enable(true/*bEnable*/);
-        pFrame->GetDispatcher()->Lock( false );
+        pFrame->Enable(bEnable);
+        pFrame->GetDispatcher()->Lock( !bEnable );
         pFrame = SfxViewFrame::GetNext(*pFrame, pDoc);
     }
 
     if ( pView )
     {
-        pView->Enable( true/*bEnable*/ );
-        pView->GetDispatcher()->Lock( false );
+        pView->Enable( bEnable );
+        pView->GetDispatcher()->Lock( !bEnable );
     }
 
     if ( !pDoc )
-        SfxGetpApp()->GetAppDispatcher_Impl()->Lock( false );
+        SfxGetpApp()->GetAppDispatcher_Impl()->Lock( !bEnable );
 }
 
 
@@ -209,7 +209,7 @@ void SfxProgress::Stop()
     else
         SfxGetpApp()->SetProgress_Impl(nullptr);
     if ( pImp->bLocked )
-        pImp->Enable_Impl();
+        pImp->Enable_Impl(true);
 }
 
 bool SfxProgress::SetStateText
@@ -403,7 +403,7 @@ void SfxProgress::UnLock()
 
     SAL_INFO("sfx.bastyp", "SfxProgress: unlocked");
     pImp->bLocked = false;
-    pImp->Enable_Impl();
+    pImp->Enable_Impl(true);
 }
 
 

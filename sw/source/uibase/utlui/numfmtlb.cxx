@@ -64,7 +64,7 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     bShowLanguageControl(false),
     bUseAutomaticLanguage(true)
 {
-    Init(css::util::NumberFormat::NUMBER);
+    Init(css::util::NumberFormat::NUMBER, true);
 }
 
 VCL_BUILDER_DECL_FACTORY(NumFormatListBox)
@@ -86,7 +86,7 @@ VCL_BUILDER_DECL_FACTORY(NumFormatListBox)
     rRet = pListBox;
 }
 
-void NumFormatListBox::Init(short nFormatType)
+void NumFormatListBox::Init(short nFormatType, bool bUsrFormats)
 {
     SwView *pView = GetView();
 
@@ -94,6 +94,11 @@ void NumFormatListBox::Init(short nFormatType)
         eCurLanguage = pView->GetWrtShell().GetCurLang();
     else
         eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
+
+    if (!bUsrFormats)
+    {
+        pOwnFormatter = new SvNumberFormatter(comphelper::getProcessComponentContext(), eCurLanguage);
+    }
 
     SetFormatType(nFormatType);
     SetDefFormat(nDefFormat);

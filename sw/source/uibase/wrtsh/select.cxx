@@ -36,6 +36,7 @@
 #include <swundo.hxx>
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
+#include <crsskip.hxx>
 #include <doc.hxx>
 #include <wordcountdialog.hxx>
 #include <memory>
@@ -69,7 +70,7 @@ bool SwWrtShell::SelNearestWrd()
     return SelWrd();
 }
 
-bool SwWrtShell::SelWrd(const Point *pPt )
+bool SwWrtShell::SelWrd(const Point *pPt, bool )
 {
     bool bRet;
     {
@@ -87,7 +88,7 @@ bool SwWrtShell::SelWrd(const Point *pPt )
     return bRet;
 }
 
-void SwWrtShell::SelSentence(const Point *pPt )
+void SwWrtShell::SelSentence(const Point *pPt, bool )
 {
     {
         SwMvContext aMvContext(this);
@@ -103,7 +104,7 @@ void SwWrtShell::SelSentence(const Point *pPt )
     m_bSelWrd = false;  // disable SelWord, otherwise no SelLine goes on
 }
 
-void SwWrtShell::SelPara(const Point *pPt )
+void SwWrtShell::SelPara(const Point *pPt, bool )
 {
     {
         SwMvContext aMvContext(this);

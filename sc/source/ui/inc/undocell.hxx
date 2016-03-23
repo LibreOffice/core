@@ -48,7 +48,7 @@ public:
                     ScUndoCursorAttr( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
-                            const ScPatternAttr* pApplyPat );
+                            const ScPatternAttr* pApplyPat, bool bAutomatic );
     virtual         ~ScUndoCursorAttr();
 
     virtual void    Undo() override;

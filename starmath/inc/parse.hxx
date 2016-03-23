@@ -53,6 +53,9 @@ class SmParser
     SmParser(const SmParser&) = delete;
     SmParser& operator=(const SmParser&) = delete;
 
+#if OSL_DEBUG_LEVEL > 1
+    bool            IsDelimiter( const OUString &rTxt, sal_Int32 nPos );
+#endif
     void            NextToken();
     sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );

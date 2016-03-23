@@ -34,6 +34,8 @@ SHORT_NAMES = %
 # hmm... not sure if we want the source files in the output?
 #SHOW_USED_FILES = NO
 #SHOW_FILES = NO
+# make it possible to auto-generate links to all compounds and members
+PREDICTABLE_URLS = YES
 
 # ideally everything should be documented, but...
 EXTRACT_ALL = YES

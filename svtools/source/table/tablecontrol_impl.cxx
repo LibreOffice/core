@@ -1324,7 +1324,7 @@ namespace svt { namespace table
             else
                 m_aSelectedRows.push_back(m_nCurRow);
             invalidateRow( m_nCurRow );
-            ensureVisible(m_nCurColumn,m_nCurRow);
+            ensureVisible(m_nCurColumn,m_nCurRow,false);
             selectionChanged = true;
             bSuccess = true;
         }
@@ -1354,7 +1354,7 @@ namespace svt { namespace table
                 m_aSelectedRows.push_back(m_nCurRow);
                 invalidateRow( m_nCurRow );
             }
-            ensureVisible(m_nCurColumn,m_nCurRow);
+            ensureVisible(m_nCurColumn,m_nCurRow,false);
             selectionChanged = true;
             bSuccess = true;
         }
@@ -1518,7 +1518,7 @@ namespace svt { namespace table
                 }
                 m_pSelEngine->SetAnchor(true);
                 m_nAnchor = m_nCurRow;
-                ensureVisible(m_nCurColumn, m_nCurRow);
+                ensureVisible(m_nCurColumn, m_nCurRow, false);
                 selectionChanged = true;
                 bSuccess = true;
             }
@@ -1599,7 +1599,7 @@ namespace svt { namespace table
                 }
                 m_pSelEngine->SetAnchor(true);
                 m_nAnchor = m_nCurRow;
-                ensureVisible(m_nCurColumn, m_nCurRow);
+                ensureVisible(m_nCurColumn, m_nCurRow, false);
                 selectionChanged = true;
                 bSuccess = true;
             }
@@ -1627,7 +1627,7 @@ namespace svt { namespace table
                 m_nCurRow = 0;
                 m_nAnchor = m_nCurRow;
                 m_pSelEngine->SetAnchor(true);
-                ensureVisible(m_nCurColumn, 0);
+                ensureVisible(m_nCurColumn, 0, false);
                 selectionChanged = true;
                 bSuccess = true;
             }
@@ -1653,7 +1653,7 @@ namespace svt { namespace table
             m_nCurRow = m_nRowCount-1;
             m_nAnchor = m_nCurRow;
             m_pSelEngine->SetAnchor(true);
-            ensureVisible(m_nCurColumn, m_nRowCount-1);
+            ensureVisible(m_nCurColumn, m_nRowCount-1, false);
             selectionChanged = true;
             bSuccess = true;
         }
@@ -1991,12 +1991,12 @@ namespace svt { namespace table
         m_nCurRow = _nRow;
 
         // ensure that the new cell is visible
-        ensureVisible( m_nCurColumn, m_nCurRow );
+        ensureVisible( m_nCurColumn, m_nCurRow, false );
         return true;
     }
 
 
-    void TableControl_Impl::ensureVisible( ColPos _nColumn, RowPos _nRow )
+    void TableControl_Impl::ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility )
     {
         DBG_ASSERT( ( _nColumn >= 0 ) && ( _nColumn < m_nColumnCount )
                  && ( _nRow >= 0 ) && ( _nRow < m_nRowCount ),
@@ -2008,7 +2008,7 @@ namespace svt { namespace table
             impl_scrollColumns( _nColumn - m_nLeftColumn );
         else
         {
-            TableSize nVisibleColumns = impl_getVisibleColumns( false/*bAcceptPartialVisibility*/ );
+            TableSize nVisibleColumns = impl_getVisibleColumns( _bAcceptPartialVisibility );
             if ( _nColumn > m_nLeftColumn + nVisibleColumns - 1 )
             {
                 impl_scrollColumns( _nColumn - ( m_nLeftColumn + nVisibleColumns - 1 ) );
@@ -2021,7 +2021,7 @@ namespace svt { namespace table
             impl_scrollRows( _nRow - m_nTopRow );
         else
         {
-            TableSize nVisibleRows = impl_getVisibleRows( false/*_bAcceptPartialVisibility*/ );
+            TableSize nVisibleRows = impl_getVisibleRows( _bAcceptPartialVisibility );
             if ( _nRow > m_nTopRow + nVisibleRows - 1 )
                 impl_scrollRows( _nRow - ( m_nTopRow + nVisibleRows - 1 ) );
         }

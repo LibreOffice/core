@@ -903,13 +903,13 @@ XclExpPTItem::XclExpPTItem( const XclExpPCField& rCacheField, sal_uInt16 nCacheI
     maItemInfo.maVisName.mbUseCache = mpCacheItem != nullptr;
 }
 
-XclExpPTItem::XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx ) :
+XclExpPTItem::XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx, bool bUseCache ) :
     XclExpRecord( EXC_ID_SXVI, 8 ),
     mpCacheItem( nullptr )
 {
     maItemInfo.mnType = nItemType;
     maItemInfo.mnCacheIdx = nCacheIdx;
-    maItemInfo.maVisName.mbUseCache = true;
+    maItemInfo.maVisName.mbUseCache = bUseCache;
 }
 
 OUString XclExpPTItem::GetItemName() const
@@ -1156,7 +1156,7 @@ XclExpPTItem* XclExpPTField::GetItemAcc( const OUString& rName )
 
 void XclExpPTField::AppendSubtotalItem( sal_uInt16 nItemType )
 {
-    maItemList.AppendNewRecord( new XclExpPTItem( nItemType, EXC_SXVI_DEFAULT_CACHE ) );
+    maItemList.AppendNewRecord( new XclExpPTItem( nItemType, EXC_SXVI_DEFAULT_CACHE, true ) );
     ++maFieldInfo.mnItemCount;
 }
 

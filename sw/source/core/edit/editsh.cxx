@@ -53,6 +53,7 @@
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <extinput.hxx>
+#include <crsskip.hxx>
 #include <scriptinfo.hxx>
 #include <unocrsrhelper.hxx>
 #include <section.hxx>

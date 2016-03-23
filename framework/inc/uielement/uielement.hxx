@@ -72,11 +72,12 @@ struct UIElement
 
     UIElement( const OUString& rName,
                const OUString& rType,
-               const css::uno::Reference< css::ui::XUIElement >& rUIElement
+               const css::uno::Reference< css::ui::XUIElement >& rUIElement,
+               bool bFloating = false
                ) : m_aType( rType ),
                    m_aName( rName ),
                    m_xUIElement( rUIElement ),
-                   m_bFloating( false ),
+                   m_bFloating( bFloating ),
                    m_bVisible( true ),
                    m_bUserActive( false ),
                    m_bCreateNewRowCol0( false ),

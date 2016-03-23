@@ -200,14 +200,14 @@ Size GridWindow::GetOptimalSize() const
     return LogicToPixel(Size(240, 200), MAP_APPFONT);
 }
 
-GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Window* pParent )
+GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Window* pParent, bool bCutValues )
     : ModalDialog(pParent, "GridDialog", "modules/scanner/ui/griddialog.ui")
 {
     get(m_pOKButton, "ok");
     get(m_pResetTypeBox, "resetTypeCombobox");
     get(m_pResetButton, "resetButton");
     get(m_pGridWindow, "gridwindow");
-    m_pGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, get<FixedImage>("handle")->GetImage().GetBitmapEx());
+    m_pGridWindow->Init(pXValues, pYValues, nValues, bCutValues, get<FixedImage>("handle")->GetImage().GetBitmapEx());
 
     m_pResetTypeBox->SelectEntryPos( 0 );
 

@@ -100,7 +100,8 @@ protected:
 class ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
-    ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges);
+    ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges,
+                     ScBlockUndoMode eBlockMode);
     virtual ~ScMultiBlockUndo();
 
 protected:

@@ -681,7 +681,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_DELROWS, true);
+    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_DELROWS, true, true);
 
     // Make sure C1:C4 belong to the same group.
     pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
@@ -787,7 +787,7 @@ void Test::testSharedFormulasRefUpdateExternal()
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rDocFunc.DeleteCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true);
+    rDocFunc.DeleteCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
 
     // Check the shifted formula cells now in A5:A8.
     if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "'file:///extdata.fake'#$Data.A1"))
@@ -1049,7 +1049,7 @@ void Test::testSharedFormulasDeleteColumns()
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,0,0)));
 
     // Delete column B.
-    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
     CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,0,0)));
 
     // The reference should still point to row 1 but the column status should be set to 'deleted'.
@@ -1092,7 +1092,7 @@ void Test::testSharedFormulasDeleteColumns()
     }
 
     // Delete column B.
-    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
 
     for (SCROW i = 0; i <= 1; ++i)
     {

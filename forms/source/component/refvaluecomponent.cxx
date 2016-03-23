@@ -37,9 +37,10 @@ namespace frm
     //=
 
 
-    OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault )
+    OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, false, true, true )
         ,m_eDefaultChecked( TRISTATE_FALSE )
+        ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
     {
     }
 
@@ -50,6 +51,7 @@ namespace frm
         m_sReferenceValue           = _pOriginal->m_sReferenceValue;
         m_sNoCheckReferenceValue    = _pOriginal->m_sNoCheckReferenceValue;
         m_eDefaultChecked           = _pOriginal->m_eDefaultChecked;
+        m_bSupportSecondRefValue    = _pOriginal->m_bSupportSecondRefValue;
 
         calculateExternalValueType();
     }
@@ -75,6 +77,7 @@ namespace frm
         case PROPERTY_ID_DEFAULT_STATE:    _rValue <<= (sal_Int16)m_eDefaultChecked; break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
+            OSL_ENSURE( m_bSupportSecondRefValue, "OReferenceValueComponent::getFastPropertyValue: not supported!" );
             _rValue <<= m_sNoCheckReferenceValue;
             break;
 
@@ -94,6 +97,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
+            OSL_ENSURE( m_bSupportSecondRefValue, "OReferenceValueComponent::setFastPropertyValue_NoBroadcast: not supported!" );
             OSL_VERIFY( _rValue >>= m_sNoCheckReferenceValue );
             break;
 
@@ -129,6 +133,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
+            OSL_ENSURE( m_bSupportSecondRefValue, "OReferenceValueComponent::convertFastPropertyValue: not supported!" );
             bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_sNoCheckReferenceValue );
             break;
 
@@ -152,10 +157,13 @@ namespace frm
 
     void OReferenceValueComponent::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 3, OBoundControlModel )
+        BEGIN_DESCRIBE_PROPERTIES( m_bSupportSecondRefValue ? 3 : 2, OBoundControlModel )
             DECL_PROP1( REFVALUE,       OUString,    BOUND );
             DECL_PROP1( DEFAULT_STATE, sal_Int16,          BOUND );
-            DECL_PROP1( UNCHECKED_REFVALUE, OUString,    BOUND );
+            if ( m_bSupportSecondRefValue )
+            {
+                DECL_PROP1( UNCHECKED_REFVALUE, OUString,    BOUND );
+            }
         END_DESCRIBE_PROPERTIES();
     }
 
@@ -189,7 +197,7 @@ namespace frm
                 nState = TRISTATE_TRUE;
             else
             {
-                if ( sExternalValue == m_sNoCheckReferenceValue )
+                if ( !m_bSupportSecondRefValue || ( sExternalValue == m_sNoCheckReferenceValue ) )
                     nState = TRISTATE_FALSE;
                 else
                     nState = TRISTATE_INDET;
@@ -243,7 +251,7 @@ namespace frm
                 }
                 else if ( bStringExchange )
                 {
-                    aExternalValue <<= m_sNoCheckReferenceValue;
+                    aExternalValue <<= (m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : OUString());
                 }
                 break;
             }

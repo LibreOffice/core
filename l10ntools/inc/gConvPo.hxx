@@ -31,7 +31,7 @@ class convert_po : public convert_gen
 
 
         convert_po(l10nMem& crMemory);
-        ~convert_po()  {};
+        ~convert_po();
 
         void startLook ();
         void setValue  (char *syyText, int iLineCnt);
@@ -41,26 +41,22 @@ class convert_po : public convert_gen
         void setMsgStr ();
         void handleNL  ();
 
-        // Used to save .pot files
-        void startSave(const string& sName,
-                       const string& sTargetDir,
-                       const string& sFile);
-        void save(const string& sFileName,
-                  const string& sKey,
-                  const string& sENUStext,
-                  const string& sText,
-                  const string& sComment,
-                  const string& sResource,
-                  bool               bFuzzy);
-        void endSave();
-
     private:
-        string  msId;
-        string  msStr;
-        string  msKey;
+        std::string  msId;
+        std::string  msStr;
+        std::string  msKey;
         bool         mbFuzzy;
-        filebuf outBuffer;
+        std::filebuf outBuffer;
 
-        void doExecute() override;
+        void execute() override;
+
+        void startSave(const std::string& sLanguage,
+                       const std::string& sFile) override;
+        void save(const std::string& sFileName,
+                  const std::string& sKey,
+                  const std::string& sENUStext,
+                  const std::string& sText,
+                  bool               bFuzzy) override;
+        void endSave() override;
 };
 #endif

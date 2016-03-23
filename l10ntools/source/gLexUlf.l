@@ -22,7 +22,6 @@
 %top{
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvUlf.hxx"
@@ -30,7 +29,7 @@ using namespace std;
 #define IMPLptr convert_gen::mcImpl
 #define LOCptr ((convert_ulf *)convert_gen::mcImpl)
 
-/* enlarge token buffer to tokenize whole strings */
+/* enlarge token buffer to tokenize whole std::strings */
 #undef  YYLMAX
 #define YYLMAX 64000
 
@@ -131,5 +130,7 @@ KEYID [a-zA-Z0-9_-]+
 
 void ulf_dummyJustForCompiler()
 {
-    yyunput(0, NULL);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

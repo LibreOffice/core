@@ -59,24 +59,12 @@ void DrawViewShell::GotoBookmark(const OUString& rBookmark)
 
 void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
 {
-    // tdf#98646 check if Rectangle which contains the bounds of the region to
-    // be shown eventually contains values that cause overflows when processing
-    // e.g. when calling GetWidth()
-    const bool bOverflowInX(!rtl::math::approxEqual((double)rRect.getWidth(), (double)rRect.Right() - (double)rRect.Left()));
-    const bool bOverflowInY(!rtl::math::approxEqual((double)rRect.getHeight(), (double)rRect.Bottom() - (double)rRect.Top()));
-
-    if(bOverflowInX || bOverflowInY)
-    {
-        SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
-        return;
-    }
-
     // In older versions, if in X or Y the size of the object was
     // smaller than the visible area, the user-defined zoom was
     // changed. This was decided to be a bug for 6.x, thus I developed a
     // version which instead handles X/Y bigger/smaller and visibility
     // questions separately
-    const Size aLogicSize(rRect.GetSize());
+    Size aLogicSize(rRect.GetSize());
 
     // visible area
     Size aVisSizePixel(rWin.GetOutputSizePixel());
@@ -116,32 +104,13 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
         else
         {
             if(nFreeSpaceX > rRect.GetWidth())
-            {
                 nFreeSpaceX = rRect.GetWidth();
-            }
 
-            if(nFreeSpaceX < 0)
-            {
-                SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
-            }
-            else
-            {
-                const long distRight(rRect.Right() - aNewPos.X() + aVisAreaSize.Width());
+            while(rRect.Right() > aNewPos.X() + aVisAreaSize.Width())
+                aNewPos.X() += nFreeSpaceX;
 
-                if(distRight > 0)
-                {
-                    long mult = (distRight / nFreeSpaceX) + 1;
-                    aNewPos.X() += mult * nFreeSpaceX;
-                }
-
-                const long distLeft(aNewPos.X() - rRect.Left());
-
-                if(distLeft > 0)
-                {
-                    long mult = (distLeft / nFreeSpaceX) + 1;
-                    aNewPos.X() -= mult * nFreeSpaceX;
-                }
-            }
+            while(rRect.Left() < aNewPos.X())
+                aNewPos.X() -= nFreeSpaceX;
         }
 
         if(nFreeSpaceY < 0)
@@ -161,32 +130,13 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
         else
         {
             if(nFreeSpaceY > rRect.GetHeight())
-            {
                 nFreeSpaceY = rRect.GetHeight();
-            }
 
-            if(nFreeSpaceY < 0)
-            {
-                SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
-            }
-            else
-            {
-                const long distBottom(rRect.Bottom() - aNewPos.Y() + aVisAreaSize.Height());
+            while(rRect.Bottom() > aNewPos.Y() + aVisAreaSize.Height())
+                aNewPos.Y() += nFreeSpaceY;
 
-                if(distBottom > 0)
-                {
-                    long mult = (distBottom / nFreeSpaceY) + 1;
-                    aNewPos.Y() += mult * nFreeSpaceY;
-                }
-
-                const long distTop(aNewPos.Y() - rRect.Top());
-
-                if(distTop > 0)
-                {
-                    long mult = (distTop / nFreeSpaceY) + 1;
-                    aNewPos.Y() -= mult * nFreeSpaceY;
-                }
-            }
+            while(rRect.Top() < aNewPos.Y())
+                aNewPos.Y() -= nFreeSpaceY;
         }
 
         // did position change? Does it need to be set?

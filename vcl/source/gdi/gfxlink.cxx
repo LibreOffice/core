@@ -251,8 +251,6 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
     WritePair( rOStream, rGfxLink.GetPrefSize() );
     WriteMapMode( rOStream, rGfxLink.GetPrefMapMode() );
 
-    pCompat.reset(); // destructor writes stuff into the header
-
     if( rGfxLink.GetDataSize() )
     {
         if( rGfxLink.IsSwappedOut() )
@@ -284,8 +282,6 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
         ReadMapMode( rIStream, aMapMode );
         bMapAndSizeValid = true;
     }
-
-    pCompat.reset(); // destructor writes stuff into the header
 
     pBuf = new sal_uInt8[ nSize ];
     rIStream.Read( pBuf, nSize );

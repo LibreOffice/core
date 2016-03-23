@@ -175,7 +175,7 @@ void SAL_CALL OFileTable::release() throw()
     OTable_TYPEDEF::release();
 }
 
-bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, bool /*bFlush*/, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     return false;
 }

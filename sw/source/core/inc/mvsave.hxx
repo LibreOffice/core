@@ -46,7 +46,8 @@ namespace sw { namespace mark
     class SaveBookmark
     {
     public:
-            SaveBookmark(
+            SaveBookmark(bool bSavePos,
+                bool bSaveOtherPos,
                 const ::sw::mark::IMark& rBkmk,
                 const SwNodeIndex& rMvPos,
                 const SwIndex* pIdx =nullptr);

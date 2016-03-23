@@ -220,7 +220,7 @@ bool sw_ChkAndSetNewAnchor(
     return ::lcl_FindAnchorPos( *pDoc, rFly.Frame().Pos(), rFly, rSet );
 }
 
-void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
+void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame, bool bNew )
 {
     SET_CURR_SHELL( this );
 
@@ -232,7 +232,7 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
     // The frames should not be selected by the document position, because
     // it should have been selected!
     SwViewShellImp *pImpl = Imp();
-    if( GetWin() )
+    if( GetWin() && (bNew || !pImpl->GetDrawView()->AreObjectsMarked()) )
     {
         OSL_ENSURE( rFrame.IsFlyFrame(), "SelectFlyFrame will einen Fly" );
 
@@ -750,7 +750,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
     {
         SwFlyFrame* pFrame = pRet->GetFrame( &aPt );
         if( pFrame )
-            SelectFlyFrame( *pFrame );
+            SelectFlyFrame( *pFrame, true );
         else
         {
             GetLayout()->SetAssertFlyPages();
@@ -839,7 +839,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
             pPageFrame->InvalidateFlyLayout();
             pPageFrame->InvalidateContent();
 
-            SelectFlyFrame( *pFrame );
+            SelectFlyFrame( *pFrame, true );
         }
         else
             GetLayout()->SetAssertFlyPages();
@@ -869,7 +869,7 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
         SwFlyFrame* pFrame = pFormat->GetFrame( &aPt );
 
         if( pFrame )
-            SelectFlyFrame( *pFrame );
+            SelectFlyFrame( *pFrame, true );
         else
             GetLayout()->SetAssertFlyPages();
     }
@@ -1052,7 +1052,7 @@ bool SwFEShell::SetFlyFrameAttr( SfxItemSet& rSet )
                 bRet = true;
                 SwFlyFrame* pFrame = pFlyFormat->GetFrame( &aPt );
                 if( pFrame )
-                    SelectFlyFrame( *pFrame );
+                    SelectFlyFrame( *pFrame, true );
                 else
                     GetLayout()->SetAssertFlyPages();
             }
@@ -1194,7 +1194,7 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
         {
             SwFlyFrame* pFrame = pFlyFormat->GetFrame( &aPt );
             if( pFrame )
-                SelectFlyFrame( *pFrame );
+                SelectFlyFrame( *pFrame, true );
             else
                 GetLayout()->SetAssertFlyPages();
         }

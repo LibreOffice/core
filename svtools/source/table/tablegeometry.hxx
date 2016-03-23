@@ -132,10 +132,11 @@ namespace svt { namespace table
                 TableControl_Impl const & _rControl,
                 Rectangle const & _rBoundaries,
                 ColPos const _nCol,
-                RowPos const _nRow
+                RowPos const _nRow,
+                bool const i_alllowVirtualCells = false
             )
-            :m_aRow( _rControl, _rBoundaries, _nRow, false/*allowVirtualCells*/ )
-            ,m_aCol( _rControl, _rBoundaries, _nCol, false/*allowVirtualCells*/ )
+            :m_aRow( _rControl, _rBoundaries, _nRow, i_alllowVirtualCells )
+            ,m_aCol( _rControl, _rBoundaries, _nCol, i_alllowVirtualCells )
         {
         }
 

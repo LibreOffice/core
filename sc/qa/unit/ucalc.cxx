@@ -3298,11 +3298,8 @@ void Test::testCopyPaste()
     ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "Sheet1.$A$1");
     ScRangeData* pLocal5 = new ScRangeData( m_pDoc, "local5", "$A$1"); // implicit relative sheet reference
     ScRangeData* pGlobal = new ScRangeData( m_pDoc, "global", aAdr);
-    const OUString aGlobal2Symbol("$Sheet1.$A$1:$A$23");
-    ScRangeData* pGlobal2 = new ScRangeData( m_pDoc, "global2", aGlobal2Symbol);
     ScRangeName* pGlobalRangeName = new ScRangeName();
     pGlobalRangeName->insert(pGlobal);
-    pGlobalRangeName->insert(pGlobal2);
     ScRangeName* pLocalRangeName1 = new ScRangeName();
     pLocalRangeName1->insert(pLocal1);
     pLocalRangeName1->insert(pLocal2);
@@ -3429,24 +3426,6 @@ void Test::testCopyPaste()
             m_pDoc->GetNote(ScAddress(1, 0, 0))->GetText(), m_pDoc->GetNote(ScAddress(1, 1, 1))->GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("After Redo, note again on Sheet2.C2, string cell content",
             m_pDoc->GetNote(ScAddress(2, 0, 0))->GetText(), m_pDoc->GetNote(ScAddress(2, 1, 1))->GetText());
-
-
-    // Copy Sheet1.A11:A13 to Sheet1.A7:A9, both within global2 range.
-    aRange = ScRange(0,10,0,0,12,0);
-    ScDocument aClipDoc2(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, aRange, &aClipDoc2);
-
-    aRange = ScRange(0,6,0,0,8,0);
-    aMark.SetMarkArea(aRange);
-    m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc2);
-
-    // The global2 range must not have changed.
-    pGlobal2 = m_pDoc->GetRangeName()->findByUpperName("GLOBAL2");
-    CPPUNIT_ASSERT_MESSAGE("GLOBAL2 name not found", pGlobal2);
-    OUString aSymbol;
-    pGlobal2->GetSymbol(aSymbol);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GLOBAL2 named range changed", aGlobal2Symbol, aSymbol);
-
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -4184,7 +4163,7 @@ void Test::testCopyPasteRepeatOneFormula()
     }
 
     // Delete row at row 1 to shift the cells up.
-    rFunc.DeleteCells(aRowOne, &aMark, DEL_DELROWS, true);
+    rFunc.DeleteCells(aRowOne, &aMark, DEL_DELROWS, true, true);
 
     // Check the formula results again.
     for (SCROW i = 0; i < 10; ++i)
@@ -4637,7 +4616,7 @@ void Test::testAutoFill()
     m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
     ScRange aRange(0,0,0,0,5,0);
     aMarkData.SetMarkArea(aRange);
-    rFunc.FillSeries(aRange, &aMarkData, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, MAXDOUBLE, 1.0, MAXDOUBLE, true);
+    rFunc.FillSeries(aRange, &aMarkData, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, MAXDOUBLE, 1.0, MAXDOUBLE, true, true);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
@@ -5092,7 +5071,7 @@ void Test::testNoteDeleteRow()
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true);
+    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
 
     // Check to make sure the notes have shifted upward.
     pNote = m_pDoc->GetNote(ScAddress(1,1,0));
@@ -5121,7 +5100,7 @@ void Test::testNoteDeleteRow()
     CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
 
     // Delete row 3.
-    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
+    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
 
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
@@ -5767,7 +5746,7 @@ void Test::testTransliterateText()
     aMark.SetMarkArea(ScRange(0,0,0,0,2,0));
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     rFunc.TransliterateText(
-        aMark, i18n::TransliterationModules_LOWERCASE_UPPERCASE, true);
+        aMark, i18n::TransliterationModules_LOWERCASE_UPPERCASE, true, true);
 
     CPPUNIT_ASSERT_EQUAL(OUString("MIKE"), m_pDoc->GetString(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));
@@ -5828,7 +5807,7 @@ void Test::testFormulaToValue()
     // Convert B5:C6 to static values, and check the result.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScRange aConvRange(1,4,0,2,5,0); // B5:C6
-    rFunc.ConvertFormulaToValue(aConvRange, false);
+    rFunc.ConvertFormulaToValue(aConvRange, true, false);
 
     {
         // Expected output table content.  0 = empty cell
@@ -5987,7 +5966,7 @@ void Test::testFormulaToValue2()
     // Convert B3:B5 to a value.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScRange aConvRange(1,2,0,1,4,0); // B3:B5
-    rFunc.ConvertFormulaToValue(aConvRange, false);
+    rFunc.ConvertFormulaToValue(aConvRange, true, false);
 
     {
         // Expected output table content.  0 = empty cell
@@ -6312,8 +6291,7 @@ bool Test::insertRangeNames(
             pDoc,
             OUString::createFromAscii(p->mpName),
             OUString::createFromAscii(p->mpExpr),
-            aA1, ScRangeData::Type::Name,
-            formula::FormulaGrammar::GRAM_ENGLISH);
+            aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
         pNew->SetIndex(p->mnIndex);
         bool bSuccess = pNames->insert(pNew);
         if (!bSuccess)

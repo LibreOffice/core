@@ -934,15 +934,27 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
 }
 
-void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
+void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
+                               bool bRetouche ) const
 {
     if ( OnWin() || !bRetouche )
     {
         if( aTextFly.IsOn() )
             const_cast<SwTextPaintInfo*>(this)->GetTextFly().
-                DrawFlyRect( m_pOut, rRect, *this, true/*bNoGraphic*/ );
-        else
+                DrawFlyRect( m_pOut, rRect, *this, bNoGraphic );
+        else if ( bNoGraphic )
             m_pOut->DrawRect( rRect.SVRect() );
+        else
+        {
+            if(pBrushItem != reinterpret_cast<SvxBrushItem*>(-1))
+            {
+                ::DrawGraphic( pBrushItem, m_pOut, aItemRect, rRect );
+            }
+            else
+            {
+                OSL_ENSURE(false, "DrawRect: Uninitialized BrushItem!" );
+            }
+        }
     }
 }
 
@@ -1193,7 +1205,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         pTmpOut->SetFillColor(aFillColor);
         pTmpOut->SetLineColor();
 
-        DrawRect( aIntersect, false );
+        DrawRect( aIntersect, true, false );
 
         pTmpOut->Pop();
     }

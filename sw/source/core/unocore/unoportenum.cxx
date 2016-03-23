@@ -53,6 +53,7 @@
 #include <unoidx.hxx>
 #include <unocoll.hxx>
 #include <redline.hxx>
+#include <crsskip.hxx>
 #include <calbck.hxx>
 #include <docufld.hxx>
 #include <osl/mutex.hxx>
@@ -442,7 +443,7 @@ lcl_ExportFieldMark(
     OSL_ENSURE(pUnoCursor->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
 
-    pUnoCursor->Right(1);
+    pUnoCursor->Right(1, CRSR_SKIP_CHARS, false, false);
     if ( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
     {
         OSL_FAIL("cannot move cursor?");
@@ -821,7 +822,7 @@ lcl_ExportHints(
                 case RES_TXTATR_FIELD:
                    if(!bRightMoveForbidden)
                     {
-                        pUnoCursor->Right(1);
+                        pUnoCursor->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
                         SwXTextPortion* pPortion;
@@ -838,7 +839,7 @@ lcl_ExportHints(
                 case RES_TXTATR_ANNOTATION:
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCursor->Right(1);
+                        pUnoCursor->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
 
@@ -868,7 +869,10 @@ lcl_ExportHints(
                     {
 
                         pUnoCursor->Right(
-                            pAttr->GetFormatField().GetField()->ExpandField( true ).getLength() + 2 );
+                            pAttr->GetFormatField().GetField()->ExpandField( true ).getLength() + 2,
+                            CRSR_SKIP_CHARS,
+                            false,
+                            false );
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
                         SwXTextPortion* pPortion =
@@ -884,7 +888,7 @@ lcl_ExportHints(
                 case RES_TXTATR_FLYCNT:
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCursor->Right(1);
+                        pUnoCursor->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break; // Robust #i81708 content in covered cells
 
@@ -901,7 +905,7 @@ lcl_ExportHints(
                     {
                         if(!bRightMoveForbidden)
                         {
-                            pUnoCursor->Right(1);
+                            pUnoCursor->Right(1,CRSR_SKIP_CHARS,false,false);
                             if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                                 break;
                             SwXTextPortion* pPortion;
@@ -922,7 +926,7 @@ lcl_ExportHints(
                     {
                         if (bIsPoint)
                         {
-                            pUnoCursor->Right(1);
+                            pUnoCursor->Right(1,CRSR_SKIP_CHARS,false,false);
                         }
                         Reference<XTextRange> xTmp =
                                 (RES_TXTATR_REFMARK == nAttrWhich)
@@ -957,7 +961,7 @@ lcl_ExportHints(
                     {
                         if (!bRightMoveForbidden)
                         {
-                            pUnoCursor->Right(1);
+                            pUnoCursor->Right(1,CRSR_SKIP_CHARS,false,false);
                             o_rbCursorMoved = true;
                             // only if the end is included in selection!
                             if ((i_nEndPos < 0) ||
@@ -1251,7 +1255,8 @@ static void lcl_CreatePortions(
             (i_nStartPos <= pUnoCursor->Start()->nNode.GetNode().GetTextNode()->
                         GetText().getLength()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
-        pUnoCursor->Right(static_cast<sal_Int32>(i_nStartPos));
+        pUnoCursor->Right(static_cast<sal_Int32>(i_nStartPos),
+                CRSR_SKIP_CHARS, false, false);
     }
 
     SwDoc * const pDoc = pUnoCursor->GetDoc();

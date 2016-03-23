@@ -838,7 +838,7 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
     return bWrapped;
 }
 
-bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward )
+bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible )
 {
     bool bRet = false;
     size_t nOldLevel = mnFocusLevel;
@@ -858,7 +858,7 @@ bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward )
         if ( bForward && bWrapInLevel )
             bRet |= ImplMoveFocusByLevel( bForward );
     }
-    while ( !IsFocusButtonVisible() && ((nOldLevel != mnFocusLevel) || (nOldEntry != mnFocusEntry)) );
+    while ( bFindVisible && !IsFocusButtonVisible() && ((nOldLevel != mnFocusLevel) || (nOldEntry != mnFocusEntry)) );
 
     return bRet;
 }
@@ -870,7 +870,7 @@ void ScOutlineWindow::ImplMoveFocusToVisible( bool bForward )
         ImplMoveFocusByEntry( bForward, true );
     // then try to find any other entry
     if ( !IsFocusButtonVisible() )
-        ImplMoveFocusByTabOrder( bForward );
+        ImplMoveFocusByTabOrder( bForward, true );
 }
 
 void ScOutlineWindow::MoveFocusByEntry( bool bForward )
@@ -890,7 +890,7 @@ void ScOutlineWindow::MoveFocusByLevel( bool bForward )
 void ScOutlineWindow::MoveFocusByTabOrder( bool bForward )
 {
     HideFocus();
-    ImplMoveFocusByTabOrder( bForward );
+    ImplMoveFocusByTabOrder( bForward, true );
     ShowFocus();
 }
 

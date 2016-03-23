@@ -596,7 +596,8 @@ class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelpe
 public:
     explicit            OpCodeProvider(
                             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
-                            FilterType eFilter, BiffType eBiff, bool bImportFilter );
+                            FilterType eFilter, BiffType eBiff, bool bImportFilter,
+                            bool bCallerKnowsAboutMacroExport = false );
     virtual             ~OpCodeProvider();
 
     /** Returns the structure containing all token op-codes for operators and

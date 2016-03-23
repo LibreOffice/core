@@ -36,6 +36,7 @@
 #include <docsh.hxx>
 #include <mdiexp.hxx>
 #include <edtwin.hxx>
+#include <crsskip.hxx>
 #include <index.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>

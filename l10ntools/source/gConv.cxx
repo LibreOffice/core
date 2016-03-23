@@ -18,14 +18,13 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConv.hxx"
+#include "gConvDB.hxx"
 #include "gConvPo.hxx"
 #include "gConvProp.hxx"
 #include "gConvSrc.hxx"
-#include "gConvUi.hxx"
 #include "gConvTree.hxx"
 #include "gConvUlf.hxx"
 #include "gConvXcs.hxx"
@@ -62,17 +61,17 @@ convert_gen::~convert_gen()
 
 
 convert_gen& convert_gen::createInstance(l10nMem&           cMemory,
-                                         const string& sSourceDir,
-                                         const string& sTargetDir,
-                                        const string& sSourceFile)
+                                         const std::string& sSourceDir,
+                                         const std::string& sTargetDir,
+                                        const std::string& sSourceFile)
 {
     // did the user give a .xxx with the source file ?
     int nInx = sSourceFile.rfind(".");
-    if (nInx == (int)string::npos)
+    if (nInx == (int)std::string::npos)
         throw l10nMem::showError("source file: "+sSourceFile+" missing extension");
 
     // find correct conversion class and create correct object
-    string sExtension = sSourceFile.substr(nInx+1);
+    std::string sExtension = sSourceFile.substr(nInx+1);
     convert_gen *x;
     if      (sExtension == "hrc")        x = new convert_src(cMemory);
     else if (sExtension == "src")        x = new convert_src(cMemory);
@@ -80,7 +79,6 @@ convert_gen& convert_gen::createInstance(l10nMem&           cMemory,
     else if (sExtension == "pot")        x = new convert_po(cMemory);
     else if (sExtension == "tree")       x = new convert_tree(cMemory);
     else if (sExtension == "ulf")        x = new convert_ulf(cMemory);
-    else if (sExtension == "ui")         x = new convert_ui(cMemory);
     else if (sExtension == "xcu")        x = new convert_xcu(cMemory);
     else if (sExtension == "xhp")        x = new convert_xhp(cMemory);
     else if (sExtension == "xrm")        x = new convert_xrm(cMemory);
@@ -96,37 +94,74 @@ convert_gen& convert_gen::createInstance(l10nMem&           cMemory,
 
 
 
-bool convert_gen::execute(const bool bMerge)
+bool convert_gen::execute(const bool bMerge, const bool bKid)
 {
     mbMergeMode  = bMerge;
+
+    if (bKid)
+        throw l10nMem::showError("not implemented");
 
     // and load file
     if (!prepareFile())
         return false;
 
     // and execute conversion
-    doExecute();
+    execute();
 
     return true;
 }
 
 
 
-bool convert_gen::checkAccess(string& sFile)
+void convert_gen::startSave(const std::string& sLanguage,
+                            const std::string& sFile)
+{
+    std::string x;
+
+    x = sLanguage;
+    x = sFile;
+    throw l10nMem::showError("startSave called with non .po file");
+}
+
+
+
+void convert_gen::save(const std::string& sFileName,
+                       const std::string& sKey,
+                       const std::string& sENUStext,
+                       const std::string& sText,
+                       bool               bFuzzy)
+{
+    std::string x;
+
+    if (bFuzzy)
+        x = sFileName + sKey + sENUStext + sText;
+    throw l10nMem::showError("save called with non .po file");
+}
+
+
+
+void convert_gen::endSave()
+{
+    throw l10nMem::showError("endSave called with non .po file");
+}
+
+
+
+bool convert_gen::checkAccess(std::string& sFile)
 {
     return (OS_ACCESS(sFile.c_str(), 0) == 0);
 }
 
 
 
-bool convert_gen::createDir(const string& sDir, const string& sFile)
+bool convert_gen::createDir(std::string& sDir, std::string& sFile)
 {
-    string sNewDir(sDir);
+    std::string sNewDir(sDir);
     int         newPos, oldPos;
 
     for (oldPos = 0;; oldPos = newPos +1) {
         newPos = sFile.find_first_of("/\\", oldPos);
-        if (newPos == (int)string::npos)
+        if (newPos == (int)std::string::npos)
             break;
 
         sNewDir += sFile.substr(oldPos, newPos-oldPos) + "/";
@@ -142,7 +177,7 @@ bool convert_gen::createDir(const string& sDir, const string& sFile)
 
 bool convert_gen::prepareFile()
 {
-    ifstream inputFile(msSourcePath.c_str(), ios::binary);
+    std::ifstream inputFile(msSourcePath.c_str(), std::ios::binary);
 
 
     if (!inputFile.is_open()) {
@@ -156,11 +191,11 @@ bool convert_gen::prepareFile()
 
     // get length of file:
     miSourceReadIndex = 0;
-    inputFile.seekg (0, ios::end);
+    inputFile.seekg (0, std::ios::end);
     msSourceBuffer.resize((unsigned int)inputFile.tellg());
-    inputFile.seekg (0, ios::beg);
+    inputFile.seekg (0, std::ios::beg);
 
-    // get size, prepare string and read whole file
+    // get size, prepare std::string and read whole file
     inputFile.read(const_cast<char *>(msSourceBuffer.c_str()), msSourceBuffer.size());
     if ((unsigned int)inputFile.gcount() != msSourceBuffer.size())
         throw l10nMem::showError("cannot read whole file");
@@ -172,12 +207,12 @@ bool convert_gen::prepareFile()
             mcOutputFile.close();
 
         // open output file
-        mcOutputFile.open((msTargetPath+msSourceFile).c_str(), ios::binary);
+        mcOutputFile.open((msTargetPath+msSourceFile).c_str(), std::ios::binary);
         if (mcOutputFile.is_open())
             return true;
 
         if (convert_gen::createDir(msTargetPath, msSourceFile)) {
-            mcOutputFile.open((msTargetPath+msSourceFile).c_str(), ios::binary);
+            mcOutputFile.open((msTargetPath+msSourceFile).c_str(), std::ios::binary);
             if (mcOutputFile.is_open())
                 return true;
         }
@@ -202,21 +237,20 @@ void convert_gen::lexRead(char *sBuf, int *nResult, int nMax_size)
 
     // space enough for the whole line ?
     if (*nResult <= nMax_size) {
-        msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
+        //    msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
         l10nMem::showDebug(sBuf);
         miSourceReadIndex = -1;
     }
     else {
-        msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
-        l10nMem::showDebug(sBuf);
-        *nResult = nMax_size;
+        //    msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
+        *nResult           = nMax_size;
         miSourceReadIndex += nMax_size;
     }
 }
 
 
 
-void convert_gen::writeSourceFile(const string& line)
+void convert_gen::writeSourceFile(const std::string& line)
 {
     if (!line.size())
         return;
@@ -227,7 +261,7 @@ void convert_gen::writeSourceFile(const string& line)
 
 
 
-string& convert_gen::copySource(char const *yyText, bool bDoClear)
+std::string& convert_gen::copySource(char const *yyText, bool bDoClear)
 {
     int nL;
 

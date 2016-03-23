@@ -32,6 +32,7 @@
 #include <textsh.hxx>
 #include <num.hxx>
 #include <edtwin.hxx>
+#include <crsskip.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 

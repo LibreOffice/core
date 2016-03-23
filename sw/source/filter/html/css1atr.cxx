@@ -192,13 +192,14 @@ class SwCSS1OutMode
 
 public:
 
-    SwCSS1OutMode( SwHTMLWriter& rHWrt, sal_uInt16 nMode,
-                   const OUString *pSelector ) :
+    SwCSS1OutMode( SwHTMLWriter& rHWrt, sal_uInt16 nMode, bool bStartFirst=true,
+                   const OUString *pSelector=nullptr ) :
         rWrt( rHWrt ),
         nOldMode( rHWrt.m_nCSS1OutMode )
     {
         rWrt.m_nCSS1OutMode = nMode;
-        rWrt.m_bFirstCSS1Property = true;
+        if( bStartFirst )
+            rWrt.m_bFirstCSS1Property = true;
         if( pSelector )
             rWrt.m_aCSS1Selector = *pSelector;
     }
@@ -1323,7 +1324,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
             // some class rule for the additional style dependen properties
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &rSelector );
+                                     true, &rSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
             }
 
@@ -1341,21 +1342,21 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
             aNewSelector += ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, false );
             }
 
             aNewSelector = aSelector + ".cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, false );
             }
 
             aNewSelector = aSelector + ".ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, false );
             }
         }
@@ -1368,21 +1369,21 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
             aNewSelector += "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
             }
 
             aNewSelector = aSelector + "-cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
             }
 
             aNewSelector = aSelector + "-ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
             }
         }
@@ -1395,7 +1396,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
         // script dependencies by now.
         SwCSS1OutMode aMode( rHTMLWrt,
                 rHTMLWrt.m_nCSS1Script|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                             &rSelector );
+                             true, &rSelector );
         rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
     }
 
@@ -1428,7 +1429,7 @@ static void OutCSS1DropCapRule(
             // some class rule for the additional style dependen properties
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &rSelector );
+                                     true, &rSelector );
                 OutCSS1_SwFormatDropAttrs( rHTMLWrt, rDrop );
             }
 
@@ -1445,21 +1446,21 @@ static void OutCSS1DropCapRule(
             aNewSelector += ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
             aNewSelector = aSelector + ".cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
             aNewSelector = aSelector + ".ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
         }
@@ -1472,21 +1473,21 @@ static void OutCSS1DropCapRule(
             aNewSelector += "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop );
             }
 
             aNewSelector = aSelector + "-cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop );
             }
 
             aNewSelector = aSelector + "-ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     &aNewSelector );
+                                     true, &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop );
             }
         }
@@ -1499,7 +1500,7 @@ static void OutCSS1DropCapRule(
         // script dependencies by now.
         SwCSS1OutMode aMode( rHTMLWrt,
                 rHTMLWrt.m_nCSS1Script|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                             &rSelector );
+                             true, &rSelector );
                 OutCSS1_SwFormatDropAttrs( rHTMLWrt, rDrop );
     }
 }
@@ -1706,7 +1707,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     }
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE_ON|CSS1_OUTMODE_TEMPLATE,
-                         &aSelector );
+                         true, &aSelector );
 
     // Size: If the only difference is the Landscape-Flag,
     // only export Portrait oder Landscape. Otherwise export size.
@@ -1794,7 +1795,7 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
                     ( bEndNote ? OUString(OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
                                : OUString(OOO_STRING_SVTOOLS_HTML_sdfootnote_anc) );
         SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                             &aSelector );
+                             true, &aSelector );
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
                                         sHTML_FTN_fontheight );
         rHTMLWrt.Strm().WriteCharPtr( sCSS1_rule_end );
@@ -1837,7 +1838,7 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
-                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_BODY, nullptr );
+                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_BODY );
 
     // Only export the attributes of the page template.
     // The attributes of the default paragraph template were
@@ -1871,7 +1872,7 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     SwCSS1OutMode aMode( rHTMLWrt, rHTMLWrt.m_nCSS1Script|CSS1_OUTMODE_STYLE_OPT |
-                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA, nullptr );
+                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA );
     rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
 
     return rWrt;
@@ -1882,7 +1883,7 @@ Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_SPAN_TAG |
-                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_HINT, nullptr );
+                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_HINT );
 
     Out( aCSS1AttrFnTab, rHt, rWrt );
 
@@ -1898,7 +1899,7 @@ Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
-                                   CSS1_OUTMODE_HINT, nullptr );
+                                   CSS1_OUTMODE_HINT );
 
     Out( aCSS1AttrFnTab, rHt, rWrt );
 
@@ -1915,7 +1916,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
-                                   CSS1_OUTMODE_TABLEBOX, nullptr );
+                                   CSS1_OUTMODE_TABLEBOX );
     OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE );
 
     if( !rHTMLWrt.m_bFirstCSS1Property )
@@ -1930,7 +1931,7 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT |
-                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA, nullptr );
+                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA );
 
     const SwNumFormat& rNumFormat = rNumRule.Get( nLevel );
 
@@ -1965,7 +1966,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
 {
     SwCSS1OutMode aMode( *this, CSS1_OUTMODE_STYLE_OPT_ON |
                                 CSS1_OUTMODE_ENCODE|
-                                CSS1_OUTMODE_FRAME, nullptr );
+                                CSS1_OUTMODE_FRAME );
 
     const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
     SvxLRSpaceItem aLRItem( rFrameFormat.GetLRSpace() );
@@ -2158,7 +2159,7 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
 {
     SwCSS1OutMode aMode( *this, CSS1_OUTMODE_STYLE_OPT_ON |
                                 CSS1_OUTMODE_ENCODE|
-                                CSS1_OUTMODE_TABLE, nullptr );
+                                CSS1_OUTMODE_TABLE );
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
@@ -2178,7 +2179,7 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
 void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat)
 {
     SwCSS1OutMode const aMode( *this,
-        CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX, nullptr );
+        CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX );
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
     if (!m_bFirstCSS1Property)
     {
@@ -2190,7 +2191,7 @@ void SwHTMLWriter::OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameForm
 {
     SwCSS1OutMode aMode( *this, CSS1_OUTMODE_STYLE_OPT_ON |
                                 CSS1_OUTMODE_ENCODE|
-                                CSS1_OUTMODE_SECTION, nullptr );
+                                CSS1_OUTMODE_SECTION );
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
@@ -2905,7 +2906,7 @@ static Writer& OutCSS1_SwFormatDrop( Writer& rWrt, const SfxPoolItem& rHt )
     {
         SwCSS1OutMode aMode( rHTMLWrt,
                              rHTMLWrt.m_nCSS1Script|CSS1_OUTMODE_SPAN_TAG1_ON|CSS1_OUTMODE_ENCODE|
-                             CSS1_OUTMODE_DROPCAP, nullptr );
+                             CSS1_OUTMODE_DROPCAP );
 
         OutCSS1_SwFormatDropAttrs( rHTMLWrt, static_cast<const SwFormatDrop&>(rHt) );
         // A "> is already printed by the calling OutCSS1_HintAsSpanTag.

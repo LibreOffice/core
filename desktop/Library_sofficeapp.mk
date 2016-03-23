@@ -105,6 +105,11 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ))
 
 ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+    desktop/source/lib/init \
+    desktop/source/lib/lokinteractionhandler \
+    desktop/source/lib/lokclipboard \
+))
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm $(DLOPEN_LIBS) \
 	-lpthread \

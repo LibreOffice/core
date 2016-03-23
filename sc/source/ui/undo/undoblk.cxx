@@ -830,7 +830,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 InsertDeleteFlags nNewFlags,
                 ScRefUndoData* pRefData,
                 bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
-    ScMultiBlockUndo( pNewDocShell, rRanges ),
+    ScMultiBlockUndo( pNewDocShell, rRanges, SC_UNDO_SIMPLE ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),
     pRedoDoc( pNewRedoDoc ),

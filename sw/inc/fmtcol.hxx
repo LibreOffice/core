@@ -113,7 +113,8 @@ public:
     // If a Paragraph Style is assigned to list level N of the Outline Style,
     // then its outline level - AttrOutlineLevel - is set to N+1
     void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
-    void DeleteAssignmentToListLevelOfOutlineStyle();
+    void DeleteAssignmentToListLevelOfOutlineStyle(const bool bResetOutlineLevel
+                                                   = true);
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
      the paragragh style at the corresponding <SwNumRule> instance. */

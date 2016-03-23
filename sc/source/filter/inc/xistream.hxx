@@ -240,10 +240,12 @@ public:
 
     /** Constructs the Excel record import stream using a TOOLS stream object.
         @param rInStrm  The system input stream. Will be set to its start position.
-        Must exist as long as this object exists */
+        Must exist as long as this object exists.
+        @param bContLookup  Automatic CONTINUE lookup on/off. */
     explicit            XclImpStream(
                             SvStream& rInStrm,
-                            const XclImpRoot& rRoot );
+                            const XclImpRoot& rRoot,
+                            bool bContLookup = true );
 
                         ~XclImpStream();
 

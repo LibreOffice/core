@@ -74,10 +74,10 @@ namespace connectivity
             virtual sal_Int32 getCurrentLastPos() const {return -1;}
 
             virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
-            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) = 0;
+            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) = 0;
 
             ::rtl::Reference<OSQLColumns> getTableColumns() const {return m_aColumns;}
-            virtual bool InsertRow(OValueRefVector& rRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual bool InsertRow(OValueRefVector& rRow, bool bFlush, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual bool DeleteRow(const OSQLColumns& _rCols);
             virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);

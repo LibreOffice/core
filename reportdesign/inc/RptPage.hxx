@@ -54,7 +54,8 @@ protected:
 public:
 
     OReportPage( OReportModel& rModel
-                ,const css::uno::Reference< css::report::XSection >& _xSection );
+                ,const css::uno::Reference< css::report::XSection >& _xSection
+                ,bool bMasterPage = false );
 
 
     virtual SdrPage* Clone() const override;

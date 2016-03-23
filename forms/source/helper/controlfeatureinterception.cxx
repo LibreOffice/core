@@ -127,18 +127,18 @@ namespace frm
         }
     }
 
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const OUString& _rTargetFrameName )
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags )
     {
         Reference< XDispatch > xDispatcher;
         if ( m_xFirstDispatchInterceptor.is() )
-            xDispatcher = m_xFirstDispatchInterceptor->queryDispatch( _rURL, _rTargetFrameName, 0 );
+            xDispatcher = m_xFirstDispatchInterceptor->queryDispatch( _rURL, _rTargetFrameName, _nSearchFlags );
         return xDispatcher;
     }
 
 
     Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL )
     {
-        return queryDispatch( _rURL, OUString() );
+        return queryDispatch( _rURL, OUString(), 0 );
     }
 
 

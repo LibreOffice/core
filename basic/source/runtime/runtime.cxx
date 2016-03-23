@@ -3970,19 +3970,19 @@ void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 }
 
 void SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2,
-                                SbError nNotFound, bool bStatic )
+                                SbError nNotFound, bool bLocal, bool bStatic )
 {
     if( !refLocals )
     {
         refLocals = new SbxArray;
     }
-    PushVar( FindElement( pObj, nOp1, nOp2, nNotFound, true/*bLocal*/, bStatic ) );
+    PushVar( FindElement( pObj, nOp1, nOp2, nNotFound, bLocal, bStatic ) );
 }
 // loading a local/global variable (+StringID+type)
 
 void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED );
+    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true );
 }
 
 // Search inside a class module (CM) to enable global search in time
@@ -3994,7 +3994,7 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         pMod->SetFlag( SbxFlagBits::GlobalSearch );
     }
-    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED);
+    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true );
 
     if( pClassModuleObject )
     {
@@ -4004,7 +4004,7 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
 void SbiRuntime::StepFIND_STATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true );
+    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true, true );
 }
 
 // loading an object-element (+StringID+type)

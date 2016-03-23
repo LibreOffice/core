@@ -166,8 +166,8 @@ class CompareFrameFormatText : public CompareData
 {
     const SwNodeIndex &m_rIndex;
 public:
-    CompareFrameFormatText(SwDoc &rD, const SwNodeIndex &rIndex)
-        : CompareData(rD, true/*bRecordDiff*/)
+    CompareFrameFormatText(SwDoc &rD, const SwNodeIndex &rIndex, bool bRecordDiff=true)
+        : CompareData(rD, bRecordDiff)
         , m_rIndex(rIndex)
     {
     }

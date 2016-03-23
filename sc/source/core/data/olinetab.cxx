@@ -184,7 +184,7 @@ void ScOutlineArray::FindEntry(
 }
 
 bool ScOutlineArray::Insert(
-    SCCOLROW nStartCol, SCCOLROW nEndCol, bool& rSizeChanged, bool bHidden )
+    SCCOLROW nStartCol, SCCOLROW nEndCol, bool& rSizeChanged, bool bHidden, bool bVisible )
 {
     rSizeChanged = false;
 
@@ -283,7 +283,7 @@ bool ScOutlineArray::Insert(
     }
 
     ScOutlineEntry aNewEntry(nStartCol, nEndCol+1-nStartCol, bHidden);
-    aNewEntry.SetVisible( true );
+    aNewEntry.SetVisible( bVisible );
     aCollections[nLevel].insert(aNewEntry);
 
     return true;
@@ -769,7 +769,7 @@ void ScOutlineArray::RemoveAll()
     nDepth = 0;
 }
 
-void ScOutlineArray::finalizeImport(ScTable& rTable)
+void ScOutlineArray::finalizeImport(ScTable& rTable, bool bCol)
 {
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
@@ -781,7 +781,7 @@ void ScOutlineArray::finalizeImport(ScTable& rTable)
 
         SCCOLROW nEntryStart = pEntry->GetStart();
         SCCOLROW nEntryEnd   = pEntry->GetEnd();
-        SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, false/*bCol*/);
+        SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, bCol);
         bool bAllHidden = (nEntryEnd <= nEnd && nEnd <
                 ::std::numeric_limits<SCCOLROW>::max());
 

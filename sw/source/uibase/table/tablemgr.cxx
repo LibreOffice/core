@@ -166,10 +166,10 @@ void SwTableFUNC::InitTabCols()
         pSh->GetTabCols( aCols );
 }
 
-SwTableFUNC::SwTableFUNC(SwWrtShell *pShell)
+SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, bool bCopyFormat)
     : pFormat(pShell->GetTableFormat()),
       pSh(pShell),
-      bCopy(false)
+      bCopy(bCopyFormat)
 {
     // if applicable copy the format for edit
     if( pFormat && bCopy )

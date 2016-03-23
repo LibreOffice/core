@@ -243,7 +243,7 @@ void ScTable::finalizeOutlineImport()
 {
     if (pOutlineTable && pRowFlags)
     {
-        pOutlineTable->GetRowArray().finalizeImport(*this);
+        pOutlineTable->GetRowArray().finalizeImport(*this, false);
     }
 }
 

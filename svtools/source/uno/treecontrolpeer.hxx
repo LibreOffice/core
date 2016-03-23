@@ -129,7 +129,7 @@ private:
     UnoTreeListEntry* createEntry( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND );
     void updateEntry( UnoTreeListEntry* pEntry );
 
-    void updateTree( const css::awt::tree::TreeDataModelEvent& rEvent );
+    void updateTree( const css::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive );
     void updateNode( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bRecursive );
     void updateChildNodes( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
 

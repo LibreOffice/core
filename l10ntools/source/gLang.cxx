@@ -19,7 +19,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConv.hxx"
@@ -32,59 +31,63 @@ class handler
         handler()  {};
         ~handler() {};
 
-        void showRunTimeError(string sErr);
-        void showUsage(string        sErr);
+        void showRunTimeError(std::string sErr);
+        void showUsage(std::string        sErr);
         void checkCommandLine(int argc, char *argv[]);
         void run();
 
     private:
         bool mbForceSave;
-        enum {DO_CONVERT, DO_EXTRACT, DO_MERGE} meWorkMode;
-        string         msTargetDir;
-        string         msPoDir;
-        vector<string> mvSourceFiles;
-        l10nMem        mcMemory;
+        enum {DO_CONVERT, DO_EXTRACT, DO_MERGE_KID, DO_MERGE} meWorkMode;
+        std::string              msTargetDir;
+        std::string              msPoDir;
+        std::string              msPotDir;
+        std::vector<std::string> mvSourceFiles;
+        std::vector<std::string> mvLanguages;
+        l10nMem                  mcMemory;
 
         void showManual();
         void loadL10MEM(bool onlyTemplates);
         void runConvert();
         void runExtract();
-        void runMerge();
+        void runMerge(bool bKid);
 };
 
 
 
-void handler::showRunTimeError(string sErr)
+void handler::showRunTimeError(std::string sErr)
 {
-    cerr << "runtime error: "
-         << (sErr.size() ? sErr : "No description")
-         << endl;
+    std::cerr << "runtime error: "
+              << (sErr.size() ? sErr : "No description")
+              << std::endl;
     exit(-1);
 }
 
 
 
-void handler::showUsage(string sErr)
+void handler::showUsage(std::string sErr)
 {
     if (sErr.size())
-        cerr << "commandline error: " << sErr << endl;
+        std::cerr << "commandline error: " << sErr << std::endl;
 
-    cout << "syntax oveview, use \"genLang help\" for full description\n"
-        "   genLang <cmd> <options>\n"
-        "   <cmd> is one of\n"
-        "      convert   convert old pot/po files to new format\n"
-        "      extract   extract pot templates from sources\n"
-        "      help      show manual\n"
-        "      merge     merge po files back to sources\n"
-        "   <options> is a combination of\n"
-        "      -d        show debug information\n"
-        "      -s        save unconditionally\n"
-        "      -v        show progress information\n"
-        "\n"
-        "      --files     <files>       input file list\n"
-        "      --target    <directory>   target root directory\n"
-        "      --base      <directory>   base directory for files\n"
-        "      --po        <directory>   po root directory\n";
+    std::cout << "syntax oveview, use \"genLang help\" for full description\n"
+                 "   genLang <cmd> <options>\n"
+                 "   <cmd> is one of\n"
+                 "      convert   convert old pot/po files to new format\n"
+                 "      extract   extract pot templates from sources\n"
+                 "      help      show manual\n"
+                 "      merge     merge po files back to sources\n"
+                 "   <options> is a combination of\n"
+                 "      -d        show debug information\n"
+                 "      -k        generate key identifier version\n"
+                 "      -s        save unconditionally\n"
+                 "      -v        show progress information\n"
+                 "\n"
+                 "      --files     <files>       input file list\n"
+                 "      --languages <languages>   language list (omitting is all)\n"
+                 "      --target    <directory>   target root directory\n"
+                 "      --po        <directory>   po root directory\n"
+                 "      --pot       <directory>   pot root directory\n";
 
     if (sErr.size())
         exit(-1);
@@ -95,7 +98,7 @@ void handler::showUsage(string sErr)
 void handler::showManual()
 {
     // give the correct usage
-    cout <<
+    std::cout <<
         "genLang(c) 2016 by Document Foundation\n"
         "=============================================\n"
         "As part of the L10N framework for LibreOffice,\n"
@@ -113,42 +116,51 @@ void handler::showManual()
 
     showUsage("");
 
-    cout <<
+    std::cout <<
         "\n"
         "  genLang extract [-v] [-d] [-s]\n"
-        "                  --base <directory> --files <files> --target <directory>\n"
-        "    extract text from source (.ui etc) <files>, result is .pot\n"
-        "    templates files written to <directory> with a structure\n"
-        "    files are expanded with --base, to shorten command line"
+        "                  --files <files>   --pot   <directory>\n"
+        "    extract text from <files>, result is .pot template\n"
+        "    files written to <directory> with a structure\n"
         "\n\n";
 
-    cout <<
-        "  genLang merge [-v] [-d] [-s]\n"
-        "                --base  <directory>"
-        "                --files <files>\n"
+    std::cout <<
+        "  genLang merge [-v] [-d] [-s] [-k]\n"
+        "                --languages <languages>\n"
         "                --target <directory>\n"
         "                --po     <directory>\n"
-        "  merges translations (--po) with source files (--files)\n"
+        "  merges translations (--po) with source files\n"
         "  and write the result to --target\n"
-        "  files are expanded with --base, to shorten command line"
         "\n\n";
 
-    cout <<
+    std::cout <<
         "  genLang convert [-v] [-d] [-s]\n"
-        "                  --base  <directory>"
-        "                  --files <files>\n"
         "                  --po     <directory>\n"
+        "                  --pot    <directory>\n"
         "                  --target <directory>\n"
-        "  read old po (--po) and new po (--files) files and\n"
-        "  write po files (--target), ready to be loaded\n"
-        "  files are expanded with --base, to shorten command line"
+        "  read old po (--po) and pot (--pot) files and updates\n"
+        "  target po and pot files (--target), ready to be loaded\n"
         "  in Pootle\n"
         "\n\n";
 
-    cout <<
+    std::cout <<
         "  genLang help\n"
         "    this text\n"
         "\n\n";
+
+    std::cout <<
+        "Parameters:\n"
+        "      -d        show debug information\n"
+        "      -k        generate key identifier version\n"
+        "      -v        show progress information\n"
+        "      -s        save unconditionally\n"
+        "\n"
+        "      --files     <files>        input file list\n"
+        "      --languages <languages>   language list (omitting is all)\n"
+        "      --target    <directory>   target root directory\n"
+        "      --po        <directory>   po root directory\n"
+        "      --pot       <directory>   pot root directory\n";
+
     exit(0);
 }
 
@@ -156,9 +168,8 @@ void handler::showManual()
 
 void handler::checkCommandLine(int argc, char *argv[])
 {
-    string sWorkText, sBaseDir("");
-    int    i;
-    bool   bSourceFiles, bTargetDir, bPoDir;
+    std::string sWorkText;
+    int         i;
 
 
     // Set default
@@ -183,6 +194,12 @@ void handler::checkCommandLine(int argc, char *argv[])
             // show debug information
             mcMemory.setDebug(true);
         }
+        else if (sWorkText == "-k") {
+            // generate key identifier version
+            if (meWorkMode != DO_MERGE)
+                showUsage("-k requires \"merge\"");
+            meWorkMode = DO_MERGE_KID;
+        }
         else if (sWorkText == "-v") {
             // show progress information
             mcMemory.setVerbose(true);
@@ -191,67 +208,109 @@ void handler::checkCommandLine(int argc, char *argv[])
             // forced save
             mbForceSave = true;
         }
-        else {
-            // These arguments, all need and extra argument
-            if (i == argc - 1)
-                throw sWorkText + " missing filename arguments";
+        else if (sWorkText == "--files") {
+            // list of input files
+            if (meWorkMode != DO_EXTRACT)
+                showUsage("--files not valid for command");
+            if (i == argc)
+                showUsage("--files missing filename arguments");
 
-            if (sWorkText == "--files") {
-                // Loop through filenames
-                for (++i; i < argc && argv[i][0] != '-'; ++i)
-                    mvSourceFiles.push_back(sBaseDir + argv[i]);
-                --i;
-            }
-            else if (sWorkText == "--base") {
-                sBaseDir = argv[++i];
-                if (sBaseDir[sBaseDir.length() - 1] != '/')
-                    sBaseDir += "/";
-            }
-            else if (sWorkText == "--target") {
-                msTargetDir = argv[++i];
-                if (msTargetDir[msTargetDir.length() - 1] != '/')
-                    msTargetDir += "/";
-            }
-            else if (sWorkText == "--po") {
-                msPoDir = argv[++i];
-                if (msPoDir[msPoDir.length() - 1] != '/')
-                    msPoDir += "/";
-            }
-            else
-                throw "unknown argument";
+            // Loop through filenames
+            for (; i < argc && argv[i][0] != '-'; ++i)
+                mvSourceFiles.push_back(argv[i]);
+        }
+        else if (sWorkText == "--languages") {
+            // list of languages
+            if (meWorkMode != DO_MERGE)
+                showUsage("--languages not valid for command");
+            if (i == argc)
+                showUsage("--languages missing arguments");
+
+            // Loop through filenames
+            for (; i < argc && argv[i][0] != '-'; ++i)
+                mvLanguages.push_back(argv[i]);
+        }
+        else if (sWorkText == "--target") {
+            // target root directory
+            if (meWorkMode != DO_MERGE && meWorkMode != DO_CONVERT)
+                showUsage("--target not valid for command");
+            if (i == argc)
+                showUsage("--target missing directory argument");
+
+            msTargetDir = argv[++i];
+        }
+        else if (sWorkText == "--po") {
+            // po file root directory
+            if (meWorkMode != DO_MERGE && meWorkMode != DO_CONVERT)
+                showUsage("--po not valid for command");
+            if (i == argc)
+                showUsage("--po missing directory argument");
+
+            msPoDir = argv[++i];
+        }
+        else if (sWorkText == "--pot") {
+            // pot file root directory
+            if (meWorkMode != DO_EXTRACT && meWorkMode != DO_CONVERT)
+                showUsage("--pot not valid for command");
+            if (i == argc)
+                showUsage("--pot missing directory argument");
+
+            msPotDir = argv[++i];
+        }
+        else {
+            // collect files
+            showUsage("unknown argument");
         }
     }
 
     // Check all the correct parameters are suplied
-    bSourceFiles = bTargetDir = bPoDir = false;
-    switch (meWorkMode) {
-        case DO_CONVERT:
-             bSourceFiles = bPoDir = bTargetDir = true;
-             break;
-        case DO_EXTRACT:
-             bSourceFiles = bTargetDir = true;
-             break;
-        case DO_MERGE:
-             bPoDir = bTargetDir = true;
-             break;
-    }
+    {
+        bool bSourceFiles, bLanguages, bTargetDir, bPoDir, bPotDir;
 
-    if ( (mvSourceFiles.size() > 0) != bSourceFiles)
-        throw bSourceFiles ? "--files missing" : "--files used, but not permitted";
-    if ( (msPoDir.size() > 0) != bPoDir)
-        throw bPoDir ? "--po missing" : "--po used, but not permitted";
+        bSourceFiles = bLanguages = bTargetDir = bPoDir = bPotDir = false;
+        switch (meWorkMode)
+        {
+            case DO_CONVERT:
+                 bPoDir = bPotDir = bTargetDir = true;
+                 break;
+            case DO_EXTRACT:
+                 bPotDir = bSourceFiles = true;
+                 break;
+            case DO_MERGE_KID:
+            case DO_MERGE:
+                 bPoDir = bLanguages = bTargetDir = true;
+                 break;
+        }
+
+        if ( (mvSourceFiles.size() > 0) != bSourceFiles)
+            throw bSourceFiles ? "--files missing" :
+                                 "--files used, but not permitted";
+        if ( (mvLanguages.size() > 0) != bLanguages)
+            throw bLanguages ?  "--languages missing" :
+                                "--languages used, but not permitted";
+        if ( (msPoDir.size() > 0) != bPoDir)
+            throw bPoDir ? "--po missing" :
+                           "--po used, but not permitted";
+        if ( (msPotDir.size() > 0) != bPotDir)
+            throw bPotDir ? "--pot missing" :
+                            "--pot used, but not permitted";
+    }
 }
 
 
 
 void handler::run()
 {
+    // Start memory module
+    loadL10MEM( (meWorkMode == DO_EXTRACT) );
+
     // use workMode to start correct control part
     switch (meWorkMode)
     {
-        case DO_EXTRACT:     runExtract(); break;
-        case DO_MERGE:       runMerge();   break;
-        case DO_CONVERT:     runConvert(); break;
+        case DO_EXTRACT:     runExtract();      break;
+        case DO_MERGE:       runMerge(false);   break;
+        case DO_MERGE_KID:   runMerge(true);    break;
+        case DO_CONVERT:     runConvert();      break;
     }
 }
 
@@ -259,8 +318,8 @@ void handler::run()
 
 void handler::loadL10MEM(bool onlyTemplates)
 {
-    string sLoad = msPoDir + "templates/";
-    vector<string>::iterator siLang;
+    std::string sLoad = msPoDir + "templates/";
+    std::vector<std::string>::iterator siLang;
 
     // no convert
     mcMemory.setConvert(false, false);
@@ -271,32 +330,32 @@ void handler::loadL10MEM(bool onlyTemplates)
 
     // and load file
     mcMemory.setLanguage("", true);
-    convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false);
+    convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false, false);
 
     if (onlyTemplates)
       return;
 
     // loop through all languages and load text
-//FIX    for (siLang = mvLanguages.begin(); siLang != mvLanguages.end(); ++siLang)
-//FIX    {
-//FIX        sLoad = msPoDir + *siLang + "/";
+    for (siLang = mvLanguages.begin(); siLang != mvLanguages.end(); ++siLang)
+    {
+        sLoad = msPoDir + *siLang + "/";
 
         // get converter and extract files
-//FIX        mcMemory.setLanguage(*siLang, true);
+        mcMemory.setLanguage(*siLang, true);
 
         // tell system
-//FIX        l10nMem::showDebug("genLang loading text from language file " + sLoad);
+        l10nMem::showDebug("genLang loading text from language file " + sLoad);
 
-//FIX        convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false, false);
-//FIX    }
+        convert_gen::createInstance(mcMemory, sLoad, msTargetDir, "").execute(false, false);
+    }
 }
 
 
 
 void handler::runConvert()
 {
-    vector<string>::iterator siSource;
-    vector<string>::iterator siLang;
+    std::vector<std::string>::iterator siSource;
+    std::vector<std::string>::iterator siLang;
 
 
     // convert
@@ -309,24 +368,24 @@ void handler::runConvert()
 
         // get converter and extract files
         convert_gen& convertObj = convert_gen::createInstance(mcMemory, "./", msTargetDir, *siSource);
-        convertObj.execute(false);
+        convertObj.execute(false, false);
 
         mcMemory.showNOconvert();
 
-//FIX        for (siLang = mvLanguages.begin(); siLang != mvLanguages.end(); ++siLang) {
-//FIX            string sFilePath = *siLang + "/";
+        for (siLang = mvLanguages.begin(); siLang != mvLanguages.end(); ++siLang) {
+            std::string sFilePath = *siLang + "/";
 
             // get converter and extract files
-//FIX            mcMemory.setLanguage(*siLang, false);
+            mcMemory.setLanguage(*siLang, false);
 
             // tell system
-//FIX            l10nMem::showDebug("genLang convert text from file " +
-//FIX                               sFilePath + *siSource + " language " + *siLang);
+            l10nMem::showDebug("genLang convert text from file " +
+                               sFilePath + *siSource + " language " + *siLang);
 
             // get converter and extract files
-//FIX            convert_gen& convertObj = convert_gen::createInstance(mcMemory, sFilePath, msTargetDir, *siSource);
-//FIX            convertObj.execute(true, false);
-//FIX        }
+            convert_gen& convertObj = convert_gen::createInstance(mcMemory, sFilePath, msTargetDir, *siSource);
+            convertObj.execute(true, false);
+        }
     }
 
     // and generate language file
@@ -337,8 +396,8 @@ void handler::runConvert()
 
 void handler::runExtract()
 {
-    vector<string>::iterator siSource;
-    int newPos;
+    std::vector<std::string>::iterator siSource;
+
 
     // no convert
     mcMemory.setConvert(false, false);
@@ -348,24 +407,20 @@ void handler::runExtract()
         // tell system
         l10nMem::showDebug("genLang extracting text from file " + *siSource);
 
-        // set module name
-        newPos = (*siSource).find_last_of("/\\", (*siSource).length());
-        mcMemory.setModuleName((*siSource).substr(0, newPos));
-
         // get converter and extract file
         convert_gen& convertObj = convert_gen::createInstance(mcMemory, "", msTargetDir, *siSource);
-        convertObj.execute(false);
+        convertObj.execute(false, false);
     }
 
     // and generate language file
-    mcMemory.saveTemplates(msTargetDir, mbForceSave);
+    mcMemory.saveTemplates(msPoDir, false, mbForceSave);
 }
 
 
 
-void handler::runMerge()
+void handler::runMerge(bool bKid)
 {
-    vector<string>::iterator siSource;
+    std::vector<std::string>::iterator siSource;
 
     // no convert
     mcMemory.setConvert(false, false);
@@ -377,7 +432,7 @@ void handler::runMerge()
 
         // get converter and extract file
         convert_gen& convertObj = convert_gen::createInstance(mcMemory, "", msTargetDir, *siSource);
-        convertObj.execute(true);
+        convertObj.execute(true, bKid);
     }
 }
 
@@ -392,11 +447,11 @@ int main(int argc, char *argv[])
         cHandler.checkCommandLine(argc, argv);
     }
     catch(const char *sErr) {
-        string myErr(sErr);
+        std::string myErr(sErr);
         cHandler.showUsage(myErr);
         exit(-1);
     }
-    catch(string sErr) {
+    catch(std::string sErr) {
         cHandler.showUsage(sErr);
         exit(-1);
     }
@@ -406,11 +461,11 @@ int main(int argc, char *argv[])
         cHandler.run();
     }
     catch(const char *sErr) {
-        string myErr(sErr);
+        std::string myErr(sErr);
         cHandler.showRunTimeError(myErr);
         exit(-1);
     }
-    catch(string sErr) {
+    catch(std::string sErr) {
         cHandler.showRunTimeError(sErr);
         exit(-1);
     }

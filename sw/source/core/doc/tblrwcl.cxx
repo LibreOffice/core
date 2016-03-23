@@ -1372,12 +1372,12 @@ struct _InsULPara
 
     SwTableBox* pLeftBox;
 
-    _InsULPara( SwTableNode* pTNd,
+    _InsULPara( SwTableNode* pTNd, bool bUpperLower, bool bUpper,
                 SwTableBox* pLeft,
                 SwTableLine* pLine=nullptr, SwTableBox* pBox=nullptr )
         : pTableNd( pTNd ), pInsLine( pLine ), pInsBox( pBox ),
         pLeftBox( pLeft )
-        {   bUL_LR = true; bUL = true; }
+        {   bUL_LR = bUpperLower; bUL = bUpper; }
 
     void SetLeft( SwTableBox* pBox=nullptr )
         { bUL_LR = false;   bUL = true; if( pBox ) pInsBox = pBox; }
@@ -1613,7 +1613,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     // This contains all Lines that are above the selected Area,
     // thus they form a Upper/Lower Line
-    _InsULPara aPara( pTableNd, pLeftBox, pInsLine );
+    _InsULPara aPara( pTableNd, true, true, pLeftBox, pInsLine );
 
     // Move the overlapping upper/lower Lines of the selected Area
     for (auto & it : pFndBox->GetLines().front()->GetBoxes())
@@ -2324,11 +2324,12 @@ SwTableBox* SwTableBox::FindNextBox( const SwTable& rTable,
 
 // Find the next Box with content from this Line
 SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTable,
-                         const SwTableBox* pSrchBox ) const
+                         const SwTableBox* pSrchBox, bool bOvrTableLns ) const
 {
     if( !pSrchBox && GetTabLines().empty() )
         return const_cast<SwTableBox*>(this);
-    return GetUpper()->FindPreviousBox( rTable, pSrchBox ? pSrchBox : this );
+    return GetUpper()->FindPreviousBox( rTable, pSrchBox ? pSrchBox : this,
+                                        bOvrTableLns );
 }
 
 static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox )

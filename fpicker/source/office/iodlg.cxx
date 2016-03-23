@@ -87,6 +87,11 @@
 #include <functional>
 #include <vector>
 
+//#define AUTOSELECT_USERFILTER
+    // define this for the experimental feature of user-filter auto selection
+    // means if the user enters e.g. *.doc<enter>, and there is a filter which is responsible for *.doc files (only),
+    // then this filter is selected automatically
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui::dialogs;
@@ -787,7 +792,7 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
     }
 }
 
-bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
+bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt )
 {
     // delete the old user filter and create a new one
     DELETEZ( _pImp->_pUserFilter );
@@ -803,10 +808,27 @@ bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
         // is always "*.<something>". But changing this would take some more time than I have now...
 
     // now, the default extension is set to the one of the user filter (or empty)
-    if ( _pImp->GetCurFilter( ) )
-        SetDefaultExt( _pImp->GetCurFilter( )->GetExtension() );
-    else
-        EraseDefaultExt();
+    // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter
+    // (if possible)
+    bool bUseCurFilterExt = true;
+    OUString sUserFilter = _pImp->_pUserFilter->GetType();
+    sal_Int32 nSepPos = sUserFilter.lastIndexOf( '.' );
+    if ( nSepPos != -1 )
+    {
+        OUString sUserExt = sUserFilter.copy( nSepPos + 1 );
+        if  (   ( -1 == sUserExt.indexOf( '*' ) )
+            &&  ( -1 == sUserExt.indexOf( '?' ) )
+            )
+            bUseCurFilterExt = false;
+    }
+
+    if ( !_bAllowUserDefExt || bUseCurFilterExt )
+    {
+        if ( _pImp->GetCurFilter( ) )
+            SetDefaultExt( _pImp->GetCurFilter( )->GetExtension() );
+        else
+            EraseDefaultExt();
+    }
 
     // outta here
     return bIsAllFiles;
@@ -833,6 +855,15 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
         // search for a corresponding filter
         SvtFileDialogFilter_Impl* pFilter = FindFilter_Impl( _rFilter, false, bFilterChanged );
 
+#ifdef AUTOSELECT_USERFILTER
+        // if we found a filter which without allowing multi-extensions -> select it
+        if ( pFilter )
+        {
+            _pImp->SelectFilterListEntry( pFilter->GetName() );
+            _pImp->SetCurFilter( pFilter );
+        }
+#endif // AUTOSELECT_USERFILTER
+
         // look for multi-ext filters if necessary
         if ( !pFilter )
             pFilter = FindFilter_Impl( _rFilter, true, bFilterChanged );
@@ -844,11 +875,30 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
         {
             nReturn |= FLT_USERFILTER;
             // no filter found : use it as user defined filter
-            if ( createNewUserFilter( _rFilter ) )
+#ifdef AUTOSELECT_USERFILTER
+            if ( createNewUserFilter( _rFilter, sal_True ) )
+#else
+            if ( createNewUserFilter( _rFilter, false ) )
+#endif
             {   // it's the "all files" filter
                 nReturn |= FLT_ALLFILESFILTER;
 
+#ifdef AUTOSELECT_USERFILTER
+                // select the "all files" entry
+                OUString sAllFilesFilter( SvtResId( STR_FILTERNAME_ALL ) );
+                if ( _pImp->HasFilterListEntry( sAllFilesFilter ) )
+                {
+                    _pImp->SelectFilterListEntry( sAllFilesFilter );
+                    _pImp->SetCurFilter( _pImp->GetSelectedFilterEntry( sAllFilesFilter ) );
+                }
+                else
+                    _pImp->SetNoFilterListSelection( ); // there is no "all files" entry
+#endif // AUTOSELECT_USERFILTER
             }
+#ifdef AUTOSELECT_USERFILTER
+            else
+                _pImp->SetNoFilterListSelection( );
+#endif // AUTOSELECT_USERFILTER
         }
     }
 
@@ -1369,7 +1419,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
             // activate filter
             _rFilterChanged = _pImp->_pUserFilter || ( _pImp->GetCurFilter() != pFilter );
 
-            createNewUserFilter( _rFilter );
+            createNewUserFilter( _rFilter, false );
 
             break;
         }

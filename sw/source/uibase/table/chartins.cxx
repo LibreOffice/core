@@ -163,7 +163,7 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
     }
 
     SwFlyFrameFormat *pFlyFrameFormat = nullptr;
-    xChartModel.set( SwTableFUNC( &rWrtShell ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrameFormat ));
+    xChartModel.set( SwTableFUNC( &rWrtShell, false ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrameFormat ));
 
     //open wizard
     //@todo get context from writer if that has one

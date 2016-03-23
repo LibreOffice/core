@@ -73,10 +73,13 @@ public:
        @param pVd
        [in] the new virtual device.
 
-       The old virtual device will be deleted.
-       Triggers all necessary invalidations.
+       @param bDeleteOld
+       [in] if set, the old virtual device will be deleted.
+
+       @param bCallVirDevDataChanged
+       [in] if set, triggers all necessary invalidations.
      */
-    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd ) = 0;
+    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged ) = 0;
 
     /** Returns the current reference device
 

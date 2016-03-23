@@ -86,12 +86,12 @@ public:
     /**
      * @descr   Set drawing object border line.
      */
-    void    SetLineStyle(double width, XFColor color = XFColor(0,0,0));
+    void    SetLineStyle(double width, XFColor color = XFColor(0,0,0), sal_Int32 transparency = 0);
 
     /**
      * @descr   Set drawing object dash border style.
      */
-    void    SetLineDashStyle(enumXFLineStyle style, double len1, double len2, double space );
+    void    SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space );
 
     /**
      * @descr   Set drawing object area fill color.
@@ -106,12 +106,12 @@ public:
     /**
      * @descr   Set drawing object arrow start style,only lines can have arrows.
      */
-    void    SetArrowStart(const OUString& start, double size=0.3);
+    void    SetArrowStart(const OUString& start, double size=0.3, bool center = false);
 
     /**
      * @descr   Set drawing object arrow end style,only lines can have arrows.
      */
-    void    SetArrowEnd(const OUString& end, double size=0.3);
+    void    SetArrowEnd(const OUString& end, double size=0.3, bool center = false);
 
     void SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust);
 
@@ -133,20 +133,20 @@ private:
     bool m_bArrowEndCenter;
 };
 
-inline void XFDrawStyle::SetArrowStart(const OUString& start, double size)
+inline void XFDrawStyle::SetArrowStart(const OUString& start, double size, bool center)
 {
     assert(size>0);
     m_strArrowStart = start;
     m_fArrowStartSize = size;
-    m_bArrowStartCenter = true;
+    m_bArrowStartCenter = center;
 }
 
-inline void XFDrawStyle::SetArrowEnd(const OUString& end, double size)
+inline void XFDrawStyle::SetArrowEnd(const OUString& end, double size, bool center)
 {
     assert(size>0);
     m_strArrowEnd = end;
     m_fArrowEndSize = size;
-    m_bArrowEndCenter = true;
+    m_bArrowEndCenter = center;
 }
 
 #endif

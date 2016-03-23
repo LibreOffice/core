@@ -31,7 +31,6 @@
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <controller/SlsPageSelector.hxx>
-#include <chrono>
 
 using namespace ::com::sun::star;
 
@@ -86,7 +85,8 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
         while (Scheduler::ProcessTaskScheduling(true));
         if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
             break;
-        osl::Thread::wait(std::chrono::milliseconds(100));
+        TimeValue aSleep(0, 100 * 1000000); // 100 msec
+        osl::Thread::wait(aSleep);
     }
     CPPUNIT_ASSERT(pSSVS);
 
@@ -126,7 +126,8 @@ void SdMiscTest::testTdf96708()
     xSSController.GetClipboard().DoCopy();
 
     // Now wait for timers to trigger creation of auto-layout
-    osl::Thread::wait(std::chrono::milliseconds(100));
+    TimeValue aSleep(0, 100 * 1000000); // 100 msec
+    osl::Thread::wait(aSleep);
     Scheduler::ProcessTaskScheduling(true);
 
     xSSController.GetClipboard().DoPaste();

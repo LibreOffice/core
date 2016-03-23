@@ -4815,10 +4815,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                     // Sheet-local on other sheet.
                     OUString aName;
                     if (pDoc->GetName( nTab, aName))
-                    {
-                        ScCompiler::CheckTabQuotes( aName, pConv->meConv);
                         aBuffer.append( aName);
-                    }
                     else
                         aBuffer.append( ScGlobal::GetRscString( STR_NO_NAME_REF));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));

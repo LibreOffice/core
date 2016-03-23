@@ -236,7 +236,7 @@ IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar
 {
     StopEntryEditing();
     // arrow up: delta=-1; arrow down: delta=+1
-    Scroll( 0, pScrollBar->GetDelta() );
+    Scroll( 0, pScrollBar->GetDelta(), true );
     bEndScrollInvalidate = true;
 }
 
@@ -244,7 +244,7 @@ IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScroll
 {
     StopEntryEditing();
     // arrow left: delta=-1; arrow right: delta=+1
-    Scroll( pScrollBar->GetDelta(), 0 );
+    Scroll( pScrollBar->GetDelta(), 0, true );
     bEndScrollInvalidate = true;
 }
 
@@ -343,7 +343,7 @@ void SvxIconChoiceCtrl_Impl::SetListPositions()
 }
 
 void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool bSelect,
-    bool bAdd, bool bSyncPaint )
+    bool bCallHdl, bool bAdd, bool bSyncPaint )
 {
     if( eSelectionMode == NO_SELECTION )
         return;
@@ -366,14 +366,16 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
             nEntryFlags |= SvxIconViewFlags::SELECTED;
             pEntry->AssignFlags( nEntryFlags );
             nSelectionCount++;
-            CallSelectHandler( pEntry );
+            if( bCallHdl )
+                CallSelectHandler( pEntry );
         }
         else
         {
             nEntryFlags &= ~( SvxIconViewFlags::SELECTED);
             pEntry->AssignFlags( nEntryFlags );
             nSelectionCount--;
-            CallSelectHandler( nullptr );
+            if( bCallHdl )
+                CallSelectHandler( nullptr );
         }
         EntrySelected( pEntry, bSelect, bSyncPaint );
     }
@@ -657,7 +659,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
         const Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
         if (rRect.IsOver(rBoundRect))
         {
-            PaintEntry(pEntry, rBoundRect.TopLeft(), rRenderContext);
+            PaintEntry(pEntry, rBoundRect.TopLeft(), rRenderContext, true);
             // set entries to Top if they are being repainted
             pPaintedEntries->push_back(pEntry);
         }
@@ -790,7 +792,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     if( rMEvt.GetClicks() == 2 )
     {
         DeselectAllBut( pEntry );
-        SelectEntry( pEntry, true, false, true );
+        SelectEntry( pEntry, true, true, false, true );
         pHdlEntry = pEntry;
         pView->ClickIcon();
     }
@@ -832,7 +834,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
                 {
                     DeselectAllBut( pEntry, true /* paint synchronously */ );
                     SetCursor( pEntry );
-                    SelectEntry( pEntry, true, false, true );
+                    SelectEntry( pEntry, true, true, false, true );
                 }
                 else
                 {
@@ -877,7 +879,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
         {
             DeselectAllBut( pDocEntry );
             SetCursor( pDocEntry );
-            SelectEntry( pDocEntry, true, false, true );
+            SelectEntry( pDocEntry, true, true, false, true );
             bHandled = true;
         }
     }
@@ -967,7 +969,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
         }
         else
         {
-            SelectEntry( pCursor, true, false, bPaintSync );
+            SelectEntry( pCursor, true, true,  false, bPaintSync );
             aCurSelectionRect = GetEntryBoundRect( pCursor );
             CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
         }
@@ -1601,7 +1603,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
     }
 }
 
-void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, vcl::RenderContext& rRenderContext)
+void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted)
 {
     bool bSelected = false;
 
@@ -1665,7 +1667,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
     if( !bNoEmphasis )
-        PaintEmphasis(aTextRect, aBmpRect, bSelected, bDropTarget, bCursored, rRenderContext, true/*bIsBackgroundPainted*/);
+        PaintEmphasis(aTextRect, aBmpRect, bSelected, bDropTarget, bCursored, rRenderContext, bIsBackgroundPainted);
 
     if ( bShowSelection )
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView.get(), CalcFocusRect(pEntry),
@@ -1678,7 +1680,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     // draw highlight frame
     if (pEntry == pCurHighlightFrame && !bNoEmphasis)
-        DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry));
+        DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry), false);
 
     rRenderContext.Pop();
     if (bResetClipRegion)
@@ -2187,7 +2189,8 @@ void SvxIconChoiceCtrl_Impl::ClipAtVirtOutRect( Rectangle& rRect ) const
 // visible
 // bScrBar == true: rectangle was calculated because of a scrollbar event
 
-void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar )
+void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar,
+    bool bCallRectChangedHdl )
 {
     Rectangle aVirtRect( rRect );
     ClipAtVirtOutRect( aVirtRect );
@@ -2276,7 +2279,8 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar )
     // Vis-Rect-Changed handler is called in any case. This case may occur e.g.
     // if only few pixels of the lower border are invisible, but a scrollbar has
     // a larger line size.
-    VisRectChanged();
+    if( bCallRectChangedHdl || GetOutputRect() != rRect )
+        VisRectChanged();
 }
 
 sal_Int32 SvxIconChoiceCtrl_Impl::GetSelectionCount() const
@@ -2293,7 +2297,7 @@ void SvxIconChoiceCtrl_Impl::ToggleSelection( SvxIconChoiceCtrlEntry* pEntry )
         bSel = false;
     else
         bSel = true;
-    SelectEntry( pEntry, bSel, true );
+    SelectEntry( pEntry, bSel, true, true );
 }
 
 void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry* pThisEntryNot,
@@ -2308,7 +2312,7 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry* pThisEntryN
     {
         SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
         if( pEntry != pThisEntryNot && pEntry->IsSelected() )
-            SelectEntry( pEntry, false, true, bPaintSync );
+            SelectEntry( pEntry, false, true, true, bPaintSync );
     }
     pAnchor = nullptr;
     nFlags &= (~F_ADD_MODE);
@@ -2443,7 +2447,7 @@ void SvxIconChoiceCtrl_Impl::Center( SvxIconChoiceCtrlEntry* pEntry ) const
 // The deltas are the offsets by which the view is moved on the document.
 // left, up: offsets < 0
 // right, down: offsets > 0
-void SvxIconChoiceCtrl_Impl::Scroll( long nDeltaX, long nDeltaY )
+void SvxIconChoiceCtrl_Impl::Scroll( long nDeltaX, long nDeltaY, bool bScrollBar )
 {
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
@@ -2452,7 +2456,7 @@ void SvxIconChoiceCtrl_Impl::Scroll( long nDeltaX, long nDeltaY )
     aOrigin.Y() += nDeltaY;
     aOrigin.X() += nDeltaX;
     Rectangle aRect( aOrigin, aOutputSize );
-    MakeVisible( aRect, true/*bScrollBar*/ );
+    MakeVisible( aRect, bScrollBar );
 }
 
 
@@ -2544,14 +2548,14 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, bool bAdd,
             // is inside the new selection rectangle and outside of any old one
             // => select
             if( !bSelected )
-                SelectEntry( pEntry, true, true );
+                SelectEntry( pEntry, true, true, true );
         }
         else if( !bAdd )
         {
             // is outside of the selection rectangle
             // => deselect
             if( bSelected )
-                SelectEntry( pEntry, false, true );
+                SelectEntry( pEntry, false, true, true );
         }
         else if( bAdd && bOverlaps )
         {
@@ -2570,19 +2574,19 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, bool bAdd,
             {
                 // deselect intersection between old rectangles and current rectangle
                 if( bSelected )
-                    SelectEntry( pEntry, false, true );
+                    SelectEntry( pEntry, false, true, true );
             }
             else
             {
                 // select entry of an old rectangle
                 if( !bSelected )
-                    SelectEntry( pEntry, true, true );
+                    SelectEntry( pEntry, true, true, true );
             }
         }
         else if( !bOver && bSelected )
         {
             // this entry is completely outside the rectangle => deselect it
-            SelectEntry( pEntry, false, true );
+            SelectEntry( pEntry, false, true, true );
         }
     }
 
@@ -2614,7 +2618,7 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
         {
             pEntry = GetEntry( i );
             if( pEntry->IsSelected() )
-                SelectEntry( pEntry, false, true, true );
+                SelectEntry( pEntry, false, true, true, true );
         }
     }
 
@@ -2623,7 +2627,7 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
     {
         pEntry = GetEntry( i );
         if( ! pEntry->IsSelected() )
-            SelectEntry( pEntry, true, true, true );
+            SelectEntry( pEntry, true, true,  true, true );
     }
 
     if ( ! bAdd )
@@ -2635,7 +2639,7 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
         {
             pEntry = GetEntry( i );
             if( pEntry->IsSelected() )
-                SelectEntry( pEntry, false, true, true );
+                SelectEntry( pEntry, false, true, true, true );
         }
     }
 }
@@ -3052,7 +3056,7 @@ void SvxIconChoiceCtrl_Impl::SelectAll()
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
-        SelectEntry( pEntry, true/*bSelect*/, true, bPaint );
+        SelectEntry( pEntry, true/*bSelect*/, true, true, bPaint );
     }
     nFlags &= (~F_ADD_MODE);
     pAnchor = nullptr;
@@ -3470,7 +3474,7 @@ const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16
     return it->second.get();
 }
 
-void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect)
+void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide)
 {
     Rectangle aBmpRect(rBmpRect);
     long nBorder = 2;
@@ -3481,13 +3485,18 @@ void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderConte
     aBmpRect.Bottom() += nBorder;
     aBmpRect.Top() -= nBorder;
 
-    DecorationView aDecoView(&rRenderContext);
-    DrawHighlightFrameStyle nDecoFlags;
-    if (bHighlightFramePressed)
-        nDecoFlags = DrawHighlightFrameStyle::In;
+    if (bHide)
+        pView->Invalidate(aBmpRect);
     else
-        nDecoFlags = DrawHighlightFrameStyle::Out;
-    aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags);
+    {
+        DecorationView aDecoView(&rRenderContext);
+        DrawHighlightFrameStyle nDecoFlags;
+        if (bHighlightFramePressed)
+            nDecoFlags = DrawHighlightFrameStyle::In;
+        else
+            nDecoFlags = DrawHighlightFrameStyle::Out;
+        aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags);
+    }
 }
 
 void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEntry,

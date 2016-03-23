@@ -338,7 +338,7 @@ class SwHistory
 
 public:
     typedef std::vector<SwHistoryHint*>::iterator SwpHstry_iterator;
-    SwHistory();
+    SwHistory( sal_uInt16 nInitSz = 0 );
     ~SwHistory();
 
     // delete History

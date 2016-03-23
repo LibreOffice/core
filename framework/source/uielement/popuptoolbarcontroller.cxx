@@ -354,14 +354,12 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException ) override;
 
 private:
-    bool m_bSplitButton;
     bool m_bModified;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
 };
 
 SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, ".uno:SaveAsMenu" )
-    , m_bSplitButton( true )
     , m_bModified( false )
 {
 }
@@ -371,20 +369,15 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
 {
     PopupMenuToolbarController::initialize( aArguments );
 
-    bool bRelationDesignModule = m_sModuleName.endsWith( "RelationDesign" );
-
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox )
-        && ( bRelationDesignModule || pToolBox->GetItemCommand( nId ) != m_aCommandURL ) )
+    if ( m_sModuleName.endsWith( "RelationDesign" ) )
     {
-        m_bSplitButton = false;
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
-    }
-
-    if ( bRelationDesignModule )
-        // No modified icon there, just disable the button if there's nothing to save.
+        // Should not have the dropdown.
+        ToolBox* pToolBox = nullptr;
+        sal_uInt16 nId = 0;
+        if ( getToolboxId( nId, &pToolBox ) )
+            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
         return;
+    }
 
     css::uno::Reference< css::frame::XController > xController( m_xFrame->getController(), css::uno::UNO_QUERY );
     if ( xController.is() )
@@ -428,7 +421,7 @@ void SaveToolbarController::updateImage()
     css::uno::Reference< css::frame::XStorable > xStorable( m_xModifiable, css::uno::UNO_QUERY );
     Image aImage;
 
-    if ( m_bSplitButton && xStorable.is() && xStorable->isReadonly() )
+    if ( xStorable.is() && xStorable->isReadonly() )
     {
         aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
     }
@@ -453,7 +446,7 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
     // If the model is able to tell us whether we're in read only mode, change the button to save as only mode
     // based on that. Otherwise just dumbly disable the button (because there could be other reasons why the
     // save slot is disabled, where save as isn't possible as well).
-    if ( m_bSplitButton && xStorable.is() )
+    if ( xStorable.is() )
     {
         ToolBox* pToolBox = nullptr;
         sal_uInt16 nId = 0;

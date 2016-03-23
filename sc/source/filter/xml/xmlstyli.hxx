@@ -247,7 +247,8 @@ public:
     ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+            bool bDefaultStyle = false );
     virtual ~ScCellTextStyleContext();
 
     // override FillPropertySet to store style information

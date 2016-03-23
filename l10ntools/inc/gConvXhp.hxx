@@ -43,8 +43,8 @@ class convert_xhp : public convert_gen
         void handleSpecial(char *yytext);
         void handleDataEnd(char *yytext);
         void duplicate(char *yytext);
-        string& copySourceSpecial(char *yytext, int iType);
-        void writeSourceFile(string& sText, int inx);
+        std::string& copySourceSpecial(char *yytext, int iType);
+        void writeSourceFile(std::string& sText, int inx);
 
     private:
         typedef enum {
@@ -55,11 +55,11 @@ class convert_xhp : public convert_gen
             VALUE_IS_VALUE_TAG
         } STATE;
         STATE       meExpectValue, mePushValue;
-        string msKey, msPushCollect;
-        string msLine;
-        string    *msLangText;
-        ofstream  *mcOutputFiles;
+        std::string msKey, msPushCollect;
+        std::string msLine;
+        std::string    *msLangText;
+        std::ofstream  *mcOutputFiles;
         int             miCntLanguages;
-        void            doExecute() override;
+        void            execute() override;
 };
 #endif

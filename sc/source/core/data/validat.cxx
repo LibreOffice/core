@@ -555,8 +555,8 @@ namespace {
 class ScStringTokenIterator
 {
 public:
-    inline explicit             ScStringTokenIterator( ScTokenArray& rTokArr ) :
-                                    mrTokArr( rTokArr ), mbSkipEmpty( true ), mbOk( true ) {}
+    inline explicit             ScStringTokenIterator( ScTokenArray& rTokArr, bool bSkipEmpty = true ) :
+                                    mrTokArr( rTokArr ), mbSkipEmpty( bSkipEmpty ), mbOk( true ) {}
 
     /** Returns the string of the first string token or NULL on error or empty token array. */
     rtl_uString* First();

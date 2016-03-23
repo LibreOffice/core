@@ -220,8 +220,9 @@ OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
                                             ,OReportHelper> _pMemberFunction
                                        ,const uno::Reference< report::XReportDefinition >& _xReport
-                                       ,Action _eAction)
-: OSectionUndo(_rMod,_nSlot,_eAction,0)
+                                       ,Action _eAction
+                                       ,sal_uInt16 nCommentID)
+: OSectionUndo(_rMod,_nSlot,_eAction,nCommentID)
 ,m_aReportHelper(_xReport)
 ,m_pMemberFunction(_pMemberFunction)
 {

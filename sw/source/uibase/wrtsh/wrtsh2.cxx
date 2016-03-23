@@ -52,6 +52,7 @@
 #include <section.hxx>
 #include <navicont.hxx>
 #include <navipi.hxx>
+#include <crsskip.hxx>
 #include <txtinet.hxx>
 #include <cmdid.h>
 #include <wrtsh.hrc>

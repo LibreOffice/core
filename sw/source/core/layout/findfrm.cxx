@@ -1529,7 +1529,7 @@ SwCellFrame* SwCellFrame::GetFollowCell() const
 
         if ( !pRow->GetNext() )
         {
-            pThisCell = &pThisCell->FindStartEndOfRowSpanCell( false );
+            pThisCell = &pThisCell->FindStartEndOfRowSpanCell( false, true );
             pRow = pThisCell->GetUpper();
         }
     }
@@ -1576,7 +1576,7 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
                 if ( pMasterRow )
                     pRet = lcl_FindCorrespondingCellFrame( *static_cast<const SwRowFrame*>(pRow), *this, *pMasterRow, false );
                 if ( pRet && pRet->GetTabBox()->getRowSpan() < 1 )
-                    pRet = &const_cast<SwCellFrame&>(pRet->FindStartEndOfRowSpanCell( true ));
+                    pRet = &const_cast<SwCellFrame&>(pRet->FindStartEndOfRowSpanCell( true, true ));
             }
         }
     }
@@ -1585,7 +1585,7 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
 }
 
 // --> NEW TABLES
-const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
+const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTableOnly ) const
 {
     const SwCellFrame* pRet = nullptr;
 
@@ -1604,28 +1604,31 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
         const SwTable* pTable = pTableFrame->GetTable();
 
         sal_uInt16 nMax = USHRT_MAX;
-        const SwFrame* pCurrentRow = GetUpper();
-        const bool bDoNotEnterHeadline = bStart && pTableFrame->IsFollow() &&
+        if ( bCurrentTableOnly )
+        {
+            const SwFrame* pCurrentRow = GetUpper();
+            const bool bDoNotEnterHeadline = bStart && pTableFrame->IsFollow() &&
                                         !pTableFrame->IsInHeadline( *pCurrentRow );
 
-        // check how many rows we are allowed to go up or down until we reach the end of
-        // the current table frame:
-        nMax = 0;
-        while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
-        {
-            if ( bStart )
+            // check how many rows we are allowed to go up or down until we reach the end of
+            // the current table frame:
+            nMax = 0;
+            while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
             {
-                // do not enter a repeated headline:
-                if ( bDoNotEnterHeadline && pTableFrame->IsFollow() &&
-                     pTableFrame->IsInHeadline( *pCurrentRow->GetPrev() ) )
-                    break;
+                if ( bStart )
+                {
+                    // do not enter a repeated headline:
+                    if ( bDoNotEnterHeadline && pTableFrame->IsFollow() &&
+                         pTableFrame->IsInHeadline( *pCurrentRow->GetPrev() ) )
+                        break;
 
-                pCurrentRow = pCurrentRow->GetPrev();
+                    pCurrentRow = pCurrentRow->GetPrev();
+                }
+                else
+                    pCurrentRow = pCurrentRow->GetNext();
+
+                ++nMax;
             }
-            else
-               pCurrentRow = pCurrentRow->GetNext();
-
-            ++nMax;
         }
 
         // By passing the nMax value for Find*OfRowSpan (in case of bCurrentTableOnly
@@ -1643,10 +1646,23 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
             {
                 const SwTabFrame* pMasterTable = static_cast<const SwTabFrame*>(pMasterCell->GetUpper()->GetUpper());
 
-                if ( pMasterTable == pTableFrame )
+                if ( bCurrentTableOnly )
                 {
-                    pRet = pMasterCell;
-                    break;
+                    if ( pMasterTable == pTableFrame )
+                    {
+                        pRet = pMasterCell;
+                        break;
+                    }
+                }
+                else
+                {
+                    if ( pMasterTable == pTableFrame ||
+                         (  (bStart && pMasterTable->IsAnFollow(pTableFrame)) ||
+                           (!bStart && pTableFrame->IsAnFollow(pMasterTable)) ) )
+                    {
+                        pRet = pMasterCell;
+                        break;
+                    }
                 }
             }
         }

@@ -566,12 +566,13 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     commitUserChanges();
 }
 
-css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset)
+css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset,
+                                                                  bool bUseNoLangGlobal)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
         SolarMutexGuard g;
-        xFolder = m_xWorkingStorageNoLang;
+        xFolder = bUseNoLangGlobal? m_xWorkingStorageNoLang: m_xWorkingStorageShare;
     }
 
     // e.g. module without any config data ?!
@@ -586,7 +587,8 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
     return xStream;
 }
 
-css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget)
+css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget         ,
+                                                                        bool         bCreateIfMissing)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
@@ -601,11 +603,15 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
     OUString sFile(sTarget);
     sFile += ".xml";
 
+    sal_Int32 nOpenMode = css::embed::ElementModes::READWRITE;
+    if (!bCreateIfMissing)
+        nOpenMode |= css::embed::ElementModes::NOCREATE;
+
     // try it in read/write mode first and ignore errors.
     css::uno::Reference< css::io::XStream > xStream;
     try
     {
-        xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READWRITE);
+        xStream = xFolder->openStreamElement(sFile, nOpenMode);
         return xStream;
     }
     catch(const css::uno::RuntimeException&)
@@ -615,7 +621,8 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
 
     // try it readonly if it failed before.
     // inform user about errors (use original exceptions!)
-    xStream    = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
+    nOpenMode &= ~css::embed::ElementModes::WRITE;
+    xStream    = xFolder->openStreamElement(sFile, nOpenMode);
 
     return xStream;
 }

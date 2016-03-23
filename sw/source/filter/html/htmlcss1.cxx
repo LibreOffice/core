@@ -2121,7 +2121,8 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
     }
 }
 
-_HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
+_HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit,
+                                            bool bRemove )
 {
     _HTMLAttrContexts::size_type nPos = m_aContexts.size();
     if( nPos <= m_nContextStMin )
@@ -2139,7 +2140,7 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
                 bFound = true;
                 break;
             }
-            else if( nCntxtToken == 0 ) // 0 als Token kommt nicht vor
+            else if( nCntxtToken == nLimit ) // 0 als Token kommt nicht vor
             {
                 break;
             }
@@ -2154,7 +2155,8 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
     if( bFound )
     {
         pCntxt = m_aContexts[nPos];
-        m_aContexts.erase( m_aContexts.begin() + nPos );
+        if( bRemove )
+            m_aContexts.erase( m_aContexts.begin() + nPos );
     }
 
     return pCntxt;

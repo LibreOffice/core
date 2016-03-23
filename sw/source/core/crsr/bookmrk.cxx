@@ -73,9 +73,8 @@ namespace
 
         SwPosition rStart = pField->GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
-        sal_Unicode ch_start = 0;
-        if( pStartTextNode && ( rStart.nContent.GetIndex() < pStartTextNode->GetText().getLength() ) )
-            ch_start = pStartTextNode->GetText()[rStart.nContent.GetIndex()];
+        const sal_Unicode ch_start = ( rStart.nContent.GetIndex() >= pStartTextNode->GetText().getLength() ) ? 0 :
+            pStartTextNode->GetText()[rStart.nContent.GetIndex()];
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
             SwPaM aStartPaM(rStart);
@@ -88,9 +87,7 @@ namespace
         SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
         const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
-        sal_Unicode ch_end = 0;
-        if ( pEndTextNode && ( nEndPos < pEndTextNode->GetText().getLength() ) )
-            ch_end = pEndTextNode->GetText()[nEndPos];
+        const sal_Unicode ch_end = nEndPos >= pEndTextNode->GetText().getLength() ? 0 : pEndTextNode->GetText()[nEndPos];
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
             SwPaM aEndPaM(rEnd);
@@ -110,9 +107,8 @@ namespace
 
         const SwPosition& rStart = pField->GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
-        sal_Unicode ch_start = 0;
-        if( pStartTextNode )
-            ch_start = pStartTextNode->GetText()[rStart.nContent.GetIndex()];
+        const sal_Unicode ch_start =
+            pStartTextNode->GetText()[rStart.nContent.GetIndex()];
 
         if( ch_start == aStartMark )
         {
@@ -126,9 +122,7 @@ namespace
         const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 )
                                    ? rEnd.nContent.GetIndex()
                                    : rEnd.nContent.GetIndex() - 1;
-        sal_Unicode ch_end = 0;
-        if ( pEndTextNode )
-            ch_end = pEndTextNode->GetText()[nEndPos];
+        const sal_Unicode ch_end = pEndTextNode->GetText()[nEndPos];
         if ( ch_end == aEndMark )
         {
             SwPaM aEnd(rEnd, rEnd);

@@ -29,8 +29,10 @@
 
 #include <osl/module.hxx>
 #include <comphelper/solarmutex.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
-
+#endif
 #include "unx/geninst.h"
 
 // SalYieldMutex
@@ -60,7 +62,9 @@ void SalYieldMutex::release()
     assert(mnThreadId == osl::Thread::getCurrentIdentifier());
     if ( mnCount == 1 )
     {
+#if HAVE_FEATURE_OPENGL
         OpenGLContext::prepareForYield();
+#endif
         mnThreadId = 0;
     }
     mnCount--;

@@ -175,7 +175,7 @@ public:
         { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
 
         // translate from VCL settings
-        void SetToolboxStyle( sal_Int16 nStyle );
+        void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
 
         inline bool UseSystemPrintDialog() const
         { return m_bUseSystemPrintDialog; }
@@ -472,10 +472,11 @@ void SvtMiscOptions_Impl::CallListeners()
         iter->Call( nullptr );
 }
 
-void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle )
+void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified )
 {
     m_nToolboxStyle = nStyle ? 1 : 0;
-    SetModified();
+    if ( _bSetModified )
+        SetModified();
     CallListeners();
 }
 
@@ -764,7 +765,7 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
-    m_pDataContainer->SetToolboxStyle( nStyle );
+    m_pDataContainer->SetToolboxStyle( nStyle, true );
 }
 
 bool SvtMiscOptions::UseSystemPrintDialog() const

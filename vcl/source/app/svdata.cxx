@@ -52,7 +52,10 @@
 
 #include "officecfg/Office/Common.hxx"
 
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
+#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -154,10 +157,12 @@ vcl::Window *ImplGetDefaultContextWindow()
             pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
             pSVData->mpDefaultWin->SetText( "VCL ImplGetDefaultWindow" );
 
+#if HAVE_FEATURE_OPENGL
             // Add a reference to the default context so it never gets deleted
             rtl::Reference<OpenGLContext> pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
             if( pContext.is() )
                 pContext->acquire();
+#endif
         }
     }
 

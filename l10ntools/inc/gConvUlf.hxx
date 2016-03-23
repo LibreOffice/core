@@ -25,17 +25,17 @@
 class convert_ulf : public convert_gen
 {
     public:
-        convert_ulf(l10nMem& crMemory) : convert_gen(crMemory) {};
-        ~convert_ulf() {};
+        convert_ulf(l10nMem& crMemory);
+        ~convert_ulf();
 
         void setKey(char *syyText);
         void setText(char *syyText, bool bIsEnUs);
         void setValue(char *syyText);
 
     private:
-        string msKey;
+        std::string msKey;
 
-        void doExecute() override;
+        void execute() override;
         void handleLines();
 };
 #endif

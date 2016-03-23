@@ -482,6 +482,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     std::unique_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
+                                                                                            InsertDeleteFlags::NONE, /* nCheckDefaults */
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB)));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);

@@ -664,7 +664,7 @@ void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepor
     }
 }
 
-void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
+void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles,  bool _bBoundRects)
 {
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
@@ -679,7 +679,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
             {
                 const SdrMark* pM = rView.GetSdrMarkByIndex(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
-                Rectangle aObjRect(pObj->GetSnapRect());
+                Rectangle aObjRect(_bBoundRects ? pObj->GetCurrentBoundRect() : pObj->GetSnapRect());
                 _rSortRectangles.insert(TRectangleMap::value_type(aObjRect,TRectangleMap::mapped_type(pObj,&rView)));
             }
         }
@@ -780,7 +780,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
     }
     RectangleLess aCompare(eCompareMode,aRefPoint);
     TRectangleMap aSortRectangles(aCompare);
-    collectRectangles(aSortRectangles);
+    collectRectangles(aSortRectangles,false);
 
     Rectangle aBound;
     Rectangle aResize;

@@ -260,7 +260,7 @@ private:
     bool mbAllChildren:1;
 public:
     LateInitParams( const ::std::vector<ScDPDimension*>& ppDim, const ::std::vector<ScDPLevel*>& ppLev,
-        bool bRow);
+        bool bRow, bool bInitChild = true, bool bAllChildren = false);
     ~LateInitParams();
 
     void SetInitChild( bool b ) { mbInitChild = b; }
@@ -350,7 +350,7 @@ private:
     sal_uInt16                  nMemberStep;            // step to show details
 public:
     ScDPResultMember(
-        const ScDPResultData* pData,  const ScDPParentDimData& rParentDimData );  //! Ref
+        const ScDPResultData* pData,  const ScDPParentDimData& rParentDimData, bool bForceSub );  //! Ref
     ScDPResultMember(  const ScDPResultData* pData, bool bForceSub );
     ~ScDPResultMember();
 

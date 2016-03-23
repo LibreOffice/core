@@ -60,7 +60,7 @@ using namespace formula;
 // Date and Time
 
 double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
-        bool bStrict )
+        bool bStrict, bool bCheckGregorian )
 {
     if ( nYear < 100 && !bStrict )
         nYear = pFormatter->ExpandTwoDigitYear( nYear );
@@ -90,7 +90,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     Date aDate( nD, nM, nY);
     if (!bStrict)
         aDate += nDay - 1;
-    if (aDate.IsValidAndGregorian())
+    if ((!bCheckGregorian && aDate.IsValidDate()) || (bCheckGregorian && aDate.IsValidAndGregorian()))
         return (double) (aDate - *(pFormatter->GetNullDate()));
     else
     {
@@ -303,7 +303,7 @@ void ScInterpreter::ScEasterSunday()
         O = H + L - 7 * M + 114;
         nDay = sal::static_int_cast<sal_Int16>( O % 31 + 1 );
         nMonth = sal::static_int_cast<sal_Int16>( int(O / 31) );
-        PushDouble( GetDateSerial( nYear, nMonth, nDay, true ) );
+        PushDouble( GetDateSerial( nYear, nMonth, nDay, true, true ) );
     }
 }
 
@@ -553,7 +553,7 @@ void ScInterpreter::ScGetDate()
             PushIllegalArgument();
         else
         {
-            PushDouble(GetDateSerial(nYear, nMonth, nDay, false));
+            PushDouble(GetDateSerial(nYear, nMonth, nDay, false, true));
         }
     }
 }

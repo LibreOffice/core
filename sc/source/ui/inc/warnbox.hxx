@@ -26,8 +26,9 @@
 class ScCbWarningBox : public WarningBox
 {
 public:
-    /** @param rMsgStr  Resource ID for the message text. */
-                                ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr );
+    /** @param rMsgStr  Resource ID for the message text.
+        @param bDefYes  true = "Yes" focused, false = "No" focused. */
+                                ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr, bool bDefYes = true );
 
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,

@@ -192,7 +192,9 @@ DEFINE_XTYPEPROVIDER_6              (   TabWindowService               ,
 
 TabWindowService::TabWindowService()
         :   TransactionBase         (                               )
-        ,   PropertySetHelper       ( m_aMutex, &m_aTransactionManager)
+        ,   PropertySetHelper       ( m_aMutex,
+                                      &m_aTransactionManager        ,
+                                      false                     ) // sal_False => don't release shared mutex on calling us!
         ,   OWeakObject             (                               )
 
         // Init member

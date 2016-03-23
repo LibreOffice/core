@@ -93,18 +93,30 @@ namespace slideshow
                 this->viewAdded( rView );
         }
 
-        void LayerManager::activate()
+        void LayerManager::activate( bool bSlideBackgoundPainted )
         {
             mbActive = true;
             maUpdateShapes.clear(); // update gets forced via area, or
                                     // has happened outside already
 
-            // clear all possibly pending update areas - content
-            // is there, already
-            for( const auto& pLayer : maLayers )
-                pLayer->clearUpdateRanges();
+            if( !bSlideBackgoundPainted )
+            {
+                for( const auto& pView : mrViews )
+                    pView->clearAll();
 
-            updateShapeLayers( true/*bSlideBackgoundPainted*/ );
+                // force update of whole slide area
+                for( const auto& pLayer : maLayers )
+                    pLayer->addUpdateRange( maPageBounds );
+            }
+            else
+            {
+                // clear all possibly pending update areas - content
+                // is there, already
+                for( const auto& pLayer : maLayers )
+                    pLayer->clearUpdateRanges();
+            }
+
+            updateShapeLayers( bSlideBackgoundPainted );
         }
 
         void LayerManager::deactivate()

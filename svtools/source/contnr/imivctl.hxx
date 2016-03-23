@@ -332,6 +332,7 @@ public:
     void                SelectEntry(
                             SvxIconChoiceCtrlEntry*,
                             bool bSelect,
+                            bool bCallHdl = true,
                             bool bAddToSelection = false,
                             bool bSyncPaint = false
                         );
@@ -353,7 +354,7 @@ public:
     void                LoseFocus();
     void                SetUpdateMode( bool bUpdate );
     bool                GetUpdateMode() const { return bUpdateMode; }
-    void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext);
+    void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted = false);
 
     void                SetEntryPos(
                             SvxIconChoiceCtrlEntry* pEntry,
@@ -420,7 +421,7 @@ public:
     sal_Int32           GetSelectionCount() const;
     void                SetGrid( const Size& );
     Size                GetMinGrid() const;
-    void                Scroll( long nDeltaX, long nDeltaY );
+    void                Scroll( long nDeltaX, long nDeltaY, bool bScrollBar = false );
     const Size&         GetItemSize( SvxIconChoiceCtrlEntry*, IcnViewFieldType ) const;
 
     void                HideDDIcon();
@@ -437,9 +438,10 @@ public:
                         );
 
     bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
-    void               MakeVisible(
+    void                MakeVisible(
                             const Rectangle& rDocPos,
-                            bool bInScrollBarEvent=false
+                            bool bInScrollBarEvent=false,
+                            bool bCallRectChangedHdl = true
                         );
 
     void                AdjustEntryAtGrid();
@@ -492,7 +494,7 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry,
                             bool bKeepHighlightFlags = false
                         );
-    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect);
+    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide);
 
     void                CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
 

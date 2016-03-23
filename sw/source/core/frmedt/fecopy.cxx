@@ -563,7 +563,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 {
                     //JP 12.05.98: should this be in SelectFlyFrame???
                     pDestShell->Imp()->GetDrawView()->UnmarkAll();
-                    pDestShell->SelectFlyFrame( *pFlyFrame );
+                    pDestShell->SelectFlyFrame( *pFlyFrame, true );
                 }
             }
 
@@ -761,7 +761,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 {   // Now we have to look for insertion positions...
                     if( !nMove ) // Annotate the last given insert position
                         aStartPos = aInsertPos;
-                    SwCursor aCursor( aStartPos, nullptr);
+                    SwCursor aCursor( aStartPos, nullptr, false);
                     // Check if we find another insert position by moving
                     // down the last given position
                     if( aCursor.UpDown( false, ++nMove, nullptr, 0 ) )
@@ -998,7 +998,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                                 SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->
                                                         GetFrame( &aPt );
                                 if( pFlyFrame )
-                                    SelectFlyFrame( *pFlyFrame );
+                                    SelectFlyFrame( *pFlyFrame, true );
                                 // always pick the first FlyFrame only; the others
                                 // were copied to the clipboard via Fly in Fly
                                 break;

@@ -31,8 +31,10 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
         public:
             OMySQLColumns(  ::cppu::OWeakObject& _rParent
+                            ,bool _bCase
                             ,::osl::Mutex& _rMutex
                             ,const TStringVector &_rVector
+                            ,bool _bUseHardRef = true
                         );
         };
 
@@ -49,7 +51,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
         public:
-            OMySQLColumn();
+            OMySQLColumn(bool _bCase);
             virtual void construct() override;
 
             virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;

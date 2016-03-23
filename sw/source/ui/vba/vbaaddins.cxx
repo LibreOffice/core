@@ -45,7 +45,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
             OUString sUrl = sEntries[ index ];
             if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCase( ".dot" ) )
             {
-                maAddins.push_back( uno::Reference< word::XAddin >( new SwVbaAddin( xParent, xContext, sUrl ) ) );
+                maAddins.push_back( uno::Reference< word::XAddin >( new SwVbaAddin( xParent, xContext, sUrl, true ) ) );
             }
         }
     }

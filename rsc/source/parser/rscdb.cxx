@@ -254,18 +254,22 @@ RscTop * RscTypCont::SearchType( Atom nId )
     return nullptr;
 }
 
-sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
+sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName,
+                                     sal_uInt32 nConst, sal_uInt32 nId, bool bFirst )
 {
     RscSysEntry *pSysEntry;
     RscSysEntry *pFoundEntry = nullptr;
+    bool            bId1 = false;
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
         pSysEntry = aSysLst[ i ];
+        if( pSysEntry->nKey == 1 )
+            bId1 = true;
         if( !strcmp( pSysEntry->aFileName.getStr(), pFileName ) )
             if(  pSysEntry->nRscTyp == nRscTyp &&
-                 pSysEntry->nTyp    == 0 &&
-                 pSysEntry->nRefId  == 0)
+                 pSysEntry->nTyp    == nConst &&
+                 pSysEntry->nRefId  == nId)
             {
                 pFoundEntry = pSysEntry;
                 break;
@@ -273,15 +277,21 @@ sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
     }
     pSysEntry = pFoundEntry;
 
-    if ( !pSysEntry )
+    if ( !pSysEntry || (bFirst && !bId1) )
     {
         pSysEntry = new RscSysEntry;
         pSysEntry->nKey = nUniqueId++;
         pSysEntry->nRscTyp = nRscTyp;
-        pSysEntry->nTyp = 0;
-        pSysEntry->nRefId = 0;
+        pSysEntry->nTyp = nConst;
+        pSysEntry->nRefId = nId;
         pSysEntry->aFileName = pFileName;
-        aSysLst.push_back( pSysEntry );
+        if( bFirst && !bId1 )
+        {
+            pSysEntry->nKey = 1;
+            aSysLst.insert( aSysLst.begin(), pSysEntry );
+        }
+        else
+            aSysLst.push_back( pSysEntry );
     }
 
     return pSysEntry->nKey;
@@ -493,7 +503,8 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
     return aError;
 }
 
-void RscTypCont::WriteSrc( FILE * fOutput, RscFileTab::Index nFileKey )
+void RscTypCont::WriteSrc( FILE * fOutput, RscFileTab::Index nFileKey,
+                             bool bName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
@@ -501,19 +512,49 @@ void RscTypCont::WriteSrc( FILE * fOutput, RscFileTab::Index nFileKey )
     size_t nItems = SAL_N_ELEMENTS(aUTF8BOM);
     bool bSuccess = (nItems == fwrite(aUTF8BOM, 1, nItems, fOutput));
     SAL_WARN_IF(!bSuccess, "rsc", "short write");
-    RscId::SetNames( false );
-    if( nFileKey == RscFileTab::IndexNotFound )
+    if( bName )
     {
-        RscFileTab::Index aIndex = aFileTab.FirstIndex();
-        while( aIndex != RscFileTab::IndexNotFound )
+        RscFile* pFName;
+        WriteInc( fOutput, nFileKey );
+
+        if( nFileKey == RscFileTab::IndexNotFound )
         {
-            aEnumRef.WriteSrc( aIndex );
-            aIndex = aFileTab.NextIndex( aIndex );
-        };
+            RscFileTab::Index aIndex = aFileTab.FirstIndex();
+            while( aIndex != RscFileTab::IndexNotFound )
+            {
+                pFName = aFileTab.Get( aIndex );
+                if( !pFName->IsIncFile() )
+                    pFName->aDefLst.WriteAll( fOutput );
+                aEnumRef.WriteSrc( aIndex );
+                aIndex = aFileTab.NextIndex( aIndex );
+            };
+        }
+        else
+        {
+            pFName = aFileTab.Get( nFileKey );
+            if( pFName )
+            {
+                pFName->aDefLst.WriteAll( fOutput );
+                aEnumRef.WriteSrc( nFileKey );
+            }
+        }
     }
     else
-         aEnumRef.WriteSrc( nFileKey );
-    RscId::SetNames();
+    {
+        RscId::SetNames( false );
+        if( nFileKey == RscFileTab::IndexNotFound )
+        {
+            RscFileTab::Index aIndex = aFileTab.FirstIndex();
+            while( aIndex != RscFileTab::IndexNotFound )
+            {
+                aEnumRef.WriteSrc( aIndex );
+                aIndex = aFileTab.NextIndex( aIndex );
+            };
+        }
+        else
+             aEnumRef.WriteSrc( nFileKey );
+        RscId::SetNames();
+    };
 }
 
 class RscDel

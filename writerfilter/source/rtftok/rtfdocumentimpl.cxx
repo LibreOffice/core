@@ -3280,6 +3280,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_PGNDEC:
     case RTF_PGNUCRM:
     case RTF_PGNLCRM:
+    case RTF_PGNUCLTR:
     case RTF_PGNLCLTR:
     case RTF_PGNBIDIA:
     case RTF_PGNBIDIB:
@@ -3595,15 +3596,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_LINEBETCOL:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_sep, std::make_shared<RTFValue>(1));
         break;
-    case RTF_PGNRESTART:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_start, std::make_shared<RTFValue>(1));
-        break;
-    case RTF_PGNUCLTR:
-    {
-        auto pIntValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_upperLetter);
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
-    }
-    break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");

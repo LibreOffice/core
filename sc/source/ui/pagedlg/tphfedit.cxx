@@ -79,7 +79,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     Size aSize( GetOutputSize() );
     aSize.Height() *= 4;
 
-    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool() );
+    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), true );
     pEdEngine->SetPaperSize( aSize );
     pEdEngine->SetRefDevice( this );
 

@@ -39,8 +39,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <vcl/sysdata.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
-
+#endif
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
@@ -223,10 +224,12 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
         }
     }
 #if HAVE_FEATURE_GLTF
+#if HAVE_FEATURE_OPENGL
     else if ( *pMimeType == AVMEDIA_MIMETYPE_JSON )
     {
         xPlayer = createPlayer(rURL, AVMEDIA_OPENGL_MANAGER_SERVICE_NAME, xContext);
     }
+#endif
 #endif
 
     return xPlayer;

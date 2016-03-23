@@ -2107,7 +2107,7 @@ namespace
             OTableFieldDescRef  aInfo = new OTableFieldDesc();
             if (pTabWin->ExistsField( "*", aInfo ))
             {
-                eErrorCode = _pView->InsertField(aInfo, bFirstField);
+                eErrorCode = _pView->InsertField(aInfo, true, bFirstField);
                 bFirstField = false;
             }
         }
@@ -2165,7 +2165,7 @@ namespace
                     if (SQL_ISRULE(pColumnRef,column_ref))
                     {
                         InsertColumnRef(_pView,pColumnRef,aColumnName,aColumnAlias,aTableRange,aInfo,pTabList);
-                        eErrorCode = _pView->InsertField(aInfo, bFirstField);
+                        eErrorCode = _pView->InsertField(aInfo, true, bFirstField);
                         bFirstField = false;
                     }
                     else if(SQL_ISRULEOR3(pColumnRef, general_set_fct, set_fct_spec, position_exp)  ||
@@ -2244,7 +2244,7 @@ namespace
                         else
                             aInfo->SetFunctionType(nFunctionType|FKT_OTHER);
 
-                        eErrorCode = _pView->InsertField(aInfo, bFirstField);
+                        eErrorCode = _pView->InsertField(aInfo, true, bFirstField);
                         bFirstField = false;
                     }
                     else
@@ -2272,7 +2272,7 @@ namespace
                         aInfo->SetFieldAlias(aColumnAlias);
                         aInfo->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
 
-                        eErrorCode = _pView->InsertField(aInfo, bFirstField);
+                        eErrorCode = _pView->InsertField(aInfo, true, bFirstField);
                         bFirstField = false;
                     }
 
@@ -2717,9 +2717,9 @@ bool OQueryDesignView::HasFieldByAliasName(const OUString& rFieldName, OTableFie
     return m_pSelectionBox->HasFieldByAliasName( rFieldName, rInfo);
 }
 
-SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, bool bActivate)
+SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, bool bVis, bool bActivate)
 {
-    return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID, true/*bVis*/, bActivate ).is() ? eOk : eTooManyColumns;
+    return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID,bVis, bActivate ).is() ? eOk : eTooManyColumns;
 }
 
 sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
@@ -3139,7 +3139,7 @@ void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >&
     {
         ::rtl::Reference< OTableFieldDesc > pField( new OTableFieldDesc() );
         pField->Load( *field, true );
-        InsertField( pField, false );
+        InsertField( pField, true, false );
     }
 
     rController.ClearUndoManager();

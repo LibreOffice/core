@@ -18,7 +18,6 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 
@@ -39,15 +38,15 @@ convert_src::convert_src(l10nMem& crMemory)
                           mbValuePresent(false),
                           mbInList(false),
                           mbInListItem(false)
+{}
+convert_src::~convert_src()
+{}
+
+
+
+void convert_src::execute()
 {
-}
-
-
-
-extern int srclex(void);
-void convert_src::doExecute()
-{
-    srclex();
+    //  SrcWrap::yylex();
 }
 
 
@@ -69,7 +68,7 @@ void convert_src::setValue(char *syyText, char *sbuildValue)
 
 void convert_src::setLang(char *syyText, bool bEnUs)
 {
-    string useText = copySource(syyText) + " is no en-US language";
+    std::string useText = copySource(syyText) + " is no en-US language";
 
     mbEnUs = bEnUs;
     if (!bEnUs && mbExpectValue)
@@ -99,7 +98,7 @@ void convert_src::setText(char *syyText)
 
 void convert_src::setName(char *syyText)
 {
-    string useText = copySource(syyText);
+    std::string useText = copySource(syyText);
 
     trim(useText);
     if (mbExpectName) {
@@ -153,7 +152,7 @@ void convert_src::setList(char *syyText)
 void convert_src::setNL(char *syyText, bool bMacro)
 {
     int         nL;
-    string sKey;
+    std::string sKey;
 
     copySource(syyText);
 
@@ -163,20 +162,20 @@ void convert_src::setNL(char *syyText, bool bMacro)
 
         for (nL = -1;;) {
             nL = msValue.find("\\\"", nL+1);
-            if (nL == (int)string::npos)
+            if (nL == (int)std::string::npos)
                 break;
             msValue.erase(nL,1);
         }
         for (nL = -1;;) {
             nL = msValue.find("\\\\", nL+1);
-            if (nL == (int)string::npos)
+            if (nL == (int)std::string::npos)
                 break;
             msValue.erase(nL,1);
         }
 
         sKey += "." + msCmd + "." + msTextName;
         if (msValue.size() && msValue != "-") {
-            mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, "", "", mbMergeMode);
+            mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, mbMergeMode);
             if (mbMergeMode)
                 insertLanguagePart(sKey, msTextName);
         }
@@ -241,8 +240,8 @@ void convert_src::setListItem(char const *syyText, bool bIsStart)
     else
     {
         if (mbInListItem) {
-            stringstream ssBuf;
-            string       myKey;
+            std::stringstream ssBuf;
+            std::string       myKey;
 
             ++miListCount;
             mcStack.pop_back();
@@ -262,7 +261,7 @@ void convert_src::setListItem(char const *syyText, bool bIsStart)
 
 
 
-void convert_src::trim(string& sText)
+void convert_src::trim(std::string& sText)
 {
     int nL;
 
@@ -276,7 +275,7 @@ void convert_src::trim(string& sText)
 
 
 
-void convert_src::buildKey(string& sKey)
+void convert_src::buildKey(std::string& sKey)
 {
     int nL;
 
@@ -289,9 +288,9 @@ void convert_src::buildKey(string& sKey)
 
 
 
-void convert_src::insertLanguagePart(string& sKey, string& sTextType)
+void convert_src::insertLanguagePart(std::string& sKey, std::string& sTextType)
 {
-    string sLang, sText, sTagText;
+    std::string sLang, sText, sTagText;
 
 
     // just to please compiler

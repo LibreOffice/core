@@ -436,7 +436,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(":");
             pDateStyle->AddMinute();
             pDateStyle->AddText(":");
-            pDateStyle->AddSecond();
+            pDateStyle->AddSecond(true,0);
         }
         else if (sFormula == "%FLM/D/YY")
         {
@@ -887,7 +887,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
             pTimeStyle->AddText(":");
-            pTimeStyle->AddSecond();
+            pTimeStyle->AddSecond(true,0);
         }
         else if (sFormula == "%FLH:mm ampm")
         {
@@ -912,7 +912,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
             pTimeStyle->AddText(":");
-            pTimeStyle->AddSecond();
+            pTimeStyle->AddSecond(true,0);
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
@@ -923,7 +923,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
             pTimeStyle->AddText(":");
-            pTimeStyle->AddSecond();
+            pTimeStyle->AddSecond(true,0);
         }
         else if (sFormula == "%FLH ampm")
         {
@@ -945,7 +945,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
         else if (sFormula == "%FLSS")
         {
             pTimeStyle = new XFTimeStyle;
-            pTimeStyle->AddSecond();
+            pTimeStyle->AddSecond(true,0);
         }
         else if (sFormula == "%FLampm")
         {
@@ -1002,7 +1002,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
             pTimeStyle->AddText(":");
-            pTimeStyle->AddSecond();
+            pTimeStyle->AddSecond(true,0);
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
@@ -1020,7 +1020,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
             pTimeStyle->AddText(":");
-            pTimeStyle->AddSecond();
+            pTimeStyle->AddSecond(true,0);
         }
         //other version end
     }

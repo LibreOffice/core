@@ -5938,7 +5938,7 @@ void SwWW8ImplReader::SetOutlineStyles()
             // WW8 Built-In Heading Style does not apply the chosen one.
             // --> delete assignment to OutlineStyle, but keep its current
             // outline level
-            pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
+            pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle(false);
             // Apply existing WW8 list style a normal list style at the
             // Paragraph Style
             if (pStyleInf->GetOutlineNumrule() != nullptr)

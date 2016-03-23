@@ -4487,7 +4487,7 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
     return 0;
 }
 
-SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
+SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return 0;
@@ -4522,7 +4522,8 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
         if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
             ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
             (bStartHidden != bHidden) ||
-            (nStartHeight != nHeight))
+            (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
+            (!bCareManualSize && ((nStartHeight != nHeight))))
             return nRow;
     }
 
@@ -4829,18 +4830,21 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
     }
 }
 
-bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
+bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const
 {
     if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::UNKNOWN )
     {
-        SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(),
-                    SFX_STYLE_FAMILY_PARA );
-        for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
-                                       pStyle = aIter.Next() )
+        if ( bGatherAllStyles )
         {
-            const ScStyleSheet* pScStyle = dynamic_cast<const ScStyleSheet*>( pStyle  );
-            if ( pScStyle )
-                pScStyle->SetUsage( ScStyleSheet::NOTUSED );
+            SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(),
+                    SFX_STYLE_FAMILY_PARA );
+            for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
+                                           pStyle = aIter.Next() )
+            {
+                const ScStyleSheet* pScStyle = dynamic_cast<const ScStyleSheet*>( pStyle  );
+                if ( pScStyle )
+                    pScStyle->SetUsage( ScStyleSheet::NOTUSED );
+            }
         }
 
         bool bIsUsed = false;
@@ -4849,13 +4853,16 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
         for (; it != maTabs.end(); ++it)
             if (*it)
             {
-                if ( (*it)->IsStyleSheetUsed( rStyle, true/*bGatherAllStyles*/ ) )
+                if ( (*it)->IsStyleSheetUsed( rStyle, bGatherAllStyles ) )
                 {
+                    if ( !bGatherAllStyles )
+                        return true;
                     bIsUsed = true;
                 }
             }
 
-        bStyleSheetUsageInvalid = false;
+        if ( bGatherAllStyles )
+            bStyleSheetUsageInvalid = false;
 
         return bIsUsed;
     }
@@ -4885,18 +4892,20 @@ bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
     return false;
 }
 
-void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr )
+void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr,
+                                bool bPutToPool )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
-            maTabs[nTab]->SetPattern( nCol, nRow, rAttr, true/*bPutToPool*/ );
+            maTabs[nTab]->SetPattern( nCol, nRow, rAttr, bPutToPool );
 }
 
-void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
+void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr,
+                                bool bPutToPool )
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetPattern( rPos, rAttr, true/*bPutToPool*/ );
+        maTabs[nTab]->SetPattern( rPos, rAttr, bPutToPool );
 }
 
 ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool bDeep )
@@ -6377,7 +6386,7 @@ ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
 }
 ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
 {
-    ScPostIt* pPostIt = new ScPostIt(*this, rPos);
+    ScPostIt* pPostIt = new ScPostIt(*this, rPos, false);
     SetNote(rPos, pPostIt);
     return pPostIt;
 }

@@ -68,7 +68,7 @@ public:
 
     void            openWebBrowser( const OUString & sURL, const OUString & sTitle ) const;
     Dialog*         getWindow() const { return m_pVCLWindow; };
-    void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller );
+    void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller, bool bReferenceLink = false );
     void            clearEventID() { m_nEventID = nullptr; }
 
     virtual void    showProgress( bool bStart ) = 0;

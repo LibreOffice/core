@@ -25,8 +25,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL ) throw ( uno::RuntimeException ) :
-    SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbAutoload( true ), mbInstalled( true )
+SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL, bool bAutoload ) throw ( uno::RuntimeException ) :
+    SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbAutoload( bAutoload ), mbInstalled( bAutoload )
 {
 }
 

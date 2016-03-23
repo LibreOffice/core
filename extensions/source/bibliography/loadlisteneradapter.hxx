@@ -133,7 +133,8 @@ namespace bib
 
     public:
         OLoadListenerAdapter(
-            const css::uno::Reference< css::form::XLoadable >& _rxLoadable
+            const css::uno::Reference< css::form::XLoadable >& _rxLoadable,
+            bool _bAutoRelease = true
         );
 
 

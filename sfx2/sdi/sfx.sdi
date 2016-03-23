@@ -3563,21 +3563,6 @@ SfxVoidItem RunBasic SID_BASICRUN
     GroupId = GID_MACRO;
 ]
 
-SfxVoidItem SaveSimple SID_SAVESIMPLE
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DOCUMENT;
-]
 
 SfxBoolItem Save SID_SAVEDOC
 (SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR)

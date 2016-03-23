@@ -3550,10 +3550,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
     sc::RefUpdateResult aRes;
 
-    if (rCxt.meMode == URM_COPY)
-        // Copying cells does not modify named expressions.
-        return aRes;
-
     TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
     for (size_t j=0; j<2; ++j)
     {
@@ -4754,10 +4750,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                             if (static_cast<size_t>(nTab) < rCxt.maTabNames.size())
                                 aName = rCxt.maTabNames[nTab];
                             if (!aName.isEmpty())
-                            {
-                                ScCompiler::CheckTabQuotes( aName, rCxt.mpRefConv->meConv);
                                 rBuf.append( aName);
-                            }
                             else
                                 rBuf.append( ScGlobal::GetRscString( STR_NO_NAME_REF));
                             rBuf.append( rCxt.mpRefConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));

@@ -2225,10 +2225,10 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
     return static_cast<SwBorderAttrs*>(SwCacheAccess::Get());
 }
 
-SwOrderIter::SwOrderIter( const SwPageFrame *pPg ) :
+SwOrderIter::SwOrderIter( const SwPageFrame *pPg, bool bFlys ) :
     m_pPage( pPg ),
     m_pCurrent( nullptr ),
-    m_bFlysOnly( true )
+    m_bFlysOnly( bFlys )
 {
 }
 

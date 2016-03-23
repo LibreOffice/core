@@ -749,7 +749,7 @@ void fillSortedColumnArray(
                     assert(rCell.mpAttr);
                     ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
 
-                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos );
+                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos, SC_CLONECELL_DEFAULT);
                     if (pArray->IsUpdateRefs())
                     {
                         pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);

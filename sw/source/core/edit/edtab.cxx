@@ -447,7 +447,7 @@ bool SwEditShell::SplitTable( sal_uInt16 eMode )
     return bRet;
 }
 
-bool SwEditShell::MergeTable( bool bWithPrev )
+bool SwEditShell::MergeTable( bool bWithPrev, sal_uInt16 nMode )
 {
     bool bRet = false;
     SwPaM *pCursor = GetCursor();
@@ -456,7 +456,7 @@ bool SwEditShell::MergeTable( bool bWithPrev )
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
-        bRet = GetDoc()->MergeTable( *pCursor->GetPoint(), bWithPrev );
+        bRet = GetDoc()->MergeTable( *pCursor->GetPoint(), bWithPrev, nMode );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
         ClearFEShellTabCols();

@@ -18,7 +18,6 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXcu.hxx"
@@ -32,26 +31,31 @@ convert_xcu::convert_xcu(l10nMem& crMemory)
 
 
 
-extern int xculex(void);
-void convert_xcu::doExecute()
+convert_xcu::~convert_xcu()
 {
-    xculex();
+}
+
+
+
+void convert_xcu::execute()
+{
+    //  XcuWrap::yylex();
 }
 
 
 
 void convert_xcu::pushKey(char *syyText)
 {
-    string sKey, sTag = copySource(syyText);
+    std::string sKey, sTag = copySource(syyText);
     int    nL, nE;
 
     // find key in tag
     nL = sTag.find("oor:name=\"");
-    if (nL != (int)string::npos) {
+    if (nL != (int)std::string::npos) {
         // find end of key
         nL += 10;
         nE  = sTag.find("\"", nL);
-        if (nE != (int)string::npos)
+        if (nE != (int)std::string::npos)
             sKey = sTag.substr(nL, nE - nL);
     }
     mcStack.push_back(sKey);
@@ -75,14 +79,14 @@ void convert_xcu::popKey(char *syyText)
 void convert_xcu::startCollectData(char *syyText)
 {
     int nL;
-    string sTag = copySource(syyText);
+    std::string sTag = copySource(syyText);
 
     if (mbNoTranslate)
         return;
 
     // locate object name
     nL = sTag.find("xml:lang=\"");
-    if (nL != (int)string::npos) {
+    if (nL != (int)std::string::npos) {
         // test langauge
         nL += 10;
         if (sTag.substr(nL,5) == "en-US")
@@ -90,7 +94,7 @@ void convert_xcu::startCollectData(char *syyText)
         else if (sTag.substr(nL,14) == "x-no-translate")
             mbNoTranslate = true;
         else {
-            string sErr = sTag.substr(nL,5) + " is not en-US";
+            std::string sErr = sTag.substr(nL,5) + " is not en-US";
             l10nMem::showError(sErr);
         }
     }
@@ -101,7 +105,7 @@ void convert_xcu::startCollectData(char *syyText)
 void convert_xcu::stopCollectData(char *syyText)
 {
     int    nL;
-    string useKey, useText = msCollector;
+    std::string useKey, useText = msCollector;
 
     copySource(syyText);
 
@@ -112,7 +116,7 @@ void convert_xcu::stopCollectData(char *syyText)
     // remove any newline
     for (nL = 0;;) {
         nL = useText.find("\n");
-        if (nL == (int)string::npos)
+        if (nL == (int)std::string::npos)
             break;
         useText.erase(nL,1);
     }
@@ -123,11 +127,11 @@ void convert_xcu::stopCollectData(char *syyText)
         // locate key and extract it
         for (nL = 0; nL < (int)mcStack.size(); ++nL)
             useKey += (useKey.size() ? "." : "" ) + mcStack[nL];
-        mcMemory.setSourceKey(miLineNo, msSourceFile, useKey, useText, "", "", mbMergeMode);
+        mcMemory.setSourceKey(miLineNo, msSourceFile, useKey, useText, mbMergeMode);
     }
 
     if (mbMergeMode) {
-        string sLang, sText, sNewLine;
+        std::string sLang, sText, sNewLine;
 
         // prepare to read all languages
         mcMemory.prepareMerge();
@@ -144,7 +148,7 @@ void convert_xcu::stopCollectData(char *syyText)
 void convert_xcu::copySpecial(char *syyText)
 {
     int         nx    = msCollector.size();
-    string sText = copySource(syyText, mbNoCollectingData);
+    std::string sText = copySource(syyText, mbNoCollectingData);
 
     if (!mbNoCollectingData) {
         msCollector.erase(nx);
@@ -158,7 +162,7 @@ void convert_xcu::copySpecial(char *syyText)
 void convert_xcu::copyNL(char *syyText)
 {
     int         nX    = msCollector.size();
-    string sText = copySource(syyText, mbNoCollectingData);
+    std::string sText = copySource(syyText, mbNoCollectingData);
 
     if (!mbNoCollectingData) {
         msCollector.erase(nX);

@@ -335,7 +335,7 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
     {
         // NEW TABLES
         SwCellFrame& rToAdjust = pCurrMasterCell->GetTabBox()->getRowSpan() < 1 ?
-                               const_cast<SwCellFrame&>(pCurrMasterCell->FindStartEndOfRowSpanCell( true )) :
+                               const_cast<SwCellFrame&>(pCurrMasterCell->FindStartEndOfRowSpanCell( true, true )) :
                                *pCurrMasterCell;
 
         // #i26945#
@@ -441,7 +441,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
                 // NEW TABLES
                 SwCellFrame* pDestCell = static_cast<SwCellFrame*>(pCurrDestCell);
                 if ( pDestCell->GetTabBox()->getRowSpan() < 1 )
-                    pDestCell = & const_cast<SwCellFrame&>(pDestCell->FindStartEndOfRowSpanCell( true ));
+                    pDestCell = & const_cast<SwCellFrame&>(pDestCell->FindStartEndOfRowSpanCell( true, true ));
 
                 // Find last content
                 SwFrame* pFrame = pDestCell->GetLastLower();
@@ -1309,7 +1309,7 @@ void SwInvalidateAll( SwFrame *pFrame, long nBottom )
             SwCellFrame* pThisCell = dynamic_cast<SwCellFrame*>(pFrame);
             if ( pThisCell && pThisCell->GetTabBox()->getRowSpan() < 1 )
             {
-                pToInvalidate = & const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
+                pToInvalidate = & const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true, true ));
                 pToInvalidate->_InvalidatePos();
                 pToInvalidate->_InvalidateSize();
                 pToInvalidate->_InvalidatePrt();
@@ -1472,7 +1472,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
             SwCellFrame* pThisCell = dynamic_cast<SwCellFrame*>(pFrame);
             if ( pThisCell && pThisCell->GetTabBox()->getRowSpan() < 1 )
             {
-                SwCellFrame& rToCalc = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
+                SwCellFrame& rToCalc = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true, true ));
                 bRet |= !rToCalc.IsValid();
                 rToCalc.Calc(pRenderContext);
                 if ( rToCalc.Lower() )
@@ -1540,7 +1540,7 @@ static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
                     if ( bCalc )
                     {
                         SwCellFrame& rToRecalc = 0 == i ?
-                                               const_cast<SwCellFrame&>(pCellFrame->FindStartEndOfRowSpanCell( true )) :
+                                               const_cast<SwCellFrame&>(pCellFrame->FindStartEndOfRowSpanCell( true, true )) :
                                                *pCellFrame;
                         bCheck  |= SwContentFrame::CalcLowers( &rToRecalc, &rToRecalc, nBottom, false );
                     }
@@ -2725,7 +2725,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         //the value applies to the screen width in the BrowseView.
         const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
         // OD 14.03.2003 #i9040# - adjust variable name.
-        const SwTwips nWishedTableWidth = CalcRel( rSz );
+        const SwTwips nWishedTableWidth = CalcRel( rSz, true );
 
         bool bCheckBrowseWidth = false;
 
@@ -3824,7 +3824,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
             // Height of the last cell of a row span is height of master cell
             // minus the height of the other rows which are covered by the master
             // cell:
-            const SwCellFrame& rMaster = pLow->FindStartEndOfRowSpanCell( true );
+            const SwCellFrame& rMaster = pLow->FindStartEndOfRowSpanCell( true, true );
             nTmp = ::lcl_CalcMinCellHeight( &rMaster, _bConsiderObjs );
             const SwFrame* pMasterRow = rMaster.GetUpper();
             while ( pMasterRow && pMasterRow != _pRow )
@@ -4143,7 +4143,7 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
             // height of the cell starting the row span
             if ( pCellFrame->GetLayoutRowSpan() < 1 )
             {
-                pToAdjust = const_cast< SwCellFrame*>(&pCellFrame->FindStartEndOfRowSpanCell( true ));
+                pToAdjust = const_cast< SwCellFrame*>(&pCellFrame->FindStartEndOfRowSpanCell( true, true ));
                 pToAdjustRow = pToAdjust->GetUpper();
             }
             else

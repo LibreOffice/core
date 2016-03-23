@@ -108,7 +108,7 @@ namespace dbaui
         css::lang::Locale      getLocale() const           { return m_aLocale;}
         OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
-        SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bActivate = true);
+        SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bVis = true, bool bActivate = true);
         bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
         // save the position of the table window and the pos of the splitters
         // called when fields are deleted

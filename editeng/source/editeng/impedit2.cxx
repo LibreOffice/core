@@ -2528,8 +2528,8 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
 }
 
 
-EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
-        sal_Unicode c, bool bOverwrite )
+EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
+        sal_Unicode c, bool bOverwrite, bool bIsUserInput )
 {
     OSL_ENSURE( c != '\t', "Tab for InsertText ?" );
     OSL_ENSURE( c != '\n', "Word wrapping for InsertText ?");
@@ -2559,7 +2559,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
 
     if ( aPaM.GetNode()->Len() < MAXCHARSINPARA )
     {
-        if (IsInputSequenceCheckingRequired( c, rCurSel ))
+        if (bIsUserInput && IsInputSequenceCheckingRequired( c, rCurSel ))
         {
             uno::Reference < i18n::XExtendedInputSequenceChecker > _xISC( ImplGetInputSequenceChecker() );
             if (!pCTLOptions)

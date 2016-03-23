@@ -638,7 +638,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     SwPostItField aPostItField(
                     static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
                     aEmptyOUStr, aComment, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
-    InsertAttr( SwFormatField( aPostItField ), false );
+    InsertAttr( SwFormatField( aPostItField ) );
 
     if( bMoveFwd )
         m_pPam->Move( fnMoveForward );

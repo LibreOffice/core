@@ -692,7 +692,7 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl 
         // then find the "Anchor" (Body) position
         Point aPt;
         SwNode2Layout aNode2Layout( *pNd, pNd->GetIndex() );
-        const SwFrame* pFrame = aNode2Layout.GetFrame( &aPt, nullptr );
+        const SwFrame* pFrame = aNode2Layout.GetFrame( &aPt, nullptr, false );
 
         if( pFrame )
         {

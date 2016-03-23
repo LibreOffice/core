@@ -240,7 +240,7 @@ public:
 
     css::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    void fire( sal_Int32 * pnHandles, const css::uno::Any * pNewValues, const css::uno::Any * pOldValues, sal_Int32 nCount );
+    void fire( sal_Int32 * pnHandles, const css::uno::Any * pNewValues, const css::uno::Any * pOldValues, sal_Int32 nCount, bool bVetoable );
 
     // IPropertyBagHelperContext
     virtual ::osl::Mutex&   getMutex() override;

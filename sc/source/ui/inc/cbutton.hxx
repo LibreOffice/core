@@ -35,9 +35,10 @@ public:
     void    SetOutputDevice( OutputDevice* pOutputDevice );
 
     void    Draw( const Point&  rAt,
-                  const Size&   rSize );
+                  const Size&   rSize,
+                  bool          bState );
     void    Draw()
-                { Draw( aBtnPos, aBtnSize ); }
+                { Draw( aBtnPos, aBtnSize, false ); }
 
     void    SetOptSizePixel();
 

@@ -62,7 +62,7 @@ public:
     ScAddress mMaximumAddress;
     bool      mTrackRange;
 
-    AddressWalker(ScAddress aInitialAddress);
+    AddressWalker(ScAddress aInitialAddress, bool aTrackRange = true);
 
     ScAddress current(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
 

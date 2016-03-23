@@ -66,10 +66,10 @@ bool ScDoubleField::GetValue( double& rfValue ) const
     return bOk;
 }
 
-void ScDoubleField::SetValue( double fValue, sal_Int32 nDecPlaces )
+void ScDoubleField::SetValue( double fValue, sal_Int32 nDecPlaces, bool bEraseTrailingDecZeros )
 {
     SetText( ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G,
-        nDecPlaces, lclGetDecSep(), true/*bEraseTrailingDecZeros*/ ) );
+        nDecPlaces, lclGetDecSep(), bEraseTrailingDecZeros ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

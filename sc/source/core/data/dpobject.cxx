@@ -2189,7 +2189,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
     }
 
     if (bAddData && !bDataFound)
-        aFields.push_back(ScPivotField(PIVOT_DATA_FIELD));
+        aFields.push_back(ScPivotField(PIVOT_DATA_FIELD, 0));
 
     rFields.swap(aFields);
 }

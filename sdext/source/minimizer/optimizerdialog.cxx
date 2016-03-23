@@ -105,11 +105,11 @@ void OptimizerDialog::InitRoadmap()
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( "Name", Any( OUString("rdmNavi") ) );
         mxRoadmapControl = mxDialog->getControl( "rdmNavi" );
-        InsertRoadmapItem( 0, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
-        InsertRoadmapItem( 1, getString( STR_SLIDES ), ITEM_ID_SLIDES );
-        InsertRoadmapItem( 2, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );
-        InsertRoadmapItem( 3, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
-        InsertRoadmapItem( 4, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
+        InsertRoadmapItem( 0, true, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
+        InsertRoadmapItem( 1, true, getString( STR_SLIDES ), ITEM_ID_SLIDES );
+        InsertRoadmapItem( 2, true, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );
+        InsertRoadmapItem( 3, true, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
+        InsertRoadmapItem( 4, true, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
         // Well, that's messy, but the
         // BMP_PRESENTATION_MINIMIZER from sd module cannot be used here directly
@@ -128,7 +128,7 @@ void OptimizerDialog::InitRoadmap()
 }
 
 
-void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const OUString& rLabel, const sal_Int32 nItemID )
+void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
 {
     try
     {
@@ -137,7 +137,7 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const OUString&
         Reference< XInterface > xRoadmapItem( xSFRoadmap->createInstance(), UNO_QUERY_THROW );
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( "Label", Any( rLabel ) );
-        xPropertySet->setPropertyValue( "Enabled", Any( true ) );
+        xPropertySet->setPropertyValue( "Enabled", Any( bEnabled ) );
         xPropertySet->setPropertyValue( "ID", Any( nItemID ) );
         aIndexContainerRoadmap->insertByIndex( nIndex, Any( xRoadmapItem ) );
     }

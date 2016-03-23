@@ -146,10 +146,10 @@ public:
 
     /** Checks if the passed sheet index is valid.
         @param nScTab  The sheet index to check.
-        Sets the internal flag that produces a warning box
+        @param bWarn  true = Sets the internal flag that produces a warning box
             after loading/saving the file, if the sheet index is not valid.
     */
-    void                CheckScTab( SCTAB nScTab );
+    void                CheckScTab( SCTAB nScTab, bool bWarn );
 
 protected:
     XclTracer&          mrTracer;       /// Tracer for invalid addresses.

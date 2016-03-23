@@ -875,7 +875,7 @@ FltError ImportExcel8::Read()
                     if( maStrm.GetRecId() != EXC_ID_EOF )
                         XclTools::SkipSubStream( maStrm );
                     // #i29930# show warning box
-                    GetAddressConverter().CheckScTab( nScTab );
+                    GetAddressConverter().CheckScTab( nScTab, true );
                     eAkt = EXC_STATE_END;
                 }
                 else

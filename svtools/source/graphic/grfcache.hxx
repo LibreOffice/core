@@ -80,7 +80,10 @@ public:
     void                    SetMaxDisplayCacheSize( sal_uLong nNewCacheSize );
     sal_uLong               GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
 
-    void                    SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize );
+    void                    SetMaxObjDisplayCacheSize(
+                                sal_uLong nNewMaxObjSize,
+                                bool bDestroyGreaterCached = false
+                            );
 
     sal_uLong               GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
 

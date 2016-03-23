@@ -22,7 +22,6 @@
 %top{
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXrm.hxx"
@@ -30,7 +29,7 @@ using namespace std;
 #define IMPLptr convert_gen::mcImpl
 #define LOCptr ((convert_xrm *)convert_gen::mcImpl)
 
-/* enlarge token buffer to tokenize whole strings */
+/* enlarge token buffer to tokenize whole std::strings */
 #undef  YYLMAX
 #define YYLMAX 64000
 
@@ -85,6 +84,7 @@ SP    [ \t]*
 }
 
 
+"<title "    |
 "<h"[0-9]" " |
 "<p "        {
     LOCptr->setTag(yytext);
@@ -92,6 +92,7 @@ SP    [ \t]*
 
 
 
+"</title>"[ \t\r]*[\n]    |
 "</h"[0-9]">"[ \t\r]*[\n] |
 "</p>"[ \t\r]*[\n]        {
     LOCptr->stopCollectData(yytext);

@@ -99,7 +99,7 @@ public:
 
     rtl_TextEncoding getTextEncoding() const;
     void setTextEncoding(rtl_TextEncoding aEnc);
-    OUString ToOUString(const OString& s) const;
+    OUString ToOUString(const OString& s, bool bSpecials=false) const;
 
     double getGlobalLineTypeScale() const;
     void setGlobalLineTypeScale(double fGlobalLineTypeScale);

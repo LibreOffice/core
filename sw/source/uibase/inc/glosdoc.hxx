@@ -63,21 +63,22 @@ public:
     ~SwGlossaries();
 
     /** returns the cached AutoTextGroup (if any) for the given group name
-        The group is created if it does not yet exist
 
         @precond
             If <arg>_bCreate</arg> is <TRUE/>, the SolarMutex must be locked when calling into this method.
 
         @param _rGroupName
             the name of the glossaries group
+        @param _bCreate
+            if <TRUE/>, the group is created if it does not yet exist
     */
     css::uno::Reference< css::text::XAutoTextGroup >
                             GetAutoTextGroup(
-                                const OUString& _rGroupName
+                                const OUString& _rGroupName,
+                                bool _bCreate = false
                             );
 
     /** returns the cached AutoTextEntry (if any) for the given group/with the given name
-        The entry is created if it does not yet exist
 
         @precond
             If <arg>_bCreate</arg> is <TRUE/>, the SolarMutex must be locked when calling into this method.
@@ -88,12 +89,15 @@ public:
             the name of the glossaries group, as to be passed to the entry
         @param _rEntryName
             the name of the auto text entry
+        @param _bCreate
+            if <TRUE/>, the entry is created if it does not yet exist
     */
     css::uno::Reference< css::text::XAutoTextEntry >
                             GetAutoTextEntry(
                                 const OUString& _rCompleteGroupName,
                                 const OUString& _rGroupName,
-                                const OUString& _rEntryName
+                                const OUString& _rEntryName,
+                                bool _bCreate = false
                             );
 
     size_t          GetGroupCnt();

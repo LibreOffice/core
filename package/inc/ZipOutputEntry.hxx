@@ -28,7 +28,6 @@
 
 #include <package/Deflater.hxx>
 #include <CRC32.hxx>
-#include <atomic>
 
 struct ZipEntry;
 class ZipPackageBuffer;
@@ -36,9 +35,6 @@ class ZipPackageStream;
 
 class ZipOutputEntry
 {
-    // allow only DeflateThread to change m_bFinished using setFinished()
-    friend class DeflateThread;
-
     css::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -52,9 +48,8 @@ class ZipOutputEntry
     CRC32               m_aCRC;
     ZipEntry            *m_pCurrentEntry;
     sal_Int16           m_nDigested;
-    ZipPackageStream*   m_pCurrentStream;
     bool                m_bEncryptCurrentEntry;
-    std::atomic<bool>   m_bFinished;
+    ZipPackageStream*   m_pCurrentStream;
 
 public:
     ZipOutputEntry(
@@ -83,10 +78,7 @@ public:
     void closeEntry();
     void write(const css::uno::Sequence< sal_Int8 >& rBuffer);
 
-    bool isFinished() const { return m_bFinished; }
-
 private:
-    void setFinished() { m_bFinished = true; }
     void doDeflate();
 };
 

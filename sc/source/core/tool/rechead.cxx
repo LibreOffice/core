@@ -105,11 +105,11 @@ sal_uLong ScMultipleReadHeader::BytesLeft() const
     return 0;
 }
 
-ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream) :
+ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault) :
     rStream( rNewStream ),
     aMemStream( 4096, 4096 )
 {
-    nDataSize = 0;
+    nDataSize = nDefault;
     rStream.WriteUInt32( nDataSize );
 
     nDataPos = rStream.Tell();

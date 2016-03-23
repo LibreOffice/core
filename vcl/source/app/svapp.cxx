@@ -51,7 +51,9 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/lazydelete.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#endif
 
 #include "salinst.hxx"
 #include "salframe.hxx"
@@ -1220,9 +1222,11 @@ OUString Application::GetHWOSConfInfo()
     aDetails.append( "; " );
 
     aDetails.append( VclResId(SV_APP_UIRENDER).toString() );
+#if HAVE_FEATURE_OPENGL
     if ( OpenGLWrapper::isVCLOpenGLEnabled() )
         aDetails.append( VclResId(SV_APP_GL).toString() );
     else
+#endif
         aDetails.append( VclResId(SV_APP_DEFAULT).toString() );
     aDetails.append( "; " );
 

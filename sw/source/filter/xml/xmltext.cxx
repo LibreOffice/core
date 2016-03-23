@@ -30,7 +30,8 @@ class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 
 public:
 
-    SwXMLBodyContentContext_Impl( SwXMLImport& rImport, const OUString& rLName );
+    SwXMLBodyContentContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
+                             const OUString& rLName );
     virtual ~SwXMLBodyContentContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -43,8 +44,9 @@ public:
 };
 
 SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport,
+                                              sal_uInt16 nPrfx,
                                                    const OUString& rLName ) :
-    SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
 
@@ -79,7 +81,8 @@ SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
     SvXMLImportContext *pContext = nullptr;
 
     if( !IsStylesOnlyMode() )
-         pContext = new SwXMLBodyContentContext_Impl( *this, rLocalName );
+         pContext = new SwXMLBodyContentContext_Impl( *this, XML_NAMESPACE_OFFICE,
+                                              rLocalName );
     else
         pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
                                            rLocalName );

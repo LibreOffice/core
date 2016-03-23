@@ -515,7 +515,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void SplitAttrTab( const SwPosition& rNewPos );
     void SplitAttrTab( _HTMLAttrTable& rNewAttrTab, bool bMoveEndBack = true );
     void RestoreAttrTab( _HTMLAttrTable& rNewAttrTab );
-    void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
+    void InsertAttr( const SfxPoolItem& rItem, bool bLikePara = false,
+                     bool bInsAtStart=false );
     void InsertAttrs( _HTMLAttrs& rAttrs );
 
     bool DoPositioning( SfxItemSet &rItemSet,
@@ -542,7 +543,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     SwHTMLNumRuleInfo& GetNumInfo() { return *m_pNumRuleInfo; }
     // add parameter <bCountedInList>
-    void SetNodeNum( sal_uInt8 nLevel );
+    void SetNodeNum( sal_uInt8 nLevel, bool bCountedInList );
 
     // Verwalten von Absatz-Vorlagen
 
@@ -559,7 +560,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // den obersten/spezifizierten Kontext holen, aber nicht ausserhalb
     // des Kontexts mit Token nLimit suchen. Wenn bRemove gesetzt ist,
     // wird er entfernt
-    _HTMLAttrContext *PopContext( sal_uInt16 nToken=0 );
+    _HTMLAttrContext *PopContext( sal_uInt16 nToken=0, sal_uInt16 nLimit=0,
+                                  bool bRemove=true );
 
     bool GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
                                 bool bIgnoreCurrent=false ) const;
@@ -617,7 +619,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewDefList();
     void EndDefList();
     void NewDefListItem( int nToken );
-    void EndDefListItem( int nToken=0, bool bLastPara=false );
+    void EndDefListItem( int nToken=0, bool bSetColl=true,
+                         bool bLastPara=false );
 
     // Behandlung von Tags auf Zeichen-Ebene
 

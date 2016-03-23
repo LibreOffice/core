@@ -912,7 +912,8 @@ public:
                                         const ScMarkData& rMark,
                                         const OUString& rFormula,
                                         const ScTokenArray* p = nullptr,
-                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
+                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                                        bool bDirtyFlag=true );
     SC_DLLPUBLIC void InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
@@ -1512,7 +1513,7 @@ public:
                                         double nPPTX, double nPPTY,
                                         const Fraction& rZoomX, const Fraction& rZoomY );
 
-    bool            IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
+    bool            IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
 
     SC_DLLPUBLIC bool           ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
@@ -1521,8 +1522,10 @@ public:
                                             SCCOL nEndCol, SCROW nEndRow,
                                             SCTAB nTab, sal_Int16 nFlags );
 
-    SC_DLLPUBLIC void           SetPattern( const ScAddress&, const ScPatternAttr& rAttr );
-    SC_DLLPUBLIC void           SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr );
+    SC_DLLPUBLIC void           SetPattern( const ScAddress&, const ScPatternAttr& rAttr,
+                                    bool bPutToPool = false );
+    SC_DLLPUBLIC void           SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr,
+                                    bool bPutToPool = false );
 
     void            AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     sal_uInt16 nFormatNo, const ScMarkData& rMark );
@@ -1651,7 +1654,11 @@ public:
 
     SCCOL           GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const;
 
-    SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const;
+                    // if bCareManualSize is set then the row
+                    // heights are compared only if the manual size flag for
+                    // the row is set. If the bCareManualSize is not set then
+                    // the row heights are always compared.
+    SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize = true) const;
 
     // returns whether to export a Default style for this col or not
     // nDefault is setted to one position in the current row where the Default style is
@@ -1749,7 +1756,7 @@ public:
      * database range that contains the specified cell position.
      */
     void GetFilterEntries(
-        SCCOL nCol, SCROW nRow, SCTAB nTab, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
     SC_DLLPUBLIC void GetFilterEntriesArea(
         SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
@@ -1951,7 +1958,7 @@ public:
      *                     recalculated.
      */
     SC_DLLPUBLIC void CalcFormulaTree(
-       bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
+        bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
@@ -2197,7 +2204,7 @@ private:
     void    DeleteDrawLayer();
     SC_DLLPUBLIC bool   DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const;
     void    DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
-    void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
+    void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, bool bSkipNotes = false );
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();

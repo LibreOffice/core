@@ -284,11 +284,11 @@ private:
     sal_uInt32          GetNearestListColor( sal_uInt32 nIndex ) const;
 
     /** Returns in rnIndex the palette index of the color nearest to rColor.
-        Searches for default colors only (colors never replaced).
+        @param bDefaultOnly  true = Searches for default colors only (colors never replaced).
         @return  The distance from passed color to found color. */
     sal_Int32           GetNearestPaletteColor(
                             sal_uInt32& rnIndex,
-                            const Color& rColor ) const;
+                            const Color& rColor, bool bDefaultOnly ) const;
     /** Returns in rnFirst and rnSecond the palette indexes of the two colors nearest to rColor.
         @return  The minimum distance from passed color to found colors. */
     sal_Int32           GetNearPaletteColors(
@@ -380,7 +380,7 @@ void XclExpPaletteImpl::Finalize()
         // find nearest unused default color for each unprocessed list color
         for( nIndex = 0; nIndex < nCount; ++nIndex )
             aNearestVec[ nIndex ].mnDist = aRemapVec[ nIndex ].mbProcessed ? SAL_MAX_INT32 :
-                GetNearestPaletteColor( aNearestVec[ nIndex ].mnPalIndex, mxColorList->at( nIndex )->GetColor() );
+                GetNearestPaletteColor( aNearestVec[ nIndex ].mnPalIndex, mxColorList->at( nIndex )->GetColor(), true );
         // find the list color which is nearest to a default color
         sal_uInt32 nFound = 0;
         for( nIndex = 1; nIndex < nCount; ++nIndex )
@@ -704,7 +704,7 @@ sal_uInt32 XclExpPaletteImpl::GetNearestListColor( sal_uInt32 nIndex ) const
 }
 
 sal_Int32 XclExpPaletteImpl::GetNearestPaletteColor(
-        sal_uInt32& rnIndex, const Color& rColor ) const
+        sal_uInt32& rnIndex, const Color& rColor, bool bDefaultOnly ) const
 {
     rnIndex = 0;
     sal_Int32 nDist = SAL_MAX_INT32;
@@ -712,7 +712,7 @@ sal_Int32 XclExpPaletteImpl::GetNearestPaletteColor(
     for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end();
             aIt != aEnd; ++aIt )
     {
-        if( !aIt->mbUsed )
+        if( !bDefaultOnly || !aIt->mbUsed )
         {
             sal_Int32 nCurrDist = lclGetColorDistance( rColor, aIt->maColor );
             if( nCurrDist < nDist )

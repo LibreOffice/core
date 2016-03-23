@@ -41,6 +41,7 @@
 #include <usrpref.hxx>
 #include <pagedesc.hxx>
 #include <workctrl.hxx>
+#include <crsskip.hxx>
 #include <touch/touch.h>
 
 #include <PostItMgr.hxx>

@@ -29,7 +29,7 @@ class convert_xcu : public convert_gen
         bool mbNoCollectingData;
 
         convert_xcu(l10nMem& crMemory);
-        ~convert_xcu() {};
+        ~convert_xcu();
 
         void pushKey(char *syyText);
         void popKey(char *syyText);
@@ -41,10 +41,10 @@ class convert_xcu : public convert_gen
         void addLevel();
 
     private:
-        vector<string> mcStack;
+        std::vector<std::string> mcStack;
         int                      miLevel;
         bool                     mbNoTranslate;
 
-        void doExecute() override;
+        void execute() override;
 };
 #endif

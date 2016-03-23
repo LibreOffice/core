@@ -650,12 +650,12 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     return true;
 }
 
-void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
+void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller, bool bReferenceLink )
 {
     if ( m_nEventID )
         Application::RemoveUserEvent( m_nEventID );
 
-    m_nEventID = Application::PostUserEvent( rLink, pCaller, true/*bReferenceLink*/ );
+    m_nEventID = Application::PostUserEvent( rLink, pCaller, bReferenceLink );
 }
 
 //                             ExtMgrDialog
@@ -1009,7 +1009,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
         OSL_TRACE( "showProgress stop!" );
     }
 
-    DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), reinterpret_cast<void*>(bStart) );
+    DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), reinterpret_cast<void*>(bStart), true );
 }
 
 
@@ -1318,7 +1318,7 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
         OSL_TRACE( "showProgress stop!" );
     }
 
-    DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), reinterpret_cast<void*>(bStart) );
+    DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), reinterpret_cast<void*>(bStart), true );
 }
 
 

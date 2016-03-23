@@ -401,7 +401,7 @@ void RscCompiler::EndCompile()
                     RscFile* pFN = pTC->aFileTab.Get( aIndex );
                     if( !pFN->IsIncFile() )
                     {
-                        pTC->WriteSrc( foutput, RscFileTab::IndexNotFound );
+                        pTC->WriteSrc( foutput, RscFileTab::IndexNotFound, false );
                         break; // ?T 281091MM only one source file
                     }
                 }

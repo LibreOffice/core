@@ -60,7 +60,7 @@ css::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames
 //= OCheckBoxModel
 
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
-    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX )
+    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, true )
     // use the old control name for compytibility reasons
 {
 

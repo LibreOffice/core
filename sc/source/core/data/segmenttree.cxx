@@ -373,9 +373,9 @@ void ScFlatBoolRowSegments::removeSegment(SCROW nRow1, SCROW nRow2)
     mpImpl->removeSegment(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
 }
 
-void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize)
+void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary)
 {
-    mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), true/*bSkipStartBoundary*/);
+    mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
 SCROW ScFlatBoolRowSegments::findLastTrue() const
@@ -424,9 +424,9 @@ void ScFlatBoolColSegments::removeSegment(SCCOL nCol1, SCCOL nCol2)
     mpImpl->removeSegment(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
 }
 
-void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize)
+void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary)
 {
-    mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), true/*bSkipStartBoundary*/);
+    mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
@@ -501,9 +501,9 @@ void ScFlatUInt16RowSegments::removeSegment(SCROW nRow1, SCROW nRow2)
     mpImpl->removeSegment(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
 }
 
-void ScFlatUInt16RowSegments::insertSegment(SCROW nRow, SCROW nSize)
+void ScFlatUInt16RowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary)
 {
-    mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), false/*bSkipStartBoundary*/);
+    mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
 SCROW ScFlatUInt16RowSegments::findLastTrue(sal_uInt16 nValue) const

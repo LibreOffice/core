@@ -130,7 +130,7 @@ void OMySQLTable::construct()
 
 sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)
 {
-    OMySQLColumns* pColumns = new OMySQLColumns(*this,m_aMutex,_rNames);
+    OMySQLColumns* pColumns = new OMySQLColumns(*this,true,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }

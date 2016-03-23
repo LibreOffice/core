@@ -36,7 +36,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mpScData( nullptr ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
-    meNameType( ScRangeData::Type::Name ),
+    meNameType( RT_NAME ),
     mnXclTab( EXC_NAME_GLOBAL ),
     mnNameIndex( nXclNameIdx ),
     mbVBName( false ),
@@ -161,11 +161,11 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         {
             case EXC_BUILTIN_PRINTAREA:
                 if( rFmlaConv.Convert( GetPrintAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvOK )
-                    meNameType |= ScRangeData::Type::PrintArea;
+                    meNameType |= RT_PRINTAREA;
             break;
             case EXC_BUILTIN_PRINTTITLES:
                 if( rFmlaConv.Convert( GetTitleAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvOK )
-                    meNameType |= ScRangeData::Type::ColHeader | ScRangeData::Type::RowHeader;
+                    meNameType |= RT_COLHEADER | RT_ROWHEADER;
             break;
         }
         rStrm.PopPosition();
@@ -188,7 +188,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                     break;
                     case EXC_BUILTIN_CRITERIA:
                         GetFilterManager().AddAdvancedRange( aRange );
-                        meNameType |= ScRangeData::Type::Criteria;
+                        meNameType |= RT_CRITERIA;
                     break;
                     case EXC_BUILTIN_EXTRACT:
                         if (pTokArr->IsValidReference(aRange, ScAddress()))

@@ -1414,14 +1414,17 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
 {
     SCCOL nStartCol = nCol;
     SCTAB nTab = aViewData.GetTabNo();
+    bool bTestNeg = true;
 
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
-        bMoveIsShift = true;
+    {
+        nStartCol = aViewData.GetCurX();
+        bTestNeg = false;
+    }
 
     DoneBlockMode( nModifier != 0 );
-    InitBlockMode( nStartCol, 0, nTab, true, true);
+    InitBlockMode( nStartCol, 0, nTab, bTestNeg, true );
     MarkCursor( nCol, MAXROW, nTab );
-    bMoveIsShift = false;
     SetCursor( nCol, 0 );
     SelectionChanged();
 }
@@ -1430,14 +1433,17 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
 {
     SCROW nStartRow = nRow;
     SCTAB nTab = aViewData.GetTabNo();
+    bool bTestNeg = true;
 
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
-        bMoveIsShift = true;
+    {
+        nStartRow = aViewData.GetCurY();
+        bTestNeg = false;
+    }
 
     DoneBlockMode( nModifier != 0 );
-    InitBlockMode( 0, nStartRow, nTab, true, false, true );
+    InitBlockMode( 0, nStartRow, nTab, bTestNeg, false, true );
     MarkCursor( MAXCOL, nRow, nTab );
-    bMoveIsShift = false;
     SetCursor( 0, nRow );
     SelectionChanged();
 }

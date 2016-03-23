@@ -826,9 +826,6 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 cmd/lc_dsbrowserexplorer.png cmd/lc_showfmexplorer.png
 cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
 
-cmd/lc_savesimple.png cmd/lc_save.png
-cmd/sc_savesimple.png cmd/sc_save.png
-
 # database
 # ==============================================
 database/linked_text_table.png cmd/sc_dataimport.png

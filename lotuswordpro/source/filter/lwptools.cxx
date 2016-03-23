@@ -410,9 +410,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddSecond(false);
+                    pDateStyle->AddSecond(false,0);
                 else
-                    pDateStyle->AddSecond();
+                    pDateStyle->AddSecond(true,0);
                 break;
             }
             case 'S':
@@ -731,9 +731,9 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     }
                 }
                 if (j==1)
-                    pTimeStyle->AddSecond(false);
+                    pTimeStyle->AddSecond(false,0);
                 else
-                    pTimeStyle->AddSecond();
+                    pTimeStyle->AddSecond(true,0);
                 break;
             }
             case 'S':

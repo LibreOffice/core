@@ -205,6 +205,9 @@ SfxItemPool * SmEditWindow::GetEditEngineItemPool()
 void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     // Note: SetBackground still done in SmEditWindow::DataChanged
+#if OSL_DEBUG_LEVEL > 1
+//   ColorData nVal = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
+#endif
     SetTextColor( rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor );
     Invalidate();
 }

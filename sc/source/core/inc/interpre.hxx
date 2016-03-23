@@ -628,9 +628,11 @@ void ScDebugVar();
         If true, the date passed must be a valid Gregorian calendar date. No
         two-digit expanding or rollover is done.
 
-    Date must be Gregorian, i.e. >= 1582-10-15.
+    @param bCheckGregorian
+        If true, date must be Gregorian, i.e. >= 1582-10-15.
+        If false, don't care, any valid date >= 0-1-1 will do.
  */
-double GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bStrict );
+double GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bStrict, bool bCheckGregorian );
 
 void ScGetActDate();
 void ScGetActTime();

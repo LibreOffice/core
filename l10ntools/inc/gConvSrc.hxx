@@ -28,7 +28,7 @@ class convert_src : public convert_gen
         bool mbExpectValue;
 
         convert_src(l10nMem& crMemory);
-        ~convert_src() {};
+        ~convert_src();
 
         void setValue      (char *syyText, char *sbuildValue);
         void setLang       (char *syyText, bool bEnUs);
@@ -44,11 +44,11 @@ class convert_src : public convert_gen
         void stopBlock     (char *syyText);
 
     private:
-        vector<string> mcStack;
-        string              msValue;
-        string              msName;
-        string              msTextName;
-        string              msCmd;
+        std::vector<std::string> mcStack;
+        std::string              msValue;
+        std::string              msName;
+        std::string              msTextName;
+        std::string              msCmd;
         bool                     mbEnUs;
         bool                     mbExpectName;
         bool                     mbExpectMacro;
@@ -58,9 +58,9 @@ class convert_src : public convert_gen
         bool                     mbInListItem;
         int                      miListCount;
         int                      miMacroLevel;
-        void doExecute() override;
-        void trim(string& sText);
-        void buildKey(string& sKey);
-        void insertLanguagePart(string& sKey, string& sTextType);
+        void execute() override;
+        void trim(std::string& sText);
+        void buildKey(std::string& sKey);
+        void insertLanguagePart(std::string& sKey, std::string& sTextType);
 };
 #endif

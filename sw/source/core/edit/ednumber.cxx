@@ -856,11 +856,12 @@ sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
 }
 
 const SwNumRule * SwEditShell::SearchNumRule( const bool bNum,
+                                              const bool bOutline,
                                               int nNonEmptyAllowed,
                                               OUString& sListId )
 {
     return GetDoc()->SearchNumRule( *(GetCursor()->Start()),
-                                    false/*bForward*/, bNum, false/*bOutline*/, nNonEmptyAllowed,
+                                    false/*bForward*/, bNum, bOutline, nNonEmptyAllowed,
                                     sListId );
 }
 

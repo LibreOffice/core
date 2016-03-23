@@ -54,6 +54,7 @@
 #include <olmenu.hxx>
 #include <pam.hxx>
 #include <edtwin.hxx>
+#include <crsskip.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <vcl/lstbox.hxx>

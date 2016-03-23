@@ -714,9 +714,10 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( vc
 }
 
 AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( vcl::Window* pParent,
-                                                            bool bUnGroup )
+                                                            bool bUnGroup,
+                                                            bool bRows )
 {
-    VclPtr<ScGroupDlg> pDlg = VclPtr<ScGroupDlg>::Create( pParent, bUnGroup, true/*bRows*/);
+    VclPtr<ScGroupDlg> pDlg = VclPtr<ScGroupDlg>::Create( pParent, bUnGroup, bRows);
     return new AbstractScGroupDlg_Impl( pDlg );
 }
 
@@ -740,9 +741,10 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( v
 }
 
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( vcl::Window*      pParent,
+                                                                                    InsertDeleteFlags nCheckDefaults,
                                                                                     const OUString* pStrTitle )
 {
-    VclPtr<ScInsertContentsDlg> pDlg = VclPtr<ScInsertContentsDlg>::Create(pParent, InsertDeleteFlags::NONE, pStrTitle);
+    VclPtr<ScInsertContentsDlg> pDlg = VclPtr<ScInsertContentsDlg>::Create(pParent, nCheckDefaults, pStrTitle);
     return new AbstractScInsertContentsDlg_Impl( pDlg );
 }
 
@@ -821,9 +823,10 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData,
-                                                                const ScDPNameVec& rDataFields )
+                                                                const ScDPNameVec& rDataFields,
+                                                                bool bEnableLayout )
 {
-    VclPtr<ScDPSubtotalDlg> pDlg = VclPtr<ScDPSubtotalDlg>::Create( pParent, rDPObj, rLabelData, rFuncData, rDataFields, true/*bEnableLayout*/ );
+    VclPtr<ScDPSubtotalDlg> pDlg = VclPtr<ScDPSubtotalDlg>::Create( pParent, rDPObj, rLabelData, rFuncData, rDataFields, bEnableLayout );
     return new AbstractScDPSubtotalDlg_Impl( pDlg );
 }
 

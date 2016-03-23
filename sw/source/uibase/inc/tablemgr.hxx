@@ -51,7 +51,7 @@ private:
 
 public:
     inline SwTableFUNC(SwFrameFormat &);
-           SwTableFUNC(SwWrtShell *pShell);
+           SwTableFUNC(SwWrtShell *pShell, bool bCopyFormat = false);
            ~SwTableFUNC();
 
     void    InitTabCols();

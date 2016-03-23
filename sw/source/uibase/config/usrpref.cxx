@@ -209,8 +209,8 @@ void SwContentViewConfig::Load()
                         rParent.SetUpdateLinkMode(nSet, true);
                     }
                     break;// "Update/Link",
-                    case 17: rParent.SetUpdateFields(bSet); break;// "Update/Field",
-                    case 18: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
+                    case 17: rParent.SetUpdateFields(bSet, true); break;// "Update/Field",
+                    case 18: rParent.SetUpdateCharts(bSet, true); break;// "Update/Chart"
                 }
             }
         }

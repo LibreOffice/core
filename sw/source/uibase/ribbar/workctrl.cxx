@@ -144,7 +144,7 @@ IMPL_STATIC_LINK_TYPED(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
     sal_uInt16 nBlock = nId / 100;
 
     SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-    OUString sGroup = pGlossaryList->GetGroupName(nBlock - 1);
+    OUString sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
     OUString sShortName =
         pGlossaryList->GetBlockShortName(nBlock - 1, nId - (100 * nBlock) - 1);
 

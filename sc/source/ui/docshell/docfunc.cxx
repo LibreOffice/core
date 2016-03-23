@@ -645,7 +645,7 @@ bool ScDocFunc::DeleteContents(
 }
 
 bool ScDocFunc::DeleteCell(
-    const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord )
+    const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator(rDocShell);
 
@@ -657,7 +657,8 @@ bool ScDocFunc::DeleteCell(
     ScEditableTester aTester(&rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
     if (!aTester.IsEditable())
     {
-        rDocShell.ErrorMessage(aTester.GetMessageId());
+        if (!bApi)
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return false;
     }
 
@@ -712,12 +713,11 @@ bool ScDocFunc::DeleteCell(
 }
 
 bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
-                                    bool bApi )
+                                    bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
@@ -1146,7 +1146,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             ScMarkData aMark;
             aMark.SelectTable( rPos.Tab(), true );
             aMark.SetMarkArea( ScRange( rPos ) );
-            ApplyAttributes( aMark, aPattern, bApi );
+            ApplyAttributes( aMark, aPattern, true, bApi );
         }
     }
 }
@@ -1310,10 +1310,9 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 }
 
 bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                    bool bApi )
+                                    bool bRecord, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
     if ( bRecord && !rDoc.IsUndoEnabled() )
         bRecord = false;
 
@@ -1373,10 +1372,9 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 }
 
 bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
-                                bool bApi )
+                                bool bRecord, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
     if ( bRecord && !rDoc.IsUndoEnabled() )
         bRecord = false;
 
@@ -2078,7 +2076,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 }
 
 bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, DelCellCmd eCmd,
-                             bool bApi )
+                             bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2103,7 +2101,6 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nPaintEndRow = nEndRow;
     sal_uInt16 nPaintFlags = PAINT_GRID;
 
-    bool bRecord = true;
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
@@ -3291,11 +3288,10 @@ bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bo
 }
 
 bool ScDocFunc::SetTabBgColor(
-    ScUndoTabColorInfo::List& rUndoTabColorList, bool bApi )
+    ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     if ( !rDoc.IsDocEditable() )
@@ -3933,7 +3929,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
 }
 
 bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
-                            sal_uInt16 nFormatNo, bool bApi )
+                            sal_uInt16 nFormatNo, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3946,8 +3942,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
 
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
     ScMarkData aMark;
     if (pTabMark)
@@ -4264,7 +4259,7 @@ void adjustFillRangeForAdjacentCopy(ScRange& rRange, FillDir eDir)
 }
 
 bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
-                            FillDir eDir, bool bApi )
+                            FillDir eDir, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -4280,8 +4275,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
     SCROW nEndRow = aRange.aEnd.Row();
     SCTAB nEndTab = aRange.aEnd.Tab();
 
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScMarkData aMark;
@@ -4376,7 +4370,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
 bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                             FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                             double fStart, double fStep, double fMax,
-                            bool bApi )
+                            bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -4389,8 +4383,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
 
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScMarkData aMark;
@@ -4502,11 +4495,11 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
 }
 
 bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
-                            FillDir eDir, sal_uLong nCount, bool bApi )
+                            FillDir eDir, sal_uLong nCount, bool bRecord, bool bApi )
 {
     double      fStep = 1.0;
     double      fMax = MAXDOUBLE;
-    return FillAuto( rRange, pTabMark, eDir, FILL_AUTO, FILL_DAY, nCount, fStep, fMax, true/*bRecord*/, bApi );
+    return FillAuto( rRange, pTabMark, eDir, FILL_AUTO, FILL_DAY, nCount, fStep, fMax, bRecord, bApi );
 }
 
 bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, sal_uLong nCount, double fStep, double fMax,  bool bRecord, bool bApi )
@@ -5066,7 +5059,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
     {
         const ScRangeData& r = *itr->second;
-        if (!r.HasType(ScRangeData::Type::Database))
+        if (!r.HasType(RT_DATABASE))
             ++nValidCount;
     }
     ScRangeName* pList = rDoc.GetRangeName();
@@ -5074,7 +5067,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         const ScRangeData& r = *itr->second;
-        if (!r.HasType(ScRangeData::Type::Database) && !pLocalList->findByUpperName(r.GetUpperName()))
+        if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(r.GetUpperName()))
             ++nValidCount;
     }
 
@@ -5105,13 +5098,13 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
             for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
             {
                 ScRangeData& r = *itr->second;
-                if (!r.HasType(ScRangeData::Type::Database))
+                if (!r.HasType(RT_DATABASE))
                     ppSortArray[j++] = &r;
             }
             for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
                 ScRangeData& r = *itr->second;
-                if (!r.HasType(ScRangeData::Type::Database) && !pLocalList->findByUpperName(itr->first))
+                if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(itr->first))
                     ppSortArray[j++] = &r;
             }
             qsort( static_cast<void*>(ppSortArray.get()), nValidCount, sizeof(ScRangeData*),
@@ -5161,7 +5154,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     return bDone;
 }
 
-void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd )
+void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     SCCOL nStartCol = rOldRange.aStart.Col();
@@ -5184,13 +5177,13 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         aMark.SelectTable( nTab, true );
         ScRange aNewRange( rOldRange.aStart, rNewEnd );
 
-        if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, false/*bApi*/ ) )
+        if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, bApi ) )
         {
             // GRAM_PODF_A1 for API compatibility.
-            if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 ))
+            if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 ))
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+                EnterMatrix( rOldRange, &aMark, nullptr, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             }
         }
 
@@ -5389,11 +5382,10 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
-void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction )
+void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bRecord, bool bInteraction )
 {
     ScDocShellModificator aModificator(rDocShell);
     ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 

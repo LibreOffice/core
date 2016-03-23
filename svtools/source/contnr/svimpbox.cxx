@@ -695,9 +695,11 @@ void SvImpLBox::ShowCursor( bool bShow )
 }
 
 
-void SvImpLBox::UpdateAll( bool bInvalidateCompleteView )
+void SvImpLBox::UpdateAll(
+    bool bInvalidateCompleteView, bool bUpdateVerScrollBar )
 {
-    FindMostRight(nullptr);
+    if( bUpdateVerScrollBar )
+        FindMostRight(nullptr);
     aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1 ) );
     SyncVerThumb();
     FillView();

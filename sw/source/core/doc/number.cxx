@@ -372,7 +372,8 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
 
 SwNumRule::SwNumRule( const OUString& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
-                      SwNumRuleType eType )
+                      SwNumRuleType eType,
+                      bool bAutoFlg )
   : maTextNodeList(),
     maParagraphStyleList(),
     mpNumRuleMap(nullptr),
@@ -381,7 +382,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
     mnPoolFormatId( USHRT_MAX ),
     mnPoolHelpId( USHRT_MAX ),
     mnPoolHlpFileId( UCHAR_MAX ),
-    mbAutoRuleFlag( true ),
+    mbAutoRuleFlag( bAutoFlg ),
     mbInvalidRuleFlag( true ),
     mbContinusNum( false ),
     mbAbsSpaces( false ),
@@ -630,10 +631,12 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat* pNumFormat )
     }
 }
 
-OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings ) const
+OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings,
+                                bool bOnlyArabic ) const
 {
     if (rNum.IsCounted())
-        return MakeNumString(rNum.GetNumberVector(), bInclStrings);
+        return MakeNumString(rNum.GetNumberVector(),
+                             bInclStrings, bOnlyArabic);
 
     return OUString();
 }

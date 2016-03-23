@@ -913,7 +913,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     const SwPageFrame* pObjPage = rFlyAtContentFrame.FindPageFrame();
     const SwFrame* pObjContext = ::FindKontext( &rAnchorTextFrame, FRM_COLUMN );
     sal_uLong nObjIndex = rAnchorTextFrame.GetTextNode()->GetIndex();
-    SwOrderIter aIter( pObjPage );
+    SwOrderIter aIter( pObjPage, true );
     const SwFlyFrame* pFly = static_cast<const SwVirtFlyDrawObj*>(aIter.Bottom())->GetFlyFrame();
     while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
     {

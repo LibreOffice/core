@@ -44,20 +44,18 @@
 #include "AxisHelper.hxx"
 #include "LegendHelper.hxx"
 #include "servicenames_charttypes.hxx"
+#include "MenuResIds.hrc"
 #include "DrawCommandDispatch.hxx"
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
-#include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/InlineContainer.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 #include <svtools/contextmenuhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -952,53 +950,30 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
             impl_notifySelectionChangeListeners();
 
-        css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( m_xCC->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.awt.PopupMenu", m_xCC ), css::uno::UNO_QUERY );
-
-        Point aPos( rCEvt.GetMousePosPixel() );
-        if( !rCEvt.IsMouseEvent() )
-        {
-            SolarMutexGuard aGuard;
-            if(m_pChartWindow)
-                aPos = m_pChartWindow->GetPointerState().maPos;
-        }
-
         if ( isShapeContext() )
         {
             // #i12587# support for shapes in chart
-            OUString aMenuName = m_pDrawViewWrapper->IsTextEdit() ? OUString( "drawtext" ) : OUString( "draw" );
-            css::uno::Sequence< css::uno::Any > aArgs( 3 );
-            aArgs[0] <<= comphelper::makePropertyValue( "Value", aMenuName );
-            aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
-            aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
-
-            css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
-                m_xCC->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xCC ), css::uno::UNO_QUERY );
-
-            if ( !xPopupController.is() || !xPopupMenu.is() )
-                return;
-
-            xPopupController->setPopupMenu( xPopupMenu );
-            xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
-                                 css::awt::Rectangle( aPos.X(), aPos.Y(), 0, 0 ),
-                                 css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
-
-            css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
+            PopupMenu aContextMenu( SchResId( m_pDrawViewWrapper->IsTextEdit() ?
+                RID_CONTEXTMENU_SHAPEEDIT : RID_CONTEXTMENU_SHAPE ) );
+            ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
+            Point aPos( rCEvt.GetMousePosPixel() );
+            if( !rCEvt.IsMouseEvent() )
+            {
+                SolarMutexGuard aGuard;
+                if(m_pChartWindow)
+                    aPos = m_pChartWindow->GetPointerState().maPos;
+            }
+            aContextMenuHelper.completeAndExecute( aPos, aContextMenu );
         }
         else
         {
             // todo: the context menu should be specified by an xml file in uiconfig
+            uno::Reference< awt::XPopupMenu > xPopupMenu(
+                m_xCC->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.awt.PopupMenu", m_xCC ), uno::UNO_QUERY );
             if( xPopupMenu.is())
             {
                 sal_Int16 nUniqueId = 1;
-                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
-                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
-                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
-                xPopupMenu->insertSeparator( -1 );
-
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
                 Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( getModel() );
 
@@ -1237,8 +1212,19 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DataRanges" );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramData" );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:View3D" );
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
 
                 ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
+                Point aPos( rCEvt.GetMousePosPixel() );
+                if( !rCEvt.IsMouseEvent() )
+                {
+                    SolarMutexGuard aGuard;
+                    if(m_pChartWindow)
+                        aPos = m_pChartWindow->GetPointerState().maPos;
+                }
                 aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
             }
         }

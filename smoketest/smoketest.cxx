@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <chrono>
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/awt/AsyncCallback.hpp"
 #include "com/sun/star/awt/XCallback.hpp"
@@ -178,7 +177,8 @@ void Test::test() {
             css::uno::Any());
     // Wait for result.condition or connection_ going stale:
     for (;;) {
-        osl::Condition::Result res = result.condition.wait(std::chrono::seconds(1)); // 1 sec delay
+        TimeValue delay = { 1, 0 }; // 1 sec
+        osl::Condition::Result res = result.condition.wait(&delay);
         if (res == osl::Condition::result_ok) {
             break;
         }

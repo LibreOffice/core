@@ -224,7 +224,7 @@ private:
     ScHeaderFieldData   aData;
 
 public:
-    ScHeaderEditEngine( SfxItemPool* pEnginePool );
+    ScHeaderEditEngine( SfxItemPool* pEnginePool, bool bDeleteEnginePool = false );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor ) override;
 
     void SetNumType(SvxNumType eNew)                { aData.eNumType = eNew; }
@@ -237,7 +237,8 @@ class ScNoteEditEngine : public ScEditEngineDefaulter
 
 public:
     ScNoteEditEngine( SfxItemPool* pEnginePool,
-                SfxItemPool* pTextObjectPool = nullptr );
+                SfxItemPool* pTextObjectPool = nullptr,
+                bool bDeleteEnginePool = false );
 
 };
 

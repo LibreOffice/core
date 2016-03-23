@@ -74,6 +74,7 @@
 #include <modcfg.hxx>
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
+#include <crsskip.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <dbui.hrc>

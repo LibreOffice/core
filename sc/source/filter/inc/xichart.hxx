@@ -669,7 +669,7 @@ public:
     /** Writes the line format only, e.g. for trend lines or error bars. */
     void                ConvertLine( ScfPropertySet& rPropSet, XclChObjectType eObjType ) const;
     /** Writes the area format only for the series or a data point. */
-    void                ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
+    void                ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, bool bUsePicFmt ) const;
 
 private:
     /** Removes unused formatting (e.g. pie distance in a bar chart). */

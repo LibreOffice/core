@@ -575,7 +575,7 @@ void Shell::CheckWindows()
 }
 
 
-void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName )
+void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy )
 {
     bool bChangeCurWindow = pCurWin;
     std::vector<VclPtr<BaseWindow> > aDeleteVec;
@@ -591,7 +591,7 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
         if ( pWin == pCurWin )
             bChangeCurWindow = true;
         pWin->StoreData();
-        RemoveWindow( pWin, true/*bDestroy*/, false );
+        RemoveWindow( pWin, bDestroy, false );
     }
     if ( bChangeCurWindow )
         SetCurWindow( FindApplicationWindow(), true );

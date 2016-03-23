@@ -55,9 +55,8 @@ ZipOutputEntry::ZipOutputEntry(
 , m_xOutStream(rxOutput)
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
-, m_pCurrentStream(pStream)
 , m_bEncryptCurrentEntry(bEncrypt)
-, m_bFinished(false)
+, m_pCurrentStream(pStream)
 {
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     assert(m_xOutStream.is());
@@ -78,9 +77,8 @@ ZipOutputEntry::ZipOutputEntry(
 , m_xContext(rxContext)
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
-, m_pCurrentStream(pStream)
 , m_bEncryptCurrentEntry(bEncrypt)
-, m_bFinished(false)
+, m_pCurrentStream(pStream)
 {
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)

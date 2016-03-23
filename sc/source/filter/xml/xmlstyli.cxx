@@ -1050,8 +1050,8 @@ void ScMasterPageContext::Finish( bool bOverwrite )
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
-    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, false/*bDefaultStyle*/ ),
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle ) :
+    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     nLastSheet(-1)
 {
 }

@@ -154,7 +154,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         {
             bSuccess = false;
             _InvalidatePrevObjs( _rAnchoredObj );
-            _InvalidateFollowObjs( _rAnchoredObj );
+            _InvalidateFollowObjs( _rAnchoredObj, true );
         }
 
         // format anchor text frame, if wrapping style influence of the object
@@ -211,7 +211,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                         mrAnchorTextFrame.InvalidatePos();
                         bSuccess = false;
                         _InvalidatePrevObjs( _rAnchoredObj );
-                        _InvalidateFollowObjs( _rAnchoredObj );
+                        _InvalidateFollowObjs( _rAnchoredObj, true );
                     }
                     else
                     {
@@ -267,7 +267,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 
                         // Invalidate object and following objects for the restart of the
                         // layout process
-                        _InvalidateFollowObjs( _rAnchoredObj );
+                        _InvalidateFollowObjs( _rAnchoredObj, true );
                     }
                     else
                     {
@@ -395,7 +395,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                     mrAnchorTextFrame.InvalidatePos();
                     bSuccess = false;
                     _InvalidatePrevObjs( *pObj );
-                    _InvalidateFollowObjs( *pObj );
+                    _InvalidateFollowObjs( *pObj, true );
                 }
                 else
                 {
@@ -436,7 +436,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
 
                 // Invalidate object and following objects for the restart of the
                 // layout process
-                _InvalidateFollowObjs( *pObj );
+                _InvalidateFollowObjs( *pObj, true );
             }
             else
             {
@@ -491,9 +491,13 @@ void SwObjectFormatterTextFrame::_InvalidatePrevObjs( SwAnchoredObject& _rAnchor
     }
 }
 
-void SwObjectFormatterTextFrame::_InvalidateFollowObjs( SwAnchoredObject& _rAnchoredObj )
+void SwObjectFormatterTextFrame::_InvalidateFollowObjs( SwAnchoredObject& _rAnchoredObj,
+                                                     const bool _bInclObj )
 {
-    _rAnchoredObj.InvalidateObjPosForConsiderWrapInfluence();
+    if ( _bInclObj )
+    {
+        _rAnchoredObj.InvalidateObjPosForConsiderWrapInfluence();
+    }
 
     const SwSortedObjs* pObjs = GetPageFrame().GetSortedObjs();
     if ( pObjs )

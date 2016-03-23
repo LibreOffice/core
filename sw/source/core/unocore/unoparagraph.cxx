@@ -396,7 +396,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
     SwPosition aPos( rTextNode );
-    SwCursor aCursor( aPos, nullptr );
+    SwCursor aCursor( aPos, nullptr, false );
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
     const uno::Any* pValues = rValues.getConstArray();
     const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
@@ -665,7 +665,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         m_pImpl->m_rPropSet.getPropertyMap();
 
     SwPosition aPos( rTextNode );
-    SwCursor aCursor( aPos, nullptr );
+    SwCursor aCursor( aPos, nullptr, false );
     SwParaSelection aParaSel( aCursor );
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
@@ -1124,7 +1124,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
     SwPosition aPos( rTextNode );
-    SwCursor aCursor( aPos, nullptr );
+    SwCursor aCursor( aPos, nullptr, false );
     if (rPropertyName == UNO_NAME_ANCHOR_TYPE  ||
         rPropertyName == UNO_NAME_ANCHOR_TYPES ||
         rPropertyName == UNO_NAME_TEXT_WRAP)
@@ -1260,7 +1260,7 @@ SwXParagraph::getAnchor() throw (uno::RuntimeException, std::exception)
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
     SwPosition aPos( rTextNode );
-    SwCursor aCursor( aPos, nullptr );
+    SwCursor aCursor( aPos, nullptr, false );
     // select paragraph
     SwParaSelection aParaSel( aCursor );
     const uno::Reference< text::XTextRange >  xRet =
@@ -1275,7 +1275,7 @@ void SAL_CALL SwXParagraph::dispose() throw (uno::RuntimeException, std::excepti
     SwTextNode *const pTextNode( m_pImpl->GetTextNode() );
     if (pTextNode)
     {
-        SwCursor aCursor( SwPosition( *pTextNode ), nullptr );
+        SwCursor aCursor( SwPosition( *pTextNode ), nullptr, false );
         pTextNode->GetDoc()->getIDocumentContentOperations().DelFullPara(aCursor);
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
         m_pImpl->m_EventListeners.disposeAndClear(ev);
@@ -1340,7 +1340,7 @@ SwXParagraph::getStart() throw (uno::RuntimeException, std::exception)
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
     SwPosition aPos( rTextNode );
-    SwCursor aCursor( aPos, nullptr );
+    SwCursor aCursor( aPos, nullptr, false );
     SwParaSelection aParaSel( aCursor );
     SwPaM aPam( *aCursor.Start() );
     uno::Reference< text::XText >  xParent = getText();
@@ -1357,7 +1357,7 @@ SwXParagraph::getEnd() throw (uno::RuntimeException, std::exception)
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
     SwPosition aPos( rTextNode );
-    SwCursor aCursor( aPos, nullptr );
+    SwCursor aCursor( aPos, nullptr, false );
     SwParaSelection aParaSel( aCursor );
     SwPaM aPam( *aCursor.End() );
     uno::Reference< text::XText >  xParent = getText();
@@ -1374,7 +1374,7 @@ OUString SAL_CALL SwXParagraph::getString() throw (uno::RuntimeException, std::e
     if (pTextNode)
     {
         SwPosition aPos( *pTextNode );
-        SwCursor aCursor( aPos, nullptr );
+        SwCursor aCursor( aPos, nullptr, false );
         SwParaSelection aParaSel( aCursor );
         SwUnoCursorHelper::GetTextFromPam(aCursor, aRet);
     }
@@ -1398,7 +1398,7 @@ throw (uno::RuntimeException, std::exception)
     if (pTextNode)
     {
         SwPosition aPos( *pTextNode );
-        SwCursor aCursor( aPos, nullptr );
+        SwCursor aCursor( aPos, nullptr, false );
         if (!SwUnoCursorHelper::IsStartOfPara(aCursor)) {
             aCursor.MovePara(fnParaCurr, fnParaStart);
         }

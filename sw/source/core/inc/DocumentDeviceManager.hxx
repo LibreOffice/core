@@ -47,7 +47,7 @@ public:
 
     VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const override;
 
-    void setVirtualDevice(/*[in]*/ VirtualDevice* pVd ) override;
+    void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool ) override;
 
     OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const override;
 

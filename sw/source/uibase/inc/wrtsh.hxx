@@ -177,10 +177,10 @@ public:
 
     // select word / sentence
     bool    SelNearestWrd();
-    bool    SelWrd      (const Point * = nullptr );
+    bool    SelWrd      (const Point * = nullptr, bool bProp=false );
     // #i32329# Enhanced selection
-    void    SelSentence (const Point * = nullptr );
-    void    SelPara     (const Point * = nullptr );
+    void    SelSentence (const Point * = nullptr, bool bProp=false );
+    void    SelPara     (const Point * = nullptr, bool bProp=false );
     long    SelAll();
 
     // basecursortravelling
@@ -191,8 +191,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
     bool Right      ( sal_uInt16 nMode, bool bSelect,
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
-    bool Up         ( bool bSelect, bool bBasicCall = false );
-    bool Down       ( bool bSelect, bool bBasicCall = false );
+    bool Up         ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
+    bool Down       ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
     void NxtWrd     ( bool bSelect = false ) { SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
     bool PrvWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 
@@ -298,7 +298,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    InsertLineBreak();
     void    InsertColumnBreak();
     void    InsertFootnote(const OUString &, bool bEndNote = false, bool bEdit = true );
-    void    SplitNode( bool bAutoFormat = false );
+    void    SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
     bool    CanInsert();
 
     // indexes
@@ -321,6 +321,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 for clipboard
                           const svt::EmbeddedObjectRef&,
                           SvGlobalName *pName = nullptr,      // != 0 create object accordingly
+                          bool bActivate = true,
                           sal_uInt16 nSlotId = 0);       // SlotId for dialog
 
     bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = nullptr );
@@ -395,7 +396,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     // jump to bookmark and set the "selections-flags" correctly again
     void GotoMark( const ::sw::mark::IMark* const pMark );
-    bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect );
+    bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, bool bStart );
     void GotoMark( const OUString& rName );
     bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();

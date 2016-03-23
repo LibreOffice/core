@@ -266,6 +266,19 @@ ContextMenuHelper::~ContextMenuHelper()
 void
 ContextMenuHelper::completeAndExecute(
     const Point& aPos,
+    PopupMenu& rPopupMenu )
+{
+    SolarMutexGuard aSolarGuard;
+
+    associateUIConfigurationManagers();
+    completeMenuProperties( &rPopupMenu );
+    executePopupMenu( aPos, &rPopupMenu );
+    resetAssociations();
+}
+
+void
+ContextMenuHelper::completeAndExecute(
+    const Point& aPos,
     const uno::Reference< awt::XPopupMenu >& xPopupMenu )
 {
     SolarMutexGuard aSolarGuard;

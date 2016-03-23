@@ -259,7 +259,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      const ScMarkData& rMark,
                                      const OUString& rFormula,
                                      const ScTokenArray* pArr,
-                                     const formula::FormulaGrammar::Grammar eGram )
+                                     const formula::FormulaGrammar::Grammar eGram,
+                                     bool bDirtyFlag )
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
@@ -279,7 +280,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         pCell = new ScFormulaCell(this, aPos, *pArr, eGram, MM_FORMULA);
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
-    pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
+    pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1, bDirtyFlag );
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     for (; itr != itrEnd && *itr < nMax; ++itr)

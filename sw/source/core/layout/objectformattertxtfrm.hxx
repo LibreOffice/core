@@ -56,8 +56,13 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
             @param _rAnchoredObj
             reference to anchored object - objects, anchored after this one will
             be invalidated.
+
+            @param _bInclObj
+            boolean indicates, if given anchored object <_rAnchoredObj> also have
+            to be invalidated.
         */
-        void _InvalidateFollowObjs( SwAnchoredObject& _rAnchoredObj );
+        void _InvalidateFollowObjs( SwAnchoredObject& _rAnchoredObj,
+                                    const bool _bInclObj );
 
         /** method to determine first anchored object, whose 'anchor is moved
             forward'.

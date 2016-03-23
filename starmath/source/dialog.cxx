@@ -151,7 +151,9 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
         for (i = 0;  i < SmFontStyles::GetCount(); ++i)
             if (rStyleName == rStyles.GetStyleName(i))
                 break;
-        assert(i < SmFontStyles::GetCount() && "style-name unknown");
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE(i < rStyles.GetCount(), "style-name unknown");
+#endif
         nIndex = i;
     }
 
@@ -764,11 +766,16 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, const OString& sHelpId)
 
 void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 {
-    assert(nCategory < NOCATEGORIES && "Sm: wrong category number in SmDistanceDialog");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(/*0 <= nCategory  &&*/  nCategory < NOCATEGORIES,
+        "Sm: wrong category number in SmDistanceDialog");
+#endif
 
     // array to convert category- and metricfield-number in help ids.
     // 0 is used in case of unused combinations.
-    assert(NOCATEGORIES == 10 && "Sm : array doesn't fit into the number of categories");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(NOCATEGORIES == 10, "Sm : array doesn't fit into the number of categories");
+#endif
     static const char * aCatMf2Hid[10][4] =
     {
         { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, nullptr },
@@ -1659,6 +1666,11 @@ void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRec
     OUString aText( GetText() );
     if (!aText.isEmpty())
     {
+#if OSL_DEBUG_LEVEL > 1
+        sal_Int32 nPos = 0;
+        sal_UCS4 cChar = aText.iterateCodePoints( &nPos );
+        (void) cChar;
+#endif
         Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
 
         rRenderContext.DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
@@ -1701,7 +1713,10 @@ void SmShowChar::Resize()
 
 void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong ComboBox");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbols  ||  &rComboBox == pSymbols,
+        "Sm : wrong ComboBox");
+#endif
 
     rComboBox.Clear();
     if (bDeleteText)
@@ -1716,7 +1731,10 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 
 void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbolSets || &rComboBox == pSymbolSets) && "Sm : falsche ComboBox");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbolSets  ||  &rComboBox == pSymbolSets,
+        "Sm : falsche ComboBox");
+#endif
 
     rComboBox.Clear();
     if (bDeleteText)
@@ -1759,7 +1777,9 @@ void SmSymDefineDialog::FillStyles()
         for (sal_uInt16 i = 0;  i < SmFontStyles::GetCount();  i++)
             pStyles->InsertEntry( rStyles.GetStyleName(i) );
 
-        assert(pStyles->GetEntryCount() > 0 && "Sm : no styles available");
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE(pStyles->GetEntryCount() > 0, "Sm : no styles available");
+#endif
         pStyles->SetText( pStyles->GetEntry(0) );
     }
 }
@@ -1767,7 +1787,10 @@ void SmSymDefineDialog::FillStyles()
 
 SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 {
-    assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong combobox");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbols  ||  &rComboBox == pSymbols,
+        "Sm : wrong combobox");
+#endif
     return aSymbolMgrCopy.GetSymbolByName(rComboBox.GetText());
 }
 
@@ -1775,7 +1798,9 @@ SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
-    assert(&rComboBox == pOldSymbols && "Sm : wrong argument");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbols, "Sm : wrong argument");
+#endif
     SelectSymbol(*pOldSymbols, pOldSymbols->GetText(), false);
 }
 
@@ -1783,7 +1808,9 @@ IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, vo
 IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
-    assert(&rComboBox == pOldSymbolSets && "Sm : wrong argument");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbolSets, "Sm : wrong argument");
+#endif
     SelectSymbolSet(*pOldSymbolSets, pOldSymbolSets->GetText(), false);
 }
 
@@ -1818,7 +1845,9 @@ IMPL_LINK_TYPED( SmSymDefineDialog, ModifyHdl, Edit&, rEdit, void )
 IMPL_LINK_TYPED( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
 {
     (void) rListBox;
-    assert(&rListBox == pFonts && "Sm : wrong argument");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rListBox == pFonts, "Sm : wrong argument");
+#endif
 
     SelectFont(pFonts->GetSelectEntry());
 }
@@ -1841,7 +1870,9 @@ IMPL_LINK_NOARG_TYPED( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 IMPL_LINK_TYPED( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
-    assert(&rComboBox == pStyles && "Sm : falsches Argument");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pStyles, "Sm : falsches Argument");
+#endif
 
     SelectStyle(pStyles->GetText());
 }
@@ -1851,7 +1882,9 @@ IMPL_LINK_NOARG_TYPED(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void
 {
    sal_UCS4 cChar = pCharsetDisplay->GetSelectCharacter();
 
-    assert(pSubsetMap && "SubsetMap missing");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( pSubsetMap, "SubsetMap missing" );
+#endif
     if (pSubsetMap)
     {
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
@@ -1878,8 +1911,10 @@ IMPL_LINK_NOARG_TYPED(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void
 IMPL_LINK_TYPED( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
 {
     (void) pButton;
-    assert(pButton == pAddBtn && "Sm : wrong argument");
-    assert(pButton->IsEnabled() && "Sm : requirements met ??");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(pButton == pAddBtn, "Sm : wrong argument");
+    OSL_ENSURE(pAddBtn->IsEnabled(), "Sm : requirements met ??");
+#endif
 
     // add symbol
     const SmSym aNewSymbol( pSymbols->GetText(), pCharsetDisplay->GetFont(),
@@ -1905,8 +1940,10 @@ IMPL_LINK_TYPED( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
 IMPL_LINK_TYPED( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
 {
     (void) pButton;
-    assert(pButton == pChangeBtn && "Sm : wrong argument");
-    assert(pChangeBtn->IsEnabled() && "Sm : requirements met ??");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(pButton == pChangeBtn, "Sm : wrong argument");
+    OSL_ENSURE(pChangeBtn->IsEnabled(), "Sm : requirements met ??");
+#endif
 
     // get new Sybol to use
     //! get font from symbol-disp lay since charset-display does not keep
@@ -1942,8 +1979,10 @@ IMPL_LINK_TYPED( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
 IMPL_LINK_TYPED( SmSymDefineDialog, DeleteClickHdl, Button *, pButton, void )
 {
     (void) pButton;
-    assert(pButton == pDeleteBtn && "Sm : wrong argument");
-    assert(pDeleteBtn->IsEnabled() && "Sm : requirements met ??");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(pButton == pDeleteBtn, "Sm : wrong argument");
+    OSL_ENSURE(pDeleteBtn->IsEnabled(), "Sm : requirements met ??");
+#endif
 
     if (pOrigSymbol)
     {
@@ -2138,7 +2177,10 @@ void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
 bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
         const OUString &rSymbolSetName, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbolSets || &rComboBox == pSymbolSets) && "Sm : wrong ComboBox");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbolSets  ||  &rComboBox == pSymbolSets,
+        "Sm : wrong ComboBox");
+#endif
 
     // trim SymbolName (no leading and trailing blanks)
     OUString  aNormName (rSymbolSetName);
@@ -2213,7 +2255,10 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
 bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
         const OUString &rSymbolName, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong ComboBox");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(&rComboBox == pOldSymbols  ||  &rComboBox == pSymbols,
+        "Sm : wrong ComboBox");
+#endif
 
     // trim SymbolName (no blanks)
     OUString  aNormName(comphelper::string::remove(rSymbolName, ' '));

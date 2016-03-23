@@ -86,6 +86,7 @@
 #include <idxmrk.hxx>
 #include <poolfmt.hxx>
 #include <breakit.hxx>
+#include <crsskip.hxx>
 #include <modcfg.hxx>
 #include <column.hxx>
 #include <edtwin.hxx>
@@ -248,7 +249,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
 
         svt::EmbeddedObjectRef xObj;
-        rSh.InsertObject( xObj, pName, nSlot);
+        rSh.InsertObject( xObj, pName, true, nSlot);
         rReq.Done();
         break;
     }
@@ -315,7 +316,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            rSh.InsertObject( xObj, nullptr, nSlot);
+            rSh.InsertObject( xObj, nullptr, true, nSlot);
             rReq.Done();
         }
     }
@@ -347,7 +348,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 else
                     bFillWithData = false;  // will create chart with only it's default image
 
-                SwTableFUNC( &rSh ).InsertChart( xDataProvider, bFillWithData, aRangeString );
+                SwTableFUNC( &rSh, false ).InsertChart( xDataProvider, bFillWithData, aRangeString );
                 rSh.LaunchOLEObj();
 
                 svt::EmbeddedObjectRef& xObj = rSh.GetOLEObject();

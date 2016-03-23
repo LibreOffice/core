@@ -742,7 +742,7 @@ namespace sw { namespace mark
                 {
                     if ( pSaveBkmk )
                     {
-                        pSaveBkmk->push_back( SaveBookmark( *pMark, rStt, pSttIdx ) );
+                        pSaveBkmk->push_back( SaveBookmark( true, true, *pMark, rStt, pSttIdx ) );
                     }
                     vMarksToDelete.push_back(ppMark);
                 }
@@ -1192,14 +1192,16 @@ const IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess() const
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
 SaveBookmark::SaveBookmark(
+    bool bSavePos,
+    bool bSaveOtherPos,
     const IMark& rBkmk,
     const SwNodeIndex & rMvPos,
     const SwIndex* pIdx)
     : m_aName(rBkmk.GetName())
     , m_aShortName()
     , m_aCode()
-    , m_bSavePos(true)
-    , m_bSaveOtherPos(true)
+    , m_bSavePos(bSavePos)
+    , m_bSaveOtherPos(bSaveOtherPos)
     , m_eOrigBkmType(IDocumentMarkAccess::GetType(rBkmk))
 {
     const IBookmark* const pBookmark = dynamic_cast< const IBookmark* >(&rBkmk);

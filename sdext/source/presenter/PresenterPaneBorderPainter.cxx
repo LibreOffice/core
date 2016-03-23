@@ -120,7 +120,8 @@ public:
         const std::shared_ptr<RendererPaneStyle>& rpStyle,
         const awt::Rectangle& rUpdateBox,
         const awt::Rectangle& rOuterBox,
-        const awt::Rectangle& rInnerBox);
+        const awt::Rectangle& rInnerBox,
+        const bool bPaintBackground);
     void SetupClipping (
         const awt::Rectangle& rUpdateBox,
         const awt::Rectangle& rOuterBox,
@@ -490,7 +491,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     PaintBitmap(aCenterBox, rUpdateBox, +1,+1, 0,0, false, pBottomRight, pBackground);
 
     // Paint the title.
-    PaintTitle(rsTitle, pStyle, rUpdateBox, aOuterBox, aInnerBox);
+    PaintTitle(rsTitle, pStyle, rUpdateBox, aOuterBox, aInnerBox, false);
 
     // In a double buffering environment request to make the changes visible.
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
@@ -503,7 +504,8 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     const std::shared_ptr<RendererPaneStyle>& rpStyle,
     const awt::Rectangle& rUpdateBox,
     const awt::Rectangle& rOuterBox,
-    const awt::Rectangle& rInnerBox)
+    const awt::Rectangle& rInnerBox,
+    bool bPaintBackground)
 {
     if ( ! mxCanvas.is())
         return;
@@ -564,14 +566,35 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
-    PresenterCanvasHelper::SetDeviceColor(
+    if (bPaintBackground)
+    {
+        PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
+        Sequence<Sequence<geometry::RealPoint2D> > aPolygons(1);
+        aPolygons[0] = Sequence<geometry::RealPoint2D>(4);
+        aPolygons[0][0] = geometry::RealPoint2D(0, -nTextHeight);
+        aPolygons[0][1] = geometry::RealPoint2D(0, 0);
+        aPolygons[0][2] = geometry::RealPoint2D(nTextWidth, 0);
+        aPolygons[0][3] = geometry::RealPoint2D(nTextWidth, -nTextHeight);
+        Reference<rendering::XPolyPolygon2D> xPolygon (
+        mxCanvas->getDevice()->createCompatibleLinePolyPolygon(aPolygons), UNO_QUERY);
+        if (xPolygon.is())
+            xPolygon->setClosed(0, sal_True);
+        mxCanvas->fillPolyPolygon(
+            xPolygon,
+            maViewState,
+            aRenderState);
+    }
+    else
+    {
+        PresenterCanvasHelper::SetDeviceColor(
             aRenderState,
             rpStyle->mpFont->mnColor);
 
-    mxCanvas->drawTextLayout (
+        mxCanvas->drawTextLayout (
             xLayout,
             maViewState,
             aRenderState);
+    }
 }
 
 std::shared_ptr<RendererPaneStyle>

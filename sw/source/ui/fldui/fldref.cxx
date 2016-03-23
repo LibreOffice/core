@@ -621,11 +621,11 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             for ( size_t nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
             {
                 SvTreeListEntry* pEntry = nullptr;
-                bool isSubstring = MatchSubstring(pIDoc->getListItemText( *maNumItems[nNumItemIdx] ), filterString);
+                bool isSubstring = MatchSubstring(pIDoc->getListItemText( *maNumItems[nNumItemIdx], true, true ), filterString);
                 if(isSubstring)
                 {
                     pEntry = m_pSelectionToolTipLB->InsertEntry(
-                    pIDoc->getListItemText( *maNumItems[nNumItemIdx] ) );
+                    pIDoc->getListItemText( *maNumItems[nNumItemIdx], true, true ) );
                     pEntry->SetUserData( reinterpret_cast<void*>(nNumItemIdx) );
                     if ( ( IsFieldEdit() &&
                            pRefField->GetReferencedTextNode() == maNumItems[nNumItemIdx]->GetTextNode() ) ||
@@ -781,7 +781,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
             }
             else
             {
-                nSize = GetFieldMgr().GetFormatCount( nTypeId, IsFieldDlgHtmlMode() );
+                nSize = GetFieldMgr().GetFormatCount( nTypeId, false, IsFieldDlgHtmlMode() );
             }
             break;
     }

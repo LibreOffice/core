@@ -22,7 +22,6 @@
 %top{
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvTree.hxx"
@@ -30,7 +29,7 @@ using namespace std;
 #define IMPLptr convert_gen::mcImpl
 #define LOCptr ((convert_tree *)convert_gen::mcImpl)
 
-/* enlarge token buffer to tokenize whole strings */
+/* enlarge token buffer to tokenize whole std::strings */
 #undef  YYLMAX
 #define YYLMAX 64000
 
@@ -90,49 +89,49 @@ IDENT [\.a-zA-Z0-9_-]+
 
 
 \> {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_VALUE, convert_tree::STATE_VAL_NONE, NULL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_VALUE, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "id=" {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_ID, NULL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_ID);
 }
 
 
 
 "application=" {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_APPL, NULL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_APPL);
 }
 
 
 
 "title=" {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_TITLE, NULL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NONE, convert_tree::STATE_VAL_TITLE);
 }
 
 
 
 "<help_section " {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_HELPSEC, convert_tree::STATE_VAL_NONE, "help_section");
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_HELPSEC, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "<node " {
-    LOCptr->setState(yytext, convert_tree::STATE_TAG_NODE, convert_tree::STATE_VAL_NONE, "node");
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_NODE, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "<topic " {
-    //NOT NOW LOCptr->setState(yytext, convert_tree::STATE_TAG_TOPIC, convert_tree::STATE_VAL_NONE, NULL);
+    LOCptr->setState(yytext, convert_tree::STATE_TAG_TOPIC, convert_tree::STATE_VAL_NONE);
 }
 
 
 
 "</topic" {
-    // NOT NOW LOCptr->setValue(yytext);
+    LOCptr->setValue(yytext);
 }
 
 
@@ -153,5 +152,7 @@ IDENT [\.a-zA-Z0-9_-]+
 
 void tree_dummyJustForCompiler()
 {
-    yyunput(0, NULL);
+    char *txt = NULL;
+    //  yy_flex_strlen(txt);
+    yyunput(0, txt);
 }

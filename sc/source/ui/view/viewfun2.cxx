@@ -1011,7 +1011,7 @@ bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
         return false;
 }
 
-bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
+bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bCenter )
 {
     //  Editable- and Being-Nested- test must be at the beginning (in DocFunc too),
     //  so that the Contents-QueryBox won't appear
@@ -1089,7 +1089,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
 
     if (bOk)
     {
-        bOk = pDocSh->GetDocFunc().MergeCells( aMergeOption, rDoContents, true/*bRecord*/, bApi );
+        bOk = pDocSh->GetDocFunc().MergeCells( aMergeOption, rDoContents, bRecord, bApi );
 
         if (bOk)
         {
@@ -1199,7 +1199,7 @@ void ScViewFunc::FillSimple( FillDir eDir )
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
-        bool bSuccess = pDocSh->GetDocFunc().FillSimple( aRange, &rMark, eDir, false );
+        bool bSuccess = pDocSh->GetDocFunc().FillSimple( aRange, &rMark, eDir, true/*bRecord*/, false );
         if (bSuccess)
         {
             pDocSh->UpdateOle(&GetViewData());
@@ -1224,7 +1224,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
         const ScMarkData& rMark = GetViewData().GetMarkData();
         bool bSuccess = pDocSh->GetDocFunc().
                         FillSeries( aRange, &rMark, eDir, eCmd, eDateCmd,
-                                    fStart, fStep, fMax, false );
+                                    fStart, fStep, fMax, true/*bRecord*/, false );
         if (bSuccess)
         {
             pDocSh->UpdateOle(&GetViewData());
@@ -1246,7 +1246,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     const ScMarkData& rMark = GetViewData().GetMarkData();
     bool bSuccess = pDocSh->GetDocFunc().
-                    FillAuto( aRange, &rMark, eDir, nCount, false );
+                    FillAuto( aRange, &rMark, eDir, nCount, true/*bRecord*/, false );
     if (bSuccess)
     {
         MarkRange( aRange, false );         // aRange was modified in FillAuto
@@ -1564,7 +1564,7 @@ void ScViewFunc::ConvertFormulaToValue()
     aRange.PutInOrder();
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().ConvertFormulaToValue(aRange, true);
+    pDocSh->GetDocFunc().ConvertFormulaToValue(aRange, true, true);
     pDocSh->PostPaint(aRange, PAINT_GRID);
 }
 
@@ -1580,7 +1580,7 @@ void ScViewFunc::TransliterateText( sal_Int32 nType )
     }
 
     bool bSuccess = GetViewData().GetDocShell()->GetDocFunc().
-                        TransliterateText( aFuncMark, nType, false );
+                        TransliterateText( aFuncMark, nType, true, false );
     if (bSuccess)
     {
         GetViewData().GetViewShell()->UpdateInputHandler();
@@ -1618,7 +1618,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo )
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         ScMarkData& rMark = GetViewData().GetMarkData();
 
-        bool bSuccess = pDocSh->GetDocFunc().AutoFormat( aRange, &rMark, nFormatNo, false );
+        bool bSuccess = pDocSh->GetDocFunc().AutoFormat( aRange, &rMark, nFormatNo, true/*bRecord*/, false );
         if (bSuccess)
             pDocSh->UpdateOle(&GetViewData());
     }
@@ -2353,7 +2353,7 @@ bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
 
 bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
 {
-    bool bSuccess = GetViewData().GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, false );
+    bool bSuccess = GetViewData().GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, true, false );
     if (bSuccess)
     {
         GetViewData().GetViewShell()->UpdateInputHandler();
@@ -2363,7 +2363,7 @@ bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfo
 
 void ScViewFunc::InsertAreaLink( const OUString& rFile,
                                     const OUString& rFilter, const OUString& rOptions,
-                                    const OUString& rSource )
+                                    const OUString& rSource, sal_uLong nRefresh )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     SCCOL nPosX = GetViewData().GetCurX();
@@ -2371,7 +2371,7 @@ void ScViewFunc::InsertAreaLink( const OUString& rFile,
     SCTAB nTab = GetViewData().GetTabNo();
     ScAddress aPos( nPosX, nPosY, nTab );
 
-    pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, aPos, 0/*nRefresh*/, false, false );
+    pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, aPos, nRefresh, false, false );
 }
 
 void ScViewFunc::InsertTableLink( const OUString& rFile,

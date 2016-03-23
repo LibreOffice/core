@@ -42,6 +42,7 @@
 #include <ndtxt.hxx>
 #include <pamtyp.hxx>
 #include <swundo.hxx>
+#include <crsskip.hxx>
 #include <boost/optional.hpp>
 #include <memory>
 

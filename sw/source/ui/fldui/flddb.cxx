@@ -131,7 +131,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
 
     m_pFormatLB->Clear();
 
-    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, IsFieldDlgHtmlMode());
+    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, false, IsFieldDlgHtmlMode());
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {
         const sal_Int32 nEntryPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));

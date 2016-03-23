@@ -294,11 +294,11 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
     return mxAccessible;
 }
 
-void ScMenuFloatingWindow::addMenuItem(const OUString& rText, Action* pAction)
+void ScMenuFloatingWindow::addMenuItem(const OUString& rText, bool bEnabled, Action* pAction)
 {
     MenuItemData aItem;
     aItem.maText = rText;
-    aItem.mbEnabled = true;
+    aItem.mbEnabled = bEnabled;
     aItem.mpAction.reset(pAction);
     maMenuItems.push_back(aItem);
 }

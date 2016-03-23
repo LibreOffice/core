@@ -207,13 +207,13 @@ void ScDBFunc::AutoOutline( )
 
 // select outline level
 
-void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord )
+void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord, bool bPaint )
 {
     SCTAB nTab = GetViewData().GetTabNo();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    bool bOk = aFunc.SelectLevel( nTab, bColumns, nLevel, bRecord, true/*bPaint*/ );
+    bool bOk = aFunc.SelectLevel( nTab, bColumns, nLevel, bRecord, bPaint );
 
     if (bOk)
         UpdateScrollBars();

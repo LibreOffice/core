@@ -119,7 +119,7 @@ namespace rptui
         /** returns the iterator at pos _nPos or the end()
         */
         TSectionsMap::iterator getIteratorAtPos(sal_uInt16 _nPos);
-        void collectRectangles(TRectangleMap& _rMap);
+        void collectRectangles(TRectangleMap& _rMap,bool _bBoundRects);
         static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize);
         void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
 

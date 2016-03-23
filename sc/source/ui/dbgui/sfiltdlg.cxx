@@ -153,7 +153,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
             ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
             for (; itr != itrEnd; ++itr)
             {
-                if (!itr->second->HasType(ScRangeData::Type::Criteria))
+                if (!itr->second->HasType(RT_CRITERIA))
                     continue;
 
                 const sal_Int32 nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());

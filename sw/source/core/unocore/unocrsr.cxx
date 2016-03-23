@@ -30,7 +30,7 @@ sw::DocDisposingHint::~DocDisposingHint() {}
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
 
 SwUnoCursor::SwUnoCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing )
+    : SwCursor( rPos, pRing, false )
     , SwModify(nullptr)
     , m_bRemainInSection(true)
     , m_bSkipOverHiddenSections(false)
@@ -157,10 +157,10 @@ bool SwUnoCursor::IsSelOvr( int eFlags )
 }
 
 SwUnoTableCursor::SwUnoTableCursor(const SwPosition& rPos)
-    : SwCursor(rPos, nullptr)
+    : SwCursor(rPos, nullptr, false)
     , SwUnoCursor(rPos)
     , SwTableCursor(rPos)
-    , m_aTableSel(rPos, nullptr)
+    , m_aTableSel(rPos, nullptr, false)
 {
     SetRemainInSection(false);
 }

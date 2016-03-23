@@ -440,7 +440,8 @@ public:
                                 const ScMarkData& rMark,
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                                 InsertDeleteFlags nNewFlags,
-                                ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3
+                                ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
+                                bool bRedoIsFilled = true
                                  );
     virtual     ~ScUndoDataForm();
 

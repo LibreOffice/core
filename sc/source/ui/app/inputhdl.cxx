@@ -2891,7 +2891,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     if ( bOldMod && pExecuteSh && pCellAttrs && !bForget )
     {
         // Combine with input?
-        pExecuteSh->ApplySelectionPattern( *pCellAttrs, true );
+        pExecuteSh->ApplySelectionPattern( *pCellAttrs, true, true );
         pExecuteSh->AdjustBlockHeight();
     }
 
@@ -3424,7 +3424,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     return bUsed;
 }
 
-void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
+void ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
 {
     if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
@@ -3458,74 +3458,77 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
     }
     else
     {
-        if (!bOptLoaded)
+        if ( bForce || eMode != SC_INPUT_NONE )
         {
-            bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
-            bOptLoaded = true;
-        }
-
-        HideTip();
-        HideTipBelow();
-
-        if ( bSelIsRef )
-        {
-            RemoveSelection();
-            bSelIsRef = false;
-        }
-
-        UpdateActiveView();
-        bool bNewView = DataChanging( 0, true );
-
-        if (!bProtected)                            // changes allowed
-        {
-            if (bNewView)                           // create new edit view
+            if (!bOptLoaded)
             {
-                if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine, aCursorPos );
-                UpdateActiveView();
-                if (eMode==SC_INPUT_NONE)
-                    if (pTableView || pTopView)
-                    {
-                        OUString aStrLoP;
-                        if (pTableView)
-                        {
-                            pTableView->GetEditEngine()->SetText( aStrLoP );
-                            pTableView->SetSelection( ESelection(0,0, 0,0) );
-                        }
-                        if (pTopView)
-                        {
-                            pTopView->GetEditEngine()->SetText( aStrLoP );
-                            pTopView->SetSelection( ESelection(0,0, 0,0) );
-                        }
-                    }
-                SyncViews();
+                bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
+                bOptLoaded = true;
             }
 
-            if (pTableView || pTopView)
-            {
-                if (pTableView)
-                    pTableView->Command( rCEvt );
-                if (pTopView)
-                    pTopView->Command( rCEvt );
+            HideTip();
+            HideTipBelow();
 
-                if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
+            if ( bSelIsRef )
+            {
+                RemoveSelection();
+                bSelIsRef = false;
+            }
+
+            UpdateActiveView();
+            bool bNewView = DataChanging( 0, true );
+
+            if (!bProtected)                            // changes allowed
+            {
+                if (bNewView)                           // create new edit view
                 {
-                    //  AutoInput after ext text input
-
-                    if (pFormulaData)
-                        miAutoPosFormula = pFormulaData->end();
-                    if (pColumnData)
-                        miAutoPosColumn = pColumnData->end();
-
-                    if (bFormulaMode)
-                        UseFormulaData();
-                    else
-                        UseColData();
+                    if (pActiveViewSh)
+                        pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine, aCursorPos );
+                    UpdateActiveView();
+                    if (eMode==SC_INPUT_NONE)
+                        if (pTableView || pTopView)
+                        {
+                            OUString aStrLoP;
+                            if (pTableView)
+                            {
+                                pTableView->GetEditEngine()->SetText( aStrLoP );
+                                pTableView->SetSelection( ESelection(0,0, 0,0) );
+                            }
+                            if (pTopView)
+                            {
+                                pTopView->GetEditEngine()->SetText( aStrLoP );
+                                pTopView->SetSelection( ESelection(0,0, 0,0) );
+                            }
+                        }
+                    SyncViews();
                 }
-            }
 
-            DataChanged();              //  calls UpdateParenthesis()
-            InvalidateAttribs();        //! in DataChanged ?
+                if (pTableView || pTopView)
+                {
+                    if (pTableView)
+                        pTableView->Command( rCEvt );
+                    if (pTopView)
+                        pTopView->Command( rCEvt );
+
+                    if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
+                    {
+                        //  AutoInput after ext text input
+
+                        if (pFormulaData)
+                            miAutoPosFormula = pFormulaData->end();
+                        if (pColumnData)
+                            miAutoPosColumn = pColumnData->end();
+
+                        if (bFormulaMode)
+                            UseFormulaData();
+                        else
+                            UseColData();
+                    }
+                }
+
+                DataChanged();              //  calls UpdateParenthesis()
+                InvalidateAttribs();        //! in DataChanged ?
+            }
         }
 
         if (pTopView && eMode != SC_INPUT_NONE)

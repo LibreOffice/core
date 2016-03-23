@@ -157,7 +157,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     {
         if (mpRowHeights && pRowFlags)
         {
-            mpRowHeights->insertSegment(nStartRow, nSize);
+            mpRowHeights->insertSegment(nStartRow, nSize, false);
             sal_uInt8 nNewFlags = pRowFlags->Insert( nStartRow, nSize);
             // only copy manual size flag, clear all others
             if (nNewFlags && (nNewFlags != CR_MANUALSIZE))
@@ -168,8 +168,8 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (pOutlineTable)
             pOutlineTable->InsertRow( nStartRow, nSize );
 
-        mpFilteredRows->insertSegment(nStartRow, nSize);
-        mpHiddenRows->insertSegment(nStartRow, nSize);
+        mpFilteredRows->insertSegment(nStartRow, nSize, true);
+        mpHiddenRows->insertSegment(nStartRow, nSize, true);
 
         if (!maRowManualBreaks.empty())
         {
@@ -290,8 +290,8 @@ void ScTable::InsertCol(
         if (pOutlineTable)
             pOutlineTable->InsertCol( nStartCol, nSize );
 
-        mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
-        mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
+        mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize), true);
+        mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize), true);
 
         if (!maColManualBreaks.empty())
         {
@@ -3549,7 +3549,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             else
             {
                 aCell.release(*pDocument, aDest);
-                pDocument->SetPattern( aDest, *GetPattern( nCol, nRow ) );
+                pDocument->SetPattern( aDest, *GetPattern( nCol, nRow ), true );
             }
 
             ++nDestX;

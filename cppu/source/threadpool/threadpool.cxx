@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include <cassert>
-#include <chrono>
 #include <algorithm>
 #include <unordered_map>
 
@@ -149,7 +148,8 @@ namespace cppu_threadpool
         }
 
         // let the thread wait 2 seconds
-        waitingThread.condition.wait( std::chrono::seconds(2) );
+        TimeValue time = { 2 , 0 };
+        waitingThread.condition.wait( &time );
 
         {
             MutexGuard guard ( m_mutexWaitingThreadList );

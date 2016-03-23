@@ -27,9 +27,11 @@
 namespace framework{
 
 PropertySetHelper::PropertySetHelper(      osl::Mutex & mutex,
-                                           TransactionManager*                                     pExternalTransactionManager )
+                                           TransactionManager*                                     pExternalTransactionManager ,
+                                           bool                                                bReleaseLockOnCall          )
     : m_lSimpleChangeListener(mutex)
     , m_lVetoChangeListener  (mutex)
+    , m_bReleaseLockOnCall   (bReleaseLockOnCall                   )
     , m_rTransactionManager  (*pExternalTransactionManager         )
 {
 }
@@ -160,6 +162,13 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     css::beans::Property aPropInfo = pIt->second;
 
     bool bLocked = true;
+    if (m_bReleaseLockOnCall)
+    {
+        aWriteLock.clear();
+        bLocked = false;
+        // <- SAFE
+    }
+
     css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
 
     if (! bLocked)
@@ -179,6 +188,12 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     aEvent.OldValue       = aCurrentValue;
     aEvent.NewValue       = aValue;
     aEvent.Source.set(m_xBroadcaster.get(), css::uno::UNO_QUERY);
+
+    if (m_bReleaseLockOnCall)
+    {
+        aWriteLock.clear();
+        // <- SAFE
+    }
 
     if (impl_existsVeto(aEvent))
         throw css::beans::PropertyVetoException();
@@ -203,6 +218,9 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const OUString& sProp
         throw css::beans::UnknownPropertyException();
 
     css::beans::Property aPropInfo = pIt->second;
+
+    if (m_bReleaseLockOnCall)
+        aReadLock.clear();
 
     return impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
 }

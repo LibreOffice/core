@@ -206,7 +206,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, true );
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode( MAP_TWIP );
@@ -337,7 +337,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
     if (pData)
     {
         // for pure text, no font info is needed in pool defaults
-        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool() );
+        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), true );
 
         ScHeaderFieldData aData;
         FillDummyFieldData( aData );
@@ -355,7 +355,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(un
     OUString aString(aText);
 
     // for pure text, no font info is needed in pool defaults
-    ScHeaderEditEngine aEditEngine(EditEngine::CreatePool());
+    ScHeaderEditEngine aEditEngine(EditEngine::CreatePool(), true);
     aEditEngine.SetText( aString );
     aTextData.UpdateData(aEditEngine);
 }

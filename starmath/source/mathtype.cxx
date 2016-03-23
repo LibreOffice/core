@@ -581,13 +581,16 @@ bool MathType::Parse(SotStorage *pStor)
     //starmaths internals.
     rRet += "{}";
 
-#ifdef CAOLAN
+#if OSL_DEBUG_LEVEL > 1
+#   ifdef CAOLAN
     //sanity check
 
     //sigh, theres no point! MathType (in some bizarre subvarient) pads
     //the end of the formula with ENDs (0)'s
     sal_uLong nEnd = pS->Tell();
-    SAL_WARN_IF(nEnd == pS->Seek(STREAM_SEEK_TO_END), "starmath", "Possibly unfully parsed formula");
+    OSL_ENSURE(nEnd == pS->Seek(STREAM_SEEK_TO_END),
+        "Possibly unfully parsed formula");
+#   endif
 #endif
     return bRet;
 }

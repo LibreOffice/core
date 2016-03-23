@@ -26,7 +26,8 @@
 #include <osl/file.hxx>
 
 
-SvMetaModule::SvMetaModule()
+SvMetaModule::SvMetaModule( bool bImp )
+    : bImported( bImp )
 {
 }
 

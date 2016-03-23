@@ -86,6 +86,7 @@
 #include <app.hrc>
 #include <web.hrc>
 #include "paratr.hxx"
+#include <crsskip.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
@@ -1005,7 +1006,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, nullptr, false, sDefPage ));
+                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, nullptr, false, sDefPage ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
             SfxItemSet* pSet = nullptr;
@@ -1119,12 +1120,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             OUString sContinuedListId;
             const SwNumRule* pRule =
-                rWrtSh.SearchNumRule( true, -1, sContinuedListId );
+                rWrtSh.SearchNumRule( true, false, -1, sContinuedListId );
             // #i86492#
             // Search also for bullet list
             if ( !pRule )
             {
-                pRule = rWrtSh.SearchNumRule( false, -1, sContinuedListId );
+                pRule = rWrtSh.SearchNumRule( false, false, -1, sContinuedListId );
             }
             if ( pRule )
             {
@@ -1881,10 +1882,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     // Search also for bullet list
                     OUString aDummy;
                     const SwNumRule* pRule =
-                            rSh.SearchNumRule( true, -1, aDummy );
+                            rSh.SearchNumRule( true, false, -1, aDummy );
                     if ( !pRule )
                     {
-                        pRule = rSh.SearchNumRule( false, -1, aDummy );
+                        pRule = rSh.SearchNumRule( false, false, -1, aDummy );
                     }
                     if ( !pRule )
                         rSet.DisableItem(nWhich);

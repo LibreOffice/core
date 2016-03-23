@@ -31,8 +31,7 @@
 #if (defined(INTEL) \
     && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) ||   \
                               defined(NETBSD) || defined(OPENBSD) ||  \
-                              defined(DRAGONFLY) || defined(SOLARIS) || \
-                              defined(ANDROID)) \
+                              defined(DRAGONFLY) || defined(SOLARIS)) \
         || defined(MACOSX) )) \
     || defined(IOS)
 #define MAX_ALIGNMENT_4

@@ -158,7 +158,7 @@ public:
                     virtual ~ScFormulaCell();
 
     ScFormulaCell* Clone() const;
-    ScFormulaCell* Clone( const ScAddress& rPos ) const;
+    ScFormulaCell* Clone( const ScAddress& rPos, int nCloneFlags ) const;
 
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos );
 

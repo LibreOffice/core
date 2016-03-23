@@ -352,9 +352,11 @@ void IconViewImpl::SyncVerThumb()
         aVerSBar->SetThumbPos( 0 );
 }
 
-void IconViewImpl::UpdateAll( bool bInvalidateCompleteView )
+void IconViewImpl::UpdateAll( bool bInvalidateCompleteView,
+               bool bUpdateVerScrollBar )
 {
-    FindMostRight( nullptr );
+    if( bUpdateVerScrollBar )
+        FindMostRight( nullptr );
     aVerSBar->SetRange( Range( 0, pView->GetVisibleCount() ) );
     SyncVerThumb();
     FillView();

@@ -218,7 +218,7 @@ bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPo
     if (!pGlobalNames)
         return false;
 
-    ScRangeData* pName = new ScRangeData(this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar());
+    ScRangeData* pName = new ScRangeData(this, rName, rExpr, rPos, RT_NAME, GetGrammar());
     return pGlobalNames->insert(pName);
 }
 
@@ -1488,7 +1488,7 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
  * Entries for AutoFilter listbox
  */
 void ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
@@ -1510,15 +1510,17 @@ void ScDocument::GetFilterEntries(
             pDBData->GetQueryParam( aParam );
 
             // Return all filter entries, if a filter condition is connected with a boolean OR
-            bool bFilter = true;
-            SCSIZE nEntryCount = aParam.GetEntryCount();
-            for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
+            if ( bFilter )
             {
-                ScQueryEntry& rEntry = aParam.GetEntry(i);
-                if ( rEntry.eConnect != SC_AND )
+                SCSIZE nEntryCount = aParam.GetEntryCount();
+                for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
                 {
-                    bFilter = false;
-                    break;
+                    ScQueryEntry& rEntry = aParam.GetEntry(i);
+                    if ( rEntry.eConnect != SC_AND )
+                    {
+                        bFilter = false;
+                        break;
+                    }
                 }
             }
 

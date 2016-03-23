@@ -106,13 +106,14 @@ VirtualDevice* DocumentDeviceManager::getVirtualDevice(/*[in]*/ bool bCreate ) c
     return pRet;
 }
 
-void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd )
+void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool )
 {
     assert ( !pVd->isDisposed() );
 
     if ( mpVirDev.get() != pVd )
     {
-        mpVirDev.disposeAndClear();
+        if ( bDeleteOld )
+            mpVirDev.disposeAndClear();
         mpVirDev = pVd;
 
         if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
@@ -275,7 +276,7 @@ VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
     aMapMode.SetMapUnit( MAP_TWIP );
     pNewVir->SetMapMode( aMapMode );
 
-    const_cast<DocumentDeviceManager*>(this)->setVirtualDevice( pNewVir );
+    const_cast<DocumentDeviceManager*>(this)->setVirtualDevice( pNewVir, true, true );
     return *mpVirDev;
 }
 

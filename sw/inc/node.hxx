@@ -407,7 +407,8 @@ public:
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
-                            const Point* pPoint = nullptr  ) const;
+                            const Point* pPoint = nullptr,
+                            const bool bCalcFrame = false  ) const;
     SwRect FindPageFrameRect() const;
 
     /** Method creates all views of document for given node. The content

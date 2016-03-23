@@ -72,7 +72,10 @@
 #include "salimestatus.hxx"
 #include "xconnection.hxx"
 
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
+#endif
 
 #include <osl/process.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -110,8 +113,10 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
              (pInfo->Signal == osl_Signal_DebugBreak) )
         {
             nVCLException = EXCEPTION_SYSTEM;
+#if HAVE_FEATURE_OPENGL
             if (OpenGLZone::isInZone())
                 OpenGLZone::hardDisable();
+#endif
         }
 
         // RC
@@ -188,8 +193,9 @@ int ImplSVMain()
       pSVData->mxAccessBridge.clear();
     }
 
+#if HAVE_FEATURE_OPENGL
     OpenGLWatchdogThread::stop();
-
+#endif
     DeInitVCL();
 
     return nReturn;

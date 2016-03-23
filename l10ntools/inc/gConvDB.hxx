@@ -16,24 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <string>
-#include <vector>
-using namespace std;
-
-#include "gL10nMem.hxx"
-
-#include "gConvUi.hxx"
+#ifndef GCONDN_HXX
+#define GCONDN_HXX
+#include "gConv.hxx"
 
 
-convert_ui::convert_ui(l10nMem& crMemory)
-                      : convert_gen(crMemory)
+
+class convert_db : public convert_gen
 {
-}
+    public:
+        convert_db(l10nMem& crMemory);
+        ~convert_db();
 
+    private:
+        static const int NUMFIELD = 16;
+        std::string      msFields[NUMFIELD];
+        int              miSize;
 
-
-extern int uilex(void);
-void convert_ui::doExecute()
-{
-    uilex();
-}
+        void execute() override;
+        bool collectLine();
+};
+#endif

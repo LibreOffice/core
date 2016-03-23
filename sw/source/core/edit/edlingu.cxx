@@ -50,6 +50,7 @@
 #include <mdiexp.hxx>
 #include <statstr.hrc>
 #include <cntfrm.hxx>
+#include <crsskip.hxx>
 #include <splargs.hxx>
 #include <redline.hxx>
 #include <docary.hxx>

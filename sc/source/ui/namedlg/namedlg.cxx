@@ -254,10 +254,10 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     m_pBtnColHeader->SetToggleHdl( Link<CheckBox&,void>() );
     m_pBtnRowHeader->SetToggleHdl( Link<CheckBox&,void>() );
 
-    m_pBtnCriteria->Check( pData->HasType( ScRangeData::Type::Criteria ) );
-    m_pBtnPrintArea->Check( pData->HasType( ScRangeData::Type::PrintArea ) );
-    m_pBtnColHeader->Check( pData->HasType( ScRangeData::Type::ColHeader ) );
-    m_pBtnRowHeader->Check( pData->HasType( ScRangeData::Type::RowHeader ) );
+    m_pBtnCriteria->Check( pData->HasType( RT_CRITERIA ) );
+    m_pBtnPrintArea->Check( pData->HasType( RT_PRINTAREA ) );
+    m_pBtnColHeader->Check( pData->HasType( RT_COLHEADER ) );
+    m_pBtnRowHeader->Check( pData->HasType( RT_ROWHEADER ) );
 
     // Restore handlers so user input is processed again
     Link<CheckBox&,void> aToggleHandler = LINK( this, ScNameDlg, EdModifyCheckBoxHdl );
@@ -408,11 +408,11 @@ void ScNameDlg::NameModified()
         pOldRangeName->erase(*pData);
         mbNeedUpdate = false;
         m_pRangeManagerTable->DeleteSelectedEntries();
-        ScRangeData::Type nType = ScRangeData::Type::Name;
-        if ( m_pBtnRowHeader->IsChecked() ) nType |= ScRangeData::Type::RowHeader;
-        if ( m_pBtnColHeader->IsChecked() ) nType |= ScRangeData::Type::ColHeader;
-        if ( m_pBtnPrintArea->IsChecked() ) nType |= ScRangeData::Type::PrintArea;
-        if ( m_pBtnCriteria->IsChecked()  ) nType |= ScRangeData::Type::Criteria;
+        RangeType nType = RT_NAME |
+            (m_pBtnRowHeader->IsChecked() ? RT_ROWHEADER : RangeType(0))
+            |(m_pBtnColHeader->IsChecked() ? RT_COLHEADER : RangeType(0))
+            |(m_pBtnPrintArea->IsChecked() ? RT_PRINTAREA : RangeType(0))
+            |(m_pBtnCriteria->IsChecked()  ? RT_CRITERIA  : RangeType(0));
 
         ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
                 maCursorPos, nType);

@@ -18,7 +18,6 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXhp.hxx"
@@ -48,27 +47,26 @@ convert_xhp::~convert_xhp()
 
 
 
-extern int xhplex(void);
-void convert_xhp::doExecute()
+void convert_xhp::execute()
 {
-    string sLang;
-    string sFile, sFile2;
+    std::string sLang;
+    std::string sFile, sFile2;
 
     // prepare list with languages
     miCntLanguages = mcMemory.prepareMerge();
     if (mbMergeMode) {
-        mcOutputFiles  = new ofstream[miCntLanguages];
-        msLangText     = new string[miCntLanguages];
+        mcOutputFiles  = new std::ofstream[miCntLanguages];
+        msLangText     = new std::string[miCntLanguages];
 
         for (int i = 0; mcMemory.getMergeLang(sLang, sFile); ++i) {
             sFile2 = sLang + "/text/" + mcMemory.getModuleName().substr(5) + "/" + msSourceFile;
             sFile  = msTargetPath + sFile2;
-            mcOutputFiles[i].open(sFile.c_str(), ios::binary);
+            mcOutputFiles[i].open(sFile.c_str(), std::ios::binary);
             if (!mcOutputFiles[i].is_open()) {
                 if (!convert_gen::createDir(msTargetPath, sFile2))
                     throw l10nMem::showError("Cannot create missing directories (" + sFile + ") for writing");
 
-                mcOutputFiles[i].open(sFile.c_str(), ios::binary);
+                mcOutputFiles[i].open(sFile.c_str(), std::ios::binary);
                 if (!mcOutputFiles[i].is_open())
                     throw l10nMem::showError("Cannot open file (" + sFile + ") for writing");
             }
@@ -77,7 +75,7 @@ void convert_xhp::doExecute()
     }
 
     // run analyzer
-    xhplex();
+    //  XhpWrap::yylex();
 
     // dump last line
     copySourceSpecial(nullptr,3);
@@ -147,12 +145,12 @@ void convert_xhp::closeTagNOvalue(char *yytext)
 void convert_xhp::setId(char *yytext)
 {
     int          nL, nE;
-    string& sText = copySourceSpecial(yytext, 0);
+    std::string& sText = copySourceSpecial(yytext, 0);
 
 
     nL = sText.find("\"");
     nE = sText.find("\"", nL+1);
-    if (nL == (int)string::npos || nE == (int)string::npos)
+    if (nL == (int)std::string::npos || nE == (int)std::string::npos)
         return;
 
     switch (meExpectValue) {
@@ -173,13 +171,13 @@ void convert_xhp::setId(char *yytext)
 void convert_xhp::setLang(char *yytext)
 {
     int          nL, nE;
-    string  sLang;
-    string& sText = copySourceSpecial(yytext, 1);
+    std::string  sLang;
+    std::string& sText = copySourceSpecial(yytext, 1);
 
 
     nL = sText.find("\"");
     nE = sText.find("\"", nL+1);
-    if (nL == (int)string::npos || nE == (int)string::npos)
+    if (nL == (int)std::string::npos || nE == (int)std::string::npos)
         return;
 
     switch (meExpectValue) {
@@ -207,12 +205,12 @@ void convert_xhp::setLang(char *yytext)
 void convert_xhp::setRef(char *yytext)
 {
     int          nL, nE;
-    string& sText = copySourceSpecial(yytext, 0);
+    std::string& sText = copySourceSpecial(yytext, 0);
 
 
     nL = sText.find("\"");
     nE = sText.find("\"", nL+1);
-    if (nL == (int)string::npos || nE == (int)string::npos)
+    if (nL == (int)std::string::npos || nE == (int)std::string::npos)
         return;
 
     switch (meExpectValue) {
@@ -245,12 +243,8 @@ void convert_xhp::closeTransTag(char *yytext)
 
 
     if (meExpectValue == VALUE_IS_VALUE || meExpectValue == VALUE_IS_VALUE_TAG) {
-        if (msCollector.size() && msCollector != "-") {
-            string newString(msCollector);
-            if (newString[newString.length() - 1] == ' ')
-                newString = newString.substr(0, newString.length() - 1);
-            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, newString, "", "help", mbMergeMode);
-        }
+        if (msCollector.size() && msCollector != "-")
+            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, msCollector, mbMergeMode);
         msKey.clear();
         iType = 2;
     }
@@ -290,7 +284,7 @@ void convert_xhp::stopComment(char *yytext)
 void convert_xhp::handleSpecial(char *yytext)
 {
     if (meExpectValue != VALUE_IS_VALUE || meExpectValue != VALUE_IS_VALUE_TAG) {
-        string sText(yytext);
+        std::string sText(yytext);
         mcMemory.convertFromInetString(sText);
         msCollector += sText;
     }
@@ -321,11 +315,11 @@ void convert_xhp::duplicate(char *yytext)
 
 
 
-string& convert_xhp::copySourceSpecial(char *yytext, int iType)
+std::string& convert_xhp::copySourceSpecial(char *yytext, int iType)
 {
     bool         doingValue = (meExpectValue == VALUE_IS_VALUE || meExpectValue == VALUE_IS_VALUE_TAG);
-    string& sText      = copySource(yytext, !doingValue);
-    string  sLang;
+    std::string& sText      = copySource(yytext, !doingValue);
+    std::string  sLang;
     int          i;
 
 
@@ -363,7 +357,7 @@ string& convert_xhp::copySourceSpecial(char *yytext, int iType)
                      writeSourceFile(msLine, i);
                      mcMemory.getMergeLang(sLang, sText);
                      writeSourceFile(sText,i);
-                     string sYY(yytext);
+                     std::string sYY(yytext);
                      writeSourceFile(sYY, i);
                  }
                  msLine.clear();
@@ -382,7 +376,7 @@ string& convert_xhp::copySourceSpecial(char *yytext, int iType)
 
 
 
-void convert_xhp::writeSourceFile(string& sText, int inx)
+void convert_xhp::writeSourceFile(std::string& sText, int inx)
 {
     if (sText.size() && mcOutputFiles[inx].is_open())
         mcOutputFiles[inx].write(sText.c_str(), sText.size());

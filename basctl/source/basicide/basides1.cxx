@@ -467,7 +467,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             {
                 if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
                 {
-                    RemoveWindows( aDocument, aLibName );
+                    RemoveWindows( aDocument, aLibName, true );
                     if ( aDocument == m_aCurDocument && aLibName == m_aCurLibName )
                     {
                         m_aCurDocument = ScriptDocument::getApplicationScriptDocument();

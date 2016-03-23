@@ -2497,7 +2497,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             SwRect aClip;
             SwRect aOrig;
             Lower()->Calc(pRenderContext);
-            static_cast<const SwNoTextFrame*>(Lower())->GetGrfArea( aClip, &aOrig );
+            static_cast<const SwNoTextFrame*>(Lower())->GetGrfArea( aClip, &aOrig, false );
             // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
             // in order to avoid that graphic has to be loaded for contour scale.
             //SvxContourDlg::ScaleContour( rContour, aGrf, MAP_TWIP, aOrig.SSize() );

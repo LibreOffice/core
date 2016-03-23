@@ -2262,7 +2262,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                     const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
                     if ( pThisCell && pThisCell->GetLayoutRowSpan() > 1 )
                     {
-                        SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
+                        SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false, true ));
                         if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
                             pToGrow = rEndCell.GetUpper();
                         else
@@ -2460,7 +2460,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         // NEW TABLES
         if ( pThisCell && pThisCell->GetLayoutRowSpan() > 1 )
         {
-            SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
+            SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false, true ));
             pToShrink = rEndCell.GetUpper();
         }
 
@@ -3115,7 +3115,7 @@ void SwLayoutFrame::InvaPercentLowers( SwTwips nDiff )
         } while ( pFrame && IsAnLower( pFrame ) ) ;
 }
 
-long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz ) const
+long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz, bool ) const
 {
     long nRet     = rSz.GetWidth(),
          nPercent = rSz.GetWidthPercent();

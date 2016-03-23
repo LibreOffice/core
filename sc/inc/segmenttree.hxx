@@ -71,7 +71,7 @@ public:
     bool getRangeData(SCROW nRow, RangeData& rData) const;
     bool getRangeDataLeaf(SCROW nRow, RangeData& rData);
     void removeSegment(SCROW nRow1, SCROW nRow2);
-    void insertSegment(SCROW nRow, SCROW nSize);
+    void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
     SCROW findLastTrue() const;
 
@@ -96,7 +96,7 @@ public:
     bool setFalse(SCCOL nCol1, SCCOL nCol2);
     bool getRangeData(SCCOL nCol, RangeData& rData);
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
-    void insertSegment(SCCOL nCol, SCCOL nSize);
+    void insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary);
 
 private:
     ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
@@ -139,7 +139,7 @@ public:
     sal_uInt32 getSumValue(SCROW nRow1, SCROW nRow2);
     bool getRangeData(SCROW nRow, RangeData& rData);
     void removeSegment(SCROW nRow1, SCROW nRow2);
-    void insertSegment(SCROW nRow, SCROW nSize);
+    void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
     SCROW findLastTrue(sal_uInt16 nValue) const;
 

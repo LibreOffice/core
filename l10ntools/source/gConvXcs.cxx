@@ -18,7 +18,6 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXcs.hxx"
@@ -33,14 +32,19 @@ convert_xcs::convert_xcs(l10nMem& crMemory)
 
 
 
-extern int xcslex(void);
-void convert_xcs::doExecute()
+convert_xcs::~convert_xcs()
+{
+}
+
+
+
+void convert_xcs::execute()
 {
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
 
     // currently no .xcs files generate en-US translation, so stop trying
-    xcslex();
+    //  XcsWrap::yylex();
 }
 
 
@@ -48,15 +52,15 @@ void convert_xcs::doExecute()
 void convert_xcs::setKey(char *syyText)
 {
     int    nL;
-    string sHead, sText = copySource(syyText);
+    std::string sHead, sText = copySource(syyText);
 
     // is it to be translated
-    if (sText.find("oor:localized=") == string::npos)
+    if (sText.find("oor:localized=") == std::string::npos)
         return;
 
     // locate key (is any)
     nL = sText.find("oor:name=\"");
-    if (nL == (int)string::npos)
+    if (nL == (int)std::string::npos)
         return;
     sHead = sText.substr(nL+10);
     nL    = sHead.find("\"");
@@ -83,14 +87,14 @@ void convert_xcs::startCollectData(char *syyText)
 
 void convert_xcs::stopCollectData(char *syyText)
 {
-    string sHead, sKey, sLang, sText, sCollectedText = copySource(syyText, false);
+    std::string sHead, sKey, sLang, sText, sCollectedText = copySource(syyText, false);
     int    nL;
 
 
     // get type of tag
     msCollector += sCollectedText;
     nL = msCollector.find("<p");
-    if (nL != (int)string::npos)
+    if (nL != (int)std::string::npos)
         sHead = msCollector.substr(nL+1, 1);
     else {
         nL = msCollector.find("<h");
@@ -109,8 +113,8 @@ void convert_xcs::stopCollectData(char *syyText)
     if (mbMergeMode) {
 #if 0
         // get all languages (includes en-US)
-        vector<l10nMem_entry *>& cExtraLangauges = mcMemory.getLanguagesForKey(sKey);
-        string                   sNewLine;
+        std::vector<l10nMem_entry *>& cExtraLangauges = mcMemory.getLanguagesForKey(sKey);
+        std::string                   sNewLine;
         nL = cExtraLangauges.size();
 
         for (int i = 0; i < nL; ++i) {
@@ -124,6 +128,6 @@ void convert_xcs::stopCollectData(char *syyText)
 #endif
     }
 
-    mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, sText, "", "", mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, sText, mbMergeMode);
     mbCollectingData = false;
 }

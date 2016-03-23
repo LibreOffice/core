@@ -21,6 +21,7 @@
 #include "chrdlg.hrc"
 #include "cmdid.h"
 #include "comcore.hrc"
+#include "crsskip.hxx"
 #include "doc.hxx"
 #include "docsh.hxx"
 #include "edtwin.hxx"

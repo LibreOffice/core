@@ -61,7 +61,7 @@ struct CurTOXType
 
     CurTOXType () : eType (TOX_INDEX), nIndex (0) {};
 
-    CurTOXType (TOXTypes t) : eType (t), nIndex (0) {};
+    CurTOXType (TOXTypes t, sal_uInt16 i) : eType (t), nIndex (i) {};
 };
 
 class SwOLENames : public Resource

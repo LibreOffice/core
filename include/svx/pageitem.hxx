@@ -32,9 +32,7 @@ enum SvxNumType
     SVX_ARABIC,
     SVX_NUMBER_NONE,
     SVX_CHAR_SPECIAL,
-    SVX_PAGEDESC,
-    SVX_BITMAP,
-    SVX_CHARS_UPPER_LETTER_N
+    SVX_PAGEDESC
 };
 
 /*--------------------------------------------------------------------

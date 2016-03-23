@@ -101,7 +101,7 @@ class ScVbaRange : public ScVbaRange_BASE
     void setValue( const css::uno::Any& aValue, ValueSetter& setter, bool bFireEvent ) throw ( css::uno::RuntimeException);
 
     css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
-    void setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar ) throw ( css::uno::RuntimeException);
+    void setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar, bool bFireEvent ) throw ( css::uno::RuntimeException);
 
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  ) throw( css::uno::RuntimeException );
     ScCellRangeObj* getCellRangeObj( )  throw ( css::uno::RuntimeException );

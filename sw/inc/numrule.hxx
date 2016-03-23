@@ -147,7 +147,8 @@ public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
     SwNumRule( const OUString& rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
-               SwNumRuleType = NUM_RULE );
+               SwNumRuleType = NUM_RULE,
+               bool bAutoFlg = true );
 
     SwNumRule( const SwNumRule& );
     ~SwNumRule();
@@ -164,7 +165,8 @@ public:
 
     void Set( sal_uInt16 i, const SwNumFormat* );
     void Set( sal_uInt16 i, const SwNumFormat& );
-    OUString MakeNumString( const SwNodeNum&, bool bInclStrings = true ) const;
+    OUString MakeNumString( const SwNodeNum&, bool bInclStrings = true,
+                            bool bOnlyArabic = false ) const;
     /** - add optional parameter <_nRestrictToThisLevel> in order to
          restrict returned string to this level. */
     OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,

@@ -144,7 +144,7 @@ public:
     void CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat );
 
     void SetBoxItem( SfxItemSet& rItemSet, sal_uInt16 nMinBorderDist,
-                     const SvxBoxItem* pDflt=nullptr );
+                     const SvxBoxItem* pDflt=nullptr, bool bTable = false );
 
 };
 

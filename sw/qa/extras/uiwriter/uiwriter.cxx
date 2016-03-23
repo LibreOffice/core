@@ -15,6 +15,7 @@
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <crsskip.hxx>
 #include <shellio.hxx>
 #include <expfld.hxx>
 #include <drawdoc.hxx>
@@ -90,6 +91,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <config_features.h>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -172,7 +174,9 @@ public:
     void testUnicodeNotationToggle();
     void testTextTableCellNames();
     void testShapeAnchorUndo();
+#if HAVE_HEADLESS_MODE == 0
     void testDde();
+#endif
     void testDocModState();
     void testTdf94804();
     void testTdf34957();
@@ -263,7 +267,9 @@ public:
     CPPUNIT_TEST(testUnicodeNotationToggle);
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
+#if HAVE_HEADLESS_MODE == 0
     CPPUNIT_TEST(testDde);
+#endif
     CPPUNIT_TEST(testDocModState);
     CPPUNIT_TEST(testTdf94804);
     CPPUNIT_TEST(testTdf34957);
@@ -364,7 +370,7 @@ void SwUiWriterTest::testBookmarkCopy()
     IDocumentMarkAccess & rIDMA(*pDoc->getIDocumentMarkAccess());
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwCursor aPaM(SwPosition(aIdx), nullptr);
+    SwCursor aPaM(SwPosition(aIdx), nullptr, false);
     rIDCO.InsertString(aPaM, "foo");
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
     rIDCO.InsertString(aPaM, "bar");
@@ -2791,6 +2797,7 @@ void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, con
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
+#if HAVE_HEADLESS_MODE == 0
 void SwUiWriterTest::testDde()
 {
     // Type asdf and copy it.
@@ -2814,7 +2821,7 @@ void SwUiWriterTest::testDde()
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
 }
-
+#endif
 //IdleTask class to add a low priority Idle task
 class IdleTask
 {

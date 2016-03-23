@@ -116,12 +116,13 @@ namespace dp_manager {
 
 ActivePackages::ActivePackages() {}
 
-ActivePackages::ActivePackages(OUString const & url)
+ActivePackages::ActivePackages(OUString const & url, bool readOnly)
 #if HAVE_FEATURE_EXTENSIONS
-    : m_map(url, false/*readOnly*/)
+    : m_map(url, readOnly)
 #endif
 {
     (void) url;
+    (void) readOnly;
 }
 
 ActivePackages::~ActivePackages() {}

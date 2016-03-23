@@ -45,7 +45,8 @@ public:
     // returns 0 if position is just past the last entry
     SvTreeListEntry* GetEntry( const Point& rPoint ) const SAL_OVERRIDE;
 
-    void UpdateAll( bool bInvalidateCompleteView = true ) SAL_OVERRIDE;
+    void UpdateAll( bool bInvalidateCompleteView = true,
+               bool bUpdateVerScrollBar = true ) SAL_OVERRIDE;
 
     bool KeyInput( const KeyEvent& ) SAL_OVERRIDE;
 

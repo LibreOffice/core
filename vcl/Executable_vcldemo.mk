@@ -17,9 +17,13 @@ $(eval $(call gb_Executable_use_api,vcldemo,\
 
 $(eval $(call gb_Executable_use_externals,vcldemo,\
 	boost_headers \
-	glew \
 	glm_headers \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Executable_use_externals,vcldemo,\
+    glew \
+))
+endif
 
 $(eval $(call gb_Executable_set_include,vcldemo,\
     $$(INCLUDE) \

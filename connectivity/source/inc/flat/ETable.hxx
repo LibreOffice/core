@@ -88,7 +88,7 @@ namespace connectivity
             void construct() override; // can throw any exception
 
             virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
-            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
+            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bIsTable, bool bRetrieveData) override;
             virtual void refreshHeader() override;
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;

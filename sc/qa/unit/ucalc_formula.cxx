@@ -119,7 +119,7 @@ void Test::testFormulaCreateStringFromTokens()
     {
         ScRangeData* pName = new ScRangeData(
             m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
-            ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+            ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
 
         if (aNames[i].bGlobal)
         {
@@ -2474,7 +2474,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    bool bDeleted = rFunc.DeleteCells(ScRange(3,0,0,4,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    bool bDeleted = rFunc.DeleteCells(ScRange(3,0,0,4,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     aPos.IncCol(-2);
@@ -2493,7 +2493,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
         CPPUNIT_FAIL("Wrong formula!");
 
     // Delete columns C:D (left end of the reference).
-    bDeleted = rFunc.DeleteCells(ScRange(2,0,0,3,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    bDeleted = rFunc.DeleteCells(ScRange(2,0,0,3,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     aPos.IncCol(-2);
@@ -2509,7 +2509,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
         CPPUNIT_FAIL("Wrong formula!");
 
     // Delete columns B:E (overlaps on the left).
-    bDeleted = rFunc.DeleteCells(ScRange(1,0,0,4,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    bDeleted = rFunc.DeleteCells(ScRange(1,0,0,4,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     aPos.IncCol(-4);
@@ -2537,7 +2537,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
 
     // Delete columns F:H (right end of the reference).
-    bDeleted = rFunc.DeleteCells(ScRange(5,0,0,7,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    bDeleted = rFunc.DeleteCells(ScRange(5,0,0,7,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
@@ -2551,7 +2551,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
         CPPUNIT_FAIL("Wrong formula!");
 
     // Delete columns G:I (overlaps on the right).
-    bDeleted = rFunc.DeleteCells(ScRange(6,0,0,8,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    bDeleted = rFunc.DeleteCells(ScRange(6,0,0,8,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(aPos));
@@ -2587,7 +2587,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    bool bDeleted = rFunc.DeleteCells(ScRange(0,3,0,MAXCOL,4,0), &aMark, DEL_CELLSUP, true);
+    bool bDeleted = rFunc.DeleteCells(ScRange(0,3,0,MAXCOL,4,0), &aMark, DEL_CELLSUP, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     aPos.IncRow(-2);
@@ -2606,7 +2606,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
         CPPUNIT_FAIL("Wrong formula!");
 
     // Delete rows 3:4 (top end of the reference).
-    bDeleted = rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,3,0), &aMark, DEL_CELLSUP, true);
+    bDeleted = rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,3,0), &aMark, DEL_CELLSUP, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     aPos.IncRow(-2);
@@ -2622,7 +2622,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
         CPPUNIT_FAIL("Wrong formula!");
 
     // Delete rows 2:5 (overlaps on the top).
-    bDeleted = rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,4,0), &aMark, DEL_CELLSUP, true);
+    bDeleted = rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,4,0), &aMark, DEL_CELLSUP, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     aPos.IncRow(-4);
@@ -2650,7 +2650,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
 
     // Delete rows 6:8 (bottom end of the reference).
-    bDeleted = rFunc.DeleteCells(ScRange(0,5,0,MAXCOL,7,0), &aMark, DEL_CELLSUP, true);
+    bDeleted = rFunc.DeleteCells(ScRange(0,5,0,MAXCOL,7,0), &aMark, DEL_CELLSUP, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
@@ -2664,7 +2664,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
         CPPUNIT_FAIL("Wrong formula!");
 
     // Delete rows 7:9 (overlaps on the bottom).
-    bDeleted = rFunc.DeleteCells(ScRange(0,6,0,MAXCOL,8,0), &aMark, DEL_CELLSUP, true);
+    bDeleted = rFunc.DeleteCells(ScRange(0,6,0,MAXCOL,8,0), &aMark, DEL_CELLSUP, true, true);
     CPPUNIT_ASSERT(bDeleted);
 
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(aPos));
@@ -2696,8 +2696,7 @@ void Test::testFormulaRefUpdateName()
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     ScRangeData* pName = new ScRangeData(
-        m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0),
-        ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
+        m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
 
     bool bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
@@ -2739,7 +2738,7 @@ void Test::testFormulaRefUpdateName()
 
     // Insert a new named expression that references these values as absolute range.
     pName = new ScRangeData(
-        m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+        m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
@@ -2796,7 +2795,7 @@ void Test::testFormulaRefUpdateName()
     pGlobalNames->clear();
 
     pName = new ScRangeData(
-        m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+        m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
     pName->GetSymbol(aExpr);
@@ -3043,14 +3042,14 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     // Delete row 3.
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
+    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
 
     // The reference in the name should get updated to B2:B3.
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$3"), aExpr);
 
     // Delete row 3 again.
-    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
+    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$2"), aExpr);
 
@@ -3078,7 +3077,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
     // Delete row 2-3.
-    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
+    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
 
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$2"), aExpr);
@@ -3097,7 +3096,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
 
     ScMarkData aMark2;
     aMark2.SelectOneTable(1);
-    rFunc.DeleteCells(ScRange(0,2,1,MAXCOL,2,1), &aMark2, DEL_CELLSUP, true);
+    rFunc.DeleteCells(ScRange(0,2,1,MAXCOL,2,1), &aMark2, DEL_CELLSUP, true, true);
 
     pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
@@ -5118,7 +5117,7 @@ void Test::testFormulaDepTrackingDeleteRow()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true);
+    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
 
     pBC = m_pDoc->GetBroadcaster(ScAddress(0,3,0));
     CPPUNIT_ASSERT_MESSAGE("Broadcaster at A5 should have shifted to A4.", pBC);
@@ -5176,7 +5175,7 @@ void Test::testFormulaDepTrackingDeleteCol()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.DeleteCells(ScRange(0,0,0,0,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    rFunc.DeleteCells(ScRange(0,0,0,0,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
 
     {
         // Expected output table content.  0 = empty cell
@@ -5880,7 +5879,7 @@ void Test::testFuncTableRef()
             // proper rows.
             ScRangeData* pName = new ScRangeData(
                     m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
-                    ScAddress(2,4,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+                    ScAddress(2,4,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
                     OString("Failed to insert named expression "+ OString(aNames[i].pName) +".").getStr(), bInserted);
@@ -6057,7 +6056,7 @@ void Test::testFuncTableRef()
             // proper rows.
             ScRangeData* pName = new ScRangeData(
                     m_pDoc, OUString::createFromAscii(aHlNames[i].pName), OUString::createFromAscii(aHlNames[i].pExpr),
-                    ScAddress(6,12,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+                    ScAddress(6,12,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
                     OString("Failed to insert named expression "+ OString(aHlNames[i].pName) +".").getStr(), bInserted);

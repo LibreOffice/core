@@ -263,7 +263,7 @@ public:
     bool Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
                bool bIsMove = false, bool bSelectInsert = true );
 
-    void SelectFlyFrame( SwFlyFrame& rFrame );
+    void SelectFlyFrame( SwFlyFrame& rFrame, bool bNew = false );
 
     /// Is selected frame within another frame?
     const SwFrameFormat* IsFlyInFly();

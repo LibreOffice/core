@@ -101,7 +101,7 @@ public:
     SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc = nullptr, bool bCut = false, bool bApi = false,
                                             bool bIncludeObjects = false, bool bStopEdit = true );
     SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut = false,
-                                            bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true );
+                                            bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true, bool bUseRangeForVBA = true );
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                                     ScPasteFunc nFunction = ScPasteFunc::NONE, bool bSkipEmpty = false,
@@ -147,9 +147,9 @@ public:
     bool            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
     bool            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
-                                    bool bCut );
+                                    bool bCut, bool bRecord, bool bPaint, bool bApi );
 
-    bool            LinkBlock( const ScRange& rSource, const ScAddress& rDestPos );
+    bool            LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, bool bApi );
 
     void            CreateNames( sal_uInt16 nFlags );
     sal_uInt16      GetCreateNameFlags();
@@ -160,7 +160,8 @@ public:
     void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet );
     void            ApplyAttr( const SfxPoolItem& rAttrItem );
     void            ApplySelectionPattern( const ScPatternAttr& rAttr,
-                                            bool bCursorOnly = false);
+                                            bool bRecord = true,
+                                            bool bCursorOnly = false );
     void            ApplyPatternLines( const ScPatternAttr& rAttr,
                                         const SvxBoxItem* pNewOuter,
                                         const SvxBoxInfoItem* pNewInner );
@@ -194,7 +195,7 @@ public:
 
     void SetWidthOrHeight(
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
-        sal_uInt16 nSizeTwips, bool bRecord = true, ScMarkData* pMarkData = nullptr );
+        sal_uInt16 nSizeTwips, bool bRecord = true, bool bPaint = true, ScMarkData* pMarkData = nullptr );
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips );
 
@@ -220,7 +221,7 @@ public:
     bool            TestMergeCells();
     bool            TestRemoveMerge();
 
-    bool            MergeCells( bool bApi, bool& rDoContents, bool bCenter = false );
+    bool            MergeCells( bool bApi, bool& rDoContents, bool bRecord = true, bool bCenter = false );
     bool            RemoveMerge();
 
     void            FillSimple( FillDir eDir );
@@ -265,7 +266,7 @@ public:
                                         const OUString& rTabName );
     void            InsertAreaLink( const OUString& rFile,
                                         const OUString& rFilter, const OUString& rOptions,
-                                        const OUString& rSource );
+                                        const OUString& rSource, sal_uLong nRefresh );
 
     void            ShowTable( const std::vector<OUString>& rNames );
     void            HideTable( const ScMarkData& rMark );

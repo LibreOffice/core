@@ -95,10 +95,10 @@ OUString ScDPLabelData::getDisplayName() const
 
 // ScPivotField
 
-ScPivotField::ScPivotField(SCCOL nNewCol) :
+ScPivotField::ScPivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
     nCol(nNewCol),
     mnOriginalDim(-1),
-    nFuncMask(0),
+    nFuncMask(nNewFuncMask),
     mnDupCount(0)
 {}
 

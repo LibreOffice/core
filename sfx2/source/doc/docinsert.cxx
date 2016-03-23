@@ -39,7 +39,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -81,14 +80,14 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
 
 SfxMedium* DocumentInserter::CreateMedium()
 {
-    std::unique_ptr<SfxMedium> pMedium;
+    SfxMedium* pMedium = nullptr;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
         OUString sURL(m_pURLList[0]);
-        pMedium.reset(new SfxMedium(
+        pMedium = new SfxMedium(
                 sURL, SFX_STREAM_READONLY,
-                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet ));
+                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
         pMedium->UseInteractionHandler( true );
         SfxFilterMatcher* pMatcher = nullptr;
         if ( !m_sDocFactory.isEmpty() )
@@ -101,15 +100,15 @@ SfxMedium* DocumentInserter::CreateMedium()
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
-            pMedium.reset();
+            DELETEZ( pMedium );
 
-        if ( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium.get() ) == ERRCODE_ABORT )
-            pMedium.reset();
+        if ( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium ) == ERRCODE_ABORT )
+            pMedium = nullptr;
 
         DELETEZ( pMatcher );
     }
 
-    return pMedium.release();
+    return pMedium;
 }
 
 SfxMediumList* DocumentInserter::CreateMediumList()

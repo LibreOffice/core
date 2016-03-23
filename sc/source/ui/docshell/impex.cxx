@@ -149,9 +149,9 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
         const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->uppercase(aPos));
         if (pData)
         {
-            if( pData->HasType( ScRangeData::Type::RefArea )
-                || pData->HasType( ScRangeData::Type::AbsArea )
-                || pData->HasType( ScRangeData::Type::AbsPos ) )
+            if( pData->HasType( RT_REFAREA )
+                || pData->HasType( RT_ABSAREA )
+                || pData->HasType( RT_ABSPOS ) )
             {
                 pData->GetSymbol(aPos);
             }
@@ -2164,7 +2164,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
 bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange);
+    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange, true);
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
@@ -2218,7 +2218,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) override { return eERR_INTERN; }
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) override { return nullptr; }
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange& ) override { return nullptr; }
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) override { return nullptr; }
     virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) override { return OUString(); }
 
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) override { return eERR_INTERN; }

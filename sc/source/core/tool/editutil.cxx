@@ -791,8 +791,8 @@ ScHeaderFieldData::ScHeaderFieldData()
     eNumType = SVX_ARABIC;
 }
 
-ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP )
-        : ScEditEngineDefaulter( pEnginePoolP,true/*bDeleteEnginePoolP*/ )
+ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, bool bDeleteEnginePoolP )
+        : ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
 }
 
@@ -883,8 +883,8 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal
 }
 
 ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
-            SfxItemPool* pTextObjectPool ) :
-    ScEditEngineDefaulter( pEnginePoolP, false/*bDeleteEnginePoolP*/ )
+            SfxItemPool* pTextObjectPool, bool bDeleteEnginePoolP ) :
+    ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );

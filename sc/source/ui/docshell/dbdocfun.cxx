@@ -277,14 +277,13 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     }
 }
 
-bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed, SCTAB aTab )
+bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed, SCTAB aTab )
 {
     //! auch fuer ScDBFunc::RepeatDB benutzen!
 
     bool bDone = false;
     ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
     ScDBData* pDBData = nullptr;
     if (bIsUnnamed)
@@ -1628,7 +1627,7 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     aImportParam.nType      = static_cast<sal_uInt8>( ( nCommandType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable );
     aImportParam.bImport    = true;
 
-    bool bContinue = DoImport( nTab, aImportParam, &rDescriptor );
+    bool bContinue = DoImport( nTab, aImportParam, &rDescriptor, true );
 
     //  DB-Operationen wiederholen
 

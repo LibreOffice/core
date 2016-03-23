@@ -554,7 +554,7 @@ private:
     void                CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rStartPos /*, sal_Bool bCreateBlockPortions */ );
     void                RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars );
     sal_Int32           SplitTextPortion( ParaPortion* pParaPortion, sal_Int32 nPos,  EditLine* pCurLine = nullptr );
-    void                SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = nullptr );
+    void                SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = nullptr, sal_uInt16 nIgnoreWhich = 0 );
     void                RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
     void                CheckAutoPageSize();
 
@@ -742,7 +742,7 @@ public:
     void                    FormatDoc();
     void                    FormatFullDoc();
     void                    UpdateViews( EditView* pCurView = nullptr );
-    void                    Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    void                    Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr, bool bUseVirtDev = false );
     void                    Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, short nOrientation = 0 );
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
@@ -778,7 +778,7 @@ public:
 
     void            SetText(const OUString& rText);
     EditPaM         DeleteSelected(const EditSelection& rEditSelection);
-    EditPaM         InsertTextUserInput( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite );
+    EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, bool bIsUserInput = false );
     EditPaM         InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, vcl::Window* pFrameWin = nullptr );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );

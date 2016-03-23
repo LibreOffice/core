@@ -194,7 +194,7 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
     pDateStyle->AddText(":");
     pDateStyle->AddMinute();
     pDateStyle->AddText(":");
-    pDateStyle->AddSecond();
+    pDateStyle->AddSecond(true,0);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle).m_pStyle->GetStyleName();

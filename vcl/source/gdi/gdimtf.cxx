@@ -2772,7 +2772,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             ReadPair( rIStm, rGDIMetaFile.aPrefSize );
             rIStm.ReadUInt32( nCount );
 
-            pCompat.reset(); // destructor writes stuff into the header
+            pCompat.reset(); // needs to be deleted here for the parsing to work correctly
 
             ImplMetaReadData aReadData;
             aReadData.meActualCharSet = rIStm.GetStreamCharSet();

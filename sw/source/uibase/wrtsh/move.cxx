@@ -21,6 +21,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
+#include <crsskip.hxx>
 
 /**
    Always:
@@ -127,7 +128,7 @@ bool SwWrtShell::Right( sal_uInt16 nMode, bool bSelect,
     }
 }
 
-bool SwWrtShell::Up( bool bSelect, bool bBasicCall )
+bool SwWrtShell::Up( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCursorReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -138,10 +139,10 @@ bool SwWrtShell::Up( bool bSelect, bool bBasicCall )
     }
 
     ShellMoveCursor aTmp( this, bSelect );
-    return SwCursorShell::Up();
+    return SwCursorShell::Up( nCount );
 }
 
-bool SwWrtShell::Down( bool bSelect, bool bBasicCall )
+bool SwWrtShell::Down( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCursorReadonly() && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -153,7 +154,7 @@ bool SwWrtShell::Down( bool bSelect, bool bBasicCall )
     }
 
     ShellMoveCursor aTmp( this, bSelect );
-    return SwCursorShell::Down();
+    return SwCursorShell::Down( nCount );
 }
 
 bool SwWrtShell::LeftMargin( bool bSelect, bool bBasicCall )
@@ -576,11 +577,11 @@ bool SwWrtShell::GotoPage(sal_uInt16 nPage, bool bRecord)
     return false;
 }
 
-bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect )
+bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, bool bStart )
 {
     ShellMoveCursor aTmp( this, bSelect );
     SwPosition aPos = *GetCursor()->GetPoint();
-    bool bRet = SwCursorShell::GotoMark( pMark, true/*bStart*/ );
+    bool bRet = SwCursorShell::GotoMark( pMark, bStart );
     if (bRet)
         m_aNavigationMgr.addEntry(aPos);
     return bRet;

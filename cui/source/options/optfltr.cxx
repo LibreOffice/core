@@ -276,7 +276,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         InsertEntry( sChgToFromCalc, static_cast< sal_IntPtr >( Calc ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
         InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
-    InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), false );
+    InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), true, false );
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -325,11 +325,11 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )
 {
-    InsertEntry( _rTxt, _nType, true );
+    InsertEntry( _rTxt, _nType, true, true );
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
-                                       bool saveEnabled )
+                                       bool loadEnabled, bool saveEnabled )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -339,7 +339,8 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
         new SvLBoxContextBmp(Image(), Image(), false)));
     pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(SvLBoxButtonKind::EnabledCheckbox,
+        new SvLBoxButton(loadEnabled ? SvLBoxButtonKind::EnabledCheckbox
+                                     : SvLBoxButtonKind::DisabledCheckbox,
                pCheckButtonData)));
     pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
         new SvLBoxButton(saveEnabled ? SvLBoxButtonKind::EnabledCheckbox

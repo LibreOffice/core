@@ -369,7 +369,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             OSL_ENSURE( nWhich, "Which for SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( static_cast<const SvxSearchItem&>(rItem));
-            StartSearchAndReplace( static_cast<const SvxSearchItem&>(rItem), rReq.IsAPI() );
+            StartSearchAndReplace( static_cast<const SvxSearchItem&>(rItem), false, rReq.IsAPI() );
             if(aEditWin->IsModified())
                 GetDocShell()->GetDoc()->getIDocumentState().SetModified();
         }
@@ -379,7 +379,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             SvxSearchItem* pSrchItem = GetSearchItem();
             if(pSrchItem)
             {
-                StartSearchAndReplace( *pSrchItem, rReq.IsAPI() );
+                StartSearchAndReplace( *pSrchItem, false, rReq.IsAPI() );
                 if(aEditWin->IsModified())
                     GetDocShell()->GetDoc()->getIDocumentState().SetModified();
             }
@@ -567,6 +567,7 @@ void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
 }
 
 void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
+                                                  bool bFromStart,
                                                   bool bApi,
                                                   bool bRecursive)
 {
@@ -579,6 +580,12 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
     if( !bForward )
         aPaM = TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL );
+
+    if( bFromStart )
+    {
+        aSel = pTextView->GetSelection();
+        pTextView->SetSelection( TextSelection( aPaM, aPaM ));
+    }
 
     util::SearchOptions2 aSearchOpt( rSearchItem.GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
@@ -606,7 +613,15 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         bool bNotFoundMessage = false;
         if(!bRecursive)
         {
-            bNotFoundMessage = bAtStart;
+            if(!bFromStart)
+            {
+                bNotFoundMessage = bAtStart;
+            }
+            else
+            {
+                bNotFoundMessage = true;
+                pTextView->SetSelection( aSel );
+            }
         }
         else if(bAtStart)
         {
@@ -638,7 +653,7 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                 if (nRet == RET_YES)
                 {
                     pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
-                    StartSearchAndReplace( rSearchItem, false, true );
+                    StartSearchAndReplace( rSearchItem, false, false, true );
                 }
             }
         }

@@ -80,7 +80,8 @@ namespace rptui
                             ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                 ,OReportHelper> _pMemberFunction
                             ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
-                            ,Action _eAction);
+                            ,Action _eAction
+                            ,sal_uInt16 nCommentID);
         virtual ~OReportSectionUndo();
     };
 

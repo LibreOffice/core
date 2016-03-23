@@ -49,7 +49,8 @@ void ScDDComboBoxButton::SetOptSizePixel()
 }
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
-                               const Size&  rSize )
+                               const Size&  rSize,
+                               bool         bState )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
         return;
@@ -81,7 +82,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     aInnerRect.Top()   = aInnerCenter.Y() - (aInnerSize.Width()>>1);
     aInnerRect.Bottom()= aInnerCenter.Y() + (aInnerSize.Width()>>1);
 
-    ImpDrawArrow( aInnerRect, false/*bState*/ );
+    ImpDrawArrow( aInnerRect, bState );
 
     // restore old state
     pOut->EnableMapMode( bOldEnable );

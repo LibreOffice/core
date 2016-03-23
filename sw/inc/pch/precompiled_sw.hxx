@@ -263,6 +263,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <crsrsh.hxx>
+#include <crsskip.hxx>
 #include <crstate.hxx>
 #include <dbfld.hxx>
 #include <dbmgr.hxx>

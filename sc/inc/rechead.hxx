@@ -70,12 +70,12 @@ class ScMultipleWriteHeader
 private:
     SvStream&       rStream;
     SvMemoryStream  aMemStream;
-    sal_uLong       nDataPos;
+    sal_uLong           nDataPos;
     sal_uInt32      nDataSize;
-    sal_uLong       nEntryStart;
+    sal_uLong           nEntryStart;
 
 public:
-    ScMultipleWriteHeader(SvStream& rNewStream);
+    ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault = 0);
     ~ScMultipleWriteHeader();
 
     void    StartEntry();

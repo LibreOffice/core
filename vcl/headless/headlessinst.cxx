@@ -8,7 +8,7 @@
  */
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 
 class HeadlessSalInstance : public SvpSalInstance
 {

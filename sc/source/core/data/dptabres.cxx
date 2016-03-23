@@ -915,13 +915,13 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDi
 }
 
 ScDPResultMember::ScDPResultMember(
-    const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ) :
+    const ScDPResultData* pData, const ScDPParentDimData& rParentDimData, bool bForceSub ) :
     pResultData( pData ),
        aParentDimData( rParentDimData ),
     pChildDimension( nullptr ),
     pDataRoot( nullptr ),
     bHasElements( false ),
-    bForceSubTotal( false ),
+    bForceSubTotal( bForceSub ),
     bHasHiddenDetails( false ),
     bInitialized( false ),
     bAutoHidden( false ),
@@ -3953,7 +3953,7 @@ SCROW ScDPResultMember::GetDataId( ) const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-    ScDPResultMember* pMember = new ScDPResultMember( pResultData, aData );
+    ScDPResultMember* pMember = new ScDPResultMember( pResultData, aData, false );
     SCROW   nDataIndex = pMember->GetDataId();
     maMemberArray.push_back( pMember );
 
@@ -3967,7 +3967,7 @@ ScDPResultMember* ScDPResultDimension::InsertMember(ScDPParentDimData *pMemberDa
     SCROW  nInsert = 0;
     if ( !lcl_SearchMember( maMemberArray, pMemberData->mnOrder , nInsert ) )
     {
-        ScDPResultMember* pNew = new ScDPResultMember( pResultData, *pMemberData );
+        ScDPResultMember* pNew = new ScDPResultMember( pResultData, *pMemberData, false );
         maMemberArray.insert( maMemberArray.begin()+nInsert, pNew );
 
         SCROW   nDataIndex = pMemberData->mpMemberDesc->GetItemDataId();
@@ -4051,12 +4051,12 @@ ResultMembers::~ResultMembers()
 }
 
 LateInitParams::LateInitParams(
-    const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, bool bRow ) :
+    const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, bool bRow, bool bInitChild, bool bAllChildren ) :
     mppDim( ppDim ),
     mppLev( ppLev ),
     mbRow( bRow ),
-    mbInitChild( true ),
-    mbAllChildren( false )
+    mbInitChild( bInitChild ),
+    mbAllChildren( bAllChildren )
 {
 }
 

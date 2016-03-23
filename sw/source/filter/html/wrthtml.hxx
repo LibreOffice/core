@@ -237,7 +237,8 @@ struct SwHTMLFormatInfo
     // Konstruktor zum Erstellen der Format-Info
     SwHTMLFormatInfo( const SwFormat *pFormat, SwDoc *pDoc, SwDoc *pTemlate,
                    bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
-                   sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT );
+                   sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
+                   bool bHardDrop=false );
     ~SwHTMLFormatInfo();
 
     friend bool operator<( const SwHTMLFormatInfo& rInfo1,

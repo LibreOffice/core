@@ -74,7 +74,7 @@ class ColorConfig_Impl : public utl::ConfigItem
     virtual void                    ImplCommit() override;
 
 public:
-    explicit ColorConfig_Impl();
+    explicit ColorConfig_Impl(bool bEditMode = false);
     virtual ~ColorConfig_Impl();
 
     void                            Load(const OUString& rScheme);
@@ -190,9 +190,9 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
 
 }
 
-ColorConfig_Impl::ColorConfig_Impl() :
+ColorConfig_Impl::ColorConfig_Impl(bool bEditMode) :
     ConfigItem("Office.UI/ColorScheme"),
-    m_bEditMode(false),
+    m_bEditMode(bEditMode),
     m_bAutoDetectSystemHC(true)
 {
     if(!m_bEditMode)

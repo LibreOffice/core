@@ -171,15 +171,19 @@ public:
         }
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
 
-    void SetUpdateFields(bool bSet)
+    void SetUpdateFields(bool bSet, bool bNoModify = false)
         {
             if(bSet && eFieldUpdateFlags == AUTOUPD_OFF)
             {
                 eFieldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                if(!bNoModify)
+                    aContentConfig.SetModified();
              }
             else if(!bSet)
             {
                 eFieldUpdateFlags = AUTOUPD_OFF;
+                if(!bNoModify)
+                    aContentConfig.SetModified();
             }
         };
     bool IsUpdateFields()const {return eFieldUpdateFlags != AUTOUPD_OFF; }
@@ -191,15 +195,19 @@ public:
             aContentConfig.SetModified();
         }
 
-    void SetUpdateCharts(bool bSet)
+    void SetUpdateCharts(bool bSet, bool bNoModify = false)
         {
             if(bSet)
             {
                 eFieldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
+                if(!bNoModify)
+                    aContentConfig.SetModified();
              }
              else if(eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
              {
                 eFieldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                if(!bNoModify)
+                    aContentConfig.SetModified();
              }
         };
     bool IsUpdateCharts()const {return eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }

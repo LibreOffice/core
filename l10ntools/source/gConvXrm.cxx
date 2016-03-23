@@ -18,7 +18,6 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvXrm.hxx"
@@ -35,10 +34,15 @@ convert_xrm::convert_xrm(l10nMem& crMemory)
 
 
 
-extern int xrmlex(void);
-void convert_xrm::doExecute()
+convert_xrm::~convert_xrm()
 {
-    xrmlex();
+}
+
+
+
+void convert_xrm::execute()
+{
+    ////  XrmWrap::yylex();
 
     // write last part of file.
     if (mbMergeMode)
@@ -49,14 +53,14 @@ void convert_xrm::doExecute()
 
 void convert_xrm::setId(char *yytext)
 {
-    string& sText = copySource(yytext, mbNoCollectingData);
+    std::string& sText = copySource(yytext, mbNoCollectingData);
     int          nL, nE;
 
 
     if (mbIsTag) {
         nL = sText.find("\"");
         nE = sText.find("\"", nL+1);
-        if (nL == (int)string::npos || nE == (int)string::npos)
+        if (nL == (int)std::string::npos || nE == (int)std::string::npos)
             return;
 
         msKey = sText.substr(nL+1, nE - nL -1);
@@ -67,15 +71,15 @@ void convert_xrm::setId(char *yytext)
 
 void convert_xrm::setLang(char *yytext)
 {
-    string& sText = copySource(yytext, mbNoCollectingData);
-    string  sLang;
-    int     nL, nE;
+    std::string& sText = copySource(yytext, mbNoCollectingData);
+    std::string  sLang;
+    int          nL, nE;
 
 
     if (mbIsTag) {
         nL = sText.find("\"");
         nE = sText.find("\"", nL+1);
-        if (nL == (int)string::npos || nE == (int)string::npos)
+        if (nL == (int)std::string::npos || nE == (int)std::string::npos)
             return;
 
         sLang = sText.substr(nL+1, nE - nL -1);
@@ -113,11 +117,11 @@ void convert_xrm::startCollectData(char *yytext)
 
 void convert_xrm::stopCollectData(char *yytext)
 {
-    string sTagText, sTagEnd, sLang, sText = msCollector;
+    std::string sTagText, sTagEnd, sLang, sText = msCollector;
 
     copySource(yytext);
     if (!mbNoCollectingData) {
-        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "readmeitem", mbMergeMode);
+        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, mbMergeMode);
         mbNoCollectingData = true;
         if (mbMergeMode) {
             sTagEnd  = "</" + msTag.substr(1,msTag.size()-2) + ">\n";
@@ -127,7 +131,7 @@ void convert_xrm::stopCollectData(char *yytext)
             mcMemory.prepareMerge();
             for (; mcMemory.getMergeLang(sLang, sText);) {
                 // replace \" with "
-                for (int i = 0; (i = sText.find("\\\"", i)) != (int)string::npos;)
+                for (int i = 0; (i = sText.find("\\\"", i)) != (int)std::string::npos;)
                     sText.erase(i,1);
 
                 // Prepare tag start and end

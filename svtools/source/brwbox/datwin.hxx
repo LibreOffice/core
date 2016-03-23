@@ -45,13 +45,14 @@ class ButtonFrame
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
                             const OUString &rText,
+                            bool bPress,
                             bool bCursor,
                             bool _bDrawDisabled)
                 :aRect( rPt, rSz )
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
                 ,aText(rText)
-                ,bPressed(false)
+                ,bPressed(bPress)
                 ,bCurs(bCursor)
                 ,m_bDrawDisabled(_bDrawDisabled)
             {
@@ -83,7 +84,7 @@ public:
     void                Freeze() { _bFrozen = true; }
 
     void                Draw( BrowseBox& rBox, OutputDevice& rDev,
-                              const Point& rPos  );
+                              const Point& rPos, bool bCurs  );
 
     void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);
     void                ZoomChanged(const Fraction& rNewZoom);

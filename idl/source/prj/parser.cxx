@@ -38,7 +38,7 @@ void SvIdlParser::ReadSvIdl( const OUString & rPath )
             return;
 
         Read( SvHash_module() );
-        tools::SvRef<SvMetaModule> aModule = new SvMetaModule;
+        tools::SvRef<SvMetaModule> aModule = new SvMetaModule( false/*bImported*/ );
         ReadModuleHeader(*aModule);
         rBase.GetModuleList().push_back( aModule );
     }

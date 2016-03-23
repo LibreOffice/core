@@ -856,7 +856,7 @@ namespace drawinglayer
                 {
                     aMask.transform(maCurrentTransformation);
                     const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
-                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
                     if(aBufferDevice.isVisible())
                     {
@@ -933,7 +933,7 @@ namespace drawinglayer
                         // transparence is in visible range
                         basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
                         aRange.transform(maCurrentTransformation);
-                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
                         if(aBufferDevice.isVisible())
                         {
@@ -962,7 +962,7 @@ namespace drawinglayer
             {
                 basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
                 aRange.transform(maCurrentTransformation);
-                impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+                impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
                 if(aBufferDevice.isVisible())
                 {

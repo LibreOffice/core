@@ -895,7 +895,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper* pLclData = aSysLocale.GetLocaleDataPtr();
     const long nLang = pLclData->getLanguageTag().getLanguageType();
-    bool bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
+    bool bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, true, aCalc );
 #endif
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
@@ -992,7 +992,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
         {
             UpdateDBNumFields( *const_cast<SwDBNameInfField*>(static_cast<const SwDBNameInfField*>(pField)), aCalc );
             if( bCanFill )
-                bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
+                bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, true, aCalc );
         }
 #endif
         break;

@@ -336,7 +336,8 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 }
 
 /** Calculate the Bitmap's position and the size within the passed rectangle */
-void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
+void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
+                             bool ) const
 {
     // Currently only used for scaling, cropping and mirroring the contour of graphics!
     // Everything else is handled by GraphicObject

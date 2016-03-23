@@ -146,7 +146,7 @@ class SwTextFly
         \param[in] rPortion
             Scope: document global.
      */
-    SwRect _GetFrame( const SwRect &rPortion ) const;
+    SwRect _GetFrame( const SwRect &rPortion, bool bTop ) const;
 
     SwAnchoredObjList* InitAnchoredObjList();
 
@@ -356,7 +356,7 @@ inline void SwTextFly::SetNextTop( long nNew ) const
 
 inline SwRect SwTextFly::GetFrame( const SwRect &rRect ) const
 {
-    return bOn ? _GetFrame( rRect ) : SwRect();
+    return bOn ? _GetFrame( rRect, true/*bTop*/ ) : SwRect();
 }
 
 inline void SwTextFly::SetIgnoreCurrentFrame( bool bNew )

@@ -19,7 +19,6 @@
 
 #include <config_folders.h>
 #include <config_features.h>
-#include <chrono>
 
 #include "dp_misc.h"
 #include "dp_version.hxx"
@@ -459,7 +458,8 @@ Reference<XInterface> resolveUnoURL(
         catch (const connection::NoConnectException &) {
             if (i < 20)
             {
-                ::osl::Thread::wait( std::chrono::milliseconds(500) );
+                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
+                ::osl::Thread::wait( tv );
             }
             else throw;
         }

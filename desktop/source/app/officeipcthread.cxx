@@ -243,6 +243,7 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
 }
 
 rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
+    namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
@@ -525,15 +526,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
         do
         {
-            osl::Security security;
+            osl::Security &rSecurity = Security::get();
 
             // Try to create pipe
-            if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, security ))
+            if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
             {
                 // Pipe created
                 nPipeMode = PIPEMODE_CREATED;
             }
-            else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, security )) // Creation not successful, now we try to connect
+            else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successful, now we try to connect
             {
                 osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
                 if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
@@ -653,6 +654,11 @@ OfficeIPCThread::OfficeIPCThread() :
 
 OfficeIPCThread::~OfficeIPCThread()
 {
+    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
+
+    mpDispatchWatcher.clear();
+    maPipe.close();
+    pGlobalOfficeIPCThread.clear();
 }
 
 void OfficeIPCThread::SetReady()
@@ -741,7 +747,9 @@ void OfficeIPCThread::execute()
             }
             catch ( const CommandLineArgs::Supplier::Exception & )
             {
+#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
                 SAL_WARN("desktop.app", "Error in received command line arguments");
+#endif
                 continue;
             }
 
@@ -958,7 +966,9 @@ void OfficeIPCThread::execute()
                 }
             }
 
+#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
             SAL_WARN( "desktop.app", "Error on accept: " << (int)nError);
+#endif
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;
@@ -1063,8 +1073,6 @@ bool OfficeIPCThread::ExecuteCmdLineRequests(
         {
             pGlobalOfficeIPCThread->mpDispatchWatcher = new DispatchWatcher;
         }
-        rtl::Reference<DispatchWatcher> dispatchWatcher(
-            pGlobalOfficeIPCThread->mpDispatchWatcher);
 
         // copy for execute
         std::vector<DispatchWatcher::DispatchRequest> aTempList( aDispatchList );
@@ -1073,7 +1081,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests(
         aGuard.clear();
 
         // Execute dispatch requests
-        bShutdown = dispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
+        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
 
         // set processed flag
         if (aRequest.pcProcessed != nullptr)

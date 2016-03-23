@@ -1000,7 +1000,7 @@ static long lcl_TOXTypesToUserData(CurTOXType eType)
 
 void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 {
-    CurTOXType eCurType (eSet);
+    CurTOXType eCurType (eSet, 0);
 
     sal_IntPtr nData = lcl_TOXTypesToUserData(eCurType);
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos(reinterpret_cast<void*>(nData)));

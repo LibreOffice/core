@@ -98,7 +98,7 @@ void SwHTMLParser::EndScript()
         SwScriptField aField( pType, m_aScriptType,
                             !m_aScriptURL.isEmpty() ? m_aScriptURL : m_aScriptSource,
                             !m_aScriptURL.isEmpty() );
-        InsertAttr( SwFormatField( aField ), false );
+        InsertAttr( SwFormatField( aField ) );
     }
 
     SwDocShell *pDocSh = m_pDoc->GetDocShell();

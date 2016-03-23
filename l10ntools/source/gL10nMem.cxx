@@ -21,10 +21,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-using namespace std;
 
 #include "gL10nMem.hxx"
-#include "gConvPO.hxx"
 
 l10nMem *myMem;
 
@@ -32,14 +30,14 @@ l10nMem *myMem;
 class l10nMem_lang_list_entry
 {
     public:
-        l10nMem_lang_list_entry(const string& sName)
+        l10nMem_lang_list_entry(const std::string& sName)
                                : msName(sName),
                                  mbChanged(false)
         {}
 
         ~l10nMem_lang_list_entry() {};
 
-        string msName;      // language Name
+        std::string msName;      // language Name
         bool        mbChanged;   // used for "convert", true if language is modified
 };
 
@@ -47,22 +45,22 @@ class l10nMem_lang_list_entry
 class l10nMem_file_entry
 {
     public:
-        l10nMem_file_entry(const string& sFileName, int iStart)
+        l10nMem_file_entry(const std::string& sFileName, int iStart)
                           : msFileName(sFileName),
                             miStart(iStart),
                             miEnd(iStart)
         {
             // Store fileName without relative path
             int i = msFileName.rfind("/");
-            if (i == (int)string::npos)
+            if (i == (int)std::string::npos)
                 msPureName = msFileName;
             else
                 msPureName = msFileName.substr(i + 1);
         }
         ~l10nMem_file_entry() {};
 
-        string msFileName;  // file Name with relative path
-        string msPureName;  // just filename
+        std::string msFileName;  // file Name with relative path
+        std::string msPureName;  // just filename
         int         miStart;     // start index of entries in mcMasterEntries (l10Mem_db::mcENUS)
         int         miEnd;       // last index of entries in mcMasterEntries (l10Mem_db::mcENUS)
 };
@@ -72,13 +70,13 @@ class l10nMem_file_entry
 class l10nMem_lang_entry
 {
     public:
-        l10nMem_lang_entry(const string& sMsgStr, bool bFuzzy)
+        l10nMem_lang_entry(const std::string& sMsgStr, bool bFuzzy)
                           : msMsgStr(sMsgStr),
                             mbFuzzy(bFuzzy)
         {}
         ~l10nMem_lang_entry() {};
 
-        string msMsgStr;   // translated text from po file
+        std::string msMsgStr;   // translated text from po file
         bool        mbFuzzy;    // fuzzy flag
 };
 
@@ -87,17 +85,13 @@ class l10nMem_lang_entry
 class l10nMem_enus_entry
 {
     public:
-        l10nMem_enus_entry(const string&   sKey,
-                           const string&   sMsgId,
-                           const string&   sComment,
-                           const string&   sResource,
+        l10nMem_enus_entry(const std::string&   sKey,
+                           const std::string&   sMsgId,
                            int                  iLineNo,
                            int                  iFileInx,
                            int                  iLangSize,
                            l10nMem::ENTRY_STATE eState)
                           : msMsgId(sMsgId),
-                            msComment(sComment),
-                            msResource(sResource),
                             meState(eState),
                             miFileInx(iFileInx),
                             miLineNo(iLineNo)
@@ -110,19 +104,17 @@ class l10nMem_enus_entry
 
             // convert key to upper case
             msKey = sKey;
-            //FIX l10nMem::keyToUpper(msKey);
+            l10nMem::keyToUpper(msKey);
         }
 
         ~l10nMem_enus_entry() {};
 
-        string                     msKey;      // key in po file and source file
-        string                     msMsgId;    // en-US text from source file
-        string                     msComment;  // Comment (to be used in msgcstr)
-        string                     msResource; // Resource Id (to be used in msgcstr)
-        l10nMem::ENTRY_STATE       meState;    // status information
-        int                        miFileInx;  // index of file name
-        int                        miLineNo;   // line number
-        vector<l10nMem_lang_entry> mcLangText; // language texts (index is languageId)
+        std::string                     msKey;      // key in po file and source file
+        std::string                     msMsgId;    // en-US text from source file
+        l10nMem::ENTRY_STATE            meState;    // status information
+        int                             miFileInx;  // index of file name
+        int                             miLineNo;   // line number
+        std::vector<l10nMem_lang_entry> mcLangText; // language texts (index is languageId)
 };
 
 
@@ -139,10 +131,9 @@ l10nMem::l10nMem()
                   mbStrictMode(false)
 {
     myMem = this;
-    msModuleName   = "default";
     mcFileList.push_back(l10nMem_file_entry("-genLang-", 0));
     mcLangList.push_back(l10nMem_lang_list_entry("-genLang-"));
-    mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", "", "", 0, 0, 0, l10nMem::ENTRY_DELETED));
+    mcENUSlist.push_back(l10nMem_enus_entry("-genLang-", "-genLang-", 0, 0, 0, l10nMem::ENTRY_DELETED));
 }
 
 
@@ -153,7 +144,7 @@ l10nMem::~l10nMem()
 
 
 
-int l10nMem::showError(const string& sText, int iLineNo)
+int l10nMem::showError(const std::string& sText, int iLineNo)
 {
     myMem->mbInError = true;
     myMem->formatAndShowText("ERROR", iLineNo, sText);
@@ -162,14 +153,14 @@ int l10nMem::showError(const string& sText, int iLineNo)
 
 
 
-void l10nMem::showWarning(const string& sText, int iLineNo)
+void l10nMem::showWarning(const std::string& sText, int iLineNo)
 {
     myMem->formatAndShowText("WARNING", iLineNo, sText);
 }
 
 
 
-void l10nMem::showDebug(const string& sText, int iLineNo)
+void l10nMem::showDebug(const std::string& sText, int iLineNo)
 {
     if (myMem->mbDebug)
         myMem->formatAndShowText("DEBUG", iLineNo, sText);
@@ -177,7 +168,7 @@ void l10nMem::showDebug(const string& sText, int iLineNo)
 
 
 
-void l10nMem::showVerbose(const string& sText, int iLineNo)
+void l10nMem::showVerbose(const std::string& sText, int iLineNo)
 {
     if (myMem->mbVerbose)
         myMem->formatAndShowText("INFO", iLineNo, sText);
@@ -192,21 +183,21 @@ bool l10nMem::isError()
 
 
 
-void l10nMem::setModuleName(const string& sModuleName)
+void l10nMem::setModuleName(const std::string& sModuleName)
 {
     msModuleName = sModuleName;
 }
 
 
 
-const string& l10nMem::getModuleName()
+const std::string& l10nMem::getModuleName()
 {
     return msModuleName;
 }
 
 
 
-void l10nMem::setLanguage(const string& sLanguage,
+void l10nMem::setLanguage(const std::string& sLanguage,
                           bool               bCreate)
 {
     int i, iSize;
@@ -272,38 +263,34 @@ void l10nMem::setDebug(bool doDebug)
 
 
 
-void l10nMem::loadEntryKey(int           iLineNo,
-                           const string& sSourceFile,
-                           const string& sKey,
-                           const string& sMsgId,
-                           const string& sMsgStr,
-                           const string& sComment,
-                           const string& sResource,
-                           bool          bIsFuzzy)
+void l10nMem::loadEntryKey(int                iLineNo,
+                           const std::string& sSourceFile,
+                           const std::string& sKey,
+                           const std::string& sMsgId,
+                           const std::string& sMsgStr,
+                           bool               bIsFuzzy)
 {
     if (mbConvertMode)
         convEntryKey(iLineNo, sSourceFile, sKey, sMsgId, sMsgStr, bIsFuzzy);
     else if (!miCurLangInx)
-        loadENUSkey(iLineNo, sSourceFile, sKey, sMsgId, sComment, sResource);
+        loadENUSkey(iLineNo, sSourceFile, sKey, sMsgId);
     else
         loadLangKey(iLineNo, sSourceFile, sKey, sMsgId, sMsgStr, bIsFuzzy);
 }
 
 
 
-void l10nMem::setSourceKey(int           iLineNo,
-                           const string& sSourceFile,
-                           const string& sKey,
-                           const string& sMsgId,
-                           const string& sComment,
-                           const string& sResource,
-                           bool          bMustExist)
+void l10nMem::setSourceKey(int                iLineNo,
+                           const std::string& sSourceFile,
+                           const std::string& sKey,
+                           const std::string& sMsgId,
+                           bool               bMustExist)
 {
-    string newText(sMsgId);
+    std::string newText(sMsgId);
     int         i;
 
     // time to escape " and \ if contained in text or key
-    for (i = 0; (i = newText.find("\\", i)) != (int)string::npos;) {
+    for (i = 0; (i = newText.find("\\", i)) != (int)std::string::npos;) {
         ++i;
         if (i < (int)newText.size() &&
             (newText[i] == '\\' || newText[i] == '<' || newText[i] == '>' ||
@@ -315,7 +302,7 @@ void l10nMem::setSourceKey(int           iLineNo,
             ++i;
         }
     }
-    for (i = 0; (i = newText.find("\"", i)) != (int)string::npos;) {
+    for (i = 0; (i = newText.find("\"", i)) != (int)std::string::npos;) {
         newText.insert(i, "\\");
         i += 2;
     }
@@ -328,29 +315,37 @@ void l10nMem::setSourceKey(int           iLineNo,
             throw showError("key " + sKey + " does not exist");
 
         // add key, if changed text, this is wrong but handled in reorganize
-        addKey(iLineNo, sSourceFile, sKey, newText, sComment, sResource, ENTRY_ADDED);
+        addKey(iLineNo, sSourceFile, sKey, newText, ENTRY_ADDED);
     }
 }
 
 
 
-void l10nMem::saveTemplates(const string& sTargetDir, bool bForce)
+void l10nMem::saveTemplates(const std::string& sTargetDir, bool bKid, bool bForce)
 {
-    string target(msModuleName + ".pot");
-    int iE, iEsize = mcENUSlist.size();
+    //    int iEsize = mcENUSlist.size();
+    std::string sFileName = msModuleName + ".pot";
+
+    // Dummy to satisfy compiler
+    if (bKid)
+        return;
+    showError(sTargetDir);
 
     // and reorganize db if needed
     miCurFileInx = 0;
     reorganize(false);
 
     // no save if there has been errors
-    if (!needWrite(target, bForce))
+    if (!needWrite(sFileName, bForce))
         return;
 
-    // Save en-US
-    convert_po savePo(*this);
+    //JIX save HANDLE KID
 
-    savePo.startSave(msModuleName, sTargetDir, target);
+    // Save en-US
+#if 0
+    convert_gen savePo(cMem, sTargetDir, sTargetDir, sFileName);
+
+    savePo.startSave("templates/", sFileName);
     for (iE = 1; iE < iEsize; ++iE) {
         l10nMem_enus_entry& cE = mcENUSlist[iE];
 
@@ -358,19 +353,20 @@ void l10nMem::saveTemplates(const string& sTargetDir, bool bForce)
         if (cE.meState == ENTRY_DELETED)
             continue;
 
-        savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", cE.msComment, cE.msResource, false);
+        savePo.save(mcFileList[cE.miFileInx].msFileName, cE.msKey, cE.msMsgId, "", false);
     }
     savePo.endSave();
+#endif
 }
 
 
 
-void l10nMem::saveLanguages(l10nMem& cMem, const string& sTargetDir, bool bForce)
+void l10nMem::saveLanguages(l10nMem& cMem, const std::string& sTargetDir, bool bForce)
 {
     //    int iE, iEsize = mcENUSlist.size();
     //    int iEsize = mcENUSlist.size();
     int iL, iLsize = mcLangList.size();
-    string sFileName = msModuleName + ".po";
+    std::string sFileName = msModuleName + ".po";
 
     cMem.dumpMem("jan");
     showDebug(sTargetDir);
@@ -428,7 +424,7 @@ void l10nMem::showNOconvert()
 
 
 
-void l10nMem::convertToInetString(string& sText)
+void l10nMem::convertToInetString(std::string& sText)
 {
     static const char *replacingStr[] = { "&", "\'", ">", "<", "\"", nullptr };
     static const int   replacingLen[] = { 1, 1, 1, 1, 1, 0 };
@@ -438,7 +434,7 @@ void l10nMem::convertToInetString(string& sText)
 
     for (i = 0; replacingStr[i]; i++) {
         pos = 0;
-        while ((pos = sText.find(replacingStr[i], pos)) != (int)string::npos) {
+        while ((pos = sText.find(replacingStr[i], pos)) != (int)std::string::npos) {
             sText.replace(pos, replacingLen[i], newStr[i]);
             pos += newLen[i];
         }
@@ -447,7 +443,7 @@ void l10nMem::convertToInetString(string& sText)
 
 
 
-void l10nMem::convertFromInetString(string& sText)
+void l10nMem::convertFromInetString(std::string& sText)
 {
     static const char *replacingStr[] = { "&amp;", "&apos;", "&gt;", "&lt;", "&quot;", nullptr };
     static const int   replacingLen[] = { 5, 6, 4, 4, 6, 0 };
@@ -457,7 +453,7 @@ void l10nMem::convertFromInetString(string& sText)
 
     for (i = 0; replacingStr[i]; i++) {
         pos = 0;
-        while ((pos = sText.find(replacingStr[i], pos)) != (int)string::npos) {
+        while ((pos = sText.find(replacingStr[i], pos)) != (int)std::string::npos) {
             sText.replace(pos, replacingLen[i], newStr[i]);
             pos += newLen[i];
         }
@@ -474,7 +470,7 @@ int  l10nMem::prepareMerge()
 
 
 
-void l10nMem::dumpMem(const string& sFileName)
+void l10nMem::dumpMem(const std::string& sFileName)
 {
     // and reorganize db if needed
     reorganize(false);
@@ -488,7 +484,7 @@ void l10nMem::dumpMem(const string& sFileName)
 
 
 
-bool l10nMem::getMergeLang(string& sLang, string& sMsgStr)
+bool l10nMem::getMergeLang(std::string& sLang, std::string& sMsgStr)
 {
     miCurLangInx++;
     if (miCurLangInx >= (int)mcLangList.size())
@@ -505,19 +501,19 @@ bool l10nMem::getMergeLang(string& sLang, string& sMsgStr)
 
 
 
-void l10nMem::formatAndShowText(const string& sType, int iLineNo, const string& sText)
+void l10nMem::formatAndShowText(const std::string& sType, int iLineNo, const std::string& sText)
 {
-    cout << sType;
+    std::cout << sType;
     if (miCurFileInx > 0)
-        cout << " in " << mcFileList[miCurFileInx].msFileName;
+        std::cout << " in " << mcFileList[miCurFileInx].msFileName;
     if (iLineNo)
-        cout << "(" << iLineNo << ")";
-     cout << ":  " << sText << endl;
+        std::cout << "(" << iLineNo << ")";
+     std::cout << ":  " << sText << std::endl;
 }
 
 
 
-bool l10nMem::needWrite(const string sFileName, bool bForce)
+bool l10nMem::needWrite(const std::string sFileName, bool bForce)
 {
     int iE, iEsize  = mcENUSlist.size();
     int iCntDeleted = 0, iCntChanged = 0, iCntAdded = 0;
@@ -542,26 +538,26 @@ bool l10nMem::needWrite(const string sFileName, bool bForce)
     if (!mbConvertMode)
         iCntDeleted -= iCntChanged;
     if (!iCntAdded && !iCntChanged && !iCntDeleted) {
-        cout << "genLang: No changes in " <<   sFileName;
+        std::cout << "genLang: No changes in " <<   sFileName;
         if (bForce)
-            cout << ", -o switch used, so files are saved" << endl;
+            std::cout << ", -o switch used, so files are saved" << std::endl;
         else
-            cout << " skipping \"save\"" << endl;
+            std::cout << " skipping \"save\"" << std::endl;
         return bForce;
     }
 
-    cout << "genLang statistics: " << iCntDeleted << " deleted, "
+    std::cout << "genLang statistics: " << iCntDeleted << " deleted, "
                                         << iCntChanged << " changed, "
                                         << iCntAdded   << " added entries in "
-                                        << sFileName   << endl;
+                                        << sFileName   << std::endl;
     return true;
 }
 
 
 
-bool l10nMem::convFilterWarning(const string& sSourceFile,
-                                const string& sKey,
-                                const string& sMsgId)
+bool l10nMem::convFilterWarning(const std::string& sSourceFile,
+                                const std::string& sKey,
+                                const std::string& sMsgId)
 {
     // silent ignore deleted messages
     if (sMsgId == "-" || sMsgId == "")
@@ -665,16 +661,16 @@ bool l10nMem::convFilterWarning(const string& sSourceFile,
 
 
 
-void l10nMem::convEntryKey(int           iLineNo,
-                           const string& sSourceFile,
-                           const string& sKey,
-                           const string& sMsgId,
-                           const string& sMsgStr,
-                           bool          bIsFuzzy)
+void l10nMem::convEntryKey(int                iLineNo,
+                           const std::string& sSourceFile,
+                           const std::string& sKey,
+                           const std::string& sMsgId,
+                           const std::string& sMsgStr,
+                           bool               bIsFuzzy)
 {
-    vector<int> ivEntryList;
-    string      curFileName;
-    string      curKeyUpper;
+    std::vector<int> ivEntryList;
+    std::string      curFileName;
+    std::string      curKeyUpper;
     int              curFileIndex, curENUSindex, i, iSize;
 
 
@@ -733,7 +729,7 @@ void l10nMem::convEntryKey(int           iLineNo,
             l10nMem_enus_entry& curE = mcENUSlist[ivEntryList[i]];
 
             // compare keys, but be aware of different length
-            if (curKeyUpper.find(curE.msKey) != string::npos) {
+            if (curKeyUpper.find(curE.msKey) != std::string::npos) {
                 curENUSindex = ivEntryList[i];
                 bIsFuzzy     = true;
                 break;
@@ -760,25 +756,23 @@ void l10nMem::convEntryKey(int           iLineNo,
 
 
 
-void l10nMem::loadENUSkey(int           iLineNo,
-                          const string& sSourceFile,
-                          const string& sKey,
-                          const string& sMsgId,
-                          const string& sComment,
-                          const string& sResource)
+void l10nMem::loadENUSkey(int                iLineNo,
+    const std::string& sSourceFile,
+    const std::string& sKey,
+    const std::string& sMsgId)
 {
     // add it to vector and update file pointer
-    addKey(iLineNo, sSourceFile, sKey, sMsgId, sComment, sResource, ENTRY_DELETED);
+    addKey(iLineNo, sSourceFile, sKey, sMsgId, ENTRY_DELETED);
 }
 
 
 
-void l10nMem::loadLangKey(int           iLineNo,
-                          const string& sSourceFile,
-                          const string& sKey,
-                          const string& sMsgId,
-                          const string& sMsgStr,
-                          bool          bFuzzy)
+void l10nMem::loadLangKey(int                iLineNo,
+                          const std::string& sSourceFile,
+                          const std::string& sKey,
+                          const std::string& sMsgId,
+                          const std::string& sMsgStr,
+                          bool               bFuzzy)
 {
     if (!locateKey(iLineNo, sSourceFile, sKey, sMsgId, true))
         throw l10nMem::showError(".po file contains unknown filename: " + sSourceFile + " or key: " + sKey);
@@ -794,7 +788,7 @@ void l10nMem::reorganize(bool bConvert)
 {
     int iE, iEsize = mcENUSlist.size();
     int iD, iDsize;
-    vector<int> listDel, listAdd;
+    std::vector<int> listDel, listAdd;
 
 
     // Check number of changes
@@ -843,12 +837,12 @@ void l10nMem::reorganize(bool bConvert)
 
 
 bool l10nMem::locateKey(int                iLineNo,
-                        const string& sSourceFile,
-                        const string& sKey,
-                        const string& sMsgId,
+                        const std::string& sSourceFile,
+                        const std::string& sKey,
+                        const std::string& sMsgId,
                         bool               bThrow)
 {
-    string sUpperKey(sKey);
+    std::string sUpperKey(sKey);
     int         i, iSize = sUpperKey.size();
     char        ch;
 
@@ -889,12 +883,10 @@ bool l10nMem::locateKey(int                iLineNo,
 
 
 
-void l10nMem::addKey(int             iLineNo,
-                     const string&   sSourceFile,
-                     const string&   sKey,
-                     const string&   sMsgId,
-                     const string&   sComment,
-                     const string&   sResource,
+void l10nMem::addKey(int                  iLineNo,
+                     const std::string&   sSourceFile,
+                     const std::string&   sKey,
+                     const std::string&   sMsgId,
                      l10nMem::ENTRY_STATE eStat)
 {
     // check file
@@ -907,20 +899,20 @@ void l10nMem::addKey(int             iLineNo,
         mcFileList.push_back(l10nMem_file_entry(sSourceFile, miCurENUSinx));
 
         // and add entry at the back (no problem since it is a new file)
-        mcENUSlist.push_back(l10nMem_enus_entry(sKey, sMsgId, sComment, sResource, iLineNo, miCurFileInx,
+        mcENUSlist.push_back(l10nMem_enus_entry(sKey, sMsgId, iLineNo, miCurFileInx,
             mcLangList.size(), eStat));
         mcFileList[miCurFileInx].miEnd = miCurENUSinx;
     }
     else {
         int iFsize = mcFileList.size();
         l10nMem_file_entry& curF = mcFileList[miCurFileInx];
-        vector<l10nMem_enus_entry>::iterator it = mcENUSlist.begin();
+        std::vector<l10nMem_enus_entry>::iterator it = mcENUSlist.begin();
 
         // file is registred, so we need to add the entry at the end of the file range
         curF.miEnd++;
         miCurENUSinx = curF.miEnd;
         mcENUSlist.insert(it + curF.miEnd,
-            l10nMem_enus_entry(sKey, sMsgId, sComment, sResource, iLineNo, miCurFileInx,
+                          l10nMem_enus_entry(sKey, sMsgId, iLineNo, miCurFileInx,
                           mcLangList.size(), eStat));
         for (int i = miCurFileInx + 1; i < iFsize; ++i) {
             l10nMem_file_entry& curF2 = mcFileList[i];
@@ -933,7 +925,7 @@ void l10nMem::addKey(int             iLineNo,
 }
 
 
-bool l10nMem::findFileName(const string& sSourceFile)
+bool l10nMem::findFileName(const std::string& sSourceFile)
 {
     int iSize = mcFileList.size();
 
@@ -958,7 +950,7 @@ bool l10nMem::findFileName(const string& sSourceFile)
 
 
 
-void l10nMem::keyToUpper(string& sKey)
+void l10nMem::keyToUpper(std::string& sKey)
 {
     int i, iSize;
 

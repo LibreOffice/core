@@ -22,6 +22,7 @@
 #include <swwait.hxx>
 #include <view.hxx>
 #include <toxmgr.hxx>
+#include <crsskip.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>

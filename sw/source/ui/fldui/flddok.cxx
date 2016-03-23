@@ -239,7 +239,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldDokPage, TypeHdl, ListBox&, void)
             if (nTypeId != TYP_AUTHORFLD)
                 nCount = aLst.size();
             else
-                nCount = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
+                nCount = GetFieldMgr().GetFormatCount(nTypeId, false, IsFieldDlgHtmlMode());
 
             size_t nPos;
 
@@ -498,7 +498,7 @@ sal_Int32 SwFieldDokPage::FillFormatLB(sal_uInt16 nTypeId)
     if (nTypeId == TYP_AUTHORFLD)
         return m_pFormatLB->GetEntryCount();
 
-    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
+    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, false, IsFieldDlgHtmlMode());
 
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {

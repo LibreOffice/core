@@ -18,7 +18,6 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "gL10nMem.hxx"
 #include "gConvPo.hxx"
@@ -40,9 +39,15 @@ convert_po::convert_po(l10nMem& crMemory)
 
 
 
+convert_po::~convert_po()
+{
+}
+
+
+
 void convert_po::startLook()
 {
-    string sFileName, sNewKey;
+    std::string sFileName, sNewKey;
     int         i;
 
 
@@ -56,7 +61,7 @@ void convert_po::startLook()
 
     // load in db
     if (msId.size())
-        mcMemory.loadEntryKey(miLineNo, sFileName, sNewKey, msId, msStr, "", "", mbFuzzy);
+        mcMemory.loadEntryKey(miLineNo, sFileName, sNewKey, msId, msStr, mbFuzzy);
 
     // and prepare for new entry
     msKey.clear();
@@ -126,86 +131,82 @@ void convert_po::handleNL()
 
 
 
-extern int polex(void);
-void convert_po::doExecute()
+void convert_po::execute()
 {
     if (mbMergeMode)
         throw l10nMem::showError("Merge not implemented");
 
-    polex();
+    //  PoWrap::yylex();
     startLook();
 }
 
 
 
-void convert_po::startSave(const string& sName,
-                           const string& sTargetDir,
-                           const string& sFile)
+void convert_po::startSave(const std::string& sLanguage,
+                           const std::string& sFile)
 {
-    string sFilePath = sTargetDir + "/" + sFile;
-
-    // create directories as needed
-    createDir(string(""), sFilePath);
-    outBuffer.open(sFilePath.c_str(), ios::out + ios::binary);
+    std::string sFilePath = msTargetPath + sLanguage + sFile;
+    outBuffer.open(sFilePath.c_str(), std::ios::out);
 
     if (!outBuffer.is_open())
         throw l10nMem::showError("Cannot open " + sFilePath + " for writing");
 
     l10nMem::showDebug("writing file (" + sFilePath + ")");
 
-    ostream outFile(&outBuffer);
+    std::ostream outFile(&outBuffer);
 
     // Set license header
-//FIX JAN POT-Creation-Date
-    outFile << "#. extracted from " << sName                       << endl
-            << "msgid \"\""                                        << endl
-            << "msgstr \"\""                                       << endl
-            << "\"Project-Id-Version: PACKAGE VERSION\\n\""        << endl
-            << "\"Report-Msgid-Bugs-To: "
-            << "https://bugs.libreoffice.org/enter_bug.cgi?"
-            << "product=LibreOffice&bug_status=UNCONFIRMED"
-            << "&component=UI\\n\""                                << endl
-            << "\"POT-Creation-Date: \\n\""                        << endl
-            << "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\""    << endl
-            << "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"" << endl
-            << "\"Language-Team: LANGUAGE <LL@li.org>\\n\""        << endl
-            << "\"MIME-Version: 1.0\\n\""                          << endl
-            << "\"Content-Type: text/plain; charset=UTF-8\\n\""    << endl
-            << "\"Content-Transfer-Encoding: 8bit\\n\""            << endl
-            << "\"X-Generator: LibreOffice\\n\""                   << endl
-            << "\"X-Accelerator-Marker: ~\\n\""                    << endl;
+    outFile << "#*************************************************************" << std::endl
+            << "#*"                                                             << std::endl
+            << "#* This file is part of the LibreOffice project.              " << std::endl
+            << "#*"                                                             << std::endl
+            << "#* This Source Code Form is subject to the terms of the       " << std::endl
+            << "#* Mozilla Public License, v. 2.0. If a copy of the MPL was   " << std::endl
+            << "#* not distributed with this file, You can obtain one at      " << std::endl
+            << "#* http://mozilla.org/MPL/2.0/."                                << std::endl
+            << "#*"                                                             << std::endl
+            << "#* This file incorporates work covered by the following       " << std::endl
+            << "#* license notice :"                                            << std::endl
+            << "#*"                                                             << std::endl
+            << "#* Licensed to the Apache Software Foundation (ASF) under one " << std::endl
+            << "#* or more contributor license agreements. See the NOTICE file" << std::endl
+            << "#* distributed with this work for additional information      " << std::endl
+            << "#* regarding copyright ownership. The ASF licenses this file  " << std::endl
+            << "#* to you under the Apache License, Version 2.0               " << std::endl
+            << "#* (the \"License\"); you may not use this file except in     " << std::endl
+            << "#* compliance with the License.You may obtain a copy of the   " << std::endl
+            << "#* License at http ://www.apache.org/licenses/LICENSE-2.0 .   " << std::endl
+            << "#*"                                                             << std::endl
+            << "#************************************************************"  << std::endl
+            << "msgid \"\""                                                     << std::endl
+            << "msgstr \"\""                                                    << std::endl
+            << "\"Project-Id-Version: AOO-4-xx\\n\""                            << std::endl
+            << "\"POT-Creation-Date: \\n\""                                     << std::endl
+            << "\"PO-Revision-Date: \\n\""                                      << std::endl
+            << "\"Last-Translator: genLang (build process)\\n\""                << std::endl
+            << "\"Language-Team: \\n\""                                         << std::endl
+            << "\"MIME-Version: 1.0\\n\""                                       << std::endl
+            << "\"Content-Type: text/plain; charset=UTF-8\\n\""                 << std::endl
+            << "\"Content-Transfer-Encoding: 8bit\\n\""                         << std::endl
+            << "\"X-Generator: genLang\\n\""                                    << std::endl
+            << std::endl;
 }
 
 
 
-void convert_po::save(const string& sFileName,
-                      const string& sKey,
-                      const string& sENUStext,
-                      const string& sText,
-                      const string& sComment,
-                      const string& sResource,
+void convert_po::save(const std::string& sFileName,
+                      const std::string& sKey,
+                      const std::string& sENUStext,
+                      const std::string& sText,
                       bool               bFuzzy)
 {
-    string sName;
-    ostream outFile(&outBuffer);
-    int newPos;
+    std::ostream outFile(&outBuffer);
 
-    // isolate filename
-    newPos = sFileName.find_last_of("/\\", sFileName.length());
-    sName = sFileName.substr(newPos + 1, sFileName.length());
-
-    outFile << endl << "#. xxxxx" << endl;
-    if (sComment.length())
-        outFile << "#. " << sComment << endl;
-    outFile << "#: " << sName << endl
-            << "msgctxt \"\"" << endl
-            << "\"" << sName << "\\n\"" << endl
-            << "\"" << sKey << "\\n\"" << endl
-            << "\"" << sResource << ".text\"" << endl;
+    outFile << std::endl << "#: " << sFileName << "#" << sKey << std::endl;
     if (bFuzzy)
-        outFile << "#, fuzzy" << endl;
-    outFile << "msgid \"" << sENUStext << "\"" << endl
-            << "msgstr \"" << sText     << "\"" << endl;
+        outFile << "#, fuzzy" << std::endl;
+    outFile << "msgid  \"" << sENUStext << "\"" << std::endl
+            << "msgstr \"" << sText     << "\"" << std::endl;
 }
 
 

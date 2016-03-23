@@ -216,7 +216,7 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
 
 int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                                 bool bLink, GraphicFilter *pFilter,
-                                Graphic* pPreviewGrf )
+                                Graphic* pPreviewGrf, bool bRule )
 {
     SwWait aWait( *GetDocShell(), true );
 
@@ -278,7 +278,8 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                 OUString sURL = URIHelper::SmartRel2Abs(
                     aTemp, rPath, URIHelper::GetMaybeFileHdl() );
 
-                rShell.Insert( sURL, rFilter, aGraphic, &aFrameManager );
+                rShell.Insert( sURL,
+                            rFilter, aGraphic, &aFrameManager, bRule );
             }
             else
             {
@@ -1113,7 +1114,7 @@ void SwView::Execute(SfxRequest &rReq)
                     pValues[0].Value <<= aData.sDataSource;
                     pValues[1].Value <<= aData.sCommand;
                     pValues[2].Value <<= aData.nCommandType;
-                    pDBManager->ExecuteFormLetter(rSh, aProperties);
+                    pDBManager->ExecuteFormLetter(rSh, aProperties, true);
                 }
             }
 #endif
@@ -2004,7 +2005,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
             }
             else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
             {
-                m_pWrtShell->GotoMark( ppMark->get(), false );
+                m_pWrtShell->GotoMark( ppMark->get(), false, true );
                 bRet = true;
             }
             else if( nullptr != ( pINet = m_pWrtShell->FindINetAttr( sMark ) )) {
@@ -2031,7 +2032,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         }
         else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
         {
-            m_pWrtShell->GotoMark( ppMark->get(), false );
+            m_pWrtShell->GotoMark( ppMark->get(), false, true );
             bRet = true;
         }
         else if( nullptr != ( pINet = m_pWrtShell->FindINetAttr( sMark ) ))
@@ -2414,7 +2415,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             pValues[0].Value <<= aData.sDataSource;
             pValues[1].Value <<= aData.sCommand;
             pValues[2].Value <<= aData.nCommandType;
-            pDBManager->ExecuteFormLetter(GetWrtShell(), aProperties);
+            pDBManager->ExecuteFormLetter(GetWrtShell(), aProperties, true);
         }
     }
     else

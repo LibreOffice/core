@@ -957,10 +957,11 @@ void SwHistoryChangeCharFormat::SetInDoc(SwDoc * pDoc, bool )
 }
 // <- #i27615#
 
-SwHistory::SwHistory()
+SwHistory::SwHistory( sal_uInt16 nInitSz )
     : m_SwpHstry()
     , m_nEndDiff( 0 )
 {
+    m_SwpHstry.reserve( (sal_uInt8)nInitSz );
 }
 
 SwHistory::~SwHistory()
