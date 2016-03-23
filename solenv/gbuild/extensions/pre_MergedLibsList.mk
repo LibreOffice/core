@@ -10,6 +10,7 @@
 
 # we link all object files from these libraries into one, merged library
 MERGE_LIBRARY_LIST := \
+	acc \
 	avmedia \
 	basegfx \
 	canvastools \
@@ -23,6 +24,7 @@ MERGE_LIBRARY_LIST := \
 	$(if $(USING_X11),desktop_detector) \
 	drawinglayer \
 	editeng \
+	expwrap \
 	filterconfig \
 	fsstorage \
 	fwe \
@@ -43,6 +45,7 @@ MERGE_LIBRARY_LIST := \
 	sofficeapp \
 	sot \
 	$(if $(ENABLE_HEADLESS),,spl) \
+	store \
 	svl \
 	svt \
 	svx \
