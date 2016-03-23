@@ -1728,7 +1728,7 @@ bool ScColumn::ParseString(
                 if (!pLocale)
                     break;
 
-                LocaleDataItem aLocaleItem = pLocale->getLocaleItem();
+                const LocaleDataItem& aLocaleItem = pLocale->getLocaleItem();
                 const OUString& rDecSep = aLocaleItem.decimalSeparator;
                 const OUString& rGroupSep = aLocaleItem.thousandSeparator;
                 if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
