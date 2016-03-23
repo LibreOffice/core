@@ -3217,7 +3217,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 //  const Brush &rBrush = static_cast<const SvxBrushItem &>(rHt).GetBrush();
     const Color & rColor = static_cast<const SvxBrushItem &>(rHt).GetColor();
     OUString aLink = pGraphicName ? *pGraphicName
-                            : ((const SvxBrushItem &)rHt).GetGraphicLink();
+                            : static_cast<const SvxBrushItem &>(rHt).GetGraphicLink();
     SvxGraphicPosition ePos = static_cast<const SvxBrushItem &>(rHt).GetGraphicPos();
     if( CSS1_BACKGROUND_PAGE==nMode && !rHTMLWrt.mbEmbedImages )
     {
