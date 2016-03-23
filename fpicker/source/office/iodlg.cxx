@@ -87,11 +87,6 @@
 #include <functional>
 #include <vector>
 
-//#define AUTOSELECT_USERFILTER
-    // define this for the experimental feature of user-filter auto selection
-    // means if the user enters e.g. *.doc<enter>, and there is a filter which is responsible for *.doc files (only),
-    // then this filter is selected automatically
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui::dialogs;
@@ -855,15 +850,6 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
         // search for a corresponding filter
         SvtFileDialogFilter_Impl* pFilter = FindFilter_Impl( _rFilter, false, bFilterChanged );
 
-#ifdef AUTOSELECT_USERFILTER
-        // if we found a filter which without allowing multi-extensions -> select it
-        if ( pFilter )
-        {
-            _pImp->SelectFilterListEntry( pFilter->GetName() );
-            _pImp->SetCurFilter( pFilter );
-        }
-#endif // AUTOSELECT_USERFILTER
-
         // look for multi-ext filters if necessary
         if ( !pFilter )
             pFilter = FindFilter_Impl( _rFilter, true, bFilterChanged );
@@ -875,30 +861,11 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
         {
             nReturn |= FLT_USERFILTER;
             // no filter found : use it as user defined filter
-#ifdef AUTOSELECT_USERFILTER
-            if ( createNewUserFilter( _rFilter, sal_True ) )
-#else
             if ( createNewUserFilter( _rFilter, false ) )
-#endif
             {   // it's the "all files" filter
                 nReturn |= FLT_ALLFILESFILTER;
 
-#ifdef AUTOSELECT_USERFILTER
-                // select the "all files" entry
-                OUString sAllFilesFilter( SvtResId( STR_FILTERNAME_ALL ) );
-                if ( _pImp->HasFilterListEntry( sAllFilesFilter ) )
-                {
-                    _pImp->SelectFilterListEntry( sAllFilesFilter );
-                    _pImp->SetCurFilter( _pImp->GetSelectedFilterEntry( sAllFilesFilter ) );
-                }
-                else
-                    _pImp->SetNoFilterListSelection( ); // there is no "all files" entry
-#endif // AUTOSELECT_USERFILTER
             }
-#ifdef AUTOSELECT_USERFILTER
-            else
-                _pImp->SetNoFilterListSelection( );
-#endif // AUTOSELECT_USERFILTER
         }
     }
 
