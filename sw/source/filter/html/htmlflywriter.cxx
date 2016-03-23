@@ -1815,7 +1815,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         }
         else
         {
-            pGrfNd->GetFileFilterNms( &aGraphicURL, 0 );
+            pGrfNd->GetFileFilterNms( &aGraphicURL, nullptr );
             if( rHTMLWrt.m_bCfgCpyLinkedGrfs )
                 rWrt.CopyLocalFileToINet( aGraphicURL );
         }

@@ -1918,7 +1918,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
                                    CSS1_OUTMODE_TABLEBOX, nullptr );
-    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE, 0 );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE, nullptr );
 
     if( !rHTMLWrt.m_bFirstCSS1Property )
         rWrt.Strm().WriteChar( '\"' );
@@ -2165,7 +2165,7 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE, 0 );
+        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE, nullptr );
 
     if( IsHTMLMode( HTMLMODE_PRINT_EXT ) )
         OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, false );
@@ -2197,7 +2197,7 @@ void SwHTMLWriter::OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameForm
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION, 0 );
+        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION, nullptr );
 
     if (pCol)
     {
@@ -2219,7 +2219,7 @@ static bool OutCSS1_FrameFormatBrush( SwHTMLWriter& rWrt,
         nullptr != rBrushItem.GetGraphicLink() ||
         0 != rBrushItem.GetGraphicPos() )
     {
-        OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY, 0 );
+        OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY, nullptr );
         bWritten = true;
     }
     return bWritten;
@@ -3197,7 +3197,7 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
 // Wrapper for OutCSS1_SfxItemSet etc.
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, 0 );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, nullptr );
     return rWrt;
 }
 
@@ -3242,7 +3242,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     OUString aGraphicAsLink;
 
     // Embedded Grafic -> export WriteEmbedded
-    const Graphic* pGrf = 0;
+    const Graphic* pGrf = nullptr;
     if( rHTMLWrt.mbEmbedImages || aLink.isEmpty())
     {
         pGrf = static_cast<const SvxBrushItem &>(rHt).GetGraphic();
