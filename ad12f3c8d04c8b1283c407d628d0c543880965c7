@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_ff243ab0",
+        "filename": "cppu/source/uno/check.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-24T14:44:18Z",
+      "side": 1,
+      "message": "if you turn the #else into #elif, you should probably add #else #error blocks",
+      "revId": "ad12f3c8d04c8b1283c407d628d0c543880965c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
