@@ -282,7 +282,10 @@ XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
     {
         SAL_WARN("sc", "Parsing error: " << nMaxRows <<
                  " max possible rows, but " << nLastRow << " index claimed, truncating");
-        nLastRow = nMaxRows-1;
+        if (nMaxRows > 0)
+            nLastRow = nMaxRows-1;
+        else
+            return;
     }
 
     mxCached->Resize(nLastCol+1, nLastRow+1);
