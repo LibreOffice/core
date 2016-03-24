@@ -61,7 +61,8 @@ protected:
     SwMailMergeConfigItem& m_rConfigItem;
 
     SwGreetingsHandler(SwMailMergeConfigItem& rConfigItem)
-        : m_rConfigItem(rConfigItem)
+        : m_bIsTabPage(false),
+        m_rConfigItem(rConfigItem)
     {
     }
 
