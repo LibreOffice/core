@@ -264,6 +264,11 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             return true;
     }
 
+    // tdf#98856 Prevent dragging an empty text box (b/c SdrEndTextEdit will be triggered
+    // which causes the textbox to be deleted b/c it has no content)
+    if (eHit == SDRHIT_MARKEDOBJECT && !mpView->GetTextEditObject()->HasText())
+        return true;
+
     if (rMEvt.GetClicks() == 1)
     {
         if (mpView->IsTextEdit() && eHit != SDRHIT_MARKEDOBJECT && eHit != SDRHIT_HANDLE)
