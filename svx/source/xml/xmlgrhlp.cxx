@@ -475,7 +475,6 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
         { "wmf", "image/x-wmf" },
         { "eps", "image/x-eps" },
         { "bmp", "image/bmp" },
-        { "pct", "image/x-pict" }
     };
 
     OUString aMimeType;
@@ -680,7 +679,6 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                         case GFX_LINK_TYPE_NATIVE_TIF: aExtension = ".tif"; break;
                         case GFX_LINK_TYPE_NATIVE_WMF: aExtension = ".wmf"; break;
                         case GFX_LINK_TYPE_NATIVE_MET: aExtension = ".met"; break;
-                        case GFX_LINK_TYPE_NATIVE_PCT: aExtension = ".pct"; break;
                         case GFX_LINK_TYPE_NATIVE_SVG:
                             // backward-compat kludge: since no released OOo
                             // version to date can handle svg properly, wrap it up

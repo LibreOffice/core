@@ -76,7 +76,6 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         else if ( ImpDetectWMF( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectEMF( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectSVG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCT( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectXBM( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectXPM( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectPBM( rStm, bExtendedInfo ) ) bRet = true;
@@ -940,26 +939,6 @@ bool GraphicDescriptor::ImpDetectMET( SvStream&, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
-{
-    bool bRet = aPathExt.startsWith( "pct" );
-    if (bRet)
-        nFormat = GraphicFileFormat::PCT;
-    else
-    {
-        sal_Size nStreamPos = rStm.Tell();
-        sal_Size nStreamLen = rStm.remainingSize();
-        if (isPCT(rStm, nStreamPos, nStreamLen))
-        {
-            bRet = true;
-            nFormat = GraphicFileFormat::PCT;
-        }
-        rStm.Seek(nStreamPos);
-    }
-
-    return bRet;
-}
-
 bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, bool )
 {
     bool bRet = false;
@@ -1122,7 +1101,6 @@ OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat 
         case( GraphicFileFormat::TIF ) :   pKeyName = "tif";   break;
         case( GraphicFileFormat::DXF ) :   pKeyName = "dxf";   break;
         case( GraphicFileFormat::MET ) :   pKeyName = "met";   break;
-        case( GraphicFileFormat::PCT ) :   pKeyName = "pct";   break;
         case( GraphicFileFormat::SGF ) :   pKeyName = "sgf";   break;
         case( GraphicFileFormat::SGV ) :   pKeyName = "sgv";   break;
         case( GraphicFileFormat::SVM ) :   pKeyName = "svm";   break;

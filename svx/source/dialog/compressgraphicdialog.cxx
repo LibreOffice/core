@@ -157,9 +157,6 @@ void CompressGraphicsDialog::Update()
         case GFX_LINK_TYPE_NATIVE_MET:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_MET);
             break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PCT);
-            break;
         case GFX_LINK_TYPE_NATIVE_SVG:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_SVG);
             break;
