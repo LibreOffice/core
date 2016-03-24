@@ -9,7 +9,6 @@
 
 xmlsec_patches :=
 xmlsec_patches += xmlsec1-configure.patch.1
-xmlsec_patches += xmlsec1-configure-libxml-libxslt.patch.1
 xmlsec_patches += xmlsec1-oldlibtool.patch.1
 xmlsec_patches += xmlsec1-nssdisablecallbacks.patch.1
 xmlsec_patches += xmlsec1-nssmangleciphers.patch.1
