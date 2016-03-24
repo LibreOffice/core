@@ -216,6 +216,8 @@ private:
     ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
     int                     mnPenWidth;         // Linienbreite
 
+    ImplFontEntry* GetWinFontEntry(int nFallbackLevel);
+
 public:
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
