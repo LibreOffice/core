@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_24b6cb8a",
+        "filename": "starmath/source/unomodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-03-24T11:53:44Z",
+      "side": 0,
+      "message": "while at it this could be a ranged-for too:\n\n for(const auto\u0026 pSymbol : aSymbols)\n\nit seems ... (not blocking on that though, can be a followup)",
+      "revId": "15b53976e5d119877e53f34b34cee33a5f2883fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
