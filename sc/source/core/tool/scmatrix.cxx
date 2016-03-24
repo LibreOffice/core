@@ -3026,7 +3026,14 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, rtl_uString**
             continue;
         }
 
-        // Empty cell. No action required.
+        // it's a NaN, need to flush the non-NaN segment if it exists
+
+        if (pNumHead)
+        {
+            // Flush this non-NaN segment to the matrix.
+            rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
+            pNumHead = nullptr;
+        }
     }
 
     if (pStrHead)
@@ -3051,6 +3058,9 @@ void ScVectorRefMatrix::ensureFullMatrix()
     const std::vector<formula::VectorRefArray>& rArrays = mpToken->GetArrays();
     size_t nColSize = rArrays.size();
     mpFullMatrix.reset(new ScFullMatrix(nColSize, mnRowSize));
+
+    if (mpErrorInterpreter)
+        mpFullMatrix->SetErrorInterpreter(mpErrorInterpreter);
 
     size_t nRowSize = mnRowSize;
     size_t nRowEnd = mnRowStart + mnRowSize;
