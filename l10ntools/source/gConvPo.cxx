@@ -144,7 +144,10 @@ void convert_po::startSave(const string& sName,
                            const string& sTargetDir,
                            const string& sFile)
 {
-    string sFilePath = sTargetDir + "/" + sFile;
+    string sFilePath;
+    string ext = sTargetDir.substr(sTargetDir.length() - 5, sTargetDir.length());
+
+    sFilePath = (ext == ".pot/") ? sTargetDir.substr(0, sTargetDir.length() - 1) : sTargetDir + sFile;
 
     // create directories as needed
     createDir(string(""), sFilePath);

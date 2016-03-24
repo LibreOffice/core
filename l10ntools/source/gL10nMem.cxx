@@ -525,9 +525,12 @@ bool l10nMem::needWrite(const string sFileName, bool bForce)
     int iCntDeleted = 0, iCntChanged = 0, iCntAdded = 0;
 
     // no save if there has been errors
-    if (mbInError)
-        throw showError("Cannot save due to previous errors");
-
+    if (mbInError) {
+        if (bForce)
+            showError("forced save, due to errors");
+        else
+            throw showError("Cannot save due to previous errors");
+    }
     // Check number of changes
     for (iE = 1; iE < iEsize; ++iE) {
         l10nMem_enus_entry& cur = mcENUSlist[iE];

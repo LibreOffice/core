@@ -20,12 +20,21 @@
 #include <vector>
 using namespace std;
 
+
+
 #include "gL10nMem.hxx"
-#include "gConvProp.hxx"
+#include "gConvXml.hxx"
 
 
 
-void convert_prop::doExecute()
+convert_xml::convert_xml(l10nMem& crMemory)
+                      : convert_gen(crMemory)
 {
-//    throw l10nMem::showError(string("convert_prop::execute not implemented"));
+}
+
+
+
+void convert_xml::doExecute()
+{
+    xmllex();
 }

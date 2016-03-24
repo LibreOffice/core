@@ -31,6 +31,7 @@ using namespace std;
 #include "gConvXcs.hxx"
 #include "gConvXcu.hxx"
 #include "gConvXhp.hxx"
+#include "gConvXml.hxx"
 #include "gConvXrm.hxx"
 #ifdef _WIN32
 #include <io.h>
@@ -84,6 +85,7 @@ convert_gen& convert_gen::createInstance(l10nMem&           cMemory,
     else if (sExtension == "xcu")        x = new convert_xcu(cMemory);
     else if (sExtension == "xhp")        x = new convert_xhp(cMemory);
     else if (sExtension == "xrm")        x = new convert_xrm(cMemory);
+    else if (sExtension == "xml")        x = new convert_xml(cMemory);
     else if (sExtension == "properties") x = new convert_prop(cMemory);
     else throw l10nMem::showError("unknown extension on source file: "+sSourceFile);
 
