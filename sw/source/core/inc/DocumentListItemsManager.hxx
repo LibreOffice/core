@@ -21,14 +21,12 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTITEMSMANAGER_HXX
 
 #include <IDocumentListItems.hxx>
-#include <boost/noncopyable.hpp>
 #include <set>
 
 namespace sw
 {
 
-class DocumentListItemsManager : public IDocumentListItems,
-                                 public ::boost::noncopyable
+class DocumentListItemsManager : public IDocumentListItems
 {
 public:
 
@@ -54,6 +52,9 @@ public:
     typedef ::std::set< const SwNodeNum*, lessThanNodeNum > tImplSortedNodeNumList;
 
 private:
+
+    DocumentListItemsManager(DocumentListItemsManager const&) = delete;
+    DocumentListItemsManager& operator=(DocumentListItemsManager const&) = delete;
 
     tImplSortedNodeNumList* mpListItemsList;
 };

@@ -21,15 +21,13 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTREDLINEMANAGER_HXX
 
 #include <IDocumentRedlineAccess.hxx>
-#include <boost/noncopyable.hpp>
 
 class SwDoc;
 
 namespace sw
 {
 
-class DocumentRedlineManager : public IDocumentRedlineAccess,
-                               public ::boost::noncopyable
+class DocumentRedlineManager : public IDocumentRedlineAccess
 {
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );
@@ -124,6 +122,10 @@ public:
     virtual ~DocumentRedlineManager();
 
 private:
+
+    DocumentRedlineManager(DocumentRedlineManager const&) = delete;
+    DocumentRedlineManager& operator=(DocumentRedlineManager const&) = delete;
+
     SwDoc& m_rDoc;
 
     RedlineMode_t meRedlineMode;     //< Current Redline Mode.

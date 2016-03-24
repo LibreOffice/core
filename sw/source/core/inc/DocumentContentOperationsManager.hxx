@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
 
 #include <IDocumentContentOperations.hxx>
-#include <boost/noncopyable.hpp>
 #include <ndarr.hxx> //Only for lcl_RstTxtAttr
 
 class SwDoc;
@@ -32,8 +31,7 @@ class SwHistory;
 namespace sw
 {
 
-class DocumentContentOperationsManager : public IDocumentContentOperations,
-                                         public ::boost::noncopyable
+class DocumentContentOperationsManager : public IDocumentContentOperations
 {
 public:
     DocumentContentOperationsManager( SwDoc& i_rSwdoc );
@@ -165,6 +163,9 @@ private:
      Position may not lie within range! */
     bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrames /*= true */,
             const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
+
+    DocumentContentOperationsManager(DocumentContentOperationsManager const&) = delete;
+    DocumentContentOperationsManager& operator=(DocumentContentOperationsManager const&) = delete;
 };
 
 }

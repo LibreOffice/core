@@ -21,16 +21,20 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTEXTERNALDATAMANAGER_HXX
 
 #include <IDocumentExternalData.hxx>
-#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 
 namespace sw {
 
-class DocumentExternalDataManager : public IDocumentExternalData,
-                                    public ::boost::noncopyable
+class DocumentExternalDataManager : public IDocumentExternalData
 {
 
+private:
+    DocumentExternalDataManager(DocumentExternalDataManager const&) = delete;
+    DocumentExternalDataManager& operator=(DocumentExternalDataManager const&) = delete;
+
 public:
+    DocumentExternalDataManager() = default;
+
     void setExternalData( ::sw::tExternalDataType eType, ::sw::tExternalDataPointer pPayload) override;
     ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) override;
 

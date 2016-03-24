@@ -21,15 +21,13 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTOUTLINENODESMANAGER_HXX
 
 #include <IDocumentOutlineNodes.hxx>
-#include <boost/noncopyable.hpp>
 
 class SwDoc;
 
 namespace sw
 {
 
-class DocumentOutlineNodesManager : public IDocumentOutlineNodes,
-                                    public ::boost::noncopyable
+class DocumentOutlineNodesManager : public IDocumentOutlineNodes
 {
 public:
 
@@ -50,6 +48,9 @@ public:
     virtual ~DocumentOutlineNodesManager();
 
 private:
+
+    DocumentOutlineNodesManager(DocumentOutlineNodesManager const&) = delete;
+    DocumentOutlineNodesManager& operator=(DocumentOutlineNodesManager const&) = delete;
 
     SwDoc& m_rDoc;
 };

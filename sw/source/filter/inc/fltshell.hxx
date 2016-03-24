@@ -32,8 +32,6 @@
 #include <pam.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 #include <deque>
 
@@ -92,8 +90,12 @@ public:
 };
 
 // Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
-class SwFltStackEntry : private ::boost::noncopyable
+class SwFltStackEntry
 {
+private:
+    SwFltStackEntry(SwFltStackEntry const&) = delete;
+    SwFltStackEntry& operator=(SwFltStackEntry const&) = delete;
+
 public:
     SwFltPosition m_aMkPos;
     SwFltPosition m_aPtPos;
@@ -125,15 +127,18 @@ public:
     void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
 };
 
-class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
+class SW_DLLPUBLIC SwFltControlStack
 {
+private:
+    SwFltControlStack(SwFltControlStack const&) = delete;
+    SwFltControlStack& operator=(SwFltControlStack const&) = delete;
+
     typedef std::deque<std::unique_ptr<SwFltStackEntry>> Entries;
     typedef Entries::iterator myEIter;
     Entries m_Entries;
 
     sal_uLong nFieldFlags;
 
-private:
     bool bHasSdOD;
     bool bSdODChecked;
 

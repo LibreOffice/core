@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCHARTDATAPROVIDEMANAGER_HXX
 
 #include <IDocumentChartDataProviderAccess.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <rtl/ref.hxx>
 
@@ -37,8 +36,7 @@ class SwDoc;
 
 namespace sw {
 
-class DocumentChartDataProviderManager : public IDocumentChartDataProviderAccess,
-                                         public ::boost::noncopyable
+class DocumentChartDataProviderManager : public IDocumentChartDataProviderAccess
 {
 
 public:
@@ -54,6 +52,9 @@ public:
     virtual ~DocumentChartDataProviderManager();
 
 private:
+
+    DocumentChartDataProviderManager(DocumentChartDataProviderManager const&) = delete;
+    DocumentChartDataProviderManager& operator=(DocumentChartDataProviderManager const&) = delete;
 
     SwDoc& m_rDoc;
 

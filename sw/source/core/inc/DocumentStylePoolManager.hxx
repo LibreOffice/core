@@ -21,14 +21,12 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTYLEPOOLMANAGER_HXX
 
 #include <IDocumentStylePoolAccess.hxx>
-#include <boost/noncopyable.hpp>
 
 class SwDoc;
 
 namespace sw {
 
-class DocumentStylePoolManager : public IDocumentStylePoolAccess,
-                                 public ::boost::noncopyable
+class DocumentStylePoolManager : public IDocumentStylePoolAccess
 {
 
 public:
@@ -48,6 +46,9 @@ public:
     virtual ~DocumentStylePoolManager();
 
 private:
+
+    DocumentStylePoolManager(DocumentStylePoolManager const&) = delete;
+    DocumentStylePoolManager& operator=(DocumentStylePoolManager const&) = delete;
 
     SwDoc& m_rDoc;
 };

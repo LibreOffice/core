@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTATISTICSMANAGER_HXX
 
 #include <IDocumentStatistics.hxx>
-#include <boost/noncopyable.hpp>
 #include <vcl/timer.hxx>
 
 class SwDoc;
@@ -29,8 +28,7 @@ class Timer;
 
 namespace sw {
 
-class DocumentStatisticsManager : public IDocumentStatistics,
-                                  public ::boost::noncopyable
+class DocumentStatisticsManager : public IDocumentStatistics
 {
 
 public:
@@ -48,8 +46,10 @@ public:
 
 private:
 
-    SwDoc& m_rDoc;
+    DocumentStatisticsManager(DocumentStatisticsManager const&) = delete;
+    DocumentStatisticsManager& operator=(DocumentStatisticsManager const&) = delete;
 
+    SwDoc& m_rDoc;
 
     /** continue computing a chunk of document statistics
       * \param nChars  number of characters to count before exiting

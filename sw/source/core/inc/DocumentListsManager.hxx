@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
 
 #include <IDocumentListsAccess.hxx>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 
 class SwList;
@@ -31,8 +30,7 @@ namespace sw
 {
 
 
-class DocumentListsManager : public IDocumentListsAccess,
-                             public ::boost::noncopyable
+class DocumentListsManager : public IDocumentListsAccess
 {
     public:
 
@@ -53,6 +51,9 @@ class DocumentListsManager : public IDocumentListsAccess,
         virtual ~DocumentListsManager();
 
     private:
+
+        DocumentListsManager(DocumentListsManager const&) = delete;
+        DocumentListsManager& operator=(DocumentListsManager const&) = delete;
 
         SwDoc& m_rDoc;
 

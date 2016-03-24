@@ -24,7 +24,6 @@
 #include <sfx2/Metadatable.hxx>
 #include <vcl/keycod.hxx>
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <map>
 #include <rtl/ustring.hxx>
 #include <IMark.hxx>

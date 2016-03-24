@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTFIELDSMANAGER_HXX
 
 #include <IDocumentFieldsAccess.hxx>
-#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 
 class SwDoc;
@@ -28,8 +27,7 @@ class SwDBNameInfField;
 
 namespace sw {
 
-class DocumentFieldsManager : public IDocumentFieldsAccess,
-                              public ::boost::noncopyable
+class DocumentFieldsManager : public IDocumentFieldsAccess
 {
 
 public:
@@ -91,6 +89,9 @@ public:
     virtual ~DocumentFieldsManager();
 
 private:
+
+    DocumentFieldsManager(DocumentFieldsManager const&) = delete;
+    DocumentFieldsManager& operator=(DocumentFieldsManager const&) = delete;
 
     SwDoc& m_rDoc;
 

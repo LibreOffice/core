@@ -33,7 +33,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <unobaseclass.hxx>
 
@@ -60,7 +59,6 @@ typedef ::cppu::ImplInheritanceHelper
 
 class SwXMeta
     : public SwXMeta_Base
-    , private ::boost::noncopyable
 {
 
 public:
@@ -78,6 +76,9 @@ protected:
                 css::uno::RuntimeException);
 
     virtual ~SwXMeta();
+
+    SwXMeta(SwXMeta const&) = delete;
+    SwXMeta& operator=(SwXMeta const&) = delete;
 
     /// @param pDoc and pMeta != 0, but not & because of ImplInheritanceHelper
     SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,

@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLAYOUTMANAGER_HXX
 
 #include <IDocumentLayoutAccess.hxx>
-#include <boost/noncopyable.hpp>
 
 class SwDoc;
 class SwViewShell;
@@ -29,8 +28,7 @@ class SwLayouter;
 
 namespace sw {
 
-class DocumentLayoutManager : public IDocumentLayoutAccess,
-                              public ::boost::noncopyable
+class DocumentLayoutManager : public IDocumentLayoutAccess
 {
 
 public:
@@ -59,6 +57,9 @@ public:
     virtual ~DocumentLayoutManager();
 
 private:
+
+    DocumentLayoutManager(DocumentLayoutManager const&) = delete;
+    DocumentLayoutManager& operator=(DocumentLayoutManager const&) = delete;
 
     SwDoc& m_rDoc;
 

@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTTIMERMANAGER_HXX
 
 #include <IDocumentTimerAccess.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <vcl/idle.hxx>
 #include <sal/types.h>
@@ -32,8 +31,7 @@ class SwDoc;
 namespace sw
 {
 
-class DocumentTimerManager : public IDocumentTimerAccess,
-                             public ::boost::noncopyable
+class DocumentTimerManager : public IDocumentTimerAccess
 {
 public:
 
@@ -56,11 +54,14 @@ public:
 
 private:
 
-     SwDoc& m_rDoc;
+    DocumentTimerManager(DocumentTimerManager const&) = delete;
+    DocumentTimerManager& operator=(DocumentTimerManager const&) = delete;
 
-     bool mbStartIdleTimer; //< idle timer mode start/stop
-     sal_Int32 mIdleBlockCount;
-     Idle  maIdle;
+    SwDoc& m_rDoc;
+
+    bool mbStartIdleTimer; //< idle timer mode start/stop
+    sal_Int32 mIdleBlockCount;
+    Idle  maIdle;
 };
 
 }

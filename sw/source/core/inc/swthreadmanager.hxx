@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 class ObservableThread;
@@ -35,7 +34,6 @@ class ThreadManager;
     Conforms the singleton pattern
 */
 class SwThreadManager
-    : private ::boost::noncopyable
 {
     public:
 
@@ -66,6 +64,10 @@ class SwThreadManager
         bool StartingOfThreadsSuspended();
 
     private:
+
+        SwThreadManager(SwThreadManager const&) = delete;
+        SwThreadManager& operator=(SwThreadManager const&) = delete;
+
         static bool mbThreadManagerInstantiated;
 
         ::std::unique_ptr<ThreadManager> mpThreadManagerImpl;

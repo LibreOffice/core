@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <IDocumentDrawModelAccess.hxx>
-#include <boost/noncopyable.hpp>
 #include <svx/svdtypes.hxx>
 
 class SwDrawModel;
@@ -32,8 +31,7 @@ class SwDoc;
 namespace sw
 {
 
-class DocumentDrawModelManager : public IDocumentDrawModelAccess,
-                                 public ::boost::noncopyable
+class DocumentDrawModelManager : public IDocumentDrawModelAccess
 {
 public:
 
@@ -66,6 +64,9 @@ public:
     virtual ~DocumentDrawModelManager() {}
 
 private:
+
+    DocumentDrawModelManager(DocumentDrawModelManager const&) = delete;
+    DocumentDrawModelManager& operator=(DocumentDrawModelManager const&) = delete;
 
     SwDoc& m_rDoc;
 

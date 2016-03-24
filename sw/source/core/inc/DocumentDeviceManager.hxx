@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTDEVICEMANAGER_HXX
 
 #include <IDocumentDeviceAccess.hxx>
-#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 #include <vcl/vclptr.hxx>
 
@@ -33,8 +32,7 @@ class SwPrintData;
 
 namespace sw {
 
-class DocumentDeviceManager : public IDocumentDeviceAccess,
-                              public ::boost::noncopyable
+class DocumentDeviceManager : public IDocumentDeviceAccess
 {
 
 public:
@@ -64,6 +62,9 @@ public:
     virtual ~DocumentDeviceManager();
 
 private:
+
+    DocumentDeviceManager(DocumentDeviceManager const&) = delete;
+    DocumentDeviceManager& operator=(DocumentDeviceManager const&) = delete;
 
     VirtualDevice& CreateVirtualDevice_() const;
     SfxPrinter& CreatePrinter_() const;

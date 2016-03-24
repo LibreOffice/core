@@ -26,7 +26,6 @@
 #include <itabenum.hxx>
 #include <memory>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 class SfxItemSet;
 
@@ -162,7 +161,7 @@ public:
     void SaveBoxContent( const SwTableBox& rBox );
 };
 
-class SwUndoTableNdsChg : public SwUndo, private boost::noncopyable
+class SwUndoTableNdsChg : public SwUndo
 {
     _SaveTable* pSaveTable;
     std::set<sal_uLong> m_Boxes;
@@ -180,6 +179,9 @@ class SwUndoTableNdsChg : public SwUndo, private boost::noncopyable
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;
     bool bFlag;
     bool bSameHeight;                   // only used for SplitRow
+
+    SwUndoTableNdsChg(SwUndoTableNdsChg const&) = delete;
+    SwUndoTableNdsChg& operator=(SwUndoTableNdsChg const&) = delete;
 
 public:
     SwUndoTableNdsChg( SwUndoId UndoId,

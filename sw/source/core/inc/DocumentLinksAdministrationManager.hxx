@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLINKSADMINISTRATIONMANAGER_HXX
 
 #include <IDocumentLinksAdministration.hxx>
-#include <boost/noncopyable.hpp>
 
 
 namespace sfx2 { class LinkManager; }
@@ -32,8 +31,7 @@ class SwNodeRange;
 namespace sw
 {
 
-class DocumentLinksAdministrationManager : public IDocumentLinksAdministration,
-                                           public ::boost::noncopyable
+class DocumentLinksAdministrationManager : public IDocumentLinksAdministration
 {
 public:
 
@@ -67,6 +65,9 @@ public:
     virtual ~DocumentLinksAdministrationManager();
 
 private:
+
+    DocumentLinksAdministrationManager(DocumentLinksAdministrationManager const&) = delete;
+    DocumentLinksAdministrationManager& operator=(DocumentLinksAdministrationManager const&) = delete;
 
     bool mbVisibleLinks; //< TRUE: Links are inserted visibly.
     bool mbLinksUpdated; //< #i38810# flag indicating, that the links have been updated.
