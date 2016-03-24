@@ -1347,6 +1347,7 @@ WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWF
     mrWinFontEntry(rWFE),
     mbUseOpenGL(bUseOpenGL)
 {
+    assert(mrWinFontEntry.mnRefCount > 0);
     // keep mrWinFontEntry alive
     mrWinFontEntry.m_pFontCache->Acquire(&mrWinFontEntry);
 }
@@ -4261,6 +4262,11 @@ int    WinSalGraphics::GetMinKashidaWidth()
     mpWinFontEntry[0]->InitKashidaHandling( getHDC() );
     int nMinKashida = static_cast<int>(mfFontScale[0] * mpWinFontEntry[0]->GetMinKashidaWidth());
     return nMinKashida;
+}
+
+ImplFontEntry * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
+{
+    return mpWinFontEntry[nFallbackLevel];
 }
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )

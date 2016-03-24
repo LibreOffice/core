@@ -1532,12 +1532,23 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
             if( mhFonts[i] )
                 ::DeleteFont( mhFonts[i] );
             mhFonts[ i ] = 0;
+            if (mpWinFontEntry[i])
+            {
+                GetWinFontEntry(i)->m_pFontCache->Release(GetWinFontEntry(i));
+            }
+            mpWinFontEntry[i] = nullptr;
+            mpWinFontData[i] = nullptr;
         }
         mhDefFont = 0;
         return 0;
     }
 
     DBG_ASSERT( pFont->mpFontData, "WinSalGraphics mpFontData==NULL");
+    if (mpWinFontEntry[nFallbackLevel])
+    {
+        GetWinFontEntry(nFallbackLevel)->m_pFontCache->Release(GetWinFontEntry(nFallbackLevel));
+    }
+    pFont->mpFontEntry->m_pFontCache->Acquire(pFont->mpFontEntry);
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<ImplWinFontEntry*>( pFont->mpFontEntry );
     mpWinFontData[ nFallbackLevel ] = static_cast<const ImplWinFontData*>( pFont->mpFontData );
 
@@ -1560,6 +1571,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
                 ::DeleteFont( mhFonts[i] );
                 mhFonts[i] = 0;
             }
+            // note: removing mpWinFontEntry[i] here has obviously bad effects
         }
     }
 
