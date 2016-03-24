@@ -46,6 +46,7 @@ private:
     bool                mbExportNotes;
     bool                mbViewPDF;
     bool                mbExportNotesPages;
+    bool                mbExportOnlyNotesPages;
     bool                mbUseTransitionEffects;
     bool                mbExportBookmarks;
     bool                mbExportHiddenSlides;

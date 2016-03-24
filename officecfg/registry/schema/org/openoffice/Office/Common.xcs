@@ -5148,6 +5148,13 @@
             </info>
             <value>false</value>
           </prop>
+          <prop oor:name="ExportOnlyNotesPages" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if only notes pages (i.e., not slides) are exported to PDF. (Notes pages
+              are available in Impress documents only).</desc>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="UseTransitionEffects" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies slide transitions are exported to PDF. This option

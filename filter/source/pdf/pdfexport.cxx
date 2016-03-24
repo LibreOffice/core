@@ -95,6 +95,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbExportNotes               ( true ),
     mbViewPDF                   ( true ),
     mbExportNotesPages          ( false ),
+    mbExportOnlyNotesPages      ( false ),
     mbUseTransitionEffects      ( true ),
     mbExportBookmarks           ( true ),
     mbExportHiddenSlides        ( false ),
@@ -465,6 +466,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mbViewPDF;
                 else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
+                else if ( rFilterData[ nData ].Name == "ExportOnlyNotesPages" )
+                    rFilterData[ nData ].Value >>= mbExportOnlyNotesPages;
                 else if ( rFilterData[ nData ].Name == "UseTransitionEffects" )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
                 else if ( rFilterData[ nData ].Name == "ExportFormFields" )
@@ -839,7 +842,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aSelection = Any();
                     aSelection <<= mxSrcDoc;
                 }
-                bool bSecondPassForImpressNotes = false;
+                bool bExportNotesPages = false;
                 bool bReChangeToNormalView = false;
                 const OUString sShowOnlineLayout( "ShowOnlineLayout" );
                 bool bReHideWhitespace = false;
@@ -878,8 +881,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 {
                     uno::Reference< drawing::XShapes > xShapes;     // do not allow to export notes when exporting a selection
                     if ( ! ( aSelection >>= xShapes ) )             // TODO: in the dialog the export notes checkbox needs to be disabled
-                        bSecondPassForImpressNotes = true;
+                        bExportNotesPages = true;
                 }
+                const bool bExportPages = bExportNotesPages ? !mbExportOnlyNotesPages : true;
 
                 if( aPageRange.isEmpty() )
                 {
@@ -893,18 +897,18 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     if ( pResMgr )
                     {
                         sal_Int32 nTotalPageCount = aRangeEnum.size();
-                        if ( bSecondPassForImpressNotes )
+                        if ( bExportPages && bExportNotesPages )
                             nTotalPageCount *= 2;
                         mxStatusIndicator->start( ResId( PDF_PROGRESS_BAR, *pResMgr ), nTotalPageCount );
                     }
                 }
 
-                if( nPageCount > 0 )
-                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
-                else
-                    bRet = false;
+                bRet = nPageCount > 0;
 
-                if ( bRet && bSecondPassForImpressNotes )
+                if ( bRet && bExportPages )
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
+
+                if ( bRet && bExportNotesPages )
                 {
                     rExportNotesValue <<= sal_True;
                     bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );

@@ -81,6 +81,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mbExportNotes( true ),
     mbViewPDF( false ),
     mbExportNotesPages( false ),
+    mbExportOnlyNotesPages( false ),
     mbUseTransitionEffects( false ),
     mbIsSkipEmptyPages( true ),
     mbAddStream( false ),
@@ -187,7 +188,10 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mbUseTaggedPDF = maConfigItem.ReadBool( "UseTaggedPDF", false );
     mnPDFTypeSelection =  maConfigItem.ReadInt32( "SelectPdfVersion", 0 );
     if ( mbIsPresentation )
+    {
         mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", false );
+        mbExportOnlyNotesPages = maConfigItem.ReadBool( "ExportOnlyNotesPages", false );
+    }
     mbExportNotes = maConfigItem.ReadBool( "ExportNotes", false );
     mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", false );
 
@@ -393,7 +397,10 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteInt32("SelectPdfVersion", mnPDFTypeSelection );
 
     if ( mbIsPresentation )
+    {
         maConfigItem.WriteBool( "ExportNotesPages", mbExportNotesPages );
+        maConfigItem.WriteBool( "ExportOnlyNotesPages", mbExportOnlyNotesPages );
+    }
     maConfigItem.WriteBool( "ExportNotes", mbExportNotes );
     maConfigItem.WriteBool( "ViewPDFAfterExport", mbViewPDF );
 
@@ -541,6 +548,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     get(mpCbExportHiddenSlides, "hiddenpages");
     get(mpCbExportNotes, "comments");
     get(mpCbExportNotesPages, "notes");
+    get(mpCbExportOnlyNotesPages, "onlynotes");
     get(mpCbExportEmptyPages, "emptypages");
     get(mpCbViewPDF, "viewpdf");
 
@@ -579,6 +587,7 @@ void ImpPDFTabGeneralPage::dispose()
     mpCbExportNotes.clear();
     mpCbViewPDF.clear();
     mpCbExportNotesPages.clear();
+    mpCbExportOnlyNotesPages.clear();
     mpCbExportEmptyPages.clear();
     mpCbAddStream.clear();
     mpCbWatermark.clear();
@@ -662,6 +671,10 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpRbRange->SetText(get<FixedText>("slides")->GetText());
         mpCbExportNotesPages->Show();
         mpCbExportNotesPages->Check(paParent->mbExportNotesPages);
+        mpCbExportNotesPages->SetToggleHdl( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
+        mpCbExportOnlyNotesPages->Show();
+        mpCbExportOnlyNotesPages->Check(paParent->mbExportOnlyNotesPages);
+        mpCbExportOnlyNotesPages->Enable(paParent->mbExportNotesPages);
         mpCbExportHiddenSlides->Show();
         mpCbExportHiddenSlides->Check(paParent->mbExportHiddenSlides);
     }
@@ -669,6 +682,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     {
         mpCbExportNotesPages->Show(false);
         mpCbExportNotesPages->Check(false);
+        mpCbExportOnlyNotesPages->Show(false);
+        mpCbExportOnlyNotesPages->Check(false);
         mpCbExportHiddenSlides->Show(false);
         mpCbExportHiddenSlides->Check(false);
     }
@@ -693,7 +708,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mbExportNotes = mpCbExportNotes->IsChecked();
     paParent->mbViewPDF = mpCbViewPDF->IsChecked();
     if ( mbIsPresentation )
+    {
         paParent->mbExportNotesPages = mpCbExportNotesPages->IsChecked();
+        paParent->mbExportOnlyNotesPages = mpCbExportOnlyNotesPages->IsChecked();
+    }
     paParent->mbExportBookmarks = mpCbExportBookmarks->IsChecked();
     if ( mbIsPresentation )
         paParent->mbExportHiddenSlides = mpCbExportHiddenSlides->IsChecked();
@@ -761,6 +779,10 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, CheckBox&
     mpFormsFrame->Enable(mpCbExportFormFields->IsChecked());
 }
 
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, CheckBox&, void)
+{
+    mpCbExportOnlyNotesPages->Enable(mpCbExportNotesPages->IsChecked());
+}
 
 IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleCompressionHdl, RadioButton&, void)
 {

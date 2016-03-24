@@ -105,6 +105,7 @@ protected:
     bool                        mbExportNotes;
     bool                        mbViewPDF;
     bool                        mbExportNotesPages;
+    bool                        mbExportOnlyNotesPages;
     bool                        mbUseTransitionEffects;
     bool                        mbIsSkipEmptyPages;
     bool                        mbAddStream;
@@ -219,6 +220,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     VclPtr<CheckBox>             mpCbExportNotes;
     VclPtr<CheckBox>             mpCbViewPDF;
     VclPtr<CheckBox>             mpCbExportNotesPages;
+    VclPtr<CheckBox>             mpCbExportOnlyNotesPages;
 
     VclPtr<CheckBox>             mpCbExportEmptyPages;
     VclPtr<CheckBox>             mpCbAddStream;
@@ -238,6 +240,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK_TYPED( ToggleWatermarkHdl, CheckBox&, void );
     DECL_LINK_TYPED( ToggleAddStreamHdl, CheckBox&, void );
     DECL_LINK_TYPED( ToggleExportFormFieldsHdl, CheckBox&, void );
+    DECL_LINK_TYPED( ToggleExportNotesPagesHdl, CheckBox&, void );
 
     void                        TogglePagesHdl();
 
