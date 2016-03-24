@@ -420,93 +420,133 @@ bool lcl_isReference(const FormulaToken& rToken)
         rToken.GetType() == svDoubleRef;
 }
 
-void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
+ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+        const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal,
+        SCTAB nOldSheet, SCTAB & nNewSheet)
+{
+    ScAddress aRangePos( pOldRangeData->GetPos());
+    if (nOldSheet < 0 && !bGlobalNamesToLocal)
+    {
+        nNewSheet = -1;
+    }
+    else
+    {
+        nNewSheet = rNewPos.Tab();
+        aRangePos.SetTab( nNewSheet);
+    }
+    ScRangeData* pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc, &aRangePos);
+    pRangeData->SetIndex(0);    // needed for insert to assign a new index
+    ScTokenArray* pRangeNameToken = pRangeData->GetCode();
+    bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(pOldDoc)->GetPool());
+    if (bSameDoc && nNewSheet >= 0)
+    {
+        if (bGlobalNamesToLocal && nOldSheet < 0)
+        {
+            nOldSheet = rOldPos.Tab();
+            if (rNewPos.Tab() <= nOldSheet)
+                // Sheet was inserted before and references already updated.
+                ++nOldSheet;
+        }
+        pRangeNameToken->AdjustSheetLocalNameReferences( nOldSheet, nNewSheet);
+    }
+    if (!bSameDoc)
+    {
+        pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
+        pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, rOldPos, rNewPos, true);
+    }
+
+    bool bInserted;
+    if (nNewSheet < 0)
+        bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
+    else
+        bInserted = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
+
+    return bInserted ? pRangeData : nullptr;
+}
+
+void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+        const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal)
 {
     bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(pOldDoc)->GetPool());
     SCTAB nOldSheet = pToken->GetSheet();
-    if (bSameDoc && (nOldSheet < 0 || nOldSheet != aOldPos.Tab()))
-        // Same doc and global name or sheet-local name on other sheet stays
-        // the same.
+    if (bSameDoc && ((nOldSheet < 0 && !bGlobalNamesToLocal) || (nOldSheet >= 0 && nOldSheet != rOldPos.Tab())))
+        // Same doc and global name, if not copied to local name, or
+        // sheet-local name on other sheet stays the same.
         return;
+
+    SAL_WARN_IF( !bSameDoc && nOldSheet >= 0 && nOldSheet != rOldPos.Tab(),
+            "sc.core", "adjustRangeName - sheet-local name was on other sheet in other document");
+    /* TODO: can we do something about that? e.g. loop over sheets? */
 
     OUString aRangeName;
     int nOldIndex = pToken->GetIndex();
     ScRangeData* pOldRangeData = nullptr;
 
-    //search the name of the RangeName
+    // Search the name of the RangeName.
     if (nOldSheet >= 0)
     {
+        // XXX bGlobalNamesToLocal is also a synonym for copied sheet.
+        if (bGlobalNamesToLocal && bSameDoc && rNewPos.Tab() <= rOldPos.Tab())
+            // Sheet was already inserted before old position.
+            ++nOldSheet;
+
         const ScRangeName* pRangeName = pOldDoc->GetRangeName(nOldSheet);
         pOldRangeData = pRangeName ? pRangeName->findByIndex(nOldIndex) : nullptr;
         if (!pOldRangeData)
-            return;     //might be an error in the formula array
+            return;     // might be an error in the formula array
         aRangeName = pOldRangeData->GetUpperName();
     }
     else
     {
         pOldRangeData = pOldDoc->GetRangeName()->findByIndex(nOldIndex);
         if (!pOldRangeData)
-            return;     //might be an error in the formula array
+            return;     // might be an error in the formula array
         aRangeName = pOldRangeData->GetUpperName();
     }
 
-    SAL_WARN_IF( !bSameDoc && nOldSheet >= 0 && nOldSheet != aOldPos.Tab(),
-            "sc.core", "adjustRangeName - sheet-local name was on other sheet in other document");
-    /* TODO: can we do something about that? e.g. loop over sheets? */
-
-    //find corresponding range name in new document
-    //first search for local range name then global range names
-    SCTAB nNewSheet = aNewPos.Tab();
+    // Find corresponding range name in new document.
+    // First search for local range name then global range names.
+    SCTAB nNewSheet = rNewPos.Tab();
     ScRangeName* pRangeName = rNewDoc.GetRangeName(nNewSheet);
     ScRangeData* pRangeData = nullptr;
-    //search local range names
+    // Search local range names.
     if (pRangeName)
     {
         pRangeData = pRangeName->findByUpperName(aRangeName);
     }
-    //search global range names
-    if (!pRangeData)
+    // Search global range names.
+    if (!pRangeData && !bGlobalNamesToLocal)
     {
         nNewSheet = -1;
         pRangeName = rNewDoc.GetRangeName();
         if (pRangeName)
             pRangeData = pRangeName->findByUpperName(aRangeName);
     }
-    //if no range name was found copy it
+    // If no range name was found copy it.
     if (!pRangeData)
     {
-        ScAddress aRangePos( pOldRangeData->GetPos());
-        if (nOldSheet < 0)
+        if (nOldSheet < 0 && bGlobalNamesToLocal)
         {
-            nNewSheet = -1;
-        }
-        else
-        {
-            nNewSheet = aNewPos.Tab();
-            aRangePos.SetTab( nNewSheet);
-        }
-        pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc, &aRangePos);
-        pRangeData->SetIndex(0);    // needed for insert to assign a new index
-        ScTokenArray* pRangeNameToken = pRangeData->GetCode();
-        if (bSameDoc && nNewSheet >= 0)
-        {
-            pRangeNameToken->AdjustSheetLocalNameReferences( nOldSheet, nNewSheet);
-        }
-        if (!bSameDoc)
-        {
-            pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
-            pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, true);
+            // Copy only global names to local that reference the old sheet.
+            SCTAB nOldTab = rOldPos.Tab();
+            if (bSameDoc && rNewPos.Tab() <= nOldTab)
+            {
+                // Sheet was inserted before old position, references were
+                // already updated but rOldPos points to the old position,
+                // adjust to look for references.
+                ++nOldTab;
+            }
+            if (!pOldRangeData->GetCode()->ReferencesSheet( nOldTab, pOldRangeData->GetPos().Tab()))
+                return;
         }
 
-        bool bInserted;
-        if (nNewSheet < 0)
-            bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
-        else
-            bInserted = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
-        if (!bInserted)
+        // Also may modify nNewSheet to be set below at the end.
+        pRangeData = copyRangeName( pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos, bGlobalNamesToLocal,
+                nOldSheet, nNewSheet);
+
+        if (!pRangeData)
         {
-            //if this happened we have a real problem
-            pRangeData = nullptr;
+            // If this happened we have a real problem.
             pToken->SetIndex(0);
             OSL_FAIL("inserting the range name should not fail");
             return;
@@ -918,12 +958,13 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     {
         if (!pDocument->IsClipboardSource() || aPos.Tab() != rCell.aPos.Tab())
         {
+            bool bGlobalNamesToLocal = ((nCloneFlags & SC_CLONECELL_NAMES_TO_LOCAL) != 0);
             formula::FormulaToken* pToken = nullptr;
             while((pToken = pCode->GetNextName())!= nullptr)
             {
                 OpCode eOpCode = pToken->GetOpCode();
                 if (eOpCode == ocName)
-                    adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos);
+                    adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos, bGlobalNamesToLocal);
                 else if (eOpCode == ocDBArea || eOpCode == ocTableRef)
                     adjustDBRange(pToken, rDoc, rCell.pDocument);
             }

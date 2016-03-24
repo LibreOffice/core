@@ -2523,6 +2523,56 @@ void ScTokenArray::AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab 
     }
 }
 
+bool ScTokenArray::ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const
+{
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, false);
+    for (size_t j=0; j<2; ++j)
+    {
+        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; pp != pEnd; ++pp)
+        {
+            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            if (!p)
+                continue;
+
+            switch ( p->GetType() )
+            {
+                case svDoubleRef :
+                    {
+                        ScComplexRefData& rRef = *p->GetDoubleRef();
+                        ScSingleRefData& rRef2 = rRef.Ref2;
+                        ScSingleRefData& rRef1 = rRef.Ref1;
+
+                        SCTAB nTab1 = (rRef1.IsTabRel() ? rRef1.Tab() + nPosTab : rRef1.Tab());
+                        SCTAB nTab2 = (rRef2.IsTabRel() ? rRef2.Tab() + nPosTab : rRef2.Tab());
+                        if (nTab1 <= nTab && nTab <= nTab2)
+                            return true;
+                    }
+                    break;
+                case svSingleRef :
+                    {
+                        ScSingleRefData& rRef = *p->GetSingleRef();
+                        if (rRef.IsTabRel())
+                        {
+                            if (rRef.Tab() + nPosTab == nTab)
+                                return true;
+                        }
+                        else
+                        {
+                            if (rRef.Tab() == nTab)
+                                return true;
+                        }
+                    }
+                    break;
+                default:
+                    ;
+            }
+        }
+    }
+    return false;
+}
+
 namespace {
 
 ScRange getSelectedRange( const sc::RefUpdateContext& rCxt )

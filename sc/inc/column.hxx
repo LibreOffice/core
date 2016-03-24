@@ -293,7 +293,8 @@ public:
 
     void CopyToColumn(
         sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,
-        ScColumn& rColumn, const ScMarkData* pMarkData = nullptr, bool bAsLink = false) const;
+        ScColumn& rColumn, const ScMarkData* pMarkData = nullptr, bool bAsLink = false,
+        bool bGlobalNamesToLocal = false ) const;
 
     void UndoToColumn(
         sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,

@@ -241,6 +241,10 @@ const int SC_CLONECELL_NOCAPTION        = 0x0004;
 /** If set, absolute refs will not transformed to external references */
 const int SC_CLONECELL_NOMAKEABS_EXTERNAL = 0x0008;
 
+/** If set, global named expressions will be converted to sheet-local named
+    expressions. */
+const int SC_CLONECELL_NAMES_TO_LOCAL   = 0x0010;
+
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
 #endif

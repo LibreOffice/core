@@ -141,6 +141,11 @@ public:
      */
     void AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab );
 
+    /** Returns true if the sheet nTab is referenced in code. Relative sheet
+        references are evaluated using nPosTab.
+     */
+    bool ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const;
+
     /**
      * Adjust all references in response to shifting of cells during cell
      * insertion and deletion.

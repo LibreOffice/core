@@ -874,8 +874,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     {
         SetNoListening( true );     // noch nicht bei CopyToTable/Insert
         sc::CopyToDocContext aCopyDocCxt(*this);
-        maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, InsertDeleteFlags::ALL, (pOnlyMarked != nullptr),
-                                        maTabs[nNewPos], pOnlyMarked );
+        maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, InsertDeleteFlags::ALL,
+                (pOnlyMarked != nullptr), maTabs[nNewPos], pOnlyMarked,
+                false /*bAsLink*/, true /*bColRowFlags*/, true /*bGlobalNamesToLocal*/ );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
         SCTAB nDz = nNewPos - nOldPos;

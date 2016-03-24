@@ -445,7 +445,8 @@ public:
     void CopyToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab,
-        const ScMarkData* pMarkData = nullptr, bool bAsLink = false, bool bColRowFlags = true );
+        const ScMarkData* pMarkData = nullptr, bool bAsLink = false, bool bColRowFlags = true,
+        bool bGlobalNamesToLocal = false );
 
     void UndoToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
