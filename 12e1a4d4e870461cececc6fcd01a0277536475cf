@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_64f8c37d",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-24T07:29:02Z",
+      "side": 1,
+      "message": "static_cast\u003clong\u003e here and elsewhere no longer necessary",
+      "revId": "12e1a4d4e870461cececc6fcd01a0277536475cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_44f5bf81",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-24T07:29:02Z",
+      "side": 1,
+      "message": "rather use Get\u003cSfxBoolItem\u003e(ATTR_PAGE_SHARED) here and similarly below",
+      "revId": "12e1a4d4e870461cececc6fcd01a0277536475cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
