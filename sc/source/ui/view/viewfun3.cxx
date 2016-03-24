@@ -235,7 +235,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 pClipDoc->SetClipOptions(aOptions);
             }
 
-            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects );
+            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects );
             if ( pDoc && pClipDoc )
             {
                 ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
@@ -365,7 +365,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
             }
             if (!bValidRanges)
                 break;
-            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects );
+            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, bIncludeObjects );
 
             ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
             if ( pChangeTrack )
@@ -422,7 +422,7 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
             ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
 
             ScClipParam aClipParam(aRange, false);
-            pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, false, true);
+            pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, true);
 
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
             pClipDoc->ExtendMerge( aRange, true );

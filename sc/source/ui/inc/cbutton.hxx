@@ -48,8 +48,7 @@ public:
     Size    GetSizePixel() const                 { return aBtnSize; }
 
 private:
-    void    ImpDrawArrow( const Rectangle&  rRect,
-                          bool              bState );
+    void    ImpDrawArrow( const Rectangle&  rRect );
 
 protected:
     VclPtr<OutputDevice> pOut;

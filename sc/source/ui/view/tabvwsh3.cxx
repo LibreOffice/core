@@ -230,7 +230,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case FID_RESET_PRINTZOOM:
-            SetPrintZoom( 100, 0 );     // 100%, not on pages
+            SetPrintZoom( 100 );     // 100%, not on pages
             rReq.Done();
             break;
 

@@ -531,11 +531,10 @@ bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
 
 void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               SCCOL nCol, SCROW nRow, SCTAB nTab,
-                              ScMarkData& rMark,
-                              bool bIsUndoP)
+                              ScMarkData& rMark)
 {
     if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
+        maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, true/*bIsUndoP*/);
 }
 
 void ScDocument::CompileDBFormula()
@@ -1165,7 +1164,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             nIndex = 0;
             aProText.append(aTemplate.getToken( 1, '#', nIndex ));
             ScProgress aProgress( GetDocumentShell(),
-                                        aProText.makeStringAndClear(), 3*nThisEndRow );  // 2x FindOrder, 1x here
+                                        aProText.makeStringAndClear(), 3*nThisEndRow, true );  // 2x FindOrder, 1x here
             long nProgressStart = 2*nThisEndRow;                    // start for here
 
             std::unique_ptr<SCCOLROW[]> pTempRows(new SCCOLROW[nThisEndRow+1]);

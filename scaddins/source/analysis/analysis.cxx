@@ -461,7 +461,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XProp
 
     SortedIndividualInt32List   aSrtLst;
 
-    aSrtLst.InsertHolidayList( aAnyConv, xOptions, aHDay, nNullDate, false );
+    aSrtLst.InsertHolidayList( aAnyConv, xOptions, aHDay, nNullDate );
 
     sal_Int32                   nActDate = nDate + nNullDate;
 
@@ -569,7 +569,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( const uno::Reference< beans::X
 
     SortedIndividualInt32List   aSrtLst;
 
-    aSrtLst.InsertHolidayList( aAnyConv, xOpt, aHDay, nNullDate, false );
+    aSrtLst.InsertHolidayList( aAnyConv, xOpt, aHDay, nNullDate );
 
     sal_Int32                   nActDate = nStartDate + nNullDate;
     sal_Int32                   nStopDate = nEndDate + nNullDate;

@@ -578,7 +578,7 @@ bool ScDocument::InsertTab(
 }
 
 bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
-            bool bExternalDocument, bool bNamesValid )
+            bool bNamesValid )
 {
     SCTAB   nNewSheets = static_cast<SCTAB>(rNames.size());
     SCTAB    nTabCount = static_cast<SCTAB>(maTabs.size());
@@ -591,8 +591,6 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
             for ( SCTAB i = 0; i < nNewSheets; ++i )
             {
                 maTabs.push_back( new ScTable(this, nTabCount + i, rNames.at(i)) );
-                if ( bExternalDocument )
-                    maTabs[nTabCount+i]->SetVisible( false );
             }
         }
         else
@@ -2087,14 +2085,11 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
         CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), InsertDeleteFlags::FORMULA, false, pDestDoc );
 }
 
-// bUseRangeForVBA added for VBA api support to allow content of a specified
-// range to be copied ( e.g. don't use marked data but the just the range
-// specified by rClipParam
 void ScDocument::CopyToClip(const ScClipParam& rClipParam,
                             ScDocument* pClipDoc, const ScMarkData* pMarks,
-                            bool bAllTabs, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions, bool bUseRangeForVBA )
+                            bool bKeepScenarioFlags, bool bIncludeObjects )
 {
-    OSL_ENSURE( !bUseRangeForVBA && ( bAllTabs ||  pMarks ), "CopyToClip: ScMarkData fails" );
+    OSL_ENSURE( pMarks, "CopyToClip: ScMarkData fails" );
 
     if (bIsClip)
         return;
@@ -2133,28 +2128,19 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     pClipDoc->aDocName = aDocName;
     pClipDoc->SetClipParam(rClipParam);
     ScRange aClipRange = rClipParam.getWholeRange();
-    SCTAB nTab = aClipRange.aStart.Tab();
-    SCTAB i = 0;
     SCTAB nEndTab =  static_cast<SCTAB>(maTabs.size());
 
-    if ( bUseRangeForVBA )
-    {
-        pClipDoc->ResetClip( this, nTab );
-        i = nTab;
-        nEndTab = nTab + 1;
-    }
-    else
-        pClipDoc->ResetClip(this, pMarks);
+    pClipDoc->ResetClip(this, pMarks);
 
-    sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags, bCloneNoteCaptions);
-    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
+    sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags, true/*bCloneNoteCaptions*/);
+    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, false/*bAllTabs*/);
 
-    for ( ; i < nEndTab; ++i)
+    for (SCTAB i = 0; i < nEndTab; ++i)
     {
         if (!maTabs[i] || i >= static_cast<SCTAB>(pClipDoc->maTabs.size()) || !pClipDoc->maTabs[i])
             continue;
 
-        if ( !bUseRangeForVBA && ( pMarks && !pMarks->GetTableSelect(i) ) )
+        if ( pMarks && !pMarks->GetTableSelect(i) )
             continue;
 
         maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i]);
@@ -3860,7 +3846,7 @@ void ScDocument::CompileXML()
     bool bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( false );
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
-                STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
+                STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount(), true );
 
     sc::CompileFormulaContext aCxt(this);
 
@@ -4159,7 +4145,7 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
             nCellCount += maTabs[nTab]->GetWeightedCount();
 
-    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount );
+    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount, true );
 
     sal_uLong nProgressStart = 0;
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
@@ -4849,7 +4835,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
         for (; it != maTabs.end(); ++it)
             if (*it)
             {
-                if ( (*it)->IsStyleSheetUsed( rStyle, true/*bGatherAllStyles*/ ) )
+                if ( (*it)->IsStyleSheetUsed( rStyle ) )
                 {
                     bIsUsed = true;
                 }
@@ -4889,14 +4875,14 @@ void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPattern
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
-            maTabs[nTab]->SetPattern( nCol, nRow, rAttr, true/*bPutToPool*/ );
+            maTabs[nTab]->SetPattern( nCol, nRow, rAttr );
 }
 
 void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetPattern( rPos, rAttr, true/*bPutToPool*/ );
+        maTabs[nTab]->SetPattern( rPos, rAttr );
 }
 
 ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool bDeep )

@@ -108,7 +108,7 @@ sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScProgress* pProgress = new ScProgress( mpDoc->GetDocumentShell(),
-        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize() );
+        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize(), true );
     sal_uLong nProgress = 0;
 
     SCCOL nStartCol, nEndCol;

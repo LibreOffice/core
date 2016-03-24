@@ -559,7 +559,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     {
         ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
         bool bUpdateRefs = aInputOption.GetSortRefUpdate();
-        ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
+        ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0, true);
         rDoc.Sort(nTab, aLocalParam, bRepeatQuery, bUpdateRefs, &aProgress, &aUndoParam);
     }
 
@@ -823,7 +823,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 sal_uLong nProgCount = nFormulaCols;
                 nProgCount *= aLocalParam.nRow2 - nFStartY;
                 ScProgress aProgress( rDoc.GetDocumentShell(),
-                        ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+                        ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
                 rDoc.Fill( aLocalParam.nCol2+1, nFStartY,
                             aLocalParam.nCol2+nFormulaCols, nFStartY, &aProgress, aMark,

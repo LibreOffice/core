@@ -1369,7 +1369,7 @@ void ScUndoDragDrop::Redo()
     // do not clone objects and note captions into clipdoc (see above)
     // but at least copy notes
     ScClipParam aClipParam(aSrcRange, bCut);
-    rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, false, bKeepScenarioFlags);
+    rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, bKeepScenarioFlags, false);
 
     if (bCut)
     {

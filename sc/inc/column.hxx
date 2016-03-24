@@ -256,7 +256,7 @@ public:
         SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag,
         bool bBroadcast = true, sc::ColumnSpanSet* pBroadcastSpans = nullptr );
 
-    void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag, bool bBroadcast );
+    void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag );
 
     void CopyToClip(
         sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
@@ -450,7 +450,7 @@ public:
                                   ScEditDataArray* pDataArray = nullptr );
     void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutToPool = false );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
-                                const ScPatternAttr& rPatAttr, bool bPutToPool = false );
+                                const ScPatternAttr& rPatAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
 

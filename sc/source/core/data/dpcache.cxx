@@ -156,8 +156,8 @@ struct Bucket
     SCROW mnOrderIndex;
     SCROW mnDataIndex;
     SCROW mnValueSortIndex;
-    Bucket(const ScDPItemData& rValue, SCROW nOrder, SCROW nData) :
-        maValue(rValue), mnOrderIndex(nOrder), mnDataIndex(nData), mnValueSortIndex(0) {}
+    Bucket(const ScDPItemData& rValue, SCROW nData) :
+        maValue(rValue), mnOrderIndex(0), mnDataIndex(nData), mnValueSortIndex(0) {}
 };
 
 #if DEBUG_PIVOT_TABLE
@@ -353,7 +353,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
             SCROW nRow = i + nOffset;
             sal_uLong nNumFormat = 0;
             initFromCell(*this, pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
-            aBuckets.push_back(Bucket(aData, 0, i));
+            aBuckets.push_back(Bucket(aData, i));
 
             if (!aData.IsEmpty())
             {
@@ -418,7 +418,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
                 short nFormatType = css::util::NumberFormat::UNDEFINED;
                 aData.SetEmpty();
                 rDB.getValue(nCol, aData, nFormatType);
-                aBuckets.push_back(Bucket(aData, 0, nRow));
+                aBuckets.push_back(Bucket(aData, nRow));
                 if (!aData.IsEmpty())
                 {
                     maEmptyRows.insert_back(nRow, nRow+1, false);

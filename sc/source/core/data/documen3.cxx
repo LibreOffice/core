@@ -1554,7 +1554,7 @@ void ScDocument::GetFilterEntriesArea(
  * Entries for selection list listbox (no numbers/formulas)
  */
 void ScDocument::GetDataEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
+    SCCOL nCol, SCROW nRow, SCTAB nTab,
     std::vector<ScTypedStrData>& rStrings, bool bLimit )
 {
     if( !bLimit )
@@ -1569,7 +1569,7 @@ void ScDocument::GetDataEntries(
             if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
             {
                 if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
-                    sortAndRemoveDuplicates(rStrings, bCaseSens);
+                    sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
 
                 return;
             }
@@ -1585,7 +1585,7 @@ void ScDocument::GetDataEntries(
     std::set<ScTypedStrData> aStrings;
     maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
     rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
-    sortAndRemoveDuplicates(rStrings, bCaseSens);
+    sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
 }
 
 /**

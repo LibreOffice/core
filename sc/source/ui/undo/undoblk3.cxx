@@ -599,7 +599,7 @@ void ScUndoAutoFill::Redo()
         nProgCount = aSource.aEnd.Row() - aSource.aStart.Row() + 1;
     nProgCount *= nCount;
     ScProgress aProgress( rDoc.GetDocumentShell(),
-            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
     rDoc.Fill( aSource.aStart.Col(), aSource.aStart.Row(),
             aSource.aEnd.Col(), aSource.aEnd.Row(), &aProgress,
@@ -1000,7 +1000,7 @@ void ScUndoReplace::Undo()
         pSearchItem->SetReplaceString(aTempStr);
         rDoc.ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
-                            aMarkData, true);
+                            aMarkData);
         pSearchItem->SetReplaceString(pSearchItem->GetSearchString());
         pSearchItem->SetSearchString(aTempStr);
         if (pViewShell)
@@ -1066,7 +1066,7 @@ void ScUndoReplace::Redo()
     {
         rDoc.ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
-                            aMarkData, true);
+                            aMarkData);
         pDocShell->PostPaintGridAll();
     }
     else

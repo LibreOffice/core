@@ -974,7 +974,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
         }
 
         ScProgress* pProgress = new ScProgress(this, ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
-                                                aDocument.GetCodeCount());
+                                                aDocument.GetCodeCount(), true);
         bool bDone = aDocument.MoveTab( nSrcTab, nDestTab, pProgress );
         delete pProgress;
         if (!bDone)

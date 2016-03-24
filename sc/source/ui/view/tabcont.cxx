@@ -461,7 +461,7 @@ void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
     ScClipParam aClipParam(aTabRange, false);
-    rDoc.CopyToClip(aClipParam, pClipDoc, &aTabMark);
+    rDoc.CopyToClip(aClipParam, pClipDoc, &aTabMark, false, false);
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );

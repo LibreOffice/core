@@ -495,7 +495,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
         if (!bSameDoc)
         {
             pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
-            pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, false, true);
+            pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, true);
         }
 
         bool bInserted;
@@ -935,7 +935,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
             pCode->ReadjustAbsolute3DReferences( rCell.pDocument, &rDoc, rCell.aPos);
         }
 
-        pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos, false, bCopyBetweenDocs );
+        pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos, bCopyBetweenDocs );
     }
 
     if (!pDocument->IsClipOrUndo())

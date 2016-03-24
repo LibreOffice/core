@@ -1129,7 +1129,7 @@ void ScTable::SortReorderByRow(
 
             for (it = aSpans.begin(); it != itEnd; ++it)
             {
-                aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern, true);
+                aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern);
                 pDocument->GetPool()->Remove(*it->mpPattern);
             }
         }
@@ -1327,7 +1327,7 @@ void ScTable::SortReorderByRowRefUpdate(
 
             for (it = aSpans.begin(); it != itEnd; ++it)
             {
-                aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern, true);
+                aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern);
                 pDocument->GetPool()->Remove(*it->mpPattern);
             }
         }
@@ -1895,7 +1895,7 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
         SfxItemSet& rSet = aNewPattern.GetItemSet();
         rSet.ClearItem( ATTR_VALUE_FORMAT );
         rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
-        pTab->SetPattern( nCol, nRow, aNewPattern, true );
+        pTab->SetPattern( nCol, nRow, aNewPattern );
     }
 }
 

@@ -291,9 +291,9 @@ const ScDPItemData* ScDPFilteredCache::getCell(SCCOL nCol, SCROW nRow, bool bRep
    return mrCache.GetItemDataById( nCol, nId );
 }
 
-void  ScDPFilteredCache::getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
+void  ScDPFilteredCache::getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow) const
 {
-    const ScDPItemData* pData = getCell( nCol, nRow, bRepeatIfEmpty );
+    const ScDPItemData* pData = getCell( nCol, nRow, false/*bRepeatIfEmpty*/ );
 
     if (pData)
     {

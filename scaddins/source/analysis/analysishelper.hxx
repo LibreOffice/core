@@ -271,13 +271,12 @@ public:
     bool                        Find( sal_Int32 nVal ) const;
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
-                                    @param bInsertOnWeekend  insertion mode: false = holidays on weekend are omitted */
+                                    holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     const css::uno::Any& rHolAny,
-                                    sal_Int32 nNullDate,
-                                    bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    sal_Int32 nNullDate) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 

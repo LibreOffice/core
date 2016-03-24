@@ -93,7 +93,7 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
                 nSysTotalSize /= 2;
                 mnSysProgressScale *= 2;
             }
-            mxSysProgress.reset( new ScProgress( mpDocShell, maText, nSysTotalSize ) );
+            mxSysProgress.reset( new ScProgress( mpDocShell, maText, nSysTotalSize, true ) );
         }
 
         if( !mbInProgress && mpCurrSegment && (mnTotalSize > 0) )

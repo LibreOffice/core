@@ -1855,7 +1855,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     SCROW nEndRow;
     aDocument.GetCellArea( nTab, nEndCol, nEndRow );
 
-    ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ), nEndRow );
+    ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ), nEndRow, true );
 
     OUString aString;
 

@@ -1269,7 +1269,7 @@ static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_u
     {
         ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
         ScClipParam aClipParam(rRange, false);
-        rSrcDoc.CopyToClip(aClipParam, pClipDoc, &aMark);
+        rSrcDoc.CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
         // pClipDoc->ExtendMerge( rRange, sal_True );
 
         TransferableObjectDescriptor aObjDesc;

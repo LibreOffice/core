@@ -190,7 +190,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     {
         //  progress bar
         //  only text (title is still needed, for the cancel button)
-        ScProgress aProgress( &rDocShell, ScGlobal::GetRscString(STR_UNDO_IMPORTDATA), 0 );
+        ScProgress aProgress( &rDocShell, ScGlobal::GetRscString(STR_UNDO_IMPORTDATA), 0, true );
 
         uno::Reference<sdbc::XRowSet> xRowSet( xResultSet, uno::UNO_QUERY );
         bool bDispose = false;
@@ -554,7 +554,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             sal_uLong nProgCount = nFormulaCols;
             nProgCount *= nEndRow-rParam.nRow1-1;
             ScProgress aProgress( rDoc.GetDocumentShell(),
-                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
             rDoc.Fill( nEndCol+1, rParam.nRow1+1, nEndCol+nFormulaCols, rParam.nRow1+1,
                             &aProgress, aMark, nEndRow-rParam.nRow1-1, FILL_TO_BOTTOM, FILL_SIMPLE );

@@ -293,12 +293,12 @@ void ScDocShell::SetLockCount(sal_uInt16 nNew)
     {
         if ( !pPaintLockData )
             pPaintLockData = new ScPaintLockData;
-        pPaintLockData->SetLevel(nNew-1, true);
+        pPaintLockData->SetDocLevel(nNew-1);
         LockDocument_Impl(nNew);
     }
     else if (pPaintLockData)    // loeschen
     {
-        pPaintLockData->SetLevel(0, true);  // bei Unlock sofort ausfuehren
+        pPaintLockData->SetDocLevel(0);  // bei Unlock sofort ausfuehren
         UnlockPaint_Impl(true);                 // jetzt
         UnlockDocument_Impl(0);
     }
@@ -828,7 +828,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             //  ab hier kein return mehr
 
     ScProgress aProgress( this, OUString("..."),
-                    nNewActionCount );
+                    nNewActionCount, true );
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, gueltige Referenzen fuer den letzten gemeinsamen Zustand

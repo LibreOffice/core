@@ -2614,7 +2614,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
     ScClipParam aClipParam(ScRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nStartTab), bCut);
-    rDoc.CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bScenariosAdded, true);
+    rDoc.CopyToClip(aClipParam, pClipDoc, &aSourceMark, bScenariosAdded, true);
 
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
@@ -4348,7 +4348,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
         nProgCount *= nCount;
         ScProgress aProgress( rDoc.GetDocumentShell(),
-                ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+                ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
         rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                 aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
@@ -4475,7 +4475,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                 nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
             nProgCount *= nCount;
             ScProgress aProgress( rDoc.GetDocumentShell(),
-                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
             rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                         aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
@@ -4614,7 +4614,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
     nProgCount *= nCount;
     ScProgress aProgress( rDoc.GetDocumentShell(),
-            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
     rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
             aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,

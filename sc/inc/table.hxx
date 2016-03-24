@@ -616,12 +616,12 @@ public:
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = nullptr );
 
-    void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, bool bPutToPool = false )
+    void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
                     {
                         if (ValidColRow(rPos.Col(),rPos.Row()))
-                            aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr, bPutToPool );
+                            aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr, true/*bPutToPool*/ );
                     }
-    void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, bool bPutToPool = false );
+    void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
     void        AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
@@ -643,7 +643,7 @@ public:
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY );
 
-    bool        IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
+    bool        IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
     bool        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
     bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );

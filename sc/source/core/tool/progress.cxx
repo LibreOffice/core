@@ -71,7 +71,7 @@ static bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
 }
 
 ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
-                       sal_uLong nRange, bool bAllDocs, bool bWait)
+                       sal_uLong nRange, bool bWait)
     : bEnabled(true)
 {
 
@@ -107,7 +107,7 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
     }
     else
     {
-        pProgress = new SfxProgress( pObjSh, rText, nRange, bAllDocs, bWait );
+        pProgress = new SfxProgress( pObjSh, rText, nRange, false/*bAllDocs*/, bWait );
         pGlobalProgress = pProgress;
         nGlobalRange = nRange;
         nGlobalPercent = 0;
@@ -151,7 +151,7 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
             if ( !pGlobalProgress )
                 pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
                     ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
-                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, false, bWait );
+                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, bWait );
             pInterpretDoc = pDoc;
         }
     }

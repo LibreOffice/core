@@ -214,7 +214,7 @@ public:
 
     void            RemoveManualBreaks();
 
-    void            SetPrintZoom(sal_uInt16 nScale, sal_uInt16 nPages);
+    void            SetPrintZoom(sal_uInt16 nScale);
     void            AdjustPrintZoom();
 
     bool            TestMergeCells();

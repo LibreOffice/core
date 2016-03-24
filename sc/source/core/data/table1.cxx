@@ -75,7 +75,7 @@ ScProgress* GetProgressBar(
 
     if (nCount > 1)
         return new ScProgress(
-            pDoc->GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount);
+            pDoc->GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount, true);
 
     return nullptr;
 }

@@ -869,11 +869,11 @@ void ScViewFunc::RemoveManualBreaks()
     pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
 }
 
-void ScViewFunc::SetPrintZoom(sal_uInt16 nScale, sal_uInt16 nPages)
+void ScViewFunc::SetPrintZoom(sal_uInt16 nScale)
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     SCTAB nTab = GetViewData().GetTabNo();
-    pDocSh->SetPrintZoom( nTab, nScale, nPages );
+    pDocSh->SetPrintZoom( nTab, nScale, 0/*nPages*/ );
 }
 
 void ScViewFunc::AdjustPrintZoom()

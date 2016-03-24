@@ -125,7 +125,7 @@ public:
         that the data grid doesn't include the header row.  Don't delete the
         returned object! */
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
-    void  getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
+    void  getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow) const;
     OUString getFieldName(SCCOL nIndex) const;
 
    /** Get the unique entries for a field specified by index.  The caller must

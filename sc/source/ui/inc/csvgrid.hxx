@@ -36,35 +36,20 @@ class ScEditEngineDefaulter;
 class ScAsciiOptions;
 class ScAccessibleCsvControl;
 
-const sal_uInt8 CSV_COLFLAG_NONE    = 0x00;         /// Nothing set.
-const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
-
 const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;
 
 /** This struct contains the state of one table column. */
 struct ScCsvColState
 {
-    sal_Int32                   mnType;             /// Data type.
-    sal_uInt8                   mnFlags;            /// Flags (i.e. selection state).
+    sal_Int32            mnType;             /// Data type.
+    bool                 mbColumnSelected;
 
-    inline explicit             ScCsvColState(
-                                        sal_Int32 nType = CSV_TYPE_DEFAULT,
-                                        sal_uInt8 nFlags = CSV_COLFLAG_NONE ) :
-                                    mnType( nType ), mnFlags( nFlags ) {}
+    explicit             ScCsvColState( sal_Int32 nType = CSV_TYPE_DEFAULT ) :
+                                    mnType( nType ), mbColumnSelected( false ) {}
 
-    inline bool                 IsSelected() const;
-    inline void                 Select( bool bSel );
+    bool                 IsSelected() const { return mbColumnSelected; }
+    void                 Select( bool bSel ) { mbColumnSelected = bSel; }
 };
-
-inline bool ScCsvColState::IsSelected() const
-{
-    return (mnFlags & CSV_COLFLAG_SELECT) != 0;
-}
-
-inline void ScCsvColState::Select( bool bSel )
-{
-    if( bSel ) mnFlags |= CSV_COLFLAG_SELECT; else mnFlags &= ~CSV_COLFLAG_SELECT;
-}
 
 typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 

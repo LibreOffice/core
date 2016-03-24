@@ -684,7 +684,7 @@ public:
         SCTAB nPos, const OUString& rName, bool bExternalDocument = false, bool bUndoDeleteTab = false );
 
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
-                                bool bExternalDocument = false, bool bNamesValid = false );
+                                            bool bNamesValid = false );
     SC_DLLPUBLIC bool DeleteTabs( SCTAB nTab, SCTAB nSheets );
     SC_DLLPUBLIC bool DeleteTab( SCTAB nTab );
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
@@ -1272,8 +1272,8 @@ public:
     void            DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
     void            CopyToClip(const ScClipParam& rClipParam, ScDocument* pClipDoc,
-                               const ScMarkData* pMarks = nullptr, bool bAllTabs = false, bool bKeepScenarioFlags = false,
-                               bool bIncludeObjects = false, bool bCloneNoteCaptions = true, bool bUseRangeForVBA = false );
+                               const ScMarkData* pMarks, bool bKeepScenarioFlags,
+                               bool bIncludeObjects );
 
     /**
      * Copy only raw cell values to another document.  Formula cells are
@@ -1756,7 +1756,7 @@ public:
         std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
     void GetDataEntries(
-        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
+        SCCOL nCol, SCROW nRow, SCTAB nTab,
         std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
     void GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
@@ -1778,7 +1778,7 @@ public:
 
     void            ReplaceStyle(const SvxSearchItem& rSearchItem,
                                  SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                 ScMarkData& rMark, bool bIsUndo);
+                                 ScMarkData& rMark);
 
     void            InvalidateTextWidth( const OUString& rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
@@ -1937,7 +1937,7 @@ public:
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );
 
-    /**
+/**
      * Calculate formula cells that are on the formula tree either partially,
      * or in full.
      *

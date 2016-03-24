@@ -1141,7 +1141,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     bool bEmpty = false;
     std::vector<ScTypedStrData> aStrings; // case sensitive
     // Fill List
-    pDoc->GetDataEntries(nCol, nRow, nTab, true, aStrings);
+    pDoc->GetDataEntries(nCol, nRow, nTab, aStrings);
     if (aStrings.empty())
         bEmpty = true;
 

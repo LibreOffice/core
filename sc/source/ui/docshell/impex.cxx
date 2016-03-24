@@ -1267,7 +1267,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     sal_uInt64 const nOldPos = rStrm.Tell();
     sal_uInt64 const nRemaining = rStrm.remainingSize();
     std::unique_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
-            ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining ));
+            ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining, true ));
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
     SCCOL nStartCol = aRange.aStart.Col();

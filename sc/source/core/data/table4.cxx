@@ -1174,7 +1174,7 @@ void ScTable::FillFormulaVertical(
     if (aSpans.empty())
         return;
 
-    aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE, false);
+    aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, nullptr);
 
     std::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
@@ -1567,7 +1567,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if(!bIsFiltered)
                 {
                     aCol[nCol].SetPatternArea( static_cast<SCROW>(nIMin),
-                            static_cast<SCROW>(nIMax), *pSrcPattern, true );
+                            static_cast<SCROW>(nIMax), *pSrcPattern );
 
                     for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
                             itr != itrEnd; ++itr)
@@ -1588,7 +1588,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if(!RowHidden(nAtRow))
                         {
                             aCol[nCol].SetPatternArea( static_cast<SCROW>(nAtRow),
-                                    static_cast<SCROW>(nAtRow), *pSrcPattern, true);
+                                    static_cast<SCROW>(nAtRow), *pSrcPattern);
                             for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
                                     itr != itrEnd; ++itr)
                             {

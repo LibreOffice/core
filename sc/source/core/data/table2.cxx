@@ -875,7 +875,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     // no borders or merge items involved - use pattern as-is
                     for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
-                        pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), *pPattern, true );
+                        pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), *pPattern );
                 }
                 else
                 {
@@ -918,7 +918,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                     for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
                         pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1),
-                                static_cast<SCROW>(nCol-nCol1), aNewPattern, true);
+                                static_cast<SCROW>(nCol-nCol1), aNewPattern);
                 }
             }
         }
@@ -2557,16 +2557,14 @@ const ScStyleSheet* ScTable::GetAreaStyle( bool& rFound, SCCOL nCol1, SCROW nRow
     return bEqual ? pStyle : nullptr;
 }
 
-bool ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const
+bool ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 {
     bool bIsUsed = false;
 
     for ( SCCOL i=0; i<=MAXCOL; i++ )
     {
-        if ( aCol[i].IsStyleSheetUsed( rStyle, bGatherAllStyles ) )
+        if ( aCol[i].IsStyleSheetUsed( rStyle, true/*bGatherAllStyles*/ ) )
         {
-            if ( !bGatherAllStyles )
-                return true;
             bIsUsed = true;
         }
     }
@@ -2620,10 +2618,10 @@ bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     return bChanged;
 }
 
-void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, bool bPutToPool )
+void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].SetPattern( nRow, rAttr, bPutToPool );
+        aCol[nCol].SetPattern( nRow, rAttr, true/*bPutToPool*/ );
 }
 
 void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
@@ -3544,7 +3542,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             if (bThisTab)
             {
                 aCell.release(aCol[nDestX], nDestY);
-                SetPattern( nDestX, nDestY, *GetPattern( nCol, nRow ), true );
+                SetPattern( nDestX, nDestY, *GetPattern( nCol, nRow ) );
             }
             else
             {

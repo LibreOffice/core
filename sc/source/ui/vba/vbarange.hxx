@@ -98,7 +98,7 @@ class ScVbaRange : public ScVbaRange_BASE
     void ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (css::uno::RuntimeException);
 
     css::uno::Any getValue( ValueGetter& rValueGetter ) throw (css::uno::RuntimeException);
-    void setValue( const css::uno::Any& aValue, ValueSetter& setter, bool bFireEvent ) throw ( css::uno::RuntimeException);
+    void setValue( const css::uno::Any& aValue, ValueSetter& setter ) throw ( css::uno::RuntimeException);
 
     css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
     void setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar ) throw ( css::uno::RuntimeException);

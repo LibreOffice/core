@@ -1533,8 +1533,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOptions,
         const uno::Any& rHolAny,
-        sal_Int32 nNullDate,
-        bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nNullDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     rAnyConv.init( xOptions );
     if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
@@ -1549,14 +1548,14 @@ void SortedIndividualInt32List::InsertHolidayList(
                 const uno::Any* pAnyArray = rSubSeq.getConstArray();
 
                 for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
-                    InsertHolidayList( rAnyConv, pAnyArray[ nIndex2 ], nNullDate, bInsertOnWeekend );
+                    InsertHolidayList( rAnyConv, pAnyArray[ nIndex2 ], nNullDate, false/*bInsertOnWeekend*/ );
             }
         }
         else
             throw lang::IllegalArgumentException();
     }
     else
-        InsertHolidayList( rAnyConv, rHolAny, nNullDate, bInsertOnWeekend );
+        InsertHolidayList( rAnyConv, rHolAny, nNullDate, false/*bInsertOnWeekend*/ );
 }
 
 

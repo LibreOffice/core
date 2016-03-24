@@ -816,7 +816,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
     sc::WaitPointerSwitch aWaitSwitch(pWin);
 
     pExternalRefMgr->enableDocTimer(false);
-    ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS).toString(), aRefLinks.size());
+    ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS).toString(), aRefLinks.size(), true);
     for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
     {
         aProgress.SetState(i+1);

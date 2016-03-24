@@ -1518,7 +1518,7 @@ ScVbaRange::getValue() throw (uno::RuntimeException, std::exception)
 }
 
 void
-ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFireEvent ) throw (uno::RuntimeException)
+ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter ) throw (uno::RuntimeException)
 {
     uno::TypeClass aClass = aValue.getValueTypeClass();
     if ( aClass == uno::TypeClass_SEQUENCE )
@@ -1553,7 +1553,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFi
     {
         visitArray( valueSetter );
     }
-    if( bFireEvent ) fireChangeEvent();
+    fireChangeEvent();
 }
 
 void SAL_CALL
@@ -1568,7 +1568,7 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException, st
         return;
     }
     CellValueSetter valueSetter( aValue );
-    setValue( aValue, valueSetter, true );
+    setValue( aValue, valueSetter );
 }
 
 void SAL_CALL
@@ -1642,7 +1642,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
         return;
     }
     CellFormulaValueSetter formulaValueSetter( rFormula, &getScDocument(), eGram );
-    setValue( rFormula, formulaValueSetter, true/*bFireEvent*/ );
+    setValue( rFormula, formulaValueSetter );
 }
 
 uno::Any

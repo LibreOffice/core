@@ -7011,7 +7011,7 @@ public:
         // Copy formula cell to clipboard.
         ScClipParam aClipParam(aPos, false);
         aMark.SetMarkArea(aPos);
-        m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+        m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
         // Paste it to first range.
         InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
@@ -7131,7 +7131,7 @@ void Test::testTdf97587()
     // Copy formula cell to clipboard.
     ScClipParam aClipParam(aPos, false);
     aMark.SetMarkArea(aPos);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to first range.
     InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;

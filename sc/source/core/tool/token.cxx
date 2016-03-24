@@ -2428,9 +2428,9 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
 }
 
 void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos,
-        bool bRangeName, bool bCheckCopyRange)
+        bool bCheckCopyRange)
 {
-    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, !bRangeName);
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, true);
     for (size_t j=0; j<2; ++j)
     {
         FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
@@ -2452,11 +2452,8 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
                         ScSingleRefData& rRef2 = rRef.Ref2;
                         ScSingleRefData& rRef1 = rRef.Ref1;
 
-                        // for range names only adjust if all parts are absolute
-                        if (!bRangeName || !(rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel()))
-                            AdjustSingleRefData( rRef1, rOldPos, rNewPos );
-                        if (!bRangeName || !(rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel()))
-                            AdjustSingleRefData( rRef2, rOldPos, rNewPos );
+                        AdjustSingleRefData( rRef1, rOldPos, rNewPos );
+                        AdjustSingleRefData( rRef2, rOldPos, rNewPos );
                     }
                     break;
                 case svSingleRef :
@@ -2466,9 +2463,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
 
                         ScSingleRefData& rRef = *p->GetSingleRef();
 
-                        // for range names only adjust if all parts are absolute
-                        if (!bRangeName || !(rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel()))
-                            AdjustSingleRefData( rRef, rOldPos, rNewPos );
+                        AdjustSingleRefData( rRef, rOldPos, rNewPos );
                     }
                     break;
                 default:

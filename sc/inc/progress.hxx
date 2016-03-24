@@ -71,7 +71,7 @@ public:
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const OUString& rText,
-                                         sal_uLong nRange, bool bAllDocs = false,
+                                         sal_uLong nRange,
                                          bool bWait = true );
                             ~ScProgress();
 

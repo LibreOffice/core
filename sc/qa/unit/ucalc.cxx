@@ -262,7 +262,7 @@ void Test::testPerf()
         // Copy cell A1 to clipboard.
         ScDocument aClipDoc(SCDOCMODE_CLIP);
         ScClipParam aParam(aPos, false);
-        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark, false, false);
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
 
         ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
@@ -333,7 +333,7 @@ void Test::testPerf()
         // Copy to clipboard.
         ScDocument aClipDoc(SCDOCMODE_CLIP);
         ScClipParam aParam(aSrcRange, false);
-        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark, false, false);
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
 
         ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
@@ -410,7 +410,7 @@ void Test::testPerf()
         // Copy to clipboard.
         ScDocument aClipDoc(SCDOCMODE_CLIP);
         ScClipParam aParam(aSrcRange, false);
-        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark, false, false);
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
 
         ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
@@ -798,7 +798,7 @@ void Test::testDataEntries()
     m_pDoc->SetString(ScAddress(0,10,0), "Andy");
 
     std::vector<ScTypedStrData> aEntries;
-    m_pDoc->GetDataEntries(0, 0, 0, true, aEntries); // Try at the very top.
+    m_pDoc->GetDataEntries(0, 0, 0, aEntries); // Try at the very top.
 
     // Entries are supposed to be sorted in ascending order, and are all unique.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
@@ -812,7 +812,7 @@ void Test::testDataEntries()
     CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", it == aEntries.end());
 
     aEntries.clear();
-    m_pDoc->GetDataEntries(0, MAXROW, 0, true, aEntries); // Try at the very bottom.
+    m_pDoc->GetDataEntries(0, MAXROW, 0, aEntries); // Try at the very bottom.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
 
     // Make sure we get the same set of suggestions.
@@ -3589,7 +3589,7 @@ void Test::testCopyPasteMultiRange()
     aClipParam.maRanges.Append(ScRange(0,3,0,1,3,0)); // A4:B4
     aClipParam.maRanges.Append(ScRange(0,5,0,1,5,0)); // A6:B6
     aClipParam.meDirection = ScClipParam::Row;
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste to D9:E11, and make sure it won't crash (rhbz#1080196).
     m_pDoc->CopyMultiRangeFromClip(ScAddress(3,8,0), aMark, InsertDeleteFlags::CONTENTS, &aClipDoc);
@@ -4044,7 +4044,7 @@ void Test::testCopyPasteRelativeFormula()
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to B1:B2.
     InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
@@ -4067,7 +4067,7 @@ void Test::testCopyPasteRelativeFormula()
 
     // Copy A1 to clipboard.
     aClipParam = ScClipParam(ScAddress(0,0,0), false);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     pFC = aClipDoc.GetFormulaCell(ScAddress(0,0,0));
     CPPUNIT_ASSERT(pFC);
@@ -4127,7 +4127,7 @@ void Test::testCopyPasteRepeatOneFormula()
     // Copy C1 to clipboard.
     ScClipParam aClipParam(aPos, false);
     aMark.SetMarkArea(aPos);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to C2:C10.
     InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
@@ -4396,7 +4396,7 @@ void Test::testUpdateReference()
     std::vector<OUString> aSheets;
     aSheets.push_back("Sheet1");
     aSheets.push_back("Sheet2");
-    m_pDoc->InsertTabs(0, aSheets, false, true);
+    m_pDoc->InsertTabs(0, aSheets, true);
     m_pDoc->GetValue(2, 0, 2, aValue);
     OUString aFormula;
     m_pDoc->GetFormula(2,0,2, aFormula);
@@ -4780,7 +4780,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
     aRange = ScRange(1,1,1,1,6,1);
@@ -5193,7 +5193,7 @@ void Test::testNoteLifeCycle()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScMarkData aMarkData;
     aMarkData.SelectOneTable(0);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, false, true);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, true);
 
     ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
@@ -5273,7 +5273,7 @@ void Test::testNoteCopyPaste()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
     ScClipParam aClipParam(aCopyRange, false);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Make sure the notes are in the clipboard.
     pNote = aClipDoc.GetNote(ScAddress(1,1,0));
@@ -6148,7 +6148,7 @@ void Test::testCopyPasteMatrixFormula()
     ScAddress aPos(0,0,0);  // A1
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScClipParam aParam(aPos, false);
-    m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+    m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark, false, false);
     // Formula string should be equal.
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
 
@@ -6362,7 +6362,7 @@ void Test::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pC
     ScClipParam aClipParam(rRange, false);
     ScMarkData aMark;
     aMark.SetMarkArea(rRange);
-    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 }
 
 void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)

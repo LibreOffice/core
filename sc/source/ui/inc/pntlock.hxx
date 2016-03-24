@@ -50,8 +50,8 @@ public:
     bool                    GetModified() const             { return bModified; }
 
     /** for recovery after reset */
-    void            SetLevel(sal_uInt16 nNew, bool bDoc)
-                        { if (bDoc) nDocLevel = nNew; else nLevel = nNew; }
+    void            SetDocLevel(sal_uInt16 nNew)
+                        { nDocLevel = nNew; }
 };
 
 #endif

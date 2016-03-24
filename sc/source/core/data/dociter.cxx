@@ -2605,7 +2605,7 @@ void ScDocRowHeightUpdater::update()
         }
     }
 
-    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
     itr = mpTabRangesArray->begin();
@@ -2643,7 +2643,7 @@ void ScDocRowHeightUpdater::updateAll()
         nCellCount += mrDoc.maTabs[nTab]->GetWeightedCount();
     }
 
-    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
     sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);

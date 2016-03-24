@@ -99,7 +99,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     SCROW               nNumRows = nEndRow - rRange.aStart.Row() + 1;
     SCTAB               nTab = rRange.aStart.Tab();
 
-    ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows );
+    ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows, true );
 
     aPrgrsBar.SetState( 0 );
 

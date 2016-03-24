@@ -435,7 +435,7 @@ void ScDrawLayer::ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
     ResetTab(nMinPos, pDoc->GetTableCount()-1);
 }
 
-void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, bool bSkipNotes )
+void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 {
     if (bDrawIsInUndo)
         return;
@@ -454,7 +454,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, bool bSkip
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            if ( bSkipNotes && IsNoteCaption( pOldObject ) )
+            if ( IsNoteCaption( pOldObject ) )
             {
                 pOldObject = aIter.Next();
                 continue;

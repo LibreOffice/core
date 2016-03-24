@@ -689,9 +689,9 @@ void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutT
 }
 
 void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
-                                const ScPatternAttr& rPatAttr, bool bPutToPool )
+                                const ScPatternAttr& rPatAttr )
 {
-    pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, bPutToPool );
+    pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );
 }
 
 void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )

@@ -469,11 +469,11 @@ void ScColumn::SwapNonEmpty(
     CellStorageModified();
 }
 
-void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag, bool bBroadcast )
+void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag )
 {
     std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
     for (; itSpan != itSpanEnd; ++itSpan)
-        DeleteArea(itSpan->mnRow1, itSpan->mnRow2, nDelFlag, bBroadcast);
+        DeleteArea(itSpan->mnRow1, itSpan->mnRow2, nDelFlag, false/*bBroadcast*/);
 }
 
 void ScColumn::CloneFormulaCell(
