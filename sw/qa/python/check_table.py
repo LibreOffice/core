@@ -358,7 +358,7 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = False
         xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
         xRows = xTable.Rows
-        self.assertEquals(xRows.ImplementationName, 'SwXTableRows')
+        self.assertEqual(xRows.ImplementationName, 'SwXTableRows')
         self.assertTrue(xRows.supportsService('com.sun.star.text.TableRows'))
         self.assertFalse(xRows.supportsService('foo'))
         self.assertIn('com.sun.star.text.TableRows', xRows.SupportedServiceNames)
@@ -366,7 +366,7 @@ class CheckTable(unittest.TestCase):
         xRows.removeByIndex(1, 2)
         self.assertEqual( xTable.Data, ((1,2,3), (10,11,12)))
         xCols = xTable.Columns
-        self.assertEquals(xCols.ImplementationName, 'SwXTableColumns')
+        self.assertEqual(xCols.ImplementationName, 'SwXTableColumns')
         self.assertTrue(xCols.supportsService('com.sun.star.text.TableColumns'))
         self.assertFalse(xCols.supportsService('foo'))
         self.assertIn('com.sun.star.text.TableColumns', xCols.SupportedServiceNames)
@@ -429,7 +429,7 @@ class CheckTable(unittest.TestCase):
         self.assertTrue(xTable.Name == 'Table1')
         self.assertIn('com.sun.star.text.GenericTextDocument', xDoc.SupportedServiceNames)
         xChartdataprovider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
-        self.assertEquals(xChartdataprovider.ImplementationName, 'SwChartDataProvider')
+        self.assertEqual(xChartdataprovider.ImplementationName, 'SwChartDataProvider')
         self.assertTrue(xChartdataprovider.supportsService('com.sun.star.chart2.data.DataProvider'))
         self.assertFalse(xChartdataprovider.supportsService('foo'))
         self.assertIn('com.sun.star.chart2.data.DataProvider', xChartdataprovider.SupportedServiceNames)
@@ -442,7 +442,7 @@ class CheckTable(unittest.TestCase):
         expectedCellrange = ('A1:A2', 'B1:B2', 'C1:C2')
         for col in range(3):
             xSeq = xDataSource.DataSequences[col].Values
-            self.assertEquals(xSeq.ImplementationName, 'SwChartDataSequence')
+            self.assertEqual(xSeq.ImplementationName, 'SwChartDataSequence')
             self.assertTrue(xSeq.supportsService('com.sun.star.chart2.data.DataSequence'))
             self.assertFalse(xSeq.supportsService('foo'))
             self.assertIn('com.sun.star.chart2.data.DataSequence', xSeq.SupportedServiceNames)
@@ -479,16 +479,16 @@ class CheckTable(unittest.TestCase):
                                    (PropertyValue('Text', 0, '3', 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
         # Check that the formatting we set up is not destroyed
-        self.assertEquals(xTable.getCellByPosition(0,0).getString(), '3.00 €')
-        self.assertEquals(xTable.getCellByPosition(0,0).getValue(), 3)
+        self.assertEqual(xTable.getCellByPosition(0,0).getString(), '3.00 €')
+        self.assertEqual(xTable.getCellByPosition(0,0).getValue(), 3)
         # Verify that it works with number recognition turned on as well
         xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
                                    (PropertyValue('TableNumberRecognition', 0, True, 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
                                    (PropertyValue('Text', 0, '4', 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
-        self.assertEquals(xTable.getCellByPosition(0,1).getString(), '4.00 €')
-        self.assertEquals(xTable.getCellByPosition(0,1).getValue(), 4)
+        self.assertEqual(xTable.getCellByPosition(0,1).getString(), '4.00 €')
+        self.assertEqual(xTable.getCellByPosition(0,1).getValue(), 4)
         xDoc.dispose()
 
     def test_numberRecognition(self):
@@ -507,8 +507,8 @@ class CheckTable(unittest.TestCase):
                                    (PropertyValue('Text', 0, '15-10-30', 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
         # Without number recognition 15-10-30 should not be interpretated as a date
-        self.assertEquals(xTable.getCellByPosition(0,0).getString(), '15-10-30')
-        self.assertEquals(xTable.getCellByPosition(0,0).getValue(), 0)
+        self.assertEqual(xTable.getCellByPosition(0,0).getString(), '15-10-30')
+        self.assertEqual(xTable.getCellByPosition(0,0).getValue(), 0)
         # Activate number recognition
         xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
                                    (PropertyValue('TableNumberRecognition', 0, True, 0),))
@@ -517,8 +517,8 @@ class CheckTable(unittest.TestCase):
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
         # With number recognition it should now be a date, confirm by checking
         # the string and value of the cell.
-        self.assertEquals(xTable.getCellByPosition(0,1).getString(), '2015-10-30')
-        self.assertEquals(xTable.getCellByPosition(0,1).getValue(), 42307.0)
+        self.assertEqual(xTable.getCellByPosition(0,1).getString(), '2015-10-30')
+        self.assertEqual(xTable.getCellByPosition(0,1).getValue(), 42307.0)
         xDoc.dispose()
 
 if __name__ == '__main__':
