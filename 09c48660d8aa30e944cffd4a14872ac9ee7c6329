@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_c4ed2f27",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-03-24T15:10:04Z",
+      "side": 1,
+      "message": "should be:\n// callback for Insert button. Inserts a new bookmarkk",
+      "revId": "09c48660d8aa30e944cffd4a14872ac9ee7c6329",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
