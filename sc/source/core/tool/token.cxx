@@ -2528,11 +2528,11 @@ bool ScTokenArray::ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const
     TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, false);
     for (size_t j=0; j<2; ++j)
     {
-        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
-        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        FormulaToken* const * pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken* const * const pEnd = aPtrs.maPointerRange[j].mpStop;
         for (; pp != pEnd; ++pp)
         {
-            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            const FormulaToken* p = aPtrs.getHandledToken(j,pp);
             if (!p)
                 continue;
 
@@ -2540,9 +2540,9 @@ bool ScTokenArray::ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const
             {
                 case svDoubleRef :
                     {
-                        ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScSingleRefData& rRef2 = rRef.Ref2;
-                        ScSingleRefData& rRef1 = rRef.Ref1;
+                        const ScComplexRefData& rRef = *p->GetDoubleRef();
+                        const ScSingleRefData& rRef2 = rRef.Ref2;
+                        const ScSingleRefData& rRef1 = rRef.Ref1;
 
                         SCTAB nTab1 = (rRef1.IsTabRel() ? rRef1.Tab() + nPosTab : rRef1.Tab());
                         SCTAB nTab2 = (rRef2.IsTabRel() ? rRef2.Tab() + nPosTab : rRef2.Tab());
@@ -2552,7 +2552,7 @@ bool ScTokenArray::ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const
                     break;
                 case svSingleRef :
                     {
-                        ScSingleRefData& rRef = *p->GetSingleRef();
+                        const ScSingleRefData& rRef = *p->GetSingleRef();
                         if (rRef.IsTabRel())
                         {
                             if (rRef.Tab() + nPosTab == nTab)
