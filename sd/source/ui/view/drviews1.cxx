@@ -498,21 +498,16 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
  * Generate horizontal ruler
  */
 
-SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, bool bIsFirst)
+SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin)
 {
     Ruler* pRuler;
     WinBits  aWBits;
     SvxRulerSupportFlags nFlags = SvxRulerSupportFlags::OBJECT;
 
-    if ( bIsFirst )
-    {
-        aWBits  = WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
-        nFlags |= ( SvxRulerSupportFlags::SET_NULLOFFSET |
-                    SvxRulerSupportFlags::TABS |
-                    SvxRulerSupportFlags::PARAGRAPH_MARGINS ); // Neu
-    }
-    else
-        aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
+    aWBits  = WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
+    nFlags |= SvxRulerSupportFlags::SET_NULLOFFSET |
+              SvxRulerSupportFlags::TABS |
+              SvxRulerSupportFlags::PARAGRAPH_MARGINS; // Neu
 
     pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);

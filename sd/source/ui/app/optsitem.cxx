@@ -917,8 +917,8 @@ void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptionsZoom::SdOptionsZoom( sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, ( bUseConfig &&  ( SDCFG_DRAW == nConfigId ) ) ?
+SdOptionsZoom::SdOptionsZoom( sal_uInt16 nConfigId ) :
+    SdOptionsGeneric( nConfigId, ( SDCFG_DRAW == nConfigId ) ?
                                  OUString( "Office.Draw/Zoom" ) :
                                  OUString() ),
     nX( 1 ),
@@ -970,12 +970,12 @@ bool SdOptionsZoom::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsGrid::SdOptionsGrid( sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
+SdOptionsGrid::SdOptionsGrid( sal_uInt16 nConfigId ) :
+    SdOptionsGeneric( nConfigId,
+                      ( SDCFG_DRAW == nConfigId ) ?
                         OUString( "Office.Draw/Grid" ) :
-                        OUString( "Office.Impress/Grid" ) ) :
-                      OUString() )
+                        OUString( "Office.Impress/Grid" )
+                    )
 {
     EnableModify( false );
     SetDefaults();
@@ -1399,8 +1399,8 @@ SdOptions::SdOptions( sal_uInt16 nConfigId ) :
     SdOptionsContents( nConfigId, true ),
     SdOptionsMisc( nConfigId, true ),
     SdOptionsSnap( nConfigId, true ),
-    SdOptionsZoom( nConfigId, true ),
-    SdOptionsGrid( nConfigId, true ),
+    SdOptionsZoom( nConfigId ),
+    SdOptionsGrid( nConfigId ),
     SdOptionsPrint( nConfigId, true )
 {
 }

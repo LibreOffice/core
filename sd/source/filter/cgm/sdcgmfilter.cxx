@@ -49,7 +49,7 @@ extern "C" sal_uInt32 ImportCGM( OUString const &, Reference< XModel > const &, 
 #endif
 
 SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
-    SdFilter( rMedium, rDocShell, true/*bShowProgress*/ )
+    SdFilter( rMedium, rDocShell )
 {
 }
 

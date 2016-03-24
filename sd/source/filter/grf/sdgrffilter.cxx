@@ -123,7 +123,7 @@ void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::tas
 
 
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
-    SdFilter( rMedium, rDocShell, true )
+    SdFilter( rMedium, rDocShell )
 {
 }
 

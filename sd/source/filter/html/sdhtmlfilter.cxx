@@ -40,7 +40,7 @@
 
 
 SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
-    SdFilter( rMedium, rDocShell, true/*bShowProgress*/ )
+    SdFilter( rMedium, rDocShell )
 {
 }
 

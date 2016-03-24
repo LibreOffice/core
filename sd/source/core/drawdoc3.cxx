@@ -283,7 +283,6 @@ void SdDrawDocument::InsertBookmark(
     bool bLink,                                     // Insert bookmarks as links?
     bool bReplace,                                  // Replace current default and notes pages?
     sal_uInt16 nInsertPos,                          // Insertion position of pages
-    bool bNoDialogs,                                // Don't show dialogs
     ::sd::DrawDocShell* pBookmarkDocSh,             // If set, this is the source document
     Point* pObjPos)                                 // Insertion position of objects
 {
@@ -329,7 +328,7 @@ void SdDrawDocument::InsertBookmark(
     {
         // Insert all page bookmarks
         bOK = InsertBookmarkAsPage(rBookmarkList, &rExchangeList, bLink, bReplace,
-                                   nInsertPos, bNoDialogs, pBookmarkDocSh, true/*bCopy*/, true, false);
+                                   nInsertPos, false/*bNoDialogs*/, pBookmarkDocSh, true/*bCopy*/, true, false);
     }
 
     if ( bOK && !rBookmarkList.empty() )

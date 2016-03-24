@@ -296,21 +296,14 @@ void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
 #if HAVE_FEATURE_GLTF
 void View::Insert3DModelURL(
     const OUString& rModelURL, sal_Int8& rAction,
-    const Point& rPos, const Size& rSize,
-    bool const bLink )
+    const Point& rPos, const Size& rSize )
 {
     OUString sRealURL;
-    if (bLink)
-    {
-        sRealURL = rModelURL;
-    }
-    else
-    {
-        uno::Reference<frame::XModel> const xModel(
+    uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
-        bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
-        if (!bRet) { return; }
-    }
+    bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
+    if (!bRet)
+        return;
 
     SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "model/vnd.gltf+json", rAction, rPos, rSize );
     avmedia::MediaItem aItem = pRetObject->getMediaProperties();

@@ -158,7 +158,7 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 
 
 SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
-    SdFilter( rMedium, rDocShell, true/*bShowProgress*/ ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
+    SdFilter( rMedium, rDocShell ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
 {
 }
 
@@ -528,7 +528,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
     Reference< lang::XComponent > xModelComp( mxModel, uno::UNO_QUERY );
 
     // try to get an XStatusIndicator from the Medium
-    if( mbShowProgress )
     {
         SfxItemSet* pSet = mrMedium.GetItemSet();
         if(pSet)
@@ -910,26 +909,23 @@ bool SdXMLFilter::Export()
                 xGrfResolver = pGraphicHelper;
             }
 
-            if(mbShowProgress)
+            CreateStatusIndicator();
+            if(mxStatusIndicator.is())
             {
-                CreateStatusIndicator();
-                if(mxStatusIndicator.is())
-                {
-                    sal_Int32 nProgressRange(1000000);
-                    sal_Int32 nProgressCurrent(0);
-                    OUString aMsg(SD_RESSTR(STR_SAVE_DOC));
-                    mxStatusIndicator->start(aMsg, nProgressRange);
+                sal_Int32 nProgressRange(1000000);
+                sal_Int32 nProgressCurrent(0);
+                OUString aMsg(SD_RESSTR(STR_SAVE_DOC));
+                mxStatusIndicator->start(aMsg, nProgressRange);
 
-                    // set ProgressRange
-                    uno::Any aProgRange;
-                    aProgRange <<= nProgressRange;
-                    xInfoSet->setPropertyValue( "ProgressRange" , aProgRange);
+                // set ProgressRange
+                uno::Any aProgRange;
+                aProgRange <<= nProgressRange;
+                xInfoSet->setPropertyValue( "ProgressRange" , aProgRange);
 
-                    // set ProgressCurrent
-                    uno::Any aProgCurrent;
-                    aProgCurrent <<= nProgressCurrent;
-                    xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
-                }
+                // set ProgressCurrent
+                uno::Any aProgCurrent;
+                aProgCurrent <<= nProgressCurrent;
+                xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
             }
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
@@ -1019,11 +1015,8 @@ bool SdXMLFilter::Export()
             }
             while( bDocRet && pServices->mpService );
 
-            if(mbShowProgress)
-            {
-                if(mxStatusIndicator.is())
-                    mxStatusIndicator->end();
-            }
+            if(mxStatusIndicator.is())
+                mxStatusIndicator->end();
         }
     }
     catch (const uno::Exception &e)

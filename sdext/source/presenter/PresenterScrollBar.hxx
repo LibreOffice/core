@@ -225,10 +225,6 @@ protected:
         const Area eArea) const;
     bool IsDisabled (const Area eArea) const;
     double ValidateThumbPosition (double nPosition);
-    void SetThumbPosition (
-        double nPosition,
-        const bool bAsynchronousRepaint,
-        const bool bValidate);
 
 private:
     class MousePressRepeater;

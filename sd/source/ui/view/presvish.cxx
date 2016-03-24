@@ -107,7 +107,7 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
     GetActiveWindow()->GrabFocus();
 }
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, bool)
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*)
 {
     return nullptr;
 }

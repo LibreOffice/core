@@ -53,7 +53,7 @@ public:
     virtual void Resize() override;
 
 protected:
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) override;
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin) override;
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin) override;
 
 private:

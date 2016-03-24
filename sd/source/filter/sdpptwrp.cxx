@@ -62,7 +62,7 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
-    SdFilter( rMedium, rDocShell, true/*bShowProgress*/ ),
+    SdFilter( rMedium, rDocShell ),
     pBas    ( nullptr )
 {
 }
@@ -161,8 +161,7 @@ bool SdPPTFilter::Export()
 
                 mrDocument.SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
 
-                if( mbShowProgress )
-                    CreateStatusIndicator();
+                CreateStatusIndicator();
 
                 //OUString sBaseURI( "BaseURI");
                 std::vector< PropertyValue > aProperties;

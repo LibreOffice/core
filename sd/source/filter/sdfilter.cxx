@@ -41,13 +41,12 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
 
-SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress )
+SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell )
 :   mxModel( rDocShell.GetModel() )
 ,   mrMedium( rMedium )
 ,   mrDocShell( rDocShell )
 ,   mrDocument( *rDocShell.GetDoc() )
 ,   mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW )
-,   mbShowProgress( bShowProgress )
 {
 }
 

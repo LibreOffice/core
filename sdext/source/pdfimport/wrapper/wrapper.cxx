@@ -610,7 +610,6 @@ void Parser::readFont()
                             nIsBold != 0,
                             nIsItalic != 0,
                             nIsUnderline != 0,
-                            false,
                             nSize,
                             1.0);
 

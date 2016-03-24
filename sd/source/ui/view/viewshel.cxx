@@ -849,7 +849,7 @@ void ViewShell::SetupRulers()
         }
         if ( mpHorizontalRuler.get() == nullptr )
         {
-            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), true));
+            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow()));
             if ( mpHorizontalRuler.get() != nullptr )
             {
                 mpHorizontalRuler->SetWinPos(nHRulerOfs);

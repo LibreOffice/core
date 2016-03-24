@@ -51,14 +51,13 @@ namespace pdfi
                         bool                 isBold_,
                         bool                 isItalic_,
                         bool                 isUnderline_,
-                        bool                 isOutline_,
                         double               size_,
                         double               ascent_) :
             familyName(familyName_),
             isBold(isBold_),
             isItalic(isItalic_),
             isUnderline(isUnderline_),
-            isOutline(isOutline_),
+            isOutline(false),
             size(size_),
             ascent(ascent_)
         {}
@@ -73,7 +72,7 @@ namespace pdfi
             ascent(1.0)
         {}
 
-        OUString     familyName;
+        OUString            familyName;
         bool                isBold;
         bool                isItalic;
         bool                isUnderline;

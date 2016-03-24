@@ -142,18 +142,14 @@ public:
     bool                    InsertMetaFile( TransferableDataHelper& rDataHelper,
                                             const Point& rInsertPos,
                                             ImageMap* pImageMap, bool bOptimize );
-
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
     void                    InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
-
     void                    Insert3DModelURL( const OUString& rModelURL, sal_Int8& rAction,
-                                              const Point& rPos, const Size& rSize,
-                                              bool const bLink );
-
+                                              const Point& rPos, const Size& rSize );
     SdrMediaObj*            InsertMediaObj( const OUString& rURL, const OUString& rMimeType, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 

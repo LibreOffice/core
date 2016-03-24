@@ -244,7 +244,7 @@ void ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     }
 }
 
-SvxRuler* ViewShell::CreateHRuler(::sd::Window* , bool )
+SvxRuler* ViewShell::CreateHRuler(::sd::Window* )
 {
     return nullptr;
 }

@@ -186,16 +186,7 @@ void PresenterScrollBar::SetThumbPosition (
     double nPosition,
     const bool bAsynchronousUpdate)
 {
-    SetThumbPosition(nPosition, bAsynchronousUpdate, true);
-}
-
-void PresenterScrollBar::SetThumbPosition (
-    double nPosition,
-    const bool bAsynchronousUpdate,
-    const bool bValidate)
-{
-    if (bValidate)
-        nPosition = ValidateThumbPosition(nPosition);
+    nPosition = ValidateThumbPosition(nPosition);
 
     if (nPosition != mnThumbPosition && ! mbIsNotificationActive)
     {
@@ -442,7 +433,7 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
     UpdateDragAnchor(nDragDistance);
     if (nDragDistance != 0)
     {
-        SetThumbPosition(mnThumbPosition + nDragDistance, false, true);
+        SetThumbPosition(mnThumbPosition + nDragDistance, false);
     }
 }
 

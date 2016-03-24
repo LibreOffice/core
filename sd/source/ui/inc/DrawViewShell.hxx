@@ -390,7 +390,7 @@ protected:
     void            DeleteActualPage();
     void            DeleteActualLayer();
 
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) override;
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin) override;
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin) override;
     virtual void    UpdateHRuler() override;
     virtual void    UpdateVRuler() override;
