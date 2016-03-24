@@ -28,10 +28,10 @@ index 98650bf..d9fa3df 100644
   *
   * Xslt strings
 diff --git a/include/xmlsec/transforms.h b/include/xmlsec/transforms.h
-index aec8bb5..0bbd7ec 100644
+index f0c70c9..5bdb1b9 100644
 --- a/include/xmlsec/transforms.h
 +++ b/include/xmlsec/transforms.h
-@@ -961,6 +961,10 @@ XMLSEC_EXPORT int               xmlSecTransformXPointerSetExpr          (xmlSecT
+@@ -949,6 +949,10 @@ XMLSEC_EXPORT int               xmlSecTransformXPointerSetExpr          (xmlSecT
                                                                           const xmlChar* expr,
                                                                           xmlSecNodeSetType nodeSetType,
                                                                           xmlNodePtr hereNode);
@@ -40,8 +40,8 @@ index aec8bb5..0bbd7ec 100644
 +XMLSEC_EXPORT xmlSecTransformId xmlSecTransformRelationshipGetKlass (void);
 +
  #ifndef XMLSEC_NO_XSLT
- /**
-  * xmlSecTransformXsltId:
+ #include <libxslt/security.h>
+ 
 diff --git a/src/strings.c b/src/strings.c
 index 99ee316..d318d16 100644
 --- a/src/strings.c
@@ -57,10 +57,10 @@ index 99ee316..d318d16 100644
   *
   * Xslt strings
 diff --git a/src/transforms.c b/src/transforms.c
-index e8e0050..a966f0b 100644
+index 8a2ded2..0371b82 100644
 --- a/src/transforms.c
 +++ b/src/transforms.c
-@@ -271,6 +271,17 @@ xmlSecTransformIdsRegisterDefault(void) {
+@@ -281,6 +281,17 @@ xmlSecTransformIdsRegisterDefault(void) {
          return(-1);
      }
  

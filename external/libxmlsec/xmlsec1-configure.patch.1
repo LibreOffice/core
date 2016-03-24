@@ -32,7 +32,7 @@ diff --git a/Makefile.in b/Makefile.in
 index 23effe0..0547429 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -349,8 +349,9 @@ top_builddir = @top_builddir@
+@@ -354,8 +354,9 @@ top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  NULL = 
  SAFE_VERSION = @XMLSEC_VERSION_SAFE@
@@ -45,10 +45,10 @@ index 23effe0..0547429 100644
  bin_SCRIPTS = xmlsec1-config
  pkgconfig_DATA = xmlsec1.pc @XMLSEC_CRYPTO_PC_FILES_LIST@
 diff --git a/configure.in b/configure.in
-index 502a374..1fa401e 100644
+index 7347a6e..813aa3c 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -183,8 +183,8 @@ dnl find libxml
+@@ -184,8 +184,8 @@ dnl find libxml
  dnl ==========================================================================
  LIBXML_MIN_VERSION="2.7.4"
  LIBXML_CONFIG="xml2-config"
@@ -59,7 +59,7 @@ index 502a374..1fa401e 100644
  LIBXML_FOUND="no"
  AC_ARG_WITH(libxml, 
      [  --with-libxml=[PFX]       libxml2 location]
-@@ -193,6 +193,8 @@ AC_ARG_WITH(libxml-src,
+@@ -194,6 +194,8 @@ AC_ARG_WITH(libxml-src,
      [  --with-libxml-src=[PFX]   not installed yet libxml2 location]
  )
  
@@ -68,7 +68,7 @@ index 502a374..1fa401e 100644
  if test "z$with_libxml" = "zno" -o "z$with_libxml_src" = "zno"; then 
      AC_MSG_CHECKING(for libxml2 libraries >= $LIBXML_MIN_VERSION) 
      AC_MSG_ERROR(libxml2 >= $LIBXML_MIN_VERSION is required for $XMLSEC_PACKAGE)
-@@ -236,6 +238,8 @@ if test "z$LIBXML_FOUND" = "zno" ; then
+@@ -242,6 +244,8 @@ if test "z$LIBXML_FOUND" = "zno" ; then
      fi
  fi
  
@@ -77,7 +77,7 @@ index 502a374..1fa401e 100644
  AC_SUBST(LIBXML_CFLAGS)
  AC_SUBST(LIBXML_LIBS)
  AC_SUBST(LIBXML_CONFIG)
-@@ -533,12 +537,26 @@ dnl ==========================================================================
+@@ -544,12 +548,26 @@ dnl ==========================================================================
  XMLSEC_NO_NSS="1"
  SEAMONKEY_MIN_VERSION="1.0"
  MOZILLA_MIN_VERSION="1.4"
@@ -106,7 +106,7 @@ index 502a374..1fa401e 100644
  NSS_CRYPTO_LIB="$XMLSEC_PACKAGE-nss"
  NSS_FOUND="no"
  NSPR_PACKAGE=mozilla-nspr
-@@ -565,6 +583,16 @@ elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z
+@@ -576,6 +594,16 @@ elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z
      dnl We are going to try all options
      dnl
      if test "z$NSS_FOUND" = "zno" ; then
@@ -123,7 +123,7 @@ index 502a374..1fa401e 100644
          PKG_CHECK_MODULES(NSS, seamonkey-nspr >= $NSPR_MIN_VERSION seamonkey-nss >= $SEAMONKEY_MIN_VERSION,
      	    [NSS_FOUND=yes NSPR_PACKAGE=seamonkey-nspr NSS_PACKAGE=seamonkey-nss],
  	    [NSS_FOUND=no])
-@@ -596,8 +624,8 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -607,8 +635,8 @@ if test "z$NSS_FOUND" = "zno" ; then
          ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
      fi
  
@@ -134,7 +134,7 @@ index 502a374..1fa401e 100644
  
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"
-@@ -618,21 +646,21 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -629,21 +657,21 @@ if test "z$NSS_FOUND" = "zno" ; then
  	NSPR_PRINIT_H="$with_nspr/include/prinit.h"
      else
  	for dir in $ac_nss_inc_dir ; do
@@ -160,7 +160,7 @@ index 502a374..1fa401e 100644
  		dnl do not add -L/usr/lib because compiler does it anyway
          	if test "z$dir" = "z/usr/lib" ; then
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
-@@ -703,7 +731,7 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -714,7 +742,7 @@ if test "z$NSS_FOUND" = "zno" ; then
          done
         
          for dir in $ac_nss_lib_dir ; do
@@ -169,7 +169,7 @@ index 502a374..1fa401e 100644
          	dnl do not add -L/usr/lib because compiler does it anyway
      		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
-@@ -722,7 +750,7 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -733,7 +761,7 @@ if test "z$NSS_FOUND" = "zno" ; then
  
      if test "z$NSS_INCLUDES_FOUND" = "zyes" -a "z$NSS_LIBS_FOUND" = "zyes" ; then
         OLD_CPPFLAGS=$CPPFLAGS

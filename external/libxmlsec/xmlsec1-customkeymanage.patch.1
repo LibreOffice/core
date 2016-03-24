@@ -57,10 +57,10 @@ index 18dff94..44837b6 100644
  certkeys.h \
  crypto.h \
 diff --git a/include/xmlsec/mscrypto/Makefile.in b/include/xmlsec/mscrypto/Makefile.in
-index 4a5a4f9..147b4f8 100644
+index 477c5cb..4022177 100644
 --- a/include/xmlsec/mscrypto/Makefile.in
 +++ b/include/xmlsec/mscrypto/Makefile.in
-@@ -288,6 +288,7 @@ top_srcdir = @top_srcdir@
+@@ -293,6 +293,7 @@ top_srcdir = @top_srcdir@
  NULL = 
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  xmlsecmscryptoinc_HEADERS = \
@@ -160,10 +160,10 @@ index e352162..997ca7f 100644
  
  install-exec-hook:
 diff --git a/include/xmlsec/nss/Makefile.in b/include/xmlsec/nss/Makefile.in
-index 64865e5..8e97e1a 100644
+index 0fcffb4..151e091 100644
 --- a/include/xmlsec/nss/Makefile.in
 +++ b/include/xmlsec/nss/Makefile.in
-@@ -295,6 +295,9 @@ bignum.h \
+@@ -300,6 +300,9 @@ bignum.h \
  keysstore.h \
  pkikeys.h \
  x509.h \
@@ -765,10 +765,10 @@ index 8cd8586..a14199e 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/nss/Makefile.in b/src/nss/Makefile.in
-index 0003297..8179e59 100644
+index 46c8c92..8fc7e05 100644
 --- a/src/nss/Makefile.in
 +++ b/src/nss/Makefile.in
-@@ -72,7 +72,8 @@ am__DEPENDENCIES_1 =
+@@ -75,7 +75,8 @@ am__DEPENDENCIES_1 =
  am__libxmlsec1_nss_la_SOURCES_DIST = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -778,7 +778,7 @@ index 0003297..8179e59 100644
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 = libxmlsec1_nss_la-strings.lo
  am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
-@@ -83,6 +84,8 @@ am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
+@@ -86,6 +87,8 @@ am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
  	libxmlsec1_nss_la-x509.lo libxmlsec1_nss_la-x509vfy.lo \
  	libxmlsec1_nss_la-keysstore.lo libxmlsec1_nss_la-keytrans.lo \
  	libxmlsec1_nss_la-kw_des.lo libxmlsec1_nss_la-kw_aes.lo \
@@ -787,7 +787,7 @@ index 0003297..8179e59 100644
  	$(am__objects_1) $(am__objects_2)
  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
  libxmlsec1_nss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-@@ -340,6 +343,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
+@@ -345,6 +348,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
  libxmlsec1_nss_la_SOURCES = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -795,7 +795,7 @@ index 0003297..8179e59 100644
  	$(NULL) $(am__append_1)
  libxmlsec1_nss_la_LIBADD = \
  	$(NSS_LIBS) \
-@@ -446,6 +450,8 @@ distclean-compile:
+@@ -451,6 +455,8 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509vfy.Plo@am__quote@
@@ -804,7 +804,7 @@ index 0003297..8179e59 100644
  
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -475,6 +481,20 @@ libxmlsec1_nss_la-app.lo: app.c
+@@ -480,6 +486,20 @@ libxmlsec1_nss_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
@@ -1216,7 +1216,7 @@ index 0000000..65b94ac
 +}
 +
 diff --git a/src/nss/hmac.c b/src/nss/hmac.c
-index dfe5a53..f6b26fe 100644
+index ae7e67e..ba3887a 100644
 --- a/src/nss/hmac.c
 +++ b/src/nss/hmac.c
 @@ -23,8 +23,8 @@
