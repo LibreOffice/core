@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_a4fc7b3f",
+        "filename": "Repository.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "this changes the scp2 installation module (the parameter following PLAINLIBS_OOO) from \"ooo\" to \"avmediaogl\", which doesn\u0027t actually exist",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_84f97750",
+        "filename": "avmedia/Library_avmediaogl.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "i think this is unnecessary, if it should be completely disabled we just conditionally disable it in the Module_foo.mk and that\u0027s sufficient",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c44ecf95",
+        "filename": "avmedia/Module_avmedia.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "there are some inconsistencies here - in makefiles you only check ENABLE_OPENGL for this but in the cxx file both HAVE_FEATURE_OPENGL and HAVE_FEATURE_GLTF",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_e494b3e9",
+        "filename": "chart2/source/controller/main/ChartWindow.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "better use \"nullptr\" literal",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_04a46755",
+        "filename": "chart2/source/model/template/ChartTypeManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "shouldn\u0027t this endif be one line up?",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c4c08fe3",
+        "filename": "config_host/config_global.h.in",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "i find the name HAVE_HEADLESS_MODE misleading - a default built already supports soffice --headless, perhaps pick a less misleading name like ENABLE_GUI (with inverted value, since all of these seem to be \"positive\")\n\nalso config_global.h is perhaps wrong header for this...\n\nwould fit better in config_features.h",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c467ef23",
+        "filename": "desktop/source/app/sofficemain.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "this should default to \"false\"",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_246d2b05",
+        "filename": "external/cairo/ExternalProject_cairo.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "there is a spurious \"i\" at the end\n\n(actually you can just nest the \"$(if ...)\" inside the CFLAGS\u003d\"...\")",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_647723d5",
+        "filename": "external/cairo/ExternalProject_cairo.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "shouldn\u0027t this depend on SYSTEM_FREETYPE?\n\ni think i just merged another patch to do that...",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_44749fce",
+        "filename": "external/cairo/ExternalProject_cairo.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 1,
+      "message": "SYSTEM_FONTCONFIG?",
+      "revId": "334e78ceaaa3dc9e70561aa45b49f4b16afa950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

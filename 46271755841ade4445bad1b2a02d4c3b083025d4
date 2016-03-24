@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_6489e3ca",
+        "filename": "config_host/config_features.h.in",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-24T12:27:32Z",
+      "side": 0,
+      "message": "please don\u0027t remove this!",
+      "revId": "46271755841ade4445bad1b2a02d4c3b083025d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_6472837e",
         "filename": "configure.ac",
         "patchSetId": 2
