@@ -362,6 +362,15 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setClie
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
     pDocument->pClass->setClientZoom(pDocument, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+}
 
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setDocumentPassword
+    (JNIEnv* pEnv, jobject aObject, jstring pURL, jstring pPassword)
+{
+    const char* aCloneUrl = copyJavaString(pEnv, pURL);
+    const char* aClonePassword = copyJavaString(pEnv, pPassword);
+
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    pLibreOfficeKit->pClass->setDocumentPassword(pLibreOfficeKit, aCloneUrl, aClonePassword);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

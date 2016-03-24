@@ -26,6 +26,8 @@ dependencies {
     compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.1.0'
+    compile files('libs/rltodfjlib/rltodfjlib.jar')
+    compile files('libs/zip4j/zip4j_1.3.2.jar')
 }
 
 android {

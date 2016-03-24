@@ -31,6 +31,8 @@ public class Office {
         return document;
     }
 
+    public native void setDocumentPassword(String url, String password);
+
     public native void destroy();
     public native void destroyAndExit();
 }
