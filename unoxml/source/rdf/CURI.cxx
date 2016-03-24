@@ -19,7 +19,6 @@
 
 #include "CNodes.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,8 +36,7 @@ class CURI:
     public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
-        css::rdf::XURI>,
-    private boost::noncopyable
+        css::rdf::XURI>
 {
 public:
     explicit CURI();
@@ -60,6 +58,9 @@ public:
     virtual OUString SAL_CALL getNamespace() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
+    CURI(CURI const&) = delete;
+    CURI& operator=(CURI const&) = delete;
+
     /// handle css.rdf.URIs
     void SAL_CALL initFromConstant(const sal_Int16 i_Constant);
 

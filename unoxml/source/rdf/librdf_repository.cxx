@@ -28,7 +28,6 @@
 #include <functional>
 #include <algorithm>
 
-#include <boost/noncopyable.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/optional.hpp>
 
@@ -261,7 +260,6 @@ private:
 /** implements the repository service.
  */
 class librdf_Repository:
-    private boost::noncopyable,
 //    private ::cppu::BaseMutex,
     public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
@@ -402,6 +400,9 @@ public:
 
 private:
 
+    librdf_Repository(librdf_Repository const&) = delete;
+    librdf_Repository& operator=(librdf_Repository const&) = delete;
+
     /// this is const, no need to lock m_aMutex to access it
     uno::Reference< uno::XComponentContext > const m_xContext;
 
@@ -443,7 +444,6 @@ private:
     an XEnumeration of statements.
  */
 class librdf_GraphResult:
-    private boost::noncopyable,
     public ::cppu::WeakImplHelper<
         container::XEnumeration>
 {
@@ -478,6 +478,10 @@ public:
             lang::WrappedTargetException, std::exception) override;
 
 private:
+
+    librdf_GraphResult(librdf_GraphResult const&) = delete;
+    librdf_GraphResult& operator=(librdf_GraphResult const&) = delete;
+
     // NB: this is not a weak pointer: streams _must_ be deleted before the
     //     storage they point into, so we keep the repository alive here
     // also, sequence is important: the stream must be destroyed first.
@@ -555,7 +559,6 @@ throw (uno::RuntimeException, container::NoSuchElementException,
 /** result of tuple queries ("SELECT").
  */
 class librdf_QuerySelectResult:
-    private boost::noncopyable,
     public ::cppu::WeakImplHelper<
         rdf::XQuerySelectResult>
 {
@@ -593,6 +596,9 @@ public:
         throw (uno::RuntimeException, std::exception) override;
 
 private:
+
+    librdf_QuerySelectResult(librdf_QuerySelectResult const&) = delete;
+    librdf_QuerySelectResult& operator=(librdf_QuerySelectResult const&) = delete;
 
     // NB: this is not a weak pointer: streams _must_ be deleted before the
     //     storage they point into, so we keep the repository alive here
@@ -679,7 +685,6 @@ librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException, std::e
 /** represents a named graph, and forwards all the work to repository.
  */
 class librdf_NamedGraph:
-    private boost::noncopyable,
     public ::cppu::WeakImplHelper<
         rdf::XNamedGraph>
 {
@@ -729,6 +734,9 @@ public:
             container::NoSuchElementException, rdf::RepositoryException, std::exception) override;
 
 private:
+
+    librdf_NamedGraph(librdf_NamedGraph const&) = delete;
+    librdf_NamedGraph& operator=(librdf_NamedGraph const&) = delete;
 
     /// weak reference: this is needed to check if m_pRep is valid
     uno::WeakReference< rdf::XRepository > const m_wRep;
