@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/bind.hpp>
-
 #include "officecfg/Office/Common.hxx"
 
 #include <vcl/print.hxx>
@@ -78,12 +76,14 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics = new AquaSalGraphics();
 
     const int nWidth = 100, nHeight = 100;
-    maContextMemory.reset( static_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
-                           boost::bind( rtl_freeMemory, _1 ) );
+    mpContextMemory.reset(static_cast<sal_uInt8*>(rtl_allocateMemory(nWidth * 4 * nHeight)),
+                          &rtl_freeMemory);
 
-    if( maContextMemory )
+    if (mpContextMemory)
     {
-        mrContext = CGBitmapContextCreate( maContextMemory.get(), nWidth, nHeight, 8, nWidth * 4, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
+        mrContext = CGBitmapContextCreate(mpContextMemory.get(),
+                nWidth, nHeight, 8, nWidth * 4,
+                GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst);
         if( mrContext )
             SetupPrinterGraphics( mrContext );
     }

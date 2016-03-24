@@ -24,8 +24,7 @@
 
 #include "salprn.hxx"
 
-#include <boost/shared_array.hpp>
-
+#include <memory>
 
 class AquaSalGraphics;
 
@@ -48,7 +47,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     /// graphics context for Quartz 2D
     CGContextRef                            mrContext;
     /// memory for graphics bitmap context for querying metrics
-    boost::shared_array< sal_uInt8 >        maContextMemory;
+    std::shared_ptr<sal_uInt8> mpContextMemory;
 
     // since changes to NSPrintInfo during a job are ignored
     // we have to care for some settings ourselves
