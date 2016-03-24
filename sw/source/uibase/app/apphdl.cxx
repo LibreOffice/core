@@ -793,6 +793,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             if (pConfigItem && pConfigItem->GetTargetView())
                 pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
         }
+        break;
         case FN_MAILMERGE_SAVE_DOCUMENTS:
         case FN_MAILMERGE_PRINT_DOCUMENTS:
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
