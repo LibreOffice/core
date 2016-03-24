@@ -12,17 +12,22 @@ package org.libreoffice.ui;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,10 +41,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,6 +55,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.libreoffice.Decryptor;
 import org.libreoffice.LOAbout;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
@@ -56,13 +64,16 @@ import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
+import org.mozilla.gecko.gfx.LayerView;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +91,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     private IDocumentProvider documentProvider;
     private IFile homeDirectory;
     private IFile currentDirectory;
+    private String mPassword;
 
     private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
     private static final String DOC_PROIVDER_KEY = "CURRENT_DOCUMENT_PROVIDER";
@@ -162,7 +174,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
         }
 
         // setup the drawer
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -351,6 +362,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     }
 
     public void open(final IFile document) {
+        final Context context = this;
         new AsyncTask<IFile, Void, File>() {
             @Override
             protected File doInBackground(IFile... document) {
@@ -376,6 +388,19 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
             @Override
             protected void onPostExecute(File file) {
                 if (file != null) {
+                    // checks and resolves encryption
+                    String extension = FileUtilities.getExtension(file.getAbsolutePath());
+                    if (Arrays.asList(".odf", ".odt", ".ods", ".odp", ".odg").contains(extension)) {
+                        try {
+                            if (Decryptor.isEncrypted(file)) {
+                                requestPasswordDialog(getString(R.string.protected_label), context);
+                                file = Decryptor.getDecryptedFile(file, mPassword);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
                     String packageName = getApplicationContext().getPackageName();
                     ComponentName componentName = new ComponentName(packageName,
@@ -417,6 +442,47 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
                 openDirectory(result);
             }
         }.execute();
+    }
+
+    // Not exactly an ideal way of doing this, but it works, for now
+    public String requestPasswordDialog(String message, Context context) {
+        // make a handler that throws a runtime exception when a message is received
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message mesg) {
+                throw new RuntimeException();
+            }
+        };
+
+        // make a text input dialog and show it
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptsView = layoutInflater.inflate(R.layout.password_dialog, null);
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+
+        final EditText passwordInput = (EditText) promptsView.findViewById(R.id.password_input);
+
+        alert.setView(promptsView);
+        alert.setMessage(message);
+        alert.setPositiveButton("Open", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                mPassword = passwordInput.getText().toString();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                mPassword = null;
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        alert.show();
+
+        // loop till a runtime exception is triggered.
+        try {
+            Looper.loop();
+        } catch (RuntimeException e2) {}
+
+        return mPassword;
     }
 
     private void share(int position) {
@@ -656,7 +722,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     protected void onResume() {
         super.onResume();
         Log.d(LOGTAG, "onResume");
-        Log.d(LOGTAG, "sortMode="+ sortMode + " filterMode=" + filterMode);
+        Log.d(LOGTAG, "sortMode=" + sortMode + " filterMode=" + filterMode);
         createUI();
     }
 
@@ -670,12 +736,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     protected void onStop() {
         super.onStop();
         Log.d(LOGTAG, "onStop");
+
+        Decryptor.deleteRecursive(Environment.getExternalStorageDirectory()
+                + "/Android/data/com.example.libreoffice");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(LOGTAG, "onDestroy");
+
+        Decryptor.deleteRecursive(Environment.getExternalStorageDirectory()
+                + "/Android/data/com.example.libreoffice");
     }
 
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {

@@ -31,6 +31,7 @@
     <string name="menu_sort_modified">Sort by Date</string>
     <string name="menu_preferences">Preferences</string>
     <string name="file_icon_desc">fileicon</string>
+
     <!-- Pref keys as resources ; Not currently used -->
     <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
     <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
@@ -100,5 +101,6 @@
     <string name="directory_browser_label">Choose Directory</string>
     <string name="bad_directory">Invalid directory path</string>
 
+    <string name="protected_label">This file is protected, please enter a password to open it</string>
 
 </resources>
