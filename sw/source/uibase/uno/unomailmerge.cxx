@@ -700,7 +700,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aMergeDesc.pMailMergeConfigItem = pMMConfigItem.get();
         break;
     case MailMergeType::FILE:
-    case MailMergeType::MAIL:
         {
             INetURLObject aURLObj;
             aURLObj.SetSmartProtocol( INetProtocol::File );
@@ -731,23 +730,22 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             if (!aPath.isEmpty() && !aPath.endsWith(aDelim))
                 aPath += aDelim;
             if (bCurFileNameFromColumn)
-                pMgr->SetEMailColumn( aCurFileNamePrefix );
+                aMergeDesc.sDBcolumn = aCurFileNamePrefix;
             else
             {
                 aPath += aCurFileNamePrefix;
-                pMgr->SetEMailColumn( OUString() );
             }
-            pMgr->SetSubject( aPath );
-            if(MailMergeType::FILE == nCurOutputType)
+
+            aMergeDesc.sPath = aPath;
+            aMergeDesc.sSaveToFilter = m_sSaveFilter;
+            aMergeDesc.sSaveToFilterOptions = m_sSaveFilterOptions;
+            aMergeDesc.aSaveToFilterData = m_aSaveFilterData;
+            aMergeDesc.bCreateSingleFile = m_bSaveAsSingleFile;
+        }
+        break;
+    case MailMergeType::MAIL:
             {
-                aMergeDesc.sSaveToFilter = m_sSaveFilter;
-                aMergeDesc.sSaveToFilterOptions = m_sSaveFilterOptions;
-                aMergeDesc.aSaveToFilterData = m_aSaveFilterData;
-                aMergeDesc.bCreateSingleFile = m_bSaveAsSingleFile;
-            }
-            else
-            {
-                pMgr->SetEMailColumn( m_sAddressFromColumn );
+                aMergeDesc.sDBcolumn = m_sAddressFromColumn;
                 if(m_sAddressFromColumn.isEmpty())
                     throw RuntimeException("Mail address column not set.", static_cast < cppu::OWeakObject * > ( this ) );
                 aMergeDesc.sSaveToFilter     = m_sAttachmentFilter;
@@ -769,7 +767,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
                     throw RuntimeException("Failed to connect to mail server.", static_cast < cppu::OWeakObject * > ( this ) );
             }
-        }
         break;
     }
 
