@@ -1871,7 +1871,10 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     return bRet;
 }
 
-void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
+void impAddB2DPolygonToGDIPlusGraphicsPathReal(
+    Gdiplus::GraphicsPath& rGraphicsPath,
+    const basegfx::B2DPolygon& rPolygon,
+    bool bNoLineJoin)
 {
     sal_uInt32 nCount(rPolygon.count());
 
@@ -1891,15 +1894,17 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const bas
                 const basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
                 const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
 
-                Gdiplus::DllExports::GdipAddPathBezier(pPath,
-                    aCurr.getX(), aCurr.getY(),
-                    aCa.getX(), aCa.getY(),
-                    aCb.getX(), aCb.getY(),
-                    aNext.getX(), aNext.getY());
+                rGraphicsPath.AddBezier(
+                    static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                    static_cast< Gdiplus::REAL >(aCa.getX()), static_cast< Gdiplus::REAL >(aCa.getY()),
+                    static_cast< Gdiplus::REAL >(aCb.getX()), static_cast< Gdiplus::REAL >(aCb.getY()),
+                    static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
             }
             else
             {
-                Gdiplus::DllExports::GdipAddPathLine(pPath, aCurr.getX(), aCurr.getY(), aNext.getX(), aNext.getY());
+                rGraphicsPath.AddLine(
+                    static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                    static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
             }
 
             if(a + 1 < nEdgeCount)
@@ -1908,52 +1913,7 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const bas
 
                 if(bNoLineJoin)
                 {
-                    Gdiplus::DllExports::GdipStartPathFigure(pPath);
-                }
-            }
-        }
-    }
-}
-
-void impAddB2DPolygonToGDIPlusGraphicsPathInteger(Gdiplus::GpPath *pPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
-{
-    sal_uInt32 nCount(rPolygon.count());
-
-    if(nCount)
-    {
-        const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nCount : nCount - 1);
-        const bool bControls(rPolygon.areControlPointsUsed());
-        basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
-
-        for(sal_uInt32 a(0); a < nEdgeCount; a++)
-        {
-            const sal_uInt32 nNextIndex((a + 1) % nCount);
-            const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
-
-            if(bControls && (rPolygon.isNextControlPointUsed(a) || rPolygon.isPrevControlPointUsed(nNextIndex)))
-            {
-                const basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
-                const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
-
-                Gdiplus::DllExports::GdipAddPathBezier(
-                    pPath,
-                    aCurr.getX(), aCurr.getY(),
-                    aCa.getX(), aCa.getY(),
-                    aCb.getX(), aCb.getY(),
-                    aNext.getX(), aNext.getY());
-            }
-            else
-            {
-                Gdiplus::DllExports::GdipAddPathLine(pPath, aCurr.getX(), aCurr.getY(), aNext.getX(), aNext.getY());
-            }
-
-            if(a + 1 < nEdgeCount)
-            {
-                aCurr = aNext;
-
-                if(bNoLineJoin)
-                {
-                    Gdiplus::DllExports::GdipStartPathFigure(pPath);
+                    rGraphicsPath.StartFigure();
                 }
             }
         }
@@ -1966,33 +1926,32 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
 
     if(mbBrush && nCount && (fTransparency >= 0.0 && fTransparency < 1.0))
     {
-        Gdiplus::GpGraphics *pGraphics = NULL;
-        Gdiplus::DllExports::GdipCreateFromHDC(mrParent.getHDC(), &pGraphics);
+        Gdiplus::Graphics aGraphics(mrParent.getHDC());
         const sal_uInt8 aTrans((sal_uInt8)255 - (sal_uInt8)basegfx::fround(fTransparency * 255.0));
-        Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maFillColor), SALCOLOR_GREEN(maFillColor), SALCOLOR_BLUE(maFillColor));
-        Gdiplus::GpSolidFill *pTestBrush;
-        Gdiplus::DllExports::GdipCreateSolidFill(aTestColor.GetValue(), &pTestBrush);
-        Gdiplus::GpPath *pPath = NULL;
-        Gdiplus::DllExports::GdipCreatePath(Gdiplus::FillModeAlternate, &pPath);
+        const Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maFillColor), SALCOLOR_GREEN(maFillColor), SALCOLOR_BLUE(maFillColor));
+        const Gdiplus::SolidBrush aSolidBrush(aTestColor.GetValue());
+        Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
 
         for(sal_uInt32 a(0); a < nCount; a++)
         {
             if(0 != a)
             {
-                Gdiplus::DllExports::GdipStartPathFigure(pPath); // #i101491# not needed for first run
+                // #i101491# not needed for first run
+                aGraphicsPath.StartFigure();
             }
 
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolyPolygon.getB2DPolygon(a), false);
-            Gdiplus::DllExports::GdipClosePathFigure(pPath);
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolyPolygon.getB2DPolygon(a), false);
+
+            aGraphicsPath.CloseFigure();
         }
 
         if(mrParent.getAntiAliasB2DDraw())
         {
-            Gdiplus::DllExports::GdipSetSmoothingMode(pGraphics, Gdiplus::SmoothingModeAntiAlias);
+            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
         }
         else
         {
-            Gdiplus::DllExports::GdipSetSmoothingMode(pGraphics, Gdiplus::SmoothingModeNone);
+            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
         }
 
         if(mrParent.isPrinter())
@@ -2008,19 +1967,14 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
             // checked that there is *no* transformation set and estimated that a stable factor
             // dependent of the printer's DPI is used. Create and set a transformation here to
             // correct this.
-            Gdiplus::REAL aDpiX;
-            Gdiplus::DllExports::GdipGetDpiX(pGraphics, &aDpiX);
-            Gdiplus::REAL aDpiY;
-            Gdiplus::DllExports::GdipGetDpiY(pGraphics, &aDpiY);
+            const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
+            const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
 
-            Gdiplus::DllExports::GdipResetWorldTransform(pGraphics);
-            Gdiplus::DllExports::GdipScaleWorldTransform(pGraphics, Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY, Gdiplus::MatrixOrderAppend);
+            aGraphics.ResetTransform();
+            aGraphics.ScaleTransform(Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY, Gdiplus::MatrixOrderAppend);
         }
 
-        Gdiplus::DllExports::GdipFillPath(pGraphics, pTestBrush, pPath);
-
-        Gdiplus::DllExports::GdipDeletePath(pPath);
-        Gdiplus::DllExports::GdipDeleteGraphics(pGraphics);
+        aGraphics.FillPath(&aSolidBrush, &aGraphicsPath);
     }
 
      return true;
@@ -2037,14 +1991,11 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
     if(mbPen && nCount)
     {
-        Gdiplus::GpGraphics *pGraphics = NULL;
-        Gdiplus::DllExports::GdipCreateFromHDC(mrParent.getHDC(), &pGraphics);
+        Gdiplus::Graphics aGraphics(mrParent.getHDC());
         const sal_uInt8 aTrans = (sal_uInt8)basegfx::fround( 255 * (1.0 - fTransparency) );
-        Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
-        Gdiplus::GpPen *pTestPen = NULL;
-        Gdiplus::DllExports::GdipCreatePen1(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()), Gdiplus::UnitWorld, &pTestPen);
-        Gdiplus::GpPath *pPath;
-        Gdiplus::DllExports::GdipCreatePath(Gdiplus::FillModeAlternate, &pPath);
+        const Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
+        Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
+        Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
         bool bNoLineJoin(false);
 
         switch(eLineJoin)
@@ -2059,19 +2010,20 @@ bool WinSalGraphicsImpl::drawPolyLine(
             }
             case basegfx::B2DLineJoin::Bevel :
             {
-                Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinBevel);
+                aPen.SetLineJoin(Gdiplus::LineJoinBevel);
                 break;
             }
             case basegfx::B2DLineJoin::Miter :
             {
                 const Gdiplus::REAL aMiterLimit(15.0);
-                Gdiplus::DllExports::GdipSetPenMiterLimit(pTestPen, aMiterLimit);
-                Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinMiter);
+
+                aPen.SetMiterLimit(aMiterLimit);
+                aPen.SetLineJoin(Gdiplus::LineJoinMiter);
                 break;
             }
             case basegfx::B2DLineJoin::Round :
             {
-                Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinRound);
+                aPen.SetLineJoin(Gdiplus::LineJoinRound);
                 break;
             }
         }
@@ -2085,47 +2037,36 @@ bool WinSalGraphicsImpl::drawPolyLine(
             }
             case css::drawing::LineCap_ROUND:
             {
-                Gdiplus::DllExports::GdipSetPenStartCap(pTestPen, Gdiplus::LineCapRound);
-                Gdiplus::DllExports::GdipSetPenEndCap(pTestPen, Gdiplus::LineCapRound);
+                aPen.SetStartCap(Gdiplus::LineCapRound);
+                aPen.SetEndCap(Gdiplus::LineCapRound);
                 break;
             }
             case css::drawing::LineCap_SQUARE:
             {
-                Gdiplus::DllExports::GdipSetPenStartCap(pTestPen, Gdiplus::LineCapSquare);
-                Gdiplus::DllExports::GdipSetPenEndCap(pTestPen, Gdiplus::LineCapSquare);
+                aPen.SetStartCap(Gdiplus::LineCapSquare);
+                aPen.SetEndCap(Gdiplus::LineCapSquare);
                 break;
             }
         }
 
-        if(nCount > 250 && basegfx::fTools::more(rLineWidths.getX(), 1.5))
-        {
-            impAddB2DPolygonToGDIPlusGraphicsPathInteger(pPath, rPolygon, bNoLineJoin);
-        }
-        else
-        {
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolygon, bNoLineJoin);
-        }
+        impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolygon, bNoLineJoin);
 
         if(rPolygon.isClosed() && !bNoLineJoin)
         {
             // #i101491# needed to create the correct line joins
-            Gdiplus::DllExports::GdipClosePathFigure(pPath);
+            aGraphicsPath.CloseFigure();
         }
 
         if(mrParent.getAntiAliasB2DDraw())
         {
-            Gdiplus::DllExports::GdipSetSmoothingMode(pGraphics, Gdiplus::SmoothingModeAntiAlias);
+            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
         }
         else
         {
-            Gdiplus::DllExports::GdipSetSmoothingMode(pGraphics, Gdiplus::SmoothingModeNone);
+            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
         }
 
-        Gdiplus::DllExports::GdipDrawPath(pGraphics, pTestPen, pPath);
-
-        Gdiplus::DllExports::GdipDeletePath(pPath);
-        Gdiplus::DllExports::GdipDeletePen(pTestPen);
-        Gdiplus::DllExports::GdipDeleteGraphics(pGraphics);
+        aGraphics.DrawPath(&aPen, &aGraphicsPath);
     }
 
     return true;
