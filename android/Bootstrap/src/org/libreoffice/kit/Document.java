@@ -69,6 +69,8 @@ public class Document {
     public static final int CALLBACK_DOCUMENT_SIZE_CHANGED = 13;
     public static final int CALLBACK_SET_PART = 14;
     public static final int CALLBACK_SEARCH_RESULT_SELECTION = 15;
+    public static final int CALLBACK_DOCUMENT_PASSWORD = 16;
+    public static final int CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY = 17;
 
     /**
      * Set text selection types

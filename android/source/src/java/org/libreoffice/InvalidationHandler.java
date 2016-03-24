@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import org.libreoffice.canvas.SelectionHandle;
@@ -11,6 +12,7 @@ import org.libreoffice.kit.Document;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,6 +78,10 @@ public class InvalidationHandler implements Document.MessageCallback {
                 break;
             case Document.CALLBACK_STATE_CHANGED:
                 stateChanged(payload);
+                break;
+            case Document.CALLBACK_DOCUMENT_PASSWORD:
+                break;
+            case Document.CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
                 break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncatched: " + messageID + " : " + payload);

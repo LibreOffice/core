@@ -27,9 +27,12 @@ public class Office {
         Document document = null;
         if (documentHandle != null) {
             document = new Document(documentHandle);
+
         }
         return document;
     }
+
+    public native void setDocumentPassword(String url, String password);
 
     public native void destroy();
     public native void destroyAndExit();

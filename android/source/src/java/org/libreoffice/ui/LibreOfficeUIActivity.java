@@ -162,7 +162,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
         }
 
         // setup the drawer
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -351,6 +350,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     }
 
     public void open(final IFile document) {
+        final Context context = this;
         new AsyncTask<IFile, Void, File>() {
             @Override
             protected File doInBackground(IFile... document) {
@@ -656,7 +656,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     protected void onResume() {
         super.onResume();
         Log.d(LOGTAG, "onResume");
-        Log.d(LOGTAG, "sortMode="+ sortMode + " filterMode=" + filterMode);
+        Log.d(LOGTAG, "sortMode=" + sortMode + " filterMode=" + filterMode);
         createUI();
     }
 
