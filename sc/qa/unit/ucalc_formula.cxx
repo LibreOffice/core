@@ -3143,6 +3143,44 @@ void Test::testFormulaRefUpdateNameCopySheet()
     nVal = m_pDoc->GetValue(2, 2, 0);
     CPPUNIT_ASSERT_EQUAL(5.0, nVal);
 
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+
+    m_pDoc->InsertTab(0, "Test1");
+    // Global name referencing sheet Test1.
+    bInserted = m_pDoc->InsertNewRangeName("sheetnumber", ScAddress(0,0,0), "$Test1.$A$1");
+    CPPUNIT_ASSERT(bInserted);
+    m_pDoc->SetString(ScAddress(0,0,0), "=SHEET()");
+    m_pDoc->SetString(ScAddress(1,0,0), "=sheetnumber");
+    nVal = m_pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet number should be 1", 1.0, nVal);
+
+    // Copy sheet after.
+    m_pDoc->CopyTab(0, 1);
+    nVal = m_pDoc->GetValue(1,0,1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("New sheet number should be 2", 2.0, nVal);
+    nVal = m_pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Org sheet number should be 1", 1.0, nVal);
+    const ScRangeData* pName = m_pDoc->GetRangeName(1)->findByUpperName("SHEETNUMBER");
+    CPPUNIT_ASSERT_MESSAGE("New sheet-local name should exist", pName);
+
+    // Copy sheet before, shifting following now two sheets.
+    m_pDoc->CopyTab(0, 0);
+    nVal = m_pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("New sheet number should be 1", 1.0, nVal);
+    pName = m_pDoc->GetRangeName(0)->findByUpperName("SHEETNUMBER");
+    CPPUNIT_ASSERT_MESSAGE("New sheet-local name should exist", pName);
+    nVal = m_pDoc->GetValue(1,0,1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Org sheet number should be 2", 2.0, nVal);
+    pName = m_pDoc->GetRangeName(1)->findByUpperName("SHEETNUMBER");
+    CPPUNIT_ASSERT_MESSAGE("Org sheet-local name should not exist", !pName);
+    nVal = m_pDoc->GetValue(1,0,2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Old sheet number should be 3", 3.0, nVal);
+    pName = m_pDoc->GetRangeName(2)->findByUpperName("SHEETNUMBER");
+    CPPUNIT_ASSERT_MESSAGE("Old sheet-local name should exist", pName);
+
+    m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
