@@ -219,7 +219,8 @@ public:
 };
 
 SwMMResultSaveDialog::SwMMResultSaveDialog(vcl::Window* pParent)
-    : SfxModalDialog(pParent, "MMResultSaveDialog", "modules/swriter/ui/mmresultsavedialog.ui")
+    : SfxModalDialog(pParent, "MMResultSaveDialog", "modules/swriter/ui/mmresultsavedialog.ui"),
+    m_bCancelSaving(false)
 {
     get(m_pSaveAsOneRB, "singlerb");
     get(m_pSaveIndividualRB, "individualrb");
