@@ -220,6 +220,8 @@ private:
     sal_uIntPtr             mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
 
+    ImplFontEntry* GetWinFontEntry(int nFallbackLevel);
+
 public:
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
