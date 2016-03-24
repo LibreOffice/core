@@ -1453,7 +1453,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         return 0;
     }
 
-    DBG_ASSERT( pFont->mpFontData, "WinSalGraphics mpFontData==NULL");
+    assert(pFont->mpFontData);
     if (mpWinFontEntry[nFallbackLevel])
     {
         GetWinFontEntry(nFallbackLevel)->mpFontCache->Release(GetWinFontEntry(nFallbackLevel));
