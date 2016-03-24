@@ -2470,7 +2470,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             {
                 pos = maMat.set(pos, CreateDoubleError(nErrors[nMaxCol * j + i]));
             }
-            pos = maMat.next_position(pos);
+            pos = MatrixImplType::next_position(pos);
         }
     }
 }
