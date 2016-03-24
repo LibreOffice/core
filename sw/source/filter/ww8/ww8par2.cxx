@@ -1547,13 +1547,13 @@ void WW8TabBandDesc::ReadShd(const sal_uInt8* pS )
         memset( pSHDs, 0, nWwCols * sizeof( WW8_SHD ) );
     }
 
-    short nAnz = nLen >> 1;
-    if (nAnz > nWwCols)
-        nAnz = nWwCols;
+    short nCount = nLen >> 1;
+    if (nCount > nWwCols)
+        nCount = nWwCols;
 
     SVBT16 const * pShd;
     int i;
-    for(i=0, pShd = reinterpret_cast<SVBT16 const *>(pS); i<nAnz; i++, pShd++ )
+    for(i=0, pShd = reinterpret_cast<SVBT16 const *>(pS); i<nCount; i++, pShd++ )
         pSHDs[i].SetWWValue( *pShd );
 }
 
@@ -1566,12 +1566,12 @@ void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67)
     if (!pNewSHDs)
         pNewSHDs = new sal_uInt32[nWwCols];
 
-    short nAnz = nLen / 10; //10 bytes each
-    if (nAnz > nWwCols)
-        nAnz = nWwCols;
+    short nCount = nLen / 10; //10 bytes each
+    if (nCount > nWwCols)
+        nCount = nWwCols;
 
     int i=0;
-    while (i < nAnz)
+    while (i < nCount)
         pNewSHDs[i++] = SwWW8ImplReader::ExtractColour(pS, bVer67);
 
     while (i < nWwCols)
