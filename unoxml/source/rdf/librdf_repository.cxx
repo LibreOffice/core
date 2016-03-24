@@ -28,7 +28,6 @@
 #include <functional>
 #include <algorithm>
 
-#include <boost/shared_array.hpp>
 #include <boost/optional.hpp>
 
 #include <libxslt/security.h>
@@ -645,10 +644,10 @@ throw (uno::RuntimeException, container::NoSuchElementException,
     if (!librdf_query_results_finished(m_pQueryResult.get())) {
         sal_Int32 count(m_BindingNames.getLength());
         OSL_ENSURE(count >= 0, "negative length?");
-        boost::shared_array<librdf_node*> pNodes( new librdf_node*[count],
+        std::shared_ptr<librdf_node*> const pNodes(new librdf_node*[count],
             NodeArrayDeleter(count));
         for (int i = 0; i < count; ++i) {
-            pNodes[i] = nullptr;
+            pNodes.get()[i] = nullptr;
         }
         if (librdf_query_results_get_bindings(m_pQueryResult.get(), nullptr,
                     pNodes.get()))
@@ -663,7 +662,7 @@ throw (uno::RuntimeException, container::NoSuchElementException,
         }
         uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
         for (int i = 0; i < count; ++i) {
-            ret[i] = m_xRep->getTypeConverter().convertToXNode(pNodes[i]);
+            ret[i] = m_xRep->getTypeConverter().convertToXNode(pNodes.get()[i]);
         }
         // NB: this will invalidate current item.
         librdf_query_results_next(m_pQueryResult.get());
