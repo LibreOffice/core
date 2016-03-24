@@ -1265,7 +1265,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 // sub-document, to get the correct PageDesc.
                 if(!bFreezedLayouts && bCreateSingleFile)
                 {
-                    FreezeLayouts(pTargetShell, true);
+                    if (pTargetShell)
+                        FreezeLayouts(pTargetShell, true);
                     bFreezedLayouts = true;
                 }
             } while( !bCancel && bNoError &&
