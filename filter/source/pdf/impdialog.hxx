@@ -234,7 +234,9 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     VclPtr<ImpPDFTabDialog>     mpaParent;
 
+    DECL_LINK_TYPED( ToggleAllHdl, RadioButton&, void );
     DECL_LINK_TYPED( TogglePagesHdl, RadioButton&, void );
+    DECL_LINK_TYPED( ToggleSelectionHdl, RadioButton&, void );
     DECL_LINK_TYPED( ToggleCompressionHdl, RadioButton&, void );
     DECL_LINK_TYPED( ToggleReduceImageResolutionHdl, CheckBox&, void );
     DECL_LINK_TYPED( ToggleWatermarkHdl, CheckBox&, void );
@@ -243,6 +245,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK_TYPED( ToggleExportNotesPagesHdl, CheckBox&, void );
 
     void                        TogglePagesHdl();
+    void                        EnableExportNotesPages();
 
 public:
     DECL_LINK_TYPED( ToggleExportPDFAHdl, CheckBox&, void );

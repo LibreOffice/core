@@ -606,9 +606,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     mpRbRange->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
 
     mpRbAll->Check();
+    mpRbAll->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAllHdl ) );
     TogglePagesHdl();
 
     mpRbSelection->Enable( paParent->mbSelectionPresent );
+    if ( paParent->mbSelectionPresent )
+        mpRbSelection->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
     mbIsPresentation = paParent->mbIsPresentation;
     mbIsWriter = paParent->mbIsWriter;
 
@@ -674,7 +677,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportNotesPages->SetToggleHdl( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
         mpCbExportOnlyNotesPages->Show();
         mpCbExportOnlyNotesPages->Check(paParent->mbExportOnlyNotesPages);
-        mpCbExportOnlyNotesPages->Enable(paParent->mbExportNotesPages);
         mpCbExportHiddenSlides->Show();
         mpCbExportHiddenSlides->Check(paParent->mbExportHiddenSlides);
     }
@@ -761,9 +763,20 @@ VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
 }
 
 
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleAllHdl, RadioButton&, void)
+{
+    EnableExportNotesPages();
+}
+
 IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, TogglePagesHdl, RadioButton&, void)
 {
     TogglePagesHdl();
+    EnableExportNotesPages();
+}
+
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleSelectionHdl, RadioButton&, void)
+{
+    EnableExportNotesPages();
 }
 
 void ImpPDFTabGeneralPage::TogglePagesHdl()
@@ -773,6 +786,14 @@ void ImpPDFTabGeneralPage::TogglePagesHdl()
         mpEdPages->GrabFocus();
 }
 
+void ImpPDFTabGeneralPage::EnableExportNotesPages()
+{
+    if ( mbIsPresentation )
+    {
+        mpCbExportNotesPages->Enable( !mpRbSelection->IsChecked() );
+        mpCbExportOnlyNotesPages->Enable( !mpRbSelection->IsChecked() && mpCbExportNotesPages->IsChecked() );
+    }
+}
 
 IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, CheckBox&, void)
 {

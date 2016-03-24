@@ -880,7 +880,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 if ( mbExportNotesPages && aCreator == "Impress" )
                 {
                     uno::Reference< drawing::XShapes > xShapes;     // do not allow to export notes when exporting a selection
-                    if ( ! ( aSelection >>= xShapes ) )             // TODO: in the dialog the export notes checkbox needs to be disabled
+                    if ( ! ( aSelection >>= xShapes ) )
                         bExportNotesPages = true;
                 }
                 const bool bExportPages = bExportNotesPages ? !mbExportOnlyNotesPages : true;
