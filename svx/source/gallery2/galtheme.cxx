@@ -271,7 +271,6 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
             case ConvertDataFormat::GIF: pExt = ".gif"; break;
             case ConvertDataFormat::JPG: pExt = ".jpg"; break;
             case ConvertDataFormat::MET: pExt = ".met"; break;
-            case ConvertDataFormat::PCT: pExt = ".pct"; break;
             case ConvertDataFormat::PNG: pExt = ".png"; break;
             case ConvertDataFormat::SVM: pExt = ".svm"; break;
             case ConvertDataFormat::TIF: pExt = ".tif"; break;
@@ -869,7 +868,6 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
                 case GFX_LINK_TYPE_NATIVE_TIF: nExportFormat = ConvertDataFormat::TIF; break;
                 case GFX_LINK_TYPE_NATIVE_WMF: nExportFormat = ConvertDataFormat::WMF; break;
                 case GFX_LINK_TYPE_NATIVE_MET: nExportFormat = ConvertDataFormat::MET; break;
-                case GFX_LINK_TYPE_NATIVE_PCT: nExportFormat = ConvertDataFormat::PCT; break;
                 case GFX_LINK_TYPE_NATIVE_SVG: nExportFormat = ConvertDataFormat::SVG; break;
                 default:
                     break;

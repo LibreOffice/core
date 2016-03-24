@@ -179,7 +179,6 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
                 case GFX_LINK_TYPE_NATIVE_TIF: nCvtType = ConvertDataFormat::TIF; break;
                 case GFX_LINK_TYPE_NATIVE_WMF: nCvtType = ConvertDataFormat::WMF; break;
                 case GFX_LINK_TYPE_NATIVE_MET: nCvtType = ConvertDataFormat::MET; break;
-                case GFX_LINK_TYPE_NATIVE_PCT: nCvtType = ConvertDataFormat::PCT; break;
                 case GFX_LINK_TYPE_NATIVE_SVG: nCvtType = ConvertDataFormat::SVG; break;
 
                 default: nCvtType = ConvertDataFormat::Unknown; break;

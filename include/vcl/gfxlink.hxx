@@ -91,11 +91,10 @@ enum GfxLinkType
     GFX_LINK_TYPE_NATIVE_TIF    = 5,    // Don't forget to update the following defines
     GFX_LINK_TYPE_NATIVE_WMF    = 6,    // Don't forget to update the following defines
     GFX_LINK_TYPE_NATIVE_MET    = 7,    // Don't forget to update the following defines
-    GFX_LINK_TYPE_NATIVE_PCT    = 8,    // Don't forget to update the following defines
-    GFX_LINK_TYPE_NATIVE_SVG    = 9,    // Don't forget to update the following defines
-    GFX_LINK_TYPE_NATIVE_MOV    = 10,   // Don't forget to update the following defines
+    GFX_LINK_TYPE_NATIVE_SVG    = 8,    // Don't forget to update the following defines
+    GFX_LINK_TYPE_NATIVE_MOV    = 9,   // Don't forget to update the following defines
     // #i15508# added BMP type support
-    GFX_LINK_TYPE_NATIVE_BMP    = 11,   // Don't forget to update the following defines
+    GFX_LINK_TYPE_NATIVE_BMP    = 10,   // Don't forget to update the following defines
     GFX_LINK_TYPE_USER          = 0xffff
 };
 

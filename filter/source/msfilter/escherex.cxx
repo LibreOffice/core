@@ -1582,7 +1582,6 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                       nFormat != GraphicFileFormat::JPG &&
                       nFormat != GraphicFileFormat::PNG &&
                       nFormat != GraphicFileFormat::TIF &&
-                      nFormat != GraphicFileFormat::PCT &&
                       nFormat != GraphicFileFormat::WMF &&
                       nFormat != GraphicFileFormat::EMF) )
                 {

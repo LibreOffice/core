@@ -75,9 +75,6 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GFX_LINK_TYPE_NATIVE_MET:
             aExtension = "met";
             break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
-            aExtension = "pct";
-            break;
         case GFX_LINK_TYPE_NATIVE_JPG:
             aExtension = "jpg";
             break;

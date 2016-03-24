@@ -239,21 +239,6 @@ try_again:
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
-            else if (strcmp(argv[2], "pct") == 0)
-            {
-                static PFilterCall pfnImport(nullptr);
-                if (!pfnImport)
-                {
-                    osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libiptlo.so");
-                    pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
-                    aLibrary.release();
-                }
-                Graphic aTarget;
-                SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
-            }
             else if (strcmp(argv[2], "pcx") == 0)
             {
                 static PFilterCall pfnImport(nullptr);

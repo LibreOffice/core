@@ -777,8 +777,6 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     pFilterShortName = "met";
                 else if (aMimeType == MIMETYPE_PNG)
                     pFilterShortName = "png";
-                else if (aMimeType == MIMETYPE_PCT)
-                    pFilterShortName = "pct";
                 else if (aMimeType == MIMETYPE_PBM)
                     pFilterShortName = "pbm";
                 else if (aMimeType == MIMETYPE_PGM)
