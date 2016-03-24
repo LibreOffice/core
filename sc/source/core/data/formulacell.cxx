@@ -961,7 +961,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
             }
             else if ( t->GetType() == svIndex )
             {
-                ScRangeData* pRangeData = rDoc.GetRangeName()->findByIndex( t->GetIndex() );
+                const ScRangeData* pRangeData = rDoc.FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
                 if( pRangeData )
                 {
                     if( pRangeData->HasReferences() )
