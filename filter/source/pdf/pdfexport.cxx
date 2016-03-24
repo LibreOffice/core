@@ -883,7 +883,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     if ( ! ( aSelection >>= xShapes ) )
                         bExportNotesPages = true;
                 }
-                const bool bExportPages = bExportNotesPages ? !mbExportOnlyNotesPages : true;
+                const bool bExportPages = !bExportNotesPages || !mbExportOnlyNotesPages;
 
                 if( aPageRange.isEmpty() )
                 {
