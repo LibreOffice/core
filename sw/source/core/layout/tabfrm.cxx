@@ -364,11 +364,27 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                 if ( pTmp->IsTabFrame() )
                 {
                     SwRowFrame* pTmpRow = static_cast<SwRowFrame*>(static_cast<SwTabFrame*>(pTmp)->Lower());
+                    bool bAllRowsCollapsed = true;
+
                     while ( pTmpRow )
                     {
                         lcl_ShrinkCellsAndAllContent( *pTmpRow );
+
+                        if ((pTmpRow->Frame().*fnRect->fnGetHeight)() > 0)
+                            bAllRowsCollapsed = false;
+
                         pTmpRow = static_cast<SwRowFrame*>(pTmpRow->GetNext());
                     }
+
+                    if (bAllRowsCollapsed)
+                    {
+                        // All rows of this table have 0 height -> set height of the table itself as well.
+                        (pTmp->Frame().*fnRect->fnSetHeight)(0);
+                        (pTmp->Prt().*fnRect->fnSetTop)(0);
+                        (pTmp->Prt().*fnRect->fnSetHeight)(0);
+                    }
+                    else
+                        bAllLowersCollapsed = false;
                 }
                 else
                 {
