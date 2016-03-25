@@ -199,7 +199,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
         //  like in GetString for document (column)
         Color* pColor;
         sal_uLong nNumFmt = rDoc.GetNumberFormat(rPos);
-        aVal = GetString(rDoc, rPos, nNumFmt, &pColor, *rDoc.GetFormatTable());
+        GetString(rCell, nNumFmt, aVal, &pColor, *rDoc.GetFormatTable(), &rDoc);
     }
     return aVal;
 }
