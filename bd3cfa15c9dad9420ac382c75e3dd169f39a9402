@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_1f994e6f",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-25T08:52:31Z",
+      "side": 1,
+      "message": "the curly bracket should go into new-line - that is what we (mostly) use consistently - so you should too..",
+      "range": {
+        "startLine": 103,
+        "startChar": 45,
+        "endLine": 103,
+        "endChar": 49
+      },
+      "revId": "bd3cfa15c9dad9420ac382c75e3dd169f39a9402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ff9d5a5a",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-25T08:52:31Z",
+      "side": 1,
+      "message": "You could also use \"for (Image\u0026 aImage : imgVector)\"",
+      "range": {
+        "startLine": 103,
+        "startChar": 8,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "bd3cfa15c9dad9420ac382c75e3dd169f39a9402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5fa3c69e",
+        "filename": "svtools/source/contnr/imivctl1.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-03-25T08:52:31Z",
+      "side": 1,
+      "message": "curly bracket",
+      "range": {
+        "startLine": 151,
+        "startChar": 37,
+        "endLine": 151,
+        "endChar": 39
+      },
+      "revId": "bd3cfa15c9dad9420ac382c75e3dd169f39a9402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
