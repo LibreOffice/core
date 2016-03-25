@@ -32,6 +32,7 @@
 #include "veewipe.hxx"
 #include "iriswipe.hxx"
 #include "ellipsewipe.hxx"
+#include "ovalwipe.hxx"
 #include "checkerboardwipe.hxx"
 #include "randomwipe.hxx"
 #include "waterfallwipe.hxx"
@@ -90,6 +91,9 @@ namespace slideshow
             case ELLIPSEWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new EllipseWipe(nSubType) );
+            case OVALWIPE:
+                return ParametricPolyPolygonSharedPtr(
+                    new OvalWipe(nSubType) );
             case CHECKERBOARDWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new CheckerBoardWipe );

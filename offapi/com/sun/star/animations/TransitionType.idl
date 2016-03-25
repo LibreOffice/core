@@ -64,6 +64,7 @@ constants TransitionType
     const short PUSHWIPE = 35;
     const short SLIDEWIPE = 36;
     const short FADE = 37;
+    const short OVALWIPE = 44;
 
     // Non-standard, not in SMIL 2.0:
     const short RANDOMBARWIPE = 38;
