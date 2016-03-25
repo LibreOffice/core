@@ -1723,6 +1723,11 @@
           <value xml:lang="en-US">Left</value>
         </prop>
       </node>
+      <node oor:name="oval" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Oval</value>
+        </prop>
+      </node>
       <node oor:name="circle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Circle</value>
@@ -2041,6 +2046,14 @@
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
           <value>vertical</value>
+        </prop>
+      </node>
+      <node oor:name="shape-oval" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>shape</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>oval</value>
         </prop>
       </node>
       <node oor:name="shape-circle" oor:op="replace">
