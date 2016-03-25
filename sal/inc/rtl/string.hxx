@@ -32,6 +32,9 @@
 #include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include <rtl/string.h>
+#ifdef DBG_UTIL
+#include <tools/debug.hxx>
+#endif /* DBG_UTIL */
 
 #if !defined EXCEPTIONS_OFF
 #include <new>
@@ -969,8 +972,10 @@ struct CStringHash
 /* Helper methods to support OString messages in OSL_ENSURE, DBG_ERROR, DBG_WARN, DBG_TRACE, etc. */
 inline sal_Bool SAL_CALL osl_assertFailedLine( const sal_Char* pszFileName, sal_Int32 nLine, const ::rtl::OString& rMessage)
     { return osl_assertFailedLine( pszFileName, nLine, rMessage.getStr()); }
+#ifdef DBG_UTIL
 inline void DbgOut( const rtl::OString& rMessage, sal_uInt16 nOutType, const sal_Char* pFileName, sal_uInt16 nLineNum )
     { DbgOut( rMessage.getStr(), nOutType, pFileName, nLineNum); }
+#endif /* DBG_UTIL */
 
 #endif /* __cplusplus */
 
