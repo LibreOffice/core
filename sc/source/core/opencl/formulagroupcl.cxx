@@ -113,34 +113,32 @@ std::string StackVarEnumToString(StackVar const e)
 {
     switch (e)
     {
-#define CASE(x) case sv##x: return #x
-        CASE(Byte);
-        CASE(Double);
-        CASE(String);
-        CASE(SingleRef);
-        CASE(DoubleRef);
-        CASE(Matrix);
-        CASE(Index);
-        CASE(Jump);
-        CASE(External);
-        CASE(FAP);
-        CASE(JumpMatrix);
-        CASE(RefList);
-        CASE(EmptyCell);
-        CASE(MatrixCell);
-        CASE(HybridCell);
-        CASE(HybridValueCell);
-        CASE(ExternalSingleRef);
-        CASE(ExternalDoubleRef);
-        CASE(ExternalName);
-        CASE(SingleVectorRef);
-        CASE(DoubleVectorRef);
-        CASE(Subroutine);
-        CASE(Error);
-        CASE(Missing);
-        CASE(Sep);
-        CASE(Unknown);
-#undef CASE
+        case svByte:              return "Byte";
+        case svDouble:            return "Double";
+        case svString:            return "String";
+        case svSingleRef:         return "SingleRef";
+        case svDoubleRef:         return "DoubleRef";
+        case svMatrix:            return "Matrix";
+        case svIndex:             return "Index";
+        case svJump:              return "Jump";
+        case svExternal:          return "External";
+        case svFAP:               return "FAP";
+        case svJumpMatrix:        return "JumpMatrix";
+        case svRefList:           return "RefList";
+        case svEmptyCell:         return "EmptyCell";
+        case svMatrixCell:        return "MatrixCell";
+        case svHybridCell:        return "HybridCell";
+        case svHybridValueCell:   return "HybridValueCell";
+        case svExternalSingleRef: return "ExternalSingleRef";
+        case svExternalDoubleRef: return "ExternalDoubleRef";
+        case svExternalName:      return "ExternalName";
+        case svSingleVectorRef:   return "SingleVectorRef";
+        case svDoubleVectorRef:   return "DoubleVectorRef";
+        case svSubroutine:        return "Subroutine";
+        case svError:             return "Error";
+        case svMissing:           return "Missing";
+        case svSep:               return "Sep";
+        case svUnknown:           return "Unknown";
     }
     return std::to_string(static_cast<int>(e));
 }
