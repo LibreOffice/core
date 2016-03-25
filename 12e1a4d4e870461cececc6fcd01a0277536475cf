@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_3f51b263",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-25T18:40:31Z",
+      "side": 1,
+      "message": "Thanks forgot to remove those.\nDone",
+      "parentUuid": "9ad45d7e_64f8c37d",
+      "revId": "12e1a4d4e870461cececc6fcd01a0277536475cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_44f5bf81",
         "filename": "sc/source/ui/docshell/docsh4.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-03-24T07:29:02Z",
       "side": 1,
       "message": "rather use Get\u003cSfxBoolItem\u003e(ATTR_PAGE_SHARED) here and similarly below",
+      "revId": "12e1a4d4e870461cececc6fcd01a0277536475cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7f4b2ab1",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-25T18:40:31Z",
+      "side": 1,
+      "message": "guess you meant the neat GetItem template.\nwell following code compiles and passes unit tests.\n\nbool bShareHeader \u003d rStyleSet.GetItem\u003cSvxSetItem\u003e(ATTR_PAGE_HEADERSET)-\u003eGetItemSet()\n    .GetItem\u003cSfxBoolItem\u003e(ATTR_PAGE_SHARED)-\u003eGetValue();\nbool bShareFooter \u003d rStyleSet.GetItem\u003cSvxSetItem\u003e(ATTR_PAGE_FOOTERSET)-\u003eGetItemSet()\n   .GetItem\u003cSfxBoolItem\u003e(ATTR_PAGE_SHARED)-\u003eGetValue();\n\nBut GetItem returns a pointer and I don\u0027t know how safe it would be without null pointer checks.",
+      "parentUuid": "9ad45d7e_44f5bf81",
       "revId": "12e1a4d4e870461cececc6fcd01a0277536475cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
