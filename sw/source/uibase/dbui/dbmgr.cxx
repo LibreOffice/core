@@ -158,11 +158,14 @@ const sal_Char cActiveConnection[] = "ActiveConnection";
         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_##type, \
             SwDocShell::GetEventName(STR_SW_EVENT_##type), shell))
 
-#define RESCHEDULE_GUI \
-    do { \
-        for( sal_uInt16 i = 0; i < 25; i++) \
-            Application::Reschedule(); \
-    } while( 0 )
+namespace {
+
+void rescheduleGui() {
+    for( sal_uInt16 i = 0; i < 25; i++)
+        Application::Reschedule();
+}
+
+}
 
 enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
@@ -1224,7 +1227,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );
         pProgressDlg->Show();
 
-        RESCHEDULE_GUI;
+        rescheduleGui();
     }
 
     if( bCreateSingleFile && !pTargetView )
@@ -1347,7 +1350,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 pProgressDlg->Update();
             }
 
-            RESCHEDULE_GUI;
+            rescheduleGui();
 
             // Create a copy of the source document and work with that one instead of the source.
             // If we're not in the single file mode (which requires modifying the document for the merging),
@@ -1439,8 +1442,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                     pWorkView->StartPrint( aOptions, bIsMergeSilent, rMergeDescriptor.bPrintAsync );
                     // some GetPrinter functions have a true default, so keep the false
-                    SfxPrinter* pDocPrt = pWorkView->GetPrinter( false );
-                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
+                    SfxPrinter* pDocPrt = pWorkView->GetPrinter();
+                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
                     if( !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup ) )
                         MergeCancel();
                 }
@@ -1534,7 +1537,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     }
     else if( IsMergeOk() ) // && bCreateSingleFile
     {
-        RESCHEDULE_GUI;
+        rescheduleGui();
 
         // sw::DocumentLayoutManager::CopyLayoutFormat() did not generate
         // unique fly names, do it here once.
@@ -1549,7 +1552,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             aLayout->AllCheckPageDescs();
         }
 
-        RESCHEDULE_GUI;
+        rescheduleGui();
 
         if( IsMergeOk() && bMT_FILE )
         {
@@ -1586,7 +1589,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             xTargetDocShell->DoClose();
     }
 
-    RESCHEDULE_GUI;
+    rescheduleGui();
 
     pProgressDlg.disposeAndClear();
 
