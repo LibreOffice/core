@@ -49,9 +49,7 @@ class ScHeaderFooterTextObj;
 
 struct ScHeaderFieldData;
 
-#define SC_HDFT_LEFT    0
-#define SC_HDFT_CENTER  1
-#define SC_HDFT_RIGHT   2
+enum class ScHeaderFooterPart{ LEFT, CENTER, RIGHT };
 
 //  ScHeaderFooterContentObj is a dumb container which must be re-written into
 //  the page template using setPropertyValue
@@ -113,7 +111,7 @@ class ScHeaderFooterTextData
 private:
     std::unique_ptr<EditTextObject> mpTextObj;
     rtl::Reference<ScHeaderFooterContentObj> rContentObj;
-    sal_uInt16                      nPart;
+    ScHeaderFooterPart          nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
     bool                        bDataValid;
@@ -122,7 +120,7 @@ public:
     ScHeaderFooterTextData(const ScHeaderFooterTextData&) = delete;
     const ScHeaderFooterTextData& operator=(const ScHeaderFooterTextData&) = delete;
     ScHeaderFooterTextData(
-        rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+        rtl::Reference<ScHeaderFooterContentObj> const & rContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
     ~ScHeaderFooterTextData();
 
                             // helper functions
@@ -131,7 +129,7 @@ public:
     void UpdateData(EditEngine& rEditEngine);
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
-    sal_uInt16                  GetPart() const         { return nPart; }
+    ScHeaderFooterPart      GetPart() const         { return nPart; }
     rtl::Reference<ScHeaderFooterContentObj> GetContentObj() const { return rContentObj; }
 
     const EditTextObject* GetTextObject() const { return mpTextObj.get(); }
@@ -160,7 +158,7 @@ private:
 
 public:
     ScHeaderFooterTextObj(
-        rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+        rtl::Reference<ScHeaderFooterContentObj> const & rContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
     virtual ~ScHeaderFooterTextObj();
 
     const EditTextObject* GetTextObject() const;
