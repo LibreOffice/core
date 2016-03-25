@@ -485,12 +485,13 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     // Search the name of the RangeName.
     if (nOldSheet >= 0)
     {
+        SCTAB nOldTab = nOldSheet;
         // XXX bGlobalNamesToLocal is also a synonym for copied sheet.
         if (bGlobalNamesToLocal && bSameDoc && rNewPos.Tab() <= rOldPos.Tab())
             // Sheet was already inserted before old position.
-            ++nOldSheet;
+            ++nOldTab;
 
-        const ScRangeName* pRangeName = pOldDoc->GetRangeName(nOldSheet);
+        const ScRangeName* pRangeName = pOldDoc->GetRangeName(nOldTab);
         pOldRangeData = pRangeName ? pRangeName->findByIndex(nOldIndex) : nullptr;
         if (!pOldRangeData)
             return;     // might be an error in the formula array
