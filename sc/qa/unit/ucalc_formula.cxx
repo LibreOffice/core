@@ -3183,6 +3183,39 @@ void Test::testFormulaRefUpdateNameCopySheet()
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
+
+    m_pDoc->InsertTab(0, "Test2");
+    // Local name referencing sheet Test2.
+    bInserted = m_pDoc->GetRangeName(0)->insert( new ScRangeData( m_pDoc, "localname", "$Test2.$A$1"));
+    CPPUNIT_ASSERT(bInserted);
+    m_pDoc->SetString(ScAddress(0,0,0), "=SHEET()");
+    m_pDoc->SetString(ScAddress(1,0,0), "=localname");
+    nVal = m_pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Localname sheet number should be 1", 1.0, nVal);
+
+    // Insert sheet before and shift sheet with local name.
+    m_pDoc->InsertTab(0, "Test1");
+    pName = m_pDoc->GetRangeName(1)->findByUpperName("LOCALNAME");
+    CPPUNIT_ASSERT_MESSAGE("Org sheet-local name should exist", pName);
+    nVal = m_pDoc->GetValue(1,0,1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Localname sheet number should be 2", 2.0, nVal);
+
+    // Copy sheet before, shifting following now two sheets.
+    m_pDoc->CopyTab(1, 0);
+    pName = m_pDoc->GetRangeName(0)->findByUpperName("LOCALNAME");
+    CPPUNIT_ASSERT_MESSAGE("New sheet-local name should exist", pName);
+    nVal = m_pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("New sheet number should be 1", 1.0, nVal);
+    pName = m_pDoc->GetRangeName(1)->findByUpperName("LOCALNAME");
+    CPPUNIT_ASSERT_MESSAGE("Old sheet-local name should not exist", !pName);
+    pName = m_pDoc->GetRangeName(2)->findByUpperName("LOCALNAME");
+    CPPUNIT_ASSERT_MESSAGE("Org sheet-local name should exist", pName);
+    nVal = m_pDoc->GetValue(1,0,2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("New sheet number should be 3", 3.0, nVal);
+
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testFormulaRefUpdateNameDelete()
