@@ -213,20 +213,28 @@ OUString lcl_RangeSequenceToString(
     return aResult.makeStringAndClear();
 }
 
-OUString lcl_GetFormattedString( ScDocument* pDoc, const ScAddress& rPos )
+OUString lcl_GetFormattedString(ScDocument* pDoc, ScRefCellValue& rCell, const ScAddress& rAddr)
 {
     // return text/edit cell string content, with line feeds in edit cells
 
     if (!pDoc)
         return EMPTY_OUSTRING;
 
-    switch (pDoc->GetCellType(rPos))
+    switch (rCell.meType)
     {
         case CELLTYPE_STRING:
-            return pDoc->GetString(rPos);
+        {
+            OUString aStr;
+            Color* pColor;
+            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+
+            sal_uLong nFormat = pDoc->GetNumberFormat(rAddr);
+            ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *pFormatter, pDoc);
+            return aStr;
+        }
         case CELLTYPE_EDIT:
         {
-            const EditTextObject* pData = pDoc->GetEditText(rPos);
+            const EditTextObject* pData = rCell.mpEditText;
             if (!pData)
                 return EMPTY_OUSTRING;
 
@@ -3095,7 +3103,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             break;
         case table::CellContentType_TEXT :
             {
-                OUString sFormattedString(lcl_GetFormattedString(pDoc, aCell.maCellAddress));
+                OUString sFormattedString(lcl_GetFormattedString(pDoc, aCell.maBaseCell, aCell.maCellAddress));
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sCellString, sFormattedString);
