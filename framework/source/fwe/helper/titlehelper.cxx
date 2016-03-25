@@ -249,13 +249,13 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     // SYNCHRONIZED ->
     aLock.reset ();
 
+         m_xOwner        = nullptr;
          m_sTitle        = OUString ();
          m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
     aLock.clear ();
     // <- SYNCHRONIZED
 
-    impl_sendTitleChangedEvent ();
 }
 
 void TitleHelper::impl_sendTitleChangedEvent ()
