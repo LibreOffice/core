@@ -102,16 +102,6 @@ using namespace ::com::sun::star;
 #include <documentlinkmgr.hxx>
 #include <memory>
 
-#define IS_SHARE_HEADER(set) \
-    static_cast<const SfxBoolItem&>( \
-        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
-            Get(ATTR_PAGE_SHARED)).GetValue()
-
-#define IS_SHARE_FOOTER(set) \
-    static_cast<const SfxBoolItem&>( \
-        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
-            Get(ATTR_PAGE_SHARED)).GetValue()
-
 void ScDocShell::Execute( SfxRequest& rReq )
 {
     //  SID_SC_RANGE (Range),
@@ -1640,8 +1630,18 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             SvxPageUsage( static_cast<const SvxPageItem&>(
                                             rStyleSet.Get( ATTR_PAGE )).
                                                 GetPageUsage() );
-                        bool bShareHeader = IS_SHARE_HEADER(rStyleSet);
-                        bool bShareFooter = IS_SHARE_FOOTER(rStyleSet);
+                        bool bShareHeader = static_cast<const SfxBoolItem&>(
+                                                static_cast<const SvxSetItem&>(rStyleSet
+                                                        .Get(ATTR_PAGE_HEADERSET))
+                                                    .GetItemSet()
+                                                    .Get(ATTR_PAGE_SHARED))
+                                                .GetValue();
+                        bool bShareFooter = static_cast<const SfxBoolItem&>(
+                                                static_cast<const SvxSetItem&>(rStyleSet
+                                                        .Get(ATTR_PAGE_FOOTERSET))
+                                                    .GetItemSet()
+                                                    .Get(ATTR_PAGE_SHARED))
+                                                .GetValue();
                         sal_uInt16 nResId = 0;
 
                         switch ( eUsage )
