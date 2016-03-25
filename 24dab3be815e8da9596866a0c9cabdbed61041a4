@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_df7856fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2016-03-25T16:53:46Z",
+      "side": 1,
+      "message": "Please use tdf#96896 (with # sign)",
+      "revId": "24dab3be815e8da9596866a0c9cabdbed61041a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_bf7da2e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2016-03-25T16:53:46Z",
+      "side": 1,
+      "message": "No need for bug number again.\nAlso, please limit each line to about 80 characters.",
+      "revId": "24dab3be815e8da9596866a0c9cabdbed61041a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
