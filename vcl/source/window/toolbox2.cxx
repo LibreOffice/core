@@ -107,7 +107,8 @@ ImplToolItem::ImplToolItem()
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             ToolBoxItemBits nItemBits ) :
-    maImage( rImage )
+    maImage( rImage ),
+    maImageOriginal( rImage )
 {
     init(nItemId, nItemBits, false);
 }
@@ -122,6 +123,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const OUString& rText,
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             const OUString& rText, ToolBoxItemBits nItemBits ) :
     maImage( rImage ),
+    maImageOriginal( rImage ),
     maText( rText )
 {
     init(nItemId, nItemBits, false);
@@ -131,6 +133,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         mpWindow                ( rItem.mpWindow ),
         mpUserData              ( rItem.mpUserData ),
         maImage                 ( rItem.maImage ),
+        maImageOriginal         ( rItem.maImageOriginal ),
         mnImageAngle            ( rItem.mnImageAngle ),
         mbMirrorMode            ( rItem.mbMirrorMode ),
         maText                  ( rItem.maText ),
@@ -169,6 +172,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     mpWindow                = rItem.mpWindow;
     mpUserData              = rItem.mpUserData;
     maImage                 = rItem.maImage;
+    maImageOriginal         = rItem.maImageOriginal;
     mnImageAngle            = rItem.mnImageAngle;
     mbMirrorMode            = rItem.mbMirrorMode;
     maText                  = rItem.maText;
@@ -487,6 +491,7 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         Bitmap aBmp = Bitmap( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
         aItem.maImage = Image( aBmp, IMAGE_STDBTN_COLOR );
+        aItem.maImageOriginal = aItem.maImage;
         bImage = true;
     }
     if ( nObjMask & RSC_TOOLBOXITEM_IMAGE )
@@ -509,7 +514,10 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 
     // if no image is loaded, try to load one from the image list
     if ( !bImage && aItem.mnId )
+    {
         aItem.maImage = maImageList.GetImage( aItem.mnId );
+        aItem.maImageOriginal = aItem.maImage;
+    }
 
     // if this is a ButtonItem, check ID
     bool bNewCalc;
