@@ -1217,6 +1217,8 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             nY = pCnt->Frame().Left() - rNew.X();
             if ( bVertL2R )
                 nY = -nY;
+            else
+                nY += pCnt->Frame().Width() - Frame().Width();
             nY -= pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         }
         else
