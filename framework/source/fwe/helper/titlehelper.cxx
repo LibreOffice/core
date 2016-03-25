@@ -249,6 +249,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     // SYNCHRONIZED ->
     aLock.reset ();
 
+         m_xOwner        = nullptr;
          m_sTitle        = OUString ();
          m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
@@ -268,6 +269,8 @@ void TitleHelper::impl_sendTitleChangedEvent ()
     aLock.clear ();
     // <- SYNCHRONIZED
 
+    if(!(aEvent.Source).is())
+        return;
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListener.getContainer( cppu::UnoType<css::frame::XTitleChangeListener>::get());
     if ( ! pContainer)
         return;
