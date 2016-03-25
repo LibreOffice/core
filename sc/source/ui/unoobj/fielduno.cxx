@@ -481,13 +481,19 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     uno::Reference<text::XTextRange> xTextRange;
     rtl::Reference<ScHeaderFooterContentObj> rContentObj = mrData.GetContentObj();
     uno::Reference<text::XText> xText;
-    sal_uInt16 nPart = mrData.GetPart();
-    if (nPart == SC_HDFT_LEFT)
-        xText = rContentObj->getLeftText();
-    else if (nPart == SC_HDFT_CENTER)
-        xText = rContentObj->getCenterText();
-    else
-        xText = rContentObj->getRightText();
+
+    switch ( mrData.GetPart() )
+    {
+        case ScHeaderFooterPart::LEFT:
+            xText = rContentObj->getLeftText();
+        break;
+        case ScHeaderFooterPart::CENTER:
+            xText = rContentObj->getCenterText();
+        break;
+        case ScHeaderFooterPart::RIGHT:
+            xText = rContentObj->getRightText();
+        break;
+    }
 
     uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
     xTextRange = xTemp;
