@@ -105,3 +105,9 @@ cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
+# Find Toolbar
+cmd/lc_scrolltonext.png cmd/lc_downsearch.png
+cmd/sc_scrolltonext.png cmd/sc_downsearch.png
+cmd/lc_scrolltoprevious.png cmd/lc_upsearch.png
+cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
