@@ -59,17 +59,17 @@ class Fdo84315(unittest.TestCase):
 
         xResultset = xStatement.executeQuery('SELECT "count" FROM "test_table"')
         expected_values = deque([42, 4711])
-        xMeta = _testQuery("count", NUMERIC)
+        xMeta = _testQuery('count', NUMERIC)
         _testResultSetInteger(xResultset, expected_values)
 
         xResultset = xStatement.executeQuery('SELECT "name" FROM "test_table"')
         expected_values = deque(['foo', 'bar'])
-        xMeta = _testQuery("name", VAR_CHAR)
+        xMeta = _testQuery('name', VAR_CHAR)
         _testResultSetString(xResultset, expected_values)
 
         xResultset = xStatement.executeQuery('SELECT "id" FROM "test_table"')
         expected_values = deque([0, 1])
-        xMeta = _testQuery("id", INTEGER)
+        xMeta = _testQuery('id', INTEGER)
         _testResultSetInteger(xResultset, expected_values)
 
         xCon.dispose()
