@@ -34,23 +34,6 @@ ScFormulaListener::ScFormulaListener(ScDocument* pDoc):
 {
 }
 
-namespace {
-
-std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
-{
-    rStrm << "Col: " << rAddr.Col() << ", Row: " << rAddr.Row() << ", Tab: " << rAddr.Tab();
-    return rStrm;
-}
-
-std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
-{
-    rStrm << "Start: " << rRange.aStart << std::endl;
-    rStrm << "End: " << rRange.aEnd << std::endl;
-    return rStrm;
-}
-
-}
-
 void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange)
 {
     if (!pArr)
