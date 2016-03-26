@@ -18,6 +18,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
             <property name="label" translatable="yes">_Format:</property>
             <property name="use_underline">True</property>
           </object>
@@ -30,6 +31,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
             <property name="label" translatable="yes">Background:</property>
           </object>
           <packing>
@@ -112,6 +114,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
             <property name="hexpand">True</property>
             <property name="label" translatable="yes">Master Slide:</property>
             <property name="ellipsize">start</property>
@@ -136,8 +139,8 @@
         </child>
         <child>
           <object class="svxlo-SvxFillAttrBox" id="fillattr1">
-            <property name="can_focus">False</property>
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -146,8 +149,8 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="fillattr2">
-            <property name="can_focus">False</property>
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -212,7 +215,16 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Orientation: </property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
         </child>
         <child>
           <placeholder/>

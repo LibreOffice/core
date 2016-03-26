@@ -590,7 +590,7 @@
       </node>
       <node oor:name="SlideBackgroundPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">SlideBackground</value>
+          <value xml:lang="en-US">Slide Background</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>false</value>
@@ -603,11 +603,11 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Impress, DrawPage,        visible   ;
-            Impress, default,         visible   ;
-            Impress, HandoutPage,     visible   ;
-            Impress, NotesPage,       visible   ;
-            Impress, SlidesorterPage, visible   ;
+            Impress, DrawPage,        visible, .uno:PageSetup  ;
+            Impress, default,         visible, .uno:PageSetup  ;
+            Impress, HandoutPage,     visible, .uno:PageSetup  ;
+            Impress, NotesPage,       visible, .uno:PageSetup  ;
+            Impress, SlidesorterPage, visible, .uno:PageSetup  ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
