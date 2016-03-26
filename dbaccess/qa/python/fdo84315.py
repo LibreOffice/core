@@ -14,8 +14,6 @@ import unohelper
 from org.libreoffice.unotest import UnoInProcess
 
 class Fdo84315(unittest.TestCase):
-    _uno = None
-    _xDoc = None
 
     @classmethod
     def setUpClass(cls):
@@ -28,6 +26,25 @@ class Fdo84315(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
+    def __test_Query(self, column_name, expected_type, xResultset):
+        self.assertTrue(xResultset)
+        xMeta = xResultset.MetaData
+        self.assertEqual(xMeta.ColumnCount, 1)
+        self.assertEqual(xResultset.findColumn(column_name), 1)
+        self.assertEqual(xMeta.getColumnName(1), column_name)
+        self.assertEqual(xMeta.getColumnType(1), expected_type)
+        return xMeta
+
+    def __test_ResultSetInteger(self, xResultset, expected_values):
+        while xResultset.next():
+            self.assertEqual(xResultset.getInt(1), expected_values.popleft())
+        self.assertEqual(len(expected_values), 0)
+
+    def __test_ResultSetString(self, xResultset, expected_values):
+        while xResultset.next():
+            self.assertEqual(xResultset.getString(1), expected_values.popleft())
+        self.assertEqual(len(expected_values), 0)
+
     def test_fdo84315(self):
         xDoc = self.__class__._xDoc
         xDataSource = xDoc.DataSource
@@ -38,39 +55,20 @@ class Fdo84315(unittest.TestCase):
         VAR_CHAR = 12
         INTEGER = 4
 
-        def _testQuery(column_name, expected_type):
-            self.assertTrue(xResultset)
-            xMeta = xResultset.MetaData
-            self.assertEqual(xMeta.ColumnCount, 1)
-            self.assertEqual(xResultset.findColumn(column_name), 1)
-            self.assertEqual(xMeta.getColumnName(1), column_name)
-            self.assertEqual(xMeta.getColumnType(1), expected_type)
-            return xMeta
-
-        def _testResultSetInteger(xResultSet, expected_values):
-            while xResultset.next():
-                self.assertEqual(xResultset.getInt(1), expected_values.popleft())
-            self.assertEqual(len(expected_values), 0)
-
-        def _testResultSetString(xResultSet, expected_values):
-            while xResultset.next():
-                self.assertEqual(xResultset.getString(1), expected_values.popleft())
-            self.assertEqual(len(expected_values), 0)
-
         xResultset = xStatement.executeQuery('SELECT "count" FROM "test_table"')
         expected_values = deque([42, 4711])
-        xMeta = _testQuery("count", NUMERIC)
-        _testResultSetInteger(xResultset, expected_values)
+        xMeta = self.__test_Query('count', NUMERIC, xResultset)
+        self.__test_ResultSetInteger(xResultset, expected_values)
 
         xResultset = xStatement.executeQuery('SELECT "name" FROM "test_table"')
         expected_values = deque(['foo', 'bar'])
-        xMeta = _testQuery("name", VAR_CHAR)
-        _testResultSetString(xResultset, expected_values)
+        xMeta = self.__test_Query('name', VAR_CHAR, xResultset)
+        self.__test_ResultSetString(xResultset, expected_values)
 
         xResultset = xStatement.executeQuery('SELECT "id" FROM "test_table"')
         expected_values = deque([0, 1])
-        xMeta = _testQuery("id", INTEGER)
-        _testResultSetInteger(xResultset, expected_values)
+        xMeta = self.__test_Query('id', INTEGER, xResultset)
+        self.__test_ResultSetInteger(xResultset, expected_values)
 
         xCon.dispose()
 
