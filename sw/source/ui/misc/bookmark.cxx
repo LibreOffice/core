@@ -337,13 +337,13 @@ void SwInsertBookmarkDlg::dispose()
 BookmarkTable::BookmarkTable(SvSimpleTableContainer& rParent) :
     SvSimpleTable(rParent, 0)
 {
-    static long nTabs[] = {3, 0, 30, 150};
+    static long nTabs[] = {3, 0, 40, 150};
 
     SetTabs(nTabs, MAP_PIXEL);
     SetSelectionMode(MULTIPLE_SELECTION);
-    InsertHeaderEntry("Page");
-    InsertHeaderEntry("Name");
-    InsertHeaderEntry("Text");
+    InsertHeaderEntry(OUString(SW_RES(STR_PAGE));
+    InsertHeaderEntry(OUString(SW_RES(STR_BOOKMARK_NAME)));
+    InsertHeaderEntry(OUString(SW_RES(STR_BOOKMARK_TEXT)));
 
     rParent.SetTable(this);
 }
