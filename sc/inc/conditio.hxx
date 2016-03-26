@@ -26,6 +26,10 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 
+#include <svl/hint.hxx>
+#include <svl/listener.hxx>
+#include <svl/broadcast.hxx>
+
 #include <comphelper/stl_types.hxx>
 
 #include <rtl/math.hxx>
@@ -81,6 +85,31 @@ enum ScConditionMode
     SC_COND_CONTAINS_TEXT,
     SC_COND_NOT_CONTAINS_TEXT,
     SC_COND_NONE
+};
+
+class ScFormulaListener : public SvtListener
+{
+private:
+    std::vector<ScRange> maCells;
+    mutable bool mbDirty;
+    ScDocument* mpDoc;
+    std::function<void()> maCallbackFunction;
+
+    void startListening(ScTokenArray* pTokens, const ScRange& rPos);
+
+public:
+    explicit ScFormulaListener(ScFormulaCell* pCell);
+    explicit ScFormulaListener(ScDocument* pDoc);
+    virtual ~ScFormulaListener();
+
+    void Notify( const SfxHint& rHint ) override;
+
+    bool NeedsRepaint() const;
+
+    void resetTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
+    void addTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
+    void stopListening();
+    void setCallback(std::function<void()> aCallbackFunction);
 };
 
 class ScConditionalFormat;
@@ -176,6 +205,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     bool                bRelRef1;
     bool                bRelRef2;
     bool                bFirstRun;
+    std::unique_ptr<ScFormulaListener> mpListener;
 
     void    MakeCells( const ScAddress& rPos );
     void    Compile( const OUString& rExpr1, const OUString& rExpr2,
@@ -187,6 +217,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
 
     bool    IsValid( double nArg, const ScAddress& rPos ) const;
     bool    IsValidStr( const OUString& rArg, const ScAddress& rPos ) const;
+    void    StartListening();
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -205,7 +236,7 @@ public:
 
     bool            operator== ( const ScConditionEntry& r ) const;
 
-    virtual void SetParent( ScConditionalFormat* pNew ) override  { pCondFormat = pNew; }
+    virtual void SetParent( ScConditionalFormat* pNew ) override;
 
     bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
@@ -234,8 +265,6 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
 
-    void            SourceChanged( const ScAddress& rChanged );
-
     bool            MarkUsedExternalReferences() const;
 
     virtual condformat::ScFormatEntryType GetType() const override { return condformat::CONDITION; }
@@ -246,6 +275,8 @@ public:
 
     virtual void endRendering() override;
     virtual void startRendering() override;
+
+    bool NeedsRepaint() const;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
@@ -413,8 +444,6 @@ public:
     void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            RenameCellStyle( const OUString& rOld, const OUString& rNew );
 
-    void            SourceChanged( const ScAddress& rAddr );
-
     const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
     const OUString& GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const;
@@ -478,8 +507,6 @@ public:
     void    RenameCellStyle( const OUString& rOld, const OUString& rNew );
     void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
-    void    SourceChanged( const ScAddress& rAddr );
-
     typedef ConditionalFormatContainer::iterator iterator;
     typedef ConditionalFormatContainer::const_iterator const_iterator;
 
@@ -492,6 +519,7 @@ public:
     bool empty() const;
 
     void erase(sal_uLong nIndex);
+    void clear();
 
     void startRendering();
     void endRendering();

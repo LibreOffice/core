@@ -54,6 +54,7 @@
 #include "postit.hxx"
 #include "charthelper.hxx"
 #include "interpre.hxx"
+#include "conditio.hxx"
 #include <documentlinkmgr.hxx>
 
 using namespace ::com::sun::star;
@@ -517,7 +518,13 @@ void ScDocument::Clear( bool bFromDestructor )
 {
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
+        if (*it)
+            (*it)->GetCondFormList()->clear();
+
+    it = maTabs.begin();
+    for (;it != maTabs.end(); ++it)
         delete *it;
+
     maTabs.clear();
     delete pSelectionAttr;
     pSelectionAttr = nullptr;

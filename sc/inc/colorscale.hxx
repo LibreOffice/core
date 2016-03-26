@@ -15,9 +15,6 @@
 #include "rangelst.hxx"
 #include "conditio.hxx"
 
-#include <svl/listener.hxx>
-#include <svl/broadcast.hxx>
-
 #include <memory>
 #include <vector>
 
@@ -28,7 +25,6 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 class BitmapEx;
-class ScFormulaListener;
 
 namespace sc {
     class IconSetBitmapMap : public std::map<sal_Int32, BitmapEx> {};

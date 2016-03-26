@@ -21,24 +21,6 @@
 
 #include <algorithm>
 
-class ScFormulaListener : public SvtListener
-{
-private:
-    std::vector<ScRange> maCells;
-    mutable bool mbDirty;
-    ScDocument* mpDoc;
-
-    void startListening(ScTokenArray* pTokens, const ScAddress& rPos);
-
-public:
-    explicit ScFormulaListener(ScFormulaCell* pCell);
-    virtual ~ScFormulaListener();
-
-    void Notify( const SfxHint& rHint ) override;
-
-    bool NeedsRepaint() const;
-};
-
 ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),
     mpDoc(pCell->GetDocument())
@@ -46,19 +28,47 @@ ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     startListening( pCell->GetCode(), pCell->aPos );
 }
 
-void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos)
+ScFormulaListener::ScFormulaListener(ScDocument* pDoc):
+    mbDirty(false),
+    mpDoc(pDoc)
 {
+}
+
+namespace {
+
+std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
+{
+    rStrm << "Col: " << rAddr.Col() << ", Row: " << rAddr.Row() << ", Tab: " << rAddr.Tab();
+    return rStrm;
+}
+
+std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
+{
+    rStrm << "Start: " << rRange.aStart << std::endl;
+    rStrm << "End: " << rRange.aEnd << std::endl;
+    return rStrm;
+}
+
+}
+
+void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange)
+{
+    if (!pArr)
+        return;
+
     pArr->Reset();
     formula::FormulaToken* t;
-    while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+    while ( ( t = pArr->GetNextReference() ) != nullptr )
     {
         switch (t->GetType())
         {
             case formula::svSingleRef:
             {
-                ScAddress aCell =  t->GetSingleRef()->toAbs(rPos);
-                if (aCell.IsValid())
-                    mpDoc->StartListeningCell(aCell, this);
+                ScAddress aCell = t->GetSingleRef()->toAbs(rRange.aStart);
+                ScAddress aCell2 = t->GetSingleRef()->toAbs(rRange.aEnd);
+                ScRange aRange(aCell, aCell2);
+                if (aRange.IsValid())
+                    mpDoc->StartListeningArea(aRange, false, this);
 
                 maCells.push_back(aCell);
             }
@@ -67,23 +77,28 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();
-                ScAddress aCell1 = rRef1.toAbs(rPos);
-                ScAddress aCell2 = rRef2.toAbs(rPos);
-                if (aCell1.IsValid() && aCell2.IsValid())
+                ScAddress aCell1 = rRef1.toAbs(rRange.aStart);
+                ScAddress aCell2 = rRef2.toAbs(rRange.aStart);
+                ScAddress aCell3 = rRef1.toAbs(rRange.aEnd);
+                ScAddress aCell4 = rRef2.toAbs(rRange.aEnd);
+                ScRange aRange1(aCell1, aCell3);
+                ScRange aRange2(aCell2, aCell4);
+                aRange1.ExtendTo(aRange2);
+                if (aRange1.IsValid())
                 {
                     if (t->GetOpCode() == ocColRowNameAuto)
                     {   // automagically
                         if ( rRef1.IsColRel() )
                         {   // ColName
-                            aCell2.SetRow(MAXROW);
+                            aRange1.aEnd.SetRow(MAXROW);
                         }
                         else
                         {   // RowName
-                            aCell2.SetCol(MAXCOL);
+                            aRange1.aEnd.SetCol(MAXCOL);
                         }
                     }
-                    mpDoc->StartListeningArea(ScRange(aCell1, aCell2), false, this);
-                    maCells.push_back(ScRange(aCell1, aCell2));
+                    mpDoc->StartListeningArea(aRange1, false, this);
+                    maCells.push_back(aRange1);
                 }
             }
             break;
@@ -91,7 +106,22 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
                 ;   // nothing
         }
     }
+}
 
+void ScFormulaListener::resetTokenArray(ScTokenArray* pArray, const ScRange& rRange)
+{
+    stopListening();
+    startListening(pArray, rRange);
+}
+
+void ScFormulaListener::addTokenArray(ScTokenArray* pArray, const ScRange& rRange)
+{
+    startListening(pArray, rRange);
+}
+
+void ScFormulaListener::setCallback(std::function<void()> aCallback)
+{
+    maCallbackFunction = aCallback;
 }
 
 namespace {
@@ -101,6 +131,7 @@ struct StopListeningCell
     StopListeningCell(ScDocument* pDoc, SvtListener* pListener):
         mpDoc(pDoc), mpListener(pListener) {}
 
+    // TODO: moggi: use EndListeningArea
     void operator()(const ScRange& rRange)
     {
         for(SCTAB nTab = rRange.aStart.Tab(),
@@ -125,14 +156,21 @@ private:
 
 }
 
-ScFormulaListener::~ScFormulaListener()
+void ScFormulaListener::stopListening()
 {
     std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
+}
+
+ScFormulaListener::~ScFormulaListener()
+{
+    stopListening();
 }
 
 void ScFormulaListener::Notify( const SfxHint& )
 {
     mbDirty = true;
+    if (maCallbackFunction)
+        maCallbackFunction();
 }
 
 bool ScFormulaListener::NeedsRepaint() const
