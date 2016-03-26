@@ -1310,6 +1310,9 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
                 nX = aPt.x;
                 nY = aPt.y;
+
+                // the position is set
+                mbDefPos = false;
             }
     }
 
