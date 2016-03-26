@@ -34,41 +34,43 @@ class Fdo84315(unittest.TestCase):
         xCon = xDataSource.getConnection('','')
         xStatement = xCon.createStatement()
 
+        NUMERIC = 2
+        VAR_CHAR = 12
+        INTEGER = 4
+
+        def _testQuery(column_name, expected_type):
+            self.assertTrue(xResultset)
+            xMeta = xResultset.MetaData
+            self.assertEqual(xMeta.ColumnCount, 1)
+            self.assertEqual(xResultset.findColumn(column_name), 1)
+            self.assertEqual(xMeta.getColumnName(1), column_name)
+            self.assertEqual(xMeta.getColumnType(1), expected_type)
+            return xMeta
+
+        def _testResultSetInteger(xResultSet, expected_values):
+            while xResultset.next():
+                self.assertEqual(xResultset.getInt(1), expected_values.popleft())
+            self.assertEqual(len(expected_values), 0)
+
+        def _testResultSetString(xResultSet, expected_values):
+            while xResultset.next():
+                self.assertEqual(xResultset.getString(1), expected_values.popleft())
+            self.assertEqual(len(expected_values), 0)
+
         xResultset = xStatement.executeQuery('SELECT "count" FROM "test_table"')
         expected_values = deque([42, 4711])
-        self.assertTrue(xResultset)
-        xMeta = xResultset.MetaData
-        self.assertEqual(xMeta.ColumnCount, 1)
-        self.assertEqual(xResultset.findColumn("count"), 1)
-        self.assertEqual(xMeta.getColumnName(1), "count");
-        self.assertEqual(xMeta.getColumnType(1), 2); # numeric
-        while xResultset.next():
-            self.assertEqual(xResultset.getInt(1), expected_values.popleft())
-        self.assertEqual(len(expected_values), 0)
+        xMeta = _testQuery("count", NUMERIC)
+        _testResultSetInteger(xResultset, expected_values)
 
         xResultset = xStatement.executeQuery('SELECT "name" FROM "test_table"')
         expected_values = deque(['foo', 'bar'])
-        self.assertTrue(xResultset)
-        xMeta = xResultset.MetaData
-        self.assertEqual(xMeta.ColumnCount, 1)
-        self.assertEqual(xResultset.findColumn("name"), 1)
-        self.assertEqual(xMeta.getColumnName(1), "name");
-        self.assertEqual(xMeta.getColumnType(1), 12); # varchar
-        while xResultset.next():
-            self.assertEqual(xResultset.getString(1), expected_values.popleft())
-        self.assertEqual(len(expected_values), 0)
+        xMeta = _testQuery("name", VAR_CHAR)
+        _testResultSetString(xResultset, expected_values)
 
         xResultset = xStatement.executeQuery('SELECT "id" FROM "test_table"')
         expected_values = deque([0, 1])
-        self.assertTrue(xResultset)
-        xMeta = xResultset.MetaData
-        self.assertEqual(xMeta.ColumnCount, 1)
-        self.assertEqual(xResultset.findColumn("id"), 1)
-        self.assertEqual(xMeta.getColumnName(1), "id");
-        self.assertEqual(xMeta.getColumnType(1), 4); # integer
-        while xResultset.next():
-            self.assertEqual(xResultset.getInt(1), expected_values.popleft())
-        self.assertEqual(len(expected_values), 0)
+        xMeta = _testQuery("id", INTEGER)
+        _testResultSetInteger(xResultset, expected_values)
 
         xCon.dispose()
 
