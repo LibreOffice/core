@@ -145,19 +145,4 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="letter"/>
-      <widget name="email"/>
-      <widget name="button1"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="letterft"/>
-      <widget name="emailft"/>
-    </widgets>
-  </object>
 </interface>
