@@ -1005,9 +1005,12 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
             switch( sal::static_int_cast<sal_uLong>(meType) )
             {
                 case SYS_WINMETAFILE:
-                case SYS_WNTMETAFILE: nCvtType = ConvertDataFormat::WMF; break;
-                case SYS_OS2METAFILE: nCvtType = ConvertDataFormat::MET; break;
-                case SYS_MACMETAFILE: nCvtType = ConvertDataFormat::PCT; break;
+                case SYS_WNTMETAFILE:
+                    nCvtType = ConvertDataFormat::WMF; break;
+                case SYS_OS2METAFILE:
+                    nCvtType = ConvertDataFormat::MET; break;
+                case SYS_MACMETAFILE:
+                    nCvtType = ConvertDataFormat::PICT; break;
 
                 default:
                     nCvtType = ConvertDataFormat::Unknown;

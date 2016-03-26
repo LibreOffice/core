@@ -334,9 +334,9 @@ void PDFWriter::SetTextAlign( ::TextAlign eAlign )
     xImplementation->setTextAlign( eAlign );
 }
 
-void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
+void PDFWriter::DrawJPEG( SvStream& rStreamData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
 {
-    xImplementation->drawJPGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rMask );
+    xImplementation->drawJPEGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rMask );
 }
 
 sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )

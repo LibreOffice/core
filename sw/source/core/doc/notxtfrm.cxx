@@ -801,7 +801,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
 
             if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aTempGraphic, aURL))
             {
-                if(aTempGraphic.IsLink() && GfxLinkType::NativeJpg == aTempGraphic.GetLink().GetType())
+                if(aTempGraphic.IsLink() && GfxLinkType::NativeJpeg == aTempGraphic.GetLink().GetType())
                 {
                     aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
                         aTargetTransform,

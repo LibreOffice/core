@@ -100,7 +100,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
         {
             GfxLinkType eType = i_Graphic.GetLink().GetType();
-            bIsJpeg = (eType == GfxLinkType::NativeJpg);
+            bIsJpeg = (eType == GfxLinkType::NativeJpeg);
             bIsPng = (eType == GfxLinkType::NativePng);
         }
 
@@ -159,15 +159,15 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 if( nDepth > 1 )
                     aBitmapEx.Convert( eConv );
             }
-            bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
+            bool bUseJPEGCompression = !i_rContext.m_bOnlyLosslessCompression;
             if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
-                bUseJPGCompression = false;
+                bUseJPEGCompression = false;
 
             SvMemoryStream  aStrm;
             Bitmap          aMask;
 
-            bool bTrueColorJPG = true;
-            if ( bUseJPGCompression )
+            bool bTrueColorJPEG = true;
+            if ( bUseJPEGCompression )
             {
 
                 sal_uInt32 nZippedFileSize = 0; // sj: we will calculate the filesize of a zipped bitmap
@@ -216,7 +216,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     xOut->flush();
                     if ( !bIsJpeg && xSeekable->getLength() > nZippedFileSize )
                     {
-                        bUseJPGCompression = false;
+                        bUseJPEGCompression = false;
                     }
                     else
                     {
@@ -232,18 +232,18 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                             sal_Int16 nBitsPerPixel = 24;
                             if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
                             {
-                                bTrueColorJPG = nBitsPerPixel != 8;
+                                bTrueColorJPEG = nBitsPerPixel != 8;
                             }
                         }
                     }
                 }
                 catch( uno::Exception& )
                 {
-                    bUseJPGCompression = false;
+                    bUseJPEGCompression = false;
                 }
             }
-            if ( bUseJPGCompression )
-                m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+            if ( bUseJPEGCompression )
+                m_rOuterFace.DrawJPEG( aStrm, bTrueColorJPEG, aSizePixel, Rectangle( aPoint, aSize ), aMask );
             else if ( aBitmapEx.IsTransparent() )
                 m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else

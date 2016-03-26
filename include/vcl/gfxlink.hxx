@@ -34,12 +34,12 @@ enum class GfxLinkType
     NONE         = 0,
     EpsBuffer    = 1,
     NativeGif    = 2,    // Don't forget to update the following defines
-    NativeJpg    = 3,    // Don't forget to update the following defines
+    NativeJpeg   = 3,    // Don't forget to update the following defines
     NativePng    = 4,    // Don't forget to update the following defines
-    NativeTif    = 5,    // Don't forget to update the following defines
+    NativeTiff   = 5,    // Don't forget to update the following defines
     NativeWmf    = 6,    // Don't forget to update the following defines
     NativeMet    = 7,    // Don't forget to update the following defines
-    NativePct    = 8,    // Don't forget to update the following defines
+    NativePict   = 8,    // Don't forget to update the following defines
     NativeSvg    = 9,    // Don't forget to update the following defines
     NativeMov    = 10,   // Don't forget to update the following defines
     NativeBmp    = 11,
@@ -64,7 +64,7 @@ private:
 
     };
 
-    GfxLinkType     meType = GfxLinkType::NONE;
+    GfxLinkType     myType = GfxLinkType::NONE;
     sal_uInt32      mnUserId = 0;
 
     std::shared_ptr<sal_uInt8> mpSwapInData;
@@ -85,7 +85,7 @@ public:
 
     bool                IsEqual( const GfxLink& ) const;
 
-    GfxLinkType         GetType() const { return meType;}
+    GfxLinkType         GetType() const { return myType; }
 
     void                SetUserId( sal_uInt32 nUserId ) { mnUserId = nUserId; }
     sal_uInt32          GetUserId() const { return mnUserId; }

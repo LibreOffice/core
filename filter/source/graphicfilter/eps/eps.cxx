@@ -360,10 +360,10 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         {
             BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
             aTempBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
-            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
+            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIFF ) ;
         }
         else
-            nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIF ) ;
+            nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIFF ) ;
 
         if ( nErrCode == ERRCODE_NONE )
         {

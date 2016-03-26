@@ -40,7 +40,7 @@ GfxLink::GfxLink( std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkTy
     SAL_WARN_IF( pBuf == nullptr || !nSize, "vcl",
                 "GfxLink::GfxLink(): empty/NULL buffer given" );
 
-    meType = nType;
+    myType = nType;
     mnSwapInDataSize = nSize;
     mpSwapInData = std::shared_ptr<sal_uInt8>(pBuf.release(), pBuf.get_deleter());  // std::move(pBuf) does not compile on Jenkins MacOSX (24 May 2016)
 }
@@ -49,7 +49,7 @@ bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
 {
     bool bIsEqual = false;
 
-    if ( ( mnSwapInDataSize == rGfxLink.mnSwapInDataSize ) && ( meType == rGfxLink.meType ) )
+    if ( ( mnSwapInDataSize == rGfxLink.mnSwapInDataSize ) && ( myType == rGfxLink.myType ) )
     {
         const sal_uInt8* pSource = GetData();
         const sal_uInt8* pDest = rGfxLink.GetData();
@@ -65,10 +65,9 @@ bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
     return bIsEqual;
 }
 
-
 bool GfxLink::IsNative() const
 {
-    return( meType >= GFX_LINK_FIRST_NATIVE_ID && meType <= GFX_LINK_LAST_NATIVE_ID );
+    return( myType >= GFX_LINK_FIRST_NATIVE_ID && myType <= GFX_LINK_LAST_NATIVE_ID );
 }
 
 
@@ -110,16 +109,16 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
 
             aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnSwapInDataSize, mnSwapInDataSize );
 
-            switch( meType )
+            switch( myType )
             {
                 case GfxLinkType::NativeGif: nCvtType = ConvertDataFormat::GIF; break;
                 case GfxLinkType::NativeBmp: nCvtType = ConvertDataFormat::BMP; break;
-                case GfxLinkType::NativeJpg: nCvtType = ConvertDataFormat::JPG; break;
+                case GfxLinkType::NativeJpeg: nCvtType = ConvertDataFormat::JPEG; break;
                 case GfxLinkType::NativePng: nCvtType = ConvertDataFormat::PNG; break;
-                case GfxLinkType::NativeTif: nCvtType = ConvertDataFormat::TIF; break;
+                case GfxLinkType::NativeTiff: nCvtType = ConvertDataFormat::TIFF; break;
                 case GfxLinkType::NativeWmf: nCvtType = ConvertDataFormat::WMF; break;
                 case GfxLinkType::NativeMet: nCvtType = ConvertDataFormat::MET; break;
-                case GfxLinkType::NativePct: nCvtType = ConvertDataFormat::PCT; break;
+                case GfxLinkType::NativePict: nCvtType = ConvertDataFormat::PICT; break;
                 case GfxLinkType::NativeSvg: nCvtType = ConvertDataFormat::SVG; break;
 
                 default: nCvtType = ConvertDataFormat::Unknown; break;
@@ -211,16 +210,16 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
 
 SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
 {
-    Size            aSize;
-    MapMode         aMapMode;
-    sal_uInt32      nSize;
-    sal_uInt32      nUserId;
-    sal_uInt16      nType;
-    bool            bMapAndSizeValid( false );
-    std::unique_ptr<VersionCompat>  pCompat(new VersionCompat( rIStream, StreamMode::READ ));
-
     // Version 1
-    rIStream.ReadUInt16( nType ).ReadUInt32( nSize ).ReadUInt32( nUserId );
+    sal_uInt16 theType;
+    sal_uInt32 nSize;
+    sal_uInt32 nUserId;
+    rIStream.ReadUInt16( theType ).ReadUInt32( nSize ).ReadUInt32( nUserId );
+
+    Size       aSize;
+    MapMode    aMapMode;
+    bool       bMapAndSizeValid( false );
+    std::unique_ptr<VersionCompat> pCompat( new VersionCompat( rIStream, StreamMode::READ ) );
 
     if( pCompat->GetVersion() >= 2 )
     {
@@ -234,7 +233,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSize ]);
     rIStream.ReadBytes( pBuf.get(), nSize );
 
-    rGfxLink = GfxLink( std::move(pBuf), nSize, (GfxLinkType) nType );
+    rGfxLink = GfxLink( std::move(pBuf), nSize, (GfxLinkType) theType );
     rGfxLink.SetUserId( nUserId );
 
     if( bMapAndSizeValid )

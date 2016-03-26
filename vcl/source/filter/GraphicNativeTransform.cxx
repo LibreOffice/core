@@ -44,7 +44,7 @@ bool GraphicNativeTransform::canBeRotated()
         return false;
     }
 
-    if (   aLink.GetType() == GfxLinkType::NativeJpg
+    if (   aLink.GetType() == GfxLinkType::NativeJpeg
         || aLink.GetType() == GfxLinkType::NativePng
         || aLink.GetType() == GfxLinkType::NativeGif
         || aLink.GetType() == GfxLinkType::NONE)
@@ -70,7 +70,7 @@ bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
     }
 
     GfxLink aLink = mrGraphic.GetLink();
-    if ( aLink.GetType() == GfxLinkType::NativeJpg )
+    if ( aLink.GetType() == GfxLinkType::NativeJpeg )
     {
         return rotateJPEG(aRotation);
     }

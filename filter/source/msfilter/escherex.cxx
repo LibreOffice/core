@@ -1574,10 +1574,10 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 if ( bMirrored || nAngle || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma) ||
                      (nFormat != GraphicFileFormat::BMP &&
                       nFormat != GraphicFileFormat::GIF &&
-                      nFormat != GraphicFileFormat::JPG &&
+                      nFormat != GraphicFileFormat::JPEG &&
                       nFormat != GraphicFileFormat::PNG &&
-                      nFormat != GraphicFileFormat::TIF &&
-                      nFormat != GraphicFileFormat::PCT &&
+                      nFormat != GraphicFileFormat::TIFF &&
+                      nFormat != GraphicFileFormat::PICT &&
                       nFormat != GraphicFileFormat::WMF &&
                       nFormat != GraphicFileFormat::EMF) )
                 {
@@ -4230,7 +4230,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             {
                 switch ( aGraphicLink.GetType() )
                 {
-                    case GfxLinkType::NativeJpg : p_EscherBlibEntry->meBlibType = PEG; break;
+                    case GfxLinkType::NativeJpeg : p_EscherBlibEntry->meBlibType = PEG; break;
                     case GfxLinkType::NativePng : p_EscherBlibEntry->meBlibType = PNG; break;
 
                     // #i15508# added BMP type for better exports; need to check this

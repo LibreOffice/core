@@ -15,16 +15,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-    <node oor:name="PCT - Mac Pict" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="FilterService"/>
-        <prop oor:name="UserData"><value></value></prop>
+    <node oor:name="pict_QuickDraw_Picture" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>pct pict</value></prop>
+        <prop oor:name="MediaType"><value>image/x-pict</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>PICT - Macintosh QuickDraw Picture</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PCT - Mac Pict</value>
+            <value>PICT - Macintosh QuickDraw Picture</value>
         </prop>
-        <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="Type"><value>pct_Mac_Pict</value></prop>
-        <prop oor:name="TemplateName"/>
-        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+        <prop oor:name="ClipboardFormat"/>
     </node>

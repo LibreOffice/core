@@ -41,7 +41,7 @@ String STR_IMAGE_GIF
 
 String STR_IMAGE_JPEG
 {
-    Text [ en-US ] = "Jpeg image";
+    Text [ en-US ] = "JPEG image";
 };
 
 String STR_IMAGE_PNG
@@ -64,9 +64,9 @@ String STR_IMAGE_MET
     Text [ en-US ] = "MET image";
 };
 
-String STR_IMAGE_PCT
+String STR_IMAGE_PICT
 {
-    Text [ en-US ] = "PCT image";
+    Text [ en-US ] = "PICT image";
 };
 
 String STR_IMAGE_SVG

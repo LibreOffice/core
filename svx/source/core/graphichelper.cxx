@@ -66,8 +66,8 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GfxLinkType::NativeGif:
             aExtension = "gif";
             break;
-        case GfxLinkType::NativeTif:
-            aExtension = "tif";
+        case GfxLinkType::NativeTiff:
+            aExtension = "tiff";
             break;
         case GfxLinkType::NativeWmf:
             aExtension = "wmf";
@@ -75,10 +75,10 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GfxLinkType::NativeMet:
             aExtension = "met";
             break;
-        case GfxLinkType::NativePct:
-            aExtension = "pct";
+        case GfxLinkType::NativePict:
+            aExtension = "pict";
             break;
-        case GfxLinkType::NativeJpg:
+        case GfxLinkType::NativeJpeg:
             aExtension = "jpg";
             break;
         case GfxLinkType::NativeBmp:

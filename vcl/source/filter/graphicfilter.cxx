@@ -178,7 +178,7 @@ inline OUString ImpGetExtension( const OUString &rPath )
     return aExt;
 }
 
-bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
+bool isPICT( SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen )
 {
     sal_uInt8 sBuf[3];
     // store number format
@@ -404,13 +404,13 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         }
     }
 
-    //--------------------------- TIF ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "TIF" ) )
+    //--------------------------- TIFF -----------------------------------
+    if( !bTest || rFormatExtension.startsWith( "TIFF" ) || rFormatExtension.startsWith( "TIF" ) )
     {
         bSomethingTested=true;
         if ( nFirstLong==0x49492a00 || nFirstLong==0x4d4d002a )
         {
-            rFormatExtension = "TIF";
+            rFormatExtension = "TIFF";
             return true;
         }
     }
@@ -437,14 +437,14 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         }
     }
 
-    //--------------------------- JPG ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "JPG" ) )
+    //--------------------------- JPEG -----------------------------------
+    if( !bTest || rFormatExtension.startsWith( "JPEG" ) || rFormatExtension.startsWith( "JPG" ) )
     {
         bSomethingTested=true;
         if ( ( nFirstLong==0xffd8ffe0 && sFirstBytes[6]==0x4a && sFirstBytes[7]==0x46 && sFirstBytes[8]==0x49 && sFirstBytes[9]==0x46 ) ||
              ( nFirstLong==0xffd8fffe ) || ( 0xffd8ff00 == ( nFirstLong & 0xffffff00 ) ) )
         {
-            rFormatExtension = "JPG";
+            rFormatExtension = "JPEG";
             return true;
         }
     }
@@ -542,13 +542,13 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
     }
 
-    //--------------------------- PCT ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "PCT" ) )
+    //--------------------------- PICT ------------------------------------
+    if( !bTest || rFormatExtension.startsWith( "PICT" ) || rFormatExtension.startsWith( "PCT" ) )
     {
         bSomethingTested = true;
-        if (isPCT(rStream, nStreamPos, nStreamLen))
+        if ( isPICT( rStream, nStreamPos, nStreamLen ) )
         {
-            rFormatExtension = "PCT";
+            rFormatExtension = "PICT";
             return true;
         }
     }
@@ -1497,7 +1497,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( !ImportJPEG( rIStream, rGraphic, nullptr, nImportFlags ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
-                eLinkType = GfxLinkType::NativeJpg;
+                eLinkType = GfxLinkType::NativeJpeg;
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVG ) )
         {
@@ -1732,12 +1732,12 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                     // try to set link type if format matches
                     if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                     {
-                        if( aShortName.startsWith( TIF_SHORTNAME ) )
-                            eLinkType = GfxLinkType::NativeTif;
+                        if( aShortName.startsWith( TIFF_SHORTNAME ) )
+                            eLinkType = GfxLinkType::NativeTiff;
                         else if( aShortName.startsWith( MET_SHORTNAME ) )
                             eLinkType = GfxLinkType::NativeMet;
-                        else if( aShortName.startsWith( PCT_SHORTNAME ) )
-                            eLinkType = GfxLinkType::NativePct;
+                        else if( aShortName.startsWith( PICT_SHORTNAME ) )
+                            eLinkType = GfxLinkType::NativePict;
                     }
                 }
             }
@@ -2140,17 +2140,17 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     OString aShortName;
     switch( rData.mnFormat )
     {
-        case( ConvertDataFormat::BMP ): aShortName = BMP_SHORTNAME; break;
-        case( ConvertDataFormat::GIF ): aShortName = GIF_SHORTNAME; break;
-        case( ConvertDataFormat::JPG ): aShortName = JPG_SHORTNAME; break;
-        case( ConvertDataFormat::MET ): aShortName = MET_SHORTNAME; break;
-        case( ConvertDataFormat::PCT ): aShortName = PCT_SHORTNAME; break;
-        case( ConvertDataFormat::PNG ): aShortName = PNG_SHORTNAME; break;
-        case( ConvertDataFormat::SVM ): aShortName = SVM_SHORTNAME; break;
-        case( ConvertDataFormat::TIF ): aShortName = TIF_SHORTNAME; break;
-        case( ConvertDataFormat::WMF ): aShortName = WMF_SHORTNAME; break;
-        case( ConvertDataFormat::EMF ): aShortName = EMF_SHORTNAME; break;
-        case( ConvertDataFormat::SVG ): aShortName = SVG_SHORTNAME; break;
+        case( ConvertDataFormat::BMP ):  aShortName = BMP_SHORTNAME; break;
+        case( ConvertDataFormat::GIF ):  aShortName = GIF_SHORTNAME; break;
+        case( ConvertDataFormat::JPEG ): aShortName = JPEG_SHORTNAME; break;
+        case( ConvertDataFormat::MET ):  aShortName = MET_SHORTNAME; break;
+        case( ConvertDataFormat::PICT ): aShortName = PICT_SHORTNAME; break;
+        case( ConvertDataFormat::PNG ):  aShortName = PNG_SHORTNAME; break;
+        case( ConvertDataFormat::SVM ):  aShortName = SVM_SHORTNAME; break;
+        case( ConvertDataFormat::TIFF ): aShortName = TIFF_SHORTNAME; break;
+        case( ConvertDataFormat::WMF ):  aShortName = WMF_SHORTNAME; break;
+        case( ConvertDataFormat::EMF ):  aShortName = EMF_SHORTNAME; break;
+        case( ConvertDataFormat::SVG ):  aShortName = SVG_SHORTNAME; break;
 
         default:
         break;

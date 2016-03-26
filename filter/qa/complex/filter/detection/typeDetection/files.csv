@@ -104,7 +104,7 @@ gif;Graphics/pic.gif;gif_Graphics_Interchange;gif_Graphics_Interchange
 jpg;Graphics/pic.jpg;jpg_JPEG;jpg_JPEG
 met;Graphics/pic.met;met_OS2_Metafile;met_OS2_Metafile:generic_Text
 pbm;Graphics/pic.pbm;pbm_Portable_Bitmap;pbm_Portable_Bitmap
-pct;Graphics/pic.pct;pct_Mac_Pict;pct_Mac_Pict
+pict;Graphics/pic.pict;pict_QuickDraw_Picture;pict_QuickDraw_Picture
 pgm;Graphics/pic.pgm;pgm_Portable_Graymap;pgm_Portable_Graymap
 png;Graphics/pic.png;png_Portable_Network_Graphic;png_Portable_Network_Graphic
 ppm;Graphics/pic.ppm;ppm_Portable_Pixelmap;ppm_Portable_Pixelmap

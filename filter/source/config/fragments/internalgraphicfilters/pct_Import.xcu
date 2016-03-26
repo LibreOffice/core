@@ -16,12 +16,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
     <node oor:name="pct_Import" oor:op="replace"  >
-        <prop oor:name="Type"><value>pct_Mac_Pict</value></prop>
+        <prop oor:name="Type"><value>pict_QuickDraw_Picture</value></prop>
         <prop oor:name="FormatName"><value>ipt</value></prop>
-        <prop oor:name="RealFilterName"><value>PCT - Mac Pict</value></prop>
+        <prop oor:name="RealFilterName"><value>PICT - Macintosh QuickDraw Picture</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PCT - Mac Pict</value>
+            <value xml:lang="en-US">PICT - Macintosh QuickDraw Picture</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT</value></prop>
     </node>

@@ -34,46 +34,51 @@
     // complete FilterConfigItem for GraphicImport under -fsanitize=function
 
 namespace PictReaderInternal {
-  //! utilitary class to store a pattern, ...
+
+  enum class PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
+
+  enum class BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
+              BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
+              BRUSH_25, BRUSH_50, BRUSH_75,
+              BRUSH_BITMAP };
+
+  // utility class to store a pattern
   class Pattern {
   public:
-    //! constructor
-    Pattern() : penStyle(PEN_SOLID),
-                brushStyle(BRUSH_SOLID),
-                nBitCount(64),
-                isColor(false),
-                isRead(false)
+    // constructor
+    Pattern() : penStyle( PenStyle::PEN_SOLID ),
+                brushStyle( BrushStyle::BRUSH_SOLID ),
+                nBitCount( 64 ),
+                isColor( false ),
+                isRead( false )
     {}
 
-    //! reads black/white pattern from SvStream
+    // reads black/white pattern from SvStream
     sal_uLong read(SvStream &stream);
-    //! sets the color
+
+    // sets the color
     void setColor(Color &col) { isColor = true; color = col; }
+
     /** returns a color which can be "used" to replace the pattern,
-     *     created from ForeColor and BackColor, ...
+     *     created from ForeColor and BackColor
      *
-     * note: maybe, we must also use some mode PatCopy, ... to define the color
+     * note: maybe use some PatCopy to define the color
      */
     Color getColor(Color bkColor, Color fgColor) const {
       if (isColor) return color;
-      // we create a gray pattern from nBitCount
+      // create a gray pattern from nBitCount
       double alpha = nBitCount / 64.0;
       return Color(sal_uInt8(alpha*fgColor.GetRed()+(1.0-alpha)*bkColor.GetRed()),
            sal_uInt8(alpha*fgColor.GetGreen()+(1.0-alpha)*bkColor.GetGreen()),
            sal_uInt8(alpha*fgColor.GetBlue()+(1.0-alpha)*bkColor.GetBlue()));
     }
 
-    //! returns true if this is the default pattern
+    // returns true if this is the default pattern
     bool isDefault() const { return !isRead; }
 
-    enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
-    enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
-              BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
-              BRUSH_25, BRUSH_50, BRUSH_75,
-              BRUSH_BITMAP };
     // Data
-    enum PenStyle penStyle;
-    enum BrushStyle brushStyle;
+    PenStyle penStyle;
+    BrushStyle brushStyle;
     short nBitCount;
 
     bool isColor; // true if it is a color pattern
@@ -109,24 +114,24 @@ namespace PictReaderInternal {
       (sal_uLong)nbyte[7];
 
     // create a PenStyle:
-    if      (nBitCount<=0)  penStyle=PEN_NULL;
-    else if (nBitCount<=16) penStyle=PEN_DOT;
-    else if (nBitCount<=32) penStyle=PEN_DASHDOT;
-    else if (nBitCount<=48) penStyle=PEN_DASH;
-    else                    penStyle=PEN_SOLID;
+    if      (nBitCount<=0)  penStyle = PenStyle::PEN_NULL;
+    else if (nBitCount<=16) penStyle = PenStyle::PEN_DOT;
+    else if (nBitCount<=32) penStyle = PenStyle::PEN_DASHDOT;
+    else if (nBitCount<=48) penStyle = PenStyle::PEN_DASH;
+    else                    penStyle = PenStyle::PEN_SOLID;
 
     // create a BrushStyle:
-    if      (nHiBytes==0xffffffff && nLoBytes==0xffffffff) brushStyle=BRUSH_SOLID;
-    else if (nHiBytes==0xff000000 && nLoBytes==0x00000000) brushStyle=BRUSH_HORZ;
-    else if (nHiBytes==0x80808080 && nLoBytes==0x80808080) brushStyle=BRUSH_VERT;
-    else if (nHiBytes==0xff808080 && nLoBytes==0x80808080) brushStyle=BRUSH_CROSS;
-    else if (nHiBytes==0x01824428 && nLoBytes==0x10284482) brushStyle=BRUSH_DIAGCROSS;
-    else if (nHiBytes==0x80402010 && nLoBytes==0x08040201) brushStyle=BRUSH_UPDIAG;
-    else if (nHiBytes==0x01020408 && nLoBytes==0x10204080) brushStyle=BRUSH_DOWNDIAG;
-    else if (nBitCount<=24) brushStyle=BRUSH_25;
-    else if (nBitCount<=40) brushStyle=BRUSH_50;
-    else if (nBitCount<=56) brushStyle=BRUSH_75;
-    else                    brushStyle=BRUSH_SOLID;
+    if      (nHiBytes==0xffffffff && nLoBytes==0xffffffff) brushStyle = BrushStyle::BRUSH_SOLID;
+    else if (nHiBytes==0xff000000 && nLoBytes==0x00000000) brushStyle = BrushStyle::BRUSH_HORZ;
+    else if (nHiBytes==0x80808080 && nLoBytes==0x80808080) brushStyle = BrushStyle::BRUSH_VERT;
+    else if (nHiBytes==0xff808080 && nLoBytes==0x80808080) brushStyle = BrushStyle::BRUSH_CROSS;
+    else if (nHiBytes==0x01824428 && nLoBytes==0x10284482) brushStyle = BrushStyle::BRUSH_DIAGCROSS;
+    else if (nHiBytes==0x80402010 && nLoBytes==0x08040201) brushStyle = BrushStyle::BRUSH_UPDIAG;
+    else if (nHiBytes==0x01020408 && nLoBytes==0x10204080) brushStyle = BrushStyle::BRUSH_DOWNDIAG;
+    else if (nBitCount<=24) brushStyle = BrushStyle::BRUSH_25;
+    else if (nBitCount<=40) brushStyle = BrushStyle::BRUSH_50;
+    else if (nBitCount<=56) brushStyle = BrushStyle::BRUSH_75;
+    else                    brushStyle = BrushStyle::BRUSH_SOLID;
 
     isRead = true;
 

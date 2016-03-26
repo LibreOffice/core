@@ -565,7 +565,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             if ( nPosTIFF && nSizeTIFF )
             {
                 rStream.Seek( nOrigPos + nPosTIFF );
-                if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
+                if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::TIFF ) == ERRCODE_NONE )
                 {
                     MakeAsMeta(aGraphic);
                     rStream.Seek( nOrigPos + nPosTIFF );

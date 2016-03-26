@@ -783,14 +783,14 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     pFilterShortName = "eps";
                 else if (aMimeType == MIMETYPE_GIF)
                     pFilterShortName = "gif";
-                else if (aMimeType == MIMETYPE_JPG)
-                    pFilterShortName = "jpg";
+                else if (aMimeType == MIMETYPE_JPEG)
+                    pFilterShortName = "jpeg";
                 else if (aMimeType == MIMETYPE_MET)
                     pFilterShortName = "met";
                 else if (aMimeType == MIMETYPE_PNG)
                     pFilterShortName = "png";
-                else if (aMimeType == MIMETYPE_PCT)
-                    pFilterShortName = "pct";
+                else if (aMimeType == MIMETYPE_PICT)
+                    pFilterShortName = "pict";
                 else if (aMimeType == MIMETYPE_PBM)
                     pFilterShortName = "pbm";
                 else if (aMimeType == MIMETYPE_PGM)
@@ -801,8 +801,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     pFilterShortName = "ras";
                 else if (aMimeType == MIMETYPE_SVM)
                     pFilterShortName = "svm";
-                else if (aMimeType == MIMETYPE_TIF)
-                    pFilterShortName = "tif";
+                else if (aMimeType == MIMETYPE_TIFF)
+                    pFilterShortName = "tiff";
                 else if (aMimeType == MIMETYPE_EMF)
                     pFilterShortName = "emf";
                 else if (aMimeType == MIMETYPE_WMF)

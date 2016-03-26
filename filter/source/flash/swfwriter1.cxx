@@ -774,8 +774,8 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     sal_uInt16 nBitmapId = createID();
     mBitmapCache[bmpChecksum] = nBitmapId;
 
-    // AS: OK, we have a good image, so now we decide whether or not to JPEG it or
-    //  or Lossless compress it.
+    // AS: OK, we have a good image, so now we decide whether or not to JPEG it
+    //  or Lossless compress it
 
     // Figure out lossless size
     sal_uInt8 *pImageData, *pAlphaData;
@@ -789,7 +789,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #ifdef DBG_UTIL
     if(compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
     {
-        SAL_WARN( "filter.flash", "compress2 failed!" ); ((void)0);
+        SAL_WARN( "filter.flash", "compress2 failed" ); ((void)0);
     }
 #else
     compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION);
@@ -807,7 +807,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #ifdef DBG_UTIL
         if(compress2(pAlphaCompressed.get(), &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
         {
-            SAL_WARN( "filter.flash", "compress2 failed!" ); ((void)0);
+            SAL_WARN( "filter.flash", "compress2 failed" ); ((void)0);
         }
 #else
         compress2(pAlphaCompressed.get(), &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION);
@@ -819,11 +819,11 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     sal_uInt32 nJpgDataLength = 0xffffffff;
 
     Graphic aGraphic( bmpSource );
-    SvMemoryStream aDstStm( 65535, 65535 );
+    SvMemoryStream aDstStm( ( 1 << 16 ) - 1, ( 1 << 16 ) - 1 );
 
     GraphicFilter aFilter;
 
-    Sequence< PropertyValue > aFilterData(sal_Int32(nJPEGQualityLevel != -1));
+    Sequence< PropertyValue > aFilterData( ( nJPEGQualityLevel != -1 ) ? 1 : 0 );
     if( nJPEGQualityLevel != -1 )
     {
         aFilterData[0].Name = "Quality";
@@ -831,7 +831,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     }
 
     if( aFilter.ExportGraphic( aGraphic, OUString(), aDstStm,
-                                aFilter.GetExportFormatNumberForShortName( JPG_SHORTNAME ), &aFilterData ) == ERRCODE_NONE )
+                        aFilter.GetExportFormatNumberForShortName( JPEG_SHORTNAME ), &aFilterData ) == ERRCODE_NONE )
     {
         pJpgData = static_cast<const sal_uInt8*>(aDstStm.GetData());
         nJpgDataLength = aDstStm.Seek( STREAM_SEEK_TO_END );

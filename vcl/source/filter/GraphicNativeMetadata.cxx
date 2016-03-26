@@ -35,7 +35,7 @@ GraphicNativeMetadata::~GraphicNativeMetadata()
 bool GraphicNativeMetadata::read(Graphic& rGraphic)
 {
     GfxLink aLink = rGraphic.GetLink();
-    if ( aLink.GetType() != GfxLinkType::NativeJpg )
+    if ( aLink.GetType() != GfxLinkType::NativeJpeg )
         return false;
 
     sal_uInt32 aDataSize = aLink.GetDataSize();

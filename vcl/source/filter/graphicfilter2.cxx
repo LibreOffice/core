@@ -62,31 +62,31 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         SvStream&      rStm = *pFileStm;
         SvStreamEndian nOldFormat = rStm.GetEndian();
 
-        if      ( ImpDetectGIF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectJPG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectBMP( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPNG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectTIF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCX( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectDXF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectMET( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSGF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSGV( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSVM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectWMF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectEMF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSVG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCT( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectXBM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectXPM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPBM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPGM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPPM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectRAS( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectTGA( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPSD( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectEPS( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCD( rStm, bExtendedInfo ) ) bRet = true;
+        if      ( ImpDetectGIF( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectJPEG( rStm, bExtendedInfo ) ) bRet = true;
+        else if ( ImpDetectBMP( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPNG( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectTIFF( rStm, bExtendedInfo ) ) bRet = true;
+        else if ( ImpDetectPCX( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectDXF( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectMET( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectSGF( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectSGV( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectSVM( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectWMF( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectEMF( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectSVG( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPICT( rStm, bExtendedInfo ) ) bRet = true;
+        else if ( ImpDetectXBM( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectXPM( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPBM( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPGM( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPPM( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectRAS( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectTGA( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPSD( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectEPS( rStm, bExtendedInfo )  ) bRet = true;
+        else if ( ImpDetectPCD( rStm, bExtendedInfo )  ) bRet = true;
 
         rStm.SetEndian( nOldFormat );
     }
@@ -216,7 +216,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 }
 
 // returns the next jpeg marker, a return value of 0 represents an error
-sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
+sal_uInt8 ImpDetectJPEG_GetNextMarker( SvStream& rStm )
 {
     sal_uInt8 nByte;
     do
@@ -241,7 +241,7 @@ sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
     return nByte;
 }
 
-bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
+bool GraphicDescriptor::ImpDetectJPEG( SvStream& rStm,  bool bExtendedInfo )
 {
     sal_uInt32  nTemp32 = 0;
     bool    bRet = false;
@@ -254,7 +254,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
     // compare upper 24 bits
     if( 0xffd8ff00 == ( nTemp32 & 0xffffff00 ) )
     {
-        nFormat = GraphicFileFormat::JPG;
+        nFormat = GraphicFileFormat::JPEG;
         bRet = true;
 
         if ( bExtendedInfo )
@@ -268,7 +268,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
 
             while( !bScanFailure && !bScanFinished && !rStm.IsEof() && !rStm.GetError() )
             {
-                sal_uInt8 nMarker = ImpDetectJPG_GetNextMarker( rStm );
+                sal_uInt8 nMarker = ImpDetectJPEG_GetNextMarker( rStm );
                 switch( nMarker )
                 {
                     // fixed size marker, not having a two byte length parameter
@@ -605,7 +605,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
+bool GraphicDescriptor::ImpDetectTIFF( SvStream& rStm, bool bExtendedInfo )
 {
     bool    bRet = false;
     sal_uInt8   cByte1 = 0;
@@ -636,7 +636,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
             rStm.ReadUInt16( nTemp16 );
             if ( nTemp16 == 0x2a )
             {
-                nFormat = GraphicFileFormat::TIF;
+                nFormat = GraphicFileFormat::TIFF;
                 bRet = true;
 
                 if ( bExtendedInfo )
@@ -941,19 +941,19 @@ bool GraphicDescriptor::ImpDetectMET( SvStream&, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
+bool GraphicDescriptor::ImpDetectPICT( SvStream& rStm, bool )
 {
-    bool bRet = aPathExt.startsWith( "pct" );
-    if (bRet)
-        nFormat = GraphicFileFormat::PCT;
+    bool bRet = aPathExt.startsWith( "pic" ) || aPathExt.startsWith( "pct" );
+    if ( bRet )
+        nFormat = GraphicFileFormat::PICT;
     else
     {
         sal_uInt64 const nStreamPos = rStm.Tell();
         sal_uInt64 const nStreamLen = rStm.remainingSize();
-        if (isPCT(rStm, nStreamPos, nStreamLen))
+        if ( isPICT( rStm, nStreamPos, nStreamLen ) )
         {
             bRet = true;
-            nFormat = GraphicFileFormat::PCT;
+            nFormat = GraphicFileFormat::PICT;
         }
         rStm.Seek(nStreamPos);
     }
@@ -1105,31 +1105,31 @@ OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat 
 
     switch( nFormat )
     {
-        case( GraphicFileFormat::BMP ) :   pKeyName = "bmp";   break;
-        case( GraphicFileFormat::GIF ) :   pKeyName = "gif";   break;
-        case( GraphicFileFormat::JPG ) :   pKeyName = "jpg";   break;
-        case( GraphicFileFormat::PCD ) :   pKeyName = "pcd";   break;
-        case( GraphicFileFormat::PCX ) :   pKeyName = "pcx";   break;
-        case( GraphicFileFormat::PNG ) :   pKeyName = "png";   break;
-        case( GraphicFileFormat::XBM ) :   pKeyName = "xbm";   break;
-        case( GraphicFileFormat::XPM ) :   pKeyName = "xpm";   break;
-        case( GraphicFileFormat::PBM ) :   pKeyName = "pbm";   break;
-        case( GraphicFileFormat::PGM ) :   pKeyName = "pgm";   break;
-        case( GraphicFileFormat::PPM ) :   pKeyName = "ppm";   break;
-        case( GraphicFileFormat::RAS ) :   pKeyName = "ras";   break;
-        case( GraphicFileFormat::TGA ) :   pKeyName = "tga";   break;
-        case( GraphicFileFormat::PSD ) :   pKeyName = "psd";   break;
-        case( GraphicFileFormat::EPS ) :   pKeyName = "eps";   break;
-        case( GraphicFileFormat::TIF ) :   pKeyName = "tif";   break;
-        case( GraphicFileFormat::DXF ) :   pKeyName = "dxf";   break;
-        case( GraphicFileFormat::MET ) :   pKeyName = "met";   break;
-        case( GraphicFileFormat::PCT ) :   pKeyName = "pct";   break;
-        case( GraphicFileFormat::SGF ) :   pKeyName = "sgf";   break;
-        case( GraphicFileFormat::SGV ) :   pKeyName = "sgv";   break;
-        case( GraphicFileFormat::SVM ) :   pKeyName = "svm";   break;
-        case( GraphicFileFormat::WMF ) :   pKeyName = "wmf";   break;
-        case( GraphicFileFormat::EMF ) :   pKeyName = "emf";   break;
-        case( GraphicFileFormat::SVG ) :   pKeyName = "svg";   break;
+        case( GraphicFileFormat::BMP )  :   pKeyName = "bmp";   break;
+        case( GraphicFileFormat::GIF )  :   pKeyName = "gif";   break;
+        case( GraphicFileFormat::JPEG ) :   pKeyName = "jpg";   break;
+        case( GraphicFileFormat::PCD )  :   pKeyName = "pcd";   break;
+        case( GraphicFileFormat::PCX )  :   pKeyName = "pcx";   break;
+        case( GraphicFileFormat::PNG )  :   pKeyName = "png";   break;
+        case( GraphicFileFormat::XBM )  :   pKeyName = "xbm";   break;
+        case( GraphicFileFormat::XPM )  :   pKeyName = "xpm";   break;
+        case( GraphicFileFormat::PBM )  :   pKeyName = "pbm";   break;
+        case( GraphicFileFormat::PGM )  :   pKeyName = "pgm";   break;
+        case( GraphicFileFormat::PPM )  :   pKeyName = "ppm";   break;
+        case( GraphicFileFormat::RAS )  :   pKeyName = "ras";   break;
+        case( GraphicFileFormat::TGA )  :   pKeyName = "tga";   break;
+        case( GraphicFileFormat::PSD )  :   pKeyName = "psd";   break;
+        case( GraphicFileFormat::EPS )  :   pKeyName = "eps";   break;
+        case( GraphicFileFormat::TIFF ) :   pKeyName = "tiff";  break;
+        case( GraphicFileFormat::DXF )  :   pKeyName = "dxf";   break;
+        case( GraphicFileFormat::MET )  :   pKeyName = "met";   break;
+        case( GraphicFileFormat::PICT ) :   pKeyName = "pict";  break;
+        case( GraphicFileFormat::SGF )  :   pKeyName = "sgf";   break;
+        case( GraphicFileFormat::SGV )  :   pKeyName = "sgv";   break;
+        case( GraphicFileFormat::SVM )  :   pKeyName = "svm";   break;
+        case( GraphicFileFormat::WMF )  :   pKeyName = "wmf";   break;
+        case( GraphicFileFormat::EMF )  :   pKeyName = "emf";   break;
+        case( GraphicFileFormat::SVG )  :   pKeyName = "svg";   break;
         default: assert(false);
     }
 

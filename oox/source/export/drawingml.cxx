@@ -856,7 +856,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             pExtension = ".bmp";
             break;
 
-        case GfxLinkType::NativeJpg:
+        case GfxLinkType::NativeJpeg:
             sMediaType = "image/jpeg";
             pExtension = ".jpeg";
             break;
@@ -864,7 +864,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             sMediaType = "image/png";
             pExtension = ".png";
             break;
-        case GfxLinkType::NativeTif:
+        case GfxLinkType::NativeTiff:
             sMediaType = "image/tiff";
             pExtension = ".tif";
             break;
@@ -876,7 +876,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             sMediaType = "image/x-met";
             pExtension = ".met";
             break;
-        case GfxLinkType::NativePct:
+        case GfxLinkType::NativePict:
             sMediaType = "image/x-pict";
             pExtension = ".pct";
             break;

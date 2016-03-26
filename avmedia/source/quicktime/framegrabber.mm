@@ -92,7 +92,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     const void* pBitmapData = [pBitmap bytes];
     SvMemoryStream  aMemStm( const_cast<void *>(pBitmapData), nSize, StreamMode::READ | StreamMode::WRITE );
     Graphic aGraphic;
-    if ( GraphicConverter::Import( aMemStm, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
+    if ( GraphicConverter::Import( aMemStm, aGraphic, ConvertDataFormat::TIFF ) == ERRCODE_NONE )
     {
         xRet = aGraphic.GetXGraphic();
     }

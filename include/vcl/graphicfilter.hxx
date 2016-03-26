@@ -87,12 +87,12 @@ namespace o3tl
 
 #define BMP_SHORTNAME           "BMP"
 #define GIF_SHORTNAME           "GIF"
-#define JPG_SHORTNAME           "JPG"
+#define JPEG_SHORTNAME          "JPEG"
 #define MET_SHORTNAME           "MET"
-#define PCT_SHORTNAME           "PCT"
+#define PICT_SHORTNAME          "PICT"
 #define PNG_SHORTNAME           "PNG"
 #define SVM_SHORTNAME           "SVM"
-#define TIF_SHORTNAME           "TIF"
+#define TIFF_SHORTNAME          "TIFF"
 #define WMF_SHORTNAME           "WMF"
 #define EMF_SHORTNAME           "EMF"
 #define SVG_SHORTNAME           "SVG"
@@ -104,11 +104,11 @@ enum class GraphicFileFormat
     NOT = 0x0000,
     BMP = 0x0001,
     GIF = 0x0002,
-    JPG = 0x0003,
+    JPEG = 0x0003,
     PCD = 0x0004,
     PCX = 0x0005,
     PNG = 0x0006,
-    TIF = 0x0007,
+    TIFF = 0x0007,
     XBM = 0x0008,
     XPM = 0x0009,
     PBM = 0x000a,
@@ -120,7 +120,7 @@ enum class GraphicFileFormat
     EPS = 0x0010,
     DXF = 0x00f1,
     MET = 0x00f2,
-    PCT = 0x00f3,
+    PICT = 0x00f3,
     SGF = 0x00f4,
     SVM = 0x00f5,
     WMF = 0x00f6,
@@ -147,11 +147,11 @@ class VCL_DLLPUBLIC GraphicDescriptor final
 
     bool            ImpDetectBMP( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectGIF( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectJPG( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectJPEG( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPCD( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPCX( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPNG( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectTIF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectTIFF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectXBM( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectXPM( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPBM( SvStream& rStm, bool bExtendedInfo );
@@ -163,7 +163,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     bool            ImpDetectEPS( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectDXF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectMET( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectPCT( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPICT( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectSGF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectSVM( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectWMF( SvStream& rStm, bool bExtendedInfo );

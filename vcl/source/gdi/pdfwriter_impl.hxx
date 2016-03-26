@@ -592,7 +592,7 @@ private:
      *  file stream as XObjects*/
     std::list< BitmapEmit >             m_aBitmaps;
     /* contains JPG streams until written to file     */
-    std::list<JPGEmit>                  m_aJPGs;
+    std::list<JPGEmit>                  m_aJPEGs;
     /*--->i56629 contains all named destinations ever set during the PDF creation,
        destination id is always the destination's position in this vector
      */
@@ -802,7 +802,7 @@ i12626
      */
     bool writeBitmapObject( BitmapEmit& rObject, bool bMask = false );
 
-    void writeJPG( JPGEmit& rEmit );
+    void writeJPEG( JPGEmit& rEmit );
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
@@ -1168,7 +1168,7 @@ public:
 
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
-    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
+    void drawJPEGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 
     void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
     void drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );

@@ -36,7 +36,7 @@
 
 #define FORMAT_BMP  "bmp"
 #define FORMAT_GIF  "gif"
-#define FORMAT_JPG  "jpg"
+#define FORMAT_JPEG "jpg"
 #define FORMAT_PNG  "png"
 
 using namespace com::sun::star;
@@ -209,7 +209,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                     // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
                     case GfxLinkType::NativeBmp: aExt = FORMAT_BMP; break;
 
-                    case GfxLinkType::NativeJpg: aExt = FORMAT_JPG; break;
+                    case GfxLinkType::NativeJpeg: aExt = FORMAT_JPEG; break;
                     case GfxLinkType::NativePng: aExt = FORMAT_PNG; break;
 
                     default:
@@ -356,8 +356,8 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     ConvertDataFormat aCvtType;
     switch(  aLink.GetType() )
     {
-        case GfxLinkType::NativeJpg:
-            aCvtType = ConvertDataFormat::JPG;
+        case GfxLinkType::NativeJpeg:
+            aCvtType = ConvertDataFormat::JPEG;
             aMimeType = "image/jpeg";
             break;
         case GfxLinkType::NativePng:

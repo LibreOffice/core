@@ -668,12 +668,12 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                         case GfxLinkType::NativeGif: aExtension = ".gif"; break;
                         // #i15508# added BMP type for better exports (checked, works)
                         case GfxLinkType::NativeBmp: aExtension = ".bmp"; break;
-                        case GfxLinkType::NativeJpg: aExtension = ".jpg"; break;
+                        case GfxLinkType::NativeJpeg: aExtension = ".jpg"; break;
                         case GfxLinkType::NativePng: aExtension = ".png"; break;
-                        case GfxLinkType::NativeTif: aExtension = ".tif"; break;
+                        case GfxLinkType::NativeTiff: aExtension = ".tiff"; break;
                         case GfxLinkType::NativeWmf: aExtension = ".wmf"; break;
                         case GfxLinkType::NativeMet: aExtension = ".met"; break;
-                        case GfxLinkType::NativePct: aExtension = ".pct"; break;
+                        case GfxLinkType::NativePict: aExtension = ".pict"; break;
                         case GfxLinkType::NativeSvg:
                             // backward-compat kludge: since no released OOo
                             // version to date can handle svg properly, wrap it up

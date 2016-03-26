@@ -145,18 +145,18 @@ void CompressGraphicsDialog::Update()
 {
     GfxLinkType aLinkType = m_aGraphic.GetLink().GetType();
     OUString aGraphicTypeString;
-    switch(aLinkType)
+    switch( aLinkType )
     {
         case GfxLinkType::NativeGif:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_GIF);
             break;
-        case GfxLinkType::NativeJpg:
+        case GfxLinkType::NativeJpeg:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_JPEG);
             break;
         case GfxLinkType::NativePng:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PNG);
             break;
-        case GfxLinkType::NativeTif:
+        case GfxLinkType::NativeTiff:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_TIFF);
             break;
         case GfxLinkType::NativeWmf:
@@ -165,8 +165,8 @@ void CompressGraphicsDialog::Update()
         case GfxLinkType::NativeMet:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_MET);
             break;
-        case GfxLinkType::NativePct:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PCT);
+        case GfxLinkType::NativePict:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PICT);
             break;
         case GfxLinkType::NativeSvg:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_SVG);
