@@ -4917,6 +4917,9 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
     if( nLang != pFrame->mnInputLang )
         pFrame->CallCallback( SALEVENT_INPUTLANGUAGECHANGE, 0 );
 
+    // reinit spec. keys
+    GetSalData()->initKeyCodeMap();
+
     ImplSalYieldMutexRelease();
 }
 
