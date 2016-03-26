@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <internal/signalshared.hxx>
+
 #include <config_features.h>
 
 /* system headers */
@@ -51,7 +53,6 @@
 #endif
 
 #include <osl/diagnose.h>
-#include <osl/mutex.h>
 #include <osl/signal.h>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -60,7 +61,6 @@
 #include <rtl/digest.h>
 
 #include "file_path_helper.hxx"
-
 #define ACT_IGNORE  1
 #define ACT_EXIT    2
 #define ACT_SYSTEM  3
@@ -71,14 +71,9 @@
 #include <valgrind/memcheck.h>
 #endif
 
-struct oslSignalHandlerImpl
+namespace
 {
-    oslSignalHandlerFunction      Handler;
-    void*                         pData;
-    oslSignalHandlerImpl *        pNext;
-};
-
-static struct SignalAction
+struct SignalAction
 {
     int Signal;
     int Action;
@@ -138,19 +133,15 @@ what looks like a bug in the new handler*/
 };
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
-static bool               bErrorReportingEnabled = true;
-static bool               bInitSignal = false;
-static oslMutex               SignalListMutex;
-static oslSignalHandlerImpl*  SignalList;
-static bool               bSetSEGVHandler = false;
-static bool               bSetWINCHHandler = false;
-static bool               bSetILLHandler = false;
+bool bSetSEGVHandler = false;
+bool bSetWINCHHandler = false;
+bool bSetILLHandler = false;
 
-static void SignalHandlerFunction(int);
+void signalHandlerFunction(int);
 
-static void getExecutableName_Impl (rtl_String ** ppstrProgName)
+void getExecutableName_Impl (rtl_String ** ppstrProgName)
 {
-    rtl_uString * ustrProgFile = nullptr;
+    rtl_uString* ustrProgFile = nullptr;
     osl_getExecutableFile (&ustrProgFile);
     if (ustrProgFile)
     {
@@ -169,10 +160,10 @@ static void getExecutableName_Impl (rtl_String ** ppstrProgName)
     }
 }
 
-static bool is_soffice_Impl()
+bool is_soffice_Impl()
 {
-    sal_Int32    idx       = -1;
-    rtl_String * strProgName = nullptr;
+    sal_Int32 idx = -1;
+    rtl_String* strProgName = nullptr;
 
     getExecutableName_Impl (&strProgName);
     if (strProgName)
@@ -183,13 +174,10 @@ static bool is_soffice_Impl()
     return (idx != -1);
 }
 
-static bool InitSignal()
-{
-    int i;
-    struct sigaction act;
-    struct sigaction oact;
-    sigset_t unset;
+}
 
+bool onInitSignal()
+{
     if (is_soffice_Impl())
     {
         // WORKAROUND FOR SEGV HANDLER CONFLICT
@@ -213,15 +201,14 @@ static bool InitSignal()
     bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = false;
 #endif
 
-    SignalListMutex = osl_createMutex();
-
-    act.sa_handler = SignalHandlerFunction;
+    struct sigaction act;
+    act.sa_handler = signalHandlerFunction;
     act.sa_flags   = SA_RESTART;
 
     sigfillset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
-    for (i = 0; i < NoSignals; ++i)
+    for (int i = 0; i < NoSignals; ++i)
     {
 #if defined HAVE_VALGRIND_HEADERS
         if (Signals[i].Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
@@ -243,6 +230,7 @@ static bool InitSignal()
                     ign.sa_flags   = 0;
                     sigemptyset(&ign.sa_mask);
 
+                    struct sigaction oact;
                     if (sigaction(Signals[i].Signal, &ign, &oact) == 0)
                         Signals[i].Handler = oact.sa_handler;
                     else
@@ -250,6 +238,7 @@ static bool InitSignal()
                 }
                 else
                 {
+                    struct sigaction oact;
                     if (sigaction(Signals[i].Signal, &act, &oact) == 0)
                         Signals[i].Handler = oact.sa_handler;
                     else
@@ -263,6 +252,7 @@ static bool InitSignal()
        crash soffice re-execs itself from within the signal handler, so the
        second soffice would have the guilty signal blocked and would freeze upon
        encountering a similar crash again): */
+    sigset_t unset;
     if (sigemptyset(&unset) < 0 ||
         pthread_sigmask(SIG_SETMASK, &unset, nullptr) < 0)
     {
@@ -272,16 +262,15 @@ static bool InitSignal()
     return true;
 }
 
-static bool DeInitSignal()
+bool onDeInitSignal()
 {
-    int i;
     struct sigaction act;
 
     act.sa_flags   = 0;
     sigemptyset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
-    for (i = NoSignals - 1; i >= 0; i--)
+    for (int i = NoSignals - 1; i >= 0; i--)
         if (Signals[i].Action != ACT_SYSTEM)
         {
             act.sa_handler = Signals[i].Handler;
@@ -289,12 +278,12 @@ static bool DeInitSignal()
             sigaction(Signals[i].Signal, &act, nullptr);
         }
 
-    osl_destroyMutex(SignalListMutex);
-
     return false;
 }
 
-static void PrintStack( int sig )
+namespace
+{
+void printStack(int sig)
 {
 #ifdef INCLUDE_BACKTRACE
     void *buffer[MAX_STACK_FRAMES];
@@ -316,31 +305,13 @@ static void PrintStack( int sig )
 #endif
 }
 
-static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
-{
-    oslSignalHandlerImpl* pHandler = SignalList;
-    oslSignalAction Action = osl_Signal_ActCallNextHdl;
-
-    while (pHandler != nullptr)
-    {
-        if ((Action = pHandler->Handler(pHandler->pData, pInfo))
-            != osl_Signal_ActCallNextHdl)
-            break;
-
-        pHandler = pHandler->pNext;
-    }
-
-    return Action;
-}
-
-void CallSystemHandler(int Signal)
+void callSystemHandler(int signal)
 {
     int i;
-    struct sigaction act;
 
     for (i = 0; i < NoSignals; i++)
     {
-        if (Signals[i].Signal == Signal)
+        if (Signals[i].Signal == signal)
             break;
     }
 
@@ -359,11 +330,12 @@ void CallSystemHandler(int Signal)
                     break;
 
                 case ACT_ABORT:     /* terminate witch core dump */
+                    struct sigaction act;
                     act.sa_handler = SIG_DFL;
                     act.sa_flags   = 0;
                     sigemptyset(&(act.sa_mask));
                     sigaction(SIGABRT, &act, nullptr);
-                    PrintStack( Signal );
+                    printStack( signal );
                     abort();
                     break;
 
@@ -375,7 +347,7 @@ void CallSystemHandler(int Signal)
             }
         }
         else
-            (*Signals[i].Handler)(Signal);
+            (*Signals[i].Handler)(signal);
     }
 }
 
@@ -399,15 +371,14 @@ static void DUMPCURRENTALLOCS()
 }
 #endif
 
-void SignalHandlerFunction(int Signal)
+void signalHandlerFunction(int signal)
 {
-    oslSignalInfo    Info;
-    struct sigaction act;
+    oslSignalInfo Info;
 
-    Info.UserSignal = Signal;
+    Info.UserSignal = signal;
     Info.UserData   = nullptr;
 
-    switch (Signal)
+    switch (signal)
     {
         case SIGBUS:
         case SIGILL:
@@ -446,18 +417,19 @@ void SignalHandlerFunction(int Signal)
             break;
     }
 
-    switch (CallSignalHandler(&Info))
+    switch (callSignalHandler(&Info))
     {
     case osl_Signal_ActCallNextHdl:
-        CallSystemHandler(Signal);
+        callSystemHandler(signal);
         break;
 
     case osl_Signal_ActAbortApp:
+        struct sigaction act;
         act.sa_handler = SIG_DFL;
         act.sa_flags   = 0;
         sigemptyset(&(act.sa_mask));
         sigaction(SIGABRT, &act, nullptr);
-        PrintStack( Signal );
+        printStack( signal );
         abort();
         break;
 
@@ -470,107 +442,6 @@ void SignalHandlerFunction(int Signal)
     }
 }
 
-oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler, void* pData)
-{
-    oslSignalHandlerImpl* pHandler;
-
-    OSL_ASSERT(Handler != nullptr);
-    if ( Handler == nullptr )
-    {
-        return nullptr;
-    }
-
-    if (! bInitSignal)
-        bInitSignal = InitSignal();
-
-    pHandler = static_cast<oslSignalHandlerImpl*>(calloc(1, sizeof(oslSignalHandlerImpl)));
-
-    if (pHandler != nullptr)
-    {
-        pHandler->Handler = Handler;
-        pHandler->pData   = pData;
-
-        osl_acquireMutex(SignalListMutex);
-
-        pHandler->pNext = SignalList;
-        SignalList      = pHandler;
-
-        osl_releaseMutex(SignalListMutex);
-
-        return (pHandler);
-    }
-
-    return nullptr;
-}
-
-sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
-{
-    oslSignalHandlerImpl *pHandler, *pPrevious = nullptr;
-
-    OSL_ASSERT(Handler != nullptr);
-
-    if (! bInitSignal)
-        bInitSignal = InitSignal();
-
-    osl_acquireMutex(SignalListMutex);
-
-    pHandler = SignalList;
-
-    while (pHandler != nullptr)
-    {
-        if (pHandler == Handler)
-        {
-            if (pPrevious)
-                pPrevious->pNext = pHandler->pNext;
-            else
-                SignalList = pHandler->pNext;
-
-            osl_releaseMutex(SignalListMutex);
-
-            if (SignalList == nullptr)
-                bInitSignal = DeInitSignal();
-
-            free(pHandler);
-
-            return sal_True;
-        }
-
-        pPrevious = pHandler;
-        pHandler  = pHandler->pNext;
-    }
-
-    osl_releaseMutex(SignalListMutex);
-
-    return sal_False;
-}
-
-oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
-{
-    oslSignalInfo   Info;
-    oslSignalAction Action;
-
-    if (! bInitSignal)
-        bInitSignal = InitSignal();
-
-    osl_acquireMutex(SignalListMutex);
-
-    Info.Signal     = osl_Signal_User;
-    Info.UserSignal = UserSignal;
-    Info.UserData   = UserData;
-
-    Action = CallSignalHandler(&Info);
-
-    osl_releaseMutex(SignalListMutex);
-
-    return (Action);
-}
-
-sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
-{
-    bool bOld = bErrorReportingEnabled;
-    bErrorReportingEnabled = bEnable;
-
-    return bOld;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
