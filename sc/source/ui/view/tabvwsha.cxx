@@ -37,6 +37,7 @@
 #include "global.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
+#include "cellform.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
 #include "globstr.hrc"
@@ -625,7 +626,6 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
         const EditTextObject*   pObject     = nullptr;
         ScViewData&             rViewData   = GetViewData();
         ScDocument*             pDoc        = rViewData.GetDocument();
-        CellType                eType;
         SCCOL                   nPosX       = rViewData.GetCurX();
         SCROW                   nPosY       = rViewData.GetCurY();
         SCTAB                   nTab        = rViewData.GetTabNo();
@@ -658,28 +658,28 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         if (!bHideAll)
         {
-            eType = pDoc->GetCellType(aPos);
-            if (eType == CELLTYPE_FORMULA)
+            ScRefCellValue rCell(*pDoc, aPos);
+            if (rCell.meType == CELLTYPE_FORMULA)
             {
                 if (!bHideFormula)
-                    pDoc->GetFormula( nPosX, nPosY, nTab, aString );
+                    rCell.mpFormula->GetFormula(aString);
             }
-            else if (eType == CELLTYPE_EDIT)
+            else if (rCell.meType == CELLTYPE_EDIT)
             {
-                pObject = pDoc->GetEditText(aPos);
+                pObject = rCell.mpEditText;
             }
             else
             {
-                pDoc->GetInputString( nPosX, nPosY, nTab, aString );
-                if (eType == CELLTYPE_STRING)
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                sal_uInt32 nNumFmt = pDoc->GetNumberFormat( aPos );
+
+                ScCellFormat::GetInputString( rCell, nNumFmt, aString, *pFormatter, pDoc );
+                if (rCell.meType == CELLTYPE_STRING)
                 {
                     // Put a ' in front if necessary, so that the string is not
                     // unintentionally interpreted as a number, and to show the
                     // user that it is a string (#35060#).
                     //! also for numberformat "Text"? -> then remove when editing
-                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                    sal_uInt32 nNumFmt;
-                    pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                     double fDummy;
                     if ( pFormatter->IsNumberFormat(aString, nNumFmt, fDummy) )
                         aString = "'" + aString;
