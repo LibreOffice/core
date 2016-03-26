@@ -133,24 +133,22 @@ OUString ScCellFormat::GetString(
     OUString aString;
     *ppColor = nullptr;
 
-    CellType eType = rDoc.GetCellType(rPos);
-    switch (eType)
+    ScRefCellValue aCell(rDoc, rPos);
+    switch (aCell.meType)
     {
         case CELLTYPE_STRING:
         {
-            ScRefCellValue aCell(rDoc, rPos);
             rFormatter.GetOutputString(aCell.mpString->getString(), nFormat, aString, ppColor);
         }
         break;
         case CELLTYPE_EDIT:
         {
-            ScRefCellValue aCell(rDoc, rPos);
             rFormatter.GetOutputString(aCell.getString(&rDoc), nFormat, aString, ppColor);
         }
         break;
         case CELLTYPE_VALUE:
         {
-            double nValue = rDoc.GetValue(rPos);
+            double nValue = aCell.getValue();
             if (!bNullVals && nValue == 0.0) aString.clear();
             else
             {
@@ -170,7 +168,7 @@ OUString ScCellFormat::GetString(
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rDoc.GetFormulaCell(rPos);
+            ScFormulaCell* pFCell = aCell.mpFormula;
             if (!pFCell)
                 return aString;
             if (bFormula)
