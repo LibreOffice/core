@@ -743,4 +743,125 @@ void Test::testFormulaListenerMultipleCellsToMultipleCells()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatUpdateMoveTab()
+{
+    m_pDoc->InsertTab(0, "test");
+    m_pDoc->InsertTab(1, "Test2");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "A1", "", m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->SetRange(ScRange(10, 10, 0, 10, 12, 0));
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    pFormat->AddEntry(pEntry);
+
+    // the conditional format should listen to A1:A3
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->MoveTab(0, 1);
+
+    // the conditional format should listen to A1:A3 on the second sheet
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 1), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatUpdateInsertTab()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "A1", "", m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->SetRange(ScRange(10, 10, 0, 10, 12, 0));
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    pFormat->AddEntry(pEntry);
+
+    // the conditional format should listen to A1:A3
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->InsertTab(0, "test2");
+
+    // the conditional format should listen to A1:A3 on the second sheet
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 1), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatUpdateDeleteTab()
+{
+    m_pDoc->InsertTab(0, "test");
+    m_pDoc->InsertTab(1, "Test2");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "A1", "", m_pDoc, ScAddress(10, 10, 1), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->SetRange(ScRange(10, 10, 1, 10, 12, 1));
+    m_pDoc->AddCondFormat(pFormat, 1);
+
+    pFormat->AddEntry(pEntry);
+
+    // the conditional format should listen to A1:A3 on the second sheet
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 1), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->DeleteTab(0);
+
+    // the conditional format should listen to A1:A3 on the second sheet
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatUpdateReference()
+{
+    m_pDoc->InsertTab(0, "test");
+    m_pDoc->InsertTab(1, "Test2");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "A1", "", m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->SetRange(ScRange(10, 10, 0, 10, 12, 0));
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    pFormat->AddEntry(pEntry);
+
+    // the conditional format should listen to A1:A3
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
+        CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+    }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -432,6 +432,8 @@ public:
     void testCellTextWidth();
     void testEditTextIterator();
 
+    // conditional format tests
+    // mostly in ucalc_condformat.cxx
     void testCondFormatINSDEL();
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
@@ -444,10 +446,19 @@ public:
     void testIconSet();
     void testDataBarLengthAutomaticAxis();
     void testDataBarLengthMiddleAxis();
+
+    // Tests for the ScFormulaListener class
     void testFormulaListenerSingleCellToSingleCell();
     void testFormulaListenerMultipleCellsToSingleCell();
     void testFormulaListenerSingleCellToMultipleCells();
     void testFormulaListenerMultipleCellsToMultipleCells();
+
+    // Check that the Listeners are correctly updated when we
+    // call a operation
+    void testCondFormatUpdateMoveTab();
+    void testCondFormatUpdateDeleteTab();
+    void testCondFormatUpdateInsertTab();
+    void testCondFormatUpdateReference();
 
     void testCondFormatEndsWithStr();
     void testCondFormatEndsWithVal();
