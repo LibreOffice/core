@@ -339,6 +339,8 @@ void SalData::initKeyCodeMap()
         if( nKey < 0xffff )\
             maVKMap[ nKey ] = b;
 
+    maVKMap.clear();
+
     initKey( '+', KEY_ADD );
     initKey( '-', KEY_SUBTRACT );
     initKey( '*', KEY_MULTIPLY );
