@@ -23,6 +23,7 @@
 #include <float.h>
 
 #include "chartarr.hxx"
+#include "cellvalue.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
 #include "globstr.hrc"
@@ -105,12 +106,12 @@ double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, b
 {
     double fRet = fDefault;
 
-    CellType eType = rDoc.GetCellType(rPos);
-    switch (eType)
+    ScRefCellValue aCell(rDoc, rPos);
+    switch (aCell.meType)
     {
         case CELLTYPE_VALUE:
         {
-            fRet = rDoc.GetValue(rPos);
+            fRet = aCell.getValue();
             if (bCalcAsShown && fRet != 0.0)
             {
                 sal_uInt32 nFormat = rDoc.GetNumberFormat(rPos);
@@ -120,7 +121,7 @@ double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, b
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rDoc.GetFormulaCell(rPos);
+            ScFormulaCell* pFCell = aCell.mpFormula;
             if (pFCell && !pFCell->GetErrCode() && pFCell->IsValue())
                 fRet = pFCell->GetValue();
         }

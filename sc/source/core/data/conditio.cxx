@@ -1029,22 +1029,14 @@ bool ScConditionEntry::IsAboveAverage( double nArg, bool bEqual ) const
 
 bool ScConditionEntry::IsError( const ScAddress& rPos ) const
 {
-    switch (mpDoc->GetCellType(rPos))
+    ScRefCellValue rCell(*mpDoc, rPos);
+
+    if (rCell.meType == CELLTYPE_FORMULA)
     {
-        case CELLTYPE_VALUE:
-            return false;
-        case CELLTYPE_FORMULA:
-        {
-            ScFormulaCell* pFormulaCell = mpDoc->GetFormulaCell(rPos);
-            if (pFormulaCell && pFormulaCell->GetErrCode())
-                return true;
-        }
-        case CELLTYPE_STRING:
-        case CELLTYPE_EDIT:
-            return false;
-        default:
-            break;
+        if (rCell.mpFormula->GetErrCode())
+            return true;
     }
+
     return false;
 }
 
@@ -1620,13 +1612,9 @@ ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc, const ScCondDate
 
 bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
 {
-    CellType eCellType = mpDoc->GetCellType(rPos);
+    ScRefCellValue rCell(*mpDoc, rPos);
 
-    if (eCellType == CELLTYPE_NONE)
-        // empty cell.
-        return false;
-
-    if (eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+    if (!rCell.hasNumeric())
         // non-numerical cell.
         return false;
 
@@ -1637,7 +1625,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
     long nCurrentDate = rActDate - *(pFormatter->GetNullDate());
 
-    double nVal = mpDoc->GetValue(rPos);
+    double nVal = rCell.getValue();
     long nCellDate = (long) ::rtl::math::approxFloor(nVal);
     Date aCellDate = *(pFormatter->GetNullDate());
     aCellDate += (long) ::rtl::math::approxFloor(nVal);

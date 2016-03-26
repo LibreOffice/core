@@ -413,20 +413,11 @@ std::vector<double>& ScColorFormat::getValues() const
                 for(SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
                 {
                     ScAddress aAddr(nCol, nRow, nTab);
-                    CellType eType = mpDoc->GetCellType(aAddr);
-                    if(eType == CELLTYPE_VALUE)
+                    ScRefCellValue rCell(*mpDoc, aAddr);
+                    if(rCell.hasNumeric())
                     {
-                        double aVal = mpDoc->GetValue(nCol, nRow, nTab);
+                        double aVal = rCell.getValue();
                         rValues.push_back(aVal);
-                    }
-                    else if(eType == CELLTYPE_FORMULA)
-                    {
-                        ScFormulaCell *pCell = mpDoc->GetFormulaCell(aAddr);
-                        if (pCell && pCell->IsValue())
-                        {
-                            double aVal = mpDoc->GetValue(nCol, nRow, nTab);
-                            rValues.push_back(aVal);
-                        }
                     }
                 }
             }
@@ -540,19 +531,12 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleEntri
 
 Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 {
-    CellType eCellType = mpDoc->GetCellType(rAddr);
-    if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+    ScRefCellValue rCell(*mpDoc, rAddr);
+    if(!rCell.hasNumeric())
         return nullptr;
 
-    if (eCellType == CELLTYPE_FORMULA)
-    {
-        ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
-        if (!pCell || !pCell->IsValue())
-            return nullptr;
-    }
-
     // now we have for sure a value
-    double nVal = mpDoc->GetValue(rAddr);
+    double nVal = rCell.getValue();
 
     if (maColorScales.size() < 2)
         return nullptr;
@@ -796,16 +780,9 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
 
 ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 {
-    CellType eCellType = mpDoc->GetCellType(rAddr);
-    if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+    ScRefCellValue rCell(*mpDoc, rAddr);
+    if(!rCell.hasNumeric())
         return nullptr;
-
-    if (eCellType == CELLTYPE_FORMULA)
-    {
-        ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
-        if (!pCell || !pCell->IsValue())
-            return nullptr;
-    }
 
     // now we have for sure a value
 
@@ -816,7 +793,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     double nMinLength = mpFormatData->mnMinLength;
     double nMaxLength = mpFormatData->mnMaxLength;
 
-    double nValue = mpDoc->GetValue(rAddr);
+    double nValue = rCell.getValue();
 
     ScDataBarInfo* pInfo = new ScDataBarInfo();
     if(mpFormatData->meAxisPosition == databar::NONE)
@@ -982,19 +959,12 @@ const ScIconSetFormatData* ScIconSetFormat::GetIconSetData() const
 
 ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 {
-    CellType eCellType = mpDoc->GetCellType(rAddr);
-    if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+    ScRefCellValue rCell(*mpDoc, rAddr);
+    if(!rCell.hasNumeric())
         return nullptr;
 
-    if (eCellType == CELLTYPE_FORMULA)
-    {
-        ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
-        if (!pCell || !pCell->IsValue())
-            return nullptr;
-    }
-
     // now we have for sure a value
-    double nVal = mpDoc->GetValue(rAddr);
+    double nVal = rCell.getValue();
 
     if (mpFormatData->m_Entries.size() < 2)
         return nullptr;
