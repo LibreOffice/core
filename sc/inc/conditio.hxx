@@ -415,8 +415,8 @@ class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
     ScRangeList maRanges;            // Ranges for conditional format
 
 public:
-            ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
-            ~ScConditionalFormat();
+    ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
+    ~ScConditionalFormat();
 
     // true copy of formulas (for Ref-Undo / between documents)
     ScConditionalFormat* Clone(ScDocument* pNewDoc = nullptr) const;
