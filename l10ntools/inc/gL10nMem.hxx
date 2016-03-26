@@ -39,7 +39,7 @@ class l10nMem
         static void showWarning(const string& sText, int iLineNo = 0);
         static void showDebug  (const string& sText, int iLineNo = 0);
         static void showVerbose(const string& sText, int iLineNo = 0);
-        static void keyToUpper (string& sKey);
+        static void keyToLower (string& sKey);
 
         void setModuleName(const string& sModuleName);
         const string& getModuleName(void);

@@ -18,15 +18,14 @@
  */
 #include <string>
 #include <vector>
-using namespace std;
-
-#include "gL10nMem.hxx"
-
-#include "gConvSrc.hxx"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <sstream>
+using namespace std;
+
+#include "gL10nMem.hxx"
+#include "gConvSrc.hxx"
 
 
 convert_src::convert_src(l10nMem& crMemory)
@@ -44,7 +43,6 @@ convert_src::convert_src(l10nMem& crMemory)
 
 
 
-extern int srclex(void);
 void convert_src::doExecute()
 {
     srclex();
@@ -123,6 +121,7 @@ void convert_src::setCmd(char *syyText)
     mbExpectName = true;
     mbInList     = false;
     trim(msCmd);
+    l10nMem::keyToLower(msCmd);
 }
 
 
@@ -174,9 +173,9 @@ void convert_src::setNL(char *syyText, bool bMacro)
             msValue.erase(nL,1);
         }
 
-        sKey += "." + msCmd + "." + msTextName;
+//FIX        sKey += "." + msCmd + "." + msTextName;
         if (msValue.size() && msValue != "-") {
-            mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, "", "", mbMergeMode);
+            mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, "", msCmd, mbMergeMode);
             if (mbMergeMode)
                 insertLanguagePart(sKey, msTextName);
         }

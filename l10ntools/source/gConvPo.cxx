@@ -1,24 +1,35 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
- *
+
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
+
  * This file incorporates work covered by the following license notice:
- *
+
  *   Licensed to the Apache Software Foundation (ASF) under one or more
  *   contributor license agreements. See the NOTICE file distributed
  *   with this work for additional information regarding copyright
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0
  */
+#include <iomanip>
+#include <ctime>
 #include <string>
 #include <vector>
 using namespace std;
+
+#ifdef _MSC_VER
+#pragma warning (push, 1)
+#pragma warning (disable: 4245)
+#endif
+#include <boost/crc.hpp>
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
 
 #include "gL10nMem.hxx"
 #include "gConvPo.hxx"
@@ -72,7 +83,7 @@ void convert_po::setValue(char *syyText, int iLineCnt)
         msId = syyText;
     if (mbExpectStr)
         msStr = syyText;
-    mbExpectId  =
+    mbExpectId =
     mbExpectStr = false;
     miLineNo   += iLineCnt;
 }
@@ -96,12 +107,12 @@ void convert_po::setKey(char *syyText)
 
     // skip "#:" and any blanks
     for (syyText += 2; *syyText == ' ' || *syyText == '\t'; ++syyText)
-        ;
+
     msKey = syyText;
 
     // remove trailing blanks
     for (i = msKey.size() -1; msKey[i] == '\r' || msKey[i] == ' ' || msKey[i] == '\t'; --i)
-        ;
+
     msKey.erase(i+1);
 }
 
@@ -128,7 +139,6 @@ void convert_po::handleNL()
 
 
 
-extern int polex(void);
 void convert_po::doExecute()
 {
     if (mbMergeMode)
@@ -160,8 +170,9 @@ void convert_po::startSave(const string& sName,
 
     ostream outFile(&outBuffer);
 
-    // Set license header
-//FIX JAN POT-Creation-Date
+    // Set header
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
     outFile << "#. extracted from " << sName                       << endl
             << "msgid \"\""                                        << endl
             << "msgstr \"\""                                       << endl
@@ -170,7 +181,8 @@ void convert_po::startSave(const string& sName,
             << "https://bugs.libreoffice.org/enter_bug.cgi?"
             << "product=LibreOffice&bug_status=UNCONFIRMED"
             << "&component=UI\\n\""                                << endl
-            << "\"POT-Creation-Date: \\n\""                        << endl
+            << "\"POT-Creation-Date: "
+            << std::put_time(&tm, "%Y-%m-%d %H:%M%z") << "\\n\""   << endl
             << "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\""    << endl
             << "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"" << endl
             << "\"Language-Team: LANGUAGE <LL@li.org>\\n\""        << endl
@@ -199,7 +211,7 @@ void convert_po::save(const string& sFileName,
     newPos = sFileName.find_last_of("/\\", sFileName.length());
     sName = sFileName.substr(newPos + 1, sFileName.length());
 
-    outFile << endl << "#. xxxxx" << endl;
+    outFile << endl << "#. " << genKeyId(sName + sText) << endl;
     if (sComment.length())
         outFile << "#. " << sComment << endl;
     outFile << "#: " << sName << endl
@@ -215,8 +227,26 @@ void convert_po::save(const string& sFileName,
 
 
 
-
 void convert_po::endSave()
 {
     outBuffer.close();
+}
+
+
+
+string convert_po::genKeyId(const string& text)
+{
+    boost::crc_32_type aCRC32;
+    aCRC32.process_bytes(text.c_str(), text.length());
+    unsigned int nCRC = aCRC32.checksum();
+    string key;
+
+    // Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
+    static const char sSymbols[] =
+        "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+    for (short nKeyInd = 0; nKeyInd < 5; ++nKeyInd) {
+        key += sSymbols[(nCRC & 63) % strlen(sSymbols)];
+        nCRC >>= 6;
+    }
+    return key;
 }

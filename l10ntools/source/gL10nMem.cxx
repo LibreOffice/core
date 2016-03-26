@@ -549,7 +549,7 @@ bool l10nMem::needWrite(const string sFileName, bool bForce)
     if (!iCntAdded && !iCntChanged && !iCntDeleted) {
         cout << "genLang: No changes in " <<   sFileName;
         if (bForce)
-            cout << ", -o switch used, so files are saved" << endl;
+            cout << ", -s switch used, so files are saved" << endl;
         else
             cout << " skipping \"save\"" << endl;
         return bForce;
@@ -731,7 +731,7 @@ void l10nMem::convEntryKey(int           iLineNo,
     if (curENUSindex == -1 || mbStrictMode) {
         // make copy of key in upper case
         curKeyUpper = sKey;
-        keyToUpper(curKeyUpper);
+        keyToLower(curKeyUpper);
 
         // Loop through all potential en-US entries
         for (i = 0; i < iSize; ++i) {
@@ -963,7 +963,7 @@ bool l10nMem::findFileName(const string& sSourceFile)
 
 
 
-void l10nMem::keyToUpper(string& sKey)
+void l10nMem::keyToLower(string& sKey)
 {
     int i, iSize;
 
@@ -973,6 +973,6 @@ void l10nMem::keyToUpper(string& sKey)
         if (ch == ' ' || ch == '*' || ch == '+' || ch == '%')
             sKey[i] = '_';
         else
-            sKey[i] = toupper(ch);
+            sKey[i] = tolower(ch);
     }
 }

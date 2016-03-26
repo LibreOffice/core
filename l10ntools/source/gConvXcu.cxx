@@ -20,8 +20,13 @@
 #include <vector>
 using namespace std;
 
+
+
 #include "gL10nMem.hxx"
 #include "gConvXcu.hxx"
+
+
+
 convert_xcu::convert_xcu(l10nMem& crMemory)
                         : convert_gen(crMemory),
                           mbNoCollectingData(true),

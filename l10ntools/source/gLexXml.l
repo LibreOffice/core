@@ -16,9 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
-
 %top{
 #include <string>
 #include <vector>
@@ -27,56 +24,29 @@ using namespace std;
 #include "gL10nMem.hxx"
 #include "gConvXml.hxx"
 
-#define IMPLptr convert_gen::mcImpl
 #define LOCptr ((convert_xml *)convert_gen::mcImpl)
-
-/* enlarge token buffer to tokenize whole strings */
-#undef  YYLMAX
 #define YYLMAX 64000
-
-/* change reader function (input) to our own version */
-#define YY_INPUT(buf,result,max_size) {int xres; IMPLptr->lexRead(buf, &xres, max_size); result = (yy_size_t)xres;}
-
-#define yytext_ptr xmltext_ptr
+#define YY_INPUT(buf,result,max_size) LOCptr->lexRead(buf, max_size)
 #define YY_NO_UNISTD_H 1
+#define yytext_ptr xmltext_ptr
+#define yy_flex_strncpy convert_gen::lexStrncpy 
 }
 
-%{
-static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
-{
-    register int i;
-    for ( i = 0; i < n; ++i )
-        s1[i] = s2[i];
-}
-%}
 
 
-
-
-
-/*****************************   O P T I O N S   *****************************/
-/* 8bit               --> allow 8bit characters in the input stream   */
-/* noyywrap           --> yywrap is not called (single file scan)     */
-/* never-interactive  --> no check for console output                 */
-/* prefix=            --> yyFlexLexer change name                     */
-/* --- The following options are for future use (maybe)               */
-/* yyclass=           --> subClass yyFlexLexer to allow own functions */
-/* c++                --> generate C++ classes                        */
 %option prefix="xml" 8bit noyywrap never-interactive
 %array
 %p 24000
 %e 1200
 %n 500
-
-
 %x CMD
+
 PRE   ^[ \t]*
 SUF   [ \t\r\n\\]
 SUFT  [ \t\r\n\[]
 SPACE [ \t]*
 IDENT ([(a-zA-Z0-9_][ a-zA-Z0-9_\-\+\*(,&]*[a-zA-Z0-9)_]|[a-zA-Z0-9_])
 KEYID [a-zA-Z0-9_-]+
-
 %%
 
 
@@ -92,18 +62,18 @@ KEYID [a-zA-Z0-9_-]+
     }
     yytext[i+1] = '\0';
 
-    IMPLptr->copySource(yytext);
+    LOCptr->copySource(yytext);
 }
 
 
 "//".* {
-    IMPLptr->copySource(yytext);
+    LOCptr->copySource(yytext);
 }
 
 
 
 . {
-    IMPLptr->copySource(yytext);
+    LOCptr->copySource(yytext);
 
     // Just to please compiler.
     if (false)

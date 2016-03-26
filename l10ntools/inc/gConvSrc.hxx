@@ -21,6 +21,9 @@
 #include "gConv.hxx"
 
 
+extern int srclex(void);
+
+
 
 class convert_src : public convert_gen
 {

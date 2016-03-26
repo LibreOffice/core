@@ -22,6 +22,10 @@
 
 
 
+extern int polex(void);
+
+
+
 class convert_po : public convert_gen
 {
     public:
@@ -61,5 +65,6 @@ class convert_po : public convert_gen
         filebuf outBuffer;
 
         void doExecute() override;
+        string genKeyId(const string& text);
 };
 #endif

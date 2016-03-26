@@ -42,7 +42,8 @@ class convert_gen
         virtual void doExecute() = 0;
 
         // utility functions for converters
-        void lexRead(char *sBuf, int *nResult, int nMax_size);
+        int lexRead(char *sBuf, int nMax_size);
+        static void lexStrncpy(char* s1, const char * s2, int n);
         string& copySource(char const *yyText, bool bDoClear = true);
 
     protected:

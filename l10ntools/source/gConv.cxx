@@ -191,29 +191,38 @@ bool convert_gen::prepareFile()
 
 
 
-void convert_gen::lexRead(char *sBuf, int *nResult, int nMax_size)
+int convert_gen::lexRead(char *sBuf, int nMax_size)
 {
+    int nResult = 0;
+
     // did we hit eof
-    if (miSourceReadIndex == -1) {
-        *nResult = 0;
-        return;
-    }
+    if (miSourceReadIndex != -1) {
+        // assume we can copy all that are left.
+        nResult = msSourceBuffer.size() - miSourceReadIndex;
 
-    // assume we can copy all that are left.
-    *nResult = msSourceBuffer.size() - miSourceReadIndex;
+        // space enough for the whole line ?
+        if (nResult <= nMax_size) {
+            msSourceBuffer.copy(sBuf, nResult, miSourceReadIndex);
+            l10nMem::showDebug(sBuf);
+            miSourceReadIndex = -1;
+        }
+        else {
+            msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
+            l10nMem::showDebug(sBuf);
+            nResult = nMax_size;
+            miSourceReadIndex += nMax_size;
+        }
+    }
+    return nResult;
+}
 
-    // space enough for the whole line ?
-    if (*nResult <= nMax_size) {
-        msSourceBuffer.copy(sBuf, *nResult, miSourceReadIndex);
-        l10nMem::showDebug(sBuf);
-        miSourceReadIndex = -1;
-    }
-    else {
-        msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
-        l10nMem::showDebug(sBuf);
-        *nResult = nMax_size;
-        miSourceReadIndex += nMax_size;
-    }
+
+
+void convert_gen::lexStrncpy(char *s1, const char *s2, int n)
+{
+    register int i;
+    for (i = 0; i < n; ++i)
+        s1[i] = s2[i];
 }
 
 
