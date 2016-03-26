@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <internal/signalshared.hxx>
+
 /* system headers */
 #include "system.h"
 #include <tchar.h>
@@ -25,7 +29,6 @@
 #include "path_helper.hxx"
 
 #include <osl/diagnose.h>
-#include <osl/mutex.h>
 #include <osl/signal.h>
 #ifndef __MINGW32__
 #include <DbgHelp.h>
@@ -36,80 +39,49 @@
 #include <eh.h>
 #include <stdexcept>
 
-typedef struct _oslSignalHandlerImpl
+namespace
 {
-    oslSignalHandlerFunction      Handler;
-    void*                         pData;
-    struct _oslSignalHandlerImpl* pNext;
-} oslSignalHandlerImpl;
+long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
 
-static sal_Bool               bErrorReportingEnabled = sal_True;
-static sal_Bool               bInitSignal = sal_False;
-static oslMutex               SignalListMutex;
-static oslSignalHandlerImpl*  SignalList;
+void onErrorReportingChanged(bool bEnable);
+}
 
-static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
-
-static sal_Bool InitSignal()
+bool onInitSignal()
 {
-    HMODULE hFaultRep;
+    SetUnhandledExceptionFilter(signalHandlerFunction);
 
-    SignalListMutex = osl_createMutex();
-
-    SetUnhandledExceptionFilter(SignalHandlerFunction);
-
-    hFaultRep = LoadLibrary( "faultrep.dll" );
+    HMODULE hFaultRep = LoadLibrary( "faultrep.dll" );
     if ( hFaultRep )
     {
-        pfn_ADDEREXCLUDEDAPPLICATIONW       pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
+        pfn_ADDEREXCLUDEDAPPLICATIONW pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
         if ( pfn )
             pfn( L"SOFFICE.EXE" );
         FreeLibrary( hFaultRep );
     }
 
-    return sal_True;
+    return true;
 }
 
-static sal_Bool DeInitSignal()
+bool onDeInitSignal()
 {
-    SetUnhandledExceptionFilter(NULL);
+    SetUnhandledExceptionFilter(nullptr);
 
-    osl_destroyMutex(SignalListMutex);
-
-    return sal_False;
+    return false;
 }
 
-static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
+namespace
 {
-    oslSignalHandlerImpl* pHandler = SignalList;
-    oslSignalAction Action = osl_Signal_ActCallNextHdl;
-
-    while (pHandler != NULL)
-    {
-        if ((Action = pHandler->Handler(pHandler->pData, pInfo)) != osl_Signal_ActCallNextHdl)
-            break;
-
-        pHandler = pHandler->pNext;
-    }
-
-    return Action;
-}
-
-/*****************************************************************************/
-/* SignalHandlerFunction    */
-/*****************************************************************************/
-
 /* magic Microsoft C++ compiler exception constant */
 #define EXCEPTION_MSC_CPP_EXCEPTION 0xe06d7363
 
-static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
+long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
-    static sal_Bool     bNested = sal_False;
-    oslSignalInfo   Info;
-    oslSignalAction Action;
+    static bool bNested = false;
 
-    Info.UserSignal = lpEP->ExceptionRecord->ExceptionCode;
-    Info.UserData   = NULL;
+    oslSignalInfo info;
+
+    info.UserSignal = lpEP->ExceptionRecord->ExceptionCode;
+    info.UserData   = nullptr;
 
     switch (lpEP->ExceptionRecord->ExceptionCode)
     {
@@ -118,35 +90,37 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
          */
         case EXCEPTION_MSC_CPP_EXCEPTION:
         case EXCEPTION_ACCESS_VIOLATION:
-            Info.Signal = osl_Signal_AccessViolation;
+            info.Signal = osl_Signal_AccessViolation;
             break;
 
         case EXCEPTION_INT_DIVIDE_BY_ZERO:
-            Info.Signal = osl_Signal_IntegerDivideByZero;
+            info.Signal = osl_Signal_IntegerDivideByZero;
             break;
 
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-            Info.Signal = osl_Signal_FloatDivideByZero;
+            info.Signal = osl_Signal_FloatDivideByZero;
             break;
 
         case EXCEPTION_BREAKPOINT:
-            Info.Signal = osl_Signal_DebugBreak;
+            info.Signal = osl_Signal_DebugBreak;
             break;
 
         default:
-            Info.Signal = osl_Signal_System;
+            info.Signal = osl_Signal_System;
             break;
     }
 
+    oslSignalAction action;
+
     if ( !bNested )
     {
-        bNested = sal_True;
-        Action = CallSignalHandler(&Info);
+        bNested = true;
+        action = callSignalHandler(&info);
     }
     else
-        Action = osl_Signal_ActKillApp;
+        action = osl_Signal_ActKillApp;
 
-    switch ( Action )
+    switch ( action )
     {
         case osl_Signal_ActCallNextHdl:
             return EXCEPTION_CONTINUE_SEARCH;
@@ -165,113 +139,9 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
     return EXCEPTION_CONTINUE_EXECUTION;
 }
 
-/*****************************************************************************/
-/* osl_addSignalHandler */
-/*****************************************************************************/
-oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler, void* pData)
-{
-    oslSignalHandlerImpl* pHandler;
-
-    OSL_ASSERT(Handler != NULL);
-
-    if (! bInitSignal)
-        bInitSignal = InitSignal();
-
-    pHandler = reinterpret_cast< oslSignalHandlerImpl* >( calloc( 1, sizeof(oslSignalHandlerImpl) ) );
-
-    if (pHandler != NULL)
-    {
-        pHandler->Handler = Handler;
-        pHandler->pData   = pData;
-
-        osl_acquireMutex(SignalListMutex);
-
-        pHandler->pNext = SignalList;
-        SignalList      = pHandler;
-
-        osl_releaseMutex(SignalListMutex);
-
-        return pHandler;
-    }
-
-    return NULL;
-}
-
-/*****************************************************************************/
-/* osl_removeSignalHandler */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
-{
-    oslSignalHandlerImpl *pHandler, *pPrevious = NULL;
-
-    OSL_ASSERT(Handler != NULL);
-
-    if (! bInitSignal)
-        bInitSignal = InitSignal();
-
-    osl_acquireMutex(SignalListMutex);
-
-    pHandler = SignalList;
-
-    while (pHandler != NULL)
-    {
-        if (pHandler == Handler)
-        {
-            if (pPrevious)
-                pPrevious->pNext = pHandler->pNext;
-            else
-                SignalList = pHandler->pNext;
-
-            osl_releaseMutex(SignalListMutex);
-
-            if (SignalList == NULL)
-                bInitSignal = DeInitSignal();
-
-            free(pHandler);
-
-            return sal_True;
-        }
-
-        pPrevious = pHandler;
-        pHandler  = pHandler->pNext;
-    }
-
-    osl_releaseMutex(SignalListMutex);
-
-    return sal_False;
-}
-
-/*****************************************************************************/
-/* osl_raiseSignal */
-/*****************************************************************************/
-oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
-{
-    oslSignalInfo   Info;
-    oslSignalAction Action;
-
-    if (! bInitSignal)
-        bInitSignal = InitSignal();
-
-    osl_acquireMutex(SignalListMutex);
-
-    Info.Signal     = osl_Signal_User;
-    Info.UserSignal = UserSignal;
-    Info.UserData   = UserData;
-
-    Action = CallSignalHandler(&Info);
-
-    osl_releaseMutex(SignalListMutex);
-
-    return Action;
-}
-
-/*****************************************************************************/
-/* osl_setErrorReporting */
-/*****************************************************************************/
-
 void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* /* pExcPtrs */)
 {
-    const char* pSEHName = NULL;
+    const char* pSEHName = nullptr;
     switch( nSEHCode)
     {
         case EXCEPTION_ACCESS_VIOLATION:         pSEHName = "SEH Exception: ACCESS VIOLATION"; break;
@@ -304,11 +174,8 @@ void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* /* pExcPtrs */)
         throw std::runtime_error( pSEHName);
 }
 
-sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
+void onErrorReportingChanged(bool bEnable)
 {
-    sal_Bool bOld = bErrorReportingEnabled;
-    bErrorReportingEnabled = bEnable;
-
 #if defined _MSC_VER
     if( !bEnable) // if the crash reporter is disabled
     {
@@ -316,8 +183,8 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
         _set_se_translator( win_seh_translator);
     }
 #endif
+}
 
-    return bOld;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
