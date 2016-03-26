@@ -74,18 +74,6 @@ void ScDocument::Broadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    // Repaint for conditional formats with relative references:
-    for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
-    {
-        if(!maTabs[nTab])
-            continue;
-
-        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
-        if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-            pCondFormList->SourceChanged( rHint.GetAddress() );
-
-    }
-
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
     {
         SCTAB nTab = rHint.GetAddress().Tab();
@@ -129,32 +117,6 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool b
 
         if (pBASM->AreaBroadcast(rRange, nHint) || bIsBroadcasted)
             TrackFormulas(nHint);
-    }
-
-    // Repaint for conditional formats with relative references:
-    for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
-    {
-        ScTable* pTab = FetchTable(nTab);
-        if (!pTab)
-            continue;
-
-        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
-        if (pCondFormList && !pCondFormList->empty())
-        {
-            /* TODO: looping over all possible cells is a terrible bottle neck,
-             * for each cell looping over all conditional formats even worse,
-             * this certainly needs a better method. */
-            ScAddress aAddress( 0, 0, nTab);
-            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-            {
-                aAddress.SetRow(nRow);
-                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-                {
-                    aAddress.SetCol(nCol);
-                    pCondFormList->SourceChanged(aAddress);
-                }
-            }
-        }
     }
 
     for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
@@ -267,16 +229,6 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         if ( pBASM->AreaBroadcast( rHint ) )
             TrackFormulas( rHint.GetId() );
-    }
-
-    for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
-    {
-        if(!maTabs[nTab])
-            continue;
-
-        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
-        if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-            pCondFormList->SourceChanged( rHint.GetAddress() );
     }
 }
 
@@ -608,16 +560,6 @@ void ScDocument::TrackFormulas( sal_uInt32 nHintId )
             if (pBC)
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
-            // Repaint for conditional formats with relative references:
-            TableContainer::iterator itr = maTabs.begin();
-            for(; itr != maTabs.end(); ++itr)
-            {
-                if(!*itr)
-                    continue;
-                ScConditionalFormatList* pCondFormList = (*itr)->GetCondFormList();
-                if ( pCondFormList )
-                    pCondFormList->SourceChanged( pTrack->aPos );
-            }
             // for "calculate" event, keep track of which sheets are affected by tracked formulas
             if ( bCalcEvent )
                 SetCalcNotification( pTrack->aPos.Tab() );

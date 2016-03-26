@@ -172,14 +172,14 @@ ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
         return nullptr;
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
+    pFormat->SetRange(maRanges);
+
     for(EntryContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         ScFormatEntry* pEntry = (*itr)->GetEntry();
         if(pEntry)
             pFormat->AddEntry(pEntry);
     }
-
-    pFormat->SetRange(maRanges);
 
     return pFormat;
 }
