@@ -129,26 +129,28 @@ void ScFiltersTest::testTdf43534()
 
 void ScFiltersTest::testTdf91979()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    CPPUNIT_ASSERT_MESSAGE( "no desktop", xDesktop.is() );
+    uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no loader", xLoader.is() );
 
-    Sequence < beans::PropertyValue > args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= true;
+    Sequence < beans::PropertyValue > extraArgs( 1 );
+    extraArgs[ 0 ].Name = "Hidden";
+    extraArgs[ 0 ].Value <<= true;
 
-    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
-        "private:factory/scalc",
-        "_blank",
-        0,
-        args);
-    CPPUNIT_ASSERT(xComponent.is());
+    uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
+            "private:factory/scalc" ,
+            "_blank" ,
+            0 /* search flags */ ,
+            extraArgs );
+    CPPUNIT_ASSERT_MESSAGE( "no component", xComponent.is() );
 
     // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent( xComponent );
+    CPPUNIT_ASSERT_MESSAGE( "no document shell", pFoundShell );
 
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh.get() != nullptr);
+    ScDocShellRef xDocSh = dynamic_cast< ScDocShell* >( pFoundShell );
+    CPPUNIT_ASSERT( xDocSh.get() != nullptr );
 
     // Get the document controller
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);

@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -23,11 +24,13 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 #include "test/container/xnamed.hxx"
 #include "test/sheet/xdatapilottable.hxx"
 #include "test/sheet/xdatapilotdescriptor.hxx"
 #include "test/beans/xpropertyset.hxx"
-//check the DataPilot of Calc.
+
+// check the DataPilot of Calc
 
 using namespace css;
 using namespace css::lang;
@@ -86,8 +89,8 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     else
         return mxObject;
 
-    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document!", xSheetDoc.is());
+    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc( mxComponent, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no calc document", xSheetDoc.is() );
 
     // the cell range
     table::CellRangeAddress sCellRangeAdress;

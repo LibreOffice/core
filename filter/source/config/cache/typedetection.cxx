@@ -949,8 +949,8 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
             if (!sDeepType.isEmpty())
                 return sDeepType;
         }
-        catch(const css::container::NoSuchElementException&)
-            {}
+        catch( ... )
+            { }
         // e)
     }
 
@@ -1007,21 +1007,14 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
 
     try
     {
-        // Attention! If e.g. an office module was not installed sometimes we
-        // find a registered detect service, which is referred inside the
-        // configuration ... but not really installed. On the other side we use
-        // third party components here, which can make trouble anyway.  So we
-        // should handle errors during creation of such services more
-        // gracefully .-)
-        xDetector.set(
-                xContext->getServiceManager()->createInstanceWithContext(sDetectService, xContext),
-                css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::uno::XInterface > xInterface =
+                xContext->getServiceManager()->createInstanceWithContext( sDetectService, xContext );
+        if ( xInterface.is() )
+            xDetector.set( xInterface, css::uno::UNO_QUERY_THROW );
     }
-    catch (...)
-    {
-    }
+    catch ( ... ) { }
 
-    if ( ! xDetector.is())
+    if ( ! xDetector.is() )
         return OUString();
 
     OUString sDeepType;
@@ -1030,22 +1023,19 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         // start deep detection
         // Don't forget to convert stl descriptor to its uno representation.
 
-        /* Attention!
+        /*
                 You have to use an explicit instance of this uno sequence ...
-                Because its used as an in out parameter. And in case of a temp. used object
-                we will run into memory corruptions!
+                Because its used as an in out parameter. And in case of a temporary used object
+                you will run into memory corruptions
         */
         css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
         rDescriptor >> lDescriptor;
-        sDeepType = xDetector->detect(lDescriptor);
+        sDeepType = xDetector->detect( lDescriptor );
         rDescriptor << lDescriptor;
     }
     catch (...)
     {
-        // We should ignore errors here.
-        // Thrown exceptions mostly will end in crash recovery ...
-        // But might be we find another deep detection service which can detect the same
-        // document without a problem .-)
+        // ignore errors here
         sDeepType.clear();
     }
 
