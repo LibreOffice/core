@@ -90,15 +90,10 @@ namespace comphelper
         bool            m_isModified;
 
     public:
-        // XServiceInfo - static versions
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
-        static OUString getImplementationName_static() throw( css::uno::RuntimeException );
-        static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
-    protected:
         OPropertyBag();
         virtual ~OPropertyBag();
+
+    protected:
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 

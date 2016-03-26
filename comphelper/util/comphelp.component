@@ -40,7 +40,8 @@
   <implementation name="com.sun.star.comp.SequenceOutputStreamService">
     <service name="com.sun.star.io.SequenceOutputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.comphelper.OPropertyBag">
+  <implementation name="com.sun.star.comp.comphelper.OPropertyBag"
+      constructor="com_sun_star_comp_comphelper_OPropertyBag">		  >
     <service name="com.sun.star.beans.PropertyBag"/>
   </implementation>
   <implementation name="com.sun.star.comp.embed.InstanceLocker"

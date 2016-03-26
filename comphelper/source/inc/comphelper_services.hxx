@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 void createRegistryInfo_Map();
-void createRegistryInfo_OPropertyBag();
 void createRegistryInfo_SequenceInputStream();
 void createRegistryInfo_SequenceOutputStream();
 void createRegistryInfo_UNOMemoryStream();
