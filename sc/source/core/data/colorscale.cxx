@@ -134,19 +134,7 @@ struct StopListeningCell
     // TODO: moggi: use EndListeningArea
     void operator()(const ScRange& rRange)
     {
-        for(SCTAB nTab = rRange.aStart.Tab(),
-                nTabEnd = rRange.aEnd.Tab(); nTab <= nTabEnd; ++nTab)
-        {
-            for(SCCOL nCol = rRange.aStart.Col(),
-                    nColEnd = rRange.aEnd.Col(); nCol <= nColEnd; ++nCol)
-            {
-                for(SCROW nRow = rRange.aStart.Row(),
-                        nRowEnd = rRange.aEnd.Row(); nRow <= nRowEnd; ++nRow)
-                {
-                    mpDoc->EndListeningCell(ScAddress(nCol, nRow, nTab), mpListener);
-                }
-            }
-        }
+        mpDoc->EndListeningArea(rRange, false, mpListener);
     }
 
 private:
