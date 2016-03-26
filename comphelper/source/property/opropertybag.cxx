@@ -19,8 +19,6 @@
 
 
 #include "opropertybag.hxx"
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -39,11 +37,13 @@
 
 using namespace ::com::sun::star;
 
-void createRegistryInfo_OPropertyBag()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_comphelper_OPropertyBag (
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OAutoRegistration< ::comphelper::OPropertyBag > aAutoRegistration;
+    return cppu::acquire(new comphelper::OPropertyBag());
 }
-
 
 namespace comphelper
 {
@@ -73,14 +73,6 @@ namespace comphelper
 
     IMPLEMENT_FORWARD_XINTERFACE2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
-
-
-    Sequence< OUString > OPropertyBag::getSupportedServiceNames_static() throw( RuntimeException )
-    {
-        Sequence< OUString > aServices { "com.sun.star.beans.PropertyBag" };
-        return aServices;
-    }
-
 
     void SAL_CALL OPropertyBag::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
     {
@@ -120,22 +112,9 @@ namespace comphelper
         }
     }
 
-
-    OUString OPropertyBag::getImplementationName_static() throw( RuntimeException )
-    {
-        return OUString( "com.sun.star.comp.comphelper.OPropertyBag" );
-    }
-
-
-    Reference< XInterface > SAL_CALL OPropertyBag::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
-    {
-        return *new OPropertyBag;
-    }
-
-
     OUString SAL_CALL OPropertyBag::getImplementationName() throw (RuntimeException, std::exception)
     {
-        return getImplementationName_static();
+        return OUString( "com.sun.star.comp.comphelper.OPropertyBag" );
     }
 
     sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
@@ -143,12 +122,11 @@ namespace comphelper
         return cppu::supportsService(this, rServiceName);
     }
 
-
     Sequence< OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_static();
+        Sequence< OUString > aServices { "com.sun.star.beans.PropertyBag" };
+        return aServices;
     }
-
 
     void OPropertyBag::fireEvents(
             sal_Int32 * /*pnHandles*/,

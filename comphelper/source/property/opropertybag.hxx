@@ -91,16 +91,10 @@ namespace comphelper
         //noncopyable
         OPropertyBag(const OPropertyBag&) = delete;
         const OPropertyBag& operator=(const OPropertyBag&) = delete;
-
-        // XServiceInfo - static versions
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
-        static OUString getImplementationName_static() throw( css::uno::RuntimeException );
-        static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
-    protected:
         OPropertyBag();
         virtual ~OPropertyBag();
+
+    protected:
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
