@@ -1906,8 +1906,7 @@ public:
     void EndListeningArea( const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
                         /** Broadcast wrapper, calls
                             rHint.GetCell()->Broadcast() and AreaBroadcast()
-                            and TrackFormulas() and conditional format list
-                            SourceChanged().
+                            and TrackFormulas()
                             Preferred.
                          */
     void                Broadcast( const ScHint& rHint );
