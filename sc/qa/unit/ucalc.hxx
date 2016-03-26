@@ -442,6 +442,10 @@ public:
     void testIconSet();
     void testDataBarLengthAutomaticAxis();
     void testDataBarLengthMiddleAxis();
+    void testFormulaListenerSingleCellToSingleCell();
+    void testFormulaListenerMultipleCellsToSingleCell();
+    void testFormulaListenerSingleCellToMultipleCells();
+    void testFormulaListenerMultipleCellsToMultipleCells();
 
     void testCondFormatEndsWithStr();
     void testCondFormatEndsWithVal();
@@ -687,6 +691,10 @@ public:
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testDataBarLengthAutomaticAxis);
     CPPUNIT_TEST(testDataBarLengthMiddleAxis);
+    CPPUNIT_TEST(testFormulaListenerSingleCellToSingleCell);
+    CPPUNIT_TEST(testFormulaListenerSingleCellToMultipleCells);
+    CPPUNIT_TEST(testFormulaListenerMultipleCellsToSingleCell);
+    CPPUNIT_TEST(testFormulaListenerMultipleCellsToMultipleCells);
     CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);

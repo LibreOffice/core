@@ -18,6 +18,8 @@
 #include "scitems.hxx"
 #include "attrib.hxx"
 #include "fillinfo.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
 
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
@@ -661,6 +663,82 @@ void Test::testCondFormatEndsWithVal()
         bool bShouldBeValid = (i % 10) == 2;
         CPPUNIT_ASSERT_EQUAL(bShouldBeValid, bValid);
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaListenerSingleCellToSingleCell()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
+    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+
+    std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
+
+    ScFormulaListener aListener(m_pDoc);
+
+    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    CPPUNIT_ASSERT(aListener.NeedsRepaint());
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaListenerSingleCellToMultipleCells()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
+    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+
+    std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
+
+    ScFormulaListener aListener(m_pDoc);
+
+    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    CPPUNIT_ASSERT(aListener.NeedsRepaint());
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaListenerMultipleCellsToSingleCell()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
+    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+
+    std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
+
+    ScFormulaListener aListener(m_pDoc);
+
+    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    CPPUNIT_ASSERT(aListener.NeedsRepaint());
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaListenerMultipleCellsToMultipleCells()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
+    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+
+    std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
+
+    ScFormulaListener aListener(m_pDoc);
+
+    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    CPPUNIT_ASSERT(aListener.NeedsRepaint());
 
     m_pDoc->DeleteTab(0);
 }
