@@ -62,6 +62,7 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -1209,10 +1210,25 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             {
                 if( !IsStyleSheetImport() )
                 {
-                    uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
-                    rContext->Insert( PROP_NUMBERING_RULES, aRules );
-                    // erase numbering from pStyle if already set
-                    rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+                    // Assume outline can be determeined by first level.
+                    ListLevel::Pointer pAbsLevel = pList->GetAbstractDefinition()->GetLevel( 0 );
+                    if (pAbsLevel->isOutlineNumbering())
+                    {
+                        uno::Reference< text::XChapterNumberingSupplier > xOutlines (
+                            GetTextFactory() , uno::UNO_QUERY_THROW );
+                        uno::Reference< container::XIndexReplace > xOutlineRules =
+                            xOutlines->getChapterNumberingRules( );
+                        uno::Any aRules = uno::makeAny( xOutlineRules );
+                        rContext->Insert( PROP_NUMBERING_RULES, aRules );
+                        rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString("Outline")));
+                    }
+                    else
+                    {
+                        uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
+                        rContext->Insert( PROP_NUMBERING_RULES, aRules );
+                        // erase numbering from pStyle if already set
+                        rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+                    }
 
                     // Indentation can came from:
                     // 1) Paragraph style's numbering's indentation: the current non-style numId has priority over it.
@@ -2049,8 +2065,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, pStyleTable) : -1;
             if( pStyleSheetProperties && nListId >= 0 )
             {
+                ListsManager::Pointer pListTable = m_pImpl->GetListTable();
+                ListDef::Pointer pList = pListTable->GetList( nListId );
+                ListLevel::Pointer pAbsLevel = pList->GetAbstractDefinition()->GetLevel( 0 );
+                bool bOutline = pAbsLevel->isOutlineNumbering();
                 rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(
-                            ListDef::GetStyleName( nListId ) ), false);
+                            bOutline ? OUString("Outline"): ListDef::GetStyleName( nListId ) ), false);
 
                 // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
                 sal_Int32 nParaRightMargin = 0;
