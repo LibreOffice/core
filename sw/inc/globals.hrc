@@ -95,6 +95,9 @@
 
 // free
 
+#define STR_BOOKMARK_NAME           (RC_GLOBALS_BEGIN + 36)
+#define STR_BOOKMARK_TEXT           (RC_GLOBALS_BEGIN + 37)
+
 #define STR_LOAD_HTML_DOC           (RC_GLOBALS_BEGIN + 38)
 
 #define STR_JAVA_EDIT               (RC_GLOBALS_BEGIN + 39)
