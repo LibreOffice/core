@@ -1956,6 +1956,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getFill();
+                }
+
                 static basegfx::BColor aBlack(0.0, 0.0, 0.0);
                 return &aBlack;
             }
@@ -1999,6 +2006,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getStroke();
+                }
+
                 return nullptr;
             }
             else if(maStroke.isSet())
@@ -2041,6 +2055,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getSvgGradientNodeFill();
+                }
+
                 return nullptr;
             }
             else if(mpSvgGradientNodeFill)
@@ -2064,6 +2085,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getSvgGradientNodeStroke();
+                }
+
                 return nullptr;
             }
             else if(mpSvgGradientNodeStroke)
@@ -2087,6 +2115,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getSvgPatternNodeFill();
+                }
+
                 return nullptr;
             }
             else if(mpSvgPatternNodeFill)
@@ -2110,6 +2145,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getSvgPatternNodeStroke();
+                }
+
                 return nullptr;
             }
             else if(mpSvgPatternNodeStroke)
@@ -2133,6 +2175,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getStrokeWidth();
+                }
+
                 return SvgNumber(0.0);
             }
             else if(maStrokeWidth.isSet())
@@ -2166,6 +2215,13 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getFillOpacity();
+                }
+
                 return SvgNumber(1.0);
             }
             else if(maFillOpacity.isSet())
@@ -2188,6 +2244,12 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getOpacity();
+                }
                 return SvgNumber(1.0);
             }
             else if(maOpacity.isSet())
