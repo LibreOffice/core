@@ -35,14 +35,19 @@
 #include <vcl/svapp.hxx>
 #include <memory>
 
-#define UNOGRAPHIC_GRAPHICTYPE  1
-#define UNOGRAPHIC_MIMETYPE     2
-#define UNOGRAPHIC_SIZEPIXEL    3
-#define UNOGRAPHIC_SIZE100THMM  4
-#define UNOGRAPHIC_BITSPERPIXEL 5
-#define UNOGRAPHIC_TRANSPARENT  6
-#define UNOGRAPHIC_ALPHA        7
-#define UNOGRAPHIC_ANIMATED     8
+
+enum class UnoGraphicProperty
+{
+      GraphicType = 1
+    , MimeType = 2
+    , SizePixel = 3
+    , Size100thMM = 4
+    , BitsPerPixel = 5
+    , Transparent = 6
+    , Alpha = 7
+    , Animated = 8
+};
+
 
 using namespace ::com::sun::star;
 
@@ -259,14 +264,14 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("GraphicType"), UNOGRAPHIC_GRAPHICTYPE, cppu::UnoType<sal_Int8>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("MimeType"), UNOGRAPHIC_MIMETYPE, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("SizePixel"), UNOGRAPHIC_SIZEPIXEL, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Size100thMM"), UNOGRAPHIC_SIZE100THMM, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("BitsPerPixel"), UNOGRAPHIC_BITSPERPIXEL, cppu::UnoType<sal_uInt8>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Transparent"), UNOGRAPHIC_TRANSPARENT, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Alpha"), UNOGRAPHIC_ALPHA, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Animated"), UNOGRAPHIC_ANIMATED, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "GraphicType" ), static_cast< sal_Int32 >( UnoGraphicProperty::GraphicType ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "MimeType" ), static_cast< sal_Int32 >( UnoGraphicProperty::MimeType ), cppu::UnoType< OUString >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "SizePixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::SizePixel ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "Size100thMM" ), static_cast< sal_Int32 >( UnoGraphicProperty::Size100thMM ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "BitsPerPixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::BitsPerPixel ), cppu::UnoType< sal_uInt8 >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "Transparent" ), static_cast< sal_Int32 >( UnoGraphicProperty::Transparent ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "Alpha" ), static_cast< sal_Int32 >( UnoGraphicProperty::Alpha ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "Animated" ), static_cast< sal_Int32 >( UnoGraphicProperty::Animated ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -294,9 +299,10 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
     while( *ppEntries )
     {
-        switch( (*ppEntries)->mnHandle )
+        UnoGraphicProperty theProperty = static_cast< UnoGraphicProperty >( (*ppEntries)->mnHandle );
+        switch( theProperty )
         {
-            case UNOGRAPHIC_GRAPHICTYPE:
+            case UnoGraphicProperty::GraphicType:
             {
                 const GraphicType eType( mpGraphic ? mpGraphic->GetType() : meType );
 
@@ -306,7 +312,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case UNOGRAPHIC_MIMETYPE:
+            case UnoGraphicProperty::MimeType:
             {
                 OUString aMimeType;
 
@@ -351,7 +357,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case UNOGRAPHIC_SIZEPIXEL:
+            case UnoGraphicProperty::SizePixel:
             {
                 awt::Size aAWTSize( 0, 0 );
 
@@ -370,7 +376,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case UNOGRAPHIC_SIZE100THMM:
+            case UnoGraphicProperty::Size100thMM:
             {
                 awt::Size aAWTSize( 0, 0 );
 
@@ -389,7 +395,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case UNOGRAPHIC_BITSPERPIXEL:
+            case UnoGraphicProperty::BitsPerPixel:
             {
                 sal_uInt16 nBitsPerPixel = 0;
 
@@ -405,19 +411,19 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case UNOGRAPHIC_TRANSPARENT:
+            case UnoGraphicProperty::Transparent:
             {
                 *pValues <<= mpGraphic ? mpGraphic->IsTransparent() : mbTransparent;
             }
             break;
 
-            case UNOGRAPHIC_ALPHA:
+            case UnoGraphicProperty::Alpha:
             {
                 *pValues <<= mpGraphic ? mpGraphic->IsAlpha() : mbAlpha;
             }
             break;
 
-            case UNOGRAPHIC_ANIMATED:
+            case UnoGraphicProperty::Animated:
             {
                 *pValues <<= mpGraphic ? mpGraphic->IsAnimated() : mbAnimated;
             }
