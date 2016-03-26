@@ -770,6 +770,9 @@ void Test::testCondFormatUpdateMoveTab()
     {
         m_pDoc->SetValue(ScAddress(0, nRow, 1), 1.0);
         CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
+        CPPUNIT_ASSERT(!pEntry->NeedsRepaint());
     }
 
     m_pDoc->DeleteTab(1);
@@ -793,6 +796,9 @@ void Test::testCondFormatUpdateInsertTab()
     {
         m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
         CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+
+        m_pDoc->SetValue(ScAddress(0, nRow, 1), 1.0);
+        CPPUNIT_ASSERT(!pEntry->NeedsRepaint());
     }
 
     m_pDoc->InsertTab(0, "test2");
@@ -802,6 +808,9 @@ void Test::testCondFormatUpdateInsertTab()
     {
         m_pDoc->SetValue(ScAddress(0, nRow, 1), 1.0);
         CPPUNIT_ASSERT(pEntry->NeedsRepaint());
+
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 1.0);
+        CPPUNIT_ASSERT(!pEntry->NeedsRepaint());
     }
 
     m_pDoc->DeleteTab(1);
