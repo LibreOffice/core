@@ -191,6 +191,20 @@ public:
     }
 };
 
+bool isRotateItemUsed(ScDocumentPool *pPool)
+{
+    sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
+    for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
+    {
+        if (pPool->GetItem2( ATTR_ROTATE_VALUE, nItem ))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 }
 
 void ScDocument::FillInfo(
@@ -308,14 +322,7 @@ void ScDocument::FillInfo(
     // Rotated text...
 
     // Is Attribute really used in document?
-    bool bAnyItem = false;
-    sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
-    for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
-        if (pPool->GetItem2( ATTR_ROTATE_VALUE, nItem ))
-        {
-            bAnyItem = true;
-            break;
-        }
+    bool bAnyItem = isRotateItemUsed(pPool);
 
     SCCOL nRotMax = nCol2;
     if ( bAnyItem && HasAttrib( 0,nRow1,nTab, MAXCOL,nRow2+1,nTab,
