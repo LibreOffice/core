@@ -247,13 +247,30 @@ SvxNumberFormat::~SvxNumberFormat()
 
 void SvxNumberFormat::SetNumberingType(sal_Int16 nSet)
 {
+    static bool isRomanAndChar = false;
     if(!mbNumAdjustChanged)
     {
         // Right align Roman numbers, tdf#42788
         if(nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER)
+        {
             eNumAdjust = SVX_ADJUST_RIGHT;
+            isRomanAndChar = true;
+        }
+/*
         else if (eNumAdjust == SVX_ADJUST_RIGHT && (GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER))
             eNumAdjust = SVX_ADJUST_LEFT;
+*/
+        if(!(nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER) && nInclUpperLevels == 1)
+        {
+            eNumAdjust = SVX_ADJUST_LEFT;
+            isRomanAndChar = false;
+
+        }
+
+        if(isRomanAndChar)
+        {
+            eNumAdjust = SVX_ADJUST_RIGHT;
+        }
     }
 
     SvxNumberType::SetNumberingType(nSet);
