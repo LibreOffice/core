@@ -251,7 +251,7 @@ namespace basegfx
 
     bool B3DPolyPolygon::areBColorsUsed() const
     {
-        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB3DPolygon(a)).areBColorsUsed())
             {
@@ -276,7 +276,7 @@ namespace basegfx
 
     bool B3DPolyPolygon::areNormalsUsed() const
     {
-        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB3DPolygon(a)).areNormalsUsed())
             {
@@ -301,7 +301,7 @@ namespace basegfx
 
     bool B3DPolyPolygon::areTextureCoordinatesUsed() const
     {
-        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB3DPolygon(a)).areTextureCoordinatesUsed())
             {
@@ -352,7 +352,7 @@ namespace basegfx
     {
         bool bRetval(false);
 
-        for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); !bRetval && a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB3DPolygon(a)).hasDoublePoints())
             {

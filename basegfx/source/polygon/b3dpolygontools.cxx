@@ -37,7 +37,7 @@ namespace basegfx
         void checkClosed(B3DPolygon& rCandidate)
         {
             while(rCandidate.count() > 1L
-                && rCandidate.getB3DPoint(0L).equal(rCandidate.getB3DPoint(rCandidate.count() - 1L)))
+                && rCandidate.getB3DPoint(0).equal(rCandidate.getB3DPoint(rCandidate.count() - 1L)))
             {
                 rCandidate.setClosed(true);
                 rCandidate.remove(rCandidate.count() - 1L);
@@ -54,7 +54,7 @@ namespace basegfx
             }
             else
             {
-                return 0L;
+                return 0;
             }
         }
 
@@ -63,7 +63,7 @@ namespace basegfx
             B3DRange aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            for(sal_uInt32 a(0L); a < nPointCount; a++)
+            for(sal_uInt32 a(0); a < nPointCount; a++)
             {
                 const B3DPoint aTestPoint(rCandidate.getB3DPoint(a));
                 aRetval.expand(aTestPoint);
@@ -81,7 +81,7 @@ namespace basegfx
             {
                 const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
 
-                for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                for(sal_uInt32 a(0); a < nLoopCount; a++)
                 {
                     const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
                     const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(a));
@@ -270,7 +270,7 @@ namespace basegfx
         {
             B3DPolygon aRetval(rCandidate);
 
-            for(sal_uInt32 a(0L); a < aRetval.count(); a++)
+            for(sal_uInt32 a(0); a < aRetval.count(); a++)
             {
                 B3DVector aVector(aRetval.getB3DPoint(a) - rCenter);
                 aVector.normalize();
@@ -286,7 +286,7 @@ namespace basegfx
 
             if(aRetval.areNormalsUsed())
             {
-                for(sal_uInt32 a(0L); a < aRetval.count(); a++)
+                for(sal_uInt32 a(0); a < aRetval.count(); a++)
                 {
                     aRetval.setNormal(a, -aRetval.getNormal(a));
                 }
@@ -309,7 +309,7 @@ namespace basegfx
                 const bool bHeightSet(!fTools::equalZero(fHeight));
                 const double fOne(1.0);
 
-                for(sal_uInt32 a(0L); a < aRetval.count(); a++)
+                for(sal_uInt32 a(0); a < aRetval.count(); a++)
                 {
                     const B3DPoint aPoint(aRetval.getB3DPoint(a));
                     B2DPoint aTextureCoordinate(aRetval.getTextureCoordinate(a));
@@ -364,7 +364,7 @@ namespace basegfx
                 const B3DPoint aPlaneCenter(aPlaneRange.getCenter() - rCenter);
                 const double fXCenter(fOne - ((atan2(aPlaneCenter.getZ(), aPlaneCenter.getX()) + F_PI) / F_2PI));
 
-                for(a = 0L; a < nPointCount; a++)
+                for(a = 0; a < nPointCount; a++)
                 {
                     const B3DVector aVector(aRetval.getB3DPoint(a) - rCenter);
                     const double fY(fOne - ((atan2(aVector.getY(), aVector.getXZLength()) + F_PI2) / F_PI));
@@ -429,7 +429,7 @@ namespace basegfx
                 {
                     // correct X-texture coordinates if polar points are contained. Those
                     // coordinates cannot be correct, so use prev or next X-coordinate
-                    for(a = 0L; a < nPointCount; a++)
+                    for(a = 0; a < nPointCount; a++)
                     {
                         B2DPoint aTexCoor(aRetval.getTextureCoordinate(a));
 

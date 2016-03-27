@@ -43,7 +43,7 @@ namespace basegfx
             B3DRange aRetval;
             const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            for(sal_uInt32 a(0); a < nPolygonCount; a++)
             {
                 B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
                 aRetval.expand(getRange(aCandidate));
@@ -261,7 +261,7 @@ namespace basegfx
             bool bVerToBottom(fTools::equal(fVerStop, -F_PI2));
 
             // create horizontal rings
-            const sal_uInt32 nLoopVerInit(bVerFromTop ? 1L : 0L);
+            const sal_uInt32 nLoopVerInit(bVerFromTop ? 1L : 0);
             const sal_uInt32 nLoopVerLimit(bVerToBottom ? nVerSeg : nVerSeg + 1L);
             const sal_uInt32 nLoopHorLimit(bHorClosed ? nHorSeg : nHorSeg + 1L);
 
@@ -270,7 +270,7 @@ namespace basegfx
                 const double fVer(fVerStart + ((double)(a) * fVerDiffPerStep));
                 B3DPolygon aNew;
 
-                for(b = 0L; b < nLoopHorLimit; b++)
+                for(b = 0; b < nLoopHorLimit; b++)
                 {
                     const double fHor(fHorStart + ((double)(b) * fHorDiffPerStep));
                     aNew.append(getPointFromCartesian(fHor, fVer));
@@ -281,7 +281,7 @@ namespace basegfx
             }
 
             // create vertical half-rings
-            for(a = 0L; a < nLoopHorLimit; a++)
+            for(a = 0; a < nLoopHorLimit; a++)
             {
                 const double fHor(fHorStart + ((double)(a) * fHorDiffPerStep));
                 B3DPolygon aNew;
@@ -353,13 +353,13 @@ namespace basegfx
             nVerSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nVerSeg));
 
             // vertical loop
-            for(sal_uInt32 a(0L); a < nVerSeg; a++)
+            for(sal_uInt32 a(0); a < nVerSeg; a++)
             {
                 const double fVer1(fVerStart + (((fVerStop - fVerStart) * a) / nVerSeg));
                 const double fVer2(fVerStart + (((fVerStop - fVerStart) * (a + 1)) / nVerSeg));
 
                 // horizontal loop
-                for(sal_uInt32 b(0L); b < nHorSeg; b++)
+                for(sal_uInt32 b(0); b < nHorSeg; b++)
                 {
                     const double fHor1(fHorStart + (((fHorStop - fHorStart) * b) / nHorSeg));
                     const double fHor2(fHorStart + (((fHorStop - fHorStart) * (b + 1)) / nHorSeg));
@@ -372,7 +372,7 @@ namespace basegfx
 
                     if(bNormals)
                     {
-                        for(sal_uInt32 c(0L); c < aNew.count(); c++)
+                        for(sal_uInt32 c(0); c < aNew.count(); c++)
                         {
                             aNew.setNormal(c, ::basegfx::B3DVector(aNew.getB3DPoint(c)));
                         }
@@ -411,7 +411,7 @@ namespace basegfx
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
             {
                 aRetval.append(applyDefaultNormalsSphere(rCandidate.getB3DPolygon(a), rCenter));
             }
@@ -423,7 +423,7 @@ namespace basegfx
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
             {
                 aRetval.append(invertNormals(rCandidate.getB3DPolygon(a)));
             }
@@ -435,7 +435,7 @@ namespace basegfx
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
             {
                 aRetval.append(applyDefaultTextureCoordinatesParallel(rCandidate.getB3DPolygon(a), rRange, bChangeX, bChangeY));
             }
@@ -447,7 +447,7 @@ namespace basegfx
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
             {
                 aRetval.append(applyDefaultTextureCoordinatesSphere(rCandidate.getB3DPolygon(a), rCenter, bChangeX, bChangeY));
             }

@@ -171,7 +171,7 @@ namespace unotools
             const bool bClosed(rPoly.isClosed());
 
             // calculate input vertex count
-            const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1L : 0L ));
+            const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1L : 0 ));
 
             std::vector<awt::Point> aPoints; aPoints.reserve(nLoopCount);
             std::vector<drawing::PolygonFlags> aFlags; aFlags.reserve(nLoopCount);
@@ -182,7 +182,7 @@ namespace unotools
                 basegfx::B2DCubicBezier aBezier;
                 aBezier.setStartPoint(rPoly.getB2DPoint(0));
 
-                for(sal_uInt32 b(0L); b<nLoopCount; b++)
+                for(sal_uInt32 b(0); b<nLoopCount; b++)
                 {
                     // add current point (always) and remember StartPointIndex for evtl. later corrections
                     const awt::Point aStartPoint(fround(aBezier.getStartPoint().getX()),
