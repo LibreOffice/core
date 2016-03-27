@@ -28,6 +28,26 @@ class CheckTable(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
+    def __test_borderAsserts(self, typeOfLine, lineValid):
+        self.assertTrue(lineValid)
+        self.assertEqual(0, typeOfLine.InnerLineWidth)
+        self.assertEqual(2, typeOfLine.OuterLineWidth)
+        self.assertEqual(0, typeOfLine.LineDistance)
+        self.assertEqual(0, typeOfLine.Color)
+
+    def __test_borderAssertsWithLineStyle(self, typeOfLine, lineValid):
+        self.assertTrue(lineValid)
+        self.assertEqual(0, typeOfLine.InnerLineWidth)
+        self.assertEqual(2, typeOfLine.OuterLineWidth)
+        self.assertEqual(0, typeOfLine.LineDistance)
+        self.assertEqual(SOLID, typeOfLine.LineStyle)
+        self.assertEqual(0, typeOfLine.Color)
+
+    def __test_borderDistance(self, border):
+        self.assertTrue(border.IsDistanceValid)
+        self.assertEqual(97, border.Distance)
+
+
     def test_tableborder(self):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         # insert table
@@ -39,41 +59,12 @@ class CheckTable(unittest.TestCase):
 
         border = xTable.getPropertyValue("TableBorder")
 
-        self.assertTrue(border.IsTopLineValid)
-        self.assertEqual(0, border.TopLine.InnerLineWidth)
-        self.assertEqual(2, border.TopLine.OuterLineWidth)
-        self.assertEqual(0, border.TopLine.LineDistance)
-        self.assertEqual(0, border.TopLine.Color)
-
-        self.assertTrue(border.IsBottomLineValid)
-        self.assertEqual(0, border.BottomLine.InnerLineWidth)
-        self.assertEqual(2, border.BottomLine.OuterLineWidth)
-        self.assertEqual(0, border.BottomLine.LineDistance)
-        self.assertEqual(0, border.BottomLine.Color)
-
-        self.assertTrue(border.IsLeftLineValid)
-        self.assertEqual(0, border.LeftLine.InnerLineWidth)
-        self.assertEqual(2, border.LeftLine.OuterLineWidth)
-        self.assertEqual(0, border.LeftLine.LineDistance)
-        self.assertEqual(0, border.LeftLine.Color)
-
-        self.assertTrue(border.IsRightLineValid)
-        self.assertEqual(0, border.RightLine.InnerLineWidth)
-        self.assertEqual(2, border.RightLine.OuterLineWidth)
-        self.assertEqual(0, border.RightLine.LineDistance)
-        self.assertEqual(0, border.RightLine.Color)
-
-        self.assertTrue(border.IsHorizontalLineValid)
-        self.assertEqual(0, border.HorizontalLine.InnerLineWidth)
-        self.assertEqual(2, border.HorizontalLine.OuterLineWidth)
-        self.assertEqual(0, border.HorizontalLine.LineDistance)
-        self.assertEqual(0, border.HorizontalLine.Color)
-
-        self.assertTrue(border.IsVerticalLineValid)
-        self.assertEqual(0, border.VerticalLine.InnerLineWidth)
-        self.assertEqual(2, border.VerticalLine.OuterLineWidth)
-        self.assertEqual(0, border.VerticalLine.LineDistance)
-        self.assertEqual(0, border.VerticalLine.Color)
+        self.__test_borderAsserts(border.TopLine, border.IsTopLineValid)
+        self.__test_borderAsserts(border.BottomLine, border.IsBottomLineValid)
+        self.__test_borderAsserts(border.LeftLine, border.IsLeftLineValid)
+        self.__test_borderAsserts(border.RightLine, border.IsRightLineValid)
+        self.__test_borderAsserts(border.HorizontalLine, border.IsHorizontalLineValid)
+        self.__test_borderAsserts(border.VerticalLine, border.IsVerticalLineValid)
 
         self.assertTrue(border.IsDistanceValid)
         self.assertEqual(97, border.Distance)
@@ -97,17 +88,10 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(0, border.BottomLine.LineDistance)
         self.assertEqual(0xFF, border.BottomLine.Color)
 
-        self.assertTrue(border.IsLeftLineValid)
-        self.assertEqual(0, border.LeftLine.InnerLineWidth)
-        self.assertEqual(2, border.LeftLine.OuterLineWidth)
-        self.assertEqual(0, border.LeftLine.LineDistance)
-        self.assertEqual(0, border.LeftLine.Color)
+        self.__test_borderAsserts(border.LeftLine, border.IsLeftLineValid)
 
-        self.assertTrue(border.IsRightLineValid)
-        self.assertEqual(0, border.RightLine.InnerLineWidth)
-        self.assertEqual(2, border.RightLine.OuterLineWidth)
-        self.assertEqual(0, border.RightLine.LineDistance)
-        self.assertEqual(0, border.RightLine.Color)
+        self.__test_borderAsserts(border.RightLine, border.IsRightLineValid)
+
 
         self.assertTrue(border.IsHorizontalLineValid)
         self.assertEqual(0, border.HorizontalLine.InnerLineWidth)
@@ -115,11 +99,8 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(0, border.HorizontalLine.LineDistance)
         self.assertEqual(0xFF00, border.HorizontalLine.Color)
 
-        self.assertTrue(border.IsVerticalLineValid)
-        self.assertEqual(0, border.VerticalLine.InnerLineWidth)
-        self.assertEqual(2, border.VerticalLine.OuterLineWidth)
-        self.assertEqual(0, border.VerticalLine.LineDistance)
-        self.assertEqual(0, border.VerticalLine.Color)
+        self.__test_borderAsserts(border.VerticalLine, border.IsVerticalLineValid)
+
 
         self.assertTrue(border.IsDistanceValid)
         self.assertEqual(97, border.Distance)
@@ -141,21 +122,9 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(SOLID, border2.BottomLine.LineStyle)
         self.assertEqual(11, border2.BottomLine.LineWidth)
 
-        self.assertTrue(border2.IsLeftLineValid)
-        self.assertEqual(0, border2.LeftLine.InnerLineWidth)
-        self.assertEqual(2, border2.LeftLine.OuterLineWidth)
-        self.assertEqual(0, border2.LeftLine.LineDistance)
-        self.assertEqual(0, border2.LeftLine.Color)
-        self.assertEqual(SOLID, border2.LeftLine.LineStyle)
-        self.assertEqual(2, border2.LeftLine.LineWidth)
+        self.__test_borderAssertsWithLineStyle(border2.LeftLine, border2.IsLeftLineValid)
 
-        self.assertTrue(border2.IsRightLineValid)
-        self.assertEqual(0, border2.RightLine.InnerLineWidth)
-        self.assertEqual(2, border2.RightLine.OuterLineWidth)
-        self.assertEqual(0, border2.RightLine.LineDistance)
-        self.assertEqual(0, border2.RightLine.Color)
-        self.assertEqual(SOLID, border2.RightLine.LineStyle)
-        self.assertEqual(2, border2.RightLine.LineWidth)
+        self.__test_borderAssertsWithLineStyle(border2.RightLine, border2.IsRightLineValid)
 
         self.assertTrue(border2.IsHorizontalLineValid)
         self.assertEqual(0, border2.HorizontalLine.InnerLineWidth)
@@ -165,16 +134,9 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(SOLID, border2.HorizontalLine.LineStyle)
         self.assertEqual(90, border2.HorizontalLine.LineWidth)
 
-        self.assertTrue(border2.IsVerticalLineValid)
-        self.assertEqual(0, border2.VerticalLine.InnerLineWidth)
-        self.assertEqual(2, border2.VerticalLine.OuterLineWidth)
-        self.assertEqual(0, border2.VerticalLine.LineDistance)
-        self.assertEqual(0, border2.VerticalLine.Color)
-        self.assertEqual(SOLID, border2.VerticalLine.LineStyle)
-        self.assertEqual(2, border2.VerticalLine.LineWidth)
+        self.__test_borderAssertsWithLineStyle(border2.VerticalLine, border2.IsVerticalLineValid)
 
-        self.assertTrue(border2.IsDistanceValid)
-        self.assertEqual(97, border2.Distance)
+        self.__test_borderDistance(border)
     # set border2
         border2.RightLine      = BorderLine2(0,      0, 0, 0, THICKTHIN_LARGEGAP, 120)
         border2.LeftLine       = BorderLine2(0,      0, 0, 0, EMBOSSED, 90)
@@ -232,8 +194,7 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(DOTTED, border2.VerticalLine.LineStyle)
         self.assertEqual(90, border2.VerticalLine.LineWidth)
 
-        self.assertTrue(border2.IsDistanceValid)
-        self.assertEqual(97, border2.Distance)
+        self.__test_borderDistance(border2)
 
     # close document
         xDoc.dispose()
