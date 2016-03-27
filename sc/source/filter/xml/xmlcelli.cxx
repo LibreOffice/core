@@ -23,6 +23,7 @@
 #include "xmlstyli.hxx"
 #include "xmlannoi.hxx"
 #include "global.hxx"
+#include "cellvalue.hxx"
 #include "document.hxx"
 #include "cellsuno.hxx"
 #include "docuno.hxx"
@@ -1047,10 +1048,11 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     //cell was already put in document, just need to set text here.
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
-        bDoIncrement = rXMLImport.GetDocument()->GetCellType(rCurrentPos) == CELLTYPE_FORMULA;
+        ScRefCellValue aCell(*rXMLImport.GetDocument(), rCurrentPos);
+        bDoIncrement = aCell.meType == CELLTYPE_FORMULA;
         if ( bDoIncrement )
         {
-            ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCurrentPos);
+            ScFormulaCell* pFCell = aCell.mpFormula;
             OUString aCellString;
             if (maStringValue)
                 aCellString = *maStringValue;
@@ -1147,9 +1149,10 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
     //cell was already put in document, just need to set value here.
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
-        if (rXMLImport.GetDocument()->GetCellType(rCurrentPos) == CELLTYPE_FORMULA)
+        ScRefCellValue aCell(*rXMLImport.GetDocument(), rCurrentPos);
+        if (aCell.meType == CELLTYPE_FORMULA)
         {
-            ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCurrentPos);
+            ScFormulaCell* pFCell = aCell.mpFormula;;
             SetFormulaCell(pFCell);
             if (pFCell)
                 pFCell->SetNeedNumberFormat( true );
@@ -1291,8 +1294,8 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
     if (!pDoc)
         return OUString();
 
-    CellType eType = pDoc->GetCellType(aCellPos);
-    switch (eType)
+    ScRefCellValue aCell(*pDoc, aCellPos);
+    switch (aCell.meType)
     {
         case CELLTYPE_NONE:
             return OUString();
@@ -1300,13 +1303,10 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
         {
             //  GetString on EditCell replaces linebreaks with spaces;
             //  however here we need line breaks
-            const EditTextObject* pData = pDoc->GetEditText(aCellPos);
-            if (pData)
-            {
-                EditEngine& rEngine = pDoc->GetEditEngine();
-                rEngine.SetText(*pData);
-                return rEngine.GetText();
-            }
+            const EditTextObject* pData = aCell.mpEditText;
+            EditEngine& rEngine = pDoc->GetEditEngine();
+            rEngine.SetText(*pData);
+            return rEngine.GetText();
             //  also don't format EditCells per NumberFormatter
         }
         break;
@@ -1315,8 +1315,9 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
             //  like in GetString for document (column)
             Color* pColor;
             sal_uLong nNumFmt = pDoc->GetNumberFormat(aCellPos);
-            return ScCellFormat::GetString(
-                *pDoc, aCellPos, nNumFmt, &pColor, *pDoc->GetFormatTable());
+            OUString aStr;
+            ScCellFormat::GetString(aCell, nNumFmt, aStr, &pColor, *pDoc->GetFormatTable(), pDoc);
+            return aStr;
         }
     }
 

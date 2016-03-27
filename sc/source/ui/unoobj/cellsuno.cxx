@@ -63,6 +63,7 @@
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
 
 #include "autoform.hxx"
+#include "cellvalue.hxx"
 #include "cellmergeoption.hxx"
 #include "cellsuno.hxx"
 #include "cursuno.hxx"
@@ -6483,14 +6484,16 @@ void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeExc
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh && pDocSh->GetDocument().GetCellType( aCellPos ) == CELLTYPE_FORMULA )
+    if (pDocSh)
     {
-        ScFormulaCell* pCell = pDocSh->GetDocument().GetFormulaCell(aCellPos);
-        if (!pCell)
-            return;
-        pCell->SetHybridDouble( nValue );
-        pCell->ResetDirty();
-        pCell->SetChanged(false);
+        ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
+        if (aCell.meType == CELLTYPE_FORMULA)
+        {
+            ScFormulaCell* pCell = aCell.mpFormula;
+            pCell->SetHybridDouble( nValue );
+            pCell->ResetDirty();
+            pCell->SetChanged(false);
+        }
     }
 }
 
