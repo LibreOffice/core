@@ -48,7 +48,11 @@ namespace basegfx
             {
             }
 
+<<<<<<< 51737960911d41593ffd9792a6a85aeaa86824fd
             explicit ImplMatLine(sal_uInt16 nRow, ImplMatLine< RowSize >* pToBeCopied = nullptr)
+=======
+            explicit ImplMatLine(sal_uInt16 nRow, ImplMatLine< RowSize >* pToBeCopied = 0)
+>>>>>>> tdf#96505 Remove 0L occurences from avmedia and basegfx modules
             {
                 if(pToBeCopied)
                 {
