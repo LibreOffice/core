@@ -58,10 +58,19 @@ public:
 };
 
 template<typename Value>
-class SwVectorModifyBase : public std::vector<Value>
+class SwVectorModifyBase
 {
+private:
+    std::vector<Value> baseValue;
+
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
+    typedef typename std::vector<Value>::value_type value_type;
+    typename std::vector<Value>::reference operator[] (size_t idx) { return baseValue[idx]; }
+    typename std::vector<Value>::const_reference operator[] (size_t idx) const { return baseValue[idx]; }
+    typedef typename std::vector<Value>::size_type size_type;
+    typedef typename std::vector<Value>::iterator iterator;
+
 
 protected:
     enum class DestructorPolicy {
@@ -78,14 +87,15 @@ protected:
         : mPolicy(policy) {}
 
 public:
-    using std::vector<Value>::begin;
-    using std::vector<Value>::end;
-
+    typename std::vector<Value>::const_iterator begin() const { return baseValue.begin(); }
+    typename std::vector<Value>::iterator begin() { return baseValue.begin(); }
+    typename std::vector<Value>::iterator end() { return baseValue.end(); }
+    typename std::vector<Value>::const_iterator end() const { return baseValue.end(); }
     // free any remaining child objects based on mPolicy
     virtual ~SwVectorModifyBase()
     {
         if (mPolicy == DestructorPolicy::FreeElements)
-            for(const_iterator it = begin(); it != end(); ++it)
+            for(typename std::vector<Value>::const_iterator it = baseValue.begin(); it != baseValue.end(); ++it)
                 delete *it;
     }
 
@@ -93,22 +103,50 @@ public:
     {
         if (aEndIdx < aStartIdx)
             return;
-        for (const_iterator it = begin() + aStartIdx;
-                            it != begin() + aEndIdx; ++it)
+        for (typename std::vector<Value>::const_iterator it = baseValue.begin() + aStartIdx;
+                            it != baseValue.begin() + aEndIdx; ++it)
             delete *it;
-        this->erase( begin() + aStartIdx, begin() + aEndIdx);
+        this->erase( baseValue.begin() + aStartIdx, baseValue.begin() + aEndIdx);
     }
 
     size_t GetPos(Value const& p) const
     {
-        const_iterator const it = std::find(begin(), end(), p);
-        return it == end() ? SIZE_MAX : it - begin();
+        typename std::vector<Value>::const_iterator const it = std::find(baseValue.begin(), baseValue.end(), p);
+        return it == baseValue.end() ? SIZE_MAX : it - baseValue.begin();
     }
 
     bool Contains(Value const& p) const
-        { return std::find(begin(), end(), p) != end(); }
+        { return std::find(baseValue.begin(), baseValue.end(), p) != baseValue.end(); }
 
     static void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) {};
+    size_t size() { return baseValue.size(); }
+    size_t size() const { return baseValue.size(); }
+    void clear() { return baseValue.clear();}
+    typename std::vector<Value>::iterator insert(typename std::vector<Value>::iterator pos , Value V)
+    {
+        return baseValue.insert(pos , V);
+    }
+    void insert(typename std::vector<Value>::iterator pos , typename std::vector<Value>::const_iterator first , typename std::vector<Value>::const_iterator last)
+    {
+        return baseValue.insert(pos , first , last);
+    }
+    void push_back(Value V) { baseValue.push_back(V); }
+    typename std::vector<Value>::iterator erase(typename std::vector<Value>::iterator pos)
+    {
+        return baseValue.erase(pos);
+    }
+    bool empty() { return baseValue.empty(); }
+    bool empty() const { return baseValue.empty(); }
+    Value front() const { return baseValue.front(); }
+    Value front() { return baseValue.front(); }
+    void reserve(size_type n) { baseValue.reserve(n); }
+    void erase(typename std::vector<Value>::iterator first , typename std::vector<Value>::iterator last)
+    {
+        baseValue.erase(first , last);
+    }
+    typename std::vector<Value>::reference at(size_type pos) { return baseValue.at(pos); }
+    typename std::vector<Value>::const_reference at(size_type pos) const { return baseValue.at(pos); }
+
 };
 
 template<typename Value>
@@ -118,13 +156,14 @@ protected:
     SwFormatsModifyBase(typename SwVectorModifyBase<Value>::DestructorPolicy
             policy = SwVectorModifyBase<Value>::DestructorPolicy::FreeElements)
         : SwVectorModifyBase<Value>(policy) {}
-
+private:
+std::vector<Value> baseValue;
 public:
     virtual size_t GetFormatCount() const override
-        { return std::vector<Value>::size(); }
+        { return baseValue.size(); }
 
     virtual Value GetFormat(size_t idx) const override
-        { return std::vector<Value>::operator[](idx); }
+        { return baseValue.operator[](idx); }
 
     inline size_t GetPos(const SwFormat *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
