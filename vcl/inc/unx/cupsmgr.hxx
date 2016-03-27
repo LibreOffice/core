@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 #define INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 
-#include <vcl/printerinfomanager.hxx>
+#include "unx/printerinfomanager.hxx"
 #include "osl/module.h"
 #include "osl/thread.h"
 #include "osl/mutex.hxx"

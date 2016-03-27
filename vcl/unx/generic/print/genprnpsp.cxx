@@ -47,7 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <vcl/pdfwriter.hxx>
-#include <vcl/printerinfomanager.hxx>
+#include "unx/printerinfomanager.hxx"
 #include <vcl/settings.hxx>
 #include "svids.hrc"
 #include "saldatabasic.hxx"

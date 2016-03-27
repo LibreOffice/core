@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GENPRN_H
 #define INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
-#include <vcl/jobdata.hxx>
+#include "unx/jobdata.hxx"
 #include "unx/printergfx.hxx"
 #include "unx/printerjob.hxx"
 #include "salprn.hxx"
