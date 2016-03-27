@@ -255,7 +255,7 @@ class BColorArray
 public:
     explicit BColorArray(sal_uInt32 nCount)
     :   maVector(nCount),
-        mnUsedEntries(0L)
+        mnUsedEntries(0)
     {
     }
 
@@ -267,7 +267,7 @@ public:
 
     BColorArray(const BColorArray& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(),
-        mnUsedEntries(0L)
+        mnUsedEntries(0)
     {
         BColorDataVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
@@ -296,7 +296,7 @@ public:
 
     bool isUsed() const
     {
-        return (0L != mnUsedEntries);
+        return (0 != mnUsedEntries);
     }
 
     const ::basegfx::BColor& getBColor(sal_uInt32 nIndex) const
@@ -413,7 +413,7 @@ class NormalsArray3D
 public:
     explicit NormalsArray3D(sal_uInt32 nCount)
     :   maVector(nCount),
-        mnUsedEntries(0L)
+        mnUsedEntries(0)
     {
     }
 
@@ -425,7 +425,7 @@ public:
 
     NormalsArray3D(const NormalsArray3D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(),
-        mnUsedEntries(0L)
+        mnUsedEntries(0)
     {
         NormalsData3DVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
@@ -453,7 +453,7 @@ public:
 
     bool isUsed() const
     {
-        return (0L != mnUsedEntries);
+        return (0 != mnUsedEntries);
     }
 
     const ::basegfx::B3DVector& getNormal(sal_uInt32 nIndex) const
@@ -580,7 +580,7 @@ class TextureCoordinate2D
 public:
     explicit TextureCoordinate2D(sal_uInt32 nCount)
     :   maVector(nCount),
-        mnUsedEntries(0L)
+        mnUsedEntries(0)
     {
     }
 
@@ -592,7 +592,7 @@ public:
 
     TextureCoordinate2D(const TextureCoordinate2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(),
-        mnUsedEntries(0L)
+        mnUsedEntries(0)
     {
         TextureData2DVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
@@ -620,7 +620,7 @@ public:
 
     bool isUsed() const
     {
-        return (0L != mnUsedEntries);
+        return (0 != mnUsedEntries);
     }
 
     const ::basegfx::B2DPoint& getTextureCoordinate(sal_uInt32 nIndex) const
@@ -778,7 +778,7 @@ public:
     // This constructor is only used from the static identity polygon, thus
     // the RefCount is set to 1 to never 'delete' this static incarnation.
     ImplB3DPolygon()
-    :   maPoints(0L),
+    :   maPoints(0),
         mpBColors(nullptr),
         mpNormals(nullptr),
         mpTextureCoordinates(nullptr),
@@ -1351,17 +1351,17 @@ public:
             // check for same start and end point
             const sal_uInt32 nIndex(maPoints.count() - 1L);
 
-            if(maPoints.getCoordinate(0L) == maPoints.getCoordinate(nIndex))
+            if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
             {
-                const bool bBColorEqual(!mpBColors || (mpBColors->getBColor(0L) == mpBColors->getBColor(nIndex)));
+                const bool bBColorEqual(!mpBColors || (mpBColors->getBColor(0) == mpBColors->getBColor(nIndex)));
 
                 if(bBColorEqual)
                 {
-                    const bool bNormalsEqual(!mpNormals || (mpNormals->getNormal(0L) == mpNormals->getNormal(nIndex)));
+                    const bool bNormalsEqual(!mpNormals || (mpNormals->getNormal(0) == mpNormals->getNormal(nIndex)));
 
                     if(bNormalsEqual)
                     {
-                        const bool bTextureCoordinatesEqual(!mpTextureCoordinates || (mpTextureCoordinates->getTextureCoordinate(0L) == mpTextureCoordinates->getTextureCoordinate(nIndex)));
+                        const bool bTextureCoordinatesEqual(!mpTextureCoordinates || (mpTextureCoordinates->getTextureCoordinate(0) == mpTextureCoordinates->getTextureCoordinate(nIndex)));
 
                         if(bTextureCoordinatesEqual)
                         {
@@ -1373,7 +1373,7 @@ public:
         }
 
         // test for range
-        for(sal_uInt32 a(0L); a < maPoints.count() - 1L; a++)
+        for(sal_uInt32 a(0); a < maPoints.count() - 1L; a++)
         {
             if(maPoints.getCoordinate(a) == maPoints.getCoordinate(a + 1L))
             {
@@ -1413,19 +1413,19 @@ public:
                 if(maPoints.count() > 1L)
                 {
                     const sal_uInt32 nIndex(maPoints.count() - 1L);
-                    bRemove = (maPoints.getCoordinate(0L) == maPoints.getCoordinate(nIndex));
+                    bRemove = (maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex));
 
-                    if(bRemove && mpBColors && !(mpBColors->getBColor(0L) == mpBColors->getBColor(nIndex)))
+                    if(bRemove && mpBColors && !(mpBColors->getBColor(0) == mpBColors->getBColor(nIndex)))
                     {
                         bRemove = false;
                     }
 
-                    if(bRemove && mpNormals && !(mpNormals->getNormal(0L) == mpNormals->getNormal(nIndex)))
+                    if(bRemove && mpNormals && !(mpNormals->getNormal(0) == mpNormals->getNormal(nIndex)))
                     {
                         bRemove = false;
                     }
 
-                    if(bRemove && mpTextureCoordinates && !(mpTextureCoordinates->getTextureCoordinate(0L) == mpTextureCoordinates->getTextureCoordinate(nIndex)))
+                    if(bRemove && mpTextureCoordinates && !(mpTextureCoordinates->getTextureCoordinate(0) == mpTextureCoordinates->getTextureCoordinate(nIndex)))
                     {
                         bRemove = false;
                     }
@@ -1442,7 +1442,7 @@ public:
 
     void removeDoublePointsWholeTrack()
     {
-        sal_uInt32 nIndex(0L);
+        sal_uInt32 nIndex(0);
 
         // test as long as there are at least two points and as long as the index
         // is smaller or equal second last point
@@ -1661,7 +1661,7 @@ namespace basegfx
                 nCount = rPoly.count();
             }
 
-            if(0L == nIndex && nCount == rPoly.count())
+            if(0 == nIndex && nCount == rPoly.count())
             {
                 mpPolygon->insert(mpPolygon->count(), *rPoly.mpPolygon);
             }

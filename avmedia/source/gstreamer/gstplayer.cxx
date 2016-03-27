@@ -432,7 +432,7 @@ static gboolean wrap_element_query_position (GstElement *element, GstFormat form
 {
 #ifdef AVMEDIA_GST_0_10
     GstFormat my_format = format;
-    return gst_element_query_position( element, &my_format, cur) && my_format == format && *cur > 0L;
+    return gst_element_query_position( element, &my_format, cur) && my_format == format && *cur > 0;
 #else
     return gst_element_query_position( element, format, cur );
 #endif
@@ -443,7 +443,7 @@ static gboolean wrap_element_query_duration (GstElement *element, GstFormat form
 {
 #ifdef AVMEDIA_GST_0_10
     GstFormat my_format = format;
-    return gst_element_query_duration( element, &my_format, duration) && my_format == format && *duration > 0L;
+    return gst_element_query_duration( element, &my_format, duration) && my_format == format && *duration > 0;
 #else
     return gst_element_query_duration( element, format, duration );
 #endif
@@ -502,7 +502,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " change to paused received" );
 
                 if( mnDuration == 0) {
-                    gint64 gst_duration = 0L;
+                    gint64 gst_duration = 0;
                     if( wrap_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
                         mnDuration = gst_duration;
                 }
@@ -546,7 +546,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     // We get to use the exciting new playbin2 ! (now known as playbin)
     if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ASYNC_DONE ) {
         if( mnDuration == 0) {
-            gint64 gst_duration = 0L;
+            gint64 gst_duration = 0;
             if( wrap_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
                 mnDuration = gst_duration;
         }

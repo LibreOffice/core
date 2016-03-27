@@ -688,7 +688,7 @@ namespace basegfx
 
         B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
-            if(rCandidate.count() > 0L)
+            if(rCandidate.count() > 0)
             {
                 solver aSolver(rCandidate);
                 return aSolver.getB2DPolyPolygon();
@@ -709,7 +709,7 @@ namespace basegfx
         {
             B2DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
@@ -789,7 +789,7 @@ namespace basegfx
                 const B2DPolyPolygon aSource(aCandidate);
                 aCandidate.clear();
 
-                for(a = 0L; a < nCount; a++)
+                for(a = 0; a < nCount; a++)
                 {
                     const StripHelper& rHelper = aHelpers[a];
                     // for contained unequal oriented polygons sum will be 0
@@ -817,7 +817,7 @@ namespace basegfx
             {
                 if(nCount == 1L)
                 {
-                    if(!bKeepAboveZero && B2VectorOrientation::Positive == tools::getOrientation(rCandidate.getB2DPolygon(0L)))
+                    if(!bKeepAboveZero && B2VectorOrientation::Positive == tools::getOrientation(rCandidate.getB2DPolygon(0)))
                     {
                         aRetval = rCandidate;
                     }
@@ -828,16 +828,16 @@ namespace basegfx
                     ::std::vector< StripHelper > aHelpers;
                     aHelpers.resize(nCount);
 
-                    for(a = 0L; a < nCount; a++)
+                    for(a = 0; a < nCount; a++)
                     {
                         const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
                         StripHelper* pNewHelper = &(aHelpers[a]);
                         pNewHelper->maRange = tools::getRange(aCandidate);
                         pNewHelper->meOrinetation = tools::getOrientation(aCandidate);
-                        pNewHelper->mnDepth = (B2VectorOrientation::Negative == pNewHelper->meOrinetation ? -1L : 0L);
+                        pNewHelper->mnDepth = (B2VectorOrientation::Negative == pNewHelper->meOrinetation ? -1L : 0);
                     }
 
-                    for(a = 0L; a < nCount - 1L; a++)
+                    for(a = 0; a < nCount - 1L; a++)
                     {
                         const B2DPolygon aCandA(rCandidate.getB2DPolygon(a));
                         StripHelper& rHelperA = aHelpers[a];
@@ -894,10 +894,10 @@ namespace basegfx
                         }
                     }
 
-                    for(a = 0L; a < nCount; a++)
+                    for(a = 0; a < nCount; a++)
                     {
                         const StripHelper& rHelper = aHelpers[a];
-                        bool bAcceptEntry(bKeepAboveZero ? 1L <= rHelper.mnDepth : 0L == rHelper.mnDepth);
+                        bool bAcceptEntry(bKeepAboveZero ? 1L <= rHelper.mnDepth : 0 == rHelper.mnDepth);
 
                         if(bAcceptEntry)
                         {

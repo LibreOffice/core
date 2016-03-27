@@ -223,7 +223,7 @@ namespace basegfx
             // by Y,X,atan2 when adding nodes
             if(rCandidate.count())
             {
-                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                for(sal_uInt32 a(0); a < rCandidate.count(); a++)
                 {
                     const B2DPolygon aPolygonCandidate(rCandidate.getB2DPolygon(a));
                     const sal_uInt32 nCount(aPolygonCandidate.count());
@@ -232,7 +232,7 @@ namespace basegfx
                     {
                         B2DPoint aPrevPnt(aPolygonCandidate.getB2DPoint(nCount - 1L));
 
-                        for(sal_uInt32 b(0L); b < nCount; b++)
+                        for(sal_uInt32 b(0); b < nCount; b++)
                         {
                             B2DPoint aNextPnt(aPolygonCandidate.getB2DPoint(b));
 
@@ -430,7 +430,7 @@ namespace basegfx
             if(1L == aCandidate.count())
             {
                 // single polygon -> single polygon triangulation
-                const B2DPolygon aSinglePolygon(aCandidate.getB2DPolygon(0L));
+                const B2DPolygon aSinglePolygon(aCandidate.getB2DPolygon(0));
                 aRetval = triangulate(aSinglePolygon);
             }
             else
