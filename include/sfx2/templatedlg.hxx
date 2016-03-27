@@ -70,6 +70,8 @@ private:
     DECL_LINK_TYPED(TBXTemplateHdl, ToolBox*, void);
     DECL_LINK_TYPED(TBXDropdownHdl, ToolBox*, void);
 
+    DECL_LINK_TYPED(OkClickHdl, Button*, void);
+
     DECL_LINK_TYPED(TVItemStateHdl, const ThumbnailViewItem*, void);
 
     DECL_LINK_TYPED(MenuSelectHdl, Menu*, bool);
@@ -146,6 +148,7 @@ private:
     VclPtr<TabControl> mpTabControl;
 
     VclPtr<Edit> mpSearchEdit;
+    VclPtr<PushButton> mpOKButton;
     VclPtr<ToolBox> mpViewBar;
     VclPtr<ToolBox> mpActionBar;
     VclPtr<ToolBox> mpTemplateBar;

@@ -191,6 +191,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpLocalView, "template_view");
     get(mpSearchView, "search_view");
     get(mpRemoteView, "remote_view");
+    get(mpOKButton, "ok");
 
     TabPage *pTabPage = mpTabControl->GetTabPage(mpTabControl->GetPageId("filter_docs"));
     pTabPage->Show();
@@ -271,6 +272,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     mpTabControl->SetActivatePageHdl(LINK(this, SfxTemplateManagerDlg, ActivatePageHdl));
 
+    mpOKButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
+
     SvtMiscOptions aMiscOptions;
     if ( !aMiscOptions.IsExperimentalMode() )
     {
@@ -281,17 +284,25 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpViewBar->Show();
     mpActionBar->Show();
 
+
     switchMainView(true);
 
     loadRepositories();
 
     createRepositoryMenu();
     createDefaultTemplateMenu();
+    //setSaveMode(); //Uncomment this line to put template manager into Save As mode
 
     mpLocalView->Populate();
     mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
 
     readSettings();
+
+    if(!mbIsSaveMode)
+        mpOKButton->Disable();
+
+    if(mbIsSaveMode)
+        mpOKButton->SetText("Save As");
 
     mpLocalView->Show();
 }
@@ -663,6 +674,17 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMen
     return false;
 }
 
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OkClickHdl, Button*, void)
+{
+   if(!mbIsSaveMode)
+   {
+       OnTemplateOpen();
+       EndDialog(RET_OK);
+   }
+   else
+       OnTemplateSaveAs();
+}
+
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
 {
     maSelFolders.clear();
@@ -671,7 +693,10 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
     mpViewBar->ShowItem(VIEWBAR_NEW_FOLDER, mpCurView->isNestedRegionAllowed());
 
     if (!mbIsSaveMode)
+    {
         mpViewBar->ShowItem(VIEWBAR_IMPORT, mpCurView->isImportAllowed());
+        mpOKButton->Disable();
+    }
 
     mpTemplateBar->Hide();
     mpViewBar->Show();
@@ -766,6 +791,8 @@ void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
         }
 
         maSelFolders.insert(pItem);
+        if(mbIsSaveMode)
+            mpOKButton->Enable();
     }
     else
     {
@@ -777,6 +804,8 @@ void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
             mpViewBar->HideItem(VIEWBAR_DELETE);
             mpViewBar->ShowItem(VIEWBAR_NEW_FOLDER);
         }
+        if(!mbIsSaveMode)
+            mpOKButton->Disable();
     }
 }
 
@@ -790,6 +819,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
         {
             mpViewBar->Show(false);
             mpTemplateBar->Show();
+            mpOKButton->Enable();
         }
         else if (maSelTemplates.size() != 1 || !bInSelection)
         {
@@ -806,6 +836,8 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
                 mpTemplateBar->HideItem(TEMPLATEBAR_PROPERTIES);
                 mpTemplateBar->HideItem(TEMPLATEBAR_DEFAULT);
             }
+            if( !mbIsSaveMode )
+                mpOKButton->Disable();
         }
 
         if (!bInSelection)
@@ -821,6 +853,8 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
             {
                 mpTemplateBar->Show(false);
                 mpViewBar->Show();
+                if(!mbIsSaveMode)
+                    mpOKButton->Disable();
             }
             else if (maSelTemplates.size() == 1)
             {
@@ -837,6 +871,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
                     mpTemplateBar->ShowItem(TEMPLATEBAR_PROPERTIES);
                     mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
                 }
+                mpOKButton->Enable();
             }
         }
     }
