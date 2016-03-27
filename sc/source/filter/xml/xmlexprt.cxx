@@ -220,16 +220,14 @@ OUString lcl_GetFormattedString( ScDocument* pDoc, const ScAddress& rPos )
     if (!pDoc)
         return EMPTY_OUSTRING;
 
-    switch (pDoc->GetCellType(rPos))
+    ScRefCellValue aCell(*pDoc, rPos);
+    switch (aCell.meType)
     {
         case CELLTYPE_STRING:
             return pDoc->GetString(rPos);
         case CELLTYPE_EDIT:
         {
-            const EditTextObject* pData = pDoc->GetEditText(rPos);
-            if (!pData)
-                return EMPTY_OUSTRING;
-
+            const EditTextObject* pData = aCell.mpEditText;
             EditEngine& rEngine = pDoc->GetEditEngine();
             rEngine.SetText(*pData);
             return rEngine.GetText();

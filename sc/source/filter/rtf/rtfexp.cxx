@@ -33,6 +33,7 @@
 
 #include "rtfexp.hxx"
 #include "filter.hxx"
+#include "cellvalue.hxx"
 #include "document.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
@@ -165,7 +166,8 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     bool bValueData = false;
     OUString aContent;
     ScAddress aPos(nCol, nRow, nTab);
-    switch (pDoc->GetCellType(aPos))
+    ScRefCellValue aCell(*pDoc, aPos);
+    switch (aCell.meType)
     {
         case CELLTYPE_NONE:
             bValueData = false;
@@ -173,13 +175,10 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         case CELLTYPE_EDIT:
         {
             bValueData = false;
-            const EditTextObject* pObj = pDoc->GetEditText(aPos);
-            if (pObj)
-            {
-                EditEngine& rEngine = GetEditEngine();
-                rEngine.SetText(*pObj);
-                aContent = rEngine.GetText(); // LineFeed in between paragraphs!
-            }
+            const EditTextObject* pObj = aCell.mpEditText;
+            EditEngine& rEngine = GetEditEngine();
+            rEngine.SetText(*pObj);
+            aContent = rEngine.GetText(); // LineFeed in between paragraphs!
         }
         break;
         default:
