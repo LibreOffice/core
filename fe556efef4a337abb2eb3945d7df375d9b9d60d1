@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_9ae54caa",
+        "filename": "sc/source/filter/excel/xicontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-27T23:10:45Z",
+      "side": 1,
+      "message": "The code mixes CELLTYPE_STRING and CELLTYPE_EDIT. You can\u0027t access aCell.mpEditText in the CELLTYPE_STRING case.",
+      "parentUuid": "9ad45d7e_1a831cce",
+      "range": {
+        "startLine": 186,
+        "startChar": 45,
+        "endLine": 186,
+        "endChar": 79
+      },
+      "revId": "fe556efef4a337abb2eb3945d7df375d9b9d60d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_ba7db0e9",
         "filename": "sc/source/ui/Accessibility/AccessibleText.cxx",
         "patchSetId": 1
