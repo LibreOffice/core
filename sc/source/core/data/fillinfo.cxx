@@ -135,7 +135,7 @@ class RowInfoFiller
     SCTAB mnTab;
     RowInfo* mpRowInfo;
     SCCOL mnArrX;
-    SCSIZE& mrArrY;
+    SCSIZE mnArrY;
     SCROW mnHiddenEndRow;
     bool mbHiddenRow;
 
@@ -149,25 +149,25 @@ class RowInfoFiller
 
     void alignArray(size_t nRow)
     {
-        while (mpRowInfo[mrArrY].nRowNo < static_cast<SCROW>(nRow))
-            ++mrArrY;
+        while (mpRowInfo[mnArrY].nRowNo < static_cast<SCROW>(nRow))
+            ++mnArrY;
     }
 
     void setInfo(size_t nRow, const ScRefCellValue& rCell)
     {
         alignArray(nRow);
 
-        RowInfo* pThisRowInfo = &mpRowInfo[mrArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[mnArrY];
         CellInfo* pInfo = &pThisRowInfo->pCellInfo[mnArrX];
         pInfo->maCell = rCell;
         pThisRowInfo->bEmptyText = false;
         pInfo->bEmptyCellText = false;
-        ++mrArrY;
+        ++mnArrY;
     }
 
 public:
     RowInfoFiller(ScDocument& rDoc, SCTAB nTab, RowInfo* pRowInfo, SCCOL nArrX, SCSIZE& rArrY) :
-        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnArrX(nArrX), mrArrY(rArrY),
+        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnArrX(nArrX), mnArrY(rArrY),
         mnHiddenEndRow(-1), mbHiddenRow(false) {}
 
     void operator() (size_t nRow, double fVal)
@@ -207,6 +207,58 @@ bool isRotateItemUsed(ScDocumentPool *pPool)
     }
 
     return false;
+}
+
+void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, SCROW& rY,
+        double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& nYExtra, SCSIZE& rArrRow, SCROW& rRow2)
+{
+    sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
+    SCROW nDocHeightEndRow = -1;
+    for (SCsROW nSignedY=((SCsROW)nRow1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
+    {
+        if (nSignedY >= 0)
+            rY = (SCROW) nSignedY;
+        else
+            rY = MAXROW+1;          // invalid
+
+        if (rY > nDocHeightEndRow)
+        {
+            if (ValidRow(rY))
+                nDocHeight = pDoc->GetRowHeight( rY, nTab, nullptr, &nDocHeightEndRow );
+            else
+                nDocHeight = ScGlobal::nStdRowHeight;
+        }
+
+        if ( rArrRow==0 || nDocHeight || rY > MAXROW )
+        {
+            RowInfo* pThisRowInfo = &pRowInfo[rArrRow];
+            pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
+
+            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
+            if (!nHeight)
+                nHeight = 1;
+
+            pThisRowInfo->nRowNo        = rY;               //TODO: case < 0 ?
+            pThisRowInfo->nHeight       = nHeight;
+            pThisRowInfo->bEmptyBack    = true;
+            pThisRowInfo->bEmptyText    = true;
+            pThisRowInfo->bChanged      = true;
+            pThisRowInfo->bAutoFilter   = false;
+            pThisRowInfo->bPivotButton  = false;
+            pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
+
+            ++rArrRow;
+            if (rArrRow >= ROWINFO_MAX)
+            {
+                OSL_FAIL("FillInfo: Range too big" );
+                nYExtra = nSignedY;                         // End
+                rRow2 = nYExtra - 1;                        // Adjust range
+            }
+        }
+        else
+            if (nSignedY==(SCsROW) nYExtra)                 // hidden additional line?
+                ++nYExtra;
+    }
 }
 
 }
@@ -274,53 +326,8 @@ void ScDocument::FillInfo(
 
     nArrRow=0;
     SCROW nYExtra = nRow2+1;
-    sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
-    SCROW nDocHeightEndRow = -1;
-    for (nSignedY=((SCsROW)nRow1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
-    {
-        if (nSignedY >= 0)
-            nY = (SCROW) nSignedY;
-        else
-            nY = MAXROW+1;          // invalid
-
-        if (nY > nDocHeightEndRow)
-        {
-            if (ValidRow(nY))
-                nDocHeight = GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
-            else
-                nDocHeight = ScGlobal::nStdRowHeight;
-        }
-
-        if ( nArrRow==0 || nDocHeight || nY > MAXROW )
-        {
-            RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-            pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
-
-            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
-            if (!nHeight)
-                nHeight = 1;
-
-            pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
-            pThisRowInfo->nHeight       = nHeight;
-            pThisRowInfo->bEmptyBack    = true;
-            pThisRowInfo->bEmptyText    = true;
-            pThisRowInfo->bChanged      = true;
-            pThisRowInfo->bAutoFilter   = false;
-            pThisRowInfo->bPivotButton  = false;
-            pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
-
-            ++nArrRow;
-            if (nArrRow >= ROWINFO_MAX)
-            {
-                OSL_FAIL("FillInfo: Range too big" );
-                nYExtra = nSignedY;                         // End
-                nRow2 = nYExtra - 1;                        // Adjust range
-            }
-        }
-        else
-            if (nSignedY==(SCsROW) nYExtra)                 // hidden additional line?
-                ++nYExtra;
-    }
+    initRowInfo(this, pRowInfo, nY, fRowScale, nRow1,
+            nTab, nYExtra, nArrRow, nRow2);
     nArrCount = nArrRow;                                      // incl. Dummys
 
     // Rotated text...
@@ -329,7 +336,7 @@ void ScDocument::FillInfo(
     bool bAnyItem = isRotateItemUsed(pPool);
 
     SCCOL nRotMax = nCol2;
-    if ( bAnyItem && HasAttrib( 0,nRow1,nTab, MAXCOL,nRow2+1,nTab,
+    if ( bAnyItem && HasAttrib( 0, nRow1, nTab, MAXCOL, nRow2+1, nTab,
                                 HASATTR_ROTATE | HASATTR_CONDITIONAL ) )
     {
         //TODO: check Conditionals also for HASATTR_ROTATE ????
@@ -437,18 +444,17 @@ void ScDocument::FillInfo(
 
                 ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Column data
 
-                nArrRow = 1;
+                nArrRow = 0;
                 // Iterate between rows nY1 and nY2 and pick up non-empty
                 // cells that are not hidden.
                 RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
                 sc::ParseAllNonEmpty(
-                    pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc);
+                    pThisCol->maCells.begin(), pThisCol->maCells, std::max(0 , nRow1 - 1), nYExtra, aFunc);
 
                 if (nX+1 >= nCol1)                                // Attribute/Blockmark from nX1-1
                 {
                     ScAttrArray* pThisAttrArr = pThisCol->pAttrArray;       // Attribute
 
-                    nArrRow = 0;
                     const ScPatternAttr* pPattern;
                     SCROW nCurRow=nRow1;                  // single rows
                     if (nCurRow>0)
