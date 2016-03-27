@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_da8ea426",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-03-27T15:01:39Z",
+      "side": 1,
+      "message": "Please use your real name in Git",
+      "revId": "f67df658d6280d6c7426b2e702a18dd1bb31b8b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7a73384e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-03-27T15:01:39Z",
+      "side": 1,
+      "message": "The LibreOffice project has several bug trackers. In order to refer to a bug hosted in The Document Foundation\u0027s Bugzilla instance, write it like this: \"tdf#97404\"",
+      "revId": "f67df658d6280d6c7426b2e702a18dd1bb31b8b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
