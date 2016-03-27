@@ -189,6 +189,7 @@ Const cstThisSub = &quot;Field.GetChunk&quot;
 	Utils._SetCalledSub(cstThisSub)
 
 Dim oValue As Object, bNullable As Boolean, bNull As Boolean, vValue() As Variant
+Dim lLength As Long, lOffset As Long, lValue As Long
 
 	If IsMissing(pvOffset) Or IsMissing(pvBytes) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvOffset, 1, _AddNumeric()) Then Goto Exit_Function
@@ -205,6 +206,7 @@ Dim oValue As Object, bNullable As Boolean, bNull As Boolean, vValue() As Varian
 	bNullable = ( Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE )
 	bNull = False
 	GetChunk = Null
+	vValue = Array()
 	With com.sun.star.sdbc.DataType
 		Select Case Column.Type			&apos;	DOES NOT WORK FOR CHARACTER TYPES
 &apos;			Case .CHAR, .VARCHAR, .LONGVARCHAR
@@ -218,14 +220,15 @@ Dim oValue As Object, bNullable As Boolean, bNull As Boolean, vValue() As Varian
 			Case Else
 				Goto Trace_Error
 		End Select
+		If bNullable Then bNull = Column.wasNull()
+		If Not bNull Then
+			lOffset = CLng(pvOffset)
+			If lOffset &gt; 0 Then oValue.skipBytes(lOffset)
+			lValue = oValue.readBytes(vValue, pvBytes)
+		End If
+		oValue.closeInput()
 	End With
-	If bNullable Then bNull = Column.wasNull()
-	If Not bNull Then
-		If pvOffset &gt; 0 Then oValue.skipBytes(pvOffset)
-		oValue.readBytes(vValue, pvBytes)
-		GetChunk = vValue
-	End If
-	oValue.closeInput()
+	GetChunk = vValue
 
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
