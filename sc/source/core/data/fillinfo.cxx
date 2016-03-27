@@ -261,6 +261,63 @@ void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, SCROW& rY,
     }
 }
 
+void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax, bool bPaintMarks,
+        const SvxShadowItem* pDefShadow, SCROW nBlockStartY, SCROW nBlockEndY,
+        SCCOL nBlockStartX, SCCOL nBlockEndX)
+{
+    for (SCSIZE nArrRow = 0; nArrRow < nArrCount; nArrRow++)
+    {
+        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
+        SCROW nY = pThisRowInfo->nRowNo;
+        pThisRowInfo->pCellInfo = new CellInfo[ nRotMax+1+2 ];  // to delete the caller!
+
+        for (SCCOL nArrCol = 0; nArrCol <= nRotMax+2; nArrCol++)          // Preassign cell info
+        {
+            SCCOL nX;
+            if (nArrCol>0)
+                nX = nArrCol-1;
+            else
+                nX = MAXCOL+1;      // invalid
+
+            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
+            pInfo->bEmptyCellText = true;
+            pInfo->maCell.clear();
+            if (bPaintMarks)
+                pInfo->bMarked = ( nX >= nBlockStartX && nX <= nBlockEndX
+                                && nY >= nBlockStartY && nY <= nBlockEndY );
+            else
+                pInfo->bMarked = false;
+            pInfo->nWidth = 0;
+
+            pInfo->nClipMark    = SC_CLIPMARK_NONE;
+            pInfo->bMerged      = false;
+            pInfo->bHOverlapped = false;
+            pInfo->bVOverlapped = false;
+            pInfo->bAutoFilter  = false;
+            pInfo->bPivotButton  = false;
+            pInfo->bPivotPopupButton = false;
+            pInfo->bFilterActive = false;
+            pInfo->nRotateDir   = SC_ROTDIR_NONE;
+
+            pInfo->bPrinted     = false;                    //  view-internal
+            pInfo->bHideGrid    = false;                    //  view-internal
+            pInfo->bEditEngine  = false;                    //  view-internal
+
+            pInfo->pBackground  = nullptr;                     //TODO: omit?
+            pInfo->pPatternAttr = nullptr;
+            pInfo->pConditionSet= nullptr;
+
+            pInfo->pLinesAttr   = nullptr;
+            pInfo->mpTLBRLine   = nullptr;
+            pInfo->mpBLTRLine   = nullptr;
+
+            pInfo->pShadowAttr    = pDefShadow;
+            pInfo->pHShadowOrigin = nullptr;
+            pInfo->pVShadowOrigin = nullptr;
+        }
+    }
+}
+
 }
 
 void ScDocument::FillInfo(
@@ -352,57 +409,8 @@ void ScDocument::FillInfo(
 
     //  Allocate cell information only after the test rotation
     //  to nRotMax due to nRotateDir Flag
-
-    for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
-    {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-        nY = pThisRowInfo->nRowNo;
-        pThisRowInfo->pCellInfo = new CellInfo[ nRotMax+1+2 ];  // to delete the caller!
-
-        for (nArrCol=0; nArrCol<=nRotMax+2; nArrCol++)          // Preassign cell info
-        {
-            if (nArrCol>0)
-                nX = nArrCol-1;
-            else
-                nX = MAXCOL+1;      // invalid
-
-            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
-            pInfo->bEmptyCellText = true;
-            pInfo->maCell.clear();
-            if (bPaintMarks)
-                pInfo->bMarked = ( nX >= nBlockStartX && nX <= nBlockEndX
-                                && nY >= nBlockStartY && nY <= nBlockEndY );
-            else
-                pInfo->bMarked = false;
-            pInfo->nWidth = 0;
-
-            pInfo->nClipMark    = SC_CLIPMARK_NONE;
-            pInfo->bMerged      = false;
-            pInfo->bHOverlapped = false;
-            pInfo->bVOverlapped = false;
-            pInfo->bAutoFilter  = false;
-            pInfo->bPivotButton  = false;
-            pInfo->bPivotPopupButton = false;
-            pInfo->bFilterActive = false;
-            pInfo->nRotateDir   = SC_ROTDIR_NONE;
-
-            pInfo->bPrinted     = false;                    //  view-internal
-            pInfo->bHideGrid    = false;                    //  view-internal
-            pInfo->bEditEngine  = false;                    //  view-internal
-
-            pInfo->pBackground  = nullptr;                     //TODO: omit?
-            pInfo->pPatternAttr = nullptr;
-            pInfo->pConditionSet= nullptr;
-
-            pInfo->pLinesAttr   = nullptr;
-            pInfo->mpTLBRLine   = nullptr;
-            pInfo->mpBLTRLine   = nullptr;
-
-            pInfo->pShadowAttr    = pDefShadow;
-            pInfo->pHShadowOrigin = nullptr;
-            pInfo->pVShadowOrigin = nullptr;
-        }
-    }
+    initCellInfo(pRowInfo, nArrCount, nRotMax, bPaintMarks, pDefShadow,
+            nBlockStartY, nBlockEndY, nBlockStartX, nBlockEndX);
 
     for (nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)    // Add remaining widths
     {
