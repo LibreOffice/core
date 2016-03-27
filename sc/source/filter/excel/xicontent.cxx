@@ -37,6 +37,8 @@
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include "stringutil.hxx"
+#include "cellform.hxx"
+#include "cellvalue.hxx"
 #include "document.hxx"
 #include "editutil.hxx"
 #include "formulacell.hxx"
@@ -163,23 +165,27 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
 {
     ScDocumentImport& rDoc = rRoot.GetDocImport();
     ScAddress aScPos( nScCol, nScRow, nScTab );
-    CellType eCellType = rDoc.getDoc().GetCellType(aScPos);
-    switch( eCellType )
+    ScRefCellValue aCell(rDoc.getDoc(), aScPos);
+    switch( aCell.meType )
     {
         // #i54261# hyperlinks in string cells
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
         {
-            OUString aDisplText = rDoc.getDoc().GetString(nScCol, nScRow, nScTab);
+            sal_uLong nNumFmt = rDoc.getDoc().GetNumberFormat(aScPos);
+            SvNumberFormatter* pFormatter = rDoc.getDoc().GetFormatTable();
+            Color* pColor;
+            OUString aDisplText;
+            ScCellFormat::GetString(aCell, nNumFmt, aDisplText, &pColor, *pFormatter, &rDoc.getDoc());
             if (aDisplText.isEmpty())
                 aDisplText = rUrl;
 
             ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
             SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
 
-            const EditTextObject* pEditObj = rDoc.getDoc().GetEditText(aScPos);
-            if( pEditObj )
+            if( aCell.meType == CELLTYPE_EDIT )
             {
+                const EditTextObject* pEditObj = aCell.mpEditText;
                 rEE.SetText( *pEditObj );
                 rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, EE_PARA_ALL, 0 ) );
             }

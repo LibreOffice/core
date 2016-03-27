@@ -35,6 +35,7 @@
 #include "filter.hxx"
 #include "asciiopt.hxx"
 #include "formulacell.hxx"
+#include "cellform.hxx"
 #include "docoptio.hxx"
 #include "progress.hxx"
 #include "scitems.hxx"
@@ -1601,7 +1602,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
     if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
         pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow );
 
-    OUString aCell;
+    OUString aCellStr;
 
     bool bConvertLF = (GetSystemLineEnd() != LINEEND_LF);
 
@@ -1611,71 +1612,77 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
         {
             for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
-                CellType eType;
-                pDoc->GetCellType( nCol, nRow, nStartTab, eType );
-                switch (eType)
+                ScAddress aPos(nCol, nRow, nStartTab);
+                sal_uLong nNumFmt = pDoc->GetNumberFormat(aPos);
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+
+                ScRefCellValue aCell(*pDoc, aPos);
+                switch (aCell.meType)
                 {
                     case CELLTYPE_FORMULA:
                     {
                         if (bFormulas)
                         {
-                            pDoc->GetFormula( nCol, nRow, nStartTab, aCell );
-                            if( aCell.indexOf( cSep ) != -1 )
-                                lcl_WriteString( rStrm, aCell, cStr, cStr );
+                            aCell.mpFormula->GetFormula( aCellStr );
+                            if( aCellStr.indexOf( cSep ) != -1 )
+                                lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                             else
-                                lcl_WriteSimpleString( rStrm, aCell );
+                                lcl_WriteSimpleString( rStrm, aCellStr );
                         }
                         else
                         {
-                            aCell = pDoc->GetString(nCol, nRow, nStartTab);
+                            Color* pColor;
+                            ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
 
-                            bool bMultiLineText = ( aCell.indexOf( '\n' ) != -1 );
+                            bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                             if( bMultiLineText )
                             {
                                 if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
-                                    aCell = aCell.replaceAll( "\n", " " );
+                                    aCellStr = aCellStr.replaceAll( "\n", " " );
                                 else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
-                                    aCell = convertLineEnd(aCell, GetSystemLineEnd());
+                                    aCellStr = convertLineEnd(aCellStr, GetSystemLineEnd());
                             }
 
                             if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                                aCell = aCell.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
+                                aCellStr = aCellStr.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
 
-                            if( mExportTextOptions.mbAddQuotes && ( aCell.indexOf( cSep ) != -1 ) )
-                                lcl_WriteString( rStrm, aCell, cStr, cStr );
+                            if( mExportTextOptions.mbAddQuotes && ( aCellStr.indexOf( cSep ) != -1 ) )
+                                lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                             else
-                                lcl_WriteSimpleString( rStrm, aCell );
+                                lcl_WriteSimpleString( rStrm, aCellStr );
                         }
                     }
                     break;
                     case CELLTYPE_VALUE:
                     {
-                        aCell = pDoc->GetString(nCol, nRow, nStartTab);
-                        lcl_WriteSimpleString( rStrm, aCell );
+                        Color* pColor;
+                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
+                        lcl_WriteSimpleString( rStrm, aCellStr );
                     }
                     break;
                     case CELLTYPE_NONE:
                     break;
                     default:
                     {
-                        aCell = pDoc->GetString(nCol, nRow, nStartTab);
+                        Color* pColor;
+                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
 
-                        bool bMultiLineText = ( aCell.indexOf( '\n' ) != -1 );
+                        bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                         if( bMultiLineText )
                         {
                             if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
-                                aCell = aCell.replaceAll( "\n", " " );
+                                aCellStr = aCellStr.replaceAll( "\n", " " );
                             else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
-                                aCell = convertLineEnd(aCell, GetSystemLineEnd());
+                                aCellStr = convertLineEnd(aCellStr, GetSystemLineEnd());
                         }
 
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                            aCell = aCell.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
+                            aCellStr = aCellStr.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
 
-                        if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCell, cSep) )
-                            lcl_WriteString( rStrm, aCell, cStr, cStr );
+                        if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCellStr, cSep) )
+                            lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                         else
-                            lcl_WriteSimpleString( rStrm, aCell );
+                            lcl_WriteSimpleString( rStrm, aCellStr );
                     }
                 }
                 if( nCol < nEndCol )
