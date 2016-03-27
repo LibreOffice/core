@@ -608,8 +608,6 @@ bool l10nMem::convFilterWarning(const string& sSourceFile,
              sKey        == "ImpressWindowState.UIElements.States.private:resource/toolpanel/DrawingFramework/Layouts.UIName") ||
             (sSourceFile == "registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu" &&
              sKey        == "ImpressWindowState.UIElements.States.private:resource/toolpanel/DrawingFramework/TableDesign.UIName") ||
-            (sSourceFile == "registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu" &&
-             sKey        == "ImpressWindowState.UIElements.States.private:resource/toolpanel/DrawingFramework/TableDesign.UIName"))
             return true;
     }
     if (msModuleName == "readlicense_oo") {
