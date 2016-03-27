@@ -42,6 +42,8 @@
 #include "miscuno.hxx"
 #include "cellsuno.hxx"
 #include "hints.hxx"
+#include "cellvalue.hxx"
+#include "cellform.hxx"
 #include "patattr.hxx"
 #include "formulacell.hxx"
 #include "docfunc.hxx"
@@ -982,15 +984,17 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
         }
 
-        if (rDoc.GetCellType(aCellPos) == CELLTYPE_EDIT)
+        ScRefCellValue aCell(rDoc, aCellPos);
+        if (aCell.meType == CELLTYPE_EDIT)
         {
-            const EditTextObject* pObj = rDoc.GetEditText(aCellPos);
+            const EditTextObject* pObj = aCell.mpEditText;
             if (pObj)
                 pEditEngine->SetTextNewDefaults(*pObj, aDefaults);
         }
         else
         {
-            GetCellText(aCellPos, aText);
+            sal_uLong nFormat = rDoc.GetNumberFormat(aCellPos);
+            ScCellFormat::GetInputString(aCell, nFormat, aText, *rDoc.GetFormatTable(), &rDoc);
             if (!aText.isEmpty())
                 pEditEngine->SetTextNewDefaults(aText, aDefaults);
             else
