@@ -678,10 +678,10 @@ namespace basegfx
 
         // now look for the closest point
         const sal_uInt32 nPointCount(aInitialPolygon.count());
-        B2DVector aVector(rTestPoint - aInitialPolygon.getB2DPoint(0L));
+        B2DVector aVector(rTestPoint - aInitialPolygon.getB2DPoint(0));
         double fQuadDist(aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY());
         double fNewQuadDist;
-        sal_uInt32 nSmallestIndex(0L);
+        sal_uInt32 nSmallestIndex(0);
 
         for(sal_uInt32 a(1L); a < nPointCount; a++)
         {
