@@ -230,7 +230,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/table/table \
 	) \
     $(if $(ENABLE_OPENGL), \
-		$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
+        $(if $(ENABLE_GLTF), \
+			$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
+		) \
 	) \
 ))
 
