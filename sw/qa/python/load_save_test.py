@@ -49,7 +49,7 @@ class LoadSaveTest(unittest.TestCase):
         cls.m_fileURL = "file:/"
         cls.m_SourceDir = "FIXME"
         cls.m_TargetDir = "/tmp/out/"
-        cls.dirs= []
+        cls.dirs = []
         cls.files = []
         cls.fileName = ""
 
@@ -71,7 +71,6 @@ class LoadSaveTest(unittest.TestCase):
             m_xMSF = self.xContext.ServiceManager
             desktop = m_xMSF.createInstanceWithContext('com.sun.star.frame.Desktop', self.xContext)
 
-            #path = os.getenv("TDOC")
             filepath = os.path.abspath("FIXME")
             if os.name == "nt":
                 sourceFile = "file:///" + filepath + "/" + quote(self.fileName)
@@ -93,15 +92,15 @@ class LoadSaveTest(unittest.TestCase):
             raise
 
 
-    def getDirAndFile(self,dir):
+    def getDirAndFile(self, dir):
 
         root2 = os.mkdir(dir)
-        root = open(dir+ "/" + dir + ".odt",'a')
+        root = open(dir + "/" + dir + ".odt", 'a')
 
         self.getDirAndFileNames(dir)
         return self.dirs, self.files
 
-    def getDirAndFileNames( self, fdName):
+    def getDirAndFileNames(self, fdName):
 
         if os.path.isdir(fdName):
             self.dirs.append(fdName)
@@ -109,6 +108,7 @@ class LoadSaveTest(unittest.TestCase):
 
             if not fdName[-1] == "/":
                 fdName += "/"
+
             for subfile in subfiles:
                 subfileName = fdName + subfile
                 self.getDirAndFileNames(subfileName)
@@ -125,5 +125,6 @@ class LoadSaveTest(unittest.TestCase):
             if not os.path.exists(target + dir):
                 f = os.mkdir(target + dir)
                 self.assertTrue( os.path.exists(target + dir))
-        root = open(target + dir + "/" + self.m_SourceDir + ".odt",'a')
+
+        root = open(target + dir + "/" + self.m_SourceDir + ".odt", 'a')
         filepath = os.path.abspath(target + dir + "/" +  self.m_SourceDir + ".odt")

@@ -17,18 +17,22 @@ from com.sun.star.lang import IllegalArgumentException
 
 class CheckStyle(unittest.TestCase):
     _uno = None
+
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
+
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
+
     def test_StyleFamilies(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xStyleFamilies = xDoc.StyleFamilies
         self.assertEqual(xStyleFamilies.ImplementationName, "SwXStyleFamilies")
         self.assertEqual(len(xStyleFamilies.SupportedServiceNames), 1)
+
         for servicename in xStyleFamilies.SupportedServiceNames:
             self.assertIn(servicename, ["com.sun.star.style.StyleFamilies"] )
             self.assertTrue(xStyleFamilies.supportsService(servicename))
@@ -36,39 +40,50 @@ class CheckStyle(unittest.TestCase):
         self.assertTrue(xStyleFamilies.hasElements())
         self.assertRegex(str(xStyleFamilies.ElementType), "com\.sun\.star\.container\.XNameContainer")
         self.assertEqual(len(xStyleFamilies.ElementNames), 5)
+
         for sFamilyname in xStyleFamilies.ElementNames:
             self.assertIn(sFamilyname, ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles"])
+
         with self.assertRaises(NoSuchElementException):
             xStyleFamilies.getByName("foobarbaz")
         xDoc.dispose()
+
     def __test_StyleFamily(self, xFamily, vExpectedNames):
         self.assertEqual(xFamily.ImplementationName, "XStyleFamily")
         self.assertEqual(len(xFamily.SupportedServiceNames), 1)
+
         for sServicename in xFamily.SupportedServiceNames:
             self.assertIn(sServicename, ["com.sun.star.style.StyleFamily"] )
             self.assertTrue(xFamily.supportsService(sServicename))
         self.assertFalse(xFamily.supportsService("foobarbaz"))
         self.assertTrue(xFamily.hasElements())
         self.assertRegex(str(xFamily.ElementType), "com\.sun\.star\.style\.XStyle")
+
         with self.assertRaises(NoSuchElementException):
             xFamily.getByName("foobarbaz")
+
         with self.assertRaises(IndexOutOfBoundsException):
             xFamily.getByIndex(-1)
+
         for sStylename in xFamily.ElementNames:
             self.assertTrue(xFamily.hasByName(sStylename))
             self.assertEqual(xFamily[sStylename].ImplementationName, "SwXStyle")
             self.assertFalse(xFamily[sStylename].isUserDefined())
+ 
         vExpectedNames.sort()
         vNames = list(xFamily.ElementNames)
         vNames.sort()
         self.assertListEqual(vNames, vExpectedNames)
+
     def __test_StyleFamilyIndex(self, xFamily, vExpectedNames):
         self.assertEqual(xFamily.Count, len(vExpectedNames))
+
         for nIndex in range(xFamily.Count):
             xStyle = xFamily.getByIndex(nIndex)
             self.assertEqual(xStyle.ImplementationName, "SwXStyle")
             self.assertIn(xStyle.Name, vExpectedNames)
             self.assertFalse(xStyle.isUserDefined())
+
     def __test_StyleFamilyInsert(self, xDoc, xFamily, vExpectedNames, sRightStyle, sWrongStyle):
         xRightStyle = xDoc.createInstance(sRightStyle)
         xRightStyle.Name = "RightStyleOld"
@@ -86,18 +101,24 @@ class CheckStyle(unittest.TestCase):
         self.assertEqual(xRightStyle2.Name, "RightStyle")
         self.assertEqual(xFamily[xRightStyle2.Name], xRightStyle2)
         xFamily.removeByName(xRightStyle2.Name)
+
         with self.assertRaises(NoSuchElementException):
             nope = xFamily.getByName("RightStyleOld")
         with self.assertRaises(NoSuchElementException):
             nope = xFamily.getByName("RightStyle")
+
         with self.assertRaises(NoSuchElementException):
             nope = xFamily.getByName("RightStyle2Old")
+
         with self.assertRaises(NoSuchElementException):
             nope = xFamily.getByName("RightStyle2")
+
         with self.assertRaises(IllegalArgumentException):
             xFamily.insertByName("WrongStyle", xWrongStyle)
+
         with self.assertRaises(NoSuchElementException):
             nope = xFamily.getByName("WrongStyle")
+
     def test_CharacterFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCharStyles = xDoc.StyleFamilies["CharacterStyles"]
@@ -106,6 +127,7 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamilyIndex(xCharStyles, vEmptyDocStyles)
         self.__test_StyleFamilyInsert(xDoc, xCharStyles, vEmptyDocStyles, "com.sun.star.style.CharacterStyle", "com.sun.star.style.ParagraphStyle")
         xDoc.dispose()
+
     def test_ParagraphFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xParaStyles = xDoc.StyleFamilies["ParagraphStyles"]
@@ -114,6 +136,7 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamilyIndex(xParaStyles, vEmptyDocStyles)
         self.__test_StyleFamilyInsert(xDoc, xParaStyles, vEmptyDocStyles, "com.sun.star.style.ParagraphStyle", "com.sun.star.style.CharacterStyle")
         xDoc.dispose()
+
     def test_PageFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xPageStyles = xDoc.StyleFamilies["PageStyles"]
@@ -122,6 +145,7 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamilyIndex(xPageStyles, vEmptyDocStyles)
         self.__test_StyleFamilyInsert(xDoc, xPageStyles, vEmptyDocStyles, "com.sun.star.style.PageStyle", "com.sun.star.style.CharacterStyle")
         xDoc.dispose()
+
     def test_FrameFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xFrameStyles = xDoc.StyleFamilies["FrameStyles"]
@@ -130,6 +154,7 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamilyIndex(xFrameStyles, vEmptyDocStyles)
         self.__test_StyleFamilyInsert(xDoc, xFrameStyles, vEmptyDocStyles, "com.sun.star.style.FrameStyle", "com.sun.star.style.CharacterStyle")
         xDoc.dispose()
+
     def test_NumberingFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xNumberingStyles = xDoc.StyleFamilies["NumberingStyles"]
@@ -138,6 +163,7 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamilyIndex(xNumberingStyles, vEmptyDocStyles)
         self.__test_StyleFamilyInsert(xDoc, xNumberingStyles, vEmptyDocStyles, "com.sun.star.style.NumberingStyle", "com.sun.star.style.CharacterStyle")
         xDoc.dispose()
+
 if __name__ == '__main__':
     unittest.main()
 
