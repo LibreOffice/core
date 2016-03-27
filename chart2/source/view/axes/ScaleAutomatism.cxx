@@ -369,26 +369,16 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         than 1, and the range has been swapped above), then: */
     if( bAutoMinimum && (fTempMinimum > 0.0) )
     {
-        /*  If minimum is less than 5 (i.e. original source values less than
-            B^5, B being the base of the scaling), or if minimum and maximum
-            are in different increment intervals (means, if minimum and maximum
-            are not both in the range [B^n,B^(n+1)] for a whole number n), set
-            minimum to 0, which results in B^0=1 on the axis. */
         double fMinimumFloor = ::rtl::math::approxFloor( fTempMinimum );
         double fMaximumFloor = ::rtl::math::approxFloor( fTempMaximum );
         // handle the exact value B^(n+1) to be in the range [B^n,B^(n+1)]
         if( ::rtl::math::approxEqual( fTempMaximum, fMaximumFloor ) )
             fMaximumFloor -= 1.0;
 
-        if( (fMinimumFloor < 5.0) || (fMinimumFloor < fMaximumFloor) )
+        if( fMinimumFloor == fMaximumFloor )
         {
-            if( m_bExpandWideValuesToZero )
-                fTempMinimum = 0.0;
-        }
-        /*  Else (minimum and maximum are in one increment interval), expand
+        /*  if minimum and maximum are in one increment interval, expand
             minimum toward 0 to make the 'shorter' data points visible. */
-        else
-        {
             if( m_bExpandNarrowValuesTowardZero )
                 fTempMinimum -= 1.0;
         }
