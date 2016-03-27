@@ -32,7 +32,7 @@
 #include <vcl/field.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ppdparser.hxx>
-#include "unx/printerinfomanager.hxx"
+#include <vcl/printerinfomanager.hxx>
 
 class RTSPaperPage;
 class RTSDevicePage;

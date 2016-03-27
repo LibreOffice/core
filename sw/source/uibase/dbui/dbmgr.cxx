@@ -137,10 +137,6 @@
 #include <IDocumentState.hxx>
 
 #include <memory>
-#include <config_cups.h>
-#if ENABLE_CUPS && !defined(MACOSX)
-#include "unx/printerinfomanager.hxx"
-#endif
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX
 
-#include "unx/jobdata.hxx"
+#include <vcl/jobdata.hxx>
 #include "unx/printergfx.hxx"
 #include "unx/printerjob.hxx"
 #include "unx/genprn.h"

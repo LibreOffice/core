@@ -41,7 +41,7 @@
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 #include "basegfx/polygon/b2dtrapezoid.hxx"
 
-#include "unx/jobdata.hxx"
+#include <vcl/jobdata.hxx>
 #include <vcl/virdev.hxx>
 
 #include "unx/salunx.h"

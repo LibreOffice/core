@@ -30,7 +30,7 @@
 #include "unx/printergfx.hxx"
 #include <vcl/ppdparser.hxx>
 #include <vcl/strhelper.hxx>
-#include "unx/printerinfomanager.hxx"
+#include <vcl/printerinfomanager.hxx>
 
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.hxx"

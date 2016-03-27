@@ -19,7 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include "unx/printerinfomanager.hxx"
+#include <vcl/printerinfomanager.hxx>
 
 #include "jobset.h"
 #include "print.h"

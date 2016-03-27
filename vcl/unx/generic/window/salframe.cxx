@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
-#include "unx/printerinfomanager.hxx"
+#include <vcl/printerinfomanager.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
