@@ -58,8 +58,10 @@ public:
 };
 
 template<typename Value>
-class SwVectorModifyBase : public std::vector<Value>
+class SwVectorModifyBase
 {
+protected:
+    std::vector<Value> baseValue;
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
 
@@ -78,8 +80,36 @@ protected:
         : mPolicy(policy) {}
 
 public:
-    using std::vector<Value>::begin;
-    using std::vector<Value>::end;
+    typename std::vector<Value>::iterator begin() noexcept { return baseValue.begin(); }
+    typename std::vector<Value>::const_iterator begin() const noexcept{ return baseValue.begin(); }
+    typename std::vector<Value>::iterator end() noexcept{ return baseValue.end(); }
+    typename std::vector<Value>::const_iterator end() const noexcept{ return baseValue.end(); }
+    typedef typename std::vector<Value>::size_type size_type;
+    typedef typename std::vector<Value>::iterator iterator;
+    void clear() noexcept { return baseValue.clear(); }
+    typename std::vector<Value>::iterator insert(typename std::vector<Value>::iterator pos , Value V)
+    {
+        return baseValue.insert(pos , V);
+    }
+    void insert(typename std::vector<Value>::iterator pos , typename std::vector<Value>::const_iterator first , typename std::vector<Value>::const_iterator last)
+    {
+        baseValue.insert(pos , first , last);
+    }
+    void push_back(Value V) { baseValue.push_back(V); }
+    typename std::vector<Value>::iterator erase(typename std::vector<Value>::iterator pos)
+    {
+        return baseValue.erase(pos);
+    }
+    void erase(typename std::vector<Value>::iterator first , typename std::vector<Value>::iterator last)
+    {
+        baseValue.erase(first , last);
+    }
+    void reserve(size_type n) { baseValue.reserve(n); }
+    bool empty() const noexcept { return baseValue.empty(); }
+    typename std::vector<Value>::const_reference front() const { return baseValue.front(); }
+    typename std::vector<Value>::reference front() { return baseValue.front(); }
+    typename std::vector<Value>::reference at(size_type pos) { return baseValue.at(pos); }
+    typename std::vector<Value>::const_reference at(size_type pos) const { return baseValue.at(pos); }
 
     // free any remaining child objects based on mPolicy
     virtual ~SwVectorModifyBase()
@@ -109,6 +139,10 @@ public:
         { return std::find(begin(), end(), p) != end(); }
 
     static void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) {};
+    size_t size() const  { return baseValue.size(); }
+    typename std::vector<Value>::reference operator[] (size_t idx) { return baseValue[idx]; }
+    typename std::vector<Value>::const_reference operator[] (size_t idx) const { return baseValue[idx]; }
+    typedef typename std::vector<Value>::value_type value_type;
 };
 
 template<typename Value>
@@ -121,10 +155,10 @@ protected:
 
 public:
     virtual size_t GetFormatCount() const override
-        { return std::vector<Value>::size(); }
+        { return SwVectorModifyBase<Value>::size(); }
 
     virtual Value GetFormat(size_t idx) const override
-        { return std::vector<Value>::operator[](idx); }
+        { return SwVectorModifyBase<Value>::operator[](idx); }
 
     inline size_t GetPos(const SwFormat *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
@@ -132,6 +166,7 @@ public:
         Value p2 = dynamic_cast<Value>(const_cast<SwFormat*>(p));
         return p2 != nullptr && SwVectorModifyBase<Value>::Contains(p2);
     }
+
 };
 
 class SwGrfFormatColls : public SwFormatsModifyBase<SwGrfFormatColl*>
