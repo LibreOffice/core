@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_1a831cce",
+        "filename": "sc/source/filter/excel/xicontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1001238
+      },
+      "writtenOn": "2016-03-27T21:39:29Z",
+      "side": 1,
+      "message": "I tried to replace this with aCell.mpEditText but it crashed during tests https://gist.github.com/AlexP11223/fcf1d02ef5f2d830c8f3",
+      "range": {
+        "startLine": 186,
+        "startChar": 45,
+        "endLine": 186,
+        "endChar": 79
+      },
+      "revId": "fe556efef4a337abb2eb3945d7df375d9b9d60d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ba7db0e9",
+        "filename": "sc/source/ui/Accessibility/AccessibleText.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1001238
+      },
+      "writtenOn": "2016-03-27T21:39:29Z",
+      "side": 1,
+      "message": "Maybe should fix float comparison somehow?",
+      "range": {
+        "startLine": 757,
+        "startChar": 88,
+        "endLine": 757,
+        "endChar": 112
+      },
+      "revId": "fe556efef4a337abb2eb3945d7df375d9b9d60d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
