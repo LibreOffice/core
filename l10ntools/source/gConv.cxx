@@ -191,29 +191,28 @@ bool convert_gen::prepareFile()
 
 
 
-int convert_gen::lexRead(char *sBuf, int nMax_size)
+void convert_gen::lexRead(char *sBuf, size_t *result, size_t nMax_size)
 {
-    int nResult = 0;
-
     // did we hit eof
-    if (miSourceReadIndex != -1) {
+    if (miSourceReadIndex == -1)
+        *result = 0;
+    else {
         // assume we can copy all that are left.
-        nResult = msSourceBuffer.size() - miSourceReadIndex;
+        *result = msSourceBuffer.size() - miSourceReadIndex;
 
         // space enough for the whole line ?
-        if (nResult <= nMax_size) {
-            msSourceBuffer.copy(sBuf, nResult, miSourceReadIndex);
+        if (*result <= nMax_size) {
+            msSourceBuffer.copy(sBuf, *result, miSourceReadIndex);
             l10nMem::showDebug(sBuf);
             miSourceReadIndex = -1;
         }
         else {
             msSourceBuffer.copy(sBuf, nMax_size, miSourceReadIndex);
             l10nMem::showDebug(sBuf);
-            nResult = nMax_size;
+            *result = nMax_size;
             miSourceReadIndex += nMax_size;
         }
     }
-    return nResult;
 }
 
 

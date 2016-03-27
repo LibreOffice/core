@@ -161,14 +161,14 @@ void convert_po::startSave(const string& sName,
 
     // create directories as needed
     createDir(string(""), sFilePath);
-    outBuffer.open(sFilePath.c_str(), ios::out | ios::binary);
+    mfOutBuffer.open(sFilePath.c_str(), ios::out | ios::binary);
 
-    if (!outBuffer.is_open())
+    if (!mfOutBuffer.is_open())
         throw l10nMem::showError("Cannot open " + sFilePath + " for writing");
 
     l10nMem::showDebug("writing file (" + sFilePath + ")");
 
-    ostream outFile(&outBuffer);
+    ostream outFile(&mfOutBuffer);
 
     // Set header
     auto t = std::time(nullptr);
@@ -204,14 +204,14 @@ void convert_po::save(const string& sFileName,
                       bool               bFuzzy)
 {
     string sName;
-    ostream outFile(&outBuffer);
+    ostream outFile(&mfOutBuffer);
     int newPos;
 
     // isolate filename
     newPos = sFileName.find_last_of("/\\", sFileName.length());
     sName = sFileName.substr(newPos + 1, sFileName.length());
 
-    outFile << endl << "#. " << genKeyId(sName + sText) << endl;
+    outFile << endl << "#. " << genKeyId(sName + sKey + sResource + sENUStext) << endl;
     if (sComment.length())
         outFile << "#. " << sComment << endl;
     outFile << "#: " << sName << endl
@@ -229,15 +229,24 @@ void convert_po::save(const string& sFileName,
 
 void convert_po::endSave()
 {
-    outBuffer.close();
+    mfOutBuffer.close();
 }
 
 
 
 string convert_po::genKeyId(const string& text)
 {
+    string newText(text);
     boost::crc_32_type aCRC32;
-    aCRC32.process_bytes(text.c_str(), text.length());
+    int i;
+
+    for (i = 0; (i = newText.find("\\\\", 0)) != (int)string::npos;) {
+        newText.erase(i, 1);
+    }
+    for (i = 0; (i = newText.find("\\\"", 0)) != (int)string::npos;) {
+        newText.erase(i, 1);
+    }
+    aCRC32.process_bytes(newText.c_str(), newText.length());
     unsigned int nCRC = aCRC32.checksum();
     string key;
 

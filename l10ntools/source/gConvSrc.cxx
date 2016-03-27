@@ -152,13 +152,13 @@ void convert_src::setList(char *syyText)
 void convert_src::setNL(char *syyText, bool bMacro)
 {
     int         nL;
-    string sKey;
+    string sKey, x;
 
     copySource(syyText);
 
     if (msTextName.size() && mbValuePresent && mbEnUs) {
         // locate key and extract it
-        buildKey(sKey);
+        buildKey(x);
 
         for (nL = -1;;) {
             nL = msValue.find("\\\"", nL+1);
@@ -231,7 +231,7 @@ void convert_src::setListItem(char const *syyText, bool bIsStart)
             msName = "dummy";
             mcStack.push_back(msName);
         }
-        msTextName         = "item";
+        msTextName    = "item";
         mbExpectValue =
         mbExpectName  =
         mbInListItem  = true;

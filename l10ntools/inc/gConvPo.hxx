@@ -61,8 +61,8 @@ class convert_po : public convert_gen
         string  msId;
         string  msStr;
         string  msKey;
-        bool         mbFuzzy;
-        filebuf outBuffer;
+        bool    mbFuzzy;
+        filebuf mfOutBuffer;
 
         void doExecute() override;
         string genKeyId(const string& text);

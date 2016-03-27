@@ -14,6 +14,11 @@ $(eval $(call gb_Executable_set_include,genlang,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Executable_use_externals,genlang,\
+    boost_headers \
+))
+
+
 $(eval $(call gb_Executable_add_scanners,genlang,\
     l10ntools/source/gLexPo   \
     l10ntools/source/gLexUi   \

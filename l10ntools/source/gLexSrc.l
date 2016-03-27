@@ -26,7 +26,7 @@ using namespace std;
 
 #define LOCptr ((convert_src *)convert_gen::mcImpl)
 #define YYLMAX 64000
-#define YY_INPUT(buf,result,max_size) LOCptr->lexRead(buf, max_size)
+#define YY_INPUT(buf,result,max_size) LOCptr->lexRead(buf, &result, max_size)
 #define YY_NO_UNISTD_H 1
 #define yytext_ptr srctext_ptr
 #define yy_flex_strncpy convert_gen::lexStrncpy 
