@@ -97,7 +97,7 @@ namespace basegfx
                     B2DCubicBezier aEdge;
                     B2DPolygon aRun;
 
-                    for(sal_uInt32 a(0L); a < nEdgeCount; a++)
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
                     {
                         aCandidate.getBezierSegment(a, aEdge);
                         const B2DPoint aTestPoint(aEdge.interpolatePoint(0.5));
@@ -169,7 +169,7 @@ namespace basegfx
             const sal_uInt32 nPolygonCount(rCandidate.count());
             B2DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            for(sal_uInt32 a(0); a < nPolygonCount; a++)
             {
                 const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnParallelAxis(rCandidate.getB2DPolygon(a), bParallelToXAxis, bAboveAxis, fValueOnOtherAxis, bStroke));
 
@@ -249,7 +249,7 @@ namespace basegfx
                 // against Y-Axis, lower value
                 if(1L == aRetval.count())
                 {
-                    aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), false, bInside, rRange.getMinX(), bStroke);
+                    aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, bInside, rRange.getMinX(), bStroke);
                 }
                 else
                 {
@@ -261,7 +261,7 @@ namespace basegfx
                     // against X-Axis, higher value
                     if(1L == aRetval.count())
                     {
-                        aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), true, !bInside, rRange.getMaxY(), bStroke);
+                        aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), true, !bInside, rRange.getMaxY(), bStroke);
                     }
                     else
                     {
@@ -273,7 +273,7 @@ namespace basegfx
                         // against Y-Axis, higher value
                         if(1L == aRetval.count())
                         {
-                            aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), false, !bInside, rRange.getMaxX(), bStroke);
+                            aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, !bInside, rRange.getMaxX(), bStroke);
                         }
                         else
                         {
@@ -313,7 +313,7 @@ namespace basegfx
 
             if(bInside)
             {
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                for(sal_uInt32 a(0); a < nPolygonCount; a++)
                 {
                     const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnRange(rCandidate.getB2DPolygon(a), rRange, bInside, bStroke));
 
