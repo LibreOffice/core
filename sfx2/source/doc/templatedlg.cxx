@@ -191,6 +191,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpLocalView, "template_view");
     get(mpSearchView, "search_view");
     get(mpRemoteView, "remote_view");
+    get(mpOKButton, "ok");
 
     TabPage *pTabPage = mpTabControl->GetTabPage(mpTabControl->GetPageId("filter_docs"));
     pTabPage->Show();
@@ -271,6 +272,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     mpTabControl->SetActivatePageHdl(LINK(this, SfxTemplateManagerDlg, ActivatePageHdl));
 
+    mpOKButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
+
     SvtMiscOptions aMiscOptions;
     if ( !aMiscOptions.IsExperimentalMode() )
     {
@@ -280,6 +283,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     mpViewBar->Show();
     mpActionBar->Show();
+    mpOKButton->Disable();
 
     switchMainView(true);
 
@@ -360,6 +364,7 @@ void SfxTemplateManagerDlg::setSaveMode()
     mpTemplateBar->HideItem(TEMPLATEBAR_MOVE);
     mpTemplateBar->HideItem(TEMPLATEBAR_EXPORT);
     mpTemplateBar->HideItem(TEMPLATEBAR_DELETE);
+    mpOKButton->Enable();
 }
 
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
@@ -663,6 +668,16 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMen
     return false;
 }
 
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OkClickHdl, Button*, void)
+{
+   if(!mbIsSaveMode)
+   {
+       OnTemplateOpen();
+   }
+
+   EndDialog(RET_OK);
+}
+
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
 {
     maSelFolders.clear();
@@ -674,6 +689,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
         mpViewBar->ShowItem(VIEWBAR_IMPORT, mpCurView->isImportAllowed());
 
     mpTemplateBar->Hide();
+    mpOKButton->Disable();
     mpViewBar->Show();
     mpActionBar->Show();
 }
@@ -790,6 +806,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
         {
             mpViewBar->Show(false);
             mpTemplateBar->Show();
+            mpOKButton->Enable();
         }
         else if (maSelTemplates.size() != 1 || !bInSelection)
         {
@@ -821,6 +838,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
             {
                 mpTemplateBar->Show(false);
                 mpViewBar->Show();
+                mpOKButton->Disable();
             }
             else if (maSelTemplates.size() == 1)
             {
