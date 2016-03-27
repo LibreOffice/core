@@ -14,6 +14,7 @@
 #include <tools/color.hxx>
 #include "rangelst.hxx"
 #include "conditio.hxx"
+#include "document.hxx"
 
 #include <memory>
 #include <vector>
@@ -25,10 +26,6 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 class BitmapEx;
-
-namespace sc {
-    class IconSetBitmapMap : public std::map<sal_Int32, BitmapEx> {};
-}
 
 // don't change the order
 // they are also used in the dialog to determine the position
@@ -375,7 +372,7 @@ public:
     virtual condformat::ScFormatEntryType GetType() const override;
 
     static ScIconSetMap* getIconSetMap();
-    static BitmapEx& getBitmap(sc::IconSetBitmapMap &, ScIconSetType eType, sal_Int32 nIndex);
+    static BitmapEx& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);
 
     typedef ScIconSetFormatData::Entries_t::iterator iterator;
     typedef ScIconSetFormatData::Entries_t::const_iterator const_iterator;

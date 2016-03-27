@@ -79,7 +79,6 @@ class RefMovedHint;
 struct SortUndoParam;
 struct ReorderParam;
 class FormulaGroupAreaListener;
-class IconSetBitmapMap;
 
 }
 
@@ -190,6 +189,13 @@ class ScHint;
 class SvtBroadcaster;
 enum class ScDBDataPortion;
 enum class ScSheetEventId;
+class BitmapEx;
+
+namespace sc {
+
+typedef std::map<sal_Int32, BitmapEx> IconSetBitmapMap;
+
+}
 
 namespace com { namespace sun { namespace star {
     namespace lang {
