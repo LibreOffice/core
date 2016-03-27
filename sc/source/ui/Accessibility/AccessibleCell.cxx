@@ -431,16 +431,18 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
 
 void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet)
 {
-    if (mpDoc && mpDoc->GetCellType(maCellAddress) == CELLTYPE_FORMULA)
+    if (mpDoc)
     {
-        ScFormulaCell* pCell = mpDoc->GetFormulaCell(maCellAddress);
-        if (!pCell)
-            return;
-        ScDetectiveRefIter aIter(pCell);
-        ScRange aRef;
-        while ( aIter.GetNextRef( aRef ) )
+        ScRefCellValue aCell(*mpDoc, maCellAddress);
+        if (aCell.meType == CELLTYPE_FORMULA)
         {
-            AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
+            ScFormulaCell* pCell = aCell.mpFormula;
+            ScDetectiveRefIter aIter(pCell);
+            ScRange aRef;
+            while ( aIter.GetNextRef( aRef ) )
+            {
+                AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
+            }
         }
     }
 }

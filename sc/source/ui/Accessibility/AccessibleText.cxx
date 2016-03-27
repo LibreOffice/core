@@ -25,6 +25,8 @@
 #include "AccessibleCell.hxx"
 #include "tabvwsh.hxx"
 #include "editutil.hxx"
+#include "cellvalue.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "scmod.hxx"
 #include "prevwsh.hxx"
@@ -745,15 +747,14 @@ void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, OUString& 
     if (mpViewShell)
     {
         const ScViewOptions& aOptions = mpViewShell->GetViewData().GetOptions();
-        CellType aCellType;
-        rDoc.GetCellType(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), aCellType);
-        if (aCellType == CELLTYPE_FORMULA && aOptions.GetOption( VOPT_FORMULAS ))
+        ScRefCellValue aCell(rDoc, ScAddress(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab()));
+        if (aCell.meType == CELLTYPE_FORMULA && aOptions.GetOption( VOPT_FORMULAS ))
         {
-            rDoc.GetFormula( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText);
+            aCell.mpFormula->GetFormula(rText);
         }
         else if (!aOptions.GetOption( VOPT_NULLVALS ))
         {
-            if ((aCellType == CELLTYPE_VALUE || aCellType == CELLTYPE_FORMULA) && rDoc.GetValue(rCellPos) == 0.0)
+            if ((aCell.meType == CELLTYPE_VALUE || aCell.meType == CELLTYPE_FORMULA) && aCell.getValue() == 0.0)
                 rText.clear();
         }
     }
