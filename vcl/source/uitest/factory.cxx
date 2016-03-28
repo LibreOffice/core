@@ -14,6 +14,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/spin.hxx>
+#include <vcl/spinfld.hxx>
 
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
 {
@@ -96,6 +97,19 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             SpinButton* pSpinButton = dynamic_cast<SpinButton*>(pWindow);
             assert(pSpinButton);
             return std::unique_ptr<UIObject>(new SpinUIObject(pSpinButton));
+        }
+        break;
+        case WINDOW_SPINFIELD:
+        case WINDOW_PATTERNFIELD:
+        case WINDOW_NUMERICFIELD:
+        case WINDOW_METRICFIELD:
+        case WINDOW_CURRENCYFIELD:
+        case WINDOW_DATEFIELD:
+        case WINDOW_TIMEFIELD:
+        {
+            SpinField* pSpinField = dynamic_cast<SpinField*>(pWindow);
+            assert(pSpinField);
+            return std::unique_ptr<UIObject>(new SpinFieldUIObject(pSpinField));
         }
         break;
         default:
