@@ -183,14 +183,14 @@ void WindowUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "TYPE")
     {
-        auto itr = rParameters.find("TEXT");
-        if (itr == rParameters.end())
+        auto it = rParameters.find("TEXT");
+        if (it == rParameters.end())
         {
             SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE");
             return;
         }
 
-        const OUString& rText = itr->second;
+        const OUString& rText = it->second;
         auto aKeyEvents = generate_key_events_from_text(rText);
         for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
                 itr != itrEnd; ++itr)
@@ -353,14 +353,14 @@ void EditUIObject::execute(const OUString& rAction,
     {
         if (rParameters.find("TEXT") != rParameters.end())
         {
-            auto itr = rParameters.find("TEXT");
-            if (itr == rParameters.end())
+            auto it = rParameters.find("TEXT");
+            if (it == rParameters.end())
             {
                 SAL_WARN("vcl.uitest", "missing parameter TEXT to action SET");
                 return;
             }
 
-            const OUString& rText = rParameters.find("TEXT")->second;
+            const OUString& rText = it->second;
             auto aKeyEvents = generate_key_events_from_text(rText);
             for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
                     itr != itrEnd; ++itr)
@@ -447,9 +447,12 @@ TabPageUIObject::TabPageUIObject(VclPtr<TabPage> xTabPage):
 }
 
 void TabPageUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
+        const StringMap& /*rParameters*/)
 {
+    if (rAction == "SELECT")
+    {
 
+    }
 }
 
 StringMap TabPageUIObject::get_state()
@@ -568,7 +571,7 @@ SpinUIObject::SpinUIObject(VclPtr<SpinButton> xSpinButton):
 }
 
 void SpinUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
+        const StringMap& /*rParameters*/)
 {
     if (rAction == "UP")
     {
