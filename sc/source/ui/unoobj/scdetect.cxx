@@ -202,7 +202,7 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream.ReadUChar( nMark );
     bool bValidMark = false;
-    for (size_t i=0; i < sizeof(nValidMarks)/sizeof(nValidMarks[0]) && !bValidMark; ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(nValidMarks) && !bValidMark; ++i)
     {
         if (nValidMarks[i] == nMark)
             bValidMark = true;

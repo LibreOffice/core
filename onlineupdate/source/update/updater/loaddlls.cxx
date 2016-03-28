@@ -90,7 +90,7 @@ struct AutoLoadSystemDependencies
     }
 
     // For each known DLL ensure it is loaded from the system32 directory
-    for (size_t i = 0; i < sizeof(delayDLLs) / sizeof(delayDLLs[0]); ++i) {
+    for (size_t i = 0; i < SAL_N_ELEMENTS(delayDLLs); ++i) {
       size_t fileLen = wcslen(delayDLLs[i]);
       wcsncpy(systemDirectory + systemDirLen, delayDLLs[i],
               MAX_PATH - systemDirLen);

@@ -1153,12 +1153,12 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     // execute the menu
     std::unique_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
-    sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
+    const sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
                             , SID_DB_APP_VIEW_DOC_PREVIEW
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(size_t i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
+    for(size_t i=0; i < SAL_N_ELEMENTS(pActions);++i)
     {
         aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
     }

@@ -1472,11 +1472,11 @@ void ODocumentDefinition::separateOpenCommandArguments( const Sequence< Property
 {
     ::comphelper::NamedValueCollection aOpenCommandArguments( i_rOpenCommandArguments );
 
-    const sal_Char* pObjectDescriptorArgs[] =
+    const char* pObjectDescriptorArgs[] =
     {
         "RecoveryStorage"
     };
-    for ( size_t i=0; i < sizeof( pObjectDescriptorArgs ) / sizeof( pObjectDescriptorArgs[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( pObjectDescriptorArgs ); ++i )
     {
         if ( aOpenCommandArguments.has( pObjectDescriptorArgs[i] ) )
         {

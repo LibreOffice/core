@@ -2094,7 +2094,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
             ,OUString("private:resource/toolbar/resizebar")
             ,OUString("private:resource/toolbar/sectionshrinkbar")
         };
-        for (size_t i = 0; i< sizeof(s_sMenu)/sizeof(s_sMenu[0]); ++i)
+        for (size_t i = 0; i< SAL_N_ELEMENTS(s_sMenu); ++i)
         {
             _xLayoutManager->createElement( s_sMenu[i] );
             _xLayoutManager->requestElement( s_sMenu[i] );
@@ -2537,7 +2537,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     }
     SfxItemPool::Free(pPool);
 
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
 }
@@ -2724,7 +2724,7 @@ uno::Any SAL_CALL OReportController::getViewData() throw( uno::RuntimeException,
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    sal_Int32 nCommandIDs[] =
+    const sal_Int32 nCommandIDs[] =
     {
         SID_GRID_VISIBLE,
         SID_GRID_USE,
@@ -2736,7 +2736,7 @@ uno::Any SAL_CALL OReportController::getViewData() throw( uno::RuntimeException,
     };
 
     ::comphelper::NamedValueCollection aCommandProperties;
-    for ( size_t i=0; i < sizeof (nCommandIDs) / sizeof (nCommandIDs[0]); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS(nCommandIDs); ++i )
     {
         const FeatureState aFeatureState = GetState( nCommandIDs[i] );
 
@@ -3209,7 +3209,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
                                           ,OUString(PROPERTY_FORMATSSUPPLIER)
                                           ,OUString(PROPERTY_BACKGROUNDCOLOR)
             };
-            for(size_t i = 0; i < sizeof (sProps) / sizeof (sProps[0]); ++i)
+            for(size_t i = 0; i < SAL_N_ELEMENTS(sProps); ++i)
             {
                 if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
                     xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
@@ -3493,7 +3493,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     OUString sDefaultName;
                     size_t i = 0;
                     OUnoObject* pObjs[2];
-                    for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
+                    for(i = 0; i < SAL_N_ELEMENTS(pControl); ++i)
                     {
                         pObjs[i] = dynamic_cast<OUnoObject*>(pControl[i]);
                         uno::Reference<beans::XPropertySet> xUnoProp(pObjs[i]->GetUnoControlModel(),uno::UNO_QUERY_THROW);
@@ -3508,7 +3508,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                                                             ,OUString(PROPERTY_BORDER)
                                                             ,OUString(PROPERTY_BACKGROUNDCOLOR)
                         };
-                        for(size_t k = 0; k < sizeof(sProps)/sizeof(sProps[0]);++k)
+                        for(size_t k = 0; k < SAL_N_ELEMENTS(sProps); ++k)
                         {
                             if ( xInfo->hasPropertyByName(sProps[k]) && xShapeInfo->hasPropertyByName(sProps[k]) )
                                 xUnoProp->setPropertyValue(sProps[k],xShapeProp->getPropertyValue(sProps[k]));
@@ -3570,7 +3570,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
-                    for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i) // insert controls
+                    for(i = 0; i < SAL_N_ELEMENTS(pControl); ++i) // insert controls
                     {
                         correctOverlapping(pControl[i],pSectionWindow[1-i]->getReportSection());
                     }
@@ -3619,7 +3619,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
             else
             {
-                for(size_t i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
+                for(size_t i = 0; i < SAL_N_ELEMENTS(pControl); ++i)
                     delete pControl[i];
             }
         }
@@ -3680,7 +3680,7 @@ void OReportController::listen(const bool _bAdd)
     void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const OUString&, const uno::Reference< XPropertyChangeListener >& ) =
         _bAdd ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
 
-    for (size_t i = 0; i < sizeof(aProps)/sizeof(aProps[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
         (m_xReportDefinition.get()->*pPropertyListenerAction)( aProps[i], static_cast< XPropertyChangeListener* >( this ) );
 
     OXUndoEnvironment& rUndoEnv = m_aReportModel->GetUndoEnv();
@@ -4264,7 +4264,7 @@ void OReportController::openZoomDialog()
         }
         SfxItemPool::Free(pPool);
 
-        for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+        for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(pDefaults); ++i)
             delete pDefaults[i];
     }
 }

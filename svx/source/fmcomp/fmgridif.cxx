@@ -1610,13 +1610,13 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners ... linux has problems with global static UStrings, so
     // we have to do it this way ....
-    static OUString aPropsListenedTo[] =
+    static const OUString aPropsListenedTo[] =
     {
         OUString(FM_PROP_LABEL), OUString(FM_PROP_WIDTH), OUString(FM_PROP_HIDDEN), OUString(FM_PROP_ALIGN), OUString(FM_PROP_FORMATKEY)
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
-    for (sal_uInt16 i=0; i<sizeof(aPropsListenedTo)/sizeof(aPropsListenedTo[0]); ++i)
+    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
         if (xInfo->hasPropertyByName(aPropsListenedTo[i]))
             xCol->removePropertyChangeListener(aPropsListenedTo[i], this);
 }

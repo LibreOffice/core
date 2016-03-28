@@ -41,7 +41,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 
     const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
     vcl::Window* pWindows[] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
-    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
     {
         vcl::Font aFont = pWindows[i]->GetControlFont();
         aFont.SetWeight(WEIGHT_BOLD);

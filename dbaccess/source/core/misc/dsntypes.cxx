@@ -377,7 +377,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         {
         }
 
-        bool match( const OUString &url)
+        bool match( const OUString &url) const
         {
             if(bMatchComplete)
             {
@@ -389,7 +389,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
             }
         }
     };
-    KnownPrefix aKnowPrefixes[] =
+    const KnownPrefix aKnowPrefixes[] =
     {
         KnownPrefix( "sdbc:calc:",          DST_CALC,               false ),
         KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
@@ -414,7 +414,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
     };
 
-    for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aKnowPrefixes ); ++i )
     {
         if( aKnowPrefixes[i].match(sDsn) )
         {
