@@ -44,6 +44,7 @@ protected:
 
 };
 
+// TODO: moggi: what about push buttons?
 class ButtonUIObject : public WindowUIObject
 {
     VclPtr<Button> mxButton;
