@@ -22,6 +22,7 @@ enum class UIObjectType
     EDIT,
     CHECKBOX,
     LISTBOX,
+    COMBOBOX,
     TABPAGE,
     UNKNOWN
 };

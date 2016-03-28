@@ -14,6 +14,7 @@
 #include <vcl/edit.hxx>
 
 class TabPage;
+class ComboBox;
 
 class WindowUIObject : public UIObject
 {
@@ -147,6 +148,28 @@ private:
 public:
 
     ListBoxUIObject(VclPtr<ListBox> xListBox);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    virtual UIObjectType get_type() const override;
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+// TODO: moggi: should it inherit from EditUIObject?
+class ComboBoxUIObject : public WindowUIObject
+{
+private:
+    VclPtr<ComboBox> mxComboBox;
+
+public:
+
+    ComboBoxUIObject(VclPtr<ComboBox> xListBox);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;

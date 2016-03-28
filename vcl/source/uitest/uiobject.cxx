@@ -13,6 +13,7 @@
 #include <vcl/event.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/combobox.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -506,6 +507,45 @@ UIObjectType ListBoxUIObject::get_type() const
 OUString ListBoxUIObject::get_name() const
 {
     return OUString("ListBoxUIObject");
+}
+
+ComboBoxUIObject::ComboBoxUIObject(VclPtr<ComboBox> xComboBox):
+    WindowUIObject(xComboBox),
+    mxComboBox(xComboBox)
+{
+}
+
+void ComboBoxUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("POS");
+            OUString aVal = itr->second;
+            sal_Int32 nPos = aVal.toInt32();
+            mxComboBox->SelectEntryPos(nPos);
+        }
+        mxComboBox->Select();
+    }
+}
+
+StringMap ComboBoxUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    return aMap;
+}
+
+UIObjectType ComboBoxUIObject::get_type() const
+{
+    return UIObjectType::COMBOBOX;
+}
+
+OUString ComboBoxUIObject::get_name() const
+{
+    return OUString("ComboBoxUIObject");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
