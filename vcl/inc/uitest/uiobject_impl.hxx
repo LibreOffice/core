@@ -16,6 +16,7 @@
 class TabPage;
 class ComboBox;
 class SpinButton;
+class SpinField;
 
 class WindowUIObject : public UIObject
 {
@@ -193,6 +194,26 @@ private:
 public:
 
     SpinUIObject(VclPtr<SpinButton> xSpinButton);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    virtual UIObjectType get_type() const override;
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class SpinFieldUIObject : public EditUIObject
+{
+    VclPtr<SpinField> mxSpinField;
+
+public:
+
+    SpinFieldUIObject(VclPtr<SpinField> xEdit);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
