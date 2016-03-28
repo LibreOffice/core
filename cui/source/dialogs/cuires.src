@@ -19,6 +19,11 @@ String RID_SVXSTR_SELECT_FILE_IFRAME
     Text [ en-US ] = "Select File for Floating Frame" ;
 };
 
+String RID_SVXSTR_ALLFUNCTIONS
+{
+    Text [ en-US ] = "All commands";
+};
+
 String RID_SVXSTR_MYMACROS
 {
     Text [ en-US ] = "My Macros";
