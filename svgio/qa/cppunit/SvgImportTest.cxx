@@ -54,6 +54,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testRGBAColor();
     void testTdf97936();
     void testClipPathAndParentStyle();
+    void testClipPathAndStyle();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testRGBAColor);
     CPPUNIT_TEST(testTdf97936);
     CPPUNIT_TEST(testClipPathAndParentStyle);
+    CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -423,6 +425,25 @@ void Test::testClipPathAndParentStyle()
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "5");
 
 }
+
+void Test::testClipPathAndStyle()
+{
+    //Check that fill color, stroke color and stroke-width are inherited from use element
+    //when the element is within a clipPath element
+    Primitive2DSequence aSequenceClipPathAndStyle = parseSvg("/svgio/qa/cppunit/data/ClipPathAndStyle.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceClipPathAndStyle.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceClipPathAndStyle));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ccccff");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#0000cc");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "2");
+
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }

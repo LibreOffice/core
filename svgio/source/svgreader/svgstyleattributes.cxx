@@ -1954,19 +1954,7 @@ namespace svgio
 
         const basegfx::BColor* SvgStyleAttributes::getFill() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getFill();
-                }
-
-                static basegfx::BColor aBlack(0.0, 0.0, 0.0);
-                return &aBlack;
-            }
-            else if((SVGTokenMarker == mrOwner.getType()) && !maFill.isSet())
+            if((SVGTokenMarker == mrOwner.getType()) && !maFill.isSet())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -1998,24 +1986,18 @@ namespace svgio
                     return pSvgStyleAttributes->getFill();
                 }
             }
+            else if(mbIsClipPathContent)
+            {
+                static basegfx::BColor aBlack(0.0, 0.0, 0.0);
+                return &aBlack;
+            }
 
             return nullptr;
         }
 
         const basegfx::BColor* SvgStyleAttributes::getStroke() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getStroke();
-                }
-
-                return nullptr;
-            }
-            else if(maStroke.isSet())
+            if(maStroke.isSet())
             {
                 if(maStroke.isCurrent())
                 {
@@ -2053,18 +2035,7 @@ namespace svgio
 
         const SvgGradientNode* SvgStyleAttributes::getSvgGradientNodeFill() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getSvgGradientNodeFill();
-                }
-
-                return nullptr;
-            }
-            else if(mpSvgGradientNodeFill)
+            if(mpSvgGradientNodeFill)
             {
                 return mpSvgGradientNodeFill;
             }
@@ -2083,18 +2054,7 @@ namespace svgio
 
         const SvgGradientNode* SvgStyleAttributes::getSvgGradientNodeStroke() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getSvgGradientNodeStroke();
-                }
-
-                return nullptr;
-            }
-            else if(mpSvgGradientNodeStroke)
+            if(mpSvgGradientNodeStroke)
             {
                 return mpSvgGradientNodeStroke;
             }
@@ -2113,18 +2073,7 @@ namespace svgio
 
         const SvgPatternNode* SvgStyleAttributes::getSvgPatternNodeFill() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getSvgPatternNodeFill();
-                }
-
-                return nullptr;
-            }
-            else if(mpSvgPatternNodeFill)
+            if(mpSvgPatternNodeFill)
             {
                 return mpSvgPatternNodeFill;
             }
@@ -2143,18 +2092,7 @@ namespace svgio
 
         const SvgPatternNode* SvgStyleAttributes::getSvgPatternNodeStroke() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getSvgPatternNodeStroke();
-                }
-
-                return nullptr;
-            }
-            else if(mpSvgPatternNodeStroke)
+            if(mpSvgPatternNodeStroke)
             {
                 return mpSvgPatternNodeStroke;
             }
@@ -2173,18 +2111,7 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getStrokeWidth() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getStrokeWidth();
-                }
-
-                return SvgNumber(0.0);
-            }
-            else if(maStrokeWidth.isSet())
+            if(maStrokeWidth.isSet())
             {
                 return maStrokeWidth;
             }
@@ -2194,6 +2121,11 @@ namespace svgio
             if(pSvgStyleAttributes)
             {
                 return pSvgStyleAttributes->getStrokeWidth();
+            }
+
+            if(mbIsClipPathContent)
+            {
+                return SvgNumber(0.0);
             }
 
             // default is 1
@@ -2213,18 +2145,7 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getFillOpacity() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getFillOpacity();
-                }
-
-                return SvgNumber(1.0);
-            }
-            else if(maFillOpacity.isSet())
+            if(maFillOpacity.isSet())
             {
                 return maFillOpacity;
             }
@@ -2242,17 +2163,7 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getOpacity() const
         {
-            if(mbIsClipPathContent)
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getOpacity();
-                }
-                return SvgNumber(1.0);
-            }
-            else if(maOpacity.isSet())
+            if(maOpacity.isSet())
             {
                 return maOpacity;
             }
@@ -2910,3 +2821,4 @@ namespace svgio
 } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
