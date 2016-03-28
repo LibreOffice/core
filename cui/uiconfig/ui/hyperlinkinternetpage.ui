@@ -106,20 +106,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes">WWW Browser</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Open web browser, copy an URL, and paste it to Target field</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="login_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>

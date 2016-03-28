@@ -45,16 +45,11 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     get(m_pRbtLinktypFTP, "linktyp_ftp");
     get(m_pCbbTarget, "target");
     m_pCbbTarget->SetSmartProtocol(INetProtocol::Http);
-    get(m_pBtBrowse, "browse");
-    m_pBtBrowse->SetModeImage(Image(CUI_RES (RID_SVXBMP_BROWSE)));
     get(m_pFtLogin, "login_label");
     get(m_pEdLogin, "login");
     get(m_pFtPassword, "password_label");
     get(m_pEdPassword, "password");
     get(m_pCbAnonymous, "anonymous");
-
-    // Disable display of bitmap names.
-    m_pBtBrowse->EnableTextDisplay (false);
 
     InitStdControls();
 
@@ -66,7 +61,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
 
     // set defaults
     m_pRbtLinktypInternet->Check ();
-    m_pBtBrowse->Enable();
 
 
     // set handlers
@@ -74,7 +68,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     m_pRbtLinktypInternet->SetClickHdl( aLink );
     m_pRbtLinktypFTP->SetClickHdl     ( aLink );
     m_pCbAnonymous->SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
-    m_pBtBrowse->SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
     m_pEdLogin->SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
     m_pCbbTarget->SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
     m_pCbbTarget->SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
@@ -91,7 +84,6 @@ void SvxHyperlinkInternetTp::dispose()
     m_pRbtLinktypInternet.clear();
     m_pRbtLinktypFTP.clear();
     m_pCbbTarget.clear();
-    m_pBtBrowse.clear();
     m_pFtLogin.clear();
     m_pEdLogin.clear();
     m_pFtPassword.clear();
@@ -382,29 +374,6 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, v
 IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, Control&, void)
 {
     RefreshMarkWindow();
-}
-
-/*************************************************************************
-|*
-|* Click on imagebutton : Browse
-|*
-|************************************************************************/
-
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, Button*, void)
-{
-
-    // Open URL if available
-
-    SfxStringItem aName( SID_FILE_NAME, OUString("http://") );
-    SfxStringItem aRefererItem( SID_REFERER, OUString("private:user") );
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, true );
-    SfxBoolItem aSilent( SID_SILENT, true );
-    SfxBoolItem aReadOnly( SID_DOC_READONLY, true );
-
-    SfxBoolItem aBrowse( SID_BROWSE, true );
-
-    const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, nullptr };
-    static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 }
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()
