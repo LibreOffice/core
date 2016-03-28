@@ -12,6 +12,7 @@
 
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/combobox.hxx>
 
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
 {
@@ -66,6 +67,13 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pWindow);
             assert(pCheckBox);
             return std::unique_ptr<UIObject>(new CheckBoxUIObject(pCheckBox));
+        }
+        break;
+        case WINDOW_COMBOBOX:
+        {
+            ComboBox* pComboBox = dynamic_cast<ComboBox*>(pWindow);
+            assert(pComboBox);
+            return std::unique_ptr<UIObject>(new ComboBoxUIObject(pComboBox));
         }
         break;
         case WINDOW_LISTBOX:
