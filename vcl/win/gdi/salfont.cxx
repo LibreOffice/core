@@ -21,7 +21,6 @@
 #include <config_folders.h>
 
 #include <algorithm>
-#include <malloc.h>
 #include <map>
 #include <set>
 #include <string.h>
