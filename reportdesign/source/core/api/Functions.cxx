@@ -101,7 +101,7 @@ void SAL_CALL OFunctions::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexO
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         checkIndex(Index);
-        TFunctions::iterator aPos = m_aFunctions.begin();
+        TFunctions::const_iterator aPos = m_aFunctions.begin();
         ::std::advance(aPos,Index);
         xFunction = *aPos;
         m_aFunctions.erase(aPos);
@@ -142,7 +142,7 @@ uno::Any SAL_CALL OFunctions::getByIndex( ::sal_Int32 Index ) throw (lang::Index
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkIndex(Index);
-    TFunctions::iterator aPos = m_aFunctions.begin();
+    TFunctions::const_iterator aPos = m_aFunctions.begin();
     ::std::advance(aPos,Index);
     return uno::makeAny(*aPos);
 }

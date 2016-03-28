@@ -127,8 +127,8 @@ OSectionUndo::~OSectionUndo()
     if ( !m_bInserted )
     {
         OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-        ::std::vector< uno::Reference< drawing::XShape> >::iterator aEnd = m_aControls.end();
-        for (::std::vector< uno::Reference< drawing::XShape> >::iterator aIter = m_aControls.begin(); aIter != aEnd; ++aIter)
+        ::std::vector< uno::Reference< drawing::XShape> >::const_iterator aEnd = m_aControls.end();
+        for (::std::vector< uno::Reference< drawing::XShape> >::const_iterator aIter = m_aControls.begin(); aIter != aEnd; ++aIter)
         {
             uno::Reference< drawing::XShape> xShape = *aIter;
             rEnv.RemoveElement(xShape);

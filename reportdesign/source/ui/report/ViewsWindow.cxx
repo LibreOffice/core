@@ -223,8 +223,8 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
 {
     bool bSet = false;
     Point aStartPoint;
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
     {
         OSectionWindow* pSectionWindow = (*aIter);
@@ -252,8 +252,8 @@ void OViewsWindow::Resize()
     {
         const Point aOffset(m_pParent->getThumbPos());
         Point aStartPoint(0,-aOffset.Y());
-        TSectionsMap::iterator aIter = m_aSections.begin();
-        TSectionsMap::iterator aEnd = m_aSections.end();
+        TSectionsMap::const_iterator aIter = m_aSections.begin();
+        TSectionsMap::const_iterator aEnd = m_aSections.end();
         for (;aIter != aEnd ; ++aIter)
         {
             OSectionWindow* pSectionWindow = (*aIter);
@@ -312,7 +312,7 @@ void OViewsWindow::removeSection(sal_uInt16 _nPosition)
     if ( _nPosition < m_aSections.size() )
     {
         TSectionsMap::iterator aPos = getIteratorAtPos(_nPosition);
-        TSectionsMap::iterator aNew = getIteratorAtPos(_nPosition == 0 ? _nPosition+1: _nPosition - 1);
+        TSectionsMap::const_iterator aNew = getIteratorAtPos(_nPosition == 0 ? _nPosition+1: _nPosition - 1);
 
         m_pParent->getReportView()->UpdatePropertyBrowserDelayed((*aNew)->getReportSection().getSectionView());
 
@@ -353,8 +353,8 @@ sal_uInt16 OViewsWindow::getSectionCount() const
 
 void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
         (*aIter)->getReportSection().getSectionView().SetCurrentObj( eObj, ReportInventor );
 
@@ -523,8 +523,8 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
     if ( !m_bInUnmark )
     {
         m_bInUnmark = true;
-        TSectionsMap::iterator aIter = m_aSections.begin();
-        TSectionsMap::iterator aEnd = m_aSections.end();
+        TSectionsMap::const_iterator aIter = m_aSections.begin();
+        TSectionsMap::const_iterator aEnd = m_aSections.end();
         for (; aIter != aEnd ; ++aIter)
         {
             if ( &(*aIter)->getReportSection().getSectionView() != _pSectionView )
@@ -570,8 +570,8 @@ void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
     {
-        TSectionsMap::iterator aIter = m_aSections.begin();
-        TSectionsMap::iterator aEnd = m_aSections.end();
+        TSectionsMap::const_iterator aIter = m_aSections.begin();
+        TSectionsMap::const_iterator aEnd = m_aSections.end();
         for (;aIter != aEnd ; ++aIter)
         {
             if ( (*aIter)->getReportSection().getSectionView().AreObjectsMarked() )
@@ -592,8 +592,8 @@ void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 bool OViewsWindow::handleKeyEvent(const KeyEvent& _rEvent)
 {
     bool bRet = false;
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
     {
         if ( (*aIter)->getStartMarker().isMarked() )
@@ -621,8 +621,8 @@ void OViewsWindow::setMarked(OSectionView* _pSectionView, bool _bMark)
 
 void OViewsWindow::setMarked(const uno::Reference< report::XSection>& _xSection, bool _bMark)
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd ; ++aIter)
     {
         if ( (*aIter)->getReportSection().getSection() != _xSection )
@@ -666,8 +666,8 @@ void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepor
 
 void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (aIter = m_aSections.begin();aIter != aEnd ; ++aIter)
     {
         OSectionView& rView = (*aIter)->getReportSection().getSectionView();
@@ -790,8 +790,8 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
 
     ::std::mem_fun_t<long&,Rectangle> aGetFun       = ::std::mem_fun<long&,Rectangle>(&Rectangle::Bottom);
     ::std::mem_fun_t<long&,Rectangle> aRefFun       = ::std::mem_fun<long&,Rectangle>(&Rectangle::Top);
-    TRectangleMap::iterator aRectIter = aSortRectangles.begin();
-    TRectangleMap::iterator aRectEnd = aSortRectangles.end();
+    TRectangleMap::const_iterator aRectIter = aSortRectangles.begin();
+    TRectangleMap::const_iterator aRectEnd = aSortRectangles.end();
     for (;aRectIter != aRectEnd ; ++aRectIter)
     {
         Rectangle aObjRect = aRectIter->first;
@@ -841,7 +841,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
             {
                 Rectangle aTest = aObjRect;
                 aGetFun(&aTest) = aGetFun(&aBound);
-                TRectangleMap::iterator aInterSectRectIter = aSortRectangles.begin();
+                TRectangleMap::const_iterator aInterSectRectIter = aSortRectangles.begin();
                 for (; aInterSectRectIter != aRectIter; ++aInterSectRectIter)
                 {
                     if ( pView == aInterSectRectIter->second.second && (dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) || dynamic_cast<OOle2Obj*>(aInterSectRectIter->second.first)))
@@ -915,8 +915,8 @@ void OViewsWindow::createDefault()
 
 void OViewsWindow::setGridSnap(bool bOn)
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd ; ++aIter)
     {
         (*aIter)->getReportSection().getSectionView().SetGridSnap(bOn);
@@ -926,8 +926,8 @@ void OViewsWindow::setGridSnap(bool bOn)
 
 void OViewsWindow::setDragStripes(bool bOn)
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd ; ++aIter)
         (*aIter)->getReportSection().getSectionView().SetDragStripes(bOn);
 }
@@ -1020,8 +1020,8 @@ void OViewsWindow::BrkAction()
 
 void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView& _rSection)
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     Point aNewPos(0,0);
 
     for (; aIter != aEnd; ++aIter)
@@ -1063,8 +1063,8 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
     // Calculate the absolute clickpoint in the views
     Point aAbsolutePnt = _aPnt;
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd; ++aIter)
     {
         OReportSection& rReportSection = (*aIter)->getReportSection();
@@ -1171,8 +1171,8 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
     bool bAdd = true;
     Point aNewPos = _aPnt;
 
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     long nLastSectionHeight = 0;
     for (; aIter != aEnd; ++aIter)
     {
@@ -1200,8 +1200,8 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
 {
     OSectionView* pSection = nullptr;
     sal_Int32 nCount = 0;
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    const TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    const TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd ; ++aIter,++nCount)
     {
         OReportSection& rReportSection = (*aIter)->getReportSection();
@@ -1247,8 +1247,8 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
 
 void OViewsWindow::EndDragObj_removeInvisibleObjects()
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
 
     for (; aIter != aEnd; ++aIter)
     {
@@ -1274,8 +1274,8 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
         aNewPos -= m_aDragDelta;
 
         uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
-        TSectionsMap::iterator aIter = m_aSections.begin();
-        const TSectionsMap::iterator aEnd = m_aSections.end();
+        TSectionsMap::const_iterator aIter = m_aSections.begin();
+        const TSectionsMap::const_iterator aEnd = m_aSections.end();
         for (; aIter != aEnd; ++aIter)
         {
             OReportSection& rReportSection = (*aIter)->getReportSection();
@@ -1384,8 +1384,8 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bo
         aHdlPos = pHdl->GetPos();
     }
 
-    TSectionsMap::iterator aIter;
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter;
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
 
     for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
     {
@@ -1729,8 +1729,8 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
 
     setZoomFactor(_aZoom,*this);
 
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
     {
         (*aIter)->zoom(_aZoom);
@@ -1761,8 +1761,8 @@ void OViewsWindow::scrollChildren(const Point& _aThumbPos)
         Scroll(0, -( aOld.Y() + aPosY.Y()),ScrollFlags::Children);
     }
 
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
     {
         (*aIter)->scrollChildren(aPos.X());

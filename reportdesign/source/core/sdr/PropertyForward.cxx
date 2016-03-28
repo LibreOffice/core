@@ -53,8 +53,8 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             if ( _bReverse )
             {
                 ::comphelper::copyProperties(m_xDest,m_xSource);
-                TPropertyNamePair::iterator aIter = m_aNameMap.begin();
-                TPropertyNamePair::iterator aEnd = m_aNameMap.end();
+                TPropertyNamePair::const_iterator aIter = m_aNameMap.begin();
+                TPropertyNamePair::const_iterator aEnd = m_aNameMap.end();
                 for (; aIter != aEnd; ++aIter)
                 {
                     Property aProp = m_xSourceInfo->getPropertyByName(aIter->first);
@@ -69,8 +69,8 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             else
             {
                 ::comphelper::copyProperties(m_xSource,m_xDest);
-                TPropertyNamePair::iterator aIter = m_aNameMap.begin();
-                TPropertyNamePair::iterator aEnd = m_aNameMap.end();
+                TPropertyNamePair::const_iterator aIter = m_aNameMap.begin();
+                TPropertyNamePair::const_iterator aEnd = m_aNameMap.end();
                 for (; aIter != aEnd; ++aIter)
                     _xDest->setPropertyValue(aIter->second.first,aIter->second.second->operator()(aIter->second.first,_xSource->getPropertyValue(aIter->first)));
             }
@@ -108,7 +108,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                         xProp->setPropertyValue(evt.PropertyName,evt.NewValue);
                     else
                     {
-                        TPropertyNamePair::iterator aFind = m_aNameMap.find(evt.PropertyName);
+                        TPropertyNamePair::const_iterator aFind = m_aNameMap.find(evt.PropertyName);
                         OUString sPropName;
                         if ( aFind != m_aNameMap.end() )
                             sPropName = aFind->second.first;
