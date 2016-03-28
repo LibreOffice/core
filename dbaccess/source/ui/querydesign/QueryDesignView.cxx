@@ -615,8 +615,8 @@ namespace
 
         bool bAsterisk = false;
         int nVis = 0;
-        OTableFields::iterator aIter = _rFieldList.begin();
-        OTableFields::iterator aEnd = _rFieldList.end();
+        OTableFields::const_iterator aIter = _rFieldList.begin();
+        OTableFields::const_iterator aEnd = _rFieldList.end();
         for(;aIter != aEnd;++aIter)
         {
             OTableFieldDescRef pEntryField = *aIter;
@@ -659,8 +659,8 @@ namespace
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         OTableFieldDescRef  aInfo = new OTableFieldDesc();
-                        OJoinTableView::OTableWindowMap::iterator tableIter = rTabList.begin();
-                        OJoinTableView::OTableWindowMap::iterator tableEnd = rTabList.end();
+                        OJoinTableView::OTableWindowMap::const_iterator tableIter = rTabList.begin();
+                        OJoinTableView::OTableWindowMap::const_iterator tableEnd = rTabList.end();
                         bool bFound = false;
                         for(;!bFound && tableIter != tableEnd ;++tableIter)
                         {
@@ -721,8 +721,8 @@ namespace
         OUString aFieldName,aCriteria,aWhereStr,aHavingStr,aWork/*,aOrderStr*/;
         // print line by line joined with AND
         sal_uInt16 nMaxCriteria = 0;
-        OTableFields::iterator aIter = _rFieldList.begin();
-        OTableFields::iterator aEnd = _rFieldList.end();
+        OTableFields::const_iterator aIter = _rFieldList.begin();
+        OTableFields::const_iterator aEnd = _rFieldList.end();
         for(;aIter != aEnd;++aIter)
         {
             nMaxCriteria = ::std::max<sal_uInt16>(nMaxCriteria,(sal_uInt16)(*aIter)->GetCriteria().size());
@@ -902,8 +902,8 @@ namespace
             OUString aQuote = xMetaData->getIdentifierQuoteString();
             // * must not contain filter - have I already shown the warning?
             bool bCritsOnAsterikWarning = false;        // ** TMFS **
-            OTableFields::iterator aIter = _rFieldList.begin();
-            OTableFields::iterator aEnd = _rFieldList.end();
+            OTableFields::const_iterator aIter = _rFieldList.begin();
+            OTableFields::const_iterator aEnd = _rFieldList.end();
             for(;aIter != aEnd;++aIter)
             {
                 OTableFieldDescRef  pEntryField = *aIter;
@@ -1036,8 +1036,8 @@ namespace
                 ++aConnectionCount[(*aIter)->GetDestWin()];
             }
             ::std::multimap<sal_Int32 , OTableWindow*> aMulti;
-            ::std::map<OTableWindow*,sal_Int32>::iterator aCountIter = aConnectionCount.begin();
-            ::std::map<OTableWindow*,sal_Int32>::iterator aCountEnd = aConnectionCount.end();
+            ::std::map<OTableWindow*,sal_Int32>::const_iterator aCountIter = aConnectionCount.begin();
+            ::std::map<OTableWindow*,sal_Int32>::const_iterator aCountEnd = aConnectionCount.end();
             for(;aCountIter != aCountEnd;++aCountIter)
             {
                 aMulti.insert(::std::multimap<sal_Int32 , OTableWindow*>::value_type(aCountIter->second,aCountIter->first));
@@ -1144,8 +1144,8 @@ namespace
             const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             const OUString aQuote = xMetaData->getIdentifierQuoteString();
 
-            OTableFields::iterator aIter = _rFieldList.begin();
-            OTableFields::iterator aEnd = _rFieldList.end();
+            OTableFields::const_iterator aIter = _rFieldList.begin();
+            OTableFields::const_iterator aEnd = _rFieldList.end();
             for(;aIter != aEnd;++aIter)
             {
                 OTableFieldDescRef  pEntryField = *aIter;
@@ -1536,8 +1536,8 @@ namespace
                 if ( pParamNode && pParamNode->getTokenValue().toChar() == '*' )
                 {
                     OJoinTableView::OTableWindowMap& rTabList = _pView->getTableView()->GetTabWinMap();
-                    OJoinTableView::OTableWindowMap::iterator aIter = rTabList.begin();
-                    OJoinTableView::OTableWindowMap::iterator aTabEnd = rTabList.end();
+                    OJoinTableView::OTableWindowMap::const_iterator aIter = rTabList.begin();
+                    OJoinTableView::OTableWindowMap::const_iterator aTabEnd = rTabList.end();
                     for(;aIter != aTabEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
@@ -1610,8 +1610,8 @@ namespace
                 if ( pConn )
                 {
                     OConnectionLineDataVec& rLineDataList = pConn->GetData()->GetConnLineDataList();
-                    OConnectionLineDataVec::iterator aIter = rLineDataList.begin();
-                    OConnectionLineDataVec::iterator aEnd = rLineDataList.end();
+                    OConnectionLineDataVec::const_iterator aIter = rLineDataList.begin();
+                    OConnectionLineDataVec::const_iterator aEnd = rLineDataList.end();
                     for(;aIter != aEnd;++aIter)
                     {
                         if((*aIter)->GetSourceFieldName() == aDragLeft->GetField() ||
@@ -2026,8 +2026,8 @@ namespace
 
                 // now delete the data for which we haven't any tablewindow
                 OJoinTableView::OTableWindowMap aTableMap(pTableView->GetTabWinMap());
-                OJoinTableView::OTableWindowMap::iterator aIterTableMap = aTableMap.begin();
-                OJoinTableView::OTableWindowMap::iterator aIterTableEnd = aTableMap.end();
+                OJoinTableView::OTableWindowMap::const_iterator aIterTableMap = aTableMap.begin();
+                OJoinTableView::OTableWindowMap::const_iterator aIterTableEnd = aTableMap.end();
                 for(;aIterTableMap != aIterTableEnd;++aIterTableMap)
                 {
                     if(aMap.find(aIterTableMap->second->GetComposedName())  == aMap.end() &&
@@ -2099,8 +2099,8 @@ namespace
     {
         SqlParseError eErrorCode = eOk;
         bool bFirstField = true;
-        OJoinTableView::OTableWindowMap::iterator aIter = _pTabList->begin();
-        OJoinTableView::OTableWindowMap::iterator aEnd = _pTabList->end();
+        OJoinTableView::OTableWindowMap::const_iterator aIter = _pTabList->begin();
+        OJoinTableView::OTableWindowMap::const_iterator aEnd = _pTabList->end();
         for(;aIter != aEnd && eOk == eErrorCode ;++aIter)
         {
             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
@@ -2196,7 +2196,7 @@ namespace
                         {
                             if ( pParamRef && pParamRef->getTokenValue().toChar() == '*' )
                             {
-                                OJoinTableView::OTableWindowMap::iterator             aIter = pTabList->begin();
+                                OJoinTableView::OTableWindowMap::const_iterator             aIter = pTabList->begin();
                                 const OJoinTableView::OTableWindowMap::const_iterator aEnd  = pTabList->end();
                                 for(;aIter != aEnd;++aIter)
                                 {
@@ -2323,8 +2323,8 @@ namespace
                         rParseIter.getColumnRange( pArgument, aColumnName, aTableRange );
 
                         OTableFields& aList = rController.getTableFieldDesc();
-                        OTableFields::iterator aIter = aList.begin();
-                        OTableFields::iterator aEnd = aList.end();
+                        OTableFields::const_iterator aIter = aList.begin();
+                        OTableFields::const_iterator aEnd = aList.end();
                         for(;aIter != aEnd;++aIter)
                         {
                             OTableFieldDescRef pEntry = *aIter;
@@ -2741,8 +2741,8 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
     OJoinTableView::OTableWindowMap& rTabWins = m_pTableView->GetTabWinMap();
     OUString strCurrentPrefix;
     ::std::vector< OUString> aFields;
-    OJoinTableView::OTableWindowMap::iterator aIter = rTabWins.begin();
-    OJoinTableView::OTableWindowMap::iterator aEnd  = rTabWins.end();
+    OJoinTableView::OTableWindowMap::const_iterator aIter = rTabWins.begin();
+    OJoinTableView::OTableWindowMap::const_iterator aEnd  = rTabWins.end();
     for(;aIter != aEnd;++aIter)
     {
         OQueryTableWindow* pCurrentWin = static_cast<OQueryTableWindow*>(aIter->second.get());
@@ -2753,8 +2753,8 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
 
             pCurrentWin->EnumValidFields(aFields);
 
-            ::std::vector< OUString>::iterator aStrIter = aFields.begin();
-            ::std::vector< OUString>::iterator aStrEnd = aFields.end();
+            ::std::vector< OUString>::const_iterator aStrIter = aFields.begin();
+            ::std::vector< OUString>::const_iterator aStrEnd = aFields.end();
             for(;aStrIter != aStrEnd;++aStrIter)
             {
                 if (bAllTables || aStrIter->toChar() == '*')
@@ -2811,8 +2811,8 @@ OUString OQueryDesignView::getStatement()
     // create the select columns
     sal_uInt32 nFieldcount = 0;
     OTableFields& rFieldList = rController.getTableFieldDesc();
-    OTableFields::iterator aIter = rFieldList.begin();
-    OTableFields::iterator aEnd = rFieldList.end();
+    OTableFields::const_iterator aIter = rFieldList.begin();
+    OTableFields::const_iterator aEnd = rFieldList.end();
     for(;aIter != aEnd;++aIter)
     {
         OTableFieldDescRef pEntryField = *aIter;
