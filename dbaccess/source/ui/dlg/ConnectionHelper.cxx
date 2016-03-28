@@ -621,7 +621,7 @@ namespace dbaui
             Sequence< Any > aNewDirectoryAttributes(1);
 
             // loop
-            for (   ::std::vector< OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
+            for (   ::std::vector< OUString >::const_reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
                 )

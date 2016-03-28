@@ -85,7 +85,7 @@ namespace dbaui
 
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
-        Indexes::iterator aEnd = m_aIndexes.end();
+        Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
             if (aSearch->sName == sNameCompare)
                 break;
@@ -113,7 +113,7 @@ namespace dbaui
 
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
-        Indexes::iterator aEnd = m_aIndexes.end();
+        Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
             if (aSearch->getOriginalName() == sNameCompare)
                 break;

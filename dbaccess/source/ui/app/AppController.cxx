@@ -484,7 +484,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
         Reference<XContainer> xContainer( _rSource.Source, UNO_QUERY );
         if ( xContainer.is() )
         {
-            TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer);
+            TContainerVector::const_iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer);
             if ( aFind != m_aCurrentContainers.end() )
                 m_aCurrentContainers.erase(aFind);
         }
@@ -1054,8 +1054,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         ::std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
                         ::std::vector<SotClipboardFormatId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-                        const ::std::vector<SotClipboardFormatId>::iterator aEnd = aFormatIds.end();
-                        for (::std::vector<SotClipboardFormatId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
+                        const ::std::vector<SotClipboardFormatId>::const_iterator aEnd = aFormatIds.end();
+                        for (::std::vector<SotClipboardFormatId>::const_iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
                             pDlg->Insert(*aIter,"");
 
                         const TransferableDataHelper& rClipboard = getViewClipboard();
@@ -1703,7 +1703,7 @@ bool OApplicationController::onContainerSelect(ElementType _eType)
             getContainer()->getDetailView()->createPage(_eType,xContainer);
         }
 
-        SelectionByElementType::iterator pendingSelection = m_aPendingSelection.find( _eType );
+        SelectionByElementType::const_iterator pendingSelection = m_aPendingSelection.find( _eType );
         if ( pendingSelection != m_aPendingSelection.end() )
         {
             getContainer()->selectElements( comphelper::containerToSequence(pendingSelection->second) );
@@ -1998,7 +1998,7 @@ void OApplicationController::addContainerListener(const Reference<XNameAccess>& 
         if ( xCont.is() )
         {
             // add as listener to get notified if elements are inserted or removed
-            TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xCont);
+            TContainerVector::const_iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xCont);
             if ( aFind == m_aCurrentContainers.end() )
             {
                 xCont->addContainerListener(this);
@@ -2850,7 +2850,6 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw
             }
         }
     }
-
     for (   SelectionByElementType::const_iterator sel = aSelectedElements.begin();
             sel != aSelectedElements.end();
             ++sel

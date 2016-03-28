@@ -114,7 +114,7 @@ namespace dbaccess
         while ( pEventData->pAsciiEventName )
         {
             OUString sEventName = OUString::createFromAscii( pEventData->pAsciiEventName );
-            DocumentEventsData::iterator existingPos = m_pData->rEventsData.find( sEventName );
+            DocumentEventsData::const_iterator existingPos = m_pData->rEventsData.find( sEventName );
             if ( existingPos == m_pData->rEventsData.end() )
                 m_pData->rEventsData[ sEventName ] = Sequence< PropertyValue >();
             ++pEventData;

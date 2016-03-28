@@ -207,7 +207,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
         ::std::set< OUString >::size_type nCount = aDeleteNames.size();
         for ( ::std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
         {
-            ::std::set< OUString >::iterator  aThisRound = aDeleteNames.begin();
+            ::std::set< OUString >::const_iterator  aThisRound = aDeleteNames.begin();
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
@@ -252,12 +252,12 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     OUStringBuffer sSmallestSiblingName( *aThisRound );
                     sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
 
-                    ::std::set< OUString >::iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
-                    for ( ::std::set< OUString >::iterator aObsolete = aThisRound;
+                    ::std::set< OUString >::const_iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
+                    for ( ::std::set< OUString >::const_iterator aObsolete = aThisRound;
                           aObsolete != aUpperChildrenBound;
                         )
                     {
-                        ::std::set< OUString >::iterator aNextObsolete = aObsolete; ++aNextObsolete;
+                        ::std::set< OUString >::const_iterator aNextObsolete = aObsolete; ++aNextObsolete;
                         aDeleteNames.erase( aObsolete );
                         --nObjectsLeft;
                         aObsolete = aNextObsolete;

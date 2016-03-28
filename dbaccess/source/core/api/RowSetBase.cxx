@@ -230,13 +230,13 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     if ( bValidCurrentRow )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ORowSetMatrix::iterator aCacheEnd;
+        ORowSetMatrix::const_iterator aCacheEnd;
         ORowSetMatrix::iterator aCurrentRow;
         aCacheEnd = m_pCache->getEnd();
         aCurrentRow = m_aCurrentRow;
-        ORowSetCacheMap::iterator aCacheIter = m_aCurrentRow.getIter();
+        ORowSetCacheMap::const_iterator aCacheIter = m_aCurrentRow.getIter();
         ORowSetCacheIterator_Helper aHelper = aCacheIter->second;
-        ORowSetMatrix::iterator k = aHelper.aIterator;
+        ORowSetMatrix::const_iterator k = aHelper.aIterator;
         for (; k != m_pCache->getEnd(); ++k)
         {
             ORowSetValueVector* pTemp = k->get();
@@ -1177,8 +1177,8 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     SAL_INFO("dbaccess", "ORowSetBase::firePropertyChange() Clone = " << m_bClone);
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
     sal_Int32 i=0;
-    TDataColumns::iterator aEnd = m_aDataColumns.end();
-    for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
+    TDataColumns::const_iterator aEnd = m_aDataColumns.end();
+    for(TDataColumns::const_iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
     {
         try
         {
@@ -1444,7 +1444,7 @@ void ORowSetNotifier::firePropertyChange()
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
     if( m_pImpl.get() )
     {
-        ::std::vector<sal_Int32>::iterator aIter = m_pImpl->aChangedColumns.begin();
+        ::std::vector<sal_Int32>::const_iterator aIter = m_pImpl->aChangedColumns.begin();
         for(;aIter != m_pImpl->aChangedColumns.end();++aIter)
         {
             m_pRowSet->firePropertyChange((*aIter)-1 ,m_pImpl->aRow[(*aIter)-1], ORowSetBase::GrantNotifierAccess());

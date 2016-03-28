@@ -704,8 +704,8 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     }
 
     ::std::vector< ::std::pair< OUString ,Reference< XModel > > > aComponents;
-    ::std::vector< OUString>::iterator aEnd = aList.end();
-    for (::std::vector< OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
+    ::std::vector< OUString>::const_iterator aEnd = aList.end();
+    for (::std::vector< OUString>::const_iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
     {
         if ( SID_DB_APP_CONVERTTOVIEW == _nId )
             convertToView(*aIter);
@@ -720,8 +720,8 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
 
-        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentIter = aComponents.begin();
-        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentEnd = aComponents.end();
+        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::const_iterator componentIter = aComponents.begin();
+        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::const_iterator componentEnd = aComponents.end();
         OUString aDocTypeString;
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;

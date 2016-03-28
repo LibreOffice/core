@@ -662,7 +662,7 @@ void ODBExport::exportDataSourceSettings()
 
     SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, true, true);
     ::std::vector< TypedPropertyValue >::iterator aIter = m_aDataSourceSettings.begin();
-    ::std::vector< TypedPropertyValue >::iterator aEnd = m_aDataSourceSettings.end();
+    ::std::vector< TypedPropertyValue >::const_iterator aEnd = m_aDataSourceSettings.end();
     for ( ; aIter != aEnd; ++aIter )
     {
         bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
@@ -906,7 +906,7 @@ void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
 
 void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const uno::Reference<beans::XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap)
 {
-    TPropertyStyleMap::iterator aFind = _rMap.find(_xProp);
+    TPropertyStyleMap::const_iterator aFind = _rMap.find(_xProp);
     if ( aFind != _rMap.end() )
     {
         _rAtt.AddAttribute( GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DB, GetXMLToken(_eToken) ),
@@ -963,7 +963,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
         if ( !xNameAccess->hasElements() )
         {
             Reference< XPropertySet > xComponent(_xColSup,UNO_QUERY);
-            TTableColumnMap::iterator aFind = m_aTableDummyColumns.find(xComponent);
+            TTableColumnMap::const_iterator aFind = m_aTableDummyColumns.find(xComponent);
             if ( aFind != m_aTableDummyColumns.end() )
             {
                 SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, true, true);
@@ -1183,7 +1183,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             if ( !aPropStates.empty() )
             {
                 ::std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
-                ::std::vector< XMLPropertyState >::iterator aEnd = aPropStates.end();
+                ::std::vector< XMLPropertyState >::const_iterator aEnd = aPropStates.end();
                 const rtl::Reference < XMLPropertySetMapper >& pStyle = pExportHelper[i].first->getPropertySetMapper();
                 while ( aItr != aEnd )
                 {

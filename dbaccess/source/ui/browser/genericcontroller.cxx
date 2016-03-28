@@ -486,7 +486,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
         // m_arrStatusListener itself
         Dispatch aNotifyLoop( m_arrStatusListener );
         Dispatch::iterator iterSearch = aNotifyLoop.begin();
-        Dispatch::iterator iterEnd = aNotifyLoop.end();
+        Dispatch::const_iterator iterEnd = aNotifyLoop.end();
 
         while (iterSearch != iterEnd)
         {
@@ -504,7 +504,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
 
 bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
 {
-    SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+    SupportedFeatures::const_iterator aFeaturePos = ::std::find_if(
         m_aSupportedFeatures.begin(),
         m_aSupportedFeatures.end(),
         ::std::bind2nd( CompareFeatureById(), _nId )
@@ -537,7 +537,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
         }
         else
         {
-            SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+            SupportedFeatures::const_iterator aFeaturePos = ::std::find_if(
                 m_aSupportedFeatures.begin(),
                 m_aSupportedFeatures.end(),
                 ::std::bind2nd( CompareFeatureById(), aNextFeature.nId )
@@ -574,7 +574,7 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
 #if OSL_DEBUG_LEVEL > 0
     if ( _nId != -1 )
     {
-        SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+        SupportedFeatures::const_iterator aFeaturePos = ::std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
             ::std::bind2nd( CompareFeatureById(), _nId )
@@ -752,7 +752,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
-        StateCache::iterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
+        StateCache::const_iterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
         if ( aCachePos != m_aStateCache.end() )
             m_aStateCache.erase( aCachePos );
     }
@@ -786,8 +786,8 @@ void OGenericUnoController::disposing()
         EventObject aDisposeEvent;
         aDisposeEvent.Source = static_cast<XWeak*>(this);
         Dispatch aStatusListener = m_arrStatusListener;
-        Dispatch::iterator aEnd = aStatusListener.end();
-        for (Dispatch::iterator aIter = aStatusListener.begin(); aIter != aEnd; ++aIter)
+        Dispatch::const_iterator aEnd = aStatusListener.end();
+        for (Dispatch::const_iterator aIter = aStatusListener.begin(); aIter != aEnd; ++aIter)
         {
             aIter->xListener->disposing(aDisposeEvent);
         }

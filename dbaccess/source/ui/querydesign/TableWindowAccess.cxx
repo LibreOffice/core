@@ -137,8 +137,8 @@ namespace dbaui
         {
             // search the position of our table window in the table window map
             OJoinTableView::OTableWindowMap& rMap = m_pTable->getTableView()->GetTabWinMap();
-            OJoinTableView::OTableWindowMap::iterator aIter = rMap.begin();
-            OJoinTableView::OTableWindowMap::iterator aEnd = rMap.end();
+            OJoinTableView::OTableWindowMap::const_iterator aIter = rMap.begin();
+            OJoinTableView::OTableWindowMap::const_iterator aEnd = rMap.end();
             for (nIndex = 0; aIter != aEnd && aIter->second != m_pTable; ++nIndex,++aIter)
                 ;
             nIndex = aIter != aEnd ? nIndex : -1;

@@ -126,8 +126,8 @@ namespace dbaui
             m_aStates.insert(TCommandState::value_type(OUString(".uno:DBRebuildData")   ,sal_True));
         }
 
-        TCommandState::iterator aIter = m_aStates.begin();
-        TCommandState::iterator aEnd = m_aStates.end();
+        TCommandState::const_iterator aIter = m_aStates.begin();
+        TCommandState::const_iterator aEnd = m_aStates.end();
         for (; aIter != aEnd; ++aIter)
             addStatusListener(aIter->first);
 
@@ -203,7 +203,7 @@ namespace dbaui
 
                     Image aImage(aImages[0]);
                     pMenu->SetItemImage(nItemId,aImage);
-                    TCommandState::iterator aFind = m_aStates.find( aSeq[0] );
+                    TCommandState::const_iterator aFind = m_aStates.find( aSeq[0] );
                     if ( aFind != m_aStates.end() )
                     {
                         pMenu->EnableItem(nItemId,aFind->second);

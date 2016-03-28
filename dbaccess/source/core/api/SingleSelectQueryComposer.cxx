@@ -265,13 +265,13 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
 OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
 {
-    ::std::vector<OPrivateColumns*>::iterator aColIter = m_aColumnsCollection.begin();
-    ::std::vector<OPrivateColumns*>::iterator aEnd = m_aColumnsCollection.end();
+    ::std::vector<OPrivateColumns*>::const_iterator aColIter = m_aColumnsCollection.begin();
+    ::std::vector<OPrivateColumns*>::const_iterator aEnd = m_aColumnsCollection.end();
     for(;aColIter != aEnd;++aColIter)
         delete *aColIter;
 
-    ::std::vector<OPrivateTables*>::iterator aTabIter = m_aTablesCollection.begin();
-    ::std::vector<OPrivateTables*>::iterator aTabEnd = m_aTablesCollection.end();
+    ::std::vector<OPrivateTables*>::const_iterator aTabIter = m_aTablesCollection.begin();
+    ::std::vector<OPrivateTables*>::const_iterator aTabEnd = m_aTablesCollection.end();
     for(;aTabIter != aTabEnd;++aTabIter)
         delete *aTabIter;
 }
@@ -898,7 +898,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             {
                 // we can now only look if we found it under the realname property
                 // here we have to make the assumption that the position is correct
-                OSQLColumns::Vector::iterator aFind2 = aSelectColumns->get().begin() + i-1;
+                OSQLColumns::Vector::const_iterator aFind2 = aSelectColumns->get().begin() + i-1;
                 Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
                 if ( !xProp.is() || !xProp->getPropertySetInfo()->hasPropertyByName( PROPERTY_REALNAME ) )
                     continue;
@@ -909,7 +909,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 
                 OUString sRealName;
                 xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
-                ::std::vector< OUString>::iterator aFindName;
+                ::std::vector< OUString>::const_iterator aFindName;
                 if ( sColumnName.isEmpty() )
                     xProp->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
 
@@ -1373,7 +1373,7 @@ void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 void OSingleSelectQueryComposer::clearCurrentCollections()
 {
     ::std::vector<OPrivateColumns*>::iterator aIter = m_aCurrentColumns.begin();
-    ::std::vector<OPrivateColumns*>::iterator aEnd = m_aCurrentColumns.end();
+    ::std::vector<OPrivateColumns*>::const_iterator aEnd = m_aCurrentColumns.end();
     for (;aIter != aEnd;++aIter)
     {
         if ( *aIter )

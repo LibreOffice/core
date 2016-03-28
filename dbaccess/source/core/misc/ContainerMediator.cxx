@@ -102,7 +102,7 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
     {
         OUString sElementName;
         _rEvent.Accessor >>= sElementName;
-        PropertyForwardList::iterator aFind = m_aForwardList.find(sElementName);
+        PropertyForwardList::const_iterator aFind = m_aForwardList.find(sElementName);
         if ( aFind != m_aForwardList.end() )
         {
             Reference< XPropertySet> xDest(_rEvent.Element,UNO_QUERY);
@@ -141,7 +141,7 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
         OUString sElementName;
         _rEvent.ReplacedElement >>= sElementName;
 
-        PropertyForwardList::iterator aFind = m_aForwardList.find(sElementName);
+        PropertyForwardList::const_iterator aFind = m_aForwardList.find(sElementName);
         if ( aFind != m_aForwardList.end() )
         {
             OUString sNewName;
@@ -193,7 +193,7 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
     if ( !m_xSettings.is() )
         return;
 
-    PropertyForwardList::iterator aFind = m_aForwardList.find( _sName );
+    PropertyForwardList::const_iterator aFind = m_aForwardList.find( _sName );
     if  (   aFind != m_aForwardList.end()
         &&  aFind->second->getDefinition().is()
         )

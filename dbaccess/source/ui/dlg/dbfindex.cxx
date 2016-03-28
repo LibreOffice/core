@@ -132,7 +132,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
 
     sal_Int32 nPos = 0;
 
-    TableIndexList::iterator aSearch;
+    TableIndexList::const_iterator aSearch;
     for (   aSearch = _rList.begin();
             aSearch != _rList.end();
             ++aSearch, ++nPos

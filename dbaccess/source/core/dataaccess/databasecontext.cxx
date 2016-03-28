@@ -271,8 +271,8 @@ void ODatabaseContext::disposing()
     // dispose the data sources
     // disposing seems to remove elements, so work on copy for valid iterators
     ObjectCache objCopy(m_aDatabaseObjects);
-    ObjectCache::iterator const aEnd = objCopy.end();
-    for (   ObjectCache::iterator aIter = objCopy.begin();
+    ObjectCache::const_iterator const aEnd = objCopy.end();
+    for (   ObjectCache::const_iterator aIter = objCopy.begin();
             aIter != aEnd;
             ++aIter
         )
@@ -530,7 +530,7 @@ void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, Ru
     }
 
     // check if URL is already loaded
-    ObjectCache::iterator aExistent = m_aDatabaseObjects.find( sURL );
+    ObjectCache::const_iterator aExistent = m_aDatabaseObjects.find( sURL );
     if ( aExistent != m_aDatabaseObjects.end() )
         m_aDatabaseObjects.erase( aExistent );
 
@@ -675,7 +675,7 @@ sal_Bool ODatabaseContext::hasByName(const OUString& _rName) throw( RuntimeExcep
 
 Reference< XInterface > ODatabaseContext::getObject( const OUString& _rURL )
 {
-    ObjectCache::iterator aFind = m_aDatabaseObjects.find( _rURL );
+    ObjectCache::const_iterator aFind = m_aDatabaseObjects.find( _rURL );
     Reference< XInterface > xExistent;
     if ( aFind != m_aDatabaseObjects.end() )
         xExistent = aFind->second->getOrCreateDataSource();
@@ -706,9 +706,9 @@ void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, cons
 {
     SAL_INFO("dbaccess.core", "DatabaseContext: changing registrations from " << _rOldURL <<
              " to " << _rNewURL);
-    ObjectCache::iterator oldPos = m_aDatabaseObjects.find( _rOldURL );
+    ObjectCache::const_iterator oldPos = m_aDatabaseObjects.find( _rOldURL );
     ENSURE_OR_THROW( oldPos != m_aDatabaseObjects.end(), "illegal old database document URL" );
-    ObjectCache::iterator newPos = m_aDatabaseObjects.find( _rNewURL );
+    ObjectCache::const_iterator newPos = m_aDatabaseObjects.find( _rNewURL );
     ENSURE_OR_THROW( newPos == m_aDatabaseObjects.end(), "illegal new database document URL" );
 
     m_aDatabaseObjects[ _rNewURL ] = oldPos->second;

@@ -715,8 +715,8 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
     MapInt2String::const_iterator aTranslation;
-    ::std::vector< sal_Int32>::iterator aDetailsEnd = aDetailIds.end();
-    for (::std::vector< sal_Int32>::iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
+    ::std::vector< sal_Int32>::const_iterator aDetailsEnd = aDetailIds.end();
+    for (::std::vector< sal_Int32>::const_iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
     {
         const SfxPoolItem* pCurrent = _rSource.GetItem((sal_uInt16)*aIter);
         aTranslation = m_aIndirectPropTranslator.find(*aIter);
@@ -746,7 +746,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     for (sal_Int32 i = 0; i < nCount; ++i, ++pInfo)
     {
         aSearchFor.Name = pInfo->Name;
-        PropertyValueSet::iterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
+        PropertyValueSet::const_iterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
         if (aRelevantSettings.end() != aOverwrittenSetting)
         {   // the setting was present in the original sequence, and it is to be overwritten -> replace it
             if ( pInfo->Value != aOverwrittenSetting->Value )

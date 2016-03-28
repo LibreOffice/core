@@ -268,7 +268,7 @@ void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connect
     OCacheSet::deleteRow(_rDeleteRow,_xTable);
     if(m_bDeleted)
     {
-        ORowSetMatrix::iterator aPos = m_aSet.begin()+(_rDeleteRow->get())[0].getInt32();
+        ORowSetMatrix::const_iterator aPos = m_aSet.begin()+(_rDeleteRow->get())[0].getInt32();
         if(aPos == (m_aSet.end()-1))
             m_aSetIter = m_aSet.end();
         m_aSet.erase(aPos);
