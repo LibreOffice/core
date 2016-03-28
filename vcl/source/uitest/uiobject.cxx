@@ -11,6 +11,7 @@
 #include "uitest/factory.hxx"
 
 #include <vcl/event.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -423,6 +424,35 @@ UIObjectType CheckBoxUIObject::get_type() const
 OUString CheckBoxUIObject::get_name() const
 {
     return OUString("CheckBoxUIObject");
+}
+
+TabPageUIObject::TabPageUIObject(VclPtr<TabPage> xTabPage):
+    WindowUIObject(xTabPage),
+    mxTabPage(xTabPage)
+{
+}
+
+void TabPageUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+
+}
+
+StringMap TabPageUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    return aMap;
+}
+
+UIObjectType TabPageUIObject::get_type() const
+{
+    return UIObjectType::TABPAGE;
+}
+
+OUString TabPageUIObject::get_name() const
+{
+    return OUString("TabPageUIObject");
 }
 
 ListBoxUIObject::ListBoxUIObject(VclPtr<ListBox> xListBox):
