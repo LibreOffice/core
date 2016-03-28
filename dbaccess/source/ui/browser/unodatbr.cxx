@@ -1361,11 +1361,11 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const css::lang::EventObject& _rS
         Reference< XDispatch > xSource(_rSource.Source, UNO_QUERY);
         if(xSource.is())
         {
-            ExternalFeaturesMap::iterator aLoop = m_aExternalFeatures.begin();
-            ExternalFeaturesMap::iterator aEnd = m_aExternalFeatures.end();
+            ExternalFeaturesMap::const_iterator aLoop = m_aExternalFeatures.begin();
+            ExternalFeaturesMap::const_iterator aEnd = m_aExternalFeatures.end();
             while (aLoop != aEnd)
             {
-                ExternalFeaturesMap::iterator aI = aLoop++;
+                ExternalFeaturesMap::const_iterator aI = aLoop++;
                 if ( aI->second.xDispatcher.get() == xSource.get() )
                 {
                     sal_uInt16 nSlot = aI->first;
@@ -3762,10 +3762,10 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSo
             "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: inconsistence (2)!");
 
     // delete any user data of the child entries of the to-be-removed entry
-    std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator> aIters =
+    std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator> aIters =
         m_pTreeModel->GetChildIterators(pDataSourceEntry);
 
-    SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
+    SvTreeListEntries::const_iterator it = aIters.first, itEnd = aIters.second;
 
     for (; it != itEnd; ++it)
     {

@@ -1086,7 +1086,7 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException, std::exception
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose all children
-    for (   ::std::vector< Reference< css::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
+    for (   ::std::vector< Reference< css::form::XFormComponent > >::const_iterator aIter = m_aChildren.begin();
             aIter != m_aChildren.end();
             ++aIter
         )
@@ -1428,7 +1428,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
 
 sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
 {
-    ::std::vector< OUString>::iterator aIter = ::std::find_if(   m_aChildNames.begin(),
+    ::std::vector< OUString>::const_iterator aIter = ::std::find_if(   m_aChildNames.begin(),
                                                                 m_aChildNames.end(),
                                                                 ::std::bind2nd(::std::equal_to< OUString>(),rName));
 
@@ -1631,7 +1631,7 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEv
 {
     if (evt.PropertyName == PROPERTY_NAME)
     {
-        ::std::vector<  css::uno::Reference< css::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
+        ::std::vector<  css::uno::Reference< css::form::XFormComponent > >::const_iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
                                                                 ::std::bind2nd(::std::equal_to< css::uno::Reference< css::uno::XInterface > >(),evt.Source));
 
@@ -1651,7 +1651,7 @@ void SAL_CALL SbaXFormAdapter::disposing(const css::lang::EventObject& Source) t
     if (Source.Source == m_xMainForm)
         dispose();
 
-    ::std::vector<  css::uno::Reference< css::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
+    ::std::vector<  css::uno::Reference< css::form::XFormComponent > >::const_iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
                                                                 ::std::bind2nd(::std::equal_to< css::uno::Reference< css::uno::XInterface > >(),Source.Source));
     if(aIter != m_aChildren.end())

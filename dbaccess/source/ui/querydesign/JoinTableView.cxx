@@ -227,8 +227,8 @@ void OJoinTableView::Resize()
         // all ok
         return;
 
-    OTableWindowMap::iterator aIter = m_aTableMap.begin();
-    OTableWindowMap::iterator aEnd = m_aTableMap.end();
+    OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
+    OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
     for(;aIter != aEnd;++aIter)
     {
         OTableWindow* pCurrent = aIter->second;
@@ -271,7 +271,7 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn, bool _bDelete )
 
 OTableWindow* OJoinTableView::GetTabWindow( const OUString& rName )
 {
-    OTableWindowMap::iterator aIter = m_aTableMap.find(rName);
+    OTableWindowMap::const_iterator aIter = m_aTableMap.find(rName);
 
     return aIter == m_aTableMap.end() ? nullptr : aIter->second;
 }
@@ -538,8 +538,8 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
         aRowRect.Bottom() = (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
 
         // check occupied areas of this line
-        OTableWindowMap::iterator aIter = m_aTableMap.begin();
-        OTableWindowMap::iterator aEnd = m_aTableMap.end();
+        OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
+        OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
         for(;aIter != aEnd;++aIter)
         {
             OTableWindow* pOtherTabWin = aIter->second;
@@ -702,8 +702,8 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
     OTableWindow* pTabWin;
     Point aPos;
 
-    OTableWindowMap::iterator aIter = m_aTableMap.begin();
-    OTableWindowMap::iterator aEnd = m_aTableMap.end();
+    OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
+    OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
     for(;aIter != aEnd;++aIter)
     {
         pTabWin = aIter->second;
@@ -1286,8 +1286,8 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
 
                         bool bForward = !pKeyEvent->GetKeyCode().IsShift();
                         // is there an active tab win ?
-                        OTableWindowMap::iterator aIter = m_aTableMap.begin();
-                        OTableWindowMap::iterator aEnd = m_aTableMap.end();
+                        OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
+                        OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
                         for(;aIter != aEnd;++aIter)
                             if (aIter->second && aIter->second->HasChildPathFocus())
                                 break;
@@ -1419,8 +1419,8 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
 
                 if (pSearchFor)
                 {
-                    OTableWindowMap::iterator aIter = m_aTableMap.begin();
-                    OTableWindowMap::iterator aEnd = m_aTableMap.end();
+                    OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
+                    OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
                     for(;aIter != aEnd;++aIter)
                     {
                         if (aIter->second == pSearchFor)
@@ -1475,8 +1475,8 @@ void OJoinTableView::StateChanged( StateChangedType nType )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont(*this, aFont);
 
-        OTableWindowMap::iterator aIter = m_aTableMap.begin();
-        OTableWindowMap::iterator aEnd = m_aTableMap.end();
+        OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
+        OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
         for(;aIter != aEnd;++aIter)
         {
             aIter->second->SetZoom(GetZoom());
@@ -1495,8 +1495,8 @@ void OJoinTableView::HideTabWins()
 
     // working on a copy because the real list will be cleared in inner calls
     OTableWindowMap aCopy(rTabWins);
-    OTableWindowMap::iterator aIter = aCopy.begin();
-    OTableWindowMap::iterator aEnd = aCopy.end();
+    OTableWindowMap::const_iterator aIter = aCopy.begin();
+    OTableWindowMap::const_iterator aEnd = aCopy.end();
     for(;aIter != aEnd;++aIter)
         RemoveTabWin(aIter->second);
 
@@ -1526,7 +1526,7 @@ void OJoinTableView::clearLayoutInformation()
     m_pSelectedConn     = nullptr;
     // delete lists
     OTableWindowMap::iterator aIter = m_aTableMap.begin();
-    OTableWindowMap::iterator aEnd  = m_aTableMap.end();
+    OTableWindowMap::const_iterator aEnd  = m_aTableMap.end();
     for(;aIter != aEnd;++aIter)
     {
         if ( aIter->second )

@@ -1045,8 +1045,8 @@ namespace
             }
 
             const bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
-            ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aRIter = aMulti.rbegin();
-            ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aREnd = aMulti.rend();
+            ::std::multimap<sal_Int32 , OTableWindow*>::const_reverse_iterator aRIter = aMulti.rbegin();
+            ::std::multimap<sal_Int32 , OTableWindow*>::const_reverse_iterator aREnd = aMulti.rend();
             for(;aRIter != aREnd;++aRIter)
             {
                 auto aConIter = aRIter->second->getTableView()->getTableConnections(aRIter->second);
@@ -1908,7 +1908,7 @@ namespace
         // now we have to insert the fields which aren't in the statement
         OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
         OTableFields& rUnUsedFields = rController.getUnUsedFields();
-        OTableFields::iterator aEnd = rUnUsedFields.end();
+        OTableFields::const_iterator aEnd = rUnUsedFields.end();
         for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != aEnd;++aIter)
             if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,false,false).is())
                 (*aIter) = nullptr;

@@ -55,7 +55,7 @@ namespace dbaccess
 // ODefinitionContainer_Impl
 void ODefinitionContainer_Impl::erase( TContentPtr _pDefinition )
 {
-    NamedDefinitions::iterator aPos = find( _pDefinition );
+    NamedDefinitions::const_iterator aPos = find( _pDefinition );
     if ( aPos != end() )
         m_aDefinitions.erase( aPos );
 }
@@ -120,8 +120,8 @@ void SAL_CALL ODefinitionContainer::disposing()
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose our elements
-    Documents::iterator aIter = m_aDocumentMap.begin();
-    Documents::iterator aEnd = m_aDocumentMap.end();
+    Documents::const_iterator aIter = m_aDocumentMap.begin();
+    Documents::const_iterator aEnd = m_aDocumentMap.end();
 
     for (; aIter != aEnd; ++aIter)
     {
@@ -429,8 +429,8 @@ Sequence< OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) throw(Ru
 
     Sequence< OUString > aNames(m_aDocumentMap.size());
     OUString* pNames = aNames.getArray();
-    Documents::iterator aEnd = m_aDocumentMap.end();
-    for (   Documents::iterator aNameIter = m_aDocumentMap.begin();
+    Documents::const_iterator aEnd = m_aDocumentMap.end();
+    for (   Documents::const_iterator aNameIter = m_aDocumentMap.begin();
             aNameIter != aEnd;
             ++pNames, ++aNameIter
         )
@@ -454,7 +454,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
     Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
     // it's one of our documents ....
     Documents::iterator aIter = m_aDocumentMap.begin();
-    Documents::iterator aEnd = m_aDocumentMap.end();
+    Documents::const_iterator aEnd = m_aDocumentMap.end();
     for (;aIter != aEnd;++aIter )
     {
         if ( xSource == aIter->second.get() )
@@ -469,7 +469,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
 void ODefinitionContainer::implRemove(const OUString& _rName)
 {
     // from the object maps
-    Documents::iterator aFind = m_aDocumentMap.find(_rName);
+    Documents::const_iterator aFind = m_aDocumentMap.find(_rName);
     if ( aFind != m_aDocumentMap.end() )
     {
         m_aDocuments.erase( ::std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));

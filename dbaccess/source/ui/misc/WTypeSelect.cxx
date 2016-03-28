@@ -153,7 +153,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
                 // now we change the name
                 OCopyTableWizard::TNameMapping::iterator aIter = pWiz->m_mNameMapping.begin();
-                OCopyTableWizard::TNameMapping::iterator aEnd  = pWiz->m_mNameMapping.end();
+                OCopyTableWizard::TNameMapping::const_iterator aEnd  = pWiz->m_mNameMapping.end();
 
                 ::comphelper::UStringMixEqual aCase(bCase);
                 for(;aIter != aEnd;++aIter)

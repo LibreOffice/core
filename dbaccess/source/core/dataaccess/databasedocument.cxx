@@ -409,8 +409,8 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
     {
         // Export the images to the storage
         Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(rxContext, xTmpPic);
-        std::vector< OUString >::iterator it = vEmbedImgUrls.begin();
-        std::vector< OUString >::iterator it_end = vEmbedImgUrls.end();
+        std::vector< OUString >::const_iterator it = vEmbedImgUrls.begin();
+        std::vector< OUString >::const_iterator it_end = vEmbedImgUrls.end();
         if ( xGraphicResolver.is() )
         {
             for ( sal_Int32 count = 0; it != it_end; ++it, ++count )
@@ -1459,8 +1459,8 @@ void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( bool _bDeliverOw
 {
     Controllers aCopy = m_aControllers;
 
-    Controllers::iterator aEnd = aCopy.end();
-    for ( Controllers::iterator aIter = aCopy.begin(); aIter != aEnd ; ++aIter )
+    Controllers::const_iterator aEnd = aCopy.end();
+    for ( Controllers::const_iterator aIter = aCopy.begin(); aIter != aEnd ; ++aIter )
     {
         if ( !aIter->is() )
             continue;
@@ -2118,7 +2118,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     }
     uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
 
-    TNumberedController::iterator aFind = m_aNumberedControllers.find(sModuleId);
+    TNumberedController::const_iterator aFind = m_aNumberedControllers.find(sModuleId);
     if ( aFind == m_aNumberedControllers.end() )
     {
         uno::Reference< frame::XModel > xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);

@@ -517,7 +517,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
                     PropertyEventSequence* propertyEvents = nullptr;
 
                     XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
-                    PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
+                    PropertiesEventListenerMap::const_iterator it = aListeners.find( pListener );
                     if ( it == aListeners.end() )
                     {
                         // Not in map - create and insert new entry.
@@ -534,7 +534,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         }
 
         // Notify listeners.
-        PropertiesEventListenerMap::iterator it = aListeners.begin();
+        PropertiesEventListenerMap::const_iterator it = aListeners.begin();
         while ( !aListeners.empty() )
         {
             XPropertiesChangeListener* pListener =

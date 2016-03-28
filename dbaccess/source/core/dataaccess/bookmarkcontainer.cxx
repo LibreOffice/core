@@ -268,7 +268,7 @@ void OBookmarkContainer::implRemove(const OUString& _rName)
     MutexGuard aGuard(m_rMutex);
 
     // look for the name in the index access vector
-    MapString2String::iterator aMapPos = m_aBookmarks.end();
+    MapString2String::const_iterator aMapPos = m_aBookmarks.end();
     for (   MapIteratorVector::iterator aSearch = m_aBookmarksIndexed.begin();
             aSearch != m_aBookmarksIndexed.end();
             ++aSearch

@@ -486,8 +486,8 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 
     ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
 
-    ::std::vector< std::shared_ptr<OTableRow> >::iterator aIter = m_pRowList->begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::iterator aEnd = m_pRowList->end();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     sal_Int32 nCount(0);
     for(;aIter != aEnd;++aIter)
     {
@@ -1455,7 +1455,7 @@ IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedPaste, void*, void )
     {   // Insertion is not allowed, only appending, so test if there are full cells after the PastePosition
 
         sal_Int32 nFreeFromPos; // from here on there are only empty rows
-        ::std::vector< std::shared_ptr<OTableRow> >::reverse_iterator aIter = m_pRowList->rbegin();
+        ::std::vector< std::shared_ptr<OTableRow> >::const_reverse_iterator aIter = m_pRowList->rbegin();
         for(nFreeFromPos = m_pRowList->size();
             aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty());
             --nFreeFromPos, ++aIter)
