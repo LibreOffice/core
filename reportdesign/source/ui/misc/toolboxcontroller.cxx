@@ -155,7 +155,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
             m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox);
         }
 
-        TCommandState::iterator aIter = m_aStates.begin();
+        TCommandState::const_iterator aIter = m_aStates.begin();
         for (; aIter != m_aStates.end(); ++aIter)
             addStatusListener(aIter->first);
 

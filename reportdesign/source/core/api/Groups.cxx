@@ -143,7 +143,7 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOut
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkIndex(Index);
-    TGroups::iterator aPos = m_aGroups.begin();
+    TGroups::const_iterator aPos = m_aGroups.begin();
     ::std::advance(aPos,Index);
     return uno::makeAny(*aPos);
 }

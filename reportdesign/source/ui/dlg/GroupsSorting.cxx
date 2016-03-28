@@ -458,7 +458,7 @@ bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
                 // find position where to insert the new group
                 sal_Int32 nGroupPos = 0;
                 ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
-                ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.begin() + nRow;
+                ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.begin() + nRow;
                 for(;aIter != aEnd;++aIter)
                     if ( *aIter != NO_GROUP )
                         nGroupPos = *aIter + 1;
@@ -651,7 +651,7 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
                 else
                     *aFind = nGroupPos;
 
-                ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
+                ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
                 for(++aFind;aFind != aEnd;++aFind)
                     if ( *aFind != NO_GROUP )
                         ++*aFind;
@@ -673,10 +673,10 @@ void SAL_CALL OFieldExpressionControl::elementRemoved(const container::Container
     if ( evt.Accessor >>= nGroupPos )
     {
         ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aGroupPositions.begin(),m_aGroupPositions.end(),nGroupPos);
-        if ( aFind != m_aGroupPositions.end() )
+        ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
+        if (aFind != aEnd)
         {
             *aFind = NO_GROUP;
-            ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
             for(++aFind;aFind != aEnd;++aFind)
                 if ( *aFind != NO_GROUP )
                     --*aFind;
@@ -797,10 +797,10 @@ void OFieldExpressionControl::DeleteRows()
             m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
 
             ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aGroupPositions.begin(),m_aGroupPositions.end(),nGroupPos);
-            if (aFind != m_aGroupPositions.end())
+            ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
+            if (aFind != aEnd)
             {
                 *aFind = NO_GROUP;
-                ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
                 for(++aFind;aFind != aEnd;++aFind)
                     if ( *aFind != NO_GROUP )
                         --*aFind;
@@ -900,7 +900,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
                 ::std::vector<sal_Int32>::size_type nRowPos = static_cast< ::std::vector<sal_Int32>::size_type >(nRow);
                 if ( nRowPos < m_aGroupPositions.size() )
                 {
-                    ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.begin() + nRowPos;
+                    ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.begin() + nRowPos;
                     for(;aIter != aEnd;++aIter)
                     {
                         if ( *aIter != NO_GROUP )
@@ -919,7 +919,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
                     ::std::vector<sal_Int32>::iterator aInsertPos = m_aGroupPositions.insert(aIter,nGroupPos);
                     ++aInsertPos;
                     aIter = aInsertPos;
-                    ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
+                    ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
                     for(;aInsertPos != aEnd;++aInsertPos)
                         if ( *aInsertPos != NO_GROUP )
                             ++*aInsertPos;

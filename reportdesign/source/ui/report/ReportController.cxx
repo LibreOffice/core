@@ -904,7 +904,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             {
                 ::std::vector< uno::Reference< uno::XInterface > > aSelection;
                 getDesignView()->fillControlModelSelection(aSelection);
-                ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aSelection.begin();
+                ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
                 for(; aIter != aSelection.end()
                     && !uno::Reference< report::XFixedLine >(*aIter,uno::UNO_QUERY).is()
                     && !uno::Reference< report::XImageControl >(*aIter,uno::UNO_QUERY).is()
@@ -1451,7 +1451,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 const OUString sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
                 UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
-                ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aControlsFormats.begin();
+                ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aControlsFormats.begin();
                 for(; aIter != aControlsFormats.end();++aIter)
                 {
                     uno::Reference< report::XReportControlFormat> xReportControlFormat(*aIter,uno::UNO_QUERY);
@@ -1528,7 +1528,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGEFONT ) );
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
-                    ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aControlsFormats.begin();
+                    ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aControlsFormats.begin();
                     for(; aIter != aControlsFormats.end();++aIter)
                     {
                         uno::Reference< report::XReportControlFormat > xFormat( *aIter, uno::UNO_QUERY );
@@ -2764,8 +2764,8 @@ uno::Any SAL_CALL OReportController::getViewData() throw( uno::RuntimeException,
         {
             uno::Sequence<beans::PropertyValue> aCollapsedSections(aCollapsedPositions.size());
             beans::PropertyValue* pCollapsedIter = aCollapsedSections.getArray();
-            ::std::vector<sal_uInt16>::iterator aIter = aCollapsedPositions.begin();
-            ::std::vector<sal_uInt16>::iterator aEnd = aCollapsedPositions.end();
+            ::std::vector<sal_uInt16>::const_iterator aIter = aCollapsedPositions.begin();
+            ::std::vector<sal_uInt16>::const_iterator aEnd = aCollapsedPositions.end();
             for (sal_Int32 i = 1; aIter != aEnd ; ++aIter,++pCollapsedIter,++i)
             {
                 pCollapsedIter->Name = PROPERTY_SECTION + OUString::number(i);
@@ -4106,7 +4106,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
         if ( _rState.bEnabled )
         {
             uno::Any aTemp;
-            ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aSelection.begin();
+            ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
             for(; aIter != aSelection.end() && _rState.bEnabled ;++aIter)
             {
                 uno::Reference< beans::XPropertySet> xProp(*aIter,uno::UNO_QUERY);
@@ -4176,7 +4176,7 @@ bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndo
     ::std::vector< uno::Reference< uno::XInterface > > aSelection;
     uno::Reference< awt::XWindow> xWindow;
     lcl_getReportControlFormat( _aArgs, getDesignView(), xWindow, aSelection );
-    ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aSelection.begin();
+    ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
 
     const OUString sUndoAction = ModuleRes( _nUndoResId );
     UndoContext aUndoContext( getUndoManager(), sUndoAction );

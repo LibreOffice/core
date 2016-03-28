@@ -245,7 +245,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     // now we have access to the cached info about the set
     // let's see what we know about the property
     ObjectInfo& rObjectInfo = objectPos->second;
-    PropertiesInfo::iterator aPropertyPos = rObjectInfo.aProperties.find( _rEvent.PropertyName );
+    PropertiesInfo::const_iterator aPropertyPos = rObjectInfo.aProperties.find( _rEvent.PropertyName );
     if ( aPropertyPos == rObjectInfo.aProperties.end() )
     {   // nothing 'til now ... have to change this ....
         // the attributes
