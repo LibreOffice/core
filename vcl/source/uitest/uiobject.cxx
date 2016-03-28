@@ -183,8 +183,14 @@ void WindowUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "TYPE")
     {
-        assert(rParameters.find("TEXT") != rParameters.end());
-        const OUString& rText = rParameters.find("TEXT")->second;
+        auto itr = rParameters.find("TEXT");
+        if (itr == rParameters.end())
+        {
+            SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE");
+            return;
+        }
+
+        const OUString& rText = itr->second;
         auto aKeyEvents = generate_key_events_from_text(rText);
         for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
                 itr != itrEnd; ++itr)
@@ -347,7 +353,13 @@ void EditUIObject::execute(const OUString& rAction,
     {
         if (rParameters.find("TEXT") != rParameters.end())
         {
-            assert(rParameters.size() == 1); // only the text
+            auto itr = rParameters.find("TEXT");
+            if (itr == rParameters.end())
+            {
+                SAL_WARN("vcl.uitest", "missing parameter TEXT to action SET");
+                return;
+            }
+
             const OUString& rText = rParameters.find("TEXT")->second;
             auto aKeyEvents = generate_key_events_from_text(rText);
             for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
