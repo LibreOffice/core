@@ -157,8 +157,8 @@ bool ORowSetImportExport::insertNewRow()
     {
         m_xTargetResultSetUpdate->moveToInsertRow();
         sal_Int32 i = 1;
-        ::std::vector<sal_Int32>::iterator aEnd = m_aColumnMapping.end();
-        for (::std::vector<sal_Int32>::iterator aIter = m_aColumnMapping.begin(); aIter != aEnd ;++aIter,++i )
+        ::std::vector<sal_Int32>::const_iterator aEnd = m_aColumnMapping.end();
+        for (::std::vector<sal_Int32>::const_iterator aIter = m_aColumnMapping.begin(); aIter != aEnd ;++aIter,++i )
         {
             if(*aIter > 0)
             {

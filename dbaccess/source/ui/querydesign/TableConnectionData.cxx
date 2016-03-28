@@ -109,8 +109,8 @@ void OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSour
 
 bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
-    OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-    OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+    OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+    OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
     for(;aIter != aEnd;++aIter)
     {
         if((*aIter)->GetDestFieldName() == rDestFieldName && (*aIter)->GetSourceFieldName() == rSourceFieldName)

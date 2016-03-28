@@ -674,8 +674,8 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup, boo
         Reference<XAppend> xAppend(xColumns,UNO_QUERY);
         OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
-        ::std::vector< std::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-        ::std::vector< std::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
+        ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
+        ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
         for(;aIter != aEnd;++aIter)
         {
             OSL_ENSURE(*aIter,"OTableRow is null!");
@@ -861,8 +861,8 @@ void OTableController::loadData()
 
             for(;pKeyBegin != pKeyEnd;++pKeyBegin)
             {
-                ::std::vector< std::shared_ptr<OTableRow> >::iterator rowIter = m_vRowList.begin();
-                ::std::vector< std::shared_ptr<OTableRow> >::iterator rowEnd = m_vRowList.end();
+                ::std::vector< std::shared_ptr<OTableRow> >::const_iterator rowIter = m_vRowList.begin();
+                ::std::vector< std::shared_ptr<OTableRow> >::const_iterator rowEnd = m_vRowList.end();
                 for(;rowIter != rowEnd;++rowIter)
                 {
                     if((*rowIter)->GetActFieldDescr()->GetName() == *pKeyBegin)
@@ -877,7 +877,7 @@ void OTableController::loadData()
 
     // fill empty rows
 
-    OTypeInfoMap::iterator aTypeIter = m_aTypeInfo.find(DataType::VARCHAR);
+    OTypeInfoMap::const_iterator aTypeIter = m_aTypeInfo.find(DataType::VARCHAR);
     if(aTypeIter == m_aTypeInfo.end())
         aTypeIter = m_aTypeInfo.begin();
 
@@ -990,8 +990,8 @@ void OTableController::alterColumns()
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
     ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
-    ::std::vector< std::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
     sal_Int32 nPos = 0;
     for(;aIter != aEnd;++aIter,++nPos)
@@ -1433,8 +1433,8 @@ void OTableController::reSyncRows()
 {
     bool bAlterAllowed  = isAlterAllowed();
     bool bAddAllowed    = isAddAllowed();
-    ::std::vector< std::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
     for(;aIter != aEnd;++aIter)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");

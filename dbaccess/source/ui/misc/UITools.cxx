@@ -634,7 +634,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
         _rTypeInfoIters.reserve(_rTypeInfoMap.size());
 
         OTypeInfoMap::iterator aIter = _rTypeInfoMap.begin();
-        OTypeInfoMap::iterator aEnd = _rTypeInfoMap.end();
+        OTypeInfoMap::const_iterator aEnd = _rTypeInfoMap.end();
         for(;aIter != aEnd;++aIter)
             _rTypeInfoIters.push_back(aIter);
 

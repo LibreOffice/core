@@ -348,12 +348,12 @@ void OKeySet::ensureStatement( )
     const connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aEnd  = m_aKeyIter->second.first->get().end();
     for( ; aIter != aEnd; ++aIter )
         FilterColumnsNULL.push_back(aIter->isNull());
-    vStatements_t::iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
+    vStatements_t::const_iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
     if(pNewStatement == m_vStatements.end())
     {
         // no: make a new one
         makeNewStatement();
-        std::pair< vStatements_t::iterator, bool > insert_result
+        std::pair< vStatements_t::const_iterator, bool > insert_result
             (m_vStatements.insert(vStatements_t::value_type(FilterColumnsNULL, m_xStatement)));
         (void) insert_result; // WaE: unused variable
         assert(insert_result.second);
@@ -720,11 +720,11 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                     Reference< XResultSetMetaDataSupplier > xMdSup(xRes,UNO_QUERY);
                     Reference< XResultSetMetaData > xMd = xMdSup->getMetaData();
                     sal_Int32 nColumnCount = xMd->getColumnCount();
-                    ::std::vector< OUString >::iterator aAutoIter = m_aAutoColumns.begin();
-                    ::std::vector< OUString >::iterator aAutoEnd = m_aAutoColumns.end();
+                    ::std::vector< OUString >::const_iterator aAutoIter = m_aAutoColumns.begin();
+                    ::std::vector< OUString >::const_iterator aAutoEnd = m_aAutoColumns.end();
                     for (sal_Int32 i = 1;aAutoIter !=  aAutoEnd && i <= nColumnCount; ++aAutoIter,++i)
                     {
-                        SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+                        SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != m_pKeyColumnNames->end() )
                             (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
                     }
@@ -748,12 +748,12 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         const OUString sQuote = getIdentifierQuoteString();
         OUString sMaxStmt;
         aEnd = m_pKeyColumnNames->end();
-        ::std::vector< OUString >::iterator aAutoIter = m_aAutoColumns.begin();
-        ::std::vector< OUString >::iterator aAutoEnd = m_aAutoColumns.end();
+        ::std::vector< OUString >::const_iterator aAutoIter = m_aAutoColumns.begin();
+        ::std::vector< OUString >::const_iterator aAutoEnd = m_aAutoColumns.end();
         for (;aAutoIter !=  aAutoEnd; ++aAutoIter)
         {
             // we will only fetch values which are keycolumns
-            SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+            SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
             if ( aFind != aEnd )
             {
                 sMaxStmt += sMax;
@@ -782,7 +782,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                     for (sal_Int32 i=1;aAutoIter != aAutoEnd; ++aAutoIter,++i)
                     {
                         // we will only fetch values which are keycolumns
-                        SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+                        SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != aEnd )
                             (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
                     }
@@ -797,7 +797,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
     }
     if ( m_bInserted )
     {
-        OKeySetMatrix::iterator aKeyIter = m_aKeyMap.end();
+        OKeySetMatrix::const_iterator aKeyIter = m_aKeyMap.end();
         --aKeyIter;
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >(m_pKeyColumnNames->size());
         copyRowValue(_rInsertRow,aKeyRow,aKeyIter->first + 1);
@@ -949,8 +949,8 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     }
 
     // now we have to set the index values
-    ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
-    ::std::vector<sal_Int32>::iterator aIdxColEnd = aIndexColumnPositions.end();
+    ::std::vector<sal_Int32>::const_iterator aIdxColIter = aIndexColumnPositions.begin();
+    ::std::vector<sal_Int32>::const_iterator aIdxColEnd = aIndexColumnPositions.end();
     aIter = m_pColumnNames->begin();
     for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i,++aIter)
     {
@@ -1198,7 +1198,7 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
     sal_Int32 nPos=1;
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaIter;
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaEnd;
-    OUpdatedParameter::iterator aUpdateFind = m_aUpdatedParameter.find(m_aKeyIter->first);
+    OUpdatedParameter::const_iterator aUpdateFind = m_aUpdatedParameter.find(m_aKeyIter->first);
     if ( aUpdateFind == m_aUpdatedParameter.end() )
     {
         aParaIter = m_aParameterValueForCache->get().begin();
@@ -1248,7 +1248,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     if ( !bOK )
     {
         // This row has disappeared; remove it.
-        OKeySetMatrix::iterator aTemp = m_aKeyIter;
+        OKeySetMatrix::const_iterator aTemp = m_aKeyIter;
         // use *next* row
         ++m_aKeyIter;
         m_aKeyMap.erase(aTemp);

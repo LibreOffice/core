@@ -109,8 +109,8 @@ void ORelationTableConnectionData::ChangeOrientation()
 {
     // exchange Source- and DestFieldName of the lines
     OUString sTempString;
-    OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-    OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+    OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+    OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
     for(;aIter != aEnd;++aIter)
     {
         sTempString = (*aIter)->GetSourceFieldName();
@@ -290,8 +290,8 @@ bool ORelationTableConnectionData::Update()
         Reference<XAppend> xColumnAppend(xColumns,UNO_QUERY);
         if ( xColumnFactory.is() )
         {
-            OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-            OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+            OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
             for(;aIter != aEnd;++aIter)
             {
                 if(!((*aIter)->GetSourceFieldName().isEmpty() || (*aIter)->GetDestFieldName().isEmpty()))
@@ -345,8 +345,8 @@ xKey.clear();
                         xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
                         xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
 
-                        OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-                        OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+                        OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+                        OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
                         for(;aIter != aEnd;++aIter)
                         {
                             if(    (*aIter)->GetSourceFieldName() == sName

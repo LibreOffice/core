@@ -232,7 +232,7 @@ sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMa
 {
     sal_Int32 nRet = 0;
 
-    OTableWindowMap::iterator aIter = GetTabWinMap().find(rName);
+    OTableWindowMap::const_iterator aIter = GetTabWinMap().find(rName);
     while(aIter != GetTabWinMap().end())
     {
         OUString aNewName = rName + "_" + OUString::number(++nRet);
@@ -253,7 +253,7 @@ void OQueryTableView::ReSync()
     // I need a collection of all window names that cannot be created so that I do not initialize connections for them.
     ::std::vector<OUString> arrInvalidTables;
 
-    TTableWindowData::reverse_iterator aIter = rTabWinDataList.rbegin();
+    TTableWindowData::const_reverse_iterator aIter = rTabWinDataList.rbegin();
     // Create the window and add it
 
     for(;aIter != rTabWinDataList.rend();++aIter)
@@ -286,7 +286,7 @@ void OQueryTableView::ReSync()
 
     // Add the connections
     TTableConnectionData& rTabConnDataList = m_pView->getController().getTableConnectionData();
-    TTableConnectionData::reverse_iterator aConIter = rTabConnDataList.rbegin();
+    TTableConnectionData::const_reverse_iterator aConIter = rTabConnDataList.rbegin();
 
     for(;aConIter != rTabConnDataList.rend();++aConIter)
     {
@@ -442,8 +442,8 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
     TTableWindowData& rWindowData = getDesignView()->getController().getTableWindowData();
-    TTableWindowData::iterator aWinIter = rWindowData.begin();
-    TTableWindowData::iterator aWinEnd = rWindowData.end();
+    TTableWindowData::const_iterator aWinIter = rWindowData.begin();
+    TTableWindowData::const_iterator aWinEnd = rWindowData.end();
     for(;aWinIter != aWinEnd;++aWinIter)
     {
         pNewTabWinData = *aWinIter;
@@ -720,8 +720,8 @@ bool OQueryTableView::ContainsTabWin(const OTableWindow& rTabWin)
 {
     OTableWindowMap& rTabWins = GetTabWinMap();
 
-    OTableWindowMap::iterator aIter = rTabWins.begin();
-    OTableWindowMap::iterator aEnd  = rTabWins.end();
+    OTableWindowMap::const_iterator aIter = rTabWins.begin();
+    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
 
     for ( ;aIter != aEnd ; ++aIter )
     {
@@ -798,8 +798,8 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
     getDesignView()->SaveTabWinUIConfig(pTabWin);
     // (I need to go via the parent, as only the parent knows the position of the scrollbars)
     // and then out of the TabWins list and hide
-    OTableWindowMap::iterator aIter = rTabWins.begin();
-    OTableWindowMap::iterator aEnd  = rTabWins.end();
+    OTableWindowMap::const_iterator aIter = rTabWins.begin();
+    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
     for ( ;aIter != aEnd ; ++aIter )
         if ( aIter->second == pTabWin )
         {

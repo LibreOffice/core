@@ -671,8 +671,8 @@ void ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any
 void SAL_CALL ODocumentContainer::commit(  ) throw (css::io::IOException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
-    Documents::iterator aIter = m_aDocumentMap.begin();
-    Documents::iterator aEnd = m_aDocumentMap.end();
+    Documents::const_iterator aIter = m_aDocumentMap.begin();
+    Documents::const_iterator aEnd = m_aDocumentMap.end();
     for (; aIter != aEnd ; ++aIter)
     {
         Reference<XTransactedObject> xTrans(aIter->second.get(),UNO_QUERY);
@@ -687,8 +687,8 @@ void SAL_CALL ODocumentContainer::commit(  ) throw (css::io::IOException, css::l
 void SAL_CALL ODocumentContainer::revert(  ) throw (css::io::IOException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
-    Documents::iterator aIter = m_aDocumentMap.begin();
-    Documents::iterator aEnd = m_aDocumentMap.end();
+    Documents::const_iterator aIter = m_aDocumentMap.begin();
+    Documents::const_iterator aEnd = m_aDocumentMap.end();
     for (; aIter != aEnd ; ++aIter)
     {
         Reference<XTransactedObject> xTrans(aIter->second.get(),UNO_QUERY);

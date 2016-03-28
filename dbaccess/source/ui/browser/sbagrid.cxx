@@ -203,7 +203,7 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > 
     // TODO: why the hell this whole class does not use any mutex?
 
         Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
-        for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
+        for (   StatusMultiplexerArray::const_iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
                 ++aIter)
         {
@@ -452,7 +452,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     if ( dtUnknown != eURLType )
     {
         // notify any status listeners that the dialog is now active (well, about to be active)
-        MapDispatchToBool::iterator aThisURLState = m_aDispatchStates.insert( MapDispatchToBool::value_type( eURLType, sal_True ) ).first;
+        MapDispatchToBool::const_iterator aThisURLState = m_aDispatchStates.insert( MapDispatchToBool::value_type( eURLType, sal_True ) ).first;
         NotifyStatusChanged( aURL, nullptr );
 
         // execute the dialog

@@ -71,7 +71,7 @@ namespace dbaui
             sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
             if( i < nTableWindowCount )
             {
-                OJoinTableView::OTableWindowMap::iterator aIter = m_pTableView->GetTabWinMap().begin();
+                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableView->GetTabWinMap().begin();
                 for (sal_Int32 j=i; j; ++aIter,--j)
                     ;
                 aRet = aIter->second->GetAccessible();

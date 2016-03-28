@@ -82,8 +82,8 @@ namespace
 {
     void clearColumns(ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColumnsVec)
     {
-        ODatabaseExport::TColumns::iterator aIter = _rColumns.begin();
-        ODatabaseExport::TColumns::iterator aEnd  = _rColumns.end();
+        ODatabaseExport::TColumns::const_iterator aIter = _rColumns.begin();
+        ODatabaseExport::TColumns::const_iterator aEnd  = _rColumns.end();
 
         for(;aIter != aEnd;++aIter)
             delete aIter->second;
@@ -791,7 +791,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
             ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
             for(;aSrcIter != aSrcEnd;++aSrcIter)
             {
-                ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
+                ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
 
                 if ( aDestIter != m_vDestColumns.end() )
                 {
@@ -873,7 +873,7 @@ IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplOKHdl, Button*, void)
                 {
                     if ( supportsPrimaryKey() )
                     {
-                        ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
+                        ODatabaseExport::TColumns::const_iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
                             [] (const ODatabaseExport::TColumns::value_type& tCol) { return tCol.second->IsPrimaryKey(); });
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
@@ -999,7 +999,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
     if ( _pField )
     {
-        ODatabaseExport::TColumns::iterator aFind = m_vDestColumns.find(_pField->GetName());
+        ODatabaseExport::TColumns::const_iterator aFind = m_vDestColumns.find(_pField->GetName());
         if ( aFind != m_vDestColumns.end() )
         {
             delete aFind->second;
@@ -1032,8 +1032,8 @@ void OCopyTableWizard::impl_loadSourceData()
 
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
-    ODatabaseExport::TColumns::iterator colEnd = _rColumns.end();
-    for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != colEnd; ++col )
+    ODatabaseExport::TColumns::const_iterator colEnd = _rColumns.end();
+    for ( ODatabaseExport::TColumns::const_iterator col = _rColumns.begin(); col != colEnd; ++col )
         delete col->second;
 
     _rColVector.clear();
@@ -1080,7 +1080,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
 
     for( ; pKeyColName != pKeyColEnd; ++pKeyColName )
     {
-        ODatabaseExport::TColumns::iterator keyPos = _rColumns.find( *pKeyColName );
+        ODatabaseExport::TColumns::const_iterator keyPos = _rColumns.find( *pKeyColName );
         if ( keyPos != _rColumns.end() )
         {
             keyPos->second->SetPrimaryKey( true );

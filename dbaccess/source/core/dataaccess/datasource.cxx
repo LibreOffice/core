@@ -322,7 +322,7 @@ void SAL_CALL OSharedConnectionManager::disposing( const css::lang::EventObject&
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
-    TSharedConnectionMap::iterator aFind = m_aSharedConnection.find(xConnection);
+    TSharedConnectionMap::const_iterator aFind = m_aSharedConnection.find(xConnection);
     if ( m_aSharedConnection.end() != aFind )
     {
         osl_atomic_decrement(&aFind->second->second.nALiveCount);

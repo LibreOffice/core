@@ -285,8 +285,8 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 ODatabaseExport::~ODatabaseExport()
 {
     m_pFormatter = nullptr;
-    ODatabaseExport::TColumns::iterator aIter = m_aDestColumns.begin();
-    ODatabaseExport::TColumns::iterator aEnd  = m_aDestColumns.end();
+    ODatabaseExport::TColumns::const_iterator aIter = m_aDestColumns.begin();
+    ODatabaseExport::TColumns::const_iterator aEnd  = m_aDestColumns.end();
 
     for(;aIter != aEnd;++aIter)
         delete aIter->second;
@@ -664,7 +664,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
     pField->SetPrimaryKey(false);
     pField->SetCurrency(false);
 
-    TColumns::iterator aFind = m_aDestColumns.find( aAlias );
+    TColumns::const_iterator aFind = m_aDestColumns.find( aAlias );
     if ( aFind != m_aDestColumns.end() )
     {
         delete aFind->second;
@@ -844,8 +844,8 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     i = 1;
     // create the sql string
-    ::std::vector< OUString>::iterator aInsertEnd = aInsertList.end();
-    for (::std::vector< OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
+    ::std::vector< OUString>::const_iterator aInsertEnd = aInsertList.end();
+    for (::std::vector< OUString>::const_iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
     {
         if ( !aInsertIter->isEmpty() )
         {

@@ -171,7 +171,7 @@ namespace dbaui
         IndexFields::const_iterator aSource = m_aFields.begin();
         IndexFields::const_iterator aSourceEnd = m_aFields.end();
         IndexFields::iterator aDest = _rFields.begin();
-        for (; aSource < aSourceEnd; ++aSource)
+        for (; aSource != aSourceEnd; ++aSource)
             if (!aSource->sFieldName.isEmpty())
             {
                 *aDest = *aSource;
