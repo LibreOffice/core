@@ -25,6 +25,7 @@ enum class UIObjectType
     COMBOBOX,
     SPINBUTTON,
     TABPAGE,
+    SPINFIELD,
     UNKNOWN
 };
 

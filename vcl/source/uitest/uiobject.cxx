@@ -15,6 +15,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/spin.hxx>
+#include <vcl/spinfld.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -602,4 +603,41 @@ OUString SpinUIObject::get_name() const
 {
     return OUString("SpinUIObject");
 }
+
+SpinFieldUIObject::SpinFieldUIObject(VclPtr<SpinField> xSpinField):
+    EditUIObject(xSpinField),
+    mxSpinField(xSpinField)
+{
+}
+
+void SpinFieldUIObject::execute(const OUString& rAction,
+        const StringMap& /*rParameters*/)
+{
+    if (rAction == "UP")
+    {
+        mxSpinField->Up();
+    }
+    else if (rAction == "DOWN")
+    {
+        mxSpinField->Down();
+    }
+}
+
+StringMap SpinFieldUIObject::get_state()
+{
+    StringMap aMap = EditUIObject::get_state();
+
+    return aMap;
+}
+
+UIObjectType SpinFieldUIObject::get_type() const
+{
+    return UIObjectType::SPINFIELD;
+}
+
+OUString SpinFieldUIObject::get_name() const
+{
+    return OUString("SpinFieldUIObject");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
