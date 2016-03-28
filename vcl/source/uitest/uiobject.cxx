@@ -14,6 +14,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/spin.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -548,4 +549,42 @@ OUString ComboBoxUIObject::get_name() const
     return OUString("ComboBoxUIObject");
 }
 
+SpinUIObject::SpinUIObject(VclPtr<SpinButton> xSpinButton):
+    WindowUIObject(xSpinButton),
+    mxSpinButton(xSpinButton)
+{
+}
+
+void SpinUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "UP")
+    {
+        /* code */
+    }
+    else if (rAction == "DOWN")
+    {
+    }
+}
+
+StringMap SpinUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["Min"] = OUString::number(mxSpinButton->GetRangeMin());
+    aMap["Max"] = OUString::number(mxSpinButton->GetRangeMax());
+    aMap["Step"] = OUString::number(mxSpinButton->GetValueStep());
+    aMap["Value"] = OUString::number(mxSpinButton->GetValue());
+
+    return aMap;
+}
+
+UIObjectType SpinUIObject::get_type() const
+{
+    return UIObjectType::SPINBUTTON;
+}
+
+OUString SpinUIObject::get_name() const
+{
+    return OUString("SpinUIObject");
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
