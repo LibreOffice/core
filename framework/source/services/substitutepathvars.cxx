@@ -822,9 +822,8 @@ OUString SubstitutePathVariables::GetHomeVariableValue() const
 
 OUString SubstitutePathVariables::GetPathVariableValue() const
 {
-
     OUString aRetStr;
-    const char*   pEnv = getenv( "PATH" );
+    const char* pEnv = getenv( "PATH" );
 
     if ( pEnv )
     {
@@ -838,9 +837,10 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
         do
         {
             OUString sToken = aPathList.getToken(0, SAL_PATHSEPARATOR, nToken);
-            if (!sToken.isEmpty())
+            if (!sToken.isEmpty() &&
+                osl::FileBase::getFileURLFromSystemPath( sToken, aTmp ) ==
+                osl::FileBase::RC::E_None )
             {
-                osl::FileBase::getFileURLFromSystemPath( sToken, aTmp );
                 if ( bAppendSep )
                     aPathStrBuffer.append( ";" ); // Office uses ';' as path separator
                 aPathStrBuffer.append( aTmp );
