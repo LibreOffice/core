@@ -459,6 +459,8 @@ StringMap ListBoxUIObject::get_state()
     StringMap aMap = WindowUIObject::get_state();
     aMap["ReadOnly"] = OUString::boolean(mxListBox->IsReadOnly());
     aMap["MultiSelect"] = OUString::boolean(mxListBox->IsMultiSelectionEnabled());
+    aMap["EntryCount"] = OUString::number(mxListBox->GetEntryCount());
+    aMap["SelectEntryCount"] = OUString::number(mxListBox->GetSelectEntryCount());
 
     return aMap;
 }
