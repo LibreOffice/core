@@ -214,7 +214,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, InsertHdl, Button*, void)
     if (!rReq.IsDone())
         rReq.Ignore();
 
-    Close();
+    EndDialog(RET_OK);
 }
 
 void SwInsertBookmarkDlg::GotoSelectedBookmark()
