@@ -1098,7 +1098,7 @@ void SAL_CALL OReportDefinition::close( sal_Bool _bDeliverOwnership ) throw (uti
 
     ::std::vector< uno::Reference< frame::XController> > aCopy = m_pImpl->m_aControllers;
     ::std::vector< uno::Reference< frame::XController> >::iterator aIter = aCopy.begin();
-    ::std::vector< uno::Reference< frame::XController> >::iterator aEnd = aCopy.end();
+    ::std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = aCopy.end();
     for (;aIter != aEnd ; ++aIter)
     {
         if ( aIter->is() )
@@ -1197,7 +1197,7 @@ void SAL_CALL OReportDefinition::disconnectController( const uno::Reference< fra
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    ::std::vector< uno::Reference< frame::XController> >::iterator aFind = ::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController);
+    ::std::vector< uno::Reference< frame::XController> >::const_iterator aFind = ::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController);
     if ( aFind != m_pImpl->m_aControllers.end() )
         m_pImpl->m_aControllers.erase(aFind);
     if ( m_pImpl->m_xCurrentController == _xController )
@@ -1915,8 +1915,8 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     {
         m_pImpl->m_xViewData.set( document::IndexedPropertyValues::create(m_aProps->m_xContext), uno::UNO_QUERY);
         uno::Reference< container::XIndexContainer > xContainer(m_pImpl->m_xViewData,uno::UNO_QUERY);
-        ::std::vector< uno::Reference< frame::XController> >::iterator aIter = m_pImpl->m_aControllers.begin();
-        ::std::vector< uno::Reference< frame::XController> >::iterator aEnd = m_pImpl->m_aControllers.end();
+        ::std::vector< uno::Reference< frame::XController> >::const_iterator aIter = m_pImpl->m_aControllers.begin();
+        ::std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = m_pImpl->m_aControllers.end();
         for (;aIter != aEnd ; ++aIter)
         {
             if ( aIter->is() )
@@ -2384,7 +2384,7 @@ uno::Any SAL_CALL OStylesHelper::getByIndex( sal_Int32 Index ) throw(lang::Index
 uno::Any SAL_CALL OStylesHelper::getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    TStyleElements::iterator aFind = m_aElements.find(aName);
+    TStyleElements::const_iterator aFind = m_aElements.find(aName);
     if ( aFind == m_aElements.end() )
         throw container::NoSuchElementException();
     return aFind->second;
@@ -2425,7 +2425,7 @@ void SAL_CALL OStylesHelper::insertByName( const OUString& aName, const uno::Any
 void SAL_CALL OStylesHelper::removeByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    TStyleElements::iterator aFind = m_aElements.find(aName);
+    TStyleElements::const_iterator aFind = m_aElements.find(aName);
     if ( aFind != m_aElements.end() )
         throw container::NoSuchElementException();
     m_aElementsPos.erase(::std::find(m_aElementsPos.begin(),m_aElementsPos.end(),aFind));

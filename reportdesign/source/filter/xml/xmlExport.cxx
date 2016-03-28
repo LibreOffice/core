@@ -179,17 +179,17 @@ namespace rptxml
 void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 {
     ORptExport::TSectionsGrid::iterator aSectionIter = _rGrid.begin();
-    ORptExport::TSectionsGrid::iterator aSectionEnd = _rGrid.end();
+    ORptExport::TSectionsGrid::const_iterator aSectionEnd = _rGrid.end();
     for (;aSectionIter != aSectionEnd ; ++aSectionIter)
     {
         ORptExport::TGrid::iterator aRowIter = aSectionIter->second.begin();
-        ORptExport::TGrid::iterator aRowEnd = aSectionIter->second.end();
+        ORptExport::TGrid::const_iterator aRowEnd = aSectionIter->second.end();
         for (; aRowIter != aRowEnd; ++aRowIter)
         {
             if ( aRowIter->first )
             {
-                ::std::vector< ORptExport::TCell >::iterator aColIter = aRowIter->second.begin();
-                ::std::vector< ORptExport::TCell >::iterator aColEnd = aRowIter->second.end();
+                ::std::vector< ORptExport::TCell >::const_iterator aColIter = aRowIter->second.begin();
+                ::std::vector< ORptExport::TCell >::const_iterator aColEnd = aRowIter->second.end();
                 for (; aColIter != aColEnd; ++aColIter)
                 {
                     if ( aColIter->nRowSpan > 1 )
@@ -737,13 +737,13 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
 void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
 {
     SvXMLElementExport aColumns(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, true, true);
-    TGridStyleMap::iterator aColFind = m_aColumnStyleNames.find(_xSection.get());
+    TGridStyleMap::const_iterator aColFind = m_aColumnStyleNames.find(_xSection.get());
     OSL_ENSURE(aColFind != m_aColumnStyleNames.end(),"ORptExport::exportTableColumns: Section not found in m_aColumnStyleNames!");
     if ( aColFind == m_aColumnStyleNames.end() )
         return;
 
-    TStringVec::iterator aColIter = aColFind->second.begin();
-    TStringVec::iterator aColEnd = aColFind->second.end();
+    TStringVec::const_iterator aColIter = aColFind->second.begin();
+    TStringVec::const_iterator aColEnd = aColFind->second.end();
     for (; aColIter != aColEnd; ++aColIter)
     {
         AddAttribute( m_sTableStyle,*aColIter );
@@ -757,16 +757,16 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 
     exportTableColumns(_xSection);
 
-    TSectionsGrid::iterator aFind = m_aSectionsGrid.find(_xSection.get());
+    TSectionsGrid::const_iterator aFind = m_aSectionsGrid.find(_xSection.get());
     OSL_ENSURE(aFind != m_aSectionsGrid.end(),"ORptExport::exportContainer: Section not found in grid!");
     if ( aFind == m_aSectionsGrid.end() )
         return;
-    TGrid::iterator aRowIter = aFind->second.begin();
-    TGrid::iterator aRowEnd = aFind->second.end();
+    TGrid::const_iterator aRowIter = aFind->second.begin();
+    TGrid::const_iterator aRowEnd = aFind->second.end();
 
     sal_Int32 nEmptyCellColSpan = 0;
-    TGridStyleMap::iterator aRowFind = m_aRowStyleNames.find(_xSection.get());
-    TStringVec::iterator aHeightIter = aRowFind->second.begin();
+    TGridStyleMap::const_iterator aRowFind = m_aRowStyleNames.find(_xSection.get());
+    TStringVec::const_iterator aHeightIter = aRowFind->second.begin();
     OSL_ENSURE(aRowFind->second.size() == aFind->second.size(),"Different count for rows");
 
     bool bShapeHandled = false;
@@ -777,8 +777,8 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
         SvXMLElementExport aRow(*this,XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
         if ( aRowIter->first )
         {
-            ::std::vector< TCell >::iterator aColIter = aRowIter->second.begin();
-            ::std::vector< TCell >::iterator aColEnd = aRowIter->second.end();
+            ::std::vector< TCell >::const_iterator aColIter = aRowIter->second.begin();
+            ::std::vector< TCell >::const_iterator aColEnd = aRowIter->second.end();
             nEmptyCellColSpan = 0;
             for (; aColIter != aColEnd; ++aColIter)
             {
@@ -1016,7 +1016,7 @@ bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OU
 void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName)
 {
     Reference<XPropertySet> xFind(_xProp);
-    TPropertyStyleMap::iterator aFind = m_aAutoStyleNames.find(xFind);
+    TPropertyStyleMap::const_iterator aFind = m_aAutoStyleNames.find(xFind);
     if ( aFind != m_aAutoStyleNames.end() )
     {
         _rAtt.AddAttribute( _sName,
@@ -1068,7 +1068,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
                         }
                         OUString sFormula("rpt:HASCHANGED(\"");
 
-                        TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
+                        TGroupFunctionMap::const_iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
                         if ( aGroupFind != m_aGroupFunctionMap.end() )
                             sExpression = aGroupFind->second->getName();
                         sFormula += sExpression;

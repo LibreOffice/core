@@ -86,7 +86,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
             m_aGroups.push_back(xGroup);
         else
         {
-            TGroups::iterator aPos = m_aGroups.begin();
+            TGroups::const_iterator aPos = m_aGroups.begin();
             ::std::advance(aPos,Index);
             m_aGroups.insert(aPos, xGroup);
         }
@@ -103,7 +103,7 @@ void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutO
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         checkIndex(Index);
-        TGroups::iterator aPos = m_aGroups.begin();
+        TGroups::const_iterator aPos = m_aGroups.begin();
         ::std::advance(aPos,Index);
         xGroup = *aPos;
         m_aGroups.erase(aPos);
@@ -143,7 +143,7 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOut
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkIndex(Index);
-    TGroups::iterator aPos = m_aGroups.begin();
+    TGroups::const_iterator aPos = m_aGroups.begin();
     ::std::advance(aPos,Index);
     return uno::makeAny(*aPos);
 }
