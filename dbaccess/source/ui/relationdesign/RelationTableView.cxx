@@ -102,7 +102,7 @@ void ORelationTableView::ReSync()
 
     // create and insert windows
     TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
-    TTableWindowData::reverse_iterator aIter = rTabWinDataList.rbegin();
+    TTableWindowData::const_reverse_iterator aIter = rTabWinDataList.rbegin();
     for(;aIter != rTabWinDataList.rend();++aIter)
     {
         TTableWindowData::value_type pData = *aIter;
@@ -130,7 +130,7 @@ void ORelationTableView::ReSync()
 
     // insert connection
     TTableConnectionData& rTabConnDataList = m_pView->getController().getTableConnectionData();
-    TTableConnectionData::reverse_iterator aConIter = rTabConnDataList.rbegin();
+    TTableConnectionData::const_reverse_iterator aConIter = rTabConnDataList.rbegin();
 
     for(;aConIter != rTabConnDataList.rend();++aConIter)
     {
@@ -284,7 +284,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,bool /*_bDel
 void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool /*bNewTable*/)
 {
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
-    OJoinTableView::OTableWindowMap::iterator aIter = GetTabWinMap().find(_rComposedName);
+    OJoinTableView::OTableWindowMap::const_iterator aIter = GetTabWinMap().find(_rComposedName);
 
     if(aIter != GetTabWinMap().end())
     {

@@ -541,8 +541,8 @@ void ORowSet::freeResources( bool _bComplete )
     MutexGuard aGuard(m_aMutex);
 
     // free all clones
-    connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
+    connectivity::OWeakRefArray::const_iterator aEnd = m_aClones.end();
+    for (connectivity::OWeakRefArray::const_iterator i = m_aClones.begin(); aEnd != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
         if (xComp.is())
@@ -1241,7 +1241,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException,
 void ORowSet::impl_setDataColumnsWriteable_throw()
 {
     impl_restoreDataColumnsWriteable_throw();
-    TDataColumns::iterator aIter = m_aDataColumns.begin();
+    TDataColumns::const_iterator aIter = m_aDataColumns.begin();
     m_aReadOnlyDataColumns.resize(m_aDataColumns.size(),false);
     ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aIter != m_aDataColumns.end();++aIter,++aReadIter)
@@ -1257,8 +1257,8 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
 void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
     assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
-    TDataColumns::iterator aIter = m_aDataColumns.begin();
-    ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    TDataColumns::const_iterator aIter = m_aDataColumns.begin();
+    ::std::vector<bool, std::allocator<bool> >::const_iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
     {
         (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( (bool)*aReadIter ) );
@@ -2165,8 +2165,8 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify ourself
     onDeleteRow( _rBookmark );
     // notify the clones
-    connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
+    connectivity::OWeakRefArray::const_iterator aEnd = m_aClones.end();
+    for (connectivity::OWeakRefArray::const_iterator i = m_aClones.begin(); aEnd != i; ++i)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
@@ -2183,8 +2183,8 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify ourself
     onDeletedRow( _rBookmark, _nPos );
     // notify the clones
-    connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
+    connectivity::OWeakRefArray::const_iterator aEnd = m_aClones.end();
+    for (connectivity::OWeakRefArray::const_iterator i = m_aClones.begin(); aEnd != i; ++i)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())

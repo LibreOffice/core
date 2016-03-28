@@ -66,8 +66,8 @@ namespace dbaui
     }
     void OTableConnection::clearLineData()
     {
-        ::std::vector<OConnectionLine*>::iterator aLineEnd = m_vConnLine.end();
-        for(::std::vector<OConnectionLine*>::iterator aLineIter = m_vConnLine.begin();aLineIter != aLineEnd;++aLineIter)
+        ::std::vector<OConnectionLine*>::const_iterator aLineEnd = m_vConnLine.end();
+        for(::std::vector<OConnectionLine*>::const_iterator aLineIter = m_vConnLine.begin();aLineIter != aLineEnd;++aLineIter)
             delete *aLineIter;
         m_vConnLine.clear();
     }

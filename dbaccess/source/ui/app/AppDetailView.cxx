@@ -713,7 +713,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
     MnemonicGenerator aAllMnemonics( m_aExternalMnemonics );
 
     // remove the entries which are not enabled currently
-    for (   TaskEntryList::iterator pTask = rList.begin();
+    for (   TaskEntryList::const_iterator pTask = rList.begin();
             pTask != rList.end();
         )
     {
@@ -729,7 +729,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
     }
 
     // for the remaining entries, assign mnemonics
-    for (   TaskEntryList::iterator pTask = rList.begin();
+    for (   TaskEntryList::const_iterator pTask = rList.begin();
             pTask != rList.end();
             ++pTask
         )

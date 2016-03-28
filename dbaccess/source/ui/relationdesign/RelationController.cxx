@@ -353,7 +353,7 @@ namespace
     {
         Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
         const OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::EComposeRule::InTableDefinitions, false, false, false );
-        TTableDataHelper::iterator aFind = m_aTableData.find(sSourceName);
+        TTableDataHelper::const_iterator aFind = m_aTableData.find(sSourceName);
         if ( aFind == m_aTableData.end() )
         {
             aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::std::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
@@ -383,7 +383,7 @@ namespace
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
 
                     // insert windows
-                    TTableDataHelper::iterator aRefFind = m_aTableData.find(sReferencedTable);
+                    TTableDataHelper::const_iterator aRefFind = m_aTableData.find(sReferencedTable);
                     if ( aRefFind == m_aTableData.end() )
                     {
                         if ( m_xTables->hasByName(sReferencedTable) )
@@ -446,8 +446,8 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
     //const Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
     const bool bCase = true;//xMetaData.is() && xMetaData->supportsMixedCaseQuotedIdentifiers();
     // here we are finished, so we can collect the table from connection data
-    TTableConnectionData::iterator aConnDataIter = m_vTableConnectionData.begin();
-    TTableConnectionData::iterator aConnDataEnd = m_vTableConnectionData.end();
+    TTableConnectionData::const_iterator aConnDataIter = m_vTableConnectionData.begin();
+    TTableConnectionData::const_iterator aConnDataEnd = m_vTableConnectionData.end();
     for(;aConnDataIter != aConnDataEnd;++aConnDataIter)
     {
         if ( !existsTable((*aConnDataIter)->getReferencingTable()->GetComposedName(),bCase) )

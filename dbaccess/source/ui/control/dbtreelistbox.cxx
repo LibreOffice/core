@@ -96,11 +96,11 @@ void DBTreeListBox::dispose()
 SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvTreeList* myModel = GetModel();
-    std::pair<SvTreeListEntries::iterator,SvTreeListEntries::iterator> aIters =
+    std::pair<SvTreeListEntries::const_iterator,SvTreeListEntries::const_iterator> aIters =
         myModel->GetChildIterators(pStart);
 
     SvTreeListEntry* pEntry = nullptr;
-    SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
+    SvTreeListEntries::const_iterator it = aIters.first, itEnd = aIters.second;
     for (; it != itEnd; ++it)
     {
         pEntry = (*it).get();

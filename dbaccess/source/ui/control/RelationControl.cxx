@@ -612,7 +612,7 @@ namespace dbaui
         }
         m_pParentDialog->setValid(bValid);
 
-        ORelationControl::ops_type::iterator i (m_pRC_Tables->m_ops.begin());
+        ORelationControl::ops_type::const_iterator i (m_pRC_Tables->m_ops.begin());
         const ORelationControl::ops_type::const_iterator e (m_pRC_Tables->m_ops.end());
         m_pRC_Tables->DeactivateCell();
         for(; i != e; ++i)

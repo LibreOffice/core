@@ -290,8 +290,8 @@ namespace dbaui
         Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
         // fill the list with the index names
         m_pIndexList->Clear();
-        Indexes::iterator aIndexLoop = m_pIndexes->begin();
-        Indexes::iterator aEnd = m_pIndexes->end();
+        Indexes::const_iterator aIndexLoop = m_pIndexes->begin();
+        Indexes::const_iterator aEnd = m_pIndexes->end();
         for (; aIndexLoop != aEnd; ++aIndexLoop)
         {
             SvTreeListEntry* pNewEntry = nullptr;
@@ -395,7 +395,7 @@ namespace dbaui
         // they're iterators of the index collection, and thus they have changed when removing the index
         for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
         {
-            Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
+            Indexes::const_iterator aAfterInsertPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
             OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
             pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
         }
@@ -465,7 +465,7 @@ namespace dbaui
             // they're iterators of the index collection, and thus they have changed when removing the index
             for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
             {
-                Indexes::iterator aAfterDropPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
+                Indexes::const_iterator aAfterDropPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
                 OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
                 pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
@@ -717,7 +717,7 @@ namespace dbaui
     {
         if (m_pPreviousSelection)
         {
-            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
+            Indexes::const_iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
             if (!implSaveModified())
                 return false;

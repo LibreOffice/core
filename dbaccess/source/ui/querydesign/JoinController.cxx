@@ -298,8 +298,8 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
     OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
         "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
 
-    OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
-    OJoinTableView::OTableWindowMap::iterator aEnd = pTabWinList->end();
+    OJoinTableView::OTableWindowMap::const_iterator aIter = pTabWinList->begin();
+    OJoinTableView::OTableWindowMap::const_iterator aEnd = pTabWinList->end();
     for(;aIter != aEnd;++aIter)
         SaveTabWinPosSize(aIter->second, nOffsetX, nOffsetY);
 }

@@ -295,8 +295,8 @@ void OSelectionBrowseBox::ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo )
     if ( rFields.size() > sal_uInt16(nNewPos-1) )
     {
         sal_uInt16 nOldPos = 0;
-        OTableFields::iterator aEnd = rFields.end();
-        OTableFields::iterator aIter = rFields.begin();
+        OTableFields::const_iterator aEnd = rFields.end();
+        OTableFields::const_iterator aIter = rFields.begin();
         for (; aIter != aEnd && ( (*aIter)->GetColumnId() != nColId ); ++aIter,++nOldPos)
             ;
 
@@ -395,7 +395,7 @@ void OSelectionBrowseBox::ClearAll()
 {
     SetUpdateMode(false);
 
-    OTableFields::reverse_iterator aIter = getFields().rbegin();
+    OTableFields::const_reverse_iterator aIter = getFields().rbegin();
     for ( ;aIter != getFields().rend(); ++aIter )
     {
         if ( !(*aIter)->IsEmpty() )
@@ -493,8 +493,8 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             if ( !pEntry->isCondition() )
             {
                 OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.begin();
-                OJoinTableView::OTableWindowMap::iterator aEnd = rTabWinList.end();
+                OJoinTableView::OTableWindowMap::const_iterator aIter = rTabWinList.begin();
+                OJoinTableView::OTableWindowMap::const_iterator aEnd = rTabWinList.end();
 
                 for(;aIter != aEnd;++aIter)
                     m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second.get())->GetAliasName());
@@ -988,7 +988,7 @@ bool OSelectionBrowseBox::SaveModified()
                     pEntry->SetAlias(aAliasName);
                     // we have to set the table name as well as the table window
                     OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                    OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.find(aAliasName);
+                    OJoinTableView::OTableWindowMap::const_iterator aIter = rTabWinList.find(aAliasName);
                     if(aIter != rTabWinList.end())
                     {
                         OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second.get());
@@ -1425,7 +1425,7 @@ void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
         if (bWasEditing)
             DeactivateCell();
 
-        OTableFields::reverse_iterator aIter = getFields().rbegin();
+        OTableFields::const_reverse_iterator aIter = getFields().rbegin();
         OTableFieldDescRef pEntry = nullptr;
         for(sal_uInt16 nPos=sal::static_int_cast< sal_uInt16 >(getFields().size());aIter != getFields().rend();++aIter,--nPos)
         {
@@ -1587,10 +1587,11 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
 
 sal_uInt16 OSelectionBrowseBox::FieldsCount()
 {
-    OTableFields::iterator aIter = getFields().begin();
+    OTableFields::const_iterator aIter = getFields().begin();
+    OTableFields::const_iterator aEnd = getFields().end();
     sal_uInt16 nCount = 0;
 
-    while (aIter != getFields().end())
+    while (aIter != aEnd)
     {
         if ((*aIter).is() && !(*aIter)->IsEmpty())
             ++nCount;
@@ -1602,8 +1603,8 @@ sal_uInt16 OSelectionBrowseBox::FieldsCount()
 
 OTableFieldDescRef OSelectionBrowseBox::FindFirstFreeCol(sal_uInt16& _rColumnPosition )
 {
-    OTableFields::iterator aIter = getFields().begin();
-    OTableFields::iterator aEnd  = getFields().end();
+    OTableFields::const_iterator aIter = getFields().begin();
+    OTableFields::const_iterator aEnd  = getFields().end();
 
     _rColumnPosition = BROWSER_INVALIDID;
 
@@ -1641,8 +1642,8 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     //sal_Bool bAppend = sal_False;
 
     OTableFields& rFields = getFields();
-    OTableFields::iterator aIter = rFields.begin();
-    OTableFields::iterator aEnd = rFields.end();
+    OTableFields::const_iterator aIter = rFields.begin();
+    OTableFields::const_iterator aEnd = rFields.end();
     for(;aIter != aEnd;++aIter)
     {
         pEntry = *aIter;
@@ -1688,8 +1689,8 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
 {
     const sal_uInt16 nNewLevel = nLevel +1;
     OTableFields& rFields = getFields();
-    OTableFields::iterator aIter = rFields.begin();
-    OTableFields::iterator aEnd = rFields.end();
+    OTableFields::const_iterator aIter = rFields.begin();
+    OTableFields::const_iterator aEnd = rFields.end();
     for(;aIter != aEnd;++aIter)
     {
         OTableFieldDescRef pEntry = *aIter;
@@ -1721,8 +1722,8 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
 
     OTableFields& rFields = getFields();
-    OTableFields::iterator aIter = rFields.begin();
-    OTableFields::iterator aEnd = rFields.end();
+    OTableFields::const_iterator aIter = rFields.begin();
+    OTableFields::const_iterator aEnd = rFields.end();
     for(;aIter != aEnd;++aIter)
     {
         OTableFieldDescRef pEntry = *aIter;
@@ -1814,8 +1815,8 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
 
     bool bAppend = false;
     OTableFields& rFields = getFields();
-    OTableFields::iterator aIter = rFields.begin();
-    OTableFields::iterator aEnd = rFields.end();
+    OTableFields::const_iterator aIter = rFields.begin();
+    OTableFields::const_iterator aEnd = rFields.end();
     for(;aIter != aEnd;++aIter)
     {
         pEntry = *aIter;
@@ -2594,7 +2595,7 @@ bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const OUStr
 {
     bool bRet = false;
     OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-    OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.find(_sTableName);
+    OJoinTableView::OTableWindowMap::const_iterator aIter = rTabWinList.find(_sTableName);
     if(aIter != rTabWinList.end())
     {
         OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second.get());
@@ -2675,8 +2676,8 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
 bool OSelectionBrowseBox::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const
 {
     OTableFields& aFields = getFields();
-    OTableFields::iterator aIter = aFields.begin();
-    OTableFields::iterator aEnd  = aFields.end();
+    OTableFields::const_iterator aIter = aFields.begin();
+    OTableFields::const_iterator aEnd  = aFields.end();
 
     for(;aIter != aEnd;++aIter)
     {

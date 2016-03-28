@@ -324,8 +324,8 @@ void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource
     {
         Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
         // it's one of our documents ....
-        Documents::iterator aIter = m_aDocumentMap.begin();
-        Documents::iterator aEnd = m_aDocumentMap.end();
+        Documents::const_iterator aIter = m_aDocumentMap.begin();
+        Documents::const_iterator aEnd = m_aDocumentMap.end();
         for (;aIter != aEnd;++aIter )
         {
             if ( xSource == aIter->second.get() )
@@ -383,7 +383,7 @@ bool OQueryContainer::checkExistence(const OUString& _rName)
     if ( !m_bInPropertyChange )
     {
         bRet = m_xCommandDefinitions->hasByName(_rName);
-        Documents::iterator aFind = m_aDocumentMap.find(_rName);
+        Documents::const_iterator aFind = m_aDocumentMap.find(_rName);
         if ( !bRet && aFind != m_aDocumentMap.end() )
         {
             m_aDocuments.erase( ::std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));

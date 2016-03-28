@@ -459,8 +459,8 @@ void OConnection::disposing()
     OSubComponent::disposing();
     OConnectionWrapper::disposing();
 
-    connectivity::OWeakRefArray::iterator aEnd = m_aStatements.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aStatements.begin(); aEnd != i; ++i)
+    connectivity::OWeakRefArray::const_iterator aEnd = m_aStatements.end();
+    for (connectivity::OWeakRefArray::const_iterator i = m_aStatements.begin(); aEnd != i; ++i)
     {
         Reference<XComponent> xComp(i->get(),UNO_QUERY);
         ::comphelper::disposeComponent(xComp);
@@ -475,8 +475,8 @@ void OConnection::disposing()
 
     ::comphelper::disposeComponent(m_xQueries);
 
-    connectivity::OWeakRefArray::iterator aComposerEnd = m_aComposers.end();
-    for (connectivity::OWeakRefArray::iterator j = m_aComposers.begin(); aComposerEnd != j; ++j)
+    connectivity::OWeakRefArray::const_iterator aComposerEnd = m_aComposers.end();
+    for (connectivity::OWeakRefArray::const_iterator j = m_aComposers.begin(); aComposerEnd != j; ++j)
     {
         Reference<XComponent> xComp(j->get(),UNO_QUERY);
         ::comphelper::disposeComponent(xComp);
@@ -640,7 +640,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
     {
         if ( !_sServiceSpecifier.isEmpty() )
         {
-            TSupportServices::iterator aFind = m_aSupportServices.find(_sServiceSpecifier);
+            TSupportServices::const_iterator aFind = m_aSupportServices.find(_sServiceSpecifier);
             if ( aFind == m_aSupportServices.end() )
             {
                 Sequence<Any> aArgs(1);
