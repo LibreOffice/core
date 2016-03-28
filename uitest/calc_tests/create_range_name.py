@@ -39,4 +39,30 @@ def create_range_name(xContext):
     xAddBtn = xAddNameDlg.getChild("add")
     xAddBtn.executeAction("CLICK", tuple())
 
+def create_local_range_name(xContext):
+    xUITest = xContext.ServiceManager.createInstanceWithContext(
+            "org.libreoffice.uitest.UITest", xContext)
+
+    ui_test = UITest(xUITest, xContext)
+
+    ui_test.create_doc_in_start_center("calc")
+
+    ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+
+    xAddNameDlg = xUITest.getTopFocusWindow()
+
+    props = {"TEXT": "simpleRangeName"}
+    actionProps = mkPropertyValues(props)
+
+    xEdit = xAddNameDlg.getChild("edit")
+    xEdit.executeAction("TYPE", actionProps)
+
+    xScope = xAddNameDlg.getChild("scope")
+    props = {"POS": "1"}
+    scopeProps = mkPropertyValues(props)
+    xScope.executeAction("SELECT", scopeProps)
+
+    xAddBtn = xAddNameDlg.getChild("add")
+    xAddBtn.executeAction("CLICK", tuple())
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
