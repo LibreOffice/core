@@ -240,7 +240,7 @@ void OConnectionPool::invalidatePooledConnections()
             aIter->second.aConnections.clear();
 
             // look if the iterator aIter is still present in the active connection map
-            TActiveConnectionMap::iterator aActIter = m_aActiveConnections.begin();
+            TActiveConnectionMap::const_iterator aActIter = m_aActiveConnections.begin();
             for (; aActIter != m_aActiveConnections.end(); ++aActIter)
             {
                 if(aIter == aActIter->second.aPos)

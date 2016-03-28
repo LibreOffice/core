@@ -200,7 +200,7 @@ SQLRETURN OResultSet::unbind(bool _bUnbindHandle)
     if ( m_aBindVector.size() > 0 )
     {
         TVoidVector::iterator pValue = m_aBindVector.begin();
-        TVoidVector::iterator pEnd = m_aBindVector.end();
+        TVoidVector::const_iterator pEnd = m_aBindVector.end();
         for(; pValue != pEnd; ++pValue)
         {
             switch (pValue->second)
@@ -960,7 +960,7 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException, st
     if ( m_bRowDeleted )
     {
         TBookmarkPosMap::iterator aIter = m_aPosToBookmarks.begin();
-        TBookmarkPosMap::iterator aEnd = m_aPosToBookmarks.end();
+        TBookmarkPosMap::const_iterator aEnd = m_aPosToBookmarks.end();
         for (; aIter != aEnd; ++aIter)
         {
             if ( aIter->second == nPos )
@@ -1160,7 +1160,7 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  Runtim
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
+    TBookmarkPosMap::const_iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
         [this] (const TBookmarkPosMap::value_type& bookmarkPos) {
             return bookmarkPos.second == m_nRowPos;
         });
@@ -1202,7 +1202,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
         {
             m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
             OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-            TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(aBookmark);
+            TBookmarkPosMap::const_iterator aFind = m_aPosToBookmarks.find(aBookmark);
             if(aFind != m_aPosToBookmarks.end())
                 m_nRowPos = aFind->second;
             else
@@ -1666,8 +1666,8 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
             break;
         case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
         {
-            TBookmarkPosMap::iterator aIter = m_aPosToBookmarks.begin();
-            TBookmarkPosMap::iterator aEnd = m_aPosToBookmarks.end();
+            TBookmarkPosMap::const_iterator aIter = m_aPosToBookmarks.begin();
+            TBookmarkPosMap::const_iterator aEnd = m_aPosToBookmarks.end();
             for (; aIter != aEnd; ++aIter)
             {
                 if ( aIter->second == _nOffset )
@@ -1823,7 +1823,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
 
 SWORD OResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)
 {
-    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+    ::std::map<sal_Int32,SWORD>::const_iterator aFind = m_aODBCColumnTypes.find(columnIndex);
     if ( aFind == m_aODBCColumnTypes.end() )
         aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
     return aFind->second;

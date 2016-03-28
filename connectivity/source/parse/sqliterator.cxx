@@ -1680,7 +1680,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
         {
             Reference< XPropertySet> xNewColumn;
 
-            for ( OSQLTables::iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter )
+            for ( OSQLTables::const_iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter )
             {
                 if ( !aIter->second.is() )
                     continue;

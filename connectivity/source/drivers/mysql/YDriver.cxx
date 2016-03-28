@@ -74,7 +74,7 @@ namespace connectivity
             ::comphelper::disposeComponent(m_xODBCDriver);
             ::comphelper::disposeComponent(m_xNativeDriver);
             TJDBCDrivers::iterator aIter = m_aJdbcDrivers.begin();
-            TJDBCDrivers::iterator aEnd = m_aJdbcDrivers.end();
+            TJDBCDrivers::const_iterator aEnd = m_aJdbcDrivers.end();
             for ( ;aIter != aEnd;++aIter )
                 ::comphelper::disposeComponent(aIter->second);
         }
@@ -405,7 +405,7 @@ namespace connectivity
             OMetaConnection* pConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
             if ( pConnection )
             {
-                TWeakPairVector::iterator aEnd = m_aConnections.end();
+                TWeakPairVector::const_iterator aEnd = m_aConnections.end();
                 for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
                 {
                     if ( i->second.second == pConnection )
@@ -423,7 +423,7 @@ namespace connectivity
         } // if ( xTunnel.is() )
         if ( !xTab.is() )
         {
-            TWeakPairVector::iterator aEnd = m_aConnections.end();
+            TWeakPairVector::const_iterator aEnd = m_aConnections.end();
             for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
             {
                 Reference< XConnection > xTemp(i->first.get(),UNO_QUERY);

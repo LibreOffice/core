@@ -95,7 +95,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
             OUStringToOString(
                 aProgrammaticNames[i], RTL_TEXTENCODING_ASCII_US));
         bool bFound = false;
-        for (AliasMap::iterator j(m_aAliasMap.begin()); j != m_aAliasMap.end();
+        for (AliasMap::const_iterator j(m_aAliasMap.begin()); j != m_aAliasMap.end();
              ++j)
         {
             if (j->second.programmaticAsciiName == sAsciiProgrammaticName) {

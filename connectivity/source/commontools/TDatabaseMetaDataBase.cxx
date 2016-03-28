@@ -146,7 +146,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                 }
 
                 ::std::vector<ExpressionNodeSharedPtr>::iterator aIter = aConditions.begin();
-                ::std::vector<ExpressionNodeSharedPtr>::iterator aEnd = aConditions.end();
+                ::std::vector<ExpressionNodeSharedPtr>::const_iterator aEnd = aConditions.end();
                 for (; aIter != aEnd; ++aIter)
                 {
                     if ( (*aIter)->evaluate(aRow)->getValue().getBool() )

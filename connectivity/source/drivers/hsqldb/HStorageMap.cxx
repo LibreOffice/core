@@ -191,7 +191,7 @@ namespace connectivity
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
-            TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
+            TStorages::const_iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                 [&_xStorage] (const TStorages::value_type& storage) {
                     return storage.second.mapStorage() == _xStorage;
                 });
@@ -208,7 +208,7 @@ namespace connectivity
         {
             TStorages::mapped_type aRet;
             TStorages& rMap = lcl_getStorageMap();
-            TStorages::iterator aFind = rMap.find(_sKey);
+            TStorages::const_iterator aFind = rMap.find(_sKey);
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
                 aRet = aFind->second;
@@ -222,7 +222,7 @@ namespace connectivity
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
-            TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
+            TStorages::const_iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                 [&_xStorage] (const TStorages::value_type& storage) {
                     return storage.second.mapStorage() == _xStorage;
                 });
@@ -342,11 +342,11 @@ namespace connectivity
         {
             TStreamMap::mapped_type  pRet;
             TStorages& rMap = lcl_getStorageMap();
-            TStorages::iterator aFind = rMap.find(jstring2ustring(env,key));
+            TStorages::const_iterator aFind = rMap.find(jstring2ustring(env,key));
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
             {
-                TStreamMap::iterator aStreamFind = aFind->second.streams.find(removeURLPrefix(jstring2ustring(env,name),aFind->second.url));
+                TStreamMap::const_iterator aStreamFind = aFind->second.streams.find(removeURLPrefix(jstring2ustring(env,name),aFind->second.url));
                 if ( aStreamFind != aFind->second.streams.end() )
                     pRet = aStreamFind->second;
             }

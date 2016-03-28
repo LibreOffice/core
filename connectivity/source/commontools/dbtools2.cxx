@@ -439,7 +439,7 @@ namespace
 
                         ColumnInformationMap aInfo(_bCase);
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
-                        ColumnInformationMap::iterator aIter = aInfo.begin();
+                        ColumnInformationMap::const_iterator aIter = aInfo.begin();
                         if ( aIter != aInfo.end() )
                         {
                             bAutoIncrement  = aIter->second.first.first;

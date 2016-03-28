@@ -456,7 +456,7 @@ namespace connectivity
 
         Reference< XTablesSupplier > xTab;
 
-        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
         for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
         {
             if ( i->second.second.first.get() == connection.get() )
@@ -594,7 +594,7 @@ namespace connectivity
     void ODriverDelegator::shutdownConnections()
     {
         m_bInShutDownConnections = true;
-        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
         for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
         {
             try
@@ -612,7 +612,7 @@ namespace connectivity
 
     void ODriverDelegator::flushConnections()
     {
-        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
         for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
         {
             try
@@ -636,7 +636,7 @@ namespace connectivity
         OUString sKey = StorageContainer::getRegisteredKey(xStorage);
         if ( !sKey.isEmpty() )
         {
-            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(), m_aConnections.end(),
+            TWeakPairVector::const_iterator i = ::std::find_if(m_aConnections.begin(), m_aConnections.end(),
                 [&sKey] (const TWeakPairVector::value_type& conn) {
                     return conn.second.first == sKey;
                 });

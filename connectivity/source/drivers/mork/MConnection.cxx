@@ -151,7 +151,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
     // check that we can retrieve the tables:
     MorkTableMap *Tables = m_pBook->getTables( defaultScope );
-    MorkTableMap::Map::iterator tableIter;
+    MorkTableMap::Map::const_iterator tableIter;
     if (Tables)
     {
         // Iterate all tables

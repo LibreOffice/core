@@ -632,7 +632,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
         const OUString sDriverFactoryName = m_aDriverConfig.getDriverFactoryName(_rURL);
 
         EqualDriverAccessToName aEqual(sDriverFactoryName);
-        DriverAccessArray::iterator aFind = ::std::find_if(m_aDriversBS.begin(),m_aDriversBS.end(),aEqual);
+        DriverAccessArray::const_iterator aFind = ::std::find_if(m_aDriversBS.begin(),m_aDriversBS.end(),aEqual);
         if ( aFind == m_aDriversBS.end() )
         {
             // search all bootstrapped drivers
@@ -660,7 +660,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
     if ( !xReturn.is() )
     {
         // no -> search the runtime drivers
-        DriverCollection::iterator aPos = ::std::find_if(
+        DriverCollection::const_iterator aPos = ::std::find_if(
             m_aDriversRT.begin(),       // begin of search range
             m_aDriversRT.end(),         // end of search range
             [&_rURL] (const DriverCollection::value_type& element) {

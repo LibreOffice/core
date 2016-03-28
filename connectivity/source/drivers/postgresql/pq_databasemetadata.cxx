@@ -1339,7 +1339,7 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
 //         }
         // base type
         Statics &statics = getStatics();
-        BaseTypeMap::iterator ii = statics.baseTypeMap.find( typeName );
+        BaseTypeMap::const_iterator ii = statics.baseTypeMap.find( typeName );
         if( ii != statics.baseTypeMap.end() )
         {
             ret = ii->second;
@@ -1808,7 +1808,7 @@ static void columnMetaData2DatabaseTypeDescription(
     }
 
 
-    std::vector< std::vector<Any> >::iterator ii = vec.begin();
+    std::vector< std::vector<Any> >::const_iterator ii = vec.begin();
     OUString lastTableOid;
     sal_Int32 index = 0;
     std::vector< std::vector< Any > > ret( vec.size() );

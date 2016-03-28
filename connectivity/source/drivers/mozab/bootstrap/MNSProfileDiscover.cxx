@@ -73,7 +73,7 @@ namespace connectivity
             IniSectionMap &mAllSection = parser.getAllSection();
 
             IniSectionMap::iterator iBegin = mAllSection.begin();
-            IniSectionMap::iterator iEnd = mAllSection.end();
+            IniSectionMap::const_iterator iEnd = mAllSection.end();
             for(;iBegin != iEnd;++iBegin)
             {
                 ini_Section *aSection = &(*iBegin).second;
@@ -166,7 +166,7 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
             list.realloc(static_cast<sal_Int32>(m_Product.mProfileList.size()));
             sal_Int32 i=0;
-            for(ProfileList::iterator itor=m_Product.mProfileList.begin();
+            for(ProfileList::const_iterator itor=m_Product.mProfileList.begin();
                 itor != m_Product.mProfileList.end();
                 ++itor)
             {

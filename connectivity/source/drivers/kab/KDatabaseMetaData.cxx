@@ -891,7 +891,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
         }
 
         ::KABC::Field::List aFields = ::KABC::Field::allFields();
-        ::KABC::Field::List::iterator aField;
+        ::KABC::Field::List::const_iterator aField;
 
         for (   aField = aFields.begin();
                 aField != aFields.end();

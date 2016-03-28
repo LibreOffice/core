@@ -58,7 +58,7 @@ sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
         return KAB_FIELD_REVISION;
 
     ::KABC::Field::List aFields = ::KABC::Field::allFields();
-    ::KABC::Field::List::iterator aField;
+    ::KABC::Field::List::const_iterator aField;
     sal_uInt32 nResult;
 
     for (   aField = aFields.begin(), nResult = KAB_DATA_FIELDS;

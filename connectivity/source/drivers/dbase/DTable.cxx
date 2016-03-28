@@ -2523,7 +2523,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 
 
     sal_Int32 nCurPos;
-    OValueRefVector::Vector::iterator aIter;
+    OValueRefVector::Vector::const_iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
     {
         bool bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
