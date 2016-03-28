@@ -1070,7 +1070,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 _rControlValue >>= sValue;
                 ::std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_TYPE_CONST),aList);
-                ::std::vector< OUString >::iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
                 if ( aFind != aList.end() )
                     aPropertyValue <<= static_cast<sal_uInt32>(aFind - aList.begin());
             }
@@ -1084,7 +1084,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 _rControlValue >>= sValue;
                 ::std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_VERTICAL_ALIGN_CONST),aList);
-                ::std::vector< OUString >::iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
                 if ( aFind != aList.end() )
                     aPropertyValue <<= static_cast<style::VerticalAlignment>(aFind - aList.begin());
             }
@@ -1095,7 +1095,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 _rControlValue >>= sValue;
                 ::std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_PARAADJUST_CONST),aList);
-                ::std::vector< OUString >::iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
                 if ( aFind != aList.end() )
                     aPropertyValue <<= static_cast<sal_Int16>(aFind - aList.begin());
             }
