@@ -11,17 +11,20 @@
 #define INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 
 #include <vcl/dialog.hxx>
+#include <sfx2/dllapi.h>
 
 class Edit;
 class FixedText;
 class PushButton;
 class Button;
 
-class InputDialog : public ModalDialog
+class SFX2_DLLPUBLIC InputDialog : public ModalDialog
 {
 public:
     InputDialog (const OUString &labelText, vcl::Window *pParent = nullptr);
-    OUString getEntryText () const;
+    OUString GetEntryText () const;
+    void SetEntryText( OUString const & sStr );
+    void HideHelpBtn();
     virtual ~InputDialog();
     virtual void dispose() override;
 
@@ -35,6 +38,7 @@ private:
     VclPtr<FixedText>  m_pLabel;
     VclPtr<PushButton> m_pOK;
     VclPtr<PushButton> m_pCancel;
+    VclPtr<PushButton> m_pHelp;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX

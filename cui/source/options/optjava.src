@@ -35,4 +35,9 @@ String RID_SVXSTR_OPTIONS_RESTART
     Text [ en-US ] = "Please restart %PRODUCTNAME now so the new or modified values can take effect." ;
 };
 
+String RID_SVXSTR_JAVA_START_PARAM
+{
+    Text [ en-US ] = "Edit Parameter" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
