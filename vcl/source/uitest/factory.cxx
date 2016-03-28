@@ -10,6 +10,7 @@
 #include "uitest/factory.hxx"
 #include "uitest/uiobject_impl.hxx"
 
+#include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
@@ -72,6 +73,13 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             ListBox* pListBox = dynamic_cast<ListBox*>(pWindow);
             assert(pListBox);
             return std::unique_ptr<UIObject>(new ListBoxUIObject(pListBox));
+        }
+        break;
+        case WINDOW_TABPAGE:
+        {
+            //TabPage* pTabPage = dynamic_cast<TabPage*>(pWindow);
+            //assert(pTabPage);
+         //   return std::unique_ptr<UIObject>(new TabPageUIObject(pTabPage));
         }
         break;
         default:

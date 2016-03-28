@@ -13,6 +13,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 
+class TabPage;
+
 class WindowUIObject : public UIObject
 {
     VclPtr<vcl::Window> mxWindow;
@@ -109,6 +111,26 @@ public:
             const StringMap& rParameters) override;
 
     virtual StringMap get_state() override;
+
+    virtual UIObjectType get_type() const override;
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class TabPageUIObject : public WindowUIObject
+{
+private:
+    VclPtr<TabPage> mxTabPage;
+public:
+    TabPageUIObject(VclPtr<TabPage> xTabPage);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
 
     virtual UIObjectType get_type() const override;
 
