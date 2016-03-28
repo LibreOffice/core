@@ -34,7 +34,8 @@
   <implementation name="com.sun.star.comp.MemoryStream">
     <service name="com.sun.star.comp.MemoryStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.SequenceInputStreamService">
+  <implementation name="com.sun.star.comp.SequenceInputStreamService"
+      constructor="com_sun_star_comp_SequenceInputStreamService">
     <service name="com.sun.star.io.SequenceInputStream"/>
   </implementation>
   <implementation name="com.sun.star.comp.SequenceOutputStreamService">
