@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_b5782391",
+        "filename": "sw/inc/docary.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-28T19:54:06Z",
+      "side": 1,
+      "message": "This is obviously completely wrong and most likely causing the crash.",
+      "range": {
+        "startLine": 159,
+        "startChar": 7,
+        "endLine": 159,
+        "endChar": 8
+      },
+      "revId": "15babce8dfc934ada3fb28b969885b2c0394698e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_156e4fc9",
+        "filename": "sw/inc/docary.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-28T19:54:06Z",
+      "side": 1,
+      "message": "Actual this here is causing the crash.",
+      "range": {
+        "startLine": 165,
+        "startChar": 28,
+        "endLine": 165,
+        "endChar": 34
+      },
+      "revId": "15babce8dfc934ada3fb28b969885b2c0394698e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
