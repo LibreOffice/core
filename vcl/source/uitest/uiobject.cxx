@@ -464,6 +464,9 @@ ListBoxUIObject::ListBoxUIObject(VclPtr<ListBox> xListBox):
 void ListBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
+    if (!mxListBox->IsEnabled() || !mxListBox->IsReallyVisible())
+        return;
+
     if (rAction == "SELECT")
     {
         bool bSelect = true;
