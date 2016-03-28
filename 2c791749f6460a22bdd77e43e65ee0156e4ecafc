@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_5a2594c0",
+        "filename": "svtools/source/graphic/descriptor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-28T14:55:42Z",
+      "side": 1,
+      "message": "please make this GraphicType\u003d1, just in case something somewhere depends on it (probably not, but lets be safe)",
+      "revId": "2c791749f6460a22bdd77e43e65ee0156e4ecafc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
