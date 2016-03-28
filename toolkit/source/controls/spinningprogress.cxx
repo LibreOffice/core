@@ -63,7 +63,7 @@ protected:
                 {
                     Throbber::IMAGES_16_PX, Throbber::IMAGES_32_PX, Throbber::IMAGES_64_PX
                 };
-                for ( size_t i=0; i < sizeof( aImageSets ) / sizeof( aImageSets[0] ); ++i )
+                for ( size_t i=0; i < SAL_N_ELEMENTS(aImageSets); ++i )
                 {
                     const ::std::vector< OUString > aDefaultURLs( Throbber::getDefaultImageURLs( aImageSets[i] ) );
                     const Sequence< OUString > aImageURLs( &aDefaultURLs[0], aDefaultURLs.size() );

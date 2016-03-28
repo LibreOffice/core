@@ -109,7 +109,7 @@ namespace svx
                         { OUString(FMURL_FORM_APPLY_FILTER),    SID_FM_FORM_FILTERED,       FormFeature::ToggleApplyFilter },
                         { OUString(FMURL_FORM_REMOVE_FILTER),   SID_FM_REMOVE_FILTER_SORT,  FormFeature::RemoveFilterAndSort }
                     };
-                    for ( size_t i=0; i<sizeof(aDescriptions)/sizeof(aDescriptions[0]); ++i )
+                    for ( size_t i=0; i<SAL_N_ELEMENTS(aDescriptions); ++i )
                         s_aFeatureDescriptions.push_back( aDescriptions[i] );
                 }
             };

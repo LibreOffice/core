@@ -1564,7 +1564,7 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
     };
 
     bool bChanged = false;
-    for (unsigned i = 0; i != sizeof vIds / sizeof vIds[0]; ++i)
+    for (unsigned i = 0; i != SAL_N_ELEMENTS(vIds); ++i)
     {
         Color const aColor = aConfig.GetColorValue(vIds[i].eEntry).nColor;
         Color& rMyColor = aColors[vIds[i].eTokenType];

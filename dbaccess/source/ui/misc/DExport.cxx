@@ -337,7 +337,7 @@ void ODatabaseExport::insertValueIntoColumn()
                             {
                                 Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
                                 Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
-                                sal_Int16 nFormats[] = {
+                                const sal_Int16 nFormats[] = {
                                     NumberFormat::DATETIME
                                     ,NumberFormat::DATE
                                     ,NumberFormat::TIME
@@ -345,7 +345,7 @@ void ODatabaseExport::insertValueIntoColumn()
                                     ,NumberFormat::NUMBER
                                     ,NumberFormat::LOGICAL
                                 };
-                                for (size_t i = 0; i < sizeof(nFormats)/sizeof(nFormats[0]); ++i)
+                                for (size_t i = 0; i < SAL_N_ELEMENTS(nFormats); ++i)
                                 {
                                     try
                                     {

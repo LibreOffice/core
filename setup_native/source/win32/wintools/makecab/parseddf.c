@@ -252,7 +252,7 @@ DDFERR parseCmd(char * line, PCCAB ccab, char * token)
 
         for (p = token ; *p; ++p) *p = tolower(*p);
         if (isdigit(token[strlen(token)-1])) token[strlen(token)-1] = '\0';
-        for (i = 0; i < (sizeof(VARS)/sizeof(VARS[0])); i++)
+        for (i = 0; i < SAL_N_ELEMENTS(VARS); i++)
         {
             if (strcmp(token, VARS[i]) == 0)
             {

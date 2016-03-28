@@ -193,7 +193,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                     INetProtocol::Https, INetProtocol::Javascript,
                     INetProtocol::Ldap
                 };
-            for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
+            for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(s_aQuickHelpSupported); ++i)
                 if (s_aQuickHelpSupported[i] == aProtocol)
                 {
                     aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), INetURLObject::DECODE_UNAMBIGUOUS);

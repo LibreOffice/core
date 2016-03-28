@@ -2167,7 +2167,7 @@ style::NumberingType::
     CHARS_CYRILLIC_LOWER_LETTER_N_SR*/
 
         };
-        for( sal_uInt32 nNum = 0; nNum < sizeof(aNumberingPairs)/sizeof( NumberingPairs ); ++nNum)
+        for( sal_uInt32 nNum = 0; nNum < SAL_N_ELEMENTS(aNumberingPairs); ++nNum)
         {
             if( /*sCommand*/sNumber.equalsAscii(aNumberingPairs[nNum].cWordName ))
             {
@@ -3098,8 +3098,7 @@ void DomainMapper_Impl::handleAuthor
         //search for a field mapping
         OUString sFieldServiceName;
         sal_uInt16 nMap = 0;
-        for( ; nMap < sizeof(aDocProperties) / sizeof(DocPropertyMap);
-            ++nMap )
+        for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
         {
             if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
             {

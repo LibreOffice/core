@@ -541,7 +541,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
             m_aNewBtn.get()
         };
 
-        for (size_t i=0; i < (sizeof (pWindows) / sizeof(pWindows[0])); ++i)
+        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
         {
             if (pWindows[i]->GetPosPixel().X() < 0)
                 pWindows[i]->SetSizePixel(Size(0, nH));
@@ -812,7 +812,7 @@ void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
         case StateChangedType::Mirroring:
         {
             bool bIsRTLEnabled = IsRTLEnabled();
-            for (size_t i=0; i < (sizeof (pWindows) / sizeof(pWindows[0])); ++i)
+            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
                 pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
         break;
@@ -826,7 +826,7 @@ void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
             if (IsControlFont())
                 aFont.Merge(GetControlFont());
 
-            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
             {
                 pWindows[i]->SetZoom(aZoom);
                 pWindows[i]->SetZoomedPointFont(*pWindows[i], aFont);

@@ -1111,7 +1111,7 @@ int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt3
         _this->rawdata = nullptr;
     }
 
-    for(i=0; i < sizeof(vtable2)/sizeof(*vtable2); i++) {
+    for(i=0; i < SAL_N_ELEMENTS(vtable2); i++) {
         if (_this->tag == vtable2[i].tag) {
             return vtable2[i].f(_this, ptr, len, tag);
         }
@@ -1511,7 +1511,7 @@ extern "C"
 
         if (_this->rawdata) free(_this->rawdata);
 
-        for(i=0; i < sizeof(vcl::vtable1)/sizeof(*vcl::vtable1); i++) {
+        for(i=0; i < SAL_N_ELEMENTS(vcl::vtable1); i++) {
             if (_this->tag == vcl::vtable1[i].tag) {
                 vcl::vtable1[i].f(_this);
                 return;

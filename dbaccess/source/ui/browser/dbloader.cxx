@@ -152,11 +152,11 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     m_aURL      = rURL;
     m_aArgs     = rArgs;
 
-    struct ServiceNameToImplName
+    const struct ServiceNameToImplName
     {
-        const sal_Char*     pAsciiServiceName;
-        const sal_Char*     pAsciiImplementationName;
-        ServiceNameToImplName( const sal_Char* _pService, const sal_Char* _pImpl )
+        const char*     pAsciiServiceName;
+        const char*     pAsciiImplementationName;
+        ServiceNameToImplName( const char* _pService, const char* _pImpl )
             :pAsciiServiceName( _pService )
             ,pAsciiImplementationName( _pImpl )
         {
@@ -174,7 +174,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     Reference< XController2 > xController;
 
     const OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aImplementations ); ++i )
     {
         if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
         {

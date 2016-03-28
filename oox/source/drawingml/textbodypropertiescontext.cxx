@@ -49,7 +49,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
     // ST_Coordinate
     OUString sValue;
     sal_Int32 aIns[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
-    for( sal_Int32 i = 0; i < ( sal_Int32 )( sizeof( aIns ) / sizeof( sal_Int32 ) ); i++)
+    for( sal_Int32 i = 0; i < ( sal_Int32 ) SAL_N_ELEMENTS( aIns ); i++)
     {
         sValue = rAttribs.getString( aIns[i] ).get();
         if( !sValue.isEmpty() )

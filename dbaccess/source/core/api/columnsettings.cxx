@@ -126,7 +126,7 @@ namespace dbaccess
                 OUString sName;
                 sal_Int32       nHandle;
             };
-            PropertyDescriptor aProps[] =
+            const PropertyDescriptor aProps[] =
             {
                 { OUString(PROPERTY_ALIGN),            PROPERTY_ID_ALIGN },
                 { OUString(PROPERTY_NUMBERFORMAT),     PROPERTY_ID_NUMBERFORMAT },
@@ -138,7 +138,7 @@ namespace dbaccess
                 { OUString(PROPERTY_HIDDEN),           PROPERTY_ID_HIDDEN }
             };
 
-            for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
             {
                 if ( xPSI->hasPropertyByName( aProps[i].sName ) )
                     if ( !isDefaulted( aProps[i].nHandle, _rxColumn->getPropertyValue( aProps[i].sName ) ) )

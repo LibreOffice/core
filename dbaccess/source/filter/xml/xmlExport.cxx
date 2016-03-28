@@ -347,7 +347,7 @@ void ODBExport::exportDataSource()
                 }
             };
 
-            PropertyMap aTokens[] =
+            const PropertyMap aTokens[] =
             {
                 PropertyMap( INFO_TEXTFILEHEADER,       XML_IS_FIRST_ROW_HEADER_LINE,       s_sTrue     ),
                 PropertyMap( INFO_SHOWDELETEDROWS,      XML_SHOW_DELETED,                   s_sFalse    ),
@@ -364,7 +364,7 @@ void ODBExport::exportDataSource()
             };
 
             bool bIsXMLDefault = false;
-            for ( size_t i=0; i < sizeof( aTokens ) / sizeof( aTokens[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aTokens ); ++i )
             {
                 if ( pProperties->Name == aTokens[i].sPropertyName )
                 {
@@ -498,7 +498,7 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
         ,XML_MAX_ROW_COUNT
         ,XML_SUPPRESS_VERSION_COLUMNS
     };
-    for (size_t i = 0; i< sizeof(pSettings)/sizeof(pSettings[0]); ++i)
+    for (size_t i = 0; i< SAL_N_ELEMENTS(pSettings); ++i)
     {
         TSettingsMap::const_iterator aFind = _aSettings.find(pSettings[i]);
         if ( aFind != _aSettings.end() )
@@ -531,7 +531,7 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
         ,XML_IS_FIRST_ROW_HEADER_LINE
         ,XML_PARAMETER_NAME_SUBSTITUTION
     };
-    for (size_t i = 0; i< sizeof(pSettings)/sizeof(pSettings[0]); ++i)
+    for (size_t i = 0; i< SAL_N_ELEMENTS(pSettings); ++i)
     {
         TSettingsMap::const_iterator aFind = _aSettings.find(pSettings[i]);
         if ( aFind != _aSettings.end() )
@@ -1132,7 +1132,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         };
 
         ::std::vector< XMLPropertyState > aPropertyStates;
-        for (size_t i = 0 ; i < sizeof(pExportHelper)/sizeof(pExportHelper[0]); ++i)
+        for (size_t i = 0 ; i < SAL_N_ELEMENTS(pExportHelper); ++i)
         {
             aPropertyStates = pExportHelper[i].first->Filter(_xProp);
             if ( !aPropertyStates.empty() )
@@ -1173,11 +1173,11 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     }
     else
     { // here I know I have a column
-        TExportPropMapperPair pExportHelper[] = {
+        const TExportPropMapperPair pExportHelper[] = {
              TExportPropMapperPair(m_xColumnExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_COLUMN ))
             ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
         };
-        for (size_t i = 0 ; i < sizeof(pExportHelper)/sizeof(pExportHelper[0]); ++i)
+        for (size_t i = 0 ; i < SAL_N_ELEMENTS(pExportHelper); ++i)
         {
             ::std::vector< XMLPropertyState > aPropStates = pExportHelper[i].first->Filter( _xProp );
             if ( !aPropStates.empty() )

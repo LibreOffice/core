@@ -540,7 +540,7 @@ namespace
                                 ,{ITEMID_LANGUAGE_ASIAN,OUString(PROPERTY_CHARLOCALEASIAN)}
                                 ,{ITEMID_LANGUAGE_COMPLEX,OUString(PROPERTY_CHARLOCALECOMPLEX)}
         };
-        for(size_t k = 0; k < sizeof(pItems)/sizeof(pItems[0]);++k)
+        for(size_t k = 0; k < SAL_N_ELEMENTS(pItems); ++k)
         {
             if ( SfxItemState::SET == _rItemSet.GetItemState( pItems[k].nWhich,true,&pItem) && dynamic_cast< const SvxLanguageItem *>( pItem ) !=  nullptr)
             {
@@ -730,7 +730,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     }
 
     SfxItemPool::Free(pPool);
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
     return bSuccess;

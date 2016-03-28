@@ -2171,7 +2171,7 @@ struct SvxStyleToolBoxControl::Impl
                 };
                 Reference<container::XNameAccess> xCellStyles;
                 xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
-                for( sal_uInt32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
+                for( sal_uInt32 nStyle = 0; nStyle < SAL_N_ELEMENTS(aCalcStyles); ++nStyle )
                 {
                     try
                     {
