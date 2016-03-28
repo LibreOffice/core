@@ -36,7 +36,7 @@ generate_tag: $(foreach m,$(gbuild_modules), $(BUILDDIR)/docs/$(m).tag)
 	@echo "all tag generated"
 
 generate_doc: $(foreach m,$(gbuild_modules), $(BUILDDIR)/docs/$(m).doc)
-	@$(SRCDIR)/solenv/bin/mkdoc_portal.sh "$(SRCDIR)" "$(BUILDDIR)/docs"
+	@$(SRCDIR)/solenv/bin/mkdocs_portal.sh "$(SRCDIR)" "$(BUILDDIR)/docs"
 	@echo "Done."
 
 init_doxygen:
