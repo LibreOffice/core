@@ -13,6 +13,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/spin.hxx>
 
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
 {
@@ -88,6 +89,13 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             //TabPage* pTabPage = dynamic_cast<TabPage*>(pWindow);
             //assert(pTabPage);
          //   return std::unique_ptr<UIObject>(new TabPageUIObject(pTabPage));
+        }
+        break;
+        case WINDOW_SPINBUTTON:
+        {
+            SpinButton* pSpinButton = dynamic_cast<SpinButton*>(pWindow);
+            assert(pSpinButton);
+            return std::unique_ptr<UIObject>(new SpinUIObject(pSpinButton));
         }
         break;
         default:
