@@ -23,6 +23,9 @@ UIObjectUnoObj::~UIObjectUnoObj()
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(const OUString& rID)
     throw (css::uno::RuntimeException, std::exception)
 {
+    if (!mpObj)
+        throw css::uno::RuntimeException();
+
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = mpObj->get_child(rID);
     return new UIObjectUnoObj(std::move(pObj));
@@ -31,6 +34,9 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
 void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
     throw (css::uno::RuntimeException, std::exception)
 {
+    if (!mpObj)
+        throw css::uno::RuntimeException();
+
     SolarMutexGuard aGuard;
     StringMap aMap;
     for (sal_Int32 i = 0, n = rPropValues.getLength(); i < n; ++i)
@@ -47,6 +53,9 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     throw (css::uno::RuntimeException, std::exception)
 {
+    if (!mpObj)
+        throw css::uno::RuntimeException();
+
     SolarMutexGuard aGuard;
     StringMap aMap = mpObj->get_state();
     css::uno::Sequence<css::beans::PropertyValue> aProps(aMap.size());
