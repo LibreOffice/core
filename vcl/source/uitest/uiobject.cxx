@@ -161,6 +161,8 @@ StringMap WindowUIObject::get_state()
             aPos += aParentPos;
     }
     aMap["AbsPosition"] = to_string(aPos);
+    aMap["Text"] = mxWindow->GetText();
+    aMap["DisplayText"] = mxWindow->GetDisplayText();
 
     return aMap;
 }
