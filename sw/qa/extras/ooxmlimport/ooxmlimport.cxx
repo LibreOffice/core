@@ -1855,7 +1855,7 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
 #ifdef MACOSX
     // FIXME: The assert below fails wildly on a Retina display
     NSScreen* nsScreen = [ NSScreen mainScreen ];
-    CGFloat scaleFactor = [ nsScreen userSpaceScaleFactor ]; // for instance on the 5K Retina iMac,
+    CGFloat scaleFactor = [ nsScreen backingScaleFactor ];   // for instance on the 5K Retina iMac,
                                                              // [NSScreen mainScreen].frame.size is 2560x1440,
                                                              // while real display size is 5120x2880
     if ( nsScreen.frame.size.width * scaleFactor > 4000 )
