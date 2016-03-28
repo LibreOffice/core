@@ -718,6 +718,10 @@ namespace
                                 OTableFields& _rFieldList,
                                 bool bMulti )
     {
+        Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
+        if(!xConnection.is())
+            return false;
+
         OUString aFieldName,aCriteria,aWhereStr,aHavingStr,aWork/*,aOrderStr*/;
         // print line by line joined with AND
         sal_uInt16 nMaxCriteria = 0;
@@ -727,9 +731,6 @@ namespace
         {
             nMaxCriteria = ::std::max<sal_uInt16>(nMaxCriteria,(sal_uInt16)(*aIter)->GetCriteria().size());
         }
-        Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
-        if(!xConnection.is())
-            return false;
         try
         {
             const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
@@ -1372,11 +1373,11 @@ namespace
             const  ::connectivity::OSQLParseNode* pValueExp = pCondition->getChild(0);
             if (SQL_ISRULE(pValueExp, column_ref ) )
             {
-                OUString aColumnName;
                 OUString aCondition;
                 Reference< XConnection> xConnection = rController.getConnection();
                 if ( xConnection.is() )
                 {
+                    OUString aColumnName;
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // the international doesn't matter I have a string
                     pCondition->parseNodeToPredicateStr(aCondition,
@@ -1504,13 +1505,13 @@ namespace
                      SQL_ISRULEOR3(pFunction, extract_exp, fold, char_substring_fct)      ||
                      SQL_ISRULEOR2(pFunction,length_exp,char_value_fct),
                    "Illegal call!");
-        OUString aCondition;
-        OTableFieldDescRef aDragLeft = new OTableFieldDesc();
 
-        OUString aColumnName;
         Reference< XConnection> xConnection = rController.getConnection();
         if(xConnection.is())
         {
+            OUString aCondition;
+            OUString aColumnName;
+            OTableFieldDescRef aDragLeft = new OTableFieldDesc();
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             pCondition->parseNodeToPredicateStr(aCondition,
                                                 xConnection,
@@ -1711,12 +1712,12 @@ namespace
         {
             OUString aName,aCondition;
 
-            ::connectivity::OSQLParseNode *pLhs = pCondition->getChild(0);
-            ::connectivity::OSQLParseNode *pRhs = pCondition->getChild(2);
             // Field name
             Reference< XConnection> xConnection = rController.getConnection();
             if(xConnection.is())
             {
+                ::connectivity::OSQLParseNode *pLhs = pCondition->getChild(0);
+                ::connectivity::OSQLParseNode *pRhs = pCondition->getChild(2);
                 pLhs->parseNodeToStr(aName,
                                      xConnection,
                                      &rController.getParser().getContext(),
