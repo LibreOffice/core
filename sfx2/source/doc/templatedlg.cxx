@@ -9,7 +9,7 @@
 
 #include <sfx2/templatedlg.hxx>
 
-#include "inputdlg.hxx"
+#include <sfx2/inputdlg.hxx>
 #include "templatesearchview.hxx"
 #include "templatesearchviewitem.hxx"
 
@@ -1266,7 +1266,7 @@ void SfxTemplateManagerDlg::OnFolderNew()
 
     if (ret)
     {
-        OUString aName = dlg->getEntryText();
+        OUString aName = dlg->GetEntryText();
 
         mpCurView->createRegion(aName);
     }
@@ -1331,7 +1331,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 
     if (aDlg->Execute())
     {
-        OUString aName = aDlg->getEntryText();
+        OUString aName = aDlg->GetEntryText();
 
         if (!aName.isEmpty())
         {
@@ -1471,7 +1471,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
 
         if (ret)
         {
-            OUString aName = dlg->getEntryText();
+            OUString aName = dlg->GetEntryText();
 
             if (!aName.isEmpty())
                 nItemId = mpLocalView->createRegion(aName);
@@ -1519,7 +1519,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
 
         if (ret)
         {
-            OUString aName = dlg->getEntryText();
+            OUString aName = dlg->GetEntryText();
 
             if (!aName.isEmpty())
                 nItemId = mpLocalView->createRegion(aName);
@@ -1573,7 +1573,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
         if (ret)
         {
-            OUString aName = dlg->getEntryText();
+            OUString aName = dlg->GetEntryText();
 
             if (!aName.isEmpty())
                 nItemId = mpLocalView->createRegion(aName);
