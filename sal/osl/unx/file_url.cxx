@@ -257,12 +257,16 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     if( '~' == ustrSystemPath->buffer[0] )
     {
         /* check if another user is specified */
-        if( ( 1 == ustrSystemPath->length ) || ( '/' == ustrSystemPath->buffer[1] ) )
+        if( ( 1 == ustrSystemPath->length ) ||
+            ( '/' == ustrSystemPath->buffer[1] ) )
         {
             /* osl_getHomeDir returns file URL */
             oslSecurity pSecurity = osl_getCurrentSecurity();
             osl_getHomeDir( pSecurity , &pTmp );
             osl_freeSecurityHandle( pSecurity );
+
+            if (!pTmp)
+                return osl_File_E_INVAL;
 
             /* remove "file://" prefix */
             rtl_uString_newFromStr_WithLength( &pTmp, pTmp->buffer + 7, pTmp->length - 7 );
@@ -270,7 +274,6 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
             /* replace '~' in original string */
             rtl_uString_newReplaceStrAt( &pTmp, ustrSystemPath, 0, 1, pTmp );
         }
-
         else
         {
             /* FIXME: replace ~user with users home directory */
