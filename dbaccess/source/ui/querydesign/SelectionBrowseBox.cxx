@@ -173,7 +173,8 @@ void OSelectionBrowseBox::initialize()
     if(xConnection.is())
     {
         const IParseContext& rContext = static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext();
-        IParseContext::InternationalKeyCode eFunctions[] = { IParseContext::InternationalKeyCode::Avg,IParseContext::InternationalKeyCode::Count,IParseContext::InternationalKeyCode::Max
+        const IParseContext::InternationalKeyCode eFunctions[] = {
+            IParseContext::InternationalKeyCode::Avg,IParseContext::InternationalKeyCode::Count,IParseContext::InternationalKeyCode::Max
             ,IParseContext::InternationalKeyCode::Min,IParseContext::InternationalKeyCode::Sum
             ,IParseContext::InternationalKeyCode::Every
             ,IParseContext::InternationalKeyCode::Any
@@ -190,7 +191,7 @@ void OSelectionBrowseBox::initialize()
         OUString sGroup = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';') - 1, ';');
         m_aFunctionStrings = m_aFunctionStrings.getToken(0, ';');
 
-        for (size_t i = 0; i < sizeof (eFunctions) / sizeof (eFunctions[0]); ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
         {
             m_aFunctionStrings += ";";
             m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunctions[i]),
@@ -341,7 +342,7 @@ void OSelectionBrowseBox::Init()
     Size aHeight;
     const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
 
-    for (sal_Size i = 0; i < sizeof (pControls) / sizeof (pControls[0]); ++i)
+    for (sal_Size i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         const Size aTemp(pControls[i]->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )

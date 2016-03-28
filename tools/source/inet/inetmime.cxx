@@ -2046,7 +2046,7 @@ struct EncodingEntry
 // The source for the following table is <ftp://ftp.iana.org/in-notes/iana/
 // assignments/character-sets> as of Jan, 21 2000 12:46:00, unless  otherwise
 // noted:
-EncodingEntry const aEncodingMap[]
+static EncodingEntry const aEncodingMap[]
     = { { "US-ASCII", RTL_TEXTENCODING_ASCII_US },
         { "ANSI_X3.4-1968", RTL_TEXTENCODING_ASCII_US },
         { "ISO-IR-6", RTL_TEXTENCODING_ASCII_US },
@@ -2226,8 +2226,7 @@ EncodingEntry const aEncodingMap[]
 rtl_TextEncoding getCharsetEncoding(sal_Char const * pBegin,
                                               sal_Char const * pEnd)
 {
-    for (sal_Size i = 0; i < sizeof aEncodingMap / sizeof (EncodingEntry);
-         ++i)
+    for (sal_Size i = 0; i < SAL_N_ELEMENTS(aEncodingMap); ++i)
         if (equalIgnoreCase(pBegin, pEnd, aEncodingMap[i].m_aName))
             return aEncodingMap[i].m_eEncoding;
     return RTL_TEXTENCODING_DONTKNOW;

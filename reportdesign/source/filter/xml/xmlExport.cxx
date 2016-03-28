@@ -1566,8 +1566,8 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     sFunctionName = sFunction + "_" + sExpression;
                 if ( !sFunction.isEmpty() )
                 {
-                    sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
-                    for(sal_uInt32 j= 0; j < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++j)
+                    const sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
+                    for(sal_uInt32 j= 0; j < SAL_N_ELEMENTS(pReplaceChars);++j)
                         sFunctionName = sFunctionName.replace(pReplaceChars[j],'_');
 
                     xFunction->setName(sFunctionName);

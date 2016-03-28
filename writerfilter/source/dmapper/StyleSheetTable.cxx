@@ -187,7 +187,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
         ( nStyleId == TBL_STYLE_FIRSTCOL )
     };
 
-    for ( unsigned i = 0 ; i != sizeof(pPropsToCheck) / sizeof(PropertyIds); i++ )
+    for ( unsigned i = 0 ; i != SAL_N_ELEMENTS(pPropsToCheck); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
         boost::optional<PropertyMap::Property> pProp = pToAdd->getProperty(nId);
@@ -232,7 +232,7 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
     // Get the properties applying according to the mask
     PropertyMapPtr pProps( new PropertyMap( ) );
-    for (size_t i = 0; i < sizeof(aOrderedStyleTable)/sizeof(aOrderedStyleTable[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aOrderedStyleTable); ++i)
     {
         TblStylePrs::iterator pIt = m_aStyles.find( aOrderedStyleTable[ i ].type );
         if ( ( nMask & aOrderedStyleTable[ i ].mask ) && ( pIt != m_aStyles.end( ) ) )
@@ -1421,7 +1421,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     }
     if(m_pImpl->m_aStyleNameMap.empty())
     {
-        for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
+        for( sal_uInt32 nPair = 0; nPair < SAL_N_ELEMENTS(aStyleNamePairs)/2; ++nPair)
         {
             OUString aFrom = OUString::createFromAscii(aStyleNamePairs[2 * nPair]);
             OUString aTo = OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]);

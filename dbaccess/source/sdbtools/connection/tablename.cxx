@@ -180,7 +180,7 @@ namespace sdbtools
         */
         EComposeRule lcl_translateCompositionType_throw( sal_Int32 _nType )
         {
-            struct
+            const struct
             {
                 sal_Int32       nCompositionType;
                 EComposeRule    eComposeRule;
@@ -196,7 +196,7 @@ namespace sdbtools
 
             bool found = false;
             size_t i = 0;
-            for ( ; ( i < sizeof( TypeTable ) / sizeof( TypeTable[0] ) ) && !found; ++i )
+            for ( ; i < SAL_N_ELEMENTS( TypeTable ) && !found; ++i )
                 if ( TypeTable[i].nCompositionType == _nType )
                     found = true;
             if ( !found )

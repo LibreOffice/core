@@ -193,14 +193,14 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
         OUString sName;
         sal_Int32       nHandle;
     };
-    PropertyDescriptor aProps[] =
+    const PropertyDescriptor aProps[] =
     {
         { OUString(PROPERTY_CATALOGNAME),      PROPERTY_ID_CATALOGNAME },
         { OUString(PROPERTY_SCHEMANAME),       PROPERTY_ID_SCHEMANAME },
         { OUString(PROPERTY_TABLENAME),        PROPERTY_ID_TABLENAME },
         { OUString(PROPERTY_REALNAME),         PROPERTY_ID_REALNAME }
     };
-    for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
     {
         if ( xPSI->hasPropertyByName( aProps[i].sName ) )
             setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );

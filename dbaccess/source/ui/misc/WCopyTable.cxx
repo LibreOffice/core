@@ -143,7 +143,7 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
     const OUString aCopyProperties[] = {
         OUString(PROPERTY_FONT), OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR),OUString(PROPERTY_TEXTLINECOLOR),OUString(PROPERTY_TEXTEMPHASIS),OUString(PROPERTY_TEXTRELIEF)
     };
-    for ( size_t i=0; i < sizeof( aCopyProperties ) / sizeof( aCopyProperties[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aCopyProperties ); ++i )
     {
         if ( m_xObjectPSI->hasPropertyByName( aCopyProperties[i] ) )
             _rxObject->setPropertyValue( aCopyProperties[i], m_xObject->getPropertyValue( aCopyProperties[i] ) );

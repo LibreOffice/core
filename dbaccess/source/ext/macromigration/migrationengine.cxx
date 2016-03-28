@@ -190,16 +190,16 @@ namespace dbmm
         {
             struct LanguageMapping
             {
-                const sal_Char*     pAsciiLanguage;
+                const char*         pAsciiLanguage;
                 const ScriptType    eScriptType;
 
-                LanguageMapping( const sal_Char* _pAsciiLanguage, const ScriptType _eScriptType )
+                LanguageMapping( const char* _pAsciiLanguage, const ScriptType _eScriptType )
                     :pAsciiLanguage( _pAsciiLanguage )
                     ,eScriptType( _eScriptType )
                 {
                 }
-            }
-            aLanguageMapping[] =
+            };
+            const LanguageMapping aLanguageMapping[] =
             {
                 LanguageMapping( "JavaScript", eJavaScript ),
                 LanguageMapping( "BeanShell",  eBeanShell ),
@@ -207,7 +207,7 @@ namespace dbmm
                 LanguageMapping( "Python",     ePython ),          // TODO: is this correct?
                 LanguageMapping( "Basic",      eBasic )
             };
-            for ( size_t i=0; i < sizeof( aLanguageMapping ) / sizeof( aLanguageMapping[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aLanguageMapping ); ++i )
             {
                 if ( _rLanguage.equalsAscii( aLanguageMapping[i].pAsciiLanguage ) )
                 {
@@ -1205,10 +1205,10 @@ namespace dbmm
             }
             ::std::set< OUString > aElementNames( aDocStorage.getElementNames() );
 
-            ScriptType aKnownStorageBasedTypes[] = {
+            const ScriptType aKnownStorageBasedTypes[] = {
                 eBeanShell, eJavaScript, ePython, eJava
             };
-            for ( size_t i=0; i<sizeof( aKnownStorageBasedTypes ) / sizeof( aKnownStorageBasedTypes[0] ); ++i )
+            for ( size_t i=0; i<SAL_N_ELEMENTS( aKnownStorageBasedTypes ); ++i )
                 aElementNames.erase( lcl_getScriptsSubStorageName( aKnownStorageBasedTypes[i] ) );
 
             if ( !aElementNames.empty() )

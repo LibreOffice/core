@@ -691,7 +691,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     const OUString aSettings[] = {
         OUString(PROPERTY_FILTER), OUString(PROPERTY_ORDER), OUString(PROPERTY_HAVING_CLAUSE), OUString(PROPERTY_GROUP_BY)
     };
-    for ( size_t i=0; i < sizeof( aSettings ) / sizeof( aSettings[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aSettings ); ++i )
     {
         if ( lcl_hasNonEmptyStringValue_throw( _rxSourceDescriptor, xPSI, aSettings[i] ) )
         {

@@ -488,7 +488,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
               RTL_CONSTASCII_STRINGPARAM("'") },
             { RTL_CONSTASCII_STRINGPARAM("quot;"),
               RTL_CONSTASCII_STRINGPARAM("\"") } };
-        for (std::size_t i = 0; i < sizeof refs / sizeof refs[0]; ++i) {
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS(refs); ++i) {
             if (rtl_str_shortenedCompare_WithLength(
                     position, end - position, refs[i].inBegin, refs[i].inLength,
                     refs[i].inLength) ==

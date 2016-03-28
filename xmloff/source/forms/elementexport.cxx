@@ -547,11 +547,11 @@ namespace xmloff
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
-            OSL_ENSURE( sizeof(aStringPropertyNames)/sizeof(aStringPropertyNames[0]) ==
-                        sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
+            OSL_ENSURE( SAL_N_ELEMENTS(aStringPropertyNames) ==
+                        SAL_N_ELEMENTS(nStringPropertyAttributeIds),
                         "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (1)!");
 
-            for (i=0; i<sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]); ++i)
+            for (i=0; i<SAL_N_ELEMENTS(nStringPropertyAttributeIds); ++i)
                 if (nStringPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportStringPropertyAttribute(
@@ -590,7 +590,7 @@ namespace xmloff
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nFlagsCount),
                 "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (2)!");
         #endif
-            for (i=0; i<sizeof(nBooleanPropertyAttributeIds)/sizeof(nBooleanPropertyAttributeIds[0]); ++i)
+            for (i=0; i<SAL_N_ELEMENTS(nBooleanPropertyAttributeIds); ++i)
                 if (nBooleanPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportBooleanPropertyAttribute(
@@ -631,7 +631,7 @@ namespace xmloff
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount),
                 "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (3)!");
         #endif
-            for (i=0; i<sizeof(nIntegerPropertyAttributeIds)/sizeof(nIntegerPropertyAttributeIds[0]); ++i)
+            for (i=0; i<SAL_N_ELEMENTS(nIntegerPropertyAttributeIds); ++i)
                 if (nIntegerPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportInt16PropertyAttribute(

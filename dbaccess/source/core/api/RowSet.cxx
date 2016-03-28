@@ -1747,7 +1747,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
             OUString(PROPERTY_ALIGN), OUString(PROPERTY_RELATIVEPOSITION), OUString(PROPERTY_WIDTH), OUString(PROPERTY_HIDDEN), OUString(PROPERTY_CONTROLMODEL),
             OUString(PROPERTY_HELPTEXT), OUString(PROPERTY_CONTROLDEFAULT)
         };
-        for ( size_t i=0; i<sizeof( aPropertyNames ) / sizeof( aPropertyNames[0] ); ++i )
+        for ( size_t i=0; i<SAL_N_ELEMENTS( aPropertyNames ); ++i )
         {
             if ( xInfo->hasPropertyByName( aPropertyNames[i] ) )
             {
