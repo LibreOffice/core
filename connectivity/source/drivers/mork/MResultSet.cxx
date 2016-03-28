@@ -741,7 +741,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if(xColumns.is())
         {
             OUString aColName, aParameterValue;
-            OSQLColumns::Vector::iterator aIter = xColumns->get().begin();
+            OSQLColumns::Vector::const_iterator aIter = xColumns->get().begin();
             sal_Int32 i = 1;
             for(;aIter != xColumns->get().end();++aIter)
             {
@@ -1080,8 +1080,8 @@ void OResultSet::fillRowData()
 
 static bool matchRow( OValueRow& row1, OValueRow& row2 )
 {
-    OValueVector::Vector::iterator row1Iter = row1->get().begin();
-    OValueVector::Vector::iterator row2Iter = row2->get().begin();
+    OValueVector::Vector::const_iterator row1Iter = row1->get().begin();
+    OValueVector::Vector::const_iterator row2Iter = row2->get().begin();
     for ( ++row1Iter,++row2Iter; // the first column is the bookmark column
           row1Iter != row1->get().end(); ++row1Iter,++row2Iter)
     {
@@ -1168,7 +1168,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
+                ::std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
                 for ( ::std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
                     OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
@@ -1227,7 +1227,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                         OKeyValue* pKeyValue = OKeyValue::createKeyValue((nRow));
 
-                        ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
+                        ::std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
                         for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
                         {
                             const ORowSetValue& value = getValue(nRow, *aIter);
@@ -1332,7 +1332,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...
             sal_Int32 nColumnPos = 0;
-            for (   OSQLColumns::Vector::iterator aIter = _rxColumns->get().begin();
+            for (   OSQLColumns::Vector::const_iterator aIter = _rxColumns->get().begin();
                     aIter != _rxColumns->get().end();
                     ++aIter,++nColumnPos
                 )

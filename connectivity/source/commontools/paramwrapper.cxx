@@ -205,7 +205,7 @@ namespace param
 
                 if ( m_xValueDestination.is() )
                 {
-                    for ( ::std::vector< sal_Int32 >::iterator aIter = m_aIndexes.begin(); aIter != m_aIndexes.end(); ++aIter )
+                    for ( ::std::vector< sal_Int32 >::const_iterator aIter = m_aIndexes.begin(); aIter != m_aIndexes.end(); ++aIter )
                     {
                         m_xValueDestination->setObjectWithInfo( *aIter + 1, rValue, nParamType, nScale );
                             // (the index of the parameters is one-based)

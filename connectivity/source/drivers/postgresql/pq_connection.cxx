@@ -235,7 +235,7 @@ void Connection::close() throw ( SQLException, RuntimeException, std::exception 
         m_settings.tables.clear();
         m_settings.users.clear();
 
-        for( WeakHashMap::iterator ii = m_myStatements.begin() ;
+        for( WeakHashMap::const_iterator ii = m_myStatements.begin() ;
              ii != m_myStatements.end() ;
              ++ii )
         {
@@ -427,9 +427,9 @@ public:
     {
         OSL_ENSURE(values.size() == acquired.size(), "pq_connection: cstr_vector values and acquired size mismatch");
         std::vector<char*>::iterator pv = values.begin();
-        std::vector<bool>::iterator pa = acquired.begin();
-        const std::vector<char*>::iterator pve = values.end();
-        for( ; pv < pve ; ++pv, ++pa )
+        std::vector<bool>::const_iterator pa = acquired.begin();
+        const std::vector<char*>::const_iterator pve = values.end();
+        for( ; pv != pve ; ++pv, ++pa )
             if (*pa)
                 free(*pv);
     }

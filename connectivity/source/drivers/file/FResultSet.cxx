@@ -1122,7 +1122,7 @@ void OResultSet::sortRows()
     }
 
     OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-    ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
+    ::std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
     for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
     {
         OSL_ENSURE((sal_Int32)m_aSelectRow->get().size() > *aOrderByIter,"Invalid Index");
@@ -1337,8 +1337,8 @@ bool OResultSet::OpenImpl()
                             nKey = (m_pFileSet->get())[j-1];
                             ExecuteRow(IResultSetHelper::BOOKMARK,nKey,false);
                             m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
-                            OValueRefVector::Vector::iterator loopInRow = m_aSelectRow->get().begin();
-                            OValueVector::Vector::iterator existentInSearchRow = aSearchRow->get().begin();
+                            OValueRefVector::Vector::const_iterator loopInRow = m_aSelectRow->get().begin();
+                            OValueVector::Vector::const_iterator existentInSearchRow = aSearchRow->get().begin();
                             for (   ++loopInRow,++existentInSearchRow;  // the first column is the bookmark column
                                     loopInRow != m_aSelectRow->get().end();
                                     ++loopInRow,++existentInSearchRow)
@@ -1452,7 +1452,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
 
     typedef ::std::map<OSQLColumns::Vector::iterator,sal_Bool> IterMap;
     IterMap aSelectIters;
-    OValueRefVector::Vector::iterator aRowIter = _rRow->get().begin()+1;
+    OValueRefVector::Vector::const_iterator aRowIter = _rRow->get().begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
          aRowIter != _rRow->get().end();
             ++i, ++aRowIter
@@ -1578,7 +1578,7 @@ void OResultSet::clearInsertRow()
 {
     m_aRow->setDeleted(false); // set to false here because this is the new row
     OValueRefVector::Vector::iterator aIter = m_aInsertRow->get().begin();
-    const OValueRefVector::Vector::iterator aEnd = m_aInsertRow->get().end();
+    const OValueRefVector::Vector::const_iterator aEnd = m_aInsertRow->get().end();
     for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
     {
         ORowSetValueDecoratorRef& rValue = (*aIter);

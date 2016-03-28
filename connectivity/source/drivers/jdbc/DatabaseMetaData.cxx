@@ -467,8 +467,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 ODatabaseMetaDataResultSet::ORow aRow(8);
                 while ( xRow.is() && xTemp->next() )
                 {
-                    ::std::map<sal_Int32,sal_Int32>::iterator aIter = aColumnMatching.begin();
-                    ::std::map<sal_Int32,sal_Int32>::iterator aEnd  = aColumnMatching.end();
+                    ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = aColumnMatching.begin();
+                    ::std::map<sal_Int32,sal_Int32>::const_iterator aEnd  = aColumnMatching.end();
                     for (;aIter != aEnd ; ++aIter)
                     {
                         sValue = xRow->getString(aIter->first);

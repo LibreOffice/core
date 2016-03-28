@@ -1665,8 +1665,8 @@ namespace
             if ( m_aSet.size() < (size_t)Index )
                 throw IndexOutOfBoundsException();
 
-            ::std::vector<bool, std::allocator<bool> >::iterator aIter = m_aSet.begin();
-            ::std::vector<bool, std::allocator<bool> >::iterator aEnd = m_aSet.end();
+            ::std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();
+            ::std::vector<bool, std::allocator<bool> >::const_iterator aEnd = m_aSet.end();
             sal_Int32 i = 0;
             sal_Int32 nParamPos = -1;
             for(; aIter != aEnd && i <= Index; ++aIter)
@@ -1711,7 +1711,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
             OUString sName;
             xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
 
-            TParameterPositions::iterator aFind = aParameterNames.find(sName);
+            TParameterPositions::const_iterator aFind = aParameterNames.find(sName);
             if ( aFind != aParameterNames.end() )
                 aNewParameterSet[i] = true;
             aParameterNames[sName].push_back(i+1);
@@ -1762,9 +1762,9 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                 if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE), xParamColumn))
                     xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
                     // (the index of the parameters is one-based)
-                TParameterPositions::iterator aFind = aParameterNames.find(pFinalValues->Name);
-                ::std::vector<sal_Int32>::iterator aIterPos = aFind->second.begin();
-                ::std::vector<sal_Int32>::iterator aEndPos = aFind->second.end();
+                TParameterPositions::const_iterator aFind = aParameterNames.find(pFinalValues->Name);
+                ::std::vector<sal_Int32>::const_iterator aIterPos = aFind->second.begin();
+                ::std::vector<sal_Int32>::const_iterator aEndPos = aFind->second.end();
                 for(;aIterPos != aEndPos;++aIterPos)
                 {
                     if ( _aParametersSet.empty() || !_aParametersSet[(*aIterPos)-1] )

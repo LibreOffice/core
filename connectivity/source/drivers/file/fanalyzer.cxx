@@ -132,7 +132,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
-    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for ( ::std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
             bindRow(aIter->first->m_aCodeList,_pRow);

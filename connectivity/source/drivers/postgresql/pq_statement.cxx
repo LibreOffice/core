@@ -757,7 +757,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             {
                 OUString value;
                 OString columnName = OUStringToOString( keyColumnNames[i], pConnectionSettings->encoding );
-                String2StringMap::iterator ii = namedValues.begin();
+                String2StringMap::const_iterator ii = namedValues.begin();
                 for( ; ii != namedValues.end() ; ++ii )
                 {
                     if( columnName.equalsIgnoreAsciiCase( ii->first ) )
@@ -776,7 +776,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                         getAutoValues( autoValues, connection, schemaName, tableName );
                     }
                     // this could mean, that the column is a default or auto value, check this ...
-                    String2StringMap::iterator j = autoValues.begin();
+                    String2StringMap::const_iterator j = autoValues.begin();
                     for( ; j != autoValues.end() ; ++j )
                     {
                         if( columnName.equalsIgnoreAsciiCase( j->first ) )

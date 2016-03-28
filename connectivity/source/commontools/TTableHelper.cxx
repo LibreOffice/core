@@ -220,7 +220,7 @@ namespace
 
         // collect all used ordinals
         ::std::set< OrdinalPosition > aUsedOrdinals;
-        for (   ::std::vector< ColumnDesc >::iterator collect = _rColumns.begin();
+        for (   ::std::vector< ColumnDesc >::const_iterator collect = _rColumns.begin();
                 collect != _rColumns.end();
                 ++collect
             )

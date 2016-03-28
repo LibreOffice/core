@@ -363,7 +363,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
     ::std::vector<OOperand*>::iterator aIter = aOperands.begin();
-    ::std::vector<OOperand*>::iterator aEnd = aOperands.end();
+    ::std::vector<OOperand*>::const_iterator aEnd = aOperands.end();
     for (; aIter != aEnd; ++aIter)
     {
         if (typeid(OOperandResult) != typeid(*(*aIter)))

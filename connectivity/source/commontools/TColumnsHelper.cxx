@@ -89,7 +89,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     bool bIsCurrency    = false;
     sal_Int32 nDataType     = DataType::OTHER;
 
-    ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
+    ColumnInformationMap::const_iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
     {
         OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );

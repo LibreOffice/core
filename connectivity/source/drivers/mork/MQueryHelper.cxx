@@ -214,7 +214,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     if (!Tables)
         return -1;
     MorkRowMap *Rows = nullptr;
-    MorkRowMap::Map::iterator rowIter;
+    MorkRowMap::Map::const_iterator rowIter;
 
     // Iterate all tables
     for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
@@ -240,7 +240,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 }
 
                 MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
-                for (MorkCells::iterator CellsIter = rowIter->second.begin();
+                for (MorkCells::const_iterator CellsIter = rowIter->second.begin();
                      CellsIter != rowIter->second.end(); ++CellsIter )
                 {
                     std::string column = xMork->getColumn(CellsIter->first);
@@ -252,7 +252,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 }
                 ::std::vector<bool> vector = entryMatchedByExpression(this, &expr, entry);
                 bool result = true;
-                for (::std::vector<bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter)
+                for (::std::vector<bool>::const_iterator iter = vector.begin(); iter != vector.end(); ++iter)
                 {
                     result = result && *iter;
                 }
@@ -337,13 +337,13 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
                 bool result = false;
-                for (::std::vector<bool>::iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
+                for (::std::vector<bool>::const_iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
                     result = result || *iter;
                 }
                 resultVector.push_back(result);
             } else if (condition == MQueryExpression::AND) {
                 bool result = true;
-                for (::std::vector<bool>::iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
+                for (::std::vector<bool>::const_iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
                     result = result && *iter;
                 }
                 resultVector.push_back(result);
