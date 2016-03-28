@@ -23,6 +23,7 @@ enum class UIObjectType
     CHECKBOX,
     LISTBOX,
     COMBOBOX,
+    SPINBUTTON,
     TABPAGE,
     UNKNOWN
 };
