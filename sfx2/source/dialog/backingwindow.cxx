@@ -18,7 +18,7 @@
  */
 
 #include "backingwindow.hxx"
-#include "inputdlg.hxx"
+#include <sfx2/inputdlg.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -22,6 +22,8 @@ class InputDialog : public ModalDialog
 public:
     InputDialog (const OUString &labelText, vcl::Window *pParent = nullptr);
     OUString getEntryText () const;
+    void setEntryText( OUString const & sStr );
+    void hideHelpBtn();
     virtual ~InputDialog();
     virtual void dispose() override;
 
@@ -35,6 +37,7 @@ private:
     VclPtr<FixedText>  m_pLabel;
     VclPtr<PushButton> m_pOK;
     VclPtr<PushButton> m_pCancel;
+    VclPtr<PushButton> m_pHelp;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX

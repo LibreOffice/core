@@ -9,7 +9,7 @@
 
 #include <sfx2/templatedlg.hxx>
 
-#include "inputdlg.hxx"
+#include <sfx2/inputdlg.hxx>
 #include "templatesearchview.hxx"
 #include "templatesearchviewitem.hxx"
 

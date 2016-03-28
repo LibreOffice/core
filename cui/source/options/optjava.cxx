@@ -38,6 +38,7 @@
 #include "svtools/restartdialog.hxx"
 #include "svtools/treelistentry.hxx"
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/inputdlg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -888,44 +889,31 @@ void SvxJavaParameterDlg::EditParameter()
 {
     sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     m_pParameterEdit->SetText( OUString() );
-    OUString editedClassPath;
+    OUString editedClassPath = OUString();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        if ( !m_pParamEditDlg )
-        {
-            m_pParamEditDlg = VclPtr<SvxJavaParameterEditDlg>::Create( this );
-            editedClassPath = m_pAssignedList->GetSelectEntry();
-            m_pParamEditDlg->SetParameter( editedClassPath );
-        }
-        else{
-            editedClassPath = m_pAssignedList->GetSelectEntry();
-            m_pParamEditDlg->SetParameter( editedClassPath );
-        }
-    }
-    else
-    {
-        if(m_pParamEditDlg)
-        {
-            editedClassPath = m_pParamEditDlg->GetParameter();
-        }
-    }
+        ScopedVclPtrInstance< InputDialog > m_pParamEditDlg( "Enter Edited Parameter", this);
+        editedClassPath = m_pAssignedList->GetSelectEntry();
+        m_pParamEditDlg->setEntryText( editedClassPath );
+        m_pParamEditDlg->hideHelpBtn();
+        int ret = m_pParamEditDlg->Execute();
 
-    if ( m_pParamEditDlg->Execute() == RET_OK )
-    {
-        if (!( editedClassPath == m_pParamEditDlg->GetParameter() ) )
+        if ( ret )
         {
-            editedClassPath = m_pParamEditDlg->GetParameter();
-            if( !editedClassPath.isEmpty() ){
-                m_pAssignedList->RemoveEntry( nPos );
-                m_pAssignedList->InsertEntry( editedClassPath, nPos );
-                m_pAssignedList->SelectEntryPos( nPos );
+            if (!( editedClassPath == m_pParamEditDlg->getEntryText() ) )
+            {
+                editedClassPath = m_pParamEditDlg->getEntryText();
+                editedClassPath = comphelper::string::strip( editedClassPath, ' ');
+
+                if( !editedClassPath.isEmpty() )
+                {
+                    m_pAssignedList->RemoveEntry( nPos );
+                    m_pAssignedList->InsertEntry( editedClassPath, nPos );
+                    m_pAssignedList->SelectEntryPos( nPos );
+                }
             }
         }
-    }
-    else
-    {
-        m_pParamEditDlg->SetParameter( editedClassPath );
     }
 }
 
@@ -969,46 +957,6 @@ void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
     DisableRemoveButton();
 }
 
-// class SvxJavaParameterEditDlg ---------------------------------------------
-
-SvxJavaParameterEditDlg::SvxJavaParameterEditDlg( vcl::Window* pParent ) :
-
-    ModalDialog( pParent, "JavaStartParametersEdit",
-                 "cui/ui/javastartparameterseditdialog.ui" )
-{
-    get( m_pParameterEditField, "parametereditfield");
-}
-
-SvxJavaParameterEditDlg::~SvxJavaParameterEditDlg()
-{
-    disposeOnce();
-}
-
-void SvxJavaParameterEditDlg::dispose()
-{
-    m_pParameterEditField.clear();
-    ModalDialog::dispose();
-}
-
-
-short SvxJavaParameterEditDlg::Execute()
-{
-    m_pParameterEditField->GrabFocus();
-    return ModalDialog::Execute();
-}
-
-OUString SvxJavaParameterEditDlg::GetParameter() const
-{
-    OUString sParamEdit = comphelper::string::strip(m_pParameterEditField->GetText(), ' ');
-    return sParamEdit;
-}
-
-
-void SvxJavaParameterEditDlg::SetParameter( OUString const & strParams )
-{
-        m_pParameterEditField->SetText( strParams );
-        m_pParameterEditField->SetCursorAtLast();
-}
 
 // class SvxJavaClassPathDlg ---------------------------------------------
 

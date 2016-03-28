@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "inputdlg.hxx"
+#include <sfx2/inputdlg.hxx>
 
 #include <sfx2/sfxresid.hxx>
 #include <vcl/button.hxx>
@@ -21,6 +21,7 @@ InputDialog::InputDialog(const OUString &rLabelText, vcl::Window *pParent)
     get(m_pLabel, "label");
     get(m_pOK, "ok");
     get(m_pCancel, "cancel");
+    get(m_pHelp, "help");
     m_pLabel->SetText(rLabelText);
     m_pOK->SetClickHdl(LINK(this,InputDialog,ClickHdl));
     m_pCancel->SetClickHdl(LINK(this,InputDialog,ClickHdl));
@@ -37,12 +38,24 @@ void InputDialog::dispose()
     m_pLabel.clear();
     m_pOK.clear();
     m_pCancel.clear();
+    m_pHelp.clear();
     ModalDialog::dispose();
+}
+
+void InputDialog::hideHelpBtn()
+{
+    m_pHelp->Hide();
 }
 
 OUString InputDialog::getEntryText() const
 {
     return m_pEntry->GetText();
+}
+
+void InputDialog::setEntryText( OUString const & sStr)
+{
+    m_pEntry->SetText(sStr);
+    m_pEntry->SetCursorAtLast();
 }
 
 IMPL_LINK_TYPED(InputDialog,ClickHdl, Button*, pButton, void)
