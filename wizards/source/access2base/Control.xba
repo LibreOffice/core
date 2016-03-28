@@ -307,6 +307,15 @@ Public Function Parent() As Object
 End Function		&apos;	Parent (get)	V0.9.1
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Picture() As Variant
+	Picture = _PropertyGet(&quot;Picture&quot;)
+End Property		&apos;	Picture (get)
+
+Property Let Picture(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;Picture&quot;, pvValue)
+End Property		&apos;	Picture (set)	V1.5.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
 &apos;	Return
 &apos;		a Collection object if pvIndex absent
@@ -1018,6 +1027,7 @@ Dim vFullPropertiesList() As Variant
 		, &quot;OptionValue&quot; _
 		, &quot;Page&quot; _
 		, &quot;Parent&quot; _
+		, &quot;Picture&quot; _
 		, &quot;Required&quot; _
 		, &quot;RowSource&quot; _
 		, &quot;RowSourceType&quot; _
@@ -1039,65 +1049,65 @@ Dim vFullPropertiesList() As Variant
 Dim vPropertiesMatrix(25) As Variant
 	Select Case _ParentType
 		Case CTLPARENTISFORM, CTLPARENTISSUBFORM
-			vPropertiesMatrix(acCheckBox) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,31,32,39,40,41,42,43,45,46,47,48)
-			vPropertiesMatrix(acComboBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,27,28,31,32,33,34,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,31,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acDateField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,40,41,42,43,44,47,48)
+			vPropertiesMatrix(acCheckBox) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,31,33,40,41,42,43,44,46,47,48,49)
+			vPropertiesMatrix(acComboBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,27,28,31,33,34,35,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,31,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acDateField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,33,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,41,42,43,44,45,48,49)
 			vPropertiesMatrix(acFixedLine) = Array()
-			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,31,40,43,45,48)
-			vPropertiesMatrix(acFormattedField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acGridControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,27,28,31,40,41,42,43,48)
-			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,31,40,43,48)
-			vPropertiesMatrix(acHiddenControl) = Array(7,27,28,31,40,43,47,48)
-			vPropertiesMatrix(acImageButton) = Array(0,1,2,6,7,10,27,28,31,40,41,42,43,48)
-			vPropertiesMatrix(acImageControl) = Array(0,1,2,5,6,7,10,25,27,28,31,32,40,41,42,43,48)
-			vPropertiesMatrix(acListBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,31,32,33,34,35,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acNavigationBar) = Array(0,2,6,7,10,11,12,13,14,15,16,17,27,28,31,40,41,42,43,48)
-			vPropertiesMatrix(acNumericField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acPatternField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,36,37,38,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,31,41,44,46,49)
+			vPropertiesMatrix(acFormattedField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,33,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acGridControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,27,28,31,41,42,43,44,49)
+			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,31,41,44,49)
+			vPropertiesMatrix(acHiddenControl) = Array(7,27,28,31,41,44,48,49)
+			vPropertiesMatrix(acImageButton) = Array(0,1,2,6,7,10,27,28,31,32,41,42,43,44,49)
+			vPropertiesMatrix(acImageControl) = Array(0,1,2,5,6,7,10,25,27,28,31,32,33,41,42,43,44,49)
+			vPropertiesMatrix(acListBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,31,33,34,35,36,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acNavigationBar) = Array(0,2,6,7,10,11,12,13,14,15,16,17,27,28,31,41,42,43,44,49)
+			vPropertiesMatrix(acNumericField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acPatternField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,37,38,39,41,42,43,44,45,46,48,49)
 			vPropertiesMatrix(acProgressBar) = Array()
-			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,32,39,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,31,40,41,42,43,47,48)
-			vPropertiesMatrix(acSpinButton) = Array(0,1,2,6,7,9,10,27,28,31,40,41,42,43,47,48)
-			vPropertiesMatrix(0) = Array(7,18,21,22,27,28,31,40)
-			vPropertiesMatrix(acTextField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,36,37,38,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acTimeField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,33,40,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,31,41,42,43,44,48,49)
+			vPropertiesMatrix(acSpinButton) = Array(0,1,2,6,7,9,10,27,28,31,41,42,43,44,48,49)
+			vPropertiesMatrix(0) = Array(7,18,21,22,27,28,31,41)
+			vPropertiesMatrix(acTextField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,37,38,39,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acTimeField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,33,41,42,43,44,45,46,48,49)
 		Case CTLPARENTISGROUP
 			&apos;	To be duplicated from above !!!
-			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,32,39,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,33,40,41,42,43,44,46,48,49)
 		Case CTLPARENTISGRID
-			vPropertiesMatrix(acCheckBox) = Array(4,5,6,7,9,10,27,28,31,32,39,40,43,45,46,47)
-			vPropertiesMatrix(acComboBox) = Array(4,5,6,7,9,10,20,23,24,25,27,28,31,32,33,34,40,43,44,45,47)
-			vPropertiesMatrix(acCurrencyField) = Array(4,5,6,7,9,10,25,27,28,31,32,40,43,45,47)
-			vPropertiesMatrix(acDateField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,40,43,44,45,47)
-			vPropertiesMatrix(acFormattedField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,40,43,44,45,47)
-			vPropertiesMatrix(acListBox) = Array(4,5,6,7,9,10,20,23,24,25,26,27,28,31,32,33,34,35,40,43,45,47)
-			vPropertiesMatrix(acNumericField) = Array(4,5,6,7,9,10,25,27,28,31,32,40,43,45,47)
-			vPropertiesMatrix(acPatternField) = Array(4,5,6,7,9,10,25,27,28,31,32,36,37,38,40,43,44,45,47)
-			vPropertiesMatrix(acTextField) = Array(4,5,6,7,9,10,25,27,28,31,32,36,37,38,40,43,44,45,47)
-			vPropertiesMatrix(acTimeField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,40,43,44,45,47)
+			vPropertiesMatrix(acCheckBox) = Array(4,5,6,7,9,10,27,28,31,33,40,41,44,46,47,48)
+			vPropertiesMatrix(acComboBox) = Array(4,5,6,7,9,10,20,23,24,25,27,28,31,33,34,35,41,44,45,46,48)
+			vPropertiesMatrix(acCurrencyField) = Array(4,5,6,7,9,10,25,27,28,31,33,41,44,46,48)
+			vPropertiesMatrix(acDateField) = Array(4,5,6,7,9,10,19,25,27,28,31,33,41,44,45,46,48)
+			vPropertiesMatrix(acFormattedField) = Array(4,5,6,7,9,10,19,25,27,28,31,33,41,44,45,46,48)
+			vPropertiesMatrix(acListBox) = Array(4,5,6,7,9,10,20,23,24,25,26,27,28,31,33,34,35,36,41,44,46,48)
+			vPropertiesMatrix(acNumericField) = Array(4,5,6,7,9,10,25,27,28,31,33,41,44,46,48)
+			vPropertiesMatrix(acPatternField) = Array(4,5,6,7,9,10,25,27,28,31,33,37,38,39,41,44,45,46,48)
+			vPropertiesMatrix(acTextField) = Array(4,5,6,7,9,10,25,27,28,31,33,37,38,39,41,44,45,46,48)
+			vPropertiesMatrix(acTimeField) = Array(4,5,6,7,9,10,19,25,27,28,31,33,41,44,45,46,48)
 		Case CTLPARENTISDIALOG
-			vPropertiesMatrix(acCheckBox) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,39,40,41,42,43,45,46,47,48)
-			vPropertiesMatrix(acComboBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,27,28,30,31,33,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,30,31,40,41,42,43,45,48)
-			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acDateField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acFixedLine) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,43,48)
-			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,42,43,45,48)
-			vPropertiesMatrix(acFormattedField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,43,48)
-			vPropertiesMatrix(acImageControl) = Array(0,1,2,6,7,10,27,28,30,31,40,41,42,43,48)
-			vPropertiesMatrix(acListBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,30,31,33,35,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acNumericField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acPatternField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,36,37,38,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acProgressBar) = Array(0,1,2,6,7,10,27,28,30,31,40,41,43,47,48)
-			vPropertiesMatrix(acRadioButton) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,30,31,39,40,41,42,43,45,47,48)
-			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,31,40,41,42,43,47,48)
-			vPropertiesMatrix(acTextField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,36,37,38,40,41,42,43,44,45,47,48)
-			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acCheckBox) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,42,43,44,46,47,48,49)
+			vPropertiesMatrix(acComboBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,27,28,30,31,34,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,30,31,41,42,43,44,46,49)
+			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acDateField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acFixedLine) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,41,42,44,49)
+			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,41,42,43,44,46,49)
+			vPropertiesMatrix(acFormattedField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,41,42,44,49)
+			vPropertiesMatrix(acImageControl) = Array(0,1,2,6,7,10,27,28,30,31,41,42,43,44,49)
+			vPropertiesMatrix(acListBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,30,31,34,36,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acNumericField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acPatternField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acProgressBar) = Array(0,1,2,6,7,10,27,28,30,31,41,42,44,48,49)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,30,31,40,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,31,41,42,43,44,48,49)
+			vPropertiesMatrix(acTextField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,41,42,43,44,45,46,48,49)
 	End Select
 	
 Dim vProperties() As Variant, i As Integer, iIndex As Integer
@@ -1336,6 +1346,8 @@ Dim vSelection As Variant, sSelectedText As String
 			If Utils._hasUNOProperty(ControlModel, &quot;Step&quot;) Then _PropertyGet = ControlModel.Step
 		Case UCase(&quot;Parent&quot;)
 			Set _PropertyGet = PropertiesGet._ParentObject(_Shortcut)
+		Case UCase(&quot;Picture&quot;)
+			_PropertyGet = ConvertToUrl(ControlModel.ImageURL)
 		Case UCase(&quot;Required&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;InputRequired&quot;) Then _PropertyGet = ControlModel.InputRequired
 		Case UCase(&quot;RowSource&quot;)
@@ -1817,6 +1829,10 @@ Dim vSelection As Variant, sText As String, lStart As long
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 			If pvValue &lt; 0 Then Goto Trace_Error_Value
 			ControlModel.Step = pvValue
+		Case UCase(&quot;Picture&quot;)
+			If Not Utils._hasUNOProperty(ControlModel, &quot;ImageURL&quot;) Then Goto Trace_Error
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			ControlModel.ImageURL = ConvertToUrl(pvValue)
 		Case UCase(&quot;Required&quot;)
 			If Not Utils._hasUNOProperty(ControlModel, &quot;InputRequired&quot;) Then Goto Trace_Error
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
