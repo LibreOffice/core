@@ -48,11 +48,11 @@ void main(void)
 
     // How much each column/row will contribute to the resulting pixel.
     // assert( xscale <= 100 ); assert( yscale <= 100 );
-    float xratio[ 100 + 2 ];
-    float yratio[ 100 + 2 ];
+    float xratio[ 16 + 2 ];
+    float yratio[ 16 + 2 ];
     // For finding the first and last source pixel.
-    int xpixel[ 100 + 2 ];
-    int ypixel[ 100 + 2 ];
+    int xpixel[ 16 + 2 ];
+    int ypixel[ 16 + 2 ];
 
     int xpos = 0;
     int ypos = 0;
