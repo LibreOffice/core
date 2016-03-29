@@ -15,6 +15,9 @@
 #include <vcl/combobox.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/edit.hxx>
 
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
 {
