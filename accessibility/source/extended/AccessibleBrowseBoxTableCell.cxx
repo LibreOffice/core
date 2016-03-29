@@ -28,13 +28,13 @@ namespace accessibility
 {
     namespace
     {
-        static void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (css::lang::IndexOutOfBoundsException)
+        void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (css::lang::IndexOutOfBoundsException)
         {
             if ( _nIndex >= _sText.getLength() )
                 throw css::lang::IndexOutOfBoundsException();
         }
 
-        static sal_Int32 getIndex_Impl( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_uInt16 _nColumnCount )
+        sal_Int32 getIndex_Impl( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_uInt16 _nColumnCount )
         {
             return _nRow * _nColumnCount + _nColumn;
         }

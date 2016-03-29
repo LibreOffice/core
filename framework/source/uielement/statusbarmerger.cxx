@@ -48,7 +48,7 @@ static const char MERGEFALLBACK_ADDLAST[]       = "AddLast";
 static const char MERGEFALLBACK_ADDFIRST[]      = "AddFirst";
 static const char MERGEFALLBACK_IGNORE[]        = "Ignore";
 
-static void lcl_ConvertSequenceToValues(
+void lcl_ConvertSequenceToValues(
     const Sequence< PropertyValue > &rSequence,
     AddonStatusbarItem &rItem )
 {
@@ -95,7 +95,7 @@ static void lcl_ConvertSequenceToValues(
     rItem.nItemBits = nItemBits;
 }
 
-static void lcl_CreateStatusbarItem( StatusBar* pStatusbar,
+void lcl_CreateStatusbarItem( StatusBar* pStatusbar,
                                      sal_uInt16 nPos,
                                      sal_uInt16 nItemId,
                                      const AddonStatusbarItem& rAddonItem )
@@ -116,7 +116,7 @@ static void lcl_CreateStatusbarItem( StatusBar* pStatusbar,
     pStatusbar->SetItemData( nItemId, pUserData );
 }
 
-static bool lcl_MergeItems( StatusBar* pStatusbar,
+bool lcl_MergeItems( StatusBar* pStatusbar,
                             sal_uInt16 nPos,
                             sal_uInt16 nModIndex,
                             sal_uInt16& rItemId,
@@ -141,7 +141,7 @@ static bool lcl_MergeItems( StatusBar* pStatusbar,
     return true;
 }
 
-static bool lcl_ReplaceItem( StatusBar* pStatusbar,
+bool lcl_ReplaceItem( StatusBar* pStatusbar,
                              sal_uInt16 nPos,
                              sal_uInt16& rItemId,
                             const ::rtl::OUString& rModuleIdentifier,
@@ -151,7 +151,7 @@ static bool lcl_ReplaceItem( StatusBar* pStatusbar,
     return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, rModuleIdentifier, rAddonToolbarItems );
 }
 
-static bool lcl_RemoveItems( StatusBar* pStatusbar,
+bool lcl_RemoveItems( StatusBar* pStatusbar,
                              sal_uInt16 nPos,
                              const ::rtl::OUString& rMergeCommandParameter )
 {
