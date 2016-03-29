@@ -22,6 +22,30 @@
       "revId": "9a79ad2c4ba169bdd3e207759a53b1647c60cb67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f55e1b75",
+        "filename": "sc/source/ui/unoobj/textuno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-29T15:48:15Z",
+      "side": 1,
+      "message": "Windows build on jenkins complained about potentially uninitialized pointer. But I think this file is only used in windows build. So other compilers might insist on a default too.\n\nc:cygwinhometdflodejenkinsworkspacelo_gerrit_mastergerritgerritplatformwindowsscsourceuiunoobjtextuno.cxx(343) : error C2220: warning treated as error - no \u0027object\u0027 file generated\nc:cygwinhometdflodejenkinsworkspacelo_gerrit_mastergerritgerritplatformwindowsscsourceuiunoobjtextuno.cxx(343) : warning C4701: potentially uninitialized local variable \u0027pData\u0027 used\nc:cygwinhometdflodejenkinsworkspacelo_gerrit_mastergerritgerritplatformwindowsscsourceuiunoobjtextuno.cxx(343) : warning C4703: potentially uninitialized local pointer variable \u0027pData\u0027 used\n\nI\u0027ll add an assert for default as you suggested.",
+      "parentUuid": "9ad45d7e_1535af45",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 58
+      },
+      "revId": "9a79ad2c4ba169bdd3e207759a53b1647c60cb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
