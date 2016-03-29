@@ -151,7 +151,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    SolarMutexResettableGuard aWriteLock;
+    SolarMutexGuard g;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -160,9 +160,6 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     css::beans::Property aPropInfo = pIt->second;
 
     css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
-
-    // SAFE ->
-    aWriteLock.reset();
 
     bool bWillBeChanged = (aCurrentValue != aValue);
     if (! bWillBeChanged)
