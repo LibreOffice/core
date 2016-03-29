@@ -141,7 +141,7 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
 namespace
 {
 
-static OUString
+OUString
 getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
 {
     if (xImportInfo.is())
