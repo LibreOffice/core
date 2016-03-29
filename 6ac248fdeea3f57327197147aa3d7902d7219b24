@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_593e41b9",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T16:14:30Z",
+      "side": 1,
+      "message": "Darn, and the usual MSVC std::max() confusion.",
+      "range": {
+        "startLine": 452,
+        "startChar": 66,
+        "endLine": 452,
+        "endChar": 74
+      },
+      "revId": "6ac248fdeea3f57327197147aa3d7902d7219b24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
