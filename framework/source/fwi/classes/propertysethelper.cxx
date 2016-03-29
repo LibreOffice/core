@@ -159,14 +159,10 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
 
     css::beans::Property aPropInfo = pIt->second;
 
-    bool bLocked = true;
     css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
 
-    if (! bLocked)
-    {
-        // SAFE ->
-        aWriteLock.reset();
-    }
+    // SAFE ->
+    aWriteLock.reset();
 
     bool bWillBeChanged = (aCurrentValue != aValue);
     if (! bWillBeChanged)
