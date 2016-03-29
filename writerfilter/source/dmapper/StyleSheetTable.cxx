@@ -276,7 +276,7 @@ struct StyleSheetTable_Impl
     /// Appends the given key-value pair to the list of latent style properties of the current entry.
     void AppendLatentStyleProperty(const OUString& aName, Value& rValue);
     /// Sets all properties of xStyle back to default.
-    void SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle);
+    static void SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle);
 };
 
 
@@ -942,7 +942,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 
                         // Standard is handled already in applyDefaults().
                         if (sConvertedStyleName != "Standard")
-                            m_pImpl->SetPropertiesToDefault(xStyle);
+                            StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
                     }
                     else
                     {
@@ -1478,7 +1478,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             xParagraphStyles->getByName("Standard") >>= xStandard;
 
             uno::Reference<style::XStyle> xStyle(xStandard, uno::UNO_QUERY);
-            m_pImpl->SetPropertiesToDefault(xStyle);
+            StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
 
             uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
             for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
