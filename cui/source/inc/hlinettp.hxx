@@ -35,7 +35,6 @@ private:
     VclPtr<RadioButton >        m_pRbtLinktypInternet;
     VclPtr<RadioButton>         m_pRbtLinktypFTP;
     VclPtr<SvxHyperURLBox>      m_pCbbTarget;
-    VclPtr<PushButton>          m_pBtBrowse;
     VclPtr<FixedText>           m_pFtLogin;
     VclPtr<Edit>                m_pEdLogin;
     VclPtr<FixedText>           m_pFtPassword;
@@ -49,7 +48,6 @@ private:
 
     DECL_LINK_TYPED( Click_SmartProtocol_Impl  , Button*, void ); ///< Radiobutton clicked: Type HTTP or FTP
     DECL_LINK_TYPED( ClickAnonymousHdl_Impl    , Button*, void ); ///< Checkbox : Anonymous User
-    DECL_LINK_TYPED( ClickBrowseHdl_Impl       , Button*, void ); ///< Button : Browse
     DECL_LINK_TYPED( ModifiedLoginHdl_Impl     , Edit&,   void ); ///< Contents of editfield "Login" modified
     DECL_LINK_TYPED( LostFocusTargetHdl_Impl,    Control&, void ); ///< Combobox "Target" lost its focus
     DECL_LINK_TYPED( ModifiedTargetHdl_Impl    , Edit&, void );    ///< Contents of editfield "Target" modified
