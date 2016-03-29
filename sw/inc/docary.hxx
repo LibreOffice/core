@@ -60,8 +60,9 @@ public:
 template<typename Value>
 class SwVectorModifyBase
 {
-protected:
+private:
     std::vector<Value> baseValue;
+
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
 
@@ -80,13 +81,21 @@ protected:
         : mPolicy(policy) {}
 
 public:
-    typename std::vector<Value>::iterator begin() noexcept { return baseValue.begin(); }
-    typename std::vector<Value>::const_iterator begin() const noexcept{ return baseValue.begin(); }
-    typename std::vector<Value>::iterator end() noexcept{ return baseValue.end(); }
-    typename std::vector<Value>::const_iterator end() const noexcept{ return baseValue.end(); }
+    typename std::vector<Value>::iterator begin()
+        { return baseValue.begin(); }
+    typename std::vector<Value>::const_iterator begin() const
+        { return baseValue.begin(); }
+    typename std::vector<Value>::iterator end()
+        { return baseValue.end(); }
+    typename std::vector<Value>::const_iterator end() const
+        { return baseValue.end(); }
+
     typedef typename std::vector<Value>::size_type size_type;
     typedef typename std::vector<Value>::iterator iterator;
-    void clear() noexcept { return baseValue.clear(); }
+    typedef typename std::vector<Value>::value_type value_type;
+
+    void clear()
+        { return baseValue.clear(); }
     typename std::vector<Value>::iterator insert(typename std::vector<Value>::iterator pos , Value V)
     {
         return baseValue.insert(pos , V);
@@ -104,12 +113,18 @@ public:
     {
         baseValue.erase(first , last);
     }
-    void reserve(size_type n) { baseValue.reserve(n); }
-    bool empty() const noexcept { return baseValue.empty(); }
-    typename std::vector<Value>::const_reference front() const { return baseValue.front(); }
-    typename std::vector<Value>::reference front() { return baseValue.front(); }
-    typename std::vector<Value>::reference at(size_type pos) { return baseValue.at(pos); }
-    typename std::vector<Value>::const_reference at(size_type pos) const { return baseValue.at(pos); }
+    void reserve(size_type n)
+         { baseValue.reserve(n); }
+    bool empty() const noexcept
+         { return baseValue.empty(); }
+    typename std::vector<Value>::const_reference front() const
+         { return baseValue.front(); }
+    typename std::vector<Value>::reference front()
+         { return baseValue.front(); }
+    typename std::vector<Value>::reference at(size_type pos)
+         { return baseValue.at(pos); }
+    typename std::vector<Value>::const_reference at(size_type pos) const
+         { return baseValue.at(pos); }
 
     // free any remaining child objects based on mPolicy
     virtual ~SwVectorModifyBase()
@@ -142,7 +157,6 @@ public:
     size_t size() const  { return baseValue.size(); }
     typename std::vector<Value>::reference operator[] (size_t idx) { return baseValue[idx]; }
     typename std::vector<Value>::const_reference operator[] (size_t idx) const { return baseValue[idx]; }
-    typedef typename std::vector<Value>::value_type value_type;
 };
 
 template<typename Value>
