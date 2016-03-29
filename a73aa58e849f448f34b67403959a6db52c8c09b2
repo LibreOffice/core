@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_75eeabed",
+        "filename": "sal/inc/internal/signalshared.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-29T08:46:58Z",
+      "side": 1,
+      "message": "This should have the full license header including the ASF paragraph, as has the files from which this code got partially copied.",
+      "revId": "a73aa58e849f448f34b67403959a6db52c8c09b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_35e4330c",
+        "filename": "sal/inc/internal/signalshared.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-29T08:46:58Z",
+      "side": 1,
+      "message": "please use ..._SIGNALSHARED_HXX instead",
+      "revId": "a73aa58e849f448f34b67403959a6db52c8c09b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_95f19fd0",
+        "filename": "sal/inc/internal/signalshared.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-29T08:46:58Z",
+      "side": 1,
+      "message": "As a convention, each file shall include \u003csal/config.h\u003e as its first include.\n\n(Not all existing code follows that rule, but new code should.)",
+      "revId": "a73aa58e849f448f34b67403959a6db52c8c09b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d5b957ee",
+        "filename": "sal/osl/all/signalshared.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-29T08:46:58Z",
+      "side": 1,
+      "message": "The (unfortunate) convention is to exclusively use \u003c...\u003e includes in LO, due to how MSVC searches for \"...\" includes.\n\n(Not all existing code follows that rule, but new code should.)",
+      "revId": "a73aa58e849f448f34b67403959a6db52c8c09b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b5be63d2",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-03-29T08:46:58Z",
+      "side": 1,
+      "message": "the namespace must only be opened after #include \u003cvalgrind/memcheck.h\u003e",
+      "revId": "a73aa58e849f448f34b67403959a6db52c8c09b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
