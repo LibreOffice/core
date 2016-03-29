@@ -329,6 +329,8 @@ enum OpCode : sal_uInt16
         ocSubstitute        = SC_OPCODE_SUBSTITUTE,
         ocRept              = SC_OPCODE_REPT,
         ocConcat            = SC_OPCODE_CONCAT,
+        ocConcat_MS         = SC_OPCODE_CONCAT_MS,
+        ocTextJoin_MS       = SC_OPCODE_TEXTJOIN_MS,
         ocLenB              = SC_OPCODE_LENB,
         ocRightB            = SC_OPCODE_RIGHTB,
         ocLeftB             = SC_OPCODE_LEFTB,

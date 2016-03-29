@@ -3924,6 +3924,8 @@ StackVar ScInterpreter::Interpret()
                 case ocSubstitute       : ScSubstitute();               break;
                 case ocRept             : ScRept();                     break;
                 case ocConcat           : ScConcat();                   break;
+                case ocConcat_MS        : ScConcat_MS();                break;
+                case ocTextJoin_MS      : ScTextJoin_MS();              break;
                 case ocMatValue         : ScMatValue();                 break;
                 case ocMatrixUnit       : ScEMat();                     break;
                 case ocMatDet           : ScMatDet();                   break;
