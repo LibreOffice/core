@@ -461,6 +461,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         return IPC_STATUS_OK;
     }
 
+#if HAVE_FEATURE_DESKTOP
     OUString aUserInstallPath;
     OUString aDummy;
 
@@ -618,6 +619,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
 
         return IPC_STATUS_2ND_OFFICE;
     }
+#endif
 }
 
 void RequestHandler::Disable(bool join)
