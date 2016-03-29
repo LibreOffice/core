@@ -510,6 +510,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
                 }
             }
             break;
+        case  ::dbaccess::DST_PGSQL:
         case  ::dbaccess::DST_ORACLE_JDBC:
             {
                 const SfxStringItem* pHostName = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);

@@ -107,44 +107,45 @@
 #define STR_PAGETITLE_JDBC                  RID_STR_DLG_START + 75
 #define STR_PAGETITLE_ORACLE                RID_STR_DLG_START + 76
 #define STR_PAGETITLE_MYSQL                 RID_STR_DLG_START + 77
-#define STR_PAGETITLE_ODBC                  RID_STR_DLG_START + 78
-#define STR_PAGETITLE_SPREADSHEET           RID_STR_DLG_START + 79
-#define STR_PAGETITLE_AUTHENTIFICATION      RID_STR_DLG_START + 80
-#define STR_PAGETITLE_MYSQL_NATIVE          RID_STR_DLG_START + 81
-#define STR_PAGETITLE_FINAL                 RID_STR_DLG_START + 82
+#define STR_PAGETITLE_PGSQL                 RID_STR_DLG_START + 78
+#define STR_PAGETITLE_ODBC                  RID_STR_DLG_START + 79
+#define STR_PAGETITLE_SPREADSHEET           RID_STR_DLG_START + 80
+#define STR_PAGETITLE_AUTHENTIFICATION      RID_STR_DLG_START + 81
+#define STR_PAGETITLE_MYSQL_NATIVE          RID_STR_DLG_START + 82
+#define STR_PAGETITLE_FINAL                 RID_STR_DLG_START + 83
 
-#define STR_DBASE_HEADERTEXT                RID_STR_DLG_START + 83
-#define STR_DBASE_HELPTEXT                  RID_STR_DLG_START + 84
+#define STR_DBASE_HEADERTEXT                RID_STR_DLG_START + 84
+#define STR_DBASE_HELPTEXT                  RID_STR_DLG_START + 85
 
-#define STR_MSACCESS_HEADERTEXT             RID_STR_DLG_START + 85
-#define STR_MSACCESS_HELPTEXT               RID_STR_DLG_START + 86
+#define STR_MSACCESS_HEADERTEXT             RID_STR_DLG_START + 86
+#define STR_MSACCESS_HELPTEXT               RID_STR_DLG_START + 87
 
-#define STR_ADO_HEADERTEXT                  RID_STR_DLG_START + 87
-#define STR_ADO_HELPTEXT                    RID_STR_DLG_START + 88
+#define STR_ADO_HEADERTEXT                  RID_STR_DLG_START + 88
+#define STR_ADO_HELPTEXT                    RID_STR_DLG_START + 89
 
-#define STR_ODBC_HEADERTEXT                 RID_STR_DLG_START + 89
-#define STR_ODBC_HELPTEXT                   RID_STR_DLG_START + 90
+#define STR_ODBC_HEADERTEXT                 RID_STR_DLG_START + 90
+#define STR_ODBC_HELPTEXT                   RID_STR_DLG_START + 91
 
-#define STR_JDBC_HEADERTEXT                 RID_STR_DLG_START + 91
-#define STR_JDBC_HELPTEXT                   RID_STR_DLG_START + 92
+#define STR_JDBC_HEADERTEXT                 RID_STR_DLG_START + 92
+#define STR_JDBC_HELPTEXT                   RID_STR_DLG_START + 93
 
-#define STR_MYSQLJDBC_HEADERTEXT            RID_STR_DLG_START + 93
-#define STR_MYSQLJDBC_HELPTEXT              RID_STR_DLG_START + 94
-#define STR_MYSQL_DRIVERCLASSTEXT           RID_STR_DLG_START + 95
-#define STR_MYSQL_DEFAULT                   RID_STR_DLG_START + 96
+#define STR_MYSQLJDBC_HEADERTEXT            RID_STR_DLG_START + 94
+#define STR_MYSQLJDBC_HELPTEXT              RID_STR_DLG_START + 95
+#define STR_MYSQL_DRIVERCLASSTEXT           RID_STR_DLG_START + 96
+#define STR_MYSQL_DEFAULT                   RID_STR_DLG_START + 97
 
-#define STR_ORACLE_HEADERTEXT               RID_STR_DLG_START + 97
-#define STR_ORACLE_DEFAULT                  RID_STR_DLG_START + 98
-#define STR_ORACLE_DRIVERCLASSTEXT          RID_STR_DLG_START + 99
-#define STR_ORACLE_HELPTEXT                 RID_STR_DLG_START + 100
+#define STR_ORACLE_HEADERTEXT               RID_STR_DLG_START + 98
+#define STR_ORACLE_DEFAULT                  RID_STR_DLG_START + 99
+#define STR_ORACLE_DRIVERCLASSTEXT          RID_STR_DLG_START + 100
+#define STR_ORACLE_HELPTEXT                 RID_STR_DLG_START + 101
 
-#define STR_DATABASE_TYPE_CHANGE            RID_STR_DLG_START + 101
+#define STR_DATABASE_TYPE_CHANGE            RID_STR_DLG_START + 102
 
-#define STR_COULD_NOT_CONVERT_PARAM         RID_STR_DLG_START + 102
+#define STR_COULD_NOT_CONVERT_PARAM         RID_STR_DLG_START + 103
 
 // please adjust checking before insert new strings
 
-#define LAST_STR_HERE                       RID_STR_DLG_START + 103
+#define LAST_STR_HERE                       RID_STR_DLG_START + 104
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line

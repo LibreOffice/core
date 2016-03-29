@@ -253,6 +253,7 @@ namespace dbaui
             }
             break;
             case  ::dbaccess::DST_MYSQL_ODBC:
+            case  ::dbaccess::DST_PGSQL:
             case  ::dbaccess::DST_ODBC:
             {
                 // collect all ODBC data source names
