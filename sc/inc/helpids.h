@@ -636,5 +636,7 @@
 #define HID_FUNC_FORECAST_ETS_STA                               "SC_HID_FUNC_FORECAST_ETS_STA"
 #define HID_FUNC_FORECAST_ETS_STM                               "SC_HID_FUNC_FORECAST_ETS_STM"
 #define HID_FUNC_FORECAST_LIN                                   "SC_HID_FUNC_FORECAST_LIN"
+#define HID_FUNC_CONCAT_MS                                      "SC_HID_FUNC_CONCAT_MS"
+#define HID_FUNC_TEXTJOIN_MS                                    "SC_HID_FUNC_TEXTJOIN_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
