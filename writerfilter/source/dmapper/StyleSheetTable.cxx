@@ -298,6 +298,8 @@ struct StyleSheetTable_Impl
 
     /// Appends the given key-value pair to the list of latent style properties of the current entry.
     void AppendLatentStyleProperty(const OUString& aName, Value& rValue);
+    /// Sets all properties of xStyle back to default.
+    void SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle);
 };
 
 
@@ -372,6 +374,35 @@ void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Valu
     m_pCurrentEntry->aLatentStyles.push_back(aValue);
 }
 
+void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle)
+{
+    // See if the existing style has any non-default properties. If so, reset them back to default.
+    uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
+    std::vector<OUString> aPropertyNames;
+    for (sal_Int32 i = 0; i < aProperties.getLength(); ++i)
+    {
+        aPropertyNames.push_back(aProperties[i].Name);
+    }
+
+    uno::Reference<beans::XPropertyState> xPropertyState(xStyle, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
+    for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
+    {
+        if (aStates[i] == beans::PropertyState_DIRECT_VALUE)
+        {
+            try
+            {
+                xPropertyState->setPropertyToDefault(aPropertyNames[i]);
+            }
+            catch(const uno::Exception& rException)
+            {
+                SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << rException.Message);
+            }
+        }
+    }
+}
 
 StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
         uno::Reference< text::XTextDocument> const& xTextDocument,
@@ -932,32 +963,9 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
 
-                        // See if the existing style has any non-default properties. If so, reset them back to default.
-                        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
-                        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-                        uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
-                        std::vector<OUString> aPropertyNames;
-                        for (sal_Int32 i = 0; i < aProperties.getLength(); ++i)
-                        {
-                            aPropertyNames.push_back(aProperties[i].Name);
-                        }
-
-                        uno::Reference<beans::XPropertyState> xPropertyState(xStyle, uno::UNO_QUERY);
-                        uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
-                        for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
-                        {
-                            if (aStates[i] == beans::PropertyState_DIRECT_VALUE)
-                            {
-                                try
-                                {
-                                    xPropertyState->setPropertyToDefault(aPropertyNames[i]);
-                                }
-                                catch(const uno::Exception& rException)
-                                {
-                                    SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << rException.Message);
-                                }
-                            }
-                        }
+                        // Standard is handled already in applyDefaults().
+                        if (sConvertedStyleName != "Standard")
+                            m_pImpl->SetPropertiesToDefault(xStyle);
                     }
                     else
                     {
@@ -1485,12 +1493,22 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         }
         if( bParaProperties && m_pImpl->m_pDefaultParaProps.get())
         {
+            uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
+            uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
+            uno::Reference<container::XNameAccess> xParagraphStyles;
+            xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
+            uno::Reference<beans::XPropertySet> xStandard;
+            xParagraphStyles->getByName("Standard") >>= xStandard;
+
+            uno::Reference<style::XStyle> xStyle(xStandard, uno::UNO_QUERY);
+            m_pImpl->SetPropertiesToDefault(xStyle);
+
             uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
             for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
             {
                 try
                 {
-                    m_pImpl->m_xTextDefaults->setPropertyValue( aPropValues[i].Name, aPropValues[i].Value );
+                    xStandard->setPropertyValue(aPropValues[i].Name, aPropValues[i].Value);
                 }
                 catch( const uno::Exception& )
                 {
