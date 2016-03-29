@@ -1329,8 +1329,7 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     const sal_uInt16 nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
     const sal_uInt16 nOfsLookupList     = GetUShort( pGsubHeader+8 );
 
-    typedef std::vector<sal_uInt16> UshortList;
-    UshortList aFeatureIndexList;
+    std::vector<sal_uInt16> aFeatureIndexList;
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
@@ -1386,8 +1385,8 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     if( aFeatureIndexList.empty() )
         return;
 
-    UshortList aLookupIndexList;
-    UshortList aLookupOffsetList;
+    std::vector<sal_uInt16> aLookupIndexList;
+    std::vector<sal_uInt16> aLookupOffsetList;
 
     // parse Feature Table
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
@@ -1436,7 +1435,7 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
             aLookupOffsetList.push_back( nOffset );
     }
 
-    UshortList::const_iterator lookup_it = aLookupOffsetList.begin();
+    std::vector<sal_uInt16>::const_iterator lookup_it = aLookupOffsetList.begin();
     for(; lookup_it != aLookupOffsetList.end(); ++lookup_it )
     {
         const sal_uInt16 nOfsLookupTable = *lookup_it;

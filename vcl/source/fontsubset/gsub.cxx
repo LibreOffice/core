@@ -77,8 +77,7 @@ bool ReadGSUB( struct TrueTypeFont* pTTFile,
 
     aReqFeatureTagList.push_back( MKTAG("vert") );
 
-    typedef std::vector<sal_uInt16> UshortList;
-    UshortList aFeatureIndexList;
+    std::vector<sal_uInt16> aFeatureIndexList;
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
@@ -150,8 +149,8 @@ bool ReadGSUB( struct TrueTypeFont* pTTFile,
     if( aFeatureIndexList.empty() )
         return true;
 
-    UshortList aLookupIndexList;
-    UshortList aLookupOffsetList;
+    std::vector<sal_uInt16> aLookupIndexList;
+    std::vector<sal_uInt16> aLookupOffsetList;
 
     // parse Feature Table
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
@@ -205,7 +204,7 @@ bool ReadGSUB( struct TrueTypeFont* pTTFile,
             aLookupOffsetList.push_back( nOffset );
     }
 
-    UshortList::const_iterator it = aLookupOffsetList.begin();
+    std::vector<sal_uInt16>::const_iterator it = aLookupOffsetList.begin();
     for(; it != aLookupOffsetList.end(); ++it )
     {
         const sal_uInt16 nOfsLookupTable = *it;
