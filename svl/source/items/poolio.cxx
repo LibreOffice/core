@@ -1245,29 +1245,22 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream,
         rStream.ReadUInt16( nVersion ).ReadUInt32( nLen );
         sal_uLong nIStart = rStream.Tell();
 
-        // WhichId known in this version?
-        if ( nWhich )
-        {
-            // Load Item directly
-            SfxPoolItem *pNewItem =
-                    pRefPool->GetDefaultItem(nWhich).Create(rStream, nVersion);
-            if ( bDontPut )
-                pItem = pNewItem;
-            else
-                if ( pNewItem )
-                {
-                    pItem = &Put(*pNewItem);
-                    delete pNewItem;
-                }
-                else
-                    pItem = nullptr;
-            sal_uLong nIEnd = rStream.Tell();
-            DBG_ASSERT( nIEnd <= (nIStart+nLen), "read past end of item" );
-            if ( (nIStart+nLen) != nIEnd )
-                rStream.Seek( nIStart+nLen );
-        }
+        // Load Item directly
+        SfxPoolItem *pNewItem =
+                pRefPool->GetDefaultItem(nWhich).Create(rStream, nVersion);
+        if ( bDontPut )
+            pItem = pNewItem;
         else
-            // SKip Item
+            if ( pNewItem )
+            {
+                pItem = &Put(*pNewItem);
+                delete pNewItem;
+            }
+            else
+                pItem = nullptr;
+        sal_uLong nIEnd = rStream.Tell();
+        DBG_ASSERT( nIEnd <= (nIStart+nLen), "read past end of item" );
+        if ( (nIStart+nLen) != nIEnd )
             rStream.Seek( nIStart+nLen );
     }
 
