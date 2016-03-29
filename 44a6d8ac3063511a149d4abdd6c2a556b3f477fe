@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_79afc5e3",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-29T17:34:08Z",
+      "side": 0,
+      "message": "This merge error went in despite my review. I\u0027m sorry but it is not acceptable to just ignore reviews.",
+      "range": {
+        "startLine": 3762,
+        "startChar": 19,
+        "endLine": 3762,
+        "endChar": 22
+      },
+      "revId": "44a6d8ac3063511a149d4abdd6c2a556b3f477fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_59ac81ed",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 10440,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-29T17:34:08Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "44a6d8ac3063511a149d4abdd6c2a556b3f477fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

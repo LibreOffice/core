@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ad45d7e_19aa09d5",
+        "filename": "avmedia/Library_avmedia.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-29T17:34:08Z",
+      "side": 1,
+      "message": "Only the GLTF check is necessary. Without OpenGL we should/need to to disable GLTF as well.",
+      "revId": "96c1ae1d8e78ae8b9bd7d4001645cad24d62b720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_39a54d04",
+        "filename": "avmedia/Module_avmedia.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-29T17:34:08Z",
+      "side": 1,
+      "message": "That one is also wrong. ENABLE_OPENGL\u003dFALSE implies ENABLE_GLTF\u003dFALSE but that does not mean that ENABLE_OPENGL\u003dTRUE will imply ENABLE_GLTF\u003dTRUE",
+      "range": {
+        "startLine": 58,
+        "startChar": 27,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "96c1ae1d8e78ae8b9bd7d4001645cad24d62b720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_7913455d",
         "filename": "external/cairo/ExternalProject_cairo.mk",
         "patchSetId": 7
