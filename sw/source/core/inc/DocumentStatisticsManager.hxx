@@ -37,11 +37,10 @@ public:
 
     void DocInfoChgd(bool isEnableSetModified) override;
     const SwDocStat &GetDocStat() const override;
-    SwDocStat & GetDocStat(); //Non const version of the above, not part of the interface.
+    void SetDocStatModified(bool bSet);
     const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true) override;
     void SetDocStat(const SwDocStat& rStat) override;
     void UpdateDocStat(bool bCompleteAsync = false, bool bFields = true) override;
-
     virtual ~DocumentStatisticsManager();
 
 private:
@@ -64,6 +63,7 @@ private:
 
 
     SwDocStat       *mpDocStat;          //< Statistics information.
+    bool            mbInitialized;       // allow first time update
     Timer       maStatsUpdateTimer;      //< Timer for asynchronous stats calculation
 };
 
