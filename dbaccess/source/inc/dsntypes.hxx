@@ -95,6 +95,7 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_FINAL                     16
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
 #define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
+#define PAGE_DBSETUPWIZARD_PGSQL                     19
 
 // ODsnTypeCollection
 class OOO_DLLPUBLIC_DBA ODsnTypeCollection

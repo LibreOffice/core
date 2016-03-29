@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-
 #include "DBSetupConnectionPages.hxx"
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hrc"
@@ -809,6 +808,100 @@ using namespace ::com::sun::star;
             bChangedSomething = true;
         }
         fillBool(*_rSet,m_pCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        return bChangedSomething;
+    }
+
+    VclPtr<OGenericAdministrationPage> OPostgreSQLConnectionPageSetup::CreatePostgreSQLConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rAttrSet)
+    {
+        return VclPtr<OPostgreSQLConnectionPageSetup>::Create( pParent,
+                                                 _rAttrSet,
+                                                 DSID_POSTGRES_PORTNUMBER,
+                                                 STR_PGSQL_DEFAULT,
+                                                 STR_PGSQL_HELPTEXT,
+                                                 STR_PGSQL_HEADERTEXT,
+                                                 STR_PGSQL_DRIVERCLASSTEXT);
+    }
+
+    OPostgreSQLConnectionPageSetup::OPostgreSQLConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nPortId,  sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId,
+  sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
+        : OGenericAdministrationPage(pParent, "PostgreSQLConnection",
+            "dbaccess/ui/postgresqlconnectionpage.ui", _rCoreAttrs)
+            ,m_nPortId(_nPortId)
+    {
+        get(m_pFTHelpText, "helpText");
+        get(m_pFTHeader, "header");
+        get(m_pFTDatabasename, "dbNameLabel");
+        get(m_pFTHostname, "hostNameLabel");
+        get(m_pFTPortnumber, "portNumLabel");
+        get(m_pETDatabasename, "dbNameEntry");
+        get(m_pETHostname, "hostNameEntry");
+        get(m_pNFPortnumber, "portNumEntry");
+        get(m_pFTDefaultPortNumber, "portNumDefLabel");
+        get(m_pFTDriverClass, "pgsqlDriverLabel");
+        get(m_pETDriverClass, "pgsqlDriverEntry");
+        get(m_pPBTestDriver, "testDriverButton");
+
+        m_pFTDriverClass->SetText(OUString(ModuleRes(_nDriverClassId)));
+
+        m_pFTDefaultPortNumber->SetText(OUString(ModuleRes(_nDefaultPortResId)));
+        OUString sHelpText = OUString(ModuleRes(_nHelpTextResId));
+        m_pFTHelpText->SetText(sHelpText);
+        m_pFTHeader->SetText(ModuleRes(_nHeaderTextResId));
+        m_pETDatabasename->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_pETHostname->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_pNFPortnumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+
+        m_pETDriverClass->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+
+    }
+
+    OPostgreSQLConnectionPageSetup::~OPostgreSQLConnectionPageSetup()
+    {
+        disposeOnce();
+    }
+
+    void OPostgreSQLConnectionPageSetup::dispose()
+    {
+        m_pFTHelpText.clear();
+        m_pFTHeader.clear();
+        m_pFTDatabasename.clear();
+        m_pFTHostname.clear();
+        m_pFTPortnumber.clear();
+        m_pETDatabasename.clear();
+        m_pETHostname.clear();
+        m_pNFPortnumber.clear();
+        m_pFTDefaultPortNumber.clear();
+        m_pFTDriverClass.clear();
+        m_pETDriverClass.clear();
+        m_pPBTestDriver.clear();
+        OGenericAdministrationPage::dispose();
+    }
+
+    void OPostgreSQLConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETDatabasename));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETDriverClass));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETHostname));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pNFPortnumber));
+    }
+
+    void OPostgreSQLConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHelpText));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDatabasename));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHostname));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTPortnumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDefaultPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDriverClass));
+    }
+
+    bool OPostgreSQLConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = false;
+        fillString(*_rSet, m_pETDriverClass, DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,m_pETHostname, DSID_CONN_HOSTNAME, bChangedSomething);
+        fillString(*_rSet,m_pETDatabasename, DSID_DATABASENAME, bChangedSomething);
+        fillInt32(*_rSet,m_pNFPortnumber, m_nPortId, bChangedSomething );
         return bChangedSomething;
     }
 

@@ -171,6 +171,44 @@ namespace dbaui
         sal_uInt16              m_nPortId;
     };
 
+    class OPostgreSQLConnectionPageSetup : public OGenericAdministrationPage
+    {
+    public:
+        OPostgreSQLConnectionPageSetup(    vcl::Window* pParent
+                             , const SfxItemSet& _rCoreAttrs
+                             , sal_uInt16 _nPortId
+                             , sal_uInt16 _nDefaultPortResId
+                             , sal_uInt16 _nHelpTextResId
+                             , sal_uInt16 _nHeaderTextResId
+                             , sal_uInt16 _nDriverClassId );
+        virtual ~OPostgreSQLConnectionPageSetup();
+        virtual void dispose() override;
+        static VclPtr<OGenericAdministrationPage> Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+
+        static VclPtr<OGenericAdministrationPage> CreatePostgreSQLConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+
+    protected:
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+
+        VclPtr<FixedText>            m_pFTHelpText;
+        VclPtr<FixedText>            m_pFTHeader;
+        VclPtr<FixedText>            m_pFTDatabasename;
+        VclPtr<FixedText>            m_pFTHostname;
+        VclPtr<FixedText>            m_pFTPortnumber;
+        VclPtr<Edit>                 m_pETDatabasename;
+        VclPtr<Edit>                 m_pETHostname;
+        VclPtr<NumericField>         m_pNFPortnumber;
+        VclPtr<FixedText>            m_pFTDefaultPortNumber;
+
+        VclPtr<FixedText>            m_pFTDriverClass;
+        VclPtr<Edit>                 m_pETDriverClass;
+        VclPtr<PushButton>           m_pPBTestDriver;
+
+        sal_uInt16                   m_nPortId;
+    };
+
     // OJDBCConnectionPageSetup
     class OJDBCConnectionPageSetup : public OConnectionTabPageSetup
     {

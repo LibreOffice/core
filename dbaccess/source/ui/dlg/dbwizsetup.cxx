@@ -523,6 +523,10 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( this, *m_pOutSet);
             break;
 
+        case PAGE_DBSETUPWIZARD_PGSQL:
+            pPage = OPostgreSQLConnectionPageSetup::CreatePostgreSQLConnectionPageSetup( this, *m_pOutSet);
+            break;
+
         case PAGE_DBSETUPWIZARD_LDAP:
             pPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(this,*m_pOutSet);
             break;

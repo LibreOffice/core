@@ -85,6 +85,7 @@ typedef sal_Int32   ItemID;
 #define DSID_PRIMARY_KEY_SUPPORT    59
 #define DSID_MAX_ROW_SCAN           60
 #define DSID_RESPECTRESULTSETTYPE   61
+#define DSID_POSTGRES_PORTNUMBER    62
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 // item range. Adjust this if you introduce new items above

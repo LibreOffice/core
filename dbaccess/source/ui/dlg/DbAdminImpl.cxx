@@ -510,6 +510,21 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
                 }
             }
             break;
+        case  ::dbaccess::DST_POSTGRES:
+            {
+                const SfxStringItem* pHostName = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
+                const SfxInt32Item* pPortNumber = m_pItemSetHelper->getOutputSet()->GetItem<SfxInt32Item>(DSID_POSTGRES_PORTNUMBER);
+                const SfxStringItem* pDatabaseName = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_DATABASENAME);
+                sNewUrl = lcl_createHostWithPort(pHostName,pPortNumber);
+                OUString sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : OUString();
+                if ( !sDatabaseName.getLength() && pUrlItem )
+                   sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
+                if ( !sDatabaseName.isEmpty() )
+                {
+                    sNewUrl += "/" + sDatabaseName;
+                }
+            }
+            break;
         case  ::dbaccess::DST_ORACLE_JDBC:
             {
                 const SfxStringItem* pHostName = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
