@@ -787,7 +787,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     if ( !nRowCount )
     {
         nRowCount = 3;
-        const double fDefaultData[ ] =
+        static const double fDefaultData[ ] =
             { 9.10, 3.20, 4.54,
               2.40, 8.80, 9.65,
               3.10, 1.50, 3.70,
@@ -796,7 +796,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         {
             aRowLabels.push_back(OUString::number(h+1));
             ::std::vector< double > aRow;
-            const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
+            const sal_Int32 nSize = SAL_N_ELEMENTS(fDefaultData);
             for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)
             {
                 if ( k >= nSize )

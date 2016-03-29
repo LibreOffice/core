@@ -168,8 +168,7 @@ static char const*const g_ServicesReferenceMark[] =
     "com.sun.star.text.ReferenceMark",
 };
 
-static const size_t g_nServicesReferenceMark(
-    sizeof(g_ServicesReferenceMark)/sizeof(g_ServicesReferenceMark[0]));
+static const size_t g_nServicesReferenceMark(SAL_N_ELEMENTS(g_ServicesReferenceMark));
 
 sal_Bool SAL_CALL
 SwXReferenceMark::supportsService(const OUString& rServiceName)
@@ -906,8 +905,7 @@ static char const*const g_ServicesMeta[] =
     "com.sun.star.text.InContentMetadata",
 };
 
-static const size_t g_nServicesMeta(
-    sizeof(g_ServicesMeta)/sizeof(g_ServicesMeta[0]));
+static const size_t g_nServicesMeta(SAL_N_ELEMENTS(g_ServicesMeta));
 
 sal_Bool SAL_CALL
 SwXMeta::supportsService(const OUString& rServiceName)
@@ -1331,8 +1329,7 @@ static char const*const g_ServicesMetaField[] =
     "com.sun.star.text.textfield.MetadataField",
 };
 
-static const size_t g_nServicesMetaField(
-    sizeof(g_ServicesMetaField)/sizeof(g_ServicesMetaField[0]));
+static const size_t g_nServicesMetaField(SAL_N_ELEMENTS(g_ServicesMetaField));
 
 sal_Bool SAL_CALL
 SwXMetaField::supportsService(const OUString& rServiceName)

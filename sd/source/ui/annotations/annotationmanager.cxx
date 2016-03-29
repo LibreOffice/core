@@ -1041,7 +1041,7 @@ Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_NORMAL,     COL_AUTHOR5_NORMAL,     COL_AUTHOR6_NORMAL,
             COL_AUTHOR7_NORMAL,     COL_AUTHOR8_NORMAL,     COL_AUTHOR9_NORMAL };
 
-        return Color( aArrayNormal[ aAuthorIndex % (sizeof( aArrayNormal )/ sizeof( aArrayNormal[0] ))]);
+        return Color( aArrayNormal[ aAuthorIndex % SAL_N_ELEMENTS( aArrayNormal ) ] );
     }
 
     return Color(COL_WHITE);
@@ -1056,7 +1056,7 @@ Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_LIGHT,      COL_AUTHOR5_LIGHT,      COL_AUTHOR6_LIGHT,
             COL_AUTHOR7_LIGHT,      COL_AUTHOR8_LIGHT,      COL_AUTHOR9_LIGHT };
 
-        return Color( aArrayLight[ aAuthorIndex % (sizeof( aArrayLight )/ sizeof( aArrayLight[0] ))]);
+        return Color( aArrayLight[ aAuthorIndex % SAL_N_ELEMENTS( aArrayLight ) ] );
     }
 
     return Color(COL_WHITE);
@@ -1071,7 +1071,7 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
             COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
 
-        return Color( aArrayAnkor[  aAuthorIndex % (sizeof( aArrayAnkor )   / sizeof( aArrayAnkor[0] ))]);
+        return Color( aArrayAnkor[  aAuthorIndex % SAL_N_ELEMENTS( aArrayAnkor ) ] );
     }
 
     return Color(COL_WHITE);

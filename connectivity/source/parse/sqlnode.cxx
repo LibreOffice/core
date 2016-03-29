@@ -1331,7 +1331,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         static_assert(OSQLParseNode::UNKNOWN_RULE==0, "UNKNOWN_RULE must be 0 for memset to 0 to work");
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs));
 
-        struct
+        const struct
         {
             OSQLParseNode::Rule eRule;      // the parse node's ID for the rule
             OString      sRuleName;  // the name of the rule ("select_statement")
@@ -1439,7 +1439,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::cast_spec, "cast_spec" },
             { OSQLParseNode::window_function, "window_function" }
         };
-        const size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
+        const size_t nRuleMapCount = SAL_N_ELEMENTS( aRuleDescriptions );
         // added a new rule? Adjust this map!
         // +1 for UNKNOWN_RULE
         static_assert(nRuleMapCount + 1 == static_cast<size_t>(OSQLParseNode::rule_count), "must be equal");

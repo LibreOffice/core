@@ -614,7 +614,7 @@ namespace ucb { namespace ucp { namespace ext
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             )
         };
-        return Sequence< Property >( aProperties, sizeof( aProperties ) / sizeof( aProperties[0] ) );
+        return Sequence< Property >( aProperties, SAL_N_ELEMENTS( aProperties ) );
     }
 
 

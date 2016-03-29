@@ -1628,7 +1628,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1668,7 +1668,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1710,7 +1710,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1750,7 +1750,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1792,7 +1792,7 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1838,7 +1838,7 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1887,7 +1887,7 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1928,7 +1928,7 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -2000,7 +2000,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
         varCriteria[nPos].setString(sTypeNames);
 
     // Create SafeArray Bounds and initialize the array
-    const sal_Int32 nCrit = sizeof varCriteria / sizeof varCriteria[0];
+    const sal_Int32 nCrit = SAL_N_ELEMENTS(varCriteria);
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = nCrit;
@@ -2037,7 +2037,7 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -2081,7 +2081,7 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS(varCriteria);
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -2116,7 +2116,7 @@ ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 {
     // Create elements used in the array
     OLEVariant varCriteria[2];
-    const int nCrit = sizeof varCriteria / sizeof varCriteria[0];
+    const int nCrit = SAL_N_ELEMENTS(varCriteria);
     // Create SafeArray Bounds and initialize the array
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound   = 0;

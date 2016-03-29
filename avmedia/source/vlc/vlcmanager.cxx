@@ -49,7 +49,7 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
     m_is_vlc_found = success;
     if (m_is_vlc_found)
     {
-        mInstance.reset(new Instance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ));
+        mInstance.reset(new Instance( SAL_N_ELEMENTS(VLC_ARGS) ), VLC_ARGS ));
         //Check VLC version
         std::vector<std::string> verComponents;
         const std::string str(Common::Version());

@@ -30,11 +30,11 @@ void UpdateLog::Init(NS_tchar* sourcePathParam,
 
   sourcePath = sourcePathParam;
   NS_tchar logFile[MAXPATHLEN];
-  NS_tsnprintf(logFile, sizeof(logFile)/sizeof(logFile[0]),
+  NS_tsnprintf(logFile, SAL_N_ELEMENTS(logFile),
     NS_T("%s/%s"), sourcePathParam, fileName);
 
   if (alternateFileName && NS_taccess(logFile, F_OK)) {
-    NS_tsnprintf(logFile, sizeof(logFile)/sizeof(logFile[0]),
+    NS_tsnprintf(logFile, SAL_N_ELEMENTS(logFile),
       NS_T("%s/%s"), sourcePathParam, alternateFileName);
   }
 

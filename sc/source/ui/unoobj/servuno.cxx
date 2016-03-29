@@ -586,7 +586,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
 uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
 {
-    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     for (sal_uInt16 i = 0; i < nEntries; i++)

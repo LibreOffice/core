@@ -470,8 +470,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         sal_Int16 nZoom = 0;
         aZoom >>= nZoom;
 
-        for (sal_uInt16 i = 0;
-                i < (sizeof(nZoomValues)/sizeof(nZoomValues[0])); ++i)
+        for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(nZoomValues); ++i)
         {
             OUString sTemp = unicode::formatPercent(nZoomValues[i],
                 Application::GetSettings().GetUILanguageTag());
@@ -490,7 +489,7 @@ IMPL_LINK_TYPED(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
     if ((nId > ITEM_ZOOM) &&
-        (nId <= (ITEM_ZOOM + (sizeof(nZoomValues)/sizeof(nZoomValues[0])))))
+        (nId <= (ITEM_ZOOM + SAL_N_ELEMENTS(nZoomValues))))
     {
         sal_Int16 nZoom = nZoomValues[nId - ITEM_ZOOM - 1];
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);

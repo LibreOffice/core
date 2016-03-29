@@ -48,12 +48,12 @@ namespace reportdesign
 
 uno::Sequence< OUString> lcl_getGroupAbsent()
 {
-    OUString pProps[] = {
+    const OUString pProps[] = {
                 OUString(PROPERTY_CANGROW)
                 ,OUString(PROPERTY_CANSHRINK)
         };
 
-    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 
@@ -61,7 +61,7 @@ uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
 {
     if ( _bPageSection )
     {
-        OUString pProps[] = {
+        const OUString pProps[] = {
                 OUString(PROPERTY_FORCENEWPAGE)
                 ,OUString(PROPERTY_NEWROWORCOL)
                 ,OUString(PROPERTY_KEEPTOGETHER)
@@ -69,16 +69,16 @@ uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
                 ,OUString(PROPERTY_CANSHRINK)
                 ,OUString(PROPERTY_REPEATSECTION)
         };
-        return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+        return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
     }
 
-    OUString pProps[] = {
+    const OUString pProps[] = {
                 OUString(PROPERTY_CANGROW)
                 ,OUString(PROPERTY_CANSHRINK)
                 ,OUString(PROPERTY_REPEATSECTION)
         };
 
-    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 uno::Reference<report::XSection> OSection::createOSection(

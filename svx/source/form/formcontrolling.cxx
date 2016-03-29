@@ -417,7 +417,7 @@ namespace svx
         // but on the medium term, we are to support everything listed
         // here
         ::std::vector< sal_Int32 > aSupportedFeatures;
-        sal_Int32 pSupportedFeatures[] =
+        const sal_Int32 pSupportedFeatures[] =
         {
             SID_FM_RECORD_FIRST,
             SID_FM_RECORD_NEXT,
@@ -442,7 +442,7 @@ namespace svx
             SID_FM_FILTER_START,
             SID_FM_VIEW_AS_GRID
         };
-        sal_Int32 nFeatureCount = sizeof( pSupportedFeatures ) / sizeof( pSupportedFeatures[ 0 ] );
+        sal_Int32 nFeatureCount = SAL_N_ELEMENTS( pSupportedFeatures );
         aSupportedFeatures.resize( nFeatureCount );
         ::std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
 

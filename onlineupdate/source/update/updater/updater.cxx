@@ -502,7 +502,7 @@ static int ensure_remove_recursive(const NS_tchar *path,
     if (NS_tstrcmp(entry->d_name, NS_T(".")) &&
         NS_tstrcmp(entry->d_name, NS_T(".."))) {
       NS_tchar childPath[MAXPATHLEN];
-      NS_tsnprintf(childPath, sizeof(childPath)/sizeof(childPath[0]),
+      NS_tsnprintf(childPath, SAL_N_ELEMENTS(childPath),
                    NS_T("%s/%s"), path, entry->d_name);
       rv = ensure_remove_recursive(childPath);
       if (rv && !continueEnumOnFailure) {
@@ -788,13 +788,13 @@ static int ensure_copy_recursive(const NS_tchar *path, const NS_tchar *dest,
     if (NS_tstrcmp(entry->d_name, NS_T(".")) &&
         NS_tstrcmp(entry->d_name, NS_T(".."))) {
       NS_tchar childPath[MAXPATHLEN];
-      NS_tsnprintf(childPath, sizeof(childPath)/sizeof(childPath[0]),
+      NS_tsnprintf(childPath, SAL_N_ELEMENTS(childPath),
                    NS_T("%s/%s"), path, entry->d_name);
       if (skiplist.find(childPath)) {
         continue;
       }
       NS_tchar childPathDest[MAXPATHLEN];
-      NS_tsnprintf(childPathDest, sizeof(childPathDest)/sizeof(childPathDest[0]),
+      NS_tsnprintf(childPathDest, SAL_N_ELEMENTS(childPathDest),
                    NS_T("%s/%s"), dest, entry->d_name);
       rv = ensure_copy_recursive(childPath, childPathDest, skiplist);
       if (rv) {
@@ -893,7 +893,7 @@ static int remove_recursive_on_reboot(const NS_tchar *path, const NS_tchar *dele
     if (NS_tstrcmp(entry->d_name, NS_T(".")) &&
         NS_tstrcmp(entry->d_name, NS_T(".."))) {
       NS_tchar childPath[MAXPATHLEN];
-      NS_tsnprintf(childPath, sizeof(childPath)/sizeof(childPath[0]),
+      NS_tsnprintf(childPath, SAL_N_ELEMENTS(childPath),
                    NS_T("%s/%s"), path, entry->d_name);
       // There is no need to check the return value of this call since this
       // function is only called after an update is successful and there is not
@@ -923,7 +923,7 @@ static int remove_recursive_on_reboot(const NS_tchar *path, const NS_tchar *dele
 static int backup_create(const NS_tchar *path)
 {
   NS_tchar backup[MAXPATHLEN];
-  NS_tsnprintf(backup, sizeof(backup)/sizeof(backup[0]),
+  NS_tsnprintf(backup, SAL_N_ELEMENTS(backup),
                NS_T("%s") BACKUP_EXT, path);
 
   return rename_file(path, backup);
@@ -934,7 +934,7 @@ static int backup_create(const NS_tchar *path)
 static int backup_restore(const NS_tchar *path)
 {
   NS_tchar backup[MAXPATHLEN];
-  NS_tsnprintf(backup, sizeof(backup)/sizeof(backup[0]),
+  NS_tsnprintf(backup, SAL_N_ELEMENTS(backup),
                NS_T("%s") BACKUP_EXT, path);
 
   if (NS_taccess(backup, F_OK)) {
@@ -949,7 +949,7 @@ static int backup_restore(const NS_tchar *path)
 static int backup_discard(const NS_tchar *path)
 {
   NS_tchar backup[MAXPATHLEN];
-  NS_tsnprintf(backup, sizeof(backup)/sizeof(backup[0]),
+  NS_tsnprintf(backup, SAL_N_ELEMENTS(backup),
                NS_T("%s") BACKUP_EXT, path);
 
   // Nothing to discard
@@ -1447,7 +1447,7 @@ PatchFile::Prepare()
   // extract the patch to a temporary file
   mPatchIndex = sPatchIndex++;
 
-  NS_tsnprintf(spath, sizeof(spath)/sizeof(spath[0]),
+  NS_tsnprintf(spath, SAL_N_ELEMENTS(spath),
                NS_T("%s/updating/%d.patch"), gWorkingDirPath, mPatchIndex);
 
   NS_tremove(spath);
@@ -1837,7 +1837,7 @@ static bool
 WriteStatusFile(const char* aStatus)
 {
   NS_tchar filename[MAXPATHLEN];
-  NS_tsnprintf(filename, sizeof(filename)/sizeof(filename[0]),
+  NS_tsnprintf(filename, SAL_N_ELEMENTS(filename),
                NS_T("%s/update.status"), gPatchDirPath);
 
   // Make sure that the directory for the update status file exists
@@ -1867,7 +1867,7 @@ WriteStatusFile(int status)
       text = "succeeded\n";
     }
   } else {
-    snprintf(buf, sizeof(buf)/sizeof(buf[0]), "failed: %d\n", status);
+    snprintf(buf, SAL_N_ELEMENTS(buf), "failed: %d\n", status);
     text = buf;
   }
 
@@ -1888,7 +1888,7 @@ static bool
 IsUpdateStatusPendingService()
 {
   NS_tchar filename[MAXPATHLEN];
-  NS_tsnprintf(filename, sizeof(filename)/sizeof(filename[0]),
+  NS_tsnprintf(filename, SAL_N_ELEMENTS(filename),
                NS_T("%s/update.status"), gPatchDirPath);
 
   AutoFile file(NS_tfopen(filename, NS_T("rb")));
@@ -1922,7 +1922,7 @@ IsUpdateStatusSucceeded(bool &isSucceeded)
 {
   isSucceeded = false;
   NS_tchar filename[MAXPATHLEN];
-  NS_tsnprintf(filename, sizeof(filename)/sizeof(filename[0]),
+  NS_tsnprintf(filename, SAL_N_ELEMENTS(filename),
                NS_T("%s/update.status"), gPatchDirPath);
 
   AutoFile file(NS_tfopen(filename, NS_T("rb")));
@@ -1984,7 +1984,7 @@ ProcessReplaceRequest()
 
 #ifdef MACOSX
   NS_tchar destDir[MAXPATHLEN];
-  NS_tsnprintf(destDir, sizeof(destDir)/sizeof(destDir[0]),
+  NS_tsnprintf(destDir, SAL_N_ELEMENTS(destDir),
                NS_T("%s/Contents"), gInstallDirPath);
 #elif defined(WNT)
   // Windows preserves the case of the file/directory names.  We use the
@@ -1993,7 +1993,7 @@ ProcessReplaceRequest()
   // application, the installation directory's name does not change.
   NS_tchar destDir[MAXPATHLEN];
   if (!GetLongPathNameW(gInstallDirPath, destDir,
-                        sizeof(destDir)/sizeof(destDir[0]))) {
+                        SAL_N_ELEMENTS(destDir))) {
     return NO_INSTALLDIR_ERROR;
   }
 #else
@@ -2001,11 +2001,11 @@ ProcessReplaceRequest()
 #endif
 
   NS_tchar tmpDir[MAXPATHLEN];
-  NS_tsnprintf(tmpDir, sizeof(tmpDir)/sizeof(tmpDir[0]),
+  NS_tsnprintf(tmpDir, SAL_N_ELEMENTS(tmpDir),
                NS_T("%s.bak"), destDir);
 
   NS_tchar newDir[MAXPATHLEN];
-  NS_tsnprintf(newDir, sizeof(newDir)/sizeof(newDir[0]),
+  NS_tsnprintf(newDir, SAL_N_ELEMENTS(newDir),
 #ifdef MACOSX
                NS_T("%s/Contents"),
                gWorkingDirPath);
@@ -2077,7 +2077,7 @@ ProcessReplaceRequest()
     LOG(("Removing tmpDir failed, err: %d", rv));
 #ifdef _WIN32
     NS_tchar deleteDir[MAXPATHLEN];
-    NS_tsnprintf(deleteDir, sizeof(deleteDir)/sizeof(deleteDir[0]),
+    NS_tsnprintf(deleteDir, SAL_N_ELEMENTS(deleteDir),
                  NS_T("%s\\%s"), destDir, DELETE_DIR);
     // Attempt to remove the tobedeleted directory and then recreate it if it
     // was successfully removed.
@@ -2093,7 +2093,7 @@ ProcessReplaceRequest()
   // On OS X, we we need to remove the staging directory after its Contents
   // directory has been moved.
   NS_tchar updatedAppDir[MAXPATHLEN];
-  NS_tsnprintf(updatedAppDir, sizeof(updatedAppDir)/sizeof(updatedAppDir[0]),
+  NS_tsnprintf(updatedAppDir, SAL_N_ELEMENTS(updatedAppDir),
                NS_T("%s/Updated.app"), gPatchDirPath);
   ensure_remove_recursive(updatedAppDir);
 #endif
@@ -2147,7 +2147,7 @@ GetUpdateFileName(NS_tchar *fileName, int maxChars)
   // of the update file (terminated by a newline).
 
   NS_tchar linkFileName[MAXPATHLEN];
-  NS_tsnprintf(linkFileName, sizeof(linkFileName)/sizeof(linkFileName[0]),
+  NS_tsnprintf(linkFileName, SAL_N_ELEMENTS(linkFileName),
                NS_T("%s/update.link"), gPatchDirPath);
   AutoFile linkFile(NS_tfopen(linkFileName, NS_T("rb")));
   if (linkFile == nullptr) {
@@ -2192,7 +2192,7 @@ UpdateThreadFunc(void * /*param*/)
     rv = ProcessReplaceRequest();
   } else {
     NS_tchar dataFile[MAXPATHLEN];
-    rv = GetUpdateFileName(dataFile, sizeof(dataFile)/sizeof(dataFile[0]));
+    rv = GetUpdateFileName(dataFile, SAL_N_ELEMENTS(dataFile));
     if (rv == OK) {
       rv = gArchiveReader.Open(dataFile);
     }
@@ -2241,7 +2241,7 @@ UpdateThreadFunc(void * /*param*/)
       if (rv == OK) {
         NS_tchar updateSettingsPath[MAX_TEXT_LEN];
         NS_tsnprintf(updateSettingsPath,
-                     sizeof(updateSettingsPath) / sizeof(updateSettingsPath[0]),
+                     SAL_N_ELEMENTS(updateSettingsPath),
 #ifdef MACOSX
                      NS_T("%s/Contents/Resources/update-settings.ini"),
 #else
@@ -2280,7 +2280,7 @@ UpdateThreadFunc(void * /*param*/)
       rv = DoUpdate();
       gArchiveReader.Close();
       NS_tchar updatingDir[MAXPATHLEN];
-      NS_tsnprintf(updatingDir, sizeof(updatingDir)/sizeof(updatingDir[0]),
+      NS_tsnprintf(updatingDir, SAL_N_ELEMENTS(updatingDir),
                    NS_T("%s/updating"), gWorkingDirPath);
       ensure_remove_recursive(updatingDir);
     }
@@ -2473,7 +2473,7 @@ int NS_main(int argc, NS_tchar **argv)
     NS_tchar* logDir = gPatchDirPath;
 #else
     NS_tchar logDir[MAXPATHLEN];
-    NS_tsnprintf(logDir, sizeof(logDir)/sizeof(logDir[0]),
+    NS_tsnprintf(logDir, SAL_N_ELEMENTS(logDir),
                  NS_T("%s/updated/updates"),
                  gInstallDirPath);
 #endif
@@ -2585,7 +2585,7 @@ int NS_main(int argc, NS_tchar **argv)
       // When staging an update, the lock file is:
       // <install_dir>\updated.update_in_progress.lock
       NS_tsnprintf(updateLockFilePath,
-                   sizeof(updateLockFilePath)/sizeof(updateLockFilePath[0]),
+                   SAL_N_ELEMENTS(updateLockFilePath),
                    NS_T("%s/updated.update_in_progress.lock"), gInstallDirPath);
     } else if (sReplaceRequest) {
       // When processing a replace request, the lock file is:
@@ -2595,13 +2595,13 @@ int NS_main(int argc, NS_tchar **argv)
       NS_tchar *slash = (NS_tchar *) NS_tstrrchr(installDir, NS_SLASH);
       *slash = NS_T('\0');
       NS_tsnprintf(updateLockFilePath,
-                   sizeof(updateLockFilePath)/sizeof(updateLockFilePath[0]),
+                   SAL_N_ELEMENTS(updateLockFilePath),
                    NS_T("%s\\moz_update_in_progress.lock"), installDir);
     } else {
       // In the non-staging update case, the lock file is:
       // <install_dir>\<app_name>.exe.update_in_progress.lock
       NS_tsnprintf(updateLockFilePath,
-                   sizeof(updateLockFilePath)/sizeof(updateLockFilePath[0]),
+                   SAL_N_ELEMENTS(updateLockFilePath),
                    NS_T("%s.update_in_progress.lock"), argv[callbackIndex]);
     }
 
@@ -2630,7 +2630,7 @@ int NS_main(int argc, NS_tchar **argv)
                                        nullptr);
 
     NS_tsnprintf(elevatedLockFilePath,
-                 sizeof(elevatedLockFilePath)/sizeof(elevatedLockFilePath[0]),
+                 SAL_N_ELEMENTS(elevatedLockFilePath),
                  NS_T("%s/update_elevated.lock"), gPatchDirPath);
 
     // Even if a file has no sharing access, you can still get its attributes
@@ -2933,7 +2933,7 @@ int NS_main(int argc, NS_tchar **argv)
 
   NS_tchar applyDirLongPath[MAXPATHLEN];
   if (!GetLongPathNameW(gWorkingDirPath, applyDirLongPath,
-                        sizeof(applyDirLongPath)/sizeof(applyDirLongPath[0]))) {
+                        SAL_N_ELEMENTS(applyDirLongPath))) {
     LOG(("NS_main: unable to find apply to dir: " LOG_S, gWorkingDirPath));
     LogFinish();
     WriteStatusFile(WRITE_ERROR_APPLY_DIR_PATH);
@@ -2986,7 +2986,7 @@ int NS_main(int argc, NS_tchar **argv)
       targetPath = buffer;
     }
     if (!GetLongPathNameW(targetPath, callbackLongPath,
-                          sizeof(callbackLongPath)/sizeof(callbackLongPath[0]))) {
+                          SAL_N_ELEMENTS(callbackLongPath))) {
       LOG(("NS_main: unable to find callback file: " LOG_S, targetPath));
       LogFinish();
       WriteStatusFile(WRITE_ERROR_CALLBACK_PATH);
@@ -3026,7 +3026,7 @@ int NS_main(int argc, NS_tchar **argv)
 
       // Make a copy of the callback executable so it can be read when patching.
       NS_tsnprintf(gCallbackBackupPath,
-                   sizeof(gCallbackBackupPath)/sizeof(gCallbackBackupPath[0]),
+                   SAL_N_ELEMENTS(gCallbackBackupPath),
                    NS_T("%s" CALLBACK_BACKUP_EXT), argv[callbackIndex]);
       NS_tremove(gCallbackBackupPath);
       CopyFileW(argv[callbackIndex], gCallbackBackupPath, false);
@@ -3150,17 +3150,17 @@ int NS_main(int argc, NS_tchar **argv)
   // directory under Contents/MacOS (see Bug 1068439).
   if (gSucceeded && !sStagedUpdate) {
     NS_tchar oldPrecomplete[MAXPATHLEN];
-    NS_tsnprintf(oldPrecomplete, sizeof(oldPrecomplete)/sizeof(oldPrecomplete[0]),
+    NS_tsnprintf(oldPrecomplete, SAL_N_ELEMENTS(oldPrecomplete),
                  NS_T("%s/precomplete"), gInstallDirPath);
     NS_tremove(oldPrecomplete);
 
     NS_tchar oldDistDir[MAXPATHLEN];
-    NS_tsnprintf(oldDistDir, sizeof(oldDistDir)/sizeof(oldDistDir[0]),
+    NS_tsnprintf(oldDistDir, SAL_N_ELEMENTS(oldDistDir),
                  NS_T("%s/Contents/MacOS/distribution"), gInstallDirPath);
     int rv = NS_taccess(oldDistDir, F_OK);
     if (!rv) {
       NS_tchar newDistDir[MAXPATHLEN];
-      NS_tsnprintf(newDistDir, sizeof(newDistDir)/sizeof(newDistDir[0]),
+      NS_tsnprintf(newDistDir, SAL_N_ELEMENTS(newDistDir),
                    NS_T("%s/Contents/Resources/distribution"), gInstallDirPath);
       rv = NS_taccess(newDistDir, F_OK);
       if (!rv) {
@@ -3344,7 +3344,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
   NS_tchar searchspec[MAXPATHLEN];
   NS_tchar foundpath[MAXPATHLEN];
 
-  NS_tsnprintf(searchspec, sizeof(searchspec)/sizeof(searchspec[0]),
+  NS_tsnprintf(searchspec, SAL_N_ELEMENTS(searchspec),
                NS_T("%s*"), dirpath);
   const NS_tchar *pszSpec = get_full_path(searchspec);
 
@@ -3356,10 +3356,10 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
           NS_tstrcmp(finddata.cFileName, NS_T("..")) == 0)
         continue;
 
-      NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
+      NS_tsnprintf(foundpath, SAL_N_ELEMENTS(foundpath),
                    NS_T("%s%s"), dirpath, finddata.cFileName);
       if (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
+        NS_tsnprintf(foundpath, SAL_N_ELEMENTS(foundpath),
                      NS_T("%s/"), foundpath);
         // Recurse into the directory.
         rv = add_dir_entries(foundpath, list);
@@ -3418,7 +3418,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
   struct dirent* ent;
 
 
-  NS_tsnprintf(searchpath, sizeof(searchpath)/sizeof(searchpath[0]), NS_T("%s"),
+  NS_tsnprintf(searchpath, SAL_N_ELEMENTS(searchpath), NS_T("%s"),
                dirpath);
   // Remove the trailing slash so the paths don't contain double slashes. The
   // existence of the slash has already been checked in DoUpdate.
@@ -3436,7 +3436,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
         (strcmp(ent->d_name, "..") == 0))
       continue;
 
-    NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
+    NS_tsnprintf(foundpath, SAL_N_ELEMENTS(foundpath),
                  NS_T("%s%s"), dirpath, ent->d_name);
     struct stat64 st_buf;
     int test = stat64(foundpath, &st_buf);
@@ -3445,7 +3445,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
       return UNEXPECTED_FILE_OPERATION_ERROR;
     }
     if (S_ISDIR(st_buf.st_mode)) {
-      NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
+      NS_tsnprintf(foundpath, SAL_N_ELEMENTS(foundpath),
                    NS_T("%s/"), foundpath);
       // Recurse into the directory.
       rv = add_dir_entries(foundpath, list);
@@ -3503,7 +3503,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
   FTSENT *ftsdirEntry;
   NS_tchar searchpath[MAXPATHLEN];
 
-  NS_tsnprintf(searchpath, sizeof(searchpath)/sizeof(searchpath[0]), NS_T("%s"),
+  NS_tsnprintf(searchpath, SAL_N_ELEMENTS(searchpath), NS_T("%s"),
                dirpath);
   // Remove the trailing slash so the paths don't contain double slashes. The
   // existence of the slash has already been checked in DoUpdate.
@@ -3535,7 +3535,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
       case FTS_F:
       case FTS_NSOK:
         // Add the file to be removed to the ActionList.
-        NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
+        NS_tsnprintf(foundpath, SAL_N_ELEMENTS(foundpath),
                      NS_T("%s"), ftsdirEntry->fts_accpath);
         quotedpath = get_quoted_path(foundpath);
         if (!quotedpath) {
@@ -3552,7 +3552,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
       case FTS_DP:
         rv = OK;
         // Add the directory to be removed to the ActionList.
-        NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
+        NS_tsnprintf(foundpath, SAL_N_ELEMENTS(foundpath),
                      NS_T("%s/"), ftsdirEntry->fts_accpath);
         quotedpath = get_quoted_path(foundpath);
         if (!quotedpath) {
@@ -3725,7 +3725,7 @@ int AddPreCompleteActions(ActionList *list)
 int DoUpdate()
 {
   NS_tchar manifest[MAXPATHLEN];
-  NS_tsnprintf(manifest, sizeof(manifest)/sizeof(manifest[0]),
+  NS_tsnprintf(manifest, SAL_N_ELEMENTS(manifest),
                NS_T("%s/updating/update.manifest"), gWorkingDirPath);
   ensure_parent_dir(manifest);
 

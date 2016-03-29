@@ -2090,7 +2090,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 {
     sal_Int32 nErg(0);
     // only the first 11 row are interesting
-    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
+    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
     for(sal_Int32 i=0;i<nSize;i++)
     {
         if(!m_bVisibleRow[i])
@@ -2102,7 +2102,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
 {
     // only the first 11 row are interesting
-    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
+    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
     for(sal_Int32 i=0;i< nSize;i++)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }

@@ -347,7 +347,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
-    OSL_ENSURE( sizeof(aDinTab) / sizeof(aDinTab[0]) == NUM_PAPER_ENTRIES,
+    OSL_ENSURE( SAL_N_ELEMENTS(aDinTab) == NUM_PAPER_ENTRIES,
             "mismatch between array entries and enum values" );
 
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;

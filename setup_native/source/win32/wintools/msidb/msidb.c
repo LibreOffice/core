@@ -441,7 +441,7 @@ static BOOL msidbExportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[])
     MSIHANDLE dbhandle, tableListView, rec;
     LPWSTR tableFile = 0;
     WCHAR tableName[MAX_TABLE_NAME];
-    DWORD size = sizeof(tableName) / sizeof(tableName[0]);
+    DWORD size = SAL_N_ELEMENTS(tableName);
     int i = 0;
 
     r = MsiOpenDatabaseW(dbfile, (LPCWSTR) MSIDBOPEN_READONLY, &dbhandle);
@@ -456,7 +456,7 @@ static BOOL msidbExportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[])
 
         while (r == ERROR_SUCCESS)
         {
-            size = sizeof(tableName) / sizeof(tableName[0]);
+            size = SAL_N_ELEMENTS(tableName);
             r = MsiRecordGetStringW(rec, 1, tableName, &size);
             if (r == ERROR_SUCCESS)
             {

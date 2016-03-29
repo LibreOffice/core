@@ -2652,7 +2652,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             // Renamed new names, prepare to read future names:
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
-        static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
+        static const size_t nOdffAliases = SAL_N_ELEMENTS(aOdffAliases);
         for (size_t i=0; i<nOdffAliases; ++i)
         {
             if (rName.equalsIgnoreAsciiCaseAscii( aOdffAliases[i].pName))

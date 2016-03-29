@@ -280,7 +280,7 @@ EventInfoHash& getEventTransInfo()
     {
         OUString sEventInfo;
         TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
-        int nCount = sizeof(aTranslatePropMap_Impl) / sizeof(aTranslatePropMap_Impl[0]);
+        int nCount = SAL_N_ELEMENTS(aTranslatePropMap_Impl);
 
         int i = 0;
         while (i < nCount)

@@ -88,7 +88,7 @@ struct ToolboxStyleItem
     const char* attrName;
 };
 
-ToolboxStyleItem Styles[ ] = {
+const ToolboxStyleItem Styles[ ] = {
     { css::ui::ItemStyle::RADIO_CHECK,   ATTRIBUTE_ITEMSTYLE_RADIO },
     { css::ui::ItemStyle::ALIGN_LEFT,    ATTRIBUTE_ITEMSTYLE_LEFT },
     { css::ui::ItemStyle::AUTO_SIZE,     ATTRIBUTE_ITEMSTYLE_AUTO },
@@ -99,7 +99,7 @@ ToolboxStyleItem Styles[ ] = {
     { css::ui::ItemStyle::TEXT,          ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
-sal_Int32 nStyleItemEntries = sizeof (Styles) / sizeof (Styles[0]);
+sal_Int32 nStyleItemEntries = SAL_N_ELEMENTS(Styles);
 
 struct ToolBarEntryProperty
 {
@@ -757,7 +757,7 @@ throw ( SAXException, RuntimeException )
     if ( nStyle > 0 )
     {
         OUString aValue;
-        ToolboxStyleItem* pStyle = Styles;
+        const ToolboxStyleItem* pStyle = Styles;
 
         for ( sal_Int32 nIndex = 0; nIndex < nStyleItemEntries; ++nIndex, ++pStyle )
         {

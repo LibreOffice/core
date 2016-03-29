@@ -100,7 +100,7 @@ LaunchWinPostProcess(const WCHAR *installationDir,
 
   if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeAsync", L"TRUE",
                                 exeasync,
-                                sizeof(exeasync)/sizeof(exeasync[0]),
+                                SAL_N_ELEMENTS(exeasync),
                                 inifile)) {
     return FALSE;
   }
@@ -123,7 +123,7 @@ LaunchWinPostProcess(const WCHAR *installationDir,
   }
 
   WCHAR dummyArg[14] = { L'\0' };
-  wcsncpy(dummyArg, L"argv0ignored ", sizeof(dummyArg) / sizeof(dummyArg[0]) - 1);
+  wcsncpy(dummyArg, L"argv0ignored ", SAL_N_ELEMENTS(dummyArg) - 1);
 
   size_t len = wcslen(exearg) + wcslen(dummyArg);
   WCHAR *cmdline = (WCHAR *) malloc((len + 1) * sizeof(WCHAR));
@@ -266,8 +266,7 @@ StartServiceUpdate(LPCWSTR installDir)
   si.lpDesktop = L"";
   PROCESS_INFORMATION pi = {0};
   WCHAR cmdLine[64] = { '\0' };
-  wcsncpy(cmdLine, L"dummyparam.exe upgrade",
-          sizeof(cmdLine) / sizeof(cmdLine[0]) - 1);
+  wcsncpy(cmdLine, L"dummyparam.exe upgrade", SAL_N_ELEMENTS(cmdLine) - 1);
   BOOL svcUpdateProcessStarted = CreateProcessW(tmpService,
                                                 cmdLine,
                                                 nullptr, nullptr, FALSE,

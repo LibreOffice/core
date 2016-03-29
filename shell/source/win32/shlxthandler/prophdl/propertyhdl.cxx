@@ -47,7 +47,7 @@ struct PROPERTYMAP
     PCWSTR pszValueNodeName;
 };
 
-PROPERTYMAP g_rgPROPERTYMAP[] =
+const PROPERTYMAP g_rgPROPERTYMAP[] =
 {
     { PKEY_Title,          L"LibreOffice",          L"Title" },
     { PKEY_Author,         L"LibreOffice",          L"Author" },
@@ -56,7 +56,7 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
     { PKEY_Comment,        L"LibreOffice",          L"Comments" },
 };
 
-size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
+size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :

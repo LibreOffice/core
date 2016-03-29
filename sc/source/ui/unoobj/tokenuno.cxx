@@ -96,7 +96,7 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
         formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
     };
-    static const sal_Int16 nConvMapCount = sizeof(aConvMap)/sizeof(aConvMap[0]);
+    static const sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
 
     // If mxOpCodeMap is not empty it overrides mbEnglish, and vice versa. We
     // don't need to initialize things twice.

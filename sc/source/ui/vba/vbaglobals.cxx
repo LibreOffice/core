@@ -239,7 +239,7 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException, std::ex
     static uno::Sequence< OUString > serviceNames( ScVbaGlobals_BASE::getAvailableServiceNames() );
     if ( !bInit )
     {
-         OUString names[] = {
+         const OUString names[] = {
             OUString(  "ooo.vba.excel.Range"  ),
             OUString(  "ooo.vba.excel.Workbook"  ),
             OUString(  "ooo.vba.excel.Window"  ),
@@ -248,7 +248,7 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException, std::ex
             OUString(  "ooo.vba.excel.Hyperlink"  ),
             OUString(  "com.sun.star.script.vba.VBASpreadsheetEventProcessor"  )
           };
-        sal_Int32 nExcelServices = ( sizeof( names )/ sizeof( names[0] ) );
+        sal_Int32 nExcelServices = SAL_N_ELEMENTS( names );
         sal_Int32 startIndex = serviceNames.getLength();
         serviceNames.realloc( serviceNames.getLength() + nExcelServices );
         for ( sal_Int32 index = 0; index < nExcelServices; ++index )

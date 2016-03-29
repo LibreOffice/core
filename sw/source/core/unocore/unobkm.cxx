@@ -364,8 +364,7 @@ static char const*const g_ServicesBookmark[] =
     "com.sun.star.text.Bookmark",
     "com.sun.star.document.LinkTarget",
 };
-static const size_t g_nServicesBookmark(
-    sizeof(g_ServicesBookmark)/sizeof(g_ServicesBookmark[0]));
+static const size_t g_nServicesBookmark(SAL_N_ELEMENTS(g_ServicesBookmark));
 
 sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException, std::exception)

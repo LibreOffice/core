@@ -1593,7 +1593,7 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
     Property aPropDesc;
     const OUString* pProps = aPropsListenedTo;
-    const OUString* pPropsEnd = pProps + sizeof( aPropsListenedTo ) / sizeof( aPropsListenedTo[ 0 ] );
+    const OUString* pPropsEnd = pProps + SAL_N_ELEMENTS( aPropsListenedTo );
     for (; pProps != pPropsEnd; ++pProps)
     {
         if ( xInfo->hasPropertyByName( *pProps ) )
@@ -2650,7 +2650,7 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
     static Sequence<sal_uInt16> aSupported;
     if (aSupported.getLength() == 0)
     {
-        sal_uInt16 nSupported[] = {
+        const sal_uInt16 nSupported[] = {
             DbGridControl::NavigationBar::RECORD_FIRST,
             DbGridControl::NavigationBar::RECORD_PREV,
             DbGridControl::NavigationBar::RECORD_NEXT,
@@ -2658,7 +2658,7 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
             DbGridControl::NavigationBar::RECORD_NEW,
             SID_FM_RECORD_UNDO
         };
-        aSupported.realloc(sizeof(nSupported)/sizeof(nSupported[0]));
+        aSupported.realloc(SAL_N_ELEMENTS(nSupported));
         sal_uInt16* pSupported = aSupported.getArray();
         for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
             *pSupported = nSupported[i];
@@ -2680,7 +2680,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
             FMURL_RECORD_MOVETONEW,
             FMURL_RECORD_UNDO
         };
-        aSupported.realloc(sizeof(sSupported)/sizeof(sSupported[0]));
+        aSupported.realloc(SAL_N_ELEMENTS(sSupported));
         css::util::URL* pSupported = aSupported.getArray();
         sal_uInt16 i;
 

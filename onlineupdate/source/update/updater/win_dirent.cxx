@@ -19,8 +19,8 @@ DIR::DIR(const WCHAR* path)
   : findHandle(INVALID_HANDLE_VALUE)
 {
   memset(name, 0, sizeof(name));
-  wcsncpy(name, path, sizeof(name)/sizeof(name[0]));
-  wcsncat(name, L"\\*", sizeof(name)/sizeof(name[0]) - wcslen(name) - 1);
+  wcsncpy(name, path, SAL_N_ELEMENTS(name));
+  wcsncat(name, L"\\*", SAL_N_ELEMENTS(name) - wcslen(name) - 1);
 }
 
 DIR::~DIR()
@@ -73,7 +73,7 @@ dirent* readdir(DIR* dir)
   }
   memset(gDirEnt.d_name, 0, sizeof(gDirEnt.d_name));
   wcsncpy(gDirEnt.d_name, data.cFileName,
-           sizeof(gDirEnt.d_name)/sizeof(gDirEnt.d_name[0]));
+           SAL_N_ELEMENTS(gDirEnt.d_name));
   return &gDirEnt;
 }
 #endif

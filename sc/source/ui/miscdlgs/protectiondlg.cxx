@@ -29,7 +29,7 @@ static const ScTableProtection::Option aOptions[] = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
 };
-static const sal_uInt16 nOptionCount = sizeof(aOptions) / sizeof (aOptions[0]);
+static const sal_uInt16 nOptionCount = SAL_N_ELEMENTS(aOptions);
 
 ScTableProtectionDlg::ScTableProtectionDlg(vcl::Window* pParent)
     : ModalDialog( pParent, "ProtectSheetDialog", "modules/scalc/ui/protectsheetdlg.ui" )

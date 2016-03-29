@@ -322,7 +322,7 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
     {
-        return sizeof( supportedIndexTable ) / sizeof( supportedIndexTable[0] );
+        return SAL_N_ELEMENTS( supportedIndexTable );
     }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {

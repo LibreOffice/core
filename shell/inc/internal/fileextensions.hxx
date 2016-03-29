@@ -39,9 +39,9 @@ struct FileExtensionEntry
     const char*    RegistryForwardKey;    // e.g. "soffice.StarWriterDocument.6"
 };
 
-extern FileExtensionEntry OOFileExtensionTable[];
+extern const FileExtensionEntry OOFileExtensionTable[];
 
-extern size_t OOFileExtensionTableSize;
+extern const size_t OOFileExtensionTableSize;
 
 
 /** Return the extension of a file

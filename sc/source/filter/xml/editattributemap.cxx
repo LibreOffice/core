@@ -64,7 +64,7 @@ ScXMLEditAttributeMap::Entry aEntries[] = {
 
 ScXMLEditAttributeMap::ScXMLEditAttributeMap()
 {
-    size_t n = sizeof(aEntries) / sizeof(aEntries[0]);
+    size_t n = SAL_N_ELEMENTS(aEntries);
     for (size_t i = 0; i < n; ++i)
     {
         maAPIEntries.insert(
