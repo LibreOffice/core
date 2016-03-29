@@ -576,7 +576,7 @@ void Desktop::Init()
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
         // start ipc thread only for non-remote offices
-        RequestHandler::Status aStatus = RequestHandler::Enable();
+        RequestHandler::Status aStatus = RequestHandler::Enable(true);
         if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
         {
 #if HAVE_FEATURE_MACOSX_SANDBOX

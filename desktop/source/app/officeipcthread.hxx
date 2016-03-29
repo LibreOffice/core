@@ -115,12 +115,11 @@ class RequestHandler: public salhelper::SimpleReferenceObject
         ProcessDocumentsRequest&, bool noTerminate);
 
     // return sal_False if second office
-    static Status               Enable();
+    static Status               Enable(bool ipc);
     static void                 Disable(bool join = true);
     // start dispatching events...
     static void                 SetReady();
     static void                 WaitForReady();
-    static bool                 IsEnabled();
 
     bool                        AreRequestsEnabled() const { return mState == State::RequestsEnabled; }
 };

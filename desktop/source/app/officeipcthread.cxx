@@ -445,14 +445,23 @@ void RequestHandler::RequestsCompleted()
     }
 }
 
-RequestHandler::Status RequestHandler::Enable()
+RequestHandler::Status RequestHandler::Enable(bool ipc)
 {
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobal.is() )
         return IPC_STATUS_OK;
 
-#if HAVE_FEATURE_DESKTOP
+#if !HAVE_FEATURE_DESKTOP
+    ipc = false;
+#endif
+
+    if (!ipc) {
+        rtl::Reference< RequestHandler > pThread(new RequestHandler);
+        pGlobal = pThread;
+        return IPC_STATUS_OK;
+    }
+
     OUString aUserInstallPath;
     OUString aDummy;
 
@@ -588,6 +597,7 @@ RequestHandler::Status RequestHandler::Enable()
         pThread->mPipeReaderThread = new PipeReaderThread(*pThread, pipe);
         pGlobal = pThread;
         pThread->mPipeReaderThread->launch();
+        return IPC_STATUS_OK;
     }
     else
     {
@@ -626,11 +636,6 @@ RequestHandler::Status RequestHandler::Enable()
 
         return IPC_STATUS_2ND_OFFICE;
     }
-#else
-    rtl::Reference< RequestHandler > pThread(new RequestHandler);
-    pGlobal = pThread;
-#endif
-    return IPC_STATUS_OK;
 }
 
 void RequestHandler::Disable(bool join)
@@ -692,12 +697,6 @@ void RequestHandler::WaitForReady()
     {
         t->cReady.wait();
     }
-}
-
-bool RequestHandler::IsEnabled()
-{
-    osl::MutexGuard g(GetMutex());
-    return pGlobal.is();
 }
 
 void PipeReaderThread::execute()

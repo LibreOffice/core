@@ -1920,9 +1920,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             force_c_locale();
         }
 
-        // This is horrible crack. I really would want to go back to simply just call
-        // InitVCL() here. The RequestHandler thing is just horrible.
-
         // We could use InitVCL() here -- and used to before using soffice_main,
         // however that now deals with the initialisation for us (and it's not
         // possible to try to set up VCL twice.
@@ -1935,28 +1932,21 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         // if you try to use loadDocument too early.
 
         // The RequestHandler is specifically set to be ready when all the other
-        // init in Desktop::Main (run from soffice_main) is done. We can "enable"
-        // the Thread from wherever (it's done again in Desktop::Main), and can
-        // then use it to wait until we're definitely ready to continue.
+        // init in Desktop::Main (run from soffice_main) is done. We can enable
+        // the RequestHandler here (without starting any IPC thread;
+        // shortcutting the invocation in Desktop::Main that would start the IPC
+        // thread), and can then use it to wait until we're definitely ready to
+        // continue.
 
         if (eStage != PRE_INIT)
         {
             SAL_INFO("lok", "Enabling RequestHandler");
-            RequestHandler::Enable();
+            RequestHandler::Enable(false);
             SAL_INFO("lok", "Starting soffice_main");
             pLib->maThread = osl_createThread(lo_startmain, nullptr);
             SAL_INFO("lok", "Waiting for RequestHandler");
             RequestHandler::WaitForReady();
             SAL_INFO("lok", "RequestHandler ready -- continuing");
-
-            // If the Thread has been disabled again that indicates that a
-            // restart is required (or in any case we don't have a useable
-            // process around).
-            if (!RequestHandler::IsEnabled())
-            {
-                fprintf(stderr, "LOK init failed -- restart required\n");
-                return false;
-            }
         }
 
         if (eStage != SECOND_INIT)
