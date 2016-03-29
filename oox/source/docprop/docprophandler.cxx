@@ -296,7 +296,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
         }
         else
         {
-                OSL_FAIL( "Unexpected file format!" );
+                OSL_FAIL( "Unexpected file format" );
         }
     }
     else if ( m_nState && m_nInBlock == 1 ) // that tag should contain the property name
@@ -489,7 +489,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     break;
 
                 default:
-                    OSL_FAIL( "Unexpected core property!" );
+                    OSL_FAIL( "Unexpected core property" );
                 }
             }
             else if ( m_nState == EXTPR_TOKEN( Properties ) )
@@ -603,7 +603,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     break;
 
                 default:
-                    OSL_FAIL( "Unexpected extended property!" );
+                    OSL_FAIL( "Unexpected extended property" );
                 }
             }
             else if ( m_nState == CUSTPR_TOKEN( Properties ) )
@@ -659,7 +659,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                 }
                 else
                 {
-                    OSL_FAIL( "Unexpected tag in custom property!" );
+                    OSL_FAIL( "Unexpected tag in custom property" );
                 }
             }
         }
@@ -675,7 +675,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     catch( uno::Exception& e )
     {
         throw xml::sax::SAXException(
-            OUString("Error while setting document property!"),
+            OUString( "Error while setting document property" ),
             uno::Reference< uno::XInterface >(),
             uno::makeAny( e ) );
     }

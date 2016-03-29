@@ -553,11 +553,8 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                     if( pReader )
                     {
                         // set Doc's DocInfo at DocShell-Medium
-                        SAL_INFO( "sw.ui", "before ReadDocInfo" );
                         SwReader aRdr( rMedium, aEmptyOUStr, m_pDoc );
-                        SAL_INFO( "sw.ui", "before Read" );
                         nErr = aRdr.Read( *pReader );
-                        SAL_INFO( "sw.ui", "after Read" );
                         // If a XML document is loaded, the global doc/web doc
                         // flags have to be set, because they aren't loaded
                         // by this formats.
@@ -576,13 +573,13 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 break;
 
             default:
-                OSL_ENSURE( false, "Load: new CreateMode?" );
+                SAL_WARN( "sw.ui", "Load: new CreateMode?" );
         }
 
         UpdateFontList();
         InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
 
-        SAL_WARN( "sw.ui", "error on load: " << nErr );
+        SAL_WARN( "sw.ui", "error on load: 0x" << OUString::number(static_cast< sal_uInt32 >( nErr ), 16) );
         bRet = !IsError( nErr );
 
         if (bRet && !m_pDoc->IsInLoadAsynchron() &&

@@ -167,7 +167,11 @@ void SwModify::Add( SwClient* pDepend )
         {
             for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
             {
-                SAL_WARN_IF(&rIter.m_rRoot == m_pWriterListeners, "sw.core", "a " << typeid(*pDepend).name() << " client added as listener to a " << typeid(*this).name() << " during client iteration.");
+                SAL_WARN_IF (
+                    &rIter.m_rRoot == m_pWriterListeners,
+                    "sw.core",
+                    "a " << typeid(*pDepend).name() << " client added as listener to a " << typeid(*this).name() << " during client iteration"
+                );
             }
         }
 #endif

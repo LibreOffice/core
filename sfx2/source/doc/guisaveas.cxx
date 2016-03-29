@@ -1755,31 +1755,51 @@ void SfxStoringHelper::SetDocInfoState(
     try
     {
         uno::Reference< beans::XPropertySet > const xSet(
-                xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY);
-        uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
-        uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
-        const beans::Property* pProps = lProps.getConstArray();
-        sal_Int32 c = lProps.getLength();
-        sal_Int32 i = 0;
-        for (i=0; i<c; ++i)
+                xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY );
+        if ( xSet.is() )
         {
-            uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
-            if ( pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE )
+            uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
+            if ( xContainer.is() )
             {
-                try
+                uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+                if ( xSetInfo.is() )
                 {
-                    // QUESTION: DefaultValue?!
-                    xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+                    uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+                    const beans::Property* pProps = lProps.getConstArray();
+                    sal_Int32 c = lProps.getLength();
+                    for ( sal_Int32 i = 0; i < c; ++i )
+                    {
+                        uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
+                        if ( pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE )
+                        {
+                            try
+                            {
+                                // QUESTION: DefaultValue?
+                                xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+                            }
+                            catch (beans::PropertyExistException const&) { }
+                            try
+                            {
+                                // it is possible that the propertysets from XML and binary files differ; shouldn't break then
+                                xSet->setPropertyValue( pProps[i].Name, aValue );
+                            }
+                            catch ( const uno::Exception& ) { }
+                        }
+                    }
                 }
-                catch (beans::PropertyExistException const&) {}
-                try
+                else
                 {
-                    // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
-                    xSet->setPropertyValue( pProps[i].Name, aValue );
+                    SAL_WARN( "sfx.doc", "PropertySetInfo is nil" );
                 }
-                catch ( const uno::Exception& ) {}
             }
+            else
+            {
+                SAL_WARN( "sfx.doc", "PropertyContainer is nil" );
+            }
+        }
+        else
+        {
+            SAL_WARN( "sfx.doc", "PropertySet is nil" );
         }
 
         // sigh... have to set these manually I'm afraid... wonder why
@@ -1802,9 +1822,9 @@ void SfxStoringHelper::SetDocInfoState(
         xDocPropsToFill->setEditingDuration(i_xOldDocProps->getEditingDuration());
         // other attributes e.g. DocumentStatistics are not editable from dialog
     }
-    catch (const uno::Exception& e)
+    catch ( const uno::Exception& e )
     {
-        SAL_INFO("sfx.doc", "SetDocInfoState: caught exception: " << e.Message);
+        SAL_WARN( "sfx.doc", "SetDocInfoState: caught exception: " << e.Message );
     }
 
     // set the modified flag back if required

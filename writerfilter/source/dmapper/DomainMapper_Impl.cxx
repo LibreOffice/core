@@ -571,10 +571,11 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
 PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 {
     PropertyMapPtr pRet;
-    SAL_WARN_IF( m_aPropertyStacks[eId].empty(), "writerfilter.dmapper",
-        "no context of type " << static_cast<int>(eId) << " available");
-    if(!m_aPropertyStacks[eId].empty())
-        pRet = m_aPropertyStacks[eId].top();
+    if ( ! m_aPropertyStacks[ eId ].empty() )
+        pRet = m_aPropertyStacks[ eId ].top();
+    else
+        SAL_WARN( "writerfilter.dmapper", "no context of type " << static_cast< int >( eId ) << " is here" );
+
     return pRet;
 }
 

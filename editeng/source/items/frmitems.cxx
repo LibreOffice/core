@@ -477,7 +477,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         default:
             bRet = false;
             // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this; there used to be a MID_LR_MARGIN 0 but what type would it have?
-            OSL_FAIL("unknown MemberId");
+            SAL_WARN( "editeng.items", "unknown MemberId ( " << OUString::number( nMemberId ) << " )" );
     }
     return bRet;
 }
@@ -550,7 +550,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
 
         default:
-            OSL_FAIL("unknown MemberId");
+            SAL_WARN( "editeng.items", "unknown MemberId ( " << OUString::number( nMemberId ) << " )" );
             return false;
     }
     return true;
@@ -743,7 +743,7 @@ SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) cons
 
     if ( nVersion >= LRSPACE_AUTOFIRST_VERSION )
     {
-        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline ).ReadUInt16( txtleft ).ReadSChar( autofirst );
+        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).   ReadUInt16( prpfirstline ).ReadUInt16( txtleft ).ReadSChar( autofirst );
 
         sal_uInt64 const nPos = rStrm.Tell();
         sal_uInt32 nMarker;
@@ -759,11 +759,11 @@ SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) cons
     }
     else if ( nVersion == LRSPACE_TXTLEFT_VERSION )
     {
-        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline ).ReadUInt16( txtleft );
+        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).   ReadUInt16( prpfirstline ).ReadUInt16( txtleft );
     }
     else if ( nVersion == LRSPACE_16_VERSION )
     {
-        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline );
+        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).   ReadUInt16( prpfirstline );
     }
     else
     {
@@ -944,7 +944,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
 
         default:
-            OSL_FAIL("unknown MemberId");
+            SAL_WARN( "editeng.items", "unknown MemberId ( " << OUString::number( nMemberId ) << " )" );
             return false;
     }
     return true;
@@ -3494,7 +3494,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_GRAPHIC:
-            SAL_WARN( "editeng.items", "not implemented" );
+            SAL_WARN( "editeng.items", "MID_GRAPHIC is not implemented" );
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
@@ -3598,7 +3598,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 rVal >>= sLink;
                 if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
                 {
-                    OSL_FAIL( "package urls aren't implemented" );
+                    SAL_WARN( "editeng.items", "package urls aren't implemented" );
                 }
                 else if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
                 {

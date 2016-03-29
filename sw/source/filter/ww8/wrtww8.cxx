@@ -498,13 +498,18 @@ static void WriteDop( WW8Export& rWrt )
     uno::Reference<document::XDocumentProperties> xDocProps;
     uno::Reference<beans::XPropertySet> xProps;
     if (pDocShell) {
-        uno::Reference<lang::XComponent> xModelComp(pDocShell->GetModel(),
-           uno::UNO_QUERY);
-        xProps.set(xModelComp, uno::UNO_QUERY);
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            xModelComp, uno::UNO_QUERY_THROW);
-        xDocProps = xDPS->getDocumentProperties();
-        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
+        uno::Reference<lang::XComponent> xModelComp( pDocShell->GetModel(), uno::UNO_QUERY );
+        if ( xModelComp.is() )
+        {
+            xProps.set( xModelComp, uno::UNO_QUERY );
+
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS( xModelComp, uno::UNO_QUERY );
+            if ( xDPS.is() )
+                xDocProps = xDPS->getDocumentProperties();
+        }
+
+        if ( ! xDocProps.is() )
+            SAL_WARN( "sw.ww8", "DocumentProperties is null" );
 
         rDop.lKeyProtDoc = pDocShell->GetModifyPasswordHash();
     }
@@ -771,16 +776,15 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     rTypo.iJustification = m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType();
 }
 
-// It can only be found something with this method, if it is used within
+// It can only be found something with this method if it is used within
 // WW8_SwAttrIter::OutAttr() and WW8Export::OutputItemSet()
 const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
 {
-    const SfxPoolItem* pItem=nullptr;
+    const SfxPoolItem* pItem = nullptr;
     if (m_pISet)
     {
-        // if write a EditEngine text, then the WhichIds are greater as
-        // ourer own Ids. So the Id have to translate from our into the
-        // EditEngine Range
+        // if write a EditEngine text, then WhichIds are bigger than own Ids
+        // So translate from own into the EditEngine range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
         if (nWhich && SfxItemState::SET != m_pISet->GetItemState(nWhich, true, &pItem))
             pItem = nullptr;
@@ -789,16 +793,26 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
         pItem = m_pChpIter->HasTextItem( nWhich );
     else
     {
-        OSL_ENSURE( false, "Where is my ItemSet / pChpIter ?" );
-        pItem = nullptr;
+        ///print_stacktrace( );
+        /* SAL_WARN( "sw.ww8", "HasItem"
+                        << "( " << OUString::number( nWhich ) << " ): "
+                        << "Where is my ItemSet / AttrIter ?" ); */
     }
+
     return pItem;
 }
 
 const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
 {
-    assert((m_pISet || m_pChpIter) && "Where is my ItemSet / pChpIter ?");
-    if (m_pISet)
+    ///SAL_WARN( "sw.ww8", "GetItem" << "( " << OUString::number( nWhich ) << " )" );
+    if ( !m_pISet && !m_pChpIter )
+    {
+        SAL_WARN( "sw.ww8", "GetItem"
+                        << "( " << OUString::number( nWhich ) << " ): "
+                        << "Where is my item set / attribute iterator ?" );
+        throw css::uno::RuntimeException( "m_pISet & m_pChpIter are both nil" );
+    }
+    if ( m_pISet )
     {
         // if write a EditEngine text, then the WhichIds are greater as
         // ourer own Ids. So the Id have to translate from our into the
@@ -807,6 +821,8 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
         OSL_ENSURE(nWhich != 0, "All broken, Impossible");
         return m_pISet->Get(nWhich);
     }
+
+    ///SAL_WARN( "sw.ww8", "done GetItem" << "( " << OUString::number( nWhich ) << " )" );
     return m_pChpIter->GetItem( nWhich );
 }
 
@@ -1846,7 +1862,7 @@ void WW8Export::OutSwString(const OUString& rStr, sal_Int32 nStt,
     sal_Int32 const nLen)
 
 {
-    SAL_INFO( "sw.ww8.level2", "<OutSwString>" );
+    SAL_WARN( "sw.ww8", "<OutSwString>" );
 
     if( nLen )
     {
@@ -1854,25 +1870,23 @@ void WW8Export::OutSwString(const OUString& rStr, sal_Int32 nStt,
         {
             OUString sOut( rStr.copy( nStt, nLen ) );
 
-            SAL_INFO( "sw.ww8.level2", sOut );
-
+            SAL_WARN( "sw.ww8", sOut );
             SwWW8Writer::WriteString16(Strm(), sOut, false);
         }
         else
         {
-            SAL_INFO( "sw.ww8.level2", rStr );
-
+            SAL_WARN( "sw.ww8", rStr );
             SwWW8Writer::WriteString16(Strm(), rStr, false);
         }
     }
 
-    SAL_INFO( "sw.ww8.level2", "</OutSwString>" );
+    SAL_WARN( "sw.ww8", "</OutSwString>" );
 }
 
 void WW8Export::WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
-    if (pTableTextNodeInfoInner.get() != nullptr && pTableTextNodeInfoInner->getDepth() == 1 && pTableTextNodeInfoInner->isEndOfCell())
-        WriteChar('\007');
+    if ( pTableTextNodeInfoInner.get() && pTableTextNodeInfoInner->getDepth() == 1 && pTableTextNodeInfoInner->isEndOfCell() )
+        WriteChar( '\007' );
     else
         WriteChar( '\015' );
 
@@ -2374,7 +2388,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         else
             WW8Export::Out_SwFormatTableBox( *m_rWW8Export.pO, nullptr); // 8/16 Byte
 
-        SAL_INFO( "sw.ww8.level2", "<tclength>" << ( m_rWW8Export.pO->size() - npOCount ) << "</tclength>" );
+        SAL_WARN( "sw.ww8", "<tclength>" << ( m_rWW8Export.pO->size() - npOCount ) << "</tclength>" );
     }
 }
 
@@ -2444,7 +2458,6 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
                 const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
                 nPageSize -= (rLR.GetLeft() + rLR.GetRight());
             }
-
         }
 
         if ( nWidthPercent )
@@ -2603,11 +2616,13 @@ private:
     SwPaM *m_pCurPam;
     sal_uLong m_nStart, m_nEnd;
 public:
-    TrackContentToExport(SwPaM *pCurPam, sal_uLong nCurStart, sal_uLong nCurEnd)
+    TrackContentToExport( SwPaM *pCurPam, sal_uLong nCurStart, sal_uLong nCurEnd )
         : m_pCurPam(pCurPam)
         , m_nStart(nCurStart)
         , m_nEnd(nCurEnd)
     {
+        SAL_WARN( "sw.ww8", "created TrackContentToExport ( nCurStart = " << OUString::number( nCurStart )
+                                     << ", nCurEnd = " << OUString::number( nCurEnd ) << " )" );
     }
 
     bool contentRemainsToExport(ww8::WW8TableInfo *pTableInfo)
@@ -2641,17 +2656,23 @@ public:
 
 void MSWordExportBase::WriteText()
 {
-    TrackContentToExport aContentTracking(m_pCurPam, m_nCurStart, m_nCurEnd);
+    SAL_WARN( "sw.ww8", "<WriteText>" );
+
+    TrackContentToExport aContentTracking( m_pCurPam, m_nCurStart, m_nCurEnd );
     while (aContentTracking.contentRemainsToExport(m_pTableInfo.get()))
     {
         SwNode& rNd = m_pCurPam->GetNode();
 
         if ( rNd.IsTextNode() )
+        {
+            SAL_WARN( "sw.ww8", "got text node" );
             SectionBreaksAndFrames( *rNd.GetTextNode() );
+        }
 
         // output the various types of nodes
         if ( rNd.IsContentNode() )
         {
+            SAL_WARN( "sw.ww8", "got content node" );
             SwContentNode* pCNd = static_cast<SwContentNode*>(&rNd);
 
             const SwPageDesc* pTemp = rNd.FindPageDesc();
@@ -2663,10 +2684,14 @@ void MSWordExportBase::WriteText()
         }
         else if ( rNd.IsTableNode() )
         {
+            SAL_WARN( "sw.ww8", "got table node" );
             m_pTableInfo->processSwTable( &rNd.GetTableNode()->GetTable() );
         }
         else if ( rNd.IsSectionNode() && TXT_MAINTEXT == m_nTextTyp )
+        {
+            SAL_WARN( "sw.ww8", "got section node" );
             OutputSectionNode( *rNd.GetSectionNode() );
+        }
         else if ( TXT_MAINTEXT == m_nTextTyp && rNd.IsEndNode() &&
                   rNd.StartOfSectionNode()->IsSectionNode() )
         {
@@ -2677,11 +2702,15 @@ void MSWordExportBase::WriteText()
 
             SwNodeIndex aIdx( rNd, 1 );
             if ( aIdx.GetNode().IsEndNode() && aIdx.GetNode().StartOfSectionNode()->IsSectionNode() )
-                ;
+            {
+                SAL_WARN( "sw.ww8", "aIdx.GetNode().IsEndNode() && aIdx.GetNode().StartOfSectionNode()->IsSectionNode()" );
+            }
             else if ( aIdx.GetNode().IsSectionNode() )
-                ;
+            {
+                SAL_WARN( "sw.ww8", "aIdx.GetNode().IsSectionNode()" );
+            }
             else if ( !IsInTable()
-                && (rSect.GetType() != TOX_CONTENT_SECTION && rSect.GetType() != TOX_HEADER_SECTION )) //No sections in table
+                && ( rSect.GetType() != TOX_CONTENT_SECTION && rSect.GetType() != TOX_HEADER_SECTION ) ) //No sections in table
             {
                 //#120140# Do not need to insert a page/section break after a section end. Check this case first
                 bool bNeedExportBreakHere = true;
@@ -2738,10 +2767,12 @@ void MSWordExportBase::WriteText()
         }
         else if ( rNd.IsStartNode() )
         {
+            SAL_WARN( "sw.ww8", "got start node" );
             OutputStartNode( *rNd.GetStartNode() );
         }
         else if ( rNd.IsEndNode() )
         {
+            SAL_WARN( "sw.ww8", "got end node" );
             OutputEndNode( *rNd.GetEndNode() );
         }
 
@@ -2751,9 +2782,9 @@ void MSWordExportBase::WriteText()
         const SwNode * pCurrentNode = &m_pCurPam->GetPoint()->nNode.GetNode();
         const SwNode * pNextNode = m_pTableInfo->getNextNode(pCurrentNode);
 
-        if (pCurrentNode == pNextNode)
+        if ( pCurrentNode == pNextNode )
         {
-            SAL_WARN("sw.ww8", "loop in TableInfo");
+            SAL_WARN( "sw.ww8", "loop in TableInfo" );
             pNextNode = nullptr;
         }
 
@@ -2763,15 +2794,16 @@ void MSWordExportBase::WriteText()
             ++m_pCurPam->GetPoint()->nNode;
 
         sal_uLong nPos = m_pCurPam->GetPoint()->nNode.GetIndex();
+        SAL_WARN( "sw.ww8", OUString::number( nPos ) << " = nPos" );
         ::SetProgressState( nPos, m_pCurPam->GetDoc()->GetDocShell() );
     }
 
-    SAL_INFO( "sw.ww8.level2", "</WriteText>" );
+    SAL_WARN( "sw.ww8", "</WriteText>" );
 }
 
 void WW8Export::WriteMainText()
 {
-    SAL_INFO( "sw.ww8.level2", "<WriteMainText>" );
+    SAL_WARN( "sw.ww8", "<WriteMainText>" );
 
     pFib->m_fcMin = Strm().Tell();
 
@@ -2794,22 +2826,22 @@ void WW8Export::WriteMainText()
     if( pLastNd )
         m_nLastFormatId = GetId( static_cast<SwTextFormatColl&>(pLastNd->GetAnyFormatColl()) );
 
-    SAL_INFO( "sw.ww8.level2", "</WriteMainText>" );
+    SAL_WARN( "sw.ww8", "</WriteMainText>" );
 }
 
 bool MSWordExportBase::IsInTable() const
 {
     bool bResult = false;
 
-    if (m_pCurPam != nullptr)
+    if ( m_pCurPam )
     {
         SwNode& rNode = m_pCurPam->GetNode();
 
-        if (m_pTableInfo.get() != nullptr)
+        if ( m_pTableInfo.get() )
         {
             ww8::WW8TableNodeInfo::Pointer_t pTableNodeInfo = m_pTableInfo->getTableNodeInfo(&rNode);
 
-            if (pTableNodeInfo.get() != nullptr && pTableNodeInfo->getDepth() > 0)
+            if ( pTableNodeInfo.get() && pTableNodeInfo->getDepth() > 0)
             {
                 bResult = true;
             }
@@ -3160,7 +3192,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
         const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(mpMedium->GetItemSet(), SID_ENCRYPTIONDATA, false);
         if ( pEncryptionDataItem && ( pEncryptionDataItem->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
         {
-            OSL_ENSURE( false, "Unexpected EncryptionData!" );
+            SAL_WARN( "sw.ww8", "unexpected EncryptionData" );
             aEncryptionData.realloc( 0 );
         }
 
@@ -3384,6 +3416,8 @@ void WW8Export::ExportDocument_Impl()
 
 void WW8Export::PrepareStorage()
 {
+    SAL_WARN( "sw.ww8", "<PrepareStorage>" );
+
     static const sal_uInt8 pData[] =
     {
         0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
@@ -3415,36 +3449,41 @@ void WW8Export::PrepareStorage()
     xStor->WriteBytes(pData, sizeof(pData));
 
     SwDocShell* pDocShell = m_pDoc->GetDocShell ();
-    OSL_ENSURE(pDocShell, "no SwDocShell");
-
-    if (pDocShell) {
+    if ( pDocShell ) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            xDPS->getDocumentProperties());
-        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
+            pDocShell->GetModel(), uno::UNO_QUERY );
+        if ( ! xDPS.is() )
+        {
+            SAL_WARN( "sw.ww8", "no DocumentPropertiesSupplier" );
+            return;
+        }
 
-        if (xDocProps.is())
+        uno::Reference<document::XDocumentProperties> xDocProps( xDPS->getDocumentProperties() );
+        if ( xDocProps.is() )
         {
             if ( SvtFilterOptions::Get().IsEnableWordPreview() )
             {
-                std::shared_ptr<GDIMetaFile> xMetaFile =
-                    pDocShell->GetPreviewMetaFile();
-                uno::Sequence<sal_Int8> metaFile(
-                    sfx2::convertMetaFile(xMetaFile.get()));
-                sfx2::SaveOlePropertySet(xDocProps, &GetWriter().GetStorage(), &metaFile);
+                std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+                uno::Sequence<sal_Int8> metaFile( sfx2::convertMetaFile( xMetaFile.get() ) );
+                sfx2::SaveOlePropertySet( xDocProps, &GetWriter().GetStorage(), &metaFile );
             }
             else
                 sfx2::SaveOlePropertySet( xDocProps, &GetWriter().GetStorage() );
         }
+        else
+            SAL_WARN( "sw.ww8", "DocumentProperties is null" );
     }
+    else
+        SAL_WARN( "sw.ww8", "no SwDocShell" );
+
+    SAL_WARN( "sw.ww8", "</PrepareStorage>" );
 }
 
 sal_uLong SwWW8Writer::WriteStorage()
 {
     // #i34818# - update layout (if present), for SwWriteTable
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    if( pViewShell != nullptr )
+    if( pViewShell )
         pViewShell->CalcLayout();
 
     long nMaxNode = pDoc->GetNodes().Count();
@@ -3879,7 +3918,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     pDataStrm->WriteUInt32( slen );
 
     int len = sizeof( aFieldData );
-    OSL_ENSURE( len == 0x44-sizeof(sal_uInt32), "SwWW8Writer::WriteFormData(..) - wrong aFieldData length" );
+    OSL_ENSURE( len == 0x44 - sizeof(sal_uInt32), "wrong aFieldData length" );
     pDataStrm->WriteBytes( aFieldData, len );
 
     pDataStrm->WriteUInt32( aFieldHeader.version ).WriteUInt16( aFieldHeader.bits ).WriteUInt16( aFieldHeader.cch ).WriteUInt16( aFieldHeader.hps );
@@ -3917,9 +3956,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     SVBT16 nStyle;
     ShortToSVBT16( m_rWW8Export.m_nStyleBeforeFly, nStyle );
 
-#ifdef DBG_UTIL
-    SAL_INFO( "sw.ww8", "<OutWW8_TableNodeInfoInner>" << pNodeInfoInner->toString());
-#endif
+    SAL_WARN( "sw.ww8", "<TableNodeInfoInner>" );
 
     m_rWW8Export.pO->clear();
 
@@ -3947,7 +3984,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfCell())
     {
-        SAL_INFO( "sw.ww8", "<endOfCell/>" );
+        SAL_WARN( "sw.ww8", "<endOfCell/>" );
 
         m_rWW8Export.WriteCR(pNodeInfoInner);
 
@@ -3981,7 +4018,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfLine())
     {
-        SAL_INFO( "sw.ww8", "<endOfLine/>" );
+        SAL_WARN( "sw.ww8", "<endOfLine/>" );
 
         TableRowEnd(pNodeInfoInner->getDepth());
 
@@ -3992,20 +4029,18 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
         m_rWW8Export.pO->clear();
     }
-    SAL_INFO( "sw.ww8", "</OutWW8_TableNodeInfoInner>" );
+
+    SAL_WARN( "sw.ww8", "</TableNodeInfoInner>" );
 }
 
 void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 {
+    SAL_WARN( "sw.ww8", "<OutputStartNode>" ); /// << dbg_out(&rNode) );
 
-    ww8::WW8TableNodeInfo::Pointer_t pNodeInfo =
-        m_pTableInfo->getTableNodeInfo( &rNode );
+    ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = m_pTableInfo->getTableNodeInfo( &rNode );
 
-    if (pNodeInfo.get() != nullptr)
+    if ( pNodeInfo.get() )
     {
-#ifdef DBG_UTIL
-        SAL_INFO( "sw.ww8", pNodeInfo->toString());
-#endif
         const ww8::WW8TableNodeInfo::Inners_t aInners = pNodeInfo->getInners();
         ww8::WW8TableNodeInfo::Inners_t::const_reverse_iterator aIt(aInners.rbegin());
         ww8::WW8TableNodeInfo::Inners_t::const_reverse_iterator aEnd(aInners.rend());
@@ -4017,18 +4052,19 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
             ++aIt;
         }
     }
-    SAL_INFO( "sw.ww8", "</OutWW8_SwStartNode>" );
+  ///  else
+  ///      SAL_WARN( "sw.ww8", "can't get TableNodeInfo" );
+
+    SAL_WARN( "sw.ww8", "</OutputStartNode>" );
 }
 
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
-#ifdef DBG_UTIL
-    SAL_INFO( "sw.ww8", "<OutWW8_SwEndNode>" << dbg_out(&rNode));
-#endif
+    SAL_WARN( "sw.ww8", "<OutputEndNode>" ); /// << dbg_out(&rNode) );
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = m_pTableInfo->getTableNodeInfo( &rNode );
 
-    if (pNodeInfo.get() != nullptr)
+    if ( pNodeInfo.get() )
     {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.ww8", pNodeInfo->toString());
@@ -4043,12 +4079,15 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
             ++aIt;
          }
     }
-    SAL_INFO( "sw.ww8", "</OutWW8_SwEndNode>" );
+  ///  else
+  ///      SAL_WARN( "sw.ww8", "can't get TableNodeInfo" );
+
+    SAL_WARN( "sw.ww8", "</OutputEndNode>" );
 }
 
 const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
 {
-    if (m_pKeyMap.get() == nullptr)
+    if ( ! m_pKeyMap.get() )
     {
         m_pKeyMap.reset(new NfKeywordTable);
         NfKeywordTable & rKeywordTable = *m_pKeyMap;

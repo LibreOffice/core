@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef DBG_UTIL
-
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemiter.hxx>
@@ -994,7 +992,5 @@ const char * dbg_out(const SwNodeRange & rRange)
 {
     return dbg_out(lcl_dbg_out(rRange));
 }
-
-#endif // DEBUG
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

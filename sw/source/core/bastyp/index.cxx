@@ -223,7 +223,8 @@ SwIndexReg::SwIndexReg()
 
 SwIndexReg::~SwIndexReg()
 {
-    assert(!m_pFirst && !m_pLast && "There are still indices registered");
+    if ( ( m_pFirst != nullptr ) || ( m_pLast != nullptr ) )
+        SAL_WARN( "sw.core", "There are still indices registered" );
 }
 
 void SwIndexReg::Update(

@@ -25,30 +25,52 @@ using namespace com::sun::star;
 
 std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& rType, const SwTextNode& rNode)
 {
+    SAL_WARN( "sw.doc", "at SwRDFHelper::getTextNodeStatements" );
+
     std::map<OUString, OUString> aRet;
 
-    // We only read the node, but CreateXParagraph() needs a non-cost one.
+    // We only read the node, but CreateXParagraph() needs a non-cost one
     auto& rTextNode = const_cast<SwTextNode&>(rNode);
+
+    css::uno::Reference< css::frame::XModel > xModel = rTextNode.GetDoc()->GetDocShell()->GetBaseModel();
+    if ( ! xModel.is() )
+    {
+        SAL_WARN( "sw.doc", "can't get base XModel" );
+        return aRet;
+    }
+
+  try {
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess( xModel, uno::UNO_QUERY_THROW );
 
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
-    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(rTextNode.GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-    uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
-    if (!aGraphNames.hasElements())
-        return aRet;
 
-    uno::Reference<rdf::XResource> xTextNode(SwXParagraph::CreateXParagraph(*rTextNode.GetDoc(), &rTextNode), uno::UNO_QUERY);
-    for (const uno::Reference<rdf::XURI>& xGraphName : aGraphNames)
+    if ( xDocumentMetadataAccess.is() && xType.is() )
     {
-        uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
-        uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(xTextNode, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
-        while (xStatements->hasMoreElements())
-        {
-            rdf::Statement aStatement = xStatements->nextElement().get<rdf::Statement>();
-            aRet[aStatement.Predicate->getStringValue()] = aStatement.Object->getStringValue();
-        }
-    }
+        uno::Sequence< uno::Reference< rdf::XURI >> aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+        if ( !aGraphNames.hasElements() )
+            return aRet;
 
+        uno::Reference<rdf::XResource> xTextNode(SwXParagraph::CreateXParagraph(*rTextNode.GetDoc(), &rTextNode), uno::UNO_QUERY);
+        if ( xTextNode.is() )
+        {
+            for ( const uno::Reference<rdf::XURI>& xGraphName : aGraphNames )
+            {
+                uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
+                uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(xTextNode, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
+                while ( xStatements->hasMoreElements() )
+                {
+                    rdf::Statement aStatement = xStatements->nextElement().get< rdf::Statement >();
+                    aRet[aStatement.Predicate->getStringValue()] = aStatement.Object->getStringValue();
+                }
+            }
+        } else
+            SAL_WARN( "sw.doc", "No xTextNode" );
+    }
+  }
+  catch ( ... ) { SAL_WARN( "sw.doc", "caught exception" ); }
+
+    SAL_WARN( "sw.doc", "leaving SwRDFHelper::getTextNodeStatements" );
     return aRet;
 }
 

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_DBGOUTSW_HXX
 #define INCLUDED_SW_INC_DBGOUTSW_HXX
 
-#ifdef DBG_UTIL
-
 #include <rtl/ustring.hxx>
 #include <tox.hxx>
 #include <cstdio>
@@ -108,7 +106,7 @@ const char * dbg_out(const std::unordered_map<tKey, tMember, fHashFunction> & rM
 }
 SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken);
 SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens);
-#endif // DBG_UTIL
+
 #endif // INCLUDED_SW_INC_DBGOUTSW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

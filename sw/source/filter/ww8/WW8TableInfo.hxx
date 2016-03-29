@@ -107,9 +107,9 @@ public:
     GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase, bool calculateColumnsFromAllRows = false);
     RowSpansPtr getRowSpansOfRow();
 
-#ifdef DBG_UTIL
+//#ifdef DBG_UTIL
     std::string toString() const;
-#endif
+//#endif
 };
 
 class CellInfo
@@ -151,9 +151,9 @@ public:
         m_nFormatFrameWidth = nFormatFrameWidth;
     }
 
-#ifdef DBG_UTIL
+//#ifdef DBG_UTIL
     std::string toString() const;
-#endif
+//#endif
 };
 
 typedef std::multiset<CellInfo> CellInfoMultiSet;
@@ -211,9 +211,9 @@ public:
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
-#ifdef DBG_UTIL
+//#ifdef DBG_UTIL
     std::string toString() const;
-#endif
+//#endif
 
     bool operator < (const WW8TableNodeInfo & rInfo) const;
 };
@@ -280,9 +280,9 @@ public:
     void addShadowCells();
     WW8TableNodeInfo *connectCells(RowEndInners_t &rLastRowEnds);
 
-#ifdef DBG_UTIL
+//#ifdef DBG_UTIL
     std::string toString();
-#endif
+//#endif
 
     TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);
     WidthsPtr getWidthsOfRow(WW8TableNodeInfoInner * pNodeInfo);

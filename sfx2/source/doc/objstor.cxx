@@ -1081,11 +1081,11 @@ bool SfxObjectShell::SaveTo_Impl
 */
 
 {
-    SAL_INFO( "sfx.doc", "saving \"" << rMedium.GetName() << "\"" );
+    SAL_WARN( "sfx.doc", "saving \"" << rMedium.GetName() << "\"" );
 
     UpdateDocInfoForSave();
 
-    AddLog( OSL_LOG_PREFIX "Begin" );
+    SAL_WARN( "sfx.doc", "[ Begin ]" );
 
     ModifyBlocker_Impl aMod(this);
 
@@ -1124,7 +1124,7 @@ bool SfxObjectShell::SaveTo_Impl
         || pImpl->nScriptingSignatureState == SignatureState::NOTVALIDATED
         || pImpl->nScriptingSignatureState == SignatureState::INVALID ) )
     {
-        AddLog( OSL_LOG_PREFIX "MacroSignaturePreserving" );
+        SAL_WARN( "sfx.doc", "[ MacroSignaturePreserving ]" );
 
         // the checking of the library modified state iterates over the libraries, should be done only when required
         // currently the check is commented out since it is broken, we have to check the signature every time we save
@@ -1170,7 +1170,7 @@ bool SfxObjectShell::SaveTo_Impl
       && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         bStoreToSameLocation = true;
-        AddLog( OSL_LOG_PREFIX "Save" );
+        SAL_WARN( "sfx.doc", "[ Save ]" );
 
         if ( pMedium->DocNeedsFileDateCheck() )
             rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
@@ -1186,7 +1186,7 @@ bool SfxObjectShell::SaveTo_Impl
             const bool bDoBackup = SvtSaveOptions().IsBackup();
             if ( bDoBackup )
             {
-                AddLog( OSL_LOG_PREFIX "DoBackup" );
+                SAL_WARN( "sfx.doc", "[ DoBackup ]" );
                 rMedium.DoBackup_Impl();
                 if ( rMedium.GetError() )
                 {
@@ -1214,7 +1214,7 @@ bool SfxObjectShell::SaveTo_Impl
                     // if the last step is failed the stream should stay to be transacted and should be committed on any flush
                     // so we can forget the stream in any way and the next storage commit will flush it
 
-                AddLog( OSL_LOG_PREFIX "Save: Own to Own" );
+                SAL_WARN( "sfx.doc", "[ Save: Own to Own ]" );
 
                 bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
                     *pMedium, rMedium );
@@ -1237,7 +1237,7 @@ bool SfxObjectShell::SaveTo_Impl
                 // just disconnect the stream from the source format
                 // so that the target medium can use it
 
-                AddLog( OSL_LOG_PREFIX "Save: Alien to Alien" );
+                SAL_WARN( "sfx.doc", "[ Save: Alien to Alien ]" );
 
                 pMedium->CloseAndRelease();
                 rMedium.CloseAndRelease();
@@ -1250,7 +1250,7 @@ bool SfxObjectShell::SaveTo_Impl
                 // format is an own one so just disconnect the source
                 // medium
 
-                AddLog( OSL_LOG_PREFIX "Save: Alien to Own" );
+                SAL_WARN( "sfx.doc", "[ Save: Alien to Own ]" );
 
                 pMedium->CloseAndRelease();
                 rMedium.CloseAndRelease();
@@ -1262,7 +1262,7 @@ bool SfxObjectShell::SaveTo_Impl
                 // an alien format, just connect the source to temporary
                 // storage
 
-                AddLog( OSL_LOG_PREFIX "Save: Own to Alien" );
+                SAL_WARN( "sfx.doc", "[ Save: Own to Alien ]" );
 
                 bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
                     *pMedium, rMedium );
@@ -1284,7 +1284,7 @@ bool SfxObjectShell::SaveTo_Impl
         // but for now the framework has to be ready for it
         // TODO/LATER: let the medium be prepared for alien formats as well
 
-        AddLog( OSL_LOG_PREFIX "SaveAs/Export" );
+        SAL_WARN( "sfx.doc", "[ SaveAs/Export ]" );
 
         rMedium.CloseAndRelease();
         if ( bStorageBasedTarget )
@@ -1300,7 +1300,7 @@ bool SfxObjectShell::SaveTo_Impl
         return false;
     }
 
-    AddLog( OSL_LOG_PREFIX "Locking" );
+    SAL_WARN( "sfx.doc", "[ Locking ]" );
 
     rMedium.LockOrigFileOnDemand( false, false );
 
@@ -1353,14 +1353,14 @@ bool SfxObjectShell::SaveTo_Impl
     // TODO/LATER: get rid of bOk
     if (bOwnTarget && pFilter && !(pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER))
     {
-        AddLog( OSL_LOG_PREFIX "Storing in own format." );
+        SAL_WARN( "sfx.doc", "[ Storing in own format ]" );
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
         if ( !xMedStorage.is() )
         {
             // no saving without storage, unlock UI and return
             Lock_Impl( this, false );
             pImpl->bForbidReload = bOldStat;
-            AddLog( OSL_LOG_PREFIX "Storing failed, still no error set." );
+            SAL_WARN( "sfx.doc", "[ Storing failed, still no error set ]" );
             return false;
         }
 
@@ -1390,22 +1390,19 @@ bool SfxObjectShell::SaveTo_Impl
         if ( bOk )
         {
             bOk = false;
-            // currently the case that the storage is the same should be impossible
             if ( xMedStorage == GetStorage() )
             {
-                OSL_ENSURE( !pVersionItem, "This scenario is impossible currently!\n" );
-                AddLog( OSL_LOG_PREFIX "Should be impossible." );
-                // usual save procedure
-                bOk = Save();
+                OSL_ENSURE( !pVersionItem, "storage is the same, currently this scenario is impossible" );
+                bOk = Save(); // usual save
             }
             else
             {
                 // save to target
-                AddLog( OSL_LOG_PREFIX "Save as own format." );
+                SAL_WARN( "sfx.doc", "[ Save as own format ]" );
                 bOk = SaveAsOwnFormat( rMedium );
                 if ( bOk && pVersionItem )
                 {
-                    AddLog( OSL_LOG_PREFIX "pVersionItem != NULL" );
+                    SAL_WARN( "sfx.doc", "pVersionItem is not nil" );
                     aTmpVersionURL = CreateTempCopyOfStorage_Impl( xMedStorage );
                     bOk =  !aTmpVersionURL.isEmpty();
                 }
@@ -1418,13 +1415,13 @@ bool SfxObjectShell::SaveTo_Impl
         {
             // store the thumbnail representation image
             // the thumbnail is not stored in case of encrypted document
-            AddLog( OSL_LOG_PREFIX "Thumbnail creation." );
+            SAL_WARN( "sfx.doc", "[ Thumbnail creation ]" );
             if ( !GenerateAndStoreThumbnail( bPasswdProvided,
                                             pFilter->IsOwnTemplateFormat(),
                                             xMedStorage ) )
             {
                 // TODO: error handling
-                SAL_WARN( "sfx.doc", "Couldn't store thumbnail representation!" );
+                SAL_WARN( "sfx.doc", "couldn't store thumbnail representation" );
             }
         }
 
@@ -1432,7 +1429,7 @@ bool SfxObjectShell::SaveTo_Impl
         {
             if ( pImpl->bIsSaving || pImpl->bPreserveVersions )
             {
-                AddLog( OSL_LOG_PREFIX "Preserve versions." );
+                SAL_WARN( "sfx.doc", "[ Preserve versions ]" );
                 try
                 {
                     Sequence < util::RevisionTag > aVersions = rMedium.GetVersionList();
@@ -1462,8 +1459,7 @@ bool SfxObjectShell::SaveTo_Impl
                 }
                 catch( uno::Exception& )
                 {
-                    AddLog( OSL_LOG_PREFIX "Preserve versions has failed." );
-                    SAL_WARN( "sfx.doc", "Couldn't copy versions!" );
+                    SAL_WARN( "sfx.doc", "Preserve versions has failed, couldn't copy versions" );
                     bOk = false;
                     // TODO/LATER: a specific error could be set
                 }
@@ -1513,12 +1509,27 @@ bool SfxObjectShell::SaveTo_Impl
     }
     else
     {
-        AddLog( OSL_LOG_PREFIX "Storing in alien format." );
         // it's a "SaveAs" in an alien format
+        SAL_WARN( "sfx.doc", "[ Storing in alien format ]" );
+
         if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) )
-            bOk = ExportTo( rMedium );
+        {
+            SAL_WARN( "sfx.doc", "[ Going ExportTo ]" );
+            try
+            {
+                bOk = ExportTo( rMedium );
+            } catch ( ... ) { }
+            SAL_WARN( "sfx.doc", "[ " << ( bOk ? "ExportTo okay" : "ExportTo problem" ) << " ]" );
+        }
         else
-            bOk = ConvertTo( rMedium );
+        {
+            SAL_WARN( "sfx.doc", "[ Going ConvertTo ]" );
+            try
+            {
+                bOk = ConvertTo( rMedium );
+            } catch ( ... ) { }
+            SAL_WARN( "sfx.doc", "[ " << ( bOk ? "ConvertTo okay" : "ConvertTo problem" ) << " ]" );
+        }
 
         // after saving the document, the temporary object storage must be updated
         // if the old object storage was not a temporary one, it will be updated also, because it will be used
@@ -1544,7 +1555,7 @@ bool SfxObjectShell::SaveTo_Impl
         uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
         if ( bOk && bTryToPreserveScriptSignature )
         {
-            AddLog( OSL_LOG_PREFIX "Copying scripting signature." );
+            SAL_WARN( "sfx.doc", "[ Copying scripting signature ]" );
 
             // if the scripting code was not changed and it is signed the signature should be preserved
             // unfortunately at this point we have only information whether the basic code has changed or not
@@ -1614,9 +1625,8 @@ bool SfxObjectShell::SaveTo_Impl
                         }
                         else
                         {
-                            // it should not happen, the copies signature is invalid!
-                            // throw the changes away
-                            SAL_WARN( "sfx.doc", "An invalid signature was copied!" );
+                            // it should not happen, the signature is invalid
+                            SAL_WARN( "sfx.doc", "an invalid signature was copied" );
                         }
                     }
                 }
@@ -1628,7 +1638,7 @@ bool SfxObjectShell::SaveTo_Impl
             rMedium.CloseZipStorage_Impl();
         }
 
-        AddLog( OSL_LOG_PREFIX "Medium commit." );
+        SAL_WARN( "sfx.doc", "[ Commit medium  ]" );
 
         OUString sName( rMedium.GetName( ) );
         bOk = rMedium.Commit();
@@ -1639,7 +1649,7 @@ bool SfxObjectShell::SaveTo_Impl
 
         if ( bOk )
         {
-            AddLog( OSL_LOG_PREFIX "Storing is successful." );
+            SAL_WARN( "sfx.doc", "[ Storing is successful ]" );
 
             // if the target medium is an alien format and the "old" medium was an own format and the "old" medium
             // has a name, the object storage must be exchanged, because now we need a new temporary storage
@@ -1660,7 +1670,7 @@ bool SfxObjectShell::SaveTo_Impl
                     // copy storage of old medium to new temporary storage and take this over
                     if( !ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
                     {
-                        AddLog( OSL_LOG_PREFIX "Process after storing has failed." );
+                        SAL_WARN( "sfx.doc", "process after storing has failed" );
                         bOk = false;
                     }
                 }
@@ -1668,7 +1678,7 @@ bool SfxObjectShell::SaveTo_Impl
         }
         else
         {
-            AddLog( OSL_LOG_PREFIX "Storing has failed." );
+            SAL_WARN( "sfx.doc", "[ Storing has failed ]" );
 
             // in case the document storage was connected to backup temporarely it must be disconnected now
             if ( bNeedsDisconnectionOnFail )
@@ -2295,6 +2305,8 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
 bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 {
     OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
+    SAL_WARN( "sfx.doc", "@ ExportTo: filter name is \"" << aFilterName << "\"" );
+
     uno::Reference< document::XExporter > xExporter;
 
     {
@@ -2312,9 +2324,10 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
         {
             const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-            if (rFilterProp.Name == "FilterService")
+            if ( rFilterProp.Name == "FilterService" )
             {
                 rFilterProp.Value >>= aFilterImplName;
+                SAL_WARN( "sfx.doc", "@ ExportTo: filter implementation name is \"" << aFilterImplName << "\"" );
                 break;
             }
         }
@@ -2325,8 +2338,8 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             {
                 xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
             }
-            catch(const uno::Exception&)
-            {
+            catch( ... ) {
+                SAL_WARN( "sfx.doc", "exception in xExporter.set()" );
                 xExporter.clear();
             }
         }

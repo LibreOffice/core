@@ -391,6 +391,8 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 // und damit im falschen landen wuerden.
 void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen, bool isTextNodeEmpty)
 {
+    SAL_WARN( "sw.ww8", "<OutputSectionBreaks>" );
+
     if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs )
         return;
 
@@ -475,7 +477,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
             if ( !bRemoveHardBreakInsideTable )
             {
-                OSL_ENSURE(m_pAktPageDesc, "should not be possible");
                 /*
                  If because of this pagebreak the page desc following the page
                  break is the follow style of the current page desc then output a
@@ -495,7 +496,9 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     }
                     if( isTextNodeEmpty )
                        bNewPageDesc = false;
-                }
+                } else
+                    SAL_WARN( "sw.ww8", "m_pAktPageDesc is nil");
+
                 if ( !bNewPageDesc )
                     AttrOutput().OutputItem( *pItem );
             }
@@ -542,6 +545,8 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     }
     m_bBreakBefore = false;
     m_bPrevTextNodeIsEmpty = isTextNodeEmpty ;
+
+    SAL_WARN( "sw.ww8", "</OutputSectionBreaks>" );
 }
 
 // #i76300#
@@ -608,7 +613,7 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
     const SwSectionFormat* pFormat = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
 
-    OSL_ENSURE( pNewPgDescFormat || pNewPgDesc, "Neither page desc format nor page desc provided." );
+    OSL_ENSURE( pNewPgDescFormat || pNewPgDesc, "Neither page desc format nor page desc provided" );
 
     if ( pNewPgDescFormat )
     {
@@ -710,6 +715,8 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFormat &rFormat)
 
 void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, bool bChpFormat, bool bFlyFormat )
 {
+    SAL_INFO( "sw.ww8", "<OutputFormat>" );
+
     bool bCallOutSet = true;
     const SwModify* pOldMod = m_pOutFormatNode;
     m_pOutFormatNode = &rFormat;
@@ -834,7 +841,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
     case RES_FRMFMT:
         break;
     default:
-        OSL_ENSURE( false, "Which format is exported here?" );
+        SAL_WARN( "sw.ww8", "Which format is exported here?" );
         break;
     }
 
@@ -842,6 +849,8 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
         OutputItemSet( rFormat.GetAttrSet(), bPapFormat, bChpFormat,
             i18n::ScriptType::LATIN, m_bExportModeRTF);
     m_pOutFormatNode = pOldMod;
+
+    SAL_INFO( "sw.ww8", "</OutputFormat>" );
 }
 
 bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
@@ -935,6 +944,8 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 
 void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
+    SAL_WARN( "sw.ww8", "<EndParagraph>" );
+
     m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() - (mbOnTOXEnding?2:0), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
     mbOnTOXEnding = false;
     m_rWW8Export.pO->clear();
@@ -953,6 +964,8 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
             m_rWW8Export.pO->clear();
         }
     }
+
+    SAL_WARN( "sw.ww8", "</EndParagraph>" );
 }
 
 void WW8AttributeOutput::StartRunProperties()
@@ -1026,11 +1039,15 @@ void WW8AttributeOutput::OutputFKP(bool bForce)
 
 void WW8AttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
-    OSL_ENSURE( m_rWW8Export.pO->empty(), " pO ist am ZeilenEnde nicht leer" );
+    SAL_WARN( "sw.ww8", "<ParagraphStyle>" );
+
+    OSL_ENSURE( m_rWW8Export.pO->empty(), " pO is not empty" );
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
     m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // Style #
+
+    SAL_WARN( "sw.ww8", "</ParagraphStyle>" );
 }
 
 void WW8AttributeOutput::OutputWW8Attribute( sal_uInt8 nId, bool bVal )
@@ -1668,6 +1685,8 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
 void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     const OUString& rFieldCmd, FieldFlags nMode )
 {
+    SAL_WARN( "sw.ww8", "<OutputField>" );
+
     OUString sFieldCmd(rFieldCmd);
     switch (eFieldType)
     {
@@ -1801,6 +1820,8 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         pFieldP->Append( Fc2Cp( Strm().Tell() ), aField15 );
         InsertSpecialChar( *this, 0x15, nullptr, bIncludeEmptyPicLocation );
     }
+
+    SAL_WARN( "sw.ww8", "</OutputField>" );
 }
 
 void WW8Export::StartCommentOutput(const OUString& rName)
@@ -5162,6 +5183,7 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
             }
         }
     }
+
     return nullptr;
 }
 

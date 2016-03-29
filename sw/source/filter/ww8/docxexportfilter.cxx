@@ -39,25 +39,32 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext
 
 bool DocxExportFilter::exportDocument()
 {
+    SAL_WARN( "sw.ww8", "DocxExportFilter::exportDocument()" );
+
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
     SwXTextDocument *pTextDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
     if ( !pTextDoc )
+    {
+        SAL_WARN( "sw.ww8", "can't get SwXTextDocument" );
         return false;
+    }
 
     SwDoc *pDoc = pTextDoc->GetDocShell()->GetDoc();
     if ( !pDoc )
+    {
+        SAL_WARN( "sw.ww8", "can't get SwDoc" );
         return false;
+    }
 
     // update layout (if present), for SwWriteTable
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    if (pViewShell != nullptr)
+    if ( pViewShell )
         pViewShell->CalcLayout();
 
     // get SwPaM*
-    // FIXME so far we get SwPaM for the entire document; probably we should
-    // be able to output just the selection as well - though no idea how to
-    // get the correct SwPaM* then...
+    // FIXME so far we get SwPaM for the entire document; probably it's possible
+    // to output just the selection as well, though no idea how to get the correct SwPaM* then
     SwPaM aPam( pDoc->GetNodes().GetEndOfContent() );
     aPam.SetMark();
     aPam.Move( fnMoveBackward, GoInDoc );
@@ -66,9 +73,14 @@ bool DocxExportFilter::exportDocument()
 
     // export the document
     // (in a separate block so that it's destructed before the commit)
+    try
     {
         DocxExport aExport( this, pDoc, pCurPam, &aPam );
         aExport.ExportDocument( true ); // FIXME support exporting selection only
+    }
+    catch ( ... ) {
+        SAL_WARN( "sw.ww8", "exception during export" );
+        return false;
     }
 
     commitStorage();

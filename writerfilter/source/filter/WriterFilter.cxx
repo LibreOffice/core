@@ -124,8 +124,10 @@ private:
 
 sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw (uno::RuntimeException, std::exception)
 {
-    if (m_xSrcDoc.is())
+    if ( m_xSrcDoc.is() )
     {
+        SAL_WARN( "writerfilter", "WriterFilter::filter() SourceDocument" );
+
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< uno::XInterface > xIfc;
         try
@@ -141,15 +143,40 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
             uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": " + e.Message, uno::Reference<uno::XInterface>(), a);
         }
-        uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
-        uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
-        if (!xExprtr.is() || !xFltr.is())
+
+        uno::Reference< document::XExporter > xExporter( xIfc, uno::UNO_QUERY );
+        uno::Reference< document::XFilter > xFilter( xIfc, uno::UNO_QUERY );
+
+#if OSL_DEBUG_LEVEL > 0
+        OUString msg = "XExporter is ";
+        if ( xExporter.is() )
+            msg += "okay";
+        else
+            msg += "nil";
+        msg += ", ";
+        msg += "XFilter is ";
+        if ( xFilter.is() )
+            msg += "okay";
+        else
+            msg += "nil";
+        SAL_WARN( "writerfilter", msg );
+#endif
+
+        if ( !xExporter.is() || !xFilter.is() )
             return false;
-        xExprtr->setSourceDocument(m_xSrcDoc);
-        return xFltr->filter(aDescriptor);
+
+        xExporter->setSourceDocument( m_xSrcDoc );
+        sal_Bool bRet = sal_False;
+        try {
+            bRet = xFilter->filter( aDescriptor );
+        } catch ( ... ) { }
+        SAL_WARN( "writerfilter", "xFilter->filter() result is " << ( bRet ? "true" : "false" ) );
+        return bRet;
     }
-    else if (m_xDstDoc.is())
+    else if ( m_xDstDoc.is() )
     {
+        SAL_WARN( "writerfilter", "WriterFilter::filter() DstDoc" );
+
         utl::MediaDescriptor aMediaDesc(aDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
         bool bSkipImages = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString("")) == "SkipImages";
@@ -310,9 +337,10 @@ void WriterFilter::initialize(const uno::Sequence< uno::Any >& /*rArguments*/) t
 {
 }
 
-OUString WriterFilter::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString WriterFilter::getImplementationName()
+    throw ( uno::RuntimeException, std::exception )
 {
-    return OUString("com.sun.star.comp.Writer.WriterFilter");
+    return OUString( "com.sun.star.comp.Writer.WriterFilter" );
 }
 
 

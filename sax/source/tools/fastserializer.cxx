@@ -131,7 +131,11 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::endDocument()
     {
-        assert(mbMarkStackEmpty && maMarkStack.empty());
+        if( !mbMarkStackEmpty )
+            SAL_WARN( "sax", "endDocument(): mbMarkStackEmpty is false" );
+        if( !maMarkStack.empty() )
+            SAL_WARN( "sax", "endDocument(): maMarkStack is not empty" );
+
         maCachedOutputStream.flush();
     }
 

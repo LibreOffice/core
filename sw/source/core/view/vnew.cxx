@@ -340,14 +340,14 @@ SwViewShell::~SwViewShell()
 
         delete mpOpt;
 
-        // resize format cache.
+        // resize format cache
         if ( SwTextFrame::GetTextCache()->GetCurMax() > 250 )
             SwTextFrame::GetTextCache()->DecreaseMax( 100 );
 
         // Remove from PaintQueue if necessary
         SwPaintQueue::Remove( this );
 
-        OSL_ENSURE( !mnStartAction, "EndAction() pending." );
+        OSL_ENSURE( !mnStartAction, "EndAction() pending" );
     }
 
     if ( mpDoc )

@@ -268,34 +268,51 @@ bool SaveOlePropertySet(
             "_PID_HLINKS" );
     }
 
-    uno::Reference<beans::XPropertySet> xUserDefinedProps(
-        i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-    DBG_ASSERT(xUserDefinedProps.is(), "UserDefinedProperties is null");
-    uno::Reference<beans::XPropertySetInfo> xPropInfo =
-        xUserDefinedProps->getPropertySetInfo();
-    DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
-    uno::Sequence<beans::Property> props = xPropInfo->getProperties();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i)
+    try
     {
-        try
+        uno::Reference<beans::XPropertySet> xUserDefinedProps(
+            i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY );
+        if ( xUserDefinedProps.is() )
         {
-            // skip transient properties
-            if (~props[i].Attributes & beans::PropertyAttribute::TRANSIENT)
+            uno::Reference<beans::XPropertySetInfo> xPropInfo =
+                xUserDefinedProps->getPropertySetInfo();
+            if ( xPropInfo.is() )
             {
-                const OUString name = props[i].Name;
-                const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
-                if (rCustomSect.SetAnyValue( nPropId,
-                            xUserDefinedProps->getPropertyValue(name))) {
-                    rCustomSect.SetPropertyName( nPropId, name );
+                uno::Sequence<beans::Property> props = xPropInfo->getProperties();
+                for ( sal_Int32 i = 0; i < props.getLength(); ++i )
+                {
+                    try
+                    {
+                        // skip transient properties
+                        if ( ~props[i].Attributes & beans::PropertyAttribute::TRANSIENT )
+                        {
+                            const OUString name = props[i].Name;
+                            const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
+                            if (rCustomSect.SetAnyValue( nPropId,
+                                        xUserDefinedProps->getPropertyValue(name)))
+                            {
+                                rCustomSect.SetPropertyName( nPropId, name );
+                            }
+                        }
+                    }
+                    catch ( ... )
+                    {
+                        // may happen with concurrent modification
+                        SAL_WARN( "sfx", "caught exception" );
+                    }
                 }
             }
+            else
+            {
+                SAL_WARN( "sfx", "PropertySetInfo for UserDefinedProperties is nil" );
+            }
         }
-        catch (const uno::Exception &)
+        else
         {
-            // may happen with concurrent modification...
-            SAL_INFO("sfx", "SavePropertySet: exception");
+            SAL_WARN( "sfx", "UserDefinedProperties is nil" );
         }
     }
+    catch ( ... ) { }
 
     // save the property set
     ErrCode nDocError = aDocSet.SavePropertySet(i_pStorage,

@@ -521,13 +521,18 @@ void MSWordStyles::WriteProperties( const SwFormat* pFormat, bool bParProp, sal_
 {
     m_rExport.AttrOutput().StartStyleProperties( bParProp, nPos );
 
-    OSL_ENSURE( m_rExport.m_pCurrentStyle == nullptr, "Current style not NULL" ); // set current style before calling out
+    if ( m_rExport.m_pCurrentStyle )
+    {
+        // set current style before calling out
+        SAL_WARN( "sw.ww8", "current style is not nil" );
+    }
+
     m_rExport.m_pCurrentStyle = pFormat;
 
     m_rExport.OutputFormat( *pFormat, bParProp, !bParProp );
 
     OSL_ENSURE( m_rExport.m_pCurrentStyle == pFormat, "current style was changed" );
-    // reset current style...
+    // reset current style
     m_rExport.m_pCurrentStyle = nullptr;
 
     if ( bInsDefCharSiz  )                   // not derived from other Style
@@ -635,53 +640,70 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
 
 void WW8AttributeOutput::StartStyles()
 {
+    SAL_WARN( "sw.ww8", "<StartStyles>" );
+
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
     sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
     if ( nCurPos & 1 )                   // Start auf gerader
     {
-        m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Address
+        m_rWW8Export.pTableStrm->WriteChar( 0 );        // Address
         ++nCurPos;
     }
     rFib.m_fcStshfOrig = rFib.m_fcStshf = nCurPos;
     m_nStyleCountPos = nCurPos + 2;     // Anzahl wird nachgetragen
 
-    static sal_uInt8 aStShi[] = {
-        0x12, 0x00,
-        0x0F, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x5B, 0x00,
-        0x0F, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+    // STSHI structure stores style sheet information
+    static sal_uInt8 aStShi_Blob[] = {
+        0x12, 0x00,  /* ushort cbStshi  Size of the following STSHI structure */
+        0x0F, 0x00,  /* ushort cstd  Count of styles in stylesheet */
+        0x0A, 0x00,  /* ushort cbSTDBaseInFile  Length of STD Base as stored in a file */
+        0x01, 0x00,  /* ushort fStdStylenamesWritten : 1 // Are built-in stylenames stored? */
+                     /* ushort spareFlags : 15 */
+        0x5B, 0x00,  /* ushort stiMaxWhenSaved  Max sti known when this file was written */
+        0x0F, 0x00,  /* ushort istdMaxFixedWhenSaved  How many fixed-index istds are there? */
+        0x02, 0x00,  /* ushort nVerBuiltInNamesWhenSaved  Current version of built-in stylenames */
+        0x00, 0x00,
+        0x00, 0x00,
         0x00, 0x00 };
 
-    m_rWW8Export.pTableStrm->WriteBytes(&aStShi, sizeof(aStShi));
+    m_rWW8Export.pTableStrm->WriteBytes( &aStShi_Blob, sizeof( aStShi_Blob ) );
+
+    SAL_WARN( "sw.ww8", "</StartStyles>" );
 }
 
 void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
 {
+    SAL_WARN( "sw.ww8", "<EndStyles>" );
+
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
     rFib.m_lcbStshfOrig = rFib.m_lcbStshf = m_rWW8Export.pTableStrm->Tell() - rFib.m_fcStshf;
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, m_nStyleCountPos, nNumberOfStyles );
+
+    SAL_WARN( "sw.ww8", "</EndStyles>" );
 }
 
 void MSWordStyles::OutputStylesTable()
 {
+    SAL_WARN( "sw.ww8", "<OutputStylesTable>" );
+
     m_rExport.m_bStyDef = true;
 
     m_rExport.AttrOutput().StartStyles();
 
-    sal_uInt16 n;
     // HACK
     // Ms Office seems to have an internal limitation of 4091 styles
     // and refuses to load .docx with more, even though the spec seems to allow that;
     // so simply if there are more styles, don't export those
     // Implementing check for all exports DOCX, DOC, RTF
     sal_uInt16 nLimit = MSWORD_MAX_STYLES_LIMIT;
-    m_nUsedSlots = (nLimit > m_nUsedSlots)? m_nUsedSlots : nLimit;
+    m_nUsedSlots = ( nLimit > m_nUsedSlots ) ? m_nUsedSlots : nLimit;
 
-    for ( n = 0; n < m_nUsedSlots; n++ )
+    for ( sal_uInt16 n = 0; n < m_nUsedSlots; n++ )
     {
-        if (m_aNumRules.find(n) != m_aNumRules.end())
-            OutputStyle(m_aNumRules[n], n);
+        if ( m_aNumRules.find(n) != m_aNumRules.end() )
+            OutputStyle( m_aNumRules[n], n );
         else
             OutputStyle( m_pFormatA[n], n );
     }
@@ -689,6 +711,8 @@ void MSWordStyles::OutputStylesTable()
     m_rExport.AttrOutput().EndStyles( m_nUsedSlots );
 
     m_rExport.m_bStyDef = false;
+
+    SAL_WARN( "sw.ww8", "</OutputStylesTable>" );
 }
 
 const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
