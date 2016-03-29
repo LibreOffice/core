@@ -35,7 +35,6 @@ namespace comphelper { namespace module
             doInitialize()
             {
                 createRegistryInfo_OPropertyBag();
-                createRegistryInfo_SequenceOutputStream();
                 createRegistryInfo_UNOMemoryStream();
                 createRegistryInfo_Map();
             }
