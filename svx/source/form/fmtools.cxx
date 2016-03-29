@@ -99,7 +99,7 @@ using namespace ::svxform;
 
 namespace
 {
-    static bool lcl_shouldDisplayError( const Any& _rError )
+    bool lcl_shouldDisplayError( const Any& _rError )
     {
         SQLException aError;
         if ( !( _rError >>= aError ) )

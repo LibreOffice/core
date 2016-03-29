@@ -93,7 +93,7 @@ const char OBJECTTEXT[] = "<OBJECT>";
 
 namespace
 {
-    static LineEnd getModelLineEndSetting( const Reference< XPropertySet >& _rxModel )
+    LineEnd getModelLineEndSetting( const Reference< XPropertySet >& _rxModel )
     {
         LineEnd eFormat = LINEEND_LF;
 
@@ -927,7 +927,7 @@ void DbCellControl::SetTextLineColor(const Color& _rColor)
 
 namespace
 {
-    static void lcl_implAlign( vcl::Window* _pWindow, WinBits _nAlignmentBit )
+    void lcl_implAlign( vcl::Window* _pWindow, WinBits _nAlignmentBit )
     {
         WinBits nStyle = _pWindow->GetStyle();
         nStyle &= ~(WB_LEFT | WB_RIGHT | WB_CENTER);
@@ -1938,7 +1938,7 @@ VclPtr<SpinField> DbNumericField::createField( vcl::Window* _pParent, WinBits _n
 namespace
 {
 
-    static OUString lcl_setFormattedNumeric_nothrow( DoubleNumericField& _rField, const DbCellControl& _rControl,
+    OUString lcl_setFormattedNumeric_nothrow( DoubleNumericField& _rField, const DbCellControl& _rControl,
         const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
     {
         OUString sValue;
@@ -2079,7 +2079,7 @@ double DbCurrencyField::GetCurrency(const Reference< css::sdb::XColumn >& _rxFie
 namespace
 {
 
-    static OUString lcl_setFormattedCurrency_nothrow( LongCurrencyField& _rField, const DbCurrencyField& _rControl,
+    OUString lcl_setFormattedCurrency_nothrow( LongCurrencyField& _rField, const DbCurrencyField& _rControl,
         const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
     {
         OUString sValue;
@@ -2220,7 +2220,7 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
 namespace
 {
 
-    static OUString lcl_setFormattedDate_nothrow( DateField& _rField, const Reference< XColumn >& _rxField )
+    OUString lcl_setFormattedDate_nothrow( DateField& _rField, const Reference< XColumn >& _rxField )
     {
         OUString sDate;
         if ( _rxField.is() )
@@ -2328,7 +2328,7 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
 namespace
 {
 
-    static OUString lcl_setFormattedTime_nothrow( TimeField& _rField, const Reference< XColumn >& _rxField )
+    OUString lcl_setFormattedTime_nothrow( TimeField& _rField, const Reference< XColumn >& _rxField )
     {
         OUString sTime;
         if ( _rxField.is() )

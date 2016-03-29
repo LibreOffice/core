@@ -129,7 +129,7 @@ void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
 }
 
 
-static bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
+bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
     const sal_Int32 nCount(rA.getLength());
 

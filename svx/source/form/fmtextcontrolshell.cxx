@@ -482,7 +482,7 @@ namespace svx
         }
 
 
-        static vcl::Window* lcl_getWindow( const Reference< css::awt::XControl >& _rxControl )
+        vcl::Window* lcl_getWindow( const Reference< css::awt::XControl >& _rxControl )
         {
             vcl::Window* pWindow = nullptr;
             try

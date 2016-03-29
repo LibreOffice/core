@@ -635,7 +635,7 @@ bool SfxObjectShell::PrepareClose
 #if HAVE_FEATURE_SCRIPTING
 namespace
 {
-    static BasicManager* lcl_getBasicManagerForDocument( const SfxObjectShell& _rDocument )
+    BasicManager* lcl_getBasicManagerForDocument( const SfxObjectShell& _rDocument )
     {
         if ( !_rDocument.Get_Impl()->m_bNoBasicCapabilities )
         {

@@ -58,19 +58,19 @@ using namespace ::com::sun::star::container;
 
 namespace
 {
-    static OUString lcl_getNamePropertyName( )
+    OUString lcl_getNamePropertyName( )
     {
         return OUString( "Name" );
     }
-    static OUString lcl_getDescPropertyName( )
+    OUString lcl_getDescPropertyName( )
     {
         return OUString( "HelpText" );
     }
-    static OUString lcl_getLabelPropertyName( )
+    OUString lcl_getLabelPropertyName( )
     {
         return OUString( "Label" );
     }
-    static OUString lcl_getLabelControlPropertyName( )
+    OUString lcl_getLabelControlPropertyName( )
     {
         return OUString("LabelControl");
     }

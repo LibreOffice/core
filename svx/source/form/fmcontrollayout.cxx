@@ -99,7 +99,7 @@ namespace svxform
         }
 
 
-        static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, OUString& _rFamilyName, OUString& _rStyleName )
+        bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, OUString& _rFamilyName, OUString& _rStyleName )
         {
             bool bSuccess = true;
             Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
@@ -131,7 +131,7 @@ namespace svxform
         }
 
 
-        static void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
+        void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
         {
             try
             {
