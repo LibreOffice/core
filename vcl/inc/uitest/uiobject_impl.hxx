@@ -9,14 +9,15 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-
 class TabPage;
 class ComboBox;
 class SpinButton;
 class SpinField;
+class Edit;
+class Dialog;
+class Button;
+class CheckBox;
+class ListBox;
 
 class WindowUIObject : public UIObject
 {
