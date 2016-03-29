@@ -602,6 +602,8 @@ void ScText();
 void ScSubstitute();
 void ScRept();
 void ScConcat();
+void ScConcat_MS();
+void ScTextJoin_MS();
 void ScExternal();
 void ScMissing();
 void ScMacro();
