@@ -10,10 +10,12 @@
 
 #include <interpre.hxx>
 #include <global.hxx>
+#include <dociter.hxx>
 #include <scmatrix.hxx>
 #include <comphelper/random.hxx>
 #include <formula/token.hxx>
 
+#include <stack>
 #include <cmath>
 #include <vector>
 
@@ -1386,6 +1388,406 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
     }
 
     return;
+}
+
+void ScInterpreter::ScConcat_MS()
+{
+    OUStringBuffer aResBuf;
+    short nParamCount = GetByte();
+
+    //reverse order of parameter stack to simplify concatenation:
+    FormulaToken* p;
+    for ( short i = 0; i < short( nParamCount / 2 ); i++ )
+    {
+        p = pStack[ sp - ( nParamCount - i ) ];
+        pStack[ sp - ( nParamCount - i ) ] = pStack[ sp - 1 - i ];
+        pStack[ sp - 1 - i ] = p;
+    }
+
+    size_t nRefInList = 0;
+    while ( nParamCount-- > 0 )
+    {
+        switch ( GetStackType() )
+        {
+            case svString:
+            case svDouble:
+                aResBuf.append( PopString().getString() );
+                break;
+            case svSingleRef :
+            {
+                ScAddress aAdr;
+                PopSingleRef( aAdr );
+                if ( nGlobalError )
+                    break;
+                ScRefCellValue aCell( *pDok, aAdr );
+                if ( !aCell.isEmpty() )
+                {
+                    if ( aCell.hasString() )
+                        aResBuf.append( aCell.getString( pDok ) );
+                    else
+                    {
+                        if ( !aCell.hasEmptyValue() )
+                            aResBuf.append( OUString::number( aCell.getValue() ) );
+                    }
+                }
+                break;
+            }
+            case svDoubleRef :
+            case svRefList :
+            {
+                ScRange aRange;
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError )
+                    break;
+                // we need to read row for row, so we can't use ScCellIter
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                if ( nTab1 != nTab2 )
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+                if ( nRow1 > nRow2 )
+                    std::swap( nRow1, nRow2 );
+                if ( nCol1 > nCol2 )
+                    std::swap( nCol1, nCol2 );
+                ScAddress aAdr;
+                aAdr.SetTab( nTab1 );
+                for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
+                {
+                    for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
+                    {
+                        aAdr.SetRow( nRow );
+                        aAdr.SetCol( nCol );
+                        ScRefCellValue aCell( *pDok, aAdr );
+                        if ( !aCell.isEmpty() )
+                        {
+                            if ( aCell.hasString() )
+                                aResBuf.append(  aCell.getString( pDok ) );
+                            else
+                            {
+                                if ( !aCell.hasEmptyValue() )
+                                    aResBuf.append(  OUString::number( aCell.getValue() ) );
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat = GetMatrix();
+                if (pMat)
+                {
+                    SCSIZE nC, nR;
+                    pMat->GetDimensions(nC, nR);
+                    if (nC == 0 || nR == 0)
+                        SetError(errIllegalArgument);
+                    else
+                    {
+                        for ( SCSIZE j = 0; j < nC; j++ )
+                        {
+                            for (SCSIZE k = 0; k < nR; k++ )
+                            {
+                                if ( pMat->IsString( j, k ) )
+                                    aResBuf.append(  pMat->GetString( j, k ).getString() );
+                                else
+                                {
+                                    if ( pMat->IsValue( j, k ) )
+                                        aResBuf.append(  OUString::number( pMat->GetDouble( j, k ) ) );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            default:
+              break;
+        }
+    }
+    PushString( aResBuf.makeStringAndClear() );
+}
+
+void ScInterpreter::ScTextJoin_MS()
+{
+    short nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 3 ) )
+    {
+        //xStringStack will contain all strings to be concatenated from end to finish
+        std::stack< OUString > xStringStack;
+        size_t nRefInList = 0;
+        while ( nParamCount-- > 2 )
+        {
+            switch ( GetStackType() )
+            {
+                case svString:
+                case svDouble:
+                    xStringStack.push( PopString().getString() );
+                    break;
+                case svSingleRef :
+                {
+                    ScAddress aAdr;
+                    PopSingleRef( aAdr );
+                    if ( nGlobalError )
+                        break;
+                    ScRefCellValue aCell( *pDok, aAdr );
+                    if ( !aCell.isEmpty() )
+                    {
+                        if ( aCell.hasString() )
+                            xStringStack.push( aCell.getString( pDok ) );
+                        else
+                        {
+                            if ( !aCell.hasEmptyValue() )
+                                xStringStack.push( OUString::number( aCell.getValue() ) );
+                        }
+                    }
+                    else
+                        xStringStack.push( "" );
+                    break;
+                }
+                case svDoubleRef :
+                case svRefList :
+                {
+                    ScRange aRange;
+                    PopDoubleRef( aRange, nParamCount, nRefInList);
+                    if ( nGlobalError )
+                        break;
+                    // we need to read row for row, so we can't use ScCellIterator
+                    // also, work from end to start
+                    SCCOL nCol1, nCol2;
+                    SCROW nRow1, nRow2;
+                    SCTAB nTab1, nTab2;
+                    aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                    if ( nTab1 != nTab2 )
+                    {
+                        SetError( errIllegalParameter);
+                        break;
+                    }
+                    if ( nRow1 > nRow2 )
+                        std::swap( nRow1, nRow2 );
+                    if ( nCol1 > nCol2 )
+                        std::swap( nCol1, nCol2 );
+                    ScAddress aAdr;
+                    aAdr.SetTab( nTab1 );
+                    for ( SCROW nRow = nRow2; nRow >= nRow1; nRow-- )
+                    {
+                        for ( SCCOL nCol = nCol2; nCol >= nCol1; nCol-- )
+                        {
+                            aAdr.SetRow( nRow );
+                            aAdr.SetCol( nCol );
+                            ScRefCellValue aCell( *pDok, aAdr );
+                            if ( !aCell.isEmpty() )
+                            {
+                                if ( aCell.hasString() )
+                                    xStringStack.push( aCell.getString( pDok ) );
+                                else
+                                {
+                                    if ( !aCell.hasEmptyValue() )
+                                        xStringStack.push( OUString::number( aCell.getValue() ) );
+                                }
+                            }
+                            else
+                                xStringStack.push( "" );
+                        }
+                    }
+                    break;
+                }
+                case svMatrix :
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
+                {
+                    ScMatrixRef pMat = GetMatrix();
+                    if (pMat)
+                    {
+                        SCSIZE nC, nR;
+                        pMat->GetDimensions(nC, nR);
+                        if (nC == 0 || nR == 0)
+                            SetError(errIllegalArgument);
+                        else
+                        {
+                            for ( SCSIZE j = nC - 1; j < nC; j-- )  // j < nC because j >= 0 always is true
+                            {
+                                for (SCSIZE k = nR - 1; k < nR; k-- )  // k < nR because k >= 0 always is true
+                                {
+                                    if ( !pMat->IsEmpty( j, k ) )
+                                    {
+                                        if ( pMat->IsString( j, k ) )
+                                            xStringStack.push( pMat->GetString( j, k ).getString() );
+                                        else
+                                        {
+                                            if ( pMat->IsValue( j, k ) )
+                                                xStringStack.push( OUString::number( pMat->GetDouble( j, k ) ) );
+                                        }
+                                    }
+                                    else
+                                        xStringStack.push( "" );
+                                }
+                            }
+                        }
+                    }
+                }
+                case svMissing :
+                    xStringStack.push( "" );
+                    break;
+                default:
+                    break;
+            }
+        }
+        if ( nGlobalError )
+        {
+            PushError( nGlobalError );
+            return;
+        }
+
+        // get bSkipEmpty and xDelimiter
+        bool bSkipEmpty = static_cast< bool >( GetDouble() );
+        std::vector< OUString > xDelimiter;
+        nRefInList = 0;
+        switch ( GetStackType() )
+        {
+            case svString:
+            case svDouble:
+                xDelimiter.push_back( PopString().getString() );
+                break;
+            case svSingleRef :
+            {
+                ScAddress aAdr;
+                PopSingleRef( aAdr );
+                if ( nGlobalError )
+                    break;
+                ScRefCellValue aCell( *pDok, aAdr );
+                if ( !aCell.isEmpty() )
+                {
+                    if ( aCell.hasString() )
+                        xDelimiter.push_back( aCell.getString( pDok ) );
+                    else
+                    {
+                        if ( !aCell.hasEmptyValue() )
+                            xDelimiter.push_back( OUString::number( aCell.getValue() ) );
+                    }
+                }
+                break;
+            }
+            case svDoubleRef :
+            case svRefList :
+            {
+                ScRange aRange;
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError )
+                    break;
+                // we need to read row for row, so we can't use ScCellIterator
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                if ( nTab1 != nTab2 )
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+                if ( nRow1 > nRow2 )
+                    std::swap( nRow1, nRow2 );
+                if ( nCol1 > nCol2 )
+                    std::swap( nCol1, nCol2 );
+                ScAddress aAdr;
+                aAdr.SetTab( nTab1 );
+                for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
+                {
+                    for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
+                    {
+                        aAdr.SetRow( nRow );
+                        aAdr.SetCol( nCol );
+                        ScRefCellValue aCell( *pDok, aAdr );
+                        if ( !aCell.isEmpty() )
+                        {
+                            if ( aCell.hasString() )
+                                xDelimiter.push_back( aCell.getString( pDok ) );
+                            else
+                            {
+                                if ( !aCell.hasEmptyValue() )
+                                    xDelimiter.push_back( OUString::number( aCell.getValue() ) );
+                            }
+                        }
+                        else
+                            xDelimiter.push_back( "" );
+                    }
+                }
+                break;
+            }
+            case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat = GetMatrix();
+                if (pMat)
+                {
+                    SCSIZE nC, nR;
+                    pMat->GetDimensions(nC, nR);
+                    if (nC == 0 || nR == 0)
+                        SetError(errIllegalArgument);
+                    else
+                    {
+                        for ( SCSIZE j = 0; j < nC; j++ )
+                        {
+                            for (SCSIZE k = 0; k < nR; k++ )
+                            {
+                                if ( !pMat->IsEmpty( j, k ) )
+                                {
+                                    if ( pMat->IsString( j, k ) )
+                                        xDelimiter.push_back( pMat->GetString( j, k ).getString() );
+                                    else
+                                    {
+                                        if ( pMat->IsValue( j, k ) )
+                                            xDelimiter.push_back( OUString::number( pMat->GetDouble( j, k ) ) );
+                                    }
+                                }
+                                else
+                                    xDelimiter.push_back( "" );
+                            }
+                        }
+                    }
+                }
+            }
+            default:
+                break;
+        }
+        if ( xDelimiter.empty() )
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        // create concatenated string from xStringStack with delimiter
+        OUStringBuffer aResBuf;
+        bool bFirst = true;
+        SCSIZE i = 0;
+        SCSIZE nSize = xDelimiter.size();
+        while ( !xStringStack.empty() )
+        {
+            OUString aStr( xStringStack.top() );
+            xStringStack.pop();
+            if ( !aStr.isEmpty() || !bSkipEmpty )
+            {
+                if ( bFirst )
+                    bFirst = false;
+                else
+                {
+                    aResBuf.append( xDelimiter[ i ] );
+                    if ( nSize > 1 )
+                    {
+                        if ( ++i >= nSize )
+                            i = 0;
+                    }
+                }
+                aResBuf.append( aStr );
+            }
+        }
+        PushString( aResBuf.makeStringAndClear() );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
