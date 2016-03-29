@@ -76,7 +76,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aBasedDerivedTextStr = get<FixedText>("derived")->GetText();
     m_aLocaleStr = get<FixedText>("locale")->GetText();
 
-    m_pVersion->SetText(GetVersionString());
+    m_pVersion->SetText( GetVersionString() );
 
     OUString aCopyrightString = GetCopyrightString();
     m_pCopyrightText->SetText( aCopyrightString );
@@ -154,18 +154,22 @@ void AboutDialog::StyleControls()
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     const vcl::Font& aLabelFont = rStyleSettings.GetLabelFont();
+    const sal_Int32 labelFontHeight = aLabelFont.GetFontSize().Height();
+
     vcl::Font aLargeFont = aLabelFont;
-    aLargeFont.SetFontSize(Size( 0, aLabelFont.GetFontSize().Height() * 3));
 
     // Logo Replacement Text
+    aLargeFont.SetFontSize( Size( 0, labelFontHeight * 3 ) );
     m_pLogoReplacement->SetControlFont(aLargeFont);
 
     // Description Text
-    aLargeFont.SetFontSize(Size(0, aLabelFont.GetFontSize().Height() * 1.3));
+    // "LibreOffice is open source productivity suite"
+    aLargeFont.SetFontSize( Size( 0, labelFontHeight * 1.25 ) );
     m_pDescriptionText->SetControlFont(aLargeFont);
 
     // Version Text
-    aLargeFont.SetFontSize(Size(0, aLabelFont.GetFontSize().Height() * 1.2));
+    // "Version: 5.2.0.alpha0+ Build ID: "
+    aLargeFont.SetFontSize( Size( 0, labelFontHeight ) );
     m_pVersion->SetControlFont(aLargeFont);
 
     // If not in high-contrast mode, hard-code colors
@@ -287,7 +291,7 @@ OUString AboutDialog::GetVersionString()
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
-    sVersion += "\n" + Application::GetHWOSConfInfo();
+    sVersion += "\n\n" + Application::GetHWOSConfInfo();
 
     if (EXTRA_BUILDID[0] != '\0')
     {

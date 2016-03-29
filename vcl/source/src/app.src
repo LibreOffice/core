@@ -39,4 +39,9 @@ String SV_APP_VCLBACKEND
     Text [ en-US ] = "VCL: ";
 };
 
+String SV_APP_USERDATA
+{
+    Text [ en-US ] = "User Profile: ";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
