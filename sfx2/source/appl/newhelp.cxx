@@ -166,11 +166,6 @@ using namespace ::comphelper;
 #define KEY_HELP_ON_OPEN        "ooSetupFactoryHelpOnOpen"
 #define KEY_UI_NAME             "ooSetupFactoryUIName"
 
-#define PARSE_URL( aURL ) \
-    Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) ); \
-    xTrans->parseStrict( aURL )
-
-
 namespace sfx2
 {
 
@@ -582,26 +577,6 @@ namespace sfx2 {
     typedef std::unordered_map< OUString, int, OUStringHash > KeywordInfo;
 }
 
-#define NEW_ENTRY( url, bool ) \
-    new IndexEntry_Impl( url, bool )
-
-#define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
-    it = aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                          \
-    if ( ( tmp = it->second++ ) != 0 )                                                              \
-       nPos = m_pIndexCB->InsertEntry( aToken + OUString( append, tmp ) );                             \
-    else                                                                                            \
-       nPos = m_pIndexCB->InsertEntry( aToken )
-
-#define INSERT_DATA( j )                                                                            \
-    if ( aAnchorList[j].getLength() > 0 )                                                           \
-    {                                                                                               \
-        aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );            \
-        m_pIndexCB->SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );             \
-    }                                                                                               \
-    else                                                                                            \
-        m_pIndexCB->SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
-
-
 void IndexTabPage_Impl::InitializeIndex()
 {
     WaitObject aWaitCursor( this );
@@ -667,14 +642,22 @@ void IndexTabPage_Impl::InitializeIndex()
                         if ( aIndex != aTempString )
                         {
                             aIndex = aTempString;
-                            UNIFY_AND_INSERT_TOKEN( aTempString );
+                            it = aInfo.insert(sfx2::KeywordInfo::value_type(aTempString, 0)).first;
+                            if ( (tmp = it->second++) != 0)
+                                nPos = m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
+                            else
+                                nPos = m_pIndexCB->InsertEntry(aTempString);
                         }
                     }
                     else
                         aIndex.clear();
 
                     // Assume the token is trimmed
-                    UNIFY_AND_INSERT_TOKEN( aKeywordPair );
+                    it = aInfo.insert(sfx2::KeywordInfo::value_type(aKeywordPair, 0)).first;
+                    if ((tmp = it->second++) != 0)
+                        nPos = m_pIndexCB->InsertEntry(aKeywordPair + OUString(append, tmp));
+                    else
+                        nPos = m_pIndexCB->InsertEntry(aKeywordPair);
 
                     sal_uInt32 nRefListLen = aRefList.getLength();
 
@@ -683,7 +666,13 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     if ( aAnchorList.getLength() && nRefListLen )
                     {
-                        INSERT_DATA( 0 );
+                        if ( aAnchorList[0].getLength() > 0 )
+                        {
+                            aData.append( aRefList[0] ).append( '#' ).append( aAnchorList[0] );
+                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aData.makeStringAndClear(), insert ) );
+                        }
+                        else
+                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aRefList[0], insert ) );
                     }
 
                     for ( sal_uInt32 j = 1; j < nRefListLen ; ++j )
@@ -696,8 +685,19 @@ void IndexTabPage_Impl::InitializeIndex()
                             .append( aTitleList[j] );
 
                         aTempString = aData.makeStringAndClear();
-                        UNIFY_AND_INSERT_TOKEN( aTempString );
-                        INSERT_DATA( j );
+                        it = aInfo.insert(sfx2::KeywordInfo::value_type(aTempString, 0)).first;
+                        if ( (tmp = it->second++) != 0 )
+                            nPos = m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
+                        else
+                            nPos = m_pIndexCB->InsertEntry(aTempString);
+
+                        if ( aAnchorList[j].getLength() > 0 )
+                        {
+                            aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );
+                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aData.makeStringAndClear(), insert ) );
+                        }
+                        else
+                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aRefList[j], insert ) );
                     }
                 }
             }
@@ -713,10 +713,6 @@ void IndexTabPage_Impl::InitializeIndex()
     if ( !sKeyword.isEmpty() )
         aKeywordLink.Call( *this );
 }
-
-#undef INSERT_DATA
-#undef UNIFY_AND_INSERT_TOKEN
-
 
 void IndexTabPage_Impl::ClearIndex()
 {
@@ -2395,7 +2391,8 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
             URL aURL;
             aURL.Complete = ".uno:SelectTextMode";
-            PARSE_URL( aURL );
+            Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+            xTrans->parseStrict(aURL);
             Reference < XDispatch > xDisp = xFrame->queryDispatch( aURL, OUString(), 0 );
             if(xDisp.is())
             {
@@ -3065,7 +3062,8 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
             aURL.Complete = ".uno:Backward";
             if ( TBI_FORWARD == nActionId )
                 aURL.Complete = ".uno:Forward";
-            PARSE_URL( aURL );
+            Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) ); \
+            xTrans->parseStrict(aURL);
             pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
             break;
         }
@@ -3095,7 +3093,8 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                     aURL.Complete = ".uno:SelectTextMode";
                 else
                     aURL.Complete = ".uno:SearchDialog";
-                PARSE_URL( aURL );
+                Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) ); \
+                xTrans->parseStrict(aURL);
                 Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
                 if ( xDisp.is() )
                     xDisp->dispatch( aURL, Sequence < PropertyValue >() );
