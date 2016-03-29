@@ -120,7 +120,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
                 nFreeSpaceX = rRect.GetWidth();
             }
 
-            if(nFreeSpaceX < 0)
+            if(nFreeSpaceX <= 0)
             {
                 SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
             }
@@ -165,7 +165,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
                 nFreeSpaceY = rRect.GetHeight();
             }
 
-            if(nFreeSpaceY < 0)
+            if(nFreeSpaceY <= 0)
             {
                 SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
             }
