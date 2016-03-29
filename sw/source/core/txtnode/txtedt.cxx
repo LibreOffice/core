@@ -605,7 +605,7 @@ void SwTextNode::RstTextAttr(
         for (i = 0; i < m_pSwpHints->Count(); ++i)
         {
             SwTextAttr* pHint = m_pSwpHints->Get(i);
-            if (pHint->GetStart() != nStt)
+            if (isTXTATR_WITHEND(pHint->Which()) || pHint->GetStart() != nStt)
                 continue;
 
             const sal_Int32* pHintEnd = pHint->GetEnd();
