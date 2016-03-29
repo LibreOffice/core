@@ -142,9 +142,6 @@ class Desktop : public Application
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
-        static void             PreloadModuleData( const CommandLineArgs& );
-        static void             PreloadConfigurationData();
-
         css::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();

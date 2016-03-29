@@ -59,7 +59,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
@@ -74,7 +73,6 @@
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 
@@ -1968,211 +1966,6 @@ IMPL_STATIC_LINK_NOARG_TYPED(Desktop, EnableAcceptors_Impl, void*, void)
     enableAcceptors();
 }
 
-
-void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
-{
-    Sequence < css::beans::PropertyValue > args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= sal_True;
-    Reference < XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-
-    if ( rArgs.IsWriter() )
-    {
-        try
-        {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/swriter",
-                "_blank", 0, args ), UNO_QUERY_THROW );
-            xDoc->close( sal_False );
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
-    }
-    if ( rArgs.IsCalc() )
-    {
-        try
-        {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/scalc",
-                "_blank", 0, args ), UNO_QUERY_THROW );
-            xDoc->close( sal_False );
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
-    }
-    if ( rArgs.IsDraw() )
-    {
-        try
-        {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/sdraw",
-                "_blank", 0, args ), UNO_QUERY_THROW );
-            xDoc->close( sal_False );
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
-    }
-    if ( rArgs.IsImpress() )
-    {
-        try
-        {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/simpress",
-                "_blank", 0, args ), UNO_QUERY_THROW );
-            xDoc->close( sal_False );
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
-    }
-}
-
-void Desktop::PreloadConfigurationData()
-{
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XNameAccess > xNameAccess = css::frame::theUICommandDescription::get(xContext);
-
-    OUString aWriterDoc( "com.sun.star.text.TextDocument" );
-    OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
-    OUString aDrawDoc( "com.sun.star.drawing.DrawingDocument" );
-    OUString aImpressDoc( "com.sun.star.presentation.PresentationDocument" );
-
-    // preload commands configuration
-    Any a;
-    Reference< XNameAccess > xCmdAccess;
-
-    try
-    {
-        a = xNameAccess->getByName( aWriterDoc );
-        a >>= xCmdAccess;
-        if ( xCmdAccess.is() )
-        {
-            xCmdAccess->getByName(".uno:BasicShapes");
-            xCmdAccess->getByName(".uno:EditGlossary");
-        }
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-
-    try
-    {
-        a = xNameAccess->getByName( aCalcDoc );
-        a >>= xCmdAccess;
-        if ( xCmdAccess.is() )
-            xCmdAccess->getByName(".uno:InsertObjectStarMath");
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-
-    try
-    {
-        // draw and impress share the same configuration file (DrawImpressCommands.xcu)
-        a = xNameAccess->getByName( aDrawDoc );
-        a >>= xCmdAccess;
-        if ( xCmdAccess.is() )
-            xCmdAccess->getByName(".uno:Polygon");
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-
-    // preload window state configuration
-    xNameAccess = theWindowStateConfiguration::get( xContext );
-    Reference< XNameAccess > xWindowAccess;
-    try
-    {
-        a = xNameAccess->getByName( aWriterDoc );
-        a >>= xWindowAccess;
-        if ( xWindowAccess.is() )
-            xWindowAccess->getByName("private:resource/toolbar/standardbar");
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-    try
-    {
-        a = xNameAccess->getByName( aCalcDoc );
-        a >>= xWindowAccess;
-        if ( xWindowAccess.is() )
-            xWindowAccess->getByName("private:resource/toolbar/standardbar");
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-    try
-    {
-        a = xNameAccess->getByName( aDrawDoc );
-        a >>= xWindowAccess;
-        if ( xWindowAccess.is() )
-            xWindowAccess->getByName("private:resource/toolbar/standardbar");
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-    try
-    {
-        a = xNameAccess->getByName( aImpressDoc );
-        a >>= xWindowAccess;
-        if ( xWindowAccess.is() )
-            xWindowAccess->getByName("private:resource/toolbar/standardbar");
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-
-    // preload user interface element factories
-    Reference< XUIElementFactoryManager > xUIElementFactory = theUIElementFactoryManager::get( xContext );
-    try
-    {
-        xUIElementFactory->getRegisteredFactories();
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-
-    // preload popup menu controller factories. As all controllers are in the same
-    // configuration file they also get preloaded!
-
-    Reference< css::frame::XUIControllerRegistration > xPopupMenuControllerFactory =
-    css::frame::thePopupMenuControllerFactory::get( xContext );
-    try
-    {
-        (void)xPopupMenuControllerFactory->hasController( ".uno:CharFontName", OUString() );
-    }
-    catch ( const css::uno::Exception& )
-    {
-    }
-
-    // preload filter configuration
-    xNameAccess.set(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
-                    UNO_QUERY );
-    if ( xNameAccess.is() )
-    {
-        try
-        {
-             xNameAccess->getElementNames();
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
-    }
-
-    // preload type detection configuration
-    xNameAccess.set(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
-                    UNO_QUERY );
-    if ( xNameAccess.is() )
-    {
-        try
-        {
-             xNameAccess->getElementNames();
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
-    }
-}
-
 void Desktop::OpenClients()
 {
 
@@ -2220,42 +2013,6 @@ void Desktop::OpenClients()
             Application::GetHelp()->Start(
                 aHelpURLBuffer.makeStringAndClear(), nullptr);
             return;
-        }
-    }
-    else
-    {
-        OUString            aIniName;
-
-        osl_getExecutableFile( &aIniName.pData );
-        sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
-        if ( lastIndex > 0 )
-        {
-            aIniName    = aIniName.copy( 0, lastIndex+1 );
-            aIniName    += "perftune";
-#if defined(_WIN32)
-            aIniName    += ".ini";
-#else
-            aIniName    += "rc";
-#endif
-        }
-
-        rtl::Bootstrap aPerfTuneIniFile( aIniName );
-
-        OUString aDefault( "0" );
-        OUString aPreloadData;
-
-        aPerfTuneIniFile.getFrom( "QuickstartPreloadConfiguration", aPreloadData, aDefault );
-        if ( aPreloadData == "1" )
-        {
-            if ( rArgs.IsWriter()  ||
-                 rArgs.IsCalc()    ||
-                 rArgs.IsDraw()    ||
-                 rArgs.IsImpress()    )
-            {
-                PreloadModuleData( rArgs );
-            }
-
-            PreloadConfigurationData();
         }
     }
 
