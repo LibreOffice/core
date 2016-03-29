@@ -10,10 +10,12 @@
 
 #include <interpre.hxx>
 #include <global.hxx>
+#include <dociter.hxx>
 #include <scmatrix.hxx>
 #include <comphelper/random.hxx>
 #include <formula/token.hxx>
 
+#include <stack>
 #include <cmath>
 #include <vector>
 
@@ -1386,6 +1388,327 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
     }
 
     return;
+}
+
+void ScInterpreter::ScConcat_MS()
+{
+    OUString aRes;
+    short nParamCount = GetByte();
+    while ( nParamCount-- > 0 )
+    {
+        switch ( GetStackType() )
+        {
+            case svString:
+            case svDouble:
+                aRes = PopString().getString() + aRes;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+                if ( !nGlobalError && pToken )
+                    aRes = pToken->GetString().getString() + aRes;
+                break;
+            }
+            case svSingleRef :
+            {
+                ScAddress aAdr;
+                PopSingleRef( aAdr );
+                if ( nGlobalError )
+                    break;
+                ScRefCellValue aCell( *pDok, aAdr );
+                if ( !aCell.isEmpty() )
+                {
+                    if ( aCell.hasString() )
+                        aRes = aCell.getString( pDok ) + aRes;
+                    else
+                    {
+                        if ( !aCell.hasEmptyValue() )
+                            aRes = OUString::number( aCell.getValue() ) + aRes;
+                    }
+                }
+                break;
+            }
+            case svDoubleRef :
+            case svRefList :
+            {
+                ScRange aRange;
+                size_t nRefInList = 0;
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError )
+                    break;
+                OUString aStr;
+                // we need to read row for row, so we can't use ScCellIter
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                if ( nTab1 != nTab2 )
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+                if ( nRow1 > nRow2 )
+                    std::swap( nRow1, nRow2 );
+                if ( nCol1 > nCol2 )
+                    std::swap( nCol1, nCol2 );
+                for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
+                {
+                    for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
+                    {
+                        ScAddress aAdr( nCol, nRow, nTab1);
+                        ScRefCellValue aCell( *pDok, aAdr );
+                        if ( !aCell.isEmpty() )
+                        {
+                            if ( aCell.hasString() )
+                                aStr += aCell.getString( pDok );
+                            else
+                            {
+                                if ( !aCell.hasEmptyValue() )
+                                    aStr += OUString::number( aCell.getValue() );
+                            }
+                        }
+                    }
+                }
+                aRes = aStr + aRes;
+                break;
+            }
+            default:
+              break;
+        }
+    }
+    if ( !nGlobalError )
+        PushString( aRes );
+    else
+        PushError( nGlobalError );
+}
+
+void ScInterpreter::ScTextJoin_MS()
+{
+    short nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 3 ) )
+    {
+        //xStringStack will contain all strings to be concatenated from end to finish
+        std::stack< OUString > xStringStack;
+        while ( nParamCount-- > 2 )
+        {
+            switch ( GetStackType() )
+            {
+                case svString:
+                case svDouble:
+                    xStringStack.push( PopString().getString() );
+                    break;
+                case svExternalSingleRef:
+                {
+                    ScExternalRefCache::TokenRef pToken;
+                    ScExternalRefCache::CellFormat aFmt;
+                    PopExternalSingleRef(pToken, &aFmt);
+                    if ( !nGlobalError )
+                    {
+                        if ( pToken )
+                            xStringStack.push(  pToken->GetString().getString() );
+                        else
+                            xStringStack.push( "" );
+                    }
+                    break;
+                }
+                case svSingleRef :
+                {
+                    ScAddress aAdr;
+                    PopSingleRef( aAdr );
+                    if ( nGlobalError )
+                        break;
+                    ScRefCellValue aCell( *pDok, aAdr );
+                    if ( !aCell.isEmpty() )
+                    {
+                        if ( aCell.hasString() )
+                            xStringStack.push( aCell.getString( pDok ) );
+                        else
+                        {
+                            if ( !aCell.hasEmptyValue() )
+                                xStringStack.push( OUString::number( aCell.getValue() ) );
+                        }
+                    }
+                    else
+                        xStringStack.push( "" );
+                    break;
+                }
+                case svDoubleRef :
+                case svRefList :
+                {
+                    ScRange aRange;
+                    size_t nRefInList = 0;
+                    PopDoubleRef( aRange, nParamCount, nRefInList);
+                    if ( nGlobalError )
+                        break;
+                    // we need to read row for row, so we can't use ScCellIterator
+                    // also, work from end to start
+                    SCCOL nCol1, nCol2;
+                    SCROW nRow1, nRow2;
+                    SCTAB nTab1, nTab2;
+                    aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                    if ( nTab1 != nTab2 )
+                    {
+                        SetError( errIllegalParameter);
+                        break;
+                    }
+                    if ( nRow1 > nRow2 )
+                        std::swap( nRow1, nRow2 );
+                    if ( nCol1 > nCol2 )
+                        std::swap( nCol1, nCol2 );
+                    for ( SCROW nRow = nRow2; nRow >= nRow1; nRow-- )
+                    {
+                        for ( SCCOL nCol = nCol2; nCol >= nCol1; nCol-- )
+                        {
+                            ScAddress aAdr( nCol, nRow, nTab1);
+                            ScRefCellValue aCell( *pDok, aAdr );
+                            if ( !aCell.isEmpty() )
+                            {
+                                if ( aCell.hasString() )
+                                    xStringStack.push( aCell.getString( pDok ) );
+                                else
+                                {
+                                    if ( !aCell.hasEmptyValue() )
+                                        xStringStack.push( OUString::number( aCell.getValue() ) );
+                                }
+                            }
+                            else
+                                xStringStack.push( "" );
+                        }
+                    }
+                    break;
+                }
+                case svMissing :
+                    xStringStack.push( "" );
+                    break;
+                default:
+                    break;
+            }
+        }
+        if ( nGlobalError )
+        {
+            PushError( nGlobalError );
+            return;
+        }
+
+        // get bSkipEmpty and xDelimiter
+        bool bSkipEmpty = static_cast< bool >( GetDouble() );
+        std::vector< OUString > xDelimiter;
+        switch ( GetStackType() )
+        {
+            case svString:
+            case svDouble:
+                xDelimiter.push_back( PopString().getString() );
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+                if ( !nGlobalError && pToken )
+                    xDelimiter.push_back( pToken->GetString().getString() );
+                break;
+            }
+            case svSingleRef :
+            {
+                ScAddress aAdr;
+                PopSingleRef( aAdr );
+                if ( nGlobalError )
+                    break;
+                ScRefCellValue aCell( *pDok, aAdr );
+                if ( !aCell.isEmpty() )
+                {
+                    if ( aCell.hasString() )
+                        xDelimiter.push_back( aCell.getString( pDok ) );
+                    else
+                    {
+                        if ( !aCell.hasEmptyValue() )
+                            xDelimiter.push_back( OUString::number( aCell.getValue() ) );
+                    }
+                }
+                break;
+            }
+            case svDoubleRef :
+            case svRefList :
+            {
+                ScRange aRange;
+                size_t nRefInList = 0;
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError )
+                    break;
+                // we need to read row for row, so we can't use ScCellIterator
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                if ( nTab1 != nTab2 )
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+                if ( nRow1 > nRow2 )
+                    std::swap( nRow1, nRow2 );
+                if ( nCol1 > nCol2 )
+                    std::swap( nCol1, nCol2 );
+                for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
+                {
+                    for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
+                    {
+                        ScAddress aAdr( nCol, nRow, nTab1);
+                        ScRefCellValue aCell( *pDok, aAdr );
+                        if ( !aCell.isEmpty() )
+                        {
+                            if ( aCell.hasString() )
+                                xDelimiter.push_back( aCell.getString( pDok ) );
+                            else
+                            {
+                                if ( !aCell.hasEmptyValue() )
+                                    xDelimiter.push_back( OUString::number( aCell.getValue() ) );
+                            }
+                        }
+                        else
+                            xDelimiter.push_back( "" );
+                    }
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        if ( xDelimiter.empty() )
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        // create concatenated string from xStringStack with delimiter
+        OUString aRes;
+        bool bFirst = true;
+        SCSIZE i = 0;
+        SCSIZE nSize = xDelimiter.size();
+        while ( !xStringStack.empty() )
+        {
+            OUString aStr = xStringStack.top();
+            xStringStack.pop();
+            if ( !aStr.isEmpty() || !bSkipEmpty )
+            {
+                if ( bFirst )
+                    bFirst = false;
+                else
+                {
+                    aRes += xDelimiter[ i ];
+                    if ( nSize > 1 )
+                    {
+                        if ( ++i >= nSize )
+                            i = 0;
+                    }
+                }
+                aRes += aStr;
+            }
+        }
+        PushString( aRes );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

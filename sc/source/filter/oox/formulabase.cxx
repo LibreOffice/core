@@ -898,6 +898,7 @@ static const FunctionData saFuncTable2013[] =
 /** Functions new in Excel 2016.
 
     See https://support.office.com/en-us/article/Forecasting-functions-897a2fe9-6595-4680-a0b0-93e0308d5f6e?ui=en-US&rs=en-US&ad=US#_forecast.ets
+    and  https://support.office.com/en-us/article/What-s-New-and-Improved-in-Office-2016-for-Office-365-95c8d81d-08ba-42c1-914f-bca4603e1426?ui=en-US&rs=en-US&ad=US
 
     @See sc/source/filter/excel/xlformula.cxx saFuncTable_2016
  */
@@ -908,7 +909,9 @@ static const FunctionData saFuncTable2016[] =
     { "COM.MICROSOFT.FORECAST.ETS.CONFINT",     "FORECAST.ETS.CONFINT",     NOID,   NOID,   4,  7,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FORECAST.ETS.SEASONALITY", "FORECAST.ETS.SEASONALITY", NOID,   NOID,   2,  4,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FORECAST.ETS.STAT",        "FORECAST.ETS.STAT",        NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.FORECAST.LINEAR",          "FORECAST.LINEAR",          NOID,   NOID,   3,  3,  V, { VR, VA }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.FORECAST.LINEAR",          "FORECAST.LINEAR",          NOID,   NOID,   3,  3,  V, { VR, VA }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CONCAT",                   "CONCAT",                   NOID,   NOID,   1,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.TEXTJOIN",                 "TEXTJOIN",                 NOID,   NOID,   3,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 
