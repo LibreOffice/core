@@ -495,7 +495,7 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface(const cairo::CairoSurfaceS
 
 namespace
 {
-    static cairo::X11SysData getSysData( const vcl::Window& rWindow )
+    cairo::X11SysData getSysData( const vcl::Window& rWindow )
     {
         const SystemEnvData* pSysData = cairo::GetSysData(&rWindow);
 
@@ -505,7 +505,7 @@ namespace
             return cairo::X11SysData(*pSysData);
     }
 
-    static cairo::X11SysData getSysData( const VirtualDevice& rVirDev )
+    cairo::X11SysData getSysData( const VirtualDevice& rVirDev )
     {
         return cairo::X11SysData( rVirDev.GetSystemGfxData() );
     }

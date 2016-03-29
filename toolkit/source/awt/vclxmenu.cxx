@@ -587,7 +587,7 @@ throw (css::uno::RuntimeException, std::exception)
 
 namespace
 {
-    static Image lcl_XGraphic2VCLImage(
+    Image lcl_XGraphic2VCLImage(
         const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
         bool bResize )
     {
@@ -622,7 +622,7 @@ namespace
     }
 
     /** Copied from svtools/inc/acceleratorexecute.hxx */
-    static css::awt::KeyEvent lcl_VCLKey2AWTKey(
+    css::awt::KeyEvent lcl_VCLKey2AWTKey(
         const vcl::KeyCode& aVCLKey)
     {
         css::awt::KeyEvent aAWTKey;

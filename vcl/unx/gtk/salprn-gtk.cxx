@@ -147,14 +147,14 @@ GtkSalPrinter_Impl::~GtkSalPrinter_Impl()
 namespace
 {
 
-static GtkInstance const&
+GtkInstance const&
 lcl_getGtkSalInstance()
 {
     // we _know_ this is GtkInstance
     return *static_cast<GtkInstance*>(GetGtkSalData()->m_pInstance);
 }
 
-static bool
+bool
 lcl_useSystemPrintDialog()
 {
     return officecfg::Office::Common::Misc::UseSystemPrintDialog::get()
@@ -312,7 +312,7 @@ GtkSalPrinter::EndJob()
 namespace
 {
 
-static void
+void
 lcl_setHelpText(
         GtkWidget* const io_pWidget,
         const uno::Sequence<OUString>& i_rHelpTexts,
@@ -323,7 +323,7 @@ lcl_setHelpText(
             OUStringToOString(i_rHelpTexts.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8).getStr());
 }
 
-static GtkWidget*
+GtkWidget*
 lcl_makeFrame(
         GtkWidget* const i_pChild,
         const OUString &i_rText,
@@ -352,7 +352,7 @@ lcl_makeFrame(
     return pFrame;
 }
 
-static void
+void
 lcl_extractHelpTextsOrIds(
         const beans::PropertyValue& rEntry,
         uno::Sequence<OUString>& rHelpStrings)
@@ -368,7 +368,7 @@ lcl_extractHelpTextsOrIds(
     }
 }
 
-static GtkWidget*
+GtkWidget*
 lcl_combo_box_text_new()
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -378,7 +378,7 @@ lcl_combo_box_text_new()
 #endif
 }
 
-static void
+void
 lcl_combo_box_text_append(GtkWidget* const pWidget, gchar const* const pText)
 {
 #if GTK_CHECK_VERSION(3,0,0)

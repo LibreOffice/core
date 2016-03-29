@@ -44,7 +44,7 @@ typedef rtl::Reference< MutableTreeNode > MutableTreeNodeRef;
 typedef std::vector< MutableTreeNodeRef > TreeNodeVector;
 typedef rtl::Reference< MutableTreeDataModel > MutableTreeDataModelRef;
 
-static void implThrowIllegalArgumentException() throw( IllegalArgumentException )
+void implThrowIllegalArgumentException() throw( IllegalArgumentException )
 {
     throw IllegalArgumentException();
 }
