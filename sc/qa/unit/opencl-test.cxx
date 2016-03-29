@@ -4771,9 +4771,15 @@ void ScOpenCLTest::tearDown()
 {
     //close test env
     if(xDocSh.Is())
+    {
         xDocSh->DoClose();
+        xDocSh.Clear();
+    }
     if(xDocShRes.Is())
+    {
         xDocShRes->DoClose();
+        xDocShRes.Clear();
+    }
 
     uno::Reference< lang::XComponent >
         ( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
