@@ -2909,6 +2909,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95213, "tdf95213.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xStyle, "CharWeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf98882, "tdf98882.docx")
+{
+    sal_Int32 nFlyHeight = parseDump("//fly/infos/bounds", "height").toInt32();
+    sal_Int32 nContentHeight = parseDump("//notxt/infos/bounds", "height").toInt32();
+    // The content height was 600, not 360, so the frame and the content height did not match.
+    CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
