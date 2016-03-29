@@ -57,7 +57,7 @@ enum
     PROP_PIE_TEMPLATE_USE_RINGS
 };
 
-static void lcl_AddPropertiesToVector(
+void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
