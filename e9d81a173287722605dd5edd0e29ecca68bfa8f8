@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_95499fd3",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T12:49:25Z",
+      "side": 1,
+      "message": "nitpick: for new code rather use the FetchTable() function like in Reorder() above.",
+      "range": {
+        "startLine": 1401,
+        "startChar": 4,
+        "endLine": 1401,
+        "endChar": 85
+      },
+      "revId": "e9d81a173287722605dd5edd0e29ecca68bfa8f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_754b4bb1",
+        "filename": "sc/source/ui/view/cellsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T12:49:25Z",
+      "side": 1,
+      "message": "Here we should also use the lcl_GetSortParam() function to detect partial data selection and offer the dialog to extend the selection. Which would need some treatment to talk about Shuffle instead of Sort in that case, probably introducing a complete different dialog text would be best.\n\nUsing lcl_GetSortParam() also detects selection of an entire column where data just is somewhere in the column, right now if data starts below row 1 the data will be shuffled to start at row 1 after, which is not wanted.",
+      "revId": "e9d81a173287722605dd5edd0e29ecca68bfa8f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d5c67715",
+        "filename": "sc/source/ui/view/cellsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T12:49:25Z",
+      "side": 1,
+      "message": "Detection of a row of column headers like for Sort is missing, right now column headers are shuffled with the data.",
+      "revId": "e9d81a173287722605dd5edd0e29ecca68bfa8f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_35ff1336",
+        "filename": "sc/source/ui/view/cellsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T12:49:25Z",
+      "side": 1,
+      "message": "Instead of directly calling ScDocument::Shuffle() and adding Undo all up to this PostPaint() here, a new ScDBFunc::Shuffle() and a ScDBDocFunc::Shuffle() should be introduced to decouple the functionality from the UI shell so it could be used from different context.\n\nNote also that in ScDBDocFunc::Sort() some checks are made whether the range can be actually modified as requested. Also the data range is adapted to the used data area and row heights are adjusted after sort. Maybe best would be to reuse that function and add a parameter whether sort or shuffle should be executed, but that\u0027s just a quick idea.",
+      "revId": "e9d81a173287722605dd5edd0e29ecca68bfa8f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
