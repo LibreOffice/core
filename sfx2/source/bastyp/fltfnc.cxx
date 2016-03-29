@@ -154,16 +154,23 @@ public:
     }
 };
 
-#define IMPL_FORWARD_LOOP( aMethod, ArgType, aArg )         \
-std::shared_ptr<const SfxFilter> SfxFilterContainer::aMethod( ArgType aArg, SfxFilterFlags nMust, SfxFilterFlags nDont ) const \
-{\
-    SfxFilterMatcher aMatch( pImpl->aName ); \
-    return aMatch.aMethod( aArg, nMust, nDont ); \
+std::shared_ptr<const SfxFilter> SfxFilterContainer::GetFilter4EA(const OUString& rEA, SfxFilterFlags nMust, SfxFilterFlags nDont) const
+{
+    SfxFilterMatcher aMatch(pImpl->aName);
+    return aMatch.GetFilter4EA(rEA, nMust, nDont);
 }
 
-IMPL_FORWARD_LOOP( GetFilter4EA, const OUString&, rEA );
-IMPL_FORWARD_LOOP( GetFilter4Extension, const OUString&, rExt );
-IMPL_FORWARD_LOOP( GetFilter4FilterName, const OUString&, rName );
+std::shared_ptr<const SfxFilter> SfxFilterContainer::GetFilter4Extension(const OUString& rExt, SfxFilterFlags nMust, SfxFilterFlags nDont) const
+{
+    SfxFilterMatcher aMatch(pImpl->aName);
+    return aMatch.GetFilter4Extension(rExt, nMust, nDont);
+}
+
+std::shared_ptr<const SfxFilter> SfxFilterContainer::GetFilter4FilterName(const OUString& rName, SfxFilterFlags nMust, SfxFilterFlags nDont) const
+{
+    SfxFilterMatcher aMatch(pImpl->aName);
+    return aMatch.GetFilter4FilterName(rName, nMust, nDont);
+}
 
 std::shared_ptr<const SfxFilter> SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
