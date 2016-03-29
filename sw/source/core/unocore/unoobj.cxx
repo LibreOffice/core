@@ -852,8 +852,7 @@ static char const*const g_ServicesTextCursor[] =
     "com.sun.star.text.TextSortable",
 };
 
-static const size_t g_nServicesTextCursor(
-    sizeof(g_ServicesTextCursor)/sizeof(g_ServicesTextCursor[0]));
+static const size_t g_nServicesTextCursor(SAL_N_ELEMENTS(g_ServicesTextCursor));
 
 sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException, std::exception)

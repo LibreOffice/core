@@ -4633,7 +4633,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
     if (nUseBack == COL_AUTO)
         nUseBack = COL_WHITE;
 
-    if( nIndex >= sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] ) )
+    if( nIndex >= SAL_N_ELEMENTS( eMSGrayScale ) )
         nIndex = 0;
 
     sal_uLong nWW8BrushStyle = eMSGrayScale[nIndex];
@@ -5246,7 +5246,7 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
          {99, nullptr}                                     //"sprmPicBrcRight",
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 }
 
@@ -5608,7 +5608,7 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
         {207, nullptr},                                    //dunno
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 }
 
@@ -6200,7 +6200,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x246D, &SwWW8ImplReader::Read_ParaContextualSpacing} //"sprmPFContextualSpacing"
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 }
 

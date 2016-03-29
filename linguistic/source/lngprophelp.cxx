@@ -51,7 +51,7 @@ static const char *aCH[] =
     UPN_IS_USE_DICTIONARY_LIST,
 };
 
-static const int nCHCount = sizeof(aCH) / sizeof(aCH[0]);
+static const int nCHCount = SAL_N_ELEMENTS(aCH);
 
 
 PropertyChgHelper::PropertyChgHelper(
@@ -344,7 +344,7 @@ PropertyHelper_Spell::PropertyHelper_Spell(
         Reference< XLinguProperties > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_SPELLCHECKER )
 {
-    AddPropNames( aSP, sizeof(aSP) / sizeof(aSP[0]) );
+    AddPropNames( aSP, SAL_N_ELEMENTS(aSP) );
     SetDefaultValues();
     GetCurrentValues();
 
@@ -526,7 +526,7 @@ PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         Reference< XLinguProperties > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
 {
-    AddPropNames( aHP, sizeof(aHP) / sizeof(aHP[0]) );
+    AddPropNames( aHP, SAL_N_ELEMENTS(aHP) );
     SetDefaultValues();
     GetCurrentValues();
 }

@@ -34,7 +34,7 @@
 static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 static bool     bOutputForPrinter = true;
 
-#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
+#define DPI_COUNT SAL_N_ELEMENTS(aDPIArray)
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptPrintPage", "sfx/ui/optprintpage.ui", &rSet)
@@ -257,8 +257,8 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReduceBitmaps( m_pReduceBitmapsCB->IsChecked() );
     pCurrentOptions->SetReducedBitmapMode( m_pReduceBitmapsOptimalRB->IsChecked() ? PRINTER_BITMAP_OPTIMAL :
                                            ( m_pReduceBitmapsNormalRB->IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
-    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min( (sal_uInt16) m_pReduceBitmapsResolutionLB->GetSelectEntryPos(),
-                                                            (sal_uInt16)( (sizeof (aDPIArray) / sizeof (aDPIArray[0])) - 1 ) ) ] );
+    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min<sal_uInt16>( m_pReduceBitmapsResolutionLB->GetSelectEntryPos(),
+                                                                   SAL_N_ELEMENTS(aDPIArray) - 1 ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_pReduceBitmapsTransparencyCB->IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( m_pConvertToGreyscalesCB->IsChecked() );
     bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();

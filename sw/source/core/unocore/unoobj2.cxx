@@ -869,8 +869,7 @@ static char const*const g_ServicesTextRange[] =
     "com.sun.star.style.ParagraphPropertiesComplex",
 };
 
-static const size_t g_nServicesTextRange(
-    sizeof(g_ServicesTextRange)/sizeof(g_ServicesTextRange[0]));
+static const size_t g_nServicesTextRange(SAL_N_ELEMENTS(g_ServicesTextRange));
 
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException, std::exception)

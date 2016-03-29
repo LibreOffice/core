@@ -29,7 +29,7 @@
 
 namespace /* private */
 {
-    SHCOLUMNINFO ColumnInfoTable[] =
+    const SHCOLUMNINFO ColumnInfoTable[] =
     {
         {{PSGUID_SUMMARYINFORMATION, PIDSI_TITLE},    VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Title",    L"Title"},
         {{PSGUID_SUMMARYINFORMATION, PIDSI_AUTHOR},   VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Author",   L"Author"},
@@ -39,7 +39,7 @@ namespace /* private */
         {{PSGUID_SUMMARYINFORMATION, PIDSI_PAGECOUNT},VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Pagecount", L"Pagecount"}
     };
 
-    size_t ColumnInfoTableSize = sizeof(ColumnInfoTable)/sizeof(ColumnInfoTable[0]);
+    size_t ColumnInfoTableSize = SAL_N_ELEMENTS(ColumnInfoTable);
 }
 
 
@@ -114,7 +114,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     psci->scid.pid   = ColumnInfoTable[dwIndex].scid.pid;
     ZeroMemory(psci->wszTitle, sizeof(psci->wszTitle));
     wcsncpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle,
-            (sizeof(psci->wszTitle) / sizeof(psci->wszTitle[0]) - 1));
+            SAL_N_ELEMENTS(psci->wszTitle) - 1);
 
     return S_OK;
 }

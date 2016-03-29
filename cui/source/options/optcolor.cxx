@@ -633,7 +633,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
             vEntries[i]->SetTextColor(aRCheckCol);
     }
 
-    OSL_ENSURE( vEntries.size() >= sizeof vEntryInfo / sizeof vEntryInfo[0], "wrong number of helpIDs for color listboxes" );
+    OSL_ENSURE( vEntries.size() >= SAL_N_ELEMENTS(vEntryInfo), "wrong number of helpIDs for color listboxes" );
 
     // creating a sample color listbox with the color entries
     ScopedVclPtrInstance< ColorListBox > aSampleColorList(this);

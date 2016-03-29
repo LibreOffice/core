@@ -370,8 +370,7 @@ sal_uInt16 ScServiceProvider::GetProviderType(const OUString& rServiceName)
 {
     if (!rServiceName.isEmpty())
     {
-        const sal_uInt16 nEntries =
-            sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+        const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
         for (sal_uInt16 i = 0; i < nEntries; i++)
         {
             if (rServiceName.equalsAscii( aProvNamesId[i].pName ))
@@ -634,7 +633,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
 uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
 {
-    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     for (sal_uInt16 i = 0; i < nEntries; i++)

@@ -101,13 +101,13 @@ struct MenuStyleItem
     const char* attrName;
 };
 
-MenuStyleItem MenuItemStyles[ ] = {
+const MenuStyleItem MenuItemStyles[ ] = {
     { css::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
     { css::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
     { css::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO }
 };
 
-sal_Int32 nMenuStyleItemEntries = (sizeof (MenuItemStyles) / sizeof (MenuItemStyles[0]));
+sal_Int32 nMenuStyleItemEntries = SAL_N_ELEMENTS(MenuItemStyles);
 
 static void ExtractMenuParameters( const Sequence< PropertyValue >& rProp,
                                    OUString&                       rCommandURL,
@@ -904,7 +904,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     if ( nStyle > 0 )
     {
         OUString aValue;
-        MenuStyleItem* pStyle = MenuItemStyles;
+        const MenuStyleItem* pStyle = MenuItemStyles;
 
         for ( sal_Int32 nIndex = 0; nIndex < nMenuStyleItemEntries; ++nIndex, ++pStyle )
         {

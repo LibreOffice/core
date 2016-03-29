@@ -30,7 +30,7 @@ const std::string MATH_FILE_EXTENSIONS     = "sxmodf";
 const std::string WEB_FILE_EXTENSIONS      = "oth";
 const std::string DATABASE_FILE_EXTENSIONS = "odb";
 
-FileExtensionEntry OOFileExtensionTable[] = {
+const FileExtensionEntry OOFileExtensionTable[] = {
     { ".sxw", L".sxw", "soffice.StarWriterDocument.6"       },
     { ".sxc", L".sxc", "soffice.StarCalcDocument.6"         },
     { ".sxi", L".sxi", "soffice.StarImpressDocument.6"      },
@@ -56,7 +56,7 @@ FileExtensionEntry OOFileExtensionTable[] = {
     };
 
 
-size_t OOFileExtensionTableSize = sizeof(OOFileExtensionTable)/sizeof(OOFileExtensionTable[0]);
+size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
 
 
 /** Return the extension of a file

@@ -336,8 +336,7 @@ namespace dbtools
             if ( !bSupport )
             {
                 const OUString url = m_pImpl->xConnectionMetaData->getURL();
-                char pMySQL[] = "sdbc:mysql";
-                bSupport = url.matchAsciiL(pMySQL,(sizeof(pMySQL)/sizeof(pMySQL[0]))-1);
+                bSupport = url.startsWith("sdbc:mysql");
             }
         }
         catch( const Exception& )

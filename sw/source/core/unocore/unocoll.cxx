@@ -475,7 +475,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
     SolarMutexGuard aGuard;
     OUString sRet;
-    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     if(nObjectType < nEntries)
         sRet = OUString::createFromAscii(aProvNamesId[nObjectType].pName);
     return sRet;
@@ -483,7 +483,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 
 uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 {
-    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     sal_uInt16 n = 0;
@@ -503,7 +503,7 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 
 sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 {
-    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     for(sal_uInt16 i = 0; i < nEntries; i++ )
     {
         if (rServiceName.equalsAscii(aProvNamesId[i].pName))

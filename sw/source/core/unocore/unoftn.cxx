@@ -194,7 +194,7 @@ static char const*const g_ServicesFootnote[] =
     "com.sun.star.text.Endnote", // NB: only supported for endnotes!
 };
 
-static const size_t g_nServicesEndnote( sizeof (g_ServicesFootnote) / sizeof (g_ServicesFootnote[0]) );
+static const size_t g_nServicesEndnote( SAL_N_ELEMENTS(g_ServicesFootnote) );
 
 static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 

@@ -2115,8 +2115,7 @@ ScXMLImport::ScXMLImport(
         { XML_CURRENCY,     util::NumberFormat::CURRENCY },
         { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
     };
-    size_t n = sizeof(aCellTypePairs)/sizeof(aCellTypePairs[0]);
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aCellTypePairs); ++i)
     {
         aCellTypeMap.insert(
             CellTypeMap::value_type(
