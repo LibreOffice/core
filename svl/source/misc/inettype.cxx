@@ -112,7 +112,7 @@ inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
-    TypeIDMap::iterator it = rRegistration.m_aTypeIDMap.find( eTypeID );
+    TypeIDMap::const_iterator it = rRegistration.m_aTypeIDMap.find( eTypeID );
     if( it != rRegistration.m_aTypeIDMap.end() )
         return it->second;
     else
@@ -456,7 +456,7 @@ INetContentType Registration::GetContentType(OUString const & rTypeName)
     Registration &rRegistration = theRegistration::get();
 
     OUString aTheTypeName = rTypeName.toAsciiLowerCase();
-    TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
+    TypeNameMap::const_iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     return it != rRegistration.m_aTypeNameMap.end()
         ? it->second.m_eTypeID
         : CONTENT_TYPE_UNKNOWN;
@@ -467,7 +467,7 @@ OUString Registration::GetContentType(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
-    TypeIDMap::iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
+    TypeIDMap::const_iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
     if( pEntry != rRegistration.m_aTypeIDMap.end() )
         return pEntry->second->m_aTypeName;
     return OUString();
@@ -478,7 +478,7 @@ OUString Registration::GetPresentation(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
-    TypeIDMap::iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
+    TypeIDMap::const_iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
     if( pEntry != rRegistration.m_aTypeIDMap.end() )
         return pEntry->second->m_aPresentation;
     else
@@ -490,7 +490,7 @@ INetContentType Registration::GetContentType4Extension(OUString const & rExtensi
 {
     Registration &rRegistration = theRegistration::get();
 
-    ExtensionMap::iterator it = rRegistration.m_aExtensionMap.find(rExtension);
+    ExtensionMap::const_iterator it = rRegistration.m_aExtensionMap.find(rExtension);
     return it != rRegistration.m_aExtensionMap.end()
         ? it->second.m_eTypeID
         : CONTENT_TYPE_UNKNOWN;

@@ -370,7 +370,7 @@ void SfxItemPool::Free(SfxItemPool* pPool)
     {
         // tell all the registered SfxItemPoolUsers that the pool is in destruction
         std::vector<SfxItemPoolUser*> aListCopy(pPool->pImp->maSfxItemPoolUsers.begin(), pPool->pImp->maSfxItemPoolUsers.end());
-        for(std::vector<SfxItemPoolUser*>::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
+        for(std::vector<SfxItemPoolUser*>::const_iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
         {
             SfxItemPoolUser* pSfxItemPoolUser = *aIterator;
             DBG_ASSERT(pSfxItemPoolUser, "corrupt SfxItemPoolUser list (!)");
@@ -411,7 +411,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                 SfxPoolItemArray_Impl* pItemArr = pImp->mpSecondary->pImp->maPoolItems[n];
                 if ( pItemArr )
                 {
-                    SfxPoolItemArrayBase_Impl::iterator ppHtArr =   pItemArr->begin();
+                    SfxPoolItemArrayBase_Impl::const_iterator ppHtArr =   pItemArr->begin();
                     for( size_t i = pItemArr->size(); i; ++ppHtArr, --i )
                         if ( !(*ppHtArr) )
                         {
@@ -514,7 +514,7 @@ void SfxItemPool::Delete()
             {
                 if ( *itrItemArr )
                 {
-                    SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
+                    SfxPoolItemArrayBase_Impl::const_iterator ppHtArr = (*itrItemArr)->begin();
                     for ( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
                         if (*ppHtArr)
                         {
@@ -546,7 +546,7 @@ void SfxItemPool::Delete()
     {
         if ( *itrItemArr )
         {
-            SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
+            SfxPoolItemArrayBase_Impl::const_iterator ppHtArr = (*itrItemArr)->begin();
             for ( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
                 if (*ppHtArr)
                 {
@@ -806,7 +806,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
     assert(pItemArr && "removing Item not in Pool");
 
-    SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::iterator it;
+    SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it;
     it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
     if (it != pItemArr->maPtrToIndex.end())
     {

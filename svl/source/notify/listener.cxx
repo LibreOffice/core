@@ -67,7 +67,8 @@ bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 
 void SvtListener::EndListeningAll()
 {
-    BroadcastersType::iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
+    BroadcastersType::iterator it = maBroadcasters.begin();
+    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
     for (; it != itEnd; ++it)
     {
         SvtBroadcaster& rBC = **it;
@@ -81,7 +82,8 @@ void SvtListener::CopyAllBroadcasters( const SvtListener& r )
 {
     BroadcastersType aCopy(r.maBroadcasters);
     maBroadcasters.swap(aCopy);
-    BroadcastersType::iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
+    BroadcastersType::iterator it = maBroadcasters.begin();
+    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
     for (; it != itEnd; ++it)
     {
         SvtBroadcaster* p = *it;

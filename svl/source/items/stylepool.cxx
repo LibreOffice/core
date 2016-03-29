@@ -129,7 +129,7 @@ namespace {
                                const bool bIsItemIgnorable )
     {
         Node* pNextNode = this;
-        std::vector<Node*>::iterator aIter = mChildren.begin();
+        std::vector<Node*>::const_iterator aIter = mChildren.begin();
         while( aIter != mChildren.end() )
         {
             if( rItem.Which() == (*aIter)->getPoolItem().Which() &&
@@ -165,7 +165,7 @@ namespace {
                              const bool bSkipIgnorable )
     {
         // Searching downstairs
-        std::vector<Node*>::iterator aIter = mChildren.begin();
+        std::vector<Node*>::const_iterator aIter = mChildren.begin();
         // For pLast == 0 and pLast == this all children are of interest
         // for another pLast the search starts behind pLast...
         if( pLast && pLast != this )
@@ -264,7 +264,7 @@ namespace {
 
     Node::~Node()
     {
-        std::vector<Node*>::iterator aIter = mChildren.begin();
+        std::vector<Node*>::const_iterator aIter = mChildren.begin();
         while( aIter != mChildren.end() )
         {
             delete *aIter;

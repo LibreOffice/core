@@ -1008,10 +1008,10 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
     Sequence< UrlRecord > aResult;
 
     ::osl::MutexGuard aGuard( mMutex );
-    for( PassMap::iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); ++aIter )
+    for( PassMap::const_iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); ++aIter )
     {
         Sequence< UserRecord > aUsers;
-        for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
+        for( list< NamePassRecord >::const_iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
             if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
             {
                 sal_Int32 oldLen = aUsers.getLength();
