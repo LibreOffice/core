@@ -318,6 +318,25 @@ void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax, bool bPain
     }
 }
 
+void initColWidths(RowInfo* pRowInfo, ScDocument* pDoc, double fColScale, SCTAB nTab, SCCOL nCol2, SCCOL nRotMax)
+{
+    for (SCCOL nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)    // Add remaining widths
+    {
+        SCCOL nX = nArrCol-1;
+        if ( ValidCol(nX) )
+        {
+            if (!pDoc->ColHidden(nX, nTab))
+            {
+                sal_uInt16 nThisWidth = (sal_uInt16) (pDoc->GetColWidth( nX, nTab ) * fColScale);
+                if (!nThisWidth)
+                    nThisWidth = 1;
+
+                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;
+            }
+        }
+    }
+}
+
 }
 
 void ScDocument::FillInfo(
@@ -457,21 +476,7 @@ void ScDocument::FillInfo(
     initCellInfo(pRowInfo, nArrCount, nRotMax, bPaintMarks, pDefShadow,
             nBlockStartY, nBlockEndY, nBlockStartX, nBlockEndX);
 
-    for (nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)    // Add remaining widths
-    {
-        nX = nArrCol-1;
-        if ( ValidCol(nX) )
-        {
-            if (!ColHidden(nX, nTab))
-            {
-                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * fColScale);
-                if (!nThisWidth)
-                    nThisWidth = 1;
-
-                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;
-            }
-        }
-    }
+    initColWidths(pRowInfo, this, fColScale, nTab, nCol2, nRotMax);
 
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
     if(pCondFormList)
