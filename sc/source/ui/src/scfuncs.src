@@ -11527,6 +11527,70 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Text for the concatenation." ;
         };
     };
+     // -=*# Resource for function CONCAT #*=-
+    Resource SC_OPCODE_CONCAT_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Combines several text items into one, accepts cell ranges as arguments." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            HID_FUNC_CONCAT_MS;
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1 to last
+        {
+            Text [ en-US ] = "text " ;
+        };
+        String 3 // Description of Parameter 1 to last
+        {
+            Text [ en-US ] = "Text and/or cell ranges for the concatenation." ;
+        };
+    };
+     // -=*# Resource for function TEXTJOIN #*=-
+    Resource SC_OPCODE_TEXTJOIN_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Combines several text items into one, accepts cell ranges as arguments. Uses delimiter between items." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            HID_FUNC_TEXTJOIN_MS;
+            VAR_ARGS + 2;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "delimiter " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Text string to be used as delimiter." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "skip empty cells" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "If TRUE, empty cells will be ignored." ;
+        };
+        String 6 // Name of Parameter 3 to last
+        {
+            Text [ en-US ] = "text " ;
+        };
+        String 7 // Description of Parameter 3 to last
+        {
+            Text [ en-US ] = "Text and/or cell ranges for the concatenation." ;
+        };
+    };
      // -=*# Resource for function EXACT #*=-
     Resource SC_OPCODE_EXACT
     {
