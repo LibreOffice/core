@@ -68,7 +68,7 @@ extern "C" LO_DLLPUBLIC_PYUNO
 namespace pyuno
 {
 
-enum __NotNull
+enum NotNull
 {
     /** definition of a no acquire enum for ctors
      */
@@ -95,7 +95,7 @@ public:
 
     PyRef( PyObject * p, __sal_NoAcquire ) : m( p ) {}
 
-    PyRef( PyObject * p, __sal_NoAcquire, __NotNull ) : m( p )
+    PyRef( PyObject * p, __sal_NoAcquire, NotNull ) : m( p )
     {
         if (!m)
             throw std::bad_alloc();
