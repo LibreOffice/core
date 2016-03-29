@@ -185,7 +185,7 @@
 
 /** error codes which are returned by functions of this API.
  */
-typedef enum _javaFrameworkError
+enum javaFrameworkError
 {
     JFW_E_NONE,
     JFW_E_ERROR,
@@ -201,7 +201,7 @@ typedef enum _javaFrameworkError
     JFW_E_VM_CREATION_FAILED,
     JFW_E_CONFIGURATION,
     JFW_E_DIRECT_MODE
-} javaFrameworkError;
+};
 
 /** an instance of this struct represents an installation of a Java
     Runtime Environment (JRE).
