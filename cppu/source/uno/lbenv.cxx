@@ -52,7 +52,7 @@ namespace
 {
 
 
-inline static bool td_equals( typelib_InterfaceTypeDescription * pTD1,
+inline bool td_equals( typelib_InterfaceTypeDescription * pTD1,
                               typelib_InterfaceTypeDescription * pTD2 )
 {
     return (pTD1 == pTD2 ||
@@ -230,7 +230,7 @@ extern "C"
 {
 
 
-static void SAL_CALL defenv_registerInterface(
+void SAL_CALL defenv_registerInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -277,7 +277,7 @@ static void SAL_CALL defenv_registerInterface(
 }
 
 
-static void SAL_CALL defenv_registerProxyInterface(
+void SAL_CALL defenv_registerProxyInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface, uno_freeProxyFunc freeProxy,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -335,7 +335,7 @@ static void SAL_CALL defenv_registerProxyInterface(
 }
 
 
-static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
+void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
 {
     uno_ExtEnvironment * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
     void               * pInterface = va_arg(*pParam, void *);
@@ -422,13 +422,13 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
     }
 }
 
-static void SAL_CALL defenv_revokeInterface(uno_ExtEnvironment * pEnv, void * pInterface)
+void SAL_CALL defenv_revokeInterface(uno_ExtEnvironment * pEnv, void * pInterface)
 {
     uno_Environment_invoke(&pEnv->aBase, s_stub_defenv_revokeInterface, pEnv, pInterface);
 }
 
 
-static void SAL_CALL defenv_getObjectIdentifier(
+void SAL_CALL defenv_getObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
 {
     OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
@@ -458,7 +458,7 @@ static void SAL_CALL defenv_getObjectIdentifier(
 }
 
 
-static void SAL_CALL defenv_getRegisteredInterface(
+void SAL_CALL defenv_getRegisteredInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -488,7 +488,7 @@ static void SAL_CALL defenv_getRegisteredInterface(
 }
 
 
-static void SAL_CALL defenv_getRegisteredInterfaces(
+void SAL_CALL defenv_getRegisteredInterfaces(
     uno_ExtEnvironment * pEnv, void *** pppInterfaces, sal_Int32 * pnLen,
     uno_memAlloc memAlloc )
 {
@@ -514,7 +514,7 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
 }
 
 
-static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
+void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     osl_atomic_increment( &that->nWeakRef );
@@ -522,7 +522,7 @@ static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 }
 
 
-static void SAL_CALL defenv_release( uno_Environment * pEnv )
+void SAL_CALL defenv_release( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     if (! osl_atomic_decrement( &that->nRef ))
@@ -543,14 +543,14 @@ static void SAL_CALL defenv_release( uno_Environment * pEnv )
 }
 
 
-static void SAL_CALL defenv_acquireWeak( uno_Environment * pEnv )
+void SAL_CALL defenv_acquireWeak( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     osl_atomic_increment( &that->nWeakRef );
 }
 
 
-static void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
+void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     if (! osl_atomic_decrement( &that->nWeakRef ))
@@ -560,7 +560,7 @@ static void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
 }
 
 
-static void SAL_CALL defenv_harden(
+void SAL_CALL defenv_harden(
     uno_Environment ** ppHardEnv, uno_Environment * pEnv )
 {
     if (*ppHardEnv)
@@ -588,7 +588,7 @@ static void SAL_CALL defenv_harden(
 }
 
 
-static void SAL_CALL defenv_dispose( SAL_UNUSED_PARAMETER uno_Environment * )
+void SAL_CALL defenv_dispose( SAL_UNUSED_PARAMETER uno_Environment * )
 {
 }
 }
@@ -634,7 +634,7 @@ uno_DefaultEnvironment::~uno_DefaultEnvironment()
 }
 
 
-static void writeLine(
+void writeLine(
     void * stream, const sal_Char * pLine, const sal_Char * pFilter )
 {
     if (pFilter && *pFilter)
@@ -678,7 +678,7 @@ static void writeLine(
 }
 
 
-static void writeLine(
+void writeLine(
     void * stream, const OUString & rLine, const sal_Char * pFilter )
 {
     ::rtl::OString aLine( ::rtl::OUStringToOString(
@@ -830,7 +830,7 @@ namespace
 
     class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
 
-inline static const OUString & unoenv_getStaticOIdPart()
+inline const OUString & unoenv_getStaticOIdPart()
 {
     return theStaticOIdPart::get().getOIdPart();
 }
@@ -1022,7 +1022,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     }
 }
 
-static bool loadEnv(OUString const  & cLibStem,
+bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv)
 {
 #ifdef DISABLE_DYNLOADING
