@@ -2639,6 +2639,11 @@ namespace svgio
 
         OUString SvgStyleAttributes::getClipPathXLink() const
         {
+            if(mbIsClipPathContent)
+            {
+                return maClipPathXLink;
+            }
+
             if(!maClipPathXLink.isEmpty())
             {
                 return maClipPathXLink;
@@ -2662,7 +2667,7 @@ namespace svgio
 
                 if(!aClipPath.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpClipPathXLink = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(getClipPathXLink()));
+                    const_cast< SvgStyleAttributes* >(this)->mpClipPathXLink = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(aClipPath));
                 }
             }
 
@@ -2694,7 +2699,7 @@ namespace svgio
 
                 if(!aMask.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpMaskXLink = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(getMaskXLink()));
+                    const_cast< SvgStyleAttributes* >(this)->mpMaskXLink = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(aMask));
                 }
             }
 
