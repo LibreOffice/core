@@ -28,14 +28,12 @@
 #pragma warning(push, 1)
 #endif
 #include <windows.h>
-#include <shellapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
 
 #include <tchar.h>
 
-#include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include <systools/win32/uwinapi.h>
@@ -47,75 +45,6 @@
 #include "../loader.hxx"
 
 #include <config_version.h>
-
-#define PIPE_PREFIX                 TEXT("\\\\.\\pipe\\OSL_PIPE_")
-#define PIPE_POSTFIX                TEXT("_SingleOfficeIPC_")
-#define PIPE_TERMINATION_SEQUENCE   "InternalIPC::ProcessingDone"
-
-BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
-{
-    PSID_IDENTIFIER_AUTHORITY psia;
-    DWORD dwSubAuthorities;
-    DWORD dwSidRev=SID_REVISION;
-    DWORD dwCounter;
-    DWORD dwSidSize;
-
-    // Validate the binary SID.
-
-    if(!IsValidSid(pSid)) return FALSE;
-
-    // Get the identifier authority value from the SID.
-
-    psia = GetSidIdentifierAuthority(pSid);
-
-    // Get the number of subauthorities in the SID.
-
-    dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
-
-    // Compute the buffer length.
-    // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
-
-    dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
-
-    *StringSid = (LPTSTR)LocalAlloc( LMEM_FIXED, dwSidSize );
-
-    // Add 'S' prefix and revision number to the string.
-
-    dwSidSize=wsprintf(*StringSid, TEXT("S-%lu-"), dwSidRev );
-
-    // Add a SID identifier authority to the string.
-
-    if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
-    {
-        dwSidSize+=wsprintf(*StringSid + lstrlen(*StringSid),
-                    TEXT("0x%02hx%02hx%02hx%02hx%02hx%02hx"),
-                    (USHORT)psia->Value[0],
-                    (USHORT)psia->Value[1],
-                    (USHORT)psia->Value[2],
-                    (USHORT)psia->Value[3],
-                    (USHORT)psia->Value[4],
-                    (USHORT)psia->Value[5]);
-    }
-    else
-    {
-        dwSidSize+=wsprintf(*StringSid + lstrlen(*StringSid),
-                    TEXT("%lu"),
-                    (ULONG)(psia->Value[5]      )   +
-                    (ULONG)(psia->Value[4] <<  8)   +
-                    (ULONG)(psia->Value[3] << 16)   +
-                    (ULONG)(psia->Value[2] << 24)   );
-    }
-
-    // Add SID subauthorities to the string.
-    for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
-    {
-        dwSidSize+=wsprintf(*StringSid + dwSidSize, TEXT("-%lu"),
-                    *GetSidSubAuthority(pSid, dwCounter) );
-    }
-
-    return TRUE;
-}
-
 
 static LPTSTR   *GetCommandArgs( int *pArgc )
 {
@@ -171,7 +100,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 {
     TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
     TCHAR               szIniDirectory[MAX_PATH];
-    TCHAR               szPerfTuneIniFile[MAX_PATH] = TEXT("");
     STARTUPINFO         aStartupInfo;
 
     desktop_win32::getPaths(szTargetFileName, szIniDirectory);
@@ -180,17 +108,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     aStartupInfo.cb = sizeof(aStartupInfo);
 
     GetStartupInfo( &aStartupInfo );
-
-    TCHAR               szModuleFileName[MAX_PATH];
-
-    GetModuleFileName( NULL, szModuleFileName, MAX_PATH );
-    _TCHAR  *lpLastSlash = _tcsrchr( szModuleFileName, '\\' );
-    if ( lpLastSlash )
-    {
-        size_t len = lpLastSlash - szModuleFileName + 1;
-        _tcsncpy( szPerfTuneIniFile, szModuleFileName, len );
-        _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), SAL_N_ELEMENTS(szPerfTuneIniFile) - len );
-    }
 
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
@@ -210,119 +127,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     do
     {
-        TCHAR   szKey[32];
-
-        GetPrivateProfileString(
-            TEXT("PerformanceTuning"),
-            TEXT("FastPipeCommunication"),
-            TEXT("0"),
-            szKey,
-            SAL_N_ELEMENTS(szKey),
-            szPerfTuneIniFile
-            );
-
-        if ( 0 == _tcscmp( szKey, TEXT("1") ) )
-        {
-            HANDLE  hProcessToken;
-
-            if ( OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hProcessToken ) )
-            {
-                TCHAR   szPipeName[4096];
-
-
-                DWORD   dwTokenLength = 0;
-
-
-                fSuccess = GetTokenInformation( hProcessToken, TokenUser, NULL, dwTokenLength, &dwTokenLength );
-
-                PVOID   pTokenInfo = _alloca(dwTokenLength);
-                fSuccess = GetTokenInformation( hProcessToken, TokenUser, pTokenInfo, dwTokenLength, &dwTokenLength );
-                CloseHandle( hProcessToken );
-
-                PSID pSid = ((PTOKEN_USER)pTokenInfo)->User.Sid;
-                LPTSTR  szUserIdent = NULL;
-                TCHAR   szSUPD[11] = TEXT("0");
-
-                fSuccess = ConvertSidToStringSid( pSid, &szUserIdent );
-
-                _tcsncpy( szPipeName, PIPE_PREFIX, SAL_N_ELEMENTS(szPipeName) );
-                _tcsncat( szPipeName, szUserIdent, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, PIPE_POSTFIX, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, _ultot( LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 + LIBO_VERSION_MICRO * 1
-                                            , szSUPD, 10), SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
-
-                LocalFree( szUserIdent );
-
-                HANDLE  hPipe = CreateFile(
-                                    szPipeName,
-                                    GENERIC_READ|GENERIC_WRITE,
-                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                    NULL,
-                                    OPEN_EXISTING,
-                                    FILE_ATTRIBUTE_NORMAL,
-                                    NULL);
-
-                if ( INVALID_HANDLE_VALUE != hPipe )
-                {
-                    DWORD   dwBytesRead = 0;
-                    char    *pBuffer = (char *)_alloca( sizeof("InternalIPC::SendArguments") + 1);
-                    fSuccess = ReadFile( hPipe, pBuffer, sizeof("InternalIPC::SendArguments") + 1, &dwBytesRead, NULL );
-                    if ( fSuccess )
-                    {
-                        fSuccess = (dwBytesRead == (sizeof("InternalIPC::SendArguments") + 1) &&
-                            0 == strncmp( "InternalIPC::SendArguments", pBuffer, dwBytesRead - 1 ) );
-                    }
-                    if ( fSuccess )
-                    {
-                        DWORD   dwBytesWritten;
-                        int argc2 = 0;
-                        LPWSTR  *argv2 = CommandLineToArgvW( GetCommandLine(), &argc2 );
-
-                        fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
-                        if (fSuccess) {
-                            if (cwdLen > 0) {
-                                fSuccess = writeArgument(hPipe, '2', cwd);
-                            } else {
-                                fSuccess = WriteFile(
-                                    hPipe, RTL_CONSTASCII_STRINGPARAM("0"),
-                                    &dwBytesWritten, NULL);
-                            }
-                        }
-                        for ( int argn = 1; fSuccess && argn < argc2; argn++ )
-                        {
-                            if (std::wcsncmp(
-                                    argv2[argn], L"-env:", std::wcslen(L"-env:"))
-                                != 0)
-                            {
-                                fSuccess = writeArgument(hPipe, ',', argv2[argn]);
-                            }
-                        }
-
-                        if ( fSuccess )
-                        {
-                            fSuccess = WriteFile(  hPipe, "", 1, &dwBytesWritten, NULL );
-                            if ( fSuccess )
-                            {
-                                DWORD   dwBytesRead2 = 0;
-                                char    *pBuffer2 = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
-                                fSuccess = ReadFile( hPipe, pBuffer2, sizeof(PIPE_TERMINATION_SEQUENCE) - 1, &dwBytesRead2, NULL );
-                                if ( fSuccess )
-                                {
-                                    pBuffer2[dwBytesRead2] = 0;
-                                    if ( 0 != strcmp( PIPE_TERMINATION_SEQUENCE, pBuffer2 ) )
-                                        fSuccess = FALSE;
-                                }
-                            }
-                        }
-                    }
-                    CloseHandle( hPipe );
-
-                    return fSuccess ? 0 : -1;
-                }
-
-            }
-        }
-
         if ( bFirst ) {
             argv = GetCommandArgs(&argc);
             std::size_t n = wcslen(argv[0]) + 2;

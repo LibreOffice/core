@@ -37,7 +37,6 @@
 #include <rtl/instance.hxx>
 #include <osl/conditn.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -483,41 +482,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     // First we try to create our pipe if this fails we try to connect. We have to do this
     // in a loop because the other office can crash or shutdown between createPipe
     // and connectPipe!!
-
-    OUString            aIniName;
-
-    osl_getExecutableFile( &aIniName.pData );
-
-    sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
-    if ( lastIndex > 0 )
-    {
-        aIniName    = aIniName.copy( 0, lastIndex+1 );
-        aIniName    += "perftune";
-#if defined(_WIN32)
-        aIniName    += ".ini";
-#else
-        aIniName    += "rc";
-#endif
-    }
-
-    ::rtl::Bootstrap aPerfTuneIniFile( aIniName );
-
-    OUString aDefault( "0" );
-    OUString aPreloadData;
-
-    aPerfTuneIniFile.getFrom( "FastPipeCommunication", aPreloadData, aDefault );
-
-    OUString aUserInstallPathHashCode;
-
-    if ( aPreloadData == "1" )
-    {
-        sal_Char    szBuffer[32];
-        sprintf( szBuffer, "%d", LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 + LIBO_VERSION_MICRO * 1 );
-        aUserInstallPathHashCode = OUString( szBuffer, strlen(szBuffer), osl_getThreadTextEncoding() );
-    }
-    else
-        aUserInstallPathHashCode = CreateMD5FromString( aDummy );
-
+    auto aUserInstallPathHashCode = CreateMD5FromString( aDummy );
 
     // Check result to create a hash code from the user install path
     if ( aUserInstallPathHashCode.isEmpty() )
