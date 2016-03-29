@@ -201,7 +201,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         {
             bSetInputFilter = true;
             aForcedInputFilter = aDispatchRequest.aURL;
-            OfficeIPCThread::RequestsCompleted();
+            RequestHandler::RequestsCompleted();
             continue;
         }
 
@@ -438,7 +438,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                  aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
                 // request is completed
-                OfficeIPCThread::RequestsCompleted();
+                RequestHandler::RequestsCompleted();
             }
             else if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
                       aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
@@ -662,7 +662,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 }
 
                 // request is completed
-                OfficeIPCThread::RequestsCompleted();
+                RequestHandler::RequestsCompleted();
             }
         }
     }
@@ -727,8 +727,8 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     osl::ClearableMutexGuard aGuard(m_mutex);
     sal_Int16 nCount = --m_nRequestCount;
     aGuard.clear();
-    OfficeIPCThread::RequestsCompleted();
-    if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
+    RequestHandler::RequestsCompleted();
+    if ( !nCount && !RequestHandler::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
         Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );

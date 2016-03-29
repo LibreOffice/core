@@ -385,7 +385,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
             m_xSfxTerminator = xListener;
             return;
         }
-        if( sImplementationName == "com.sun.star.comp.OfficeIPCThreadController" )
+        if( sImplementationName == "com.sun.star.comp.RequestHandlerController" )
         {
             m_xPipeTerminator = xListener;
             return;
@@ -424,7 +424,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
             return;
         }
 
-        if( sImplementationName == "com.sun.star.comp.OfficeIPCThreadController" )
+        if( sImplementationName == "com.sun.star.comp.RequestHandlerController" )
         {
             m_xPipeTerminator.clear();
             return;

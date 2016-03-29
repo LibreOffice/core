@@ -69,12 +69,12 @@ struct ProcessDocumentsRequest
 class DispatchWatcher;
 class PipeReaderThread;
 
-class OfficeIPCThread: public salhelper::SimpleReferenceObject
+class RequestHandler: public salhelper::SimpleReferenceObject
 {
     friend PipeReaderThread;
 
   private:
-    static rtl::Reference< OfficeIPCThread > pGlobalOfficeIPCThread;
+    static rtl::Reference< RequestHandler > pGlobal;
 
     enum class State { Starting, RequestsEnabled, Downing };
 
@@ -93,9 +93,9 @@ class OfficeIPCThread: public salhelper::SimpleReferenceObject
 
     static ::osl::Mutex&        GetMutex();
 
-    OfficeIPCThread();
+    RequestHandler();
 
-    virtual ~OfficeIPCThread();
+    virtual ~RequestHandler();
 
   public:
     enum Status
@@ -115,8 +115,8 @@ class OfficeIPCThread: public salhelper::SimpleReferenceObject
         ProcessDocumentsRequest&, bool noTerminate);
 
     // return sal_False if second office
-    static Status               EnableOfficeIPCThread();
-    static void                 DisableOfficeIPCThread(bool join = true);
+    static Status               Enable();
+    static void                 Disable(bool join = true);
     // start dispatching events...
     static void                 SetReady();
     static void                 WaitForReady();
@@ -126,13 +126,13 @@ class OfficeIPCThread: public salhelper::SimpleReferenceObject
 };
 
 
-class OfficeIPCThreadController : public ::cppu::WeakImplHelper<
+class RequestHandlerController : public ::cppu::WeakImplHelper<
                                             css::lang::XServiceInfo,
                                             css::frame::XTerminateListener >
 {
     public:
-        OfficeIPCThreadController() {}
-        virtual ~OfficeIPCThreadController() {}
+        RequestHandlerController() {}
+        virtual ~RequestHandlerController() {}
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

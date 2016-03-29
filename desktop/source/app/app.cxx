@@ -199,7 +199,7 @@ namespace {
 // removed cache data is recreated.
 //
 // Multiple instances of soffice.bin can execute this code in parallel for a
-// single UserInstallation, as it is called before OfficeIPCThread is set up.
+// single UserInstallation, as it is called before RequestHandler is set up.
 // Therefore, any errors here only lead to SAL_WARNs.
 //
 // At least in theory, this function could be removed again once no
@@ -576,8 +576,8 @@ void Desktop::Init()
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
         // start ipc thread only for non-remote offices
-        OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
-        if ( aStatus == OfficeIPCThread::IPC_STATUS_PIPE_ERROR )
+        RequestHandler::Status aStatus = RequestHandler::Enable();
+        if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
         {
 #if HAVE_FEATURE_MACOSX_SANDBOX
             // In a sandboxed LO, on 10.8.2 at least, creating the
@@ -599,11 +599,11 @@ void Desktop::Init()
             SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
 #endif
         }
-        else if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
+        else if ( aStatus == RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR )
         {
             SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
         }
-        else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
+        else if ( aStatus == RequestHandler::IPC_STATUS_2ND_OFFICE )
         {
             // 2nd office startup should terminate after sending cmdlineargs through pipe
             SetBootstrapStatus(BS_TERMINATE);
@@ -612,7 +612,7 @@ void Desktop::Init()
                   || rCmdLineArgs.IsHelp() || rCmdLineArgs.IsVersion() )
         {
             // disable IPC thread in an instance that is just showing a help message
-            OfficeIPCThread::DisableOfficeIPCThread();
+            RequestHandler::Disable();
         }
         pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
     }
@@ -641,7 +641,7 @@ void Desktop::DeInit()
         // clear lockfile
         m_xLockfile.reset();
 
-        OfficeIPCThread::DisableOfficeIPCThread();
+        RequestHandler::Disable();
         if( pSignalHandler )
             osl_removeSignalHandler( pSignalHandler );
     } catch (const RuntimeException&) {
@@ -677,9 +677,9 @@ bool Desktop::QueryExit()
         FlushConfiguration();
         try
         {
-            // it is no problem to call DisableOfficeIPCThread() more than once
+            // it is no problem to call RequestHandler::Disable() more than once
             // it also looks to be threadsafe
-            OfficeIPCThread::DisableOfficeIPCThread();
+            RequestHandler::Disable();
         }
         catch ( const RuntimeException& )
         {
@@ -1154,7 +1154,7 @@ namespace {
 
 void restartOnMac(bool passArguments) {
 #if defined MACOSX
-    OfficeIPCThread::DisableOfficeIPCThread();
+    RequestHandler::Disable();
 #if HAVE_FEATURE_MACOSX_SANDBOX
     (void) passArguments; // avoid warnings
     ResMgr *resMgr = Desktop::GetDesktopResManager();
@@ -1279,7 +1279,7 @@ void Desktop::Exception(sal_uInt16 nError)
 
             if( bRestart )
             {
-                OfficeIPCThread::DisableOfficeIPCThread();
+                RequestHandler::Disable();
                 if( pSignalHandler )
                     osl_removeSignalHandler( pSignalHandler );
 
@@ -1613,7 +1613,7 @@ int Desktop::Main()
         try
         {
             if ( xDesktop.is() )
-                xDesktop->addTerminateListener( new OfficeIPCThreadController );
+                xDesktop->addTerminateListener( new RequestHandlerController );
             SetSplashScreenProgress(100);
         }
         catch ( const css::uno::Exception& e )
@@ -1659,27 +1659,27 @@ int Desktop::Main()
         }
         catch(const css::document::CorruptedFilterConfigurationException& exFilterCfg)
         {
-            OfficeIPCThread::SetDowning();
+            RequestHandler::SetDowning();
             FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
         }
         catch(const css::configuration::CorruptedConfigurationException& exAnyCfg)
         {
-            OfficeIPCThread::SetDowning();
+            RequestHandler::SetDowning();
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
         catch( const css::uno::Exception& exUNO)
         {
-            OfficeIPCThread::SetDowning();
+            RequestHandler::SetDowning();
             FatalError( exUNO.Message);
         }
         catch( const std::exception& exSTD)
         {
-            OfficeIPCThread::SetDowning();
+            RequestHandler::SetDowning();
             FatalError( OUString::createFromAscii( exSTD.what()));
         }
         catch( ...)
         {
-            OfficeIPCThread::SetDowning();
+            RequestHandler::SetDowning();
             FatalError( "Caught Unknown Exception: Aborting!");
         }
     }
@@ -1943,7 +1943,7 @@ IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
     try {
         OpenClients();
 
-        OfficeIPCThread::SetReady();
+        RequestHandler::SetReady();
 
         CloseSplashScreen();
         CheckFirstRun( );
@@ -2351,7 +2351,7 @@ void Desktop::OpenClients()
     CrashReporter::writeCommonInfo();
 #endif
 
-    OfficeIPCThread::EnableRequests();
+    RequestHandler::EnableRequests();
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
     aRequest.aOpenList = rArgs.GetOpenList();
@@ -2407,7 +2407,7 @@ void Desktop::OpenClients()
         }
 
         // Process request
-        if ( OfficeIPCThread::ExecuteCmdLineRequests(aRequest, false) )
+        if ( RequestHandler::ExecuteCmdLineRequests(aRequest, false) )
         {
             // Don't do anything if we have successfully called terminate at desktop:
             return;
@@ -2481,7 +2481,7 @@ void Desktop::OpenDefault()
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
     aRequest.aOpenList.push_back(aName);
-    OfficeIPCThread::ExecuteCmdLineRequests(aRequest, false);
+    RequestHandler::ExecuteCmdLineRequests(aRequest, false);
 }
 
 
@@ -2604,7 +2604,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 docsRequest.aOpenList.insert(
                     docsRequest.aOpenList.end(), data.begin(), data.end());
-                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest, false);
+                RequestHandler::ExecuteCmdLineRequests(docsRequest, false);
             }
         }
         break;
@@ -2621,7 +2621,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 docsRequest.aPrintList.insert(
                     docsRequest.aPrintList.end(), data.begin(), data.end());
-                OfficeIPCThread::ExecuteCmdLineRequests(docsRequest, false);
+                RequestHandler::ExecuteCmdLineRequests(docsRequest, false);
             }
         }
         break;

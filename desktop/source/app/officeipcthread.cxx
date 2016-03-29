@@ -242,7 +242,7 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
 
 }
 
-rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
+rtl::Reference< RequestHandler > RequestHandler::pGlobal;
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
@@ -290,9 +290,9 @@ IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, CallEvent, void*, pEvent, void 
 
 IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent, void )
 {
-    // Documents requests are processed by the OfficeIPCThread implementation
+    // Documents requests are processed by the RequestHandler implementation
     ProcessDocumentsRequest* pDocsRequest = static_cast<ProcessDocumentsRequest*>(pEvent);
-    OfficeIPCThread::ExecuteCmdLineRequests(*pDocsRequest, false);
+    RequestHandler::ExecuteCmdLineRequests(*pDocsRequest, false);
     delete pDocsRequest;
 }
 
@@ -309,34 +309,34 @@ void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
 oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
-        OfficeIPCThread::DisableOfficeIPCThread(false);
+        RequestHandler::Disable(false);
     return osl_Signal_ActCallNextHdl;
 }
 
 
-// The OfficeIPCThreadController implementation is a bookkeeper for all pending requests
-// that were created by the OfficeIPCThread. The requests are waiting to be processed by
+// The RequestHandlerController implementation is a bookkeeper for all pending requests
+// that were created by the RequestHandler. The requests are waiting to be processed by
 // our framework loadComponentFromURL function (e.g. open/print request).
-// During shutdown the framework is asking OfficeIPCThreadController about pending requests.
+// During shutdown the framework is asking RequestHandlerController about pending requests.
 // If there are pending requests framework has to stop the shutdown process. It is waiting
 // for these requests because framework is not able to handle shutdown and open a document
 // concurrently.
 
 
 // XServiceInfo
-OUString SAL_CALL OfficeIPCThreadController::getImplementationName()
+OUString SAL_CALL RequestHandlerController::getImplementationName()
 throw ( RuntimeException, std::exception )
 {
-    return OUString( "com.sun.star.comp.OfficeIPCThreadController" );
+    return OUString( "com.sun.star.comp.RequestHandlerController" );
 }
 
-sal_Bool OfficeIPCThreadController::supportsService(
+sal_Bool RequestHandlerController::supportsService(
     OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL OfficeIPCThreadController::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL RequestHandlerController::getSupportedServiceNames()
 throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 0 );
@@ -344,33 +344,33 @@ throw ( RuntimeException, std::exception )
 }
 
 // XEventListener
-void SAL_CALL OfficeIPCThreadController::disposing( const EventObject& )
+void SAL_CALL RequestHandlerController::disposing( const EventObject& )
 throw( RuntimeException, std::exception )
 {
 }
 
 // XTerminateListener
-void SAL_CALL OfficeIPCThreadController::queryTermination( const EventObject& )
+void SAL_CALL RequestHandlerController::queryTermination( const EventObject& )
 throw( TerminationVetoException, RuntimeException, std::exception )
 {
     // Desktop ask about pending request through our office ipc pipe. We have to
     // be sure that no pending request is waiting because framework is not able to
     // handle shutdown and open a document concurrently.
 
-    if ( OfficeIPCThread::AreRequestsPending() )
+    if ( RequestHandler::AreRequestsPending() )
         throw TerminationVetoException();
     else
-        OfficeIPCThread::SetDowning();
+        RequestHandler::SetDowning();
 }
 
-void SAL_CALL OfficeIPCThreadController::notifyTermination( const EventObject& )
+void SAL_CALL RequestHandlerController::notifyTermination( const EventObject& )
 throw( RuntimeException, std::exception )
 {
 }
 
 class PipeReaderThread: public salhelper::Thread {
 public:
-    PipeReaderThread(OfficeIPCThread & ipc, osl::Pipe const & pipe):
+    PipeReaderThread(RequestHandler & ipc, osl::Pipe const & pipe):
         Thread("PipeReader"), ipc_(ipc), pipe_(pipe)
     {}
 
@@ -381,75 +381,75 @@ private:
 
     void execute() override;
 
-    OfficeIPCThread & ipc_;
+    RequestHandler & ipc_;
     osl::Pipe pipe_;
 };
 
 namespace
 {
-    class theOfficeIPCThreadMutex
-        : public rtl::Static<osl::Mutex, theOfficeIPCThreadMutex> {};
+    class theRequestHandlerMutex
+        : public rtl::Static<osl::Mutex, theRequestHandlerMutex> {};
 }
 
-::osl::Mutex& OfficeIPCThread::GetMutex()
+::osl::Mutex& RequestHandler::GetMutex()
 {
-    return theOfficeIPCThreadMutex::get();
+    return theRequestHandlerMutex::get();
 }
 
-void OfficeIPCThread::SetDowning()
+void RequestHandler::SetDowning()
 {
     // We have the order to block all incoming requests. Framework
     // wants to shutdown and we have to make sure that no loading/printing
     // requests are executed anymore.
     ::osl::MutexGuard   aGuard( GetMutex() );
 
-    if ( pGlobalOfficeIPCThread.is() )
-        pGlobalOfficeIPCThread->mState = State::Downing;
+    if ( pGlobal.is() )
+        pGlobal->mState = State::Downing;
 }
 
-void OfficeIPCThread::EnableRequests()
+void RequestHandler::EnableRequests()
 {
     // switch between just queueing the requests and executing them
     ::osl::MutexGuard   aGuard( GetMutex() );
 
-    if ( pGlobalOfficeIPCThread.is() )
+    if ( pGlobal.is() )
     {
-        if (pGlobalOfficeIPCThread->mState != State::Downing) {
-            pGlobalOfficeIPCThread->mState = State::RequestsEnabled;
+        if (pGlobal->mState != State::Downing) {
+            pGlobal->mState = State::RequestsEnabled;
         }
         // hit the compiler over the head
         ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
         // trigger already queued requests
-        OfficeIPCThread::ExecuteCmdLineRequests(aEmptyReq, true);
+        RequestHandler::ExecuteCmdLineRequests(aEmptyReq, true);
     }
 }
 
-bool OfficeIPCThread::AreRequestsPending()
+bool RequestHandler::AreRequestsPending()
 {
     // Give info about pending requests
     ::osl::MutexGuard   aGuard( GetMutex() );
-    if ( pGlobalOfficeIPCThread.is() )
-        return ( pGlobalOfficeIPCThread->mnPendingRequests > 0 );
+    if ( pGlobal.is() )
+        return ( pGlobal->mnPendingRequests > 0 );
     else
         return false;
 }
 
-void OfficeIPCThread::RequestsCompleted()
+void RequestHandler::RequestsCompleted()
 {
     // Remove nCount pending requests from our internal counter
     ::osl::MutexGuard   aGuard( GetMutex() );
-    if ( pGlobalOfficeIPCThread.is() )
+    if ( pGlobal.is() )
     {
-        if ( pGlobalOfficeIPCThread->mnPendingRequests > 0 )
-            pGlobalOfficeIPCThread->mnPendingRequests --;
+        if ( pGlobal->mnPendingRequests > 0 )
+            pGlobal->mnPendingRequests --;
     }
 }
 
-OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
+RequestHandler::Status RequestHandler::Enable()
 {
     ::osl::MutexGuard   aGuard( GetMutex() );
 
-    if( pGlobalOfficeIPCThread.is() )
+    if( pGlobal.is() )
         return IPC_STATUS_OK;
 
 #if HAVE_FEATURE_DESKTOP
@@ -462,7 +462,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     // In LibreOfficeKit-based programs we want to be totally independent from any other LibreOffice
     // instance or LOKit-using program. Certainly no need for any IPC pipes by definition, as we
-    // don't have any reason to do any IPC. Why we even call this EnableOfficeIPCThread function
+    // don't have any reason to do any IPC. Why we even call this Enable function
     // from LibreOfficeKit's lo_initialize() I am not completely sure, but that code, and this, is
     // such horrible crack that I don't want to change it too much.
 
@@ -584,9 +584,9 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if ( nPipeMode == PIPEMODE_CREATED )
     {
         // Seems we are the one and only, so start listening thread
-        rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
+        rtl::Reference< RequestHandler > pThread(new RequestHandler);
         pThread->mPipeReaderThread = new PipeReaderThread(*pThread, pipe);
-        pGlobalOfficeIPCThread = pThread;
+        pGlobal = pThread;
         pThread->mPipeReaderThread->launch();
     }
     else
@@ -627,67 +627,66 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         return IPC_STATUS_2ND_OFFICE;
     }
 #else
-    rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
-    pGlobalOfficeIPCThread = pThread;
+    rtl::Reference< RequestHandler > pThread(new RequestHandler);
+    pGlobal = pThread;
 #endif
     return IPC_STATUS_OK;
 }
 
-void OfficeIPCThread::DisableOfficeIPCThread(bool join)
+void RequestHandler::Disable(bool join)
 {
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
-    if( pGlobalOfficeIPCThread.is() )
+    if( pGlobal.is() )
     {
-        rtl::Reference< OfficeIPCThread > pOfficeIPCThread(
-            pGlobalOfficeIPCThread);
-        pGlobalOfficeIPCThread.clear();
+        rtl::Reference< RequestHandler > handler(pGlobal);
+        pGlobal.clear();
 
-        pOfficeIPCThread->mState = State::Downing;
-        if (pOfficeIPCThread->mPipeReaderThread.is()) {
-            pOfficeIPCThread->mPipeReaderThread->close();
+        handler->mState = State::Downing;
+        if (handler->mPipeReaderThread.is()) {
+            handler->mPipeReaderThread->close();
         }
 
         // release mutex to avoid deadlocks
         aMutex.clear();
 
-        pOfficeIPCThread->cReady.set();
+        handler->cReady.set();
 
         // exit gracefully and join
-        if (join && pOfficeIPCThread->mPipeReaderThread.is())
+        if (join && handler->mPipeReaderThread.is())
         {
-            pOfficeIPCThread->mPipeReaderThread->join();
-            pOfficeIPCThread->mPipeReaderThread.clear();
+            handler->mPipeReaderThread->join();
+            handler->mPipeReaderThread.clear();
         }
     }
 }
 
-OfficeIPCThread::OfficeIPCThread() :
+RequestHandler::RequestHandler() :
     mState( State::Starting ),
     mnPendingRequests( 0 )
 {
 }
 
-OfficeIPCThread::~OfficeIPCThread()
+RequestHandler::~RequestHandler()
 {
     assert(!mPipeReaderThread.is());
 }
 
-void OfficeIPCThread::SetReady()
+void RequestHandler::SetReady()
 {
     osl::MutexGuard g(GetMutex());
-    if (pGlobalOfficeIPCThread.is())
+    if (pGlobal.is())
     {
-        pGlobalOfficeIPCThread->cReady.set();
+        pGlobal->cReady.set();
     }
 }
 
-void OfficeIPCThread::WaitForReady()
+void RequestHandler::WaitForReady()
 {
-    rtl::Reference<OfficeIPCThread> t;
+    rtl::Reference<RequestHandler> t;
     {
         osl::MutexGuard g(GetMutex());
-        t =  pGlobalOfficeIPCThread;
+        t =  pGlobal;
     }
     if (t.is())
     {
@@ -695,10 +694,10 @@ void OfficeIPCThread::WaitForReady()
     }
 }
 
-bool OfficeIPCThread::IsEnabled()
+bool RequestHandler::IsEnabled()
 {
     osl::MutexGuard g(GetMutex());
-    return pGlobalOfficeIPCThread.is();
+    return pGlobal.is();
 }
 
 void PipeReaderThread::execute()
@@ -723,13 +722,13 @@ void PipeReaderThread::execute()
             ipc_.cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!ipc_.pGlobalOfficeIPCThread.is()) return;
+            if (!ipc_.pGlobal.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
-            osl::ClearableMutexGuard aGuard( OfficeIPCThread::GetMutex() );
+            osl::ClearableMutexGuard aGuard( RequestHandler::GetMutex() );
 
-            if ( ipc_.mState == OfficeIPCThread::State::Downing )
+            if ( ipc_.mState == RequestHandler::State::Downing )
             {
                 break;
             }
@@ -967,8 +966,8 @@ void PipeReaderThread::execute()
         else
         {
             {
-                osl::MutexGuard aGuard( OfficeIPCThread::GetMutex() );
-                if ( ipc_.mState == OfficeIPCThread::State::Downing )
+                osl::MutexGuard aGuard( RequestHandler::GetMutex() );
+                if ( ipc_.mState == RequestHandler::State::Downing )
                 {
                     break;
                 }
@@ -1049,7 +1048,7 @@ static void AddConversionsToDispatchList(
 }
 
 
-bool OfficeIPCThread::ExecuteCmdLineRequests(
+bool RequestHandler::ExecuteCmdLineRequests(
     ProcessDocumentsRequest& aRequest, bool noTerminate)
 {
     // protect the dispatch list
@@ -1069,18 +1068,18 @@ bool OfficeIPCThread::ExecuteCmdLineRequests(
     AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.bTextCat );
     bool bShutdown( false );
 
-    if ( pGlobalOfficeIPCThread.is() )
+    if ( pGlobal.is() )
     {
-        if( ! pGlobalOfficeIPCThread->AreRequestsEnabled() )
+        if( ! pGlobal->AreRequestsEnabled() )
             return bShutdown;
 
-        pGlobalOfficeIPCThread->mnPendingRequests += aDispatchList.size();
-        if ( !pGlobalOfficeIPCThread->mpDispatchWatcher.is() )
+        pGlobal->mnPendingRequests += aDispatchList.size();
+        if ( !pGlobal->mpDispatchWatcher.is() )
         {
-            pGlobalOfficeIPCThread->mpDispatchWatcher = new DispatchWatcher;
+            pGlobal->mpDispatchWatcher = new DispatchWatcher;
         }
         rtl::Reference<DispatchWatcher> dispatchWatcher(
-            pGlobalOfficeIPCThread->mpDispatchWatcher);
+            pGlobal->mpDispatchWatcher);
 
         // copy for execute
         std::vector<DispatchWatcher::DispatchRequest> aTempList( aDispatchList );
