@@ -453,13 +453,13 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
         // make use of a default namespace
         ResetNamespaceMap();    // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)
-        _GetNamespaceMap().Add( OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        GetNamespaceMap_().Add( OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
 
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH_IDX),
                 GetNamespaceMap().GetNameByKey( XML_NAMESPACE_MATH_IDX));
 
         //I think we need something like ImplExportEntities();
-        _ExportContent();
+        ExportContent_();
         GetDocHandler()->endDocument();
     }
 
@@ -467,7 +467,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
     return 0;
 }
 
-void SmXMLExport::_ExportContent()
+void SmXMLExport::ExportContent_()
 {
     uno::Reference <frame::XModel> xModel = GetModel();
     uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);

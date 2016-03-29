@@ -65,7 +65,7 @@ private:
         enum ::xmloff::token::XMLTokenEnum eElementName );
 
     /// currently unused; for exporting via the XDocumentProperties interface
-    SAL_DLLPRIVATE void _MExport();
+    SAL_DLLPRIVATE void MExport_();
 
 public:
     SvXMLMetaExport( SvXMLExport& i_rExport,

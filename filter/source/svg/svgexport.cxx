@@ -358,17 +358,17 @@ SVGExport::SVGExport(
     mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, false);
 
     // add namespaces
-    _GetNamespaceMap().Add(
+    GetNamespaceMap_().Add(
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
         XML_NAMESPACE_PRESENTATION);
 
-    _GetNamespaceMap().Add(
+    GetNamespaceMap_().Add(
         GetXMLToken(XML_NP_SMIL),
         GetXMLToken(XML_N_SMIL_COMPAT),
         XML_NAMESPACE_SMIL);
 
-    _GetNamespaceMap().Add(
+    GetNamespaceMap_().Add(
         GetXMLToken(XML_NP_ANIMATION),
         GetXMLToken(XML_N_ANIMATION),
         XML_NAMESPACE_ANIMATION);

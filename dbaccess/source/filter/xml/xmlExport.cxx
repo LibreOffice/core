@@ -191,31 +191,31 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString 
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG), XML_NAMESPACE_SVG );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG), XML_NAMESPACE_SVG );
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_DB), GetXMLToken(XML_N_DB_OASIS), XML_NAMESPACE_DB );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_DB), GetXMLToken(XML_N_DB_OASIS), XML_NAMESPACE_DB );
 
     if( nExportFlag & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS) )
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
 
     if( nExportFlag & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS) )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
     if( nExportFlag & SvXMLExportFlags::SETTINGS )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
     if( nExportFlag & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS) )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
 
     m_xExportHelper = new SvXMLExportPropertyMapper(GetTableStylesPropertySetMapper());
     m_xColumnExportHelper = new OSpecialHandleXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
@@ -1216,7 +1216,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     }
 }
 
-void ODBExport::_ExportContent()
+void ODBExport::ExportContent_()
 {
     exportDataSource();
     exportForms();
@@ -1225,12 +1225,12 @@ void ODBExport::_ExportContent()
     exportTables(true);
 }
 
-void ODBExport::_ExportMasterStyles()
+void ODBExport::ExportMasterStyles_()
 {
     GetPageExport()->exportMasterStyles( true );
 }
 
-void ODBExport::_ExportAutoStyles()
+void ODBExport::ExportAutoStyles_()
 {
     // there are no styles that require their own autostyles
     if ( getExportFlags() & SvXMLExportFlags::CONTENT )
@@ -1260,9 +1260,9 @@ void ODBExport::_ExportAutoStyles()
     }
 }
 
-void ODBExport::_ExportStyles(bool bUsed)
+void ODBExport::ExportStyles_(bool bUsed)
 {
-    SvXMLExport::_ExportStyles(bUsed);
+    SvXMLExport::ExportStyles_(bUsed);
 }
 
 sal_uInt32 ODBExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
@@ -1407,11 +1407,11 @@ void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc 
     SvXMLExport::setSourceDocument(xDoc);
 }
 
-void ODBExport::_ExportFontDecls()
+void ODBExport::ExportFontDecls_()
 {
     GetFontAutoStylePool(); // make sure the pool is created
     collectComponentStyles();
-    SvXMLExport::_ExportFontDecls();
+    SvXMLExport::ExportFontDecls_();
 }
 
 void ODBExport::collectComponentStyles()

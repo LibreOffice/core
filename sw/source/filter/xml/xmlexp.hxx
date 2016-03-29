@@ -86,13 +86,13 @@ class SwXMLExport : public SvXMLExport
                            SwXMLTableInfo_Impl& rTableInfo,
                            sal_uInt32 nHeaderRows = 0 );
 
-    virtual void _ExportMeta() override;
-    virtual void _ExportFontDecls() override;
-    virtual void _ExportStyles( bool bUsed ) override;
-    virtual void _ExportAutoStyles() override;
-    virtual void _ExportMasterStyles() override;
+    virtual void ExportMeta_() override;
+    virtual void ExportFontDecls_() override;
+    virtual void ExportStyles_( bool bUsed ) override;
+    virtual void ExportAutoStyles_() override;
+    virtual void ExportMasterStyles_() override;
     virtual void SetBodyAttributes() override;
-    virtual void _ExportContent() override;
+    virtual void ExportContent_() override;
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings ) override;

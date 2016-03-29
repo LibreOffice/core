@@ -63,7 +63,7 @@ protected:
         default and isn't inherited, apart from bDefault is true)
         After this process It'll called 'Contextfilter' for application-specific
         filter-processes. */
-    std::vector<XMLPropertyState> _Filter(
+    std::vector<XMLPropertyState> Filter_(
             const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
             bool bDefault, bool bDisableFoFontFamily ) const;
 

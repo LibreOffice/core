@@ -50,9 +50,9 @@ public:
         throw (css::uno::RuntimeException, std::exception);
 
     // methods without content:
-    virtual void _ExportAutoStyles() override;
-    virtual void _ExportMasterStyles() override;
-    virtual void _ExportContent() override;
+    virtual void ExportAutoStyles_() override;
+    virtual void ExportMasterStyles_() override;
+    virtual void ExportContent_() override;
 
 private:
     bool exportTable() throw();

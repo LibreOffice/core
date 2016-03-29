@@ -47,9 +47,9 @@ XMLVersionListExport::XMLVersionListExport(
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     maVersions( rVersions )
 {
-    _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
+    GetNamespaceMap_().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_DC), XML_NAMESPACE_DC );
-    _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
+    GetNamespaceMap_().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 
@@ -61,12 +61,12 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 
     sal_uInt16 nPos = SvXMLNamespaceMap::GetIndexByKey( XML_NAMESPACE_DC );
 
-    AddAttribute( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex( nPos ),
-                             _GetNamespaceMap().GetNameByIndex ( nPos ) );
+    AddAttribute( XML_NAMESPACE_NONE, GetNamespaceMap_().GetAttrNameByIndex( nPos ),
+                             GetNamespaceMap_().GetNameByIndex ( nPos ) );
 
     nPos = SvXMLNamespaceMap::GetIndexByKey( XML_NAMESPACE_FRAMEWORK );
-    AddAttribute( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex( nPos ),
-                             _GetNamespaceMap().GetNameByIndex ( nPos ) );
+    AddAttribute( XML_NAMESPACE_NONE, GetNamespaceMap_().GetAttrNameByIndex( nPos ),
+                             GetNamespaceMap_().GetNameByIndex ( nPos ) );
 
     {
         // the following object will write all collected attributes in its dtor

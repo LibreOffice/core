@@ -3526,7 +3526,7 @@ SchXMLExport::SchXMLExport(
     maExportHelper( new SchXMLExportHelper(*this, *maAutoStylePool.get()) )
 {
     if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 }
 
 SchXMLExport::~SchXMLExport()
@@ -3549,18 +3549,18 @@ sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     return SvXMLExport::exportDoc( eClass );
 }
 
-void SchXMLExport::_ExportStyles( bool bUsed )
+void SchXMLExport::ExportStyles_( bool bUsed )
 {
-    SvXMLExport::_ExportStyles( bUsed );
+    SvXMLExport::ExportStyles_( bUsed );
 }
 
-void SchXMLExport::_ExportMasterStyles()
+void SchXMLExport::ExportMasterStyles_()
 {
     // not available in chart
     SAL_INFO("xmloff.chart", "Master Style Export requested. Not available for Chart" );
 }
 
-void SchXMLExport::_ExportAutoStyles()
+void SchXMLExport::ExportAutoStyles_()
 {
     // there are no styles that require their own autostyles
     if( getExportFlags() & SvXMLExportFlags::CONTENT )
@@ -3578,7 +3578,7 @@ void SchXMLExport::_ExportAutoStyles()
     }
 }
 
-void SchXMLExport::_ExportContent()
+void SchXMLExport::ExportContent_()
 {
     Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     if( xChartDoc.is())

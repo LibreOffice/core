@@ -216,40 +216,40 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     GetMM100UnitConverter().SetXMLMeasureUnit(css::util::MeasureUnit::CM);
 
     // (getExportFlags() & EXPORT_CONTENT) != 0 ? : XML_N_OOO
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE ), XML_NAMESPACE_OFFICE );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE ), XML_NAMESPACE_OFFICE );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_RPT), GetXMLToken(XML_N_RPT), XML_NAMESPACE_REPORT );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT),  XML_NAMESPACE_SVG );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_RPT), GetXMLToken(XML_N_RPT), XML_NAMESPACE_REPORT );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT),  XML_NAMESPACE_SVG );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
 
 
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS) )
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
 
     if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS) )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
     if( getExportFlags() & SvXMLExportFlags::SETTINGS )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS) )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
     // RDFa: needed for content and header/footer styles
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
         // loext, needed for paragraphs inside shapes
         if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
-            _GetNamespaceMap().Add(
+            GetNamespaceMap_().Add(
                 GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT),
                 XML_NAMESPACE_LO_EXT);
         }
@@ -257,11 +257,11 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     // GRDDL: to convert RDFa and meta.xml to RDF
     if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_GRDDL),GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
+        GetNamespaceMap_().Add( GetXMLToken(XML_NP_GRDDL),GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
     }
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
 
     m_sTableStyle = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_STYLE_NAME) );
     m_sColumnStyle = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_COLUMN) );
@@ -1285,12 +1285,12 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
     }
 }
 
-void ORptExport::_ExportContent()
+void ORptExport::ExportContent_()
 {
     exportReport(getReportDefinition());
 }
 
-void ORptExport::_ExportMasterStyles()
+void ORptExport::ExportMasterStyles_()
 {
     GetPageExport()->exportMasterStyles( true );
 }
@@ -1322,7 +1322,7 @@ void ORptExport::collectComponentStyles()
     }
 }
 
-void ORptExport::_ExportAutoStyles()
+void ORptExport::ExportAutoStyles_()
 {
     // there are no styles that require their own autostyles
     if ( getExportFlags() & SvXMLExportFlags::CONTENT )
@@ -1360,9 +1360,9 @@ void ORptExport::_ExportAutoStyles()
         GetPageExport()->exportAutoStyles();
 }
 
-void ORptExport::_ExportStyles(bool bUsed)
+void ORptExport::ExportStyles_(bool bUsed)
 {
-    SvXMLExport::_ExportStyles(bUsed);
+    SvXMLExport::ExportStyles_(bUsed);
 
     // write draw:style-name for object graphic-styles
     GetShapeExport()->ExportGraphicDefaults();
@@ -1394,11 +1394,11 @@ void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc
     SvXMLExport::setSourceDocument(xDoc);
 }
 
-void ORptExport::_ExportFontDecls()
+void ORptExport::ExportFontDecls_()
 {
     GetFontAutoStylePool(); // make sure the pool is created
     collectComponentStyles();
-    SvXMLExport::_ExportFontDecls();
+    SvXMLExport::ExportFontDecls_();
 }
 
 void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xReportElement)

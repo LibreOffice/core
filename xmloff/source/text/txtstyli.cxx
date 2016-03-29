@@ -413,7 +413,7 @@ void XMLTextStyleContext::FillPropertySet(
         // but instead we chose to insert the code into this
         // iteration. I haven't been able to come up with a much more
         // intelligent solution.
-        struct _ContextID_Index_Pair aContextIDs[] =
+        struct ContextID_Index_Pair aContextIDs[] =
         {
             { CTF_COMBINED_CHARACTERS_FIELD, -1 },
             { CTF_KEEP_TOGETHER, -1 },

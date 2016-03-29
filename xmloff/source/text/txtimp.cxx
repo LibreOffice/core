@@ -1218,7 +1218,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
 
                 if( pStyle )
                 {
-                    sal_Int32 nCount = pStyle->_GetProperties().size();
+                    sal_Int32 nCount = pStyle->GetProperties_().size();
                     if( nCount )
                     {
                         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
@@ -1230,7 +1230,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                 xImpPrMap->getPropertySetMapper();
                             for( sal_Int32 i=0; i < nCount; i++ )
                             {
-                                const XMLPropertyState& rProp = pStyle->_GetProperties()[i];
+                                const XMLPropertyState& rProp = pStyle->GetProperties_()[i];
                                 sal_Int32 nIdx = rProp.mnIndex;
                                 sal_uInt32 nContextId = rPropMapper->GetEntryContextId(nIdx);
                                 if( CTF_FONTFAMILYNAME == nContextId )

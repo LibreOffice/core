@@ -156,9 +156,9 @@ void SwXMLImport::SetStatistics(
     pProgress->SetValue( 0 );
 }
 
-void SwXMLExport::_ExportMeta()
+void SwXMLExport::ExportMeta_()
 {
-    SvXMLExport::_ExportMeta();
+    SvXMLExport::ExportMeta_();
 
     if( !IsBlockMode() )
     {

@@ -194,7 +194,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
     if(xImpPrMap.is())
     {
         // properties that need special handling because they need the used name to be translated first
-        struct _ContextID_Index_Pair aContextIDs[] =
+        struct ContextID_Index_Pair aContextIDs[] =
         {
             { CTF_PM_FILLGRADIENTNAME, -1 },
             { CTF_PM_FILLTRANSNAME, -1 },

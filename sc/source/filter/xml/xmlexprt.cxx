@@ -475,7 +475,7 @@ void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewS
             {
                 // add the loaded namespaces to the name space map
 
-                if ( !pSheetData->AddLoadedNamespaces( _GetNamespaceMap() ) )
+                if ( !pSheetData->AddLoadedNamespaces( GetNamespaceMap_() ) )
                 {
                     // conflicts in the namespaces - ignore the stream, save normally
                     xSourceStream.clear();
@@ -653,7 +653,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
     pSharedData->SortNoteShapes(); // sort twice, because some more shapes are added
 }
 
-void ScXMLExport::_ExportMeta()
+void ScXMLExport::ExportMeta_()
 {
     sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
     SCTAB nTableCount(0);
@@ -678,13 +678,13 @@ void ScXMLExport::_ExportMeta()
     }
 
     // export document properties
-    SvXMLExport::_ExportMeta();
+    SvXMLExport::ExportMeta_();
 }
 
-void ScXMLExport::_ExportFontDecls()
+void ScXMLExport::ExportFontDecls_()
 {
     GetFontAutoStylePool(); // make sure the pool is created
-    SvXMLExport::_ExportFontDecls();
+    SvXMLExport::ExportFontDecls_();
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 /* nTable */)
@@ -1805,7 +1805,7 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
-void ScXMLExport::_ExportContent()
+void ScXMLExport::ExportContent_()
 {
     nCurrentTable = 0;
     if (!pSharedData)
@@ -1898,7 +1898,7 @@ void ScXMLExport::_ExportContent()
     GetProgressBarHelper()->SetValue(GetProgressBarHelper()->GetReference());
 }
 
-void ScXMLExport::_ExportStyles( bool bUsed )
+void ScXMLExport::ExportStyles_( bool bUsed )
 {
     if (!pSharedData)
     {
@@ -1950,7 +1950,7 @@ void ScXMLExport::_ExportStyles( bool bUsed )
     aStylesExp->exportStyleFamily(OUString("CellStyles"),
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper, false, XML_STYLE_FAMILY_TABLE_CELL);
 
-    SvXMLExport::_ExportStyles(bUsed);
+    SvXMLExport::ExportStyles_(bUsed);
 }
 
 void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& xProperties,
@@ -2192,7 +2192,7 @@ static uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess>
     return aRet;
 }
 
-void ScXMLExport::_ExportAutoStyles()
+void ScXMLExport::ExportAutoStyles_()
 {
     if (!GetModel().is())
         return;
@@ -2632,7 +2632,7 @@ void ScXMLExport::_ExportAutoStyles()
         GetTextParagraphExport()->exportTextAutoStyles();
 }
 
-void ScXMLExport::_ExportMasterStyles()
+void ScXMLExport::ExportMasterStyles_()
 {
     GetPageExport()->exportMasterStyles( true );
 }
@@ -4900,7 +4900,7 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
                         // Add namespace declaration for unknown attributes if
                         // there aren't existing ones for the prefix used by the
                         // attibutes
-                        _GetNamespaceMap().Add( rPrefix,
+                        GetNamespaceMap_().Add( rPrefix,
                                                 pUnknown->GetNamespace( nIdx ) );
                     }
                     nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
@@ -4910,7 +4910,7 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
     }
 
     // #i66550# needed for 'presentation:event-listener' element for URLs in shapes
-    _GetNamespaceMap().Add(
+    GetNamespaceMap_().Add(
         GetXMLToken( XML_NP_PRESENTATION ),
         GetXMLToken( XML_N_PRESENTATION ),
         XML_NAMESPACE_PRESENTATION );
@@ -4968,7 +4968,7 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
                     if (pDoc->GetSheetEvents(nTab))
                         bAnySheetEvents = true;
                 if (bAnySheetEvents)
-                    _GetNamespaceMap().Add(
+                    GetNamespaceMap_().Add(
                         GetXMLToken( XML_NP_OFFICE_EXT ),
                         GetXMLToken( XML_N_OFFICE_EXT ),
                         XML_NAMESPACE_OFFICE_EXT );

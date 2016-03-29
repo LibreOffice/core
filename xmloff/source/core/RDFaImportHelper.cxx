@@ -175,7 +175,7 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
         OUString Prefix;
         OUString LocalName;
         OUString Namespace;
-        sal_uInt16 nKey( GetImport().GetNamespaceMap()._GetKeyByAttrName(
+        sal_uInt16 nKey( GetImport().GetNamespaceMap().GetKeyByAttrName_(
             i_rCURIE, &Prefix, &LocalName, &Namespace) );
         if ( Prefix == "_" )
         {

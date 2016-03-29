@@ -155,13 +155,13 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                     true, true );
 
         // NB: office:meta is now written by _ExportMeta
-        _ExportMeta();
+        ExportMeta_();
     }
     xDocHandler->endDocument();
     return 0;
 }
 
-void XMLMetaExportComponent::_ExportMeta()
+void XMLMetaExportComponent::ExportMeta_()
 {
     if (mxDocProps.is()) {
         OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
@@ -171,14 +171,14 @@ void XMLMetaExportComponent::_ExportMeta()
         uno::Reference<xml::sax::XDocumentHandler> xMeta(pMeta);
         pMeta->Export();
     } else {
-        SvXMLExport::_ExportMeta();
+        SvXMLExport::ExportMeta_();
     }
 }
 
 // methods without content:
-void XMLMetaExportComponent::_ExportAutoStyles() {}
-void XMLMetaExportComponent::_ExportMasterStyles() {}
-void XMLMetaExportComponent::_ExportContent() {}
+void XMLMetaExportComponent::ExportAutoStyles_() {}
+void XMLMetaExportComponent::ExportMasterStyles_() {}
+void XMLMetaExportComponent::ExportContent_() {}
 
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()

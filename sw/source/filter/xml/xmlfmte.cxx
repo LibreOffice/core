@@ -160,9 +160,9 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
     }
 }
 
-void SwXMLExport::_ExportStyles( bool bUsed )
+void SwXMLExport::ExportStyles_( bool bUsed )
 {
-    SvXMLExport::_ExportStyles( bUsed );
+    SvXMLExport::ExportStyles_( bUsed );
 
     // drawing defaults
     GetShapeExport()->ExportGraphicDefaults();
@@ -174,7 +174,7 @@ void SwXMLExport::_ExportStyles( bool bUsed )
     GetPageExport()->exportDefaultStyle();
 }
 
-void SwXMLExport::_ExportAutoStyles()
+void SwXMLExport::ExportAutoStyles_()
 {
     // The order in which styles are collected *MUST* be the same as
     // the order in which they are exported. Otherwise, caching will
@@ -241,7 +241,7 @@ XMLPageExport* SwXMLExport::CreatePageExport()
     return new XMLTextMasterPageExport( *this );
 }
 
-void SwXMLExport::_ExportMasterStyles()
+void SwXMLExport::ExportMasterStyles_()
 {
     // export master styles
     GetPageExport()->exportMasterStyles( false );

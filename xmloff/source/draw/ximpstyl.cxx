@@ -236,7 +236,7 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
     const Reference< beans::XPropertySet > & rPropSet )
 {
     static const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
-    struct _ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
+    struct ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
     {
         { CTF_DASHNAME , -1 },
         { CTF_LINESTARTNAME , -1 },

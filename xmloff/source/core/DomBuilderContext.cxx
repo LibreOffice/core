@@ -125,7 +125,7 @@ void DomBuilderContext::StartElement(
         // namespace handling: determine namespace & namespace key
         OUString sNamespace;
         sal_uInt16 nNamespaceKey =
-            GetImport().GetNamespaceMap()._GetKeyByAttrName(
+            GetImport().GetNamespaceMap().GetKeyByAttrName_(
                 rName, nullptr, nullptr, &sNamespace );
 
         // create attribute node and set value
