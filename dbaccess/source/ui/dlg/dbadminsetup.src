@@ -69,6 +69,11 @@ String STR_PAGETITLE_MYSQL
     Text[ en-US ] = "Set up MySQL connection" ;
 };
 
+String STR_PAGETITLE_PGSQL
+{
+    Text[ en-US ] = "Set up PGSQL connection" ;
+};
+
 String STR_PAGETITLE_ODBC
 {
     Text[ en-US ] = "Set up ODBC connection" ;

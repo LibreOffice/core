@@ -145,6 +145,7 @@
 // please adjust checking before insert new strings
 
 #define LAST_STR_HERE                       RID_STR_DLG_START + 103
+#define STR_PAGETITLE_PGSQL                 RID_STR_DLG_START + 104
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line

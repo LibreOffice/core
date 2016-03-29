@@ -60,6 +60,7 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_PAGE_ODBC           10
 #define ADDITIONAL_USERDEFINED         11
 #define ADDITIONAL_PAGE_MYSQL_NATIVE   12
+#define ADDITIONAL_PAGE_PGSQL          13
 
 // ODbTypeWizDialog
 ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
@@ -137,6 +138,9 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                 case  ::dbaccess::DST_MYSQL_NATIVE:
                     nNextState = ADDITIONAL_PAGE_MYSQL_NATIVE;
                     break;
+                case  ::dbaccess::DST_PGSQL:
+                    nNextState = ADDITIONAL_PAGE_PGSQL;
+                    break;
                 default:
                     nNextState = CONNECTION_PAGE;
                     break;
@@ -183,6 +187,9 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                     break;
                 case  ::dbaccess::DST_ODBC:
                     nNextState = ADDITIONAL_PAGE_ODBC;
+                    break;
+                case  ::dbaccess::DST_PGSQL:
+                    nNextState = ADDITIONAL_PAGE_PGSQL;
                     break;
                 default:
                     nNextState = WZS_INVALID_STATE;
