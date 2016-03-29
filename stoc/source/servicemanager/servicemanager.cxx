@@ -68,7 +68,7 @@ using namespace std;
 
 namespace {
 
-static Sequence< OUString > retrieveAsciiValueList(
+Sequence< OUString > retrieveAsciiValueList(
     const Reference< XSimpleRegistry > &xReg, const OUString &keyName )
 {
     Reference< XEnumerationAccess > xAccess( xReg, UNO_QUERY );

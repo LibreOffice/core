@@ -225,7 +225,7 @@ typedef std::stack< jvmaccess::VirtualMachine::AttachGuard * > GuardStack;
 
 extern "C" {
 
-static void destroyAttachGuards(void * pData)
+void destroyAttachGuards(void * pData)
 {
     GuardStack * pStack = static_cast< GuardStack * >(pData);
     if (pStack != nullptr)
@@ -465,7 +465,7 @@ void getJavaPropsFromSafetySettings(
     xConfRegistry_simple->close();
 }
 
-static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
+void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
     /* A Bug in the Java function
     ** struct Hjava_util_Properties * java_lang_System_initProperties(
     ** struct Hjava_lang_System *this,

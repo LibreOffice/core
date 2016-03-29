@@ -50,12 +50,12 @@ using namespace css::uno;
 namespace
 {
 
-static OUString proxyfac_getImplementationName()
+OUString proxyfac_getImplementationName()
 {
     return OUString(IMPL_NAME);
 }
 
-static Sequence< OUString > proxyfac_getSupportedServiceNames()
+Sequence< OUString > proxyfac_getSupportedServiceNames()
 {
     OUString str_name = SERVICE_NAME;
     return Sequence< OUString >( &str_name, 1 );
@@ -198,7 +198,7 @@ extern "C"
 {
 
 
-static void SAL_CALL binuno_proxy_free(
+void SAL_CALL binuno_proxy_free(
     uno_ExtEnvironment * pEnv, void * pProxy )
 {
     (void) pEnv; // avoid warning about unused parameter
@@ -209,7 +209,7 @@ static void SAL_CALL binuno_proxy_free(
 }
 
 
-static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
+void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
     if (osl_atomic_increment( &that->m_nRefCount ) == 1)
@@ -228,7 +228,7 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 }
 
 
-static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
+void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
     if (osl_atomic_decrement( &that->m_nRefCount ) == 0)
@@ -241,7 +241,7 @@ static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
 }
 
 
-static void SAL_CALL binuno_proxy_dispatch(
+void SAL_CALL binuno_proxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
 {
@@ -450,7 +450,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 }
 
 
-static Reference< XInterface > SAL_CALL proxyfac_create(
+Reference< XInterface > SAL_CALL proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     throw (Exception)
 {
