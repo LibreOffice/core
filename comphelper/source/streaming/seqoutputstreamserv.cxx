@@ -50,11 +50,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception ) override;
 
-    // XServiceInfo - static versions (used for component registration)
-    static OUString SAL_CALL getImplementationName_static();
-    static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-    static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
-
     // css::io::XOutputStream:
     virtual void SAL_CALL writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL flush() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) override;
@@ -79,11 +74,6 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL SequenceOutputStreamService::getImplementationName() throw ( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_static();
-}
-
-OUString SAL_CALL SequenceOutputStreamService::getImplementationName_static()
-{
     return OUString("com.sun.star.comp.SequenceOutputStreamService");
 }
 
@@ -94,19 +84,8 @@ sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const &
 
 uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_static();
-}
-
-uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames_static()
-{
     uno::Sequence<OUString> s { "com.sun.star.io.SequenceOutputStream" };
     return s;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService::Create(
-    SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >& )
-{
-    return static_cast< ::cppu::OWeakObject * >( new SequenceOutputStreamService());
 }
 
 // css::io::XOutputStream:
@@ -152,9 +131,12 @@ uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenByte
 
 } // anonymous namespace
 
-void createRegistryInfo_SequenceOutputStream()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_SequenceOutputStreamService(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OAutoRegistration< SequenceOutputStreamService > aAutoRegistration;
+    return cppu::acquire(new SequenceOutputStreamService());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
