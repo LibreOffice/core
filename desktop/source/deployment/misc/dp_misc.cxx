@@ -137,7 +137,7 @@ bool existsOfficePipe()
 }
 
 //get modification time
-static bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
+bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
 {
     salhelper::LinkResolver aResolver(osl_FileStatus_Mask_ModifyTime);
 

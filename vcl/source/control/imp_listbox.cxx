@@ -1635,7 +1635,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
 namespace
 {
-    static vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_Int32 _nPos, OUString& _out_entryText )
+    vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_Int32 _nPos, OUString& _out_entryText )
     {
         OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
         sal_Int32 nEntryCount( _rList.GetEntryCount() );
@@ -1648,7 +1648,7 @@ namespace
         return reinterpret_cast< vcl::StringEntryIdentifier >( _nPos + 1 );
     }
 
-    static sal_Int32 lcl_getEntryPos( vcl::StringEntryIdentifier _entry )
+    sal_Int32 lcl_getEntryPos( vcl::StringEntryIdentifier _entry )
     {
         // our pos is 0-based, but StringEntryIdentifier does not allow for a NULL
         return static_cast< sal_Int32 >( reinterpret_cast< sal_Int64 >( _entry ) ) - 1;

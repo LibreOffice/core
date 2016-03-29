@@ -49,14 +49,14 @@ int nImplSysDialog = 0;
 
 namespace
 {
-    static Paper ImplGetPaperFormat( long nWidth100thMM, long nHeight100thMM )
+    Paper ImplGetPaperFormat( long nWidth100thMM, long nHeight100thMM )
     {
         PaperInfo aInfo(nWidth100thMM, nHeight100thMM);
         aInfo.doSloppyFit();
         return aInfo.getPaper();
     }
 
-    static const PaperInfo& ImplGetEmptyPaper()
+    const PaperInfo& ImplGetEmptyPaper()
     {
         static PaperInfo aInfo(PAPER_USER);
         return aInfo;

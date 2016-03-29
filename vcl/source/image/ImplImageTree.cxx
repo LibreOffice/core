@@ -53,12 +53,12 @@ using namespace css;
 
 namespace {
 
-static OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
+OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
 {
     return name.copy(0, pos + 1) + locale + name.copy(pos);
 }
 
-static std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
+std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
 {
     // This could use SvInputStream instead if that did not have a broken
     // SeekPos implementation for an XInputStream that is not also XSeekable
@@ -79,7 +79,7 @@ static std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInput
     return s;
 }
 
-static void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString const & rPath, BitmapEx & rBitmap)
+void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString const & rPath, BitmapEx & rBitmap)
 {
     if (rPath.endsWith(".png"))
     {
