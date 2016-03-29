@@ -70,7 +70,8 @@ namespace sw
 {
 
 DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                          mpDocStat( new SwDocStat )
+                                                                          mpDocStat( new SwDocStat ),
+                                                                          mbInitialized( false )
 {
     maStatsUpdateTimer.SetTimeout( 1 );
     maStatsUpdateTimer.SetPriority( SchedulerPriority::LOWEST );
@@ -92,14 +93,14 @@ const SwDocStat& DocumentStatisticsManager::GetDocStat() const
     return *mpDocStat;
 }
 
-SwDocStat& DocumentStatisticsManager::GetDocStat()
+void DocumentStatisticsManager::SetDocStatModified(bool bSet)
 {
-    return *mpDocStat;
+    mpDocStat->bModified = bSet;
 }
 
 const SwDocStat& DocumentStatisticsManager::GetUpdatedDocStat( bool bCompleteAsync, bool bFields )
 {
-    if( mpDocStat->bModified )
+    if( mpDocStat->bModified || !mbInitialized)
     {
         UpdateDocStat( bCompleteAsync, bFields );
     }
@@ -109,11 +110,12 @@ const SwDocStat& DocumentStatisticsManager::GetUpdatedDocStat( bool bCompleteAsy
 void DocumentStatisticsManager::SetDocStat( const SwDocStat& rStat )
 {
     *mpDocStat = rStat;
+    mbInitialized = true;
 }
 
 void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields )
 {
-    if( mpDocStat->bModified )
+    if( mpDocStat->bModified || !mbInitialized)
     {
         if (!bCompleteAsync)
         {
@@ -131,6 +133,7 @@ void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields
 // returns true while there is more to do
 bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bFields)
 {
+    mbInitialized = true;
     mpDocStat->Reset();
     mpDocStat->nPara = 0; // default is 1!
 
