@@ -468,7 +468,23 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         "dbname",
         "connect_timeout",
         "options",
-        "requiressl"
+        "sslmode",
+        "requiressl",
+        "sslcert",
+        "sslkey",
+        "sslrootcert",
+        "sslcrl",
+        "host",
+        "hostaddr",
+        "application_name",
+        "fallback_application_name",
+        "gsslib",
+        "service",
+        "keepalives",
+        "keepalives_idle",
+        "keepalives_interval",
+        "keepalives_count",
+        "tty"
     };
 
     for( int i = 0; i < args.getLength() ; ++i )
