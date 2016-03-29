@@ -569,6 +569,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
 /** Functions new in Excel 2016.
 
     See https://support.office.com/en-us/article/Forecasting-functions-897a2fe9-6595-4680-a0b0-93e0308d5f6e?ui=en-US&rs=en-US&ad=US#_forecast.ets
+    and  https://support.office.com/en-us/article/What-s-New-and-Improved-in-Office-2016-for-Office-365-95c8d81d-08ba-42c1-914f-bca4603e1426?ui=en-US&rs=en-US&ad=US
 
     @See sc/source/filter/oox/formulabase.cxx saFuncTable2016 for V,VR,RO,...
  */
@@ -578,7 +579,9 @@ static const XclFunctionInfo saFuncTable_2016[] =
     EXC_FUNCENTRY_V_VR(  ocForecast_ETS_PIA,    3,  7,  0,  "FORECAST.ETS.CONFINT" ),
     EXC_FUNCENTRY_V_VR(  ocForecast_ETS_SEA,    2,  4,  0,  "FORECAST.ETS.SEASONALITY" ),
     EXC_FUNCENTRY_V_VR(  ocForecast_ETS_STA,    3,  6,  0,  "FORECAST.ETS.STAT" ),
-    EXC_FUNCENTRY_V_VR(  ocForecast_LIN,        3,  3,  0,  "FORECAST.LINEAR" )
+    EXC_FUNCENTRY_V_VR(  ocForecast_LIN,        3,  3,  0,  "FORECAST.LINEAR" ),
+    EXC_FUNCENTRY_V_VR(  ocConcat_MS,           1,  MX, 0,  "CONCAT" ),
+    EXC_FUNCENTRY_V_VR(  ocTextJoin_MS,         3,  MX, 0,  "TEXTJOIN" )
 };
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
