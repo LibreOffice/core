@@ -1555,7 +1555,7 @@ public:
         }
     }
 
-    /** Releases mutex. */
+    /** Re-acquires mutex. */
     void SAL_CALL reset()
     {
         if( m_bCleared)
