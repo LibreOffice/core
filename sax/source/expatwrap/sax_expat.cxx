@@ -242,23 +242,23 @@ public:
 
 extern "C"
 {
-    static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
+    void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
     {
         SaxExpatParser_Impl::callbackStartElement(userData,name,atts);
     }
-    static void call_callbackEndElement(void *userData, const XML_Char *name)
+    void call_callbackEndElement(void *userData, const XML_Char *name)
     {
         SaxExpatParser_Impl::callbackEndElement(userData,name);
     }
-    static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
+    void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
     {
         SaxExpatParser_Impl::callbackCharacters(userData,s,nLen);
     }
-    static void call_callbackProcessingInstruction(void *userData,const XML_Char *sTarget,const XML_Char *sData )
+    void call_callbackProcessingInstruction(void *userData,const XML_Char *sTarget,const XML_Char *sData )
     {
         SaxExpatParser_Impl::callbackProcessingInstruction(userData,sTarget,sData );
     }
-    static void call_callbackEntityDecl(void *userData ,
+    void call_callbackEntityDecl(void *userData ,
                                         const XML_Char *entityName,
                                         int is_parameter_entity,
                                         const XML_Char *value,
@@ -272,7 +272,7 @@ extern "C"
                 is_parameter_entity, value, value_length,
                 base, systemId, publicId, notationName);
     }
-    static void call_callbackNotationDecl(void *userData,
+    void call_callbackNotationDecl(void *userData,
                                           const XML_Char *notationName,
                                           const XML_Char *base,
                                           const XML_Char *systemId,
@@ -280,7 +280,7 @@ extern "C"
     {
         SaxExpatParser_Impl::callbackNotationDecl(userData,notationName,base,systemId,publicId);
     }
-    static int call_callbackExternalEntityRef(XML_Parser parser,
+    int call_callbackExternalEntityRef(XML_Parser parser,
                                               const XML_Char *openEntityNames,
                                               const XML_Char *base,
                                               const XML_Char *systemId,
@@ -288,17 +288,17 @@ extern "C"
     {
         return SaxExpatParser_Impl::callbackExternalEntityRef(parser,openEntityNames,base,systemId,publicId);
     }
-    static int call_callbackUnknownEncoding(void *encodingHandlerData,
+    int call_callbackUnknownEncoding(void *encodingHandlerData,
                                               const XML_Char *name,
                                             XML_Encoding *info)
     {
         return SaxExpatParser_Impl::callbackUnknownEncoding(encodingHandlerData,name,info);
     }
-    static void call_callbackDefault( void *userData,  const XML_Char *s,  int len)
+    void call_callbackDefault( void *userData,  const XML_Char *s,  int len)
     {
         SaxExpatParser_Impl::callbackDefault(userData,s,len);
     }
-    static void call_callbackStartCDATA( void *userData )
+    void call_callbackStartCDATA( void *userData )
     {
         SaxExpatParser_Impl::callbackStartCDATA(userData);
     }
