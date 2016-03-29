@@ -41,7 +41,7 @@ void DocumentStateManager::SetModified()
 {
     m_rDoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
     mbModified = true;
-    m_rDoc.GetDocumentStatisticsManager().GetDocStat().bModified = true;
+    m_rDoc.GetDocumentStatisticsManager().SetDocStatModified( true );
     if( m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
@@ -60,7 +60,7 @@ void DocumentStateManager::ResetModified()
     //  Bit 1:  -> new state
     bool bOldModified = mbModified;
     mbModified = false;
-    m_rDoc.GetDocumentStatisticsManager().GetDocStat().bModified = false;
+    m_rDoc.GetDocumentStatisticsManager().SetDocStatModified( false );
     m_rDoc.GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( bOldModified && m_rDoc.GetOle2Link().IsSet() )
     {
