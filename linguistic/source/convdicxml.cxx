@@ -301,14 +301,14 @@ bool ConvDicXMLExport::Export()
 
 sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
 {
-    _GetNamespaceMap().Add( "tcd",
+    GetNamespaceMap_().Add( "tcd",
             XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
 
     GetDocHandler()->startDocument();
 
     // Add xmlns line and some other arguments
-    AddAttribute( _GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_TCD ),
-                  _GetNamespaceMap().GetNameByKey( XML_NAMESPACE_TCD ) );
+    AddAttribute( GetNamespaceMap_().GetAttrNameByKey( XML_NAMESPACE_TCD ),
+                  GetNamespaceMap_().GetNameByKey( XML_NAMESPACE_TCD ) );
     AddAttributeASCII( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
 
     OUString aIsoLang( LanguageTag::convertToBcp47( rDic.nLanguage ) );
@@ -320,7 +320,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
     //!! before the call to endDocument
     {
         SvXMLElementExport aRoot( *this, XML_NAMESPACE_TCD, "text-conversion-dictionary", true, true );
-        _ExportContent();
+        ExportContent_();
     }
 
     GetDocHandler()->endDocument();
@@ -330,7 +330,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
 }
 
 
-void ConvDicXMLExport::_ExportContent()
+void ConvDicXMLExport::ExportContent_()
 {
     // acquire sorted list of all keys
     ConvMapKeySet   aKeySet;

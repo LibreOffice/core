@@ -45,12 +45,12 @@ protected:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // override
-    virtual void _ExportMeta() override;
+    virtual void ExportMeta_() override;
 
     // methods without content:
-    virtual void _ExportAutoStyles() override;
-    virtual void _ExportMasterStyles() override;
-    virtual void _ExportContent() override;
+    virtual void ExportAutoStyles_() override;
+    virtual void ExportMasterStyles_() override;
+    virtual void ExportContent_() override;
 };
 
 #endif

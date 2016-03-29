@@ -57,9 +57,9 @@ public:
     }
 
     // SvXMLExport
-    void _ExportAutoStyles() override    {}
-    void _ExportMasterStyles() override  {}
-    void _ExportContent() override;
+    void ExportAutoStyles_() override    {}
+    void ExportMasterStyles_() override  {}
+    void ExportContent_() override;
     sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
 
     bool    Export();

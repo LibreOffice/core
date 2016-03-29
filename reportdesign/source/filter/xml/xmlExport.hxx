@@ -145,11 +145,11 @@ private:
     virtual void                    SetBodyAttributes() override;
 protected:
 
-    virtual void                    _ExportStyles( bool bUsed ) override;
-    virtual void                    _ExportAutoStyles() override;
-    virtual void                    _ExportContent() override;
-    virtual void                    _ExportMasterStyles() override;
-    virtual void                    _ExportFontDecls() override;
+    virtual void                    ExportStyles_( bool bUsed ) override;
+    virtual void                    ExportAutoStyles_() override;
+    virtual void                    ExportContent_() override;
+    virtual void                    ExportMasterStyles_() override;
+    virtual void                    ExportFontDecls_() override;
     virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() override;
     virtual XMLShapeExport*         CreateShapeExport() override;

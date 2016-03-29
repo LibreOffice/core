@@ -82,13 +82,13 @@ protected:
 
 
     // methods without content:
-    virtual void _ExportMeta() override;
-    virtual void _ExportScripts() override;
-    virtual void _ExportFontDecls() override;
-    virtual void _ExportStyles( bool bUsed ) override ;
-    virtual void _ExportAutoStyles() override;
-    virtual void _ExportMasterStyles() override;
-    virtual void _ExportContent() override;
+    virtual void ExportMeta_() override;
+    virtual void ExportScripts_() override;
+    virtual void ExportFontDecls_() override;
+    virtual void ExportStyles_( bool bUsed ) override ;
+    virtual void ExportAutoStyles_() override;
+    virtual void ExportMasterStyles_() override;
+    virtual void ExportContent_() override;
 };
 
 #endif

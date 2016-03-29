@@ -152,11 +152,11 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     mxTable( xTable )
 {
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
     SetGraphicResolver( xGrfResolver );
     setExportFlags( SvXMLExportFlags::NONE );
 }
@@ -416,9 +416,9 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
 }
 
 // methods without content:
-void SvxXMLXTableExportComponent::_ExportAutoStyles() {}
-void SvxXMLXTableExportComponent::_ExportMasterStyles() {}
-void SvxXMLXTableExportComponent::_ExportContent() {}
+void SvxXMLXTableExportComponent::ExportAutoStyles_() {}
+void SvxXMLXTableExportComponent::ExportMasterStyles_() {}
+void SvxXMLXTableExportComponent::ExportContent_() {}
 
 
 SvxXMLTableEntryExporter::~SvxXMLTableEntryExporter()

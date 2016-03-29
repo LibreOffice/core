@@ -196,13 +196,13 @@ void XMLAutoTextEventExport::exportEvents()
 
 // methods without content:
 
-void XMLAutoTextEventExport::_ExportMeta() {}
-void XMLAutoTextEventExport::_ExportScripts() {}
-void XMLAutoTextEventExport::_ExportFontDecls() {}
-void XMLAutoTextEventExport::_ExportStyles( bool ) {}
-void XMLAutoTextEventExport::_ExportAutoStyles() {}
-void XMLAutoTextEventExport::_ExportMasterStyles() {}
-void XMLAutoTextEventExport::_ExportContent() {}
+void XMLAutoTextEventExport::ExportMeta_() {}
+void XMLAutoTextEventExport::ExportScripts_() {}
+void XMLAutoTextEventExport::ExportFontDecls_() {}
+void XMLAutoTextEventExport::ExportStyles_( bool ) {}
+void XMLAutoTextEventExport::ExportAutoStyles_() {}
+void XMLAutoTextEventExport::ExportMasterStyles_() {}
+void XMLAutoTextEventExport::ExportContent_() {}
 
 
 // methods to support the component registration

@@ -72,7 +72,7 @@ bool SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
     return aNameHash == rCmp.aNameHash;
 }
 
-sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey )
+sal_uInt16 SvXMLNamespaceMap::Add_( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey )
 {
     if( XML_NAMESPACE_UNKNOWN == nKey )
     {
@@ -110,7 +110,7 @@ sal_uInt16 SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rNam
 #endif
 
     if ( aNameHash.find ( rPrefix ) == aNameHash.end() )
-        nKey = _Add( rPrefix, rName, nKey );
+        nKey = Add_( rPrefix, rName, nKey );
 
     return nKey;
 }
@@ -130,7 +130,7 @@ sal_uInt16 SvXMLNamespaceMap::AddIfKnown( const OUString& rPrefix, const OUStrin
     {
         NameSpaceHash::const_iterator aIter = aNameHash.find( rPrefix );
         if( aIter == aNameHash.end() || (*aIter).second->sName != rName )
-            nKey = _Add( rPrefix, rName, nKey );
+            nKey = Add_( rPrefix, rName, nKey );
     }
 
     return nKey;
@@ -269,14 +269,14 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
     }
 }
 
-sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName(
+sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_(
                             const OUString& rAttrName,
                             OUString *pLocalName) const
 {
-    return _GetKeyByAttrName( rAttrName, nullptr, pLocalName, nullptr, false/*bCache*/ );
+    return GetKeyByAttrName_( rAttrName, nullptr, pLocalName, nullptr, false/*bCache*/ );
 }
 
-sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
+sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
                                             OUString *pNamespace,
@@ -388,7 +388,7 @@ void SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix
     assert(XML_NAMESPACE_NONE != nKey);
     if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
     {
-        _Add( rPrefix, rName, nKey );
+        Add_( rPrefix, rName, nKey );
     }
 }
 
@@ -425,7 +425,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName(
                             OUString *pLocalName,
                             sal_uInt16 /*nIdxGuess*/) const
 {
-    return _GetKeyByAttrName( rAttrName, nullptr, pLocalName );
+    return GetKeyByAttrName_( rAttrName, nullptr, pLocalName );
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
@@ -434,7 +434,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pNamespace,
                                             sal_uInt16 /*nIdxGuess*/ ) const
 {
-    return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
+    return GetKeyByAttrName_ ( rAttrName, pPrefix, pLocalName, pNamespace );
 }
 
 bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )

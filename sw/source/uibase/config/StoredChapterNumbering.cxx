@@ -177,21 +177,21 @@ public:
         : SvXMLExport(xContext, "sw::StoredChapterNumberingExport", rFileName,
             util::MeasureUnit::CM, xHandler)
     {
-        _GetNamespaceMap().Add(GetXMLToken(XML_NP_OFFICE),
+        GetNamespaceMap_().Add(GetXMLToken(XML_NP_OFFICE),
                                GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE);
-        _GetNamespaceMap().Add(GetXMLToken(XML_NP_TEXT),
+        GetNamespaceMap_().Add(GetXMLToken(XML_NP_TEXT),
                                GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT);
-        _GetNamespaceMap().Add(GetXMLToken(XML_NP_STYLE),
+        GetNamespaceMap_().Add(GetXMLToken(XML_NP_STYLE),
                                GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE);
-        _GetNamespaceMap().Add(GetXMLToken(XML_NP_FO),
+        GetNamespaceMap_().Add(GetXMLToken(XML_NP_FO),
                                GetXMLToken(XML_N_FO), XML_NAMESPACE_FO);
-        _GetNamespaceMap().Add(GetXMLToken(XML_NP_SVG),
+        GetNamespaceMap_().Add(GetXMLToken(XML_NP_SVG),
                                GetXMLToken(XML_N_SVG), XML_NAMESPACE_SVG);
     }
 
-    virtual void _ExportAutoStyles() override {}
-    virtual void _ExportMasterStyles() override {}
-    virtual void _ExportContent() override {}
+    virtual void ExportAutoStyles_() override {}
+    virtual void ExportMasterStyles_() override {}
+    virtual void ExportContent_() override {}
 
     void ExportRule(SvxXMLNumRuleExport & rExport,
             uno::Reference<container::XIndexReplace> const& xRule)
@@ -218,20 +218,20 @@ public:
         GetDocHandler()->startDocument();
 
         AddAttribute(XML_NAMESPACE_NONE,
-                      _GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_OFFICE),
-                      _GetNamespaceMap().GetNameByKey(XML_NAMESPACE_OFFICE));
+                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_OFFICE),
+                      GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_OFFICE));
         AddAttribute(XML_NAMESPACE_NONE,
-                      _GetNamespaceMap().GetAttrNameByKey (XML_NAMESPACE_TEXT),
-                      _GetNamespaceMap().GetNameByKey(XML_NAMESPACE_TEXT));
+                      GetNamespaceMap_().GetAttrNameByKey (XML_NAMESPACE_TEXT),
+                      GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_TEXT));
         AddAttribute(XML_NAMESPACE_NONE,
-                      _GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_STYLE),
-                      _GetNamespaceMap().GetNameByKey(XML_NAMESPACE_STYLE));
+                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_STYLE),
+                      GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_STYLE));
         AddAttribute(XML_NAMESPACE_NONE,
-                      _GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_FO),
-                      _GetNamespaceMap().GetNameByKey(XML_NAMESPACE_FO));
+                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_FO),
+                      GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_FO));
         AddAttribute(XML_NAMESPACE_NONE,
-                      _GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_SVG),
-                      _GetNamespaceMap().GetNameByKey(XML_NAMESPACE_SVG));
+                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_SVG),
+                      GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_SVG));
 
         {
             // let's just have a office:styles as a dummy root

@@ -103,9 +103,9 @@ public:
     sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) override;
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
-    void _ExportAutoStyles() override {}
-    void _ExportMasterStyles() override {}
-    void _ExportContent() override;
+    void ExportAutoStyles_() override {}
+    void ExportMasterStyles_() override {}
+    void ExportContent_() override;
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
 
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;

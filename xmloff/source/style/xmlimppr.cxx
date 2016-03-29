@@ -366,7 +366,7 @@ void SvXMLImportPropertyMapper::FillPropertySequence(
 void SvXMLImportPropertyMapper::CheckSpecialContext(
             const ::std::vector< XMLPropertyState >& aProperties,
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
-            _ContextID_Index_Pair* pSpecialContextIds ) const
+            ContextID_Index_Pair* pSpecialContextIds ) const
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
     sal_Int32 nCount = aProperties.size();
@@ -411,13 +411,13 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
 bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
             const Reference< XPropertySet >& rPropSet,
-            _ContextID_Index_Pair* pSpecialContextIds ) const
+            ContextID_Index_Pair* pSpecialContextIds ) const
 {
     bool bSet = false;
 
     Reference< XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
     if (xTolPropSet.is())
-        bSet = _FillTolerantMultiPropertySet( aProperties, xTolPropSet, maPropMapper, rImport,
+        bSet = FillTolerantMultiPropertySet_( aProperties, xTolPropSet, maPropMapper, rImport,
                                             pSpecialContextIds );
 
     if (!bSet)
@@ -430,16 +430,16 @@ bool SvXMLImportPropertyMapper::FillPropertySet(
         if ( xMultiPropSet.is() )
         {
             // Try XMultiPropertySet. If that fails, try the regular route.
-            bSet = _FillMultiPropertySet( aProperties, xMultiPropSet,
+            bSet = FillMultiPropertySet_( aProperties, xMultiPropSet,
                                         xInfo, maPropMapper,
                                         pSpecialContextIds );
             if ( !bSet )
-                bSet = _FillPropertySet( aProperties, rPropSet,
+                bSet = FillPropertySet_( aProperties, rPropSet,
                                         xInfo, maPropMapper, rImport,
                                         pSpecialContextIds);
         }
         else
-            bSet = _FillPropertySet( aProperties, rPropSet, xInfo,
+            bSet = FillPropertySet_( aProperties, rPropSet, xInfo,
                                     maPropMapper, rImport,
                                     pSpecialContextIds );
     }
@@ -447,13 +447,13 @@ bool SvXMLImportPropertyMapper::FillPropertySet(
     return bSet;
 }
 
-bool SvXMLImportPropertyMapper::_FillPropertySet(
+bool SvXMLImportPropertyMapper::FillPropertySet_(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     SvXMLImport& rImport,
-    _ContextID_Index_Pair* pSpecialContextIds )
+    ContextID_Index_Pair* pSpecialContextIds )
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
     OSL_ENSURE( rPropSetInfo.is(), "need an XPropertySetInfo" );
@@ -561,11 +561,11 @@ struct PropertyPairLessFunctor :
     }
 };
 
-void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
+void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
-    _ContextID_Index_Pair* pSpecialContextIds,
+    ContextID_Index_Pair* pSpecialContextIds,
     Sequence<OUString>& rNames,
     Sequence<Any>& rValues)
 {
@@ -643,12 +643,12 @@ void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
     }
 }
 
-bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
+bool SvXMLImportPropertyMapper::FillMultiPropertySet_(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XMultiPropertySet> & rMultiPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
-    _ContextID_Index_Pair* pSpecialContextIds )
+    ContextID_Index_Pair* pSpecialContextIds )
 {
     OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
     OSL_ENSURE( rPropSetInfo.is(), "Need property set info." );
@@ -658,7 +658,7 @@ bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
 
-    _PrepareForMultiPropertySet(rProperties, rPropSetInfo, rPropMapper, pSpecialContextIds,
+    PrepareForMultiPropertySet_(rProperties, rPropSetInfo, rPropMapper, pSpecialContextIds,
         aNames, aValues);
 
     // and, finally, try to set the values
@@ -675,12 +675,12 @@ bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     return bSuccessful;
 }
 
-bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
+bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XTolerantMultiPropertySet> & rTolMultiPropSet,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     SvXMLImport& rImport,
-    _ContextID_Index_Pair* pSpecialContextIds )
+    ContextID_Index_Pair* pSpecialContextIds )
 {
     OSL_ENSURE( rTolMultiPropSet.is(), "Need tolerant multi property set. ");
 
@@ -689,7 +689,7 @@ bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
 
-    _PrepareForMultiPropertySet(rProperties, Reference<XPropertySetInfo>(nullptr), rPropMapper, pSpecialContextIds,
+    PrepareForMultiPropertySet_(rProperties, Reference<XPropertySetInfo>(nullptr), rPropMapper, pSpecialContextIds,
         aNames, aValues);
 
     // and, finally, try to set the values

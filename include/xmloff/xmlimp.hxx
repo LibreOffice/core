@@ -154,7 +154,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
     StyleMap                    *mpStyleMap;
     OUString                    msPackageProtocol;
 
-    SAL_DLLPRIVATE void _InitCtor();
+    SAL_DLLPRIVATE void InitCtor_();
 
     SvXMLImportFlags  mnImportFlags;
     SvXMLErrorFlags  mnErrorFlags;
@@ -198,8 +198,8 @@ protected:
     void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver );
 
 
-    void _CreateNumberFormatsSupplier();
-    void _CreateDataStylesImport();
+    void CreateNumberFormatsSupplier_();
+    void CreateDataStylesImport_();
 
 public:
     // SvXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
@@ -567,7 +567,7 @@ inline void SvXMLImport::SetGraphicResolver(
 inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::GetNumberFormatsSupplier()
 {
     if ( ! mxNumberFormatsSupplier.is() && mxModel.is() )
-        _CreateNumberFormatsSupplier();
+        CreateNumberFormatsSupplier_();
 
     return mxNumberFormatsSupplier;
 }
@@ -575,7 +575,7 @@ inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::G
 inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
 {
     if ( mpNumImport == nullptr)
-        _CreateDataStylesImport();
+        CreateDataStylesImport_();
 
     return mpNumImport;
 }

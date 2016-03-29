@@ -117,12 +117,12 @@ class SdXMLExport : public SvXMLExport
 
     const OUString         msPageLayoutNames;
 
-    virtual void _ExportStyles(bool bUsed) override;
-    virtual void _ExportAutoStyles() override;
-    virtual void _ExportFontDecls() override;
-    virtual void _ExportMasterStyles() override;
-    virtual void _ExportContent() override;
-    virtual void _ExportMeta() override;
+    virtual void ExportStyles_(bool bUsed) override;
+    virtual void ExportAutoStyles_() override;
+    virtual void ExportFontDecls_() override;
+    virtual void ExportMasterStyles_() override;
+    virtual void ExportContent_() override;
+    virtual void ExportMeta_() override;
 
     ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( css::uno::Reference< css::drawing::XDrawPage > xMasterPage );
     void ImpPrepPageMasterInfos();

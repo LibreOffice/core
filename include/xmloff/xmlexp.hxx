@@ -155,7 +155,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     XMLErrors*  mpXMLErrors;
 
     const enum ::xmloff::token::XMLTokenEnum meClass;
-    SAL_DLLPRIVATE void _InitCtor();
+    SAL_DLLPRIVATE void InitCtor_();
 
     SvXMLExportFlags  mnExportFlags;
     SvXMLErrorFlags   mnErrorFlags;
@@ -168,7 +168,7 @@ private:
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory meModelType;
-    SAL_DLLPRIVATE void _DetermineModelType();
+    SAL_DLLPRIVATE void DetermineModelType_();
 
     SAL_DLLPRIVATE void ImplExportMeta(); // <office:meta>
     SAL_DLLPRIVATE void ImplExportSettings(); // <office:settings>
@@ -185,37 +185,37 @@ protected:
     void setExportFlags( SvXMLExportFlags nExportFlags ) { mnExportFlags = nExportFlags; }
 
     // Get (modifyable) namespace map
-    SvXMLNamespaceMap& _GetNamespaceMap() { return *mpNamespaceMap; }
+    SvXMLNamespaceMap& GetNamespaceMap_() { return *mpNamespaceMap; }
 
     // get a new namespave map (used in starmath to have a default namespace)
     void ResetNamespaceMap();
 
     /// Override this method to export the content of <office:meta>.
     /// There is a default implementation.
-    virtual void _ExportMeta();
+    virtual void ExportMeta_();
 
     /// Override this method to export the content of <office:scripts>.
     /// There is a default implementation.
-    virtual void _ExportScripts();
+    virtual void ExportScripts_();
 
     /// Override this method to export the font declarations
     /// The default implementation will export the contents of the
     /// XMLFontAutoStylePool if it has been created.
-    virtual void _ExportFontDecls();
+    virtual void ExportFontDecls_();
 
     /// Override this method to export the content of <style:styles>.
     /// If bUsed is set, used styles should be exported only.
     /// Overriding Methods must call this method !
-    virtual void _ExportStyles( bool bUsed );
+    virtual void ExportStyles_( bool bUsed );
 
     /// Override this method to export the contents of <style:auto-styles>.
-    virtual void _ExportAutoStyles() = 0;
+    virtual void ExportAutoStyles_() = 0;
 
     /// Override this method to export the contents of <style:master-styles>.
-    virtual void _ExportMasterStyles() = 0;
+    virtual void ExportMasterStyles_() = 0;
 
     /// Override this method to export the content of <office:body>.
-    virtual void _ExportContent() = 0;
+    virtual void ExportContent_() = 0;
 
     OUString GetSourceShellID() const;
     OUString GetDestinationShellID() const;

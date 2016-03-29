@@ -184,7 +184,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         }
     }
 
-    struct _ContextID_Index_Pair aContextIDs[] =
+    struct ContextID_Index_Pair aContextIDs[] =
     {
         { CTF_DASHNAME , -1 },
         { CTF_LINESTARTNAME , -1 },

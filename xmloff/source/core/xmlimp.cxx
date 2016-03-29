@@ -72,38 +72,38 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
-sal_Char const sXML_np__office[] = "_office";
-sal_Char const sXML_np__office_ext[] = "_office_ooo";
-sal_Char const sXML_np__ooo[] = "_ooo";
-sal_Char const sXML_np__ooow[] = "_ooow";
-sal_Char const sXML_np__oooc[] = "_oooc";
-sal_Char const sXML_np__of[] = "_of";
-sal_Char const sXML_np__style[] = "_style";
-sal_Char const sXML_np__text[] = "_text";
-sal_Char const sXML_np__table[] = "_table";
-sal_Char const sXML_np__table_ext[] = "_table_ooo";
-sal_Char const sXML_np__draw[] = "_draw";
-sal_Char const sXML_np__draw_ext[] = "_draw_ooo";
-sal_Char const sXML_np__dr3d[] = "_dr3d";
-sal_Char const sXML_np__fo[] = "_fo";
-sal_Char const sXML_np__xlink[] = "_xlink";
-sal_Char const sXML_np__dc[] = "_dc";
-sal_Char const sXML_np__dom[] = "_dom";
-sal_Char const sXML_np__meta[] = "_meta";
-sal_Char const sXML_np__number[] = "_number";
-sal_Char const sXML_np__svg[] = "_svg";
-sal_Char const sXML_np__chart[] = "_chart";
-sal_Char const sXML_np__math[] = "_math";
-sal_Char const sXML_np__form[] = "_form";
-sal_Char const sXML_np__script[] = "_script";
-sal_Char const sXML_np__config[] = "_config";
-sal_Char const sXML_np__xforms[] = "_xforms";
-sal_Char const sXML_np__formx[] = "_formx";
-sal_Char const sXML_np__xsd[] = "_xsd";
-sal_Char const sXML_np__xsi[] = "_xsi";
-sal_Char const sXML_np__field[] = "_field";
-sal_Char const sXML_np__xhtml[] = "_xhtml";
-sal_Char const sXML_np__css3text[] = "_css3text";
+sal_Char const sXML_np_office[] = "_office";
+sal_Char const sXML_np_office_ext[] = "_office_ooo";
+sal_Char const sXML_np_ooo[] = "_ooo";
+sal_Char const sXML_np_ooow[] = "_ooow";
+sal_Char const sXML_np_oooc[] = "_oooc";
+sal_Char const sXML_np_of[] = "_of";
+sal_Char const sXML_np_style[] = "_style";
+sal_Char const sXML_np_text[] = "_text";
+sal_Char const sXML_np_table[] = "_table";
+sal_Char const sXML_np_table_ext[] = "_table_ooo";
+sal_Char const sXML_np_draw[] = "_draw";
+sal_Char const sXML_np_draw_ext[] = "_draw_ooo";
+sal_Char const sXML_np_dr3d[] = "_dr3d";
+sal_Char const sXML_np_fo[] = "_fo";
+sal_Char const sXML_np_xlink[] = "_xlink";
+sal_Char const sXML_np_dc[] = "_dc";
+sal_Char const sXML_np_dom[] = "_dom";
+sal_Char const sXML_np_meta[] = "_meta";
+sal_Char const sXML_np_number[] = "_number";
+sal_Char const sXML_np_svg[] = "_svg";
+sal_Char const sXML_np_chart[] = "_chart";
+sal_Char const sXML_np_math[] = "_math";
+sal_Char const sXML_np_form[] = "_form";
+sal_Char const sXML_np_script[] = "_script";
+sal_Char const sXML_np_config[] = "_config";
+sal_Char const sXML_np_xforms[] = "_xforms";
+sal_Char const sXML_np_formx[] = "_formx";
+sal_Char const sXML_np_xsd[] = "_xsd";
+sal_Char const sXML_np_xsi[] = "_xsi";
+sal_Char const sXML_np_field[] = "_field";
+sal_Char const sXML_np_xhtml[] = "_xhtml";
+sal_Char const sXML_np_css3text[] = "_css3text";
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper< css::lang::XEventListener >
 {
@@ -359,44 +359,44 @@ SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 /*Element*/,
     return new SvXMLImportContext( *this );
 }
 
-void SvXMLImport::_InitCtor()
+void SvXMLImport::InitCtor_()
 {
     if( mnImportFlags != SvXMLImportFlags::NONE )
     {
         // implicit "xml" namespace prefix
         mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
-        mpNamespaceMap->Add( sXML_np__office, GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-        mpNamespaceMap->Add( sXML_np__office_ext, GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
-        mpNamespaceMap->Add( sXML_np__ooo, GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-        mpNamespaceMap->Add( sXML_np__style, GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
-        mpNamespaceMap->Add( sXML_np__text, GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
-        mpNamespaceMap->Add( sXML_np__table, GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
-        mpNamespaceMap->Add( sXML_np__table_ext, GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
-        mpNamespaceMap->Add( sXML_np__draw, GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
-        mpNamespaceMap->Add( sXML_np__draw_ext, GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
-        mpNamespaceMap->Add( sXML_np__dr3d, GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
-        mpNamespaceMap->Add( sXML_np__fo, GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
-        mpNamespaceMap->Add( sXML_np__xlink, GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
-        mpNamespaceMap->Add( sXML_np__dc, GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-        mpNamespaceMap->Add( sXML_np__dom, GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
-        mpNamespaceMap->Add( sXML_np__meta, GetXMLToken(XML_N_META), XML_NAMESPACE_META );
-        mpNamespaceMap->Add( sXML_np__number, GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
-        mpNamespaceMap->Add( sXML_np__svg, GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
-        mpNamespaceMap->Add( sXML_np__chart, GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
-        mpNamespaceMap->Add( sXML_np__math, GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
-        mpNamespaceMap->Add(sXML_np__form, GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
-        mpNamespaceMap->Add( sXML_np__script, GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
-        mpNamespaceMap->Add( sXML_np__config, GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
-        mpNamespaceMap->Add( sXML_np__xforms, GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
-        mpNamespaceMap->Add( sXML_np__formx, GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
-        mpNamespaceMap->Add( sXML_np__xsd, GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
-        mpNamespaceMap->Add( sXML_np__xsi, GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
-        mpNamespaceMap->Add( sXML_np__ooow, GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
-        mpNamespaceMap->Add( sXML_np__oooc, GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
-        mpNamespaceMap->Add( sXML_np__field, GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
-        mpNamespaceMap->Add( sXML_np__of, GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
-        mpNamespaceMap->Add( sXML_np__xhtml, GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
-        mpNamespaceMap->Add( sXML_np__css3text, GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
+        mpNamespaceMap->Add( sXML_np_office, GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+        mpNamespaceMap->Add( sXML_np_office_ext, GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
+        mpNamespaceMap->Add( sXML_np_ooo, GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+        mpNamespaceMap->Add( sXML_np_style, GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        mpNamespaceMap->Add( sXML_np_text, GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+        mpNamespaceMap->Add( sXML_np_table, GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+        mpNamespaceMap->Add( sXML_np_table_ext, GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
+        mpNamespaceMap->Add( sXML_np_draw, GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+        mpNamespaceMap->Add( sXML_np_draw_ext, GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
+        mpNamespaceMap->Add( sXML_np_dr3d, GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
+        mpNamespaceMap->Add( sXML_np_fo, GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        mpNamespaceMap->Add( sXML_np_xlink, GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        mpNamespaceMap->Add( sXML_np_dc, GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mpNamespaceMap->Add( sXML_np_dom, GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
+        mpNamespaceMap->Add( sXML_np_meta, GetXMLToken(XML_N_META), XML_NAMESPACE_META );
+        mpNamespaceMap->Add( sXML_np_number, GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+        mpNamespaceMap->Add( sXML_np_svg, GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
+        mpNamespaceMap->Add( sXML_np_chart, GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
+        mpNamespaceMap->Add( sXML_np_math, GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        mpNamespaceMap->Add(sXML_np_form, GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
+        mpNamespaceMap->Add( sXML_np_script, GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+        mpNamespaceMap->Add( sXML_np_config, GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        mpNamespaceMap->Add( sXML_np_xforms, GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( sXML_np_formx, GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
+        mpNamespaceMap->Add( sXML_np_xsd, GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
+        mpNamespaceMap->Add( sXML_np_xsi, GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( sXML_np_ooow, GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        mpNamespaceMap->Add( sXML_np_oooc, GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mpNamespaceMap->Add( sXML_np_field, GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+        mpNamespaceMap->Add( sXML_np_of, GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
+        mpNamespaceMap->Add( sXML_np_xhtml, GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        mpNamespaceMap->Add( sXML_np_css3text, GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
 
         mpNamespaceMap->Add( "_calc_libo", GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
         mpNamespaceMap->Add( "_office_libo",
@@ -441,7 +441,7 @@ SvXMLImport::SvXMLImport(
     mbIsGraphicLoadOnDemandSupported( true )
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
-    _InitCtor();
+    InitCtor_();
 }
 
 SvXMLImport::~SvXMLImport() throw ()
@@ -1719,7 +1719,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
     return bResult;
 }
 
-void SvXMLImport::_CreateNumberFormatsSupplier()
+void SvXMLImport::CreateNumberFormatsSupplier_()
 {
     SAL_WARN_IF( mxNumberFormatsSupplier.is(), "xmloff.core", "number formats supplier already exists!" );
     if(mxModel.is())
@@ -1727,7 +1727,7 @@ void SvXMLImport::_CreateNumberFormatsSupplier()
             uno::Reference< util::XNumberFormatsSupplier> (mxModel, uno::UNO_QUERY);
 }
 
-void SvXMLImport::_CreateDataStylesImport()
+void SvXMLImport::CreateDataStylesImport_()
 {
     SAL_WARN_IF( mpNumImport != nullptr, "xmloff.core", "data styles import already exists!" );
     uno::Reference<util::XNumberFormatsSupplier> xNum =

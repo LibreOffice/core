@@ -158,7 +158,7 @@ void XMLVarFieldImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        _GetKeyByAttrName( sAttrValue, &sTmp );
+                        GetKeyByAttrName_( sAttrValue, &sTmp );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sFormula = sTmp;
@@ -1311,7 +1311,7 @@ void XMLValueImportHelper::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-                        _GetKeyByAttrName( sAttrValue, &sTmp );
+                        GetKeyByAttrName_( sAttrValue, &sTmp );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sFormula = sTmp;

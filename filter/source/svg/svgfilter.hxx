@@ -114,10 +114,10 @@ public:
 
 protected:
 
-    virtual void            _ExportStyles( bool /* bUsed */ ) override {}
-    virtual void            _ExportAutoStyles() override {}
-    virtual void            _ExportContent() override {}
-    virtual void            _ExportMasterStyles() override {}
+    virtual void            ExportStyles_( bool /* bUsed */ ) override {}
+    virtual void            ExportAutoStyles_() override {}
+    virtual void            ExportContent_() override {}
+    virtual void            ExportMasterStyles_() override {}
     virtual sal_uInt32        exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) override { return 0; }
 
 private:

@@ -301,7 +301,7 @@ void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandle
     mxExtHandler.set( mxHandler, UNO_QUERY );
 }
 
-void SvXMLExport::_InitCtor()
+void SvXMLExport::InitCtor_()
 {
     // note: it is not necessary to add XML_NP_XML (it is declared implicitly)
     if( getExportFlags() & ~SvXMLExportFlags::OASIS )
@@ -411,7 +411,7 @@ void SvXMLExport::_InitCtor()
     }
 
     // Determine model type (#i51726#)
-    _DetermineModelType();
+    DetermineModelType_();
 
     // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
     if( getExportFlags() & SvXMLExportFlags::OASIS )
@@ -423,7 +423,7 @@ void SvXMLExport::_InitCtor()
 }
 
 // Shapes in Writer cannot be named via context menu (#i51726#)
-void SvXMLExport::_DetermineModelType()
+void SvXMLExport::DetermineModelType_()
 {
     meModelType = SvtModuleOptions::EFactory::UNKNOWN_FACTORY;
 
@@ -456,7 +456,7 @@ SvXMLExport::SvXMLExport(
     mbSaveLinkedSections(true)
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
-    _InitCtor();
+    InitCtor_();
 }
 
 SvXMLExport::SvXMLExport(
@@ -487,7 +487,7 @@ SvXMLExport::SvXMLExport(
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
-    _InitCtor();
+    InitCtor_();
 
     if (mxNumberFormatsSupplier.is())
         mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
@@ -525,7 +525,7 @@ SvXMLExport::SvXMLExport(
 {
     SAL_WARN_IF(!xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
-    _InitCtor();
+    InitCtor_();
 
     if (mxNumberFormatsSupplier.is())
         mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
@@ -662,7 +662,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                     for( nIndex = 0; nIndex < nCount; ++nIndex, ++pPrefix )
                     {
                         if( xNamespaceMap->getByName( *pPrefix ) >>= aURL )
-                            _GetNamespaceMap().Add( *pPrefix, aURL );
+                            GetNamespaceMap_().Add( *pPrefix, aURL );
                     }
                 }
             }
@@ -673,7 +673,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     }
 
     // Determine model type (#i51726#)
-    _DetermineModelType();
+    DetermineModelType_();
 }
 
 // XInitialize
@@ -903,13 +903,13 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
 {
     OUString const aPreferredPrefix("gen");
     OUString sPrefix;
-    sal_uInt16 nKey( _GetNamespaceMap().GetKeyByName( i_rNamespace ) );
+    sal_uInt16 nKey( GetNamespaceMap_().GetKeyByName( i_rNamespace ) );
     if( XML_NAMESPACE_UNKNOWN == nKey )
     {
         // There is no prefix for the namespace, so
         // we have to generate one and have to add it.
         sPrefix = aPreferredPrefix;
-        nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
+        nKey = GetNamespaceMap_().GetKeyByPrefix( sPrefix );
         sal_Int32 n( 0 );
         OUStringBuffer buf;
         while( nKey != USHRT_MAX )
@@ -917,7 +917,7 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
             buf.append( aPreferredPrefix );
             buf.append( ++n );
             sPrefix = buf.makeStringAndClear();
-            nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
+            nKey = GetNamespaceMap_().GetKeyByPrefix( sPrefix );
         }
 
         if (mpImpl->mNamespaceMaps.empty()
@@ -939,7 +939,7 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
     else
     {
         // If there is a prefix for the namespace, reuse that.
-        sPrefix = _GetNamespaceMap().GetPrefixByKey( nKey );
+        sPrefix = GetNamespaceMap_().GetPrefixByKey( nKey );
     }
     return sPrefix;
 }
@@ -952,7 +952,7 @@ void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
     OUString sValue( OUString::createFromAscii( pValue ) );
 
     mpAttrList->AddAttribute(
-        _GetNamespaceMap().GetQNameByKey( nPrefixKey, sName ), sValue );
+        GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), sValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
@@ -961,14 +961,14 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
     OUString sName( OUString::createFromAscii( pName ) );
 
     mpAttrList->AddAttribute(
-        _GetNamespaceMap().GetQNameByKey( nPrefixKey, sName ), rValue );
+        GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
     mpAttrList->AddAttribute(
-        _GetNamespaceMap().GetQNameByKey( nPrefixKey, rName ), rValue );
+        GetNamespaceMap_().GetQNameByKey( nPrefixKey, rName ), rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
@@ -976,7 +976,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 const OUString& rValue )
 {
     mpAttrList->AddAttribute(
-        _GetNamespaceMap().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+        GetNamespaceMap_().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         rValue );
 }
 
@@ -985,7 +985,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eValue)
 {
     mpAttrList->AddAttribute(
-        _GetNamespaceMap().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+        GetNamespaceMap_().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         GetXMLToken(eValue) );
 }
 
@@ -1086,7 +1086,7 @@ void SvXMLExport::ImplExportMeta()
 {
     CheckAttrList();
 
-    _ExportMeta();
+    ExportMeta_();
 }
 
 void SvXMLExport::ImplExportSettings()
@@ -1144,7 +1144,7 @@ void SvXMLExport::ImplExportStyles()
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_STYLES,
                                 true, true );
 
-        _ExportStyles( false );
+        ExportStyles_( false );
     }
 
     // transfer style names (+ families) TO other components (if appropriate)
@@ -1187,7 +1187,7 @@ void SvXMLExport::ImplExportAutoStyles()
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
                                   XML_AUTOMATIC_STYLES, true, true );
 
-        _ExportAutoStyles();
+        ExportAutoStyles_();
     }
 }
 
@@ -1198,7 +1198,7 @@ void SvXMLExport::ImplExportMasterStyles()
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,
                                 true, true );
 
-        _ExportMasterStyles();
+        ExportMasterStyles_();
     }
 
 }
@@ -1228,7 +1228,7 @@ void SvXMLExport::ImplExportContent()
                                       XML_NAMESPACE_OFFICE, eClass,
                                         true, true );
 
-            _ExportContent();
+            ExportContent_();
         }
     }
 }
@@ -1434,11 +1434,11 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
         // scripts
         if( mnExportFlags & SvXMLExportFlags::SCRIPTS )
-            _ExportScripts();
+            ExportScripts_();
 
         // font declarations
         if( mnExportFlags & SvXMLExportFlags::FONTDECLS )
-            _ExportFontDecls();
+            ExportFontDecls_();
 
         // styles
         if( mnExportFlags & SvXMLExportFlags::STYLES )
@@ -1489,7 +1489,7 @@ OUString SvXMLExport::GetDestinationShellID() const
     return mpImpl->maDestShellID;
 }
 
-void SvXMLExport::_ExportMeta()
+void SvXMLExport::ExportMeta_()
 {
     OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
     Reference< XDocumentPropertiesSupplier > xDocPropsSupplier(mxModel,
@@ -1517,7 +1517,7 @@ void SvXMLExport::_ExportMeta()
     }
 }
 
-void SvXMLExport::_ExportScripts()
+void SvXMLExport::ExportScripts_()
 {
     SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, true, true );
 
@@ -1552,13 +1552,13 @@ void SvXMLExport::_ExportScripts()
     GetEventExport().Export( xEvents );
 }
 
-void SvXMLExport::_ExportFontDecls()
+void SvXMLExport::ExportFontDecls_()
 {
     if( mxFontAutoStylePool.is() )
         mxFontAutoStylePool->exportXML();
 }
 
-void SvXMLExport::_ExportStyles( bool )
+void SvXMLExport::ExportStyles_( bool )
 {
     uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
     if( xFact.is())
@@ -2182,7 +2182,7 @@ void SvXMLExport::StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         bool bIgnWSOutside )
 {
-    StartElement(_GetNamespaceMap().GetQNameByKey( nPrefix,
+    StartElement(GetNamespaceMap_().GetQNameByKey( nPrefix,
         GetXMLToken(eName) ), bIgnWSOutside);
 }
 
@@ -2239,7 +2239,7 @@ void SvXMLExport::EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         bool bIgnWSInside )
 {
-    EndElement(_GetNamespaceMap().GetQNameByKey( nPrefix, GetXMLToken(eName) ),
+    EndElement(GetNamespaceMap_().GetQNameByKey( nPrefix, GetXMLToken(eName) ),
         bIgnWSInside);
 }
 

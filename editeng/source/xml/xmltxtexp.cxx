@@ -324,9 +324,9 @@ public:
     virtual ~SvxXMLTextExportComponent();
 
     // methods without content:
-    virtual void _ExportAutoStyles() override;
-    virtual void _ExportMasterStyles() override;
-    virtual void _ExportContent() override;
+    virtual void ExportAutoStyles_() override;
+    virtual void ExportMasterStyles_() override;
+    virtual void ExportContent_() override;
 
 private:
     css::uno::Reference< css::text::XText > mxText;
@@ -413,7 +413,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 }
 
 // methods without content:
-void SvxXMLTextExportComponent::_ExportAutoStyles()
+void SvxXMLTextExportComponent::ExportAutoStyles_()
 {
     rtl::Reference< XMLTextParagraphExport > xTextExport( GetTextParagraphExport() );
 
@@ -421,13 +421,13 @@ void SvxXMLTextExportComponent::_ExportAutoStyles()
     xTextExport->exportTextAutoStyles();
 }
 
-void SvxXMLTextExportComponent::_ExportContent()
+void SvxXMLTextExportComponent::ExportContent_()
 {
     rtl::Reference< XMLTextParagraphExport > xTextExport( GetTextParagraphExport() );
 
     xTextExport->exportText( mxText );
 }
 
-void SvxXMLTextExportComponent::_ExportMasterStyles() {}
+void SvxXMLTextExportComponent::ExportMasterStyles_() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
