@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_7913455d",
+        "filename": "external/cairo/ExternalProject_cairo.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-29T15:28:24Z",
+      "side": 1,
+      "message": "this was intentionally 2 commas before, that is an empty \"this\" branch and non-empty \"else\" branch in the horrible make synatx; \"$(SYSTEM_FREETYPE,)\" probably just checks the non-existent \"SYSTEM_FREETYPE,\" variable\n\nfixed that now in commit 0c58b399ea2c163babeff42e8fa5a28df847aba4",
+      "revId": "96c1ae1d8e78ae8b9bd7d4001645cad24d62b720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
