@@ -3079,6 +3079,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf97371, "tdf97371.docx")
     CPPUNIT_ASSERT(nDiff < 10);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf98882, "tdf98882.docx")
+{
+    sal_Int32 nFlyHeight = parseDump("//fly/infos/bounds", "height").toInt32();
+    sal_Int32 nContentHeight = parseDump("//notxt/infos/bounds", "height").toInt32();
+    // The content height was 600, not 360, so the frame and the content height did not match.
+    CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
