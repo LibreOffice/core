@@ -275,7 +275,7 @@ namespace
     }
 #endif
 
-    static OUString lcl_ensureFinalSlash( const OUString& _rDir )
+    OUString lcl_ensureFinalSlash( const OUString& _rDir )
     {
         INetURLObject aWorkPathObj( _rDir, INetProtocol::File );
         aWorkPathObj.setFinalSlash();

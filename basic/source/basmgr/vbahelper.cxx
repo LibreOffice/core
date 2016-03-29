@@ -48,7 +48,7 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
 
 typedef ::std::vector<uno::Reference<frame::XModel>> ModelVector;
 
-static ModelVector CreateDocumentsEnumeration(
+ModelVector CreateDocumentsEnumeration(
         const uno::Reference< frame::XModel >& rxModel)
 {
     ModelVector models;

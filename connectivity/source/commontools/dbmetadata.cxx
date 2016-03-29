@@ -95,7 +95,7 @@ namespace dbtools
     namespace
     {
 
-        static void lcl_construct( DatabaseMetaData_Impl& _metaDataImpl, const Reference< XConnection >& _connection )
+        void lcl_construct( DatabaseMetaData_Impl& _metaDataImpl, const Reference< XConnection >& _connection )
         {
             _metaDataImpl.xConnection = _connection;
             if ( !_metaDataImpl.xConnection.is() )
@@ -107,7 +107,7 @@ namespace dbtools
         }
 
 
-        static void lcl_checkConnected( const DatabaseMetaData_Impl& _metaDataImpl )
+        void lcl_checkConnected( const DatabaseMetaData_Impl& _metaDataImpl )
         {
             if ( !_metaDataImpl.xConnection.is() || !_metaDataImpl.xConnectionMetaData.is() )
             {
@@ -118,7 +118,7 @@ namespace dbtools
         }
 
 
-        static bool lcl_getDriverSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        bool lcl_getDriverSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             lcl_checkConnected( _metaData );
             const ::comphelper::NamedValueCollection& rDriverMetaData = _metaData.aDriverConfig.getMetaData( _metaData.xConnectionMetaData->getURL() );
@@ -129,7 +129,7 @@ namespace dbtools
         }
 
 
-        static bool lcl_getConnectionSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        bool lcl_getConnectionSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
             {
@@ -160,7 +160,7 @@ namespace dbtools
         }
 
 
-        static const OUString& lcl_getConnectionStringSetting(
+        const OUString& lcl_getConnectionStringSetting(
             const DatabaseMetaData_Impl& _metaData, ::boost::optional< OUString >& _cachedSetting,
             OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
         {
