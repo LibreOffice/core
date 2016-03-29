@@ -489,16 +489,17 @@ void ScDocument::FillInfo(
 
                 ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Column data
 
-                nArrRow = 0;
+                nArrRow = 1;
                 // Iterate between rows nY1 and nY2 and pick up non-empty
                 // cells that are not hidden.
                 RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
                 sc::ParseAllNonEmpty(
-                    pThisCol->maCells.begin(), pThisCol->maCells, std::max<SCROW>(0 , nRow1 - 1), nYExtra, aFunc);
+                    pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc);
 
                 if (nX+1 >= nCol1)                                // Attribute/Blockmark from nX1-1
                 {
                     ScAttrArray* pThisAttrArr = pThisCol->pAttrArray;       // Attribute
+                    nArrRow = 0;
 
                     const ScPatternAttr* pPattern;
                     SCROW nCurRow=nRow1;                  // single rows
