@@ -90,7 +90,7 @@
                     <property name="tooltip_text" translatable="yes">Specify the borders of the selected cells.</property>
                     <property name="halign">start</property>
                     <property name="action_name">.uno:SetBorderStyle</property>
-                    <property name="label">toolbutton1</property>
+                    <property name="label" translatable="no">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -126,7 +126,7 @@
                         <property name="tooltip_text" translatable="yes">Select the line style of the borders.</property>
                         <property name="halign">end</property>
                         <property name="action_name">.uno:LineStyle</property>
-                        <property name="label">toolbutton2</property>
+                        <property name="label" translatable="no">toolbutton2</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>

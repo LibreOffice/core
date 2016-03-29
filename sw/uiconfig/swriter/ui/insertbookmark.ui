@@ -37,7 +37,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="insert">
-                    <property name="label">Insert</property>
+                    <property name="label" translatable="yes">Insert</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
