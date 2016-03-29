@@ -91,14 +91,12 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
 #endif
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS) && HAVE_FEATURE_OPENGL
     /* Run test for OpenGL support in own process to avoid crash with broken
      * OpenGL drivers. Start process as early as possible.
      */
     bool bSuccess = false;
-#if HAVE_FEATURE_OPENGL
     bSuccess = fire_glxtest_process();
-#endif
     SAL_WARN_IF(!bSuccess, "desktop.opengl", "problems with glxtest");
 #endif
 
