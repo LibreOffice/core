@@ -180,7 +180,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     aStartupInfo.cb = sizeof(aStartupInfo);
 
     GetStartupInfo( &aStartupInfo );
-    // Get image path with same name but with .bin extension
 
     TCHAR               szModuleFileName[MAX_PATH];
 
