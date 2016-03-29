@@ -16,6 +16,9 @@
 #include <vcl/combobox.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/edit.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
