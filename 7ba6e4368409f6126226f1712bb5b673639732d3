@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_75906bed",
+        "filename": "sc/source/filter/xml/XMLStylesExportHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T13:33:22Z",
+      "side": 1,
+      "message": "Using auto this way looks odd. That should be\n\n for (auto \u0026 i : aStyleNames)\n {\n     delete i;\n }\n\ninstead (if I didn\u0027t get the reference to pointer thing wrong).\nSame for the other occurrence below.\n\nBut you can do that in a follow-up patch, if you like please?",
+      "range": {
+        "startLine": 707,
+        "startChar": 0,
+        "endLine": 713,
+        "endChar": 5
+      },
+      "revId": "7ba6e4368409f6126226f1712bb5b673639732d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_95aa3f18",
+        "filename": "sc/source/filter/xml/XMLStylesExportHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T13:33:22Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 986,
+        "startChar": 0,
+        "endLine": 992,
+        "endChar": 5
+      },
+      "revId": "7ba6e4368409f6126226f1712bb5b673639732d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
