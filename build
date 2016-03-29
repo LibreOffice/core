@@ -129,7 +129,6 @@ do_configure()
     --enable-extension-integration
     --enable-ext-nlpsolver
     --enable-ext-presenter-minimizer
-    --enable-ext-wiki-publisher
     --with-build-version="${BUILD_NUMBER}"
     --with-help
     --with-java
