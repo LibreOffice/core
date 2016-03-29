@@ -54,6 +54,7 @@ class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
 class OMySQLIntroPageSetup;
+class OPostgreSQLConnectionPageSetup;
 class OFinalDBPageSetup;
 
 class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient

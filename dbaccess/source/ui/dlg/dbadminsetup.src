@@ -69,6 +69,11 @@ String STR_PAGETITLE_MYSQL
     Text[ en-US ] = "Set up MySQL connection" ;
 };
 
+String STR_PAGETITLE_PGSQL
+{
+    Text[ en-US ] = "Set up PostgreSQL connection" ;
+};
+
 String STR_PAGETITLE_ODBC
 {
     Text[ en-US ] = "Set up ODBC connection" ;
@@ -105,9 +110,19 @@ String STR_MYSQLJDBC_HEADERTEXT
     Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
 };
 
+String STR_PGSQL_HEADERTEXT
+{
+    Text[ en-US ] = "Set up connection to a PostgreSQL database" ;
+};
+
 String STR_MYSQLJDBC_HELPTEXT
 {
     Text[ en-US ] = "Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings.";
+};
+
+String STR_PGSQL_HELPTEXT
+{
+    Text[ en-US ] = "Please enter the required information to connect to a PostgreSQL database.";
 };
 
 String STR_MYSQL_DRIVERCLASSTEXT
@@ -115,9 +130,19 @@ String STR_MYSQL_DRIVERCLASSTEXT
     Text [  en-US  ] = "MySQL JDBC d~river class:";
 };
 
+String STR_PGSQL_DRIVERCLASSTEXT
+{
+    Text [  en-US  ] = "PGSQL driver class:";
+};
+
 String STR_MYSQL_DEFAULT
 {
     Text[ en-US ] = "Default: 3306";
+};
+
+String STR_PGSQL_DEFAULT
+{
+    Text[ en-US ] = "Default: 5432";
 };
 
 String STR_DBASE_HEADERTEXT
