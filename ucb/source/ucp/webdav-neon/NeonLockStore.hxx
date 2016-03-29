@@ -51,20 +51,20 @@ struct ltptr
     }
 };
 
-typedef struct _LockInfo
+struct LockInfo
 {
     rtl::Reference< NeonSession > xSession;
     sal_Int32 nLastChanceToSendRefreshRequest;
 
-    _LockInfo()
+    LockInfo()
         : nLastChanceToSendRefreshRequest( -1 ) {}
 
-    _LockInfo( rtl::Reference< NeonSession > const & _xSession,
+    LockInfo( rtl::Reference< NeonSession > const & _xSession,
               sal_Int32 _nLastChanceToSendRefreshRequest )
     : xSession( _xSession ),
       nLastChanceToSendRefreshRequest( _nLastChanceToSendRefreshRequest ) {}
 
-} LockInfo;
+};
 
 typedef std::map< NeonLock *, LockInfo, ltptr > LockInfoMap;
 

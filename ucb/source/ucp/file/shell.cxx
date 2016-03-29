@@ -111,8 +111,8 @@ shell::UnqPathData::~UnqPathData()
     delete notifier;
 }
 
-shell::MyProperty::MyProperty( const OUString&                         __PropertyName )
-    : PropertyName( __PropertyName )
+shell::MyProperty::MyProperty( const OUString&                         thePropertyName )
+    : PropertyName( thePropertyName )
     , Handle(-1)
     , isNative(false)
     , State(beans::PropertyState_AMBIGUOUS_VALUE)
@@ -121,20 +121,20 @@ shell::MyProperty::MyProperty( const OUString&                         __Propert
     // empty
 }
 
-shell::MyProperty::MyProperty( const bool&                        __isNative,
-                               const OUString&                    __PropertyName,
-                               const sal_Int32&                   __Handle,
-                               const css::uno::Type&              __Typ,
-                               const css::uno::Any&               __Value,
-                               const css::beans::PropertyState&   __State,
-                               const sal_Int16&                   __Attributes )
-    : PropertyName( __PropertyName ),
-      Handle( __Handle ),
-      isNative( __isNative ),
-      Typ( __Typ ),
-      Value( __Value ),
-      State( __State ),
-      Attributes( __Attributes )
+shell::MyProperty::MyProperty( const bool&                        theisNative,
+                               const OUString&                    thePropertyName,
+                               const sal_Int32&                   theHandle,
+                               const css::uno::Type&              theTyp,
+                               const css::uno::Any&               theValue,
+                               const css::beans::PropertyState&   theState,
+                               const sal_Int16&                   theAttributes )
+    : PropertyName( thePropertyName ),
+      Handle( theHandle ),
+      isNative( theisNative ),
+      Typ( theTyp ),
+      Value( theValue ),
+      State( theState ),
+      Attributes( theAttributes )
 {
     // empty
 }
