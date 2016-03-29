@@ -1725,9 +1725,10 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 void SmAlignNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // set alignment within the entire subtree (including current node)
 {
-    OSL_ENSURE(GetNumSubNodes() > 0, "Sm: missing subnode");
+    assert(GetNumSubNodes() == 1);
 
     SmNode  *pNode = GetSubNode(0);
+    assert(pNode);
 
     RectHorAlign  eHorAlign = RectHorAlign::Center;
     switch (GetToken().eType)
