@@ -100,8 +100,7 @@ void LimitBox::LoadDefaultLimits()
 {
     InsertValue( ALL_INT );
 
-    const unsigned nSize =
-        sizeof(global::aDefLimitAry)/sizeof(global::aDefLimitAry[0]);
+    const unsigned nSize = SAL_N_ELEMENTS(global::aDefLimitAry);
     for( unsigned nIndex = 0; nIndex< nSize; ++nIndex)
     {
         InsertValue( global::aDefLimitAry[nIndex] );

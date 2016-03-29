@@ -2533,7 +2533,7 @@ void ScInterpreter::ScBase()
             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
             0
         };
-        static const int nDigits = (sizeof (pDigits)/sizeof(pDigits[0]))-1;
+        static const int nDigits = SAL_N_ELEMENTS(pDigits) - 1;
         sal_Int32 nMinLen;
         if ( nParamCount == 3 )
         {
@@ -2740,7 +2740,7 @@ void ScInterpreter::ScRoman()
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
             static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-            static const sal_uInt16 nMaxIndex = (sal_uInt16)((sizeof(pValues)/sizeof(pValues[0])) - 1);
+            static const sal_uInt16 nMaxIndex = (sal_uInt16)(SAL_N_ELEMENTS(pValues) - 1);
 
             OUString aRoman;
             sal_uInt16 nVal = (sal_uInt16) fVal;
@@ -2990,7 +2990,7 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
         { "LTL", 3.45280,  2 }
     };
 
-    static const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
+    static const size_t nConversionCount = SAL_N_ELEMENTS( aConvertTable );
     for ( size_t i = 0; i < nConversionCount; ++i )
         if ( aSearchUnit.equalsIgnoreAsciiCaseAscii( aConvertTable[i].pCurrText ) )
         {

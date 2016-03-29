@@ -3689,7 +3689,7 @@ void OReportController::listen(const bool _bAdd)
     const beans::Property* pIter = aSeq.getConstArray();
     const beans::Property* pEnd   = pIter + aSeq.getLength();
     const OUString* pPropsBegin = &aProps[0];
-    const OUString* pPropsEnd   = pPropsBegin + (sizeof(aProps)/sizeof(aProps[0])) - 3;
+    const OUString* pPropsEnd   = pPropsBegin + SAL_N_ELEMENTS(aProps) - 3;
     for(;pIter != pEnd;++pIter)
     {
         if ( ::std::find(pPropsBegin,pPropsEnd,pIter->Name) == pPropsEnd )
@@ -4079,7 +4079,7 @@ css::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  )
 {
     static const OUString s_sModes[] = { OUString("remote"),
                                           OUString("normal") };
-    return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
+    return uno::Sequence< OUString> (&s_sModes[0],SAL_N_ELEMENTS(s_sModes));
 }
 sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception)
 {

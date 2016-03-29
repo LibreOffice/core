@@ -85,7 +85,7 @@ SAL_WNOUNREACHABLE_CODE_POP
         OUString(FM_SUN_COMPONENT_IMAGECONTROL)
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
+    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
 
     ::com::sun::star::uno::Sequence< OUString > aSeq( nSvxComponentServiceNameListCount );
     OUString* pStrings = aSeq.getArray();

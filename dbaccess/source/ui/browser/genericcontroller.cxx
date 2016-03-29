@@ -1153,11 +1153,11 @@ namespace
                     "com.sun.star.formula.FormularProperties", "smath",
                     "com.sun.star.chart.ChartDocument", "schart"
                 };
-                OSL_ENSURE( ( sizeof( pTransTable ) / sizeof( pTransTable[0] ) ) % 2 == 0,
+                OSL_ENSURE( SAL_N_ELEMENTS( pTransTable ) % 2 == 0,
                     "lcl_getModuleHelpModuleName: odd size of translation table!" );
 
                 // loop through the table
-                sal_Int32 nTableEntries = ( sizeof( pTransTable ) / sizeof( pTransTable[0] ) ) / 2;
+                sal_Int32 nTableEntries = SAL_N_ELEMENTS( pTransTable ) / 2;
                 const sal_Char** pDocumentService = pTransTable;
                 const sal_Char** pHelpModuleName = pTransTable + 1;
                 for ( sal_Int32 j=0; j<nTableEntries; ++j )

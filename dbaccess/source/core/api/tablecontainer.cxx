@@ -337,7 +337,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
                                                     , OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR)
                                                     , OUString(PROPERTY_TEXTLINECOLOR), OUString(PROPERTY_TEXTEMPHASIS)
                                                     , OUString(PROPERTY_TEXTRELIEF) };
-    Sequence< OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
+    Sequence< OUString> aNames(s_pTableProps, SAL_N_ELEMENTS(s_pTableProps));
     if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
         ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,true);
 

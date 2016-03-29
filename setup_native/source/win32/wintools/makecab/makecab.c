@@ -61,7 +61,7 @@ void cabLogErr(PERF erf, char * msg)
 
     if (erf->erfOper >= 0)
     {
-        if (erf->erfOper < (sizeof(FCI_ERRS)/sizeof(FCI_ERRS[0])))
+        if (erf->erfOper < SAL_N_ELEMENTS(FCI_ERRS))
             cabLog(CABLOG_ERR, "%s: %s", msg, FCI_ERRS[erf->erfOper]);
         else
             cabLog(CABLOG_ERR, "%s: Unknown error", msg);

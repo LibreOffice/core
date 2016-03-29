@@ -123,7 +123,7 @@ namespace
             "Plain Text"
         };
 
-        OSL_ENSURE( (sizeof (stiName) / sizeof (stiName[0])) == ww::stiMax, "WrongSizeOfArray" );
+        OSL_ENSURE( SAL_N_ELEMENTS(stiName) == ww::stiMax, "WrongSizeOfArray" );
 
         return stiName;
     }

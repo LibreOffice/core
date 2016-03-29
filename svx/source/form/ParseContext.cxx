@@ -132,7 +132,7 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
         InternationalKeyCode::Collect, InternationalKeyCode::Fusion, InternationalKeyCode::Intersection
     };
 
-    sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
+    sal_uInt32 nCount = SAL_N_ELEMENTS(Intl_TokenID);
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
         OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);

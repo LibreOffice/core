@@ -52,7 +52,7 @@ static const OUString aStringList[]=
     OUString( ".uno:AutoFormat" )
 };
 
-const sal_Int32 nDialogSize = sizeof (aStringList) / sizeof (aStringList[0]);
+const sal_Int32 nDialogSize = SAL_N_ELEMENTS(aStringList);
 
 OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )

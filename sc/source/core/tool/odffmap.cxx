@@ -142,7 +142,7 @@ const ScCompiler::AddInMap* ScCompiler::GetAddInMap()
 
 size_t ScCompiler::GetAddInMapCount()
 {
-    return sizeof(maAddInMap)/sizeof(maAddInMap[0]);
+    return SAL_N_ELEMENTS(maAddInMap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -313,8 +313,7 @@ static char const*const g_ServicesParagraph[] =
     "com.sun.star.style.ParagraphPropertiesComplex",
 };
 
-static const size_t g_nServicesParagraph(
-    sizeof(g_ServicesParagraph)/sizeof(g_ServicesParagraph[0]));
+static const size_t g_nServicesParagraph(SAL_N_ELEMENTS(g_ServicesParagraph));
 
 sal_Bool SAL_CALL
 SwXParagraph::supportsService(const OUString& rServiceName)
