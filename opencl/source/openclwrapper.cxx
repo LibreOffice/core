@@ -38,7 +38,7 @@
 #elif defined(MACOSX)
 #define OPENCL_DLL_NAME nullptr
 #else
-#define OPENCL_DLL_NAME "libOpenCL.so"
+#define OPENCL_DLL_NAME "libOpenCL.so.1"
 #endif
 
 #define DEVICE_NAME_LENGTH 1024
