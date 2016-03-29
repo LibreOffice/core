@@ -626,9 +626,6 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
         }
         else
         {
-            if( USHRT_MAX == nDist )
-                nDist = aBoxItem.GetDistance( nLine );
-
             nDist = 0U;
         }
 
