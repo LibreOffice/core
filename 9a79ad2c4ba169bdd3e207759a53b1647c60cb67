@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_1535af45",
+        "filename": "sc/source/ui/unoobj/textuno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-29T10:37:55Z",
+      "side": 1,
+      "message": "Which compiler complained about not having a default case here? All three defined enums are handled. GetPart() theoretically *might* return an undefined non-enum integer value and as such a default *might* be needed, but I\u0027m curious..\n\nnitpick: in such cases I\u0027d rather do something like this:\n\n default:\n     assert(!\"unexpected value\");\n     // fall through\n case ScHeaderFooterPart::RIGHT:\n     ...\n\nso that a debug/dbgutil build actually would stumble about an unexpected behavior and bail out. Note that a comment like \"// fall through\" is needed between a statement and the next case to make some static code analyzers not complain about a missing break statement.",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 58
+      },
+      "revId": "9a79ad2c4ba169bdd3e207759a53b1647c60cb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
