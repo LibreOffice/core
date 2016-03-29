@@ -1147,6 +1147,7 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
 
 #endif
 
+#if HAVE_FEATURE_OPENGL
 OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
     : pHandle( nullptr )
 {
@@ -1182,5 +1183,6 @@ OutputDevice::PaintScope::~PaintScope()
 {
     flush();
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
