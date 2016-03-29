@@ -47,10 +47,6 @@
 #include <sfx2/frame.hxx>
 #include <macroloader.hxx>
 
-
-#define MACRO_PRFIX         "macro://"
-#define MACRO_POSTFIX       "()"
-
 using namespace css;
 
 
@@ -458,10 +454,10 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         }
         else if ( !aMacroName.isEmpty() )
         {
-            aScript = MACRO_PRFIX;
+            aScript = "macro://";
             if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
                 aScript += ".";
-            aScript += "/" + aMacroName + MACRO_POSTFIX;
+            aScript += "/" + aMacroName + "()";
         }
         else
             // wrong properties
