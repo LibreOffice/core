@@ -565,7 +565,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
 namespace
 {
-    static void appendDigits( sal_Int32 _nNumber, sal_Int8 nDigits, OUStringBuffer& _rOut )
+    void appendDigits( sal_Int32 _nNumber, sal_Int8 nDigits, OUStringBuffer& _rOut )
     {
         sal_Int32 nCurLen = _rOut.getLength();
         _rOut.append( _nNumber );

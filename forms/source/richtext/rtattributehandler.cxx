@@ -96,7 +96,7 @@ namespace frm
 
     namespace
     {
-        static WhichId lcl_implGetWhich( const SfxItemPool& _rPool, AttributeId _nAttributeId )
+        WhichId lcl_implGetWhich( const SfxItemPool& _rPool, AttributeId _nAttributeId )
         {
             WhichId nWhich = 0;
             switch ( _nAttributeId )

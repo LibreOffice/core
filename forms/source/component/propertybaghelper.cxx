@@ -63,7 +63,7 @@ namespace frm
     namespace
     {
 
-        static ::comphelper::IPropertyInfoService& lcl_getPropertyInfos()
+        ::comphelper::IPropertyInfoService& lcl_getPropertyInfos()
         {
             static ConcreteInfoService s_aPropInfos;
             return s_aPropInfos;

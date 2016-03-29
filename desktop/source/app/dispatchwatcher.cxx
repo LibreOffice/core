@@ -126,7 +126,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const rtl::OUStr
     return pBestMatch;
 }
 
-static std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
+std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
         const rtl::OUString& rUrl, const rtl::OUString& rFactory)
 {
 try
