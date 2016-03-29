@@ -19,10 +19,25 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 
+std::map<WindowType, FactoryFunction> UITestWrapperFactory::aFactoryMap;
+
+void registerUITestFactory(WindowType eType, FactoryFunction aFactory)
+{
+    UITestWrapperFactory::aFactoryMap.insert(std::pair<WindowType, FactoryFunction>(eType, aFactory));
+}
+
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
 {
     if (!pWindow)
         return nullptr;
+
+    auto itr = aFactoryMap.find(pWindow->GetType());
+    if (itr != aFactoryMap.end())
+    {
+        std::unique_ptr<UIObject> pObj = itr->second(pWindow);
+        if (pObj)
+            return pObj;
+    }
 
     switch (pWindow->GetType())
     {
