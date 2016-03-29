@@ -7,15 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/uitest/factory.hxx>
+#include <vcl/dllapi.h>
 
 #include <tools/wintypes.hxx>
 
 #include <memory>
-#include <map>
+#include <functional>
 
-namespace vcl
-{
+namespace vcl {
 
 class Window;
 
@@ -23,12 +22,8 @@ class Window;
 
 class UIObject;
 
-class UITestWrapperFactory
-{
-public:
-    static std::unique_ptr<UIObject> createObject(vcl::Window* pWindow);
+typedef std::function<std::unique_ptr<UIObject>(vcl::Window*)> FactoryFunction;
 
-    static std::map<WindowType, FactoryFunction> aFactoryMap;
-};
+void UITEST_DLLPUBLIC registerUITestFactory(WindowType eType, FactoryFunction aFactory);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
