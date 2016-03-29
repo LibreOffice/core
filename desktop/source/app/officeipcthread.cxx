@@ -368,6 +368,23 @@ throw( RuntimeException, std::exception )
 {
 }
 
+class PipeReaderThread: public salhelper::Thread {
+public:
+    PipeReaderThread(OfficeIPCThread & ipc, osl::Pipe const & pipe):
+        Thread("PipeReader"), ipc_(ipc), pipe_(pipe)
+    {}
+
+    void close() { pipe_.close(); }
+
+private:
+    virtual ~PipeReaderThread() {}
+
+    void execute() override;
+
+    OfficeIPCThread & ipc_;
+    osl::Pipe pipe_;
+};
+
 namespace
 {
     class theOfficeIPCThreadMutex
@@ -439,7 +456,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     OUString aUserInstallPath;
     OUString aDummy;
 
-    rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
+    osl::Pipe pipe;
 
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
 
@@ -525,14 +542,14 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             osl::Security security;
 
             // Try to create pipe
-            if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, security ))
+            if ( pipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, security ))
             {
                 // Pipe created
                 nPipeMode = PIPEMODE_CREATED;
             }
-            else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, security )) // Creation not successful, now we try to connect
+            else if( pipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, security )) // Creation not successful, now we try to connect
             {
-                osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
+                osl::StreamPipe aStreamPipe(pipe.getHandle());
                 if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
                 {
                     // Pipe connected to first office
@@ -549,7 +566,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
             else
             {
-                oslPipeError eReason = pThread->maPipe.getError();
+                oslPipeError eReason = pipe.getError();
                 if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
                     return IPC_STATUS_PIPE_ERROR;
 
@@ -567,13 +584,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if ( nPipeMode == PIPEMODE_CREATED )
     {
         // Seems we are the one and only, so start listening thread
+        rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
+        pThread->mPipeReaderThread = new PipeReaderThread(*pThread, pipe);
         pGlobalOfficeIPCThread = pThread;
-        pThread->launch();
+        pThread->mPipeReaderThread->launch();
     }
     else
     {
         // Seems another office is running. Pipe arguments to it and self terminate
-        osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
+        osl::StreamPipe aStreamPipe(pipe.getHandle());
 
         OStringBuffer aArguments(ARGUMENT_PREFIX);
         OUString cwdUrl;
@@ -610,7 +629,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 #else
     rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
     pGlobalOfficeIPCThread = pThread;
-    pThread->launch();
 #endif
     return IPC_STATUS_OK;
 }
@@ -626,7 +644,9 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
         pGlobalOfficeIPCThread.clear();
 
         pOfficeIPCThread->mState = State::Downing;
-        pOfficeIPCThread->maPipe.close();
+        if (pOfficeIPCThread->mPipeReaderThread.is()) {
+            pOfficeIPCThread->mPipeReaderThread->close();
+        }
 
         // release mutex to avoid deadlocks
         aMutex.clear();
@@ -634,15 +654,15 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
         pOfficeIPCThread->cReady.set();
 
         // exit gracefully and join
-        if (join)
+        if (join && pOfficeIPCThread->mPipeReaderThread.is())
         {
-            pOfficeIPCThread->join();
+            pOfficeIPCThread->mPipeReaderThread->join();
+            pOfficeIPCThread->mPipeReaderThread.clear();
         }
     }
 }
 
 OfficeIPCThread::OfficeIPCThread() :
-    Thread( "OfficeIPCThread" ),
     mState( State::Starting ),
     mnPendingRequests( 0 )
 {
@@ -650,6 +670,7 @@ OfficeIPCThread::OfficeIPCThread() :
 
 OfficeIPCThread::~OfficeIPCThread()
 {
+    assert(!mPipeReaderThread.is());
 }
 
 void OfficeIPCThread::SetReady()
@@ -680,7 +701,7 @@ bool OfficeIPCThread::IsEnabled()
     return pGlobalOfficeIPCThread.is();
 }
 
-void OfficeIPCThread::execute()
+void PipeReaderThread::execute()
 {
 #if HAVE_FEATURE_DESKTOP
 
@@ -690,7 +711,7 @@ void OfficeIPCThread::execute()
     do
     {
         osl::StreamPipe aStreamPipe;
-        oslPipeError nError = maPipe.accept( aStreamPipe );
+        oslPipeError nError = pipe_.accept( aStreamPipe );
 
 
         if( nError == osl_Pipe_E_None )
@@ -699,16 +720,16 @@ void OfficeIPCThread::execute()
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
             // only requests that don't dispatch events may be processed before cReady is set.
-            cReady.wait();
+            ipc_.cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!pGlobalOfficeIPCThread.is()) return;
+            if (!ipc_.pGlobalOfficeIPCThread.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
-            osl::ClearableMutexGuard aGuard( GetMutex() );
+            osl::ClearableMutexGuard aGuard( OfficeIPCThread::GetMutex() );
 
-            if ( mState == State::Downing )
+            if ( ipc_.mState == OfficeIPCThread::State::Downing )
             {
                 break;
             }
@@ -791,8 +812,8 @@ void OfficeIPCThread::execute()
 
                 ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
                     aCmdLineArgs->getCwdUrl());
-                cProcessed.reset();
-                pRequest->pcProcessed = &cProcessed;
+                ipc_.cProcessed.reset();
+                pRequest->pcProcessed = &ipc_.cProcessed;
 
                 // Print requests are not dependent on the --invisible cmdline argument as they are
                 // loaded with the "hidden" flag! So they are always checked.
@@ -933,7 +954,7 @@ void OfficeIPCThread::execute()
             aGuard.clear();
             // wait for processing to finish
             if (bDocRequestSent)
-                cProcessed.wait();
+                ipc_.cProcessed.wait();
             // processing finished, inform the requesting end:
             n = aStreamPipe.write(
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
@@ -946,8 +967,8 @@ void OfficeIPCThread::execute()
         else
         {
             {
-                osl::MutexGuard aGuard( GetMutex() );
-                if ( mState == State::Downing )
+                osl::MutexGuard aGuard( OfficeIPCThread::GetMutex() );
+                if ( ipc_.mState == OfficeIPCThread::State::Downing )
                 {
                     break;
                 }

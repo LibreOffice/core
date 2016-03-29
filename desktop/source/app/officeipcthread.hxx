@@ -67,17 +67,21 @@ struct ProcessDocumentsRequest
 };
 
 class DispatchWatcher;
-class OfficeIPCThread : public salhelper::Thread
+class PipeReaderThread;
+
+class OfficeIPCThread: public salhelper::SimpleReferenceObject
 {
+    friend PipeReaderThread;
+
   private:
     static rtl::Reference< OfficeIPCThread > pGlobalOfficeIPCThread;
 
     enum class State { Starting, RequestsEnabled, Downing };
 
-    osl::Pipe                   maPipe;
     State                       mState;
     int                         mnPendingRequests;
     rtl::Reference<DispatchWatcher> mpDispatchWatcher;
+    rtl::Reference<PipeReaderThread> mPipeReaderThread;
 
     /* condition to be set when the request has been processed */
     ::osl::Condition cProcessed;
@@ -92,9 +96,6 @@ class OfficeIPCThread : public salhelper::Thread
     OfficeIPCThread();
 
     virtual ~OfficeIPCThread();
-
-    /// Working method which should be overridden
-    virtual void execute() override;
 
   public:
     enum Status
