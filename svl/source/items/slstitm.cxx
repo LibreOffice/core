@@ -226,7 +226,7 @@ OUString SfxStringListItem::GetString()
     {
         DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
 
-        std::vector<OUString>::iterator iter = pImp->aList.begin();
+        std::vector<OUString>::const_iterator iter = pImp->aList.begin();
         for (;;)
         {
             aStr += *iter;

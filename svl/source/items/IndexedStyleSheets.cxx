@@ -170,7 +170,7 @@ IndexedStyleSheets::GetNthStyleSheetThatMatchesPredicate(
 {
     rtl::Reference<SfxStyleSheetBase> retval;
     unsigned matching = 0;
-    for (VectorType::iterator it = mStyleSheets.begin()+startAt; it != mStyleSheets.end(); ++it) {
+    for (VectorType::const_iterator it = mStyleSheets.begin()+startAt; it != mStyleSheets.end(); ++it) {
         SfxStyleSheetBase *ssheet = it->get();
         if (predicate.Check(*ssheet)) {
             if (matching == n) {

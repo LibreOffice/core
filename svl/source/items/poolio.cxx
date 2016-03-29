@@ -183,7 +183,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         {
             pImp->bInSetItem = ft != 0;
 
-            std::vector<SfxPoolItemArray_Impl*>::iterator itrArr = pImp->maPoolItems.begin();
+            std::vector<SfxPoolItemArray_Impl*>::const_iterator itrArr = pImp->maPoolItems.begin();
             SfxPoolItem **ppDefItem = pImp->ppStaticDefaults;
             const sal_uInt16 nSize = GetSize_Impl();
             for ( size_t i = 0; i < nSize && !rStream.GetError(); ++i, ++itrArr, ++ppDefItem )
@@ -312,7 +312,7 @@ void SfxItemPool::LoadCompleted()
     if ( pImp->nInitRefCount > 1 )
     {
         // Iterate over all Which values
-        std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImp->maPoolItems.begin();
+        std::vector<SfxPoolItemArray_Impl*>::const_iterator itrItemArr = pImp->maPoolItems.begin();
         for( sal_uInt16 nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++itrItemArr )
         {
             // Is there an item with the Which value present at all?
@@ -470,13 +470,13 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     {
 
         // Iterate over all Which values
-        std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImp->maPoolItems.begin();
+        std::vector<SfxPoolItemArray_Impl*>::const_iterator itrItemArr = pImp->maPoolItems.begin();
         for( size_t nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++itrItemArr )
         {
             // Is there an Item with that Which value present at all?
             if ( *itrItemArr )
             {
-                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
+                SfxPoolItemArrayBase_Impl::const_iterator ppHtArr = (*itrItemArr)->begin();
                 for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {

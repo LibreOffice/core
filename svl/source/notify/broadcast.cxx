@@ -79,7 +79,7 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     if (mbAboutToDie)
         Normalize();
 
-    ListenersType::iterator dest(maDestructedListeners.begin());
+    ListenersType::const_iterator dest(maDestructedListeners.begin());
     for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
         bool bStart = true;
@@ -108,7 +108,7 @@ SvtBroadcaster::~SvtBroadcaster()
     // now when both lists are sorted, we can linearly unregister all
     // listeners, with the exception of those that already asked to be removed
     // during their own destruction
-    ListenersType::iterator dest(maDestructedListeners.begin());
+    ListenersType::const_iterator dest(maDestructedListeners.begin());
     for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
         // skip the destructed ones
@@ -124,7 +124,7 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
     Normalize();
 
-    ListenersType::iterator dest(maDestructedListeners.begin());
+    ListenersType::const_iterator dest(maDestructedListeners.begin());
     ListenersType aListeners(maListeners); // this copy is important to avoid erasing entries while iterating
     for (ListenersType::iterator it(aListeners.begin()); it != aListeners.end(); ++it)
     {

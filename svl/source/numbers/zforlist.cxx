@@ -884,7 +884,7 @@ sal_uInt32 SvNumberFormatter::ImpIsEntry(const OUString& rString,
                                          LanguageType eLnge)
 {
     sal_uInt32 res = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    SvNumberFormatTable::iterator it = aFTable.find( nCLOffset);
+    SvNumberFormatTable::const_iterator it = aFTable.find( nCLOffset);
     while ( res == NUMBERFORMAT_ENTRY_NOT_FOUND &&
             it != aFTable.end() && it->second->GetLanguage() == eLnge )
     {
@@ -1233,7 +1233,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         nSearch = CLOffset + ZF_STANDARD;
     }
 
-    DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find( nSearch);
+    DefaultFormatKeysMap::const_iterator it = aDefaultFormatKeys.find( nSearch);
     sal_uInt32 nDefaultFormat = (it != aDefaultFormatKeys.end() ?
                                  it->second : NUMBERFORMAT_ENTRY_NOT_FOUND);
     if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -1241,7 +1241,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         // look for a defined standard
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
         sal_uInt32 nKey(0);
-        SvNumberFormatTable::iterator it2 = aFTable.find( CLOffset );
+        SvNumberFormatTable::const_iterator it2 = aFTable.find( CLOffset );
         while ( it2 != aFTable.end() && (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
@@ -2196,7 +2196,7 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
 
 SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey )
 {
-    SvNumberFormatTable::iterator it = aFTable.find( nKey);
+    SvNumberFormatTable::const_iterator it = aFTable.find( nKey);
     if (it != aFTable.end())
         return it->second;
     return nullptr;
@@ -3010,7 +3010,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
     sal_uInt32 nOldKey, nOffset, nNewKey;
     SvNumberformat* pNewEntry;
 
-    SvNumberFormatTable::iterator it = rTable.aFTable.begin();
+    SvNumberFormatTable::const_iterator it = rTable.aFTable.begin();
     while (it != rTable.aFTable.end())
     {
         SvNumberformat* pFormat = it->second;
@@ -3087,7 +3087,7 @@ SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
         return SvNumberFormatterMergeMap();
     }
     SvNumberFormatterMergeMap aMap;
-    for (SvNumberFormatterIndexTable::iterator it = pMergeTable->begin(); it != pMergeTable->end(); ++it)
+    for (SvNumberFormatterIndexTable::const_iterator it = pMergeTable->begin(); it != pMergeTable->end(); ++it)
     {
         sal_uInt32 nOldKey = it->first;
         aMap[ nOldKey ] = it->second;
@@ -3358,7 +3358,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 {
     sal_uInt32 CLOffset = ImpGetCLOffset( ActLnge );
-    DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find( CLOffset + ZF_STANDARD_CURRENCY );
+    DefaultFormatKeysMap::const_iterator it = aDefaultFormatKeys.find( CLOffset + ZF_STANDARD_CURRENCY );
     sal_uInt32 nDefaultCurrencyFormat = (it != aDefaultFormatKeys.end() ?
             it->second : NUMBERFORMAT_ENTRY_NOT_FOUND);
     if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -3366,7 +3366,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
         // look for a defined standard
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
         sal_uInt32 nKey(0);
-        SvNumberFormatTable::iterator it2 = aFTable.lower_bound( CLOffset );
+        SvNumberFormatTable::const_iterator it2 = aFTable.lower_bound( CLOffset );
         while ( it2 != aFTable.end() && (nKey = it2->first) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
@@ -3950,7 +3950,7 @@ sal_uInt32 SvNumberFormatter::GetMergeFormatIndex( sal_uInt32 nOldFmt ) const
 {
     if (pMergeTable)
     {
-        SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
+        SvNumberFormatterIndexTable::const_iterator it = pMergeTable->find(nOldFmt);
         if (it != pMergeTable->end())
         {
             return it->second;

@@ -85,7 +85,7 @@ SharedString SharedStringPool::intern( const OUString& rStr )
     if (!aRes.second)
     {
         // No new string has been inserted. Return the existing string in the pool.
-        StrStoreType::iterator it = mpImpl->maStrStore.find(pOrig);
+        StrStoreType::const_iterator it = mpImpl->maStrStore.find(pOrig);
         if (it == mpImpl->maStrStore.end())
             return SharedString();
 
