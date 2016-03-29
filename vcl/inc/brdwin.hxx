@@ -20,13 +20,13 @@
 #ifndef INCLUDED_VCL_INC_BRDWIN_HXX
 #define INCLUDED_VCL_INC_BRDWIN_HXX
 
+#include <vcl/notebookbar.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
 class ImplBorderWindowView;
 enum class DrawButtonFlags;
-class NotebookBarWindow;
 
 #define BORDERWINDOW_STYLE_OVERLAP          ((sal_uInt16)0x0001)
 #define BORDERWINDOW_STYLE_BORDER           ((sal_uInt16)0x0002)
@@ -88,7 +88,7 @@ class ImplBorderWindow : public vcl::Window
 private:
     ImplBorderWindowView*   mpBorderView;
     VclPtr<vcl::Window>     mpMenuBarWindow;
-    VclPtr<NotebookBarWindow> mpNotebookBarWindow;
+    VclPtr<NotebookBar>     mpNotebookBar;
     long                    mnMinWidth;
     long                    mnMinHeight;
     long                    mnMaxWidth;
@@ -162,7 +162,8 @@ public:
     void                    SetMenuBarWindow( vcl::Window* pWindow );
     void                    SetMenuBarMode( bool bHide );
 
-    VclPtr<vcl::Window>     CreateNotebookBarWindow(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    void                    SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    VclPtr<NotebookBar>     GetNotebookBar() const { return mpNotebookBar; }
 
     void                    SetMinOutputSize( long nWidth, long nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }

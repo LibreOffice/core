@@ -170,7 +170,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/mouse \
     vcl/source/window/mouseevent \
     vcl/source/window/msgbox \
-    vcl/source/window/notebookbarwindow \
     vcl/source/window/popupmenuwindow \
     vcl/source/window/printdlg \
     vcl/source/window/scrwnd \
@@ -205,6 +204,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/listbox \
     vcl/source/control/menubtn \
     vcl/source/control/morebtn \
+    vcl/source/control/notebookbar \
     vcl/source/control/quickselectionengine \
     vcl/source/control/prgsbar \
     vcl/source/control/scrbar \

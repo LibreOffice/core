@@ -23,12 +23,12 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
-#include <vcl/window.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/notebookbar.hxx>
+#include <vcl/window.hxx>
 
 class ModalDialog;
 class MenuBar;
-class NotebookBarWindow;
 class TaskPaneList;
 class VclContainer;
 
@@ -153,6 +153,7 @@ private:
     sal_uInt16      mnIcon;
     ImplData*       mpImplData;
     Idle            maLayoutIdle;
+    OUString        maNotebookBarUIFile;
 protected:
     bool            mbIsDefferedInit;
     VclPtr<vcl::Window> mpDialogParent;
@@ -227,7 +228,8 @@ public:
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
 
-    VclPtr<vcl::Window> CreateNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    void            SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    VclPtr<NotebookBar> GetNotebookBar() const;
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;

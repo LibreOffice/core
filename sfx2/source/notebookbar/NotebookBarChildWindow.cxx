@@ -23,9 +23,10 @@ NotebookBarChildWindow::NotebookBarChildWindow (vcl::Window* pParentWindow, sal_
     : SfxChildWindow(pParentWindow, nId)
 {
     SfxFrame& rFrame = pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame();
-    VclPtr<vcl::Window> pNotebookBarWindow = rFrame.GetSystemWindow()->CreateNotebookBar("vcl/ui/notebookbar.ui", rFrame.GetFrameInterface());
+    rFrame.GetSystemWindow()->SetNotebookBar("vcl/ui/notebookbar.ui", rFrame.GetFrameInterface());
 
-    pNotebookBarWindow->SetHelpId(HID_NOTEBOOKBAR_WINDOW);
+    VclPtr<NotebookBar> pNotebookBar(rFrame.GetSystemWindow()->GetNotebookBar());
+    pNotebookBar->SetHelpId(HID_NOTEBOOKBAR_WINDOW);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

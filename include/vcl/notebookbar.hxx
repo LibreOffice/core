@@ -7,20 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_SOURCE_WINDOW_NOTEBOOKBARWINDOW_HXX
-#define VCL_SOURCE_WINDOW_NOTEBOOKBARWINDOW_HXX
-
-#include "menuwindow.hxx"
+#ifndef INCLUDED_VCL_NOTEBOOKBAR_HXX
+#define INCLUDED_VCL_NOTEBOOKBAR_HXX
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
 
 /// This implements Widget Layout-based notebook-like menu bar.
-class NotebookBarWindow : public Control, public VclBuilderContainer
+class NotebookBar : public Control, public VclBuilderContainer
 {
 public:
-    NotebookBarWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
-    virtual ~NotebookBarWindow();
+    NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
+    virtual ~NotebookBar();
     virtual void dispose() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -29,6 +27,6 @@ public:
     virtual void StateChanged(StateChangedType nType) override;
 };
 
-#endif // VCL_SOURCE_WINDOW_NOTEBOOKBARWINDOW_HXX
+#endif // INCLUDED_VCL_NOTEBOOKBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

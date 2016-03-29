@@ -7,29 +7,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "notebookbarwindow.hxx"
-
 #include <vcl/layout.hxx>
+#include <vcl/notebookbar.hxx>
 
-NotebookBarWindow::NotebookBarWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
+NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
 }
 
-NotebookBarWindow::~NotebookBarWindow()
+NotebookBar::~NotebookBar()
 {
     disposeOnce();
 }
 
-void NotebookBarWindow::dispose()
+void NotebookBar::dispose()
 {
     disposeBuilder();
     Control::dispose();
 }
 
-Size NotebookBarWindow::GetOptimalSize() const
+Size NotebookBar::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
         return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
@@ -37,7 +36,7 @@ Size NotebookBarWindow::GetOptimalSize() const
     return Control::GetOptimalSize();
 }
 
-void NotebookBarWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
+void NotebookBar::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
 {
     bool bCanHandleSmallerWidth = false;
     bool bCanHandleSmallerHeight = false;
@@ -66,7 +65,7 @@ void NotebookBarWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHei
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
-void NotebookBarWindow::StateChanged(StateChangedType nType)
+void NotebookBar::StateChanged(StateChangedType nType)
 {
     if (nType == StateChangedType::Visible)
     {

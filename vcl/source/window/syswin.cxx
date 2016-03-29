@@ -39,8 +39,6 @@
 #include <brdwin.hxx>
 #include <window.h>
 
-#include "notebookbarwindow.hxx"
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
@@ -940,9 +938,18 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     }
 }
 
-VclPtr<vcl::Window> SystemWindow::CreateNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
+void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
-    return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->CreateNotebookBarWindow(rUIXMLDescription, rFrame);
+    if (rUIXMLDescription != maNotebookBarUIFile)
+    {
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBar(rUIXMLDescription, rFrame);
+        maNotebookBarUIFile = rUIXMLDescription;
+    }
+}
+
+VclPtr<NotebookBar> SystemWindow::GetNotebookBar() const
+{
+    return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetNotebookBar();
 }
 
 void SystemWindow::SetMenuBarMode( MenuBarMode nMode )
