@@ -1246,9 +1246,9 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             {
                 SwMultiPortion* pTmp = nullptr;
 
-                if ( SW_MC_BIDI == pCreate->nId )
+                if ( SwMultiCreatorId::Bidi == pCreate->nId )
                     pTmp = new SwBidiPortion( nEnd, pCreate->nLevel );
-                else if ( SW_MC_RUBY == pCreate->nId )
+                else if ( SwMultiCreatorId::Ruby == pCreate->nId )
                 {
                     Seek( rInf.GetIdx() );
                     bool bRubyTop = false;
@@ -1269,7 +1269,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                                               *GetTextFrame()->GetTextNode()->getIDocumentSettingAccess(),
                                               nEnd, 0, pRubyPos );
                 }
-                else if( SW_MC_ROTATE == pCreate->nId )
+                else if( SwMultiCreatorId::Rotate == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
                                                  GetTextFrame()->IsRightToLeft() );
                 else
