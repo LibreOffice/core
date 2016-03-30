@@ -12,7 +12,7 @@
 
 class SfxTabDialog;
 
-class SfxTabDialogUIObject : public UIObject
+class SfxTabDialogUIObject : public WindowUIObject
 {
 private:
 
