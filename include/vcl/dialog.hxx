@@ -96,6 +96,8 @@ public:
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
 
+    virtual FactoryFunction GetUITestFactory() const;
+
     // Dialog::Execute replacement API
 public:
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl );

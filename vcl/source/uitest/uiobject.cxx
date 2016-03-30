@@ -8,7 +8,6 @@
  */
 
 #include "uitest/uiobject_impl.hxx"
-#include "uitest/factory.hxx"
 
 #include <vcl/event.hxx>
 #include <vcl/tabpage.hxx>
@@ -247,7 +246,8 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
     vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
     vcl::Window* pWindow = findChild(pDialogParent, rID);
 
-    return UITestWrapperFactory::createObject(pWindow);
+    FactoryFunction aFunction = pWindow->GetUITestFactory();
+    return aFunction(pWindow);
 }
 
 OUString WindowUIObject::get_name() const
@@ -270,9 +270,8 @@ void WindowUIObject::dumpState() const
     for (size_t i = 0; i < nCount; ++i)
     {
         vcl::Window* pChild = mxWindow->GetChild(i);
-        // TODO: moggi: we need to go through a factory for the new objects
         std::unique_ptr<UIObject> pChildWrapper =
-            UITestWrapperFactory::createObject(pChild);
+            pChild->GetUITestFactory()(pChild);
         pChildWrapper->dumpState();
     }
 }
@@ -281,8 +280,13 @@ void WindowUIObject::dumpHierarchy() const
 {
     vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
     std::unique_ptr<UIObject> pParentWrapper =
-        UITestWrapperFactory::createObject(pDialogParent);
+        pDialogParent->GetUITestFactory()(pDialogParent);
     pParentWrapper->dumpState();
+}
+
+std::unique_ptr<UIObject> WindowUIObject::create(vcl::Window* pWindow)
+{
+    return std::unique_ptr<UIObject>(new WindowUIObject(pWindow));
 }
 
 ButtonUIObject::ButtonUIObject(VclPtr<Button> xButton):
@@ -319,6 +323,13 @@ OUString ButtonUIObject::get_name() const
     return OUString("ButtonUIObject");
 }
 
+std::unique_ptr<UIObject> ButtonUIObject::create(vcl::Window* pWindow)
+{
+    Button* pButton = dynamic_cast<Button*>(pWindow);
+    assert(pButton);
+    return std::unique_ptr<UIObject>(new ButtonUIObject(pButton));
+}
+
 DialogUIObject::DialogUIObject(VclPtr<Dialog> xDialog):
     WindowUIObject(xDialog),
     mxDialog(xDialog)
@@ -341,6 +352,13 @@ OUString DialogUIObject::get_name() const
 UIObjectType DialogUIObject::get_type() const
 {
     return UIObjectType::DIALOG;
+}
+
+std::unique_ptr<UIObject> DialogUIObject::create(vcl::Window* pWindow)
+{
+    Dialog* pDialog = dynamic_cast<Dialog*>(pWindow);
+    assert(pDialog);
+    return std::unique_ptr<UIObject>(new DialogUIObject(pDialog));
 }
 
 EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
@@ -410,6 +428,13 @@ OUString EditUIObject::get_name() const
     return OUString("EditUIObject");
 }
 
+std::unique_ptr<UIObject> EditUIObject::create(vcl::Window* pWindow)
+{
+    Edit* pEdit = dynamic_cast<Edit*>(pWindow);
+    assert(pEdit);
+    return std::unique_ptr<UIObject>(new EditUIObject(pEdit));
+}
+
 CheckBoxUIObject::CheckBoxUIObject(VclPtr<CheckBox> xCheckbox):
     WindowUIObject(xCheckbox),
     mxCheckBox(xCheckbox)
@@ -442,6 +467,13 @@ UIObjectType CheckBoxUIObject::get_type() const
 OUString CheckBoxUIObject::get_name() const
 {
     return OUString("CheckBoxUIObject");
+}
+
+std::unique_ptr<UIObject> CheckBoxUIObject::create(vcl::Window* pWindow)
+{
+    CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pWindow);
+    assert(pCheckBox);
+    return std::unique_ptr<UIObject>(new CheckBoxUIObject(pCheckBox));
 }
 
 TabPageUIObject::TabPageUIObject(VclPtr<TabPage> xTabPage):
@@ -529,6 +561,13 @@ OUString ListBoxUIObject::get_name() const
     return OUString("ListBoxUIObject");
 }
 
+std::unique_ptr<UIObject> ListBoxUIObject::create(vcl::Window* pWindow)
+{
+    ListBox* pListBox = dynamic_cast<ListBox*>(pWindow);
+    assert(pListBox);
+    return std::unique_ptr<UIObject>(new ListBoxUIObject(pListBox));
+}
+
 ComboBoxUIObject::ComboBoxUIObject(VclPtr<ComboBox> xComboBox):
     WindowUIObject(xComboBox),
     mxComboBox(xComboBox)
@@ -566,6 +605,13 @@ UIObjectType ComboBoxUIObject::get_type() const
 OUString ComboBoxUIObject::get_name() const
 {
     return OUString("ComboBoxUIObject");
+}
+
+std::unique_ptr<UIObject> ComboBoxUIObject::create(vcl::Window* pWindow)
+{
+    ComboBox* pComboBox = dynamic_cast<ComboBox*>(pWindow);
+    assert(pComboBox);
+    return std::unique_ptr<UIObject>(new ComboBoxUIObject(pComboBox));
 }
 
 SpinUIObject::SpinUIObject(VclPtr<SpinButton> xSpinButton):
@@ -641,6 +687,13 @@ UIObjectType SpinFieldUIObject::get_type() const
 OUString SpinFieldUIObject::get_name() const
 {
     return OUString("SpinFieldUIObject");
+}
+
+std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
+{
+    SpinField* pSpinField = dynamic_cast<SpinField*>(pWindow);
+    assert(pSpinField);
+    return std::unique_ptr<UIObject>(new SpinFieldUIObject(pSpinField));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

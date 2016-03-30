@@ -40,6 +40,8 @@ public:
 
     virtual void dumpHierarchy() const override;
 
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
 protected:
 
     virtual OUString get_name() const;
@@ -61,6 +63,8 @@ public:
 
     virtual UIObjectType get_type() const override;
 
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
 protected:
 
     virtual OUString get_name() const override;
@@ -77,6 +81,8 @@ public:
     virtual UIObjectType get_type() const override;
 
     virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
 
@@ -97,6 +103,8 @@ public:
     virtual StringMap get_state() override;
 
     virtual UIObjectType get_type() const override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
 
@@ -119,6 +127,8 @@ public:
 
     virtual UIObjectType get_type() const override;
 
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
 protected:
 
     virtual OUString get_name() const override;
@@ -136,8 +146,9 @@ public:
 
     virtual StringMap get_state() override;
 
-
     virtual UIObjectType get_type() const override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
 
@@ -159,6 +170,8 @@ public:
     virtual StringMap get_state() override;
 
     virtual UIObjectType get_type() const override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
 
@@ -182,6 +195,8 @@ public:
 
     virtual UIObjectType get_type() const override;
 
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
 protected:
 
     virtual OUString get_name() const override;
@@ -203,6 +218,8 @@ public:
 
     virtual UIObjectType get_type() const override;
 
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
 protected:
 
     virtual OUString get_name() const override;
@@ -222,6 +239,8 @@ public:
     virtual StringMap get_state() override;
 
     virtual UIObjectType get_type() const override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
 

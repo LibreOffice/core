@@ -37,13 +37,8 @@ UIObjectType SfxTabDialogUIObject::get_type() const
 std::unique_ptr<UIObject> SfxTabDialogUIObject::create(vcl::Window* pWindow)
 {
     SfxTabDialog* pDialog = dynamic_cast<SfxTabDialog*>(pWindow);
-
-    if (pDialog)
-    {
-        return std::unique_ptr<UIObject>(new SfxTabDialogUIObject(pDialog));
-    }
-
-    return nullptr;
+    assert(pDialog);
+    return std::unique_ptr<UIObject>(new SfxTabDialogUIObject(pDialog));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

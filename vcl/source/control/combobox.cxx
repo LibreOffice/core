@@ -29,6 +29,7 @@
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <uitest/uiobject_impl.hxx>
 
 #include <svdata.hxx>
 #include "listbox.hxx"
@@ -1567,6 +1568,11 @@ bool ComboBox::set_property(const OString &rKey, const OString &rValue)
     else
         return Control::set_property(rKey, rValue);
     return true;
+}
+
+FactoryFunction ComboBox::GetUITestFactory() const
+{
+    return ComboBoxUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

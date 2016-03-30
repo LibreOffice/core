@@ -96,6 +96,8 @@ public:
     /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
     virtual void        statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
+    virtual FactoryFunction GetUITestFactory() const;
+
 protected:
 
     /// Handler for click, in case we want the button to handle uno commands (.uno:Something).
@@ -474,8 +476,9 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
     virtual void ShowFocus(const Rectangle& rRect) override;
-};
 
+    virtual FactoryFunction GetUITestFactory() const override;
+};
 
 inline void CheckBox::Check( bool bCheck )
 {
