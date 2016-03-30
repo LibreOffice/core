@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_7c13335d",
+        "filename": "avmedia/source/framework/mediaplayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T11:15:30Z",
+      "side": 1,
+      "message": "this is ... non-obvious if it\u0027s correct.\n\ni *think* this is going to use this overload:\n\n    const SfxPoolItem*  Execute( sal_uInt16 nSlot,\n                                 SfxCallMode nCall,\n                                 const SfxPoolItem *pArg1, ... );\n\n\n\n... which means the \"0\" is a vararg parameter.\n\nso that means that 0L or 0 *actually* makes a difference here; see http://blog.regehr.org/archives/1303\n\nthe implementation assigns this to a \"const SfxPoolItem *pArg\" so we really don\u0027t want this to be a 32-bit \"int\" on 64-bit platforms.\n\nactually the \"0L\" is probably also wrong on 64-bit Windows, it should be \"OLL\" or better \"nullptr\".  i\u0027ll push a patch to do that.",
+      "revId": "1a5ce0594f80058f563901b1f7243aab35466313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5c10ef4e",
+        "filename": "basegfx/source/inc/hommatrixtemplate.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T11:15:30Z",
+      "side": 1,
+      "message": "this is a pointer, so should better be \"nullptr\"",
+      "revId": "1a5ce0594f80058f563901b1f7243aab35466313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_bc1dab68",
+        "filename": "basegfx/source/inc/hommatrixtemplate.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T11:15:30Z",
+      "side": 1,
+      "message": "nullptr",
+      "revId": "1a5ce0594f80058f563901b1f7243aab35466313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_9c1a676d",
+        "filename": "basegfx/source/inc/hommatrixtemplate.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T11:15:30Z",
+      "side": 1,
+      "message": "nullptr",
+      "revId": "1a5ce0594f80058f563901b1f7243aab35466313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_fc2563ae",
+        "filename": "basegfx/source/inc/hommatrixtemplate.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T11:15:30Z",
+      "side": 1,
+      "message": "nullptr",
+      "revId": "1a5ce0594f80058f563901b1f7243aab35466313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
