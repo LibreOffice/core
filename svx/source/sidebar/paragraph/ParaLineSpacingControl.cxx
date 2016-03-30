@@ -361,8 +361,8 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             break;
     }
 
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
-            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(
+            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
 }
 
 void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_Int32 eSpace, long lValue)
@@ -437,8 +437,8 @@ void ParaLineSpacingControl::ExecuteLineSpacing(sal_Int32 nEntry)
     else
         SetLineSpace(aSpacing, nEntry);
 
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
-            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(
+            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
 
     // close when the user used the buttons
     EndPopupMode();

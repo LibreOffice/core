@@ -280,8 +280,8 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
     if( ePage != PAGE_NONE )
     {
         SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, (sal_uInt16)ePage );
-        mpBindings->GetDispatcher()->Execute(
-        SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
+        mpBindings->GetDispatcher()->ExecuteList(SID_NAVIGATOR_PAGE,
+                SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
     }
 }
 
@@ -374,8 +374,9 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
             if( !aStr.isEmpty() )
             {
                 SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
-                mpBindings->GetDispatcher()->Execute(
-                    SID_NAVIGATOR_OBJECT, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
+                mpBindings->GetDispatcher()->ExecuteList(
+                    SID_NAVIGATOR_OBJECT,
+                    SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
                 //set sign variable
                 maTlbObjects->MarkCurEntry(aStr);
 

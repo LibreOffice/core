@@ -411,8 +411,8 @@ IMPL_LINK_TYPED( AnimationWindow, ClickGetObjectHdl, Button*, pBtn, void )
     // Code now in AddObj()
     SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
 
-    GetBindings().GetDispatcher()->Execute(
-        SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->ExecuteList(
+        SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_TYPED( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
@@ -494,8 +494,8 @@ IMPL_LINK_NOARG_TYPED(AnimationWindow, ClickCreateGroupHdl, Button*, void)
     // Code now in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
 
-    GetBindings().GetDispatcher()->Execute(
-        SID_ANIMATOR_CREATE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->ExecuteList(SID_ANIMATOR_CREATE,
+            SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED(AnimationWindow, ModifyBitmapHdl, Edit&, void)
@@ -693,8 +693,9 @@ bool AnimationWindow::Close()
     {
         SfxBoolItem aItem( SID_ANIMATION_OBJECTS, false );
 
-        GetBindings().GetDispatcher()->Execute(
-            SID_ANIMATION_OBJECTS, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->ExecuteList(
+            SID_ANIMATION_OBJECTS, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            { &aItem });
 
         SfxDockingWindow::Close();
 

@@ -270,8 +270,8 @@ void ScTabControl::Select()
     {
         // sheet for basic is 1-based
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
-        rDisp.Execute( SID_CURRENTTAB, SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                &aItem, nullptr );
+        rDisp.ExecuteList(SID_CURRENTTAB,
+                SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
     }
 
     SfxBindings& rBind = pViewData->GetBindings();

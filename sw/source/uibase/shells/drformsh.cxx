@@ -98,8 +98,9 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                         rTempView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON );
                         rTempView.StopShellTimer();
                         //issue a new command to insert the link
-                        rTempView.GetViewFrame()->GetDispatcher()->Execute(
-                                SID_HYPERLINK_SETLINK, SfxCallMode::ASYNCHRON, &rHLinkItem, 0);
+                        rTempView.GetViewFrame()->GetDispatcher()->ExecuteList(
+                                SID_HYPERLINK_SETLINK, SfxCallMode::ASYNCHRON,
+                                { &rHLinkItem });
                     }
                     else
                     {

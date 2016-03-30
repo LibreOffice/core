@@ -437,8 +437,8 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+            SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
 }
 
 
@@ -452,8 +452,8 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+            SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
 }
 
 
@@ -464,14 +464,14 @@ IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
     if(aCommand == UNO_FLIPHORIZONTAL)
     {
         SfxVoidItem aHoriItem(SID_FLIP_HORIZONTAL);
-        GetBindings()->GetDispatcher()->Execute(
-                SID_FLIP_HORIZONTAL, SfxCallMode::RECORD, &aHoriItem, 0L );
+        GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_HORIZONTAL,
+                SfxCallMode::RECORD, { &aHoriItem });
     }
     else if(aCommand == UNO_FLIPVERTICAL)
     {
         SfxVoidItem aVertItem(SID_FLIP_VERTICAL);
-        GetBindings()->GetDispatcher()->Execute(
-                SID_FLIP_VERTICAL, SfxCallMode::RECORD, &aVertItem, 0L );
+        GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_VERTICAL,
+                SfxCallMode::RECORD, { &aVertItem });
     }
 }
 
@@ -834,16 +834,20 @@ void PosSizePropertyPanel::executeSize()
             || nCombinedContext == CombinedEnumContext(Application_WriterVariants, Context_OLE)
             )
         {
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aWidthItem, &aHeightItem, &aPointItem, 0L );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+                SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
         }
         else
         {
             if ( (mpMtrWidth->IsValueModified()) && (mpMtrHeight->IsValueModified()))
-                GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aWidthItem, &aHeightItem, &aPointItem, 0L );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+                    SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
             else if( mpMtrWidth->IsValueModified())
-                GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aWidthItem, &aPointItem, 0L );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+                    SfxCallMode::RECORD, { &aWidthItem, &aPointItem });
             else if ( mpMtrHeight->IsValueModified())
-                GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aHeightItem, &aPointItem, 0L );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+                    SfxCallMode::RECORD, { &aHeightItem, &aPointItem });
         }
     }
 }
@@ -867,8 +871,8 @@ void PosSizePropertyPanel::executePosX()
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
-        GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aPosXItem, 0L );
+        GetBindings()->GetDispatcher()->ExecuteList(
+            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
     }
 }
 
@@ -889,8 +893,8 @@ void PosSizePropertyPanel::executePosY()
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
-        GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aPosYItem, 0L );
+        GetBindings()->GetDispatcher()->ExecuteList(
+            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
     }
 }
 

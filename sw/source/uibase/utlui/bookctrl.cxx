@@ -125,9 +125,9 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
             if( nCurrId != USHRT_MAX)
             {
                 SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );
-                SfxViewFrame::Current()->GetDispatcher()->Execute( FN_STAT_BOOKMARK,
+                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(FN_STAT_BOOKMARK,
                     SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
-                                        &aBookmark, 0L );
+                    { &aBookmark });
             }
         }
     }

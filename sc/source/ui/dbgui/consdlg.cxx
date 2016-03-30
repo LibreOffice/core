@@ -404,9 +404,9 @@ IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
 
             SetDispatcherLock( false );
             SwitchToDocument();
-            GetBindings().GetDispatcher()->Execute( SID_CONSOLIDATE,
+            GetBindings().GetDispatcher()->ExecuteList(SID_CONSOLIDATE,
                                       SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                      &aOutItem, 0L, 0L );
+                                      { &aOutItem });
             Close();
         }
         else

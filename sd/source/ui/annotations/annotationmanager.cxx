@@ -1002,19 +1002,22 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     case SID_REPLYTO_POSTIT:
     {
         const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( xAnnotation ) );
-        pDispatcher->Execute( SID_REPLYTO_POSTIT, SfxCallMode::ASYNCHRON, &aItem, 0 );
+        pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
+                SfxCallMode::ASYNCHRON, { &aItem });
         break;
     }
     case SID_DELETE_POSTIT:
     {
         const SfxUnoAnyItem aItem( SID_DELETE_POSTIT, Any( xAnnotation ) );
-        pDispatcher->Execute( SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON, &aItem, 0 );
+        pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
+                { &aItem });
         break;
     }
     case SID_DELETEALLBYAUTHOR_POSTIT:
     {
         const SfxStringItem aItem( SID_DELETEALLBYAUTHOR_POSTIT, sAuthor );
-        pDispatcher->Execute( SID_DELETEALLBYAUTHOR_POSTIT, SfxCallMode::ASYNCHRON, &aItem, 0 );
+        pDispatcher->ExecuteList( SID_DELETEALLBYAUTHOR_POSTIT,
+                SfxCallMode::ASYNCHRON, { &aItem });
         break;
     }
     case SID_DELETEALL_POSTIT:

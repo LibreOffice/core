@@ -921,12 +921,11 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrM
     // No SID_SILENT anymore
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
-        pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                    &aUrl, &aTarget,
-                                    &aFrm, &aReferer,
-                                    &aNewView, &aBrowsing,
-                                    nullptr);
+    {
+        pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                { &aUrl, &aTarget, &aFrm, &aReferer, &aNewView, &aBrowsing });
+    }
 }
 
 bool ScGlobal::IsSystemRTL()

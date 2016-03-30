@@ -354,10 +354,9 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
 
                     // open url
-                    const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
-                                                                           SfxCallMode::SYNCHRON,
-                                                                           &aName, &aFlags,
-                                                                           &aFrame, &aReferer, 0L );
+                    const SfxPoolItem* pReturn = GetDispatcher()->ExecuteList(
+                            SID_OPENDOC, SfxCallMode::SYNCHRON,
+                            { &aName, &aFlags, &aFrame, &aReferer });
 
                     // save new doc
                     const SfxViewFrameItem *pItem = dynamic_cast<const SfxViewFrameItem*>( pReturn  );  // SJ: pReturn is NULL if the Hyperlink
@@ -368,9 +367,9 @@ void SvxHyperlinkNewDocTp::DoApply ()
                         {
                             SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-                            pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
-                                                                  SfxCallMode::SYNCHRON,
-                                                                  &aNewName, 0L );
+                            pViewFrame->GetDispatcher()->ExecuteList(
+                                SID_SAVEASDOC, SfxCallMode::SYNCHRON,
+                                { &aNewName });
 
                         }
                     }

@@ -449,7 +449,8 @@ void    SwZoomBox_Impl::Select()
         {
             SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
 
-            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, &aZoom, 0L);
+            pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM,
+                    SfxCallMode::ASYNCHRON, { &aZoom });
         }
         ReleaseFocus();
     }
@@ -577,7 +578,8 @@ void SwJumpToSpecificBox_Impl::Select()
     SfxUInt16Item aPageNum(nSlotId);
     aPageNum.SetValue((sal_uInt16)sEntry.toInt32());
     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
-    pCurrentShell->GetDispatcher()->Execute(nSlotId, SfxCallMode::ASYNCHRON, &aPageNum, 0L);
+    pCurrentShell->GetDispatcher()->ExecuteList(nSlotId, SfxCallMode::ASYNCHRON,
+            { &aPageNum });
 }
 
 bool SwJumpToSpecificBox_Impl::Notify( NotifyEvent& rNEvt )

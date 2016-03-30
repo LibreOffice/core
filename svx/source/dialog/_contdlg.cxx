@@ -322,8 +322,9 @@ bool SvxSuperContourDlg::Close()
         if ( nRet == RET_YES )
         {
             SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
-            GetBindings().GetDispatcher()->Execute(
-                SID_CONTOUR_EXEC, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, &aBoolItem, 0L );
+            GetBindings().GetDispatcher()->ExecuteList(
+                SID_CONTOUR_EXEC, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                { &aBoolItem });
         }
         else if ( nRet == RET_CANCEL )
             bRet = false;
@@ -438,8 +439,9 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     if (nId == mnApplyId)
     {
         SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
-        GetBindings().GetDispatcher()->Execute(
-            SID_CONTOUR_EXEC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aBoolItem, 0L );
+        GetBindings().GetDispatcher()->ExecuteList(
+            SID_CONTOUR_EXEC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            { &aBoolItem });
     }
     else if (nId == mnWorkSpaceId)
     {

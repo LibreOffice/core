@@ -185,7 +185,8 @@ namespace
             SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
             SfxStringItem aRef(SID_REFERER, OUString("private:user"));
             SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
-            SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
+            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
         }
         catch (const Exception & e)
         {
@@ -299,7 +300,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 SfxStringItem aNameItem( SID_FILE_NAME, OUString("vnd.sun.star.cmd:logout") );
                 SfxStringItem aReferer( SID_REFERER, "private/user" );
-                pAppData_Impl->pAppDispat->Execute( SID_OPENDOC, SfxCallMode::SLOT, &aNameItem, &aReferer, 0L );
+                pAppData_Impl->pAppDispat->ExecuteList(SID_OPENDOC,
+                        SfxCallMode::SLOT, { &aNameItem, &aReferer });
                 return;
             }
 
@@ -625,7 +627,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     break;
             }
 
-            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, &aZoom, 0L);
+            pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
 
             break;
         }

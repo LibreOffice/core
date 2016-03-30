@@ -3181,8 +3181,8 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
                     {
                         SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, const_cast<SwTOXBase *>(pBase));
                         m_pActiveShell->GetView().GetViewFrame()->
-                            GetDispatcher()->Execute(FN_INSERT_MULTI_TOX,
-                                            SfxCallMode::ASYNCHRON, &aPtrItem, 0L);
+                            GetDispatcher()->ExecuteList(FN_INSERT_MULTI_TOX,
+                                SfxCallMode::ASYNCHRON, { &aPtrItem });
 
                     }
                 break;

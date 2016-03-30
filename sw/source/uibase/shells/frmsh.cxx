@@ -154,9 +154,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             {
                 // Frame already exists, open frame dialog for editing.
                 SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, "columns");
-                rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_FORMAT_FRAME_DLG,
-                                SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-                                &aDefPage, 0L );
+                rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                        FN_FORMAT_FRAME_DLG,
+                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                        { &aDefPage });
 
             }
             else

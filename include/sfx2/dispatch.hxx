@@ -23,11 +23,11 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 
-#include <stdarg.h>
-
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <initializer_list>
 
 class SfxSlotServer;
 class SfxShell;
@@ -129,9 +129,9 @@ public:
                                  SfxItemSet* pInternalArgs,
                                  sal_uInt16 nModi = 0);
 
-    const SfxPoolItem*  Execute( sal_uInt16 nSlot,
+    const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
-                                 const SfxPoolItem *pArg1, ... );
+                                 std::initializer_list<SfxPoolItem const*> args);
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,

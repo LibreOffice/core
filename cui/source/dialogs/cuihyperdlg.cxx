@@ -211,8 +211,8 @@ void SvxHpLinkDlg::Apply()
                                       aItemSet.GetItem (SID_HYPERLINK_SETLINK));
         OUString aStrEmpty;
         if ( aItem->GetURL() != aStrEmpty )
-            GetDispatcher()->Execute( SID_HYPERLINK_SETLINK, SfxCallMode::ASYNCHRON |
-                                      SfxCallMode::RECORD, aItem, 0L);
+            GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
+                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { aItem });
 
         static_cast<SvxHyperlinkTabPageBase*>( GetTabPage( GetCurPageId() ) )->DoApply();
     }

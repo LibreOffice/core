@@ -1758,10 +1758,10 @@ bool SfxViewShell::IsShowView_Impl() const
 void SfxViewShell::JumpToMark( const OUString& rMark )
 {
     SfxStringItem aMarkItem( SID_JUMPTOMARK, rMark );
-    GetViewFrame()->GetDispatcher()->Execute(
+    GetViewFrame()->GetDispatcher()->ExecuteList(
         SID_JUMPTOMARK,
         SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-        &aMarkItem, 0L );
+        { &aMarkItem });
 }
 
 void SfxViewShell::SetController( SfxBaseController* pController )

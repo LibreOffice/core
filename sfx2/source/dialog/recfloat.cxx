@@ -141,7 +141,8 @@ SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
     SfxBoolItem aItem( FN_PARAM_1, true );
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() )
-        pBindings->GetDispatcher()->Execute( SID_STOP_RECORDING, SfxCallMode::SYNCHRON, &aItem, 0L );
+        pBindings->GetDispatcher()->ExecuteList(SID_STOP_RECORDING,
+                SfxCallMode::SYNCHRON, { &aItem });
 }
 
 bool SfxRecordingFloatWrapper_Impl::QueryClose()
@@ -193,7 +194,8 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );
-    GetBindings().GetDispatcher()->Execute( SID_RECORDMACRO, SfxCallMode::SYNCHRON, &aItem, 0L );
+    GetBindings().GetDispatcher()->ExecuteList(SID_RECORDMACRO,
+            SfxCallMode::SYNCHRON, { &aItem });
 }
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()

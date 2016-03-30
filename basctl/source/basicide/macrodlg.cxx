@@ -679,8 +679,8 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
 
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
-                pDispatcher->Execute(SID_BASICIDE_EDITMACRO,
-                        SfxCallMode::ASYNCHRON, &aInfoItem, nullptr);
+                pDispatcher->ExecuteList(SID_BASICIDE_EDITMACRO,
+                        SfxCallMode::ASYNCHRON, { &aInfoItem });
             }
             EndDialog(Macro_Edit);
         }
@@ -691,8 +691,8 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
                 DeleteMacro();
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                 {
-                    pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE,
-                                  SfxCallMode::SYNCHRON, &aInfoItem, nullptr);
+                    pDispatcher->ExecuteList( SID_BASICIDE_UPDATEMODULESOURCE,
+                                  SfxCallMode::SYNCHRON, { &aInfoItem });
                 }
                 CheckButtons();
                 UpdateFields();
@@ -720,8 +720,8 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
 
                     if (SfxDispatcher* pDispatcher = GetDispatcher())
                     {
-                        pDispatcher->Execute(SID_BASICIDE_EDITMACRO,
-                                SfxCallMode::ASYNCHRON, &aInfoItem, nullptr);
+                        pDispatcher->ExecuteList(SID_BASICIDE_EDITMACRO,
+                                SfxCallMode::ASYNCHRON, { &aInfoItem });
                     }
                     StoreMacroDescription();
                     EndDialog(Macro_New);

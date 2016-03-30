@@ -1520,9 +1520,9 @@ IMPL_LINK_NOARG_TYPED( SmSymbolDialog, GetClickHdl, Button*, void )
         OUStringBuffer aText;
         aText.append('%').append(pSym->GetName()).append(' ');
 
-        rViewSh.GetViewFrame()->GetDispatcher()->Execute(
+        rViewSh.GetViewFrame()->GetDispatcher()->ExecuteList(
                 SID_INSERTSYMBOL, SfxCallMode::RECORD,
-                new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()), 0);
+                { new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()) });
     }
 }
 

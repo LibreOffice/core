@@ -536,9 +536,9 @@ IMPL_LINK_TYPED( SwView, ExecRulerClick, Ruler *, pRuler, void )
     }
 
     SfxStringItem aDefPage(SID_PARA_DLG, sDefPage);
-    GetViewFrame()->GetDispatcher()->Execute( SID_PARA_DLG,
+    GetViewFrame()->GetDispatcher()->ExecuteList(SID_PARA_DLG,
                                 SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-                                &aDefPage, 0L );
+                                { &aDefPage });
 }
 
 sal_uInt16 SwView::GetMoveType()

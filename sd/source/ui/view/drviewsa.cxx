@@ -749,8 +749,8 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
             mbReadOnly = GetDocSh()->IsReadOnly();
 
             SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
-            GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, nullptr);
+            GetViewFrame()->GetDispatcher()->ExecuteList(SID_FM_DESIGN_MODE,
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
         }
     }
 

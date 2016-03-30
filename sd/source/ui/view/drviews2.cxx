@@ -1049,8 +1049,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_BULLET, (sal_uInt16)0xFFFF);
-            GetViewFrame()->GetDispatcher()->Execute(FN_SVX_SET_BULLET,
-                    SfxCallMode::RECORD, &aItem, nullptr);
+            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET,
+                    SfxCallMode::RECORD, { &aItem });
         }
         break;
 
@@ -1058,8 +1058,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_NUMBER, (sal_uInt16)0xFFFF);
-            GetViewFrame()->GetDispatcher()->Execute(FN_SVX_SET_NUMBER,
-                    SfxCallMode::RECORD, &aItem, nullptr);
+            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER,
+                    SfxCallMode::RECORD, { &aItem });
         }
         break;
 
@@ -1737,12 +1737,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
-                            pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                                        &aUrl, &aTarget,
-                                                        &aFrm, &aReferer,
-                                                        &aNewView, &aBrowsing,
-                                                        nullptr);
+                        {
+                            pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                { &aUrl, &aTarget, &aFrm, &aReferer,
+                                  &aNewView, &aBrowsing });
+                        }
                     }
                 }
             }

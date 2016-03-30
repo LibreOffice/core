@@ -192,7 +192,8 @@ IMPL_LINK_TYPED( MaskData, PipetteHdl, ToolBox*, pTbx, void )
     SfxBoolItem aBItem( SID_BMPMASK_PIPETTE,
                         pTbx->IsItemChecked( pTbx->GetItemId(0) ) );
 
-    rBindings.GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aBItem, 0L );
+    rBindings.GetDispatcher()->ExecuteList(SID_BMPMASK_PIPETTE, OWN_CALLMODE,
+            { &aBItem });
 }
 
 IMPL_LINK_TYPED( MaskData, CbxHdl, Button*, pButton, void )
@@ -304,7 +305,8 @@ IMPL_LINK_TYPED( MaskData, FocusLbHdl, Control&, rControl, void )
 IMPL_LINK_NOARG_TYPED(MaskData, ExecHdl, Button*, void)
 {
     SfxBoolItem aBItem( SID_BMPMASK_EXEC, true );
-    rBindings.GetDispatcher()->Execute( SID_BMPMASK_EXEC, OWN_CALLMODE, &aBItem, 0L );
+    rBindings.GetDispatcher()->ExecuteList(SID_BMPMASK_EXEC, OWN_CALLMODE,
+            { &aBItem });
 }
 
 void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& /*Rect*/)
@@ -512,7 +514,8 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
 bool SvxBmpMask::Close()
 {
     SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, false );
-    GetBindings().GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aItem2, 0L );
+    GetBindings().GetDispatcher()->ExecuteList(SID_BMPMASK_PIPETTE,
+            OWN_CALLMODE, { &aItem2 });
 
     return SfxDockingWindow::Close();
 }

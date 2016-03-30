@@ -236,9 +236,9 @@ IMPL_LINK_TYPED( ScSolverDlg, BtnHdl, Button*, pBtn, void )
                         SetDispatcherLock( false );
 
                         SwitchToDocument();
-                        GetBindings().GetDispatcher()->Execute( SID_SOLVE,
+                        GetBindings().GetDispatcher()->ExecuteList(SID_SOLVE,
                                                   SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                                  &aOutItem, 0L, 0L );
+                                                  { &aOutItem });
                         Close();
                     }
                     else RaiseError( SOLVERR_NOFORMULA );

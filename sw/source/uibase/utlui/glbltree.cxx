@@ -849,7 +849,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             {
                 SfxStringItem aName(FN_EDIT_REGION,
                         pCont->GetSection()->GetSectionName());
-                rDispatch.Execute(FN_EDIT_REGION, SfxCallMode::ASYNCHRON, &aName, 0L);
+                rDispatch.ExecuteList(FN_EDIT_REGION, SfxCallMode::ASYNCHRON,
+                        { &aName });
             }
         }
         break;
@@ -932,8 +933,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                             SwDocShell::Factory().GetFilterContainer()->GetName());
 
              const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
-                            rDispatch.Execute(SID_NEWDOCDIRECT,
-                                SfxCallMode::SYNCHRON, &aFactory, 0L));
+                            rDispatch.ExecuteList(SID_NEWDOCDIRECT,
+                                SfxCallMode::SYNCHRON, { &aFactory }));
 
             // save at
             SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
@@ -1193,8 +1194,8 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
         SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
-                Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON,
-                            &aURL, &aReadOnly, &aReferer, &aTargetFrameName, 0L);
+                ExecuteList(SID_OPENDOC, SfxCallMode::ASYNCHRON,
+                        { &aURL, &aReadOnly, &aReferer, &aTargetFrameName });
     }
 }
 
