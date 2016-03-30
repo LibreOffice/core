@@ -464,7 +464,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
         if( nDiff )
         {
             if ( GetUpper()->IsFootnoteBossFrame() && HasFixSize() &&
-                 NA_GROW_SHRINK !=
+                 SwNeighbourAdjust::GrowShrink !=
                  static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment( this ) )
             {
                 (maFrame.*fnRect->fnSetHeight)( nNew );
@@ -1076,20 +1076,20 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
     {
         // AdjustNeighbourhood is now also called in columns which are not
         // placed inside a frame
-        sal_uInt8 nAdjust = GetUpper()->IsFootnoteBossFrame() ?
+        SwNeighbourAdjust nAdjust = GetUpper()->IsFootnoteBossFrame() ?
                 static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment( this )
-                : NA_GROW_SHRINK;
+                : SwNeighbourAdjust::GrowShrink;
         SwTwips nGrow = (Frame().*fnRect->fnGetHeight)();
-        if( NA_ONLY_ADJUST == nAdjust )
+        if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
             AdjustNeighbourhood( nGrow );
         else
         {
             SwTwips nReal = 0;
-            if( NA_ADJUST_GROW == nAdjust )
+            if( SwNeighbourAdjust::AdjustGrow == nAdjust )
                 nReal = AdjustNeighbourhood( nGrow );
             if( nReal < nGrow )
                 nReal += pParent->Grow( nGrow - nReal );
-            if( NA_GROW_ADJUST == nAdjust && nReal < nGrow )
+            if( SwNeighbourAdjust::GrowAdjust == nAdjust && nReal < nGrow )
                 AdjustNeighbourhood( nGrow - nReal );
         }
     }
@@ -1116,13 +1116,13 @@ void SwLayoutFrame::Cut()
     {
         if( pUp->IsFootnoteBossFrame() )
         {
-            sal_uInt8 nAdjust= static_cast<SwFootnoteBossFrame*>(pUp)->NeighbourhoodAdjustment( this );
-            if( NA_ONLY_ADJUST == nAdjust )
+            SwNeighbourAdjust nAdjust= static_cast<SwFootnoteBossFrame*>(pUp)->NeighbourhoodAdjustment( this );
+            if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
                 AdjustNeighbourhood( -nShrink );
             else
             {
                 SwTwips nReal = 0;
-                if( NA_ADJUST_GROW == nAdjust )
+                if( SwNeighbourAdjust::AdjustGrow == nAdjust )
                     nReal = -AdjustNeighbourhood( -nShrink );
                 if( nReal < nShrink )
                 {
@@ -1131,7 +1131,7 @@ void SwLayoutFrame::Cut()
                     nReal += pUp->Shrink( nShrink - nReal );
                     (Frame().*fnRect->fnSetHeight)( nOldHeight );
                 }
-                if( NA_GROW_ADJUST == nAdjust && nReal < nShrink )
+                if( SwNeighbourAdjust::GrowAdjust == nAdjust && nReal < nShrink )
                     AdjustNeighbourhood( nReal - nShrink );
             }
             RemoveFromLayout();
@@ -2241,14 +2241,14 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         if ( GetUpper() )
         {   // AdjustNeighbourhood now only for the columns (but not in frames)
-            sal_uInt8 nAdjust = GetUpper()->IsFootnoteBossFrame() ?
+            SwNeighbourAdjust nAdjust = GetUpper()->IsFootnoteBossFrame() ?
                 static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment( this )
-                : NA_GROW_SHRINK;
-            if( NA_ONLY_ADJUST == nAdjust )
+                : SwNeighbourAdjust::GrowShrink;
+            if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
                 nReal = AdjustNeighbourhood( nReal, bTst );
             else
             {
-                if( NA_ADJUST_GROW == nAdjust )
+                if( SwNeighbourAdjust::AdjustGrow == nAdjust )
                     nReal += AdjustNeighbourhood( nReal, bTst );
 
                 SwTwips nGrow = 0;
@@ -2272,7 +2272,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                     nGrow = pToGrow ? pToGrow->Grow( nReal, bTst, bInfo ) : 0;
                 }
 
-                if( NA_GROW_ADJUST == nAdjust && nGrow < nReal )
+                if( SwNeighbourAdjust::GrowAdjust == nAdjust && nGrow < nReal )
                     nReal += AdjustNeighbourhood( nReal - nGrow, bTst );
 
                 if ( IsFootnoteFrame() && (nGrow != nReal) && GetNext() )
@@ -2417,12 +2417,12 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         bMoveAccFrame = true;
     }
 
-    sal_uInt8 nAdjust = GetUpper() && GetUpper()->IsFootnoteBossFrame() ?
+    SwNeighbourAdjust nAdjust = GetUpper() && GetUpper()->IsFootnoteBossFrame() ?
                    static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment( this )
-                   : NA_GROW_SHRINK;
+                   : SwNeighbourAdjust::GrowShrink;
 
     // AdjustNeighbourhood also in columns (but not in frames)
-    if( NA_ONLY_ADJUST == nAdjust )
+    if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
     {
         if ( IsPageBodyFrame() && !bBrowse )
             nReal = nDist;
@@ -2465,7 +2465,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         }
 
         nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : 0;
-        if( ( NA_GROW_ADJUST == nAdjust || NA_ADJUST_GROW == nAdjust )
+        if( ( SwNeighbourAdjust::GrowAdjust == nAdjust || SwNeighbourAdjust::AdjustGrow == nAdjust )
             && nReal < nShrink )
             AdjustNeighbourhood( nReal - nShrink );
     }
