@@ -139,7 +139,6 @@
 #include <vcl/help.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
