@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_7c3a13cf",
+        "filename": "avmedia/source/framework/mediaplayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T11:29:35Z",
+      "side": 1,
+      "message": "fixed on master with commit 5f4f6b3146eb56c757b36eda43dcaf63c690ffb9",
+      "parentUuid": "9ad45d7e_7c13335d",
+      "revId": "1a5ce0594f80058f563901b1f7243aab35466313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_5c10ef4e",
         "filename": "basegfx/source/inc/hommatrixtemplate.hxx",
         "patchSetId": 2
