@@ -360,7 +360,9 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::cr
     }
     else
     {
-        aBorderColor = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor;
+        svtools::ColorConfigValue aBorderConfig = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES);
+        aBorderColor = aBorderConfig.bIsVisible ? aBorderConfig.nColor :
+                           aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
     }
 
     // create page outer border primitive
