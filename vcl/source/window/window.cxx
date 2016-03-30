@@ -1833,11 +1833,6 @@ void Window::KeyInput( const KeyEvent& rKEvt )
         if (autoacc && cod.GetModifier () != 0x4000) return;
     }
 
-    if (cod.IsShift() && cod.IsMod1() && cod.GetCode() == KEY_F12)
-    {
-
-    }
-
     NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );
     if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbKeyInput = true;
