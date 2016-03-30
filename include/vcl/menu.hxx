@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <list>
 
 struct ImplSVEvent;
 struct MenuItemData;

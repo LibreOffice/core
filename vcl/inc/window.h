@@ -25,6 +25,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/rendersettings.hxx>
 
+#include <list>
 #include <vector>
 #include <set>
 
