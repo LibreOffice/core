@@ -38,9 +38,9 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
         pTmpRoot->StartAllAction();
         // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
         // is only (and may only be) called by the formatting routines
-        //pTmpRoot->InvalidateAllContent( INV_LINENUM | INV_SIZE );
+        //pTmpRoot->InvalidateAllContent( SwInvalidateFlags::LineNum | SwInvalidateFlags::Size );
         for( auto aLayout : GetAllLayouts() )
-            aLayout->InvalidateAllContent( INV_LINENUM | INV_SIZE );
+            aLayout->InvalidateAllContent( SwInvalidateFlags::LineNum | SwInvalidateFlags::Size );
         pTmpRoot->EndAllAction();
     }
     *mpLineNumberInfo = rNew;

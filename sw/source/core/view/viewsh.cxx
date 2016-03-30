@@ -720,7 +720,7 @@ void SwViewShell::LayoutIdle()
     }
 }
 
-static void lcl_InvalidateAllContent( SwViewShell& rSh, sal_uInt8 nInv )
+static void lcl_InvalidateAllContent( SwViewShell& rSh, SwInvalidateFlags nInv )
 {
     bool bCursor = dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr;
     if ( bCursor )
@@ -765,7 +765,7 @@ void SwViewShell::SetParaSpaceMax( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::PARA_SPACE_MAX, bNew );
-        const sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
         lcl_InvalidateAllContent( *this,  nInv );
     }
 }
@@ -777,7 +777,7 @@ void SwViewShell::SetParaSpaceMaxAtPages( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES, bNew );
-        const sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
         lcl_InvalidateAllContent( *this,  nInv );
     }
 }
@@ -789,7 +789,7 @@ void SwViewShell::SetTabCompat( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::TAB_COMPAT, bNew );
-        const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Size | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
         lcl_InvalidateAllContent( *this, nInv );
     }
 }
@@ -804,7 +804,7 @@ void SwViewShell::SetAddExtLeading( bool bNew )
         SwDrawModel* pTmpDrawModel = getIDocumentDrawModelAccess().GetDrawModel();
         if ( pTmpDrawModel )
             pTmpDrawModel->SetAddExtLeading( bNew );
-        const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Size | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
         lcl_InvalidateAllContent( *this, nInv );
     }
 }
@@ -832,7 +832,7 @@ void SwViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCel
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
-        const sal_uInt8 nInv = INV_PRTAREA;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea;
         lcl_InvalidateAllContent( *this, nInv );
     }
 }
@@ -849,7 +849,7 @@ void SwViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::OLD_LINE_SPACING, _bUseFormerLineSpacing );
-        const sal_uInt8 nInv = INV_PRTAREA;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea;
         lcl_InvalidateAllContent( *this, nInv );
     }
 }
@@ -889,7 +889,7 @@ void SwViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, _bUseFormerTextWrapping );
-        const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Size | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
         lcl_InvalidateAllContent( *this, nInv );
     }
 }
@@ -902,7 +902,7 @@ void SwViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesW
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, _bDoNotJustifyLinesWithManualBreak );
-        const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Size | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
         lcl_InvalidateAllContent( *this, nInv );
     }
 }
@@ -919,7 +919,7 @@ void SwViewShell::Reformat()
     if( GetLayout()->IsCallbackActionEnabled() )
     {
         StartAction();
-        GetLayout()->InvalidateAllContent( INV_SIZE | INV_POS | INV_PRTAREA );
+        GetLayout()->InvalidateAllContent( SwInvalidateFlags::Size | SwInvalidateFlags::Pos | SwInvalidateFlags::PrtArea );
         EndAction();
     }
 }
@@ -1979,11 +1979,11 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
 
     // When the size ratios in browse mode change,
     // the Position and PrtArea of the Content and Tab frames must be Invalidated.
-    sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_POS;
+    SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table | SwInvalidateFlags::Pos;
     // In case of layout or mode change, the ContentFrames need a size-Invalidate
     // because of printer/screen formatting.
     if ( bSizeChanged )
-        nInv |= INV_SIZE | INV_DIRECTION;
+        nInv |= SwInvalidateFlags::Size | SwInvalidateFlags::Direction;
 
     GetLayout()->InvalidateAllContent( nInv );
 

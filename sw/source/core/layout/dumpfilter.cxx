@@ -99,7 +99,7 @@ namespace sw
             pXDoc->GetDocShell()->GetWrtShell()->StartAction();
             Rectangle aRect( 0, 0, 26000, 21000 );
             pXDoc->GetDocShell()->SetVisArea( aRect );
-            pLayout->InvalidateAllContent( INV_SIZE );
+            pLayout->InvalidateAllContent( SwInvalidateFlags::Size );
             pXDoc->GetDocShell()->GetWrtShell()->EndAction();
 
             // Dump the layout XML into the XOutputStream

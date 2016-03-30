@@ -435,7 +435,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
     {
         pTmpRoot->StartAllAction();
         for(SwRootFrame* aLayout : m_rDoc.GetAllLayouts())
-            aLayout->InvalidateAllContent(INV_SIZE);
+            aLayout->InvalidateAllContent(SwInvalidateFlags::Size);
         pTmpRoot->EndAllAction();
     }
     m_rDoc.getIDocumentState().SetModified();
@@ -505,7 +505,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
         {
             pTmpRoot->StartAllAction();
             for( auto aLayout : m_rDoc.GetAllLayouts() )
-                aLayout->InvalidateAllContent(INV_SIZE);
+                aLayout->InvalidateAllContent(SwInvalidateFlags::Size);
             pTmpRoot->EndAllAction();
         }
         m_rDoc.getIDocumentState().SetModified();
