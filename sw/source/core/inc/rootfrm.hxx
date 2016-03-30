@@ -23,6 +23,8 @@
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentTimerAccess.hxx>
+#include <o3tl/typed_flags_set.hxx>
+#include <vector>
 
 class SwContentFrame;
 class SwViewShell;
@@ -40,15 +42,21 @@ class SwSelectionList;
 struct SwPosition;
 struct SwCursorMoveState;
 
-#define INV_SIZE    1
-#define INV_PRTAREA 2
-#define INV_POS     4
-#define INV_TABLE   8
-#define INV_SECTION 16
-#define INV_LINENUM 32
-#define INV_DIRECTION 64
+enum class SwInvalidateFlags
+{
+    Size      = 0x01,
+    PrtArea   = 0x02,
+    Pos       = 0x04,
+    Table     = 0x08,
+    Section   = 0x10,
+    LineNum   = 0x20,
+    Direction = 0x40,
+};
 
-#include <vector>
+namespace o3tl
+{
+    template<> struct typed_flags<SwInvalidateFlags> : is_typed_flags<SwInvalidateFlags, 0x7f> {};
+};
 
 /// The root element of a Writer document layout.
 class SwRootFrame: public SwLayoutFrame
@@ -254,7 +262,7 @@ public:
     static void AssertPageFlys( SwPageFrame * );
 
     /// Invalidate all Content, Size or PrtArea
-    void InvalidateAllContent( sal_uInt8 nInvalidate );
+    void InvalidateAllContent( SwInvalidateFlags nInvalidate );
 
     /**
      * Invalidate/re-calculate the position of all floating

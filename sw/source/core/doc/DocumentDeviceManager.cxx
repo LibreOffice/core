@@ -340,7 +340,7 @@ void DocumentDeviceManager::PrtDataChanged()
             pFntCache->Flush();
 
             for(SwRootFrame* aLayout : m_rDoc.GetAllLayouts())
-                aLayout->InvalidateAllContent(INV_SIZE);
+                aLayout->InvalidateAllContent(SwInvalidateFlags::Size);
 
             for(SwViewShell& rShell : pSh->GetRingContainer())
                 rShell.InitPrt(getPrinter(false));

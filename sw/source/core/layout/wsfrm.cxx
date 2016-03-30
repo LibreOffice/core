@@ -3553,7 +3553,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
     }
 }
 
-static SwContentFrame* lcl_InvalidateSection( SwFrame *pCnt, sal_uInt8 nInv )
+static SwContentFrame* lcl_InvalidateSection( SwFrame *pCnt, SwInvalidateFlags nInv )
 {
     SwSectionFrame* pSect = pCnt->FindSctFrame();
     // If our ContentFrame is placed inside a table or a footnote, only sections
@@ -3562,11 +3562,11 @@ static SwContentFrame* lcl_InvalidateSection( SwFrame *pCnt, sal_uInt8 nInv )
     if( ( ( pCnt->IsInTab() && !pSect->IsInTab() ) ||
         ( pCnt->IsInFootnote() && !pSect->IsInFootnote() ) ) && !pCnt->IsTabFrame() )
         return nullptr;
-    if( nInv & INV_SIZE )
+    if( nInv & SwInvalidateFlags::Size )
         pSect->_InvalidateSize();
-    if( nInv & INV_POS )
+    if( nInv & SwInvalidateFlags::Pos )
         pSect->_InvalidatePos();
-    if( nInv & INV_PRTAREA )
+    if( nInv & SwInvalidateFlags::PrtArea )
         pSect->_InvalidatePrt();
     SwFlowFrame *pFoll = pSect->GetFollow();
     // Temporary separation from follow
@@ -3576,28 +3576,28 @@ static SwContentFrame* lcl_InvalidateSection( SwFrame *pCnt, sal_uInt8 nInv )
     return pRet;
 }
 
-static SwContentFrame* lcl_InvalidateTable( SwTabFrame *pTable, sal_uInt8 nInv )
+static SwContentFrame* lcl_InvalidateTable( SwTabFrame *pTable, SwInvalidateFlags nInv )
 {
-    if( ( nInv & INV_SECTION ) && pTable->IsInSct() )
+    if( ( nInv & SwInvalidateFlags::Section ) && pTable->IsInSct() )
         lcl_InvalidateSection( pTable, nInv );
-    if( nInv & INV_SIZE )
+    if( nInv & SwInvalidateFlags::Size )
         pTable->_InvalidateSize();
-    if( nInv & INV_POS )
+    if( nInv & SwInvalidateFlags::Pos )
         pTable->_InvalidatePos();
-    if( nInv & INV_PRTAREA )
+    if( nInv & SwInvalidateFlags::PrtArea )
         pTable->_InvalidatePrt();
     return pTable->FindLastContent();
 }
 
-static void lcl_InvalidateAllContent( SwContentFrame *pCnt, sal_uInt8 nInv );
+static void lcl_InvalidateAllContent( SwContentFrame *pCnt, SwInvalidateFlags nInv );
 
-static void lcl_InvalidateContent( SwContentFrame *pCnt, sal_uInt8 nInv )
+static void lcl_InvalidateContent( SwContentFrame *pCnt, SwInvalidateFlags nInv )
 {
     SwContentFrame *pLastTabCnt = nullptr;
     SwContentFrame *pLastSctCnt = nullptr;
     while ( pCnt )
     {
-        if( nInv & INV_SECTION )
+        if( nInv & SwInvalidateFlags::Section )
         {
             if( pCnt->IsInSct() )
             {
@@ -3612,7 +3612,7 @@ static void lcl_InvalidateContent( SwContentFrame *pCnt, sal_uInt8 nInv )
                 OSL_ENSURE( !pLastSctCnt, "Where's the last SctContent?" );
 #endif
         }
-        if( nInv & INV_TABLE )
+        if( nInv & SwInvalidateFlags::Table )
         {
             if( pCnt->IsInTab() )
             {
@@ -3640,13 +3640,13 @@ static void lcl_InvalidateContent( SwContentFrame *pCnt, sal_uInt8 nInv )
 #endif
         }
 
-        if( nInv & INV_SIZE )
+        if( nInv & SwInvalidateFlags::Size )
             pCnt->Prepare( PREP_CLEAR, nullptr, false );
-        if( nInv & INV_POS )
+        if( nInv & SwInvalidateFlags::Pos )
             pCnt->_InvalidatePos();
-        if( nInv & INV_PRTAREA )
+        if( nInv & SwInvalidateFlags::PrtArea )
             pCnt->_InvalidatePrt();
-        if ( nInv & INV_LINENUM )
+        if ( nInv & SwInvalidateFlags::LineNum )
             pCnt->InvalidateLineNum();
         if ( pCnt->GetDrawObjs() )
             lcl_InvalidateAllContent( pCnt, nInv );
@@ -3654,7 +3654,7 @@ static void lcl_InvalidateContent( SwContentFrame *pCnt, sal_uInt8 nInv )
     }
 }
 
-static void lcl_InvalidateAllContent( SwContentFrame *pCnt, sal_uInt8 nInv )
+static void lcl_InvalidateAllContent( SwContentFrame *pCnt, SwInvalidateFlags nInv )
 {
     SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
     for ( size_t i = 0; i < rObjs.size(); ++i )
@@ -3666,14 +3666,14 @@ static void lcl_InvalidateAllContent( SwContentFrame *pCnt, sal_uInt8 nInv )
             if ( pFly->IsFlyInContentFrame() )
             {
                 ::lcl_InvalidateContent( pFly->ContainsContent(), nInv );
-                if( nInv & INV_DIRECTION )
+                if( nInv & SwInvalidateFlags::Direction )
                     pFly->CheckDirChange();
             }
         }
     }
 }
 
-void SwRootFrame::InvalidateAllContent( sal_uInt8 nInv )
+void SwRootFrame::InvalidateAllContent( SwInvalidateFlags nInv )
 {
     // First process all page bound FlyFrames.
     SwPageFrame *pPage = static_cast<SwPageFrame*>(Lower());
@@ -3696,12 +3696,12 @@ void SwRootFrame::InvalidateAllContent( sal_uInt8 nInv )
                 {
                     SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     ::lcl_InvalidateContent( pFly->ContainsContent(), nInv );
-                    if ( nInv & INV_DIRECTION )
+                    if ( nInv & SwInvalidateFlags::Direction )
                         pFly->CheckDirChange();
                 }
             }
         }
-        if( nInv & INV_DIRECTION )
+        if( nInv & SwInvalidateFlags::Direction )
             pPage->CheckDirChange();
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     }
@@ -3709,7 +3709,7 @@ void SwRootFrame::InvalidateAllContent( sal_uInt8 nInv )
     //Invalidate the whole document content and the character bound Flys here.
     ::lcl_InvalidateContent( ContainsContent(), nInv );
 
-    if( nInv & INV_PRTAREA )
+    if( nInv & SwInvalidateFlags::PrtArea )
     {
         SwViewShell *pSh  = getRootFrame()->GetCurrShell();
         if( pSh )
