@@ -551,7 +551,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
      : SwMultiPortion( nEnd )
 {
     SetRuby();
-    OSL_ENSURE( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
+    OSL_ENSURE( SwMultiCreatorId::Ruby == rCreate.nId, "Ruby expected" );
     OSL_ENSURE( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
     const SwFormatRuby& rRuby = rCreate.pAttr->GetRuby();
     nAdjustment = rRuby.GetAdjustment();
@@ -823,7 +823,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = nullptr;
         pRet->pAttr = nullptr;
-        pRet->nId = SW_MC_BIDI;
+        pRet->nId = SwMultiCreatorId::Bidi;
         pRet->nLevel = nCurrLevel + 1;
         return pRet;
     }
@@ -895,7 +895,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = nullptr;
         pRet->pAttr = pRuby;
-        pRet->nId = SW_MC_RUBY;
+        pRet->nId = SwMultiCreatorId::Ruby;
         pRet->nLevel = GetTextFrame()->IsRightToLeft() ? 1 : 0;
         return pRet;
     }
@@ -933,7 +933,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             pRet->pAttr = nullptr;
             aEnd.push_front( GetText().getLength() );
         }
-        pRet->nId = SW_MC_DOUBLE;
+        pRet->nId = SwMultiCreatorId::Double;
         pRet->nLevel = GetTextFrame()->IsRightToLeft() ? 1 : 0;
 
         // n2Lines is the index of the last 2-line-attribute, which contains
@@ -1020,7 +1020,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     {   // The winner is a rotate-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
-        pRet->nId = SW_MC_ROTATE;
+        pRet->nId = SwMultiCreatorId::Rotate;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
         std::deque< sal_Int32 > aEnd;

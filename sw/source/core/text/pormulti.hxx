@@ -36,16 +36,16 @@ class SwFont;
 // or a poolitem.
 // The GetMultiCreator-function fills this structure and
 // the Ctor of the SwMultiPortion uses it.
-#define SW_MC_DOUBLE    0
-#define SW_MC_RUBY      1
-#define SW_MC_ROTATE    2
-#define SW_MC_BIDI      3
+enum class SwMultiCreatorId
+{
+    Double, Ruby, Rotate, Bidi
+};
 
 struct SwMultiCreator
 {
     const SwTextAttr* pAttr;
     const SfxPoolItem* pItem;
-    sal_uInt8 nId;
+    SwMultiCreatorId nId;
     sal_uInt8 nLevel;
 };
 
