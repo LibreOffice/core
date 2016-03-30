@@ -238,54 +238,52 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case FRM_ROOT:
+    case SwFrameType::Root:
         name = "root";
         break;
-    case FRM_PAGE:
+    case SwFrameType::Page:
         name = "page";
         break;
-    case FRM_COLUMN:
+    case SwFrameType::Column:
         name = "column";
         break;
-    case FRM_HEADER:
+    case SwFrameType::Header:
         name = "header";
         break;
-    case FRM_FOOTER:
+    case SwFrameType::Footer:
         name = "footer";
         break;
-    case FRM_FTNCONT:
+    case SwFrameType::FtnCont:
         name = "ftncont";
         break;
-    case FRM_FTN:
+    case SwFrameType::Ftn:
         name = "ftn";
         break;
-    case FRM_BODY:
+    case SwFrameType::Body:
         name = "body";
         break;
-    case FRM_FLY:
+    case SwFrameType::Fly:
         name = "fly";
         break;
-    case FRM_SECTION:
+    case SwFrameType::Section:
         name = "section";
         break;
-    case FRM_UNUSED:
-        name = "unused";
-        break;
-    case FRM_TAB:
+    case SwFrameType::Tab:
         name = "tab";
         break;
-    case FRM_ROW:
+    case SwFrameType::Row:
         name = "row";
         break;
-    case FRM_CELL:
+    case SwFrameType::Cell:
         name = "cell";
         break;
-    case FRM_TXT:
+    case SwFrameType::Txt:
         name = "txt";
         break;
-    case FRM_NOTXT:
+    case SwFrameType::NoTxt:
         name = "notxt";
         break;
+    default: break;
     };
 
     if ( name != nullptr )

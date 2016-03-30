@@ -234,7 +234,7 @@ void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 static const SwFrame* lcl_GetFrameOfNode( const SwNode& rNd )
 {
     const SwModify* pMod;
-    sal_uInt16 nFrameType = FRM_CNTNT;
+    SwFrameType nFrameType = FRM_CNTNT;
 
     if( rNd.IsContentNode() )
     {
@@ -243,7 +243,7 @@ static const SwFrame* lcl_GetFrameOfNode( const SwNode& rNd )
     else if( rNd.IsTableNode() )
     {
         pMod = static_cast<const SwTableNode&>(rNd).GetTable().GetFrameFormat();
-        nFrameType = FRM_TAB;
+        nFrameType = SwFrameType::Tab;
     }
     else
         pMod = nullptr;

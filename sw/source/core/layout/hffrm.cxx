@@ -94,7 +94,7 @@ static void lcl_LayoutFrameEnsureMinHeight(SwLayoutFrame & rFrame,
     }
 }
 
-SwHeadFootFrame::SwHeadFootFrame( SwFrameFormat * pFormat, SwFrame* pSib, sal_uInt16 nTypeIn)
+SwHeadFootFrame::SwHeadFootFrame( SwFrameFormat * pFormat, SwFrame* pSib, SwFrameType nTypeIn)
     : SwLayoutFrame( pFormat, pSib )
 {
     mnFrameType = nTypeIn;

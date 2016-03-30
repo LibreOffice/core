@@ -372,7 +372,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mbIsSwapped( false )
     , mbFollowFormatAllowed( true )
 {
-    mnFrameType = FRM_TXT;
+    mnFrameType = SwFrameType::Txt;
 }
 
 void SwTextFrame::DestroyImpl()

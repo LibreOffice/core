@@ -35,7 +35,7 @@
 SwColumnFrame::SwColumnFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     SwFootnoteBossFrame( pFormat, pSib )
 {
-    mnFrameType = FRM_COLUMN;
+    mnFrameType = SwFrameType::Column;
     SwBodyFrame* pColBody = new SwBodyFrame( pFormat->GetDoc()->GetDfltFrameFormat(), pSib );
     pColBody->InsertBehind( this, nullptr ); // ColumnFrames now with BodyFrame
     SetMaxFootnoteHeight( LONG_MAX );

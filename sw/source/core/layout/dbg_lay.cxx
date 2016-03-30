@@ -51,7 +51,7 @@
  *      is null - no method calls are logged.
  * 2.   The SwImplProtocol class contains a filter for frame types, only method
  *      call of frame types which are defined there are logged.
- *      The member nTypes can be set to values like FRM_PAGE or FRM_SECTION and
+ *      The member nTypes can be set to values like SwFrameType::Page or SwFrameType::Section and
  *      may be combined using binary OR. The default values is 0xFFFF - meaning
  *      all frame types.
  * 3.   The SwImplProtocol class contains an ArrayPointer to FrameIds which need to be
@@ -124,7 +124,7 @@ class SwImplProtocol
     std::set<sal_uInt16> *pFrameIds;  // which FrameIds shall be logged ( NULL == all)
     std::vector<long> aVars;        // variables
     OStringBuffer aLayer;      // indentation of output ("  " per start/end)
-    sal_uInt16 nTypes;              // which types shall be logged
+    SwFrameType nTypes;              // which types shall be logged
     sal_uInt16 nLineCount;          // printed lines
     sal_uInt16 nMaxLines;           // max lines to be printed
     sal_uInt8 nInitFile;            // range (FrameId,FrameType,Record) during reading of the INI file
@@ -255,7 +255,7 @@ void SwProtocol::Stop()
 }
 
 SwImplProtocol::SwImplProtocol()
-    : pStream( nullptr ), pFrameIds( nullptr ), nTypes( 0xffff ),
+    : pStream( nullptr ), pFrameIds( nullptr ), nTypes( FRM_ALL ),
       nLineCount( 0 ), nMaxLines( USHRT_MAX ), nTestMode( 0 )
 {
     NewStream();
@@ -306,7 +306,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         else if (aTmp == "[frmtype")// section types
         {
             nInitFile = 2;
-            nTypes = USHRT_MAX;     // default: log all frame types
+            nTypes = FRM_ALL;     // default: log all frame types
         }
         else if (aTmp == "[record")// section functions
         {
@@ -352,7 +352,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
                 case 1: InsertFrame( sal_uInt16( nVal ) );    // add FrameId
                         break;
                 case 2: {
-                            sal_uInt16 nNew = (sal_uInt16)nVal;
+                            SwFrameType nNew = static_cast<SwFrameType>(nVal);
                             if( bNo )
                                 nTypes &= ~nNew;    // remove type
                             else

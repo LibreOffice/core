@@ -152,7 +152,7 @@ SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
 /// Initialization: Currently add the Frame to the Cache
 void SwNoTextFrame::InitCtor()
 {
-    mnFrameType = FRM_NOTXT;
+    mnFrameType = SwFrameType::NoTxt;
 }
 
 SwContentFrame *SwNoTextNode::MakeFrame( SwFrame* pSib )

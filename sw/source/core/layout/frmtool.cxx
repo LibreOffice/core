@@ -548,7 +548,7 @@ SwLayNotify::~SwLayNotify()
         {
             const SwViewShell *pSh = pLay->getRootFrame()->GetCurrShell();
             if( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) ||
-                  !(pLay->GetType() & (FRM_BODY | FRM_PAGE)) )
+                  !(pLay->GetType() & (SwFrameType::Body | SwFrameType::Page)) )
             //Thereby the subordinates are retouched clean.
             //Example problem: Take the Flys with the handles and downsize.
             //Not for body and page, otherwise it flickers when loading HTML.
@@ -580,10 +580,10 @@ SwLayNotify::~SwLayNotify()
             pLay->InvalidateNextPos();
     }
     if ( !IsLowersComplete() &&
-         !(pLay->GetType()&(FRM_FLY|FRM_SECTION) &&
+         !(pLay->GetType()&(SwFrameType::Fly|SwFrameType::Section) &&
             pLay->Lower() && pLay->Lower()->IsColumnFrame()) &&
          (bPos || bNotify) &&
-         !(pLay->GetType() & (FRM_ROW|FRM_TAB|FRM_FTNCONT|FRM_PAGE|FRM_ROOT)))
+         !(pLay->GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
     {
         // #i44016# - force unlock of position of lower objects.
         // #i43913# - no unlock of position of objects,
@@ -1862,7 +1862,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     m_bCachedJoinedWithPrev = false;
     m_bCachedJoinedWithNext = false;
 
-    m_bBorderDist = 0 != (pConstructor->GetType() & (FRM_CELL));
+    m_bBorderDist = bool(pConstructor->GetType() & SwFrameType::Cell);
 }
 
 SwBorderAttrs::~SwBorderAttrs()
@@ -3127,11 +3127,11 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
 }
 
 /// provides the area of a frame in that no Fly from another area can overlap
-const SwFrame *FindKontext( const SwFrame *pFrame, sal_uInt16 nAdditionalContextType )
+const SwFrame *FindKontext( const SwFrame *pFrame, SwFrameType nAdditionalContextType )
 {
-    const sal_uInt16 nTyp = FRM_ROOT | FRM_HEADER   | FRM_FOOTER | FRM_FTNCONT  |
-                        FRM_FTN  | FRM_FLY      |
-                        FRM_TAB  | FRM_ROW      | FRM_CELL |
+    const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header   | SwFrameType::Footer | SwFrameType::FtnCont  |
+                        SwFrameType::Ftn  | SwFrameType::Fly      |
+                        SwFrameType::Tab  | SwFrameType::Row      | SwFrameType::Cell |
                         nAdditionalContextType;
     do
     {   if ( pFrame->GetType() & nTyp )
@@ -3143,11 +3143,11 @@ const SwFrame *FindKontext( const SwFrame *pFrame, sal_uInt16 nAdditionalContext
 
 bool IsFrameInSameKontext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
 {
-    const SwFrame *pKontext = FindKontext( pInnerFrame, 0 );
+    const SwFrame *pKontext = FindKontext( pInnerFrame, SwFrameType::None );
 
-    const sal_uInt16 nTyp = FRM_ROOT | FRM_HEADER   | FRM_FOOTER | FRM_FTNCONT  |
-                        FRM_FTN  | FRM_FLY      |
-                        FRM_TAB  | FRM_ROW      | FRM_CELL;
+    const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FtnCont |
+                        SwFrameType::Ftn  | SwFrameType::Fly      |
+                        SwFrameType::Tab  | SwFrameType::Row      | SwFrameType::Cell;
     do
     {   if ( pFrame->GetType() & nTyp )
         {
@@ -3271,7 +3271,7 @@ void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, sal_uInt16 const nFrameType,
+SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwFrameType const nFrameType,
         const Point* pPoint, const SwPosition *pPos, const bool bCalcFrame )
 {
     SwFrame *pMinFrame = nullptr, *pTmpFrame;
@@ -3327,7 +3327,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, sal
                     }
 
                     // for Flys go via the parent if the Fly is not yet "formatted"
-                    if( !bCalcFrame && pTmpFrame->GetType() & FRM_FLY &&
+                    if( !bCalcFrame && pTmpFrame->GetType() & SwFrameType::Fly &&
                         static_cast<SwFlyFrame*>(pTmpFrame)->GetAnchorFrame() &&
                         FAR_AWAY == pTmpFrame->Frame().Pos().getX() &&
                         FAR_AWAY == pTmpFrame->Frame().Pos().getY() )

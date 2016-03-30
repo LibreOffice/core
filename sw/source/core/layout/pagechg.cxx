@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 SwBodyFrame::SwBodyFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     SwLayoutFrame( pFormat, pSib )
 {
-    mnFrameType = FRM_BODY;
+    mnFrameType = SwFrameType::Body;
 }
 
 void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
@@ -172,7 +172,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
         m_bHasGrid = false;
     SetMaxFootnoteHeight( pPgDsc->GetFootnoteInfo().GetHeight() ?
                      pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX );
-    mnFrameType = FRM_PAGE;
+    mnFrameType = SwFrameType::Page;
     m_bInvalidLayout = m_bInvalidContent = m_bInvalidSpelling = m_bInvalidSmartTags = m_bInvalidAutoCmplWrds = m_bInvalidWordCount = true;
     m_bInvalidFlyLayout = m_bInvalidFlyContent = m_bInvalidFlyInCnt = m_bFootnotePage = m_bEndNotePage = false;
 
@@ -350,7 +350,10 @@ static void lcl_FormatLay( SwLayoutFrame *pLay )
     // first the low-level ones
     while ( pTmp )
     {
-        if ( pTmp->GetType() & 0x00FF )
+        const SwFrameType nTypes = SwFrameType::Root | SwFrameType::Page | SwFrameType::Column
+                           | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FtnCont
+                           | SwFrameType::Ftn | SwFrameType::Body;
+        if ( pTmp->GetType() & nTypes )
             ::lcl_FormatLay( static_cast<SwLayoutFrame*>(pTmp) );
         pTmp = pTmp->GetNext();
     }
@@ -470,7 +473,7 @@ void SwPageFrame::PreparePage( bool bFootnote )
         SwLayoutFrame *pLow = static_cast<SwLayoutFrame*>(Lower());
         while ( pLow )
         {
-            if ( pLow->GetType() & (FRM_HEADER|FRM_FOOTER) )
+            if ( pLow->GetType() & (SwFrameType::Header|SwFrameType::Footer) )
             {
                 SwContentFrame *pContent = pLow->ContainsContent();
                 while ( pContent && pLow->IsAnLower( pContent ) )

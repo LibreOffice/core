@@ -1527,12 +1527,12 @@ static void lcl_FindStartEndRow( const SwLayoutFrame *&rpStart,
 
     std::deque<const SwLayoutFrame *> aSttArr, aEndArr;
     const SwLayoutFrame *pTmp;
-    for( pTmp = rpStart; (FRM_CELL|FRM_ROW) & pTmp->GetType();
+    for( pTmp = rpStart; (SwFrameType::Cell|SwFrameType::Row) & pTmp->GetType();
                 pTmp = pTmp->GetUpper() )
     {
         aSttArr.push_front( pTmp );
     }
-    for( pTmp = rpEnd; (FRM_CELL|FRM_ROW) & pTmp->GetType();
+    for( pTmp = rpEnd; (SwFrameType::Cell|SwFrameType::Row) & pTmp->GetType();
                 pTmp = pTmp->GetUpper() )
     {
         aEndArr.push_front( pTmp );

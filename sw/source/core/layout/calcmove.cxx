@@ -491,7 +491,7 @@ void SwFrame::MakePos()
         }
 
         pPrv = lcl_Prev( this, false );
-        const sal_uInt16 nMyType = GetType();
+        const SwFrameType nMyType = GetType();
         SWRECTFN( ( IsCellFrame() && GetUpper() ? GetUpper() : this  ) )
         if ( !bUseUpper && pPrv )
         {
@@ -507,7 +507,7 @@ void SwFrame::MakePos()
                                           (pPrv->Frame().*fnRect->fnGetWidth)() );
 
                 // cells may now leave their uppers
-                if( bVert && FRM_CELL & nMyType && !mbReverse )
+                if( bVert && SwFrameType::Cell & nMyType && !mbReverse )
                     maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + pPrv->Frame().Width());
             }
             else if( bVert && FRM_NOTE_VERT & nMyType )
@@ -561,7 +561,7 @@ void SwFrame::MakePos()
                                           (pPrv->Frame().*fnRect->fnGetWidth)() );
 
                     // cells may now leave their uppers
-                    if( bVert && FRM_CELL & nMyType && !mbReverse )
+                    if( bVert && SwFrameType::Cell & nMyType && !mbReverse )
                         maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + pPrv->Frame().Width());
                 }
                 else if( bVert && FRM_NOTE_VERT & nMyType )

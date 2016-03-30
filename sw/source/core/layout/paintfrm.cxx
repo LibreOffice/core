@@ -5431,7 +5431,7 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
     // There's nothing (Row,Body,Footnote,Root,Column,NoText) need to do here
-    if ((GetType() & (FRM_NOTXT|FRM_ROW|FRM_BODY|FRM_FTN|FRM_COLUMN|FRM_ROOT)))
+    if ((GetType() & (SwFrameType::NoTxt|SwFrameType::Row|SwFrameType::Body|SwFrameType::Ftn|SwFrameType::Column|SwFrameType::Root)))
         return;
 
     if (IsCellFrame() && !gProp.pSGlobalShell->GetViewOptions()->IsTable())
