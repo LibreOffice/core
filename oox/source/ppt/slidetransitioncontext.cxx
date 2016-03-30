@@ -123,6 +123,7 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         }
         return this;
     case PPT_TOKEN( circle ):
+    case PPT_TOKEN( oval ) :
     case PPT_TOKEN( diamond ):
     case PPT_TOKEN( dissolve ):
     case PPT_TOKEN( newsflash ):

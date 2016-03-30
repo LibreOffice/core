@@ -29,8 +29,9 @@ namespace internal {
 /// Generate a iris wipe
 class EllipseWipe : public ParametricPolyPolygon
 {
+    sal_Int32 nTransitionSubtype;
 public:
-    explicit EllipseWipe( sal_Int32 /*nTransitionSubType xxx todo */ ) {}
+    explicit EllipseWipe( sal_Int32 nSubType ): nTransitionSubtype( nSubType ) {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double x ) override;
 };
 
