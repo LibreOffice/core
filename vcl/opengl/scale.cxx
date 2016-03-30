@@ -283,7 +283,7 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
         ixscale = 1 / rScaleX;
         iyscale = 1 / rScaleY;
 
-        pProgram = xContext->UseProgram("textureVertexShader", OUString("areaScaleFragmentShader"));
+        pProgram = xContext->UseProgram("textureVertexShader", "areaScaleFragmentShader");
         if (pProgram == nullptr)
             return false;
 
