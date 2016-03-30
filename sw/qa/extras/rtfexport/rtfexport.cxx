@@ -1007,6 +1007,12 @@ DECLARE_RTFEXPORT_TEST(testTdf65642, "tdf65642.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(getParagraph(2), "PageNumberOffset"));
 }
 
+DECLARE_RTFEXPORT_TEST(testPgnlcltr, "pgnlcltr.rtf")
+{
+    // The second page's numbering type: this was style::NumberingType::ARABIC.
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_LOWER_LETTER_N, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

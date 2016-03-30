@@ -993,6 +993,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     // A, B, ...
                     pSectionContext->SetPageNumberType(style::NumberingType::CHARS_UPPER_LETTER_N);
                 break;
+                case NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter:
+                    // a, b, ...
+                    pSectionContext->SetPageNumberType(style::NumberingType::CHARS_LOWER_LETTER_N);
+                break;
                 }
             }
         break;
