@@ -363,6 +363,8 @@ bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::
                 pInfo->pConditionSet = &pStyleSheet->GetItemSet();
                 bAnyCondition = true;
 
+                // TODO: moggi: looks like there is a but around bHidden and bHideFormula
+                //              They are normally for the whole pattern and not for a single cell
                 // we need to check already here for protected cells
                 const SfxPoolItem* pItem;
                 if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
