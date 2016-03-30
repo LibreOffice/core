@@ -360,6 +360,14 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Frame().Height() );
     xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFixSize"), BAD_CAST(OString::boolean(HasFixSize()).getStr()));
     xmlTextWriterEndElement( writer );
+
+    // output the Prt
+    xmlTextWriterStartElement( writer, BAD_CAST( "prtBounds" ) );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", Prt().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", Prt().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Prt().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Prt().Height() );
+    xmlTextWriterEndElement( writer );
 }
 
 // Hack: somehow conversion from "..." to va_list does
