@@ -613,7 +613,7 @@ public:
      * the underlying SalGraphics and it's implementation
      * changing.
      */
-#if HAVE_FEATURE_OPENGL
+#if HAVE_FEATURE_OPENGL || defined(ANDROID)
     class PaintScope {
         void *pHandle;
     public:

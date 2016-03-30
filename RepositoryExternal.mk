@@ -183,7 +183,7 @@ endef
 
 endif # SYSTEM_CPPUNIT
 
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_OPENGL)$(if $(filter ANDROID,$(OS)),TRUE),TRUE)
 ifneq ($(SYSTEM_GLEW),)
 
 define gb_LinkTarget__use_glew

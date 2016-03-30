@@ -53,7 +53,7 @@ using namespace ::com::sun::star::frame;
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
 
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
@@ -100,7 +100,7 @@ namespace desktop
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
 
 class Parser: public CommandLineArgs::Supplier {
 public:
