@@ -29,7 +29,7 @@
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <uitest/uiobject_impl.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <svdata.hxx>
 #include "listbox.hxx"
