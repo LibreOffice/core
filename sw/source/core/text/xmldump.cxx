@@ -22,6 +22,7 @@
 #include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
+#include <svx/svdobj.hxx>
 
 class XmlPortionDumper:public SwPortionHandler
 {
@@ -417,6 +418,9 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", GetObjBoundRect().Width() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", GetObjBoundRect().Height() );
     xmlTextWriterEndElement( writer );
+
+    if (const SdrObject* pObject = GetDrawObj())
+        pObject->dumpAsXml(writer);
 
     xmlTextWriterEndElement( writer );
 
