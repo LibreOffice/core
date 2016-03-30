@@ -699,7 +699,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         1.0, // no scaling
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true // scale isotrophically to target size
     },
 
 

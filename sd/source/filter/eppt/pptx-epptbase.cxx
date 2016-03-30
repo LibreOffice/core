@@ -798,7 +798,13 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
     break;
     case TransitionType::ELLIPSEWIPE :
     {
-        nPPTTransitionType = PPT_TRANSITION_TYPE_CIRCLE;
+        switch( nTransitionSubtype ) {
+        case TransitionSubType::VERTICAL:
+        case TransitionSubType::HORIZONTAL:
+            // no ellipse or oval in PPT or OOXML, fallback to circle
+        default:
+            nPPTTransitionType = PPT_TRANSITION_TYPE_CIRCLE;
+        }
     }
     break;
     case TransitionType::FOURBOXWIPE :
