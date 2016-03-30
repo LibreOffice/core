@@ -64,7 +64,7 @@ public:
     virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) override;
     virtual sal_uLong MakeBlockList() override;
 
-    virtual short GetFileType() const override;
+    virtual FileType GetFileType() const override;
     virtual sal_uLong OpenFile( bool bReadOnly = true ) override;
     virtual void  CloseFile() override;
 

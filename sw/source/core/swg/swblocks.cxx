@@ -74,16 +74,16 @@ SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const O
 /**
  * Is the provided file a storage or doesn't it exist?
  */
-short SwImpBlocks::GetFileType( const OUString& rFile )
+SwImpBlocks::FileType SwImpBlocks::GetFileType( const OUString& rFile )
 {
     if( !FStatHelper::IsDocument( rFile ) )
-        return SWBLK_NO_FILE;
+        return FileType::NoFile;
     if( SwXMLTextBlocks::IsFileUCBStorage( rFile ) )
-        return SWBLK_XML;
+        return FileType::XML;
     if( SotStorage::IsStorageFile( rFile ) )
-        return SWBLK_SW3;
+        return FileType::SW3;
     //otherwise return NONE
-    return SWBLK_NONE;
+    return FileType::None;
 }
 
 SwImpBlocks::SwImpBlocks( const OUString& rFile, bool )
@@ -239,8 +239,9 @@ SwTextBlocks::SwTextBlocks( const OUString& rFile )
     const OUString sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
-    case SWBLK_XML:     pImp = new SwXMLTextBlocks( sFileName ); break;
-    case SWBLK_NO_FILE: pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SwImpBlocks::FileType::XML:    pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SwImpBlocks::FileType::NoFile: pImp = new SwXMLTextBlocks( sFileName ); break;
+    default: break;
     }
     if( !pImp )
         nErr = ERR_SWG_FILE_FORMAT_ERROR;
@@ -266,8 +267,8 @@ bool SwTextBlocks::IsOld() const
 {
     if (pImp)
     {
-        short nType = pImp->GetFileType();
-        if (SWBLK_SW3 == nType || SWBLK_SW2 == nType )
+        SwImpBlocks::FileType nType = pImp->GetFileType();
+        if (SwImpBlocks::FileType::SW3 == nType || SwImpBlocks::FileType::SW2 == nType )
             return true;
     }
     return false;
@@ -377,8 +378,8 @@ sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
     bool bIsOld = false;
     if (rSource.pImp)
     {
-        short nType = rSource.pImp->GetFileType();
-        if (SWBLK_SW2 == nType || SWBLK_SW3 == nType )
+        SwImpBlocks::FileType nType = rSource.pImp->GetFileType();
+        if (SwImpBlocks::FileType::SW2 == nType || SwImpBlocks::FileType::SW3 == nType )
             bIsOld = true;
     }
     if( bIsOld ) //rSource.IsOld() )
