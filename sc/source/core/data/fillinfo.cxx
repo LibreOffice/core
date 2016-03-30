@@ -465,7 +465,6 @@ void ScDocument::FillInfo(
                     ScAttrArray* pThisAttrArr = pThisCol->pAttrArray;       // Attribute
                     nArrRow = 0;
 
-                    const ScPatternAttr* pPattern;
                     SCROW nCurRow=nRow1;                  // single rows
                     if (nCurRow>0)
                         --nCurRow;                      // 1 more on top
@@ -478,7 +477,7 @@ void ScDocument::FillInfo(
                     do
                     {
                         nThisRow=pThisAttrArr->pData[nIndex].nRow;              // End of range
-                        pPattern=pThisAttrArr->pData[nIndex].pPattern;
+                        const ScPatternAttr* pPattern=pThisAttrArr->pData[nIndex].pPattern;
 
                         const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
                                                         &pPattern->GetItem(ATTR_BACKGROUND));
