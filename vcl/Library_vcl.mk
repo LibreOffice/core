@@ -120,7 +120,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	lcms2 \
 	mdds_headers \
 ))
-ifeq ($(ENABLE_OPENGL)$(if $(filter ANDROID,$(OS)),TRUE),TRUE)
+ifneq ($(ENABLE_OPENGL)$(if $(filter ANDROID,$(OS)),TRUE),)
 $(eval $(call gb_Library_use_externals,vcl,\
      glew \
  ))
