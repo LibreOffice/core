@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "uitest/uiobject_impl.hxx"
+#include <vcl/uitest/uiobject.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/tabpage.hxx>
@@ -295,6 +295,10 @@ ButtonUIObject::ButtonUIObject(VclPtr<Button> xButton):
 {
 }
 
+ButtonUIObject::~ButtonUIObject()
+{
+}
+
 StringMap ButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
@@ -336,6 +340,10 @@ DialogUIObject::DialogUIObject(VclPtr<Dialog> xDialog):
 {
 }
 
+DialogUIObject::~DialogUIObject()
+{
+}
+
 StringMap DialogUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
@@ -364,6 +372,10 @@ std::unique_ptr<UIObject> DialogUIObject::create(vcl::Window* pWindow)
 EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
     WindowUIObject(xEdit),
     mxEdit(xEdit)
+{
+}
+
+EditUIObject::~EditUIObject()
 {
 }
 
@@ -441,6 +453,10 @@ CheckBoxUIObject::CheckBoxUIObject(VclPtr<CheckBox> xCheckbox):
 {
 }
 
+CheckBoxUIObject::~CheckBoxUIObject()
+{
+}
+
 void CheckBoxUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
 {
@@ -482,6 +498,10 @@ TabPageUIObject::TabPageUIObject(VclPtr<TabPage> xTabPage):
 {
 }
 
+TabPageUIObject::~TabPageUIObject()
+{
+}
+
 void TabPageUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
 {
@@ -511,6 +531,10 @@ OUString TabPageUIObject::get_name() const
 ListBoxUIObject::ListBoxUIObject(VclPtr<ListBox> xListBox):
     WindowUIObject(xListBox),
     mxListBox(xListBox)
+{
+}
+
+ListBoxUIObject::~ListBoxUIObject()
 {
 }
 
@@ -574,6 +598,10 @@ ComboBoxUIObject::ComboBoxUIObject(VclPtr<ComboBox> xComboBox):
 {
 }
 
+ComboBoxUIObject::~ComboBoxUIObject()
+{
+}
+
 void ComboBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
@@ -620,6 +648,10 @@ SpinUIObject::SpinUIObject(VclPtr<SpinButton> xSpinButton):
 {
 }
 
+SpinUIObject::~SpinUIObject()
+{
+}
+
 void SpinUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
 {
@@ -656,6 +688,10 @@ OUString SpinUIObject::get_name() const
 SpinFieldUIObject::SpinFieldUIObject(VclPtr<SpinField> xSpinField):
     EditUIObject(xSpinField),
     mxSpinField(xSpinField)
+{
+}
+
+SpinFieldUIObject::~SpinFieldUIObject()
 {
 }
 

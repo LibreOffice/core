@@ -12,6 +12,7 @@
 #include <sfx2/tabdlg.hxx>
 
 SfxTabDialogUIObject::SfxTabDialogUIObject(VclPtr<SfxTabDialog> xTabDialog):
+    WindowUIObject(xTabDialog),
     mxTabDialog(xTabDialog)
 {
 }
@@ -22,16 +23,21 @@ SfxTabDialogUIObject::~SfxTabDialogUIObject()
 
 StringMap SfxTabDialogUIObject::get_state()
 {
+    return WindowUIObject::get_state();
 }
 
-void SfxTabDialogUIObject::execute(const OUString& /*rAction*/,
+void SfxTabDialogUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
 {
+    if (rAction == "SELECT")
+    {
 
+    }
 }
 
 UIObjectType SfxTabDialogUIObject::get_type() const
 {
+    return UIObjectType::DIALOG;
 }
 
 std::unique_ptr<UIObject> SfxTabDialogUIObject::create(vcl::Window* pWindow)

@@ -36,7 +36,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/vclstatuslistener.hxx>
-#include <uitest/uiobject_impl.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <svids.hrc>
 #include <svdata.hxx>
