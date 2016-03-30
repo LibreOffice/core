@@ -222,14 +222,16 @@ void WrapPropertyPanel::UpdateSpacingLB()
 IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, EditContourHdl, Button*, void)
 {
     SfxBoolItem aItem(SID_CONTOUR_DLG, true);
-    mpBindings->GetDispatcher()->Execute(SID_CONTOUR_DLG, SfxCallMode::RECORD, &aItem, 0L);
+    mpBindings->GetDispatcher()->ExecuteList(SID_CONTOUR_DLG,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, EnableContourHdl, Button*, void)
 {
     bool IsContour = mpEnableContour->IsChecked();
     SfxBoolItem aItem(FN_FRAME_WRAP_CONTOUR, IsContour);
-    mpBindings->GetDispatcher()->Execute(FN_FRAME_WRAP_CONTOUR, SfxCallMode::RECORD, &aItem, 0l);
+    mpBindings->GetDispatcher()->ExecuteList(FN_FRAME_WRAP_CONTOUR,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_TYPED(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
@@ -240,8 +242,10 @@ IMPL_LINK_TYPED(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
     SvxULSpaceItem aULItem(nVal, nVal, RES_UL_SPACE);
 
     nTop = nBottom = nLeft = nRight = nVal;
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_LRSPACE, SfxCallMode::RECORD, &aLRItem, 0l);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_ULSPACE, SfxCallMode::RECORD, &aULItem, 0l);
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_LRSPACE,
+            SfxCallMode::RECORD, { &aLRItem });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_ULSPACE,
+            SfxCallMode::RECORD, { &aULItem });
 }
 
 IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, WrapTypeHdl, Button*, void)
@@ -272,7 +276,8 @@ IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, WrapTypeHdl, Button*, void)
         nSlot = FN_FRAME_NOWRAP;
     }
     SfxBoolItem bStateItem( nSlot, true );
-    mpBindings->GetDispatcher()->Execute( nSlot, SfxCallMode::RECORD, &bStateItem, 0L );
+    mpBindings->GetDispatcher()->ExecuteList(nSlot,
+            SfxCallMode::RECORD, { &bStateItem });
 
 }
 

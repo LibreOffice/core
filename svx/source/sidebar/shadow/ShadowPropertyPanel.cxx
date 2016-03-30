@@ -149,19 +149,22 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
     if( mpShowShadow->GetState() == TRISTATE_FALSE )
     {
         SdrOnOffItem aItem(makeSdrShadowItem(false));
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_SHADOW, SfxCallMode::RECORD, &aItem, 0L);
+        GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
+                SfxCallMode::RECORD, { &aItem });
     }
     else
     {
         SdrOnOffItem aItem(makeSdrShadowItem(true));
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_SHADOW, SfxCallMode::RECORD, &aItem, 0L);
+        GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
+                SfxCallMode::RECORD, { &aItem });
     }
 }
 
 IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowColorHdl, ListBox&, void)
 {
     XColorItem aItem(makeSdrShadowColorItem(mpLBShadowColor->GetSelectEntryColor()));
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_COLOR, SfxCallMode::RECORD, &aItem,  0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_COLOR,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransMetricHdl, Edit&, void)
@@ -169,7 +172,8 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransMetricHdl, Edit&, vo
     sal_uInt16 nVal = mpShadowTransMetric->GetValue();
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_TRANSPARENCE, SfxCallMode::RECORD, &aItem , 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, void)
@@ -177,7 +181,8 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, 
     sal_uInt16 nVal = mpShadowTransSlider->GetThumbPos();
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_TRANSPARENCE, SfxCallMode::RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
@@ -197,8 +202,10 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
     }
     SdrMetricItem aXItem(makeSdrShadowXDistItem(nX));
     SdrMetricItem aYItem(makeSdrShadowYDistItem(nY));
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_XDISTANCE, SfxCallMode::RECORD, &aXItem, 0L);
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_YDISTANCE, SfxCallMode::RECORD, &aYItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_XDISTANCE,
+            SfxCallMode::RECORD, { &aXItem });
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_YDISTANCE,
+            SfxCallMode::RECORD, { &aYItem });
 }
 
 void ShadowPropertyPanel::UpdateControls()

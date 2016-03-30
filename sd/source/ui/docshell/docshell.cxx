@@ -197,8 +197,11 @@ DrawDocShell::~DrawDocShell()
         pFrame = SfxViewFrame::GetFirst( this );
 
     if( pFrame )
-        pFrame->GetDispatcher()->Execute(
-            SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L);
+    {
+        pFrame->GetDispatcher()->ExecuteList(
+            SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            { &aItem });
+    }
 }
 
 void DrawDocShell::GetState(SfxItemSet &rSet)

@@ -758,9 +758,9 @@ IMPL_LINK_TYPED(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElemen
 
     if (pViewSh)
     {
-        pViewSh->GetViewFrame()->GetDispatcher()->Execute(
+        pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-            new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()), 0);
+            { new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()) });
     }
 }
 

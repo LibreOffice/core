@@ -729,9 +729,9 @@ IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
         {
             SetDispatcherLock( false );
             SwitchToDocument();
-            GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
+            GetBindings().GetDispatcher()->ExecuteList(FID_FILTER_OK,
                                       SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                      GetOutputItem(), 0L, 0L );
+                                      { GetOutputItem() });
             Close();
         }
     }

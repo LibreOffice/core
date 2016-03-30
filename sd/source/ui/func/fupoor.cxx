@@ -820,11 +820,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // try to activate textedit mode for the selected object
                         SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
                             SID_ATTR_CHAR,
                             SfxCallMode::ASYNCHRON,
-                            &aInputString,
-                            0L);
+                            { &aInputString });
 
                         // consumed
                         bReturn = true;
@@ -869,11 +868,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
                         SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
                             SID_ATTR_CHAR,
                             SfxCallMode::ASYNCHRON,
-                            &aInputString,
-                            0L);
+                            { &aInputString });
 
                         // consumed
                         bReturn = true;

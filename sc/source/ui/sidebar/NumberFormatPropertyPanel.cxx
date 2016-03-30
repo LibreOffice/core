@@ -110,7 +110,8 @@ IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, 
     if( nVal != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
-        GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
+        GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_TYPE_FORMAT,
+                SfxCallMode::RECORD, { &aItem });
         mnCategorySelected = nVal;
     }
 }
@@ -149,7 +150,8 @@ IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueHdl, Edit&, void
     aFormat += sBreak;
 
     SfxStringItem aItem( SID_NUMBER_FORMAT,  aFormat );
-    GetBindings()->GetDispatcher()->Execute(SID_NUMBER_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_FORMAT,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 VclPtr<vcl::Window> NumberFormatPropertyPanel::Create (

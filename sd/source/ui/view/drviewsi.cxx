@@ -139,9 +139,9 @@ void DrawViewShell::AssignFrom3DWindow()
                     // transform text into 3D
                     sal_uInt16 nSId = SID_CONVERT_TO_3D;
                     SfxBoolItem aItem( nSId, true );
-                    GetViewFrame()->GetDispatcher()->Execute(
+                    GetViewFrame()->GetDispatcher()->ExecuteList(
                         nSId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                        &aItem, nullptr);
+                        { &aItem });
 
                     // Determine if a FILL attribute is set.
                     // If not, hard set a fill attribute

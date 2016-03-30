@@ -2660,7 +2660,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 if ( pDispat )
                 {
                     SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, OUString(), OUString() );
-                    pDispat->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SfxCallMode::SYNCHRON, &aInfoItem, 0L );
+                    pDispat->ExecuteList(SID_BASICIDE_UPDATEMODULESOURCE,
+                            SfxCallMode::SYNCHRON, { &aInfoItem });
                 }
             }
         }

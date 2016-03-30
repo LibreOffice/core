@@ -228,10 +228,10 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     else if(aURL.Complete.equalsAscii(cURLFormLetter))
     {
         SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::makeAny(aArgs));
-        m_pView->GetViewFrame()->GetDispatcher()->Execute(
+        m_pView->GetViewFrame()->GetDispatcher()->ExecuteList(
             FN_MAILMERGE_WIZARD,
             SfxCallMode::ASYNCHRON,
-            &aDBProperties, 0L);
+            { &aDBProperties });
     }
 #endif
     else if(aURL.Complete.equalsAscii(cURLDocumentDataSource))

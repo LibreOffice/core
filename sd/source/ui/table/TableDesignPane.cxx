@@ -208,7 +208,8 @@ void TableDesignWidget::ApplyStyle()
         {
             SfxDispatcher* pDispatcher = getDispatcher( mrBase );
             SfxStringItem aArg( SID_TABLE_STYLE, sStyleName );
-            pDispatcher->Execute(SID_INSERT_TABLE, SfxCallMode::ASYNCHRON, &aArg, 0 );
+            pDispatcher->ExecuteList(SID_INSERT_TABLE, SfxCallMode::ASYNCHRON,
+                    { &aArg });
         }
     }
     catch( Exception& )

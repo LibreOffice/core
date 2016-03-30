@@ -625,8 +625,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         SfxStringItem aName(SID_FILE_NAME, sPath);
                         SfxStringItem aFilter(SID_FILTER_NAME, pHtmlFlt->GetName());
                         const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
-                                pViewFrame->GetDispatcher()->Execute(
-                                        SID_SAVEASDOC, SfxCallMode::SYNCHRON, &aName, &aFilter, 0L ));
+                                pViewFrame->GetDispatcher()->ExecuteList(
+                                        SID_SAVEASDOC, SfxCallMode::SYNCHRON,
+                                        { &aName, &aFilter }));
                         if(!pBool || !pBool->GetValue())
                             break;
                     }
@@ -1077,12 +1078,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     std::unique_ptr<SfxFrameItem> pFrameItem(new SfxFrameItem( SID_DOCFRAME,
                                                         pViewShell->GetViewFrame() ));
                                     SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
-                                    pDispatch->Execute(
-                                            SID_OPENDOC,
-                                            SfxCallMode::ASYNCHRON,
-                                            &aName,
-                                            &aReferer,
-                                            pFrameItem.get(), 0L );
+                                    pDispatch->ExecuteList(SID_OPENDOC,
+                                        SfxCallMode::ASYNCHRON,
+                                        { &aName, &aReferer, pFrameItem.get() });
                                     break;
                                 }
                                 pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -1136,8 +1134,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             SfxStringItem aApp(SID_DOC_SERVICE, OUString("com.sun.star.text.TextDocument"));
             SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
-            pViewShell->GetDispatcher()->Execute(
-                SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, &aApp, &aTarget, 0L);
+            pViewShell->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                SfxCallMode::API|SfxCallMode::SYNCHRON,
+                { &aApp, &aTarget });
         }
         break;
         case SID_CLASSIFICATION_APPLY:
@@ -1315,10 +1314,10 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
                     SfxUsrAnyItem aShellItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( GetModel() ) );
                     OUString aLibName( pBasic->GetName() );
                     SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-                    pSrcView->GetViewFrame()->GetDispatcher()->Execute(
+                    pSrcView->GetViewFrame()->GetDispatcher()->ExecuteList(
                                             SID_BASICIDE_LIBREMOVED,
                                             SfxCallMode::SYNCHRON,
-                                            &aShellItem, &aLibNameItem, 0L );
+                                            { &aShellItem, &aLibNameItem });
 
                     // Only the modules are deleted from the standard-lib
                     if( nLibCount )

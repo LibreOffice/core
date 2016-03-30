@@ -385,9 +385,9 @@ bool SfxModelessDialog::Close()
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     SfxBoolItem aValue( pImp->pMgr->GetType(), false);
-    pBindings->GetDispatcher_Impl()->Execute(
+    pBindings->GetDispatcher_Impl()->ExecuteList(
         pImp->pMgr->GetType(),
-        SfxCallMode::RECORD|SfxCallMode::SYNCHRON, &aValue, 0L );
+        SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue } );
     return true;
 }
 
@@ -498,9 +498,9 @@ bool SfxFloatingWindow::Close()
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     SfxBoolItem aValue( pImp->pMgr->GetType(), false);
-    pBindings->GetDispatcher_Impl()->Execute(
+    pBindings->GetDispatcher_Impl()->ExecuteList(
             pImp->pMgr->GetType(),
-            SfxCallMode::RECORD|SfxCallMode::SYNCHRON, &aValue, 0L );
+            SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue });
     return true;
 }
 

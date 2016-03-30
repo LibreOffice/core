@@ -1255,9 +1255,9 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
                 {
                     SfxStringItem aName( SID_FILE_NAME, aFileName );
                     SfxBoolItem aCreateView( SID_OPEN_NEW_VIEW, true );
-                    SfxGetpApp()->GetAppDispatcher_Impl()->Execute(
-                        SID_OPENDOC, SfxCallMode::ASYNCHRON, &aName,
-                        &aCreateView, 0L);
+                    SfxGetpApp()->GetAppDispatcher_Impl()->ExecuteList(
+                        SID_OPENDOC, SfxCallMode::ASYNCHRON,
+                        { &aName, &aCreateView });
                 }
             }
         }

@@ -359,12 +359,16 @@ void SfxVersionDialog::Open_Impl()
     {
         // there is a password, it should be used during the opening
         SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) );
-        pViewFrame->GetDispatcher()->Execute(
-            SID_OPENDOC, SfxCallMode::ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem, 0L );
+        pViewFrame->GetDispatcher()->ExecuteList(
+            SID_OPENDOC, SfxCallMode::ASYNCHRON,
+            { &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem });
     }
     else
-        pViewFrame->GetDispatcher()->Execute(
-            SID_OPENDOC, SfxCallMode::ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, 0L );
+    {
+        pViewFrame->GetDispatcher()->ExecuteList(
+            SID_OPENDOC, SfxCallMode::ASYNCHRON,
+            { &aFile, &aItem, &aTarget, &aReferer });
+    }
 
     Close();
 }

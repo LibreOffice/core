@@ -395,9 +395,9 @@ IMPL_LINK_TYPED( SmEditWindow, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SmViewShell *pViewSh = rCmdBox.GetView();
     if (pViewSh)
-        pViewSh->GetViewFrame()->GetDispatcher()->Execute(
+        pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
                 SID_INSERTCOMMAND, SfxCallMode::RECORD,
-                new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()), 0);
+                { new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()) });
     return false;
 }
 
@@ -1070,9 +1070,9 @@ void SmEditWindow::Flush()
         SmViewShell *pViewSh = rCmdBox.GetView();
         if (pViewSh)
         {
-            pViewSh->GetViewFrame()->GetDispatcher()->Execute(
+            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
                     SID_TEXT, SfxCallMode::RECORD,
-                    new SfxStringItem(SID_TEXT, GetText()), 0);
+                    { new SfxStringItem(SID_TEXT, GetText()) });
         }
     }
     if (aCursorMoveIdle.IsActive())

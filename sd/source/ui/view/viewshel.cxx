@@ -316,11 +316,10 @@ void ViewShell::Activate(bool bIsMDIActivate)
         // thus, the Navigator will also get a current status
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         if (GetDispatcher() != nullptr)
-            GetDispatcher()->Execute(
+            GetDispatcher()->ExecuteList(
                 SID_NAVIGATOR_INIT,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                &aItem,
-                0L);
+                { &aItem });
 
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=nullptr);

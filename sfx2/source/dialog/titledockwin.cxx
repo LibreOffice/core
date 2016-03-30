@@ -236,11 +236,10 @@ namespace sfx2
             EndTracking();
             const sal_uInt16 nChildWindowId( GetChildWindow_Impl()->GetType() );
             const SfxBoolItem aVisibility( nChildWindowId, false );
-            GetBindings().GetDispatcher()->Execute(
+            GetBindings().GetDispatcher()->ExecuteList(
                 nChildWindowId,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                &aVisibility,
-                nullptr
+                { &aVisibility }
             );
         }
     }

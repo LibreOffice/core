@@ -1701,7 +1701,7 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry)
         nActFamily = nEntry;
         SfxDispatcher* pDispat = pBindings->GetDispatcher_Impl();
         SfxUInt16Item aItem( SID_STYLE_FAMILY, nEntry );
-        pDispat->Execute( SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, &aItem, 0L );
+        pDispat->ExecuteList(SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, { &aItem });
         pBindings->Invalidate( SID_STYLE_FAMILY );
         pBindings->Update( SID_STYLE_FAMILY );
         UpdateFamily_Impl();

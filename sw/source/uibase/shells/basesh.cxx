@@ -739,7 +739,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 nGalleryItemType == css::gallery::GalleryItemType::MEDIA  )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
-                GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0L );
+                GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                        SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
+                        { &aMediaURLItem });
             }
         }
         break;

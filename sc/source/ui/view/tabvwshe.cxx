@@ -298,10 +298,10 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     // execute request (which stores the SearchItem)
 
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                    GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
+                    GetViewData().GetDispatcher().ExecuteList(FID_SEARCH_NOW,
                             rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
                                             SfxCallMode::RECORD,
-                            &aSearchItem, nullptr);
+                            { &aSearchItem });
                     const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
@@ -335,10 +335,10 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                 SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
+                GetViewData().GetDispatcher().ExecuteList( FID_SEARCH_NOW,
                         rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
                                         SfxCallMode::RECORD,
-                        &aSearchItem, nullptr);
+                        { &aSearchItem });
             }
             break;
 //      case FID_SEARCH_COUNT:

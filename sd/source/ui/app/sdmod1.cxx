@@ -678,8 +678,9 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             {
                                 SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
                                 SfxUInt32Item eAutoLayout( ID_VAL_WHATLAYOUT, (sal_uInt32) AUTOLAYOUT_TITLE );
-                                pViewFrame->GetDispatcher()->Execute(SID_MODIFYPAGE,
-                                   SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aIsChangedItem, &eAutoLayout, 0L);
+                                pViewFrame->GetDispatcher()->ExecuteList(SID_MODIFYPAGE,
+                                   SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                   { &aIsChangedItem, &eAutoLayout });
                             }
 
                             // clear document info

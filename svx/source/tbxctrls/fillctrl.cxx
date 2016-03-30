@@ -607,8 +607,9 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 mpLbFillAttr->Disable();
 
                 // #i122676# need to call a single SID_ATTR_FILL_STYLE change
-                SfxViewFrame::Current()->GetDispatcher()->Execute(
-                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &aXFillStyleItem, 0L);
+                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
+                    { &aXFillStyleItem });
                 break;
             }
             case drawing::FillStyle_SOLID:
@@ -620,8 +621,9 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 const XFillColorItem aXFillColorItem( aTmpStr, aColor );
 
                 // #i122676# change FillStyle and Color in one call
-                SfxViewFrame::Current()->GetDispatcher()->Execute(
-                    SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, &aXFillColorItem, &aXFillStyleItem, 0L);
+                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                    SID_ATTR_FILL_COLOR, SfxCallMode::RECORD,
+                    { &aXFillColorItem, &aXFillStyleItem });
                 break;
             }
             case drawing::FillStyle_GRADIENT:
@@ -651,8 +653,9 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                             const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetEntry(mnLastPosGradient), aGradient);
 
                             // #i122676# change FillStyle and Gradient in one call
-                            SfxViewFrame::Current()->GetDispatcher()->Execute(
-                                SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem, &aXFillStyleItem, 0L);
+                            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                                SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
+                                { &aXFillGradientItem, &aXFillStyleItem });
                             mpLbFillAttr->SelectEntryPos(mnLastPosGradient);
                         }
                     }
@@ -690,8 +693,9 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                             const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(), aHatch);
 
                             // #i122676# change FillStyle and Hatch in one call
-                            SfxViewFrame::Current()->GetDispatcher()->Execute(
-                                SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem, &aXFillStyleItem, 0L);
+                            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                                SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
+                                { &aXFillHatchItem, &aXFillStyleItem });
                             mpLbFillAttr->SelectEntryPos(mnLastPosHatch);
                         }
                     }
@@ -729,8 +733,9 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                             const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
                             // #i122676# change FillStyle and Bitmap in one call
-                            SfxViewFrame::Current()->GetDispatcher()->Execute(
-                                SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem, &aXFillStyleItem, 0L);
+                            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                                SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                                { &aXFillBitmapItem, &aXFillStyleItem });
                             mpLbFillAttr->SelectEntryPos(mnLastPosBitmap);
                         }
                     }
@@ -769,7 +774,9 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
             if(bFillStyleChange)
             {
                 // #i122676# Single FillStyle change call needed here
-                SfxViewFrame::Current()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &aXFillStyleItem, 0L);
+                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
+                    { &aXFillStyleItem });
             }
             break;
         }
@@ -791,10 +798,12 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                     const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
                     const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
 
-                    // #i122676# Change FillStale and Gradinet in one call
-                    SfxViewFrame::Current()->GetDispatcher()->Execute(
-                        SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem,
-                        bFillStyleChange ? &aXFillStyleItem : nullptr, 0L);
+                    // #i122676# Change FillStyle and Gradinet in one call
+                    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                        SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
+                        (bFillStyleChange)
+                            ? std::initializer_list<SfxPoolItem const*>({ &aXFillGradientItem, &aXFillStyleItem })
+                            : std::initializer_list<SfxPoolItem const*>({ &aXFillGradientItem }));
                 }
             }
 
@@ -822,10 +831,12 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                     const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
                     const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
 
-                    // #i122676# Change FillStale and Hatch in one call
-                    SfxViewFrame::Current()->GetDispatcher()->Execute(
-                        SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem,
-                        bFillStyleChange ? &aXFillStyleItem : nullptr, 0L);
+                    // #i122676# Change FillStyle and Hatch in one call
+                    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                        SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
+                        (bFillStyleChange)
+                            ? std::initializer_list<SfxPoolItem const*>({ &aXFillHatchItem, &aXFillStyleItem })
+                            : std::initializer_list<SfxPoolItem const*>({ &aXFillHatchItem }));
                 }
             }
 
@@ -853,10 +864,12 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                     const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
                     const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
-                    // #i122676# Change FillStale and Bitmap in one call
-                    SfxViewFrame::Current()->GetDispatcher()->Execute(
-                        SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem,
-                        bFillStyleChange ? &aXFillStyleItem : nullptr, 0L);
+                    // #i122676# Change FillStyle and Bitmap in one call
+                    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                        SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                        (bFillStyleChange)
+                            ? std::initializer_list<SfxPoolItem const*>({ &aXFillBitmapItem, &aXFillStyleItem })
+                            : std::initializer_list<SfxPoolItem const*>({ &aXFillBitmapItem }));
                 }
             }
 

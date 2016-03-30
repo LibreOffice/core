@@ -406,8 +406,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData().GetDispatcher();
-            rDisp.Execute(SID_SBA_IMPORT, SfxCallMode::ASYNCHRON,
-                                        &aDataDesc, &aTarget, &aAreaNew, nullptr );
+            rDisp.ExecuteList(SID_SBA_IMPORT, SfxCallMode::ASYNCHRON,
+                    { &aDataDesc, &aTarget, &aAreaNew });
 
             bRet = true;
         }

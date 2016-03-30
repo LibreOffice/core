@@ -122,10 +122,10 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                         // looks a bit awkward, but another way is not possible
                         pStyle = pPool->operator[]( nCurrId - 1 );
                         SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
-                        pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(
+                        pWrtShell->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
                                     FN_SET_PAGE_STYLE,
                                     SfxCallMode::SLOT|SfxCallMode::RECORD,
-                                    &aStyle, 0L );
+                                    { &aStyle });
                     }
                 }
             }

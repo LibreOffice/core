@@ -148,7 +148,8 @@ IMPL_LINK_TYPED( AlignmentPropertyPanel, ReferenceEdgeHdl, Button*, pControl, vo
     else
         eMode = SVX_ROTATE_MODE_STANDARD;
     SvxRotateModeItem aItem(eMode,ATTR_ROTATE_MODE);
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LOCKPOS, SfxCallMode::RECORD, &aItem, 0l);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_LOCKPOS,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
@@ -185,15 +186,15 @@ IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
     sal_Int64 nTmp = (sal_Int64)fTmp*100;
     SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
 
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, { &aAngleItem });
 }
 IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
 {
     bool bVertical = mpCBStacked->IsChecked();
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, &aStackItem, 0L );
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, { &aStackItem });
 }
 IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
 {
@@ -201,7 +202,8 @@ IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
     sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
     SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  SFX_MAPUNIT_TWIP ) );
 
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_INDENT, SfxCallMode::RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_INDENT,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void)
@@ -223,7 +225,8 @@ IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXWrapTextClkHdl, Button*, void)
 {
     bool bState = mpCBXWrapText->IsChecked();
     SfxBoolItem aItem( SID_ATTR_ALIGN_LINEBREAK , bState);
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LINEBREAK, SfxCallMode::RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_LINEBREAK,
+            SfxCallMode::RECORD, { &aItem });
 }
 
 VclPtr<vcl::Window> AlignmentPropertyPanel::Create (

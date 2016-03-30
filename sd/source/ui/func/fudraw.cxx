@@ -721,9 +721,10 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                       !mpDocSh->IsReadOnly())
             {
                 SfxUInt16Item aItem(SID_TEXTEDIT, 2);
-                mpViewShell->GetViewFrame()->GetDispatcher()->
-                                 Execute(SID_TEXTEDIT, SfxCallMode::ASYNCHRON |
-                                         SfxCallMode::RECORD, &aItem, 0L);
+                mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                        SID_TEXTEDIT,
+                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                        { &aItem });
             }
             else if (nInv == SdrInventor &&  nSdrObjKind == OBJ_GRUP)
             {

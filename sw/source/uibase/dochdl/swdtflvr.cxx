@@ -2553,9 +2553,9 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
             if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr, ""/*TODO?*/ ) )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aMediaURLStr );
-                rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
+                rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
                                 SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
-                                &aMediaURLItem, 0L );
+                                { &aMediaURLItem });
             }
 #else
             if (false)
@@ -2694,11 +2694,12 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             rView.StopShellTimer();
 
             SfxStringItem aDataDesc( nWh, sText );
-            rView.GetViewFrame()->GetDispatcher()->Execute(
-                                nWh, SfxCallMode::ASYNCHRON, &aDataDesc,
-                                pConnectionItem.get(), pColumnItem.get(),
-                                pSourceItem.get(), pCommandItem.get(), pCommandTypeItem.get(),
-                                pColumnNameItem.get(), pSelectionItem.get(), pCursorItem.get(), 0L);
+            rView.GetViewFrame()->GetDispatcher()->ExecuteList(
+                nWh, SfxCallMode::ASYNCHRON,
+                { &aDataDesc, pConnectionItem.get(), pColumnItem.get(),
+                  pSourceItem.get(), pCommandItem.get(), pCommandTypeItem.get(),
+                  pColumnNameItem.get(), pSelectionItem.get(),
+                  pCursorItem.get() });
         }
         else
         {
