@@ -43,6 +43,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/new.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/evntconf.hxx>
@@ -1149,6 +1150,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             else
                 SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
+        }
+        break;
+        case SID_NOTEBOOKBAR:
+        {
+            SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
+            sfx2::SfxNotebookBar::ExecMethod(pViewShell->GetViewFrame()->GetBindings());
         }
         break;
 

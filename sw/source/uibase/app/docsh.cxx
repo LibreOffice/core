@@ -40,6 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/srchitem.hxx>
@@ -1068,6 +1069,12 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 bRet = m_pDoc->HasInvisibleContent();
             }
             rSet.Put( SfxBoolItem( nWhich, bRet ) );
+        }
+        break;
+        case SID_NOTEBOOKBAR:
+        {
+            SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
+            sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), "vcl/ui/notebookbar.ui");
         }
         break;
 

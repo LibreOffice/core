@@ -98,7 +98,6 @@
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <sfx2/notebookbar/NotebookBarChildWindow.hxx>
 #include <sfx2/evntconf.hxx>
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
@@ -368,10 +367,6 @@ void SwDLL::RegisterControls()
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
-    ::sfx2::NotebookBarChildWindow::RegisterChildWindow(false, pMod);
-
-    //SfxFrame& rFrame = GetActiveView()->GetViewFrame()->GetFrame();
-    //rFrame.GetSystemWindow()->SetNotebookBar("vcl/ui/notebookbar.ui", rFrame.GetFrameInterface());
 
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
 }
