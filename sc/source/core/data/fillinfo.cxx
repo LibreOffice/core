@@ -338,6 +338,68 @@ void initColWidths(RowInfo* pRowInfo, ScDocument* pDoc, double fColScale, SCTAB 
     }
 }
 
+bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::vector<sal_uInt32> rCondFormats,
+        CellInfo* pInfo, ScStyleSheetPool* pStlPool,
+        const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
+{
+    bool bFound = false;
+    bool bAnyCondition = false;
+    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin();
+            itr != rCondFormats.end() && !bFound; ++itr)
+    {
+        ScConditionalFormat* pCondForm = pCondFormList->GetFormat(*itr);
+        if(!pCondForm)
+            continue;
+
+        ScCondFormatData aData = pCondForm->GetData(
+                pInfo->maCell, rAddr);
+        if (!aData.aStyleName.isEmpty())
+        {
+            SfxStyleSheetBase* pStyleSheet =
+                pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
+            if ( pStyleSheet )
+            {
+                //TODO: cache Style-Sets !!!
+                pInfo->pConditionSet = &pStyleSheet->GetItemSet();
+                bAnyCondition = true;
+
+                // we need to check already here for protected cells
+                const SfxPoolItem* pItem;
+                if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
+                {
+                    const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
+                    bHidden = pProtAttr->GetHideCell();
+                    bHideFormula = pProtAttr->GetHideFormula();
+
+                }
+                bFound = true;
+
+            }
+            // if style is not there, treat like no condition
+        }
+
+        if(aData.pColorScale)
+        {
+            pInfo->pColorScale.reset(aData.pColorScale);
+            bFound = true;
+        }
+
+        if(aData.pDataBar)
+        {
+            pInfo->pDataBar.reset(aData.pDataBar);
+            bFound = true;
+        }
+
+        if(aData.pIconSet)
+        {
+            pInfo->pIconSet.reset(aData.pIconSet);
+            bFound = true;
+        }
+    }
+
+    return bAnyCondition;
+}
+
 }
 
 void ScDocument::FillInfo(
@@ -564,61 +626,10 @@ void ScDocument::FillInfo(
                                     pThisRowInfo->bEmptyBack = false;
                                 }
 
-                                if ( bContainsCondFormat )
+                                if (bContainsCondFormat)
                                 {
-                                    bool bFound = false;
-                                    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin();
-                                            itr != rCondFormats.end() && !bFound; ++itr)
-                                    {
-                                        ScConditionalFormat* pCondForm = pCondFormList->GetFormat(*itr);
-                                        if(!pCondForm)
-                                            continue;
-
-                                        ScCondFormatData aData = pCondForm->GetData(
-                                            pInfo->maCell, ScAddress(nX, nCurRow, nTab));
-                                        if (!aData.aStyleName.isEmpty())
-                                        {
-                                            SfxStyleSheetBase* pStyleSheet =
-                                                pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
-                                            if ( pStyleSheet )
-                                            {
-                                                //TODO: cache Style-Sets !!!
-                                                pInfo->pConditionSet = &pStyleSheet->GetItemSet();
-                                                bAnyCondition = true;
-
-                                                // we need to check already here for protected cells
-                                                const SfxPoolItem* pItem;
-                                                if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
-                                                {
-                                                    const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
-                                                    bHidden = pProtAttr->GetHideCell();
-                                                    bHideFormula = pProtAttr->GetHideFormula();
-
-                                                }
-                                                bFound = true;
-
-                                            }
-                                            // if style is not there, treat like no condition
-                                        }
-
-                                        if(aData.pColorScale)
-                                        {
-                                            pInfo->pColorScale.reset(aData.pColorScale);
-                                            bFound = true;
-                                        }
-
-                                        if(aData.pDataBar)
-                                        {
-                                            pInfo->pDataBar.reset(aData.pDataBar);
-                                            bFound = true;
-                                        }
-
-                                        if(aData.pIconSet)
-                                        {
-                                            pInfo->pIconSet.reset(aData.pIconSet);
-                                            bFound = true;
-                                        }
-                                    }
+                                    bAnyCondition |= handleConditionalFormat(pCondFormList, rCondFormats, pInfo, pStlPool, ScAddress(nX, nCurRow, nTab),
+                                            bHidden, bHideFormula, bTabProtect);
                                 }
 
                                 if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.meType == CELLTYPE_FORMULA))
