@@ -809,7 +809,13 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
     break;
     case TransitionType::ELLIPSEWIPE :
     {
-        nPPTTransitionType = PPT_TRANSITION_TYPE_CIRCLE;
+        switch( nTransitionSubtype ) {
+        case TransitionSubType::HORIZONTAL:
+            nPPTTransitionType = PPT_TRANSITION_TYPE_OVAL;
+            break;
+        default:
+            nPPTTransitionType = PPT_TRANSITION_TYPE_CIRCLE;
+        }
     }
     break;
     case TransitionType::FOURBOXWIPE :
