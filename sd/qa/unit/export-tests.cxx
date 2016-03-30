@@ -1484,6 +1484,9 @@ void SdExportTest::testExportTransitionsPPTX()
     // NEWSFLASH
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 74, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
 
+    //OVAL SHAPE WIPE
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 75, TransitionType::ELLIPSEWIPE, TransitionSubType::HORIZONTAL));
+
     xDocShRef->DoClose();
 }
 
