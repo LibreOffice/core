@@ -1374,7 +1374,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 else
                 {
                     const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
-                    const sal_uInt8 nFont = rInf.GetFont()->GetActual();
+                    const SwFontScript nFont = rInf.GetFont()->GetActual();
                     const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
                     if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() ||
@@ -1382,7 +1382,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                          STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() ||
                          EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() ||
                          0                 != rInf.GetFont()->GetEscapement() ||
-                         SW_LATIN          != nFont ||
+                         SwFontScript::Latin != nFont ||
                          nCurrentLanguage  != nDefaultLang ||
                          !sStyleName.isEmpty())
                     {

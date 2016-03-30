@@ -962,12 +962,12 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo &rInf 
     // See also #i18463# and SwTextFormatter::NewNumberPortion()
     pNumFnt->SetUnderline( LINESTYLE_NONE );
     pNumFnt->SetOverline( LINESTYLE_NONE );
-    pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
-    pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
-    pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );
-    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_LATIN );
-    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CJK );
-    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
+    pNumFnt->SetItalic( ITALIC_NONE, SwFontScript::Latin );
+    pNumFnt->SetItalic( ITALIC_NONE, SwFontScript::CJK );
+    pNumFnt->SetItalic( ITALIC_NONE, SwFontScript::CTL );
+    pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::Latin );
+    pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CJK );
+    pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CTL );
 
     pNumFnt->SetDiffFnt(&rSet, pIDSA );
     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
@@ -1236,14 +1236,14 @@ public:
     SwFootnoteSave( const SwTextSizeInfo &rInf,
                const SwTextFootnote *pTextFootnote,
                const bool bApplyGivenScriptType,
-               const sal_uInt8 nGivenScriptType );
+               const SwFontScript nGivenScriptType );
    ~SwFootnoteSave();
 };
 
 SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
                       const SwTextFootnote* pTextFootnote,
                       const bool bApplyGivenScriptType,
-                      const sal_uInt8 nGivenScriptType )
+                      const SwFontScript nGivenScriptType )
     : pInf( &((SwTextSizeInfo&)rInf) )
     , pFnt( nullptr )
     , pOld( nullptr )
@@ -1322,7 +1322,7 @@ SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
         , nOrigHeight( nReal )
         // #i98418#
         , mbPreferredScriptTypeSet( false )
-        , mnPreferredScriptType( SW_LATIN )
+        , mnPreferredScriptType( SwFontScript::Latin )
 {
     SetLen(1);
     SetWhichPor( POR_FTN );
@@ -1371,7 +1371,7 @@ SwPosSize SwFootnotePortion::GetTextSize( const SwTextSizeInfo &rInfo ) const
 }
 
 // #i98418#
-void SwFootnotePortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
+void SwFootnotePortion::SetPreferredScriptType( SwFontScript nPreferredScriptType )
 {
     mbPreferredScriptTypeSet = true;
     mnPreferredScriptType = nPreferredScriptType;

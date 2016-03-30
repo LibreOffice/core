@@ -86,7 +86,7 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
 
     const SwDoc* pDoc = rInf.GetShell()->GetDoc();
     const long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc) - aDefaultFontItem.GetHeight();
-    if( SW_LATIN == rInf.GetFont()->GetActual() )
+    if( SwFontScript::Latin == rInf.GetFont()->GetActual() )
         return nGridWidthAdd / 2;
 
     return nGridWidthAdd;
@@ -913,7 +913,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // ASIAN LINE AND CHARACTER GRID MODE START
 
     if ( rInf.GetFrame() && rInf.SnapToGrid() && rInf.GetFont() &&
-         SW_CJK == rInf.GetFont()->GetActual() )
+         SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
@@ -1026,7 +1026,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
 
     if ( rInf.GetFrame() && rInf.SnapToGrid() && rInf.GetFont() &&
-         SW_CJK == rInf.GetFont()->GetActual() )
+         SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
@@ -1052,9 +1052,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     bool bSpecialJust = false;
                     const SwScriptInfo* pSI = rInf.GetScriptInfo();
-                    const sal_uInt8 nActual = rInf.GetFont()->GetActual();
+                    const SwFontScript nActual = rInf.GetFont()->GetActual();
                     ///Kana Compression
-                    if( SW_CJK == nActual && rInf.GetKanaComp() &&
+                    if( SwFontScript::CJK == nActual && rInf.GetKanaComp() &&
                         pSI && pSI->CountCompChg() &&
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
@@ -1063,9 +1063,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         bSpecialJust = true;
                     }
                     ///Asian Justification
-                    if ( ( SW_CJK == nActual || SW_LATIN == nActual ) && nSpaceAdd )
+                    if ( ( SwFontScript::CJK == nActual || SwFontScript::Latin == nActual ) && nSpaceAdd )
                     {
-                        LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
+                        LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CJK );
                         if (!MsLangId::isKorean(aLang))
                         {
                             long nSpaceSum = nSpaceAdd;
@@ -1221,10 +1221,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( rInf.GetFont() && rInf.GetLen() )
             {
                 const SwScriptInfo* pSI = rInf.GetScriptInfo();
-                const sal_uInt8 nActual = rInf.GetFont()->GetActual();
+                const SwFontScript nActual = rInf.GetFont()->GetActual();
 
                 // Kana Compression
-                if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+                if ( SwFontScript::CJK == nActual && rInf.GetKanaComp() &&
                      pSI && pSI->CountCompChg() &&
                      lcl_IsMonoSpaceFont( rInf.GetOut() ) )
                 {
@@ -1235,9 +1235,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
 
                 // Asian Justification
-                if ( SW_CJK == nActual && nSpaceAdd )
+                if ( SwFontScript::CJK == nActual && nSpaceAdd )
                 {
-                    LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
+                    LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CJK );
 
                     if (!MsLangId::isKorean(aLang))
                     {
@@ -1254,7 +1254,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
 
                 // Kashida Justification
-                if ( SW_CTL == nActual && nSpaceAdd )
+                if ( SwFontScript::CTL == nActual && nSpaceAdd )
                 {
                     if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                     {
@@ -1269,9 +1269,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
 
                 // Thai Justification
-                if ( SW_CTL == nActual && nSpaceAdd )
+                if ( SwFontScript::CTL == nActual && nSpaceAdd )
                 {
-                    LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
+                    LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CTL );
 
                     if ( LANGUAGE_THAI == aLang )
                     {
@@ -1429,11 +1429,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         if ( rInf.GetFont() && rInf.GetLen() )
         {
-            const sal_uInt8 nActual = rInf.GetFont()->GetActual();
+            const SwFontScript nActual = rInf.GetFont()->GetActual();
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
             // Kana Compression
-            if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+            if ( SwFontScript::CJK == nActual && rInf.GetKanaComp() &&
                  pSI && pSI->CountCompChg() &&
                  lcl_IsMonoSpaceFont( rInf.GetOut() ) )
             {
@@ -1447,9 +1447,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
 
             // Asian Justification
-            if ( SW_CJK == nActual && nSpaceAdd )
+            if ( SwFontScript::CJK == nActual && nSpaceAdd )
             {
-                LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
+                LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CJK );
 
                 if (!MsLangId::isKorean(aLang))
                 {
@@ -1466,7 +1466,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
 
             // Kashida Justification
-            if ( SW_CTL == nActual && nSpaceAdd )
+            if ( SwFontScript::CTL == nActual && nSpaceAdd )
             {
                 if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                 {
@@ -1480,9 +1480,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
 
             // Thai Justification
-            if ( SW_CTL == nActual && nSpaceAdd )
+            if ( SwFontScript::CTL == nActual && nSpaceAdd )
             {
-                LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
+                LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CTL );
 
                 if ( LANGUAGE_THAI == aLang )
                 {
@@ -1834,7 +1834,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     }
 
     if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SW_CJK == rInf.GetFont()->GetActual() )
+         SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
@@ -1876,7 +1876,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
     //for textgrid refactor
     if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SW_CJK == rInf.GetFont()->GetActual() )
+         SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -1905,7 +1905,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
     const bool bCompress = rInf.GetKanaComp() && nLn &&
                            rInf.GetFont() &&
-                           SW_CJK == rInf.GetFont()->GetActual() &&
+                           SwFontScript::CJK == rInf.GetFont()->GetActual() &&
                            rInf.GetScriptInfo() &&
                            rInf.GetScriptInfo()->CountCompChg() &&
                            lcl_IsMonoSpaceFont( rInf.GetOut() );
@@ -2046,10 +2046,10 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
     const SwScriptInfo* pSI = rInf.GetScriptInfo();
     if ( rInf.GetFont() && rInf.GetLen() )
     {
-        const sal_uInt8 nActual = rInf.GetFont()->GetActual();
+        const SwFontScript nActual = rInf.GetFont()->GetActual();
 
         // Kana Compression
-        if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+        if ( SwFontScript::CJK == nActual && rInf.GetKanaComp() &&
              pSI && pSI->CountCompChg() &&
              lcl_IsMonoSpaceFont( rInf.GetOut() ) )
         {
@@ -2060,9 +2060,9 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         }
 
         // Asian Justification
-        if ( SW_CJK == rInf.GetFont()->GetActual() )
+        if ( SwFontScript::CJK == rInf.GetFont()->GetActual() )
         {
-            LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
+            LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CJK );
 
             if (!MsLangId::isKorean(aLang))
             {
@@ -2079,7 +2079,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         }
 
         // Kashida Justification
-        if ( SW_CTL == nActual && rInf.GetSpace() )
+        if ( SwFontScript::CTL == nActual && rInf.GetSpace() )
         {
             if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
             {
@@ -2091,9 +2091,9 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         }
 
         // Thai Justification
-        if ( SW_CTL == nActual && nSpaceAdd )
+        if ( SwFontScript::CTL == nActual && nSpaceAdd )
         {
-            LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
+            LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CTL );
 
             if ( LANGUAGE_THAI == aLang )
             {
@@ -2115,7 +2115,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
     long nKernSum = 0;
 
     if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
-         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+         rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
@@ -2142,7 +2142,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
 
     //for textgrid refactor
     if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
-         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+         rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -2336,7 +2336,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
     ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     const bool bCompress = rInf.GetKanaComp() && rInf.GetLen() &&
-                           SW_CJK == GetActual() &&
+                           SwFontScript::CJK == GetActual() &&
                            rInf.GetScriptInfo() &&
                            rInf.GetScriptInfo()->CountCompChg() &&
                            lcl_IsMonoSpaceFont( rInf.GetOut() );
@@ -2351,7 +2351,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         ? rInf.GetText().getLength() : rInf.GetLen();
 
     if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() &&
-         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+         rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
@@ -2385,7 +2385,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
     //for text grid enhancement
     if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SW_CJK == rInf.GetFont()->GetActual() )
+         SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )

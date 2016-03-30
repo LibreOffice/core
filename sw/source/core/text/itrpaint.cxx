@@ -625,7 +625,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             pUnderlineFnt = new SwFont( *GetInfo().GetFont() );
 
             // font height
-            const sal_uInt8 nActual = pUnderlineFnt->GetActual();
+            const SwFontScript nActual = pUnderlineFnt->GetActual();
             pUnderlineFnt->SetSize( Size( pUnderlineFnt->GetSize( nActual ).Width(),
                                           nNewFontHeight ), nActual );
 

@@ -196,7 +196,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
     OUString aText;
     if( GetExpText( rInf, aText ) && !aText.isEmpty() && g_pBreakIt->GetBreakIter().is() )
     {
-        sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
+        SwFontScript nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
         sal_Int32 nChg = 0;
         if( i18n::ScriptType::WEAK == nScript )
@@ -213,11 +213,11 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
         else
             nNextScriptChg = aText.getLength();
 
-        sal_uInt8 nTmp;
+        SwFontScript nTmp;
         switch ( nScript ) {
-            case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
-            case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
-            case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
+            case i18n::ScriptType::LATIN : nTmp = SwFontScript::Latin; break;
+            case i18n::ScriptType::ASIAN : nTmp = SwFontScript::CJK; break;
+            case i18n::ScriptType::COMPLEX : nTmp = SwFontScript::CTL; break;
             default: nTmp = nActual;
         }
 
@@ -261,7 +261,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 
             if (nCurrDir == UBIDI_RTL)
             {
-                nTmp = SW_CTL;
+                nTmp = SwFontScript::CTL;
                 // If we decided that this range was RTL after all and the
                 // previous range was complex but clipped to the start of this
                 // range, then extend it to be complex over the additional RTL range
@@ -1076,13 +1076,13 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     // the arrays of width and position are filled by the format function
     if( g_pBreakIt->GetBreakIter().is() )
     {
-        sal_uInt8 nScr = SW_SCRIPTS;
+        SwFontScript nScr = SW_SCRIPTS;
         for( sal_Int32 i = 0; i < rText.getLength(); ++i )
         {
             switch ( g_pBreakIt->GetBreakIter()->getScriptType( rText, i ) ) {
-                case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
-                case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
-                case i18n::ScriptType::COMPLEX : nScr = SW_CTL; break;
+                case i18n::ScriptType::LATIN : nScr = SwFontScript::Latin; break;
+                case i18n::ScriptType::ASIAN : nScr = SwFontScript::CJK; break;
+                case i18n::ScriptType::COMPLEX : nScr = SwFontScript::CTL; break;
             }
             aScrType[i] = nScr;
         }
@@ -1090,7 +1090,7 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     else
     {
         for( int i = 0; i < 6; ++i )
-            aScrType[i] = 0;
+            aScrType[i] = SwFontScript::Latin;
     }
     memset( &aWidth, 0, sizeof(aWidth) );
 }
@@ -1126,7 +1126,7 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
             if( i == nTop ) // change the row
                 aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
             aOutPos.X() = aOldPos.X() + aPos[i];        // X position
-            const sal_uInt8 nAct = aScrType[i];        // script type
+            const SwFontScript nAct = aScrType[i];        // script type
             aTmpFont.SetActual( nAct );
 
             // if there're more than 4 characters to display, we choose fonts
@@ -1208,7 +1208,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         // local nMaxAscent, nMaxDescent and nMaxWidth variables.
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
-            sal_uInt8 nScrp = aScrType[i];
+            SwFontScript nScrp = aScrType[i];
             aTmpFont.SetActual( nScrp );
             if( aWidth[ nScrp ] )
             {

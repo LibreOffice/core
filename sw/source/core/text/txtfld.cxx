@@ -518,12 +518,12 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     // Posture style of paragraph font should not be considered
                     pNumFnt->SetUnderline( LINESTYLE_NONE );
                     pNumFnt->SetOverline( LINESTYLE_NONE );
-                    pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
-                    pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
-                    pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );
-                    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_LATIN );
-                    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CJK );
-                    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
+                    pNumFnt->SetItalic( ITALIC_NONE, SwFontScript::Latin );
+                    pNumFnt->SetItalic( ITALIC_NONE, SwFontScript::CJK );
+                    pNumFnt->SetItalic( ITALIC_NONE, SwFontScript::CTL );
+                    pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::Latin );
+                    pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CJK );
+                    pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CTL );
                 }
 
                 // Apply the explicit attributes from the character style
@@ -535,7 +535,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                 if ( pFormatFnt )
                 {
-                    const sal_uInt8 nAct = pNumFnt->GetActual();
+                    const SwFontScript nAct = pNumFnt->GetActual();
                     pNumFnt->SetFamily( pFormatFnt->GetFamilyType(), nAct );
                     pNumFnt->SetName( pFormatFnt->GetFamilyName(), nAct );
                     pNumFnt->SetStyleName( pFormatFnt->GetStyleName(), nAct );

@@ -30,6 +30,7 @@ class SwTextNode;
 class Point;
 class MultiSelection;
 typedef std::list< sal_Int32 > PositionList;
+enum class SwFontScript;
 
 #define SPACING_PRECISION_FACTOR 100
 
@@ -354,7 +355,7 @@ public:
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
                                         bool bAllowInvalid = false );
 
-    static sal_uInt8 WhichFont(sal_Int32 nIdx, const OUString* pText, const SwScriptInfo* pSI);
+    static SwFontScript WhichFont(sal_Int32 nIdx, const OUString* pText, const SwScriptInfo* pSI);
 };
 
 #endif

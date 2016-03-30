@@ -406,7 +406,7 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
 
     // in some cases, compression is not allowed or suppressed for
     // performance reasons
-    sal_uInt16 nComp =( SW_CJK == GetFont()->GetActual() &&
+    sal_uInt16 nComp =( SwFontScript::CJK == GetFont()->GetActual() &&
                     rSI.CountCompChg() &&
                     ! IsMulti() ) ?
                     GetKanaComp() :
@@ -884,7 +884,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
         const SwTwips nOldWidth = aFontSize.Width();
 
         // new height for font
-        const sal_uInt8 nAct = m_pFnt->GetActual();
+        const SwFontScript nAct = m_pFnt->GetActual();
         aFontSize.Height() = ( 100 * m_pFnt->GetSize( nAct ).Height() ) / nFactor;
         aFontSize.Width() = ( 100 * m_pFnt->GetSize( nAct).Width() ) / nFactor;
 
