@@ -1298,7 +1298,7 @@ sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _
 
 namespace
 {
-    static OUString lcl_createSDBCLevelStatement( const OUString& _rStatement, const Reference< XConnection >& _rxConnection )
+    OUString lcl_createSDBCLevelStatement( const OUString& _rStatement, const Reference< XConnection >& _rxConnection )
     {
         OUString sSDBCLevelStatement( _rStatement );
         try

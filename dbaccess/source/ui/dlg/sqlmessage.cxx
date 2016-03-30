@@ -178,7 +178,7 @@ namespace
         explicit ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
     };
 
-    static bool lcl_hasDetails( const ExceptionDisplayInfo& _displayInfo )
+    bool lcl_hasDetails( const ExceptionDisplayInfo& _displayInfo )
     {
         return  ( !_displayInfo.sErrorCode.isEmpty() )
                 ||  (   !_displayInfo.sSQLState.isEmpty()

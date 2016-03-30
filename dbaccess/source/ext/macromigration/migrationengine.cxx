@@ -170,7 +170,7 @@ namespace dbmm
     {
         static const char sScriptsStorageName[] = "Scripts";
 
-        static OUString lcl_getScriptsSubStorageName( const ScriptType _eType )
+        OUString lcl_getScriptsSubStorageName( const ScriptType _eType )
         {
             switch ( _eType )
             {
@@ -186,7 +186,7 @@ namespace dbmm
             return OUString();
         }
 
-        static bool lcl_getScriptTypeFromLanguage( const OUString& _rLanguage, ScriptType& _out_rScriptType )
+        bool lcl_getScriptTypeFromLanguage( const OUString& _rLanguage, ScriptType& _out_rScriptType )
         {
             struct LanguageMapping
             {
@@ -228,7 +228,7 @@ namespace dbmm
             return sObjectName;
         }
 
-        static Any lcl_executeCommand_throw( const Reference< XCommandProcessor >& _rxCommandProc,
+        Any lcl_executeCommand_throw( const Reference< XCommandProcessor >& _rxCommandProc,
             const sal_Char* _pAsciiCommand )
         {
             OSL_PRECOND( _rxCommandProc.is(), "lcl_executeCommand_throw: illegal object!" );
@@ -263,7 +263,7 @@ namespace dbmm
             eFailure
         };
 
-        static OpenDocResult lcl_loadSubDocument_nothrow( SubDocument& _rDocument,
+        OpenDocResult lcl_loadSubDocument_nothrow( SubDocument& _rDocument,
             const Reference< XStatusIndicator >& _rxProgress, MigrationLog& _rLogger )
         {
             OSL_PRECOND( !_rDocument.xDocument.is(), "lcl_loadSubDocument_nothrow: already loaded!" );
@@ -317,7 +317,7 @@ namespace dbmm
             return _rDocument.xDocument.is() ? eOpenedDoc : eFailure;
         }
 
-        static bool lcl_unloadSubDocument_nothrow( SubDocument& _rDocument, MigrationLog& _rLogger )
+        bool lcl_unloadSubDocument_nothrow( SubDocument& _rDocument, MigrationLog& _rLogger )
         {
             bool bSuccess = false;
             Any aException;
@@ -1132,7 +1132,7 @@ namespace dbmm
 
     namespace
     {
-        static OUString lcl_createTargetLibName( const SubDocument& _rDocument,
+        OUString lcl_createTargetLibName( const SubDocument& _rDocument,
             const OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetContainer )
         {
             // The new library name is composed from the prefix, the base name, and the old library name.
