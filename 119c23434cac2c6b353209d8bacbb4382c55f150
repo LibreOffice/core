@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_5ce46f0c",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1001238
+      },
+      "writtenOn": "2016-03-30T20:08:05Z",
+      "side": 1,
+      "message": "Maybe this can be replaced with direct call to ScEditUtil::RemoveCharAttribs? But mpEditText is const",
+      "range": {
+        "startLine": 1197,
+        "startChar": 12,
+        "endLine": 1197,
+        "endChar": 56
+      },
+      "revId": "119c23434cac2c6b353209d8bacbb4382c55f150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
