@@ -699,7 +699,7 @@ SwLayoutFrame *SwFrame::GetPrevFootnoteLeaf( MakePageType eMakeFootnote )
         {
             SwSectionFrame* pSect = pFootnote->FindSctFrame();
             if( pSect->IsEndnAtEnd() )
-                pTmpRef = pSect->FindLastContent( FINDMODE_LASTCNT );
+                pTmpRef = pSect->FindLastContent( SwFindMode::LastCnt );
         }
         if( !pTmpRef )
             pTmpRef = pFootnote->GetRef();
@@ -1419,7 +1419,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             static_cast<SwSectionFrame*>(GetUpper())->IsEndnAtEnd() )
         {
             SwFrame* pLast =
-                static_cast<SwSectionFrame*>(GetUpper())->FindLastContent( FINDMODE_ENDNOTE );
+                static_cast<SwSectionFrame*>(GetUpper())->FindLastContent( SwFindMode::EndNote );
             if( pLast )
             {
                 pBoss = pLast->FindFootnoteBossFrame();

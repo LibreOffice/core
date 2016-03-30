@@ -2031,7 +2031,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         {
             SwSectionFrame* pSect = pFootnote->FindSctFrame();
             if( pSect->IsEndnAtEnd() )
-                pRef = pSect->FindLastContent( FINDMODE_LASTCNT );
+                pRef = pSect->FindLastContent( SwFindMode::LastCnt );
         }
         if( !pRef )
             pRef = pFootnote->GetRef();

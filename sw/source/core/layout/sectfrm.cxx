@@ -803,12 +803,12 @@ static void lcl_FindContentFrame( SwContentFrame* &rpContentFrame, SwFootnoteFra
     }
 }
 
-SwContentFrame *SwSectionFrame::FindLastContent( sal_uInt8 nMode )
+SwContentFrame *SwSectionFrame::FindLastContent( SwFindMode nMode )
 {
     SwContentFrame *pRet = nullptr;
     SwFootnoteFrame *pFootnoteFrame = nullptr;
     SwSectionFrame *pSect = this;
-    if( nMode )
+    if( nMode != SwFindMode::None )
     {
         const SwSectionFormat *pFormat = IsEndnAtEnd() ? GetEndSectFormat() :
                                      m_pSection->GetFormat();
@@ -826,16 +826,16 @@ SwContentFrame *SwSectionFrame::FindLastContent( sal_uInt8 nMode )
                 break;
         } while( true );
     }
-    bool bFootnoteFound = nMode == FINDMODE_ENDNOTE;
+    bool bFootnoteFound = nMode == SwFindMode::EndNote;
     do
     {
         lcl_FindContentFrame( pRet, pFootnoteFrame, pSect->Lower(), bFootnoteFound );
-        if( pRet || !pSect->IsFollow() || !nMode ||
-            ( FINDMODE_MYLAST == nMode && this == pSect ) )
+        if( pRet || !pSect->IsFollow() || nMode == SwFindMode::None ||
+            ( SwFindMode::MyLast == nMode && this == pSect ) )
             break;
         pSect = pSect->FindMaster();
     } while( pSect );
-    if( ( nMode == FINDMODE_ENDNOTE ) && pFootnoteFrame )
+    if( ( nMode == SwFindMode::EndNote ) && pFootnoteFrame )
         pRet = pFootnoteFrame->ContainsContent();
     return pRet;
 }
@@ -1002,7 +1002,7 @@ void SwSectionFrame::_CheckClipping( bool bGrow, bool bMaximize )
         if( pFootnote )
         {
             pFootnote = pFootnote->FindFootnoteBossFrame();
-            SwFrame* pTmp = FindLastContent( FINDMODE_LASTCNT );
+            SwFrame* pTmp = FindLastContent( SwFindMode::LastCnt );
             // OD 08.11.2002 #104840# - use <SwLayoutFrame::IsBefore(..)>
             if ( pTmp && pFootnote->IsBefore( pTmp->FindFootnoteBossFrame() ) )
                 bExtraCalc = true;
