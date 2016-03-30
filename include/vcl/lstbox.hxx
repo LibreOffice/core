@@ -274,6 +274,8 @@ public:
     void EnableQuickSelection( bool b );
 
     static sal_Int32 NaturalSortCompare(const OUString &rA, const OUString &rB);
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class VCL_DLLPUBLIC MultiListBox : public ListBox

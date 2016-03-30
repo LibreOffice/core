@@ -181,6 +181,8 @@ public:
     void setMaxWidthChars(sal_Int32 nWidth);
 
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 #endif  // _COMBOBOX_HXX

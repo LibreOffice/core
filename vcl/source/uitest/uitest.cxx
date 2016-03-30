@@ -12,8 +12,6 @@
 
 #include <vcl/dialog.hxx>
 
-#include "uitest/factory.hxx"
-
 #include "svdata.hxx"
 
 #include <comphelper/dispatchcommand.hxx>
@@ -32,9 +30,11 @@ std::unique_ptr<UIObject> UITest::getFocusTopWindow()
     ImplSVWinData& rWinData = pSVData->maWinData;
 
     if (rWinData.mpLastExecuteDlg)
-        return UITestWrapperFactory::createObject(rWinData.mpLastExecuteDlg.get());
+    {
+        rWinData.mpLastExecuteDlg->GetUITestFactory()(rWinData.mpLastExecuteDlg);
+    }
 
-    return UITestWrapperFactory::createObject(rWinData.mpFirstFrame.get());
+    return rWinData.mpFirstFrame->GetUITestFactory()(rWinData.mpFirstFrame);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

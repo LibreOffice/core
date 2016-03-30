@@ -23,6 +23,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/settings.hxx>
+#include <uitest/uiobject_impl.hxx>
 
 #include "controldata.hxx"
 #include "spin.hxx"
@@ -1038,6 +1039,11 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         pDev->Pop();
         pDev->SetSettings(aOldSettings);
     }
+}
+
+FactoryFunction SpinField::GetUITestFactory() const
+{
+    return SpinFieldUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

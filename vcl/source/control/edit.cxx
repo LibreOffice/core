@@ -27,6 +27,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <uitest/uiobject_impl.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
@@ -3045,6 +3046,11 @@ OUString Edit::GetSurroundingText() const
 Selection Edit::GetSurroundingTextSelection() const
 {
   return GetSelection();
+}
+
+FactoryFunction Edit::GetUITestFactory() const
+{
+    return EditUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

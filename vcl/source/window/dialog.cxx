@@ -49,6 +49,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
+#include <uitest/uiobject_impl.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
@@ -1180,6 +1181,11 @@ bool Dialog::set_property(const OString &rKey, const OString &rValue)
     else
         return SystemWindow::set_property(rKey, rValue);
     return true;
+}
+
+FactoryFunction Dialog::GetUITestFactory() const
+{
+    return DialogUIObject::create;
 }
 
 VclBuilderContainer::VclBuilderContainer()

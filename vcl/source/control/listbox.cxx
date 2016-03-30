@@ -29,6 +29,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/settings.hxx>
+#include <uitest/uiobject_impl.hxx>
 
 #include "svdata.hxx"
 #include "controldata.hxx"
@@ -1489,6 +1490,11 @@ void ListBox::SetEdgeBlending(bool bNew)
 
         Invalidate();
     }
+}
+
+FactoryFunction ListBox::GetUITestFactory() const
+{
+    return ListBoxUIObject::create;
 }
 
 MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :

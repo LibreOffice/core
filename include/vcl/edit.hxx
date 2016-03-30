@@ -274,6 +274,8 @@ public:
 
     void SetTextFilter(TextFilter* pFilter) { mpFilterText = pFilter; }
 
+    virtual FactoryFunction GetUITestFactory() const override;
+
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)
     static Size GetMinimumEditSize();
