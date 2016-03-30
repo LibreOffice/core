@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_597481ce",
+        "filename": "dbaccess/source/ui/dlg/dbadminsetup.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-30T06:45:28Z",
+      "side": 1,
+      "message": "this should probably be \"Set up PostgreSQL connection\"\n\nPGSQL is not a widely used acronym",
+      "revId": "101eb6e41877286b3fe939b3ef5961966cbd8fc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b9813d92",
+        "filename": "dbaccess/source/ui/inc/dbu_dlg.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-30T06:45:28Z",
+      "side": 1,
+      "message": "I don\u0027t fully grok this stuff, but I suspect that this needs to have a value of 103, and then LAST_STR_HERE needs to be adjusted to 104",
+      "revId": "101eb6e41877286b3fe939b3ef5961966cbd8fc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
