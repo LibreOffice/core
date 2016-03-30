@@ -860,7 +860,8 @@ void SwView::Execute(SfxRequest &rReq)
             else
             {
                 SfxBoolItem aItem( SID_WIN_FULLSCREEN, false );
-                GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SfxCallMode::RECORD, &aItem, 0L );
+                GetViewFrame()->GetDispatcher()->ExecuteList(SID_WIN_FULLSCREEN,
+                        SfxCallMode::RECORD, { &aItem });
                 bIgnore = true;
             }
         }
@@ -1213,8 +1214,8 @@ void SwView::Execute(SfxRequest &rReq)
             if(nAlias && (m_nSelectionType & (nsSelectionType::SEL_DRW)))
             {
                 SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
-                GetViewFrame()->GetDispatcher()->Execute(
-                                SID_OBJECT_ALIGN, SfxCallMode::ASYNCHRON, &aEnumItem, 0L);
+                GetViewFrame()->GetDispatcher()->ExecuteList(SID_OBJECT_ALIGN,
+                        SfxCallMode::ASYNCHRON, { &aEnumItem });
             }
             else if(nAlias)
             //these slots are either re-mapped to text or object alignment
@@ -2360,8 +2361,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             EnableMailMerge();
             //then show the "Data base only" field dialog
             SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, true);
-            pVFrame->GetDispatcher()->Execute(FN_INSERT_FIELD_DATA_ONLY,
-                                                SfxCallMode::SYNCHRON, &aOn, 0L);
+            pVFrame->GetDispatcher()->ExecuteList(FN_INSERT_FIELD_DATA_ONLY,
+                    SfxCallMode::SYNCHRON, { &aOn });
             return;
         }
         else

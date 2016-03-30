@@ -162,8 +162,8 @@ void DrawViewShell::SelectionHasChanged()
 
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, true );
-    GetViewFrame()->GetDispatcher()->Execute(
-        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, nullptr);
+    GetViewFrame()->GetDispatcher()->ExecuteList(
+        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
 
     SdrOle2Obj* pOleObj = nullptr;
 

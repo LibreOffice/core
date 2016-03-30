@@ -1351,7 +1351,8 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 if ( pViewFrame )
                 {
                     SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                    pDispatch->Execute( SID_ATTR_YEAR2000, SfxCallMode::ASYNCHRON, pItem, 0L);
+                    pDispatch->ExecuteList(SID_ATTR_YEAR2000,
+                            SfxCallMode::ASYNCHRON, { pItem });
                 }
                 aMisc.SetYear2000(nY2K);
             }
@@ -1431,25 +1432,25 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         pItem = nullptr;
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
         {
-            pDispatch->Execute(pItem->Which(),    SfxCallMode::ASYNCHRON, pItem, 0L);
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::ASYNCHRON, { pItem });
             bSaveSpellCheck = true;
         }
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
         {
-            pDispatch->Execute(pItem->Which(),    SfxCallMode::ASYNCHRON, pItem, 0L);
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::ASYNCHRON, { pItem });
             bSaveSpellCheck = true;
         }
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
         {
-            pDispatch->Execute(pItem->Which(),    SfxCallMode::ASYNCHRON, pItem, 0L);
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::ASYNCHRON, { pItem });
             bSaveSpellCheck = true;
         }
 
         if( SfxItemState::SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
         {
             bool bOnlineSpelling = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-            pDispatch->Execute(SID_AUTOSPELL_CHECK,
-                SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, pItem, 0L);
+            pDispatch->ExecuteList(SID_AUTOSPELL_CHECK,
+                SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, { pItem });
 
             xProp->setIsSpellAuto( bOnlineSpelling );
         }
@@ -1467,7 +1468,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         SfxViewFrame* _pViewFrame = SfxViewFrame::GetFirst();
         while ( _pViewFrame )
         {
-            _pViewFrame->GetDispatcher()->Execute(pItem->Which(),    SfxCallMode::ASYNCHRON, pItem, 0L);
+            _pViewFrame->GetDispatcher()->ExecuteList(pItem->Which(),
+                    SfxCallMode::ASYNCHRON, { pItem });
             _pViewFrame = SfxViewFrame::GetNext( *_pViewFrame );
         }
     }

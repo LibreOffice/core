@@ -1017,8 +1017,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 
     @param nSlot the Id of the executing function
     @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
-    @param pArg1 First parameter
-    @param ... Zero terminated list of parameters
+    @param args  list of SfxPoolItem arguments
 
     @return                 Pointer to the SfxPoolItem valid to the next run
                             though the Message-Loop, which contains the return
@@ -1030,13 +1029,13 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     [Example]
 
     pDispatcher->Execute( SID_OPENDOCUMENT, SfxCallMode::SYNCHRON,
-        &SfxStringItem( SID_FILE_NAME, "\\tmp\\temp.sdd" ),
-        &SfxStringItem( SID_FILTER_NAME, "StarDraw Presentation" ),
-        &SfxBoolItem( SID_DOC_READONLY, sal_False ),
-        0L );
+        {   &SfxStringItem( SID_FILE_NAME, "\\tmp\\temp.sdd" ),
+            &SfxStringItem( SID_FILTER_NAME, "StarDraw Presentation" ),
+            &SfxBoolItem( SID_DOC_READONLY, sal_False ),
+        });
 */
-const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
-        const SfxPoolItem*  pArg1, ...)
+const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
+        std::initializer_list<SfxPoolItem const*> args)
 {
     if ( IsLocked(nSlot) )
         return nullptr;
@@ -1048,13 +1047,11 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     {
        SfxAllItemSet aSet( pShell->GetPool() );
 
-       va_list pVarArgs;
-       va_start( pVarArgs, pArg1 );
-       for ( const SfxPoolItem *pArg = pArg1;
-             pArg;
-             pArg = va_arg( pVarArgs, const SfxPoolItem* ) )
+       for (const SfxPoolItem *pArg : args)
+       {
+           assert(pArg);
            MappedPut_Impl( aSet, *pArg );
-       va_end(pVarArgs);
+       }
 
        SfxRequest aReq( nSlot, eCall, aSet );
        _Execute( *pShell, *pSlot, aReq, eCall );

@@ -576,9 +576,9 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
-        return ( nullptr != GetViewData().GetDispatcher().Execute(
+        return ( nullptr != GetViewData().GetDispatcher().ExecuteList(
                                 SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
-                                &aMediaURLItem, nullptr) );
+                                { &aMediaURLItem }) );
     }
 
     if (!bLink)     // for bLink only graphics or URL
@@ -605,8 +605,9 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
             // Open Asynchronously, because it can also happen from D&D
             // and that is not so good for the MAC...
-            return ( nullptr != rDispatcher.Execute( SID_OPENDOC,
-                                    SfxCallMode::ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, nullptr) );
+            return (nullptr != rDispatcher.ExecuteList(SID_OPENDOC,
+                                SfxCallMode::ASYNCHRON,
+                                { &aFileNameItem, &aFilterItem, &aTargetItem}));
         }
     }
 

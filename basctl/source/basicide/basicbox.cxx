@@ -309,9 +309,9 @@ void LibBox::NotifyIDE()
         OUString aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->Execute(
-                SID_BASICIDE_LIBSELECTED,
-                SfxCallMode::SYNCHRON, &aDocumentItem, &aLibNameItem, nullptr
+            pDispatcher->ExecuteList(
+                SID_BASICIDE_LIBSELECTED, SfxCallMode::SYNCHRON,
+                { &aDocumentItem, &aLibNameItem }
             );
     }
     ReleaseFocus();

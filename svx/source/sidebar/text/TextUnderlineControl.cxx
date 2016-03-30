@@ -221,7 +221,8 @@ IMPL_LINK_TYPED(TextUnderlineControl, VSSelectHdl, ValueSet*, pControl, void)
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
 
         aLineItem.SetColor(mrTextPropertyPanel.GetUnderlineColor());
-        mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SfxCallMode::RECORD, &aLineItem, 0L);
+        mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
+                SfxCallMode::RECORD, { &aLineItem });
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }
 }

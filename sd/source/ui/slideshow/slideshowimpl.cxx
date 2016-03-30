@@ -1546,11 +1546,11 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const css::awt::Mo
 
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
             if (pViewFrm)
-                pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                              SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                            &aUrl,
-                                            &aBrowsing,
-                                            0L );
+            {
+                pViewFrm->GetDispatcher()->ExecuteList( SID_OPENDOC,
+                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                    { &aUrl, &aBrowsing });
+            }
         }
     }
     break;

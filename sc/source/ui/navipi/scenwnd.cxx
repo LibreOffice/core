@@ -169,7 +169,8 @@ void ScScenarioListBox::ExecuteScenarioSlot( sal_uInt16 nSlotId )
     if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
     {
         SfxStringItem aStringItem( nSlotId, GetSelectEntry() );
-        pViewFrm->GetDispatcher()->Execute( nSlotId, SfxCallMode::SLOT | SfxCallMode::RECORD, &aStringItem, 0L, 0L );
+        pViewFrm->GetDispatcher()->ExecuteList(nSlotId,
+                SfxCallMode::SLOT | SfxCallMode::RECORD, { &aStringItem } );
     }
 }
 

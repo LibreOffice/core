@@ -73,8 +73,8 @@ void DrawViewShell::ModelHasChanged()
     GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, true );
 
     SfxBoolItem aItem( SID_3D_STATE, true );
-    GetViewFrame()->GetDispatcher()->Execute(
-        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, nullptr);
+    GetViewFrame()->GetDispatcher()->ExecuteList(
+        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
 
     // now initialize the TextEditOutliner which was newly created by the draw engine
     ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
@@ -300,9 +300,9 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if ( mpDrawView->IsDesignMode() != pView->IsDesignMode() )
     {
         SfxBoolItem aDesignModeItem( SID_FM_DESIGN_MODE, pView->IsDesignMode() );
-        GetViewFrame()->GetDispatcher()->Execute(SID_FM_DESIGN_MODE,
+        GetViewFrame()->GetDispatcher()->ExecuteList(SID_FM_DESIGN_MODE,
                 SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                &aDesignModeItem, nullptr);
+                { &aDesignModeItem });
     }
 
     // has to be called in the end, because it executes a WriteFrameViewData()

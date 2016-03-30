@@ -36,11 +36,10 @@ void RequestNavigatorUpdate (SfxBindings* pBindings)
         && pBindings->GetDispatcher() != nullptr)
     {
         SfxBoolItem aItem (SID_NAVIGATOR_INIT, true);
-        pBindings->GetDispatcher()->Execute(
+        pBindings->GetDispatcher()->ExecuteList(
             SID_NAVIGATOR_INIT,
             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-            &aItem,
-            0L);
+            { &aItem });
     }
 }
 

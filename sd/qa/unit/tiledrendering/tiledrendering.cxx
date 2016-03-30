@@ -261,7 +261,8 @@ void SdTiledRenderingTest::testPostKeyEvent()
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
     SfxStringItem aInputString(SID_ATTR_CHAR, "x");
-    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, &aInputString, 0);
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
+            SfxCallMode::SYNCHRON, { &aInputString });
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -288,7 +289,8 @@ void SdTiledRenderingTest::testPostMouseEvent()
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
     SfxStringItem aInputString(SID_ATTR_CHAR, "x");
-    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, &aInputString, 0);
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
+            SfxCallMode::SYNCHRON, { &aInputString });
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we manage to go after the first character?

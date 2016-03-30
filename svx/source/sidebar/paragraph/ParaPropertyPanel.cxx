@@ -209,8 +209,8 @@ IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
     aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
 }
 
 IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, void)
@@ -226,8 +226,8 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
             case CombinedEnumContext(Application_WriterVariants, Context_Table):
                 {
                     SfxBoolItem aMargin( SID_INC_INDENT, true );
-                    GetBindings()->GetDispatcher()->Execute(
-                        SID_INC_INDENT, SfxCallMode::RECORD, &aMargin, 0L);
+                    GetBindings()->GetDispatcher()->ExecuteList(
+                        SID_INC_INDENT, SfxCallMode::RECORD, { &aMargin });
                 }
                 break;
             default:
@@ -241,8 +241,8 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
                     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
                     aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
-                    GetBindings()->GetDispatcher()->Execute(
-                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
+                    GetBindings()->GetDispatcher()->ExecuteList(
+                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
                 }
             }
         }
@@ -255,8 +255,8 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
             case CombinedEnumContext(Application_WriterVariants, Context_Table):
                 {
                     SfxBoolItem aMargin( SID_DEC_INDENT, true );
-                    GetBindings()->GetDispatcher()->Execute(
-                        SID_DEC_INDENT, SfxCallMode::RECORD, &aMargin, 0L);
+                    GetBindings()->GetDispatcher()->ExecuteList(
+                        SID_DEC_INDENT, SfxCallMode::RECORD, { &aMargin });
                 }
                 break;
             default:
@@ -275,8 +275,8 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
                     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
                     aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
-                    GetBindings()->GetDispatcher()->Execute(
-                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
+                    GetBindings()->GetDispatcher()->ExecuteList(
+                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
                 }
             }
         }
@@ -287,8 +287,8 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
             aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
             aMargin.SetTextFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
 
-            GetBindings()->GetDispatcher()->Execute(
-                SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
+            GetBindings()->GetDispatcher()->ExecuteList(
+                SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
         }
 }
 
@@ -299,8 +299,8 @@ IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
     aMargin.SetUpper( (sal_uInt16)GetCoreValue( *mpTopDist, m_eULSpaceUnit ) );
     aMargin.SetLower( (sal_uInt16)GetCoreValue( *mpBottomDist, m_eULSpaceUnit ) );
 
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, { &aMargin });
 }
 
 // for Paragraph State change

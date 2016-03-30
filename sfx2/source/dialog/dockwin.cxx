@@ -1661,8 +1661,9 @@ bool SfxDockingWindow::Close()
         return true;
 
     SfxBoolItem aValue( pMgr->GetType(), false);
-    pBindings->GetDispatcher_Impl()->Execute(
-        pMgr->GetType(), SfxCallMode::RECORD | SfxCallMode::ASYNCHRON, &aValue, 0L );
+    pBindings->GetDispatcher_Impl()->ExecuteList(
+        pMgr->GetType(), SfxCallMode::RECORD | SfxCallMode::ASYNCHRON,
+        { &aValue });
     return true;
 }
 

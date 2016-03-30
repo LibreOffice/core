@@ -212,42 +212,50 @@ void LinePropertyPanel::HandleContextChange(
 
 void LinePropertyPanel::setLineStyle(const XLineStyleItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &rItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_STYLE,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 void LinePropertyPanel::setLineDash(const XLineDashItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_DASH, SfxCallMode::RECORD, &rItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_DASH,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 void LinePropertyPanel::setLineEndStyle(const XLineEndItem* pItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SfxCallMode::RECORD, pItem,  0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINEEND_STYLE,
+            SfxCallMode::RECORD, { pItem });
 }
 
 void LinePropertyPanel::setLineStartStyle(const XLineStartItem* pItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SfxCallMode::RECORD, pItem,  0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINEEND_STYLE,
+            SfxCallMode::RECORD, { pItem });
 }
 
 void LinePropertyPanel::setLineJoint(const XLineJointItem* pItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_JOINT, SfxCallMode::RECORD, pItem,  0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_JOINT,
+            SfxCallMode::RECORD, { pItem });
 }
 
 void LinePropertyPanel::setLineCap(const XLineCapItem* pItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_CAP, SfxCallMode::RECORD, pItem,  0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_CAP,
+            SfxCallMode::RECORD, { pItem });
 }
 
 void LinePropertyPanel::setLineTransparency(const XLineTransparenceItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &rItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_STYLE,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 void LinePropertyPanel::setLineWidth(const XLineWidthItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &rItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_WIDTH,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 }} // end of namespace svx::sidebar

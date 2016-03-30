@@ -2552,9 +2552,9 @@ void ScViewFunc::MoveTable(
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
         SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
 
-        const SfxPoolItem* pRetItem = GetViewData().GetDispatcher().Execute(
+        const SfxPoolItem* pRetItem = GetViewData().GetDispatcher().ExecuteList(
                     SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON,
-                    &aItem, &aTarget, nullptr);
+                    { &aItem, &aTarget });
         if ( pRetItem )
         {
             if ( dynamic_cast<const SfxObjectItem*>( pRetItem) !=  nullptr )

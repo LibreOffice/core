@@ -176,7 +176,8 @@ IMPL_LINK_TYPED(CellLineStyleControl, VSSelectHdl, ValueSet*, pControl, void)
         editeng::SvxBorderLine aTmp;
         aTmp.GuessLinesWidths(nStyle, n1, n2, n3);
         aLineItem.SetLine( &aTmp );
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_FRAME_LINESTYLE, SfxCallMode::RECORD, &aLineItem, 0L);
+        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->ExecuteList(
+            SID_FRAME_LINESTYLE, SfxCallMode::RECORD, { &aLineItem });
         SetAllNoSel();
         mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
     }

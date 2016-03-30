@@ -980,7 +980,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
         SfxBoolItem aNavi(SID_NAVIGATOR, true);
-        GetDispatcher().Execute(SID_NAVIGATOR, SfxCallMode::ASYNCHRON, &aNavi, 0L);
+        GetDispatcher().ExecuteList(SID_NAVIGATOR, SfxCallMode::ASYNCHRON, { &aNavi });
     }
 
     uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
@@ -1606,8 +1606,8 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         }
                     }
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadonly);
-                    GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::ASYNCHRON,
-                                                &aItem, 0L );
+                    GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
+                            SfxCallMode::ASYNCHRON, { &aItem });
                 }
                 break;
 
@@ -1619,8 +1619,8 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         GetFormShell()->SetView(
                             dynamic_cast<FmFormView*>( GetWrtShell().GetDrawView())  );
                         SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
-                        GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::SYNCHRON,
-                                                  &aItem, 0L );
+                        GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
+                                SfxCallMode::SYNCHRON, { &aItem });
                     }
                 }
                 break;

@@ -2275,9 +2275,9 @@ void ScPosWnd::DoEnter()
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, true );        // remove existing selection
 
-                    pViewSh->GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
+                    pViewSh->GetViewData().GetDispatcher().ExecuteList( SID_CURRENTCELL,
                                         SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                                        &aPosItem, &aUnmarkItem, nullptr);
+                                        { &aPosItem, &aUnmarkItem });
                 }
             }
         }

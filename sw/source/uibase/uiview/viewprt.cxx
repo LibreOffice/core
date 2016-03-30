@@ -169,9 +169,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             {
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
                 SfxBoolItem aSilent( SID_SILENT, true );
-                GetViewFrame()->GetDispatcher()->Execute( SID_PRINTDOC,
+                GetViewFrame()->GetDispatcher()->ExecuteList(SID_PRINTDOC,
                             SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-                            &aPrinterName, &aSilent, 0L );
+                            { &aPrinterName, &aSilent });
             }
             else
             {
@@ -180,9 +180,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 aInfoBox->set_primary_text(aInfoBox->get_primary_text().replaceFirst("%1", OUString(SW_RES(nResNo))));
                 aInfoBox->Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
-                GetViewFrame()->GetDispatcher()->Execute(SID_SW_EDITOPTIONS,
+                GetViewFrame()->GetDispatcher()->ExecuteList(SID_SW_EDITOPTIONS,
                             SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-                            &aDefPage, 0L );
+                            { &aDefPage });
             }
         }
         break;
@@ -209,8 +209,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                     if(RET_YES == nRet)
                     {
                         SfxBoolItem aBool(FN_QRY_MERGE, true);
-                        GetViewFrame()->GetDispatcher()->Execute(
-                                    FN_QRY_MERGE, SfxCallMode::ASYNCHRON, &aBool, 0L);
+                        GetViewFrame()->GetDispatcher()->ExecuteList(
+                                    FN_QRY_MERGE, SfxCallMode::ASYNCHRON,
+                                    { &aBool });
                         rReq.Ignore();
                     }
                     return;

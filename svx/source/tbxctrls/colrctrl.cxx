@@ -333,8 +333,8 @@ void SvxColorDockingWindow::SetSize()
 bool SvxColorDockingWindow::Close()
 {
     SfxBoolItem aItem( SID_COLOR_CONTROL, false );
-    GetBindings().GetDispatcher()->Execute(
-        SID_COLOR_CONTROL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->ExecuteList(SID_COLOR_CONTROL,
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
     SfxDockingWindow::Close();
     return true;
 }
@@ -353,7 +353,8 @@ IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
             if ( nPos == 1 )        // unsichtbar
             {
                 XFillStyleItem aXFillStyleItem( drawing::FillStyle_NONE );
-                pDispatcher->Execute( nLeftSlot, SfxCallMode::RECORD, &aXFillStyleItem, 0L );
+                pDispatcher->ExecuteList(nLeftSlot, SfxCallMode::RECORD,
+                        { &aXFillStyleItem });
             }
             else
             {
@@ -368,8 +369,8 @@ IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                     if ( pView && pView->IsTextEdit() )
                     {
                         SvxColorItem aTextColorItem( aColor, SID_ATTR_CHAR_COLOR );
-                        pDispatcher->Execute(
-                            SID_ATTR_CHAR_COLOR, SfxCallMode::RECORD, &aTextColorItem, 0L );
+                        pDispatcher->ExecuteList(SID_ATTR_CHAR_COLOR,
+                                SfxCallMode::RECORD, { &aTextColorItem });
                         bDone = true;
                     }
                 }
@@ -377,15 +378,16 @@ IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                 {
                     XFillStyleItem aXFillStyleItem( drawing::FillStyle_SOLID );
                     XFillColorItem aXFillColorItem( aStr, aColor );
-                    pDispatcher->Execute(
-                        nLeftSlot, SfxCallMode::RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
+                    pDispatcher->ExecuteList(nLeftSlot, SfxCallMode::RECORD,
+                            { &aXFillColorItem, &aXFillStyleItem });
                 }
             }
         }
         else if ( nPos != 1 )       // unsichtbar
         {
             SvxColorItem aLeftColorItem( aColor, nLeftSlot );
-            pDispatcher->Execute( nLeftSlot, SfxCallMode::RECORD, &aLeftColorItem, 0L );
+            pDispatcher->ExecuteList(nLeftSlot, SfxCallMode::RECORD,
+                    { &aLeftColorItem });
         }
     }
     else
@@ -395,7 +397,8 @@ IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
             if( nPos == 1 )     // unsichtbar
             {
                 XLineStyleItem aXLineStyleItem( drawing::LineStyle_NONE );
-                pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineStyleItem, 0L );
+                pDispatcher->ExecuteList(nRightSlot, SfxCallMode::RECORD,
+                        { &aXLineStyleItem });
             }
             else
             {
@@ -415,20 +418,23 @@ IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                             if ( eXLS == drawing::LineStyle_NONE )
                             {
                                 XLineStyleItem aXLineStyleItem( drawing::LineStyle_SOLID );
-                                pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineStyleItem, 0L );
+                                pDispatcher->ExecuteList(nRightSlot,
+                                    SfxCallMode::RECORD, { &aXLineStyleItem });
                             }
                         }
                     }
                 }
 
                 XLineColorItem aXLineColorItem( aStr, aColor );
-                pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineColorItem, 0L );
+                pDispatcher->ExecuteList(nRightSlot, SfxCallMode::RECORD,
+                        { &aXLineColorItem });
             }
         }
         else if ( nPos != 1 )       // unsichtbar
         {
             SvxColorItem aRightColorItem( aColor, nRightSlot );
-            pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aRightColorItem, 0L );
+            pDispatcher->ExecuteList(nRightSlot, SfxCallMode::RECORD,
+                    { &aRightColorItem });
         }
     }
 }

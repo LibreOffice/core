@@ -317,7 +317,8 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void
             nVal = LogicToLogic(30, MAP_POINT, (MapUnit)eUnit);
             nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(-nKern, SID_ATTR_CHAR_KERNING);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+            mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+                    SfxCallMode::RECORD, { &aKernItem });
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 2)
@@ -325,13 +326,15 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void
             nVal = LogicToLogic(15, MAP_POINT, (MapUnit)eUnit);
             nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(-nKern, SID_ATTR_CHAR_KERNING);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+            mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+                    SfxCallMode::RECORD, { &aKernItem });
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 3)
         {
             SvxKerningItem aKernItem(0, SID_ATTR_CHAR_KERNING);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+            mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+                    SfxCallMode::RECORD, { &aKernItem });
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 4)
@@ -339,7 +342,8 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void
             nVal = LogicToLogic(30, MAP_POINT, (MapUnit)eUnit);
             nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+            mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+                    SfxCallMode::RECORD, { &aKernItem });
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 5)
@@ -347,7 +351,8 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void
             nVal = LogicToLogic(60, MAP_POINT, (MapUnit)eUnit);
             nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+            mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+                    SfxCallMode::RECORD, { &aKernItem });
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 6)
@@ -358,7 +363,8 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void
                 nVal = LogicToLogic(mnCustomKern, MAP_POINT, (MapUnit)eUnit);
                 nKern = (short)maEditKerning->Denormalize(nVal);
                 SvxKerningItem aKernItem(nKern , SID_ATTR_CHAR_KERNING);
-                mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+                mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+                        SfxCallMode::RECORD, { &aKernItem });
                 mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
             }
             else
@@ -449,7 +455,8 @@ IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningModifyHdl, Edit&, void
         mnCustomKern = 0;
     }
     SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+            SfxCallMode::RECORD, { &aKernItem });
 }
 
 }} // end of namespace sidebar

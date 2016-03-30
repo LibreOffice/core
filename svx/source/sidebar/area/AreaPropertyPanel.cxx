@@ -105,46 +105,48 @@ VclPtr<vcl::Window> AreaPropertyPanel::Create (
 
 void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SfxCallMode::RECORD, &rItem, 0L );
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_TRANSPARENCE,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 void AreaPropertyPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SfxCallMode::RECORD, &rItem, 0L );
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_FLOATTRANSPARENCE,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 void AreaPropertyPanel::setFillStyle(const XFillStyleItem& rItem)
 {
-    GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &rItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_STYLE,
+            SfxCallMode::RECORD, { &rItem });
 }
 
 void AreaPropertyPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
         const XFillColorItem& aColorItem)
 {
-    GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, &aColorItem, pStyleItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_COLOR,
+            SfxCallMode::RECORD, { &aColorItem, pStyleItem });
 }
 
 void AreaPropertyPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
         const XFillGradientItem& rGradientItem)
 {
-    GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &rGradientItem, pStyleItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_GRADIENT,
+            SfxCallMode::RECORD, { &rGradientItem, pStyleItem });
 }
 
 void AreaPropertyPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         const XFillHatchItem& rHatchItem)
 {
-    GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &rHatchItem, pStyleItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_HATCH,
+            SfxCallMode::RECORD, { &rHatchItem, pStyleItem });
 }
 
 void AreaPropertyPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         const XFillBitmapItem& rBitmapItem)
 {
-    GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &rBitmapItem, pStyleItem, 0L);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_BITMAP,
+            SfxCallMode::RECORD, { &rBitmapItem, pStyleItem });
 }
 
 } } // end of namespace svx::sidebar

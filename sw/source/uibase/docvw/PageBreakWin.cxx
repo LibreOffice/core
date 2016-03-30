@@ -245,8 +245,10 @@ void SwPageBreakWin::Select( )
                         rSh.SetSelection( *pNd );
 
                         SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
-                        pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                FN_FORMAT_TABLE_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, nullptr );
+                        pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                                FN_FORMAT_TABLE_DLG,
+                                SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                                { &aItem });
 
                         rSh.Pop( false );
                     }
@@ -258,8 +260,10 @@ void SwPageBreakWin::Select( )
                         SwPaM aPaM( *pNd );
                         SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
                         SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
-                        pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                SID_PARA_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, &aPaMItem, nullptr );
+                        pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                                SID_PARA_DLG,
+                                SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                                { &aItem, &aPaMItem });
                     }
                     rSh.LockView( bOldLock );
                     pEditWin->GrabFocus( );

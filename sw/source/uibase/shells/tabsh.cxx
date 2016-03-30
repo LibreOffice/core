@@ -944,7 +944,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
                     if( pVFrame )
-                        pVFrame->GetDispatcher()->Execute( nDispatchSlot, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aCountItem, &aAfter, 0L);
+                        pVFrame->GetDispatcher()->ExecuteList(nDispatchSlot,
+                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                            { &aCountItem, &aAfter });
                 }
             }
             break;

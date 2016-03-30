@@ -554,8 +554,8 @@ void TabBar::EndRenaming()
         SfxUInt16Item aID( SID_BASICIDE_ARG_TABID, GetEditPageId() );
         SfxStringItem aNewName( SID_BASICIDE_ARG_MODULENAME, GetEditText() );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->Execute( SID_BASICIDE_NAMECHANGEDONTAB,
-                      SfxCallMode::SYNCHRON, &aID, &aNewName, nullptr);
+            pDispatcher->ExecuteList( SID_BASICIDE_NAMECHANGEDONTAB,
+                      SfxCallMode::SYNCHRON, { &aID, &aNewName });
     }
 }
 

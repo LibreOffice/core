@@ -2233,9 +2233,9 @@ IMPL_LINK_TYPED(SwTOXEntryTabPage, EditStyleHdl, Button*, pBtn, void)
         vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell().
-        GetView().GetViewFrame()->GetDispatcher()->Execute(
-        SID_STYLE_EDIT, SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
-            &aStyle, &aFamily, 0L);
+        GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
+                SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
+                { &aStyle, &aFamily });
         Application::SetDefDialogParent( pDefDlgParent );
     }
 }
@@ -3746,9 +3746,9 @@ IMPL_LINK_TYPED( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn, void )
         vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
-        SID_STYLE_EDIT, SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
-            &aStyle, &aFamily, 0L);
+        rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
+                SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
+                { &aStyle, &aFamily });
         Application::SetDefDialogParent( pDefDlgParent );
     }
 }

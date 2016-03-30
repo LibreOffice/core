@@ -496,10 +496,9 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
 
         // Execute the "new style" slot, complete with undo and all necessary updates.
         // The return value (SfxUInt16Item) is ignored, look for new styles instead.
-        pDisp->Execute( SID_STYLE_NEW, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
-                &aFamilyItem,
-                &aRefItem,
-                nullptr);
+        pDisp->ExecuteList(SID_STYLE_NEW,
+            SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
+            { &aFamilyItem, &aRefItem });
 
         if (bLocked)
             pDisp->Lock(true);

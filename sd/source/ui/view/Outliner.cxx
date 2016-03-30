@@ -1399,9 +1399,8 @@ void Outliner::EnterEditMode (bool bGrabFocus)
         // Make FuText the current function.
         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
         std::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-        pViewShell->GetDispatcher()->
-            Execute(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
-                SfxCallMode::RECORD, &aItem, 0L);
+        pViewShell->GetDispatcher()->ExecuteList(SID_TEXTEDIT,
+                SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aItem });
 
         // To be consistent with the usual behaviour in the Office the text
         // object that is put into edit mode would have also to be selected.

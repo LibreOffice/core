@@ -925,9 +925,9 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
         SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
         SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selektion
 
-        rBindings.GetDispatcher()->Execute( SID_CURRENTCELL,
+        rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
                                   SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                                  &aPosItem, &aUnmarkItem, 0L );
+                                  { &aPosItem, &aUnmarkItem });
     }
 }
 
@@ -936,9 +936,9 @@ void ScNavigatorDlg::SetCurrentCellStr( const OUString& rName )
     ppBoundItems[0]->ClearCache();
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
 
-    rBindings.GetDispatcher()->Execute( SID_CURRENTCELL,
+    rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
                               SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                              &aNameItem, 0L );
+                              { &aNameItem });
 }
 
 void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
@@ -947,9 +947,9 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
     {
         // Table for basic is base-1
         SfxUInt16Item aTabItem( SID_CURRENTTAB, static_cast<sal_uInt16>(nTabNo) + 1 );
-        rBindings.GetDispatcher()->Execute( SID_CURRENTTAB,
+        rBindings.GetDispatcher()->ExecuteList(SID_CURRENTTAB,
                                   SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                                  &aTabItem, 0L );
+                                  { &aTabItem });
     }
 }
 
@@ -975,17 +975,17 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
 void ScNavigatorDlg::SetCurrentObject( const OUString& rName )
 {
     SfxStringItem aNameItem( SID_CURRENTOBJECT, rName );
-    rBindings.GetDispatcher()->Execute( SID_CURRENTOBJECT,
+    rBindings.GetDispatcher()->ExecuteList( SID_CURRENTOBJECT,
                               SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                              &aNameItem, 0L );
+                              { &aNameItem });
 }
 
 void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // activate
 {
     SfxStringItem aDocItem( SID_CURRENTDOC, rDocName );
-    rBindings.GetDispatcher()->Execute( SID_CURRENTDOC,
+    rBindings.GetDispatcher()->ExecuteList( SID_CURRENTDOC,
                               SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                              &aDocItem, 0L );
+                              { &aDocItem });
 }
 
 ScTabViewShell* ScNavigatorDlg::GetTabViewShell()

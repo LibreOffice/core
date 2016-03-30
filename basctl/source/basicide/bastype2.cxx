@@ -930,9 +930,9 @@ bool TreeListBox::OpenCurrent()
                     aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
                     ConvertType(aDesc.GetType())
                 );
-                pDispatcher->Execute(
-                    SID_BASICIDE_SHOWSBX,
-                    SfxCallMode::SYNCHRON, &aSbxItem, nullptr
+                pDispatcher->ExecuteList(
+                    SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
+                    { &aSbxItem }
                 );
                 return true;
             }

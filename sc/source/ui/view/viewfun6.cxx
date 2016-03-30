@@ -111,9 +111,9 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument
     OUString aAddrText(rRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc));
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
     SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
-    pView->GetDispatcher().Execute(
+    pView->GetDispatcher().ExecuteList(
         SID_CURRENTCELL, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-        &aPosItem, &aUnmarkItem, nullptr);
+        { &aPosItem, &aUnmarkItem });
 }
 
 void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)

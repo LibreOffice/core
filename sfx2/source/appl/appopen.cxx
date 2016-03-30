@@ -314,7 +314,9 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
         SfxStringItem aFlags( SID_OPTIONS, OUString("T") );
         SfxBoolItem aHidden( SID_HIDDEN, true );
-        const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
+        const SfxPoolItem *pRet = GetDispatcher_Impl()->ExecuteList(
+            SID_OPENDOC, SfxCallMode::SYNCHRON,
+            { &aName, &aHidden, &aReferer, &aFlags } );
         const SfxObjectItem *pObj = dynamic_cast<const SfxObjectItem*>( pRet  );
         if ( pObj )
             xDoc = dynamic_cast<SfxObjectShell*>( pObj->GetShell()  );
@@ -520,12 +522,14 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
-            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName, 0L );
+            pRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
+                {&aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName});
         }
         else
         {
             SfxStringItem aName( SID_FILE_NAME, "private:factory" );
-            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, 0L );
+            pRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
+                    { &aName, &aTarget, &aReferer } );
         }
 
         if ( pRet )
