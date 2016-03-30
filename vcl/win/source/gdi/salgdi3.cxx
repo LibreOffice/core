@@ -1548,7 +1548,12 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
     {
         GetWinFontEntry(nFallbackLevel)->m_pFontCache->Release(GetWinFontEntry(nFallbackLevel));
     }
-    pFont->mpFontEntry->m_pFontCache->Acquire(pFont->mpFontEntry);
+    // WinSalGraphics::GetEmbedFontData does not set mpFontInstance/mpFontEntry
+    // since it is interested in font file data only.
+    if (pFont->mpFontEntry)
+    {
+        pFont->mpFontEntry->m_pFontCache->Acquire(pFont->mpFontEntry);
+    }
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<ImplWinFontEntry*>( pFont->mpFontEntry );
     mpWinFontData[ nFallbackLevel ] = static_cast<const ImplWinFontData*>( pFont->mpFontData );
 
