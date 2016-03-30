@@ -470,8 +470,9 @@ void ScDocument::FillInfo(
                         --nCurRow;                      // 1 more on top
                     else
                         nArrRow = 1;
+
                     SCROW nThisRow = nCurRow;                   // end of range
-                    SCSIZE  nIndex;
+                    SCSIZE nIndex;
                     (void) pThisAttrArr->Search( nCurRow, nIndex );
 
                     do
@@ -599,6 +600,7 @@ void ScDocument::FillInfo(
                                             }
                                             // if style is not there, treat like no condition
                                         }
+
                                         if(aData.pColorScale)
                                         {
                                             pInfo->pColorScale.reset(aData.pColorScale);
@@ -610,6 +612,7 @@ void ScDocument::FillInfo(
                                             pInfo->pDataBar.reset(aData.pDataBar);
                                             bFound = true;
                                         }
+
                                         if(aData.pIconSet)
                                         {
                                             pInfo->pIconSet.reset(aData.pIconSet);
