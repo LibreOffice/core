@@ -209,27 +209,28 @@ bool isRotateItemUsed(ScDocumentPool *pPool)
     return false;
 }
 
-void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, SCROW& rY,
+void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo,
         double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& rYExtra, SCSIZE& rArrRow, SCROW& rRow2)
 {
     sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
     SCROW nDocHeightEndRow = -1;
     for (SCsROW nSignedY=((SCsROW)nRow1)-1; nSignedY<=(SCsROW)rYExtra; nSignedY++)
     {
+        SCROW nY;
         if (nSignedY >= 0)
-            rY = (SCROW) nSignedY;
+            nY = (SCROW) nSignedY;
         else
-            rY = MAXROW+1;          // invalid
+            nY = MAXROW+1;          // invalid
 
-        if (rY > nDocHeightEndRow)
+        if (nY > nDocHeightEndRow)
         {
-            if (ValidRow(rY))
-                nDocHeight = pDoc->GetRowHeight( rY, nTab, nullptr, &nDocHeightEndRow );
+            if (ValidRow(nY))
+                nDocHeight = pDoc->GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
             else
                 nDocHeight = ScGlobal::nStdRowHeight;
         }
 
-        if ( rArrRow==0 || nDocHeight || rY > MAXROW )
+        if ( rArrRow==0 || nDocHeight || nY > MAXROW )
         {
             RowInfo* pThisRowInfo = &pRowInfo[rArrRow];
             pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
@@ -238,7 +239,7 @@ void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, SCROW& rY,
             if (!nHeight)
                 nHeight = 1;
 
-            pThisRowInfo->nRowNo        = rY;               //TODO: case < 0 ?
+            pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
             pThisRowInfo->nHeight       = nHeight;
             pThisRowInfo->bEmptyBack    = true;
             pThisRowInfo->bEmptyText    = true;
@@ -360,11 +361,6 @@ void ScDocument::FillInfo(
     const SvxShadowItem* pDefShadow =
             static_cast<const SvxShadowItem*>( &pPool->GetDefaultItem( ATTR_SHADOW ) );
 
-    SCROW nThisRow;
-    SCCOL nX;
-    SCROW nY;
-    SCsROW nSignedY;
-    SCCOL nArrCol;
     SCSIZE nArrRow;
     SCSIZE nArrCount;
     bool bAnyMerged = false;
@@ -402,53 +398,8 @@ void ScDocument::FillInfo(
 
     nArrRow=0;
     SCROW nYExtra = nRow2+1;
-    sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
-    SCROW nDocHeightEndRow = -1;
-    for (nSignedY=((SCsROW)nRow1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
-    {
-        if (nSignedY >= 0)
-            nY = (SCROW) nSignedY;
-        else
-            nY = MAXROW+1;          // invalid
-
-        if (nY > nDocHeightEndRow)
-        {
-            if (ValidRow(nY))
-                nDocHeight = GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
-            else
-                nDocHeight = ScGlobal::nStdRowHeight;
-        }
-
-        if ( nArrRow==0 || nDocHeight || nY > MAXROW )
-        {
-            RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-            pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
-
-            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
-            if (!nHeight)
-                nHeight = 1;
-
-            pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
-            pThisRowInfo->nHeight       = nHeight;
-            pThisRowInfo->bEmptyBack    = true;
-            pThisRowInfo->bEmptyText    = true;
-            pThisRowInfo->bChanged      = true;
-            pThisRowInfo->bAutoFilter   = false;
-            pThisRowInfo->bPivotButton  = false;
-            pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
-
-            ++nArrRow;
-            if (nArrRow >= ROWINFO_MAX)
-            {
-                OSL_FAIL("FillInfo: Range too big" );
-                nYExtra = nSignedY;                         // End
-                nRow2 = nYExtra - 1;                        // Adjust range
-            }
-        }
-        else
-            if (nSignedY==(SCsROW) nYExtra)                 // hidden additional line?
-                ++nYExtra;
-    }
+    initRowInfo(this, pRowInfo, fRowScale, nRow1,
+            nTab, nYExtra, nArrRow, nRow2);
     nArrCount = nArrRow;                                      // incl. Dummys
 
     // Rotated text...
@@ -482,9 +433,9 @@ void ScDocument::FillInfo(
     if(pCondFormList)
         pCondFormList->startRendering();
 
-    for (nArrCol=0; nArrCol<=nCol2+2; nArrCol++)                    // left & right + 1
+    for (SCCOL nArrCol=0; nArrCol<=nCol2+2; nArrCol++)                    // left & right + 1
     {
-        nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negative -> invalid
+        SCCOL nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negative -> invalid
 
         if ( ValidCol(nX) )
         {
@@ -520,7 +471,7 @@ void ScDocument::FillInfo(
                         --nCurRow;                      // 1 more on top
                     else
                         nArrRow = 1;
-                    nThisRow=nCurRow;                   // end of range
+                    SCROW nThisRow = nCurRow;                   // end of range
                     SCSIZE  nIndex;
                     (void) pThisAttrArr->Search( nCurRow, nIndex );
 
@@ -757,7 +708,7 @@ void ScDocument::FillInfo(
     {
         for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
-            for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
+            for (SCCOL nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
             {
                 CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
                 SCCOL nCol = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;
@@ -820,9 +771,9 @@ void ScDocument::FillInfo(
         for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-            nSignedY = nArrRow ? pThisRowInfo->nRowNo : ((SCsROW)nRow1)-1;
+            SCsROW nSignedY = nArrRow ? pThisRowInfo->nRowNo : ((SCsROW)nRow1)-1;
 
-            for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
+            for (SCCOL nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
             {
                 SCsCOL nSignedX = ((SCsCOL) nArrCol) - 1;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
@@ -885,7 +836,7 @@ void ScDocument::FillInfo(
             bool bTop = ( nArrRow == 0 );
             bool bBottom = ( nArrRow+1 == nArrCount );
 
-            for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
+            for (SCCOL nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
             {
                 bool bLeft = ( nArrCol == nCol1 );
                 bool bRight = ( nArrCol == nCol2+2 );
