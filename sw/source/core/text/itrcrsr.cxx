@@ -1665,7 +1665,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 aDrawInf.SetSnapToGrid( aSizeInf.SnapToGrid() );
                 aDrawInf.SetPosMatchesBounds( pCMS && pCMS->m_bPosMatchesBounds );
 
-                if ( SW_CJK == aSizeInf.GetFont()->GetActual() &&
+                if ( SwFontScript::CJK == aSizeInf.GetFont()->GetActual() &&
                      pPara->GetScriptInfo().CountCompChg() &&
                     ! pPor->InFieldGrp() )
                     aDrawInf.SetKanaComp( nKanaComp );

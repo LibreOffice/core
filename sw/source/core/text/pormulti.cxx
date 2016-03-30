@@ -289,7 +289,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
         pBracket->cPre = 0;
         pBracket->cPost = 0;
     }
-    sal_uInt8 nTmp = SW_SCRIPTS;
+    SwFontScript nTmp = SW_SCRIPTS;
     if( pBracket->cPre > 255 )
     {
         OUString aText = OUString(pBracket->cPre);
@@ -342,7 +342,7 @@ void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
     aBlank.Height( pBracket->nHeight );
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
-        sal_uInt8 nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
+        SwFontScript nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
         if( SW_SCRIPTS > nAct )
             pTmpFnt->SetActual( nAct );
         pTmpFnt->SetProportion( 100 );
@@ -382,7 +382,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
     if( pBracket->cPre )
     {
         OUString aStr( pBracket->cPre );
-        sal_uInt8 nActualScr = pTmpFnt->GetActual();
+        SwFontScript nActualScr = pTmpFnt->GetActual();
         if( SW_SCRIPTS > pBracket->nPreScript )
             pTmpFnt->SetActual( pBracket->nPreScript );
         SwFontSave aSave( rInf, pTmpFnt );

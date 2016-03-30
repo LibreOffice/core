@@ -54,8 +54,8 @@ private:
     size_t nEndIndex;
     sal_Int32 nPos;
     sal_uInt8 nPropFont;
-    const void* aMagicNo[ SW_SCRIPTS ];
-    sal_uInt16 aFntIdx[ SW_SCRIPTS ];
+    o3tl::enumarray<SwFontScript, const void*> aMagicNo;
+    o3tl::enumarray<SwFontScript, sal_uInt16> aFntIdx;
     const SwTextNode* m_pTextNode;
 
     void SeekFwd( const sal_Int32 nPos );
@@ -80,7 +80,7 @@ protected:
         , nPropFont(0)
         , m_pTextNode(pTextNode)
         {
-            aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = nullptr;
+            aMagicNo[SwFontScript::Latin] = aMagicNo[SwFontScript::CJK] = aMagicNo[SwFontScript::CTL] = nullptr;
         }
 
 public:

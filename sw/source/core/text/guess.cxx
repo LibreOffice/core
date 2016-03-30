@@ -63,7 +63,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     const SwScriptInfo& rSI =
             static_cast<SwParaPortion*>(rInf.GetParaPortion())->GetScriptInfo();
 
-    sal_uInt16 nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
+    sal_uInt16 nMaxComp = ( SwFontScript::CJK == rInf.GetFont()->GetActual() ) &&
                         rSI.CountCompChg() &&
                         ! rInf.IsMulti() &&
                         ! rPor.InFieldGrp() &&
@@ -335,7 +335,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 OSL_ENSURE( nScript, "Script is not between 1 and 4" );
 
                 // compare current script with script from last "real" character
-                if ( nScript - 1 != rInf.GetFont()->GetActual() )
+                if ( SwFontScript(nScript - 1) != rInf.GetFont()->GetActual() )
                     aLang = rInf.GetTextFrame()->GetTextNode()->GetLang(
                         CH_TXTATR_BREAKWORD == cFieldChr ?
                         nDoNotStepOver :

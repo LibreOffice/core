@@ -82,7 +82,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
                        *rTextNode.getIDocumentSettingAccess(), pShell, *pFnt, bVertLayout );
 
-    aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = nullptr;
+    aMagicNo[SwFontScript::Latin] = aMagicNo[SwFontScript::CJK] = aMagicNo[SwFontScript::CTL] = nullptr;
 
     // determine script changes if not already done for current paragraph
     OSL_ENSURE( pScriptInfo, "No script info available");
@@ -101,16 +101,16 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
             if ( nCnt >= pScriptInfo->CountScriptChg() )
                 break;
             nChg = pScriptInfo->GetScriptChg( nCnt );
-            int nTmp = SW_SCRIPTS;
+            SwFontScript nTmp = SW_SCRIPTS;
             switch ( pScriptInfo->GetScriptType( nCnt++ ) ) {
                 case i18n::ScriptType::ASIAN :
-                    if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK;
+                    if( !aMagicNo[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
                     break;
                 case i18n::ScriptType::COMPLEX :
-                    if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL;
+                    if( !aMagicNo[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
                     break;
                 default:
-                    if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
+                    if( !aMagicNo[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
             }
             if( nTmp < SW_SCRIPTS )
             {
@@ -121,8 +121,8 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     }
     else
     {
-        pFnt->ChkMagic( pShell, SW_LATIN );
-        pFnt->GetMagic( aMagicNo[ SW_LATIN ], aFntIdx[ SW_LATIN ], SW_LATIN );
+        pFnt->ChkMagic( pShell, SwFontScript::Latin );
+        pFnt->GetMagic( aMagicNo[ SwFontScript::Latin ], aFntIdx[ SwFontScript::Latin ], SwFontScript::Latin );
     }
 
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;

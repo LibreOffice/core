@@ -653,23 +653,23 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             rFnt.SetProportion( static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight() );
             break;
         case RES_CHRATR_FONT :
-            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_LATIN );
-            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SW_LATIN );
-            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SW_LATIN );
-            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SW_LATIN );
-            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SW_LATIN );
+            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SwFontScript::Latin );
+            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SwFontScript::Latin );
+            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SwFontScript::Latin );
+            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SwFontScript::Latin );
+            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SwFontScript::Latin );
             break;
         case RES_CHRATR_FONTSIZE :
-            rFnt.SetSize(Size(0,static_cast<const SvxFontHeightItem&>(rItem).GetHeight() ), SW_LATIN );
+            rFnt.SetSize(Size(0,static_cast<const SvxFontHeightItem&>(rItem).GetHeight() ), SwFontScript::Latin );
             break;
         case RES_CHRATR_KERNING :
             rFnt.SetFixKerning( static_cast<const SvxKerningItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_LANGUAGE :
-            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SW_LATIN );
+            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SwFontScript::Latin );
             break;
         case RES_CHRATR_POSTURE :
-            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SW_LATIN );
+            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SwFontScript::Latin );
             break;
         case RES_CHRATR_SHADOWED :
             rFnt.SetShadow( static_cast<const SvxShadowedItem&>(rItem).GetValue() );
@@ -717,7 +717,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             rFnt.SetOverColor( static_cast<const SvxOverlineItem&>(rItem).GetColor() );
             break;
         case RES_CHRATR_WEIGHT :
-            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SW_LATIN );
+            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SwFontScript::Latin );
             break;
         case RES_CHRATR_WORDLINEMODE :
             rFnt.SetWordLineMode( static_cast<const SvxWordLineModeItem&>(rItem).GetValue() );
@@ -743,42 +743,42 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             rFnt.SetHighlightColor( static_cast<const SvxBrushItem&>(rItem).GetColor() );
             break;
         case RES_CHRATR_CJK_FONT :
-            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_CJK );
-            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SW_CJK );
-            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SW_CJK );
-            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SW_CJK );
-            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SW_CJK );
+            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SwFontScript::CJK );
+            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SwFontScript::CJK );
+            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SwFontScript::CJK );
+            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SwFontScript::CJK );
+            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SwFontScript::CJK );
             break;
         case RES_CHRATR_CJK_FONTSIZE :
-            rFnt.SetSize(Size( 0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight()), SW_CJK);
+            rFnt.SetSize(Size( 0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight()), SwFontScript::CJK);
             break;
         case RES_CHRATR_CJK_LANGUAGE :
-            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SW_CJK );
+            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SwFontScript::CJK );
             break;
         case RES_CHRATR_CJK_POSTURE :
-            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SW_CJK );
+            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SwFontScript::CJK );
             break;
         case RES_CHRATR_CJK_WEIGHT :
-            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SW_CJK );
+            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SwFontScript::CJK );
             break;
         case RES_CHRATR_CTL_FONT :
-            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_CTL );
-            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SW_CTL );
-            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SW_CTL );
-            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SW_CTL );
-            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SW_CTL );
+            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SwFontScript::CTL );
+            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SwFontScript::CTL );
+            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SwFontScript::CTL );
+            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SwFontScript::CTL );
+            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SwFontScript::CTL );
             break;
         case RES_CHRATR_CTL_FONTSIZE :
-            rFnt.SetSize(Size(0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight() ), SW_CTL);
+            rFnt.SetSize(Size(0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight() ), SwFontScript::CTL);
             break;
         case RES_CHRATR_CTL_LANGUAGE :
-            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SW_CTL );
+            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SwFontScript::CTL );
             break;
         case RES_CHRATR_CTL_POSTURE :
-            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SW_CTL );
+            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SwFontScript::CTL );
             break;
         case RES_CHRATR_CTL_WEIGHT :
-            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SW_CTL );
+            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SwFontScript::CTL );
             break;
         case RES_CHRATR_EMPHASIS_MARK :
             rFnt.SetEmphasisMark(

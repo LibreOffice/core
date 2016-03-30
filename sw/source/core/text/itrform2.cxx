@@ -411,8 +411,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             rInf.GetLast() && rInf.GetLast()->InTextGrp() &&
             rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
-            sal_uInt8 nNxtActual = rInf.GetFont()->GetActual();
-            sal_uInt8 nLstActual = nNxtActual;
+            SwFontScript nNxtActual = rInf.GetFont()->GetActual();
+            SwFontScript nLstActual = nNxtActual;
             sal_uInt16 nLstHeight = (sal_uInt16)rInf.GetFont()->GetHeight();
             bool bAllowBehind = false;
             const CharClass& rCC = GetAppCharClass();
@@ -465,7 +465,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     bAllowBefore = rCC.isLetterNumeric( rInf.GetText(), rInf.GetIdx() - 1 );
                     // Note: ScriptType returns values in [1,4]
                     if ( bAllowBefore )
-                        nLstActual = pScriptInfo->ScriptType( rInf.GetIdx() - 1 ) - 1;
+                        nLstActual = SwFontScript(pScriptInfo->ScriptType( rInf.GetIdx() - 1 ) - 1);
                 }
 
                 nLstHeight /= 5;
@@ -574,7 +574,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
                    // 6. Grid Mode
-                     || ( bHasGrid && SW_CJK != pFnt->GetActual() )
+                     || ( bHasGrid && SwFontScript::CJK != pFnt->GetActual() )
                    )
                 )
             // we store the beginning of the critical portion as our
@@ -628,17 +628,17 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
-            const sal_uInt8 nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
-            const sal_uInt8 nNextScript = nTmp >= rInf.GetText().getLength() ?
-                                     SW_CJK :
+            const SwFontScript nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
+            const SwFontScript nNextScript = nTmp >= rInf.GetText().getLength() ?
+                                     SwFontScript::CJK :
                                      SwScriptInfo::WhichFont( nTmp, nullptr, pScriptInfo );
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
             // be careful when handling an underflow event: the gridkernportion
             // could have been deleted
-            if ( nRestWidth > 0 && SW_CJK != nCurrScript &&
-                ! rInf.IsUnderflow() && ( bFull || SW_CJK == nNextScript ) )
+            if ( nRestWidth > 0 && SwFontScript::CJK != nCurrScript &&
+                ! rInf.IsUnderflow() && ( bFull || SwFontScript::CJK == nNextScript ) )
             {
                 OSL_ENSURE( pGridKernPortion, "No GridKernPortion available" );
 

@@ -493,13 +493,13 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 
             if( pSh->GetViewOptions()->IsParagraph() && Prt().Height() )
             {
-                if( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SW_LATIN ) &&
-                    pFnt->GetName( SW_LATIN ) != numfunc::GetDefBulletFontname() )
+                if( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SwFontScript::Latin ) &&
+                    pFnt->GetName( SwFontScript::Latin ) != numfunc::GetDefBulletFontname() )
                 {
-                    pFnt->SetFamily( FAMILY_DONTKNOW, SW_LATIN );
-                    pFnt->SetName( numfunc::GetDefBulletFontname(), SW_LATIN );
-                    pFnt->SetStyleName( aEmptyOUStr, SW_LATIN );
-                    pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
+                    pFnt->SetFamily( FAMILY_DONTKNOW, SwFontScript::Latin );
+                    pFnt->SetName( numfunc::GetDefBulletFontname(), SwFontScript::Latin );
+                    pFnt->SetStyleName( aEmptyOUStr, SwFontScript::Latin );
+                    pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SwFontScript::Latin );
                 }
                 pFnt->SetVertical( 0, IsVertical() );
                 SwFrameSwapper aSwapper( this, true );

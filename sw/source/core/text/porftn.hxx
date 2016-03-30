@@ -30,7 +30,7 @@ class SwFootnotePortion : public SwFieldPortion
     sal_uInt16 nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;
-    sal_uInt8 mnPreferredScriptType;
+    SwFontScript mnPreferredScriptType;
 public:
     SwFootnotePortion( const OUString &rExpand, SwTextFootnote *pFootnote,
                   sal_uInt16 nOrig = USHRT_MAX );
@@ -42,7 +42,7 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // #i98418#
-    void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
+    void SetPreferredScriptType( SwFontScript nPreferredScriptType );
 
     const SwTextFootnote* GetTextFootnote() const { return pFootnote; };
     OUTPUT_OPERATOR_OVERRIDE

@@ -60,8 +60,8 @@ struct SwBracket
     sal_uInt16 nPostWidth;      // Width of the closing bracket
     sal_Unicode cPre;       // Initial character, e.g. '('
     sal_Unicode cPost;      // Final character, e.g. ')'
-    sal_uInt8 nPreScript;       // Script of the initial character
-    sal_uInt8 nPostScript;       // Script of the final character
+    SwFontScript nPreScript;       // Script of the initial character
+    SwFontScript nPostScript;       // Script of the final character
 };
 
 // The SwMultiPortion is line portion inside a line portion,
