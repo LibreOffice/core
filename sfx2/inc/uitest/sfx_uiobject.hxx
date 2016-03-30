@@ -32,6 +32,10 @@ public:
     virtual UIObjectType get_type() const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
