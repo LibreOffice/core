@@ -107,6 +107,12 @@
  <anim:par pres:preset-id="shape-circle">
   <anim:transitionFilter smil:type="ellipseWipe" smil:subtype="circle"/>
  </anim:par>
+ <anim:par pres:preset-id="shape-oval-horizontal">
+  <anim:transitionFilter smil:type="ellipseWipe" smil:subtype="horizontal"/>
+ </anim:par>
+ <anim:par pres:preset-id="shape-oval-vertical">
+  <anim:transitionFilter smil:type="ellipseWipe" smil:subtype="vertical"/>
+ </anim:par>
 <!--  <anim:par pres:preset-id="circle-in"> -->
 <!--   <anim:transitionFilter smil:type="ellipseWipe" smil:subtype="circle" smil:direction="reverse"/> -->
 <!--  </anim:par> -->
