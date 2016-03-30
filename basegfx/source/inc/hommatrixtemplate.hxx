@@ -101,13 +101,13 @@ namespace basegfx
 
                 // reset last line, it equals default
                 delete const_cast<ImplHomMatrixTemplate< RowSize >*>(this)->mpLine;
-                const_cast<ImplHomMatrixTemplate< RowSize >*>(this)->mpLine = 0L;
+                const_cast<ImplHomMatrixTemplate< RowSize >*>(this)->mpLine = nullptr;
 
                 return true;
             }
 
             ImplHomMatrixTemplate()
-                :   mpLine(0L)
+                :   mpLine(nullptr)
             {
                 // complete initialization with identity matrix, all lines
                 // were initialized with a trailing 1 followed by 0's.
@@ -119,7 +119,7 @@ namespace basegfx
             }
 
             ImplHomMatrixTemplate(const ImplHomMatrixTemplate& rToBeCopied)
-                :   mpLine(0L)
+                :   mpLine(nullptr)
             {
                 // complete initialization using copy
                 for(sal_uInt16 a(0); a < (RowSize - 1); a++)
@@ -174,7 +174,7 @@ namespace basegfx
 
                     if(!::basegfx::fTools::equal(fDefault, rValue))
                     {
-                        mpLine = new ImplMatLine< RowSize >((RowSize - 1), 0L);
+                        mpLine = new ImplMatLine< RowSize >((RowSize - 1), nullptr);
                         mpLine->set(nColumn, rValue);
                     }
                 }
