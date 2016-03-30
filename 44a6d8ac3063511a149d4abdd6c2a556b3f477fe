@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_b9065d1e",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T09:30:28Z",
+      "side": 0,
+      "message": "agree that this should have been fixed before, and i\u0027ve apparently fixed configure.ac yesterday in commit fb8d3a65c52de029135297b1aae2eb5c5bae8ffe but can\u0027t remember why i didn\u0027t leave it to Oliver for educational purposes :-/",
+      "parentUuid": "9ad45d7e_79afc5e3",
+      "range": {
+        "startLine": 3762,
+        "startChar": 19,
+        "endLine": 3762,
+        "endChar": 22
+      },
+      "revId": "44a6d8ac3063511a149d4abdd6c2a556b3f477fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_59ac81ed",
         "filename": "configure.ac",
         "patchSetId": 7
