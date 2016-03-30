@@ -130,7 +130,7 @@ void SwEndnoter::InsertEndnotes()
     }
     OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFootnoteBossFrame(),
             "InsertEndnotes: Where's my column?" );
-    SwFrame* pRef = pSect->FindLastContent( FINDMODE_MYLAST );
+    SwFrame* pRef = pSect->FindLastContent( SwFindMode::MyLast );
     SwFootnoteBossFrame *pBoss = pRef ? pRef->FindFootnoteBossFrame()
                                : static_cast<SwFootnoteBossFrame*>(pSect->Lower());
     pBoss->_MoveFootnotes( *pEndArr );

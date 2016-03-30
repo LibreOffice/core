@@ -30,9 +30,10 @@ class SwAttrSetChg;
 class SwFootnoteContFrame;
 class SwLayouter;
 
-#define FINDMODE_ENDNOTE 1
-#define FINDMODE_LASTCNT 2
-#define FINDMODE_MYLAST  4
+enum class SwFindMode
+{
+    None = 0, EndNote = 1, LastCnt = 2, MyLast = 4
+};
 
 class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
 {
@@ -80,7 +81,7 @@ public:
     inline       SwSectionFrame *GetFollow();
     SwSectionFrame* FindMaster() const;
 
-                 SwContentFrame *FindLastContent( sal_uInt8 nMode = 0 );
+                 SwContentFrame *FindLastContent( SwFindMode nMode = SwFindMode::None );
     inline const SwContentFrame *FindLastContent() const;
     inline SwSection* GetSection() { return m_pSection; }
     inline const SwSection* GetSection() const { return m_pSection; }

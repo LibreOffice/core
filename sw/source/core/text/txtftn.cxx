@@ -599,7 +599,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
     {
         pSect = FindSctFrame();
         if( pSect->IsEndnAtEnd() )
-            pContent = pSect->FindLastContent( FINDMODE_ENDNOTE );
+            pContent = pSect->FindLastContent( SwFindMode::EndNote );
         if( !pContent )
             pContent = this;
     }
