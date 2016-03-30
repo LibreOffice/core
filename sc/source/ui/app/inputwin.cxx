@@ -2277,7 +2277,7 @@ void ScPosWnd::DoEnter()
 
                     pViewSh->GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
                                         SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                                        &aPosItem, &aUnmarkItem, 0 );
+                                        &aPosItem, &aUnmarkItem, nullptr);
                 }
             }
         }

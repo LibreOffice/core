@@ -382,7 +382,7 @@ void ScViewUtil::SetFullScreen( SfxViewShell& rViewShell, bool bSet )
     if( IsFullScreen( rViewShell ) != bSet )
     {
         SfxBoolItem aItem( SID_WIN_FULLSCREEN, bSet );
-        rViewShell.GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SfxCallMode::RECORD, &aItem, 0 );
+        rViewShell.GetDispatcher()->Execute(SID_WIN_FULLSCREEN, SfxCallMode::RECORD, &aItem, nullptr);
     }
 }
 

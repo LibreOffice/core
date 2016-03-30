@@ -311,7 +311,7 @@ void LibBox::NotifyIDE()
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute(
                 SID_BASICIDE_LIBSELECTED,
-                SfxCallMode::SYNCHRON, &aDocumentItem, &aLibNameItem, 0
+                SfxCallMode::SYNCHRON, &aDocumentItem, &aLibNameItem, nullptr
             );
     }
     ReleaseFocus();

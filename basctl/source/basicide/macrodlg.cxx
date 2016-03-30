@@ -678,7 +678,10 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
             SfxGetpApp()->ExecuteSlot( aRequest );
 
             if (SfxDispatcher* pDispatcher = GetDispatcher())
-                pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SfxCallMode::ASYNCHRON, &aInfoItem, 0 );
+            {
+                pDispatcher->Execute(SID_BASICIDE_EDITMACRO,
+                        SfxCallMode::ASYNCHRON, &aInfoItem, nullptr);
+            }
             EndDialog(Macro_Edit);
         }
         else
@@ -687,8 +690,10 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
             {
                 DeleteMacro();
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
+                {
                     pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE,
-                                          SfxCallMode::SYNCHRON, &aInfoItem, 0 );
+                                  SfxCallMode::SYNCHRON, &aInfoItem, nullptr);
+                }
                 CheckButtons();
                 UpdateFields();
                 //if ( m_pMacroBox->GetCurEntry() )    // OV-Bug ?
@@ -714,7 +719,10 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
                     SfxGetpApp()->ExecuteSlot( aRequest );
 
                     if (SfxDispatcher* pDispatcher = GetDispatcher())
-                        pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SfxCallMode::ASYNCHRON, &aInfoItem, 0 );
+                    {
+                        pDispatcher->Execute(SID_BASICIDE_EDITMACRO,
+                                SfxCallMode::ASYNCHRON, &aInfoItem, nullptr);
+                    }
                     StoreMacroDescription();
                     EndDialog(Macro_New);
                 }

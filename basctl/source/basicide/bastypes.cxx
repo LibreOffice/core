@@ -555,7 +555,7 @@ void TabBar::EndRenaming()
         SfxStringItem aNewName( SID_BASICIDE_ARG_MODULENAME, GetEditText() );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_NAMECHANGEDONTAB,
-                                  SfxCallMode::SYNCHRON, &aID, &aNewName, 0 );
+                      SfxCallMode::SYNCHRON, &aID, &aNewName, nullptr);
     }
 }
 

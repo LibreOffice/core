@@ -84,8 +84,10 @@ bool SearchResultsDlg::Close()
         SfxDispatcher* pDispacher = mpBindings ->GetDispatcher();
         SfxBoolItem aItem(SID_SEARCH_RESULTS_DIALOG, false);
         if (pDispacher)
-            pDispacher->Execute(
-                SID_SEARCH_RESULTS_DIALOG, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0);
+        {
+            pDispacher->Execute(SID_SEARCH_RESULTS_DIALOG,
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, nullptr);
+        }
     }
 
     return ModelessDialog::Close();

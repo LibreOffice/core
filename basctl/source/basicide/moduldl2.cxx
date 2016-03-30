@@ -632,7 +632,7 @@ IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
-                                    SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0 );
+                SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, nullptr);
         EndTabDialog();
         return;
     }

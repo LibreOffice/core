@@ -926,7 +926,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrM
                                     &aUrl, &aTarget,
                                     &aFrm, &aReferer,
                                     &aNewView, &aBrowsing,
-                                    0 );
+                                    nullptr);
 }
 
 bool ScGlobal::IsSystemRTL()
