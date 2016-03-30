@@ -83,7 +83,7 @@ namespace
 {
     // Copy method from SwDoc
     // Prevent copying in Flys that are anchored in the area
-    static bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
+    bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
                         sal_uLong nInsNd )
     {
         const SwFrameFormats& rFrameFormatTable = *pDoc->GetSpzFrameFormats();
@@ -134,7 +134,7 @@ namespace
         nNewIdx is the new position of interest.
     */
 
-    static void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const sal_uLong nNewIdx, sal_uLong& rDelCount )
+    void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const sal_uLong nNewIdx, sal_uLong& rDelCount )
     {
         sal_uLong nStart = rPam.Start()->nNode.GetIndex();
         sal_uLong nEnd = rPam.End()->nNode.GetIndex();
@@ -171,7 +171,7 @@ namespace
         }
     }
 
-    static void lcl_SetCpyPos( const SwPosition& rOrigPos,
+    void lcl_SetCpyPos( const SwPosition& rOrigPos,
                         const SwPosition& rOrigStt,
                         const SwPosition& rCpyStt,
                         SwPosition& rChgPos,
@@ -197,7 +197,7 @@ namespace
     }
 
     // TODO: use SaveBookmark (from _DelBookmarks)
-    static void lcl_CopyBookmarks(
+    void lcl_CopyBookmarks(
         const SwPaM& rPam,
         SwPaM& rCpyPam )
     {
@@ -296,7 +296,7 @@ namespace
         }
     }
 
-    static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
+    void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
     {
         const SwDoc* pSrcDoc = rPam.GetDoc();
         const SwRedlineTable& rTable = pSrcDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -376,7 +376,7 @@ namespace
         }
     }
 
-    static void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
+    void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
     {
         SwDoc* pSrcDoc = rRg.aStart.GetNode().GetDoc();
         if( !pSrcDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
@@ -387,7 +387,7 @@ namespace
         }
     }
 
-    static void lcl_ChainFormats( SwFlyFrameFormat *pSrc, SwFlyFrameFormat *pDest )
+    void lcl_ChainFormats( SwFlyFrameFormat *pSrc, SwFlyFrameFormat *pDest )
     {
         SwFormatChain aSrc( pSrc->GetChain() );
         if ( !aSrc.GetNext() )
@@ -404,7 +404,7 @@ namespace
     }
 
     // #i86492#
-    static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
+    bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
     {
         bool bRet = false;
 
@@ -432,7 +432,7 @@ namespace
         return bRet;
     }
 
-    static bool lcl_MarksWholeNode(const SwPaM & rPam)
+    bool lcl_MarksWholeNode(const SwPaM & rPam)
     {
         bool bResult = false;
         const SwPosition* pStt = rPam.Start();
@@ -458,7 +458,7 @@ namespace
 //local functions originally from sw/source/core/doc/docedt.cxx
 namespace
 {
-    static void
+    void
     lcl_CalcBreaks( ::std::vector<sal_Int32> & rBreaks, SwPaM const & rPam )
     {
         SwTextNode const * const pTextNode(
@@ -486,7 +486,7 @@ namespace
         }
     }
 
-    static bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
+    bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
             bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
     {
         ::std::vector<sal_Int32> Breaks;
@@ -532,7 +532,7 @@ namespace
         return bRet;
     }
 
-    static bool lcl_StrLenOverflow( const SwPaM& rPam )
+    bool lcl_StrLenOverflow( const SwPaM& rPam )
     {
         // If we try to merge two paragraphs we have to test if afterwards
         // the string doesn't exceed the allowed string length
@@ -630,7 +630,7 @@ namespace
 
     typedef std::vector< _SaveRedline > SaveRedlines_t;
 
-    static void lcl_SaveRedlines(const SwPaM& aPam, SaveRedlines_t& rArr)
+    void lcl_SaveRedlines(const SwPaM& aPam, SaveRedlines_t& rArr)
     {
         SwDoc* pDoc = aPam.GetNode().GetDoc();
 
@@ -696,7 +696,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static void lcl_RestoreRedlines(SwDoc* pDoc, const SwPosition& rPos, SaveRedlines_t& rArr)
+    void lcl_RestoreRedlines(SwDoc* pDoc, const SwPosition& rPos, SaveRedlines_t& rArr)
     {
         RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
@@ -710,7 +710,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
+    void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
     {
         SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
         sal_uInt16 nRedlPos;
@@ -793,7 +793,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static void lcl_RestoreRedlines(SwDoc *const pDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
+    void lcl_RestoreRedlines(SwDoc *const pDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
     {
         RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
@@ -807,7 +807,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
+    bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                      const SwNodeIndex& rInsPos,
                      SwFootnoteIdxs& rFootnoteArr, SwFootnoteIdxs& rSaveArr,
                      const SwIndex* pSttCnt = nullptr, const SwIndex* pEndCnt = nullptr )
@@ -921,7 +921,7 @@ namespace
         return bUpdateFootnote;
     }
 
-    static bool lcl_MayOverwrite( const SwTextNode *pNode, const sal_Int32 nPos )
+    bool lcl_MayOverwrite( const SwTextNode *pNode, const sal_Int32 nPos )
     {
         sal_Unicode const cChr = pNode->GetText()[nPos];
         switch (cChr)
@@ -938,7 +938,7 @@ namespace
         }
     }
 
-    static void lcl_SkipAttr( const SwTextNode *pNode, SwIndex &rIdx, sal_Int32 &rStart )
+    void lcl_SkipAttr( const SwTextNode *pNode, SwIndex &rIdx, sal_Int32 &rStart )
     {
         if( !lcl_MayOverwrite( pNode, rStart ) )
         {
@@ -951,7 +951,7 @@ namespace
         }
     }
 
-    static bool lcl_GetTokenToParaBreak( OUString& rStr, OUString& rRet, bool bRegExpRplc )
+    bool lcl_GetTokenToParaBreak( OUString& rStr, OUString& rRet, bool bRegExpRplc )
     {
         if( bRegExpRplc )
         {
@@ -994,7 +994,7 @@ namespace //local functions originally from docfmt.cxx
     /// Insert Hints according to content types;
     // Is used in SwDoc::Insert(..., SwFormatHint &rHt)
 
-    static bool lcl_InsAttr(
+    bool lcl_InsAttr(
         SwDoc *const pDoc,
         const SwPaM &rRg,
         const SfxItemSet& rChgSet,

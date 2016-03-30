@@ -61,7 +61,7 @@
 #include <map>
 
 namespace {
-    static void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker )
+    void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker )
     {
         std::set<sal_uInt16> aResetAttrsArray;
         aResetAttrsArray.insert( marker );
