@@ -336,12 +336,12 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
          nReal = 0;
     if ( nGrow > 0 )
     {
-        sal_uInt8 nAdjust = pBoss->NeighbourhoodAdjustment( this );
-        if( NA_ONLY_ADJUST == nAdjust )
+        SwNeighbourAdjust nAdjust = pBoss->NeighbourhoodAdjustment( this );
+        if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
             nReal = AdjustNeighbourhood( nGrow, bTst );
         else
         {
-            if( NA_GROW_ADJUST == nAdjust )
+            if( SwNeighbourAdjust::GrowAdjust == nAdjust )
             {
                 SwFrame* pFootnote = Lower();
                 if( pFootnote )
@@ -351,12 +351,12 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
                     if( static_cast<SwFootnoteFrame*>(pFootnote)->GetAttr()->GetFootnote().IsEndNote() )
                     {
                         nReal = AdjustNeighbourhood( nGrow, bTst );
-                        nAdjust = NA_GROW_SHRINK; // no more AdjustNeighbourhood
+                        nAdjust = SwNeighbourAdjust::GrowShrink; // no more AdjustNeighbourhood
                     }
                 }
             }
             nReal += pBoss->Grow( nGrow - nReal, bTst );
-            if( ( NA_GROW_ADJUST == nAdjust || NA_ADJUST_GROW == nAdjust )
+            if( ( SwNeighbourAdjust::GrowAdjust == nAdjust || SwNeighbourAdjust::AdjustGrow == nAdjust )
                   && nReal < nGrow )
                 nReal += AdjustNeighbourhood( nGrow - nReal, bTst );
         }
@@ -2495,27 +2495,27 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
  * @see Grow()
  * @see Shrink()
  */
-sal_uInt8 SwFootnoteBossFrame::_NeighbourhoodAdjustment( const SwFrame* ) const
+SwNeighbourAdjust SwFootnoteBossFrame::_NeighbourhoodAdjustment( const SwFrame* ) const
 {
-    sal_uInt8 nRet = NA_ONLY_ADJUST;
+    SwNeighbourAdjust nRet = SwNeighbourAdjust::OnlyAdjust;
     if( GetUpper() && !GetUpper()->IsPageBodyFrame() )
     {
         // column sections need grow/shrink
         if( GetUpper()->IsFlyFrame() )
-            nRet = NA_GROW_SHRINK;
+            nRet = SwNeighbourAdjust::GrowShrink;
         else
         {
             OSL_ENSURE( GetUpper()->IsSctFrame(), "NeighbourhoodAdjustment: Unexpected Upper" );
             if( !GetNext() && !GetPrev() )
-                nRet = NA_GROW_ADJUST; // section with a single column (FootnoteAtEnd)
+                nRet = SwNeighbourAdjust::GrowAdjust; // section with a single column (FootnoteAtEnd)
             else
             {
                 const SwFrame* pTmp = Lower();
                 OSL_ENSURE( pTmp, "NeighbourhoodAdjustment: Missing Lower()" );
                 if( !pTmp->GetNext() )
-                    nRet = NA_GROW_SHRINK;
+                    nRet = SwNeighbourAdjust::GrowShrink;
                 else if( !GetUpper()->IsColLocked() )
-                    nRet = NA_ADJUST_GROW;
+                    nRet = SwNeighbourAdjust::AdjustGrow;
                 OSL_ENSURE( !pTmp->GetNext() || pTmp->GetNext()->IsFootnoteContFrame(),
                         "NeighbourhoodAdjustment: Who's that guy?" );
             }

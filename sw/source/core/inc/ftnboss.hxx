@@ -39,10 +39,9 @@ public:
     ~SwSaveFootnoteHeight();
 };
 
-#define NA_ONLY_ADJUST 0
-#define NA_GROW_SHRINK 1
-#define NA_GROW_ADJUST 2
-#define NA_ADJUST_GROW 3
+enum class SwNeighbourAdjust {
+    OnlyAdjust, GrowShrink, GrowAdjust, AdjustGrow
+};
 
 typedef std::vector<SwFootnoteFrame*> SwFootnoteFrames;
 
@@ -58,7 +57,7 @@ class SwFootnoteBossFrame: public SwLayoutFrame
 
     SwFootnoteContFrame *MakeFootnoteCont();
     SwFootnoteFrame     *FindFirstFootnote();
-    sal_uInt8 _NeighbourhoodAdjustment( const SwFrame* pFrame ) const;
+    SwNeighbourAdjust _NeighbourhoodAdjustment( const SwFrame* pFrame ) const;
 
 protected:
     void          InsertFootnote( SwFootnoteFrame * );
@@ -119,8 +118,8 @@ public:
                       SwTextFootnote *pAttr );
 
     // should AdjustNeighbourhood be called (or Grow/Shrink)?
-    sal_uInt8 NeighbourhoodAdjustment( const SwFrame* pFrame ) const
-        { return IsPageFrame() ? NA_ONLY_ADJUST : _NeighbourhoodAdjustment( pFrame ); }
+    SwNeighbourAdjust NeighbourhoodAdjustment( const SwFrame* pFrame ) const
+        { return IsPageFrame() ? SwNeighbourAdjust::OnlyAdjust : _NeighbourhoodAdjustment( pFrame ); }
 };
 
 inline const SwLayoutFrame *SwFootnoteBossFrame::FindBodyCont() const
