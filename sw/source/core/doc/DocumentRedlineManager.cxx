@@ -42,7 +42,7 @@ using namespace com::sun::star;
         // helper function for lcl_CheckRedline
         // 1. make sure that pPos->nContent points into pPos->nNode
         // 2. check that position is valid and doesn't point after text
-        static void lcl_CheckPosition( const SwPosition* pPos )
+        void lcl_CheckPosition( const SwPosition* pPos )
         {
             assert(dynamic_cast<SwIndexReg*>(&pPos->nNode.GetNode())
                     == pPos->nContent.GetIdxReg());
@@ -58,7 +58,7 @@ using namespace com::sun::star;
             }
         }
 
-        static void lcl_CheckPam( const SwPaM* pPam )
+        void lcl_CheckPam( const SwPaM* pPam )
         {
             assert(pPam);
             lcl_CheckPosition( pPam->GetPoint() );
@@ -67,7 +67,7 @@ using namespace com::sun::star;
 
         // check validity of the redline table. Checks redline bounds, and make
         // sure the redlines are sorted and non-overlapping.
-        static void lcl_CheckRedline( IDocumentRedlineAccess& redlineAccess )
+        void lcl_CheckRedline( IDocumentRedlineAccess& redlineAccess )
         {
             const SwRedlineTable& rTable = redlineAccess.GetRedlineTable();
 

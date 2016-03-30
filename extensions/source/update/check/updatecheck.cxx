@@ -98,7 +98,7 @@ OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloa
 namespace
 {
 
-static inline OUString getBuildId()
+inline OUString getBuildId()
 {
     OUString aPathVal("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(aPathVal);
@@ -107,7 +107,7 @@ static inline OUString getBuildId()
 
 
 #if defined LINUX || defined SOLARIS
-static inline OUString getBaseInstallation()
+inline OUString getBaseInstallation()
 {
     OUString aPathVal("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aPathVal);
@@ -196,7 +196,7 @@ OUString getImageFromFileName(const OUString& aFile)
 }
 
 
-static uno::Reference< beans::XPropertySet > createMenuBarUI(
+uno::Reference< beans::XPropertySet > createMenuBarUI(
     const uno::Reference< uno::XComponentContext >& xContext,
     const uno::Reference< task::XJob >& xJob)
 {

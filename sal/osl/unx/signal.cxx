@@ -352,7 +352,7 @@ void callSystemHandler(int signal)
 }
 
 #if defined HAVE_VALGRIND_HEADERS
-static void DUMPCURRENTALLOCS()
+void DUMPCURRENTALLOCS()
 {
     VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
 
