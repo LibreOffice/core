@@ -1189,13 +1189,14 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         EditTextObject* pOldEditData = nullptr;
         EditTextObject* pNewEditData = nullptr;
         ScAddress aPos(nCol, nRow, nTab);
-        if (rDoc.GetCellType(aPos) == CELLTYPE_EDIT)
+        ScRefCellValue aCell(rDoc, aPos);
+        if (aCell.meType == CELLTYPE_EDIT)
         {
-            const EditTextObject* pEditObj = rDoc.GetEditText(aPos);
-            pOldEditData = pEditObj ? pEditObj->Clone() : nullptr;
+            const EditTextObject* pEditObj = aCell.mpEditText;
+            pOldEditData = pEditObj->Clone();
             rDoc.RemoveEditTextCharAttribs(aPos, rAttr);
             pEditObj = rDoc.GetEditText(aPos);
-            pNewEditData = pEditObj ? pEditObj->Clone() : nullptr;
+            pNewEditData = pEditObj->Clone();
         }
 
         aChangeRanges.Append(aPos);

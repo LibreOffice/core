@@ -34,6 +34,8 @@
 #include "spelldialog.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
+#include "cellvalue.hxx"
+#include "cellform.hxx"
 #include "formulacell.hxx"
 #include "patattr.hxx"
 #include "waitoff.hxx"
@@ -247,19 +249,24 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScAddress aPos(nCol, nRow, nTab);
 
-    switch (mrDoc.GetCellType(aPos))
+    ScRefCellValue aCell(mrDoc, aPos);
+    switch (aCell.meType)
     {
         case CELLTYPE_STRING:
         {
-            OUString aText = mrDoc.GetString(aPos);
-            SetText( aText );
+            SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
+            sal_uLong nNumFmt = mrDoc.GetNumberFormat(aPos);
+            OUString aText;
+            Color* pColor;
+            ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, &mrDoc);
+
+            SetText(aText);
         }
         break;
         case CELLTYPE_EDIT:
         {
-            const EditTextObject* pNewEditObj = mrDoc.GetEditText(aPos);
-            if (pNewEditObj)
-                SetText(*pNewEditObj);
+            const EditTextObject* pNewEditObj = aCell.mpEditText;
+            SetText(*pNewEditObj);
         }
         break;
         default:
