@@ -3450,8 +3450,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,breakpad)/build/win32/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/breakpad.lib,Release/breakpad.lib) \
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+    breakpad \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
