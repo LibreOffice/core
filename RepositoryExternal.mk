@@ -482,14 +482,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	mythes \
-)
-else
 $(call gb_LinkTarget_add_libs,$(1),$(MYTHES_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),mythes)
-endif
 
 endef
 

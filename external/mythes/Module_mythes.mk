@@ -10,16 +10,8 @@
 $(eval $(call gb_Module_Module,mythes))
 
 $(eval $(call gb_Module_add_targets,mythes,\
+	ExternalProject_mythes \
 	UnpackedTarball_mythes \
 ))
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,mythes,\
-	StaticLibrary_mythes \
-))
-else
-$(eval $(call gb_Module_add_targets,mythes,\
-	ExternalProject_mythes \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

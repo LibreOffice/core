@@ -9653,11 +9653,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=
     BUILD_TYPE="$BUILD_TYPE MYTHES"
-    if test "$COM" = "MSC"; then
-        MYTHES_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/mythes.lib"
-    else
-        MYTHES_LIBS="-L${WORKDIR}/UnpackedTarball/mythes/.libs -lmythes-1.2"
-    fi
+    MYTHES_LIBS="-L${WORKDIR}/UnpackedTarball/mythes/.libs -lmythes-1.2"
 fi
 AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
