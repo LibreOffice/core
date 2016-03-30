@@ -48,7 +48,7 @@ namespace basegfx
             {
             }
 
-            explicit ImplMatLine(sal_uInt16 nRow, ImplMatLine< RowSize >* pToBeCopied = 0L)
+            explicit ImplMatLine(sal_uInt16 nRow, ImplMatLine< RowSize >* pToBeCopied = nullptr)
             {
                 if(pToBeCopied)
                 {

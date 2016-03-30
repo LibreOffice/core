@@ -50,7 +50,7 @@ template < class Access, class Bitmap, Access* (Bitmap::* Acquire)() > class Sco
 
 public:
     explicit ScopedBitmapAccess( Bitmap& rBitmap ) :
-        mpAccess( 0 ),
+        mpAccess( nullptr ),
         mrBitmap( rBitmap )
     {
         mpAccess = (mrBitmap.*Acquire)();

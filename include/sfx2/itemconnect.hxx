@@ -354,7 +354,7 @@ public:
     typedef typename ListBoxWrapperType::MapEntryType               MapEntryType;
 
     explicit            ListBoxConnection( sal_uInt16 nSlot, ListBox& rListBox,
-                            const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
 
@@ -379,7 +379,7 @@ public:
     typedef typename ValueSetWrapperType::MapEntryType              MapEntryType;
 
     explicit            ValueSetConnection( sal_uInt16 nSlot, ValueSet& rValueSet,
-                            const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
 

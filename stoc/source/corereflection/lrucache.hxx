@@ -90,9 +90,9 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash >::LRU_Cache( sal_Int32 nCachedElement
 #else
     : _nCachedElements( nCachedElements )
 #endif
-    , _pBlock( 0 )
-    , _pHead( 0 )
-    , _pTail( 0 )
+    , _pBlock( nullptr )
+    , _pHead( nullptr )
+    , _pTail( nullptr )
 {
     if (_nCachedElements > 0)
     {

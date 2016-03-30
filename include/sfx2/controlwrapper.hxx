@@ -79,7 +79,7 @@ public:
         is used (simply casting between list position and values). If the map
         exists, it *MUST* be terminated by an entry containing the special
         "not found" list position. */
-    inline explicit     PosValueMapper( PosT nNFPos, const MapEntryType* pMap = 0 ) :
+    inline explicit     PosValueMapper( PosT nNFPos, const MapEntryType* pMap = nullptr ) :
                             mpMap( pMap ), mnNFPos( nNFPos ) {}
 
     /** Returns the value at the specified list position.
@@ -325,7 +325,7 @@ public:
 
     /** @param pMap  Optional list position <-> value map.
         See PosValueMapper documentation for details. */
-    inline explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap = 0 ) :
+    inline explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap = nullptr ) :
                             SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE
@@ -358,7 +358,7 @@ public:
 
     /** @param pMap  Optional position <-> value map.
         See PosValueMapper documentation for details. */
-    inline explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap = 0 ) :
+    inline explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap = nullptr ) :
                             SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( WRAPPER_VALUESET_ITEM_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE

@@ -51,6 +51,10 @@ public:
 
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr);
 
+    bool VisitParmVarDecl(ParmVarDecl const * decl);
+
+    bool TraverseConstructorInitializer(CXXCtorInitializer * init);
+
     // bool shouldVisitTemplateInstantiations() const { return true; }
 
 private:
@@ -59,6 +63,10 @@ private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
 
     bool isMacroBodyExpansion(SourceLocation location) const;
+
+    void visitCXXCtorInitializer(CXXCtorInitializer const * init);
+
+    void handleZero(Expr const * expr);
 
     void handleNull(
         Expr const * expr, char const * castKind,
@@ -142,12 +150,7 @@ bool Nullptr::VisitBinaryOperator(BinaryOperator const * expr) {
     default:
         return true;
     }
-    //TODO: detect NPCK_ZeroExpression where appropriate
-    auto const lit = dyn_cast<IntegerLiteral>(e->IgnoreParenImpCasts());
-    if (lit == nullptr || lit->getValue().getBoolValue()) {
-        return true;
-    }
-    handleNull(e, nullptr, Expr::NPCK_ZeroLiteral);
+    handleZero(e);
     return true;
 }
 
@@ -173,13 +176,28 @@ bool Nullptr::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr) {
     default:
         return true;
     }
-    //TODO: detect NPCK_ZeroExpression where appropriate
-    auto const lit = dyn_cast<IntegerLiteral>(e->IgnoreParenImpCasts());
-    if (lit == nullptr || lit->getValue().getBoolValue()) {
+    handleZero(e);
+    return true;
+}
+
+bool Nullptr::VisitParmVarDecl(ParmVarDecl const * decl) {
+    if (ignoreLocation(decl)) {
         return true;
     }
-    handleNull(e, nullptr, Expr::NPCK_ZeroLiteral);
+    if (!decl->getType()->isPointerType()) {
+        return true;
+    }
+    auto e = decl->getDefaultArg();
+    if (e == nullptr) {
+        return true;
+    }
+    handleZero(e);
     return true;
+}
+
+bool Nullptr::TraverseConstructorInitializer(CXXCtorInitializer * init) {
+    visitCXXCtorInitializer(init);
+    return RecursiveASTVisitor::TraverseConstructorInitializer(init);
 }
 
 bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
@@ -202,6 +220,40 @@ bool Nullptr::isMacroBodyExpansion(SourceLocation location) const {
     return location.isMacroID()
         && !compiler.getSourceManager().isMacroArgExpansion(location);
 #endif
+}
+
+void Nullptr::visitCXXCtorInitializer(CXXCtorInitializer const * init) {
+    if (!init->isWritten()) {
+        return;
+    }
+    auto e = init->getInit();
+    if (ignoreLocation(e)) {
+        return;
+    }
+    auto d = init->getAnyMember();
+    if (d == nullptr || !d->getType()->isPointerType()) {
+        return;
+    }
+    if (auto e2 = dyn_cast<ParenListExpr>(e)) {
+        if (e2->getNumExprs() != 1) {
+            return;
+        }
+        e = e2->getExpr(0);
+    } else if (auto e2 = dyn_cast<InitListExpr>(e)) {
+        if (e2->getNumInits() != 1) {
+            return;
+        }
+        e = e2->getInit(0);
+    }
+    handleZero(e);
+}
+
+void Nullptr::handleZero(Expr const * expr) {
+    //TODO: detect NPCK_ZeroExpression where appropriate
+    auto const lit = dyn_cast<IntegerLiteral>(expr->IgnoreParenImpCasts());
+    if (lit != nullptr && !lit->getValue().getBoolValue()) {
+        handleNull(expr, nullptr, Expr::NPCK_ZeroLiteral);
+    }
 }
 
 void Nullptr::handleNull(

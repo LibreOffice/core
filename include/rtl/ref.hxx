@@ -43,7 +43,7 @@ public:
     /** Constructor...
      */
     inline Reference()
-        : m_pBody (0)
+        : m_pBody (NULL)
     {}
 
 

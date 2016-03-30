@@ -23,7 +23,7 @@ struct has_clone
     typedef struct { char a[2]; } no;
 
     template<typename U>
-    static yes& check_sig(U*, test<U* (U::*)() const, &U::clone>* = 0);
+    static yes& check_sig(U*, test<U* (U::*)() const, &U::clone>* = nullptr);
     template<typename U>
     static no& check_sig(...);
 

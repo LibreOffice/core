@@ -115,8 +115,8 @@ template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKe
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
     ::std::size_t size )
     : m_size( 0 )
-    , m_block( 0 )
-    , m_tail( 0 )
+    , m_block( nullptr )
+    , m_tail( nullptr )
 {
     setSize( size );
 }
@@ -124,9 +124,9 @@ inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache()
     : m_size( 0 )
-    , m_block( 0 )
-    , m_head( 0 )
-    , m_tail( 0 )
+    , m_block( nullptr )
+    , m_head( nullptr )
+    , m_tail( nullptr )
 {
 }
 

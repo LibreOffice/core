@@ -75,7 +75,7 @@ struct RegexpMapImpl
     List< Val > m_aList[Regexp::KIND_DOMAIN + 1];
     Entry< Val > * m_pDefault;
 
-    RegexpMapImpl(): m_pDefault(0) {}
+    RegexpMapImpl(): m_pDefault(nullptr) {}
 
     ~RegexpMapImpl() { delete m_pDefault; }
 };
@@ -126,7 +126,7 @@ private:
 template< typename Val >
 inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
     m_aEntry(rtl::OUString(), 0),
-    m_pMap(0),
+    m_pMap(nullptr),
     m_nList(-1),
     m_bEntrySet(false)
 {}

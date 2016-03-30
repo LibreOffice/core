@@ -30,13 +30,13 @@ private:
     unique_disposing_ptr(const unique_disposing_ptr&) = delete;
     unique_disposing_ptr& operator=(const unique_disposing_ptr&) = delete;
 public:
-    unique_disposing_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = 0 )
+    unique_disposing_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = nullptr )
         : m_xItem(p)
     {
         m_xTerminateListener = new TerminateListener(rComponent, *this);
     }
 
-    virtual void reset(T * p = 0)
+    virtual void reset(T * p = nullptr)
     {
         m_xItem.reset(p);
     }
@@ -141,12 +141,12 @@ template<class T> class unique_disposing_solar_mutex_reset_ptr
     : public unique_disposing_ptr<T>
 {
 public:
-    unique_disposing_solar_mutex_reset_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = 0 )
+    unique_disposing_solar_mutex_reset_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = nullptr )
         : unique_disposing_ptr<T>(rComponent, p)
     {
     }
 
-    virtual void reset(T * p = 0) override
+    virtual void reset(T * p = nullptr) override
     {
         SolarMutexGuard aGuard;
         unique_disposing_ptr<T>::reset(p);
