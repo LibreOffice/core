@@ -103,7 +103,7 @@ bool equalsWithoutFormatImpl( const _T& left, const _T& right )
     return false;
 }
 
-static void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
+void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
 {
     switch (rCell.meType)
     {

@@ -4135,7 +4135,7 @@ private:
 /** returns -1 when the matrix value is smaller than the query value, 0 when
     they are equal, and 1 when the matrix value is larger than the query
     value. */
-static sal_Int32 lcl_CompareMatrix2Query(
+sal_Int32 lcl_CompareMatrix2Query(
     SCSIZE i, const VectorMatrixAccessor& rMat, const ScQueryEntry& rEntry)
 {
     if (rMat.IsEmpty(i))
@@ -4173,7 +4173,7 @@ static sal_Int32 lcl_CompareMatrix2Query(
 
 /** returns the last item with the identical value as the original item
     value. */
-static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
+void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
         SCSIZE nMatCount, bool bReverse)
 {
     if (rMat.IsValue(rIndex))
