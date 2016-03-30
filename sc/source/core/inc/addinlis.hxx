@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <list>
 
 class ScDocument;
 

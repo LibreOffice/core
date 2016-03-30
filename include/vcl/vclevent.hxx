@@ -22,7 +22,6 @@
 
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/impdel.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 

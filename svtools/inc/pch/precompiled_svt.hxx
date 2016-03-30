@@ -121,7 +121,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/impdel.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>

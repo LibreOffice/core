@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALFRAME_HXX
 #define INCLUDED_VCL_INC_SALFRAME_HXX
 
+#include "impdel.hxx"
 #include "salwtype.hxx"
 #include "salgeom.hxx"
 
