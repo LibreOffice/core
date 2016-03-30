@@ -23,7 +23,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/settings.hxx>
-#include <uitest/uiobject_impl.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include "controldata.hxx"
 #include "spin.hxx"

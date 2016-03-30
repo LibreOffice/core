@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <uitest/uiobject_impl.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <window.h>
 #include <svdata.hxx>

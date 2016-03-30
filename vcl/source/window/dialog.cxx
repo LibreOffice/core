@@ -49,7 +49,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
-#include <uitest/uiobject_impl.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
