@@ -202,6 +202,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/mmselectpage \
 	sw/uiconfig/swriter/ui/mmsendmails \
 	sw/uiconfig/swriter/ui/mmsalutationpage \
+	sw/uiconfig/swriter/ui/notebookbar \
 	sw/uiconfig/swriter/ui/paradialog \
 	sw/uiconfig/swriter/ui/picturedialog \
 	sw/uiconfig/swriter/ui/picturepage \
