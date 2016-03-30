@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_bc900b97",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T20:00:08Z",
+      "side": 1,
+      "message": "i don\u0027t think it is necessary to tell listeners that the title of a document becomes empty when it is disposed.\n\nlisteners can just implement disposing() themselves if they want to be notified on document dispose.\n\nbut of course it\u0027s always impossible to tell what API clients actually rely on.\n\nso perhaps this call can just be removed?",
+      "revId": "f55e2fb4a4444dd6706cf462074585962748cd0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5c93cfa3",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T20:00:08Z",
+      "side": 1,
+      "message": "i think this could be a good idea independent of removing the call in disposing() as it is not so useful for a listener to receive an event and not know from where.\n\n(but it could be in a separate commit too, not necessary to do it in this one.)\n\n(in a multi-threaded scenario it could happen that one thread calls disposing() and another calls simultaneously something else on this class that calls this function)",
+      "revId": "f55e2fb4a4444dd6706cf462074585962748cd0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
