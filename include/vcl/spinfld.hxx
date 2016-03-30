@@ -99,6 +99,8 @@ public:
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;
     virtual Size    GetOptimalSize() const override;
     virtual Size    CalcSize(sal_Int32 nChars) const override;
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 #endif // INCLUDED_VCL_SPINFLD_HXX

@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/dllapi.h>
-
-#include <tools/wintypes.hxx>
-
 #include <memory>
 #include <functional>
 
@@ -23,7 +19,5 @@ class Window;
 class UIObject;
 
 typedef std::function<std::unique_ptr<UIObject>(vcl::Window*)> FactoryFunction;
-
-void UITEST_DLLPUBLIC registerUITestFactory(WindowType eType, FactoryFunction aFactory);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
