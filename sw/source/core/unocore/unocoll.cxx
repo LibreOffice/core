@@ -1025,13 +1025,13 @@ namespace
     };
 
     template<FlyCntType T>
-    static uno::Any lcl_UnoWrapFrame(SwFrameFormat* pFormat)
+    uno::Any lcl_UnoWrapFrame(SwFrameFormat* pFormat)
     {
         return UnoFrameWrap_traits<T>::wrapFrame(*pFormat);
     }
 
     // runtime adapter for lcl_UnoWrapFrame
-    static uno::Any lcl_UnoWrapFrame(SwFrameFormat* pFormat, FlyCntType eType) throw(uno::RuntimeException)
+    uno::Any lcl_UnoWrapFrame(SwFrameFormat* pFormat, FlyCntType eType) throw(uno::RuntimeException)
     {
         switch(eType)
         {

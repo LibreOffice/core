@@ -70,15 +70,15 @@ using namespace ::com::sun::star;
 
 namespace {
     //! Calculates and sets optimal repaint offset for the current line
-    static long lcl_CalcOptRepaint( SwTextFormatter &rThis,
+    long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                                     SwLineLayout &rCurr,
                                     const sal_Int32 nOldLineEnd,
                                     const std::vector<long> &rFlyStarts );
     //! Determine if we need to build hidden portions
-    static bool lcl_BuildHiddenPortion( const SwTextSizeInfo& rInf, sal_Int32 &rPos );
+    bool lcl_BuildHiddenPortion( const SwTextSizeInfo& rInf, sal_Int32 &rPos );
 
     // Check whether the two font has the same border
-    static bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
+    bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
 }
 
 inline void ClearFly( SwTextFormatInfo &rInf )

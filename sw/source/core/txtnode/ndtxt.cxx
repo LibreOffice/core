@@ -3355,7 +3355,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 }
 
 namespace {
-    static void lcl_ResetParAttrs( SwTextNode &rTextNode )
+    void lcl_ResetParAttrs( SwTextNode &rTextNode )
     {
         std::set<sal_uInt16> aAttrs;
         aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ID );

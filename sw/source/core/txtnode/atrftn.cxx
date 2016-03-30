@@ -42,7 +42,7 @@ namespace {
     /// @param[in]  pExclude A footnote whose reference number should be excluded from the set.
     /// @param[out] rUsedRef The set of used reference numbers.
     /// @param[out] rInvalid  A returned list of all items that had an invalid reference number.
-    static void lcl_FillUsedFootnoteRefNumbers(SwDoc &rDoc,
+    void lcl_FillUsedFootnoteRefNumbers(SwDoc &rDoc,
                                          SwTextFootnote *pExclude,
                                          std::set<sal_uInt16> &rUsedRef,
                                          std::vector<SwTextFootnote*> &rInvalid)
@@ -72,7 +72,7 @@ namespace {
     /// @param[in] rUsedNums Set of used reference numbers.
     /// @param[in] requested The requested reference number.
     /// @returns true if the number is available, false if not.
-    static bool lcl_IsRefNumAvailable(std::set<sal_uInt16> &rUsedNums,
+    bool lcl_IsRefNumAvailable(std::set<sal_uInt16> &rUsedNums,
                                          sal_uInt16 requested)
     {
         if ( USHRT_MAX == requested )
@@ -86,7 +86,7 @@ namespace {
     /// @param[out] rLowestUnusedNums The lowest unused sequential reference numbers.
     /// @param[in] rUsedNums   The set of used sequential reference numbers.
     /// @param[in] numRequired The number of reference number required.
-    static void lcl_FillUnusedSeqRefNums(std::vector<sal_uInt16> &rLowestUnusedNums,
+    void lcl_FillUnusedSeqRefNums(std::vector<sal_uInt16> &rLowestUnusedNums,
                                          const std::set<sal_uInt16> &rUsedNums,
                                          size_t numRequired)
     {

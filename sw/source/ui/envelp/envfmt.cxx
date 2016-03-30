@@ -60,7 +60,7 @@ namespace {
     /// @returns A vector containing one element for each item covered by the
     ///          ranges. This is not guaranteed to be sorted and may contain
     ///          duplicates if the original ranges contained overlaps.
-    static std::vector<sal_uInt16> lcl_convertRangesToList(const sal_uInt16 aRanges[]) {
+    std::vector<sal_uInt16> lcl_convertRangesToList(const sal_uInt16 aRanges[]) {
         std::vector<sal_uInt16> aVec;
         int i = 0;
         while (aRanges[i])
@@ -83,7 +83,7 @@ namespace {
     ///          is two consecutive entries that specify the start and end
     ///          points of the range. This list will be sorted and will not
     ///          contain any overlapping ranges.
-    static sal_uInt16* lcl_convertListToRanges(std::vector<sal_uInt16> &rElements) {
+    sal_uInt16* lcl_convertListToRanges(std::vector<sal_uInt16> &rElements) {
         std::sort(rElements.begin(), rElements.end());
         std::vector<sal_uInt16> aRanges;
         size_t i;
