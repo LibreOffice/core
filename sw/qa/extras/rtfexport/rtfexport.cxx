@@ -999,6 +999,14 @@ DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("None"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StopValidity"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf65642, "tdf65642.rtf")
+{
+    // The second page's numbering type: this was style::NumberingType::ARABIC.
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_UPPER_LETTER_N, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+    // The second page's restart value: this was 0.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(getParagraph(2), "PageNumberOffset"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
