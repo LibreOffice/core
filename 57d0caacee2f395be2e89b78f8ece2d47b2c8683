@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_7c417339",
+        "filename": "basctl/source/basicide/basicbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-30T12:04:44Z",
+      "side": 1,
+      "message": "this change is wrong: this calls a vararg function and \"0\" is not going to be extended to 64 bit and the function casts it to a pointer.  i\u0027ll fix that up on master, and similar cases in this patch...\n\nsee also http://blog.regehr.org/archives/1303",
+      "revId": "57d0caacee2f395be2e89b78f8ece2d47b2c8683",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
