@@ -69,13 +69,15 @@ protected:
     SwImpBlocks( const OUString&, bool = false );
     virtual ~SwImpBlocks();
 
-    static short GetFileType( const OUString& );
-    virtual short GetFileType() const = 0;
-#define SWBLK_NO_FILE   0               // Not present
-#define SWBLK_NONE      1               // No TB file
-#define SWBLK_SW2       2               // SW2 file
-#define SWBLK_SW3       3               // SW3 file
-#define SWBLK_XML       4               // XML Block List
+    enum class FileType {
+        NoFile,  // Not present
+        None,    // No TB file
+        SW2,     // SW2 file
+        SW3,     // SW3 file
+        XML      // XML Block List
+    };
+    static FileType GetFileType( const OUString& );
+    virtual FileType GetFileType() const = 0;
 
     virtual void   ClearDoc();          // Delete Doc content
     SwPaM* MakePaM();                   // Span PaM over Doc
