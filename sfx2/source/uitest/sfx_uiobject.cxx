@@ -23,7 +23,11 @@ SfxTabDialogUIObject::~SfxTabDialogUIObject()
 
 StringMap SfxTabDialogUIObject::get_state()
 {
-    return WindowUIObject::get_state();
+    StringMap aMap = WindowUIObject::get_state();
+    sal_uInt16 nPageId = mxTabDialog->GetCurPageId();
+    aMap["CurrentPageID"] = OUString::number(nPageId);
+    aMap["CurrentPageText"] = mxTabDialog->GetPageText(nPageId);
+    return aMap;
 }
 
 void SfxTabDialogUIObject::execute(const OUString& rAction,
@@ -31,7 +35,6 @@ void SfxTabDialogUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-
     }
 }
 
@@ -45,6 +48,11 @@ std::unique_ptr<UIObject> SfxTabDialogUIObject::create(vcl::Window* pWindow)
     SfxTabDialog* pDialog = dynamic_cast<SfxTabDialog*>(pWindow);
     assert(pDialog);
     return std::unique_ptr<UIObject>(new SfxTabDialogUIObject(pDialog));
+}
+
+OUString SfxTabDialogUIObject::get_name() const
+{
+    return OUString("SfxTabDialogUIObject");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
