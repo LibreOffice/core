@@ -226,7 +226,7 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
     {
         switch ( pFrame->GetType() )
         {
-            case FRM_COLUMN:    if( pFrame->GetUpper()->IsSctFrame() )
+            case SwFrameType::Column:    if( pFrame->GetUpper()->IsSctFrame() )
                                 {
                                     // Check, if isn't not only a single column
                                     // from a section with footnotes at the end.
@@ -238,17 +238,17 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
                                 else // only pages and frame columns
                                     nReturn |= FrameTypeFlags::COLUMN;
                                 break;
-            case FRM_PAGE:      nReturn |= FrameTypeFlags::PAGE;
+            case SwFrameType::Page:      nReturn |= FrameTypeFlags::PAGE;
                                 if( static_cast<const SwPageFrame*>(pFrame)->IsFootnotePage() )
                                     nReturn |= FrameTypeFlags::FTNPAGE;
                                 break;
-            case FRM_HEADER:    nReturn |= FrameTypeFlags::HEADER;      break;
-            case FRM_FOOTER:    nReturn |= FrameTypeFlags::FOOTER;      break;
-            case FRM_BODY:      if( pFrame->GetUpper()->IsPageFrame() ) // not for ColumnFrames
+            case SwFrameType::Header:    nReturn |= FrameTypeFlags::HEADER;      break;
+            case SwFrameType::Footer:    nReturn |= FrameTypeFlags::FOOTER;      break;
+            case SwFrameType::Body:      if( pFrame->GetUpper()->IsPageFrame() ) // not for ColumnFrames
                                     nReturn |= FrameTypeFlags::BODY;
                                 break;
-            case FRM_FTN:       nReturn |= FrameTypeFlags::FOOTNOTE;    break;
-            case FRM_FLY:       if( static_cast<const SwFlyFrame*>(pFrame)->IsFlyLayFrame() )
+            case SwFrameType::Ftn:       nReturn |= FrameTypeFlags::FOOTNOTE;    break;
+            case SwFrameType::Fly:       if( static_cast<const SwFlyFrame*>(pFrame)->IsFlyLayFrame() )
                                     nReturn |= FrameTypeFlags::FLY_FREE;
                                 else if ( static_cast<const SwFlyFrame*>(pFrame)->IsFlyAtContentFrame() )
                                     nReturn |= FrameTypeFlags::FLY_ATCNT;
@@ -262,9 +262,9 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
                                 if( bStopAtFly )
                                     return nReturn;
                                 break;
-            case FRM_TAB:
-            case FRM_ROW:
-            case FRM_CELL:      nReturn |= FrameTypeFlags::TABLE;       break;
+            case SwFrameType::Tab:
+            case SwFrameType::Row:
+            case SwFrameType::Cell:      nReturn |= FrameTypeFlags::TABLE;       break;
             default:            /* do nothing */                break;
         }
         if ( pFrame->IsFlyFrame() )
@@ -613,7 +613,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrame *pFrame,
                 pFrame = pCurFrame->GetUpper();
                 while( pFrame )
                 {
-                    if( ( FRM_PAGE | FRM_FLY | FRM_SECTION ) & pFrame->GetType() )
+                    if( ( SwFrameType::Page | SwFrameType::Fly | SwFrameType::Section ) & pFrame->GetType() )
                     {
                         pPara->pFrameFormat = static_cast<const SwLayoutFrame*>(pFrame)->GetFormat();
                         pPara->pPrtRect = &pFrame->Prt();

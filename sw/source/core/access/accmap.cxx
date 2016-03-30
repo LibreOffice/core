@@ -1884,19 +1884,19 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                 SwAccessibleContext *pAcc = nullptr;
                 switch( pFrame->GetType() )
                 {
-                case FRM_TXT:
+                case SwFrameType::Txt:
                     pAcc = new SwAccessibleParagraph( this,
                                     static_cast< const SwTextFrame& >( *pFrame ) );
                     break;
-                case FRM_HEADER:
+                case SwFrameType::Header:
                     pAcc = new SwAccessibleHeaderFooter( this,
                                     static_cast< const SwHeaderFrame *>( pFrame ) );
                     break;
-                case FRM_FOOTER:
+                case SwFrameType::Footer:
                     pAcc = new SwAccessibleHeaderFooter( this,
                                     static_cast< const SwFooterFrame *>( pFrame ) );
                     break;
-                case FRM_FTN:
+                case SwFrameType::Ftn:
                     {
                         const SwFootnoteFrame *pFootnoteFrame =
                             static_cast < const SwFootnoteFrame * >( pFrame );
@@ -1907,7 +1907,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                                     pFootnoteFrame );
                     }
                     break;
-                case FRM_FLY:
+                case SwFrameType::Fly:
                     {
                         const SwFlyFrame *pFlyFrame =
                             static_cast < const SwFlyFrame * >( pFrame );
@@ -1925,19 +1925,20 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                         }
                     }
                     break;
-                case FRM_CELL:
+                case SwFrameType::Cell:
                     pAcc = new SwAccessibleCell( this,
                                     static_cast< const SwCellFrame *>( pFrame ) );
                     break;
-                case FRM_TAB:
+                case SwFrameType::Tab:
                     pAcc = new SwAccessibleTable( this,
                                     static_cast< const SwTabFrame *>( pFrame ) );
                     break;
-                case FRM_PAGE:
+                case SwFrameType::Page:
                     OSL_ENSURE( GetShell()->IsPreview(),
                                 "accessible page frames only in PagePreview" );
                     pAcc = new SwAccessiblePage( this, pFrame );
                     break;
+                default: break;
                 }
                 xAcc = pAcc;
 
@@ -2467,16 +2468,14 @@ so run here: save the parent's SwFrame not the accessible object parent,
             bool bIsTextParent = false;
             if (aFrameOrObj.GetSwFrame())
             {
-                int nType = pFrame->GetType();
-                if ( FRM_FLY == nType )
+                if (SwFrameType::Fly == pFrame->GetType())
                 {
                     bIsValidFrame =true;
                 }
             }
             else if(pObj)
             {
-                int nType = pParent->GetType();
-                if (FRM_TXT == nType)
+                if (SwFrameType::Txt == pParent->GetType())
                 {
                     bIsTextParent =true;
                 }

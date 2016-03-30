@@ -51,7 +51,7 @@
  *      is null - no method calls are logged.
  * 2.   The SwImplProtocol class contains a filter for frame types, only method
  *      call of frame types which are defined there are logged.
- *      The member nTypes can be set to values like FRM_PAGE or FRM_SECTION and
+ *      The member nTypes can be set to values like SwFrameType::Page or SwFrameType::Section and
  *      may be combined using binary OR. The default values is 0xFFFF - meaning
  *      all frame types.
  * 3.   The SwImplProtocol class contains an ArrayPointer to FrameIds which need to be

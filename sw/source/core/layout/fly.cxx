@@ -80,7 +80,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     m_bLockDeleteContent( false ),
     m_bValidContentPos( false )
 {
-    mnFrameType = FRM_FLY;
+    mnFrameType = SwFrameType::Fly;
 
     m_bInvalid = m_bNotifyBack = true;
     m_bLocked  = m_bMinHeight =
@@ -587,7 +587,7 @@ SwFlyFrame *SwFlyFrame::FindChainNeighbour( SwFrameFormat &rChain, SwFrame *pAnc
         // FindFooterOrHeader is not appropriate here, as we may not have a
         // connection to the Anchor yet.
         pLay = pAnch->GetUpper();
-        while ( pLay && !(pLay->GetType() & (FRM_HEADER|FRM_FOOTER)) )
+        while ( pLay && !(pLay->GetType() & (SwFrameType::Header|SwFrameType::Footer)) )
             pLay = pLay->GetUpper();
     }
 

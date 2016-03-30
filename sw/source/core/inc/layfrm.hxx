@@ -213,12 +213,12 @@ inline SwFrame* SwLayoutFrame::ContainsAny( const bool _bInvestigateFootnoteForS
  */
 inline bool SwFrame::IsColBodyFrame() const
 {
-    return mnFrameType == FRM_BODY && GetUpper()->IsColumnFrame();
+    return mnFrameType == SwFrameType::Body && GetUpper()->IsColumnFrame();
 }
 
 inline bool SwFrame::IsPageBodyFrame() const
 {
-    return mnFrameType == FRM_BODY && GetUpper()->IsPageFrame();
+    return mnFrameType == SwFrameType::Body && GetUpper()->IsPageFrame();
 }
 
 inline SwFrame* SwLayoutFrame::GetLastLower()

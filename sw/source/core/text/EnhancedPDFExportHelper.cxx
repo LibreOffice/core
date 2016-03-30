@@ -985,7 +985,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          * GROUPING ELEMENTS
          */
 
-        case FRM_PAGE :
+        case SwFrameType::Page :
 
             // Document: Document
 
@@ -993,15 +993,15 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             aPDFType = aDocumentString;
             break;
 
-        case FRM_HEADER :
-        case FRM_FOOTER :
+        case SwFrameType::Header :
+        case SwFrameType::Footer :
 
             // Header, Footer: NonStructElement
 
             nPDFType = vcl::PDFWriter::NonStructElement;
             break;
 
-        case FRM_FTNCONT :
+        case SwFrameType::FtnCont :
 
             // Footnote container: Division
 
@@ -1009,7 +1009,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             aPDFType = aDivString;
             break;
 
-        case FRM_FTN :
+        case SwFrameType::Ftn :
 
             // Footnote frame: Note
 
@@ -1019,7 +1019,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             aPDFType = aNoteString;
             break;
 
-        case FRM_SECTION :
+        case SwFrameType::Section :
 
             // Section: TOX, Index, or Sect
 
@@ -1055,7 +1055,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          * BLOCK-LEVEL STRUCTURE ELEMENTS
          */
 
-        case FRM_TXT :
+        case SwFrameType::Txt :
             {
                 const SwTextNode* pTextNd =
                     static_cast<const SwTextFrame*>(pFrame)->GetTextNode();
@@ -1161,7 +1161,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             }
             break;
 
-        case FRM_TAB :
+        case SwFrameType::Tab :
 
             // TabFrame: Table
 
@@ -1213,7 +1213,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          * TABLE ELEMENTS
          */
 
-        case FRM_ROW :
+        case SwFrameType::Row :
 
             // RowFrame: TR
 
@@ -1228,7 +1228,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             }
             break;
 
-        case FRM_CELL :
+        case SwFrameType::Cell :
 
             // CellFrame: TH, TD
 
@@ -1251,7 +1251,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          * ILLUSTRATION
          */
 
-        case FRM_FLY :
+        case SwFrameType::Fly :
 
             // FlyFrame: Figure, Formula, Control
             // fly in content or fly at page
@@ -1290,6 +1290,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 }
             }
             break;
+
+        default: break;
     }
 
     if ( USHRT_MAX != nPDFType )

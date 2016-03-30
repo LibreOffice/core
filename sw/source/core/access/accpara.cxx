@@ -1836,7 +1836,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                     while ( pUpperFrame )
                     {
                         if ( pUpperFrame->GetType() &
-                               ( FRM_PAGE | FRM_FLY | FRM_SECTION | FRM_TAB | FRM_CELL ) )
+                               ( SwFrameType::Page | SwFrameType::Fly | SwFrameType::Section | SwFrameType::Tab | SwFrameType::Cell ) )
                         {
                             if ( pUpperFrame->IsVertical() )
                             {

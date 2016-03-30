@@ -457,7 +457,7 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mnPhyPageNums( 0 ),
     mnAccessibleShells( 0 )
 {
-    mnFrameType = FRM_ROOT;
+    mnFrameType = SwFrameType::Root;
     setRootFrame( this );
 }
 

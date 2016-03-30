@@ -31,7 +31,7 @@ protected:
     inline bool GetEatSpacing() const; // in hffrm.cxx
 
 public:
-    SwHeadFootFrame(SwFrameFormat * pFrame, SwFrame*, sal_uInt16 aType);
+    SwHeadFootFrame(SwFrameFormat * pFrame, SwFrame*, SwFrameType aType);
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual SwTwips GrowFrame( SwTwips,
                              bool bTst = false, bool bInfo = false ) override;
@@ -44,7 +44,7 @@ public:
 class SwHeaderFrame: public SwHeadFootFrame
 {
 public:
-    SwHeaderFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, FRM_HEADER) {};
+    SwHeaderFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Header) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrame)
 };
@@ -53,7 +53,7 @@ public:
 class SwFooterFrame: public SwHeadFootFrame
 {
 public:
-    SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, FRM_FOOTER) {};
+    SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Footer) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrame)
 };

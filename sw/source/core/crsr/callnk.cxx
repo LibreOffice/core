@@ -93,7 +93,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell& rShell)
     {
         for (SwFrame *pContent = pCell->GetLower(); pContent; pContent = pContent->GetNext())
         {
-            if (pContent->GetType() == FRM_TAB)
+            if (pContent->GetType() == SwFrameType::Tab)
             {
                 SwFormatFrameSize pSize = pLine->GetFrameFormat()->GetFrameSize();
                 pRow->ModifyNotification(nullptr, &pSize);

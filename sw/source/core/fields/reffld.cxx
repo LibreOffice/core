@@ -138,8 +138,8 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
 
     // different frames, check their Y-/X-position
     bool bRefIsLower = false;
-    if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrame->GetType() ||
-        ( FRM_COLUMN | FRM_CELL ) & pRefFrame->GetType() )
+    if( ( SwFrameType::Column | SwFrameType::Cell ) & pFieldFrame->GetType() ||
+        ( SwFrameType::Column | SwFrameType::Cell ) & pRefFrame->GetType() )
     {
         if( pFieldFrame->GetType() == pRefFrame->GetType() )
         {
@@ -165,7 +165,7 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                               pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() );
             pRefFrame = nullptr;
         }
-        else if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrame->GetType() )
+        else if( ( SwFrameType::Column | SwFrameType::Cell ) & pFieldFrame->GetType() )
             pFieldFrame = aArr[ nCnt - 1 ];
         else
             pRefFrame = aRefArr[ nRefCnt - 1 ];

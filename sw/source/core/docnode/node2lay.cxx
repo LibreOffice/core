@@ -417,7 +417,7 @@ SwFrame* SwNode2LayImpl::GetFrame( const Point* pDocPos,
                                 const bool bCalcFrame ) const
 {
     // test if change of member pIter -> pMod broke anything
-    return pMod ? ::GetFrameOfModify( nullptr, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrame ) : nullptr;
+    return pMod ? ::GetFrameOfModify( nullptr, *pMod, FRM_ALL, pDocPos, pPos, bCalcFrame ) : nullptr;
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )

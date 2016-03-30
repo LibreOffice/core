@@ -28,6 +28,7 @@
 #include "swrect.hxx"
 #include "calbck.hxx"
 #include <svl/SfxBroadcaster.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 
 #include <com/sun/star/style/TabStop.hpp>
@@ -66,33 +67,42 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 // which kind of FrameType an instance is _and_ from what classes it was derived.
 // Each frame has in its base class a member that must be set by the
 // constructors accordingly.
-#define FRM_ROOT        0x0001
-#define FRM_PAGE        0x0002
-#define FRM_COLUMN      0x0004
-#define FRM_HEADER      0x0008
-#define FRM_FOOTER      0x0010
-#define FRM_FTNCONT     0x0020
-#define FRM_FTN         0x0040
-#define FRM_BODY        0x0080
-#define FRM_FLY         0x0100
-#define FRM_SECTION     0x0200
-#define FRM_UNUSED      0x0400
-#define FRM_TAB         0x0800
-#define FRM_ROW         0x1000
-#define FRM_CELL        0x2000
-#define FRM_TXT         0x4000
-#define FRM_NOTXT       0x8000
+enum class SwFrameType
+{
+    None        = 0x0000,
+    Root        = 0x0001,
+    Page        = 0x0002,
+    Column      = 0x0004,
+    Header      = 0x0008,
+    Footer      = 0x0010,
+    FtnCont     = 0x0020,
+    Ftn         = 0x0040,
+    Body        = 0x0080,
+    Fly         = 0x0100,
+    Section     = 0x0200,
+//  UNUSED      0x0400
+    Tab         = 0x0800,
+    Row         = 0x1000,
+    Cell        = 0x2000,
+    Txt         = 0x4000,
+    NoTxt       = 0x8000,
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<SwFrameType> : is_typed_flags<SwFrameType, 0xfbff> {};
+};
 
 // for internal use some common combinations
-#define FRM_LAYOUT      0x3FFF
-#define FRM_CNTNT       0xC000
-#define FRM_FTNBOSS     0x0006
-#define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY|FRM_TAB|FRM_CELL|FRM_PAGE)
-
-#define FRM_NEIGHBOUR   0x2004
-#define FRM_NOTE_VERT   0x7a60
-#define FRM_HEADFOOT    0x0018
-#define FRM_BODYFTNC    0x00a0
+#define FRM_LAYOUT      SwFrameType(0x3bFF)
+#define FRM_ALL         SwFrameType(0xfbff)
+#define FRM_CNTNT       (SwFrameType::Txt | SwFrameType::NoTxt)
+#define FRM_FTNBOSS     (SwFrameType::Page | SwFrameType::Column)
+#define FRM_ACCESSIBLE  (SwFrameType::Root | SwFrameType::Page | SwFrameType::Header | SwFrameType::Footer | SwFrameType::Ftn | SwFrameType::Fly | SwFrameType::Tab | SwFrameType::Cell | SwFrameType::Txt)
+#define FRM_NEIGHBOUR   (SwFrameType::Column | SwFrameType::Cell)
+#define FRM_NOTE_VERT   (SwFrameType::FtnCont | SwFrameType::Ftn | SwFrameType::Section | SwFrameType::Tab | SwFrameType::Row | SwFrameType::Cell | SwFrameType::Txt)
+#define FRM_HEADFOOT    (SwFrameType::Header | SwFrameType::Footer)
+#define FRM_BODYFTNC    (SwFrameType::FtnCont | SwFrameType::Body)
 
 // for GetNextLeaf/GetPrevLeaf.
 enum MakePageType
@@ -224,7 +234,7 @@ protected:
     SwRect  maFrame;   // absolute position in document and size of the Frame
     SwRect  maPrt;   // position relatively to Frame and size of PrtArea
 
-    sal_uInt16 mnFrameType;  //Who am I?
+    SwFrameType mnFrameType;  //Who am I?
 
     bool mbReverse     : 1; // Next line above/at the right side instead
                                  // under/at the left side of the previous line
@@ -326,7 +336,7 @@ public:
     }
 
 
-    sal_uInt16 GetType() const { return mnFrameType; }
+    SwFrameType GetType() const { return mnFrameType; }
 
     static SwCache &GetCache()                { return *mpCache; }
     static SwCache *GetCachePtr()             { return mpCache;  }
@@ -729,7 +739,7 @@ public:
     void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
     inline bool IsNeighbourFrame() const
-        { return (GetType() & FRM_NEIGHBOUR) != 0; }
+        { return bool(GetType() & FRM_NEIGHBOUR); }
 
     // #i65250#
     inline sal_uInt32 GetFrameId() const { return mnFrameId; }
@@ -969,87 +979,87 @@ inline const SwFrame *SwFrame::FindPrev() const
 
 inline bool SwFrame::IsLayoutFrame() const
 {
-    return (GetType() & FRM_LAYOUT) != 0;
+    return bool(GetType() & FRM_LAYOUT);
 }
 inline bool SwFrame::IsRootFrame() const
 {
-    return mnFrameType == FRM_ROOT;
+    return mnFrameType == SwFrameType::Root;
 }
 inline bool SwFrame::IsPageFrame() const
 {
-    return mnFrameType == FRM_PAGE;
+    return mnFrameType == SwFrameType::Page;
 }
 inline bool SwFrame::IsColumnFrame() const
 {
-    return mnFrameType == FRM_COLUMN;
+    return mnFrameType == SwFrameType::Column;
 }
 inline bool SwFrame::IsFootnoteBossFrame() const
 {
-    return (GetType() & FRM_FTNBOSS) != 0;
+    return bool(GetType() & FRM_FTNBOSS);
 }
 inline bool SwFrame::IsHeaderFrame() const
 {
-    return mnFrameType == FRM_HEADER;
+    return mnFrameType == SwFrameType::Header;
 }
 inline bool SwFrame::IsFooterFrame() const
 {
-    return mnFrameType == FRM_FOOTER;
+    return mnFrameType == SwFrameType::Footer;
 }
 inline bool SwFrame::IsFootnoteContFrame() const
 {
-    return mnFrameType == FRM_FTNCONT;
+    return mnFrameType == SwFrameType::FtnCont;
 }
 inline bool SwFrame::IsFootnoteFrame() const
 {
-    return mnFrameType == FRM_FTN;
+    return mnFrameType == SwFrameType::Ftn;
 }
 inline bool SwFrame::IsBodyFrame() const
 {
-    return mnFrameType == FRM_BODY;
+    return mnFrameType == SwFrameType::Body;
 }
 inline bool SwFrame::IsFlyFrame() const
 {
-    return mnFrameType == FRM_FLY;
+    return mnFrameType == SwFrameType::Fly;
 }
 inline bool SwFrame::IsSctFrame() const
 {
-    return mnFrameType == FRM_SECTION;
+    return mnFrameType == SwFrameType::Section;
 }
 inline bool SwFrame::IsTabFrame() const
 {
-    return mnFrameType == FRM_TAB;
+    return mnFrameType == SwFrameType::Tab;
 }
 inline bool SwFrame::IsRowFrame() const
 {
-    return mnFrameType == FRM_ROW;
+    return mnFrameType == SwFrameType::Row;
 }
 inline bool SwFrame::IsCellFrame() const
 {
-    return mnFrameType == FRM_CELL;
+    return mnFrameType == SwFrameType::Cell;
 }
 inline bool SwFrame::IsContentFrame() const
 {
-    return (GetType() & FRM_CNTNT) != 0;
+    return bool(GetType() & FRM_CNTNT);
 }
 inline bool SwFrame::IsTextFrame() const
 {
-    return mnFrameType == FRM_TXT;
+    return mnFrameType == SwFrameType::Txt;
 }
 inline bool SwFrame::IsNoTextFrame() const
 {
-    return mnFrameType == FRM_NOTXT;
+    return mnFrameType == SwFrameType::NoTxt;
 }
 inline bool SwFrame::IsFlowFrame() const
 {
-    return (GetType() & (FRM_CNTNT|FRM_TAB|FRM_SECTION)) != 0;
+    return bool(GetType() & (FRM_CNTNT|SwFrameType::Tab|SwFrameType::Section));
 }
 inline bool SwFrame::IsRetoucheFrame() const
 {
-    return (GetType() & (FRM_CNTNT|FRM_TAB|FRM_SECTION|FRM_FTN)) != 0;
+    return bool(GetType() & (FRM_CNTNT|SwFrameType::Tab|SwFrameType::Section|SwFrameType::Ftn));
 }
 inline bool SwFrame::IsAccessibleFrame() const
 {
-    return (GetType() & FRM_ACCESSIBLE) != 0;
+    return bool(GetType() & FRM_ACCESSIBLE);
 }
 
 //use this to protect a SwFrame for a given scope from getting deleted

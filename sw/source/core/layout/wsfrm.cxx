@@ -63,7 +63,7 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib ) :
     mpNext(nullptr),
     mpPrev(nullptr),
     mpDrawObjs(nullptr),
-    mnFrameType(0),
+    mnFrameType(SwFrameType::None),
     mbInfBody( false ),
     mbInfTab ( false ),
     mbInfFly ( false ),
@@ -1631,7 +1631,7 @@ void SwFrame::ReinitializeFrameSizeAttrFlags()
          ATT_MIN_SIZE == rFormatSize.GetHeightSizeType())
     {
         mbFixSize = false;
-        if ( GetType() & (FRM_HEADER | FRM_FOOTER | FRM_ROW) )
+        if ( GetType() & (SwFrameType::Header | SwFrameType::Footer | SwFrameType::Row) )
         {
             SwFrame *pFrame = static_cast<SwLayoutFrame*>(this)->Lower();
             while ( pFrame )
@@ -1718,7 +1718,9 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse with Body
+    SwFrameType nTmpType = SwFrameType::Cell | SwFrameType::Column;
+    if (bBrowse)
+        nTmpType |= SwFrameType::Body;
     if( !(GetUpper()->GetType() & nTmpType) && GetUpper()->HasFixSize() )
     {
         if ( !bTst )
@@ -2200,7 +2202,9 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse with Body
+    SwFrameType nTmpType = SwFrameType::Cell | SwFrameType::Column;
+    if (bBrowse)
+        nTmpType |= SwFrameType::Body;
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
@@ -2331,7 +2335,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 _InvalidateAll();
                 InvalidatePage( pPage );
             }
-            if (!(GetType() & (FRM_ROW|FRM_TAB|FRM_FTNCONT|FRM_PAGE|FRM_ROOT)))
+            if (!(GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
                 NotifyLowerObjs();
 
             if( IsCellFrame() )
@@ -2360,7 +2364,9 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse by Body.
+    SwFrameType nTmpType = SwFrameType::Cell | SwFrameType::Column;
+    if (bBrowse)
+        nTmpType |= SwFrameType::Body;
 
     if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
     {
@@ -2518,7 +2524,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SetCompletePaint();
         }
 
-        if (!(GetType() & (FRM_ROW|FRM_TAB|FRM_FTNCONT|FRM_PAGE|FRM_ROOT)))
+        if (!(GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
             NotifyLowerObjs();
 
         if( IsCellFrame() )
@@ -2716,15 +2722,15 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     // In vertical layout these are neighbour frames (cell and column frames),
     //      header frames and footer frames.
     // In horizontal layout these are all frames, which aren't neighbour frames.
-    const sal_uInt16 nFixWidth = bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT)
-                                   : ~FRM_NEIGHBOUR;
+    const SwFrameType nFixWidth = bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT)
+                                   : ~SwFrameType(FRM_NEIGHBOUR);
 
     // Declare const unsigned short <nFixHeight> and init it this frame types
     // which has fixed height in vertical respectively horizontal layout.
     // In vertical layout these are all frames, which aren't neighbour frames,
     //      header frames, footer frames, body frames or foot note container frames.
     // In horizontal layout these are neighbour frames.
-    const sal_uInt16 nFixHeight= bVert ? ~(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC)
+    const SwFrameType nFixHeight = bVert ? ~SwFrameType(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC)
                                    : FRM_NEIGHBOUR;
 
     // Travel through all lowers using <GetNext()>
@@ -2742,8 +2748,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
         {
             // If lower isn't a table, row, cell or section frame, adjust its
             // frame size.
-            const sal_uInt16 nLowerType = pLowerFrame->GetType();
-            if ( !(nLowerType & (FRM_TAB|FRM_ROW|FRM_CELL|FRM_SECTION)) )
+            const SwFrameType nLowerType = pLowerFrame->GetType();
+            if ( !(nLowerType & (SwFrameType::Tab|SwFrameType::Row|SwFrameType::Cell|SwFrameType::Section)) )
             {
                 if ( bWidthChgd )
                 {

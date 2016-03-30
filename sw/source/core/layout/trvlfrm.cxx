@@ -2065,7 +2065,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     // allowed (header/footer/table-headline) for two pages.
     do {    // middle check loop
         const SwLayoutFrame* pSttLFrame = pStartFrame->GetUpper();
-        const sal_uInt16 cHdFtTableHd = FRM_HEADER | FRM_FOOTER | FRM_TAB;
+        const SwFrameType cHdFtTableHd = SwFrameType::Header | SwFrameType::Footer | SwFrameType::Tab;
         while( pSttLFrame &&
             ! (cHdFtTableHd & pSttLFrame->GetType() ))
             pSttLFrame = pSttLFrame->GetUpper();
@@ -2082,8 +2082,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             "Selection over different content" );
         switch( pSttLFrame->GetType() )
         {
-        case FRM_HEADER:
-        case FRM_FOOTER:
+        case SwFrameType::Header:
+        case SwFrameType::Footer:
             // On different pages? Then always on the start-page
             if( pEndLFrame->FindPageFrame() != pSttLFrame->FindPageFrame() )
             {
@@ -2094,7 +2094,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                     pStartFrame = pEndFrame;
             }
             break;
-        case FRM_TAB:
+        case SwFrameType::Tab:
             // On different pages? Then check for table-headline
             {
                 const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pSttLFrame);
@@ -2113,6 +2113,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                 }
             }
             break;
+        default: break;
         }
     } while( false );
 

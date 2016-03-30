@@ -50,7 +50,7 @@ SwSectionFrame::SwSectionFrame( SwSection &rSect, SwFrame* pSib )
     , m_bOwnFootnoteNum(false)
     , m_bFootnoteLock(false)
 {
-    mnFrameType = FRM_SECTION;
+    mnFrameType = SwFrameType::Section;
 
     CalcFootnoteAtEndFlag();
     CalcEndAtEndFlag();
@@ -66,7 +66,7 @@ SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
     m_bOwnFootnoteNum( false ),
     m_bFootnoteLock( false )
 {
-    mnFrameType = FRM_SECTION;
+    mnFrameType = SwFrameType::Section;
 
     PROTOCOL( this, PROT_SECTION, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )
 

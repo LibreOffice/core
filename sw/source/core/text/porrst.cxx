@@ -349,10 +349,10 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 {
     const SwFrame *pFrame = this;
     rRegDiff = 0;
-    while( !( ( FRM_BODY | FRM_FLY )
+    while( !( ( SwFrameType::Body | SwFrameType::Fly )
            & pFrame->GetType() ) && pFrame->GetUpper() )
         pFrame = pFrame->GetUpper();
-    if( ( FRM_BODY| FRM_FLY ) & pFrame->GetType() )
+    if( ( SwFrameType::Body| SwFrameType::Fly ) & pFrame->GetType() )
     {
         SWRECTFN( pFrame )
         rRegStart = (pFrame->*fnRect->fnGetPrtTop)();
