@@ -37,7 +37,6 @@ class UserDrawEvent;
 class ImplCommonButtonData;
 enum class DrawButtonFlags;
 
-
 class VCL_DLLPUBLIC Button : public Control
 {
 private:
@@ -103,14 +102,12 @@ protected:
     DECL_STATIC_LINK_TYPED(Button, dispatchCommandHandler, Button*, void);
 };
 
-
 enum class PushButtonDropdownStyle
 {
     NONE            = 0x0000,
     Toolbox         = 0x0001,
     MenuButton      = 0x0002,
 };
-
 
 class VCL_DLLPUBLIC PushButton : public Button
 {
@@ -202,18 +199,15 @@ public:
     virtual void    ShowFocus(const Rectangle& rRect) override;
 };
 
-
 inline void PushButton::Check( bool bCheck )
 {
     SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
-
 inline bool PushButton::IsChecked() const
 {
     return (GetState() == TRISTATE_TRUE);
 }
-
 
 class VCL_DLLPUBLIC OKButton : public PushButton
 {
@@ -231,7 +225,6 @@ public:
     virtual void    Click() override;
 };
 
-
 class VCL_DLLPUBLIC CancelButton : public PushButton
 {
 protected:
@@ -248,13 +241,11 @@ public:
     virtual void    Click() override;
 };
 
-
 class VCL_DLLPUBLIC CloseButton : public CancelButton
 {
 public:
     explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
 };
-
 
 class VCL_DLLPUBLIC HelpButton : public PushButton
 {
@@ -271,7 +262,6 @@ public:
 
     virtual void    Click() override;
 };
-
 
 class VCL_DLLPUBLIC RadioButton : public Button
 {
@@ -398,7 +388,6 @@ public:
     virtual void ShowFocus(const Rectangle& rRect) override;
 };
 
-
 class VCL_DLLPUBLIC CheckBox : public Button
 {
 private:
@@ -493,12 +482,10 @@ inline void CheckBox::Check( bool bCheck )
     SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
-
 inline bool CheckBox::IsChecked() const
 {
     return (GetState() == TRISTATE_TRUE);
 }
-
 
 class VCL_DLLPUBLIC ImageButton : public PushButton
 {
@@ -516,7 +503,6 @@ public:
                  ImageButton( vcl::Window* pParent, const ResId& rResId );
 };
 
-
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
 {
                     ImageRadioButton( const ImageRadioButton & ) = delete;
@@ -526,7 +512,6 @@ public:
     explicit        ImageRadioButton( vcl::Window* pParent );
 };
 
-
 class VCL_DLLPUBLIC TriStateBox : public CheckBox
 {
                     TriStateBox( const TriStateBox & ) = delete;
@@ -535,7 +520,6 @@ class VCL_DLLPUBLIC TriStateBox : public CheckBox
 public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle = 0 );
 };
-
 
 class VCL_DLLPUBLIC DisclosureButton : public CheckBox
 {
