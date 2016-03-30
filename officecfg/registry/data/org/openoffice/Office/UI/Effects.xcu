@@ -50,6 +50,11 @@
           <value xml:lang="en-US">Circle</value>
         </prop>
       </node>
+      <node oor:name="ooo-entrance-oval" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Oval Vertical</value>
+        </prop>
+      </node>
       <node oor:name="ooo-entrance-fly-in-slow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Fly in Slow</value>
@@ -1728,6 +1733,16 @@
           <value xml:lang="en-US">Circle</value>
         </prop>
       </node>
+      <node oor:name="oval-horizontal" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Oval Horizontal</value>
+        </prop>
+      </node>
+      <node oor:name="oval-vertical" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Oval Vertical</value>
+        </prop>
+      </node>
       <node oor:name="diamond" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Diamond</value>
@@ -2049,6 +2064,22 @@
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
           <value>circle</value>
+        </prop>
+      </node>
+      <node oor:name="shape-oval-horizontal" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>shape</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>oval-horizontal</value>
+        </prop>
+      </node>
+      <node oor:name="shape-oval-vertical" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>shape</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>oval-vertical</value>
         </prop>
       </node>
       <node oor:name="shape-diamond" oor:op="replace">
@@ -2383,7 +2414,7 @@
           <value xml:lang="en-US">Basic</value>
         </prop>
         <prop oor:name="Effects" oor:type="oor:string-list">
-          <value oor:separator=";">ooo-entrance-appear;ooo-entrance-fly-in;ooo-entrance-venetian-blinds;ooo-entrance-box;ooo-entrance-checkerboard;ooo-entrance-circle;ooo-entrance-fly-in-slow;ooo-entrance-diamond;ooo-entrance-dissolve-in;ooo-entrance-flash-once;ooo-entrance-peek-in;ooo-entrance-plus;ooo-entrance-random-bars;ooo-entrance-split;ooo-entrance-diagonal-squares;ooo-entrance-wedge;ooo-entrance-wheel;ooo-entrance-wipe;ooo-entrance-random</value>
+          <value oor:separator=";">ooo-entrance-appear;ooo-entrance-fly-in;ooo-entrance-venetian-blinds;ooo-entrance-box;ooo-entrance-checkerboard;ooo-entrance-circle;ooo-entrance-oval;ooo-entrance-fly-in-slow;ooo-entrance-diamond;ooo-entrance-dissolve-in;ooo-entrance-flash-once;ooo-entrance-peek-in;ooo-entrance-plus;ooo-entrance-random-bars;ooo-entrance-split;ooo-entrance-diagonal-squares;ooo-entrance-wedge;ooo-entrance-wheel;ooo-entrance-wipe;ooo-entrance-random</value>
         </prop>
       </node>
       <node oor:name="special" oor:op="replace">

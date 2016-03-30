@@ -91,6 +91,22 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-oval" pres:preset-sub-type="in">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="2" smil:type="ellipseWipe" smil:subtype="vertical" smil:direction="reverse"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-oval" pres:preset-sub-type="out">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="2" smil:type="ellipseWipe" smil:subtype="vertical"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-fly-in-slow" pres:preset-sub-type="from-bottom">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>

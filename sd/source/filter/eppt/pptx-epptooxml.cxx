@@ -696,6 +696,12 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
             case PPT_TRANSITION_TYPE_CIRCLE:
             nTransition = XML_circle;
             break;
+            case PPT_TRANSITION_TYPE_OVAL_VERTICAL:
+            nTransition = XML_oval;
+            break;
+            case PPT_TRANSITION_TYPE_OVAL_HORIZONTAL:
+            nTransition = XML_oval;
+            break;
             case PPT_TRANSITION_TYPE_COMB:
             nTransition = XML_comb;
             pDirection = (nDirection == 1) ? "vert" : "horz";

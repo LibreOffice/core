@@ -60,6 +60,8 @@ namespace ppt
 #define PPT_TRANSITION_TYPE_SMOOTHFADE      23 // Alpha Fade in MS-PPT Specs
 #define PPT_TRANSITION_TYPE_WHEEL           26
 #define PPT_TRANSITION_TYPE_CIRCLE          27
+#define PPT_TRANSITION_TYPE_OVAL_HORIZONTAL 28
+#define PPT_TRANSITION_TYPE_OVAL_VERTICAL   29
 
 // atoms
 #define DFF_msofbtAnimEvent                         0xf125
