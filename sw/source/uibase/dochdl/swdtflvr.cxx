@@ -2355,7 +2355,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             case SwPasteSdr::Insert:
             {
                 SwTransferable::SetSelInShell( rSh, false, pPt );
-                rSh.Insert( sURL, aEmptyOUStr, aGraphic, nullptr, false, nAnchorType );
+                rSh.Insert( sURL, aEmptyOUStr, aGraphic, nullptr, nAnchorType );
                 break;
             }
 

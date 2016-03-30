@@ -51,9 +51,8 @@ public:
     // Inserts a Frame under every pUpper of the array
     void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
-    SwFrame* GetFrame( const Point* pDocPos = nullptr,
-                    const SwPosition *pPos = nullptr,
-                    const bool bCalcFrame = true ) const;
+    SwFrame* GetFrame( const Point* pDocPos,
+                    const SwPosition *pPos ) const;
 };
 
 SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
@@ -413,11 +412,10 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
 }
 
 SwFrame* SwNode2LayImpl::GetFrame( const Point* pDocPos,
-                                const SwPosition *pPos,
-                                const bool bCalcFrame ) const
+                                const SwPosition *pPos ) const
 {
     // test if change of member pIter -> pMod broke anything
-    return pMod ? ::GetFrameOfModify( nullptr, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrame ) : nullptr;
+    return pMod ? ::GetFrameOfModify( nullptr, *pMod, USHRT_MAX, pDocPos, pPos ) : nullptr;
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )
@@ -454,7 +452,7 @@ SwNode2Layout::~SwNode2Layout()
 SwFrame* SwNode2Layout::GetFrame( const Point* pDocPos,
                               const SwPosition *pPos ) const
 {
-    return pImpl->GetFrame( pDocPos, pPos, false/*bCalcFrame*/ );
+    return pImpl->GetFrame( pDocPos, pPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

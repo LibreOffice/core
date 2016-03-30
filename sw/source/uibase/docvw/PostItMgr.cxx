@@ -650,8 +650,7 @@ void SwPostItMgr::LayoutPostIts()
                         {
                             pPostIt = (*i)->GetSidebarWindow( mpView->GetEditWin(),
                                                               WB_DIALOGCONTROL,
-                                                              *this,
-                                                              0 );
+                                                              *this );
                             pPostIt->InitControls();
                             pPostIt->SetReadonly(mbReadOnly);
                             pItem->pPostIt = pPostIt;

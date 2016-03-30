@@ -76,8 +76,6 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
 
         inline void SetHeight( const unsigned long aHeight ) { mHeight = aHeight; };
 
-        bool getShadowedEffect() const { return mbShadowedEffect; }
-
         void SetAnchorState( const AnchorState aState );
         inline AnchorState GetAnchorState() const { return mAnchorState; }
 
@@ -110,7 +108,6 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
         unsigned long mHeight;
         AnchorState mAnchorState;
 
-        bool mbShadowedEffect : 1;
         bool mbLineSolid : 1;
 
         AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
@@ -120,9 +117,7 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
                              const basegfx::B2DPoint& rFifthPos,
                              const basegfx::B2DPoint& rSixthPos,
                              const basegfx::B2DPoint& rSeventhPos,
-                             const Color& rBaseColor,
-                             const bool bShadowedEffect,
-                             const bool bLineSolid );
+                             const Color& rBaseColor );
         virtual ~AnchorOverlayObject();
 };
 

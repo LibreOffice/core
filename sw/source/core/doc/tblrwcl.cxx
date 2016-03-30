@@ -2058,7 +2058,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
 }
 
 bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
-                        const SwSelBoxes& rSelBoxes, bool bCpyNds,
+                        const SwSelBoxes& rSelBoxes,
                         bool bCpyName ) const
 {
     // Find all Boxes/Lines
@@ -2129,7 +2129,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pNewTable->GetFrameFormat()->SetName( GetFrameFormat()->GetName() );
 
     _CpyTabFrames aCpyFormat;
-    _CpyPara aPara( pTableNd, 1, aCpyFormat, bCpyNds );
+    _CpyPara aPara( pTableNd, 1, aCpyFormat, true/*bCpyNds*/ );
     aPara.nNewSize = aPara.nOldSize = GetFrameFormat()->GetFrameSize().GetWidth();
 
     if( IsNewModel() )

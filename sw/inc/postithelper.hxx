@@ -96,10 +96,9 @@ public:
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     SwLayoutInfo maLayoutInfo;
 
-    SwSidebarItem( const bool aShow,
-                   const bool aFocus)
+    SwSidebarItem( const bool aFocus)
         : pPostIt(nullptr)
-        , bShow(aShow)
+        , bShow(true)
         , bFocus(aFocus)
         , mLayoutStatus( SwPostItHelper::INVISIBLE )
         , maLayoutInfo()
@@ -116,8 +115,7 @@ public:
     virtual const SfxBroadcaster* GetBroadCaster() const = 0;
     virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,
-                                                                SwPostItMgr& aMgr,
-                                                                SwPostItBits aBits) = 0;
+                                                                SwPostItMgr& aMgr) = 0;
 };
 
 class SwAnnotationItem: public SwSidebarItem
@@ -126,7 +124,7 @@ public:
     SwAnnotationItem(
         SwFormatField& rFormatField,
         const bool aFocus)
-        : SwSidebarItem( true/*aShow*/, aFocus )
+        : SwSidebarItem( aFocus )
         , mrFormatField( rFormatField )
     {
     }
@@ -148,8 +146,7 @@ public:
     virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow(
         SwEditWin& rEditWin,
         WinBits nBits,
-        SwPostItMgr& aMgr,
-        SwPostItBits aBits ) override;
+        SwPostItMgr& aMgr ) override;
 
 private:
     SwFormatField& mrFormatField;

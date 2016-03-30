@@ -379,7 +379,7 @@ public:
     virtual void PaintBorder( const SwRect&, const SwPageFrame *pPage,
                               const SwBorderAttrs & ) const;
     void PaintBaBo( const SwRect&, const SwPageFrame *pPage = nullptr,
-                    const bool bLowerBorder = false, const bool bOnlyTextBackground = false ) const;
+                    const bool bOnlyTextBackground = false) const;
     void PaintBackground( const SwRect&, const SwPageFrame *pPage,
                           const SwBorderAttrs &,
                           const bool bLowerMode = false,

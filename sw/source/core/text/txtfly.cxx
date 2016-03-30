@@ -578,8 +578,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     return true;
 }
 
-void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
-        const SwTextPaintInfo &rInf, bool bNoGraphic )
+void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
 {
     SwRegionRects aRegion( rRect );
     OSL_ENSURE( !bTopRule, "DrawFlyRect: Wrong TopRule" );
@@ -631,21 +630,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
 
     for( size_t i = 0; i < aRegion.size(); ++i )
     {
-        if ( bNoGraphic )
-        {
-            pOut->DrawRect( aRegion[i].SVRect() );
-        }
-        else
-        {
-            if(reinterpret_cast<SvxBrushItem*>(-1) != rInf.GetBrushItem())
-            {
-                ::DrawGraphic(rInf.GetBrushItem(), pOut, rInf.GetBrushRect(), aRegion[i] );
-            }
-            else
-            {
-                OSL_ENSURE(false, "DrawRect: Uninitialized BrushItem!" );
-            }
-        }
+        pOut->DrawRect( aRegion[i].SVRect() );
     }
 }
 

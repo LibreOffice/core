@@ -45,14 +45,14 @@ using namespace ::com::sun::star::beans;
 class SwAddressTable : public SvSimpleTable
 {
 public:
-    SwAddressTable(SvSimpleTableContainer& rParent, WinBits nBits = 0);
+    SwAddressTable(SvSimpleTableContainer& rParent);
     void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
     virtual void Resize() override;
     void setColSizes();
 };
 
-SwAddressTable::SwAddressTable(SvSimpleTableContainer& rParent, WinBits nBits)
-    : SvSimpleTable(rParent, nBits)
+SwAddressTable::SwAddressTable(SvSimpleTableContainer& rParent)
+    : SvSimpleTable(rParent, 0)
 {
     SetSpaceBetweenEntries(3);
     SetSelectionMode(SINGLE_SELECTION);

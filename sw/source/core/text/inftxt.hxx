@@ -263,7 +263,7 @@ public:
 
     SwPosSize GetTextSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const OUString& rText, const sal_Int32 nIdx,
-                          const sal_Int32 nLen, const sal_uInt16 nComp ) const;
+                          const sal_Int32 nLen ) const;
     SwPosSize GetTextSize() const;
     void GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
                       const sal_Int32 nLen, const sal_uInt16 nComp,
@@ -740,14 +740,14 @@ inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
 {
-    return GetTextSize( m_pOut, nullptr, rText, 0, rText.getLength(), 0 );
+    return GetTextSize( m_pOut, nullptr, rText, 0, rText.getLength() );
 }
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,
                                             const sal_Int32 nNewIdx,
                                             const sal_Int32 nNewLen ) const
 {
-    return GetTextSize( m_pOut, pSI, *m_pText, nNewIdx, nNewLen, 0/*nCompress*/ );
+    return GetTextSize( m_pOut, pSI, *m_pText, nNewIdx, nNewLen );
 }
 
 inline SwTwips SwTextPaintInfo::GetPaintOfst() const

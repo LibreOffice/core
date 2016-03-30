@@ -371,7 +371,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     SwFlyPortion *pFly = rInf.GetFly();
     if( pFly )
     {
-        if ( 0 < pFly->Fix() )
+        if ( 0 < pFly->GetFix() )
             ClearFly( rInf );
         else
             rInf.SetFull(true);
@@ -1349,8 +1349,8 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                   if ( GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
-                        OSL_ENSURE( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" );
-                        const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = (sal_uInt16)(rInf.X() - pLastTabPortion->Fix() );
+                        OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
+                        const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = (sal_uInt16)(rInf.X() - pLastTabPortion->GetFix() );
                         static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                         rInf.SetTabDecimal( 0 );
                     }
@@ -2432,8 +2432,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
         rInf.SetFly( pFly );
 
-        if( pFly->Fix() < rInf.Width() )
-            rInf.Width( pFly->Fix() );
+        if( pFly->GetFix() < rInf.Width() )
+            rInf.Width( pFly->GetFix() );
 
         SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
         if ( pGrid )

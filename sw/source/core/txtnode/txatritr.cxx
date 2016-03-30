@@ -94,11 +94,9 @@ bool SwScriptIterator::Next()
 }
 
 SwTextAttrIterator::SwTextAttrIterator( const SwTextNode& rTNd, sal_uInt16 nWhchId,
-                                        sal_Int32 nStt,
-                                        bool bUseGetWhichOfScript )
+                                        sal_Int32 nStt )
     : aSIter( rTNd.GetText(), nStt ), rTextNd( rTNd ),
-    pParaItem( nullptr ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId ),
-    bIsUseGetWhichOfScript( bUseGetWhichOfScript )
+      pParaItem( nullptr ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId )
 {
     SearchNextChg();
 }
@@ -136,9 +134,7 @@ bool SwTextAttrIterator::Next()
 
                     if( RES_TXTATR_CHARFMT == pHt->Which() )
                     {
-                        const sal_uInt16 nWId = bIsUseGetWhichOfScript
-                            ? GetWhichOfScript( nWhichId, aSIter.GetCurrScript() )
-                            : nWhichId;
+                        const sal_uInt16 nWId = GetWhichOfScript( nWhichId, aSIter.GetCurrScript() );
                         pCurItem = &pHt->GetCharFormat().GetCharFormat()->GetFormatAttr(nWId);
                     }
                     else
@@ -179,9 +175,7 @@ void SwTextAttrIterator::SearchNextChg()
     }
     if( !pParaItem )
     {
-        nWh = bIsUseGetWhichOfScript ?
-                GetWhichOfScript( nWhichId,
-                                  aSIter.GetCurrScript() ) : nWhichId;
+        nWh = GetWhichOfScript( nWhichId, aSIter.GetCurrScript() );
         pParaItem = &rTextNd.GetSwAttrSet().Get( nWh );
     }
 
@@ -194,9 +188,7 @@ void SwTextAttrIterator::SearchNextChg()
     {
         if( !nWh )
         {
-            nWh =  bIsUseGetWhichOfScript ?
-                        GetWhichOfScript( nWhichId,
-                                          aSIter.GetCurrScript() ) : nWhichId;
+            nWh = GetWhichOfScript( nWhichId, aSIter.GetCurrScript() );
         }
 
         const SfxPoolItem* pItem = nullptr;

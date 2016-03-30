@@ -4306,7 +4306,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
             bRet = pSrcTableNd->GetTable().MakeCopy( this, rInsPos, rBoxes,
-                                                true, bCpyName );
+                                                bCpyName );
         }
 
         if( pUndo )
@@ -4329,7 +4329,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     {
         RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
         if( getIDocumentRedlineAccess().IsRedlineOn() )
-      getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
+            getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
                                   nsRedlineMode_t::REDLINE_SHOW_INSERT |
                                   nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
@@ -4351,7 +4351,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             pCpyDoc->acquire();
 
             SwPosition aPos( SwNodeIndex( pCpyDoc->GetNodes().GetEndOfContent() ));
-            if( !pSrcTableNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, true, true ))
+            if( !pSrcTableNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, true ))
             {
                 if( pCpyDoc->release() == 0 )
                     delete pCpyDoc;

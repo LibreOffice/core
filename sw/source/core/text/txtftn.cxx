@@ -1065,7 +1065,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     while( pPor )
     {
         if ( pPor->IsFlyPortion() )
-            nLastLeft = static_cast<SwFlyPortion*>(pPor)->Fix() +
+            nLastLeft = static_cast<SwFlyPortion*>(pPor)->GetFix() +
                         static_cast<SwFlyPortion*>(pPor)->Width();
         pPor = pPor->GetPortion();
     }

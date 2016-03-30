@@ -389,14 +389,13 @@ SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const OUString& rText,
                                      const sal_Int32 nIndex,
-                                     const sal_Int32 nLength,
-                                     const sal_uInt16 nComp) const
+                                     const sal_Int32 nLength) const
 {
     SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rText, nIndex, nLength );
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-    aDrawInf.SetKanaComp( nComp );
+    aDrawInf.SetKanaComp( 0 );
     return SwPosSize(m_pFnt->_GetTextSize( aDrawInf ));
 }
 
@@ -940,7 +939,7 @@ void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
     {
         if( aTextFly.IsOn() )
             const_cast<SwTextPaintInfo*>(this)->GetTextFly().
-                DrawFlyRect( m_pOut, rRect, *this, true/*bNoGraphic*/ );
+                DrawFlyRect( m_pOut, rRect );
         else
             m_pOut->DrawRect( rRect.SVRect() );
     }

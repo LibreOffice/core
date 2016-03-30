@@ -3370,7 +3370,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                 // calls, paint <hell> or <heaven>
                 const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
 
-                pPage->PaintBaBo( aPaintRect, pPage, true );
+                pPage->PaintBaBo( aPaintRect, pPage );
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
@@ -3387,7 +3387,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                 }
 
                 if ( pSh->GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS ) )
-                    pPage->PaintBaBo( aPaintRect, pPage, true, /*bOnlyTextBackground=*/true );
+                    pPage->PaintBaBo( aPaintRect, pPage, /*bOnlyTextBackground=*/true );
 
                 if( pSh->GetWin() )
                 {
@@ -6427,7 +6427,7 @@ SwRect SwPageFrame::GetBoundRect(OutputDevice* pOutputDevice) const
 }
 
 void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
-                       const bool bLowerBorder, const bool bOnlyTextBackground ) const
+                         const bool bOnlyTextBackground ) const
 {
     if ( !pPage )
         pPage = FindPageFrame();
@@ -6454,7 +6454,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
 
     // paint background
     {
-        PaintBackground( rRect, pPage, rAttrs, false, bLowerBorder, bOnlyTextBackground );
+        PaintBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground );
     }
 
     // OD 06.08.2002 #99657# - paint border before painting background
@@ -7413,7 +7413,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
         {
             SwRect &rRetouche = aRegion[i];
 
-            GetUpper()->PaintBaBo( rRetouche, pPage, true );
+            GetUpper()->PaintBaBo( rRetouche, pPage );
 
             //Hell and Heaven need to be refreshed too.
             //To avoid recursion my retouch flag needs to be reset first!

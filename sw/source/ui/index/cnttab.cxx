@@ -539,15 +539,15 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
 class SwIndexTreeLB : public SvSimpleTable
 {
 public:
-    SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits = 0);
+    SwIndexTreeLB(SvSimpleTableContainer& rParent);
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void Resize() override;
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;
     void setColSizes();
 };
 
-SwIndexTreeLB::SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits)
-    : SvSimpleTable(rParent, nBits)
+SwIndexTreeLB::SwIndexTreeLB(SvSimpleTableContainer& rParent)
+    : SvSimpleTable(rParent, 0)
 {
     HeaderBar& rStylesHB = GetTheHeaderBar();
     rStylesHB.SetStyle(rStylesHB.GetStyle()|WB_BUTTONSTYLE);

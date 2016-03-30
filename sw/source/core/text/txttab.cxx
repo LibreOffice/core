@@ -293,7 +293,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
  * The base class is initialized without setting anything
  */
 SwTabPortion::SwTabPortion( const sal_uInt16 nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
-    : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
+    : SwFixPortion(), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
     nLineLength = 1;
     OSL_ENSURE(!IsFilled() || ' ' != cFill, "SwTabPortion::CTOR: blanks ?!");
@@ -321,7 +321,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Here we settle down ...
-    Fix( static_cast<sal_uInt16>(rInf.X()) );
+    SetFix( static_cast<sal_uInt16>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
     const bool bTabOverflow = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVERFLOW);
@@ -474,7 +474,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
         nPorWidth = nNewWidth;
     }
 
-    const sal_uInt16 nDiffWidth = nRight - Fix();
+    const sal_uInt16 nDiffWidth = nRight - GetFix();
 
     if( nDiffWidth > nPorWidth )
     {

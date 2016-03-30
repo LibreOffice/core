@@ -197,10 +197,10 @@ public:
     SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // For sw3io: pData is taken over!
-    SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos, bool bVsbl,
-               bool bDelLP, bool bIsPD) :
+    SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
+               bool bDelLP) :
         SwPaM( rPos ), pRedlineData( pData ), pContentSect( nullptr ),
-        bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
+        bDelLastPara( bDelLP ), bIsLastParaDelete( false ), bIsVisible( true )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline();

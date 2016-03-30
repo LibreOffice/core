@@ -653,8 +653,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // create redline (using pRedlineData which gets copied in SwRangeRedline())
         SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
         SwRangeRedline* pRedline =
-            new SwRangeRedline( pRedlineData, *aPaM.GetPoint(), true,
-                           !pRedlineInfo->bMergeLastParagraph, false );
+            new SwRangeRedline( pRedlineData, *aPaM.GetPoint(),
+                           !pRedlineInfo->bMergeLastParagraph );
 
         // set mark
         if( aPaM.HasMark() )

@@ -135,8 +135,8 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
 class SwAddrSourceLB : public SvSimpleTable
 {
 public:
-    SwAddrSourceLB(SvSimpleTableContainer& rParent, WinBits nBits = 0)
-        : SvSimpleTable(rParent, nBits)
+    SwAddrSourceLB(SvSimpleTableContainer& rParent)
+        : SvSimpleTable(rParent, 0)
     {
     }
     virtual void Resize() override;

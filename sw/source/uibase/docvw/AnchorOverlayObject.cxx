@@ -253,9 +253,7 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
                     basegfx::B2DPoint( aPageBorder ,aAnchorRect.Bottom()+2*15),
                     basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
                     basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) ,
-                    aColorAnchor,
-                    false,
-                    false);
+                    aColorAnchor);
                 xOverlayManager->add(*pAnchorOverlayObject);
             }
         }
@@ -284,9 +282,7 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
                                           const basegfx::B2DPoint& rFifthPos,
                                           const basegfx::B2DPoint& rSixthPos,
                                           const basegfx::B2DPoint& rSeventhPos,
-                                          const Color& rBaseColor,
-                                          const bool bShadowedEffect,
-                                          const bool bLineSolid)
+                                          const Color& rBaseColor)
     : OverlayObjectWithBasePosition(rBasePos, rBaseColor)
     , maSecondPosition(rSecondPos)
     , maThirdPosition(rThirdPos)
@@ -299,8 +295,7 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
     , maLineTop()
     , mHeight(0)
     , mAnchorState(AS_ALL)
-    , mbShadowedEffect(bShadowedEffect)
-    , mbLineSolid(bLineSolid)
+    , mbLineSolid(false)
 {
 }
 
@@ -351,7 +346,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorOverlayObject::createOverl
                              GetAnchorState(),
                              getBaseColor().getBColor(),
                              ANCHORLINE_WIDTH * aDiscreteLineWidth,
-                             getShadowedEffect(),
+                             false,
                              getLineSolid()) );
 
     return drawinglayer::primitive2d::Primitive2DContainer { aReference };

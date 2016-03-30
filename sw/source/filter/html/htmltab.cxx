@@ -460,10 +460,8 @@ class HTMLTable
     // If nRow==nCell==USHRT_MAX, return the last Start-Node of the table.
     const SwStartNode* GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 nCell ) const;
 
-    sal_uInt16 GetTopCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
-                            bool bSwBorders=true ) const;
-    sal_uInt16 GetBottomCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
-                               bool bSwBorders=true ) const;
+    sal_uInt16 GetTopCellSpace( sal_uInt16 nRow ) const;
+    sal_uInt16 GetBottomCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan ) const;
 
     // Conforming of the frame::Frame-Format of the box
     void FixFrameFormat( SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
@@ -1255,72 +1253,25 @@ static bool IsBoxEmpty( const SwTableBox *pBox )
     return false;
 }
 
-sal_uInt16 HTMLTable::GetTopCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
-                                   bool bSwBorders ) const
+sal_uInt16 HTMLTable::GetTopCellSpace( sal_uInt16 nRow ) const
 {
     sal_uInt16 nSpace = nCellPadding;
 
     if( nRow == 0 )
     {
         nSpace += nBorder + nCellSpacing;
-        if( bSwBorders )
-        {
-            sal_uInt16 nTopBorderWidth =
-                GetBorderWidth( aTopBorderLine, true );
-            if( nSpace < nTopBorderWidth )
-                nSpace = nTopBorderWidth;
-        }
-    }
-    else if (bSwBorders && (*m_pRows)[nRow+nRowSpan-1]->bBottomBorder &&
-             nSpace < MIN_BORDER_DIST )
-    {
-        OSL_ENSURE( !nCellPadding, "GetTopCellSpace: CELLPADDING!=0" );
-        // Wenn die Gegenueberliegende Seite umrandet ist muessen
-        // wir zumindest den minimalen Abstand zum Inhalt
-        // beruecksichtigen. (Koennte man zusaetzlich auch an
-        // nCellPadding festmachen.)
-        nSpace = MIN_BORDER_DIST;
     }
 
     return nSpace;
 }
 
-sal_uInt16 HTMLTable::GetBottomCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
-                                      bool bSwBorders ) const
+sal_uInt16 HTMLTable::GetBottomCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan ) const
 {
     sal_uInt16 nSpace = nCellSpacing + nCellPadding;
 
     if( nRow+nRowSpan == nRows )
     {
         nSpace = nSpace + nBorder;
-
-        if( bSwBorders )
-        {
-            sal_uInt16 nBottomBorderWidth =
-                GetBorderWidth( aBottomBorderLine, true );
-            if( nSpace < nBottomBorderWidth )
-                nSpace = nBottomBorderWidth;
-        }
-    }
-    else if( bSwBorders )
-    {
-        if ((*m_pRows)[nRow+nRowSpan+1]->bBottomBorder)
-        {
-            sal_uInt16 nBorderWidth = GetBorderWidth( aBorderLine, true );
-            if( nSpace < nBorderWidth )
-                nSpace = nBorderWidth;
-        }
-        else if( nRow==0 && bTopBorder && nSpace < MIN_BORDER_DIST )
-        {
-            OSL_ENSURE( GetBorderWidth( aTopBorderLine, true ) > 0,
-                    "GetBottomCellSpace: |aTopLine| == 0" );
-            OSL_ENSURE( !nCellPadding, "GetBottomCellSpace: CELLPADDING!=0" );
-            // Wenn die Gegenueberliegende Seite umrandet ist muessen
-            // wir zumindest den minimalen Abstand zum Inhalt
-            // beruecksichtigen. (Koennte man zusaetzlich auch an
-            // nCellPadding festmachen.)
-            nSpace = MIN_BORDER_DIST;
-        }
     }
 
     return nSpace;
@@ -1667,8 +1618,8 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             // Mindesthoehe handelt, kann sie genauso wie in
             // Netscape berechnet werden, also ohne Beruecksichtigung
             // der tatsaechlichen Umrandungsbreite.
-            nRowHeight += GetTopCellSpace( nTopRow, 1, false ) +
-                       GetBottomCellSpace( nTopRow, 1, false );
+            nRowHeight += GetTopCellSpace( nTopRow ) +
+                       GetBottomCellSpace( nTopRow, 1 );
 
             pFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, nRowHeight ) );
         }

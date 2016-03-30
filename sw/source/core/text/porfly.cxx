@@ -52,14 +52,14 @@ void SwFlyPortion::Paint( const SwTextPaintInfo& ) const
 
 bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
 {
-    OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
+    OSL_ENSURE( GetFix() >= rInf.X(), "SwFlyPortion::Format" );
 
     // tabs must be expanded
     if( rInf.GetLastTab() )
         rInf.GetLastTab()->FormatEOL( rInf );
 
     rInf.GetLast()->FormatEOL( rInf );
-    PrtWidth( static_cast<sal_uInt16>(Fix() - rInf.X() + PrtWidth()) );
+    PrtWidth( static_cast<sal_uInt16>(GetFix() - rInf.X() + PrtWidth()) );
     if( !Width() )
     {
         OSL_ENSURE( Width(), "+SwFlyPortion::Format: a fly is a fly is a fly" );

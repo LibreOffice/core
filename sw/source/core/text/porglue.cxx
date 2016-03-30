@@ -139,8 +139,8 @@ SwFixPortion::SwFixPortion( const SwRect &rRect )
     SetWhichPor( POR_FIX );
 }
 
-SwFixPortion::SwFixPortion(const sal_uInt16 nFixedWidth, const sal_uInt16 nFixedPos)
-       : SwGluePortion(nFixedWidth), nFix(nFixedPos)
+SwFixPortion::SwFixPortion()
+       : SwGluePortion(0), nFix(0)
 {
     SetWhichPor( POR_FIX );
 }

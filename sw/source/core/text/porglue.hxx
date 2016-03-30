@@ -53,9 +53,9 @@ class SwFixPortion : public SwGluePortion
     sal_uInt16 nFix;        // The width offset in the line
 public:
     explicit SwFixPortion( const SwRect &rFlyRect );
-    SwFixPortion( const sal_uInt16 nFixWidth, const sal_uInt16 nFixPos );
-    inline void   Fix( const sal_uInt16 nNewFix ) { nFix = nNewFix; }
-    inline sal_uInt16 Fix() const { return nFix; }
+    SwFixPortion();
+    void   SetFix( const sal_uInt16 nNewFix ) { nFix = nNewFix; }
+    sal_uInt16 GetFix() const { return nFix; }
     OUTPUT_OPERATOR_OVERRIDE
 };
 

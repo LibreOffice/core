@@ -240,7 +240,7 @@ void SwWrtShell::Insert( const OUString &rStr )
 
 void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
                          const Graphic &rGrf, SwFlyFrameAttrMgr *pFrameMgr,
-                         bool bRule, sal_uInt16 nAnchorType )
+                         sal_uInt16 nAnchorType )
 {
     ResetCursorStack();
     if ( !CanInsert() )
@@ -299,7 +299,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
     if ( bOwnMgr )
         pFrameMgr->UpdateAttrMgr();
 
-    if( bSetGrfSize && !bRule )
+    if( bSetGrfSize )
     {
         Size aGrfSize, aBound = GetGraphicDefaultSize();
         GetGrfSize( aGrfSize );

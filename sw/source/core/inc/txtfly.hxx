@@ -265,8 +265,7 @@ public:
         Ensure that the overlapping frames (except the transparent frames)
         won't be scribbled
      */
-    void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
-                      const SwTextPaintInfo &rInf, bool bNoGraphic = false );
+    void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect );
 
     /**
         Used to switch off the SwTextFly when there is no overlapping object (Relax).
