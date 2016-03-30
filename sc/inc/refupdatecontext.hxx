@@ -35,6 +35,7 @@ public:
     void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
     bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
     NameIndicesType getUpdatedNames(SCTAB nTab) const;
+    bool isEmpty(SCTAB nTab) const;
 
 private:
     typedef std::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;

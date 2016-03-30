@@ -420,9 +420,104 @@ bool lcl_isReference(const FormulaToken& rToken)
         rToken.GetType() == svDoubleRef;
 }
 
+enum MightReferenceSheet
+{
+    UNKNOWN,
+    NONE,
+    CODE,
+    NAME
+};
+
+MightReferenceSheet mightRangeNameReferenceSheet( ScRangeData* pData, SCTAB nRefTab)
+{
+    ScTokenArray* pCode = pData->GetCode();
+    if (!pCode)
+        return MightReferenceSheet::NONE;
+
+    for (const FormulaToken* p = pCode->First(); p; p = pCode->Next())
+    {
+        if (p->GetOpCode() == ocName)
+            return MightReferenceSheet::NAME;
+    }
+
+    return pCode->ReferencesSheet( nRefTab, pData->GetPos().Tab()) ?
+        MightReferenceSheet::CODE : MightReferenceSheet::NONE;
+}
+
+// See also lcl_FindRangeNamesInUse() below.
+/** Recursively find all named expressions that directly or indirectly (nested)
+    reference a given sheet.
+
+    @param  pToken
+            A token of type svIndex with OpCode ocName.
+ */
+bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const FormulaToken* pToken,
+        const ScDocument* pDoc, SCTAB nGlobalRefTab, SCTAB nLocalRefTab,
+        SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement, int nRecursion)
+{
+    const sal_uInt16 nTokenIndex = pToken->GetIndex();
+    SCTAB nTokenTab = pToken->GetSheet();
+    if (nTokenTab < -1)
+    {
+        SAL_WARN("sc.core", "findRangeNamesReferencingSheet - nTokenTab < -1 : " <<
+                nTokenTab << ", nTokenIndex " << nTokenIndex << " Fix the creator!");
+#if OSL_DEBUG_LEVEL > 0
+        const ScRangeData* pData = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTokenTab);
+        SAL_WARN_IF( pData, "sc.core", "findRangeNamesReferencingSheet - named expression is: " << pData->GetName());
+#endif
+        nTokenTab = -1;
+    }
+    SCTAB nRefTab = nGlobalRefTab;
+    if (nTokenTab == nOldTokenTab)
+    {
+        nTokenTab = nOldTokenTabReplacement;
+        nRefTab = nLocalRefTab;
+    }
+    else if (nTokenTab == nOldTokenTabReplacement)
+    {
+        nRefTab = nLocalRefTab;
+    }
+
+    if (rIndexes.isNameUpdated( nTokenTab, nTokenIndex))
+        return true;
+
+    ScRangeData* pData = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTokenTab);
+    if (!pData)
+        return false;
+
+    ScTokenArray* pCode = pData->GetCode();
+    if (!pCode)
+        return false;
+
+    bool bRef = false;
+    if (nRecursion < 126)   // whatever.. 42*3
+    {
+        for (const FormulaToken* p = pCode->First(); p; p = pCode->Next())
+        {
+            if (p->GetOpCode() == ocName)
+            {
+                bRef |= findRangeNamesReferencingSheet( rIndexes, p, pDoc, nGlobalRefTab, nLocalRefTab,
+                        nOldTokenTab, nOldTokenTabReplacement, nRecursion+1);
+            }
+        }
+    }
+
+    if (!bRef)
+    {
+        SCTAB nPosTab = pData->GetPos().Tab();
+        if (nPosTab == nOldTokenTab)
+            nPosTab = nOldTokenTabReplacement;
+        bRef = pCode->ReferencesSheet( nRefTab, nPosTab);
+    }
+    if (bRef)
+        rIndexes.setUpdatedName( nTokenTab, nTokenIndex);
+
+    return bRef;
+}
+
 ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument* pOldDoc,
         const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal,
-        SCTAB nOldSheet, SCTAB & nNewSheet)
+        SCTAB nOldSheet, SCTAB & nNewSheet, bool bSameDoc)
 {
     ScAddress aRangePos( pOldRangeData->GetPos());
     if (nOldSheet < 0 && !bGlobalNamesToLocal)
@@ -437,7 +532,6 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
     ScRangeData* pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc, &aRangePos);
     pRangeData->SetIndex(0);    // needed for insert to assign a new index
     ScTokenArray* pRangeNameToken = pRangeData->GetCode();
-    bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(pOldDoc)->GetPool());
     if (bSameDoc && nNewSheet >= 0)
     {
         if (bGlobalNamesToLocal && nOldSheet < 0)
@@ -464,6 +558,80 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
     return bInserted ? pRangeData : nullptr;
 }
 
+struct SheetIndex
+{
+    SCTAB       mnSheet;
+    sal_uInt16  mnIndex;
+
+    SheetIndex( SCTAB nSheet, sal_uInt16 nIndex ) : mnSheet(nSheet < -1 ? -1 : nSheet), mnIndex(nIndex) {}
+    bool operator<( const SheetIndex& r ) const
+    {
+        // Ascending order sheet, index
+        if (mnSheet < r.mnSheet)
+            return true;
+        if (mnSheet == r.mnSheet)
+            return mnIndex < r.mnIndex;
+        return false;
+    }
+};
+typedef std::map< SheetIndex, SheetIndex > SheetIndexMap;
+
+ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeData*>& rRangeDataVec,
+        const sc::UpdatedRangeNames& rReferencingNames, SCTAB nTab,
+        const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+        const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal,
+        SCTAB nOldSheet, SCTAB & nNewSheet, bool bSameDoc)
+{
+    ScRangeData* pRangeData = nullptr;
+    const ScRangeName* pOldRangeName = (nTab < 0 ? pOldDoc->GetRangeName() : pOldDoc->GetRangeName(nTab));
+    if (pOldRangeName)
+    {
+        const ScRangeName* pNewRangeName = (nNewSheet < 0 ? rNewDoc.GetRangeName() : rNewDoc.GetRangeName(nNewSheet));
+        const SCTAB nFixSheet = nNewSheet;
+        sc::UpdatedRangeNames::NameIndicesType aSet( rReferencingNames.getUpdatedNames(nTab));
+        for (auto const & rIndex : aSet)
+        {
+            const ScRangeData* pCopyData = pOldRangeName->findByIndex(rIndex);
+            if (pCopyData)
+            {
+                // Match the original pOldRangeData to adapt the current
+                // token's values later. For that no check for an already
+                // copied name is needed as we only enter here if there was
+                // none.
+                if (pCopyData == pOldRangeData)
+                {
+                    pRangeData = copyRangeName( pCopyData, rNewDoc, pOldDoc, rNewPos, rOldPos,
+                            bGlobalNamesToLocal, nOldSheet, nNewSheet, bSameDoc);
+                    rRangeDataVec.push_back(pRangeData);
+                    rSheetIndexMap.insert( std::make_pair( SheetIndex( nOldSheet, pCopyData->GetIndex()),
+                                SheetIndex( nNewSheet, pRangeData->GetIndex())));
+                }
+                else
+                {
+                    // First check if the name is already available as copy.
+                    const ScRangeData* pFoundData = pNewRangeName->findByUpperName( pCopyData->GetUpperName());
+                    if (pFoundData)
+                    {
+                        // Just add the resulting sheet/index mapping.
+                        rSheetIndexMap.insert( std::make_pair( SheetIndex( nOldSheet, pCopyData->GetIndex()),
+                                    SheetIndex( nFixSheet, pFoundData->GetIndex())));
+                    }
+                    else
+                    {
+                        SCTAB nTmpSheet = nFixSheet;    // don't let the original get adapted
+                        ScRangeData* pTmpData = copyRangeName( pCopyData, rNewDoc, pOldDoc, rNewPos, rOldPos,
+                                bGlobalNamesToLocal, nOldSheet, nTmpSheet, bSameDoc);
+                        rRangeDataVec.push_back(pTmpData);
+                        rSheetIndexMap.insert( std::make_pair( SheetIndex( nOldSheet, pCopyData->GetIndex()),
+                                    SheetIndex( nTmpSheet, pTmpData->GetIndex())));
+                    }
+                }
+            }
+        }
+    }
+    return pRangeData;
+}
+
 void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc,
         const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal)
 {
@@ -482,15 +650,22 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     int nOldIndex = pToken->GetIndex();
     ScRangeData* pOldRangeData = nullptr;
 
+    // XXX bGlobalNamesToLocal is also a synonym for copied sheet.
+    bool bInsertingBefore = (bGlobalNamesToLocal && bSameDoc && rNewPos.Tab() <= rOldPos.Tab());
+
+    // The Tab where an old local name is to be found or that a global name
+    // references. May differ below from nOldSheet if a sheet was inserted
+    // before the old position. Global names and local names other than on the
+    // old sheet or new sheet are already updated, local names on the old sheet
+    // or inserted sheet will be updated later. Confusing stuff. Watch out.
+    SCTAB nOldTab = (nOldSheet < 0 ? rOldPos.Tab() : nOldSheet);
+    if (bInsertingBefore)
+        // Sheet was already inserted before old position.
+        ++nOldTab;
+
     // Search the name of the RangeName.
     if (nOldSheet >= 0)
     {
-        SCTAB nOldTab = nOldSheet;
-        // XXX bGlobalNamesToLocal is also a synonym for copied sheet.
-        if (bGlobalNamesToLocal && bSameDoc && rNewPos.Tab() <= rOldPos.Tab())
-            // Sheet was already inserted before old position.
-            ++nOldTab;
-
         const ScRangeName* pRangeName = pOldDoc->GetRangeName(nOldTab);
         pOldRangeData = pRangeName ? pRangeName->findByIndex(nOldIndex) : nullptr;
         if (!pOldRangeData)
@@ -526,24 +701,70 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     // If no range name was found copy it.
     if (!pRangeData)
     {
-        if (nOldSheet < 0 && bGlobalNamesToLocal)
-        {
-            // Copy only global names to local that reference the old sheet.
-            SCTAB nOldTab = rOldPos.Tab();
-            if (bSameDoc && rNewPos.Tab() <= nOldTab)
-            {
-                // Sheet was inserted before old position, references were
-                // already updated but rOldPos points to the old position,
-                // adjust to look for references.
-                ++nOldTab;
-            }
-            if (!pOldRangeData->GetCode()->ReferencesSheet( nOldTab, pOldRangeData->GetPos().Tab()))
-                return;
-        }
+        bool bCopyGlobalName = (nOldSheet < 0 && bGlobalNamesToLocal);
+        MightReferenceSheet eMightReference = mightRangeNameReferenceSheet( pOldRangeData, nOldTab);
+        if (bCopyGlobalName && eMightReference == MightReferenceSheet::NONE)
+            return;
 
-        // Also may modify nNewSheet to be set below at the end.
-        pRangeData = copyRangeName( pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos, bGlobalNamesToLocal,
-                nOldSheet, nNewSheet);
+        if (eMightReference == MightReferenceSheet::NAME)
+        {
+            // Name these to clarify what is passed where.
+            const SCTAB nGlobalRefTab = nOldTab;
+            const SCTAB nLocalRefTab = (bInsertingBefore ? nOldTab-1 : nOldTab);
+            const SCTAB nOldTokenTab = (nOldSheet < 0 ? (bInsertingBefore ? nOldTab-1 : nOldTab) : nOldSheet);
+            const SCTAB nOldTokenTabReplacement = nOldTab;
+            sc::UpdatedRangeNames aReferencingNames;
+            findRangeNamesReferencingSheet( aReferencingNames, pToken, pOldDoc,
+                    nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, 0);
+            if (bCopyGlobalName && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
+                return;
+
+            SheetIndexMap aSheetIndexMap;
+            std::vector<ScRangeData*> aRangeDataVec;
+            if (!aReferencingNames.isEmpty(nOldTokenTabReplacement))
+            {
+                const SCTAB nTmpSheet = (nOldSheet < 0 ? nOldTab : nOldSheet);
+                pRangeData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, nOldTab,
+                        pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos,
+                        bGlobalNamesToLocal, nTmpSheet, nNewSheet, bSameDoc);
+            }
+            if (bGlobalNamesToLocal && !aReferencingNames.isEmpty(-1))
+            {
+                const SCTAB nTmpSheet = -1;
+                ScRangeData* pTmpData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, -1,
+                        pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos,
+                        bGlobalNamesToLocal, nTmpSheet, nNewSheet, bSameDoc);
+                if (!pRangeData)
+                    pRangeData = pTmpData;
+            }
+
+            // Adjust copied nested names to new sheet/index.
+            for (auto & iRD : aRangeDataVec)
+            {
+                ScTokenArray* pCode = iRD->GetCode();
+                if (pCode)
+                {
+                    for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
+                    {
+                        if (p->GetOpCode() == ocName)
+                        {
+                            auto it = aSheetIndexMap.find( SheetIndex( p->GetSheet(), p->GetIndex()));
+                            if (it != aSheetIndexMap.end())
+                            {
+                                p->SetSheet( it->second.mnSheet);
+                                p->SetIndex( it->second.mnIndex);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Also may modify nNewSheet to be set below at the end.
+            pRangeData = copyRangeName( pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos, bGlobalNamesToLocal,
+                    nOldSheet, nNewSheet, bSameDoc);
+        }
 
         if (!pRangeData)
         {
@@ -3752,6 +3973,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument ); // Listener as previous
 }
 
+// See also findRangeNamesReferencingSheet() above.
 static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc,
         int nRecursion)
 {

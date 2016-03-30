@@ -56,6 +56,12 @@ UpdatedRangeNames::NameIndicesType UpdatedRangeNames::getUpdatedNames(SCTAB nTab
     return it->second;
 }
 
+bool UpdatedRangeNames::isEmpty(SCTAB nTab) const
+{
+    UpdatedNamesType::const_iterator it = maUpdatedNames.find(nTab);
+    return it == maUpdatedNames.end();
+}
+
 
 RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
     mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
