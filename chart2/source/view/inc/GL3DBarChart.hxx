@@ -12,6 +12,7 @@
 
 #include <GL3DPlotterBase.hxx>
 
+#include <list>
 #include <vector>
 #include "VDataSeries.hxx"
 
