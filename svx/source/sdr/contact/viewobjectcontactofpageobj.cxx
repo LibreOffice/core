@@ -230,7 +230,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
             // Recursion is possible. Create a replacement primitive
             xPageContent.resize(2);
             const Color aDocColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
-            const Color aBorderColor(aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor);
+            svtools::ColorConfigValue aBorderConfig = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES);
+            const Color aBorderColor = aBorderConfig.bIsVisible ? aBorderConfig.nColor : aDocColor;
             const basegfx::B2DRange aPageBound(0.0, 0.0, fPageWidth, fPageHeight);
             const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aPageBound));
 
