@@ -281,6 +281,8 @@ bool onDeInitSignal()
     return false;
 }
 
+void onErrorReportingChanged(SAL_UNUSED_PARAMETER bool) {}
+
 namespace
 {
 void printStack(int sig)
