@@ -100,7 +100,7 @@ struct lcl_RemoveController : public std::unary_function< typename MAP::value_ty
     }
 };
 
-static sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
+sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 {
     sal_uInt16 nItemBits( 0 );
 

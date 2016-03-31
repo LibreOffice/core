@@ -214,7 +214,7 @@ static const char* UIELEMENTTYPENAMES[] =
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
 static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 
-static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
+sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
@@ -236,7 +236,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
     return UIElementType::UNKNOWN;
 }
 
-static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
+OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))

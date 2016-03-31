@@ -456,7 +456,7 @@ void SubstitutePathVariables_Impl::ImplCommit()
 {
 }
 
-static inline OperatingSystem GetOperatingSystem()
+inline OperatingSystem GetOperatingSystem()
 {
 #ifdef SOLARIS
     return OS_SOLARIS;
