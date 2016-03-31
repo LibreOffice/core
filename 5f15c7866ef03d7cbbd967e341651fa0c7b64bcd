@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_df4e9195",
+        "filename": "external/breakpad/Module_breakpad.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-31T21:50:49Z",
+      "side": 0,
+      "message": "is this package intentionally removed?\n\nit is still installed in RepositoryExternal.mk,\nand its .mk file still exists, so either both\nshould be removed, or this line was erroneously removed.",
+      "revId": "5f15c7866ef03d7cbbd967e341651fa0c7b64bcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
