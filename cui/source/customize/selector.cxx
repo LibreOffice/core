@@ -468,6 +468,14 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
         if ( xModuleCategories.is() )
         {
+            SvTreeListEntry *pEntry = InsertEntry( CUI_RES(RID_SVXSTR_ALLFUNCTIONS) );
+
+            SvxGroupInfo_Impl *pInfo =
+                new SvxGroupInfo_Impl( SVX_CFGGROUP_ALLFUNCTIONS, 0 );
+            aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(pInfo) );
+
+            pEntry->SetUserData( pInfo );
+
             Sequence< sal_Int16 > gids =
                 xDIP->getSupportedCommandGroups();
 
@@ -500,10 +508,9 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
                 {
                 }
 
-                SvTreeListEntry *pEntry = InsertEntry( group );
+                pEntry = InsertEntry( group );
 
-                SvxGroupInfo_Impl *pInfo =
-                    new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
+                pInfo = new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
                 aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(pInfo) );
 
                 pEntry->SetUserData( pInfo );
@@ -636,6 +643,72 @@ SvxConfigGroupListBox::getDocumentModel(
     return xModel;
 }
 
+void SvxConfigGroupListBox::fillFunctionList(const Sequence< frame::DispatchInformation >& commands)
+{
+    for ( sal_Int32 i = 0; i < commands.getLength(); ++i )
+    {
+        if ( commands[i].Command.isEmpty() )
+        {
+            continue;
+        }
+
+        Image aImage;
+
+        OUString aCmdURL( commands[i].Command );
+
+        if ( m_pImageProvider )
+        {
+            aImage = m_pImageProvider->GetImage( aCmdURL );
+        }
+
+        OUString aLabel;
+        try
+        {
+            Any a = m_xModuleCommands->getByName( aCmdURL );
+            Sequence< beans::PropertyValue > aPropSeq;
+
+            if ( a >>= aPropSeq )
+            {
+                for ( sal_Int32 k = 0; k < aPropSeq.getLength(); ++k )
+                {
+                    if ( aPropSeq[k].Name == "Name" )
+                    {
+                        aPropSeq[k].Value >>= aLabel;
+                        break;
+                    }
+                }
+            }
+        }
+        catch ( container::NoSuchElementException& )
+        {
+        }
+
+        if ( aLabel.isEmpty() )
+        {
+            aLabel = commands[i].Command;
+        }
+
+        SvTreeListEntry* pFuncEntry = nullptr;
+        if ( !!aImage )
+        {
+            pFuncEntry = pFunctionListBox->InsertEntry(
+                aLabel, aImage, aImage );
+        }
+        else
+        {
+            pFuncEntry = pFunctionListBox->InsertEntry(
+                aLabel );
+        }
+
+        SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
+            SVX_CFGFUNCTION_SLOT, 123, aCmdURL, OUString() );
+
+        pFunctionListBox->aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(_pGroupInfo) );
+
+        pFuncEntry->SetUserData( _pGroupInfo );
+    }
+}
+
 void SvxConfigGroupListBox::GroupSelected()
 {
     SvTreeListEntry *pEntry = FirstSelected();
@@ -643,7 +716,8 @@ void SvxConfigGroupListBox::GroupSelected()
     pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SVX_CFGGROUP_FUNCTION &&
-             pInfo->nKind != SVX_CFGGROUP_SCRIPTCONTAINER )
+             pInfo->nKind != SVX_CFGGROUP_SCRIPTCONTAINER &&
+             pInfo->nKind != SVX_CFGGROUP_ALLFUNCTIONS )
     {
         pFunctionListBox->SetUpdateMode(true);
         return;
@@ -651,90 +725,46 @@ void SvxConfigGroupListBox::GroupSelected()
 
     switch ( pInfo->nKind )
     {
-        case SVX_CFGGROUP_FUNCTION :
+        case SVX_CFGGROUP_FUNCTION:
         {
-            SvTreeListEntry *_pEntry = FirstSelected();
-            if ( _pEntry != nullptr )
+            Reference< frame::XDispatchInformationProvider > xDIP( m_xFrame, UNO_QUERY );
+            Sequence< frame::DispatchInformation > commands;
+            try
             {
-                SvxGroupInfo_Impl *_pInfo =
-                    static_cast<SvxGroupInfo_Impl*>(_pEntry->GetUserData());
+                commands = xDIP->getConfigurableDispatchInformation( pInfo->nOrd );
+                fillFunctionList(commands);
+            }
+            catch ( container::NoSuchElementException& )
+            {
+            }
 
-                Reference< frame::XDispatchInformationProvider > xDIP(
-                    m_xFrame, UNO_QUERY );
+            break;
+        }
 
-                Sequence< frame::DispatchInformation > commands;
-                try
+        case SVX_CFGGROUP_ALLFUNCTIONS:
+        {
+            Reference< frame::XDispatchInformationProvider > xDIP( m_xFrame, UNO_QUERY );
+            SvTreeListEntry *pCurrEntry = First();
+            while( pCurrEntry )
+            {
+                SvxGroupInfo_Impl *pCurrentInfo = static_cast<SvxGroupInfo_Impl*>(pCurrEntry->GetUserData());
+                if (pCurrentInfo->nKind == SVX_CFGGROUP_FUNCTION)
                 {
-                    commands = xDIP->getConfigurableDispatchInformation(
-                        _pInfo->nOrd );
-                }
-                catch ( container::NoSuchElementException& )
-                {
-                }
 
-                for ( sal_Int32 i = 0; i < commands.getLength(); ++i )
-                {
-                    if ( commands[i].Command.isEmpty() )
-                    {
-                        continue;
-                    }
 
-                    Image aImage;
-
-                    OUString aCmdURL( commands[i].Command );
-
-                    if ( m_pImageProvider )
-                    {
-                        aImage = m_pImageProvider->GetImage( aCmdURL );
-                    }
-
-                    OUString aLabel;
+                    Sequence< frame::DispatchInformation > commands;
                     try
                     {
-                        Any a = m_xModuleCommands->getByName( aCmdURL );
-                        Sequence< beans::PropertyValue > aPropSeq;
-
-                        if ( a >>= aPropSeq )
-                        {
-                            for ( sal_Int32 k = 0; k < aPropSeq.getLength(); ++k )
-                            {
-                                if ( aPropSeq[k].Name == "Name" )
-                                {
-                                    aPropSeq[k].Value >>= aLabel;
-                                    break;
-                                }
-                            }
-                        }
+                        commands = xDIP->getConfigurableDispatchInformation( pCurrentInfo->nOrd );
+                        fillFunctionList(commands);
                     }
                     catch ( container::NoSuchElementException& )
                     {
                     }
-
-                    if ( aLabel.isEmpty() )
-                    {
-                        aLabel = commands[i].Command;
-                    }
-
-                    SvTreeListEntry* pFuncEntry = nullptr;
-                    if ( !!aImage )
-                    {
-                        pFuncEntry = pFunctionListBox->InsertEntry(
-                            aLabel, aImage, aImage );
-                    }
-                    else
-                    {
-                        pFuncEntry = pFunctionListBox->InsertEntry(
-                            aLabel );
-                    }
-
-                    SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
-                        SVX_CFGFUNCTION_SLOT, 123, aCmdURL, OUString() );
-
-                    pFunctionListBox->aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(_pGroupInfo) );
-
-                    pFuncEntry->SetUserData( _pGroupInfo );
                 }
-            }
+                pCurrEntry = Next( pCurrEntry );
+            };
+
             break;
         }
 
