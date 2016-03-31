@@ -51,6 +51,10 @@
 #include "drawview.hxx"
 #include <editeng/outliner.hxx>
 #include <editeng/editdata.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editids.hrc>
 #include "sdabstdlg.hxx"
 #include <memory>
 
@@ -172,6 +176,25 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     }
     else
     {
+        static const sal_uInt16 aRanges[] =
+        {
+            ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END,
+            SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
+            0
+        };
+
+        SfxItemSet aNewAttr( mpDoc->GetPool(), aRanges);
+        aNewAttr.Put(aSet, false);
+
+        const SfxPoolItem *pItem;
+        if(aNewAttr.GetItemState(EE_CHAR_BKGCOLOR, true, &pItem) == SfxItemState::SET)
+        {
+            Color aBackColor = static_cast<const SvxBackgroundColorItem *>(pItem)->GetValue();
+            SvxBrushItem aBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
+            aNewAttr.ClearItem(EE_CHAR_BKGCOLOR);
+            aNewAttr.Put(aBrushItem);
+        }
+
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         std::unique_ptr<AbstractSdPresLayoutDlg> pDlg(pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, nullptr, aSet ) : nullptr);
 
@@ -190,6 +213,21 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                     bCheckMasters = static_cast<const SfxBoolItem&>(aSet.Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
                 if (aSet.GetItemState(ATTR_PRESLAYOUT_NAME) == SfxItemState::SET)
                     aFile = static_cast<const SfxStringItem&>(aSet.Get(ATTR_PRESLAYOUT_NAME)).GetValue();
+                if (aSet.GetItemState(EE_CHAR_BKGCOLOR, true, &pItem) == SfxItemState::SET)
+                {
+                    const SfxItemSet *pOutputSet = pDlg->GetOutputItemSet();
+                    SfxItemSet pOtherSet(*pOutputSet);
+
+                    const SvxBrushItem *pBrushItem = static_cast<const SvxBrushItem *>(pOtherSet.GetItem(SID_ATTR_BRUSH_CHAR));
+
+                    if(pBrushItem)
+                    {
+                        SvxBackgroundColorItem aBackColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
+                        pOtherSet.ClearItem(SID_ATTR_BRUSH_CHAR);
+                        pOtherSet.Put(aBackColorItem);
+                    }
+                    rReq.Done(pOtherSet);
+                }
             }
             break;
 
