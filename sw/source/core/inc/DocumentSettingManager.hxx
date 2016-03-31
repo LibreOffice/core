@@ -108,6 +108,7 @@ class DocumentSettingManager :
     bool mbTabCompat                        : 1;
     bool mbUseVirtualDevice                 : 1;
     bool mbAddFlyOffsets                    : 1;
+    bool mbAddVerticalFlyOffsets            : 1;
     bool mbAddExternalLeading               : 1;
     bool mbUseHiResolutionVirtualDevice     : 1;
     bool mbOldLineSpacing                   : 1;    // #i11859#
