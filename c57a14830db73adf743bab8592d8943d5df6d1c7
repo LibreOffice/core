@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_7c6df331",
+        "filename": "sw/source/core/inc/ascharanchoredobjectposition.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-03-31T08:17:50Z",
+      "side": 1,
+      "message": "you can drop the AsChar, no one cares about the underlying type of the flags\n\nif you want to keep the enum in the objectpositioning namespace or even put it in the class, you can just do that.\n\nbut the typed_flags template has to be outside of the namespace of course with correct identifier objectpositioning::Flags\n\ndid a similar change recently\nhttps://gerrit.libreoffice.org/#/c/23415/2/sc/inc/rangenam.hxx",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 2
+      },
+      "revId": "c57a14830db73adf743bab8592d8943d5df6d1c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
