@@ -22,8 +22,9 @@
 
 #include <sal/config.h>
 
-#include <boost/unordered_map.hpp>
+#include <vector>
 
+#include <boost/unordered_map.hpp>
 #include <config_dconf.h>
 
 namespace configmgr {
