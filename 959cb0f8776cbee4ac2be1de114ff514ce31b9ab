@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_3f0fede2",
+        "filename": "basegfx/source/inc/hommatrixtemplate.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-03-31T13:06:21Z",
+      "side": 1,
+      "message": "looks like you accidentally added an unresolved merge conflict, please revert that",
+      "revId": "959cb0f8776cbee4ac2be1de114ff514ce31b9ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
