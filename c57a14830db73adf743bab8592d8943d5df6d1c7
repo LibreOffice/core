@@ -22,6 +22,30 @@
       "revId": "c57a14830db73adf743bab8592d8943d5df6d1c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3c5a5b84",
+        "filename": "sw/source/core/inc/ascharanchoredobjectposition.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-31T08:20:51Z",
+      "side": 1,
+      "message": "AsChar is not the underlying type, it is short for \"As Character Anchored\"",
+      "parentUuid": "9ad45d7e_7c6df331",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 2
+      },
+      "revId": "c57a14830db73adf743bab8592d8943d5df6d1c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
