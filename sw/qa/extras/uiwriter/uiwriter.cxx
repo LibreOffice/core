@@ -107,6 +107,8 @@ public:
     void testTdf96479();
     void testTdf88453();
     void testTdf88453Table();
+    void testTdf98987();
+    void testTdf99004();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -152,6 +154,8 @@ public:
     CPPUNIT_TEST(testTdf96479);
     CPPUNIT_TEST(testTdf88453);
     CPPUNIT_TEST(testTdf88453Table);
+    CPPUNIT_TEST(testTdf98987);
+    CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1267,6 +1271,38 @@ void SwUiWriterTest::testTdf88453Table()
     // This was 2: layout could not split the large outer table in the document
     // into 3 pages.
     CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+void SwUiWriterTest::testTdf98987()
+{
+    createDoc("tdf98987.docx");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/sdrObject", "name", "Rectangle 1");
+    sal_Int32 nRectangle1 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32();
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
+    sal_Int32 nRectangle2 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
+    CPPUNIT_ASSERT(nRectangle1 < nRectangle2);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/sdrObject", "name", "Rectangle 3");
+    sal_Int32 nRectangle3 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32();
+    // This failed: the 3rd rectangle had a smaller "top" value than the 2nd one, it even overlapped with the 1st one.
+    CPPUNIT_ASSERT(nRectangle2 < nRectangle3);
+}
+
+void SwUiWriterTest::testTdf99004()
+{
+    createDoc("tdf99004.docx");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTextbox1Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nTextBox1Height = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
+    sal_Int32 nTextBox1Bottom = nTextbox1Top + nTextBox1Height;
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
+    sal_Int32 nRectangle2Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
+    // This was 3291 and 2531, should be now around 2472 and 2531, i.e. the two rectangles should not overlap anymore.
+    CPPUNIT_ASSERT(nTextBox1Bottom < nRectangle2Top);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
