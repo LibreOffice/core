@@ -223,24 +223,24 @@ using std::deque;
 
 typedef SCCOLROW(*DimensionSelector)(const ScAddress&, const ScSingleRefData&);
 
-static SCCOLROW lcl_GetCol(const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetCol(const ScAddress& rPos, const ScSingleRefData& rData)
 {
     return rData.toAbs(rPos).Col();
 }
 
-static SCCOLROW lcl_GetRow(const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetRow(const ScAddress& rPos, const ScSingleRefData& rData)
 {
     return rData.toAbs(rPos).Row();
 }
 
-static SCCOLROW lcl_GetTab(const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetTab(const ScAddress& rPos, const ScSingleRefData& rData)
 {
     return rData.toAbs(rPos).Tab();
 }
 
 /** Check if both references span the same range in selected dimension.
  */
-static bool
+bool
 lcl_checkRangeDimension(
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     const DimensionSelector aWhich)
@@ -249,7 +249,7 @@ lcl_checkRangeDimension(
         aWhich(rPos, rRef1.Ref2) == aWhich(rPos, rRef2.Ref2);
 }
 
-static bool
+bool
 lcl_checkRangeDimensions(
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     bool& bCol, bool& bRow, bool& bTab)
@@ -272,7 +272,7 @@ lcl_checkRangeDimensions(
 /** Check if references in given reference list can possibly
     form a range. To do that, two of their dimensions must be the same.
  */
-static bool
+bool
 lcl_checkRangeDimensions(
     const ScAddress& rPos,
     const deque<formula::FormulaToken*>::const_iterator& rBegin,
@@ -342,7 +342,7 @@ public:
     }
 };
 
-static bool
+bool
 lcl_checkIfAdjacent(
     const ScAddress& rPos, const deque<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
 {
@@ -355,7 +355,7 @@ lcl_checkIfAdjacent(
     return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rPos, aWhich));
 }
 
-static void
+void
 lcl_fillRangeFromRefList(
     const ScAddress& aPos, const deque<formula::FormulaToken*>& rReferences, ScRange& rRange)
 {
@@ -367,7 +367,7 @@ lcl_fillRangeFromRefList(
     rRange.aEnd = aEnd.toAbs(aPos);
 }
 
-static bool
+bool
 lcl_refListFormsOneRange(
         const ScAddress& rPos, deque<formula::FormulaToken*>& rReferences,
         ScRange& rRange)

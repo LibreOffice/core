@@ -855,7 +855,7 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
 
 /** returns position of first ascii 10 within the string, -1 when no 10 in string.
  */
-static inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
+inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
 {
     const sal_Unicode *pSource = str.getStr();
     sal_Int32 nLen  = str.getLength();
@@ -991,7 +991,7 @@ sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence 
     return nLength;
 }
 
-static inline bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
+inline bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
 {
     return *p == ' ';
 }

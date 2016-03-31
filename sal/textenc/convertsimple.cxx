@@ -444,7 +444,7 @@ const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
 }
 
 // Writes 0--2 characters to dest:
-static int ImplConvertUnicodeCharToChar(
+int ImplConvertUnicodeCharToChar(
     const ImplByteConvertData* pConvertData, sal_Unicode c, char * dest )
 {
     const ImplUniCharTabData*   pToCharExTab;

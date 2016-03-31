@@ -231,7 +231,7 @@ const OUString FrameworkHelper::msConfigurationControllerService("com.sun.star.d
 //----- helper ----------------------------------------------------------------
 namespace
 {
-    static ::std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
+    ::std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
     {
         ::std::shared_ptr< ViewShell > pViewShell;
         if ( !i_rViewShellWrapper.is() )
