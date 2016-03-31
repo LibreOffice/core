@@ -21,12 +21,20 @@
 
 #include <vcl/lstbox.hxx>
 #include "swdllapi.h"
+#include <o3tl/typed_flags_set.hxx>
 
-#define INSERT_NUM_TYPE_NO_NUMBERING                0x01
-#define INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING        0x02
-#define INSERT_NUM_TYPE_BITMAP                      0x04
-#define INSERT_NUM_TYPE_BULLET                      0x08
-#define INSERT_NUM_EXTENDED_TYPES                   0x10
+enum class SwInsertNumTypes
+{
+    NoNumbering              = 0x01,
+    PageStyleNumbering       = 0x02,
+    Bitmap                   = 0x04,
+    Bullet                   = 0x08,
+    Extended                 = 0x10
+};
+
+namespace o3tl {
+   template<> struct typed_flags<SwInsertNumTypes> : is_typed_flags<SwInsertNumTypes, 0x1f> {};
+};
 
 struct SwNumberingTypeListBox_Impl;
 
@@ -41,7 +49,7 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
 
-    void        Reload(sal_uInt16 nTypeFlags);
+    void        Reload(SwInsertNumTypes nTypeFlags);
 
     sal_Int16   GetSelectedNumberingType();
     bool    SelectNumberingType(sal_Int16 nType);

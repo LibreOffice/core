@@ -49,7 +49,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyl
 bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "type")
-        Reload(rValue.toInt32());
+        Reload(static_cast<SwInsertNumTypes>(rValue.toInt32()));
     else
         return ListBox::set_property(rKey, rValue);
     return true;
@@ -74,12 +74,12 @@ void SwNumberingTypeListBox::dispose()
     ListBox::dispose();
 }
 
-void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
+void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 {
     Clear();
     uno::Sequence<sal_Int16> aTypes;
     const sal_Int16* pTypes = nullptr;
-    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
+    if(nTypeFlags & SwInsertNumTypes::Extended)
     {
         if(pImpl->xInfo.is())
         {
@@ -97,20 +97,20 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
         switch(nValue)
         {
             case  style::NumberingType::NUMBER_NONE:
-                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING);
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::NoNumbering);
                 nPos = 0;
 
                 break;
             case  style::NumberingType::CHAR_SPECIAL:
-                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET);
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::Bullet);
 
                 break;
             case  style::NumberingType::PAGE_DESCRIPTOR:
-                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING);
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::PageStyleNumbering);
 
                 break;
             case  style::NumberingType::BITMAP:
-                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP );
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::Bitmap );
 
                 break;
             default:
@@ -137,7 +137,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
             SetEntryData( nEntry, reinterpret_cast<void*>(nValue) );
         }
     }
-    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
+    if(nTypeFlags & SwInsertNumTypes::Extended)
     {
         if(pTypes)
         {
