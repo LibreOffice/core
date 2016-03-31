@@ -25,6 +25,9 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <SpecialUnicodes.hxx>
+
+
 using namespace com::sun::star;
 
 namespace chart
@@ -235,7 +238,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    OUStringBuffer aBuf( "f(x) = " );
 
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
     bool bFindValue = false;
@@ -248,12 +251,14 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         }
         else if (aValue < 0.0)
         {
-            aBuf.append( " - " );
+            if ( bFindValue ) // if it is not the first aValue
+                aBuf.append( " " );
+            aBuf.append( aMinusSign + " ");
             aValue = - aValue;
         }
         else
         {
-            if ( bFindValue )
+            if ( bFindValue ) // if it is not the first aValue
                 aBuf.append( " + " );
         }
         bFindValue = true;
@@ -263,17 +268,25 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
 
         if(i > 0)
         {
-            if (i == 1)
+            aBuf.append( "x" );
+            if (i > 1)
             {
-                aBuf.append( "x" );
-            }
-            else
-            {
-                aBuf.append( "x^" );
-                aBuf.append(i);
+                if (i < 10) // simple case if only one digit
+                    aBuf.append( aSuperscriptFigures[ i ] );
+                else
+                {
+                    OUString aValueOfi = OUString::number( i );
+                    for ( sal_Int32 n = 0; n < aValueOfi.getLength() ; n++ )
+                    {
+                        sal_Int32 nIndex = aValueOfi[n] - sal_Unicode ( '0' );
+                        aBuf.append( aSuperscriptFigures[ nIndex ] );
+                    }
+                }
             }
         }
     }
+    if ( aBuf.toString() == "f(x) = " )
+        aBuf.append( "0" );
 
     return aBuf.makeStringAndClear();
 }
