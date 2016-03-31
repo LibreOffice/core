@@ -68,6 +68,8 @@ class SwTextFrame: public SwContentFrame
     SwTwips mnFlyAnchorOfst;
     // The x position for wrap-through flys anchored at this paragraph.
     SwTwips mnFlyAnchorOfstNoWrap;
+    /// The y position for wrap-through flys anchored at this paragraph.
+    SwTwips mnFlyAnchorVertOfstNoWrap;
     SwTwips mnFootnoteLine;
     // OD 2004-03-17 #i11860# - re-factoring of #i11859#
     // member for height of last line (value needed for proportional line spacing)
@@ -620,6 +622,8 @@ public:
                  mnFlyAnchorOfst :
                  mnFlyAnchorOfstNoWrap );
     }
+
+    SwTwips GetBaseVertOffsetForFly(bool bIgnoreFlysAnchoredAtThisFrame) const;
 
     inline SwTwips GetHeightOfLastLine() const
     {

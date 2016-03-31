@@ -126,9 +126,9 @@ namespace objectpositioning
 
             #i11860#
         */
-        static SwTwips _GetTopForObjPos( const SwFrame& _rFrame,
+        SwTwips _GetTopForObjPos( const SwFrame& _rFrame,
                                   const SwRectFn& _fnRect,
-                                  const bool _bVert );
+                                  const bool _bVert ) const;
 
         void _GetVertAlignmentValues( const SwFrame& _rVertOrientFrame,
                                       const SwFrame& _rPageAlignLayFrame,
