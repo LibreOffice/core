@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_ff9a75c4",
+        "filename": "sc/source/ui/view/spelleng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-31T13:06:13Z",
+      "side": 1,
+      "message": "Yes. If that one fails we have already a corrupt calc model and it would just crash later.",
+      "parentUuid": "9ad45d7e_9c55471f",
+      "revId": "119c23434cac2c6b353209d8bacbb4382c55f150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_5ce46f0c",
         "filename": "sc/source/ui/view/viewfunc.cxx",
         "patchSetId": 1
