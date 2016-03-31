@@ -34,6 +34,11 @@ char const * kindName(Expr::NullPointerConstantKind kind) {
     }
 }
 
+bool isAnyKindOfPointerType(QualType type) {
+    return type->isAnyPointerType() || type->isFunctionPointerType()
+        || type->isMemberPointerType();
+}
+
 class Nullptr:
     public RecursiveASTVisitor<Nullptr>, public loplugin::RewritePlugin
 {
@@ -136,13 +141,13 @@ bool Nullptr::VisitBinaryOperator(BinaryOperator const * expr) {
     switch (expr->getOpcode()) {
     case BO_EQ:
     case BO_NE:
-        if (expr->getRHS()->getType()->isPointerType()) {
+        if (isAnyKindOfPointerType(expr->getRHS()->getType())) {
             e = expr->getLHS();
             break;
         }
         // fall through
     case BO_Assign:
-        if (expr->getLHS()->getType()->isPointerType()) {
+        if (isAnyKindOfPointerType(expr->getLHS()->getType())) {
             e = expr->getRHS();
             break;
         }
@@ -162,13 +167,13 @@ bool Nullptr::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr) {
     switch (expr->getOperator()) {
     case OO_EqualEqual:
     case OO_ExclaimEqual:
-        if (expr->getArg(1)->getType()->isPointerType()) {
+        if (isAnyKindOfPointerType(expr->getArg(1)->getType())) {
             e = expr->getArg(0);
             break;
         }
         // fall through
     case OO_Equal:
-        if (expr->getArg(0)->getType()->isPointerType()) {
+        if (isAnyKindOfPointerType(expr->getArg(0)->getType())) {
             e = expr->getArg(1);
             break;
         }
@@ -184,7 +189,7 @@ bool Nullptr::VisitParmVarDecl(ParmVarDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (!decl->getType()->isPointerType()) {
+    if (!isAnyKindOfPointerType(decl->getType())) {
         return true;
     }
     auto e = decl->getDefaultArg();
@@ -231,7 +236,7 @@ void Nullptr::visitCXXCtorInitializer(CXXCtorInitializer const * init) {
         return;
     }
     auto d = init->getAnyMember();
-    if (d == nullptr || !d->getType()->isPointerType()) {
+    if (d == nullptr || !isAnyKindOfPointerType(d->getType())) {
         return;
     }
     if (auto e2 = dyn_cast<ParenListExpr>(e)) {
