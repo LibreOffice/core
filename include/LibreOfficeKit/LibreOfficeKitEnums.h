@@ -280,6 +280,22 @@ typedef enum
      * }
      */
     LOK_CALLBACK_ERROR,
+
+    /**
+     * Context menu structure
+     *
+     * Returns the structure of context menu
+     *
+     * {
+     *      "menu": [
+     *          {"text": "label text", "type": "command | separator | menu",
+     *      "command | menu": "..." },
+     *          ...
+     *      ]
+     * }
+     */
+    LOK_CALLBACK_CONTEXT_MENU,
+
 }
 LibreOfficeKitCallbackType;
 

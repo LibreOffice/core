@@ -2446,16 +2446,24 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     SolarMutexGuard aGuard;
 
     DrawViewShell* pViewShell = GetViewShell();
+    Window* pWindow = pViewShell->GetActiveWindow();
     if (!pViewShell)
         return;
 
-    MouseEvent aEvent(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)), nCount,
+    Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
+    MouseEvent aEvent(aPos, nCount,
             MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
         pViewShell->LogicMouseButtonDown(aEvent);
+
+        if (nButtons & MOUSE_RIGHT)
+        {
+            const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true, nullptr);
+            pViewShell->Command(aCEvt, pWindow);
+        }
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         pViewShell->LogicMouseButtonUp(aEvent);

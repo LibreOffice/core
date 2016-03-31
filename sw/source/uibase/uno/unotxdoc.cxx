@@ -3303,12 +3303,19 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SolarMutexGuard aGuard;
 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
-    MouseEvent aEvent(Point(nX, nY), nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
+    Point aPos(nX , nY);
+    MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
         rEditWin.LogicMouseButtonDown(aEvent);
+
+        if (nButtons & MOUSE_RIGHT)
+        {
+            const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true, nullptr);
+            rEditWin.Command(aCEvt);
+        }
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         rEditWin.LogicMouseButtonUp(aEvent);

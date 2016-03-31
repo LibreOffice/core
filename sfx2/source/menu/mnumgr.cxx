@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -63,6 +65,9 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>
 #include "thessubmenu.hxx"
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 // static member initialization
 PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = nullptr;
@@ -327,6 +332,105 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     return nullptr;
 }
 
+namespace {
+
+    boost::property_tree::ptree fillPopupMenu(Menu* pMenu)
+    {
+        // Activate this menu first
+        pMenu->HandleMenuActivateEvent(pMenu);
+        pMenu->HandleMenuDeActivateEvent(pMenu);
+
+        boost::property_tree::ptree aTree;
+        // If last item inserted is some valid text
+        bool bIsLastItemText = false;
+        sal_uInt16 nCount = pMenu->GetItemCount();
+        for (sal_uInt16 nPos = 0; nPos < nCount; nPos++)
+        {
+            boost::property_tree::ptree aItemTree;
+            const MenuItemType aItemType = pMenu->GetItemType(nPos);
+
+            if (aItemType == MenuItemType::DONTKNOW)
+                continue;
+
+            if (aItemType == MenuItemType::SEPARATOR)
+            {
+                if (bIsLastItemText)
+                    aItemTree.put("type", "separator");
+                bIsLastItemText = false;
+            }
+            else
+            {
+                const sal_uInt16 nItemId = pMenu->GetItemId(nPos);
+                const OUString aCommandURL = pMenu->GetItemCommand(nItemId);
+
+                const OUString aItemText = pMenu->GetItemText(nItemId);
+                Menu* pPopupSubmenu = pMenu->GetPopupMenu(nItemId);
+
+                if (!pMenu->IsItemEnabled(nItemId))
+                    continue;
+
+                if (!aItemText.isEmpty())
+                    aItemTree.put("text", std::string(aItemText.toUtf8().getStr()));
+
+                if (pPopupSubmenu)
+                {
+                    boost::property_tree::ptree aSubmenu = fillPopupMenu(pPopupSubmenu);
+                    if (!aSubmenu.empty())
+                    {
+                        aItemTree.put("type", "menu");
+                        aItemTree.push_back(std::make_pair("menu", aSubmenu));
+                    }
+                    else
+                        aItemTree.clear();
+                }
+                else
+                {
+                    if (!aCommandURL.isEmpty())
+                    {
+                        aItemTree.put("type", "command");
+                        aItemTree.put("command", std::string(aCommandURL.toUtf8().getStr()));
+                    }
+                }
+
+                MenuItemBits aItemBits = pMenu->GetItemBits(nItemId);
+                bool bHasChecks = false;
+                if (aItemBits & MenuItemBits::CHECKABLE)
+                {
+                    aItemTree.put("checktype", "checkmark");
+                    bHasChecks = true;
+                }
+                else if (aItemBits & MenuItemBits::RADIOCHECK)
+                {
+                    aItemTree.put("checktype", "radio");
+                    bHasChecks = true;
+                }
+                else if (aItemBits & MenuItemBits::AUTOCHECK)
+                {
+                    aItemTree.put("checktype", "auto");
+                    bHasChecks = true;
+                }
+
+                if (bHasChecks)
+                {
+                    if (pMenu->IsItemChecked(nItemId))
+                        aItemTree.put("checked", "true");
+                    else
+                        aItemTree.put("checked", "false");
+                }
+            }
+
+            if (!aItemTree.empty())
+            {
+                aTree.push_back(std::make_pair("", aItemTree));
+                if (aItemType != MenuItemType::SEPARATOR)
+                    bIsLastItemText = true;
+            }
+        }
+
+        return aTree;
+    }
+
+} // end anonymous namespace
 
 void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, vcl::Window* pWindow )
 {
@@ -369,9 +473,23 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
             pSVMenu = static_cast<PopupMenu*>( pMenu );
         }
 
-        SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
-        aPop.RemoveDisabledEntries();
-        aPop.Execute( rPoint, pWindow );
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            boost::property_tree::ptree aMenu = fillPopupMenu(pSVMenu);
+            boost::property_tree::ptree aRoot;
+            aRoot.add_child("menu", aMenu);
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aRoot, true);
+            const SfxObjectShell* objSh = pFrame->GetObjectShell();
+            objSh->libreOfficeKitCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+        }
+        else
+        {
+            SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
+            aPop.RemoveDisabledEntries();
+            aPop.Execute( rPoint, pWindow );
+        }
 
         // #i112646 avoid crash when context menu is closed.
         // the (manually inserted) sub-menu needs to be destroyed before
