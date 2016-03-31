@@ -26,6 +26,7 @@
 #include <svtools/treelistbox.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
@@ -38,6 +39,7 @@ class SaveInData;
 #define SVX_CFGFUNCTION_SLOT  2
 #define SVX_CFGGROUP_SCRIPTCONTAINER  3
 #define SVX_CFGFUNCTION_SCRIPT 4
+#define SVX_CFGGROUP_ALLFUNCTIONS 5
 
 struct SvxGroupInfo_Impl
 {
@@ -149,6 +151,7 @@ private:
         SvTreeListEntry* _pParentEntry,
         bool _bCheapChildrenOnDemand
     );
+    void    fillFunctionList( const com::sun::star::uno::Sequence< com::sun::star::frame::DispatchInformation >& commands );
 
 protected:
     virtual void    RequestingChildren( SvTreeListEntry *pEntry) override;
