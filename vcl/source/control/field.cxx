@@ -51,7 +51,7 @@ namespace
 #define FORMAT_METRIC        2
 #define FORMAT_CURRENCY      3
 
-static sal_Int64 ImplPower10( sal_uInt16 n )
+sal_Int64 ImplPower10( sal_uInt16 n )
 {
     sal_uInt16  i;
     sal_Int64   nValue = 1;
@@ -62,7 +62,7 @@ static sal_Int64 ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                         bool bStrictFormat, bool bThousandSep,
                                         const LocaleDataWrapper& rLocaleDataWrappper )
 {
@@ -85,7 +85,7 @@ static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     }
 }
 
-static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
+bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
                                  bool bCurrency = false )
 {
@@ -293,7 +293,7 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     return true;
 }
 
-static void ImplUpdateSeparatorString( OUString& io_rText,
+void ImplUpdateSeparatorString( OUString& io_rText,
                                        const OUString& rOldDecSep, const OUString& rNewDecSep,
                                        const OUString& rOldThSep, const OUString& rNewThSep )
 {
@@ -329,7 +329,7 @@ static void ImplUpdateSeparatorString( OUString& io_rText,
     io_rText = aBuf.makeStringAndClear();
 }
 
-static void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rNewDecSep,
+void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rNewDecSep,
                                   const OUString& rOldThSep, const OUString& rNewThSep,
                                   Edit* pEdit )
 {

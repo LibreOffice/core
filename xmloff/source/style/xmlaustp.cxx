@@ -41,7 +41,7 @@ using namespace ::xmloff::token;
 
 namespace
 {
-    static void lcl_exportDataStyle( SvXMLExport& _rExport, const rtl::Reference< XMLPropertySetMapper >& _rxMapper,
+    void lcl_exportDataStyle( SvXMLExport& _rExport, const rtl::Reference< XMLPropertySetMapper >& _rxMapper,
         const XMLPropertyState& _rProperty )
     {
         assert(_rxMapper.is());

@@ -38,7 +38,7 @@ namespace
 
 #define FORMAT_LONGCURRENCY      4
 
-static BigInt ImplPower10( sal_uInt16 n )
+BigInt ImplPower10( sal_uInt16 n )
 {
     sal_uInt16 i;
     BigInt   nValue = 1;
@@ -49,7 +49,7 @@ static BigInt ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-static OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, bool bShowThousandSep )
+OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, bool bShowThousandSep )
 {
     DBG_ASSERT( nDigits < 10, "LongCurrency may only have 9 decimal places" );
 
@@ -97,7 +97,7 @@ static OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const 
     return aTemplate.makeStringAndClear();
 }
 
-static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                         bool bStrictFormat, bool bThousandSep,
                                         const LocaleDataWrapper& rLocaleDataWrapper )
 {
@@ -120,7 +120,7 @@ static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     }
 }
 
-static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
+bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  bool bCurrency = false )
 {
@@ -244,7 +244,7 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     return true;
 }
 
-static bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                              bool, bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     // There's no StrictFormat that makes sense here, thus allow all chars

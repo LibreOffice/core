@@ -251,7 +251,7 @@ void FontCfgWrapper::release()
 
 namespace
 {
-    static FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag);
+    FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag);
 
     FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag)
     {

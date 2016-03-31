@@ -330,9 +330,9 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 namespace {
 
 // helper method; implementation below
-static bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
+bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
 
-static void
+void
 lcl_checkMultiProperty(XMLPropertyState *const pState,
                        XMLPropertyState *const pRelState)
 {
@@ -358,7 +358,7 @@ lcl_checkMultiProperty(XMLPropertyState *const pState,
  * Compress border attributes. If one of groupable attributes (border type, border width, padding)
  * is equal for all four side then just one general attribute will be exported.
 **/
-static void lcl_FilterBorders(
+void lcl_FilterBorders(
     XMLPropertyState* pAllBorderWidthState, XMLPropertyState* pLeftBorderWidthState,
     XMLPropertyState* pRightBorderWidthState, XMLPropertyState* pTopBorderWidthState,
     XMLPropertyState* pBottomBorderWidthState, XMLPropertyState* pAllBorderDistanceState,
@@ -1160,7 +1160,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
 namespace {
 
-static bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
+bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
 {
     Reference< XChapterNumberingSupplier >
         xCNSupplier(rExport.GetModel(), UNO_QUERY);

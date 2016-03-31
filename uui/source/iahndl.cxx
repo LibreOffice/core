@@ -300,7 +300,7 @@ UUIInteractionHelper::tryOtherInteractionHandler(
 namespace
 {
 
-    static bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, const OUString& i_rPropagation )
+    bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, const OUString& i_rPropagation )
     {
         const css::uno::TypeDescription aTypeDesc( i_rTypeName );
         const typelib_TypeDescription* pTypeDesc = aTypeDesc.get();
