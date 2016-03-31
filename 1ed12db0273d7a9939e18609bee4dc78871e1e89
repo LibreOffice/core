@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_ff8ef525",
+        "filename": "sc/source/filter/xml/XMLCodeNameProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-31T14:38:55Z",
+      "side": 0,
+      "message": "This pre-allocated space for nCount elements. Please do similar for vector, using reserve() (not resize()).",
+      "range": {
+        "startLine": 115,
+        "startChar": 38,
+        "endLine": 115,
+        "endChar": 44
+      },
+      "revId": "1ed12db0273d7a9939e18609bee4dc78871e1e89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
