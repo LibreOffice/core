@@ -455,8 +455,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
 #endif
 
     if (!ipc) {
-        rtl::Reference< RequestHandler > pThread(new RequestHandler);
-        pGlobal = pThread;
+        pGlobal = new RequestHandler;
         return IPC_STATUS_OK;
     }
 
@@ -535,10 +534,9 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     if ( nPipeMode == PIPEMODE_CREATED )
     {
         // Seems we are the one and only, so start listening thread
-        rtl::Reference< RequestHandler > pThread(new RequestHandler);
-        pThread->mPipeReaderThread = new PipeReaderThread(*pThread, pipe);
-        pGlobal = pThread;
-        pThread->mPipeReaderThread->launch();
+        pGlobal = new RequestHandler;
+        pGlobal->mPipeReaderThread = new PipeReaderThread(*pGlobal, pipe);
+        pGlobal->mPipeReaderThread->launch();
         return IPC_STATUS_OK;
     }
     else
