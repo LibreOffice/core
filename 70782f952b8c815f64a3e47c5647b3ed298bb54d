@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_5fa0e190",
+        "filename": "i18npool/source/transliteration/transliteration_Numeric.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-31T14:46:25Z",
+      "side": 1,
+      "message": "Actually this back and forth conversion indicates that the entire change should not be done, but left using Sequence instead. The conversions introduce an unnecessary performance penalty.",
+      "revId": "70782f952b8c815f64a3e47c5647b3ed298bb54d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
