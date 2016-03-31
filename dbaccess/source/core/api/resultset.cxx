@@ -295,7 +295,7 @@ sal_Int32 OResultSet::findColumn(const OUString& columnName) throw( SQLException
 
 namespace
 {
-    static Reference< XDatabaseMetaData > lcl_getDBMetaDataFromStatement_nothrow( const Reference< XInterface >& _rxStatement )
+    Reference< XDatabaseMetaData > lcl_getDBMetaDataFromStatement_nothrow( const Reference< XInterface >& _rxStatement )
     {
         Reference< XDatabaseMetaData > xDBMetaData;
         try

@@ -678,7 +678,7 @@ namespace
     namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
     namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-    static sal_Int32 lcl_getFolderIndicatorForType( const ElementType _eType )
+    sal_Int32 lcl_getFolderIndicatorForType( const ElementType _eType )
     {
         const sal_Int32 nFolderIndicator =
                 ( _eType == E_FORM ) ? DatabaseObjectContainer::FORMS_FOLDER

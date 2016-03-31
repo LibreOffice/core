@@ -285,7 +285,7 @@ namespace
         return _rArguments.getOrDefault( "StatusIndicator", xStatusIndicator );
     }
 
-    static void lcl_triggerStatusIndicator_throw( const ::comphelper::NamedValueCollection& _rArguments, DocumentGuard& _rGuard, const bool _bStart )
+    void lcl_triggerStatusIndicator_throw( const ::comphelper::NamedValueCollection& _rArguments, DocumentGuard& _rGuard, const bool _bStart )
     {
         Reference< XStatusIndicator > xStatusIndicator( lcl_extractStatusIndicator( _rArguments ) );
         if ( !xStatusIndicator.is() )
@@ -307,7 +307,7 @@ namespace
             // note that |reset| can throw a DisposedException
     }
 
-    static void lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Sequence< Any >& _rCallArgs )
+    void lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Sequence< Any >& _rCallArgs )
     {
         Reference< XStatusIndicator > xStatusIndicator( lcl_extractStatusIndicator( _rArguments ) );
         if ( !xStatusIndicator.is() )
@@ -318,7 +318,7 @@ namespace
         _rCallArgs[ nLength ] <<= xStatusIndicator;
     }
 
-    static void lcl_extractAndStartStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Reference< XStatusIndicator >& _rxStatusIndicator,
+    void lcl_extractAndStartStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Reference< XStatusIndicator >& _rxStatusIndicator,
         Sequence< Any >& _rCallArgs )
     {
         _rxStatusIndicator = lcl_extractStatusIndicator( _rArguments );
@@ -339,7 +339,7 @@ namespace
         }
     }
 
-    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const OUString& _rURL )
+    Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const OUString& _rURL )
     {
         ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
         if ( !_rURL.isEmpty() )
