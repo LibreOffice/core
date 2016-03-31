@@ -54,7 +54,7 @@ namespace pcr
             nullptr
         };
 
-        static sal_Int32 lcl_getNavigationURLIndex( const OUString& _rNavURL )
+        sal_Int32 lcl_getNavigationURLIndex( const OUString& _rNavURL )
         {
             const sal_Char** pLookup = pNavigationURLs;
             while ( *pLookup )
@@ -66,7 +66,7 @@ namespace pcr
             return -1;
         }
 
-        static const sal_Char* lcl_getNavigationURL( sal_Int32 _nButtonTypeIndex )
+        const sal_Char* lcl_getNavigationURL( sal_Int32 _nButtonTypeIndex )
         {
             const sal_Char** pLookup = pNavigationURLs;
             while ( _nButtonTypeIndex-- && *pLookup++ )

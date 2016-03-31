@@ -85,7 +85,7 @@ namespace frm
     namespace
     {
 
-        static WinBits lcl_getWinBits_nothrow( const Reference< XControlModel >& _rxModel )
+        WinBits lcl_getWinBits_nothrow( const Reference< XControlModel >& _rxModel )
         {
             WinBits nBits = 0;
             try

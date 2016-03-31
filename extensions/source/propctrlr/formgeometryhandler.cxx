@@ -611,7 +611,7 @@ namespace pcr
 
     namespace
     {
-        static sal_Int32 lcl_getLowerBoundRowOrColumn( const Reference< XIndexAccess >& _rxRowsOrColumns, const bool _bRows,
+        sal_Int32 lcl_getLowerBoundRowOrColumn( const Reference< XIndexAccess >& _rxRowsOrColumns, const bool _bRows,
             const css::awt::Point& _rRelativePosition )
         {
             sal_Int32 nAccumulated = 0;

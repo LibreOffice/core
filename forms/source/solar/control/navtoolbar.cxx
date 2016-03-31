@@ -47,13 +47,13 @@ namespace frm
 
     namespace
     {
-        static bool isArtificialItem( sal_Int16 _nFeatureId )
+        bool isArtificialItem( sal_Int16 _nFeatureId )
         {
             return ( _nFeatureId == LID_RECORD_LABEL )
                 || ( _nFeatureId == LID_RECORD_FILLER );
         }
 
-        static OUString getLabelString( sal_uInt16 _nResId )
+        OUString getLabelString( sal_uInt16 _nResId )
         {
             OUString sLabel( " " );
             sLabel += FRM_RES_STRING( _nResId );

@@ -407,7 +407,7 @@ namespace frm
 
     namespace
     {
-        static bool lcl_needConfirmCommit( sal_Int32 _nFeature )
+        bool lcl_needConfirmCommit( sal_Int32 _nFeature )
         {
             return ( ( _nFeature == FormFeature::ReloadForm )
                   || ( _nFeature == FormFeature::RemoveFilterAndSort )
@@ -419,11 +419,11 @@ namespace frm
                   || ( _nFeature == FormFeature::InteractiveFilter )
                    );
         }
-        static bool lcl_requiresArguments( sal_Int32 _nFeature )
+        bool lcl_requiresArguments( sal_Int32 _nFeature )
         {
             return ( _nFeature == FormFeature::MoveAbsolute );
         }
-        static bool lcl_isExecutableFeature( sal_Int32 _nFeature )
+        bool lcl_isExecutableFeature( sal_Int32 _nFeature )
         {
             return ( _nFeature != FormFeature::TotalRecords );
         }
