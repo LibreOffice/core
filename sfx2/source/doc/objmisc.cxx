@@ -1452,7 +1452,7 @@ ErrCode SfxObjectShell::CallBasic( const OUString& rMacro,
 
 namespace
 {
-    static bool lcl_isScriptAccessAllowed_nothrow( const Reference< XInterface >& _rxScriptContext )
+    bool lcl_isScriptAccessAllowed_nothrow( const Reference< XInterface >& _rxScriptContext )
     {
         try
         {

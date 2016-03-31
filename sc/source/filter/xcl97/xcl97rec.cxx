@@ -168,7 +168,7 @@ void XclExpObjList::Save( XclExpStream& rStrm )
 
 namespace {
 
-static bool IsVmlObject( const XclObj *rObj )
+bool IsVmlObject( const XclObj *rObj )
 {
     switch( rObj->GetObjType() )
     {
@@ -179,7 +179,7 @@ static bool IsVmlObject( const XclObj *rObj )
     }
 }
 
-static sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
+sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 {
     sal_Int32 nNumVml = 0;
 
@@ -232,7 +232,7 @@ bool IsValidObject( const XclObj& rObj )
     return true;
 }
 
-static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
+void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
 {
     std::vector<XclObj*> aList;
     aList.reserve(rList.size());
@@ -277,7 +277,7 @@ static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, 
     rStrm.PopStream();
 }
 
-static void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nVmlCount )
+void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nVmlCount )
 {
     if( GetVmlObjectCount( rList ) == 0 )
         return;

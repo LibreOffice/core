@@ -137,7 +137,7 @@ using namespace ::com::sun::star::document;
 namespace
 {
     // lp#527938, debian#602953, fdo#33266, i#105408
-    static bool lcl_isBaseAvailable()
+    bool lcl_isBaseAvailable()
     {
         try
         {
@@ -153,7 +153,7 @@ namespace
             return false;
         }
     }
-    static void lcl_tryLoadBibliography()
+    void lcl_tryLoadBibliography()
     {
         // lp#527938, debian#602953, fdo#33266, i#105408
         // make sure we actually can instanciate services from base first
@@ -898,7 +898,7 @@ namespace
         return _pFallback;
     }
 
-    static OUString lcl_getBasicIDEServiceName()
+    OUString lcl_getBasicIDEServiceName()
     {
         return OUString( "com.sun.star.script.BasicIDE");
     }

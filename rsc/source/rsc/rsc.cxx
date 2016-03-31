@@ -529,7 +529,7 @@ namespace
     using namespace ::osl;
     class RscIoError { };
 
-    static inline OUString lcl_getAbsoluteUrl(const OUString& i_sBaseUrl, const OString& i_sPath)
+    inline OUString lcl_getAbsoluteUrl(const OUString& i_sBaseUrl, const OString& i_sPath)
     {
         OUString sRelUrl, sAbsUrl;
         if(FileBase::getFileURLFromSystemPath(OStringToOUString(i_sPath, RTL_TEXTENCODING_MS_1252), sRelUrl) != FileBase::E_None)
@@ -539,7 +539,7 @@ namespace
         return sAbsUrl;
     };
 
-    static inline OString lcl_getSystemPath(const OUString& i_sUrl)
+    inline OString lcl_getSystemPath(const OUString& i_sUrl)
     {
         OUString sSys;
         if(FileBase::getSystemPathFromFileURL(i_sUrl, sSys) != FileBase::E_None)
@@ -548,7 +548,7 @@ namespace
         return OUStringToOString(sSys, RTL_TEXTENCODING_MS_1252);
     };
 
-    static inline OString lcl_getTempFile(OUString& sTempDirUrl)
+    inline OString lcl_getTempFile(OUString& sTempDirUrl)
     {
         // get a temp file name for the rc file
         OUString sTempUrl;

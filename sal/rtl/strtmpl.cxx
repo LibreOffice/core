@@ -994,7 +994,7 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 namespace {
-    template<typename T, typename U> static inline T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
+    template<typename T, typename U> inline T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
                                                                      sal_Int16 nRadix )
     {
         static_assert(std::numeric_limits<T>::is_signed, "is signed");
@@ -1084,7 +1084,7 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 namespace {
-    template <typename T> static inline T IMPL_RTL_STRNAME( toUInt )( const IMPL_RTL_STRCODE* pStr,
+    template <typename T> inline T IMPL_RTL_STRNAME( toUInt )( const IMPL_RTL_STRCODE* pStr,
                                                                       sal_Int16 nRadix )
     {
         static_assert(!std::numeric_limits<T>::is_signed, "is not signed");

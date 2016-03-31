@@ -76,7 +76,7 @@ public:
 private:
 };
 
-static void doTest(util::Duration const & rid, char const*const pis,
+void doTest(util::Duration const & rid, char const*const pis,
         char const*const i_pos = nullptr)
 {
     char const*const pos((i_pos) ? i_pos : pis);
@@ -100,7 +100,7 @@ static void doTest(util::Duration const & rid, char const*const pis,
     CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
 }
 
-static void doTestDurationF(char const*const pis)
+void doTestDurationF(char const*const pis)
 {
     util::Duration od;
     bool bSuccess = Converter::convertDuration(od,
@@ -144,7 +144,7 @@ void ConverterTest::testDuration()
 }
 
 
-static bool eqDateTime(const util::DateTime& a, const util::DateTime& b) {
+bool eqDateTime(const util::DateTime& a, const util::DateTime& b) {
     return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
@@ -152,7 +152,7 @@ static bool eqDateTime(const util::DateTime& a, const util::DateTime& b) {
         && a.IsUTC == b.IsUTC;
 }
 
-static void doTest(util::DateTime const & rdt, char const*const pis,
+void doTest(util::DateTime const & rdt, char const*const pis,
         char const*const i_pos = nullptr)
 {
     char const*const pos((i_pos) ? i_pos : pis);
@@ -170,7 +170,7 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
                          buf.makeStringAndClear());
 }
 
-static void doTestDateTimeF(char const*const pis)
+void doTestDateTimeF(char const*const pis)
 {
     util::DateTime odt;
     bool bSuccess = Converter::parseDateTime(odt, nullptr,
@@ -247,7 +247,7 @@ void ConverterTest::testDateTime()
     SAL_INFO("sax.cppunit","\nSAX CONVERTER TEST END");
 }
 
-static void doTestTime(util::DateTime const & rdt, char const*const pis,
+void doTestTime(util::DateTime const & rdt, char const*const pis,
         char const*const i_pos = nullptr)
 {
     char const*const pos((i_pos) ? i_pos : pis);
@@ -265,7 +265,7 @@ static void doTestTime(util::DateTime const & rdt, char const*const pis,
                          buf.makeStringAndClear());
 }
 
-static void doTestTimeF(char const*const pis)
+void doTestTimeF(char const*const pis)
 {
     util::DateTime odt;
     bool bSuccess = Converter::parseTimeOrDateTime(odt, nullptr,

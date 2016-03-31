@@ -140,7 +140,7 @@ public:
     }
 };
 
-static void fillStruct(
+void fillStruct(
     const Reference< XInvocation2 > &inv,
     typelib_CompoundTypeDescription *pCompType,
     PyObject *initializer,
