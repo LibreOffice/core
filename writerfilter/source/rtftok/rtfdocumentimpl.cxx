@@ -161,7 +161,7 @@ static OString lcl_DTTM22OString(long lDTTM)
     return DateTimeToOString(msfilter::util::DTTM2DateTime(lDTTM));
 }
 
-static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(int nPos, OUString& rString)
+static RTFSprms lcl_getBookmarkProperties(int nPos, OUString& rString)
 {
     RTFSprms aAttributes;
     auto pPos = std::make_shared<RTFValue>(nPos);
@@ -172,7 +172,7 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
         aAttributes.set(NS_ooxml::LN_CT_Bookmark_name, pString);
     }
     aAttributes.set(NS_ooxml::LN_CT_MarkupRangeBookmark_id, pPos);
-    return std::make_shared<RTFReferenceProperties>(aAttributes);
+    return aAttributes;
 }
 
 static const char* lcl_RtfToString(RTFKeyword nKeyword)
@@ -5357,7 +5357,10 @@ RTFError RTFDocumentImpl::popState()
         OUString aStr = m_aStates.top().pDestinationText->makeStringAndClear();
         int nPos = m_aBookmarks.size();
         m_aBookmarks[aStr] = nPos;
-        Mapper().props(lcl_getBookmarkProperties(nPos, aStr));
+        if (!m_aStates.top().pCurrentBuffer)
+            Mapper().props(std::make_shared<RTFReferenceProperties>(lcl_getBookmarkProperties(nPos, aStr)));
+        else
+            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, std::make_shared<RTFValue>(lcl_getBookmarkProperties(nPos, aStr)), nullptr));
     }
     break;
     case Destination::BOOKMARKEND:
@@ -5365,7 +5368,10 @@ RTFError RTFDocumentImpl::popState()
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
         OUString aStr = m_aStates.top().pDestinationText->makeStringAndClear();
-        Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr));
+        if (!m_aStates.top().pCurrentBuffer)
+            Mapper().props(std::make_shared<RTFReferenceProperties>(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)));
+        else
+            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, std::make_shared<RTFValue>(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)), nullptr));
     }
     break;
     case Destination::INDEXENTRY:

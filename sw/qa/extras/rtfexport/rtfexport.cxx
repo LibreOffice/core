@@ -1013,6 +1013,14 @@ DECLARE_RTFEXPORT_TEST(testPgnlcltr, "pgnlcltr.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_LOWER_LETTER_N, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf98806, "tdf98806.rtf")
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark(xBookmarksSupplier->getBookmarks()->getByName("bookmark"), uno::UNO_QUERY);
+    // This was empty, bookmark in table wasn't imported correctly.
+    CPPUNIT_ASSERT_EQUAL(OUString("BBB"), xBookmark->getAnchor()->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
