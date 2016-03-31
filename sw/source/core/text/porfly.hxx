@@ -56,12 +56,12 @@ public:
     SwFlyCntPortion( const SwTextFrame& rFrame, SwFlyInContentFrame *pFly,
                      const Point &rBase,
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
-                     objectpositioning::AsCharFlags nFlags );
+                     AsCharFlags nFlags );
     // Use new datatype for parameter <nFlags>
     SwFlyCntPortion( const SwTextFrame& rFrame, SwDrawContact *pDrawContact,
                      const Point &rBase,
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
-                     objectpositioning::AsCharFlags nFlags );
+                     AsCharFlags nFlags );
     inline const Point& GetRefPoint() const { return aRef; }
     inline SwFlyInContentFrame *GetFlyFrame() { return static_cast<SwFlyInContentFrame*>(pContact); }
     inline const SwFlyInContentFrame *GetFlyFrame() const
@@ -78,7 +78,7 @@ public:
     void SetBase( const SwTextFrame& rFrame, const Point &rBase,
                   long nLnAscent, long nLnDescent,
                   long nFlyAscent, long nFlyDescent,
-                  objectpositioning::AsCharFlags nFlags );
+                  AsCharFlags nFlags );
     sal_Int32 GetFlyCursorOfst( const sal_uInt16 nOfst, const Point &rPoint,
                         SwPosition *pPos, SwCursorMoveState* pCMS ) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;

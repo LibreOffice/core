@@ -24,22 +24,27 @@
 #include <sal/types.h>
 #include <swtypes.hxx>
 #include <swrect.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwTextFrame;
 class SwFormatVertOrient;
 
+// flags for positioning algorithm of as-character-anchored objects
+enum class AsCharFlags {
+    None    = 0x00,
+    Quick   = 0x01,
+    UlSpace = 0x02,
+    Init    = 0x04,
+    Rotate  = 0x08,
+    Reverse = 0x10,
+    Bidi    = 0x20,
+};
+namespace o3tl {
+    template<> struct typed_flags<AsCharFlags> : is_typed_flags<AsCharFlags, 0x3f> {};
+};
+
 namespace objectpositioning
 {
-    // flags for positioning algorithm of as-character-anchored objects
-    typedef sal_uInt8 AsCharFlags;
-    #define AS_CHAR_NOFLAG  0
-    #define AS_CHAR_QUICK   1
-    #define AS_CHAR_ULSPACE 2
-    #define AS_CHAR_INIT    4
-    #define AS_CHAR_ROTATE  8
-    #define AS_CHAR_REVERSE 16
-    #define AS_CHAR_BIDI    32
-
     class SwAsCharAnchoredObjectPosition : public SwAnchoredObjectPosition
     {
     private:
@@ -48,12 +53,12 @@ namespace objectpositioning
         // of the object position.
         const Point& mrProposedAnchorPos;
         // flags that influences the calculation of the anchor position
-        // AS_CHAR_QUICK   : quick formatting - calculated position not set at object
-        // AS_CHAR_ULSPACE : consider upper/lower spacing - adjustment of anchor position
-        // AS_CHAR_INIT    : initial calculation
-        // AS_CHAR_ROTATE  : object is rotated by 90 degrees
-        // AS_CHAR_REVERSE : object is reversed (rotated by 270 degrees)
-        // AS_CHAR_BIDI    : object belongs to a BIDI-multi-portion
+        // AsCharFlags::Quick   : quick formatting - calculated position not set at object
+        // AsCharFlags::UlSpace : consider upper/lower spacing - adjustment of anchor position
+        // AsCharFlags::Init    : initial calculation
+        // AsCharFlags::Rotate  : object is rotated by 90 degrees
+        // AsCharFlags::Reverse : object is reversed (rotated by 270 degrees)
+        // AsCharFlags::Bidi    : object belongs to a BIDI-multi-portion
         const AsCharFlags mnFlags;
         // needed line values for the different alignments.
         const SwTwips mnLineAscent;
@@ -99,12 +104,12 @@ namespace objectpositioning
 
             @param _nFlags
             flags that influences the calculation of the anchor position
-            AS_CHAR_QUICK   : quick formatting - calculated position not set at object
-            AS_CHAR_ULSPACE : consider upper/lower spacing - adjustment of anchor position
-            AS_CHAR_INIT    : initial calculation
-            AS_CHAR_ROTATE  : object is rotated by 90 degrees
-            AS_CHAR_REVERSE : object is reversed (rotated by 270 degrees)
-            AS_CHAR_BIDI    : object belongs to a BIDI-multi-portion
+            AsCharFlags::Quick   : quick formatting - calculated position not set at object
+            AsCharFlags::UlSpace : consider upper/lower spacing - adjustment of anchor position
+            AsCharFlags::Init    : initial calculation
+            AsCharFlags::Rotate  : object is rotated by 90 degrees
+            AsCharFlags::Reverse : object is reversed (rotated by 270 degrees)
+            AsCharFlags::Bidi    : object belongs to a BIDI-multi-portion
 
             @param _nLineAscent, _nLineDescent, _nLineAscentInclObjs,
             _nLineDescentInclObjs - needed line values for the different

@@ -262,7 +262,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
                                   SwFlyInContentFrame *pFly, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
                                   long nFlyAsc, long nFlyDesc,
-                                  objectpositioning::AsCharFlags nFlags ) :
+                                  AsCharFlags nFlags ) :
     pContact( pFly ),
     bDraw( false ),
     bMax( false ),
@@ -270,7 +270,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
 {
     OSL_ENSURE( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!" );
     nLineLength = 1;
-    nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
+    nFlags |= AsCharFlags::UlSpace | AsCharFlags::Init;
     SetBase( rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
     SetWhichPor( POR_FLYCNT );
 }
@@ -279,7 +279,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
                                   SwDrawContact *pDrawContact, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
                                   long nFlyAsc, long nFlyDesc,
-                                  objectpositioning::AsCharFlags nFlags ) :
+                                  AsCharFlags nFlags ) :
     pContact( pDrawContact ),
     bDraw( true ),
     bMax( false ),
@@ -295,7 +295,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
         pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
     }
     nLineLength = 1;
-    nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
+    nFlags |= AsCharFlags::UlSpace | AsCharFlags::Init;
 
     SetBase( rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
 
@@ -311,7 +311,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
 void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
                                long nLnAscent, long nLnDescent,
                                long nFlyAsc, long nFlyDesc,
-                               objectpositioning::AsCharFlags nFlags )
+                               AsCharFlags nFlags )
 {
     // Use new class to position object
     // Determine drawing object
@@ -386,7 +386,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     SetAlign( aObjPositioning.GetLineAlignment() );
 
     aRef = aObjPositioning.GetAnchorPos();
-    if( nFlags & AS_CHAR_ROTATE )
+    if( nFlags & AsCharFlags::Rotate )
         SvXSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     else
         SvLSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );

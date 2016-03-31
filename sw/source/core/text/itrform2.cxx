@@ -2034,16 +2034,16 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
 
     const sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
     sal_uInt16 nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
-    objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
+    AsCharFlags nFlags = AsCharFlags::UlSpace;
     if( GetMulti() )
     {
         aTmpInf.SetDirection( GetMulti()->GetDirection() );
         if( GetMulti()->HasRotation() )
         {
-            nFlags |= AS_CHAR_ROTATE;
+            nFlags |= AsCharFlags::Rotate;
             if( GetMulti()->IsRevers() )
             {
-                nFlags |= AS_CHAR_REVERSE;
+                nFlags |= AsCharFlags::Reverse;
                 aTmpInf.X( aTmpInf.X() - nAscent );
             }
             else
@@ -2052,7 +2052,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
         else
         {
             if ( GetMulti()->IsBidi() )
-                nFlags |= AS_CHAR_BIDI;
+                nFlags |= AsCharFlags::Bidi;
             aTmpInf.Y( aTmpInf.Y() + nAscent );
         }
     }
@@ -2140,12 +2140,12 @@ void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
         return;
     SwLinePortion *pFirst = m_pCurr->GetFirstPortion();
     SwLinePortion *pPos = pFirst;
-    objectpositioning::AsCharFlags nFlags = AS_CHAR_NOFLAG;
+    AsCharFlags nFlags = AsCharFlags::None;
     if( GetMulti() && GetMulti()->HasRotation() )
     {
-        nFlags |= AS_CHAR_ROTATE;
+        nFlags |= AsCharFlags::Rotate;
         if( GetMulti()->IsRevers() )
-            nFlags |= AS_CHAR_REVERSE;
+            nFlags |= AsCharFlags::Reverse;
     }
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
@@ -2523,12 +2523,12 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
         nFlyAsc = nAscent;
 
     Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );
-    objectpositioning::AsCharFlags nMode = IsQuick() ? AS_CHAR_QUICK : 0;
+    AsCharFlags nMode = IsQuick() ? AsCharFlags::Quick : AsCharFlags::None;
     if( GetMulti() && GetMulti()->HasRotation() )
     {
-        nMode |= AS_CHAR_ROTATE;
+        nMode |= AsCharFlags::Rotate;
         if( GetMulti()->IsRevers() )
-            nMode |= AS_CHAR_REVERSE;
+            nMode |= AsCharFlags::Reverse;
     }
 
     Point aTmpBase( aBase );
@@ -2548,7 +2548,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
         if( pRet->GetAscent() > nAscent )
         {
             aBase.Y() = Y() + pRet->GetAscent();
-            nMode |= AS_CHAR_ULSPACE;
+            nMode |= AsCharFlags::UlSpace;
             if( !rInf.IsTest() )
             {
                 aTmpBase = aBase;
