@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ad45d7e_9c55471f",
+        "filename": "sc/source/ui/view/spelleng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-03-31T11:11:00Z",
+      "side": 1,
+      "message": "is it safe to remove the \"if pNewEditObj\" check here?",
+      "revId": "119c23434cac2c6b353209d8bacbb4382c55f150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_5ce46f0c",
         "filename": "sc/source/ui/view/viewfunc.cxx",
         "patchSetId": 1
