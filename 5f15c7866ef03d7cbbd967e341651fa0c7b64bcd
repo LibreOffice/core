@@ -16,6 +16,24 @@
       "revId": "5f15c7866ef03d7cbbd967e341651fa0c7b64bcd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_1f49498c",
+        "filename": "external/breakpad/Module_breakpad.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-03-31T21:55:43Z",
+      "side": 0,
+      "message": "That was an error. That should have been the ExternalProject which has been added in the other place.",
+      "parentUuid": "9ad45d7e_df4e9195",
+      "revId": "5f15c7866ef03d7cbbd967e341651fa0c7b64bcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
