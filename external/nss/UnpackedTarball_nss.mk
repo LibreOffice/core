@@ -34,6 +34,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.vs2015.pdb.patch) \
     $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)), \
         external/nss/nss-winXP-sdk.patch.1) \
+	$(if $(filter WNTMSC,$(OS)$(COM)), \
+    	external/nss/nss.utf8bom.patch.1) \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
