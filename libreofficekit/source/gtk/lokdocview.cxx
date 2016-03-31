@@ -325,6 +325,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_DOCUMENT_PASSWORD";
     case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
         return "LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY";
+    case LOK_CALLBACK_CONTEXT_MENU:
+        return "LOK_CALLBACK_CONTEXT_MENU";
     }
     return nullptr;
 }
@@ -1096,6 +1098,11 @@ callback (gpointer pData)
         reportError(pDocView, pCallback->m_aPayload);
     }
     break;
+    case LOK_CALLBACK_CONTEXT_MENU:
+    {
+        // TODO: Implement me
+        break;
+    }
     default:
         g_assert(false);
         break;

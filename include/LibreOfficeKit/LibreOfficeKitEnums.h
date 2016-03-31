@@ -66,6 +66,15 @@ typedef enum
 }
 LibreOfficeKitOptionalFeatures;
 
+// This enumerates the types of callbacks emitted to a LibreOfficeKit
+// object's callback function or to a LibreOfficeKitDocument object's
+// callback function. No callback type will be emitted to both. It is a
+// bit unfortunate that the same enum contains both kinds of
+// callbacks.
+
+// TODO: We should really add some indication at the documentation for
+// each enum value telling which type of callback it is.
+
 typedef enum
 {
     /**
