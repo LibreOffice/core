@@ -129,6 +129,13 @@ long ScColumn::GetNeededSize(
     //      conditional formatting
     const SfxItemSet* pCondSet = pDocument->GetCondResult( nCol, nRow, nTab );
 
+    //The pPattern may change in GetCondResult
+    if (aCell.meType == CELLTYPE_FORMULA)
+    {
+        pPattern = pAttrArray->GetPattern( nRow );
+        if (ppPatternChange)
+            *ppPatternChange = pPattern;
+    }
     //  line break?
 
     const SfxPoolItem* pCondItem;
