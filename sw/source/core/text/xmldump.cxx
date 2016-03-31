@@ -22,6 +22,7 @@
 #include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
+#include <svx/svdobj.hxx>
 
 class XmlPortionDumper:public SwPortionHandler
 {
@@ -360,6 +361,14 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Frm().Width() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Frm().Height() );
     xmlTextWriterEndElement( writer );
+
+    // output the Prt
+    xmlTextWriterStartElement( writer, BAD_CAST( "prtBounds" ) );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", Prt().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", Prt().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Prt().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Prt().Height() );
+    xmlTextWriterEndElement( writer );
 }
 
 // Hack: somehow conversion from "..." to va_list does
@@ -418,6 +427,9 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", GetObjBoundRect().Width() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", GetObjBoundRect().Height() );
     xmlTextWriterEndElement( writer );
+
+    if (const SdrObject* pObject = GetDrawObj())
+        pObject->dumpAsXml(writer);
 
     xmlTextWriterEndElement( writer );
 

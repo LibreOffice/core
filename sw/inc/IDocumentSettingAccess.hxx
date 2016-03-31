@@ -37,6 +37,7 @@ enum class DocumentSettingId
     TAB_COMPAT,
 
     ADD_FLY_OFFSETS,
+    ADD_VERTICAL_FLY_OFFSETS,
 
     OLD_NUMBERING,
 
