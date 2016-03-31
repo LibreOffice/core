@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_bce5aba9",
+        "filename": "include/vcl/button.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "This method can be const (b/c it doesn\u0027t modify the object)",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_9c90a7ee",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "Please keep the indent consistent",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_bc93ebf9",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "here too",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_9cf9c750",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "Not your fault, but why not just make this 360?",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_1cedd78b",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "Please add some tooltip here, so that it\u0027s obvious what the icon button does",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7c021340",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "and the same here",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_fc9443e9",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "Not very happy with this 1-letter acronym label, it might not work well in other languages",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5c862fba",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "Maybe you want to reduce spacing in this box, so the buttons are closer to each other, it now looks a bit inconsistent with the nearby flip toolbox",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_dc997f21",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "Tooltips, please",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3c9ffb04",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-03-31T09:32:13Z",
+      "side": 1,
+      "message": "the same here",
+      "revId": "3fa7f3ad6849d42a9a6c08d8b279e98de7d81a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
