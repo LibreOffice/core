@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_3fb08ddd",
+        "filename": "sc/source/ui/Accessibility/AccessibleSpreadsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-31T14:51:04Z",
+      "side": 1,
+      "message": "I see no benefit in temporarily using a vector if it has to be converted to a Sequence anyway. It only creates a performance penalty.\n\nThe original code of course could be improved similar to what you did ;)",
+      "revId": "d51912fa4b6776e0e6a1ea2a4d978d6d451d29ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
