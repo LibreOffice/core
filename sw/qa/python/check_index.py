@@ -22,8 +22,6 @@ class RefreshListener(XRefreshListener, unohelper.Base):
         self.m_bRefreshed = False
     
 class CheckIndex(unittest.TestCase):
-    _uno = None
-    _xDoc = None
 
     @classmethod
     def setUpClass(cls):
