@@ -20,24 +20,29 @@ class CheckTable(unittest.TestCase):
         for x in range(3):
             for y in range(3):
                 self.assertEqual('Cell %d %d' % (x, y), xTable.getCellByPosition(x, y).String)
+
+
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
+        cls.OOLineHairline = 2
+
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def __test_borderAsserts(self, typeOfLine, lineValid):
+    def __test_borderAsserts(self, xBorderLine, lineValid):
         self.assertTrue(lineValid)
-        self.assertEqual(0, typeOfLine.InnerLineWidth)
-        self.assertEqual(2, typeOfLine.OuterLineWidth)
-        self.assertEqual(0, typeOfLine.LineDistance)
-        self.assertEqual(0, typeOfLine.Color)
+        self.assertEqual(0, xBorderLine.InnerLineWidth)
+        self.assertEqual(self.OOLineHairline, xBorderLine.OuterLineWidth)
+        self.assertEqual(0, xBorderLine.LineDistance)
+        self.assertEqual(0, xBorderLine.Color)
 
-    def __test_borderAssertsWithLineStyle(self, typeOfLine, lineValid):
-        self.__test_borderAsserts(typeOfLine, lineValid)
-        self.assertEqual(SOLID, typeOfLine.LineStyle)
+    def __test_borderAssertsWithLineStyle(self, xBorderLine, lineValid):
+        self.__test_borderAsserts(xBorderLine, lineValid)
+        self.assertEqual(self.OOLineHairline, xBorderLine.LineWidth)
+        self.assertEqual(SOLID, xBorderLine.LineStyle)
 
     def __test_borderDistance(self, border):
         self.assertTrue(border.IsDistanceValid)
@@ -61,8 +66,8 @@ class CheckTable(unittest.TestCase):
         self.__test_borderAsserts(border.HorizontalLine, border.IsHorizontalLineValid)
         self.__test_borderAsserts(border.VerticalLine, border.IsVerticalLineValid)
 
-        self.assertTrue(border.IsDistanceValid)
-        self.assertEqual(97, border.Distance)
+        self.__test_borderDistance(border)
+
     # set border
         border.TopLine        = BorderLine(0,      11, 19, 19)
         border.BottomLine     = BorderLine(0xFF,   00, 11, 00)
@@ -97,8 +102,7 @@ class CheckTable(unittest.TestCase):
         self.__test_borderAsserts(border.VerticalLine, border.IsVerticalLineValid)
 
 
-        self.assertTrue(border.IsDistanceValid)
-        self.assertEqual(97, border.Distance)
+        self.__test_borderDistance(border)
 
         border2 = xTable.getPropertyValue("TableBorder2")
         self.assertTrue(border2.IsTopLineValid)
@@ -131,7 +135,7 @@ class CheckTable(unittest.TestCase):
 
         self.__test_borderAssertsWithLineStyle(border2.VerticalLine, border2.IsVerticalLineValid)
 
-        self.__test_borderDistance(border)
+        self.__test_borderDistance(border2)
     # set border2
         border2.RightLine      = BorderLine2(0,      0, 0, 0, THICKTHIN_LARGEGAP, 120)
         border2.LeftLine       = BorderLine2(0,      0, 0, 0, EMBOSSED, 90)
