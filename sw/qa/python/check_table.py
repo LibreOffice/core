@@ -20,6 +20,7 @@ class CheckTable(unittest.TestCase):
         for x in range(3):
             for y in range(3):
                 self.assertEqual('Cell %d %d' % (x, y), xTable.getCellByPosition(x, y).String)
+
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -37,6 +38,7 @@ class CheckTable(unittest.TestCase):
 
     def __test_borderAssertsWithLineStyle(self, typeOfLine, lineValid):
         self.__test_borderAsserts(typeOfLine, lineValid)
+        self.assertEqual(2, typeOfLine.LineWidth)
         self.assertEqual(SOLID, typeOfLine.LineStyle)
 
     def __test_borderDistance(self, border):
@@ -131,7 +133,7 @@ class CheckTable(unittest.TestCase):
 
         self.__test_borderAssertsWithLineStyle(border2.VerticalLine, border2.IsVerticalLineValid)
 
-        self.__test_borderDistance(border)
+        self.__test_borderDistance(border2)
     # set border2
         border2.RightLine      = BorderLine2(0,      0, 0, 0, THICKTHIN_LARGEGAP, 120)
         border2.LeftLine       = BorderLine2(0,      0, 0, 0, EMBOSSED, 90)

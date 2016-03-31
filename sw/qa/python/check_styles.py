@@ -16,7 +16,6 @@ from com.sun.star.lang import IllegalArgumentException
 
 
 class CheckStyle(unittest.TestCase):
-    _uno = None
 
     @classmethod
     def setUpClass(cls):
