@@ -248,12 +248,15 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         }
         else if (aValue < 0.0)
         {
-            aBuf.append( " - " );
+            if ( bFindValue ) // if it is not the first aValue
+                aBuf.append( " " );
+            aBuf.append( sal_Unicode( 0x2212 ) ); // minus sign
+            aBuf.append( " " );
             aValue = - aValue;
         }
         else
         {
-            if ( bFindValue )
+            if ( bFindValue ) // if it is not the first aValue
                 aBuf.append( " + " );
         }
         bFindValue = true;
@@ -263,14 +266,18 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
 
         if(i > 0)
         {
-            if (i == 1)
+            aBuf.append( "x" );
+            if (i > 1)
             {
-                aBuf.append( "x" );
-            }
-            else
-            {
-                aBuf.append( "x^" );
-                aBuf.append(i);
+                const sal_Unicode aSuperscriptFigures[10]={ 0x2070, 0x00B9, 0x00B2, 0x00B3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079 };
+                if (i < 10)
+                    aBuf.append( aSuperscriptFigures[ i ] );
+                else
+                {
+                    assert( i < 100 );
+                    aBuf.append( aSuperscriptFigures[ i/10 ] );
+                    aBuf.append( aSuperscriptFigures[ i%10 ] );
+                }
             }
         }
     }
