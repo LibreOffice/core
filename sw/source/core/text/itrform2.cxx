@@ -206,7 +206,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
             pPor = pPor->GetPortion();
         }
         pPor = pTmpPrev;
-        if( pPor && // Flies + Initialen werden nicht beim Underflow mitgenommen
+        if( pPor && // Skip flys and initials when underflow.
             ( pPor->IsFlyPortion() || pPor->IsDropPortion() ||
               pPor->IsFlyCntPortion() ) )
         {
@@ -220,7 +220,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // What? The under-flow portion is not in the portion chain?
     OSL_ENSURE( pPor, "SwTextFormatter::Underflow: overflow but underflow" );
 
-    // OD 2004-05-26 #i29529# - correction: no delete of footnotes
+    // i#29529 - correction: no delete of footnotes
 //    if( rInf.IsFootnoteInside() && pPor && !rInf.IsQuick() )
 //    {
 //        SwLinePortion *pTmp = pPor->GetPortion();
@@ -312,7 +312,8 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
             pPor = m_pCurr->GetPortion();
         }
 
-        // #i112181#
+        // i#112181 - Prevent footnote anchor being wrapped to next line
+        // without preceeding word
         rInf.SetOtherThanFootnoteInside( rInf.IsOtherThanFootnoteInside() || !pPor->IsFootnotePortion() );
     }
     else
@@ -740,7 +741,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
         pPor->SetAscent( rInf.GetAscent() );
         bCalc = true;
     }
-    // #i89179#
+    // i#89179
     // tab portion representing the list tab of a list label gets the
     // same height and ascent as the corresponding number portion
     else if ( pPor->InTabGrp() && pPor->GetLen() == 0 &&
@@ -1234,7 +1235,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     if( !pPor )
     {
         if( ( !pMulti || pMulti->IsBidi() ) &&
-            // #i42734#
+            // i#42734
             // No multi portion if there is a hook character waiting:
             ( !rInf.GetRest() || '\0' == rInf.GetHookChar() ) )
         {
@@ -1281,7 +1282,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 return pTmp;
             }
         }
-        // 5010: Tabs und Felder
+        // Tabs and Fields
         sal_Unicode cChar = rInf.GetHookChar();
 
         if( cChar )
@@ -1342,7 +1343,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 SwTabPortion* pLastTabPortion = rInf.GetLastTab();
                 if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
                 {
-                    // #127428# Abandon dec. tab position if line is full
+                    // Abandon dec. tab position if line is full
                     // We have a decimal tab portion in the line and the next character has to be
                     // aligned at the tab stop position. We store the width from the beginning of
                     // the tab stop portion up to the portion containing the decimal separator:
@@ -1567,7 +1568,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
         m_pCurr->CalcLine( *this, GetInfo() );
         CalcRealHeight( GetInfo().IsNewLine() );
 
-        //#i120864# For Special case that at the first calculation couldn't get
+        //i#120864 For Special case that at the first calculation couldn't get
         //correct height. And need to recalculate for the right height.
         SwLinePortion* pPorTmp = m_pCurr->GetPortion();
         if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetPortion() &&
@@ -1846,7 +1847,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
 
 void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
 {
-    // 3260, 3860: Fly auf jeden Fall loeschen!
+    // Fly auf jeden Fall loeschen!
     ClearFly( rInf );
     rInf.Init();
 
@@ -1856,7 +1857,8 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
     rInf.SetIdx( m_nStart );
 
     // Handle overflows:
-    // #i34348# Changed type from sal_uInt16 to SwTwips
+    // i#34348 Changed type from sal_uInt16 to SwTwips to enable
+    // the text formatting to cope with certain numbering indent values
     SwTwips nTmpLeft = Left();
     SwTwips nTmpRight = Right();
     SwTwips nTmpFirst = FirstLeft();
@@ -1891,7 +1893,7 @@ void SwTextFormatter::FormatReset( SwTextFormatInfo &rInf )
     if( pBlink && m_pCurr->IsBlinking() )
         pBlink->Delete( m_pCurr );
 
-    // delete pSpaceAdd und pKanaComp
+    // delete pSpaceAdd and pKanaComp
     m_pCurr->FinishSpaceAdd();
     m_pCurr->FinishKanaComp();
     m_pCurr->ResetFlags();
@@ -2366,7 +2368,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( bFullLine && rInf.GetIdx() == rInf.GetText().getLength() )
         {
             rInf.SetNewLine( true );
-            // 8221: We know that for dummies, it holds ascent == height
+            // We know that for dummies, it holds ascent == height
             m_pCurr->SetDummy(true);
         }
 
@@ -2381,11 +2383,11 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
         if( bFullLine )
         {
-            // 8110: In order to properly flow around Flys with different
+            // In order to properly flow around Flys with different
             // wrapping attributes, we need to increase by units of line height.
             // The last avoiding line should be adjusted in height, so that
             // we don't get a frame spacing effect.
-            // 8221: It is important that ascent == height, because the FlyPortion
+            // It is important that ascent == height, because the FlyPortion
             // values are transferred to pCurr in CalcLine and IsDummy() relies
             // on this behaviour.
             // To my knowledge we only have two places where DummyLines can be
@@ -2489,7 +2491,8 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // aBase.Y() = LineIter.Y() + Ascent of the current position
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+    // i#11859 - use new method <SwLineLayout::MaxAscentDescent(..)>
+    // to change line spacing behaviour at paragraph - Compatibility to MS Word
     //SwLinePortion *pPos = pCurr->GetFirstPortion();
     //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
     m_pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
@@ -2542,8 +2545,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
         // We need to make sure that our font is set again in the OutputDevice
         // It could be that the FlyInCnt was added anew and GetFlyFrame() would
         // in turn cause, that it'd be created anew again.
-        // This one's frames get formatted right away, which change the font and
-        // we have a bug (3322).
+        // This one's frames get formatted right away, which change the font.
         rInf.SelectFont();
         if( pRet->GetAscent() > nAscent )
         {
@@ -2712,7 +2714,7 @@ namespace {
 
     #ifndef MACOSX
     #if ! ENABLE_GRAPHITE
-            // #i28795#, #i34607#, #i38388#
+            // i#28795, i#34607, i#38388
             // step back six(!) more characters for complex scripts
             // this is required e.g., for Khmer (thank you, Javier!)
             const SwScriptInfo& rSI = txtFormatInfo.GetParaPortion()->GetScriptInfo();
