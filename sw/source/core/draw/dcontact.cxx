@@ -1417,7 +1417,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
 
 namespace
 {
-    static const SwFormatAnchor* lcl_getAnchorFormat( const SfxPoolItem& _rItem )
+    const SwFormatAnchor* lcl_getAnchorFormat( const SfxPoolItem& _rItem )
     {
         sal_uInt16 nWhich = _rItem.Which();
         const SwFormatAnchor* pAnchorFormat = nullptr;

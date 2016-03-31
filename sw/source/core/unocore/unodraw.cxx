@@ -913,7 +913,7 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
 }
 namespace
 {
-    static void lcl_addShapePropertyEventFactories( SdrObject& _rObj, SwXShape& _rShape )
+    void lcl_addShapePropertyEventFactories( SdrObject& _rObj, SwXShape& _rShape )
     {
         svx::PPropertyValueProvider pProvider( new svx::PropertyValueProvider( _rShape, "AnchorType" ) );
         _rObj.getShapePropertyChangeNotifier().registerProvider( svx::eTextShapeAnchorType, pProvider );

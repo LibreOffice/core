@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    static void lcl_FixPosition(SwPosition& rPos)
+    void lcl_FixPosition(SwPosition& rPos)
     {
         // make sure the position has 1) the proper node, and 2) a proper index
         SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
@@ -64,7 +64,7 @@ namespace
         }
     }
 
-    static void lcl_AssureFieldMarksSet(Fieldmark* const pField,
+    void lcl_AssureFieldMarksSet(Fieldmark* const pField,
         SwDoc* const io_pDoc,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
@@ -101,7 +101,7 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, nullptr);
     };
 
-    static void lcl_RemoveFieldMarks(Fieldmark* const pField,
+    void lcl_RemoveFieldMarks(Fieldmark* const pField,
         SwDoc* const io_pDoc,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)

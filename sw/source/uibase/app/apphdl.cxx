@@ -123,7 +123,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    static bool lcl_hasAllComponentsAvailable()
+    bool lcl_hasAllComponentsAvailable()
     {
         try
         {

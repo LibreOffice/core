@@ -83,7 +83,7 @@ struct LanguageDependentProp
 
 namespace
 {
-    static const Sequence< OUString >& lcl_getLanguageDependentProperties()
+    const Sequence< OUString >& lcl_getLanguageDependentProperties()
     {
         static Sequence< OUString > s_aLanguageDependentProperties;
         if ( s_aLanguageDependentProperties.getLength() == 0 )
@@ -832,7 +832,7 @@ namespace
     };
 
 
-    static sal_Int32 lcl_getDialogStep( const Reference< XControlModel >& _rxModel )
+    sal_Int32 lcl_getDialogStep( const Reference< XControlModel >& _rxModel )
     {
         sal_Int32 nStep = 0;
         try

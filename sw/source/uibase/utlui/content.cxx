@@ -118,17 +118,17 @@ bool SwContentTree::bIsInDrag = false;
 
 namespace
 {
-    static bool lcl_IsContent(const SvTreeListEntry* pEntry)
+    bool lcl_IsContent(const SvTreeListEntry* pEntry)
     {
         return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
 
-    static bool lcl_IsContentType(const SvTreeListEntry* pEntry)
+    bool lcl_IsContentType(const SvTreeListEntry* pEntry)
     {
         return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
 
-    static bool lcl_FindShell(SwWrtShell* pShell)
+    bool lcl_FindShell(SwWrtShell* pShell)
     {
         bool bFound = false;
         SwView *pView = SwModule::GetFirstView();
@@ -144,7 +144,7 @@ namespace
         return bFound;
     }
 
-    static bool lcl_IsUiVisibleBookmark(const IDocumentMarkAccess::pMark_t& rpMark)
+    bool lcl_IsUiVisibleBookmark(const IDocumentMarkAccess::pMark_t& rpMark)
     {
         return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }

@@ -131,7 +131,7 @@ namespace
     typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 
     /// Inserts pBkmk to rBkmArr in case it starts or ends at nOwnNode
-    static void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNodeIndex& nOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
+    void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNodeIndex& nOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         bool const hasOther = pBkmk->IsExpanded();
 
@@ -175,7 +175,7 @@ namespace
         }
     }
 
-    static void lcl_FillBookmarkArray(SwDoc& rDoc, SwUnoCursor& rUnoCursor, SwXBookmarkPortion_ImplList& rBkmArr)
+    void lcl_FillBookmarkArray(SwDoc& rDoc, SwUnoCursor& rUnoCursor, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
         if(!pMarkAccess->getBookmarksCount())
@@ -260,7 +260,7 @@ namespace
     };
     typedef std::multiset < SwAnnotationStartPortion_ImplSharedPtr, AnnotationStartCompareStruct > SwAnnotationStartPortion_ImplList;
 
-    static void lcl_FillAnnotationStartArray(
+    void lcl_FillAnnotationStartArray(
         SwDoc& rDoc,
         SwUnoCursor& rUnoCursor,
         SwAnnotationStartPortion_ImplList& rAnnotationStartArr )

@@ -322,7 +322,7 @@ namespace
     /// @param rWrt The containing WW8Export.
     /// @param pObj pointer to the drawing object.
     /// @returns The ordering number.
-    static sal_uLong lcl_getSdrOrderNumber(const WW8Export& rWrt, DrawObj *pObj)
+    sal_uLong lcl_getSdrOrderNumber(const WW8Export& rWrt, DrawObj *pObj)
     {
         return rWrt.GetSdrOrdNum(pObj->maContent.GetFrameFormat());
     };
@@ -348,7 +348,7 @@ namespace
     /// @param rWrt    The containing WW8Export.
     /// @param rSrcArr The source array.
     /// @param rDstArr The destination array.
-    static void lcl_makeZOrderArray(const WW8Export& rWrt,
+    void lcl_makeZOrderArray(const WW8Export& rWrt,
                                     std::vector<DrawObj> &rSrcArr,
                                     std::vector<DrawObj*> &rDstArr)
     {

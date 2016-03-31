@@ -952,7 +952,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
 
 namespace
 {
-    static inline void lcl_ShiftBoundariesOneway( CompareData* const pData, CompareData* const pOtherData)
+    inline void lcl_ShiftBoundariesOneway( CompareData* const pData, CompareData* const pOtherData)
     {
         sal_uLong i = 0;
         sal_uLong j = 0;
@@ -1092,7 +1092,7 @@ bool SwCompareLine::Compare( const SwCompareLine& rLine ) const
 
 namespace
 {
-    static OUString SimpleTableToText(const SwNode &rNode)
+    OUString SimpleTableToText(const SwNode &rNode)
     {
         OUStringBuffer sRet;
         const SwNode* pEndNd = rNode.EndOfSectionNode();
