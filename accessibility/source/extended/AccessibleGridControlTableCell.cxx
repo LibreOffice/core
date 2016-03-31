@@ -31,7 +31,7 @@ namespace accessibility
     {
         // FIXME this is a copy'n'paste from
         // source/extended/AccessibleBrowseBoxTableCell.cxx, get rid of that...
-        static void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (css::lang::IndexOutOfBoundsException)
+        void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (css::lang::IndexOutOfBoundsException)
         {
             if ( _nIndex >= _sText.getLength() )
                 throw css::lang::IndexOutOfBoundsException();
