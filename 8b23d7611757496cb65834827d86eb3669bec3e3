@@ -22,6 +22,29 @@
       "revId": "8b23d7611757496cb65834827d86eb3669bec3e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_dfcb311d",
+        "filename": "dbaccess/source/ui/dlg/ConnectionHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-03-31T17:46:15Z",
+      "side": 1,
+      "message": "I doubt that collecting all ODBC data source names is a relevant work for connecting to PostgreSQL through our \"direct\" driver (not through ODBC).",
+      "range": {
+        "startLine": 256,
+        "startChar": 30,
+        "endLine": 256,
+        "endChar": 39
+      },
+      "revId": "8b23d7611757496cb65834827d86eb3669bec3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
