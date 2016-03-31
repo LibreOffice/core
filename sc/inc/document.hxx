@@ -569,6 +569,19 @@ public:
      */
     bool InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
 
+    /**
+     * Insert a new named expression to a sheet-local scope.
+     *
+     * @param nTab  sheet for local scope.
+     * @param rName name for the expression.
+     * @param rPos base position.
+     * @param rExpr formula expression to be associated with the name.  The
+     *              current grammar is used to compile this expression.
+     *
+     * @return true if inserted successfully, false otherwise.
+     */
+    bool InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
+
     SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
 
     ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }

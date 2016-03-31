@@ -222,6 +222,16 @@ bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPo
     return pGlobalNames->insert(pName);
 }
 
+bool ScDocument::InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
+{
+    ScRangeName* pLocalNames = GetRangeName(nTab);
+    if (!pLocalNames)
+        return false;
+
+    ScRangeData* pName = new ScRangeData(this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar());
+    return pLocalNames->insert(pName);
+}
+
 const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const
 {
     const ScRangeData* pData = nullptr;
