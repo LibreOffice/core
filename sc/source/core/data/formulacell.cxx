@@ -728,7 +728,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
                         pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos,
                         bGlobalNamesToLocal, nTmpSheet, nNewSheet, bSameDoc);
             }
-            if (bGlobalNamesToLocal && !aReferencingNames.isEmpty(-1))
+            if ((bGlobalNamesToLocal || !bSameDoc) && !aReferencingNames.isEmpty(-1))
             {
                 const SCTAB nTmpSheet = -1;
                 ScRangeData* pTmpData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, -1,
