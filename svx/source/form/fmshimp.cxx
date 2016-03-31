@@ -1752,7 +1752,7 @@ Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm)
 
 namespace
 {
-    static bool lcl_isNavigationRelevant( sal_Int32 _nWhich )
+    bool lcl_isNavigationRelevant( sal_Int32 _nWhich )
     {
         return  ( _nWhich == SID_FM_RECORD_FIRST )
             ||  ( _nWhich == SID_FM_RECORD_PREV )

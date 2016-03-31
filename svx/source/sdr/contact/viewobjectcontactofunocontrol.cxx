@@ -1004,7 +1004,7 @@ namespace sdr { namespace contact {
 
     namespace
     {
-        static void lcl_resetFlag( bool& rbFlag )
+        void lcl_resetFlag( bool& rbFlag )
         {
             rbFlag = false;
         }

@@ -138,7 +138,7 @@ OUString parsePart(
 
 namespace
 {
-    static OUString encodeNameOrParamFragment( OUString const & fragment )
+    OUString encodeNameOrParamFragment( OUString const & fragment )
     {
         static sal_Bool const aCharClass[] =
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* NameOrParamFragment */

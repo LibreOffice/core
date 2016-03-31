@@ -43,7 +43,7 @@
 
 namespace
 {
-    static void lcl_setWinBits( vcl::Window* _pWindow, WinBits _nBits, bool _bSet )
+    void lcl_setWinBits( vcl::Window* _pWindow, WinBits _nBits, bool _bSet )
     {
         WinBits nStyle = _pWindow->GetStyle();
         if ( _bSet )

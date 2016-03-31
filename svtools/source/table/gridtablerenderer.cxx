@@ -126,7 +126,7 @@ namespace svt { namespace table
 
     namespace
     {
-        static Rectangle lcl_getContentArea( GridTableRenderer_Impl const & i_impl, Rectangle const & i_cellArea )
+        Rectangle lcl_getContentArea( GridTableRenderer_Impl const & i_impl, Rectangle const & i_cellArea )
         {
             Rectangle aContentArea( i_cellArea );
             if ( i_impl.bUseGridLines )
@@ -136,7 +136,7 @@ namespace svt { namespace table
             }
             return aContentArea;
         }
-        static Rectangle lcl_getTextRenderingArea( Rectangle const & i_contentArea )
+        Rectangle lcl_getTextRenderingArea( Rectangle const & i_contentArea )
         {
             Rectangle aTextArea( i_contentArea );
             aTextArea.Left() += 2; aTextArea.Right() -= 2;
@@ -144,7 +144,7 @@ namespace svt { namespace table
             return aTextArea;
         }
 
-        static DrawTextFlags lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
+        DrawTextFlags lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
         {
             DrawTextFlags nVertFlag = DrawTextFlags::Top;
             VerticalAlignment const eVertAlign = i_impl.rModel.getVerticalAlign();

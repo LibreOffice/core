@@ -608,7 +608,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 namespace
 {
 
-static void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bPrev)
+void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bPrev)
 {
     long i;
     long n;

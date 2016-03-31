@@ -166,7 +166,7 @@ namespace {
 
     namespace
     {
-        static void lcl_checkPaths( const Sequence< Sequence< sal_Int16 > >& i_rPaths, const Reference< XInterface >& i_rContext )
+        void lcl_checkPaths( const Sequence< Sequence< sal_Int16 > >& i_rPaths, const Reference< XInterface >& i_rContext )
         {
             // need at least one path
             if ( i_rPaths.getLength() == 0 )
@@ -245,7 +245,7 @@ namespace {
         m_bInitialized = true;
     }
 
-    static OString lcl_getHelpId( const OUString& _rHelpURL )
+    OString lcl_getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INetProtocol::Hid )
@@ -255,7 +255,7 @@ namespace {
     }
 
 
-    static OUString lcl_getHelpURL( const OString& sHelpId )
+    OUString lcl_getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;
         OUString aTmp(
