@@ -197,8 +197,6 @@ protected:
     virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-
                                 // Drag & Drop Interface
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
@@ -296,6 +294,8 @@ public:
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
     virtual void dispose() SAL_OVERRIDE;
+
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     /// @see OutputDevice::LogicInvalidate().
     void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;

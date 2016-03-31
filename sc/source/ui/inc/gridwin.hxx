@@ -301,7 +301,6 @@ protected:
     virtual void    LoseFocus() SAL_OVERRIDE;
 
     virtual void    RequestHelp( const HelpEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
@@ -319,6 +318,7 @@ public:
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();
     void flushOverlayManager();
 
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
