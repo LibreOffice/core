@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
+#include <comphelper/lok.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <vcl/svapp.hxx>
@@ -149,16 +150,25 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             Size aSize( 14100, 2000 );
 
             Point aPos;
-            Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+            Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel());
             aWinRect = GetActiveWindow()->PixelToLogic(aWinRect);
 
             // make sure that the default size of the table fits on the paper and is inside the viewing area.
             // if zoomed in close, don't make the table bigger than the viewing window.
             Size aMaxSize = getCurrentPage()->GetSize();
-            if( aMaxSize.Height() > aWinRect.getHeight() )
-                aMaxSize.setHeight( aWinRect.getHeight() );
-            if( aMaxSize.Width() > aWinRect.getWidth() )
-                aMaxSize.setWidth( aWinRect.getWidth() );
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // aWinRect is nonsensical in the LOK case
+                aWinRect = Rectangle(aPos, aMaxSize);
+            }
+            else
+            {
+                if( aMaxSize.Height() > aWinRect.getHeight() )
+                    aMaxSize.setHeight( aWinRect.getHeight() );
+                if( aMaxSize.Width() > aWinRect.getWidth() )
+                    aMaxSize.setWidth( aWinRect.getWidth() );
+            }
 
             if( aSize.Width() > aMaxSize.getWidth() )
                 aSize.setWidth( aMaxSize.getWidth() );
