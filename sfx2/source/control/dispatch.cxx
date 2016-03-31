@@ -30,12 +30,14 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
+
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
@@ -61,8 +63,11 @@
 #include <svtools/helpopt.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/idle.hxx>
+
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 
 #include <appdata.hxx>
 #include <sfxtypes.hxx>
@@ -1885,11 +1890,58 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window *pWin, c
     aEvent.ExecutePosition.Y = aPos.Y();
 
     xPopupController->setPopupMenu( xPopupMenu );
-    VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( xPopupMenu );
-    PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
-    OUString aMenuURL = "private:resource/popupmenu/" + rResName;
-    if ( pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception( *pVCLMenu, aMenuURL, aEvent ) )
-        pVCLMenu->Execute( pWindow, aPos );
+
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        sal_uInt16 nCount = xPopupMenu->getItemCount();
+        for (sal_uInt16 i = 1; i <= nCount; i++)
+        {
+
+            const OUString rCommandURL = xPopupMenu->getCommand(i);
+            const css::uno::Reference<css::frame::XFrame> xFrame (GetFrame()->GetFrame().GetFrameInterface());
+            /*css::uno::Reference<css::frame::XModuleManager2> xModuleManager = css::frame::ModuleManager::create(xContext);
+            const OUString moduleId = xModuleManager->identify(xFrame);
+            css::uno::Sequence<css::beans::PropertyValue> aProperties;
+            if (moduleId.getLength() > 0)
+            {
+                css::uno::Reference<css::container::XNameAccess> xNameAccess  = css::frame::theUICommandDescription::get(xContext);
+                css::uno::Reference<css::container::XNameAccess> xUICommandLabels;
+                if (xNameAccess->getByName(moduleId) >>= xUICommandLabels)
+                    xUICommandLabels->getByName() >>= aProperties;
+
+                for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
+                {
+                    OUString sLabel;
+                    aProperties[nIndex].Value >>= sLabel;
+                    SAL_DEBUG(sLabel);
+                }
+                SAL_DEBUG(" ");
+            }
+            */
+            OUString aLabel = vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(rCommandURL, xFrame );
+             css::uno::Reference<css::awt::XPopupMenu> xSubPopupMenu( xPopupMenu->getPopupMenu(i));
+               if (xSubPopupMenu.is())
+            {
+                sal_uInt16 subcount = xSubPopupMenu->getItemCount();
+                for (sal_uInt16 j = 1; j <= subcount; j++)
+                {
+                    const OUString subCommandURL = xSubPopupMenu->getCommand(j);
+                    OUString aSubLabel = vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(subCommandURL, xFrame );
+                    SAL_DEBUG("LOK_CONTEXT_MENU: SUB MENU" << subCommandURL  << " : "  << aSubLabel);
+                }
+                }
+               SAL_DEBUG("LOK_CONTEXT_MENU:" << rCommandURL << " : " << aLabel);
+        }
+    }
+    else
+    {
+        VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( xPopupMenu );
+        PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
+        OUString aMenuURL = "private:resource/popupmenu/" + rResName;
+        if ( pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception( *pVCLMenu, aMenuURL, aEvent ) )
+            pVCLMenu->Execute( pWindow, aPos );
+    }
 
     css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
     if ( xComponent.is() )

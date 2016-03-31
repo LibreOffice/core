@@ -597,13 +597,22 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
                        Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
 
     // Calc operates in pixels...
-    MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount,
+    Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
+    MouseEvent aEvent(aPos, nCount,
             MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
         pGridWindow->MouseButtonDown(aEvent);
+
+        if (nButtons & MOUSE_RIGHT)
+        {
+            const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true, nullptr);
+            SAL_DEBUG("before calling command.");
+            pGridWindow->Command(aCEvt);
+            SAL_DEBUG("After calling command.");
+        }
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         pGridWindow->MouseButtonUp(aEvent);

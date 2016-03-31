@@ -3311,6 +3311,13 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
         rEditWin.LogicMouseButtonDown(aEvent);
+        if (nButtons & MOUSE_RIGHT)
+        {
+            const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true, nullptr);
+            SAL_DEBUG("before calling command.");
+            pGridWindow->Command(aCEvt);
+            SAL_DEBUG("After calling command.");
+        }
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         rEditWin.LogicMouseButtonUp(aEvent);
