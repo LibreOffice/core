@@ -295,7 +295,7 @@ protected:
     virtual void    LoseFocus() override;
 
     virtual void    RequestHelp( const HelpEvent& rEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
+
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
@@ -317,6 +317,7 @@ public:
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
