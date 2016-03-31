@@ -739,7 +739,7 @@ SwFont::SwFont( const SwFont &rFont )
 
 SwFont::SwFont( const SwAttrSet* pAttrSet,
                 const IDocumentSettingAccess* pIDocumentSettingAccess )
-    : m_aSub { SwSubFont(), SwSubFont(), SwSubFont() }
+    : m_aSub()
 {
     m_nActual = SwFontScript::Latin;
     m_nToxCount = 0;
