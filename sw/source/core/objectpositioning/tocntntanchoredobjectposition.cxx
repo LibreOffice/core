@@ -248,7 +248,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             SwTwips nAlignAreaOffset;
             _GetVertAlignmentValues( *pOrientFrame, rPageAlignLayFrame,
                                      aVert.GetRelationOrient(),
-                                     nAlignAreaHeight, nAlignAreaOffset );
+                                     nAlignAreaHeight, nAlignAreaOffset, bWrapThrough );
 
             // determine relative vertical position
             SwTwips nRelPosY = nAlignAreaOffset;
@@ -380,16 +380,16 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             {
                 // #i11860# - use new method <_GetTopForObjPos>
                 // to get top of frame for object positioning.
-                const SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrame, fnRect, bVert );
+                const SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrame, fnRect, bVert, bWrapThrough );
                 nRelPosY += (*fnRect->fnYDiff)( nTopOfOrient,
-                                      _GetTopForObjPos( rAnchorTextFrame, fnRect, bVert ) );
+                                      _GetTopForObjPos( rAnchorTextFrame, fnRect, bVert, bWrapThrough ) );
             }
 
             // #i42124# - capture object inside vertical
             // layout environment.
             {
                 const SwTwips nTopOfAnch =
-                                _GetTopForObjPos( *pOrientFrame, fnRect, bVert );
+                                _GetTopForObjPos( *pOrientFrame, fnRect, bVert, bWrapThrough );
                 const SwLayoutFrame& rVertEnvironLayFrame =
                     aEnvOfObj.GetVertEnvironmentLayoutFrame(
                                             *(pOrientFrame->GetUpper()) );
@@ -486,7 +486,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             {
                 // #i11860# - use new method <_GetTopForObjPos>
                 // to get top of frame for object positioning.
-                SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrame, fnRect, bVert );
+                SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrame, fnRect, bVert, bWrapThrough );
                 if ( aVert.GetRelationOrient() == text::RelOrientation::CHAR )
                 {
                     nVertOffsetToFrameAnchorPos = (*fnRect->fnYDiff)(
@@ -509,7 +509,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 // #i11860# - use new method <_GetTopForObjPos>
                 // to get top of frame for object positioning.
                 const SwTwips nTopOfOrient =
-                        _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert );
+                        _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert, bWrapThrough );
                 // Increase <nRelPosY> by margin height,
                 // if position is vertical aligned to "paragraph text area"
                 if ( aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
@@ -562,7 +562,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 maOffsetToFrameAnchorPos.Y() = nVertOffsetToFrameAnchorPos;
             // #i11860# - use new method <_GetTopForObjPos>
             // to get top of frame for object positioning.
-            const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert );
+            const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert, bWrapThrough );
             if( nRelPosY <= 0 )
             {
                 // Allow negative position, but keep it
@@ -717,7 +717,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         // We need to calculate the part's absolute position, in order for
         // it to be put onto the right page and to be pulled into the
         // LayLeaf's PrtArea
-        const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert );
+        const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert, bWrapThrough );
         if( bVert )
         {
             // --> OD 2009-08-31 #monglianlayout#
@@ -979,7 +979,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
         // set calculated vertical position in order to determine correct
         // frame, the horizontal position is oriented at.
-        const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert );
+        const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert, bWrapThrough );
         if( bVert )
         {
             // --> OD 2009-08-31 #mongolianlayout#
@@ -1039,7 +1039,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     }
 
     // set absolute position at object
-    const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert );
+    const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrameForVertPos, fnRect, bVert, bWrapThrough );
     if( bVert )
     {
         // --> OD 2009-08-31 #mongolianlayout#

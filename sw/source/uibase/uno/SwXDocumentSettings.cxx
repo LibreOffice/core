@@ -86,6 +86,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_PRINTER_INDEPENDENT_LAYOUT,
     HANDLE_IS_LABEL_DOC,
     HANDLE_IS_ADD_FLY_OFFSET,
+    HANDLE_IS_ADD_VERTICAL_FLY_OFFSET,
     HANDLE_IS_ADD_EXTERNAL_LEADING,
     HANDLE_OLD_NUMBERING,
     HANDLE_OUTLINELEVEL_YIELDS_NUMBERING,
@@ -159,6 +160,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      cppu::UnoType<sal_Int16>::get(),             0},
         { OUString("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    cppu::UnoType<bool>::get(),           0},
         { OUString("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               cppu::UnoType<bool>::get(),           0},
+        { OUString("AddVerticalFrameOffsets"),    HANDLE_IS_ADD_VERTICAL_FLY_OFFSET,      cppu::UnoType<bool>::get(),           0},
         { OUString("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         cppu::UnoType<bool>::get(),           0},
         { OUString("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0},
         { OUString("OutlineLevelYieldsNumbering"), HANDLE_OUTLINELEVEL_YIELDS_NUMBERING, cppu::UnoType<bool>::get(),           0},
@@ -550,6 +552,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_FLY_OFFSETS, bTmp);
+        }
+        break;
+        case HANDLE_IS_ADD_VERTICAL_FLY_OFFSET:
+        {
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS, bTmp);
         }
         break;
         case HANDLE_IS_ADD_EXTERNAL_LEADING:
@@ -1018,6 +1026,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_IS_ADD_FLY_OFFSET:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_FLY_OFFSETS);
+        }
+        break;
+        case HANDLE_IS_ADD_VERTICAL_FLY_OFFSET:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
         }
         break;
         case HANDLE_IS_ADD_EXTERNAL_LEADING:

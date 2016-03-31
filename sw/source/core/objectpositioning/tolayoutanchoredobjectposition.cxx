@@ -81,10 +81,12 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
         // #i26791# - get vertical offset to frame anchor position.
         SwTwips nVertOffsetToFrameAnchorPos( 0L );
+        const SwFormatSurround& rSurround = rFrameFormat.GetSurround();
+        const bool bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
         SwTwips nRelPosY =
                 _GetVertRelPos( GetAnchorFrame(), GetAnchorFrame(), eVertOrient,
                                 aVert.GetRelationOrient(), aVert.GetPos(),
-                                rLR, rUL, nVertOffsetToFrameAnchorPos );
+                                rLR, rUL, bWrapThrough, nVertOffsetToFrameAnchorPos );
 
         // keep the calculated relative vertical position - needed for filters
         // (including the xml-filter)
