@@ -128,13 +128,15 @@ namespace objectpositioning
         */
         static SwTwips _GetTopForObjPos( const SwFrame& _rFrame,
                                   const SwRectFn& _fnRect,
-                                  const bool _bVert );
+                                  const bool _bVert,
+                                  bool bWrapThrough );
 
         void _GetVertAlignmentValues( const SwFrame& _rVertOrientFrame,
                                       const SwFrame& _rPageAlignLayFrame,
                                       const sal_Int16 _eRelOrient,
                                       SwTwips&      _orAlignAreaHeight,
-                                      SwTwips&      _orAlignAreaOffset ) const;
+                                      SwTwips&      _orAlignAreaOffset,
+                                      bool bWrapThrough ) const;
 
         // #i26791# - add output parameter <_roVertOffsetToFrameAnchorPos>
         SwTwips _GetVertRelPos( const SwFrame& _rVertOrientFrame,
@@ -144,6 +146,7 @@ namespace objectpositioning
                                 const SwTwips          _nVertPos,
                                 const SvxLRSpaceItem& _rLRSpacing,
                                 const SvxULSpaceItem& _rULSpacing,
+                                bool bWrapThrough,
                                 SwTwips& _roVertOffsetToFrameAnchorPos ) const;
 
         /** adjust calculated vertical in order to keep object inside

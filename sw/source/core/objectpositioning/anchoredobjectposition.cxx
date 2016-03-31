@@ -156,7 +156,8 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
 */
 SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrame& _rFrame,
                                                     const SwRectFn& _fnRect,
-                                                    const bool _bVert )
+                                                    const bool _bVert,
+                                                    bool bWrapThrough )
 {
     SwTwips nTopOfFrameForObjPos = (_rFrame.Frame().*_fnRect->fnGetTop)();
 
@@ -172,6 +173,11 @@ SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrame& _rFrame,
         {
             nTopOfFrameForObjPos +=
                 rTextFrame.GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+
+            // Get the offset between the top of the text frame and the top of
+            // the first line inside the frame that has more than just fly
+            // portions.
+            nTopOfFrameForObjPos += rTextFrame.GetBaseVertOffsetForFly(!bWrapThrough);
         }
     }
 
@@ -183,13 +189,14 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
                                         const SwFrame& _rPageAlignLayFrame,
                                         const sal_Int16 _eRelOrient,
                                         SwTwips&      _orAlignAreaHeight,
-                                        SwTwips&      _orAlignAreaOffset ) const
+                                        SwTwips&      _orAlignAreaOffset,
+                                        bool bWrapThrough ) const
 {
     SwTwips nHeight = 0;
     SwTwips nOffset = 0;
     SWRECTFN( (&_rVertOrientFrame) )
     // #i11860# - top of <_rVertOrientFrame> for object positioning
-    const SwTwips nVertOrientTop = _GetTopForObjPos( _rVertOrientFrame, fnRect, bVert );
+    const SwTwips nVertOrientTop = _GetTopForObjPos( _rVertOrientFrame, fnRect, bVert, bWrapThrough );
     // #i11860# - upper space amount of <_rVertOrientFrame> considered
     // for previous frame
     const SwTwips nVertOrientUpperSpaceForPrevFrameAndPageGrid =
@@ -320,6 +327,7 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
                                     const SwTwips          _nVertPos,
                                     const SvxLRSpaceItem& _rLRSpacing,
                                     const SvxULSpaceItem& _rULSpacing,
+                                    bool bWrapThrough,
                                     SwTwips& _roVertOffsetToFrameAnchorPos ) const
 {
     SwTwips nRelPosY = 0;
@@ -328,7 +336,7 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
     SwTwips nAlignAreaHeight;
     SwTwips nAlignAreaOffset;
     _GetVertAlignmentValues( _rVertOrientFrame, _rPageAlignLayFrame,
-                             _eRelOrient, nAlignAreaHeight, nAlignAreaOffset );
+                             _eRelOrient, nAlignAreaHeight, nAlignAreaOffset, bWrapThrough );
 
     nRelPosY = nAlignAreaOffset;
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );

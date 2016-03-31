@@ -194,6 +194,7 @@ public:
     void testTdf88453();
     void testTdf88453Table();
     void testClassificationPaste();
+    void testTdf98987();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -290,6 +291,7 @@ public:
     CPPUNIT_TEST(testTdf88453);
     CPPUNIT_TEST(testTdf88453Table);
     CPPUNIT_TEST(testClassificationPaste);
+    CPPUNIT_TEST(testTdf98987);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3571,6 +3573,23 @@ void SwUiWriterTest::testClassificationPaste()
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow), checkShells(pSourceShell, pDestinationShell));
 
     xSourceComponent->dispose();
+}
+
+void SwUiWriterTest::testTdf98987()
+{
+    createDoc("tdf98987.docx");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/sdrObject", "name", "Rectangle 1");
+    sal_Int32 nRectangle1 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32();
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
+    sal_Int32 nRectangle2 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
+    CPPUNIT_ASSERT(nRectangle1 < nRectangle2);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/sdrObject", "name", "Rectangle 3");
+    sal_Int32 nRectangle3 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32();
+    // This failed: the 3rd rectangle had a smaller "top" value than the 2nd one, it even overlapped with the 1st one.
+    CPPUNIT_ASSERT(nRectangle2 < nRectangle3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

@@ -354,6 +354,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mnThisLines( 0 )
     , mnFlyAnchorOfst( 0 )
     , mnFlyAnchorOfstNoWrap( 0 )
+    , mnFlyAnchorVertOfstNoWrap( 0 )
     , mnFootnoteLine( 0 )
     , mnHeightOfLastLine( 0 )
     , mnAdditionalFirstLineOffset( 0 )
@@ -2647,6 +2648,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     // Get first 'real' line and adjust position and height of line rectangle.
     // Correct behaviour if no 'real' line exists
     // (empty paragraph with and without a dummy portion)
+    SwTwips nFlyAnchorVertOfstNoWrap = 0;
     {
         SwTwips nTop = (aFlyRect.*fnRect->fnGetTop)();
         const SwLineLayout* pLay = GetPara();
@@ -2654,6 +2656,7 @@ void SwTextFrame::CalcBaseOfstForFly()
         while( pLay && pLay->IsDummy() && pLay->GetNext() )
         {
             nTop += pLay->Height();
+            nFlyAnchorVertOfstNoWrap += pLay->Height();
             pLay = pLay->GetNext();
         }
         if ( pLay )
@@ -2680,6 +2683,16 @@ void SwTextFrame::CalcBaseOfstForFly()
 
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
+
+    if (!pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
+        return;
+
+    mnFlyAnchorVertOfstNoWrap = nFlyAnchorVertOfstNoWrap;
+}
+
+SwTwips SwTextFrame::GetBaseVertOffsetForFly(bool bIgnoreFlysAnchoredAtThisFrame) const
+{
+    return bIgnoreFlysAnchoredAtThisFrame ? 0 : mnFlyAnchorVertOfstNoWrap;
 }
 
 /**
