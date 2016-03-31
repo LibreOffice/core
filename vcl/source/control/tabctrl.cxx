@@ -2181,4 +2181,16 @@ void TabControl::queue_resize(StateChangedType eReason)
     Window::queue_resize(eReason);
 }
 
+std::vector<sal_uInt16> TabControl::GetPageIDs() const
+{
+    std::vector<sal_uInt16> aIDs;
+    for (auto itr = mpTabCtrlData->maItemList.begin(), itrEnd = mpTabCtrlData->maItemList.end();
+            itr != itrEnd; ++itr)
+    {
+        aIDs.push_back(itr->mnId);
+    }
+
+    return aIDs;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

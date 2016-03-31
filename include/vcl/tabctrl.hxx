@@ -189,6 +189,8 @@ public:
         mbLayoutDirty = true;
     }
 
+    std::vector<sal_uInt16> GetPageIDs() const;
+
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
 
