@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_3f99ad6f",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T14:49:11Z",
+      "side": 1,
+      "message": "if (!m_pParamEditDlg-\u003eExecute())\n    return;\n\nUsing early return helps to reduce indentation.",
+      "revId": "ea726d5d790c834c8f36311160204ae004ee13bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_1f9e6956",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T14:49:11Z",
+      "side": 1,
+      "message": "why not use !\u003d instead of !(\u003d\u003d)",
+      "revId": "ea726d5d790c834c8f36311160204ae004ee13bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7fa3259f",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T14:49:11Z",
+      "side": 1,
+      "message": "Better do the strip() before the comparison.",
+      "revId": "ea726d5d790c834c8f36311160204ae004ee13bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ffb555d0",
+        "filename": "cui/source/options/optjava.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T14:49:11Z",
+      "side": 1,
+      "message": "Maybe better use the same text as before: \"Edit Parameter\"",
+      "revId": "ea726d5d790c834c8f36311160204ae004ee13bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

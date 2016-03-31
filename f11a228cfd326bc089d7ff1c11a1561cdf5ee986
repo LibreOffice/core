@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_bfad9d8a",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T14:49:11Z",
+      "side": 0,
+      "message": "You can delete this UI file too now",
+      "revId": "f11a228cfd326bc089d7ff1c11a1561cdf5ee986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
