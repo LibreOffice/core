@@ -1193,7 +1193,7 @@ namespace
 
 namespace
 {
-    static void lcl_rebaseScriptStorage_throw( const Reference< XStorageBasedLibraryContainer >& _rxContainer,
+    void lcl_rebaseScriptStorage_throw( const Reference< XStorageBasedLibraryContainer >& _rxContainer,
         const Reference< XStorage >& _rxNewRootStorage )
     {
         if ( _rxContainer.is() )
