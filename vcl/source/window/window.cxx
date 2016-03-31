@@ -81,6 +81,140 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
+
+#if OSL_DEBUG_LEVEL > 0
+
+namespace
+{
+     OString lcl_createWindowInfo(const vcl::Window* pWindow)
+     {
+         // skip border windows, they do not carry information that
+         // would help with diagnosing the problem
+         const vcl::Window* pTempWin( pWindow );
+         while ( pTempWin && pTempWin->GetType() == WINDOW_BORDERWINDOW ) {
+             pTempWin = pTempWin->GetWindow( GetWindowType::FirstChild );
+         }
+         // check if pTempWin is not null, otherwise use the
+         // original address
+         if ( pTempWin ) {
+             pWindow = pTempWin;
+         }
+
+         OStringBuffer aStr;
+         aStr.append(' ');
+         aStr.append(typeid( *pWindow ).name());
+         /*aStr.append("(");*/
+         /*aStr.append(
+                 OUStringToOString(
+                     pWindow->GetText(),
+                     RTL_TEXTENCODING_UTF8
+                     )
+                 );*/
+         /*aStr.append(")");*/
+         return aStr.makeStringAndClear();
+     }
+}
+
+
+namespace vcl {
+
+static OUString StringFromWindowType( WindowType nType )
+{
+    OUString str;
+    switch ( nType )
+    {
+        case WINDOW_MESSBOX: str = "MESSBOX"; break;
+        case WINDOW_INFOBOX: str = "INFOBOX"; break;
+        case WINDOW_WARNINGBOX: str = "WARNINGBOX"; break;
+        case WINDOW_ERRORBOX: str = "ERRORBOX"; break;
+        case WINDOW_QUERYBOX: str = "QUERYBOX"; break;
+        case WINDOW_WINDOW: str = "WINDOW"; break;
+        case WINDOW_SYSWINDOW: str = "SYSWINDOW"; break;
+        case WINDOW_WORKWINDOW: str = "WORKWINDOW"; break;
+        case WINDOW_CONTAINER: str = "CONTAINER"; break;
+        case WINDOW_FLOATINGWINDOW: str = "FLOATINGWINDOW"; break;
+        case WINDOW_DIALOG: str = "DIALOG"; break;
+        case WINDOW_MODELESSDIALOG: str = "MODELESSDIALOG"; break;
+        case WINDOW_MODALDIALOG: str = "MODALDIALOG"; break;
+        case WINDOW_SYSTEMDIALOG: str = "SYSTEMDIALOG"; break;
+        case WINDOW_PATHDIALOG: str = "PATHDIALOG"; break;
+        case WINDOW_FILEDIALOG: str = "FILEDIALOG"; break;
+        case WINDOW_PRINTERSETUPDIALOG: str = "PRINTERSETUPDIALOG"; break;
+        case WINDOW_PRINTDIALOG: str = "PRINTDIALOG"; break;
+        case WINDOW_COLORDIALOG: str = "COLORDIALOG"; break;
+        case WINDOW_FONTDIALOG: str = "FONTDIALOG"; break;
+        case WINDOW_CONTROL: str = "CONTROL"; break;
+        case WINDOW_BUTTON: str = "BUTTON"; break;
+        case WINDOW_PUSHBUTTON: str = "PUSHBUTTON"; break;
+        case WINDOW_OKBUTTON: str = "OKBUTTON"; break;
+        case WINDOW_CANCELBUTTON: str = "CANCELBUTTON"; break;
+        case WINDOW_HELPBUTTON: str = "HELPBUTTON"; break;
+        case WINDOW_IMAGEBUTTON: str = "IMAGEBUTTON"; break;
+        case WINDOW_MENUBUTTON: str = "MENUBUTTON"; break;
+        case WINDOW_MOREBUTTON: str = "MOREBUTTON"; break;
+        case WINDOW_SPINBUTTON: str = "SPINBUTTON"; break;
+        case WINDOW_RADIOBUTTON: str = "RADIOBUTTON"; break;
+        case WINDOW_IMAGERADIOBUTTON: str = "IMAGERADIOBUTTON"; break;
+        case WINDOW_CHECKBOX: str = "CHECKBOX"; break;
+        case WINDOW_TRISTATEBOX: str = "TRISTATEBOX"; break;
+        case WINDOW_EDIT: str = "EDIT"; break;
+        case WINDOW_MULTILINEEDIT: str = "MULTILINEEDIT"; break;
+        case WINDOW_COMBOBOX: str = "COMBOBOX"; break;
+        case WINDOW_LISTBOX: str = "LISTBOX"; break;
+        case WINDOW_MULTILISTBOX: str = "MULTILISTBOX"; break;
+        case WINDOW_FIXEDTEXT: str = "FIXEDTEXT"; break;
+        case WINDOW_FIXEDLINE: str = "FIXEDLINE"; break;
+        case WINDOW_FIXEDBITMAP: str = "FIXEDBITMAP"; break;
+        case WINDOW_FIXEDIMAGE: str = "FIXEDIMAGE"; break;
+        case WINDOW_GROUPBOX: str = "GROUPBOX"; break;
+        case WINDOW_SCROLLBAR: str = "SCROLLBAR"; break;
+        case WINDOW_SCROLLBARBOX: str = "SCROLLBARBOX"; break;
+        case WINDOW_SPLITTER: str = "SPLITTER"; break;
+        case WINDOW_SPLITWINDOW: str = "SPLITWINDOW"; break;
+        case WINDOW_SPINFIELD: str = "SPINFIELD"; break;
+        case WINDOW_PATTERNFIELD: str = "PATTERNFIELD"; break;
+        case WINDOW_NUMERICFIELD: str = "NUMERICFIELD"; break;
+        case WINDOW_METRICFIELD: str = "METRICFIELD"; break;
+        case WINDOW_CURRENCYFIELD: str = "CURRENCYFIELD"; break;
+        case WINDOW_DATEFIELD: str = "DATEFIELD"; break;
+        case WINDOW_TIMEFIELD: str = "TIMEFIELD"; break;
+        case WINDOW_PATTERNBOX: str = "PATTERNBOX"; break;
+        case WINDOW_NUMERICBOX: str = "NUMERICBOX"; break;
+        case WINDOW_METRICBOX: str = "METRICBOX"; break;
+        case WINDOW_CURRENCYBOX: str = "CURRENCYBOX"; break;
+        case WINDOW_DATEBOX: str = "DATEBOX"; break;
+        case WINDOW_TIMEBOX: str = "TIMEBOX"; break;
+        case WINDOW_LONGCURRENCYFIELD: str = "LONGCURRENCYFIELD"; break;
+        case WINDOW_LONGCURRENCYBOX: str = "LONGCURRENCYBOX"; break;
+        case WINDOW_SCROLLWINDOW: str = "SCROLLWINDOW"; break;
+        case WINDOW_TOOLBOX: str = "TOOLBOX"; break;
+        case WINDOW_DOCKINGWINDOW: str = "DOCKINGWINDOW"; break;
+        case WINDOW_STATUSBAR: str = "STATUSBAR"; break;
+        case WINDOW_TABPAGE: str = "TABPAGE"; break;
+        case WINDOW_TABCONTROL: str = "TABCONTROL"; break;
+        case WINDOW_TABDIALOG: str = "TABDIALOG"; break;
+        case WINDOW_BORDERWINDOW: str = "BORDERWINDOW"; break;
+        case WINDOW_BUTTONDIALOG: str = "BUTTONDIALOG"; break;
+        case WINDOW_SYSTEMCHILDWINDOW: str = "SYSTEMCHILDWINDOW"; break;
+        case WINDOW_SLIDER: str = "SLIDER"; break;
+        case WINDOW_MENUBARWINDOW: str = "MENUBARWINDOW"; break;
+        case WINDOW_TREELISTBOX: str = "TREELISTBOX"; break;
+        case WINDOW_HELPTEXTWINDOW: str = "HELPTEXTWINDOW"; break;
+        case WINDOW_INTROWINDOW: str = "INTROWINDOW"; break;
+        case WINDOW_LISTBOXWINDOW: str = "LISTBOXWINDOW"; break;
+        case WINDOW_DOCKINGAREA: str = "DOCKINGAREA"; break;
+        case WINDOW_RULER: str = "RULER"; break;
+        case WINDOW_CALCINPUTLINE: str = "CALCINPUTLINE"; break;
+        default: str = "unknown WindowType 0x" + OUString::number( nType, 16 ); break;
+    }
+    return str;
+}
+
+}
+
+#endif
+
+
 namespace vcl {
 
 Window::Window( WindowType nType ) :
@@ -103,39 +237,6 @@ Window::Window( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle, nullptr );
 }
 
-#if OSL_DEBUG_LEVEL > 0
-namespace
-{
-     OString lcl_createWindowInfo(const vcl::Window* pWindow)
-     {
-         // skip border windows, they do not carry information that
-         // would help with diagnosing the problem
-         const vcl::Window* pTempWin( pWindow );
-         while ( pTempWin && pTempWin->GetType() == WINDOW_BORDERWINDOW ) {
-             pTempWin = pTempWin->GetWindow( GetWindowType::FirstChild );
-         }
-         // check if pTempWin is not null, otherwise use the
-         // original address
-         if ( pTempWin ) {
-             pWindow = pTempWin;
-         }
-
-         OStringBuffer aErrorString;
-         aErrorString.append(' ');
-         aErrorString.append(typeid( *pWindow ).name());
-         aErrorString.append("(");
-         aErrorString.append(
-                 OUStringToOString(
-                     pWindow->GetText(),
-                     RTL_TEXTENCODING_UTF8
-                     )
-                 );
-         aErrorString.append(")");
-         return aErrorString.makeStringAndClear();
-     }
-}
-#endif
-
 bool Window::IsDisposed() const
 {
     return !mpWindowImpl;
@@ -144,10 +245,10 @@ bool Window::IsDisposed() const
 void Window::dispose()
 {
     assert( mpWindowImpl );
-    assert( !mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
+    assert( !mpWindowImpl->mbInDispose ); // already in dispose
     assert( (!mpWindowImpl->mpParent ||
             !mpWindowImpl->mpParent->IsDisposed()) &&
-            "vcl::Window child should have its parent disposed first" );
+            "going to try to dispose child with non disposed parent" );
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
@@ -255,85 +356,69 @@ void Window::dispose()
 #if OSL_DEBUG_LEVEL > 0
     if ( true ) // always perform these tests in debug builds
     {
-        OStringBuffer aErrorStr;
-        bool        bError = false;
-        vcl::Window*     pTempWin;
-
         if ( mpWindowImpl->mpFirstChild )
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") with live children destroyed: ");
-            pTempWin = mpWindowImpl->mpFirstChild;
+            SAL_WARN( "vcl.window", "destroyed Window ( " << lcl_createWindowInfo( this ) << " ) with live children :" );
+            vcl::Window* pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
-                aTempStr.append(lcl_createWindowInfo(pTempWin));
+                SAL_WARN( "vcl.window", "   live child " << lcl_createWindowInfo( pTempWin ) );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            SAL_WARN( "vcl.window", "throwing a RuntimeException" );
+            throw css::uno::RuntimeException( "destroyed Window with live children" );
         }
 
-        if (mpWindowImpl->mpFrameData != nullptr)
+        if ( mpWindowImpl->mpFrameData )
         {
-            pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
+            OStringBuffer aWindowList;
+            bool foundSystemWindows = false;
+            vcl::Window* pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
             while ( pTempWin )
             {
                 if ( ImplIsRealParentPath( pTempWin ) )
                 {
-                    bError = true;
-                    aErrorStr.append(lcl_createWindowInfo(pTempWin));
+                    foundSystemWindows = true;
+                    aWindowList.append( lcl_createWindowInfo( pTempWin ) );
                 }
                 pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
             }
-            if ( bError )
+            if ( foundSystemWindows )
             {
-                OStringBuffer aTempStr;
-                aTempStr.append("Window (");
-                aTempStr.append(lcl_createWindowInfo(this));
-                aTempStr.append(") with live SystemWindows destroyed: ");
-                aTempStr.append(aErrorStr.toString());
-                OSL_FAIL(aTempStr.getStr());
-                // abort in debug builds, must be fixed!
-                Application::Abort(OStringToOUString(
-                                     aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+                SAL_WARN( "vcl.window", "destroyed Window ( " << lcl_createWindowInfo( this ) << " ) with live SystemWindows : " << aWindowList.toString() );
+                SAL_WARN( "vcl.window", "throwing a RuntimeException" );
+                throw css::uno::RuntimeException( "destroyed Window with live SystemWindows" );
             }
         }
 
-        bError = false;
-        pTempWin = pSVData->maWinData.mpFirstFrame;
+        bool foundSystemWindows = false;
+        vcl::Window* pTempWin = pSVData->maWinData.mpFirstFrame;
+        OStringBuffer aWindowList;
         while ( pTempWin )
         {
             if ( ImplIsRealParentPath( pTempWin ) )
             {
-                bError = true;
-                aErrorStr.append(lcl_createWindowInfo(pTempWin));
+                foundSystemWindows = true;
+                aWindowList.append( lcl_createWindowInfo( pTempWin ) );
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
-        if ( bError )
+        if ( foundSystemWindows )
         {
-            OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") with live SystemWindows destroyed: ");
-            aTempStr.append(aErrorStr.toString());
-            OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            SAL_WARN( "vcl.window", "destroyed Window ( " << lcl_createWindowInfo( this ) << " ) with live SystemWindows : " << aWindowList.toString() );
+            throw css::uno::RuntimeException( "destroyed Window with live SystemWindows" );
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") with live SystemWindows destroyed: ");
-            pTempWin = mpWindowImpl->mpFirstOverlap;
-            while ( pTempWin )
+            SAL_WARN( "vcl.window", "destroyed Window ( " << lcl_createWindowInfo( this ) << " ) with live SystemWindows :" );
+            vcl::Window* tempWin = mpWindowImpl->mpFirstOverlap;
+            while ( tempWin )
             {
-                aTempStr.append(lcl_createWindowInfo(pTempWin));
+                SAL_WARN( "vcl.window", "   live SystemWindow " << lcl_createWindowInfo( tempWin ) );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            throw css::uno::RuntimeException( "destroyed Window with live SystemWindows" );
         }
 
         vcl::Window* pMyParent = GetParent();
@@ -349,11 +434,8 @@ void Window::dispose()
         }
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") still in TaskPanelList!");
-            OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            SAL_WARN( "vcl.window", "Window ( " << lcl_createWindowInfo(this) << " ) is still in TaskPaneList");
+            throw css::uno::RuntimeException( "Window is still in TaskPanelList" );
         }
     }
 #endif
@@ -377,10 +459,9 @@ void Window::dispose()
         }
         else
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") not found in TaskPanelList!");
-            OSL_FAIL( aTempStr.getStr() );
+    #if OSL_DEBUG_LEVEL > 0
+            SAL_WARN( "vcl.window", "Window ( " << lcl_createWindowInfo( this ) << " ) not found in TaskPaneList" );
+    #endif
         }
     }
 
@@ -421,9 +502,9 @@ void Window::dispose()
         OStringBuffer aTempStr("Window (");
         aTempStr.append(OUStringToOString(GetText(),
             RTL_TEXTENCODING_UTF8)).
-                append(") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !");
+                append(") with focused child window destroyed * FIX ME * THIS WILL LEAD TO CRASHES");
         OSL_FAIL( aTempStr.getStr() );
-        Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in debug build version, this must be fixed!
+        Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));  // FIXME abort in debug build version
 #endif
     }
 
@@ -737,8 +818,11 @@ WindowImpl::WindowImpl( WindowType nType )
     mbFill                              = true;
     mbSecondary                         = false;
     mbNonHomogeneous                    = false;
+
     static bool bDoubleBuffer = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE");
     mbDoubleBufferingRequested = bDoubleBuffer; // when we are not sure, assume it cannot do double-buffering via RenderContext
+
+    ///SAL_INFO( "vcl.window", "created WindowImpl with WindowType " << vcl::StringFromWindowType( nType ) );
 }
 
 WindowImpl::~WindowImpl()

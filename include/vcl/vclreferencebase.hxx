@@ -49,7 +49,7 @@ private:
     VclReferenceBase(const VclReferenceBase&) = delete;
     VclReferenceBase& operator=(const VclReferenceBase&) = delete;
 
-    bool                        mbDisposed : 1;
+    bool                        mbDisposed;
 
 protected:
                                 VclReferenceBase();
@@ -62,6 +62,7 @@ protected:
 public:
     void                        disposeOnce();
     bool                        isDisposed() const { return mbDisposed; }
+    void                        setDisposed(bool dp) { mbDisposed = dp; }
 
 };
 #endif

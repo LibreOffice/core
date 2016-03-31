@@ -144,6 +144,25 @@ OutputDevice::~OutputDevice()
     disposeOnce();
 }
 
+void OutputDevice::disposeOnce()
+{
+    if ( isDisposed() )
+        return;
+    setDisposed( true );
+
+    // catch badness where our OutputDevice sub-class was not
+    // wrapped safely in a VclPtr cosily.
+    // FIXME: as/when we make our destructors all protected,
+    // we should introduce this assert:
+    //    assert( mnRefCnt > 0 );
+
+    try {
+        dispose();
+    }
+    catch ( ... )
+    {   SAL_WARN( "vcl.gdi", "exception caught while disposing" );   }
+}
+
 void OutputDevice::dispose()
 {
     if ( GetUnoGraphicsList() )
@@ -163,10 +182,9 @@ void OutputDevice::dispose()
     delete mpOutDevData;
     mpOutDevData = nullptr;
 
-    // for some reason, we haven't removed state from the stack properly
     if ( !mpOutDevStateStack->empty() )
     {
-        SAL_WARN( "vcl.gdi", "OutputDevice::~OutputDevice(): OutputDevice::Push() calls != OutputDevice::Pop() calls" );
+        SAL_WARN( "vcl.gdi", "for some reason, output device state stack is not empty" );
         while ( !mpOutDevStateStack->empty() )
         {
             mpOutDevStateStack->pop_back();

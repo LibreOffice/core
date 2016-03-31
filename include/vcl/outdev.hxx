@@ -422,6 +422,8 @@ protected:
 
 public:
 
+    void                        disposeOnce();
+
     /** Get the graphic context that the output device uses to draw on.
 
      If no graphics device exists, then initialize it.
