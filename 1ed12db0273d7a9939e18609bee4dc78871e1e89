@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_1feca9c6",
+        "filename": "sc/source/core/tool/charthelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-31T15:18:33Z",
+      "side": 1,
+      "message": "I\u0027d rather use reserve() here.",
+      "range": {
+        "startLine": 217,
+        "startChar": 12,
+        "endLine": 217,
+        "endChar": 18
+      },
+      "revId": "1ed12db0273d7a9939e18609bee4dc78871e1e89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7fd165fb",
+        "filename": "sc/source/core/tool/charthelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-31T15:18:33Z",
+      "side": 1,
+      "message": "And given that the sequence has label/value pairs this code was odd anyway.. so this should be something like\n\n if (xLabel.is())\n     rRanges.push_back( xLabel-\u003egetSourceRangeRepresentation());\n else\n     rRanges.push_back( OUString());\n if (xValues.is())\n     rRanges.push_back( xValues-\u003egetSourceRangeRepresentation();\n else\n     rRanges.push_back( OUString());",
+      "revId": "1ed12db0273d7a9939e18609bee4dc78871e1e89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5fce215b",
+        "filename": "sc/source/core/tool/charthelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-03-31T15:18:33Z",
+      "side": 1,
+      "message": "So then this resize() is moot.",
+      "revId": "1ed12db0273d7a9939e18609bee4dc78871e1e89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
