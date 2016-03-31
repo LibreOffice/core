@@ -111,9 +111,9 @@ InitDialog(HWND hDlg)
   WCHAR szwInfo[MAX_TEXT_LEN];
 
   MultiByteToWideChar(CP_UTF8, 0, sUIStrings.title, -1, szwTitle,
-                      SAL_N_ELEMENTS(szwTitle));
+                      sizeof(szwTitle)/sizeof(szwTitle[0]));
   MultiByteToWideChar(CP_UTF8, 0, sUIStrings.info, -1, szwInfo,
-                      SAL_N_ELEMENTS(szwInfo));
+                      sizeof(szwInfo)/sizeof(szwInfo[0]));
 
   SetWindowTextW(hDlg, szwTitle);
   SetWindowTextW(GetDlgItem(hDlg, IDC_INFO), szwInfo);

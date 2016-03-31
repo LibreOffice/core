@@ -191,7 +191,7 @@ BOOL
 UACHelper::DisablePrivileges(HANDLE token)
 {
   static const size_t PrivsToDisableSize =
-    SAL_N_ELEMENTS(UACHelper::PrivsToDisable);
+    sizeof(UACHelper::PrivsToDisable) / sizeof(UACHelper::PrivsToDisable[0]);
 
   return DisableUnneededPrivileges(token, UACHelper::PrivsToDisable,
                                    PrivsToDisableSize);
