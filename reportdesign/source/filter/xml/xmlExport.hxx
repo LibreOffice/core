@@ -59,6 +59,10 @@ using namespace css::xml::sax;
 
 #define PROGRESS_BAR_STEP 20
 
+#ifndef DEFAULT_LINE_WIDTH
+#define DEFAULT_LINE_WIDTH 2
+#endif
+
 class ORptExport : public SvXMLExport
 {
 public:

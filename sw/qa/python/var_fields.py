@@ -4,8 +4,6 @@ from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 
 class TestVarFields(unittest.TestCase):
-    _uno = None
-    _xDoc = None
 
     @classmethod
     def setUpClass(cls):
