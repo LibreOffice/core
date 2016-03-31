@@ -634,7 +634,7 @@ uno_DefaultEnvironment::~uno_DefaultEnvironment()
 }
 
 
-static void writeLine(
+void writeLine(
     void * stream, const sal_Char * pLine, const sal_Char * pFilter )
 {
     if (pFilter && *pFilter)
@@ -678,7 +678,7 @@ static void writeLine(
 }
 
 
-static void writeLine(
+void writeLine(
     void * stream, const OUString & rLine, const sal_Char * pFilter )
 {
     ::rtl::OString aLine( ::rtl::OUStringToOString(
@@ -1022,7 +1022,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     }
 }
 
-static bool loadEnv(OUString const  & cLibStem,
+bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv)
 {
 #ifdef DISABLE_DYNLOADING
