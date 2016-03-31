@@ -1502,7 +1502,7 @@ OUString SwCalc::GetDBName(const OUString& rName)
 
 namespace
 {
-    static bool lcl_Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
+    bool lcl_Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
                                 double& rVal,
                                 const LocaleDataWrapper* const pLclData )
     {

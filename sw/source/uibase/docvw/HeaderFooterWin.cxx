@@ -60,7 +60,7 @@ using namespace drawinglayer::attribute;
 
 namespace
 {
-    static basegfx::BColor lcl_GetFillColor(const basegfx::BColor& rLineColor)
+    basegfx::BColor lcl_GetFillColor(const basegfx::BColor& rLineColor)
     {
         basegfx::BColor aHslLine = basegfx::tools::rgb2hsl(rLineColor);
         double nLuminance = aHslLine.getZ() * 2.5;
@@ -72,7 +72,7 @@ namespace
         return basegfx::tools::hsl2rgb( aHslLine );
     }
 
-    static basegfx::BColor lcl_GetLighterGradientColor(const basegfx::BColor& rDarkColor)
+    basegfx::BColor lcl_GetLighterGradientColor(const basegfx::BColor& rDarkColor)
     {
         basegfx::BColor aHslDark = basegfx::tools::rgb2hsl(rDarkColor);
         double nLuminance = aHslDark.getZ() * 255 + 20;
@@ -80,7 +80,7 @@ namespace
         return basegfx::tools::hsl2rgb( aHslDark );
     }
 
-    static B2DPolygon lcl_GetPolygon( const Rectangle& rRect, bool bHeader )
+    B2DPolygon lcl_GetPolygon( const Rectangle& rRect, bool bHeader )
     {
         const double nRadius = 3;
         const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);

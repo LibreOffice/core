@@ -98,7 +98,7 @@ namespace
         PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
     };
 
-    static long lcl_GetRightMargin( SwDoc& rDoc )
+    long lcl_GetRightMargin( SwDoc& rDoc )
     {
         // Make sure that the printer settings are taken over to the standard
         // page style
@@ -110,7 +110,7 @@ namespace
         return nWidth - nLeft - nRight;
     }
 
-    static void lcl_SetDfltFont( DefaultFontType nFntType, SfxItemSet& rSet )
+    void lcl_SetDfltFont( DefaultFontType nFntType, SfxItemSet& rSet )
     {
         static struct {
             sal_uInt16 nResLngId;
@@ -133,7 +133,7 @@ namespace
         }
     }
 
-    static void lcl_SetDfltFont( DefaultFontType nLatinFntType, DefaultFontType nCJKFntType,
+    void lcl_SetDfltFont( DefaultFontType nLatinFntType, DefaultFontType nCJKFntType,
                             DefaultFontType nCTLFntType, SfxItemSet& rSet )
     {
         static struct {
@@ -162,7 +162,7 @@ namespace
         }
     }
 
-    static void lcl_SetHeadline( SwDoc* pDoc, SwTextFormatColl* pColl,
+    void lcl_SetHeadline( SwDoc* pDoc, SwTextFormatColl* pColl,
                             SfxItemSet& rSet,
                             sal_uInt16 nOutLvlBits, sal_uInt8 nLevel, bool bItalic )
     {
@@ -220,7 +220,7 @@ namespace
         pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
     }
 
-    static void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
+    void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
                             bool bHeader, bool bTab )
     {
         SvxLRSpaceItem aLR( RES_LR_SPACE );
@@ -244,7 +244,7 @@ namespace
         }
     }
 
-    static void lcl_SetNumBul( SwDoc* pDoc, SwTextFormatColl* pColl,
+    void lcl_SetNumBul( SwDoc* pDoc, SwTextFormatColl* pColl,
                             SfxItemSet& rSet,
                             sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                             SwTwips nUpper, SwTwips nLower )
@@ -263,7 +263,7 @@ namespace
             pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nNxt ));
     }
 
-    static void lcl_PutStdPageSizeIntoItemSet( SwDoc* pDoc, SfxItemSet& rSet )
+    void lcl_PutStdPageSizeIntoItemSet( SwDoc* pDoc, SfxItemSet& rSet )
     {
         SwPageDesc* pStdPgDsc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
         SwFormatFrameSize aFrameSz( pStdPgDsc->GetMaster().GetFrameSize() );

@@ -312,7 +312,7 @@ const struct SwTableEntry NumRuleProgNameTable [] =
 };
 #undef ENTRY
 
-static ::std::vector<OUString>*
+::std::vector<OUString>*
 lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
 {
     ::std::vector<OUString> *const pNameArray = new ::std::vector<OUString>;
@@ -326,7 +326,7 @@ lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
     return pNameArray;
 }
 
-static ::std::vector<OUString>*
+::std::vector<OUString>*
 lcl_NewProgNameArray(const SwTableEntry *pTable, sal_uInt8 const nCount)
 {
     ::std::vector<OUString> *const pProgNameArray = new ::std::vector<OUString>;
@@ -340,7 +340,7 @@ lcl_NewProgNameArray(const SwTableEntry *pTable, sal_uInt8 const nCount)
     return pProgNameArray;
 }
 
-static OUString
+OUString
 lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
 {
     const ::std::vector<OUString>& rExtraArr = bIsUIName
@@ -367,7 +367,7 @@ lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
     return rExtraName;
 }
 
-static bool lcl_SuffixIsUser(const OUString & rString)
+bool lcl_SuffixIsUser(const OUString & rString)
 {
     const sal_Unicode *pChar = rString.getStr();
     sal_Int32 nLen = rString.getLength();
@@ -384,7 +384,7 @@ static bool lcl_SuffixIsUser(const OUString & rString)
     return bRet;
 }
 
-static void lcl_CheckSuffixAndDelete(OUString & rString)
+void lcl_CheckSuffixAndDelete(OUString & rString)
 {
     if (lcl_SuffixIsUser(rString))
     {
@@ -394,7 +394,7 @@ static void lcl_CheckSuffixAndDelete(OUString & rString)
 
 typedef std::tuple<sal_uInt16, sal_uInt16, const std::vector<OUString>& (*)() > NameArrayIndexTuple_t;
 
-static sal_uInt16 lcl_AccumulateIndexCount( sal_uInt16 nSum, const NameArrayIndexTuple_t& tuple ){
+sal_uInt16 lcl_AccumulateIndexCount( sal_uInt16 nSum, const NameArrayIndexTuple_t& tuple ){
     // Return running sum + (index end) - (index start)
     return nSum + std::get<1>( tuple ) - std::get<0>( tuple );
 }

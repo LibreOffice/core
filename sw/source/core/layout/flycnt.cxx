@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-static inline SwTwips lcl_GetTopForObjPos(const SwContentFrame* pCnt, const bool bVert, const bool bVertL2R)
+inline SwTwips lcl_GetTopForObjPos(const SwContentFrame* pCnt, const bool bVert, const bool bVertL2R)
 {
     if ( bVert )
     {

@@ -179,7 +179,7 @@ OString lclConvToHex(sal_uInt16 nHex)
     return OString(aNToABuf, 2);
 }
 
-static OString lclGetCSS1Color(const Color& rColor)
+OString lclGetCSS1Color(const Color& rColor)
 {
     return "#" + lclConvToHex(rColor.GetRed()) + lclConvToHex(rColor.GetGreen()) + lclConvToHex(rColor.GetBlue());
 }

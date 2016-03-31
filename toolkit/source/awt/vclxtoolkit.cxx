@@ -559,7 +559,7 @@ namespace
         { css::awt::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
     };
 
-    static bool lcl_convertMessageBoxType(
+    bool lcl_convertMessageBoxType(
         rtl::OUString &sType,
         css::awt::MessageBoxType eType )
     {
@@ -584,7 +584,7 @@ namespace
 static sal_Int32                            nVCLToolkitInstanceCount = 0;
 static bool                                 bInitedByVCLToolkit = false;
 
-static osl::Mutex & getInitMutex()
+osl::Mutex & getInitMutex()
 {
     static osl::Mutex * pM;
     if( !pM )
@@ -599,7 +599,7 @@ static osl::Mutex & getInitMutex()
     return *pM;
 }
 
-static osl::Condition & getInitCondition()
+osl::Condition & getInitCondition()
 {
     static osl::Condition * pC = nullptr;
     if( !pC )
