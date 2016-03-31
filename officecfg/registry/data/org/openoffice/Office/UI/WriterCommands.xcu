@@ -552,6 +552,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:MailMergeCurrentEntry" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Current Mail Merge Entry</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:MailMergeNextEntry" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Next Mail Merge Entry</value>
@@ -563,6 +571,14 @@
       <node oor:name=".uno:MailMergeLastEntry" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Last Mail Merge Entry</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MailMergeExcludeEntry" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Exclude Mail Merge Entry</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
