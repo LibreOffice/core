@@ -42,8 +42,6 @@
 namespace
 {
 long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
-
-void onErrorReportingChanged(bool bEnable);
 }
 
 bool onInitSignal()
