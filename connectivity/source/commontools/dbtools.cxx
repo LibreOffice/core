@@ -1309,7 +1309,7 @@ OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnectio
 
 namespace
 {
-    static void lcl_getTableNameComponents( const Reference<XPropertySet>& _xTable,
+    void lcl_getTableNameComponents( const Reference<XPropertySet>& _xTable,
         OUString& _out_rCatalog, OUString& _out_rSchema, OUString& _out_rName )
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();

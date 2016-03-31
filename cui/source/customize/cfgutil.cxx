@@ -492,7 +492,7 @@ namespace
             the model which supports the embedded scripts, or <NULL/> if it cannot find such a
             model
     */
-    static Reference< XModel > lcl_getDocumentWithScripts_throw( const Reference< XInterface >& _rxComponent )
+    Reference< XModel > lcl_getDocumentWithScripts_throw( const Reference< XInterface >& _rxComponent )
     {
         Reference< XEmbeddedScripts > xScripts( _rxComponent, UNO_QUERY );
         if ( !xScripts.is() )
@@ -506,7 +506,7 @@ namespace
     }
 
 
-    static Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
+    Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
     {
         Reference< XModel > xDocument;
 

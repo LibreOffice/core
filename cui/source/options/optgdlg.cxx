@@ -196,7 +196,7 @@ SvxGeneralTabPage::sfxpg OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 
 namespace
 {
-        static OUString impl_SystemFileOpenServiceName()
+        OUString impl_SystemFileOpenServiceName()
         {
             const OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
 
@@ -225,7 +225,7 @@ namespace
             #endif
         }
 
-        static bool lcl_HasSystemFilePicker()
+        bool lcl_HasSystemFilePicker()
         {
             if( Application::hasNativeFileSelection() )
                 return true;

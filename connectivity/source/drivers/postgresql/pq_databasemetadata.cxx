@@ -1368,7 +1368,7 @@ namespace {
     // Oh, quelle horreur
     // LEM TODO: Need to severely rewrite that!
     // should probably just "do the same" as ODBC or JDBC drivers...
-    static void extractPrecisionAndScale(
+    void extractPrecisionAndScale(
         sal_Int32 dataType, sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
     {
         if( atttypmod < PQ_VARHDRSZ )
