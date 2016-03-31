@@ -687,7 +687,7 @@ SvxShapeControlPropertyMapping[] =
 
 namespace
 {
-    static bool lcl_convertPropertyName( const OUString& rApiName, OUString& rInternalName )
+    bool lcl_convertPropertyName( const OUString& rApiName, OUString& rInternalName )
     {
         sal_uInt16 i = 0;
         while( SvxShapeControlPropertyMapping[i].mpAPIName )
@@ -720,7 +720,7 @@ namespace
         {-1,-1}
     };
 
-    static void lcl_mapFormToAPIValue( Any& _rValue, const EnumConversionMap* _pMap )
+    void lcl_mapFormToAPIValue( Any& _rValue, const EnumConversionMap* _pMap )
     {
         sal_Int16 nValue = sal_Int16();
         OSL_VERIFY( _rValue >>= nValue );
@@ -737,7 +737,7 @@ namespace
         }
     }
 
-    static void lcl_mapAPIToFormValue( Any& _rValue, const EnumConversionMap* _pMap )
+    void lcl_mapAPIToFormValue( Any& _rValue, const EnumConversionMap* _pMap )
     {
         sal_Int32 nValue = 0;
         OSL_VERIFY( _rValue >>= nValue );
@@ -754,12 +754,12 @@ namespace
         }
     }
 
-    static void lcl_convertTextAlignmentToParaAdjustment( Any& rValue )
+    void lcl_convertTextAlignmentToParaAdjustment( Any& rValue )
     {
         lcl_mapFormToAPIValue( rValue, aMapAdjustToAlign );
     }
 
-    static void lcl_convertParaAdjustmentToTextAlignment( Any& rValue )
+    void lcl_convertParaAdjustmentToTextAlignment( Any& rValue )
     {
         lcl_mapAPIToFormValue( rValue, aMapAdjustToAlign );
     }

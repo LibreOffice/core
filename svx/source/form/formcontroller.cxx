@@ -1221,7 +1221,7 @@ void FormController::disposing()
 
 namespace
 {
-    static bool lcl_shouldUseDynamicControlBorder( const Reference< XInterface >& _rxForm, const Any& _rDynamicColorProp )
+    bool lcl_shouldUseDynamicControlBorder( const Reference< XInterface >& _rxForm, const Any& _rDynamicColorProp )
     {
         bool bDoUse = false;
         if ( !( _rDynamicColorProp >>= bDoUse ) )

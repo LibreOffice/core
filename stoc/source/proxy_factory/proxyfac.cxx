@@ -50,12 +50,12 @@ using namespace css::uno;
 namespace
 {
 
-static OUString proxyfac_getImplementationName()
+OUString proxyfac_getImplementationName()
 {
     return OUString(IMPL_NAME);
 }
 
-static Sequence< OUString > proxyfac_getSupportedServiceNames()
+Sequence< OUString > proxyfac_getSupportedServiceNames()
 {
     OUString str_name = SERVICE_NAME;
     return Sequence< OUString >( &str_name, 1 );
@@ -450,7 +450,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 }
 
 
-static Reference< XInterface > SAL_CALL proxyfac_create(
+Reference< XInterface > SAL_CALL proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     throw (Exception)
 {

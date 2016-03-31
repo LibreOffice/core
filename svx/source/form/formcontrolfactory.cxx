@@ -142,7 +142,7 @@ namespace svxform
     namespace
     {
 
-        static OUString lcl_getUniqueLabel_nothrow( const Reference< XPropertySet >& _rxControlModel, const OUString& _rBaseLabel )
+        OUString lcl_getUniqueLabel_nothrow( const Reference< XPropertySet >& _rxControlModel, const OUString& _rBaseLabel )
         {
             OUString sLabel( _rBaseLabel );
             try
@@ -186,7 +186,7 @@ namespace svxform
         }
 
 
-        static Sequence< PropertyValue > lcl_getDataSourceIndirectProperties( const Reference< XPropertySet >& _rxControlModel,
+        Sequence< PropertyValue > lcl_getDataSourceIndirectProperties( const Reference< XPropertySet >& _rxControlModel,
             const Reference<XComponentContext>& _rContext )
         {
             OSL_PRECOND( _rxControlModel.is(), "lcl_getDataSourceIndirectProperties: invalid model!" );
@@ -356,7 +356,7 @@ namespace svxform
         };
 
 
-        static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
+        void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
         {
             try
             {

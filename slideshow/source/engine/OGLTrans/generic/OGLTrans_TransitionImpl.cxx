@@ -1394,7 +1394,7 @@ int permutation256 [256]= {
 116, 171,  99, 202,   7, 107, 253, 108
 };
 
-static void initPermTexture(GLuint *texID)
+void initPermTexture(GLuint *texID)
 {
     CHECK_GL_ERROR();
   glGenTextures(1, texID);
@@ -1597,7 +1597,7 @@ GLuint VortexTransition::makeShader() const
     return OpenGLHelper::LoadShaders( "vortexVertexShader", "vortexFragmentShader", "vortexGeometryShader" );
 }
 
-static glm::mat4 lookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up) {
+glm::mat4 lookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up) {
     glm::vec3 f = glm::normalize(center - eye);
     glm::vec3 u = glm::normalize(up);
     glm::vec3 s = glm::normalize(glm::cross(f, u));
