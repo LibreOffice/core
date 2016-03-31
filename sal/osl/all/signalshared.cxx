@@ -31,8 +31,6 @@ namespace
 oslSignalHandlerImpl* SignalList;
 oslMutex SignalListMutex;
 
-ErrorReportingChangedHandler errorReportingChangedHandler;
-
 bool initSignal()
 {
     SignalListMutex = osl_createMutex();
@@ -49,11 +47,6 @@ bool deInitSignal()
     return bRet;
 }
 
-}
-
-void setErrorReportingChangedHandler(ErrorReportingChangedHandler handler)
-{
-    errorReportingChangedHandler = handler;
 }
 
 oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
@@ -167,10 +160,7 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
 {
     bool bOld = bErrorReportingEnabled;
     bErrorReportingEnabled = bEnable;
-
-    if (errorReportingChangedHandler)
-        errorReportingChangedHandler(bEnable);
-
+    onErrorReportingChanged(bEnable);
     return bOld;
 }
 
