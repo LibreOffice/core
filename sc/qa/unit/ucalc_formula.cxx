@@ -3216,6 +3216,89 @@ void Test::testFormulaRefUpdateNameCopySheet()
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
+    m_pDoc->SetRangeName(nullptr);
+
+    // Test nested names during copying sheet.
+
+    m_pDoc->InsertTab(0, "Test2");
+    ScAddress aPos(0,0,0);
+    bInserted = m_pDoc->InsertNewRangeName( "global", aPos, "$Test2.$A$1");
+    CPPUNIT_ASSERT(bInserted);
+    bInserted = m_pDoc->InsertNewRangeName( aPos.Tab(), "local", aPos, "$Test2.$A$2");
+    CPPUNIT_ASSERT(bInserted);
+    bInserted = m_pDoc->InsertNewRangeName( "global_global", aPos, "global*100");
+    CPPUNIT_ASSERT(bInserted);
+    bInserted = m_pDoc->InsertNewRangeName( "global_local", aPos, "local*1000");
+    CPPUNIT_ASSERT(bInserted);
+    bInserted = m_pDoc->InsertNewRangeName( aPos.Tab(), "local_global", aPos, "global*10000");
+    CPPUNIT_ASSERT(bInserted);
+    bInserted = m_pDoc->InsertNewRangeName( aPos.Tab(), "local_local", aPos, "local*100000");
+    CPPUNIT_ASSERT(bInserted);
+
+    m_pDoc->SetString(aPos, "=SHEET()");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A1*10+SHEET()");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=global_global");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=global_local");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=local_global");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=local_local");
+
+    testFormulaRefUpdateNameCopySheetCheckTab( 0, false);
+
+    // Copy sheet after.
+    m_pDoc->CopyTab(0, 1);
+    testFormulaRefUpdateNameCopySheetCheckTab( 0, false);
+    testFormulaRefUpdateNameCopySheetCheckTab( 1, true);
+
+    // Copy sheet before, shifting following now two sheets.
+    m_pDoc->CopyTab(1, 0);
+    testFormulaRefUpdateNameCopySheetCheckTab( 0, true);
+    testFormulaRefUpdateNameCopySheetCheckTab( 1, false);
+    testFormulaRefUpdateNameCopySheetCheckTab( 2, true);
+
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaRefUpdateNameCopySheetCheckTab( SCTAB nTab, bool bCheckNames )
+{
+    if (bCheckNames)
+    {
+        const ScRangeData* pName;
+        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL should exist", pName);
+        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL should exist", pName);
+        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_GLOBAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_GLOBAL should exist", pName);
+        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_LOCAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_LOCAL should exist", pName);
+        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_GLOBAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_GLOBAL should exist", pName);
+        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_LOCAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_LOCAL should exist", pName);
+    }
+
+    ScAddress aPos(0,0,0);
+    aPos.SetRow(0);
+    aPos.SetTab(nTab);
+    int nSheet = nTab + 1;
+    CPPUNIT_ASSERT_EQUAL( 1.0 * nSheet, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 11.0 * nSheet, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 100.0 * nSheet, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 11000.0 * nSheet, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 10000.0 * nSheet, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 1100000.0 * nSheet, m_pDoc->GetValue(aPos));
 }
 
 void Test::testFormulaRefUpdateNameDelete()

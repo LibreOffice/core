@@ -151,6 +151,7 @@ public:
     void testFormulaRefUpdateNameExpandRef();
     void testFormulaRefUpdateNameDeleteRow();
     void testFormulaRefUpdateNameCopySheet();
+    void testFormulaRefUpdateNameCopySheetCheckTab( SCTAB Tab, bool bCheckNames );
     void testFormulaRefUpdateNameDelete();
     void testFormulaRefUpdateValidity();
     void testMultipleOperations();
