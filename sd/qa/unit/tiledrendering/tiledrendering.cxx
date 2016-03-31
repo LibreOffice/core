@@ -75,6 +75,7 @@ public:
     CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST(testSearchAllSelections);
     CPPUNIT_TEST(testSearchAllNotifications);
+    CPPUNIT_TEST(testSearchAllFollowedBySearch);
     CPPUNIT_TEST(testInsertDeletePage);
     CPPUNIT_TEST(testInsertTable);
 #endif
