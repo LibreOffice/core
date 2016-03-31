@@ -136,18 +136,18 @@ SwView* SwModule::GetNextView(SwView* pView)
 
 // New Master for the settings is set; this affects the current view and all following.
 void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
-                            sal_uInt16 nDest )
+                            SvViewOpt nDest )
 {
     SwView* pCurrView = pActView;
     SwViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : nullptr;
 
     SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(GetUsrPref(
-                                         nDest == VIEWOPT_DEST_WEB
-                                         || (nDest != VIEWOPT_DEST_TEXT
+                                         nDest == SvViewOpt::DestWeb
+                                         || (nDest != SvViewOpt::DestText
                                              && pCurrView && dynamic_cast< const SwWebView *>( pCurrView ) !=  nullptr) ));
 
     // with Uno, only sdbcx::View, but not the Module should be changed
-    bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
+    bool bViewOnly = SvViewOpt::DestViewOnly == nDest;
     // fob Preview off
     SwPagePreview* pPPView;
     if( !pCurrView && nullptr != (pPPView = dynamic_cast<SwPagePreview*>( SfxViewShell::Current()))  )
