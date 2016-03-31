@@ -46,7 +46,6 @@ public:
     virtual void tearDown() override;
 
 #if !defined(_WIN32) && !defined(MACOSX)
-    void testInsertDeletePage();
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -59,11 +58,12 @@ public:
     void testSearchAllSelections();
     void testSearchAllNotifications();
     void testSearchAllFollowedBySearch();
+    void testInsertDeletePage();
+    void testInsertTable();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(_WIN32) && !defined(MACOSX)
-    CPPUNIT_TEST(testInsertDeletePage);
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
@@ -75,7 +75,8 @@ public:
     CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST(testSearchAllSelections);
     CPPUNIT_TEST(testSearchAllNotifications);
-    CPPUNIT_TEST(testSearchAllFollowedBySearch);
+    CPPUNIT_TEST(testInsertDeletePage);
+    CPPUNIT_TEST(testInsertTable);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -624,6 +625,36 @@ void SdTiledRenderingTest::testInsertDeletePage()
 
     // the document has 1 slide
     CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testInsertTable()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        {
+            {"Rows", uno::makeAny(3)},
+            {"Columns", uno::makeAny(5)}
+        }
+    ));
+
+    comphelper::dispatchCommand(".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // get the table
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(1);
+    CPPUNIT_ASSERT(pObject);
+
+    // check that the table is not in the top left corner
+    Point aPos(pObject->GetRelativePos());
+
+    CPPUNIT_ASSERT(aPos.X() != 0);
+    CPPUNIT_ASSERT(aPos.Y() != 0);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
