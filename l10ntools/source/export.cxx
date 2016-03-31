@@ -48,7 +48,7 @@ std::unique_ptr< Export > exporter;
 
 }
 
-static OString lcl_GetListTyp( const sal_uInt16 nTyp, const bool bUpperCamelCase )
+OString lcl_GetListTyp( const sal_uInt16 nTyp, const bool bUpperCamelCase )
 {
     OString sType;
     switch (nTyp)
@@ -176,7 +176,7 @@ bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
 namespace
 {
 
-static sal_Int32 lcl_countOccurrences(const OString& text, char c)
+sal_Int32 lcl_countOccurrences(const OString& text, char c)
 {
     sal_Int32 n = 0;
     for (sal_Int32 i = 0;; ++i) {

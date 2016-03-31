@@ -54,7 +54,7 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
     }
 }
 
-static OString tokenToString( int token )
+OString tokenToString( int token )
 {
     const uno::Sequence< sal_Int8 > aTokenNameSeq = StaticTokenMap::get().getUtf8TokenName( token & TOKEN_MASK );
     OString tokenname( reinterpret_cast< const char* >( aTokenNameSeq.getConstArray() ), aTokenNameSeq.getLength() );

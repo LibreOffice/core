@@ -764,7 +764,7 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
 namespace
 {
 
-static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
+OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
 {
     OUString sPath = OStringToOUString(rPathname, RTL_TEXTENCODING_UTF8 );
     OUString sUrl;
@@ -1034,7 +1034,7 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
 namespace
 {
 
-static icu::UnicodeString lcl_QuotRange(
+icu::UnicodeString lcl_QuotRange(
     const icu::UnicodeString& rString, const sal_Int32 nStart,
     const sal_Int32 nEnd, bool bInsideTag = false )
 {
@@ -1072,7 +1072,7 @@ static icu::UnicodeString lcl_QuotRange(
     return sReturn;
 }
 
-static bool lcl_isTag( const icu::UnicodeString& rString )
+bool lcl_isTag( const icu::UnicodeString& rString )
 {
     static const int nSize = 13;
     static const icu::UnicodeString vTags[nSize] = {
