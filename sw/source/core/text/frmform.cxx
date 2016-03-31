@@ -250,10 +250,10 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
                              ( ! pSct->IsVertical() && !pSct->Frame().Height() ) )
                         break;
                 }
-                // OD 14.03.2003 #i11760# - intrinsic format of follow is controlled.
+                // i#11760 - Intrinsic format of follow is controlled.
                 if ( FollowFormatAllowed() )
                 {
-                    // OD 14.03.2003 #i11760# - no nested format of follows, if
+                    // i#11760 - No nested format of follows, if
                     // text frame is contained in a column frame.
                     // Thus, forbid intrinsic format of follow.
                     {
@@ -289,7 +289,7 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
                         OSL_ENSURE( !pMyFollow->GetPrev(), "SwTextFrame::CalcFollow: very cheesy follow" );
                     }
 
-                    // OD 14.03.2003 #i11760# - reset control flag for follow format.
+                    // i#11760 - Reset control flag for follow format.
                     pMyFollow->AllowFollowFormat();
                 }
 
@@ -405,8 +405,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
                 MakePos();
                 if ( aOldPos != Frame().Pos() )
                 {
-                    // OD 2004-07-01 #i28701# - use new method <SwFrame::InvalidateObjs(..)>
-                    // No format is performed for the floating screen objects.
+                    // i#28701 - No format is performed for the floating screen objects.
                     InvalidateObjs();
                 }
             }
@@ -439,8 +438,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
 
         // We can get a bit of space in table cells, because there could be some
         // left through a vertical alignment to the top.
-        // #115759# - assure, that first lower in upper
-        // is the current one or is valid.
+        // Assure that first lower in upper is the current one or is valid.
         if ( IsInTab() &&
              ( GetUpper()->Lower() == this ||
                GetUpper()->Lower()->IsValid() ) )
@@ -642,8 +640,8 @@ SwContentFrame *SwTextFrame::JoinFrame()
 
     pFoll->MoveFlyInCnt( this, nStart, COMPLETE_STRING );
     pFoll->SetFootnote( false );
-    // #i27138#
-    // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
+    // i#27138
+    // Notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
@@ -676,7 +674,7 @@ void SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
     SetFollow( pNew );
 
     pNew->Paste( GetUpper(), GetNext() );
-    // #i27138#
+    // i#27138
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
@@ -970,7 +968,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                                !rFrameBreak.IsInside( rLine ) )
                            : rFrameBreak.IsBreakNow( rLine ) ) ) )
                      ? 1 : 0;
-    // --> OD #i84870#
+    // i#84870
     // no split of text frame, which only contains a as-character anchored object
     bool bOnlyContainsAsCharAnchoredObj =
             !IsFollow() && nStrLen == 1 &&
@@ -985,7 +983,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     {
         nNew = 0;
     }
-    // <--
+
     if ( nNew )
     {
         SplitFrame( nEnd );
@@ -1062,7 +1060,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         {
             // Only split frame, if the frame contains
             // content or contains no content, but has a numbering.
-            // OD #i84870# - no split, if text frame only contains one
+            // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
             if ( !bOnlyContainsAsCharAnchoredObj &&
                  ( nStrLen > 0 ||
@@ -1290,7 +1288,7 @@ void SwTextFrame::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     // Unfortunately it can: Text size changes + FlyFrames.
     // The backlash can affect multiple lines (Frame!)!
 
-    // #i46560#
+    // i#46560
     // FME: Yes, consider this case: (word) has to go to the next line
     // because) is a forbidden character at the beginning of a line although
     // (word would still fit on the previous line. Adding text right in front
@@ -1299,7 +1297,7 @@ void SwTextFrame::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     // nevertheless it should be sufficient.
     bool bPrev = rLine.GetPrev() &&
                      ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
-                       // #i46560#
+                       // i#46560
                        + 1
                        >= rReformat.Start() ||
                        rLine.GetCurr()->IsRest() );
@@ -1829,7 +1827,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         {
             SwFrame* pPre = GetPrev();
             if( pPre &&
-                // #i10826# It's the first, it cannot keep!
+                // i#10826 It's the first, it cannot keep!
                 pPre->GetIndPrev() &&
                 pPre->GetAttrSet()->GetKeep().GetValue() )
             {
@@ -1846,7 +1844,8 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
            pPara->SetPrepMustFit( false );
 
     CalcBaseOfstForFly();
-    _CalcHeightOfLastLine(); // #i11860#
+    _CalcHeightOfLastLine(); // i#11860 - Adjust spacing implementation for
+                             // object positioning - Compatibility to MS Word
 }
 
 // bForceQuickFormat is set if GetFormatted() has been called during the
