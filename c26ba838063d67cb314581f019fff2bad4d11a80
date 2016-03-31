@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_5c6aaf1b",
+        "filename": "sw/qa/python/check_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-03-31T08:17:51Z",
+      "side": 1,
+      "message": "Why the constant 2, that must have a define somewhere, or if not a big comment is needed to explain it",
+      "revId": "c26ba838063d67cb314581f019fff2bad4d11a80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
