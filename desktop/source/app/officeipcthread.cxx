@@ -450,7 +450,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     if( pGlobal.is() )
         return IPC_STATUS_OK;
 
-#if !HAVE_FEATURE_DESKTOP
+#if !HAVE_FEATURE_DESKTOP || HAVE_FEATURE_MACOSX_SANDBOX
     ipc = false;
 #endif
 
@@ -487,10 +487,6 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     // Check result to create a hash code from the user install path
     if ( aUserInstallPathHashCode.isEmpty() )
         return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
-
-#if HAVE_FEATURE_MACOSX_SANDBOX
-    nPipeMode = PIPEMODE_CREATED;
-#else
 
     OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
 
@@ -535,7 +531,6 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         }
 
     } while ( nPipeMode == PIPEMODE_DONTKNOW );
-#endif
 
     if ( nPipeMode == PIPEMODE_CREATED )
     {
