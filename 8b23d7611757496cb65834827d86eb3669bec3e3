@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_9f4b79b0",
+        "filename": "dbaccess/source/inc/dsntypes.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-03-31T17:44:40Z",
+      "side": 1,
+      "message": "There is already a value DST_POSTGRES. Use it instead of creating a duplicat DST_PGSQL",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 13
+      },
+      "revId": "8b23d7611757496cb65834827d86eb3669bec3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
