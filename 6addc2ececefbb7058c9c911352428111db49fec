@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_9c7ee7ac",
+        "filename": "cui/source/dialogs/cuires.src",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T11:28:13Z",
+      "side": 1,
+      "message": "\"All categories\" might be a better name",
+      "revId": "6addc2ececefbb7058c9c911352428111db49fec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
