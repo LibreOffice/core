@@ -31,7 +31,7 @@ std::unique_ptr<UIObject> UITest::getFocusTopWindow()
 
     if (rWinData.mpLastExecuteDlg)
     {
-        rWinData.mpLastExecuteDlg->GetUITestFactory()(rWinData.mpLastExecuteDlg);
+        return rWinData.mpLastExecuteDlg->GetUITestFactory()(rWinData.mpLastExecuteDlg);
     }
 
     return rWinData.mpFirstFrame->GetUITestFactory()(rWinData.mpFirstFrame);
