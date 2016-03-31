@@ -172,6 +172,8 @@ void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* /* pExcPtrs */)
         throw std::runtime_error( pSEHName);
 }
 
+}
+
 void onErrorReportingChanged(bool bEnable)
 {
 #if defined _MSC_VER
@@ -181,8 +183,6 @@ void onErrorReportingChanged(bool bEnable)
         _set_se_translator( win_seh_translator);
     }
 #endif
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
