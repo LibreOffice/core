@@ -30,18 +30,15 @@ struct oslSignalHandlerImpl
     oslSignalHandlerImpl*       pNext;
 };
 
-typedef void (*ErrorReportingChangedHandler)(bool);
-
 extern bool                     bErrorReportingEnabled;
 extern bool                     bInitSignal;
-
-void setErrorReportingChangedHandler(ErrorReportingChangedHandler handler);
 
 oslSignalAction callSignalHandler(oslSignalInfo* pInfo);
 
 // platform-specific functions that need to be implemented
 bool onInitSignal();
 bool onDeInitSignal();
+void onErrorReportingChanged(bool enabled);
 
 #endif
 
