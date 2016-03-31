@@ -154,10 +154,10 @@ namespace
             { return sal::static_int_cast<size_t>(reinterpret_cast<sal_uIntPtr>(rFrame.get())); }
     };
 
-    static bool lcl_TextContentsUnfiltered(const Reference<XTextContent>&)
+    bool lcl_TextContentsUnfiltered(const Reference<XTextContent>&)
         { return true; };
 
-    static bool lcl_ShapeFilter(const Reference<XTextContent>& xTxtContent)
+    bool lcl_ShapeFilter(const Reference<XTextContent>& xTxtContent)
     {
         Reference<XShape> xShape(xTxtContent, UNO_QUERY);
         if(!xShape.is())

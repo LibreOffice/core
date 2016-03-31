@@ -74,7 +74,7 @@ namespace
         return aTime;
     }
 
-    static css::util::Date lcl_getDate( double _nValue )
+    css::util::Date lcl_getDate( double _nValue )
     {
         Date aToolsDate((sal_uInt32)_nValue);
         css::util::Date aDate;

@@ -2547,7 +2547,7 @@ struct CompressWheelEventsData
     int count; // number of compressed events
 };
 
-static Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
+Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
 {
     CompressWheelEventsData* data = reinterpret_cast< CompressWheelEventsData* >( p );
     if( data->ignore )
