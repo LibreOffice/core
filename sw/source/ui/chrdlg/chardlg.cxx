@@ -60,7 +60,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
-    sal_uInt8 nDialogMode, const OUString* pStr)
+    SwCharDlgMode nDialogMode, const OUString* pStr)
     : SfxTabDialog(pParent, "CharacterPropertiesDialog",
         "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != nullptr)
     , m_rView(rVw)
@@ -81,7 +81,7 @@ SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreS
     m_nCharBrdId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
 
     SvtCJKOptions aCJKOptions;
-    if(m_nDialogMode == DLG_CHAR_DRAW || m_nDialogMode == DLG_CHAR_ANN)
+    if(m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
     {
         RemoveTabPage(m_nCharUrlId);
         RemoveTabPage(m_nCharBgdId);
@@ -90,7 +90,7 @@ SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreS
     else if(!aCJKOptions.IsDoubleLinesEnabled())
         RemoveTabPage(m_nCharTwoId);
 
-    if(m_nDialogMode != DLG_CHAR_STD)
+    if(m_nDialogMode != SwCharDlgMode::Std)
         RemoveTabPage(m_nCharBrdId);
 }
 
@@ -107,7 +107,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(
            ( m_rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
         aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-        if(m_nDialogMode != DLG_CHAR_DRAW && m_nDialogMode != DLG_CHAR_ANN)
+        if(m_nDialogMode != SwCharDlgMode::Draw && m_nDialogMode != SwCharDlgMode::Ann)
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
         rPage.PageCreated(aSet);
     }

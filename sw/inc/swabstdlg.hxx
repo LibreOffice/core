@@ -73,6 +73,7 @@ struct SfxChildWinInfo;
 class SwTOXMark;
 struct SwDocStat;
 enum class SwBorderModes;
+enum class SwCharDlgMode;
 #include <cnttab.hxx>
 
 namespace com{namespace sun{namespace star{
@@ -336,7 +337,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual SfxAbstractTabDialog *  CreateSwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-        sal_uInt8 nDialogMode, const OUString* pFormatStr = nullptr) = 0;
+        SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0;
     virtual VclAbstractDialog * CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId) = 0;
 
