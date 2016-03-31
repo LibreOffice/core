@@ -87,6 +87,8 @@ public:
     static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<const SwFrameFormat*>& rTextBoxes) throw(css::lang::IndexOutOfBoundsException);
     /// Get the order of the shape, excluding TextBoxes.
     static sal_Int32 getOrdNum(const SdrObject* pObject, std::set<const SwFrameFormat*>& rTextBoxes);
+    /// If pTextBox is a textbox, then set rWrapThrough to the surround of its shape.
+    static void getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough);
 
     /// Saves the current shape -> textbox links in a map, so they can be restored later.
     static void saveLinks(const SwFrameFormats& rFormats, std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks);

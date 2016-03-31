@@ -37,6 +37,7 @@
 #include <ndtxt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
+#include <fmtsrnd.hxx>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;
@@ -156,7 +157,7 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
 */
 SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
                                                     const SwRectFn& _fnRect,
-                                                    const bool _bVert )
+                                                    const bool _bVert ) const
 {
     SwTwips nTopOfFrmForObjPos = (_rFrm.Frm().*_fnRect->fnGetTop)();
 
@@ -172,6 +173,17 @@ SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
         {
             nTopOfFrmForObjPos +=
                 rTextFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+
+            const SwFormatSurround& rSurround = mpFrameFormat->GetSurround();
+            bool bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
+            // If the frame format is a TextBox of a draw shape, then use the
+            // surround of the original shape.
+            SwTextBoxHelper::getShapeWrapThrough(mpFrameFormat, bWrapThrough);
+
+            // Get the offset between the top of the text frame and the top of
+            // the first line inside the frame that has more than just fly
+            // portions.
+            nTopOfFrmForObjPos += rTextFrm.GetBaseVertOffsetForFly(!bWrapThrough);
         }
     }
 
@@ -685,10 +697,12 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
         {
             nWidth = (_rHoriOrientFrm.Frm().*fnRect->fnGetWidth)();
 
-            // When positioning TextBoxes, always ignore flys anchored at the
-            // text frame, as we do want to have the textbox overlap with its
-            // draw shape.
-            bool bIgnoreFlysAnchoredAtFrame = !_bObjWrapThrough || SwTextBoxHelper::isTextBox(&GetObject());
+            bool bWrapThrough = _bObjWrapThrough;
+            // If the frame format is a TextBox of a draw shape, then use the
+            // surround of the original shape.
+            SwTextBoxHelper::getShapeWrapThrough(mpFrameFormat, bWrapThrough);
+
+            bool bIgnoreFlysAnchoredAtFrame = !bWrapThrough;
             nOffset = _rHoriOrientFrm.IsTextFrm() ?
                    static_cast<const SwTextFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( bIgnoreFlysAnchoredAtFrame ) :
                    0;
