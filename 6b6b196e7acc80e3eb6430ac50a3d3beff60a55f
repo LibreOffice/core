@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_bfc47d40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-03-31T14:58:32Z",
+      "side": 1,
+      "message": "This line is too long. See http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html for tips.\n\nAlso, if this change is related to a bug report, please add it like this: “tdf#NNNNN”, where NNNNN is the bug number.",
+      "revId": "6b6b196e7acc80e3eb6430ac50a3d3beff60a55f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
