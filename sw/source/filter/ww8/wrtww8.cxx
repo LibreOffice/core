@@ -2194,8 +2194,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
 
     const SwFrameFormat *pFormat = pTable->GetFrameFormat();
-    OSL_ENSURE(pFormat,"Impossible");
-    if (!pFormat)
+    if ( !pFormat )
         return;
 
     const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();
@@ -2294,8 +2293,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
      */
     //const bool bNewTableModel = pTable->IsNewModel();
     const SwFrameFormat *pFormat = pTable->GetFrameFormat();
-    OSL_ENSURE(pFormat,"Impossible");
-    if (!pFormat)
+    if ( !pFormat )
         return;
 
     const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();
@@ -2389,8 +2387,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
     const SwTable *pTable = pTableTextNodeInfoInner->getTable( );
 
     const SwFrameFormat *pFormat = pTable->GetFrameFormat();
-    OSL_ENSURE(pFormat,"Impossible");
-    if (!pFormat)
+    if ( !pFormat )
         return;
 
     const SwFormatFrameSize &rSize = pFormat->GetFrameSize();
@@ -2437,8 +2434,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
 
         }
 
-        OSL_ENSURE(nWidthPercent, "Impossible");
-        if (nWidthPercent)
+        if ( nWidthPercent )
         {
             nPageSize *= nWidthPercent;
             nPageSize /= 100;
