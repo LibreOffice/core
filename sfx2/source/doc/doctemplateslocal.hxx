@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vector>
 
 
 class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
@@ -35,13 +36,13 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocum
     OUString m_aNameAttr;
     OUString m_aUINameAttr;
 
-    css::uno::Sequence< css::beans::StringPair > m_aResultSeq;
-    css::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
+    std::vector< css::beans::StringPair > m_aResultSeq;
+    std::vector< OUString > m_aElementsSeq; // stack of elements being parsed
 
     DocTemplLocaleHelper();
-    css::uno::Sequence< css::beans::StringPair > GetParsingResult();
+    std::vector< css::beans::StringPair > GetParsingResult();
 
-    static css::uno::Sequence< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext > xContext )
+    static std::vector< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext > xContext )
     throw( css::uno::Exception );
 
 public:
@@ -49,7 +50,7 @@ public:
 
     // returns sequence of pairs ( GroupName, GroupUIName )
     static
-    css::uno::Sequence< css::beans::StringPair >
+    std::vector< css::beans::StringPair >
     ReadGroupLocalizationSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         const css::uno::Reference< css::uno::XComponentContext > xContext )
@@ -59,7 +60,7 @@ public:
     static
     void SAL_CALL WriteGroupLocalizationSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
-        const css::uno::Sequence< css::beans::StringPair >& aSequence,
+        const std::vector< css::beans::StringPair >& aSequence,
         const css::uno::Reference< css::uno::XComponentContext > xContext )
             throw( css::uno::Exception );
 

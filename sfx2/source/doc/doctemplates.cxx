@@ -218,7 +218,7 @@ class SfxDocTplService_Impl
                                                                 const OUString& aPrefix,
                                                                 const OUString& aExt );
 
-    uno::Sequence< beans::StringPair > ReadUINamesForTemplateDir_Impl( const OUString& aUserPath );
+    std::vector< beans::StringPair > ReadUINamesForTemplateDir_Impl( const OUString& aUserPath );
     bool                    UpdateUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName,
                                                                   const OUString& aNewFolderName );
@@ -229,7 +229,7 @@ class SfxDocTplService_Impl
     void                    RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName );
     bool                    WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
-                                                                const uno::Sequence< beans::StringPair >& aUINames );
+                                                                const std::vector< beans::StringPair >& aUINames );
 
     OUString                CreateNewGroupFsys( const OUString& rGroupName, Content& aGroup );
 
@@ -1215,7 +1215,7 @@ void SfxDocTplService_Impl::doUpdate()
 }
 
 
-uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( const OUString& aUserPath )
+std::vector< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( const OUString& aUserPath )
 {
     INetURLObject aLocObj( aUserPath );
     aLocObj.insertName( "groupuinames.xml", false,
@@ -1224,7 +1224,7 @@ uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplate
     Content aLocContent;
 
     // TODO/LATER: Use hashmap in future
-    uno::Sequence< beans::StringPair > aUINames;
+    std::vector< beans::StringPair > aUINames;
     if ( Content::create( aLocObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference < ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext(), aLocContent ) )
     {
         try
@@ -1245,15 +1245,15 @@ bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString& aU
                                                                   const OUString& aGroupName,
                                                                   const OUString& aNewFolderName )
 {
-    uno::Sequence< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
-    sal_Int32 nLen = aUINames.getLength();
+    std::vector< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
+    sal_Int32 nLen = aUINames.size();
 
     // it is possible that the name is used already, but it should be checked before
     for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
         if ( aUINames[nInd].First.equals( aNewFolderName ) )
             return false;
 
-    aUINames.realloc( ++nLen );
+    aUINames.resize( ++nLen );
     aUINames[nLen-1].First = aNewFolderName;
     aUINames[nLen-1].Second = aGroupName;
 
@@ -1266,8 +1266,8 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
                                                                   const OUString& aOldGroupName,
                                                                   const OUString& aNewGroupName )
 {
-    uno::Sequence< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
-    sal_Int32 nLen = aUINames.getLength();
+    std::vector< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
+    sal_Int32 nLen = aUINames.size();
 
     bool bChanged = false;
     for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
@@ -1279,7 +1279,7 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
 
     if ( !bChanged )
     {
-        aUINames.realloc( ++nLen );
+        aUINames.resize( ++nLen );
         aUINames[nLen-1].First = aDefaultFsysGroupName;
         aUINames[nLen-1].Second = aNewGroupName;
     }
@@ -1290,9 +1290,9 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
 void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName )
 {
-    uno::Sequence< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
-    sal_Int32 nLen = aUINames.getLength();
-    uno::Sequence< beans::StringPair > aNewUINames( nLen );
+    std::vector< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
+    sal_Int32 nLen = aUINames.size();
+    std::vector< beans::StringPair > aNewUINames( nLen );
     sal_Int32 nNewLen = 0;
 
     bool bChanged = false;
@@ -1306,14 +1306,14 @@ void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
             aNewUINames[nNewLen-1].Second = aUINames[nInd].Second;
         }
 
-    aNewUINames.realloc( nNewLen );
+    aNewUINames.resize( nNewLen );
 
     !bChanged || WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames );
 }
 
 
 bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
-                                                                const uno::Sequence< beans::StringPair >& aUINames )
+                                                             const std::vector< beans::StringPair >& aUINames )
 {
     bool bResult = false;
     try {
@@ -2564,7 +2564,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
     INetURLObject aLayerObj( aTargetURL );
 
     // TODO/LATER: Use hashmap in future
-    uno::Sequence< beans::StringPair > aUINames;
+    std::vector< beans::StringPair > aUINames;
     if ( !bHierarchy )
         aUINames = ReadUINamesForTemplateDir_Impl( aLayerObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
@@ -2596,7 +2596,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
                 else
                 {
                     OUString aUITitle;
-                    for ( sal_Int32 nInd = 0; nInd < aUINames.getLength(); nInd++ )
+                    for ( size_t nInd = 0; nInd < aUINames.size(); nInd++ )
                         if ( aUINames[nInd].First.equals( aTitle ) )
                         {
                             aUITitle = aUINames[nInd].Second;

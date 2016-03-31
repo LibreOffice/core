@@ -33,7 +33,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
+std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     OUString aStringID = "groupuinames.xml";
@@ -41,7 +41,7 @@ uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSe
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
+void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
@@ -70,7 +70,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     xWriterHandler->startDocument();
     xWriterHandler->startElement( aGroupListElement, xRootAttrList );
 
-    for ( sal_Int32 nInd = 0; nInd < aSequence.getLength(); nInd++ )
+    for ( size_t nInd = 0; nInd < aSequence.size(); nInd++ )
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
@@ -88,7 +88,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 }
 
 
-uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext > xContext )
+std::vector< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     if ( !xContext.is() || !xInStream.is() )
@@ -123,9 +123,9 @@ DocTemplLocaleHelper::~DocTemplLocaleHelper()
 }
 
 
-uno::Sequence< beans::StringPair > DocTemplLocaleHelper::GetParsingResult()
+std::vector< beans::StringPair > DocTemplLocaleHelper::GetParsingResult()
 {
-    if ( m_aElementsSeq.getLength() )
+    if ( !m_aElementsSeq.empty() )
         throw uno::RuntimeException(); // the parsing has still not finished!
 
     return m_aResultSeq;
@@ -149,27 +149,22 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 {
     if ( aName == m_aGroupListElement )
     {
-        sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
-
-        if ( nNewLength != 1 )
+        if ( m_aElementsSeq.size() != 0 )
             throw xml::sax::SAXException(); // TODO: this element must be the first level element
 
-        m_aElementsSeq.realloc( nNewLength );
-        m_aElementsSeq[nNewLength-1] = aName;
+        m_aElementsSeq.push_back( aName );
 
         return; // nothing to do
     }
     else if ( aName == m_aGroupElement )
     {
-        sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
-        if ( nNewLength != 2 )
+        if ( m_aElementsSeq.size() != 1 )
             throw xml::sax::SAXException(); // TODO: this element must be the second level element
 
-        m_aElementsSeq.realloc( nNewLength );
-        m_aElementsSeq[nNewLength-1] = aName;
+        m_aElementsSeq.push_back( aName );
 
-        sal_Int32 nNewEntryNum = m_aResultSeq.getLength() + 1;
-        m_aResultSeq.realloc( nNewEntryNum );
+        sal_Int32 nNewEntryNum = m_aResultSeq.size() + 1;
+        m_aResultSeq.resize( nNewEntryNum );
 
         OUString aNameValue = xAttribs->getValueByName( m_aNameAttr );
         if ( aNameValue.isEmpty() )
@@ -185,13 +180,10 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
     else
     {
         // accept future extensions
-        sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
-
-        if ( !nNewLength )
+        if ( m_aElementsSeq.empty() )
             throw xml::sax::SAXException(); // TODO: the extension element must not be the first level element
 
-        m_aElementsSeq.realloc( nNewLength );
-        m_aElementsSeq[nNewLength-1] = aName;
+        m_aElementsSeq.push_back( aName );
     }
 }
 
@@ -199,14 +191,13 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
-    sal_Int32 nLength = m_aElementsSeq.getLength();
-    if ( nLength <= 0 )
+    if ( m_aElementsSeq.empty() )
         throw xml::sax::SAXException(); // TODO: no other end elements expected!
 
-    if ( !m_aElementsSeq[nLength-1].equals( aName ) )
+    if ( m_aElementsSeq.back() != aName )
         throw xml::sax::SAXException(); // TODO: unexpected element ended
 
-    m_aElementsSeq.realloc( nLength - 1 );
+    m_aElementsSeq.pop_back();
 }
 
 
