@@ -58,7 +58,7 @@ namespace
             }
         };
 
-    static void releaseId(AccessibleEventNotifier::TClientId const nId)
+    void releaseId(AccessibleEventNotifier::TClientId const nId)
     {
         IntervalMap & rFreeIntervals(FreeIntervals::get());
         IntervalMap::iterator const upper(rFreeIntervals.upper_bound(nId));
@@ -87,7 +87,7 @@ namespace
     }
 
     /// generates a new client id
-    static AccessibleEventNotifier::TClientId generateId()
+    AccessibleEventNotifier::TClientId generateId()
     {
         IntervalMap & rFreeIntervals(FreeIntervals::get());
         assert(!rFreeIntervals.empty());
@@ -124,7 +124,7 @@ namespace
             <TRUE/> if and only if the client could be found and
             <arg>rPos</arg> has been filled with its position
     */
-    static bool implLookupClient(
+    bool implLookupClient(
             const AccessibleEventNotifier::TClientId nClient,
             ClientMap::iterator& rPos )
     {
