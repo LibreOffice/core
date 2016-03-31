@@ -591,7 +591,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if( !bModified )
         rSh.ResetModified();
 
-    pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
+    pModule->ApplyUsrPref( *pOpt, this, bWebView ? SvViewOpt::DestWeb : SvViewOpt::DestText );
 
     // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )

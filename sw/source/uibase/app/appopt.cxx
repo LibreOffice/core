@@ -414,7 +414,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         aViewOpt.SetIgnoreProtectedArea(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
         // set elements for the current view and shell
-    ApplyUsrPref( aViewOpt, pAppView, bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
+    ApplyUsrPref( aViewOpt, pAppView, bTextDialog? SvViewOpt::DestText : SvViewOpt::DestWeb);
 }
 
 VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
