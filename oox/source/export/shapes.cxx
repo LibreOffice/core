@@ -535,7 +535,7 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
 
 static bool lcl_IsOnBlacklist(OUString& rShapeType)
 {
-#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
+#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist = {
@@ -601,7 +601,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
 
 static bool lcl_IsOnWhitelist(OUString& rShapeType)
 {
-#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
+#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
     static
 #endif
     const std::initializer_list<OUStringLiteral> vWhitelist = {

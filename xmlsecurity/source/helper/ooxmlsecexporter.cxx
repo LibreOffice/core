@@ -74,7 +74,7 @@ struct OOXMLSecExporter::Impl
 
 bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
 {
-#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
+#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist =
@@ -94,7 +94,7 @@ bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
 
 bool OOXMLSecExporter::Impl::isOOXMLRelationBlacklist(const OUString& rRelationName)
 {
-#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
+#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist =
