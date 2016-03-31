@@ -10,6 +10,8 @@
 #include "charttest.hxx"
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
+#include <SpecialUnicodes.hxx>
+
 
 // Define the index of sheets in the test document
 #define SHEET_POTENTIAL1          0
@@ -150,7 +152,7 @@ void Chart2TrendCalculators::testLinearRegression1()
         xValues[i] = d;
         yValues[i] = - 2.0 * d - 5.0 ;
     }
-    checkCalculator( xValues, yValues, "f(x) =  - 2x - 5");
+    checkCalculator( xValues, yValues, "f(x) = "+ aMinusSign +" 2x "+ aMinusSign +" 5");
 }
 
 // test y = A x ^ B
@@ -166,7 +168,8 @@ void Chart2TrendCalculators::testPolynomialRegression1()
         xValues[i] = d;
         yValues[i] =  - 2.0 * d * d + 4 * d - 5;
     }
-    checkCalculator( xValues, yValues, "f(x) =  - 2x^2 + 4x - 5");
+    OUString sExpectedFormula( "f(x) = "+ aMinusSign +" 2x" + OUString( aSuperscriptFigures[2] ) + " + 4x "+ aMinusSign +" 5" );
+    checkCalculator( xValues, yValues, sExpectedFormula );
 }
 
 void Chart2TrendCalculators::testExponentialRegression1()
