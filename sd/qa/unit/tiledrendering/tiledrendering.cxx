@@ -636,8 +636,8 @@ void SdTiledRenderingTest::testInsertTable()
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Rows", uno::makeAny(3)},
-            {"Columns", uno::makeAny(5)}
+            { "Rows", uno::makeAny(sal_Int32(3)) },
+            { "Columns", uno::makeAny(sal_Int32(5)) }
         }
     ));
 
