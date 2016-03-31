@@ -115,7 +115,7 @@ namespace basctl
 
     namespace
     {
-        static bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
+        bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
         {
             return lhs.compareToIgnoreAsciiCase( rhs ) < 0;
         }

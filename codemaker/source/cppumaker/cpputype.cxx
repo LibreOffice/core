@@ -3426,7 +3426,7 @@ private:
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > entity_;
 };
 
-static void failsToSupply(
+void failsToSupply(
     FileStream & o, OUString const & service, OString const & type)
 {
     o << "::rtl::OUString(\"component context fails to supply service \") + \""
