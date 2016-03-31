@@ -395,7 +395,10 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
         m_xModifiable.set( xController, css::uno::UNO_QUERY );
 
     if ( m_xModifiable.is() )
+    {
         m_xModifiable->addModifyListener( this );
+        m_bModified = m_xModifiable->isModified();
+    }
 }
 
 sal_Bool SaveToolbarController::opensSubToolbar()
