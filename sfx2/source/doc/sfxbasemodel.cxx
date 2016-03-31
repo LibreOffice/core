@@ -196,7 +196,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     Reference< script::XStarBasicAccess >                      m_xStarBasicAccess       ;
     Reference< container::XNameReplace >                       m_xEvents                ;
     Sequence< beans::PropertyValue>                            m_seqArguments           ;
-    Sequence< Reference< frame::XController > >                m_seqControllers         ;
+    std::vector< Reference< frame::XController > >             m_seqControllers         ;
     Reference< container::XIndexAccess >                       m_contViewData           ;
     sal_uInt16                                                 m_nControllerLockCount   ;
     bool                                                       m_bClosed                ;
@@ -771,7 +771,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
     }
 
     m_pData->m_xCurrent.clear();
-    m_pData->m_seqControllers.realloc(0);
+    m_pData->m_seqControllers.clear();
 
     // m_pData member must be set to zero before 0delete is called to
     // force disposed exception whenever someone tries to access our
@@ -1063,14 +1063,9 @@ void SAL_CALL SfxBaseModel::connectController( const Reference< frame::XControll
     if ( !xController.is() )
         return;
 
-    sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
-    Sequence< Reference< frame::XController > > aNewSeq( nOldCount + 1 );
-    for ( sal_uInt32 n = 0; n < nOldCount; n++ )
-        aNewSeq.getArray()[n] = m_pData->m_seqControllers.getConstArray()[n];
-    aNewSeq.getArray()[nOldCount] = xController;
-    m_pData->m_seqControllers = aNewSeq;
+    m_pData->m_seqControllers.push_back(xController);
 
-    if ( m_pData->m_seqControllers.getLength() == 1 )
+    if ( m_pData->m_seqControllers.size() == 1 )
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::Get( xController, GetObjectShell() );
         ENSURE_OR_THROW( pViewFrame, "SFX document without SFX view!?" );
@@ -1089,21 +1084,11 @@ void SAL_CALL SfxBaseModel::disconnectController( const Reference< frame::XContr
 {
     SfxModelGuard aGuard( *this );
 
-    sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
-    if ( !nOldCount )
+    if ( m_pData->m_seqControllers.empty() )
         return;
 
-    Sequence< Reference< frame::XController > > aNewSeq( nOldCount - 1 );
-    for ( sal_uInt32 nOld = 0, nNew = 0; nOld < nOldCount; ++nOld )
-    {
-        if ( xController != m_pData->m_seqControllers.getConstArray()[nOld] )
-        {
-            aNewSeq.getArray()[nNew] = m_pData->m_seqControllers.getConstArray()[nOld];
-            ++nNew;
-        }
-    }
-
-    m_pData->m_seqControllers = aNewSeq;
+    auto& vec = m_pData->m_seqControllers;
+    vec.erase(std::remove(vec.begin(), vec.end(), xController), vec.end());
 
     if ( xController == m_pData->m_xCurrent )
         m_pData->m_xCurrent.clear();
@@ -1215,7 +1200,7 @@ Reference< frame::XController > SAL_CALL SfxBaseModel::getCurrentController() th
         return m_pData->m_xCurrent;
 
     // get the first controller of this model
-    return m_pData->m_seqControllers.getLength() ? m_pData->m_seqControllers.getConstArray()[0] : m_pData->m_xCurrent;
+    return !m_pData->m_seqControllers.empty() ? m_pData->m_seqControllers.front() : m_pData->m_xCurrent;
 }
 
 
@@ -3391,7 +3376,7 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     if ( !bSuccess )
         throw io::IOException();
 
-       return aResult;
+    return aResult;
 }
 
 
@@ -4085,7 +4070,7 @@ Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
 {
     SfxModelGuard aGuard( *this );
 
-    sal_Int32 c = m_pData->m_seqControllers.getLength();
+    sal_Int32 c = m_pData->m_seqControllers.size();
     sal_Int32 i = 0;
     Sequence< Any > lEnum(c);
     for (i=0; i<c; ++i)
