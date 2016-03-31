@@ -3,8 +3,6 @@ from org.libreoffice.unotest import UnoInProcess
 
 #@unittest.skip("that seems to work")
 class TestSetExpresion(unittest.TestCase):
-    _uno = None
-    _xDoc = None
 
     @classmethod
     def setUpClass(cls):
