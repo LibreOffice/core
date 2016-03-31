@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_bff11dd0",
+        "filename": "include/svx/srchdlg.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T13:35:07Z",
+      "side": 1,
+      "message": "m_pReplaceBackwardsCB please (CB for checkbox).\nIf you want you can change the others also, but in a different patch.",
+      "revId": "756fa865990088051f5f4e8ff0470da94b032cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_9f0099ac",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T13:35:07Z",
+      "side": 1,
+      "message": "Please remove one pair of braces.",
+      "revId": "756fa865990088051f5f4e8ff0470da94b032cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ff2b9531",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 14
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T13:35:07Z",
+      "side": 1,
+      "message": "These empty nodes have reappeared",
+      "revId": "756fa865990088051f5f4e8ff0470da94b032cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_1fe2e903",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 14
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-03-31T13:35:07Z",
+      "side": 1,
+      "message": "The \"o\" accelerator is already used by \"Other _options\"",
+      "revId": "756fa865990088051f5f4e8ff0470da94b032cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
