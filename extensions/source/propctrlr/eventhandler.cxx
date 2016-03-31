@@ -1046,7 +1046,7 @@ namespace pcr
 
     namespace
     {
-        static bool lcl_endsWith( const OUString& _rText, const OUString& _rCheck )
+        bool lcl_endsWith( const OUString& _rText, const OUString& _rCheck )
         {
             sal_Int32 nTextLen = _rText.getLength();
             sal_Int32 nCheckLen = _rCheck.getLength();
