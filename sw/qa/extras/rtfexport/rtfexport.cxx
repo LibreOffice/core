@@ -983,6 +983,14 @@ DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getProperty<OUString>(xUserDefinedProperties, "Company"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf98806, "tdf98806.rtf")
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark(xBookmarksSupplier->getBookmarks()->getByName("bookmark"), uno::UNO_QUERY);
+    // This was empty, bookmark in table wasn't imported correctly.
+    CPPUNIT_ASSERT_EQUAL(OUString("BBB"), xBookmark->getAnchor()->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
