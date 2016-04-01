@@ -16,7 +16,6 @@
 
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <set>
 
@@ -81,9 +80,15 @@ private:
 };
 
 /// (Partially) abstract base class for an operand
-class DynamicKernelArgument : private boost::noncopyable
+class DynamicKernelArgument
 {
 public:
+    /// delete copy constructor
+    DynamicKernelArgument( const DynamicKernelArgument& ) = delete;
+
+    /// delete copy-assignment operator
+    const DynamicKernelArgument& operator=( const DynamicKernelArgument& ) = delete;
+
     DynamicKernelArgument( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft );
     virtual ~DynamicKernelArgument() {}
 

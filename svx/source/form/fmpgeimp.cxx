@@ -237,7 +237,7 @@ Reference< XMap > FmFormPageImpl::getControlToShapeMap()
 
 namespace
 {
-    static void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
+    void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
@@ -253,7 +253,7 @@ namespace
         _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
     }
 
-    static void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
+    void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );

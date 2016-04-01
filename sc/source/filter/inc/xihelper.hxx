@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIHELPER_HXX
 
 #include <editeng/editdata.hxx>
-#include <boost/noncopyable.hpp>
 #include "types.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
@@ -105,9 +104,16 @@ class EditTextObject;
 /** This class provides methods to convert an XclImpString.
     @The string can be converted to an edit engine text object or directly
     to a Calc edit cell. */
-class XclImpStringHelper : private boost::noncopyable
+class XclImpStringHelper
 {
 public:
+    /** delete copy constructor */
+    XclImpStringHelper(const XclImpStringHelper&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpStringHelper& operator=(const XclImpStringHelper&) = delete;
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. */
+    XclImpStringHelper() = delete;
     /** Returns a new edit engine text object.
         @param nXFIndex  Index to XF for first text portion (for escapement). */
     static EditTextObject* CreateTextObject(
@@ -117,12 +123,6 @@ public:
     static void SetToDocument(
         ScDocumentImport& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
         const XclImpString& rString, sal_uInt16 nXFIndex = 0 );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpStringHelper();
 };
 
 // Header/footer conversion ===================================================
@@ -162,9 +162,14 @@ struct XclFontData;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclImpHFConverter : protected XclImpRoot, private boost::noncopyable
+class XclImpHFConverter : protected XclImpRoot
 {
 public:
+    /** delete copy constructor */
+    XclImpHFConverter(const XclImpHFConverter&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpHFConverter& operator=(const XclImpHFConverter&) = delete;
+
     explicit            XclImpHFConverter( const XclImpRoot& rRoot );
                         virtual ~XclImpHFConverter();
 
@@ -247,9 +252,17 @@ private:
 /** This class contains static methods to decode an URL stored in an Excel file.
     @descr  Excel URLs can contain a sheet name, for instance: path\[test.xls]Sheet1
     This sheet name will be extracted automatically. */
-class XclImpUrlHelper : private boost::noncopyable
+class XclImpUrlHelper
 {
 public:
+    /** delete copy constructor */
+    XclImpUrlHelper(const XclImpUrlHelper&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpUrlHelper& operator=(const XclImpUrlHelper&) = delete;
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. */
+    XclImpUrlHelper() = delete;
+
     /** Decodes an encoded external document URL with optional sheet name.
         @param rUrl  Returns the decoded file name incl. path.
         @param rTabName  Returns the decoded sheet name.
@@ -278,12 +291,6 @@ public:
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
     static bool         DecodeLink( OUString& rApplic, OUString& rTopic, const OUString& rEncUrl );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpUrlHelper();
 };
 
 // Cached values ==============================================================
@@ -292,9 +299,13 @@ class ScTokenArray;
 
 /** This class stores one cached value of a cached value list (used for instance in
     CRN, EXTERNNAME, tArray). */
-class XclImpCachedValue : private boost::noncopyable
+class XclImpCachedValue
 {
 public:
+    /** delete copy constructor */
+    XclImpCachedValue(const XclImpCachedValue&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpCachedValue& operator=(const XclImpCachedValue&) = delete;
     /** Creates a cached value and reads contents from stream and stores it with its array address. */
     explicit            XclImpCachedValue( XclImpStream& rStrm );
     virtual             ~XclImpCachedValue();

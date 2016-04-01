@@ -554,7 +554,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     if( xOStm.is() )
     {
-        if( mSelectedPages.hasElements() && !mMasterPageTargets.empty() )
+        if( !mSelectedPages.empty() && !mMasterPageTargets.empty() )
         {
             Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( xOStm ), UNO_QUERY );
 
@@ -571,8 +571,8 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 Reference< XInterface > xSVGExport = static_cast< css::document::XFilter* >( mpSVGExport );
 
                 // create an id for each draw page
-                for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
-                    implRegisterInterface( mSelectedPages[i] );
+                for( auto& rPage : mSelectedPages )
+                    implRegisterInterface( rPage );
 
                 // create an id for each master page
                 for( size_t i = 0; i < mMasterPageTargets.size(); ++i )
@@ -658,7 +658,7 @@ Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference
 
 bool SVGFilter::implLookForFirstVisiblePage()
 {
-    sal_Int32 nCurPage = 0, nLastPage = mSelectedPages.getLength() - 1;
+    sal_Int32 nCurPage = 0, nLastPage = mSelectedPages.size() - 1;
 
     while( ( nCurPage <= nLastPage ) && ( -1 == mnVisiblePage ) )
     {
@@ -692,7 +692,7 @@ bool SVGFilter::implExportDocument()
     sal_Int32        nDocX = 0, nDocY = 0; // #i124608#
     sal_Int32        nDocWidth = 0, nDocHeight = 0;
     bool         bRet = false;
-    sal_Int32        nLastPage = mSelectedPages.getLength() - 1;
+    sal_Int32        nLastPage = mSelectedPages.size() - 1;
 
     mbSinglePage = (nLastPage == 0);
     mnVisiblePage = -1;
@@ -933,7 +933,7 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
 
 void SVGFilter::implGenerateMetaData()
 {
-    sal_Int32 nCount = mSelectedPages.getLength();
+    sal_Int32 nCount = mSelectedPages.size();
     if( nCount != 0 )
     {
         // we wrap all meta presentation info into a svg:defs element
@@ -1160,7 +1160,7 @@ void SVGFilter::implExportAnimations()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation-animations" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
-    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+    for( size_t i = 0; i < mSelectedPages.size(); ++i )
     {
         Reference< XPropertySet > xProps( mSelectedPages[i], UNO_QUERY );
 
@@ -1220,7 +1220,7 @@ void SVGFilter::implExportTextShapeIndex()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "TextShapeIndex" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
-    sal_Int32 nCount = mSelectedPages.getLength();
+    sal_Int32 nCount = mSelectedPages.size();
     for( sal_Int32 i = 0; i < nCount; ++i )
     {
         const Reference< XDrawPage > & xDrawPage = mSelectedPages[i];
@@ -1490,7 +1490,7 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage >
 }
 
 
-void SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
+void SVGFilter::implExportDrawPages( const std::vector< Reference< XDrawPage > > & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1881,7 +1881,7 @@ bool SVGFilter::implCreateObjects()
     if (mbExportShapeSelection)
     {
         // #i124608# export a given object selection
-        if (mSelectedPages.getLength() && mSelectedPages[0].is())
+        if (!mSelectedPages.empty() && mSelectedPages[0].is())
         {
             implCreateObjectsFromShapes(mSelectedPages[0], maShapeSelection);
             return true;
@@ -1905,7 +1905,7 @@ bool SVGFilter::implCreateObjects()
         }
     }
 
-    for( i = 0, nCount = mSelectedPages.getLength(); i < nCount; ++i )
+    for( i = 0, nCount = mSelectedPages.size(); i < nCount; ++i )
     {
         const Reference< XDrawPage > & xDrawPage = mSelectedPages[i];
 

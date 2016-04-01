@@ -76,7 +76,7 @@ namespace dbaccess
     // helpers
     namespace
     {
-        static void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, OUStringBuffer& o_rBuffer )
+        void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, OUStringBuffer& o_rBuffer )
         {
             o_rBuffer.append( i_rComponentDesc.first );
             o_rBuffer.append( '=' );
@@ -85,7 +85,7 @@ namespace dbaccess
             o_rBuffer.append( sal_Unicode( i_rComponentDesc.second.bForEditing ? '1' : '0' ) );
         }
 
-        static bool lcl_extractCompDesc( const OUString& i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
+        bool lcl_extractCompDesc( const OUString& i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
         {
             const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( '=' );
             if ( nEqualSignPos < 1 )
@@ -110,7 +110,7 @@ namespace dbaccess
 
         static const char sObjectMapStreamName[] = "storage-component-map.ini";
 
-        static void lcl_writeObjectMap_throw( const Reference<XComponentContext> & i_rContext, const Reference< XStorage >& i_rStorage,
+        void lcl_writeObjectMap_throw( const Reference<XComponentContext> & i_rContext, const Reference< XStorage >& i_rStorage,
             const MapStringToCompDesc& i_mapStorageToCompDesc )
         {
             if ( i_mapStorageToCompDesc.empty() )
@@ -135,7 +135,7 @@ namespace dbaccess
             aTextOutput.writeLine();
         }
 
-        static bool lcl_isSectionStart( const OUString& i_rIniLine, OUString& o_rSectionName )
+        bool lcl_isSectionStart( const OUString& i_rIniLine, OUString& o_rSectionName )
         {
             const sal_Int32 nLen = i_rIniLine.getLength();
             if ( i_rIniLine.startsWith("[") && i_rIniLine.endsWith("]") )
@@ -146,14 +146,14 @@ namespace dbaccess
             return false;
         }
 
-        static void lcl_stripTrailingLineFeed( OUString& io_rLine )
+        void lcl_stripTrailingLineFeed( OUString& io_rLine )
         {
             const sal_Int32 nLen = io_rLine.getLength();
             if ( io_rLine.endsWith("\n") )
                 io_rLine = io_rLine.copy( 0, nLen - 1 );
         }
 
-        static void lcl_readObjectMap_throw( const Reference<XComponentContext> & i_rxContext, const Reference< XStorage >& i_rStorage,
+        void lcl_readObjectMap_throw( const Reference<XComponentContext> & i_rxContext, const Reference< XStorage >& i_rStorage,
             MapStringToCompDesc& o_mapStorageToObjectName )
         {
             ENSURE_OR_THROW( i_rStorage.is(), "invalid storage" );
@@ -204,7 +204,7 @@ namespace dbaccess
             }
         }
 
-        static void lcl_markModified( const Reference< XComponent >& i_rSubComponent )
+        void lcl_markModified( const Reference< XComponent >& i_rSubComponent )
         {
             const Reference< XModifiable > xModify( i_rSubComponent, UNO_QUERY );
             if ( !xModify.is() )

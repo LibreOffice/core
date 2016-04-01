@@ -5891,6 +5891,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
         fExtChar = true;
         fWord97Saved = fWord2000Saved = true;
 
+        // Just a fancy way to write 'Caolan80'.
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;

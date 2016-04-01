@@ -3371,7 +3371,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     }
 
     //not in selections or selected frames
-    if( rSh.ChgCurrPam( rDragPt ) ||
+    if( rSh.TestCurrPam( rDragPt ) ||
         ( rSh.IsSelFrameMode() && rSh.IsInsideSelectedObj( rDragPt )) )
         return false;
 
@@ -3441,7 +3441,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSh.GoPrevCursor();
             rSh.SwCursorShell::SetCursor( aSttPt, true );
             rSh.SelectTextAttr( RES_TXTATR_INETFMT );
-            if( rSh.ChgCurrPam( rDragPt ) )
+            if( rSh.TestCurrPam( rDragPt ) )
             {
                 // don't copy/move inside of yourself
                 rSh.DestroyCursor();

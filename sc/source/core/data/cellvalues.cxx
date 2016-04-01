@@ -12,7 +12,6 @@
 #include <cellvalue.hxx>
 
 #include <cassert>
-#include <boost/noncopyable.hpp>
 
 namespace sc {
 
@@ -29,12 +28,17 @@ struct BlockPos
 CellValueSpan::CellValueSpan( SCROW nRow1, SCROW nRow2 ) :
     mnRow1(nRow1), mnRow2(nRow2) {}
 
-struct CellValuesImpl : boost::noncopyable
+struct CellValuesImpl
 {
     CellStoreType maCells;
     CellTextAttrStoreType maCellTextAttrs;
     CellStoreType::iterator miCellPos;
     CellTextAttrStoreType::iterator miAttrPos;
+
+    CellValuesImpl() = default;
+
+    CellValuesImpl(const CellValuesImpl&) = delete;
+    const CellValuesImpl& operator=(const CellValuesImpl&) = delete;
 };
 
 CellValues::CellValues() :

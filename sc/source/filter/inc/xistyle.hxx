@@ -24,7 +24,6 @@
 #include <memory>
 #include <vector>
 #include <tools/mempool.hxx>
-#include <boost/noncopyable.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -156,9 +155,14 @@ private:
 };
 
 /** Stores the data of all fonts occurred in an Excel file. */
-class XclImpFontBuffer : protected XclImpRoot, private boost::noncopyable
+class XclImpFontBuffer : protected XclImpRoot
 {
 public:
+    /** delete copy constructor */
+    XclImpFontBuffer(const XclImpFontBuffer&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpFontBuffer& operator=(const XclImpFontBuffer&) = delete;
+
     explicit            XclImpFontBuffer( const XclImpRoot& rRoot );
 
     /** Clears all buffered data, used to set up for a new sheet. */
@@ -376,9 +380,13 @@ inline bool operator!=( const XclImpXFIndex& rLeft, const XclImpXFIndex& rRight 
 { return !(rLeft == rRight); }
 
 /** Contains all data of a XF record and a Calc item set. */
-class XclImpXF : public XclXFBase, protected XclImpRoot, private boost::noncopyable
+class XclImpXF : public XclXFBase, protected XclImpRoot
 {
 public:
+    /** make noncopyable */
+    XclImpXF(const XclImpXF&) = delete;
+    const XclImpXF& operator=(const XclImpXF&) = delete;
+
     explicit            XclImpXF( const XclImpRoot& rRoot );
     virtual             ~XclImpXF();
 
@@ -472,9 +480,13 @@ private:
 
 /** Contains all XF records occurred in the file.
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
-class XclImpXFBuffer : protected XclImpRoot, private boost::noncopyable
+class XclImpXFBuffer : protected XclImpRoot
 {
 public:
+    /** make noncopyable */
+    XclImpXFBuffer(const XclImpXFBuffer&) = delete;
+    const XclImpXFBuffer& operator=(const XclImpXFBuffer&) = delete;
+
     explicit            XclImpXFBuffer( const XclImpRoot& rRoot );
 
     /** Clears all buffered data, used to set up for a new sheet. */
@@ -557,9 +569,13 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 }
 
 /** Contains the XF indexes for every used cell in a column. */
-class XclImpXFRangeColumn : private boost::noncopyable
+class XclImpXFRangeColumn
 {
 public:
+    /** make noncopyable */
+    XclImpXFRangeColumn(const XclImpXFRangeColumn&) = delete;
+    const XclImpXFRangeColumn& operator=(const XclImpXFRangeColumn&) = delete;
+
     typedef std::vector< std::unique_ptr<XclImpXFRange> > IndexList;
 
     inline explicit     XclImpXFRangeColumn() {}
@@ -595,9 +611,13 @@ private:
 };
 
 /** Contains the XF indexes for every used cell in a single sheet. */
-class XclImpXFRangeBuffer : protected XclImpRoot, private boost::noncopyable
+class XclImpXFRangeBuffer : protected XclImpRoot
 {
 public:
+    /** make noncopyable */
+    XclImpXFRangeBuffer(const XclImpXFRangeBuffer&) = delete;
+    const XclImpXFRangeBuffer& operator=(const XclImpXFRangeBuffer&) = delete;
+
     explicit            XclImpXFRangeBuffer( const XclImpRoot& rRoot );
     virtual             ~XclImpXFRangeBuffer();
 

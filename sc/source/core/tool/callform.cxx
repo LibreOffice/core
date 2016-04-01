@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/module.hxx>
@@ -77,12 +76,15 @@ typedef void (CALLTYPE* Unadvice)( double&      nHandle );
 #define UNADVICE                "Unadvice"
 #endif
 
-class ModuleData: private boost::noncopyable
+class ModuleData
 {
 friend class ModuleCollection;
     OUString aName;
     osl::Module* pInstance;
 public:
+    ModuleData(const ModuleData&) = delete;
+    const ModuleData& operator=(const ModuleData&) = delete;
+
     ModuleData(const OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
     ~ModuleData() { delete pInstance; }
 

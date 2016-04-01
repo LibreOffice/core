@@ -123,7 +123,7 @@ using namespace css::system;
 
 namespace {
 
-static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
+sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 {
     // This is a temporary hardcoded solution must be removed when
     // dialogs do not need parameters in SidSet representation any more
@@ -147,7 +147,7 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 }
 
 
-static sal_Int8 getStoreModeFromSlotName( const OUString& aSlotName )
+sal_Int8 getStoreModeFromSlotName( const OUString& aSlotName )
 {
     sal_Int8 nResult = 0;
     if ( aSlotName == "ExportTo" )
@@ -172,14 +172,14 @@ static sal_Int8 getStoreModeFromSlotName( const OUString& aSlotName )
 }
 
 
-static SfxFilterFlags getMustFlags( sal_Int8 nStoreMode )
+SfxFilterFlags getMustFlags( sal_Int8 nStoreMode )
 {
     return ( SfxFilterFlags::EXPORT
             | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? SfxFilterFlags::NONE : SfxFilterFlags::IMPORT ) );
 }
 
 
-static SfxFilterFlags getDontFlags( sal_Int8 nStoreMode )
+SfxFilterFlags getDontFlags( sal_Int8 nStoreMode )
 {
     return ( SfxFilterFlags::INTERNAL
             | SfxFilterFlags::NOTINFILEDLG

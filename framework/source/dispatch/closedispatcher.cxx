@@ -322,7 +322,7 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             // c1) there is as minimum 1 frame open, which is visible and contains a document
             //     different from our one. And its not the help!
             //     => close our frame only - nothing else.
-            if (aCheck2.m_lOtherVisibleFrames.getLength()>0)
+            if (!aCheck2.m_lOtherVisibleFrames.empty())
                 bCloseFrame = true;
             else
 
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             //     close the frame.
             if (
                 (!bCloseAllViewsToo                    ) &&
-                (aCheck2.m_lModelFrames.getLength() > 0)
+                (!aCheck2.m_lModelFrames.empty())
                )
                 bCloseFrame = true;
 
@@ -443,8 +443,8 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameListAnalyzer::E_ALL);
 
-        sal_Int32 c = aCheck.m_lModelFrames.getLength();
-        sal_Int32 i = 0;
+        size_t c = aCheck.m_lModelFrames.size();
+        size_t i = 0;
         for (i=0; i<c; ++i)
         {
             if (!fpf::closeIt(aCheck.m_lModelFrames[i], false))

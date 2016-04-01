@@ -17,8 +17,6 @@
 #include <algorithm>
 #include <functional>
 
-#include <boost/noncopyable.hpp>
-
 using namespace std;
 
 namespace {
@@ -68,11 +66,14 @@ double multiplier = 10.0;
 bool dump_values = true;
 #endif
 
-struct field : boost::noncopyable
+struct field
 {
     std::vector<int> items;   /// unique values
     std::vector<size_t> data;   /// original value series as indices into unique values.
     std::vector<size_t> order;  /// ascending order of the values as indices.
+
+    field(const field&) = delete;
+    const field operator=(const field&) = delete;
 };
 
 long compare(int left, int right)

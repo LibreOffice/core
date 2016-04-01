@@ -272,7 +272,7 @@ IMPL_STATIC_LINK_TYPED( SessionManagerClient, SaveYourselfHdl, void*, pStateVal,
 
     if( m_pSession )
     {
-        SalSessionSaveRequestEvent aEvent( shutdown, false );
+        SalSessionSaveRequestEvent aEvent( shutdown );
         m_pSession->CallCallback( &aEvent );
     }
     else

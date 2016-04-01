@@ -130,9 +130,9 @@ private:
     {
         bool m_bVerticalOrient;
         sal_Int32 m_nPosition;
-        PackingData(bool bVerticalOrient = false, sal_Int32 nPosition = -1)
+        PackingData(bool bVerticalOrient = false)
             : m_bVerticalOrient(bVerticalOrient)
-            , m_nPosition(nPosition)
+            , m_nPosition(-1)
         {
         }
     };

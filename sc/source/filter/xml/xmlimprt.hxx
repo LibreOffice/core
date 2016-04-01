@@ -42,8 +42,6 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 #include <unordered_map>
 #include <map>
@@ -820,8 +818,11 @@ typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 class ScMyStylesImportHelper;
 class ScXMLEditAttributeMap;
 
-class ScXMLImport: public SvXMLImport, private boost::noncopyable
+class ScXMLImport: public SvXMLImport
 {
+    ScXMLImport(const ScXMLImport&) = delete;
+    const ScXMLImport& operator=(const ScXMLImport&) = delete;
+
     typedef std::unordered_map< OUString, sal_Int16, OUStringHash >   CellTypeMap;
     typedef ::std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;
 

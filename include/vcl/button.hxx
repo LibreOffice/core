@@ -54,7 +54,7 @@ public:
     SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
     SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
-                                              bool bLayout, sal_uLong nImageSep, DrawFlags nDrawFlags,
+                                              sal_uLong nImageSep, DrawFlags nDrawFlags,
                                               DrawTextFlags nTextStyle, Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
@@ -523,7 +523,7 @@ class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
                     ImageRadioButton & operator= ( const ImageRadioButton & ) = delete;
 
 public:
-    explicit        ImageRadioButton( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        ImageRadioButton( vcl::Window* pParent );
 };
 
 
@@ -543,7 +543,7 @@ protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override;
 
 public:
-    explicit DisclosureButton( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit DisclosureButton( vcl::Window* pParent );
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 };

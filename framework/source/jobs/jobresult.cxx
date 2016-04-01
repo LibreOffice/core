@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace framework{
 
@@ -113,8 +114,10 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     pIt = aProtocol.find(JobConst::ANSWER_SAVE_ARGUMENTS());
     if (pIt != aProtocol.end())
     {
-        pIt->second >>= m_lArguments;
-        if (m_lArguments.getLength() > 0)
+        css::uno::Sequence<css::beans::NamedValue> aTmp;
+        pIt->second >>= aTmp;
+        comphelper::sequenceToContainer(m_lArguments, aTmp);
+        if (!m_lArguments.size())
             m_eParts |= E_ARGUMENTS;
     }
 
@@ -190,7 +193,7 @@ bool JobResult::existPart( sal_uInt32 eParts ) const
     @return     It returns the state of the internal member
                 without any checks!
 */
-css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
+std::vector< css::beans::NamedValue > JobResult::getArguments() const
 {
     SolarMutexGuard g;
     return m_lArguments;

@@ -29,7 +29,6 @@
 #include "matrixoperators.hxx"
 #include "math.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 #include <tools/stream.hxx>
@@ -204,13 +203,16 @@ typedef double TMatFlag;
 const TMatFlag SC_MATFLAG_EMPTYRESULT = 1.0;
 const TMatFlag SC_MATFLAG_EMPTYPATH   = 2.0;
 
-class ScMatrixImpl: private boost::noncopyable
+class ScMatrixImpl
 {
     MatrixImplType maMat;
     MatrixImplType maMatFlag;
     ScInterpreter* pErrorInterpreter;
 
 public:
+    ScMatrixImpl(const ScMatrixImpl&) = delete;
+    const ScMatrixImpl& operator=(const ScMatrixImpl&) = delete;
+
     ScMatrixImpl(SCSIZE nC, SCSIZE nR);
     ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal);
 

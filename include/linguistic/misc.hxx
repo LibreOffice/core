@@ -118,7 +118,7 @@ bool    FileExists( const OUString &rURL );
 
 
 OUString     GetDictionaryWriteablePath();
-css::uno::Sequence< OUString > GetDictionaryPaths();
+std::vector< OUString > GetDictionaryPaths();
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'

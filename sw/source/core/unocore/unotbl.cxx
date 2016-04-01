@@ -2273,7 +2273,7 @@ uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn,
 
 namespace {
 
-static uno::Reference<table::XCellRange> GetRangeByName(
+uno::Reference<table::XCellRange> GetRangeByName(
         SwFrameFormat* pFormat, SwTable* pTable,
         const OUString& rTLName, const OUString& rBRName,
         SwRangeDescriptor& rDesc)

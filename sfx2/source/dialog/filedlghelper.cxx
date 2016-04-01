@@ -1997,7 +1997,7 @@ void FileDialogHelper_Impl::saveConfig()
 
 namespace
 {
-    static OUString getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken )
+    OUString getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken )
     {
         SfxApplication *pSfxApp = SfxGetpApp();
         OUString sPath = pSfxApp->GetLastDir_Impl();

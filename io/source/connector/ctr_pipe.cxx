@@ -49,11 +49,16 @@ namespace stoc_connector {
     {
         if( ! m_nStatus )
         {
-            if( aReadBytes.getLength() != nBytesToRead )
+            if( aReadBytes.getLength() < nBytesToRead )
             {
                 aReadBytes.realloc( nBytesToRead );
             }
-            return m_pipe.read( aReadBytes.getArray()  , aReadBytes.getLength() );
+            sal_Int32 n = m_pipe.read( aReadBytes.getArray()  , aReadBytes.getLength() );
+            if( n < aReadBytes.getLength() )
+            {
+                aReadBytes.realloc( n );
+            }
+            return n;
         }
         else {
             throw IOException();

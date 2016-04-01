@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_version.h>
 
 #include "app.hxx"
 #include "officeipcthread.hxx"
@@ -52,8 +51,6 @@ using namespace ::com::sun::star::frame;
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
-
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
@@ -82,8 +79,6 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
     }
 }
 
-#endif
-
 }
 
 // Type of pipe we use
@@ -98,8 +93,6 @@ namespace desktop
 {
 
 namespace {
-
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -236,8 +229,6 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
     return true;
 }
 
-#endif
-
 }
 
 rtl::Reference< RequestHandler > RequestHandler::pGlobal;
@@ -368,8 +359,8 @@ throw( RuntimeException, std::exception )
 
 class PipeReaderThread: public salhelper::Thread {
 public:
-    PipeReaderThread(RequestHandler & ipc, osl::Pipe const & pipe):
-        Thread("PipeReader"), ipc_(ipc), pipe_(pipe)
+    PipeReaderThread(RequestHandler & handler, osl::Pipe const & pipe):
+        Thread("PipeReader"), handler_(handler), pipe_(pipe)
     {}
 
     void close() { pipe_.close(); }
@@ -379,7 +370,7 @@ private:
 
     void execute() override;
 
-    RequestHandler & ipc_;
+    RequestHandler & handler_;
     osl::Pipe pipe_;
 };
 
@@ -459,19 +450,12 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         return IPC_STATUS_OK;
     }
 
-    OUString aUserInstallPath;
-    OUString aDummy;
-
-    osl::Pipe pipe;
-
-    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
-
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
+    OUString aUserInstallPath;
     ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
-    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS || aLocateResult == ::utl::Bootstrap::PATH_VALID)
-        aDummy = aUserInstallPath;
-    else
+    if (aLocateResult != utl::Bootstrap::PATH_EXISTS
+        && aLocateResult != utl::Bootstrap::PATH_VALID)
     {
         return IPC_STATUS_BOOTSTRAP_ERROR;
     }
@@ -481,14 +465,16 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     // First we try to create our pipe if this fails we try to connect. We have to do this
     // in a loop because the other office can crash or shutdown between createPipe
     // and connectPipe!!
-    auto aUserInstallPathHashCode = CreateMD5FromString( aDummy );
+    auto aUserInstallPathHashCode = CreateMD5FromString(aUserInstallPath);
 
     // Check result to create a hash code from the user install path
     if ( aUserInstallPathHashCode.isEmpty() )
         return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
 
-    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
+    osl::Pipe pipe;
+    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
 
+    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
     do
     {
         osl::Security security;
@@ -554,8 +540,8 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         sal_uInt32 nCount = rtl_getAppCommandArgCount();
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
-            rtl_getAppCommandArg( i, &aDummy.pData );
-            if (!addArgument(aArguments, ',', aDummy)) {
+            rtl_getAppCommandArg( i, &aUserInstallPath.pData );
+            if (!addArgument(aArguments, ',', aUserInstallPath)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
@@ -641,7 +627,6 @@ void RequestHandler::WaitForReady()
 
 void PipeReaderThread::execute()
 {
-#if HAVE_FEATURE_DESKTOP
     do
     {
         osl::StreamPipe aStreamPipe;
@@ -654,16 +639,16 @@ void PipeReaderThread::execute()
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
             // only requests that don't dispatch events may be processed before cReady is set.
-            ipc_.cReady.wait();
+            handler_.cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!ipc_.pGlobal.is()) return;
+            if (!handler_.pGlobal.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
             osl::ClearableMutexGuard aGuard( RequestHandler::GetMutex() );
 
-            if ( ipc_.mState == RequestHandler::State::Downing )
+            if ( handler_.mState == RequestHandler::State::Downing )
             {
                 break;
             }
@@ -746,8 +731,8 @@ void PipeReaderThread::execute()
 
                 ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
                     aCmdLineArgs->getCwdUrl());
-                ipc_.cProcessed.reset();
-                pRequest->pcProcessed = &ipc_.cProcessed;
+                handler_.cProcessed.reset();
+                pRequest->pcProcessed = &handler_.cProcessed;
 
                 // Print requests are not dependent on the --invisible cmdline argument as they are
                 // loaded with the "hidden" flag! So they are always checked.
@@ -874,8 +859,7 @@ void PipeReaderThread::execute()
                     delete pRequest;
                     pRequest = nullptr;
                 }
-                if (aArguments.equalsL(RTL_CONSTASCII_STRINGPARAM("-tofront")) ||
-                    aCmdLineArgs->IsEmpty())
+                if (aCmdLineArgs->IsEmpty())
                 {
                     // no document was sent, just bring Office to front
                     ApplicationEvent* pAppEvent =
@@ -888,7 +872,7 @@ void PipeReaderThread::execute()
             aGuard.clear();
             // wait for processing to finish
             if (bDocRequestSent)
-                ipc_.cProcessed.wait();
+                handler_.cProcessed.wait();
             // processing finished, inform the requesting end:
             n = aStreamPipe.write(
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
@@ -902,7 +886,7 @@ void PipeReaderThread::execute()
         {
             {
                 osl::MutexGuard aGuard( RequestHandler::GetMutex() );
-                if ( ipc_.mState == RequestHandler::State::Downing )
+                if ( handler_.mState == RequestHandler::State::Downing )
                 {
                     break;
                 }
@@ -915,7 +899,6 @@ void PipeReaderThread::execute()
             salhelper::Thread::wait( tval );
         }
     } while( schedule() );
-#endif
 }
 
 static void AddToDispatchList(

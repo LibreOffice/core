@@ -377,10 +377,9 @@ void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString&
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
                                     const OUString&           rName,
                                     SwDocStyleSheetPool*    _rPool,
-                                    SfxStyleFamily          eFam,
-                                    sal_uInt16                  _nMask) :
+                                    SfxStyleFamily          eFam) :
 
-    SfxStyleSheetBase( rName, _rPool, eFam, _nMask ),
+    SfxStyleSheetBase( rName, _rPool, eFam, 0 ),
     pCharFormat(nullptr),
     pColl(nullptr),
     pFrameFormat(nullptr),
@@ -2267,7 +2266,7 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 // methods for DocStyleSheetPool
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, bool bOrg )
 : SfxStyleSheetBasePool( rDocument.GetAttrPool() )
-, mxStyleSheet( new SwDocStyleSheet( rDocument, OUString(), this, SFX_STYLE_FAMILY_CHAR, 0 ) )
+, mxStyleSheet( new SwDocStyleSheet( rDocument, OUString(), this, SFX_STYLE_FAMILY_CHAR ) )
 , rDoc( rDocument )
 {
     bOrganizer = bOrg;
@@ -2517,8 +2516,8 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
 SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
                                 SfxStyleFamily eFam, sal_uInt16 n )
     : SfxStyleSheetIterator( pBase, eFam, n ),
-    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), OUString(), pBase, SFX_STYLE_FAMILY_CHAR, 0 ) ),
-    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), OUString(), pBase, SFX_STYLE_FAMILY_CHAR, 0 ) )
+    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), OUString(), pBase, SFX_STYLE_FAMILY_CHAR ) ),
+    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), OUString(), pBase, SFX_STYLE_FAMILY_CHAR ) )
 {
     bFirstCalled = false;
     nLastPos = 0;

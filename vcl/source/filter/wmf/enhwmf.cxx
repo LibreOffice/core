@@ -361,7 +361,7 @@ SvStream& operator>>(SvStream& rInStream, XForm& rXForm)
     return rInStream;
 }
 
-static bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
+bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
 {
     if (nLen == 0)
         return false;

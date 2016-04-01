@@ -57,7 +57,7 @@ namespace
 {
     #if HAVE_FEATURE_DBCONNECTIVITY
 
-    static OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBField )
+    OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBField )
     {
         SwDBData aDBData( rDBField.GetDBData( &rDoc ));
         OUString sDBNumNm;
@@ -77,7 +77,7 @@ namespace
 
     #endif
 
-    static void lcl_CalcField( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpField& rSGEField,
+    void lcl_CalcField( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpField& rSGEField,
                             SwDBManager* pMgr )
     {
         const SwTextField* pTextField = rSGEField.GetTextField();

@@ -311,7 +311,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // filter disabled jobs using it's time stamp values.
     /* SAFE { */
     SolarMutexResettableGuard aReadLock;
-    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
+    std::vector< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
     aReadLock.clear();
     /* } SAFE */
 
@@ -323,7 +323,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // It's not really an error, if no registered jobs could be located.
     // Step over all found jobs and execute it
     int nExecutedJobs=0;
-    for (int j=0; j<lJobs.getLength(); ++j)
+    for (size_t j=0; j<lJobs.size(); ++j)
     {
         /* SAFE { */
         aReadLock.reset();

@@ -121,12 +121,9 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
         FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
     bool  bIsPossible    = false;
-    ::sal_Int32 nVisibleFrames = aCheck.m_lOtherVisibleFrames.getLength ();
 
-    if (
-        ( ! aCheck.m_xBackingComponent.is ()) &&
-        (   nVisibleFrames < 1              )
-       )
+    if ( ! aCheck.m_xBackingComponent.is()
+         && aCheck.m_lOtherVisibleFrames.empty() )
     {
         bIsPossible = true;
     }

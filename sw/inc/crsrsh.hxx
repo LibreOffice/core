@@ -419,9 +419,8 @@ public:
     void NormalizePam(bool bPointFirst = true);
 
     void SwapPam();
-    bool ChgCurrPam( const Point & rPt,
-                     bool bTstOnly = true,      // test only, don't set
-                     bool bTstHit  = false );   // only exact matches
+    bool TestCurrPam( const Point & rPt,
+                      bool bTstHit = false);   // only exact matches
     void KillPams();
 
     // story a copy of the cursor in the stack

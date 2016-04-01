@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
@@ -364,7 +365,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     // Means: if this job has any configuration data. Note: only really
     // filled lists will be set to the return structure at the end of this method.
     css::uno::Sequence< css::beans::NamedValue > lConfigArgs;
-    css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
+    std::vector< css::beans::NamedValue > lJobConfigArgs;
     if (eMode==JobData::E_ALIAS || eMode==JobData::E_EVENT)
     {
         lConfigArgs    = m_aJobCfg.getConfig();
@@ -382,12 +383,12 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         lAllArgs[nLength].Name = "Config";
         lAllArgs[nLength].Value <<= lConfigArgs;
     }
-    if (lJobConfigArgs.getLength()>0)
+    if (!lJobConfigArgs.empty())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
         lAllArgs[nLength].Name = "JobConfig";
-        lAllArgs[nLength].Value <<= lJobConfigArgs;
+        lAllArgs[nLength].Value <<= comphelper::containerToSequence(lJobConfigArgs);
     }
     if (lEnvArgs.getLength()>0)
     {

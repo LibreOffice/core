@@ -31,7 +31,7 @@ using namespace ::osl;
 
 //  constructor
 
-OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
+OComponentEnumeration::OComponentEnumeration( const std::vector< css::uno::Reference< XComponent > >& seqComponents )
         :   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
         ,   m_seqComponents ( seqComponents                 )
 {}
@@ -67,7 +67,7 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeExcepti
     // => The last one is getLength() - 1!
     // m_nPosition's current value is the position for the next element, which will be return, if user call "nextElement()"
     // => We have more elements if current position less then the length of the list!
-    return ( m_nPosition < (sal_uInt32)(m_seqComponents.getLength()) );
+    return ( m_nPosition < (sal_uInt32)(m_seqComponents.size()) );
 }
 
 //  XEnumeration
@@ -105,7 +105,7 @@ void OComponentEnumeration::impl_resetObject()
     // I can't say, which one is the first. Normally the disposing-call - but other way ....
 
     // Delete list of components.
-    m_seqComponents.realloc( 0 );
+    m_seqComponents.clear();
     // Reset position in list.
     // The list has no elements anymore. m_nPosition is normally the current position in list for nextElement!
     // But a position of 0 in a list of 0 items is an invalid state. This constellation can't work in future.

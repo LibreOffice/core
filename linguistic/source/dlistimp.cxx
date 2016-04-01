@@ -65,8 +65,8 @@ class DicEvtListenerHelper :
         XDictionaryEventListener
     >
 {
-    comphelper::OInterfaceContainerHelper2         aDicListEvtListeners;
-    uno::Sequence< DictionaryEvent >        aCollectDicEvt;
+    comphelper::OInterfaceContainerHelper2  aDicListEvtListeners;
+    std::vector< DictionaryEvent >          aCollectDicEvt;
     uno::Reference< XDictionaryList >       xMyDicList;
 
     sal_Int16                               nCondensedEvt;
@@ -198,9 +198,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
     // update list of collected events if needs to be
     if (nNumVerboseListeners > 0)
     {
-        sal_Int32 nColEvts = aCollectDicEvt.getLength();
-        aCollectDicEvt.realloc( nColEvts + 1 );
-        aCollectDicEvt.getArray()[ nColEvts ] = rDicEvent;
+        aCollectDicEvt.push_back(rDicEvent);
     }
 
     if (nNumCollectEvtListeners == 0 && nCondensedEvt != 0)
@@ -247,7 +245,7 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
         // build DictionaryListEvent to pass on to listeners
         uno::Sequence< DictionaryEvent > aDicEvents;
         if (nNumVerboseListeners > 0)
-            aDicEvents = aCollectDicEvt;
+            aDicEvents = comphelper::containerToSequence(aCollectDicEvt);
         DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
 
         // pass on event
@@ -255,7 +253,7 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
 
         // clear "list" of events
         nCondensedEvt = 0;
-        aCollectDicEvt.realloc( 0 );
+        aCollectDicEvt.clear();
     }
 
     return nNumCollectEvtListeners;
@@ -627,12 +625,11 @@ void DicList::_CreateDicList()
 
     // look for dictionaries
     const OUString aWriteablePath( GetDictionaryWriteablePath() );
-    uno::Sequence< OUString > aPaths( GetDictionaryPaths() );
-    const OUString *pPaths = aPaths.getConstArray();
-    for (sal_Int32 i = 0;  i < aPaths.getLength();  ++i)
+    std::vector< OUString > aPaths( GetDictionaryPaths() );
+    for (size_t i = 0;  i < aPaths.size();  ++i)
     {
-        const bool bIsWriteablePath = (pPaths[i] == aWriteablePath);
-        SearchForDictionaries( aDicList, pPaths[i], bIsWriteablePath );
+        const bool bIsWriteablePath = (aPaths[i] == aWriteablePath);
+        SearchForDictionaries( aDicList, aPaths[i], bIsWriteablePath );
     }
 
     // create IgnoreAllList dictionary with empty URL (non persistent)

@@ -42,6 +42,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -214,7 +215,7 @@ static const char* UIELEMENTTYPENAMES[] =
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
 static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 
-static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
+sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
@@ -236,7 +237,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
     return UIElementType::UNKNOWN;
 }
 
-static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
+OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
@@ -864,7 +865,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     if ( m_bDisposed )
         throw DisposedException();
 
-    Sequence< Sequence< PropertyValue > > aElementInfoSeq;
+    std::vector< Sequence< PropertyValue > > aElementInfoSeq;
     UIElementInfoHashMap aUIElementInfoCollection;
 
     if ( ElementType == css::ui::UIElementType::UNKNOWN )
@@ -879,7 +880,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     aUIElementInfo[0].Name = m_aPropResourceURL;
     aUIElementInfo[1].Name = m_aPropUIName;
 
-    aElementInfoSeq.realloc( aUIElementInfoCollection.size() );
+    aElementInfoSeq.resize( aUIElementInfoCollection.size() );
     UIElementInfoHashMap::const_iterator pIter = aUIElementInfoCollection.begin();
 
     sal_Int32 n = 0;
@@ -891,7 +892,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
         ++pIter;
     }
 
-    return aElementInfoSeq;
+    return comphelper::containerToSequence(aElementInfoSeq);
 }
 
 Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings() throw (css::uno::RuntimeException, std::exception)

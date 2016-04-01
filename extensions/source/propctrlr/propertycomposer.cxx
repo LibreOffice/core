@@ -21,6 +21,7 @@
 
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
@@ -254,8 +255,7 @@ namespace pcr
             m_bSupportedPropertiesAreKnown = true;
         }
 
-        Sequence< Property > aSurvived;
-        copyBagToArray( m_aSupportedProperties, aSurvived );
+        Sequence< Property > aSurvived = comphelper::containerToSequence<Property>( m_aSupportedProperties );
         return aSurvived;
     }
 

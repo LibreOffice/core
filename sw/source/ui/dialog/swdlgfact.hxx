@@ -431,7 +431,6 @@ public:
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrame  = true,
-                                                bool bFormat     = false,
                                                 const OString& sDefPage = OString(),
                                                 const OUString*   pFormatStr  = nullptr) override;
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(

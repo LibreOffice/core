@@ -2357,11 +2357,11 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         nX += aColWidth[j] + nHorDist;
     }
 
-    Point   aPos, aDelta;
-    SmRect  aLineRect;
     SmRect::operator = (SmRect());
     for (i = 0;  i < nNumRows;  i++)
-    {   aLineRect = SmRect();
+    {
+        Point aPos;
+        SmRect aLineRect;
         for (j = 0;  j < nNumCols;  j++)
         {   SmNode *pTmpNode = GetSubNode(i * nNumCols + j);
             assert(pTmpNode);
@@ -2403,8 +2403,8 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         aPos.Y() += nVerDist;
 
         // move 'aLineRect' and rectangles in that line to final position
-        aDelta.X() = 0;     // since horizontal alignment is already done
-        aDelta.Y() = aPos.Y() - aLineRect.GetTop();
+        Point aDelta(0, // since horizontal alignment is already done
+                     aPos.Y() - aLineRect.GetTop());
         aLineRect.Move(aDelta);
         for (j = 0;  j < nNumCols;  j++)
             if (nullptr != (pNode = GetSubNode(i * nNumCols + j)))

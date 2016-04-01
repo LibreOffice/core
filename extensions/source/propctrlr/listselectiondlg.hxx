@@ -57,7 +57,7 @@ namespace pcr
         void    fillEntryList   ( const css::uno::Sequence< OUString >& _rListEntries );
 
         void    selectEntries   ( const css::uno::Sequence< sal_Int16 >& /* [in ] */ _rSelection );
-        void    collectSelection(       css::uno::Sequence< sal_Int16 >& /* [out] */ _rSelection );
+        void    collectSelection(       std::vector< sal_Int16 >& /* [out] */ _rSelection );
     };
 
 

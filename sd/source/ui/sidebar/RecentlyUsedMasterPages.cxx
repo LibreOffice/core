@@ -48,11 +48,11 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-static OUString GetPathToImpressConfigurationRoot()
+OUString GetPathToImpressConfigurationRoot()
 {
     return OUString("/org.openoffice.Office.Impress/");
 }
-static OUString GetPathToSetNode()
+OUString GetPathToSetNode()
 {
     return OUString("MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages");
 }

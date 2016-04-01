@@ -944,7 +944,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
                                         FrameListAnalyzer::E_BACKINGCOMPONENT |
                                         FrameListAnalyzer::E_HIDDEN);
 
-            sal_Int32 nOpenDocuments = aAnalyzer.m_lOtherVisibleFrames.getLength();
+            sal_Int32 nOpenDocuments = aAnalyzer.m_lOtherVisibleFrames.size();
                       bAllowed       = (nOpenDocuments < nMaxOpenDocuments);
         }
     }

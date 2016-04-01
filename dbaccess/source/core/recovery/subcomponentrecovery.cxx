@@ -84,7 +84,7 @@ namespace dbaccess
     // helper
     namespace
     {
-        static OUString lcl_getComponentStorageBaseName( const SubComponentType i_eType )
+        OUString lcl_getComponentStorageBaseName( const SubComponentType i_eType )
         {
             switch ( i_eType )
             {
@@ -104,7 +104,7 @@ namespace dbaccess
             return OUString();
         }
 
-        static SubComponentType lcl_databaseObjectToSubComponentType( const sal_Int32 i_nObjectType )
+        SubComponentType lcl_databaseObjectToSubComponentType( const sal_Int32 i_nObjectType )
         {
             switch ( i_nObjectType )
             {
@@ -118,7 +118,7 @@ namespace dbaccess
             return UNKNOWN;
         }
 
-        static bool lcl_determineReadOnly( const Reference< XComponent >& i_rComponent )
+        bool lcl_determineReadOnly( const Reference< XComponent >& i_rComponent )
         {
             Reference< XModel > xDocument( i_rComponent, UNO_QUERY );
             if ( !xDocument.is() )
@@ -134,7 +134,7 @@ namespace dbaccess
             return aDocArgs.getOrDefault( "ReadOnly", false );
         }
 
-        static Reference< XCommandProcessor > lcl_getSubComponentDef_nothrow( const Reference< XDatabaseDocumentUI >& i_rAppUI,
+        Reference< XCommandProcessor > lcl_getSubComponentDef_nothrow( const Reference< XDatabaseDocumentUI >& i_rAppUI,
             const SubComponentType i_eType, const OUString& i_rName )
         {
             Reference< XController > xController( i_rAppUI, UNO_QUERY_THROW );

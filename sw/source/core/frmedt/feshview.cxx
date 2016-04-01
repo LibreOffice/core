@@ -684,7 +684,7 @@ long SwFEShell::Drag( const Point *pPt, bool )
     return 0;
 }
 
-void SwFEShell::EndDrag( const Point *, bool )
+void SwFEShell::EndDrag( const Point * )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "EndDrag without DrawView?" );
     SdrView *pView = Imp()->GetDrawView();

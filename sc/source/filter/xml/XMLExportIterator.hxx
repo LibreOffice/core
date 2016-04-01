@@ -36,7 +36,6 @@
 #include "postit.hxx"
 #include "cellvalue.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 class   ScHorizontalCellIterator;
@@ -315,8 +314,11 @@ struct ScMyCell
                                 ~ScMyCell();
 };
 
-class ScMyNotEmptyCellsIterator : private boost::noncopyable
+class ScMyNotEmptyCellsIterator
 {
+    ScMyNotEmptyCellsIterator(const ScMyNotEmptyCellsIterator&) = delete;
+    const ScMyNotEmptyCellsIterator& operator=(const ScMyNotEmptyCellsIterator&) = delete;
+
     css::uno::Reference<css::sheet::XSpreadsheet> xTable;
     css::uno::Reference<css::table::XCellRange> xCellRange;
     css::table::CellAddress             aLastAddress;

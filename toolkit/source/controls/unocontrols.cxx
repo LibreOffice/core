@@ -348,7 +348,7 @@ void UnoEditControl::setText( const OUString& aText ) throw(uno::RuntimeExceptio
 
 namespace
 {
-    static void lcl_normalize( awt::Selection& _rSel )
+    void lcl_normalize( awt::Selection& _rSel )
     {
         if ( _rSel.Min > _rSel.Max )
             ::std::swap( _rSel.Min, _rSel.Max );

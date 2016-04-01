@@ -577,16 +577,8 @@ void Desktop::Init()
         RequestHandler::Status aStatus = RequestHandler::Enable(true);
         if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
         {
-#if HAVE_FEATURE_MACOSX_SANDBOX
-            // In a sandboxed LO, on 10.8.2 at least, creating the
-            // Unix domain socket fails. Ignore that as hopefully
-            // people running a sandboxed LO won't attempt starting it
-            // from the command-line or otherwise in tricky ways, so
-            // the normal OS X mechanism that prevents multiple
-            // instances of an app from being started should work
-            // fine. I hope.
-#elif defined ANDROID
-            // Ignore crack pipe errors on Android, too
+#if defined ANDROID
+            // Ignore crack pipe errors on Android
 #else
             // Keep using this oddly named BE_PATHINFO_MISSING value
             // for pipe-related errors on other platforms. Of course

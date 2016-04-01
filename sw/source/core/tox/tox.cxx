@@ -50,7 +50,7 @@ const OUString S_PAGE_DELI(", ");
 namespace
 {
 
-static void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
+void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
 {
     rAuthTokens.reserve(9); // Worst case: Start+Sep1+Auth+3*(Sep2+Auth)
 

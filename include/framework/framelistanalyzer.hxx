@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <framework/fwedllapi.h>
+#include <vector>
 
 namespace framework{
 
@@ -73,19 +74,19 @@ class FWE_DLLPUBLIC FrameListAnalyzer
         /** contains all frames, which uses the same model like the reference frame.
             Will be filled only if m_eDetectMode has set the flag E_MODEL.
             The reference frame is never part of this list! */
-        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > m_lModelFrames;
+        std::vector< css::uno::Reference< css::frame::XFrame > > m_lModelFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
             Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are visible ones. */
-        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > m_lOtherVisibleFrames;
+        std::vector< css::uno::Reference< css::frame::XFrame > > m_lOtherVisibleFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
             Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are hidden ones. */
-        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > m_lOtherHiddenFrames;
+        std::vector< css::uno::Reference< css::frame::XFrame > > m_lOtherHiddenFrames;
 
         /** points to the help frame.
             Will be set only, if any other frame (means different from the reference frame)

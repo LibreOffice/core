@@ -180,8 +180,7 @@ ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
             {
                 pShadowOverlayObject = new ShadowOverlayObject( basegfx::B2DPoint(0,0),
                                                                 basegfx::B2DPoint(0,0),
-                                                                Color(0,0,0),
-                                                                SS_NORMAL );
+                                                                Color(0,0,0) );
                 xOverlayManager->add(*pShadowOverlayObject);
             }
         }
@@ -204,11 +203,10 @@ ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
 ShadowOverlayObject::ShadowOverlayObject( const basegfx::B2DPoint& rBasePos,
                                           const basegfx::B2DPoint& rSecondPosition,
-                                          Color aBaseColor,
-                                          ShadowState aState )
+                                          Color aBaseColor )
     : OverlayObjectWithBasePosition(rBasePos, aBaseColor)
     , maSecondPosition(rSecondPosition)
-    , mShadowState(aState)
+    , mShadowState(SS_NORMAL)
 {
 }
 

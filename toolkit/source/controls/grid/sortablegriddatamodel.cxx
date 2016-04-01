@@ -200,7 +200,7 @@ private:
     namespace
     {
         template< class STLCONTAINER >
-        static void lcl_clear( STLCONTAINER& i_container )
+        void lcl_clear( STLCONTAINER& i_container )
         {
             STLCONTAINER empty;
             empty.swap( i_container );

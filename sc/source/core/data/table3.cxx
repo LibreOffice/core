@@ -71,7 +71,6 @@
 #include <unordered_set>
 #include <vector>
 #include <boost/checked_delete.hpp>
-#include <boost/noncopyable.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 using namespace ::com::sun::star;
@@ -219,7 +218,7 @@ struct ScSortInfo
 };
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 
-class ScSortInfoArray : private boost::noncopyable
+class ScSortInfoArray
 {
 public:
 
@@ -259,6 +258,9 @@ private:
     bool mbUpdateRefs;
 
 public:
+    ScSortInfoArray(const ScSortInfoArray&) = delete;
+    const ScSortInfoArray& operator=(const ScSortInfoArray&) = delete;
+
     ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
         pppInfo(nullptr),
         nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
@@ -538,7 +540,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray(
 
 namespace {
 
-struct SortedColumn : boost::noncopyable
+struct SortedColumn
 {
     typedef mdds::flat_segment_tree<SCROW, const ScPatternAttr*> PatRangeType;
 
@@ -549,6 +551,9 @@ struct SortedColumn : boost::noncopyable
 
     PatRangeType maPatterns;
     PatRangeType::const_iterator miPatternPos;
+
+    SortedColumn(const SortedColumn&) = delete;
+    const SortedColumn operator=(const SortedColumn&) = delete;
 
     explicit SortedColumn( size_t nTopEmptyRows ) :
         maCells(nTopEmptyRows),

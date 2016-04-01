@@ -115,48 +115,48 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
 
 // n.b.: librdf destructor functions dereference null pointers!
 //       so they need to be wrapped to be usable with std::shared_ptr.
-static void safe_librdf_free_world(librdf_world *const world)
+void safe_librdf_free_world(librdf_world *const world)
 {
     if (world) { librdf_free_world(world); }
 }
-static void safe_librdf_free_model(librdf_model *const model)
+void safe_librdf_free_model(librdf_model *const model)
 {
     if (model) { librdf_free_model(model); }
 }
-static void safe_librdf_free_node(librdf_node* node)
+void safe_librdf_free_node(librdf_node* node)
 {
     if (node) { librdf_free_node(node); }
 }
-static void safe_librdf_free_parser(librdf_parser *const parser)
+void safe_librdf_free_parser(librdf_parser *const parser)
 {
     if (parser) { librdf_free_parser(parser); }
 }
-static void safe_librdf_free_query(librdf_query *const query)
+void safe_librdf_free_query(librdf_query *const query)
 {
     if (query) { librdf_free_query(query); }
 }
-static void
+void
 safe_librdf_free_query_results(librdf_query_results *const query_results)
 {
     if (query_results) { librdf_free_query_results(query_results); }
 }
-static void safe_librdf_free_serializer(librdf_serializer *const serializer)
+void safe_librdf_free_serializer(librdf_serializer *const serializer)
 {
     if (serializer) { librdf_free_serializer(serializer); }
 }
-static void safe_librdf_free_statement(librdf_statement *const statement)
+void safe_librdf_free_statement(librdf_statement *const statement)
 {
     if (statement) { librdf_free_statement(statement); }
 }
-static void safe_librdf_free_storage(librdf_storage *const storage)
+void safe_librdf_free_storage(librdf_storage *const storage)
 {
     if (storage) { librdf_free_storage(storage); }
 }
-static void safe_librdf_free_stream(librdf_stream *const stream)
+void safe_librdf_free_stream(librdf_stream *const stream)
 {
     if (stream) { librdf_free_stream(stream); }
 }
-static void safe_librdf_free_uri(librdf_uri *const uri)
+void safe_librdf_free_uri(librdf_uri *const uri)
 {
     if (uri) { librdf_free_uri(uri); }
 }
@@ -1319,7 +1319,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     m_NamedGraphs.erase(iter);
 }
 
-static bool isMetadatableWithoutMetadata(
+bool isMetadatableWithoutMetadata(
     uno::Reference<uno::XInterface> const & i_xNode)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( i_xNode, uno::UNO_QUERY );

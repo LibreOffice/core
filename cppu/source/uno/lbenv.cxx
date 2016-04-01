@@ -52,7 +52,7 @@ namespace
 {
 
 
-inline static bool td_equals( typelib_InterfaceTypeDescription * pTD1,
+inline bool td_equals( typelib_InterfaceTypeDescription * pTD1,
                               typelib_InterfaceTypeDescription * pTD2 )
 {
     return (pTD1 == pTD2 ||
@@ -634,7 +634,7 @@ uno_DefaultEnvironment::~uno_DefaultEnvironment()
 }
 
 
-static void writeLine(
+void writeLine(
     void * stream, const sal_Char * pLine, const sal_Char * pFilter )
 {
     if (pFilter && *pFilter)
@@ -678,7 +678,7 @@ static void writeLine(
 }
 
 
-static void writeLine(
+void writeLine(
     void * stream, const OUString & rLine, const sal_Char * pFilter )
 {
     ::rtl::OString aLine( ::rtl::OUStringToOString(
@@ -830,7 +830,7 @@ namespace
 
     class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
 
-inline static const OUString & unoenv_getStaticOIdPart()
+inline const OUString & unoenv_getStaticOIdPart()
 {
     return theStaticOIdPart::get().getOIdPart();
 }
@@ -1022,7 +1022,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     }
 }
 
-static bool loadEnv(OUString const  & cLibStem,
+bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv)
 {
 #ifdef DISABLE_DYNLOADING

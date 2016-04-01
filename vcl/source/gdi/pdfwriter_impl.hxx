@@ -1233,7 +1233,7 @@ public:
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
 
     // additional streams
-    void addStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress );
+    void addStream( const OUString& rMimeType, PDFOutputStream* pStream );
 
     // helper: eventually begin marked content sequence and
     // emit a comment in debug case

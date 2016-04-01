@@ -65,7 +65,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
         // Initialize a new enumeration ... if some tasks and his components exist!
         // (OTasksEnumeration will make an assert, if we initialize the new instance without valid values!)
 
-        Sequence< css::uno::Reference< XComponent > > seqComponents;
+        std::vector< css::uno::Reference< XComponent > > seqComponents;
         impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
         OComponentEnumeration* pEnumeration = new OComponentEnumeration( seqComponents );
         xReturn.set( static_cast<OWeakObject*>(pEnumeration), UNO_QUERY );
@@ -104,8 +104,8 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::
 }
 
 
-void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Reference< XFramesSupplier >&         xNode           ,
-                                                                 Sequence< css::uno::Reference< XComponent > >& seqComponents   )
+void OComponentAccess::impl_collectAllChildComponents(  const css::uno::Reference< XFramesSupplier >&         xNode           ,
+                                                               std::vector< css::uno::Reference< XComponent > >& seqComponents   )
 {
     // If valid node was given ...
     if( xNode.is() )
@@ -114,8 +114,6 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
 
         // Get the container of current node, collect the components of existing child frames
         // and go down to next level in tree (recursive!).
-
-        sal_Int32 nComponentCount = seqComponents.getLength();
 
         const css::uno::Reference< XFrames >                xContainer  = xNode->getFrames();
         const Sequence< css::uno::Reference< XFrame > > seqFrames   = xContainer->queryFrames( FrameSearchFlag::CHILDREN );
@@ -126,9 +124,7 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
             css::uno::Reference< XComponent > xComponent = impl_getFrameComponent( seqFrames[nFrame] );
             if( xComponent.is() )
             {
-                nComponentCount++;
-                seqComponents.realloc( nComponentCount );
-                seqComponents[nComponentCount-1] = xComponent;
+                seqComponents.push_back( xComponent );
             }
         }
     }

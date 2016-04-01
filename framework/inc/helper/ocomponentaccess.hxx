@@ -33,6 +33,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <vector>
 
 namespace framework{
 
@@ -142,8 +143,8 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
                                          and must collect all information.
         *//*-*****************************************************************************************************/
 
-        void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&                 xNode           ,
-                                                          css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
+        void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&            xNode           ,
+                                                        std::vector< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
 
         /*-****************************************************************************************************
             @short      get the component of a frame

@@ -23,6 +23,7 @@
 #include "formresid.hrc"
 #include "formstrings.hxx"
 #include <vcl/msgbox.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace pcr
 {
@@ -106,12 +107,12 @@ namespace pcr
         if ( !m_xListBox.is() )
             return;
 
-        Sequence< sal_Int16 > aSelection;
+        std::vector< sal_Int16 > aSelection;
         collectSelection( aSelection );
 
         try
         {
-            m_xListBox->setPropertyValue( m_sPropertyName, makeAny( aSelection ) );
+            m_xListBox->setPropertyValue( m_sPropertyName, makeAny( comphelper::containerToSequence(aSelection) ) );
         }
         catch( const Exception& )
         {
@@ -130,13 +131,12 @@ namespace pcr
     }
 
 
-    void ListSelectionDialog::collectSelection( Sequence< sal_Int16 >& /* [out] */ _rSelection )
+    void ListSelectionDialog::collectSelection( std::vector< sal_Int16 >& /* [out] */ _rSelection )
     {
         const sal_Int32 nSelectedCount = m_pEntries->GetSelectEntryCount( );
-        _rSelection.realloc( nSelectedCount );
-        sal_Int16* pSelection = _rSelection.getArray();
-        for ( sal_Int32 selected = 0; selected < nSelectedCount; ++selected, ++pSelection )
-            *pSelection = static_cast< sal_Int16 >( m_pEntries->GetSelectEntryPos( selected ) );
+        _rSelection.resize( nSelectedCount );
+        for ( sal_Int32 selected = 0; selected < nSelectedCount; ++selected )
+            _rSelection[selected] = static_cast< sal_Int16 >( m_pEntries->GetSelectEntryPos( selected ) );
     }
 
 

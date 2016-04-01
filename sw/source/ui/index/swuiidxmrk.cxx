@@ -174,7 +174,7 @@ void SwIndexMarkPane::InitControls()
 {
     OSL_ENSURE(pSh && pTOXMgr, "no shell?");
     // contents index
-    const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT, 0);
+    const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
     OUString sTmpTypeSelection;
     if(m_pTypeDCB->GetSelectEntryCount())
@@ -183,7 +183,7 @@ void SwIndexMarkPane::InitControls()
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
     // keyword index
-    pType = pTOXMgr->GetTOXType(TOX_INDEX, 0);
+    pType = pTOXMgr->GetTOXType(TOX_INDEX);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 

@@ -675,7 +675,7 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
     @return sal_True - if URL could be located as an item of the popup menu.
             sal_False - otherwhise.
 */
-static bool Impl_ExistURLInMenu(
+bool Impl_ExistURLInMenu(
     const css::uno::Reference< css::awt::XPopupMenu > &rPopupMenu,
     OUString &sURL,
     OUString &sFallback,

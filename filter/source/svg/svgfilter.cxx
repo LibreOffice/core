@@ -168,8 +168,8 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                         {
                             ObjectSequence aSelectedPageSequence;
                             aSelection >>= aSelectedPageSequence;
-                            mSelectedPages.realloc( aSelectedPageSequence.getLength() );
-                            for( sal_Int32 j=0; j<mSelectedPages.getLength(); ++j )
+                            mSelectedPages.resize( aSelectedPageSequence.getLength() );
+                            for( size_t j=0; j<mSelectedPages.size(); ++j )
                             {
                                 uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[j],
                                                                                 uno::UNO_QUERY );
@@ -183,10 +183,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 }
             }
 
-            if( !mSelectedPages.hasElements() )
+            if( mSelectedPages.empty() )
             {
                 // apparently failed to clean selection - fallback to current page
-                mSelectedPages.realloc( 1 );
+                mSelectedPages.resize( 1 );
                 mSelectedPages[0] = xDrawView->getCurrentPage();
             }
         }
@@ -194,7 +194,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         /*
          * Export all slides, or requested "PagePos"
          */
-        if( !mSelectedPages.hasElements() )
+        if( mSelectedPages.empty() )
         {
             uno::Reference< drawing::XMasterPagesSupplier > xMasterPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
             uno::Reference< drawing::XDrawPagesSupplier >   xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 {
                     sal_Int32 nDPCount = xDrawPages->getCount();
 
-                    mSelectedPages.realloc( nPageToExport != -1 ? 1 : nDPCount );
+                    mSelectedPages.resize( nPageToExport != -1 ? 1 : nDPCount );
                     sal_Int32 i;
                     for( i = 0; i < nDPCount; ++i )
                     {
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
              *  The master page are put in an unordered set.
              */
             ObjectSet aMasterPageTargetSet;
-            for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+            for( size_t i = 0; i < mSelectedPages.size(); ++i )
             {
                 uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPages[i], uno::UNO_QUERY );
                 if( xMasterPageTarget.is() )

@@ -77,7 +77,7 @@ namespace frm
     namespace
     {
 
-        static void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
+        void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nPositiveFlag, WinBits nNegativeFlag )
         {
             bool bFlagValue = false;
@@ -86,7 +86,7 @@ namespace frm
         }
 
 
-        static void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
+        void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             bool bFlagValue = false;
             if ( _rValue >>= bFlagValue )
@@ -101,14 +101,14 @@ namespace frm
         }
 
 
-        static void implAdjustTwoStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
+        void implAdjustTwoStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             implAdjustTwoStateFlag( _rxProps->getPropertyValue( _rPropertyName ), _rAllBits, _nFlag, _bInvert );
         }
 
 
-        static void adjustTwoStateWinBit( vcl::Window* _pWindow, const Any& _rValue, WinBits _nFlag, bool _bInvert = false )
+        void adjustTwoStateWinBit( vcl::Window* _pWindow, const Any& _rValue, WinBits _nFlag, bool _bInvert = false )
         {
             WinBits nBits = _pWindow->GetStyle();
             implAdjustTwoStateFlag( _rValue, nBits, _nFlag, _bInvert );
@@ -116,7 +116,7 @@ namespace frm
         }
 
 
-        static WinBits getWinBits( const Reference< XControlModel >& _rxModel )
+        WinBits getWinBits( const Reference< XControlModel >& _rxModel )
         {
             WinBits nBits = 0;
             try
@@ -431,7 +431,7 @@ namespace frm
 
     namespace
     {
-        static SfxSlotId lcl_translateConflictingSlot( SfxSlotId _nIDFromPool )
+        SfxSlotId lcl_translateConflictingSlot( SfxSlotId _nIDFromPool )
         {
             // HACK HACK HACK
             // unfortunately, some of our applications have some conflicting slots,

@@ -25,7 +25,6 @@
 #include <limits>
 #include <sal/macros.h>
 #include <sot/storage.hxx>
-#include <boost/noncopyable.hpp>
 #include <oox/helper/helper.hxx>
 #include "filter.hxx"
 #include "scdllapi.h"
@@ -121,9 +120,12 @@ class ScStyleSheetPool;
 class SvStream;
 
 /** Contains static methods used anywhere in the filters. */
-class ScfTools : private boost::noncopyable
+class ScfTools
 {
 public:
+// *** noncopyable *** --------------------------------------------------------
+    ScfTools(const ScfTools&) = delete;
+    const ScfTools& operator=(const ScfTools&) = delete;
 
 // *** common methods *** -----------------------------------------------------
 

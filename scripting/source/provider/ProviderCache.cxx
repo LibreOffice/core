@@ -83,18 +83,18 @@ ProviderCache::getProvider( const OUString& providerName )
 Sequence < Reference< provider::XScriptProvider > >
 ProviderCache::getAllProviders() throw ( RuntimeException )
 {
-    Sequence < Reference< provider::XScriptProvider > > providers (  m_hProviderDetailsCache.size() );
     // need to create providers that haven't been created already
     // so check what providers exist and what ones don't
 
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    Sequence < Reference< provider::XScriptProvider > > providers (  m_hProviderDetailsCache.size() );
     ProviderDetails_hash::iterator h_itEnd =  m_hProviderDetailsCache.end();
     ProviderDetails_hash::iterator h_it = m_hProviderDetailsCache.begin();
     // should assert if size !>  0
     if (  !m_hProviderDetailsCache.empty() )
     {
         sal_Int32 providerIndex = 0;
-    sal_Int32 index = 0;
+        sal_Int32 index = 0;
         for ( index = 0; h_it !=  h_itEnd; ++h_it, index++ )
         {
             Reference< provider::XScriptProvider > xScriptProvider  = h_it->second.provider;

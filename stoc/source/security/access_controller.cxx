@@ -258,7 +258,7 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
 }
 
 
-static inline Reference< security::XAccessControlContext > getDynamicRestriction(
+inline Reference< security::XAccessControlContext > getDynamicRestriction(
     Reference< XCurrentContext > const & xContext )
 {
     if (xContext.is())

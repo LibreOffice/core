@@ -112,7 +112,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    static inline bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
+    inline bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
     {
         const SwContentNode* pCNd;
         return 0 == rPos2.nContent.GetIndex() &&
@@ -121,7 +121,7 @@ namespace
                rPos1.nContent.GetIndex() == pCNd->Len();
     }
 
-    static bool lcl_AcceptRedline( SwRedlineTable& rArr, sal_uInt16& rPos,
+    bool lcl_AcceptRedline( SwRedlineTable& rArr, sal_uInt16& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
                             const SwPosition* pEndRng = nullptr )
@@ -280,7 +280,7 @@ namespace
         return bRet;
     }
 
-    static bool lcl_RejectRedline( SwRedlineTable& rArr, sal_uInt16& rPos,
+    bool lcl_RejectRedline( SwRedlineTable& rArr, sal_uInt16& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
                             const SwPosition* pEndRng = nullptr )
@@ -490,7 +490,7 @@ namespace
                             const SwPosition* pEndRng);
 
 
-    static int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
+    int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                                 SwRedlineTable& rArr, bool bCallDelete,
                                 const SwPaM& rPam)
     {
@@ -535,7 +535,7 @@ namespace
         return nCount;
     }
 
-    static void lcl_AdjustRedlineRange( SwPaM& rPam )
+    void lcl_AdjustRedlineRange( SwPaM& rPam )
     {
         // The Selection is only in the ContentSection. If there are Redlines
         // to Non-ContentNodes before or after that, then the Selections

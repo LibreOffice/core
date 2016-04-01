@@ -13405,7 +13405,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     return nNewWidget;
 }
 
-void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress )
+void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStream )
 {
     if( pStream )
     {
@@ -13415,7 +13415,7 @@ void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStre
                               ? OUString( rMimeType )
                               : OUString( "application/octet-stream"  );
         rStream.m_pStream = pStream;
-        rStream.m_bCompress = bCompress;
+        rStream.m_bCompress = false;
     }
 }
 

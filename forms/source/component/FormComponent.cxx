@@ -78,18 +78,11 @@ void ControlModelLock::impl_notifyAll_nothrow()
 
 void ControlModelLock::addPropertyNotification( const sal_Int32 _nHandle, const Any& _rOldValue, const Any& _rNewValue )
 {
-    sal_Int32 nOldLength = m_aHandles.getLength();
-    if  (   ( nOldLength != m_aOldValues.getLength() )
-        ||  ( nOldLength != m_aNewValues.getLength() )
-        )
-        throw RuntimeException( OUString(), m_rModel );
+    assert( m_aHandles.size() == m_aOldValues.size() && m_aOldValues.size() == m_aNewValues.size() );
 
-    m_aHandles.realloc( nOldLength + 1 );
-    m_aHandles[ nOldLength ] = _nHandle;
-    m_aOldValues.realloc( nOldLength + 1 );
-    m_aOldValues[ nOldLength ] = _rOldValue;
-    m_aNewValues.realloc( nOldLength + 1 );
-    m_aNewValues[ nOldLength ] = _rNewValue;
+    m_aHandles.push_back( _nHandle );
+    m_aOldValues.push_back( _rOldValue );
+    m_aNewValues.push_back( _rNewValue );
 }
 
 class FieldChangeNotifier
@@ -1118,6 +1111,18 @@ void OControlModel::firePropertyChanges( const Sequence< sal_Int32 >& _rHandles,
         _rNewValues.getConstArray(),
         _rOldValues.getConstArray(),
         _rHandles.getLength(),
+        sal_False
+    );
+}
+
+void OControlModel::firePropertyChanges( const std::vector< sal_Int32 >& _rHandles, const std::vector< Any >& _rOldValues,
+                                        const std::vector< Any >& _rNewValues, LockAccess )
+{
+    OPropertySetHelper::fire(
+        const_cast< std::vector< sal_Int32 >& >( _rHandles ).data(),
+        _rNewValues.data(),
+        _rOldValues.data(),
+        _rHandles.size(),
         sal_False
     );
 }

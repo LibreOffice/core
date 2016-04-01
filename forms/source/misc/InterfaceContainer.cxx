@@ -71,7 +71,7 @@ using namespace ::com::sun::star::util;
 namespace
 {
 
-    static void lcl_throwIllegalArgumentException()
+    void lcl_throwIllegalArgumentException()
     {
         throw IllegalArgumentException();
     }

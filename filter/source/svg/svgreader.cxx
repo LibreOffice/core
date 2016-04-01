@@ -1373,7 +1373,7 @@ struct AnnotatingVisitor
 };
 
 /// Annotate svg styles with unique references to state pool
-static void annotateStyles( StatePool&                                        rStatePool,
+void annotateStyles( StatePool&                                        rStatePool,
                             StateMap&                                         rStateMap,
                             const State&                                       rInitialState,
                             uno::Reference<xml::dom::XElement>&         rElem,
@@ -1943,7 +1943,7 @@ struct ShapeWritingVisitor
 };
 
 /// Write out shapes from DOM tree
-static void writeShapes( StatePool&                                        rStatePool,
+void writeShapes( StatePool&                                        rStatePool,
                          StateMap&                                         rStateMap,
                          const uno::Reference<xml::dom::XElement>&         rElem,
                          const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,

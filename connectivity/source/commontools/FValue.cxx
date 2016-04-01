@@ -38,7 +38,7 @@ namespace connectivity
 {
 
 namespace {
-    static bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
+    bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
     {
         bool bIsCompatible = true;
 
@@ -104,7 +104,7 @@ namespace {
         return bIsCompatible;
     }
 
-    static bool isStorageComparable(sal_Int32 _eType1, sal_Int32 _eType2)
+    bool isStorageComparable(sal_Int32 _eType1, sal_Int32 _eType2)
     {
         bool bIsComparable = true;
 

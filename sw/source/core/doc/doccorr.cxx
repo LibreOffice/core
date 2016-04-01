@@ -37,7 +37,7 @@ namespace
 {
     /// find the relevant section in which the SwUnoCursor may wander.
     /// returns NULL if no restrictions apply
-    static const SwStartNode* lcl_FindUnoCursorSection( const SwNode& rNode )
+    const SwStartNode* lcl_FindUnoCursorSection( const SwNode& rNode )
     {
         const SwStartNode* pStartNode = rNode.StartOfSectionNode();
         while( ( pStartNode != nullptr ) &&
@@ -48,7 +48,7 @@ namespace
         return pStartNode;
     }
 
-    static inline bool lcl_PosCorrAbs(SwPosition & rPos,
+    inline bool lcl_PosCorrAbs(SwPosition & rPos,
         const SwPosition& rStart,
         const SwPosition& rEnd,
         const SwPosition& rNewPos)
@@ -61,7 +61,7 @@ namespace
         return false;
     };
 
-    static inline bool lcl_PaMCorrAbs(SwPaM & rPam,
+    inline bool lcl_PaMCorrAbs(SwPaM & rPam,
         const SwPosition& rStart,
         const SwPosition& rEnd,
         const SwPosition& rNewPos)
@@ -72,7 +72,7 @@ namespace
         return bRet;
     };
 
-    static inline void lcl_PaMCorrRel1(SwPaM * pPam,
+    inline void lcl_PaMCorrRel1(SwPaM * pPam,
         SwNode const * const pOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nCntIdx)
