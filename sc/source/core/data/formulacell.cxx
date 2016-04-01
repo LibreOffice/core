@@ -698,9 +698,9 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     // If no range name was found copy it.
     if (!pRangeData)
     {
-        bool bCopyGlobalName = (nOldSheet < 0 && (bGlobalNamesToLocal || !bSameDoc));
+        bool bEarlyBailOut = (nOldSheet < 0 && bSameDoc);
         MightReferenceSheet eMightReference = mightRangeNameReferenceSheet( pOldRangeData, nOldTab);
-        if (bCopyGlobalName && eMightReference == MightReferenceSheet::NONE)
+        if (bEarlyBailOut && eMightReference == MightReferenceSheet::NONE)
             return;
 
         if (eMightReference == MightReferenceSheet::NAME)
@@ -713,7 +713,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
             sc::UpdatedRangeNames aReferencingNames;
             findRangeNamesReferencingSheet( aReferencingNames, pToken, pOldDoc,
                     nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, 0);
-            if (bCopyGlobalName && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
+            if (bEarlyBailOut && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
                 return;
 
             SheetIndexMap aSheetIndexMap;
