@@ -1,7 +1,7 @@
 diff -ur firebird.org/builds/make.new/config/config.h.in firebird/builds/make.new/config/config.h.in
 --- firebird.org/builds/make.new/config/config.h.in	2015-07-30 18:57:00.826593100 +0200
 +++ firebird/builds/make.new/config/config.h.in	2015-07-30 19:27:52.139226300 +0200
-@@ -668,3 +668,37 @@
+@@ -668,3 +668,39 @@
  #ifndef HAVE_SOCKLEN_T
  typedef int socklen_t;
  #endif
@@ -38,7 +38,9 @@ diff -ur firebird.org/builds/make.new/config/config.h.in firebird/builds/make.ne
 +#endif
 +#define isnan _isnan
 +#endif
++#if _MSC_VER < 1900
 +#define snprintf _snprintf
++#endif
 diff -ur firebird.org/builds/posix/make.defaults firebird/builds/posix/make.defaults
 --- firebird.org/builds/posix/make.defaults	2015-07-30 18:56:58.936120900 +0200
 +++ firebird/builds/posix/make.defaults	2015-07-30 19:29:23.420338600 +0200

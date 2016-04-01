@@ -1467,7 +1467,7 @@ AC_ARG_ENABLE(firebird-sdbc,
     AS_HELP_STRING([--disable-firebird-sdbc],
         [Enable the build of the Firebird-SDBC driver if it compiles for you.
          Warning: Firebird-SDBC driver can not be built on Windows and Macintosh.]),
-,enable_firebird_sdbc=no)
+,enable_firebird_sdbc=yes)
 
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
