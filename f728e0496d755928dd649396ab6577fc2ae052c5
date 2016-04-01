@@ -16,6 +16,24 @@
       "revId": "f728e0496d755928dd649396ab6577fc2ae052c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_62ff0e35",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-04-01T21:55:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_3f3b6ded",
+      "revId": "f728e0496d755928dd649396ab6577fc2ae052c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
