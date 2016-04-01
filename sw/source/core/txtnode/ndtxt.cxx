@@ -4070,7 +4070,7 @@ bool SwTextNode::AreListLevelIndentsApplicable() const
 */
 bool SwTextNode::GetListTabStopPosition( long& nListTabStopPosition ) const
 {
-    bool bListTanStopPositionProvided( false );
+    bool bListTabStopPositionProvided(false);
 
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
@@ -4079,7 +4079,7 @@ bool SwTextNode::GetListTabStopPosition( long& nListTabStopPosition ) const
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
              rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
-            bListTanStopPositionProvided = true;
+            bListTabStopPositionProvided = true;
             nListTabStopPosition = rFormat.GetListtabPos();
 
             if ( getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
@@ -4099,7 +4099,7 @@ bool SwTextNode::GetListTabStopPosition( long& nListTabStopPosition ) const
         }
     }
 
-    return bListTanStopPositionProvided;
+    return bListTabStopPositionProvided;
 }
 
 OUString SwTextNode::GetLabelFollowedBy() const
