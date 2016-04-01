@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_42092a2c",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3386,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-04-01T06:16:03Z",
+      "side": 1,
+      "message": "that last 0 should be 0x00",
+      "revId": "97c21a49d189ef8a64d0cbfb287577f295079ebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_220eb634",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-04-01T06:16:03Z",
+      "side": 1,
+      "message": "the last 0 should be 0x00",
+      "revId": "97c21a49d189ef8a64d0cbfb287577f295079ebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
