@@ -2010,7 +2010,7 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
 }
 
 
-void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal, ImpTakeDescriptionOptions nOpt) const
+void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt) const
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
@@ -2031,7 +2031,7 @@ void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, 
         }
     }
 
-    rStr = rStr.replaceFirst("%2", OUString::number( nVal ));
+    rStr = rStr.replaceFirst("%2", "0");
 }
 
 

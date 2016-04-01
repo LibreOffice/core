@@ -181,7 +181,7 @@ public:
             RECORD_NEW
         };
 
-        NavigationBar(vcl::Window* pParent, WinBits nStyle = 0);
+        NavigationBar(vcl::Window* pParent);
         virtual ~NavigationBar();
         virtual void dispose() override;
 

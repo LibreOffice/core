@@ -299,10 +299,10 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 }
 
 
-FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< css::lang::XComponent>& _rxObject, sal_Int16 _nId)
+FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< css::lang::XComponent>& _rxObject)
     :m_xObject(_rxObject)
     ,m_pListener(_pListener)
-    ,m_nId(_nId)
+    ,m_nId(0)
 {
     m_pListener->setAdapter(this);
 

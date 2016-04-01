@@ -265,7 +265,7 @@ public:
     // Methods for Calc {
     void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { aRefLink = rLink; }
 
-    void            Enable( bool bEnable = true, bool bChild = true );
+    void            Enable( bool bEnable = true );
     void            Disable();
     // } Methods for Calc
 };

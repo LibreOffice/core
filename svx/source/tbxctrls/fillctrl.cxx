@@ -560,8 +560,8 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
     return VclPtr<vcl::Window>();
 }
 
-FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
-    : Window(pParent,nStyle | WB_DIALOGCONTROL)
+FillControl::FillControl(vcl::Window* pParent)
+    : Window(pParent, WB_DIALOGCONTROL)
     , mpLbFillType(VclPtr<SvxFillTypeBox>::Create(this))
     , mpToolBoxColor(VclPtr<sfx2::sidebar::SidebarToolBox>::Create(this))
     , mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this))

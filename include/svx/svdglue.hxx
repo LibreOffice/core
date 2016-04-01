@@ -77,7 +77,7 @@ class SVX_DLLPUBLIC SdrGluePoint {
     bool bUserDefined:1; // #i38892#
 public:
     SdrGluePoint(): nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(SdrAlign::NONE),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
-    SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, SdrAlign nNewAlign = SdrAlign::HORZ_CENTER): aPos(rNewPos),nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
+    SdrGluePoint(const Point& rNewPos): aPos(rNewPos),nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(SdrAlign::NONE),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
     const Point& GetPos() const                             { return aPos; }
     void         SetPos(const Point& rNewPos)               { aPos=rNewPos; }
     SdrEscapeDirection GetEscDir() const                          { return nEscDir; }

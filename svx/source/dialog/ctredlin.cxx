@@ -997,9 +997,9 @@ void SvxTPFilter::DeactivatePage()
     TabPage::DeactivatePage();
 }
 
-void SvxTPFilter::Enable( bool bEnable, bool bChild)
+void SvxTPFilter::Enable( bool bEnable)
 {
-    TabPage::Enable(bEnable,bChild);
+    TabPage::Enable(bEnable);
     if(m_pCbDate->IsEnabled())
     {
         RowEnableHdl(m_pCbDate);

@@ -108,9 +108,9 @@ protected:
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
     SvxRectCtl( vcl::Window* pParent, RECT_POINT eRpt = RP_MM,
-                sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
+                sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80 );
     void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,
-        sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT);
+        sal_uInt16 nCircle = 80);
     virtual ~SvxRectCtl();
     virtual void dispose() override;
 

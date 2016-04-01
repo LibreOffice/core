@@ -68,13 +68,13 @@ Bitmap& SvxRectCtl::GetRectBitmap()
 }
 
 SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
-    sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle)
+    sal_uInt16 nBorder, sal_uInt16 nCircle)
     : Control(pParent, WB_BORDER | WB_TABSTOP)
     , pAccContext(nullptr)
     , nBorderWidth(nBorder)
     , nRadius(nCircle)
     , eDefRP(eRpt)
-    , eCS(eStyle)
+    , eCS(CS_RECT)
     , pBitmap(nullptr)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
@@ -85,12 +85,12 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     Resize_Impl();
 }
 
-void SvxRectCtl::SetControlSettings(RECT_POINT eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle)
+void SvxRectCtl::SetControlSettings(RECT_POINT eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
 {
     nBorderWidth = nBorder;
     nRadius = nCircle;
     eDefRP = eRpt;
-    eCS = eStyle;
+    eCS = CS_RECT;
     Resize_Impl();
 }
 

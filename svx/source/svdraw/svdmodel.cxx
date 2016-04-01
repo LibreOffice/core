@@ -105,7 +105,7 @@ struct SdrModelImpl
 
 
 void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
-    bool bUseExtColorTable, bool bLoadRefCounts)
+    bool bUseExtColorTable)
 {
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=nullptr;
@@ -188,9 +188,9 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     if ( pPool == nullptr )
     {
-        pItemPool=new SdrItemPool(nullptr, bLoadRefCounts);
+        pItemPool=new SdrItemPool(nullptr, false/*bLoadRefCounts*/);
         // Outliner doesn't have its own Pool, so use the EditEngine's
-        SfxItemPool* pOutlPool=EditEngine::CreatePool( bLoadRefCounts );
+        SfxItemPool* pOutlPool=EditEngine::CreatePool( false/*bLoadRefCounts*/ );
         // OutlinerPool as SecondaryPool of SdrPool
         pItemPool->SetSecondaryPool(pOutlPool);
         // remember that I created both pools myself
@@ -236,14 +236,14 @@ SdrModel::SdrModel():
     maMaPag(),
     maPages()
 {
-    ImpCtor(nullptr, nullptr, false, false);
+    ImpCtor(nullptr, nullptr, false);
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
     maMaPag(),
     maPages()
 {
-    ImpCtor(pPool,pPers,bUseExtColorTable, false/*bLoadRefCounts*/);
+    ImpCtor(pPool,pPers,bUseExtColorTable);
 }
 
 SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
@@ -251,7 +251,7 @@ SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmb
     maPages(),
     aTablePath(rPath)
 {
-    ImpCtor(pPool,pPers,bUseExtColorTable, false/*bLoadRefCounts*/);
+    ImpCtor(pPool,pPers,bUseExtColorTable);
 }
 
 SdrModel::~SdrModel()

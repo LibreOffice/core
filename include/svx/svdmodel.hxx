@@ -261,8 +261,7 @@ private:
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();
     SVX_DLLPRIVATE void ImpCreateTables();
-    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
-        bool bLoadRefCounts = true);
+    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
 
 
     // this is a weak reference to a possible living api wrapper for this model

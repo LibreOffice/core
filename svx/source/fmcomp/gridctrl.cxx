@@ -214,7 +214,7 @@ DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, co
 
     if (_rxObject.is())
     {
-        m_pRealListener = new FmXDisposeMultiplexer(this, _rxObject, 0);
+        m_pRealListener = new FmXDisposeMultiplexer(this, _rxObject);
         m_pRealListener->acquire();
     }
 }
@@ -332,8 +332,8 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
     m_bPositioning = false;
 }
 
-DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle)
-          :Control(pParent, nStyle)
+DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
+          :Control(pParent, 0)
           ,m_aRecordText(VclPtr<FixedText>::Create(this, WB_VCENTER))
           ,m_aAbsolute(VclPtr<DbGridControl::NavigationBar::AbsolutePos>::Create(this, WB_CENTER | WB_VCENTER))
           ,m_aRecordOf(VclPtr<FixedText>::Create(this, WB_VCENTER))

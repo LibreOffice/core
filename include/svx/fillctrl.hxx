@@ -88,7 +88,7 @@ private:
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
 public:
-    FillControl(vcl::Window* pParent, WinBits nStyle = 0);
+    FillControl(vcl::Window* pParent);
     virtual ~FillControl();
     virtual void dispose() override;
 
