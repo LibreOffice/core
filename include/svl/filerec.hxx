@@ -436,8 +436,7 @@ protected:
 
                         SfxMultiVarRecordWriter( sal_uInt8 nRecordType,
                                                  SvStream *pStream,
-                                                 sal_uInt16 nRecordTag,
-                                                 sal_uInt8 nRecordVer );
+                                                 sal_uInt16 nRecordTag );
 
     void                FlushContent_Impl();
 
@@ -627,7 +626,7 @@ inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
  */
 inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter( SvStream* pStream,
                                                          sal_uInt16 nRecordTag )
-: SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS, pStream, nRecordTag, 0 )
+: SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS, pStream, nRecordTag )
 {
 }
 

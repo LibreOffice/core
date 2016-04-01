@@ -34,8 +34,8 @@ struct SfxImageItem_Impl
 };
 
 
-SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
-    : SfxInt16Item( which, nImage )
+SfxImageItem::SfxImageItem( sal_uInt16 which )
+    : SfxInt16Item( which, 0 )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
