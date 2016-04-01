@@ -27,6 +27,7 @@
 #include <mvsave.hxx>
 #include <sortedobjs.hxx>
 #include <cntfrm.hxx>
+#include <fmtsrnd.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
@@ -262,6 +263,15 @@ sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject, std::set<const Sw
 
     SAL_WARN("sw.core", "SwTextBoxHelper::getOrdNum: no page or page doesn't contain the object");
     return pObject->GetOrdNum();
+}
+
+void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough)
+{
+    std::map<SwFrameFormat*, SwFrameFormat*> aMap = findShapes(pTextBox->GetDoc());
+    std::map<SwFrameFormat*, SwFrameFormat*>::iterator it = aMap.find(const_cast<SwFrameFormat*>(pTextBox));
+    if (it != aMap.end())
+        // pTextBox is indeed a TextBox, it->second is its shape.
+        rWrapThrough = it->second->GetSurround().GetSurround() == SURROUND_THROUGHT;
 }
 
 SwFrameFormat* SwTextBoxHelper::findTextBox(uno::Reference<drawing::XShape> xShape)
