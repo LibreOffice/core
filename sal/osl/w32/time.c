@@ -35,10 +35,28 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     FILETIME   CurTime, OffTime;
     __int64    Value;
 
+    typedef BOOL (WINAPI *CheckTokenMembership_PROC)( HANDLE, PSID, PBOOL );
+
+    static HMODULE  hModule = NULL;
+    static CheckTokenMembership_PROC    pCheckTokenMembership = NULL;
+
     OSL_ASSERT(pTimeVal != 0);
 
-    GetSystemTime(&SystemTime);
-    SystemTimeToFileTime(&SystemTime, &CurTime);
+    if ( !hModule )
+    {
+        hModule = GetModuleHandleA( "Kernel32.dll" );
+        if ( hModule )
+            pCheckTokenMembership = (CheckTokenMembership_PROC)GetProcAddress( hModule, "GetSystemTimePreciseAsFileTime" );
+    }
+
+    // use ~1 microsecond resolution if available
+    if ( pCheckTokenMembership )
+        GetSystemTimePreciseAsFileTime(&CurTime);
+    else
+    {
+        GetSystemTime(&SystemTime);
+        SystemTimeToFileTime(&SystemTime, &CurTime);
+    }
 
     SystemTime.wYear         = 1970;
     SystemTime.wMonth        = 1;
