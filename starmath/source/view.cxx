@@ -95,7 +95,7 @@ using namespace css::accessibility;
 using namespace css::uno;
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell)
-    : ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0)
+    : ScrollableWindow(&pShell->GetViewFrame()->GetWindow())
     , pAccessible(nullptr)
     , pViewShell(pShell)
     , nZoom(100)

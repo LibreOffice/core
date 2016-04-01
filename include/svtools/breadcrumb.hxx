@@ -49,7 +49,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         DECL_LINK_TYPED( ClickLinkHdl, FixedHyperlink&, void );
 
     public:
-        Breadcrumb( vcl::Window* pParent, WinBits nWinStyle = 0 );
+        Breadcrumb( vcl::Window* pParent );
         virtual ~Breadcrumb();
 
         void dispose() override;

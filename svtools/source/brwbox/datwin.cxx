@@ -89,14 +89,6 @@ void ButtonFrame::Draw( OutputDevice& rDev )
             rDev.SetTextColor(aOldColor);
     }
 
-    if ( bCurs )
-    {
-        rDev.SetLineColor( Color( COL_BLACK ) );
-        rDev.SetFillColor();
-        rDev.DrawRect( Rectangle(
-            Point( aRect.Left(), aRect.Top() ), Point( aRect.Right(), aRect.Bottom() ) ) );
-    }
-
     rDev.SetLineColor( aOldLineColor );
     rDev.SetFillColor( aOldFillColor );
 }
@@ -146,7 +138,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     {
         // paint handle column
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
-                     "", false/*bCurs*/, false ).Draw( rDev );
+                     "", false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
         rDev.SetLineColor( Color( COL_BLACK ) );
         rDev.DrawLine(

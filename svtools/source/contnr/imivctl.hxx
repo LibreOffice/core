@@ -405,9 +405,8 @@ public:
                         }
     static bool         IsBoundingRectValid( const Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
 
-    void                PaintEmphasis(const Rectangle& rRect1, const Rectangle& rRect2, bool bSelected,
-                                      bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext,
-                                      bool bIsBackgroundPainted = false);
+    void                PaintEmphasis(const Rectangle& rRect1, bool bSelected,
+                                      bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext );
 
     void                PaintItem(const Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
                             sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext);

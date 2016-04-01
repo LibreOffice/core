@@ -1004,10 +1004,10 @@ void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEve
     }
 
     if( xNode.is() )
-        updateNode( rTree, xNode, true/*bRecursive*/ );
+        updateNode( rTree, xNode );
 }
 
-void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XTreeNode >& xNode, bool bRecursive )
+void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XTreeNode >& xNode )
 {
     if( xNode.is() )
     {
@@ -1028,8 +1028,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
             pNodeEntry = createEntry( xNode, pParentEntry, nChild );
         }
 
-        if( bRecursive )
-            updateChildNodes( rTree, xNode, pNodeEntry );
+        updateChildNodes( rTree, xNode, pNodeEntry );
     }
 }
 

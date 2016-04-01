@@ -153,12 +153,11 @@ class SvxIconChoiceCtrlColumnInfo
     Image                   aColImage;
     long                    nWidth;
     SvxIconChoiceCtrlColumnAlign    eAlignment;
-    sal_uInt16                  nSubItem;
+    sal_uInt16              nSubItem;
 
 public:
-                            SvxIconChoiceCtrlColumnInfo( sal_uInt16 nSub, long nWd,
-                                SvxIconChoiceCtrlColumnAlign eAlign ) :
-                                nWidth( nWd ), eAlignment( eAlign ), nSubItem( nSub ) {}
+                            SvxIconChoiceCtrlColumnInfo( long nWd ) :
+                                nWidth( nWd ), eAlignment( IcnViewAlignLeft ), nSubItem( 0 ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
     void                    SetWidth( long nWd ) { nWidth = nWd; }
