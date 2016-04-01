@@ -318,7 +318,6 @@ protected:
     // In-place editing
     SvInplaceEdit2*  pEdCtrl;
     void            EditText( const OUString&, const Rectangle&,const Selection&);
-    void            EditText( const OUString&, const Rectangle&,const Selection&, bool bMulti);
     void            CancelTextEditing();
     bool            EditingCanceled() const;
     bool            IsEmptyTextAllowed() const;

@@ -62,7 +62,7 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED( EndScrollHdl, ScrollBar *, void );
 
 public:
-                    ScrollableWindow( vcl::Window* pParent, WinBits nBits = 0,
+                    ScrollableWindow( vcl::Window* pParent,
                                       ScrollableWindowFlags = ScrollableWindowFlags::DEFAULT );
     virtual         ~ScrollableWindow();
     virtual void    dispose() override;

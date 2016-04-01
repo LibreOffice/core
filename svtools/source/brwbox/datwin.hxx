@@ -39,20 +39,17 @@ class ButtonFrame
     Rectangle   aInnerRect;
     OUString    aText;
     bool        bPressed;
-    bool        bCurs;
     bool        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
                             const OUString &rText,
-                            bool bCursor,
                             bool _bDrawDisabled)
                 :aRect( rPt, rSz )
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
                 ,aText(rText)
                 ,bPressed(false)
-                ,bCurs(bCursor)
                 ,m_bDrawDisabled(_bDrawDisabled)
             {
             }

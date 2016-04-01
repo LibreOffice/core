@@ -38,9 +38,9 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 }
 
 
-ScrollableWindow::ScrollableWindow( vcl::Window* pParent, WinBits nBits,
+ScrollableWindow::ScrollableWindow( vcl::Window* pParent,
                                     ScrollableWindowFlags nFlags ) :
-    Window( pParent, WinBits(nBits|WB_CLIPCHILDREN) ),
+    Window( pParent, WB_CLIPCHILDREN ),
     aVScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG)) ),
     aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG)) ),
     aCornerWin( VclPtr<ScrollBarBox>::Create(this) )

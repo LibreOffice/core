@@ -227,8 +227,8 @@ private:
     SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
-                                             DayOfWeek eDayOfWeek, bool bBack = true,
-                                             bool bOther = false, sal_uLong nToday = 0);
+                                             DayOfWeek eDayOfWeek,
+                                             bool bOther, sal_uLong nToday);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     SVT_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );

@@ -96,14 +96,12 @@ namespace svt { namespace table
     {
     protected:
         ColPos  m_nColPos;
-        bool    m_bAllowVirtualColumns;
 
     public:
         TableColumnGeometry(
             TableControl_Impl const & _rControl,
             Rectangle const & _rBoundaries,
-            ColPos const _nCol,
-            bool const i_allowVirtualColumns = false
+            ColPos const _nCol
         );
 
         // status
@@ -135,7 +133,7 @@ namespace svt { namespace table
                 RowPos const _nRow
             )
             :m_aRow( _rControl, _rBoundaries, _nRow, false/*allowVirtualCells*/ )
-            ,m_aCol( _rControl, _rBoundaries, _nCol, false/*allowVirtualCells*/ )
+            ,m_aCol( _rControl, _rBoundaries, _nCol )
         {
         }
 

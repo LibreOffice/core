@@ -283,7 +283,7 @@ namespace svt
         Link<LinkParamNone*,void>    m_aModifyLink;
 
     public:
-        CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
+        CheckBoxControl(vcl::Window* pParent);
         virtual ~CheckBoxControl();
         virtual void dispose() override;
 
@@ -332,7 +332,7 @@ namespace svt
         friend class ComboBoxCellController;
 
     public:
-        ComboBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
+        ComboBoxControl(vcl::Window* pParent);
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -365,7 +365,7 @@ namespace svt
         friend class ListBoxCellController;
 
     public:
-        ListBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
+        ListBoxControl(vcl::Window* pParent);
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;

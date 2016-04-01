@@ -675,7 +675,7 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
                             long nX, long nY,
                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                             DayOfWeek eDayOfWeek,
-                            bool bBack, bool bOther, sal_uLong nToday )
+                            bool bOther, sal_uLong nToday )
 {
     Color* pTextColor = nullptr;
     const OUString& rDay = maDayTexts[nDay - 1];
@@ -716,16 +716,11 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
 
     // display background
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    if (bSel || bBack)
+    if (bSel)
     {
-        if (bSel)
-        {
-            rRenderContext.SetLineColor();
-            rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
-            rRenderContext.DrawRect(aDateRect);
-        }
-        else
-            rRenderContext.Erase(aDateRect);
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.DrawRect(aDateRect);
     }
 
     // display text
@@ -922,7 +917,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                     nDeltaX = nDayX + (nDay * mnDayWidth);
                     ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay + aTempDate.GetDay(),
                                  aTempDate.GetMonth(), aTempDate.GetYear(),
-                                 (DayOfWeek)((nDay + (sal_uInt16)eStartDay) % 7), false, true, nToday);
+                                 (DayOfWeek)((nDay + (sal_uInt16)eStartDay) % 7), true, nToday);
                 }
             }
             for (nDay = 1; nDay <= nDaysInMonth; nDay++)
@@ -930,7 +925,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                 nDeltaX = nDayX + (nDayIndex * mnDayWidth);
                 ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay, nMonth, nYear,
                              (DayOfWeek)((nDayIndex + (sal_uInt16)eStartDay) % 7),
-                             false, false, nToday);
+                             false, nToday);
                 if (nDayIndex == 6)
                 {
                     nDayIndex = 0;
@@ -952,7 +947,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                     ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay,
                                  aTempDate.GetMonth(), aTempDate.GetYear(),
                                  (DayOfWeek)((nDayIndex + (sal_uInt16)eStartDay) % 7),
-                                 false, true, nToday);
+                                 true, nToday);
                     if (nDayIndex == 6)
                     {
                         nDayIndex = 0;
