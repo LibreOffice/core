@@ -359,8 +359,8 @@ throw( RuntimeException, std::exception )
 
 class PipeReaderThread: public salhelper::Thread {
 public:
-    PipeReaderThread(RequestHandler & ipc, osl::Pipe const & pipe):
-        Thread("PipeReader"), ipc_(ipc), pipe_(pipe)
+    PipeReaderThread(RequestHandler & handler, osl::Pipe const & pipe):
+        Thread("PipeReader"), handler_(handler), pipe_(pipe)
     {}
 
     void close() { pipe_.close(); }
@@ -370,7 +370,7 @@ private:
 
     void execute() override;
 
-    RequestHandler & ipc_;
+    RequestHandler & handler_;
     osl::Pipe pipe_;
 };
 
@@ -644,16 +644,16 @@ void PipeReaderThread::execute()
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
             // only requests that don't dispatch events may be processed before cReady is set.
-            ipc_.cReady.wait();
+            handler_.cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!ipc_.pGlobal.is()) return;
+            if (!handler_.pGlobal.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
             osl::ClearableMutexGuard aGuard( RequestHandler::GetMutex() );
 
-            if ( ipc_.mState == RequestHandler::State::Downing )
+            if ( handler_.mState == RequestHandler::State::Downing )
             {
                 break;
             }
@@ -736,8 +736,8 @@ void PipeReaderThread::execute()
 
                 ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
                     aCmdLineArgs->getCwdUrl());
-                ipc_.cProcessed.reset();
-                pRequest->pcProcessed = &ipc_.cProcessed;
+                handler_.cProcessed.reset();
+                pRequest->pcProcessed = &handler_.cProcessed;
 
                 // Print requests are not dependent on the --invisible cmdline argument as they are
                 // loaded with the "hidden" flag! So they are always checked.
@@ -878,7 +878,7 @@ void PipeReaderThread::execute()
             aGuard.clear();
             // wait for processing to finish
             if (bDocRequestSent)
-                ipc_.cProcessed.wait();
+                handler_.cProcessed.wait();
             // processing finished, inform the requesting end:
             n = aStreamPipe.write(
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
@@ -892,7 +892,7 @@ void PipeReaderThread::execute()
         {
             {
                 osl::MutexGuard aGuard( RequestHandler::GetMutex() );
-                if ( ipc_.mState == RequestHandler::State::Downing )
+                if ( handler_.mState == RequestHandler::State::Downing )
                 {
                     break;
                 }
