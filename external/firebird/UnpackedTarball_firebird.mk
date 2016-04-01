@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-c++11.patch.1 \
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 	external/firebird/firebird-c++14.patch \
+	external/firebird/firebird-msvc14.patch \
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
