@@ -587,6 +587,7 @@ void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::f
 
 void TitleHelper::impl_startListeningForController (const css::uno::Reference< css::frame::XController >& xController)
 {
+    xController->addEventListener (static_cast< css::lang::XEventListener* > (static_cast< css::frame::XFrameActionListener* > (this) ) );
     css::uno::Reference< css::frame::XTitle > xSubTitle(xController->getModel (), css::uno::UNO_QUERY);
     impl_setSubTitle (xSubTitle);
 }
