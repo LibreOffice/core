@@ -1,14 +1,3 @@
---- src/Pass.cpp
-+++ src/Pass.cpp
-@@ -294,7 +294,7 @@
-         s->rules = begin;
-         s->rules_end = (end - begin <= FiniteStateMachine::MAX_RULES)? end :
-             begin + FiniteStateMachine::MAX_RULES;
--        qsort(begin, end - begin, sizeof(RuleEntry), &cmpRuleEntry);
-+        if (end != begin) qsort(begin, end - begin, sizeof(RuleEntry), &cmpRuleEntry);
-     }
- 
-     return true;
 --- src/gr_face.cpp
 +++ src/gr_face.cpp
 @@ -87,7 +87,7 @@
