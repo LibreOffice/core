@@ -927,11 +927,10 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const O
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrame,
-                                                bool        bFormat,
                                                 const OString&  sDefPage,
                                                 const OUString* pFormatStr )
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrameDlg>::Create(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, bFormat, sDefPage, pFormatStr);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrameDlg>::Create(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, pFormatStr);
     return new AbstractTabDialog_Impl(pDlg);
 }
 

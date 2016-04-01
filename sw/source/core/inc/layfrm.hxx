@@ -95,7 +95,6 @@ public:
      */
     const SwContentFrame* GetContentPos( Point &rPoint, const bool bDontLeave,
                                    const bool bBodyOnly = false,
-                                   const bool bCalc = false,
                                    const SwCursorMoveState *pCMS = nullptr,
                                    const bool bDefaultExpand = true ) const;
 

@@ -214,7 +214,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                 static_cast<SwCursorMoveState*>(pCMS)->m_bStop = true;
                 return false;
             }
-            const SwContentFrame *pCnt = GetContentPos( aPoint, false, false, false, pCMS, false );
+            const SwContentFrame *pCnt = GetContentPos( aPoint, false, false, pCMS, false );
             if ( pCMS && pCMS->m_bStop )
                 return false;
 
@@ -592,7 +592,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         {
             const bool bFill = pCMS && pCMS->m_pFill;
             Point aPoint( rPoint );
-            const SwContentFrame *pCnt = GetContentPos( rPoint, true, false, false, pCMS );
+            const SwContentFrame *pCnt = GetContentPos( rPoint, true, false, pCMS );
             if ( pCMS && pCMS->m_bStop )
                 return false;
             if( bFill && pCnt->IsTextFrame() )
@@ -1178,11 +1178,9 @@ static const SwLayoutFrame* lcl_Inside( const SwContentFrame *pCnt, Point& rPt )
 const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                                             const bool bDontLeave,
                                             const bool bBodyOnly,
-                                            const bool bCalc,
                                             const SwCursorMoveState *pCMS,
                                             const bool bDefaultExpand ) const
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     //Determine the first ContentFrame.
     const SwLayoutFrame *pStart = (!bDontLeave && bDefaultExpand && GetPrev()) ?
                                     static_cast<const SwLayoutFrame*>(GetPrev()) : this;
@@ -1207,7 +1205,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                 ((!bDontLeave || IsAnLower( pContent )) &&
                 (pContent->GetPhyPageNum() <= nMaxPage)) )
         {
-            if ( ( bCalc || pContent->Frame().Width() ) &&
+            if ( pContent->Frame().Width() &&
                  ( !bBodyOnly || pContent->IsInDocBody() ) )
             {
                 //If the Content lies in a protected area (cell, Footnote, section),
@@ -1220,9 +1218,6 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
 
                 if ( !pContent->IsTextFrame() || !static_cast<const SwTextFrame*>(pContent)->IsHiddenNow() )
                 {
-                    if ( bCalc )
-                        pContent->Calc(pRenderContext);
-
                     SwRect aContentFrame( pContent->UnionFrame() );
                     if ( aContentFrame.IsInside( rPoint ) )
                     {
@@ -1361,8 +1356,6 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
     }
 
     //Bring the Point in to the PrtArea
-    if ( bCalc )
-        pActual->Calc(pRenderContext);
     const SwRect aRect( pActual->Frame().Pos() + pActual->Prt().Pos(),
                         aActualSize );
     if ( aPoint.Y() < aRect.Top() )

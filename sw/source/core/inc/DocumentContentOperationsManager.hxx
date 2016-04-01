@@ -127,13 +127,13 @@ public:
         bool bExactRange;
 
         ParaRstFormat(const SwPosition* pStt, const SwPosition* pEnd,
-                   SwHistory* pHst, sal_uInt16 nWhch = 0, const SfxItemSet* pSet = nullptr)
+                   SwHistory* pHst, const SfxItemSet* pSet = nullptr)
             : pFormatColl(nullptr)
             , pHistory(pHst)
             , pSttNd(pStt)
             , pEndNd(pEnd)
             , pDelSet(pSet)
-            , nWhich(nWhch)
+            , nWhich(0)
             , bReset(false) // #i62675#
             , bResetListAttrs(false)
             , bResetAll(true)

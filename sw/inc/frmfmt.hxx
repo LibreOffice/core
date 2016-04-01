@@ -86,8 +86,7 @@ public:
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
-                           const Point* pPoint = nullptr,
-                           const bool bCalcFrame = false ) const;
+                           const Point* pPoint = nullptr ) const;
 
     /** Searches SdrObject. SdrObjUserCall is client of the format.
        The UserCall knows its SdrObject. */
@@ -173,8 +172,7 @@ public:
     /// Creates the views.
     virtual void MakeFrames() override;
 
-    SwFlyFrame* GetFrame( const Point* pDocPos = nullptr,
-                      const bool bCalcFrame = false ) const;
+    SwFlyFrame* GetFrame( const Point* pDocPos = nullptr ) const;
 
     SwAnchoredObject* GetAnchoredObj() const;
 

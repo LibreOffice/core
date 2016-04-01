@@ -84,7 +84,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         bool bStart = false, bDelSelect = false;
         SdrObject *pObj = nullptr;
         Point aDocPos( PixelToLogic( rPosPixel ) );
-        if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, true, true))
+        if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPos, true))
             //We are not selecting and aren't at a selection
             bStart = true;
         else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
@@ -245,7 +245,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rPixPnt ) );
-    if( rSh.ChgCurrPam( aDocPt )
+    if( rSh.TestCurrPam( aDocPt )
         || rSh.IsOverReadOnlyPos( aDocPt )
         || rSh.DocPtInsideInputField( aDocPt ) )
         return SotExchangeDest::NONE;

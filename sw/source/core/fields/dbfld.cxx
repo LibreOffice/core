@@ -763,8 +763,8 @@ SwFieldType* SwDBNameFieldType::Copy() const
 
 // name of the connected database
 
-SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFormat)
-    : SwDBNameInfField(pTyp, rDBData, nFormat)
+SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData)
+    : SwDBNameInfField(pTyp, rDBData, 0)
 {}
 
 OUString SwDBNameField::Expand() const

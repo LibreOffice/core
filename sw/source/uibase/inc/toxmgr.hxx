@@ -283,7 +283,7 @@ public:
 
     bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = nullptr, const SfxItemSet* pSet = nullptr);
 
-    const SwTOXType*    GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const;
+    const SwTOXType*    GetTOXType(TOXTypes eTyp) const;
     const SwTOXBase*    GetCurTOX();
 
 };
