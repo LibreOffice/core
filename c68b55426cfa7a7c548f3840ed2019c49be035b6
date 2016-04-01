@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_626f0e93",
+        "filename": "sd/uiconfig/sdraw/ui/drawprtldialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-01T10:36:49Z",
+      "side": 1,
+      "message": "You forgot to add \u003cchild\u003e \u003cplaceholder/\u003e \u003c/child\u003e here (for the content of the tab)\n\nThat might prevent the crash when opening styles edit dialog, but I haven\u0027t tried myself",
+      "revId": "c68b55426cfa7a7c548f3840ed2019c49be035b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
