@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ad45d7e_a269068e",
+        "filename": "sd/source/ui/func/fuprlout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-01T10:56:13Z",
+      "side": 1,
+      "message": "This doesn\u0027t compile. So either find out why this function isn\u0027t available, even though it is implemented -- SdPresLayoutTemplaeDlg::GetOutputItemSet exists (see what this dialog does differently in comparison to others)\n\nOr try to get the item you need from aSet (aSet.GetItemState(SID_ATTR_...). I suggest that you use gdb pretty printers (ask me if you don\u0027t know where they are) to inspect the item sets. Maybe the desired item is already there ... I don\u0027t know, haven\u0027t tried :)",
+      "revId": "c68b55426cfa7a7c548f3840ed2019c49be035b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_626f0e93",
         "filename": "sd/uiconfig/sdraw/ui/drawprtldialog.ui",
         "patchSetId": 1
