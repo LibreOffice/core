@@ -591,8 +591,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                ImpSvNumberformatScan* pSc,
                                ImpSvNumberInputScan* pISc,
                                sal_Int32& nCheckPos,
-                               LanguageType& eLan,
-                               bool bStan)
+                               LanguageType& eLan)
         : rScan(*pSc)
         , bAdditionalBuiltin( false )
         , bStarFlag( false )
@@ -623,7 +622,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
     {
         maLocale.meLanguage = eLan;
     }
-    bStandard = bStan;
+    bStandard = false;
     bIsUsed = false;
     fLimit1 = 0.0;
     fLimit2 = 0.0;

@@ -4563,7 +4563,7 @@ void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
     // Update image mirroring/rotation
     if ( Event.FeatureURL.Complete == ".uno:ImageOrientation" )
     {
-        SfxImageItem aItem( 1, 0 );
+        SfxImageItem aItem( 1 );
         aItem.PutValue( Event.State, 0 );
 
         mbImagesMirrored = aItem.IsMirrored();

@@ -339,9 +339,8 @@ sal_uInt32 SfxMultiFixRecordWriter::Close()
  */
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(sal_uInt8  nRecordType,
                                                  SvStream*  pStream,
-                                                 sal_uInt16 nRecordTag,
-                                                 sal_uInt8  nRecordVer)
-:   SfxMultiFixRecordWriter( nRecordType, pStream, nRecordTag, nRecordVer ),
+                                                 sal_uInt16 nRecordTag)
+:   SfxMultiFixRecordWriter( nRecordType, pStream, nRecordTag, 0 ),
     _nContentVer( 0 )
 {
 }
