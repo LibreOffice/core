@@ -126,7 +126,7 @@ TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinSt
       maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
 {
     maAllButton->Hide();
-    maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
+    maAllButton->SetStyle(maAllButton->GetStyle() | WB_BEVELBUTTON);
     maAllButton->SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
     maFTName->Hide();
 }
@@ -138,7 +138,7 @@ TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
       maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
 {
     maAllButton->Hide();
-    maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
+    maAllButton->SetStyle(maAllButton->GetStyle() | WB_BEVELBUTTON);
     maAllButton->SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
     maFTName->Hide();
 }
