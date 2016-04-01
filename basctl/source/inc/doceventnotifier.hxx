@@ -24,8 +24,6 @@
 
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
-
 
 namespace basctl
 {
@@ -34,9 +32,13 @@ namespace basctl
     class ScriptDocument;
 
 
-    class SAL_NO_VTABLE DocumentEventListener : private ::boost::noncopyable
+    class SAL_NO_VTABLE DocumentEventListener
     {
     public:
+        DocumentEventListener(const DocumentEventListener&) = delete;
+        const DocumentEventListener& operator=(const DocumentEventListener&) = delete;
+        DocumentEventListener() = default;
+
         virtual void onDocumentCreated( const ScriptDocument& _rDocument ) = 0;
         virtual void onDocumentOpened( const ScriptDocument& _rDocument ) = 0;
         virtual void onDocumentSave( const ScriptDocument& _rDocument ) = 0;

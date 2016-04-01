@@ -23,7 +23,6 @@
 #include "gstplayer.hxx"
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace avmedia { namespace gstreamer {
 
@@ -31,11 +30,15 @@ typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                 css::lang::XServiceInfo > FrameGrabber_BASE;
 
 
-class FrameGrabber : public FrameGrabber_BASE, private boost::noncopyable
+class FrameGrabber : public FrameGrabber_BASE
 {
     GstElement *mpPipeline;
     void disposePipeline();
 public:
+    // noncopyable
+    FrameGrabber(const FrameGrabber&) = delete;
+    const FrameGrabber& operator=(const FrameGrabber&) =delete;
+
     // static create method instead of public Ctor
     static FrameGrabber* create( const OUString &rURL );
 

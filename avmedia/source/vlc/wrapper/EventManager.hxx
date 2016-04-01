@@ -11,7 +11,6 @@
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
 
 #include <functional>
-#include <boost/noncopyable.hpp>
 #include "Player.hxx"
 
 struct libvlc_event_manager_t;
@@ -24,10 +23,13 @@ namespace vlc
 namespace wrapper
 {
     class EventHandler;
-    class EventManager : private boost::noncopyable
+    class EventManager
     {
 
     public:
+        EventManager(const EventManager&) = delete;
+        const EventManager& operator=(const EventManager&) = delete;
+
         static bool LoadSymbols();
         typedef std::function<void()> Callback;
 

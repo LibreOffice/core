@@ -22,7 +22,6 @@
 #include <iostream>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace avmedia
 {
@@ -31,9 +30,12 @@ namespace vlc
 namespace wrapper
 {
 template<class T>
-class ThreadsafeQueue : private boost::noncopyable
+class ThreadsafeQueue
 {
 public:
+    ThreadsafeQueue(const ThreadsafeQueue&) = delete;
+    const ThreadsafeQueue& operator=(const ThreadsafeQueue&) = delete;
+
     ThreadsafeQueue();
 
     void push( const T& data );
