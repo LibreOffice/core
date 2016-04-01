@@ -40,7 +40,7 @@ namespace utl {
         AtomProvider();
         ~AtomProvider();
 
-        int getAtom( const OUString&, bool bCreate = false );
+        int getAtom( const OUString& );
         const OUString& getString( int ) const;
     };
 

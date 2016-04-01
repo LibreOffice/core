@@ -32,13 +32,11 @@ AtomProvider::~AtomProvider()
 {
 }
 
-int AtomProvider::getAtom( const OUString& rString, bool bCreate )
+int AtomProvider::getAtom( const OUString& rString )
 {
     std::unordered_map< OUString, int, OUStringHash >::iterator it = m_aAtomMap.find( rString );
     if( it != m_aAtomMap.end() )
         return it->second;
-    if( ! bCreate )
-        return INVALID_ATOM;
     m_aAtomMap[ rString ] = m_nAtoms;
     m_aStringMap[ m_nAtoms ] = rString;
     m_nAtoms++;
@@ -68,11 +66,11 @@ int MultiAtomProvider::getAtom( int atomClass, const OUString& rString )
     std::unordered_map<int, AtomProvider*>::iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
-        return it->second->getAtom( rString, true/*bCreate*/ );
+        return it->second->getAtom( rString );
 
     AtomProvider* pNewClass;
     m_aAtomLists[ atomClass ] = pNewClass = new AtomProvider();
-    return pNewClass->getAtom( rString, true/*bCreate*/ );
+    return pNewClass->getAtom( rString );
 }
 
 const OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
