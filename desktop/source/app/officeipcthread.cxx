@@ -450,19 +450,12 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         return IPC_STATUS_OK;
     }
 
-    OUString aUserInstallPath;
-    OUString aDummy;
-
-    osl::Pipe pipe;
-
-    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
-
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
+    OUString aUserInstallPath;
     ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
-    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS || aLocateResult == ::utl::Bootstrap::PATH_VALID)
-        aDummy = aUserInstallPath;
-    else
+    if (aLocateResult != utl::Bootstrap::PATH_EXISTS
+        && aLocateResult != utl::Bootstrap::PATH_VALID)
     {
         return IPC_STATUS_BOOTSTRAP_ERROR;
     }
@@ -472,14 +465,16 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     // First we try to create our pipe if this fails we try to connect. We have to do this
     // in a loop because the other office can crash or shutdown between createPipe
     // and connectPipe!!
-    auto aUserInstallPathHashCode = CreateMD5FromString( aDummy );
+    auto aUserInstallPathHashCode = CreateMD5FromString(aUserInstallPath);
 
     // Check result to create a hash code from the user install path
     if ( aUserInstallPathHashCode.isEmpty() )
         return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
 
-    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
+    osl::Pipe pipe;
+    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
 
+    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
     do
     {
         osl::Security security;
@@ -545,8 +540,8 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         sal_uInt32 nCount = rtl_getAppCommandArgCount();
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
-            rtl_getAppCommandArg( i, &aDummy.pData );
-            if (!addArgument(aArguments, ',', aDummy)) {
+            rtl_getAppCommandArg( i, &aUserInstallPath.pData );
+            if (!addArgument(aArguments, ',', aUserInstallPath)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
