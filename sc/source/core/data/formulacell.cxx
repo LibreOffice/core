@@ -453,7 +453,7 @@ MightReferenceSheet mightRangeNameReferenceSheet( ScRangeData* pData, SCTAB nRef
  */
 bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const FormulaToken* pToken,
         const ScDocument* pDoc, SCTAB nGlobalRefTab, SCTAB nLocalRefTab,
-        SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement, int nRecursion)
+        SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement, bool bSameDoc, int nRecursion)
 {
     const sal_uInt16 nTokenIndex = pToken->GetIndex();
     SCTAB nTokenTab = pToken->GetSheet();
@@ -489,7 +489,7 @@ bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const Form
     if (!pCode)
         return false;
 
-    bool bRef = false;
+    bool bRef = !bSameDoc;  // include every name used when copying to other doc
     if (nRecursion < 126)   // whatever.. 42*3
     {
         for (const FormulaToken* p = pCode->First(); p; p = pCode->Next())
@@ -497,7 +497,7 @@ bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const Form
             if (p->GetOpCode() == ocName)
             {
                 bRef |= findRangeNamesReferencingSheet( rIndexes, p, pDoc, nGlobalRefTab, nLocalRefTab,
-                        nOldTokenTab, nOldTokenTabReplacement, nRecursion+1);
+                        nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
             }
         }
     }
@@ -712,7 +712,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
             const SCTAB nOldTokenTabReplacement = nOldTab;
             sc::UpdatedRangeNames aReferencingNames;
             findRangeNamesReferencingSheet( aReferencingNames, pToken, pOldDoc,
-                    nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, 0);
+                    nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, 0);
             if (bEarlyBailOut && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
                 return;
 
