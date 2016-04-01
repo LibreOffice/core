@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_3f3b6ded",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-01T00:14:49Z",
+      "side": 1,
+      "message": "We need at least an assert(i \u003c\u003d 99); here.",
+      "revId": "f728e0496d755928dd649396ab6577fc2ae052c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
