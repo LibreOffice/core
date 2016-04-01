@@ -34,7 +34,7 @@ MAKE_PRE=$(if $(filter WNT,$(OS)),\
 
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.5)
+			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbclient.dylib.3.0.0)
 
 # do not set LDFLAGS - it is mysteriously not used by firebird on MacOSX
 $(call gb_ExternalProject_get_state_target,firebird,build):
@@ -61,8 +61,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			" \
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
-			--disable-superserver \
-			--with-system-icu --without-fbsample --without-fbsample-db \
+			--without-fbsample --without-fbsample-db \
 			$(if $(filter-out MSC,$(COM)),$(if $(ENABLE_DEBUG),--enable-debug)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING), \
@@ -71,9 +70,9 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				--enable-shared --disable-static \
 			) \
 		&& if [ -n "$${FB_CPU_ARG}" ]; then \
-			   $(MAKE_PRE) $(MAKE) $(INVOKE_FPA) SHELL='$(SHELL)' firebird_embedded $(MAKE_POST); \
+			   $(MAKE_PRE) $(MAKE) $(INVOKE_FPA) SHELL='$(SHELL)' $(MAKE_POST); \
 			else \
-			   $(MAKE_PRE) $(MAKE) SHELL='$(SHELL)' firebird_embedded $(MAKE_POST); \
+			   $(MAKE_PRE) $(MAKE) SHELL='$(SHELL)' $(MAKE_POST); \
 			fi \
 	)
 # vim: set noet sw=4 ts=4:

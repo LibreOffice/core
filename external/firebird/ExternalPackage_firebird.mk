@@ -12,13 +12,13 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,firebird,firebird))
 $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbclient.dll,gen/Release/firebird/lib/ifbclient.dll))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.5))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbclient.dylib,gen/Release/firebird/lib/libfbclient.dylib.3.0.0))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.5))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbclient.so.3.0.0,gen/Release/firebird/lib/libfbclient.so.3.0.0))
 endif
 
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/firebird.msg,gen/firebird/firebird.msg))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/firebird.msg,gen/Release/firebird/firebird.msg))
 
 # vim: set noet sw=4 ts=4:
