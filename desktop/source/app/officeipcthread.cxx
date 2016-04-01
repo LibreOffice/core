@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_version.h>
 
 #include "app.hxx"
 #include "officeipcthread.hxx"
