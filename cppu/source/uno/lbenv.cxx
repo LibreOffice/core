@@ -52,7 +52,7 @@ namespace
 {
 
 
-inline static bool td_equals( typelib_InterfaceTypeDescription * pTD1,
+inline bool td_equals( typelib_InterfaceTypeDescription * pTD1,
                               typelib_InterfaceTypeDescription * pTD2 )
 {
     return (pTD1 == pTD2 ||
@@ -830,7 +830,7 @@ namespace
 
     class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
 
-inline static const OUString & unoenv_getStaticOIdPart()
+inline const OUString & unoenv_getStaticOIdPart()
 {
     return theStaticOIdPart::get().getOIdPart();
 }
