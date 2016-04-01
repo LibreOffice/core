@@ -539,7 +539,6 @@ public:
      in case a list style is found, <sListId> holds the list id, to which the
      text node belongs, which applies the found list style. */
     const SwNumRule * SearchNumRule(const bool bNum,
-                                    int nNonEmptyAllowed,
                                     OUString& sListId );
 
     /** Undo.

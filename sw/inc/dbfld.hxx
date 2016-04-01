@@ -247,7 +247,7 @@ public:
 class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 {
 public:
-    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uLong nFormat = 0);
+    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData);
 
     virtual OUString Expand() const override;
     virtual SwField* Copy() const override;

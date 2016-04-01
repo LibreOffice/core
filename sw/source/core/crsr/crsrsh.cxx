@@ -954,23 +954,20 @@ void SwCursorShell::SwapPam()
 //TODO: provide documentation
 /** Search in the selected area for a Selection that covers the given point.
 
-    If only a test run is made, then it checks if a SSelection exists but does
-    not move the current cursor. In a normal run the cursor will be moved to the
-    chosen SSelection.
+    It checks if a Selection exists but does
+    not move the current cursor.
 
     @param rPt      The point to search at.
-    @param bTstOnly Should I only do a test run? If true so do not move cursor.
     @param bTstHit ???
 */
-bool SwCursorShell::ChgCurrPam(
+bool SwCursorShell::TestCurrPam(
     const Point & rPt,
-    bool bTstOnly,
     bool bTstHit )
 {
     SET_CURR_SHELL( this );
 
     // check if the SPoint is in a table selection
-    if( bTstOnly && m_pTableCursor )
+    if( m_pTableCursor )
         return m_pTableCursor->IsInside( rPt );
 
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
@@ -989,12 +986,7 @@ bool SwCursorShell::ChgCurrPam(
         if( pCmp && pCmp->HasMark() &&
             *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos )
         {
-            if( bTstOnly || m_pCurrentCursor == pCmp ) // is the current
-                return true;               // return without update
-
-            m_pCurrentCursor = pCmp;
-            UpdateCursor(); // cursor is already at the right position
-            return true;
+            return true;               // return without update
         }
     } while( m_pCurrentCursor !=
         ( pCmp = dynamic_cast<SwShellCursor*>(pCmp->GetNext()) ) );

@@ -62,7 +62,6 @@ public:
                      AnchorState aAnchorState,
                      const basegfx::BColor& rColor,
                      double fDiscreteLineWidth,
-                     bool bShadow,
                      bool bLineSolid )
     :   drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D(),
         maTriangle(rTriangle),
@@ -71,7 +70,7 @@ public:
         maAnchorState(aAnchorState),
         maColor(rColor),
         mfDiscreteLineWidth(fDiscreteLineWidth),
-        mbShadow(bShadow),
+        mbShadow(false),
         mbLineSolid(bLineSolid)
     {}
 
@@ -346,7 +345,6 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorOverlayObject::createOverl
                              GetAnchorState(),
                              getBaseColor().getBColor(),
                              ANCHORLINE_WIDTH * aDiscreteLineWidth,
-                             false,
                              getLineSolid()) );
 
     return drawinglayer::primitive2d::Primitive2DContainer { aReference };

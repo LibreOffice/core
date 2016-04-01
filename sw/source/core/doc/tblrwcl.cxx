@@ -263,14 +263,13 @@ struct _CpyPara
     sal_uInt8 nDelBorderFlag;
     bool bCpyContent;
 
-    _CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, _CpyTabFrames& rFrameArr,
-              bool bCopyContent = true )
+    _CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, _CpyTabFrames& rFrameArr )
         : pDoc( pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),
         pInsLine(nullptr), pInsBox(nullptr), nOldSize(0), nNewSize(0),
         nMinLeft(ULONG_MAX), nMaxRight(0),
         nCpyCnt(nCopies), nInsPos(0),
         nLnIdx(0), nBoxIdx(0),
-        nDelBorderFlag(0), bCpyContent( bCopyContent )
+        nDelBorderFlag(0), bCpyContent( true )
         {}
     _CpyPara( const _CpyPara& rPara, SwTableLine* pLine )
         : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTableNd(rPara.pTableNd),
@@ -2034,7 +2033,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
     }
 
     _CpyTabFrames aCpyFormat;
-    _CpyPara aPara( &rTableNd, 1, aCpyFormat, true );
+    _CpyPara aPara( &rTableNd, 1, aCpyFormat );
     aPara.nNewSize = aPara.nOldSize = rTableNd.GetTable().GetFrameFormat()->GetFrameSize().GetWidth();
     // Copy
     if( IsNewModel() )
@@ -2129,7 +2128,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pNewTable->GetFrameFormat()->SetName( GetFrameFormat()->GetName() );
 
     _CpyTabFrames aCpyFormat;
-    _CpyPara aPara( pTableNd, 1, aCpyFormat, true/*bCpyNds*/ );
+    _CpyPara aPara( pTableNd, 1, aCpyFormat );
     aPara.nNewSize = aPara.nOldSize = GetFrameFormat()->GetFrameSize().GetWidth();
 
     if( IsNewModel() )

@@ -3681,7 +3681,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     }
                 }
 
-                bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = false;
+                bool bOverSelect = rSh.TestCurrPam( aDocPos );
+                bool bOverURLGrf = false;
                 if( !bOverSelect )
                     bOverURLGrf = bOverSelect = nullptr != rSh.IsURLGrfAtPos( aDocPos );
 
@@ -3722,7 +3723,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     }
     else if ( MOUSE_RIGHT == rMEvt.GetButtons() && !rMEvt.GetModifier()
         && static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4) == 1
-        && !rSh.ChgCurrPam( aDocPos ) )
+        && !rSh.TestCurrPam( aDocPos ) )
     {
         SwContentAtPos aFieldAtPos(SwContentAtPos::SW_FIELD);
 
@@ -4129,7 +4130,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             if ( !rSh.IsSelFrameMode() && !g_bDDINetAttr &&
                 (IsMinMove( m_aStartPos,aPixPt ) || m_bIsInMove) &&
-                (rSh.IsInSelect() || !rSh.ChgCurrPam( aDocPt )) )
+                (rSh.IsInSelect() || !rSh.TestCurrPam( aDocPt )) )
             {
                 if ( pSdrView )
                 {
@@ -4562,7 +4563,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             else
             {
                 SwContentAtPos aFieldAtPos ( SwContentAtPos::SW_FIELD );
-                if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPt ) && !rSh.GetContentAtPos( aDocPt, aFieldAtPos ) )
+                if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPt ) &&
+                     !rSh.GetContentAtPos( aDocPt, aFieldAtPos ) )
                 {
                     const bool bTmpNoInterrupt = g_bNoInterrupt;
                     g_bNoInterrupt = false;
@@ -5815,7 +5817,8 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         rSh.ClearGCAttr();
     }
 
-    bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = false;
+    bool bOverSelect = rSh.TestCurrPam( aDocPos );
+    bool bOverURLGrf = false;
     if( !bOverSelect )
         bOverURLGrf = bOverSelect = nullptr != rSh.IsURLGrfAtPos( aDocPos );
 

@@ -308,7 +308,7 @@ long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)
         // Remove a possibly present selection at the position
         // of the mouseclick
 
-    if(!IsInSelect() && ChgCurrPam(*pPt)) {
+    if(!IsInSelect() && TestCurrPam(*pPt)) {
         ClearMark();
     }
 
@@ -721,7 +721,7 @@ IMPL_LINK_TYPED( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, vo
 long SwWrtShell::UpdateLayoutFrame(const Point *pPt, bool )
 {
         // still a dummy
-    SwFEShell::EndDrag( pPt, false );
+    SwFEShell::EndDrag( pPt );
     m_fnDrag = &SwWrtShell::BeginFrameDrag;
     return 1;
 }

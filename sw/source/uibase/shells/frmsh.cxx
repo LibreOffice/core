@@ -471,7 +471,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                                                         OUString("FrameDialog"),
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
-                                                        aSet, false,
+                                                        aSet,
                                                         false,
                                                         sDefPage));
                 assert(pDlg);

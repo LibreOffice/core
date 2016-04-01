@@ -43,8 +43,8 @@ class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFieldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType, SotClipboardFormatId nFormat )
-        : SwBaseLink( nUpdateType, nFormat ),
+    SwIntrnlRefLink( SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType )
+        : SwBaseLink( nUpdateType, SotClipboardFormatId::STRING ),
         rFieldType( rType )
     {}
 
@@ -233,7 +233,7 @@ SwDDEFieldType::SwDDEFieldType(const OUString& rName,
     aName( rName ), pDoc( nullptr ), nRefCnt( 0 )
 {
     bCRLFFlag = bDeleted = false;
-    refLink = new SwIntrnlRefLink( *this, nUpdateType, SotClipboardFormatId::STRING );
+    refLink = new SwIntrnlRefLink( *this, nUpdateType );
     SetCmd( rCmd );
 }
 

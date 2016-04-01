@@ -2650,8 +2650,7 @@ void SwFrameFormat::MakeFrames()
     OSL_ENSURE( false, "Sorry not implemented." );
 }
 
-SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
-                                 const bool bCalcFrame ) const
+SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
 {
     SwRect aRet;
     SwFrame *pFrame = nullptr;
@@ -2685,8 +2684,7 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
     else
     {
         const SwFrameType nFrameType = RES_FLYFRMFMT == Which() ? SwFrameType::Fly : FRM_ALL;
-        pFrame = ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), nFrameType, pPoint,
-                                    nullptr, bCalcFrame );
+        pFrame = ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), nFrameType, pPoint);
     }
 
     if( pFrame )
@@ -3035,10 +3033,10 @@ void SwFlyFrameFormat::MakeFrames()
     }
 }
 
-SwFlyFrame* SwFlyFrameFormat::GetFrame( const Point* pPoint, const bool bCalcFrame ) const
+SwFlyFrame* SwFlyFrameFormat::GetFrame( const Point* pPoint ) const
 {
     return static_cast<SwFlyFrame*>(::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), SwFrameType::Fly,
-                                            pPoint, nullptr, bCalcFrame ));
+                                            pPoint ));
 }
 
 SwAnchoredObject* SwFlyFrameFormat::GetAnchoredObj() const

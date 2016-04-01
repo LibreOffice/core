@@ -260,9 +260,9 @@ const SwTOXBase* SwTOXMgr::GetCurTOX()
 {
     return pSh->GetCurTOX();
 }
-const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
+const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp) const
 {
-    return pSh->GetTOXType(eTyp, nId);
+    return pSh->GetTOXType(eTyp, 0);
 }
 
 void SwTOXMgr::SetCurTOXMark(sal_uInt16 nId)

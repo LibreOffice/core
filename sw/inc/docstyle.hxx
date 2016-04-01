@@ -75,8 +75,7 @@ public:
     SwDocStyleSheet( SwDoc&                 rDoc,
                      const OUString&        rName,
                      SwDocStyleSheetPool*   pPool,
-                     SfxStyleFamily         eFam,
-                     sal_uInt16             nMask);
+                     SfxStyleFamily         eFam);
 
     SwDocStyleSheet( const SwDocStyleSheet& );
 
