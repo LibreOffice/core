@@ -422,7 +422,7 @@ public:
     { return decode(m_aAuth, eMechanism, eCharset); }
 
     inline bool SetUser(OUString const & rTheUser)
-    { return setUser(rTheUser, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
+    { return setUser(rTheUser, RTL_TEXTENCODING_UTF8); }
 
     inline bool SetPass(OUString const & rThePassword);
 
@@ -444,7 +444,7 @@ public:
     sal_uInt32 GetPort() const;
 
     inline bool SetHost(OUString const & rTheHost)
-    { return setHost(rTheHost, WAS_ENCODED, RTL_TEXTENCODING_UTF8); }
+    { return setHost(rTheHost, RTL_TEXTENCODING_UTF8); }
 
     bool SetPort(sal_uInt32 nThePort);
 
@@ -539,7 +539,7 @@ public:
         the specified place to insert the new segment does not exist, false is
         returned.  If false is returned, the object is not modified.
      */
-    inline bool insertName(OUString const & rTheName,
+    bool insertName(OUString const & rTheName,
                            bool bAppendFinalSlash = false,
                            sal_Int32 nIndex = LAST_SEGMENT,
                            EncodeMechanism eMechanism = WAS_ENCODED,
@@ -665,8 +665,6 @@ public:
         @param bIgnoreFinalSlash  If true, a final slash at the end of the
         hierarchical path does not denote an empty segment, but is ignored.
 
-        @param eMechanism  See the general discussion for set-methods.
-
         @param eCharset  See the general discussion for set-methods.
 
         @return  True if the extension has successfully been modified (and the
@@ -677,7 +675,6 @@ public:
     bool setExtension(OUString const & rTheExtension,
                       sal_Int32 nIndex = LAST_SEGMENT,
                       bool bIgnoreFinalSlash = true,
-                      EncodeMechanism eMechanism = WAS_ENCODED,
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     /** Remove the extension of the name of a segment.
@@ -1015,7 +1012,7 @@ private:
     // Relative URLs:
 
     bool convertRelToAbs(
-        OUString const & rTheRelURIRef, bool bOctets,
+        OUString const & rTheRelURIRef,
         INetURLObject & rTheAbsURIRef, bool & rWasAbsolute,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bIgnoreFragment, bool bSmart, bool bRelativeNonURIs,
@@ -1061,13 +1058,13 @@ private:
 
     bool setUser(
         OUString const & rTheUser,
-        EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
+        rtl_TextEncoding eCharset);
 
     bool clearPassword();
 
     bool setPassword(
         OUString const & rThePassword,
-        EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
+        rtl_TextEncoding eCharset);
 
     // Host and Port:
 
@@ -1082,7 +1079,7 @@ private:
 
     bool setHost(
         OUString const & rTheHost,
-        EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
+        rtl_TextEncoding eCharset);
 
     // Path:
 
@@ -1108,11 +1105,6 @@ private:
 
     TOOLS_DLLPRIVATE SubString getSegment(
         sal_Int32 nIndex, bool bIgnoreFinalSlash) const;
-
-    bool insertName(
-        OUString const & rTheName, bool bOctets, bool bAppendFinalSlash,
-        sal_Int32 nIndex, bool bIgnoreFinalSlash, EncodeMechanism eMechanism,
-        rtl_TextEncoding eCharset);
 
     // Query:
 
@@ -1235,7 +1227,7 @@ INetURLObject::smartRel2Abs(OUString const & rTheRelURIRef,
                             FSysStyle eStyle) const
 {
     INetURLObject aTheAbsURIRef;
-    convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef, rWasAbsolute,
+    convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
                     eMechanism, eCharset, bIgnoreFragment, true,
                     bRelativeNonURIs, eStyle);
     return aTheAbsURIRef;
@@ -1247,7 +1239,7 @@ inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
 {
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
-    if (!convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef, bWasAbsolute,
+    if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
                          WAS_ENCODED, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
                          FSYS_DETECT))
         return false;
@@ -1299,26 +1291,16 @@ inline bool INetURLObject::SetPass(OUString const & rThePassword)
 {
     return rThePassword.isEmpty() ?
                clearPassword() :
-               setPassword(rThePassword, WAS_ENCODED, RTL_TEXTENCODING_UTF8);
+               setPassword(rThePassword, RTL_TEXTENCODING_UTF8);
 }
 
 inline bool INetURLObject::SetUserAndPass(OUString const & rTheUser,
                                           OUString const & rThePassword)
 {
-    return setUser(rTheUser, WAS_ENCODED, RTL_TEXTENCODING_UTF8)
+    return setUser(rTheUser, RTL_TEXTENCODING_UTF8)
            && (rThePassword.isEmpty() ?
                    clearPassword() :
-                   setPassword(rThePassword, WAS_ENCODED, RTL_TEXTENCODING_UTF8));
-}
-
-inline bool INetURLObject::insertName(OUString const & rTheName,
-                                      bool bAppendFinalSlash,
-                                      sal_Int32 nIndex,
-                                      EncodeMechanism eMechanism,
-                                      rtl_TextEncoding eCharset)
-{
-    return insertName(rTheName, false, bAppendFinalSlash, nIndex,
-                      true/*bIgnoreFinalSlash*/, eMechanism, eCharset);
+                   setPassword(rThePassword, RTL_TEXTENCODING_UTF8));
 }
 
 inline bool INetURLObject::SetParam(OUString const & rTheQuery,

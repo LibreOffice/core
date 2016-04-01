@@ -561,22 +561,19 @@ bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::set< sal_
     return true;
 }
 
-bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, bool bSequence, bool bMayAdjust )
+bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, bool bSequence )
 {
     bool bSuccess = true;
     if( bSequence )
     {
-        if( bMayAdjust )
-        {
-            if( i_nFirst < mnMin )
-                i_nFirst = mnMin;
-            if( i_nFirst > mnMax )
-                i_nFirst = mnMax;
-            if( i_nLast < mnMin )
-                i_nLast = mnMin;
-            if( i_nLast > mnMax )
-                i_nLast = mnMax;
-        }
+        if( i_nFirst < mnMin )
+            i_nFirst = mnMin;
+        if( i_nFirst > mnMax )
+            i_nFirst = mnMax;
+        if( i_nLast < mnMin )
+            i_nLast = mnMin;
+        if( i_nLast > mnMax )
+            i_nLast = mnMax;
         if( checkValue( i_nFirst ) && checkValue( i_nLast ) )
         {
             maSequence.push_back( Range( i_nFirst, i_nLast ) );
@@ -614,7 +611,7 @@ bool StringRangeEnumerator::insertJoinedRanges(
         return true;
 
     if( nCount == 1 )
-        return insertRange( rNumbers[0], -1, false, true );
+        return insertRange( rNumbers[0], -1, false );
 
     for( size_t i = 0; i < nCount - 1; i++ )
     {
@@ -626,7 +623,7 @@ bool StringRangeEnumerator::insertJoinedRanges(
             else if( nFirst < nLast ) nFirst++;
         }
 
-        insertRange( nFirst, nLast, nFirst != nLast, true );
+        insertRange( nFirst, nLast, nFirst != nLast );
     }
 
     return true;
