@@ -26,6 +26,10 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include "sfx2/passwd.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <svx/drawitem.hxx>
+#include <svx/svxids.hrc>
+#include <svx/xtable.hxx>
 #include "svtools/miscopt.hxx"
 
 #include "comphelper/storagehelper.hxx"
@@ -70,6 +74,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mnGeneralPageId(0),
     mbIsPresentation( false ),
     mbIsWriter( false ),
+    mbIsSpreadsheet( false ),
 
     mbSelectionPresent( false ),
     mbUseCTLFont( false ),
@@ -79,6 +84,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mnMaxImageResolution( 300 ),
     mbUseTaggedPDF( false ),
     mbExportNotes( true ),
+    mbExportFormulaAnnotation( false ),
     mbViewPDF( false ),
     mbExportNotesPages( false ),
     mbExportOnlyNotesPages( false ),
@@ -91,6 +97,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mbExportBookmarks( true ),
     mbExportHiddenSlides ( false),
     mnOpenBookmarkLevels( -1 ),
+    mnAnnotColor( -1 ),
 
     mbHideViewerToolbar( false ),
     mbHideViewerMenubar( false ),
@@ -171,6 +178,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
                 mbIsPresentation = true;
             if ( xInfo->supportsService( "com.sun.star.text.GenericTextDocument" ) )
                 mbIsWriter = true;
+            if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+                mbIsSpreadsheet = true;
         }
     }
     catch(const RuntimeException &)
@@ -193,6 +202,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
         mbExportOnlyNotesPages = maConfigItem.ReadBool( "ExportOnlyNotesPages", false );
     }
     mbExportNotes = maConfigItem.ReadBool( "ExportNotes", false );
+    mbExportFormulaAnnotation = maConfigItem.ReadBool( "ExportFormulaAsAnnotation", false );
+    mnAnnotColor = maConfigItem.ReadInt32( "FormulaAnnotationHighlightColor", -1 );
     mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", false );
 
     mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", true );
@@ -402,6 +413,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         maConfigItem.WriteBool( "ExportOnlyNotesPages", mbExportOnlyNotesPages );
     }
     maConfigItem.WriteBool( "ExportNotes", mbExportNotes );
+    maConfigItem.WriteBool( "ExportFormulaAsAnnotation", mbExportFormulaAnnotation );
     maConfigItem.WriteBool( "ViewPDFAfterExport", mbViewPDF );
 
     maConfigItem.WriteBool( "ExportBookmarks", mbExportBookmarks );
@@ -433,6 +445,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteInt32( "PageLayout", mnPageLayout );
     maConfigItem.WriteBool( "FirstPageOnLeft", mbFirstPageLeft );
     maConfigItem.WriteInt32( "OpenBookmarkLevels", mnOpenBookmarkLevels );
+    maConfigItem.WriteInt32( "FormulaAnnotationHighlightColor", mnAnnotColor );
 
     maConfigItem.WriteBool( "ExportLinksRelativeFsys", mbExportRelativeFsysLinks );
     maConfigItem.WriteInt32("PDFViewSelection", mnViewPDFMode );
@@ -521,6 +534,8 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     , mbExportFormFieldsUserSelection(false)
     , mbIsPresentation(false)
     , mbIsWriter(false)
+    , mbIsSpreadsheet(false)
+
     , mpaParent(nullptr)
 {
     get(mpRbAll, "all");
@@ -549,12 +564,19 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     get(mpCbExportNotes, "comments");
     get(mpCbExportNotesPages, "notes");
     get(mpCbExportOnlyNotesPages, "onlynotes");
+
+    get(mpFormulaFrame, "formulaframe");
+    get(mpCbExportFormulaAnnotations, "formulas");
+    get(mpFtAnnotColor, "formulas");
+    get(mpLbAnnotColor, "annotation_color");
+
     get(mpCbExportEmptyPages, "emptypages");
     get(mpCbViewPDF, "viewpdf");
 
     get(mpCbWatermark, "watermark");
     get(mpFtWatermark, "watermarklabel");
     get(mpEdWatermark, "watermarkentry");
+    get(mpFtTransparent, "transparent");
 }
 
 
@@ -588,11 +610,16 @@ void ImpPDFTabGeneralPage::dispose()
     mpCbViewPDF.clear();
     mpCbExportNotesPages.clear();
     mpCbExportOnlyNotesPages.clear();
+    mpFormsFrame.clear();
+    mpCbExportFormulaAnnotations.clear();
+    mpFtAnnotColor.clear();
+    mpLbAnnotColor.clear();
     mpCbExportEmptyPages.clear();
     mpCbAddStream.clear();
     mpCbWatermark.clear();
-    mpFtWatermark.clear();
     mpEdWatermark.clear();
+    mpFtWatermark.clear();
+    mpFtTransparent.clear();
     mpaParent.clear();
     SfxTabPage::dispose();
 }
@@ -614,6 +641,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpRbSelection->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
     mbIsPresentation = paParent->mbIsPresentation;
     mbIsWriter = paParent->mbIsWriter;
+    mbIsSpreadsheet = paParent->mbIsSpreadsheet;
 
     mpCbExportEmptyPages->Enable( mbIsWriter );
 
@@ -688,6 +716,43 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportOnlyNotesPages->Check(false);
         mpCbExportHiddenSlides->Show(false);
         mpCbExportHiddenSlides->Check(false);
+    }
+
+    if ( mbIsSpreadsheet )
+    {
+       mpCbExportFormulaAnnotations->Show(true);
+       //mpFormulaFrame->Show(true);
+       mpFtAnnotColor->Show(true);
+       mpLbAnnotColor->Show(true);
+
+       mpCbExportFormulaAnnotations->Check( paParent->mbExportFormulaAnnotation );
+       mpFormulaFrame->Enable( paParent->mbExportFormulaAnnotation );
+
+       SfxObjectShell* pDocSh = SfxObjectShell::Current();
+       XColorListRef pColorTable;
+
+       if ( pDocSh )
+       {
+           //FIXME: translatable string
+           mpLbAnnotColor->InsertEntry( COL_TRANSPARENT, OUString("Transparent"));
+
+           const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+           if ( pItem != nullptr )
+                   pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+
+           if ( pColorTable.is() )
+           {
+               for ( long i = 0; i < pColorTable->Count(); i++ )
+               {
+                   XColorEntry* pEntry = pColorTable->GetColor(i);
+                   mpLbAnnotColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+               }
+           }
+
+           mpLbAnnotColor->SelectEntry( Color( paParent->mnAnnotColor) );
+       }
+
+       mpCbExportFormulaAnnotations->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormulaAnnotations ) );
     }
 
     mpCbExportEmptyPages->Check(!paParent->mbIsSkipEmptyPages);
@@ -893,6 +958,11 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void
     }
 }
 
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportFormulaAnnotations, CheckBox&, void)
+{
+    mpFormulaFrame->Enable(mpCbExportFormulaAnnotations->IsChecked());
+    //mpLbAnnotColor->Enable(mpCbExportFormulaAnnotations->IsChecked());
+}
 
 /// The option features tab page
 ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
