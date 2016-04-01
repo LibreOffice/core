@@ -22,14 +22,16 @@
 
 #include <sal/config.h>
 #include <basic/sberrors.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 class SbxArray;
 class SbxVariable;
 
-class SbiDllMgr: private boost::noncopyable {
+class SbiDllMgr {
 public:
+    SbiDllMgr(const SbiDllMgr&) = delete;
+    const SbiDllMgr& operator=(const SbiDllMgr&) = delete;
+
     SbiDllMgr();
 
     ~SbiDllMgr();

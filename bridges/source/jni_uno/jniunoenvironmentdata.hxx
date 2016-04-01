@@ -24,7 +24,6 @@
 
 #include <jni.h>
 
-#include <boost/noncopyable.hpp>
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -34,7 +33,10 @@
 namespace jni_uno {
 
 // The pContext payload of a JNI uno_Environment:
-struct JniUnoEnvironmentData: boost::noncopyable {
+struct JniUnoEnvironmentData {
+    JniUnoEnvironmentData(const JniUnoEnvironmentData&) = delete;
+    const JniUnoEnvironmentData& operator=(const JniUnoEnvironmentData&) = delete;
+
     explicit JniUnoEnvironmentData(
         rtl::Reference<jvmaccess::UnoVirtualMachine> const & theMachine):
         machine(theMachine), info(JNI_info::get_jni_info(theMachine)),

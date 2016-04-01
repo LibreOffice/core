@@ -11,7 +11,6 @@
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTHANDLER_HXX
 
 #include <functional>
-#include <boost/noncopyable.hpp>
 #include <salhelper/thread.hxx>
 #include "ThreadsafeQueue.hxx"
 
@@ -21,9 +20,12 @@ namespace vlc
 {
 namespace wrapper
 {
-    class EventHandler : public ::osl::Thread, private boost::noncopyable
+    class EventHandler : public ::osl::Thread
     {
     public:
+        EventHandler(const EventHandler&) = delete;
+        const EventHandler& operator=(const EventHandler&) = delete;
+
         EventHandler();
         void stop();
 
