@@ -19,6 +19,7 @@
 package com.sun.star.lib.uno.environments.remote;
 
 import java.text.*;
+import java.util.*;
 import com.sun.star.lang.DisposedException;
 
 /**
@@ -82,6 +83,24 @@ public class JobQueue {
 			Thread.currentThread().getId() + "] " + str;
 		System.err.println(print);
 		System.err.flush();
+	}
+    }
+
+    public static void printTrace()
+    {
+	Map<Thread, StackTraceElement[]> trace = Thread.getAllStackTraces();
+	Set<Thread> set = trace.keySet();
+	Iterator<Thread> i = set.iterator();
+	while(i.hasNext())
+	{
+		Thread key = i.next();
+		System.out.println("Trace information for the thread " + key);
+		StackTraceElement[] frames = trace.get(key);
+
+		for(int j = 0; j < frames.length; j++){
+			System.err.println(frames[j]);
+		}
+		System.err.println();
 	}
     }
 
@@ -288,13 +307,16 @@ public class JobQueue {
 	int count = 0;
 	for (Job i = _head; i != null; i = i._next)
 	{
-		if (i.isRequest())
+		if (!i.isRequest())
 			multipleReturns = true;
 		count++;
 	}
 
 	if (multipleReturns)
-		printDebug("ERROR: MULTIPLE RETURNS");
+	{
+		printDebug("ERROR: MULTIPLE RETURNS.patch.2");
+		printTrace();
+	}
         if(DEBUG) printDebug("##### " + getClass().getName() + ".putJob to queue of " + count);
 	printDebug("new job : " + job.toString());
 	for (Job i = _head; i != null; i = i._next)
