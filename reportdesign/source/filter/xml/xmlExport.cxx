@@ -60,6 +60,8 @@
 
 #include <iterator>
 
+#define DEFAULT_LINE_WIDTH 2
+
 namespace rptxml
 {
     using namespace xmloff;
@@ -1149,9 +1151,9 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         table::BorderLine2 aValue;
         aValue.Color = COL_BLACK;
         aValue.InnerLineWidth = aValue.LineDistance = 0;
-        aValue.OuterLineWidth = 2;
+        aValue.OuterLineWidth = DEFAULT_LINE_WIDTH;
         aValue.LineStyle = table::BorderLineStyle::SOLID;
-        aValue.LineWidth = 2;
+        aValue.LineWidth = DEFAULT_LINE_WIDTH;
 
         awt::Point aPos = xFixedLine->getPosition();
         awt::Size aSize = xFixedLine->getSize();
