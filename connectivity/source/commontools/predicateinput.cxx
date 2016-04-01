@@ -42,7 +42,6 @@ namespace dbtools
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatter;
-    using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;

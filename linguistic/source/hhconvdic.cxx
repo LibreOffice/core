@@ -28,7 +28,6 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"

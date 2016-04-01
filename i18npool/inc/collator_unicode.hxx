@@ -19,7 +19,6 @@
 #ifndef INCLUDED_I18NPOOL_INC_COLLATOR_UNICODE_HXX
 #define INCLUDED_I18NPOOL_INC_COLLATOR_UNICODE_HXX
 
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>

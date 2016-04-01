@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CPPCANVAS_FONT_HXX
 #define INCLUDED_CPPCANVAS_FONT_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace rendering

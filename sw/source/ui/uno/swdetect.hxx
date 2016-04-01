@@ -24,7 +24,6 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

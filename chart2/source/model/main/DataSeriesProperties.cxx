@@ -30,7 +30,6 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Reference;
 
 namespace chart
 {

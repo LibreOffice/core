@@ -53,7 +53,6 @@ using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
-using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Reference;

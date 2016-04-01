@@ -13,7 +13,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -23,7 +22,6 @@
 
 #include "WPGImportFilter.hxx"
 
-using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;

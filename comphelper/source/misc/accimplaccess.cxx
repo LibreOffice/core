@@ -34,7 +34,6 @@ namespace comphelper
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::XUnoTunnel;
     using ::com::sun::star::accessibility::XAccessible;

@@ -27,7 +27,6 @@
 #include <comphelper/processfactory.hxx>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::dom::DocumentBuilder;
 using com::sun::star::xml::dom::XDocumentBuilder;

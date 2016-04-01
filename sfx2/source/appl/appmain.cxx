@@ -25,7 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 
 #include "sfxtypes.hxx"
 #include "appdata.hxx"

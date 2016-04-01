@@ -43,9 +43,6 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
 
 ScDPCache::GroupItems::GroupItems() : mnGroupType(0) {}
 

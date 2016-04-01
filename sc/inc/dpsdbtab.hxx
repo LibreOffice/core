@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SC_INC_DPSDBTAB_HXX
 #define INCLUDED_SC_INC_DPSDBTAB_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-
 #include "dptabdat.hxx"
 
 #include <unordered_set>

@@ -42,7 +42,6 @@
 #include <typelib/typeclass.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <rtl/process.h>
 #include <rtl/uuid.h>
 

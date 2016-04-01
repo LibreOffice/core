@@ -37,7 +37,6 @@
 
 namespace sd {
 
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::framework::XResourceId;
 using ::com::sun::star::drawing::framework::XConfigurationController;
 using ::com::sun::star::drawing::framework::ResourceActivationMode_ADD;

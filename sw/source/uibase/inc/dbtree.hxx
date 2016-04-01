@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBTREE_HXX
 
 #include <svtools/treelistbox.hxx>
-#include <com/sun/star/uno/Reference.h>
 
 #include "swdllapi.h"
 #include <swtypes.hxx>

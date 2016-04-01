@@ -36,7 +36,6 @@ namespace dbaui
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::graphic::XGraphic;

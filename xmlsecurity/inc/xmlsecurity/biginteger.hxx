@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
 OUString bigIntegerToNumericString( const css::uno::Sequence< sal_Int8 >& serial );

@@ -23,7 +23,6 @@
 #include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

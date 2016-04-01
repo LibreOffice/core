@@ -23,7 +23,6 @@
 #include <com/sun/star/security/ExtAltNameType.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/sequence.hxx>
 #include <seccomon.h>
 #include <cert.h>

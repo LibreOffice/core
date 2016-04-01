@@ -44,7 +44,6 @@ namespace dbaui
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDriver;

@@ -31,7 +31,6 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <oletest/XCallback.hpp>
 #include <rtl/process.h>
-#include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>
 

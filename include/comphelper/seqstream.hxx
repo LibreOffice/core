@@ -20,7 +20,6 @@
 #define INCLUDED_COMPHELPER_SEQSTREAM_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

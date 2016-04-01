@@ -47,7 +47,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::awt::XWindow2;
-    using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
 

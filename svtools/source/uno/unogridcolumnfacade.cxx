@@ -44,7 +44,6 @@ namespace svt { namespace table
     using css::uno::RuntimeException;
     using css::uno::Sequence;
     using css::uno::UNO_QUERY_THROW;
-    using css::uno::UNO_QUERY;
     using css::awt::grid::XGridColumn;
     using css::uno::XInterface;
     using css::uno::Exception;

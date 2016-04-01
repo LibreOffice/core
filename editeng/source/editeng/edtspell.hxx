@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDTSPELL_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EDTSPELL_HXX
 
-#include <com/sun/star/uno/Reference.h>
 #include <editeng/editengdllapi.h>
 #include <editeng/splwrap.hxx>
 #include <editeng/svxacorr.hxx>

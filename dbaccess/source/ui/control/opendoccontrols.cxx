@@ -48,7 +48,6 @@ namespace dbaui
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::Exception;
         using ::com::sun::star::uno::Sequence;
-        using ::com::sun::star::uno::UNO_QUERY_THROW;
         using ::com::sun::star::uno::XComponentContext;
         using ::com::sun::star::container::XNameAccess;
         using ::com::sun::star::lang::XMultiServiceFactory;

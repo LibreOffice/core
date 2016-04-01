@@ -59,12 +59,10 @@ namespace sfx2
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::task::InteractionClassification_QUERY;
     using ::com::sun::star::document::XEmbeddedScripts;
-    using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::script::XLibraryQueryExecutable;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_QUERY;
 
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 

@@ -26,7 +26,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 
-using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
 namespace chart

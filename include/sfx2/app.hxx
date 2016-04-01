@@ -26,7 +26,6 @@
 #include <svl/smplhint.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 

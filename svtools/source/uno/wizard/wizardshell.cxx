@@ -34,9 +34,6 @@ namespace svt { namespace uno
 
     using css::uno::Reference;
     using css::uno::XInterface;
-    using css::uno::UNO_QUERY;
-    using css::uno::UNO_QUERY_THROW;
-    using css::uno::UNO_SET_THROW;
     using css::uno::Exception;
     using css::uno::RuntimeException;
     using css::uno::Any;

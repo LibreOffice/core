@@ -26,7 +26,6 @@
 
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 
 
 // class declaration

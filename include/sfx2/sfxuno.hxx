@@ -32,7 +32,6 @@
 
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
