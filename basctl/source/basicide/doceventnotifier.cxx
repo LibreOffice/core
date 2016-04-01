@@ -27,7 +27,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -62,11 +61,14 @@ namespace basctl
 
     /** impl class for DocumentEventNotifier
     */
-    class DocumentEventNotifier::Impl   :public ::boost::noncopyable
-                                        ,public ::cppu::BaseMutex
+    class DocumentEventNotifier::Impl   :public ::cppu::BaseMutex
                                         ,public DocumentEventNotifier_Impl_Base
     {
     public:
+        // noncopyable
+        Impl(const Impl&) = delete;
+        const Impl& operator=(const Impl) = delete;
+
         Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
         virtual ~Impl ();
 
