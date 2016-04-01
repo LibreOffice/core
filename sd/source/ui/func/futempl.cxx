@@ -35,6 +35,8 @@
 #include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -101,6 +103,15 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     // get StyleSheet parameter
     SfxStyleSheetBasePool* pSSPool = mpDoc->GetDocSh()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = nullptr;
+    SfxItemSet aEditAttr(mpDoc->GetPool());
+
+    static const sal_uInt16 aRanges[] = {
+        EE_ITEMS_START, EE_ITEMS_END,
+        SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
+        0
+    };
+    SfxItemSet aNewAttr(mpViewShell->GetPool(),aRanges);
+    aNewAttr.Put(aEditAttr, false);
 
     const SfxPoolItem* pItem;
     sal_uInt16 nFamily = USHRT_MAX;
@@ -118,7 +129,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         else
             nFamily = SD_STYLE_FAMILY_PSEUDO;
     }
-
+    else if(pArgs && SfxItemState::SET == aNewAttr.GetItemState(EE_CHAR_BKGCOLOR, true, &pItem))
+    {
+        Color aBackColor = static_cast<const SvxBackgroundColorItem *>(pItem)->GetValue();
+        SvxBrushItem aBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
+        aNewAttr.ClearItem(EE_CHAR_BKGCOLOR);
+        aNewAttr.Put(aBrushItem);
+    }
     OUString aStyleName;
     sal_uInt16 nRetMask = SFXSTYLEBIT_ALL;
 
@@ -394,6 +411,15 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     case RET_OK:
                     {
                         nRetMask = pStyleSheet->GetMask();
+                        const SfxItemSet* pOutputSet = pPresDlg->GetOutputItemSet();
+                        SfxItemSet pOtherSet(*pOutputSet);
+                        const SvxBrushItem *pBrushItem = static_cast<const SvxBrushItem *>(pOtherSet.GetItem(SID_ATTR_BRUSH_CHAR));
+
+                        if(pBrushItem) {
+                            SvxBackgroundColorItem aBackColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
+                            pOtherSet.ClearItem(SID_ATTR_BRUSH_CHAR);
+                            pOtherSet.Put(aBackColorItem);
+                        }
 
                         if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                         {
