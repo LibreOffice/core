@@ -859,8 +859,7 @@ void PipeReaderThread::execute()
                     delete pRequest;
                     pRequest = nullptr;
                 }
-                if (aArguments.equalsL(RTL_CONSTASCII_STRINGPARAM("-tofront")) ||
-                    aCmdLineArgs->IsEmpty())
+                if (aCmdLineArgs->IsEmpty())
                 {
                     // no document was sent, just bring Office to front
                     ApplicationEvent* pAppEvent =
