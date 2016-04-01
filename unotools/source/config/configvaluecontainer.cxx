@@ -215,7 +215,7 @@ namespace utl
             const sal_Char* _pConfigLocation, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
-        implConstruct( OUString::createFromAscii( _pConfigLocation ), CVCFlags::UPDATE_ACCESS, _nLevels );
+        implConstruct( OUString::createFromAscii( _pConfigLocation ), _nLevels );
     }
 
     OConfigurationValueContainer::~OConfigurationValueContainer()
@@ -224,7 +224,7 @@ namespace utl
     }
 
     void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
-        const CVCFlags _nAccessFlags, const sal_Int32 _nLevels )
+        const sal_Int32 _nLevels )
     {
         SAL_WARN_IF(m_pImpl->aConfigRoot.isValid(), "unotools.config", "OConfigurationValueContainer::implConstruct: already initialized!");
 
@@ -232,9 +232,7 @@ namespace utl
         m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithComponentContext(
             m_pImpl->xORB,
             _rConfigLocation,
-            _nLevels,
-            ( _nAccessFlags & CVCFlags::UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
-            !bool( _nAccessFlags & CVCFlags::IMMEDIATE_UPDATE )
+            _nLevels
         );
         SAL_WARN_IF(!m_pImpl->aConfigRoot.isValid(), "unotools.config",
             "Could not access the configuration node located at " << _rConfigLocation);
