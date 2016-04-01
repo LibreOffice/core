@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_PARTWND_HXX
 #define INCLUDED_SFX2_SOURCE_INC_PARTWND_HXX
 
-#include <com/sun/star/uno/Reference.h>
-
 namespace com
 {
     namespace sun

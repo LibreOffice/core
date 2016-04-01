@@ -26,7 +26,6 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/macitem.hxx>

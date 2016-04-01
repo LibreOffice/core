@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_INC_XMLSTARBASICEXPORTHANDLER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlevent.hxx>
 

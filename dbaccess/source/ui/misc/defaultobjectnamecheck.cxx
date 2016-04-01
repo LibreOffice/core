@@ -52,7 +52,6 @@ namespace dbaui
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbcx::XTablesSupplier;
     using ::com::sun::star::sdb::XQueriesSupplier;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::sdb::tools::XObjectNames;

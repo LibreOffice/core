@@ -37,10 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
 
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {

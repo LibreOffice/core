@@ -88,7 +88,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::frame::XController;

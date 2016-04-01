@@ -9,7 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <libe-book/libe-book.h>
@@ -17,7 +16,6 @@
 #include "EBookImportFilter.hxx"
 
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;

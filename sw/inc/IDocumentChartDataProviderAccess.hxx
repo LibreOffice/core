@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-
 namespace com { namespace sun { namespace star { namespace frame {
     class XModel;
 }}}}

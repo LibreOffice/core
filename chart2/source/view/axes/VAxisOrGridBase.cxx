@@ -26,7 +26,6 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
 
 VAxisOrGridBase::VAxisOrGridBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount )
             : PlotterBase( nDimensionCount )

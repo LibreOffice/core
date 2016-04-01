@@ -11,14 +11,11 @@
 
 #include <libetonyek/libetonyek.h>
 
-#include <com/sun/star/uno/Reference.h>
-
 #include <cppuhelper/supportsservice.hxx>
 
 #include "NumbersImportFilter.hxx"
 
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;

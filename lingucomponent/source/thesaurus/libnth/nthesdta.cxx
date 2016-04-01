@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 
 #include "nthesdta.hxx"

@@ -29,7 +29,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 
 
 // Project-local header

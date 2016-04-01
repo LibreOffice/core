@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/ustring.hxx>

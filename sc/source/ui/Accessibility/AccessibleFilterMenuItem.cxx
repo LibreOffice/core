@@ -36,7 +36,6 @@ using namespace ::com::sun::star::accessibility::AccessibleStateType;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 

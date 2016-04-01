@@ -24,7 +24,6 @@
 #include "drawingml/textbody.hxx"
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::xml::sax::SAXException;
 using ::com::sun::star::xml::sax::XFastAttributeList;

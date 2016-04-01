@@ -35,7 +35,6 @@ namespace comphelper
     using com::sun::star::resource::XResourceBundleLoader;
     using com::sun::star::resource::MissingResourceException;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
 

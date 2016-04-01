@@ -30,7 +30,6 @@
 namespace connectivity { namespace java { namespace sql {
 
 
-    using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
 
 

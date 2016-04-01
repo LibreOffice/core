@@ -40,7 +40,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_QUERY;
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ): SwVbaApplication_BASE( xContext )
 {

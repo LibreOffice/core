@@ -28,7 +28,6 @@
 #include <svx/flagsdef.hxx>
 #include <editeng/flstitem.hxx>
 
-using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
 namespace chart

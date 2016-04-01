@@ -37,7 +37,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicProvider;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;

@@ -31,8 +31,6 @@ namespace pcr
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;

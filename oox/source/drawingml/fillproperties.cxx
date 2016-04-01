@@ -49,7 +49,6 @@ using namespace ::com::sun::star::graphic;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::geometry::IntegerRectangle2D;
 

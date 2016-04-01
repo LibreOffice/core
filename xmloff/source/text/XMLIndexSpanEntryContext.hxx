@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXSPANENTRYCONTEXT_HXX
 
 #include "XMLIndexSimpleEntryContext.hxx"
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustrbuf.hxx>

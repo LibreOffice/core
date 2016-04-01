@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }

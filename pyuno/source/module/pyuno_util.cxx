@@ -34,11 +34,9 @@
 
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Type;
-using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::TypeClass;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;

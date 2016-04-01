@@ -40,7 +40,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XNameContainer;
 
 namespace oox {

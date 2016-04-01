@@ -26,7 +26,6 @@ namespace comphelper
 {
 
 
-    using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;

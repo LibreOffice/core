@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <com/sun/star/uno/Reference.h>
 
 namespace com { namespace sun { namespace star {
   namespace beans {
