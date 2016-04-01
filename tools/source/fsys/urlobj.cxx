@@ -1470,7 +1470,6 @@ void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
 }
 
 bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
-                                    bool bOctets,
                                     INetURLObject & rTheAbsURIRef,
                                     bool & rWasAbsolute,
                                     EncodeMechanism eMechanism,
@@ -1533,7 +1532,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                     q, pEnd - q, '\\');
                 sal_Unicode const * qe = n == -1 ? pEnd : q + n;
                 if (parseHostOrNetBiosName(
-                        q, qe, bOctets, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
+                        q, qe, false/*bOctets*/, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
                         true, nullptr))
                 {
                     bFSys = true; // 1st
@@ -1542,7 +1541,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             if (bFSys)
             {
                 INetURLObject aNewURI;
-                aNewURI.setAbsURIRef(rTheRelURIRef, bOctets, eMechanism,
+                aNewURI.setAbsURIRef(rTheRelURIRef, false/*bOctets*/, eMechanism,
                                      eCharset, true, eStyle);
                 if (!aNewURI.HasError())
                 {
@@ -1649,7 +1648,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32
-                    = getUTF32(p, pEnd, bOctets, eMechanism,
+                    = getUTF32(p, pEnd, false/*bOctets*/, eMechanism,
                                eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
                 {
@@ -1661,7 +1660,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                         break;
                     }
                 }
-                appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets,
+                appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, false/*bOctets*/,
                            PART_VISIBLE, eCharset, true);
             }
         }
@@ -1704,7 +1703,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
-                = getUTF32(p, pEnd, bOctets, eMechanism, eCharset, eEscapeType);
+                = getUTF32(p, pEnd, false/*bOctets*/, eMechanism, eCharset, eEscapeType);
             if (eEscapeType == ESCAPE_NO)
             {
                 if (nUTF32 == nFragmentDelimiter)
@@ -1715,7 +1714,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                 else if (nUTF32 == nSegmentDelimiter)
                     nUTF32 = '/';
             }
-            appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
+            appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, false/*bOctets*/, ePart,
                        eCharset, true);
         }
     }
@@ -1797,9 +1796,9 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32
-                    = getUTF32(p, pEnd, bOctets, eMechanism,
+                    = getUTF32(p, pEnd, false/*bOctets*/, eMechanism,
                                eCharset, eEscapeType);
-                appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
+                appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, false/*bOctets*/, ePart,
                            eCharset, true);
             }
             if (p != pEnd && *p == nSegmentDelimiter)
@@ -1813,8 +1812,8 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
-                = getUTF32(p, pEnd, bOctets, eMechanism, eCharset, eEscapeType);
-            appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
+                = getUTF32(p, pEnd, false/*bOctets*/, eMechanism, eCharset, eEscapeType);
+            appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, false/*bOctets*/, ePart,
                        eCharset, true);
         }
 
@@ -1843,8 +1842,8 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
-                = getUTF32(p, pEnd, bOctets, eMechanism, eCharset, eEscapeType);
-            appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets,
+                = getUTF32(p, pEnd, false/*bOctets*/, eMechanism, eCharset, eEscapeType);
+            appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, false/*bOctets*/,
                        PART_VISIBLE, eCharset, true);
         }
     }
@@ -1886,7 +1885,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // ref:
     INetURLObject aSubject;
     bool bWasAbsolute;
-    if (!convertRelToAbs(rTheAbsURIRef, false/*bOctets*/, aSubject, bWasAbsolute,
+    if (!convertRelToAbs(rTheAbsURIRef, aSubject, bWasAbsolute,
                          eEncodeMechanism, eCharset, false, false, false,
                          eStyle))
     {
@@ -2226,7 +2225,6 @@ INetURLObject::SubString INetURLObject::getAuthority() const
 }
 
 bool INetURLObject::setUser(OUString const & rTheUser,
-                            EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
     if (
@@ -2237,7 +2235,7 @@ bool INetURLObject::setUser(OUString const & rTheUser,
     }
 
     OUString aNewUser(encodeText(rTheUser, false/*bOctets*/, PART_USER_PASSWORD,
-                                  eMechanism, eCharset, false));
+                                  WAS_ENCODED, eCharset, false));
     sal_Int32 nDelta;
     if (m_aUser.isPresent())
         nDelta = m_aUser.set(m_aAbsURIRef, aNewUser);
@@ -2287,13 +2285,12 @@ bool INetURLObject::clearPassword()
 }
 
 bool INetURLObject::setPassword(OUString const & rThePassword,
-                                EncodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bPassword)
         return false;
     OUString aNewAuth(encodeText(rThePassword, false/*bOctets*/, PART_USER_PASSWORD,
-                                  eMechanism, eCharset, false));
+                                  WAS_ENCODED, eCharset, false));
     sal_Int32 nDelta;
     if (m_aAuth.isPresent())
         nDelta = m_aAuth.set(m_aAbsURIRef, aNewAuth);
@@ -2825,7 +2822,6 @@ bool INetURLObject::parseHostOrNetBiosName(
 }
 
 bool INetURLObject::setHost(OUString const & rTheHost,
-                            EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bHost)
@@ -2856,7 +2852,7 @@ bool INetURLObject::setHost(OUString const & rTheHost,
     }
     if (!parseHostOrNetBiosName(
             aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
-            false/*bOctets*/, eMechanism, eCharset, bNetBiosName, &aSynHost))
+            false/*bOctets*/, WAS_ENCODED, eCharset, bNetBiosName, &aSynHost))
         return false;
     sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear());
     m_aPort += nDelta;
@@ -3154,8 +3150,7 @@ bool INetURLObject::appendSegment(OUString const & rTheSegment,
                                   EncodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset)
 {
-    return insertName(rTheSegment, false/*bOctets*/, false, LAST_SEGMENT, true,
-                      eMechanism, eCharset);
+    return insertName(rTheSegment, false, LAST_SEGMENT, eMechanism, eCharset);
 }
 
 INetURLObject::SubString INetURLObject::getSegment(sal_Int32 nIndex,
@@ -3204,9 +3199,8 @@ INetURLObject::SubString INetURLObject::getSegment(sal_Int32 nIndex,
                      pSegEnd - pSegBegin);
 }
 
-bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
+bool INetURLObject::insertName(OUString const & rTheName,
                                bool bAppendFinalSlash, sal_Int32 nIndex,
-                               bool bIgnoreFinalSlash,
                                EncodeMechanism eMechanism,
                                rtl_TextEncoding eCharset)
 {
@@ -3225,7 +3219,7 @@ bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
     if (nIndex == LAST_SEGMENT)
     {
         pPrefixEnd = pPathEnd;
-        if (bIgnoreFinalSlash && pPrefixEnd > pPathBegin &&
+        if (pPrefixEnd > pPathBegin &&
             pPrefixEnd[-1] == '/')
         {
             --pPrefixEnd;
@@ -3241,14 +3235,14 @@ bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
             (pPathBegin == pPathEnd && bAppendFinalSlash);
         pSuffixBegin =
             (pPathEnd - pPathBegin == 1 && *pPathBegin == '/' &&
-             !bAppendFinalSlash && bIgnoreFinalSlash)
+             !bAppendFinalSlash)
             ? pPathEnd : pPathBegin;
     }
     else
     {
         pPrefixEnd = pPathBegin;
         sal_Unicode const * pEnd = pPathEnd;
-        if (bIgnoreFinalSlash && pEnd > pPathBegin && pEnd[-1] == '/')
+        if (pEnd > pPathBegin && pEnd[-1] == '/')
             --pEnd;
         bool bSkip = pPrefixEnd < pEnd && *pPrefixEnd == '/';
         bInsertSlash = false;
@@ -3280,7 +3274,7 @@ bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pPrefixEnd - pPathBegin);
     aNewPath.append('/');
-    aNewPath.append(encodeText(rTheName, bOctets, PART_PCHAR,
+    aNewPath.append(encodeText(rTheName, false/*bOctets*/, PART_PCHAR,
                            eMechanism, eCharset, true));
     if (bInsertSlash) {
         aNewPath.append('/');
@@ -3842,7 +3836,7 @@ OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
     return INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
-            convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef,
+            convertRelToAbs(rTheRelURIRef, aTheAbsURIRef,
                             bWasAbsolute, eEncodeMechanism,
                             eCharset, bIgnoreFragment, false,
                             false, FSYS_DETECT)
@@ -4147,7 +4141,6 @@ OUString INetURLObject::getExtension(sal_Int32 nIndex,
 
 bool INetURLObject::setExtension(OUString const & rTheExtension,
                                  sal_Int32 nIndex, bool bIgnoreFinalSlash,
-                                 EncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)
 {
     SubString aSegment(getSegment(nIndex, bIgnoreFinalSlash));
@@ -4175,7 +4168,7 @@ bool INetURLObject::setExtension(OUString const & rTheExtension,
     aNewPath.append(pPathBegin, pExtension - pPathBegin);
     aNewPath.append('.');
     aNewPath.append(encodeText(rTheExtension, false, PART_PCHAR,
-        eMechanism, eCharset, true));
+        WAS_ENCODED, eCharset, true));
     aNewPath.append(p, pPathEnd - p);
 
     return setPath(aNewPath.makeStringAndClear(), NOT_CANONIC,
