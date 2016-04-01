@@ -1,0 +1,2323 @@
+diff -ur firebird.orig/src/jrd/os/win32/mod_loader.cpp firebird/src/jrd/os/win32/mod_loader.cpp
+--- firebird.orig/src/jrd/os/win32/mod_loader.cpp	2015-11-16 12:39:38.000000000 +0100
++++ firebird/src/jrd/os/win32/mod_loader.cpp	2016-03-01 08:48:27.826182400 +0100
+@@ -99,6 +99,8 @@
+                     "msvcr110.dll",
+ #elif _MSC_VER == 1800
+ 		    "mscvr120.dll",
++#elif _MSC_VER == 1900
++		    "vcruntime140.dll",
+ #else
+                     #error Specify CRT DLL name here !
+ #endif
+diff --git a/src/burp/burp.cpp b/src/burp/burp.cpp
+index 58dfdf0..1f29346 100644
+--- a/src/burp/burp.cpp
++++ b/src/burp/burp.cpp
+@@ -126,8 +126,8 @@ static const StatFormat STAT_FORMATS[] =
+ {
+ 	{"time",	"%4lu.%03u ",  9},
+ 	{"delta",	"%2lu.%03u ",  7},
+-	{"reads",	"%6"UQUADFORMAT" ", 7},
+-	{"writes",	"%6"UQUADFORMAT" ", 7}
++	{"reads",	"%6" UQUADFORMAT" ", 7},
++	{"writes",	"%6" UQUADFORMAT" ", 7}
+ };
+ 
+ 
+diff --git a/src/burp/restore.epp b/src/burp/restore.epp
+index e83a9f0..c18acf3 100644
+--- a/src/burp/restore.epp
++++ b/src/burp/restore.epp
+@@ -1278,7 +1278,7 @@ void fix_security_class_name(BurpGlobals* tdgbl, TEXT* sec_class, bool is_field)
+ 
+ 	fb_assert(id);
+ 
+-	snprintf(sec_class, MAX_SQL_IDENTIFIER_SIZE, "%s%"SQUADFORMAT, prefix, id);
++	snprintf(sec_class, MAX_SQL_IDENTIFIER_SIZE, "%s%" SQUADFORMAT, prefix, id);
+ }
+ 
+ void general_on_error()
+diff --git a/src/burp/spit.cpp b/src/burp/spit.cpp
+index 51c3b10..2777688 100644
+--- a/src/burp/spit.cpp
++++ b/src/burp/spit.cpp
+@@ -250,7 +250,7 @@ int main( int argc, char *argv[])
+ 
+ 					if (strlen(string) > MAX_FILE_NM_LEN) {
+ 						fprintf(stderr, "%s: file name %s is too long\n", prog_name, string);
+-						fprintf(stderr, "%s: maximum length of file name is %"SIZEFORMAT" bytes\n",
++						fprintf(stderr, "%s: maximum length of file name is %" SIZEFORMAT" bytes\n",
+ 								   prog_name, MAX_FILE_NM_LEN);
+ 						print_clo(prog_name);
+ 						free_file_list(file_list);
+diff --git a/src/dsql/pass1.cpp b/src/dsql/pass1.cpp
+index 2fe0928..c351ac2 100644
+--- a/src/dsql/pass1.cpp
++++ b/src/dsql/pass1.cpp
+@@ -11817,7 +11817,7 @@ void DSQL_pretty(const dsql_nod* node, int column)
+ 			if (node->nod_desc.dsc_dtype == dtype_text)
+ 				sprintf(s, "constant \"%s\"", node->nod_desc.dsc_address);
+ 			else
+-				sprintf(s, "constant %"SLONGFORMAT, node->getSlong());
++				sprintf(s, "constant %" SLONGFORMAT, node->getSlong());
+ 			verb = s;
+ 		}
+ 		break;
+diff --git a/src/dudley/extract.epp b/src/dudley/extract.epp
+index 6240758..b1842ca 100644
+--- a/src/dudley/extract.epp
++++ b/src/dudley/extract.epp
+@@ -231,7 +231,7 @@ static void binary_to_ascii(SLONG value, SSHORT scale, TEXT * buffer)
+ /* Handle non-negative scale factor in straightforward manner */
+ 
+ 	if (scale >= 0) {
+-		sprintf(p, "%"SLONGFORMAT, value);
++		sprintf(p, "%" SLONGFORMAT, value);
+ 		while (*p)
+ 			p++;
+ 		if (scale)
+@@ -541,7 +541,7 @@ static void extract_database(const TEXT * DB_file_nameL)
+             d += 2;
+             page_size = gds__vax_integer(reinterpret_cast<const UCHAR*>(d), length);
+             if (page_size)
+-                fprintf(output_file, "\n\tpage_size %"SLONGFORMAT, page_size);
++                fprintf(output_file, "\n\tpage_size %" SLONGFORMAT, page_size);
+         }
+ 
+         if (EXT_capabilities & EXT_files)
+@@ -550,14 +550,14 @@ static void extract_database(const TEXT * DB_file_nameL)
+                 FOR F IN RDB$FILES WITH F.RDB$SHADOW_NUMBER MISSING OR
+                     F.RDB$SHADOW_NUMBER EQ 0
+                     name_trunc(F.RDB$FILE_NAME, buffer);
+-                    fprintf(output_file, "\n\tfile \"%s\" starting at page %"SLONGFORMAT,
++                    fprintf(output_file, "\n\tfile \"%s\" starting at page %" SLONGFORMAT,
+                                buffer, F.RDB$FILE_START);
+                 END_FOR;
+             }
+             else {
+                 FOR F IN RDB$FILES
+ 					name_trunc(F.RDB$FILE_NAME, buffer);
+-                    fprintf(output_file, "\n\tfile \"%s\" starting at page %"SLONGFORMAT,
++                    fprintf(output_file, "\n\tfile \"%s\" starting at page %" SLONGFORMAT,
+                                buffer, F.RDB$FILE_START);
+                 END_FOR;
+ 			}
+@@ -595,7 +595,7 @@ static void extract_database(const TEXT * DB_file_nameL)
+ 	           fprintf(output_file, ",\n\t\t\"%s\"", F.RDB$FILE_NAME);
+ 
+ 	       if (F.RDB$FILE_LENGTH)
+-	           fprintf(output_file, " size = %"SLONGFORMAT, F.RDB$FILE_LENGTH);
++	           fprintf(output_file, " size = %" SLONGFORMAT, F.RDB$FILE_LENGTH);
+ 
+ 	       if (F.RDB$FILE_PARTITIONS)
+ 	           fprintf(output_file, " partitions = %d",
+@@ -616,7 +616,7 @@ static void extract_database(const TEXT * DB_file_nameL)
+ 	       fprintf(output_file, " \"%s\"", F.RDB$FILE_NAME);
+ 
+ 	       if (F.RDB$FILE_LENGTH)
+-	           fprintf(output_file, " size = %"SLONGFORMAT, F.RDB$FILE_LENGTH);
++	           fprintf(output_file, " size = %" SLONGFORMAT, F.RDB$FILE_LENGTH);
+ 
+ 	       if (F.RDB$FILE_PARTITIONS)
+ 	           fprintf(output_file, " partitions = %d",
+@@ -638,12 +638,12 @@ static void extract_database(const TEXT * DB_file_nameL)
+ 			if (num_buf)
+ 				fprintf(output_file, "\n\tnum_log_buffers %d", num_buf);
+ 			if (buf_size)
+-				fprintf(output_file, "\n\tlog_buffer_size %"SLONGFORMAT, buf_size);
++				fprintf(output_file, "\n\tlog_buffer_size %" SLONGFORMAT, buf_size);
+ 			if (chkpt_len)
+-				fprintf(output_file, "\n\tcheck_point_length %"SLONGFORMAT,
++				fprintf(output_file, "\n\tcheck_point_length %" SLONGFORMAT,
+ 						   chkpt_len / OneK);
+ 			if (grp_commit)
+-				fprintf(output_file, "\n\tgroup_commit_wait_time %"SLONGFORMAT,
++				fprintf(output_file, "\n\tgroup_commit_wait_time %" SLONGFORMAT,
+ 						   grp_commit);
+ 		}
+  */
+@@ -658,7 +658,7 @@ static void extract_database(const TEXT * DB_file_nameL)
+ 				SORTED BY F.RDB$SHADOW_NUMBER, F.RDB$FILE_START
+ 				name_trunc(F.RDB$FILE_NAME, buffer);
+ 				if (F.RDB$FILE_START)
+-					fprintf(output_file, "\n\tfile \"%s\" starting at page %"SLONGFORMAT,
++					fprintf(output_file, "\n\tfile \"%s\" starting at page %" SLONGFORMAT,
+ 							   buffer, F.RDB$FILE_START);
+ 				else
+ 					fprintf(output_file, "%s\ndefine shadow %d \"%s\"",
+@@ -2056,9 +2056,9 @@ static void type_scalar(USHORT dtype,
+             D.RDB$FIELD_NAME EQ field_name
+             SORTED BY D.RDB$DIMENSION
+             if (D.RDB$LOWER_BOUND  == 1)
+-                fprintf(output_file, "%c%"SLONGFORMAT, c, D.RDB$UPPER_BOUND);
++                fprintf(output_file, "%c%" SLONGFORMAT, c, D.RDB$UPPER_BOUND);
+             else
+-                fprintf(output_file, "%c%"SLONGFORMAT":%"SLONGFORMAT, c, D.RDB$LOWER_BOUND,
++                fprintf(output_file, "%c%" SLONGFORMAT":%" SLONGFORMAT, c, D.RDB$LOWER_BOUND,
+                            D.RDB$UPPER_BOUND);
+             c = ',';
+ 	    END_FOR;
+diff --git a/src/dudley/trn.cpp b/src/dudley/trn.cpp
+index 485aa3c..c5290d1 100644
+--- a/src/dudley/trn.cpp
++++ b/src/dudley/trn.cpp
+@@ -1766,9 +1766,9 @@ static void raw_ftn( STR dyn)
+ 				break;
+ 		}
+ 		if (blr_length)
+-			sprintf(p, "%"SLONGFORMAT",", blr_hunk.longword_blr);
++			sprintf(p, "%" SLONGFORMAT",", blr_hunk.longword_blr);
+ 		else
+-			sprintf(p, "%"SLONGFORMAT"/", blr_hunk.longword_blr);
++			sprintf(p, "%" SLONGFORMAT"/", blr_hunk.longword_blr);
+ 		while (*p)
+ 			p++;
+ 		if (p - buffer > 50) {
+diff --git a/src/gpre/ada.cpp b/src/gpre/ada.cpp
+index bebd93a..f0dd01d 100644
+--- a/src/gpre/ada.cpp
++++ b/src/gpre/ada.cpp
+@@ -662,13 +662,13 @@ static void gen_based( const act* action, int column)
+ 		for (SSHORT i = 1; i < field->fld_array_info->ary_dimension_count;
+ 			 dimension = dimension->dim_next, i++)
+ 		{
+-			sprintf(s2, "%s range %"SLONGFORMAT"..%"SLONGFORMAT",\n                            ",
++			sprintf(s2, "%s range %" SLONGFORMAT"..%" SLONGFORMAT",\n                            ",
+ 					LONG_DCL, dimension->dim_lower, dimension->dim_upper);
+ 			for (p = s2; *p; p++, q++)
+ 				*q = *p;
+ 		}
+ 
+-		sprintf(s2, "%s range %"SLONGFORMAT"..%"SLONGFORMAT") of ",
++		sprintf(s2, "%s range %" SLONGFORMAT"..%" SLONGFORMAT") of ",
+ 				LONG_DCL, dimension->dim_lower, dimension->dim_upper);
+ 		for (p = s2; *p; p++, q++)
+ 			*q = *p;
+@@ -3235,11 +3235,11 @@ static void make_array_declaration( ref* reference, int column)
+ 		 i < field->fld_array_info->ary_dimension_count;
+ 		 dimension = dimension->dim_next, ++i)
+ 	{
+-		fprintf(gpreGlob.out_file, "%s range %"SLONGFORMAT"..%"SLONGFORMAT",\n                        ",
++		fprintf(gpreGlob.out_file, "%s range %" SLONGFORMAT"..%" SLONGFORMAT",\n                        ",
+ 				LONG_DCL, dimension->dim_lower, dimension->dim_upper);
+ 	}
+ 
+-	fprintf(gpreGlob.out_file, "%s range %"SLONGFORMAT"..%"SLONGFORMAT") of ",
++	fprintf(gpreGlob.out_file, "%s range %" SLONGFORMAT"..%" SLONGFORMAT") of ",
+ 			   LONG_DCL, dimension->dim_lower, dimension->dim_upper);
+ 
+ 	switch (field->fld_array_info->ary_dtype)
+diff --git a/src/gpre/cob.cpp b/src/gpre/cob.cpp
+index aace8e1..907a3a7 100644
+--- a/src/gpre/cob.cpp
++++ b/src/gpre/cob.cpp
+@@ -67,8 +67,8 @@ static const char* const BY_VALUE		= "BY VALUE ";
+ static const char* const END_VALUE		= "";
+ static const char* const BY_REF			= "BY REFERENCE ";
+ static const char* const BY_DESC 		= "BY REFERENCE ";
+-static const char* const RAW_BLR_TEMPLATE	= "03  %s%d%s%d PIC XXXX USAGE COMP-X VALUE IS %"ULONGFORMAT".";
+-static const char* const RAW_TPB_TEMPLATE	= "03  %s%d%s%d PIC XXXX USAGE COMP-X VALUE IS %"ULONGFORMAT".";
++static const char* const RAW_BLR_TEMPLATE	= "03  %s%d%s%d PIC XXXX USAGE COMP-X VALUE IS %" ULONGFORMAT".";
++static const char* const RAW_TPB_TEMPLATE	= "03  %s%d%s%d PIC XXXX USAGE COMP-X VALUE IS %" ULONGFORMAT".";
+ static const char* const COMP_VALUE		= "COMP-5";
+ #else
+ static const char* const COMP_VALUE		= "COMP";
+diff --git a/src/gpre/ftn.cpp b/src/gpre/ftn.cpp
+index 2dc1943..eeb180d 100644
+--- a/src/gpre/ftn.cpp
++++ b/src/gpre/ftn.cpp
+@@ -882,9 +882,9 @@ static void gen_based(const act* action)
+ 				 dimension = dimension->dim_next)
+ 			{
+ 				if (dimension->dim_lower != 1)
+-					fprintf(gpreGlob.out_file, "%"SLONGFORMAT":", dimension->dim_lower);
++					fprintf(gpreGlob.out_file, "%" SLONGFORMAT":", dimension->dim_lower);
+ 
+-				fprintf(gpreGlob.out_file, "%"SLONGFORMAT, dimension->dim_upper);
++				fprintf(gpreGlob.out_file, "%" SLONGFORMAT, dimension->dim_upper);
+ 				if (dimension->dim_next)
+ 					fprintf(gpreGlob.out_file, ", ");
+ 			}
+@@ -2677,9 +2677,9 @@ static void gen_raw(const UCHAR* blr, req_t request_type, int request_length, in
+ 			}
+ 		}
+ 		if (blr_length)
+-			sprintf(p, "%"SLONGFORMAT",", blr_hunk.longword_blr);
++			sprintf(p, "%" SLONGFORMAT",", blr_hunk.longword_blr);
+ 		else
+-			sprintf(p, "%"SLONGFORMAT, blr_hunk.longword_blr);
++			sprintf(p, "%" SLONGFORMAT, blr_hunk.longword_blr);
+ 		while (*p)
+ 			p++;
+ 		if (p - buffer > 50)
+@@ -3427,9 +3427,9 @@ static void gen_tpb_data(const tpb* tpb_buffer)
+ 				break;
+ 		}
+ 		if (length)
+-			sprintf(p, "%"SLONGFORMAT",", tpb_hunk.longword_tpb);
++			sprintf(p, "%" SLONGFORMAT",", tpb_hunk.longword_tpb);
+ 		else
+-			sprintf(p, "%"SLONGFORMAT"/\n", tpb_hunk.longword_tpb);
++			sprintf(p, "%" SLONGFORMAT"/\n", tpb_hunk.longword_tpb);
+ 		p += 12; // ???
+ 	}
+ 
+@@ -3625,9 +3625,9 @@ static void make_array_declaration( const ref* reference)
+ 		dimension = dimension->dim_next)
+ 	{
+ 		if (dimension->dim_lower != 1)
+-			fprintf(gpreGlob.out_file, "%"SLONGFORMAT":", dimension->dim_lower);
++			fprintf(gpreGlob.out_file, "%" SLONGFORMAT":", dimension->dim_lower);
+ 
+-		fprintf(gpreGlob.out_file, "%"SLONGFORMAT, dimension->dim_upper);
++		fprintf(gpreGlob.out_file, "%" SLONGFORMAT, dimension->dim_upper);
+ 		if (dimension->dim_next)
+ 			fprintf(gpreGlob.out_file, ", ");
+ 	}
+diff --git a/src/gpre/pas.cpp b/src/gpre/pas.cpp
+index db61a5d..372ea43 100644
+--- a/src/gpre/pas.cpp
++++ b/src/gpre/pas.cpp
+@@ -699,7 +699,7 @@ static void gen_based( const act* action, int column)
+ 		SLONG length = field->fld_seg_length;
+ 		if (!length)
+ 			length = 256;
+-		fprintf(gpreGlob.out_file, "%s [1..%"SLONGFORMAT"] of ", PACKED_ARRAY, length);
++		fprintf(gpreGlob.out_file, "%s [1..%" SLONGFORMAT"] of ", PACKED_ARRAY, length);
+ 	}
+ 	else if (field->fld_array_info)
+ 	{
+@@ -712,7 +712,7 @@ static void gen_based( const act* action, int column)
+ 		for (dim* dimension = field->fld_array_info->ary_dimension; dimension;
+ 			dimension = dimension->dim_next)
+ 		{
+-			fprintf(gpreGlob.out_file, "%"SLONGFORMAT"..%"SLONGFORMAT, dimension->dim_lower,
++			fprintf(gpreGlob.out_file, "%" SLONGFORMAT"..%" SLONGFORMAT, dimension->dim_lower,
+ 					   dimension->dim_upper);
+ 			if (dimension->dim_next)
+ 				fprintf(gpreGlob.out_file, ", ");
+@@ -3193,7 +3193,7 @@ static void make_array_declaration( const ref* reference)
+ 	for (const dim* dimension = field->fld_array_info->ary_dimension; dimension;
+ 		dimension = dimension->dim_next)
+ 	{
+-		fprintf(gpreGlob.out_file, "%"SLONGFORMAT"..%"SLONGFORMAT, dimension->dim_lower,
++		fprintf(gpreGlob.out_file, "%" SLONGFORMAT"..%" SLONGFORMAT, dimension->dim_lower,
+ 				   dimension->dim_upper);
+ 		if (dimension->dim_next)
+ 			fprintf(gpreGlob.out_file, ", ");
+diff --git a/src/include/gen/autoconfig_msvc.h b/src/include/gen/autoconfig_msvc.h
+index 8d7734e..63c4b14 100644
+--- a/src/include/gen/autoconfig_msvc.h
++++ b/src/include/gen/autoconfig_msvc.h
+@@ -250,7 +250,9 @@
+ #undef HAVE_STRUCT_XDR_OPS
+ 
+ /* Functions */
++#if defined(_MSC_VER) && (_MSC_VER < 1900)
+ #define snprintf _snprintf
++#endif
+ 
+ /* Is the platform big endian? */
+ #undef WORDS_BIGENDIAN
+diff --git a/src/isql/isql.epp b/src/isql/isql.epp
+index f5e5777..e65e594 100644
+--- a/src/isql/isql.epp
++++ b/src/isql/isql.epp
+@@ -2508,7 +2508,7 @@ static processing_state blobedit(const TEXT* action, const TEXT* const* cmd)
+ 
+ 	// Find the high and low values of the blob id
+ 	ISC_QUAD blobid;
+-	sscanf(p, "%"xLONGFORMAT":%"xLONGFORMAT, &blobid.gds_quad_high, &blobid.gds_quad_low);
++	sscanf(p, "%" xLONGFORMAT":%" xLONGFORMAT, &blobid.gds_quad_high, &blobid.gds_quad_low);
+ 
+ 	// If it isn't an explicit blobedit, then do a dump. Since this is a
+ 	// user operation, put it on the M__trans handle.
+@@ -4176,7 +4176,7 @@ static void do_isql()
+ 
+ 	M__trans = 0;
+ 
+-#if defined(_MSC_VER) && _MSC_VER >= 1400
++#if defined(_MSC_VER) && _MSC_VER >= 1400 && _MSC_VER < 1900
+ 	_set_output_format(_TWO_DIGIT_EXPONENT);
+ #endif
+ 
+@@ -7448,7 +7448,7 @@ static SSHORT print_item(TEXT** s, XSQLVAR* var, const int length)
+ 			// Print blob-ids only here
+ 
+ 			blobid = (ISC_QUAD*) var->sqldata;
+-			sprintf(blobbuf, "%"xLONGFORMAT":%"xLONGFORMAT, blobid->gds_quad_high,
++			sprintf(blobbuf, "%" xLONGFORMAT":%" xLONGFORMAT, blobid->gds_quad_high,
+ 					blobid->gds_quad_low);
+ 			sprintf(p, "%17s ", blobbuf);
+ 			break;
+@@ -7458,7 +7458,7 @@ static SSHORT print_item(TEXT** s, XSQLVAR* var, const int length)
+ 			// Print blob-ids only here
+ 
+ 			blobid = (ISC_QUAD*) var->sqldata;
+-			sprintf(blobbuf, "%"xLONGFORMAT":%"xLONGFORMAT, blobid->gds_quad_high,
++			sprintf(blobbuf, "%" xLONGFORMAT":%" xLONGFORMAT, blobid->gds_quad_high,
+ 					blobid->gds_quad_low);
+ 			sprintf(p, "%17s ", blobbuf);
+ 			if (List)
+@@ -7673,7 +7673,7 @@ static SSHORT print_item(TEXT** s, XSQLVAR* var, const int length)
+ 
+ 			if (isqlGlob.SQL_dialect > SQL_DIALECT_V5)
+ 			{
+-				sprintf(d, "%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d.%4.4"ULONGFORMAT,
++				sprintf(d, "%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d.%4.4" ULONGFORMAT,
+ 						times.tm_year + 1900, (times.tm_mon + 1),
+ 						times.tm_mday, times.tm_hour, times.tm_min,
+ 						times.tm_sec,
+@@ -7682,7 +7682,7 @@ static SSHORT print_item(TEXT** s, XSQLVAR* var, const int length)
+ 			else
+ 			{
+ 				if (Time_display)
+-					sprintf(d, "%2d-%s-%4d %2.2d:%2.2d:%2.2d.%4.4"ULONGFORMAT,
++					sprintf(d, "%2d-%s-%4d %2.2d:%2.2d:%2.2d.%4.4" ULONGFORMAT,
+ 							times.tm_mday, alpha_months[times.tm_mon],
+ 							times.tm_year + 1900, times.tm_hour, times.tm_min,
+ 							times.tm_sec,
+@@ -7700,7 +7700,7 @@ static SSHORT print_item(TEXT** s, XSQLVAR* var, const int length)
+ 
+ 		case SQL_TYPE_TIME:
+ 			isc_decode_sql_time((ISC_TIME*) var->sqldata, &times);
+-			sprintf(d, "%2.2d:%2.2d:%2.2d.%4.4"ULONGFORMAT,
++			sprintf(d, "%2.2d:%2.2d:%2.2d.%4.4" ULONGFORMAT,
+ 					times.tm_hour, times.tm_min, times.tm_sec,
+ 					(*(ISC_TIME*) var->sqldata) % ISC_TIME_SECONDS_PRECISION);
+ 			sprintf(p, "%-*s ", length, d);
+diff --git a/src/isql/show.epp b/src/isql/show.epp
+index c0794cb..24c2601 100644
+--- a/src/isql/show.epp
++++ b/src/isql/show.epp
+@@ -352,7 +352,7 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 
+ 		case isc_info_page_size:
+ 			value_out = isc_vax_integer(d, length);
+-			sprintf(info, "PAGE_SIZE %"SLONGFORMAT"%s", value_out, separator);
++			sprintf(info, "PAGE_SIZE %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_db_size_in_pages:
+@@ -363,7 +363,7 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 				sprintf(info, "%s%s", msg, separator);
+ 			}
+ 			else
+-				sprintf(info, "Number of DB pages allocated = %"SLONGFORMAT"%s", value_out, separator);
++				sprintf(info, "Number of DB pages allocated = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_sweep_interval:
+@@ -374,7 +374,7 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 				sprintf(info, "%s%s", msg, separator);
+ 			}
+ 			else
+-				sprintf(info, "Sweep interval = %"SLONGFORMAT"%s", value_out, separator);
++				sprintf(info, "Sweep interval = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_forced_writes:
+@@ -384,22 +384,22 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 
+ 		case isc_info_oldest_transaction :
+ 			value_out = isc_vax_integer (d, length);
+-			sprintf(info, "Transaction - oldest = %"SLONGFORMAT"%s", value_out, separator);
++			sprintf(info, "Transaction - oldest = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_oldest_active :
+ 			value_out = isc_vax_integer (d, length);
+-			sprintf(info, "Transaction - oldest active = %"SLONGFORMAT"%s", value_out, separator);
++			sprintf(info, "Transaction - oldest active = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_oldest_snapshot :
+ 			value_out = isc_vax_integer (d, length);
+-			sprintf(info, "Transaction - oldest snapshot = %"SLONGFORMAT"%s", value_out, separator);
++			sprintf(info, "Transaction - oldest snapshot = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_next_transaction :
+ 			value_out = isc_vax_integer (d, length);
+-			sprintf (info, "Transaction - Next = %"SLONGFORMAT"%s", value_out, separator);
++			sprintf (info, "Transaction - Next = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_base_level:
+@@ -410,7 +410,7 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 				sprintf(info, "%s%s", msg, separator);
+ 			}
+ 			else
+-				sprintf(info, "Base level = %"SLONGFORMAT"%s", value_out, separator);
++				sprintf(info, "Base level = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_limbo:
+@@ -421,7 +421,7 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 				sprintf(info, "%s%s", msg, separator);
+ 			}
+ 			else
+-				sprintf(info, "Transaction in limbo = %"SLONGFORMAT"%s", value_out, separator);
++				sprintf(info, "Transaction in limbo = %" SLONGFORMAT"%s", value_out, separator);
+ 			break;
+ 
+ 		case isc_info_ods_version:
+@@ -429,7 +429,7 @@ bool SHOW_dbb_parameters(FB_API_HANDLE db_handle,
+ 			break;
+ 		case isc_info_ods_minor_version:
+ 			value_out = isc_vax_integer(d, length);
+-			sprintf(info, "ODS = %"SLONGFORMAT".%"SLONGFORMAT"%s",
++			sprintf(info, "ODS = %" SLONGFORMAT".%" SLONGFORMAT"%s",
+ 					(SLONG) isqlGlob.major_ods, value_out, separator);
+ 			break;
+ 
+diff --git a/src/jrd/Relation.cpp b/src/jrd/Relation.cpp
+index dcc3705..84428eb 100644
+--- a/src/jrd/Relation.cpp
++++ b/src/jrd/Relation.cpp
+@@ -179,7 +179,7 @@ RelationPages* jrd_rel::getPagesInternal(thread_db* tdbb, SLONG tran, bool alloc
+ #ifdef VIO_DEBUG
+ 		if (debug_flag > DEBUG_WRITES)
+ 		{
+-			printf("jrd_rel::getPages inst %"SLONGFORMAT", ppp %"SLONGFORMAT", irp %"SLONGFORMAT", addr 0x%x\n",
++			printf("jrd_rel::getPages inst %" SLONGFORMAT", ppp %" SLONGFORMAT", irp %" SLONGFORMAT", addr 0x%x\n",
+ 				newPages->rel_instance_id,
+ 				newPages->rel_pages ? (*newPages->rel_pages)[0] : 0,
+ 				newPages->rel_index_root,
+@@ -217,7 +217,7 @@ RelationPages* jrd_rel::getPagesInternal(thread_db* tdbb, SLONG tran, bool alloc
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_WRITES)
+ 			{
+-				printf("jrd_rel::getPages inst %"SLONGFORMAT", irp %"SLONGFORMAT", idx %u, idx_root %"SLONGFORMAT", addr 0x%x\n",
++				printf("jrd_rel::getPages inst %" SLONGFORMAT", irp %" SLONGFORMAT", idx %u, idx_root %" SLONGFORMAT", addr 0x%x\n",
+ 					newPages->rel_instance_id,
+ 					newPages->rel_index_root,
+ 					idx->idx_id,
+@@ -255,7 +255,7 @@ bool jrd_rel::delPages(thread_db* tdbb, SLONG tran, RelationPages* aPages)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("jrd_rel::delPages inst %"SLONGFORMAT", ppp %"SLONGFORMAT", irp %"SLONGFORMAT", addr 0x%x\n",
++		printf("jrd_rel::delPages inst %" SLONGFORMAT", ppp %" SLONGFORMAT", irp %" SLONGFORMAT", addr 0x%x\n",
+ 			pages->rel_instance_id,
+ 			pages->rel_pages ? (*pages->rel_pages)[0] : 0,
+ 			pages->rel_index_root,
+diff --git a/src/jrd/dpm.epp b/src/jrd/dpm.epp
+index 4b4c8b9..399928f 100644
+--- a/src/jrd/dpm.epp
++++ b/src/jrd/dpm.epp
+@@ -111,7 +111,7 @@ PAG DPM_allocate(thread_db* tdbb, WIN* window)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+-		printf("DPM_allocate (window page %"SLONGFORMAT")\n",
++		printf("DPM_allocate (window page %" SLONGFORMAT")\n",
+ 				  window ? window->win_page.getPageNum() : 0);
+ 	}
+ #endif
+@@ -141,12 +141,12 @@ void DPM_backout( thread_db* tdbb, record_param* rpb)
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+-		printf("DPM_backout (record_param %"QUADFORMAT"d)\n", rpb->rpb_number.getValue());
++		printf("DPM_backout (record_param %" QUADFORMAT"d)\n", rpb->rpb_number.getValue());
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record  %"SLONGFORMAT":%d transaction %"SLONGFORMAT" back %"
+-			SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record  %" SLONGFORMAT":%d transaction %" SLONGFORMAT" back %"
++			SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -167,7 +167,7 @@ void DPM_backout( thread_db* tdbb, record_param* rpb)
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    old record %"SLONGFORMAT":%d, new record %"SLONGFORMAT
++			("    old record %" SLONGFORMAT":%d, new record %" SLONGFORMAT
+ 			":%d, old dpg_count %d, ",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_b_page,
+ 			 rpb->rpb_b_line, page->dpg_count);
+@@ -328,15 +328,15 @@ bool DPM_chain( thread_db* tdbb, record_param* org_rpb, record_param* new_rpb)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("DPM_chain (org_rpb %"QUADFORMAT"d, new_rpb %"
++		printf("DPM_chain (org_rpb %" QUADFORMAT"d, new_rpb %"
+ 			  QUADFORMAT"d)\n", org_rpb->rpb_number.getValue(),
+ 			  new_rpb ? new_rpb->rpb_number.getValue() : 0);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    org record  %"SLONGFORMAT":%d transaction %"SLONGFORMAT
+-			" back %"SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    org record  %" SLONGFORMAT":%d transaction %" SLONGFORMAT
++			" back %" SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 org_rpb->rpb_page, org_rpb->rpb_line, org_rpb->rpb_transaction_nr,
+ 			 org_rpb->rpb_b_page, org_rpb->rpb_b_line, org_rpb->rpb_f_page,
+ 			 org_rpb->rpb_f_line, org_rpb->rpb_flags);
+@@ -524,7 +524,7 @@ int DPM_compress( thread_db* tdbb, data_page* page)
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 		printf("compress (page)\n");
+ 	if (debug_flag > DEBUG_TRACE_ALL_INFO)
+-		printf("    sequence %"SLONGFORMAT"\n", page->dpg_sequence);
++		printf("    sequence %" SLONGFORMAT"\n", page->dpg_sequence);
+ #endif
+ 
+ 	UCHAR temp_page[MAX_PAGE_SIZE];
+@@ -695,7 +695,7 @@ SLONG DPM_data_pages(thread_db* tdbb, jrd_rel* relation)
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+-		printf("    returned pages: %"SLONGFORMAT"\n", pages);
++		printf("    returned pages: %" SLONGFORMAT"\n", pages);
+ #endif
+ 
+ 	return pages;
+@@ -725,14 +725,14 @@ void DPM_delete( thread_db* tdbb, record_param* rpb, SLONG prior_page)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("DPM_delete (record_param %"QUADFORMAT"d, prior_page %"SLONGFORMAT")\n",
++		printf("DPM_delete (record_param %" QUADFORMAT"d, prior_page %" SLONGFORMAT")\n",
+ 		           rpb->rpb_number.getValue(), prior_page);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record  %"SLONGFORMAT":%d transaction %"SLONGFORMAT" back %"
+-			SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record  %" SLONGFORMAT":%d transaction %" SLONGFORMAT" back %"
++			SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -865,7 +865,7 @@ void DPM_delete( thread_db* tdbb, record_param* rpb, SLONG prior_page)
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("\tDPM_delete:  page %"SLONGFORMAT
++			("\tDPM_delete:  page %" SLONGFORMAT
+ 			 " is empty and about to be released from relation %d\n",
+ 			 window->win_page.getPageNum(), rpb->rpb_relation->rel_id);
+ 	}
+@@ -1033,11 +1033,11 @@ bool DPM_fetch(thread_db* tdbb, record_param* rpb, USHORT lock)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS)
+ 	{
+-		printf("DPM_fetch (record_param %"QUADFORMAT"d, lock %d)\n",
++		printf("DPM_fetch (record_param %" QUADFORMAT"d, lock %d)\n",
+ 			rpb->rpb_number.getValue(), lock);
+ 	}
+ 	if (debug_flag > DEBUG_READS_INFO)
+-		printf("    record %"SLONGFORMAT":%d\n", rpb->rpb_page, rpb->rpb_line);
++		printf("    record %" SLONGFORMAT":%d\n", rpb->rpb_page, rpb->rpb_line);
+ #endif
+ 
+ 	const RecordNumber number = rpb->rpb_number;
+@@ -1055,8 +1055,8 @@ bool DPM_fetch(thread_db* tdbb, record_param* rpb, USHORT lock)
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+ 		printf
+-			("    record  %"SLONGFORMAT":%d transaction %"SLONGFORMAT" back %"
+-			 SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record  %" SLONGFORMAT":%d transaction %" SLONGFORMAT" back %"
++			 SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -1100,13 +1100,13 @@ SSHORT DPM_fetch_back(thread_db* tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS)
+ 	{
+-		printf("DPM_fetch_back (record_param %"QUADFORMAT"d, lock %d)\n",
++		printf("DPM_fetch_back (record_param %" QUADFORMAT"d, lock %d)\n",
+ 			rpb->rpb_number.getValue(), lock);
+ 	}
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+-		printf("    record  %"SLONGFORMAT":%d transaction %"SLONGFORMAT
+-				  " back %"SLONGFORMAT":%d\n",
++		printf("    record  %" SLONGFORMAT":%d transaction %" SLONGFORMAT
++				  " back %" SLONGFORMAT":%d\n",
+ 				  rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 				  rpb->rpb_b_page, rpb->rpb_b_line);
+ 	}
+@@ -1136,8 +1136,8 @@ SSHORT DPM_fetch_back(thread_db* tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+-		printf("    record fetched  %"SLONGFORMAT":%d transaction %"
+-			 SLONGFORMAT" back %"SLONGFORMAT":%d fragment %"SLONGFORMAT
++		printf("    record fetched  %" SLONGFORMAT":%d transaction %"
++			 SLONGFORMAT" back %" SLONGFORMAT":%d fragment %" SLONGFORMAT
+ 			 ":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+@@ -1168,12 +1168,12 @@ void DPM_fetch_fragment( thread_db* tdbb, record_param* rpb, USHORT lock)
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS)
+-		printf("DPM_fetch_fragment (record_param %"QUADFORMAT"d, lock %d)\n",
++		printf("DPM_fetch_fragment (record_param %" QUADFORMAT"d, lock %d)\n",
+ 			rpb->rpb_number.getValue(), lock);
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+-		printf("    record  %"SLONGFORMAT":%d transaction %"SLONGFORMAT
+-				  " back %"SLONGFORMAT":%d\n",
++		printf("    record  %" SLONGFORMAT":%d transaction %" SLONGFORMAT
++				  " back %" SLONGFORMAT":%d\n",
+ 				  rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 				  rpb->rpb_b_page, rpb->rpb_b_line);
+ 	}
+@@ -1194,8 +1194,8 @@ void DPM_fetch_fragment( thread_db* tdbb, record_param* rpb, USHORT lock)
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+ 		printf
+-			("    record fetched  %"SLONGFORMAT":%d transaction %"SLONGFORMAT
+-			 " back %"SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record fetched  %" SLONGFORMAT":%d transaction %" SLONGFORMAT
++			 " back %" SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -1226,7 +1226,7 @@ SINT64 DPM_gen_id(thread_db* tdbb, SLONG generator, bool initialize, SINT64 val)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 	{
+-		printf("DPM_gen_id (generator %"SLONGFORMAT", val %" QUADFORMAT "d)\n", generator, val);
++		printf("DPM_gen_id (generator %" SLONGFORMAT", val %" QUADFORMAT "d)\n", generator, val);
+ 	}
+ #endif
+ 
+@@ -1357,7 +1357,7 @@ bool DPM_get( thread_db* tdbb, record_param* rpb, SSHORT lock_type)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS)
+ 	{
+-		printf("DPM_get (record_param %"QUADFORMAT"d, lock type %d)\n",
++		printf("DPM_get (record_param %" QUADFORMAT"d, lock type %d)\n",
+ 			rpb->rpb_number.getValue(), lock_type);
+ 	}
+ #endif
+@@ -1384,7 +1384,7 @@ bool DPM_get( thread_db* tdbb, record_param* rpb, SSHORT lock_type)
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS_INFO)
+-		printf("    record  %"SLONGFORMAT":%d\n", page->ppg_page[slot], line);
++		printf("    record  %" SLONGFORMAT":%d\n", page->ppg_page[slot], line);
+ #endif
+ 
+ 	const SLONG page_number = page->ppg_page[slot];
+@@ -1435,8 +1435,8 @@ ULONG DPM_get_blob(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_READS)
+ 	{
+ 		printf
+-			("DPM_get_blob (blob, record_number %"QUADFORMAT
+-			"d, delete_flag %d, prior_page %"SLONGFORMAT")\n",
++			("DPM_get_blob (blob, record_number %" QUADFORMAT
++			"d, delete_flag %d, prior_page %" SLONGFORMAT")\n",
+ 			 record_number.getValue(), (int) delete_flag, prior_page);
+ 	}
+ #endif
+@@ -1594,7 +1594,7 @@ bool DPM_next(thread_db* tdbb,
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS)
+-		printf("DPM_next (record_param %"QUADFORMAT"d)\n", rpb->rpb_number.getValue());
++		printf("DPM_next (record_param %" QUADFORMAT"d)\n", rpb->rpb_number.getValue());
+ #endif
+ 
+ 	WIN* window = &rpb->getWindow(tdbb);
+@@ -1829,7 +1829,7 @@ void DPM_pages(thread_db* tdbb, SSHORT rel_id, int type, ULONG sequence, SLONG p
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 	{
+-		printf("DPM_pages (rel_id %d, type %d, sequence %"ULONGFORMAT", page %"SLONGFORMAT")\n",
++		printf("DPM_pages (rel_id %d, type %d, sequence %" ULONGFORMAT", page %" SLONGFORMAT")\n",
+ 				rel_id, type, sequence, page);
+ 	}
+ #endif
+@@ -2016,14 +2016,14 @@ void DPM_store( thread_db* tdbb, record_param* rpb, PageStack& stack, USHORT typ
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("DPM_store (record_param %"QUADFORMAT"d, stack, type %d)\n",
++		printf("DPM_store (record_param %" QUADFORMAT"d, stack, type %d)\n",
+ 				  rpb->rpb_number.getValue(), type);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record to store %"SLONGFORMAT":%d transaction %"SLONGFORMAT
+-			 " back %"SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record to store %" SLONGFORMAT":%d transaction %" SLONGFORMAT
++			 " back %" SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -2063,8 +2063,8 @@ void DPM_store( thread_db* tdbb, record_param* rpb, PageStack& stack, USHORT typ
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record %"SLONGFORMAT":%d, length %"SLONGFORMAT
+-			 ", rpb_flags %d, f_page %"SLONGFORMAT":%d, b_page %"SLONGFORMAT
++			("    record %" SLONGFORMAT":%d, length %" SLONGFORMAT
++			 ", rpb_flags %d, f_page %" SLONGFORMAT":%d, b_page %" SLONGFORMAT
+ 			 ":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, length, rpb->rpb_flags,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line, rpb->rpb_b_page,
+@@ -2214,7 +2214,7 @@ void DPM_rewrite_header( thread_db* tdbb, record_param* rpb)
+ 	if (debug_flag > DEBUG_WRITES)
+ 		printf("DPM_rewrite_header (record_param %"QUADFORMAT"d)\n", rpb->rpb_number.getValue());
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+-		printf("    record  %"SLONGFORMAT":%d\n", rpb->rpb_page, rpb->rpb_line);
++		printf("    record  %" SLONGFORMAT":%d\n", rpb->rpb_page, rpb->rpb_line);
+ #endif
+ 
+ 	WIN* window = &rpb->getWindow(tdbb);
+@@ -2225,13 +2225,13 @@ void DPM_rewrite_header( thread_db* tdbb, record_param* rpb)
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    old flags %d, old transaction %"SLONGFORMAT
+-			 ", old format %d, old back record %"SLONGFORMAT":%d\n",
++			("    old flags %d, old transaction %" SLONGFORMAT
++			 ", old format %d, old back record %" SLONGFORMAT":%d\n",
+ 			 header->rhd_flags, header->rhd_transaction, (int) header->rhd_format,
+ 			 header->rhd_b_page, header->rhd_b_line);
+ 		printf
+-			("    new flags %d, new transaction %"SLONGFORMAT
+-			 ", new format %d, new back record %"SLONGFORMAT":%d\n",
++			("    new flags %d, new transaction %" SLONGFORMAT
++			 ", new format %d, new back record %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_flags, rpb->rpb_transaction_nr, rpb->rpb_format_number,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line);
+ 	}
+@@ -2265,14 +2265,14 @@ void DPM_update( thread_db* tdbb, record_param* rpb, PageStack* stack,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("DPM_update (record_param %"QUADFORMAT"d, stack, transaction %"SLONGFORMAT")\n",
++		printf("DPM_update (record_param %" QUADFORMAT"d, stack, transaction %" SLONGFORMAT")\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record %"SLONGFORMAT":%d transaction %"SLONGFORMAT" back %"
+-			 SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record %" SLONGFORMAT":%d transaction %" SLONGFORMAT" back %"
++			 SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -2354,9 +2354,9 @@ void DPM_update( thread_db* tdbb, record_param* rpb, PageStack* stack,
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record %"SLONGFORMAT
+-			 ":%d, dpg_length %d, rpb_flags %d, rpb_f record %"SLONGFORMAT
+-			 ":%d, rpb_b record %"SLONGFORMAT":%d\n",
++			("    record %" SLONGFORMAT
++			 ":%d, dpg_length %d, rpb_flags %d, rpb_f record %" SLONGFORMAT
++			 ":%d, rpb_b record %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, page->dpg_rpt[slot].dpg_length,
+ 			 rpb->rpb_flags, rpb->rpb_f_page, rpb->rpb_f_line,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line);
+@@ -2391,8 +2391,8 @@ static void delete_tail(thread_db* tdbb, rhdf* header, const USHORT page_space,
+ 		printf("delete_tail (header, length)\n");
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+-		printf("    transaction %"SLONGFORMAT" flags %d fragment %"
+-				  SLONGFORMAT":%d back %"SLONGFORMAT":%d\n",
++		printf("    transaction %" SLONGFORMAT" flags %d fragment %"
++				  SLONGFORMAT":%d back %" SLONGFORMAT":%d\n",
+ 				  header->rhdf_transaction, header->rhdf_flags,
+ 				  header->rhdf_f_page, header->rhdf_f_line,
+ 				  header->rhdf_b_page, header->rhdf_b_line);
+@@ -2517,7 +2517,7 @@ static void fragment(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+ 		printf
+-			("fragment (record_param %"QUADFORMAT
++			("fragment (record_param %" QUADFORMAT
+ 			 "d, available_space %d, dcc, length %d, transaction %"
+ 			 SLONGFORMAT")\n",
+ 			 rpb->rpb_number.getValue(), available_space, length,
+@@ -2526,8 +2526,8 @@ static void fragment(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    record %"SLONGFORMAT":%d transaction %"SLONGFORMAT" back %"
+-			 SLONGFORMAT":%d fragment %"SLONGFORMAT":%d flags %d\n",
++			("    record %" SLONGFORMAT":%d transaction %" SLONGFORMAT" back %"
++			 SLONGFORMAT":%d fragment %" SLONGFORMAT":%d flags %d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page,
+ 			 rpb->rpb_f_line, rpb->rpb_flags);
+@@ -2580,9 +2580,9 @@ static void fragment(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("    rhdf_transaction %"SLONGFORMAT", window record %"SLONGFORMAT
++			("    rhdf_transaction %" SLONGFORMAT", window record %" SLONGFORMAT
+ 			 ":%d, available_space %d, rhdf_flags %d, rhdf_f record %"
+-			 SLONGFORMAT":%d, rhdf_b record %"SLONGFORMAT":%d\n",
++			 SLONGFORMAT":%d, rhdf_b record %" SLONGFORMAT":%d\n",
+ 			 header->rhdf_transaction, window->win_page.getPageNum(), line,
+ 			 available_space, header->rhdf_flags, header->rhdf_f_page,
+ 			 header->rhdf_f_line, header->rhdf_b_page, header->rhdf_b_line);
+@@ -2646,9 +2646,9 @@ static void fragment(thread_db* tdbb,
+ 	{
+ 		printf("    fragment head \n");
+ 		printf
+-			("    rhdf_trans %"SLONGFORMAT", window record %"SLONGFORMAT
+-			 ":%d, dpg_length %d\n\trhdf_flags %d, rhdf_f record %"SLONGFORMAT
+-			 ":%d, rhdf_b record %"SLONGFORMAT":%d\n",
++			("    rhdf_trans %" SLONGFORMAT", window record %" SLONGFORMAT
++			 ":%d, dpg_length %d\n\trhdf_flags %d, rhdf_f record %" SLONGFORMAT
++			 ":%d, rhdf_b record %" SLONGFORMAT":%d\n",
+ 			 header->rhdf_transaction, window->win_page.getPageNum(), line,
+ 			 page->dpg_rpt[line].dpg_length, header->rhdf_flags,
+ 			 header->rhdf_f_page, header->rhdf_f_line, header->rhdf_b_page,
+@@ -2820,7 +2820,7 @@ static void extend_relation( thread_db* tdbb, jrd_rel* relation, WIN* window)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+-		printf("   extended_relation (relation %d, window_page %"SLONGFORMAT")\n",
++		printf("   extended_relation (relation %d, window_page %" SLONGFORMAT")\n",
+ 				  relation->rel_id, window->win_page.getPageNum());
+ 	}
+ #endif
+@@ -3174,7 +3174,7 @@ static rhd* locate_space(thread_db* tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+-		printf("    extended relation %d with page %"SLONGFORMAT" to get %d bytes\n",
++		printf("    extended relation %d with page %" SLONGFORMAT" to get %d bytes\n",
+ 				  relation->rel_id, window->win_page.getPageNum(), size);
+ 	}
+ #endif
+@@ -3386,8 +3386,8 @@ static void store_big_record(thread_db* tdbb, record_param* rpb,
+ 		{
+ 			printf("    back portion\n");
+ 			printf
+-				("    getWindow(tdbb) page %"SLONGFORMAT
+-				 ", max_data %d, \n\trhdf_flags %d, prior %"SLONGFORMAT"\n",
++				("    getWindow(tdbb) page %" SLONGFORMAT
++				 ", max_data %d, \n\trhdf_flags %d, prior %" SLONGFORMAT"\n",
+ 				 rpb->getWindow(tdbb).win_page.getPageNum(), max_data, header->rhdf_flags,
+ 				 prior.getPageNum());
+ 		}
+@@ -3418,9 +3418,9 @@ static void store_big_record(thread_db* tdbb, record_param* rpb,
+ 	{
+ 		printf("    front part\n");
+ 		printf
+-			("    rhdf_trans %"SLONGFORMAT", rpb_window record %"SLONGFORMAT
+-			 ":%d, dpg_length %d \n\trhdf_flags %d, rhdf_f record %"SLONGFORMAT
+-			 ":%d, rhdf_b record %"SLONGFORMAT":%d\n",
++			("    rhdf_trans %" SLONGFORMAT", rpb_window record %" SLONGFORMAT
++			 ":%d, dpg_length %d \n\trhdf_flags %d, rhdf_f record %" SLONGFORMAT
++			 ":%d, rhdf_b record %" SLONGFORMAT":%d\n",
+ 			 header->rhdf_transaction, rpb->getWindow(tdbb).win_page.getPageNum(),
+ 			 rpb->rpb_line, page->dpg_rpt[rpb->rpb_line].dpg_length,
+ 			 header->rhdf_flags, header->rhdf_f_page, header->rhdf_f_line,
+diff --git a/src/jrd/filters.cpp b/src/jrd/filters.cpp
+index b1c1133..d70869f 100644
+--- a/src/jrd/filters.cpp
++++ b/src/jrd/filters.cpp
+@@ -1072,7 +1072,7 @@ ISC_STATUS filter_trans(USHORT action, BlobControl* control)
+ 			case TDR_TRANSACTION_ID:
+ 				{
+ 					const SLONG id = gds__vax_integer(p, length);
+-					sprintf(out, "    Transaction id: %"SLONGFORMAT, id);
++					sprintf(out, "    Transaction id: %" SLONGFORMAT, id);
+ 					break;
+ 				}
+ 
+diff --git a/src/jrd/isc_sync.cpp b/src/jrd/isc_sync.cpp
+index dff49ee..e652547 100644
+--- a/src/jrd/isc_sync.cpp
++++ b/src/jrd/isc_sync.cpp
+@@ -2084,7 +2084,7 @@ void ISC_exception_post(ULONG sig_num, const TEXT* err_msg)
+ 		break;
+ 	default:
+ 		sprintf(log_msg, "%s Unknown Exception.\n"
+-				"\t\tException number %"ULONGFORMAT"."
++				"\t\tException number %" ULONGFORMAT"."
+ 				"\tThis exception will cause the Firebird server\n"
+ 				"\tto terminate abnormally.", err_msg, sig_num);
+ 		break;
+@@ -2247,7 +2247,7 @@ ULONG ISC_exception_post(ULONG except_code, const TEXT* err_msg)
+ 		break;
+ 	default:
+ 		sprintf (log_msg, "%s An exception occurred that does\n"
+-				"\t\tnot have a description.  Exception number %"XLONGFORMAT".\n"
++				"\t\tnot have a description.  Exception number %" XLONGFORMAT".\n"
+ 				"\tThis exception will cause the Firebird server\n"
+ 				"\tto terminate abnormally.", err_msg, except_code);
+ 		break;
+@@ -2760,7 +2760,7 @@ UCHAR* ISC_map_file(ISC_STATUS* status_vector,
+ /* Create the real file mapping object. */
+ 
+ 	TEXT mapping_name[64]; // enough for int32 as text
+-	sprintf(mapping_name, "_mapping_%"ULONGFORMAT, header_address[1]);
++	sprintf(mapping_name, "_mapping_%" ULONGFORMAT, header_address[1]);
+ 
+ 	if (!make_object_name(object_name, sizeof(object_name), filename, mapping_name))
+ 	{
+@@ -4030,7 +4030,7 @@ UCHAR* ISC_remap_file(ISC_STATUS * status_vector,
+ 	while (true)
+ 	{
+ 		TEXT mapping_name[64]; // enough for int32 as text
+-		sprintf(mapping_name, "_mapping_%"ULONGFORMAT, shmem_data->sh_mem_hdr_address[1] + 1);
++		sprintf(mapping_name, "_mapping_%" ULONGFORMAT, shmem_data->sh_mem_hdr_address[1] + 1);
+ 
+ 		TEXT object_name[MAXPATHLEN];
+ 		if (!make_object_name(object_name, sizeof(object_name), shmem_data->sh_mem_name, mapping_name))
+diff --git a/src/jrd/opt.cpp b/src/jrd/opt.cpp
+index b80e06f..0c57afe 100644
+--- a/src/jrd/opt.cpp
++++ b/src/jrd/opt.cpp
+@@ -3596,7 +3596,7 @@ static USHORT find_order(thread_db* tdbb,
+ 			fprintf(opt_debug_file, "%2.2d ", tail->opt_best_stream);
+ 		}
+ 		fprintf(opt_debug_file,
+-				   "\n\t\t\tbest_cost: %g\tcombinations: %"SLONGFORMAT"\n",
++				   "\n\t\t\tbest_cost: %g\tcombinations: %" SLONGFORMAT"\n",
+ 				   opt->opt_best_cost, opt->opt_combinations);
+ 	}
+ #endif
+diff --git a/src/jrd/pag.cpp b/src/jrd/pag.cpp
+index a6e9322..08e2e65 100644
+--- a/src/jrd/pag.cpp
++++ b/src/jrd/pag.cpp
+@@ -960,7 +960,7 @@ PAG PAG_allocate(thread_db* tdbb, WIN* window)
+ 		CCH_precedence(tdbb, window, pip_window.win_page);
+ #ifdef VIO_DEBUG
+ 		if (debug_flag > DEBUG_WRITES_INFO)
+-			printf("\tPAG_allocate:  allocated page %"SLONGFORMAT"\n",
++			printf("\tPAG_allocate:  allocated page %" SLONGFORMAT"\n",
+ 					  window->win_page.getPageNum());
+ #endif
+ 		return new_page;
+@@ -1797,7 +1797,7 @@ void PAG_release_page(thread_db* tdbb, const PageNumber& number, const PageNumbe
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+-		printf("\tPAG_release_page:  about to release page %"SLONGFORMAT"\n", number.getPageNum());
++		printf("\tPAG_release_page:  about to release page %" SLONGFORMAT"\n", number.getPageNum());
+ #endif
+ 
+ 	PageManager& pageMgr = dbb->dbb_page_manager;
+diff --git a/src/jrd/svc.cpp b/src/jrd/svc.cpp
+index 225fc5f..8aeeda5 100644
+--- a/src/jrd/svc.cpp
++++ b/src/jrd/svc.cpp
+@@ -3242,7 +3242,7 @@ void Service::get_action_svc_data(const ClumpletReader& spb,
+ 								  string& switches)
+ {
+ 	string s;
+-	s.printf("%"SLONGFORMAT" ", spb.getInt());
++	s.printf("%" SLONGFORMAT" ", spb.getInt());
+ 	switches += s;
+ }
+ 
+diff --git a/src/jrd/tra.cpp b/src/jrd/tra.cpp
+index 673da9e..ec5dc9e 100644
+--- a/src/jrd/tra.cpp
++++ b/src/jrd/tra.cpp
+@@ -3682,7 +3682,7 @@ TraceSweepEvent::TraceSweepEvent(thread_db* tdbb) :
+ 
+ 	gds__log("Sweep is started by %s\n"
+ 		"\tDatabase \"%s\" \n"
+-		"\tOIT %"SLONGFORMAT", OAT %"SLONGFORMAT", OST %"SLONGFORMAT", Next %"SLONGFORMAT,
++		"\tOIT %" SLONGFORMAT", OAT %" SLONGFORMAT", OST %" SLONGFORMAT", Next %" SLONGFORMAT,
+ 		att->att_user->usr_user_name.c_str(),
+ 		att->att_filename.c_str(),
+ 		m_sweep_info.getOIT(),
+@@ -3769,7 +3769,7 @@ void TraceSweepEvent::report(ntrace_process_state_t state)
+ 	{
+ 		gds__log("Sweep is finished\n"
+ 			"\tDatabase \"%s\" \n"
+-			"\tOIT %"SLONGFORMAT", OAT %"SLONGFORMAT", OST %"SLONGFORMAT", Next %"SLONGFORMAT,
++			"\tOIT %" SLONGFORMAT", OAT %" SLONGFORMAT", OST %" SLONGFORMAT", Next %" SLONGFORMAT,
+ 			att->att_filename.c_str(),
+ 			m_sweep_info.getOIT(),
+ 			m_sweep_info.getOAT(),
+diff --git a/src/jrd/unicode_util.cpp b/src/jrd/unicode_util.cpp
+index 3c9eeb5..19f7016 100644
+--- a/src/jrd/unicode_util.cpp
++++ b/src/jrd/unicode_util.cpp
+@@ -57,7 +57,7 @@ namespace Jrd {
+ const char* const UnicodeUtil::DEFAULT_ICU_VERSION = STRINGIZE(U_ICU_VERSION_MAJOR_NUM);
+ #else
+ const char* const UnicodeUtil::DEFAULT_ICU_VERSION =
+-	STRINGIZE(U_ICU_VERSION_MAJOR_NUM)"."STRINGIZE(U_ICU_VERSION_MINOR_NUM);
++	STRINGIZE(U_ICU_VERSION_MAJOR_NUM)"." STRINGIZE(U_ICU_VERSION_MINOR_NUM);
+ #endif
+ 
+ 
+diff --git a/src/jrd/validation.cpp b/src/jrd/validation.cpp
+index ccb47dc..9db6845 100644
+--- a/src/jrd/validation.cpp
++++ b/src/jrd/validation.cpp
+@@ -706,25 +706,25 @@ static const TEXT msg_table[VAL_MAX_ERROR][80] =
+ 	"Page %ld doubly allocated",
+ 	"Page %ld is used but marked free",
+ 	"Page %ld is an orphan",
+-	"Warning: blob %"QUADFORMAT"d appears inconsistent",	// 5
+-	"Blob %"QUADFORMAT"d is corrupt",
+-	"Blob %"QUADFORMAT"d is truncated",
+-	"Chain for record %"QUADFORMAT"d is broken",
++	"Warning: blob %" QUADFORMAT"d appears inconsistent",	// 5
++	"Blob %" QUADFORMAT"d is corrupt",
++	"Blob %" QUADFORMAT"d is truncated",
++	"Chain for record %" QUADFORMAT"d is broken",
+ 	"Data page %ld (sequence %ld) is confused",
+ 	"Data page %ld (sequence %ld), line %ld is bad",	// 10
+ 	"Index %d is corrupt on page %ld level %d at offset %d. File: %s, line: %d\n\t",
+ 	"Pointer page (sequence %ld) lost",
+ 	"Pointer page (sequence %ld) inconsistent",
+-	"Record %"QUADFORMAT"d is marked as damaged",
+-	"Record %"QUADFORMAT"d has bad transaction %ld",	// 15
+-	"Fragmented record %"QUADFORMAT"d is corrupt",
+-	"Record %"QUADFORMAT"d is wrong length",
++	"Record %" QUADFORMAT"d is marked as damaged",
++	"Record %" QUADFORMAT"d has bad transaction %ld",	// 15
++	"Fragmented record %" QUADFORMAT"d is corrupt",
++	"Record %" QUADFORMAT"d is wrong length",
+ 	"Missing index root page",
+ 	"Transaction inventory pages lost",
+ 	"Transaction inventory page lost, sequence %ld",	// 20
+ 	"Transaction inventory pages confused, sequence %ld",
+ 	"Relation has %ld orphan backversions (%ld in use)",
+-	"Index %d is corrupt (record %"QUADFORMAT"d have missing entries)",
++	"Index %d is corrupt (record %" QUADFORMAT"d have missing entries)",
+ 	"Index %d has orphan child page at page %ld",
+ 	"Index %d has a circular reference at page %ld",	// 25
+ 	"Index %d has inconsistent left sibling pointer, page %ld level %d",
+diff --git a/src/jrd/vio.cpp b/src/jrd/vio.cpp
+index 614a9c1..7efd48b 100644
+--- a/src/jrd/vio.cpp
++++ b/src/jrd/vio.cpp
+@@ -294,7 +294,7 @@ void VIO_backout(thread_db* tdbb, record_param* rpb, const jrd_tra* transaction)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("VIO_backout (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT")\n",
++		printf("VIO_backout (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT")\n",
+ 				rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0);
+ 	}
+ #endif
+@@ -317,8 +317,8 @@ void VIO_backout(thread_db* tdbb, record_param* rpb, const jrd_tra* transaction)
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 temp.rpb_page, temp.rpb_line, temp.rpb_transaction_nr,
+ 			 temp.rpb_flags, temp.rpb_b_page, temp.rpb_b_line,
+ 			 temp.rpb_f_page, temp.rpb_f_line);
+@@ -622,7 +622,7 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 	{
+ 		printf
+-			("VIO_chase_record_version (record_param %"QUADFORMAT"d, transaction %"
++			("VIO_chase_record_version (record_param %" QUADFORMAT"d, transaction %"
+ 			 SLONGFORMAT", pool %p)\n",
+ 			 rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0,
+ 			 (void*) pool);
+@@ -630,8 +630,8 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ 	if (debug_flag > DEBUG_TRACE_ALL_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -689,8 +689,8 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ 		if (debug_flag > DEBUG_READS_INFO)
+ 		{
+ 			printf
+-				("   chase record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-				 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++				("   chase record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++				 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 				 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 				 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 				 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -784,7 +784,7 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is dead (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is dead (my TID - %" SLONGFORMAT")\n",
+ 						rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -869,7 +869,7 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is in limbo (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is in limbo (my TID - %" SLONGFORMAT")\n",
+ 						rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -884,7 +884,7 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ #ifdef VIO_DEBUG
+ 			if ((debug_flag > DEBUG_READS_INFO) && (state == tra_active))
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is active (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is active (my TID - %" SLONGFORMAT")\n",
+ 						rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -989,7 +989,7 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is us (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is us (my TID - %" SLONGFORMAT")\n",
+ 						rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -1007,7 +1007,7 @@ bool VIO_chase_record_version(thread_db* tdbb, record_param* rpb,
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is committed (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is committed (my TID - %" SLONGFORMAT")\n",
+ 						rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -1137,13 +1137,13 @@ void VIO_data(thread_db* tdbb, record_param* rpb, MemoryPool* pool)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS)
+ 	{
+-		printf("VIO_data (record_param %"QUADFORMAT"d, pool %p)\n",
++		printf("VIO_data (record_param %" QUADFORMAT"d, pool %p)\n",
+ 					rpb->rpb_number.getValue(), (void*) pool);
+ 	}
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+-		printf("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-				 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++		printf("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++				 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 				 rpb->rpb_page, rpb->rpb_line,
+ 				 rpb->rpb_transaction_nr, rpb->rpb_flags,
+ 				 rpb->rpb_b_page, rpb->rpb_b_line,
+@@ -1230,14 +1230,14 @@ void VIO_data(thread_db* tdbb, record_param* rpb, MemoryPool* pool)
+ #ifdef VIO_DEBUG
+ 		if (debug_flag > DEBUG_WRITES)
+ 		{
+-			printf ("VIO_erase (record_param %"QUADFORMAT"d, length %d expected %d)\n",
++			printf ("VIO_erase (record_param %" QUADFORMAT"d, length %d expected %d)\n",
+ 				rpb->rpb_number.getValue(), length, format->fmt_length);
+ 		}
+ 
+ 		if (debug_flag > DEBUG_WRITES_INFO)
+ 		{
+-			printf ("   record  %"SLONGFORMAT"d:%d, rpb_trans %"SLONGFORMAT
+-					   "d, flags %d, back %"SLONGFORMAT"d:%d, fragment %"SLONGFORMAT"d:%d\n",
++			printf ("   record  %" SLONGFORMAT"d:%d, rpb_trans %" SLONGFORMAT
++					   "d, flags %d, back %" SLONGFORMAT"d:%d, fragment %" SLONGFORMAT"d:%d\n",
+ 				rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr, rpb->rpb_flags,
+ 			    rpb->rpb_b_page, rpb->rpb_b_line, rpb->rpb_f_page, rpb->rpb_f_line);
+ 		}
+@@ -1277,13 +1277,13 @@ void VIO_erase(thread_db* tdbb, record_param* rpb, jrd_tra* transaction)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("VIO_erase (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT")\n",
++		printf("VIO_erase (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT")\n",
+ 				  rpb->rpb_number.getValue(), transaction->tra_number);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+-		printf("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++		printf("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -1695,14 +1695,14 @@ bool VIO_garbage_collect(thread_db* tdbb, record_param* rpb, const jrd_tra* tran
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE)
+ 	{
+-		printf("VIO_garbage_collect (record_param %"QUADFORMAT"d, transaction %"
++		printf("VIO_garbage_collect (record_param %" QUADFORMAT"d, transaction %"
+ 				  SLONGFORMAT")\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0);
+ 	}
+ 	if (debug_flag > DEBUG_TRACE_INFO)
+ 	{
+-		printf("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++		printf("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -1852,7 +1852,7 @@ bool VIO_get(thread_db* tdbb, record_param* rpb, jrd_tra* transaction, MemoryPoo
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_READS) {
+-		printf("VIO_get (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT", pool %p)\n",
++		printf("VIO_get (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT", pool %p)\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0,
+ 				  (void*) pool);
+ 	}
+@@ -1874,8 +1874,8 @@ bool VIO_get(thread_db* tdbb, record_param* rpb, jrd_tra* transaction, MemoryPoo
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -1931,7 +1931,7 @@ bool VIO_get_current(thread_db* tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE)
+ 	{
+-		printf("VIO_get_current (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT", pool %p)\n",
++		printf("VIO_get_current (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT", pool %p)\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0,
+ 				  (void*) pool);
+ 	}
+@@ -1951,8 +1951,8 @@ bool VIO_get_current(thread_db* tdbb,
+ 		if (debug_flag > DEBUG_TRACE_INFO)
+ 		{
+ 			printf
+-				("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-				 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++				("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++				 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 				 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 				 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 				 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -2272,16 +2272,16 @@ void VIO_modify(thread_db* tdbb, record_param* org_rpb, record_param* new_rpb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("VIO_modify (org_rpb %"QUADFORMAT"d, new_rpb %"QUADFORMAT"d, "
+-				"transaction %"SLONGFORMAT")\n",
++		printf("VIO_modify (org_rpb %" QUADFORMAT"d, new_rpb %" QUADFORMAT"d, "
++				"transaction %" SLONGFORMAT")\n",
+ 				  org_rpb->rpb_number.getValue(), new_rpb->rpb_number.getValue(),
+ 				  transaction ? transaction->tra_number : 0);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   old record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   old record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 org_rpb->rpb_page, org_rpb->rpb_line, org_rpb->rpb_transaction_nr,
+ 			 org_rpb->rpb_flags, org_rpb->rpb_b_page, org_rpb->rpb_b_line,
+ 			 org_rpb->rpb_f_page, org_rpb->rpb_f_line);
+@@ -2572,15 +2572,15 @@ bool VIO_next_record(thread_db* tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE)
+ 	{
+-		printf("VIO_next_record (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT", pool %p)\n",
++		printf("VIO_next_record (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT", pool %p)\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0,
+ 				  (void*) pool);
+ 	}
+ 	if (debug_flag > DEBUG_TRACE_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -2613,8 +2613,8 @@ bool VIO_next_record(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_READS_INFO)
+ 	{
+ 		printf
+-			("VIO_next_record got record  %"SLONGFORMAT":%d, rpb_trans %"
+-			 SLONGFORMAT", flags %d, back %"SLONGFORMAT":%d, fragment %"
++			("VIO_next_record got record  %" SLONGFORMAT":%d, rpb_trans %"
++			 SLONGFORMAT", flags %d, back %" SLONGFORMAT":%d, fragment %"
+ 			 SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+@@ -2648,7 +2648,7 @@ Record* VIO_record(thread_db* tdbb, record_param* rpb, const Format* format, Mem
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE)
+ 	{
+-		printf("VIO_record (record_param %"QUADFORMAT"d, format %d, pool %p)\n",
++		printf("VIO_record (record_param %" QUADFORMAT"d, format %d, pool %p)\n",
+ 				  rpb->rpb_number.getValue(), format ? format->fmt_version : 0,
+ 				  (void*) pool);
+ 	}
+@@ -2773,7 +2773,7 @@ void VIO_store(thread_db* tdbb, record_param* rpb, jrd_tra* transaction)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("VIO_store (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT
++		printf("VIO_store (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT
+ 				  ")\n", rpb->rpb_number.getValue(),
+ 				  transaction ? transaction->tra_number : 0);
+ 	}
+@@ -2951,8 +2951,8 @@ void VIO_store(thread_db* tdbb, record_param* rpb, jrd_tra* transaction)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES_INFO) {
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -2993,7 +2993,7 @@ bool VIO_sweep(thread_db* tdbb, jrd_tra* transaction, TraceSweepEvent* traceSwee
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE) {
+-		printf("VIO_sweep (transaction %"SLONGFORMAT")\n", transaction ? transaction->tra_number : 0);
++		printf("VIO_sweep (transaction %" SLONGFORMAT")\n", transaction ? transaction->tra_number : 0);
+ 	}
+ #endif
+ 
+@@ -3155,7 +3155,7 @@ void VIO_verb_cleanup(thread_db* tdbb, jrd_tra* transaction)
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE)
+ 	{
+-		printf("VIO_verb_cleanup (transaction %"SLONGFORMAT")\n",
++		printf("VIO_verb_cleanup (transaction %" SLONGFORMAT")\n",
+ 				  transaction ? transaction->tra_number : 0);
+ 	}
+ #endif
+@@ -3416,15 +3416,15 @@ bool VIO_writelock(thread_db* tdbb, record_param* org_rpb, RecordSource* rsb, jr
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("VIO_writelock (org_rpb %"QUADFORMAT"d, transaction %"
++		printf("VIO_writelock (org_rpb %" QUADFORMAT"d, transaction %"
+ 				  SLONGFORMAT")\n",
+ 				  org_rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   old record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   old record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 org_rpb->rpb_page, org_rpb->rpb_line, org_rpb->rpb_transaction_nr,
+ 			 org_rpb->rpb_flags, org_rpb->rpb_b_page, org_rpb->rpb_b_line,
+ 			 org_rpb->rpb_f_page, org_rpb->rpb_f_line);
+@@ -3714,14 +3714,14 @@ static void delete_record(thread_db* tdbb, record_param* rpb, SLONG prior_page,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("delete_record (record_param %"QUADFORMAT"d, prior_page %"SLONGFORMAT", pool %p)\n",
++		printf("delete_record (record_param %" QUADFORMAT"d, prior_page %" SLONGFORMAT", pool %p)\n",
+ 				  rpb->rpb_number.getValue(), prior_page, (void*) pool);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   delete_record record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   delete_record record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -3803,14 +3803,14 @@ static UCHAR* delete_tail(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+ 		printf
+-			("delete_tail (record_param %"QUADFORMAT"d, prior_page %"SLONGFORMAT", tail %p, tail_end %p)\n",
++			("delete_tail (record_param %" QUADFORMAT"d, prior_page %" SLONGFORMAT", tail %p, tail_end %p)\n",
+ 			 rpb->rpb_number.getValue(), prior_page, tail, tail_end);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   tail of record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   tail of record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -3890,8 +3890,8 @@ static void expunge(thread_db* tdbb, record_param* rpb, const jrd_tra* transacti
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("expunge (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT
+-				  ", prior_page %"SLONGFORMAT")\n",
++		printf("expunge (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT
++				  ", prior_page %" SLONGFORMAT")\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0,
+ 				  prior_page);
+ 	}
+@@ -3917,8 +3917,8 @@ static void expunge(thread_db* tdbb, record_param* rpb, const jrd_tra* transacti
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   expunge record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   expunge record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -3987,15 +3987,15 @@ static void garbage_collect(thread_db* tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_WRITES)
+ 	{
+-		printf("garbage_collect (record_param %"QUADFORMAT"d, prior_page %"SLONGFORMAT
++		printf("garbage_collect (record_param %" QUADFORMAT"d, prior_page %" SLONGFORMAT
+ 				  ", staying)\n",
+ 				  rpb->rpb_number.getValue(), prior_page);
+ 	}
+ 	if (debug_flag > DEBUG_WRITES_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -4711,19 +4711,19 @@ static int prepare_update(	thread_db*		tdbb,
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 	{
+ 		printf
+-			("prepare_update (transaction %"SLONGFORMAT
+-			 ", commit_tid read %"SLONGFORMAT", record_param %"QUADFORMAT"d, ",
++			("prepare_update (transaction %" SLONGFORMAT
++			 ", commit_tid read %" SLONGFORMAT", record_param %" QUADFORMAT"d, ",
+ 			 transaction ? transaction->tra_number : 0, commit_tid_read,
+ 			 rpb ? rpb->rpb_number.getValue() : 0);
+-		printf(" temp_rpb %"QUADFORMAT"d, new_rpb %"QUADFORMAT"d, stack)\n",
++		printf(" temp_rpb %" QUADFORMAT"d, new_rpb %" QUADFORMAT"d, stack)\n",
+ 				  temp ? temp->rpb_number.getValue() : 0,
+ 				  new_rpb ? new_rpb->rpb_number.getValue() : 0);
+ 	}
+ 	if (debug_flag > DEBUG_TRACE_ALL_INFO)
+ 	{
+ 		printf
+-			("   old record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT
++			("   old record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT
+ 			 ":%d, prior %p\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+@@ -4862,8 +4862,8 @@ static int prepare_update(	thread_db*		tdbb,
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+ 				printf
+-					("    record's transaction (%"SLONGFORMAT
+-					 ") is committed (my TID - %"SLONGFORMAT")\n",
++					("    record's transaction (%" SLONGFORMAT
++					 ") is committed (my TID - %" SLONGFORMAT")\n",
+ 					 rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -4917,8 +4917,8 @@ static int prepare_update(	thread_db*		tdbb,
+ 			if (debug_flag > DEBUG_READS_INFO && state == tra_us)
+ 			{
+ 				printf
+-					("    record's transaction (%"SLONGFORMAT
+-					 ") is us (my TID - %"SLONGFORMAT")\n",
++					("    record's transaction (%" SLONGFORMAT
++					 ") is us (my TID - %" SLONGFORMAT")\n",
+ 					 rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ 
+@@ -4960,7 +4960,7 @@ static int prepare_update(	thread_db*		tdbb,
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is %s (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is %s (my TID - %" SLONGFORMAT")\n",
+ 					 rpb->rpb_transaction_nr, (state == tra_active) ? "active" : "limbo",
+ 					 transaction->tra_number);
+ 			}
+@@ -5042,7 +5042,7 @@ static int prepare_update(	thread_db*		tdbb,
+ #ifdef VIO_DEBUG
+ 			if (debug_flag > DEBUG_READS_INFO)
+ 			{
+-				printf("    record's transaction (%"SLONGFORMAT") is dead (my TID - %"SLONGFORMAT")\n",
++				printf("    record's transaction (%" SLONGFORMAT") is dead (my TID - %" SLONGFORMAT")\n",
+ 					 rpb->rpb_transaction_nr, transaction->tra_number);
+ 			}
+ #endif
+@@ -5087,13 +5087,13 @@ static void purge(thread_db* tdbb, record_param* rpb)
+ 
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE_ALL) {
+-		printf("purge (record_param %"QUADFORMAT"d)\n", rpb->rpb_number.getValue());
++		printf("purge (record_param %" QUADFORMAT"d)\n", rpb->rpb_number.getValue());
+ 	}
+ 	if (debug_flag > DEBUG_TRACE_ALL_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+ 			 rpb->rpb_f_page, rpb->rpb_f_line);
+@@ -5208,14 +5208,14 @@ static void replace_record(thread_db*		tdbb,
+ #ifdef VIO_DEBUG
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 	{
+-		printf("replace_record (record_param %"QUADFORMAT"d, transaction %"SLONGFORMAT")\n",
++		printf("replace_record (record_param %" QUADFORMAT"d, transaction %" SLONGFORMAT")\n",
+ 				  rpb->rpb_number.getValue(), transaction ? transaction->tra_number : 0);
+ 	}
+ 	if (debug_flag > DEBUG_TRACE_ALL_INFO)
+ 	{
+ 		printf
+-			("   record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT
++			("   record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT
+ 			 ":%d, prior %p\n",
+ 			 rpb->rpb_page, rpb->rpb_line, rpb->rpb_transaction_nr,
+ 			 rpb->rpb_flags, rpb->rpb_b_page, rpb->rpb_b_line,
+@@ -5287,16 +5287,16 @@ static void update_in_place(thread_db* tdbb,
+ 	if (debug_flag > DEBUG_TRACE_ALL)
+ 	{
+ 		printf
+-			("update_in_place (transaction %"SLONGFORMAT", org_rpb %"QUADFORMAT"d, "
+-			 "new_rpb %"QUADFORMAT"d)\n",
++			("update_in_place (transaction %" SLONGFORMAT", org_rpb %" QUADFORMAT"d, "
++			 "new_rpb %" QUADFORMAT"d)\n",
+ 			 transaction ? transaction->tra_number : 0, org_rpb->rpb_number.getValue(),
+ 			 new_rpb ? new_rpb->rpb_number.getValue() : 0);
+ 	}
+ 	if (debug_flag > DEBUG_TRACE_ALL_INFO)
+ 	{
+ 		printf
+-			("   old record  %"SLONGFORMAT":%d, rpb_trans %"SLONGFORMAT
+-			 ", flags %d, back %"SLONGFORMAT":%d, fragment %"SLONGFORMAT":%d\n",
++			("   old record  %" SLONGFORMAT":%d, rpb_trans %" SLONGFORMAT
++			 ", flags %d, back %" SLONGFORMAT":%d, fragment %" SLONGFORMAT":%d\n",
+ 			 org_rpb->rpb_page, org_rpb->rpb_line, org_rpb->rpb_transaction_nr,
+ 			 org_rpb->rpb_flags, org_rpb->rpb_b_page, org_rpb->rpb_b_line,
+ 			 org_rpb->rpb_f_page, org_rpb->rpb_f_line);
+diff --git a/src/lock/lock.cpp b/src/lock/lock.cpp
+index 9b9ccc9..87f9428 100644
+--- a/src/lock/lock.cpp
++++ b/src/lock/lock.cpp
+@@ -1612,7 +1612,7 @@ void LockManager::bug_assert(const TEXT* string, ULONG line)
+ 	TEXT buffer[MAXPATHLEN + 100];
+ 	lhb LOCK_header_copy;
+ 
+-	sprintf((char*) buffer, "%s %"ULONGFORMAT": lock assertion failure: %.60s\n",
++	sprintf((char*) buffer, "%s %" ULONGFORMAT": lock assertion failure: %.60s\n",
+ 			__FILE__, line, string);
+ 
+ 	// Copy the shared memory so we can examine its state when we crashed
+@@ -1985,7 +1985,7 @@ lrq* LockManager::deadlock_walk(lrq* request, bool* maybe_deadlock)
+ #ifdef DEBUG_TRACE_DEADLOCKS
+ 		const own* owner = (own*) SRQ_ABS_PTR(request->lrq_owner);
+ 		const prc* proc = (prc*) SRQ_ABS_PTR(owner->own_process);
+-		gds__log("deadlock chain: OWNER BLOCK %6"SLONGFORMAT"\tProcess id: %6d\tFlags: 0x%02X ",
++		gds__log("deadlock chain: OWNER BLOCK %6" SLONGFORMAT"\tProcess id: %6d\tFlags: 0x%02X ",
+ 			request->lrq_owner, proc->prc_process_id, owner->own_flags);
+ #endif
+ 		return request;
+@@ -2096,7 +2096,7 @@ lrq* LockManager::deadlock_walk(lrq* request, bool* maybe_deadlock)
+ #ifdef DEBUG_TRACE_DEADLOCKS
+ 			const own* owner2 = (own*) SRQ_ABS_PTR(request->lrq_owner);
+ 			const prc* proc = (prc*) SRQ_ABS_PTR(owner2->own_process);
+-			gds__log("deadlock chain: OWNER BLOCK %6"SLONGFORMAT"\tProcess id: %6d\tFlags: 0x%02X ",
++			gds__log("deadlock chain: OWNER BLOCK %6" SLONGFORMAT"\tProcess id: %6d\tFlags: 0x%02X ",
+ 				request->lrq_owner, proc->prc_process_id, owner2->own_flags);
+ #endif
+ 			return target;
+@@ -2226,14 +2226,14 @@ lrq* LockManager::get_request(SRQ_PTR offset)
+ 	lrq* request = (lrq*) SRQ_ABS_PTR(offset);
+ 	if (offset == -1 || request->lrq_type != type_lrq)
+ 	{
+-		sprintf(s, "invalid lock id (%"SLONGFORMAT")", offset);
++		sprintf(s, "invalid lock id (%" SLONGFORMAT")", offset);
+ 		bug(NULL, s);
+ 	}
+ 
+ 	const lbl* lock = (lbl*) SRQ_ABS_PTR(request->lrq_lock);
+ 	if (lock->lbl_type != type_lbl)
+ 	{
+-		sprintf(s, "invalid lock (%"SLONGFORMAT")", offset);
++		sprintf(s, "invalid lock (%" SLONGFORMAT")", offset);
+ 		bug(NULL, s);
+ 	}
+ 
+diff --git a/src/lock/print.cpp b/src/lock/print.cpp
+index 2280a23..ff4180e 100644
+--- a/src/lock/print.cpp
++++ b/src/lock/print.cpp
+@@ -127,9 +127,9 @@ class HtmlLink
+ 	HtmlLink(const TEXT* prefix, const SLONG value)
+ 	{
+ 		if (sw_html_format && value && prefix)
+-			sprintf(strBuffer, "<a href=\"#%s%"SLONGFORMAT"\">%6"SLONGFORMAT"</a>", prefix, value, value);
++			sprintf(strBuffer, "<a href=\"#%s%" SLONGFORMAT"\">%6" SLONGFORMAT"</a>", prefix, value, value);
+ 		else
+-			sprintf(strBuffer, "%6"SLONGFORMAT, value);
++			sprintf(strBuffer, "%6" SLONGFORMAT, value);
+ 	}
+ 	operator const TEXT*()
+ 	{
+@@ -764,8 +764,8 @@ int CLIB_ROUTINE main( int argc, char *argv[])
+ 
+ 	FPRINTF(outfile, "LOCK_HEADER BLOCK\n");
+ 	FPRINTF(outfile,
+-			"\tVersion: %d, Active owner: %s, Length: %6"SLONGFORMAT
+-			", Used: %6"SLONGFORMAT"\n",
++			"\tVersion: %d, Active owner: %s, Length: %6" SLONGFORMAT
++			", Used: %6" SLONGFORMAT"\n",
+ 			LOCK_header->lhb_version, (const TEXT*)HtmlLink(preOwn, LOCK_header->lhb_active_owner),
+ 			LOCK_header->lhb_length, LOCK_header->lhb_used);
+ 
+@@ -773,20 +773,20 @@ int CLIB_ROUTINE main( int argc, char *argv[])
+ 			LOCK_header->lhb_flags);
+ 
+ 	FPRINTF(outfile,
+-			"\tEnqs: %6"UQUADFORMAT", Converts: %6"UQUADFORMAT
+-			", Rejects: %6"UQUADFORMAT", Blocks: %6"UQUADFORMAT"\n",
++			"\tEnqs: %6" UQUADFORMAT", Converts: %6" UQUADFORMAT
++			", Rejects: %6" UQUADFORMAT", Blocks: %6" UQUADFORMAT"\n",
+ 			LOCK_header->lhb_enqs, LOCK_header->lhb_converts,
+ 			LOCK_header->lhb_denies, LOCK_header->lhb_blocks);
+ 
+ 	FPRINTF(outfile,
+-			"\tDeadlock scans: %6"UQUADFORMAT", Deadlocks: %6"UQUADFORMAT
+-			", Scan interval: %3"ULONGFORMAT"\n",
++			"\tDeadlock scans: %6" UQUADFORMAT", Deadlocks: %6" UQUADFORMAT
++			", Scan interval: %3" ULONGFORMAT"\n",
+ 			LOCK_header->lhb_scans, LOCK_header->lhb_deadlocks,
+ 			LOCK_header->lhb_scan_interval);
+ 
+ 	FPRINTF(outfile,
+-			"\tAcquires: %6"UQUADFORMAT", Acquire blocks: %6"UQUADFORMAT
+-			", Spin count: %3"ULONGFORMAT"\n",
++			"\tAcquires: %6" UQUADFORMAT", Acquire blocks: %6" UQUADFORMAT
++			", Spin count: %3" ULONGFORMAT"\n",
+ 			LOCK_header->lhb_acquires, LOCK_header->lhb_acquire_blocks,
+ 			LOCK_header->lhb_acquire_spins);
+ 
+@@ -822,14 +822,14 @@ int CLIB_ROUTINE main( int argc, char *argv[])
+ 
+ 	FPRINTF(outfile, "\tHash slots: %4d, ", LOCK_header->lhb_hash_slots);
+ 
+-	FPRINTF(outfile, "Hash lengths (min/avg/max): %4"SLONGFORMAT"/%4"SLONGFORMAT"/%4"SLONGFORMAT"\n",
++	FPRINTF(outfile, "Hash lengths (min/avg/max): %4" SLONGFORMAT"/%4" SLONGFORMAT"/%4" SLONGFORMAT"\n",
+ 			hash_min_count, (hash_total_count / LOCK_header->lhb_hash_slots),
+ 			hash_max_count);
+ 
+ 	const shb* a_shb = (shb*) SRQ_ABS_PTR(LOCK_header->lhb_secondary);
+ 	FPRINTF(outfile,
+-			"\tRemove node: %6"SLONGFORMAT", Insert queue: %6"SLONGFORMAT
+-			", Insert prior: %6"SLONGFORMAT"\n",
++			"\tRemove node: %6" SLONGFORMAT", Insert queue: %6" SLONGFORMAT
++			", Insert prior: %6" SLONGFORMAT"\n",
+ 			a_shb->shb_remove_node, a_shb->shb_insert_que,
+ 			a_shb->shb_insert_prior);
+ 
+@@ -948,8 +948,8 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 		if (flag & SW_I_ACQUIRE)
+ 		{
+-			FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" %9"UQUADFORMAT" ",
++			FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" %9" UQUADFORMAT" ",
+ 					(header->lhb_acquires - prior.lhb_acquires) / seconds,
+ 					(header->lhb_acquire_blocks - prior.lhb_acquire_blocks) / seconds,
+ 					(header->lhb_acquires - prior.lhb_acquires) ?
+@@ -968,9 +968,9 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 		if (flag & SW_I_OPERATION)
+ 		{
+-			FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" ",
++			FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" ",
+ 					(header->lhb_enqs - prior.lhb_enqs) / seconds,
+ 					(header->lhb_converts - prior.lhb_converts) / seconds,
+ 					(header->lhb_downgrades - prior.lhb_downgrades) / seconds,
+@@ -990,9 +990,9 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 		if (flag & SW_I_TYPE)
+ 		{
+-			FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" ",
++			FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" ",
+ 					(header->lhb_operations[Jrd::LCK_database] -
+ 					 	prior.lhb_operations[Jrd::LCK_database]) / seconds,
+ 					(header->lhb_operations[Jrd::LCK_relation] -
+@@ -1018,9 +1018,9 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 		if (flag & SW_I_WAIT)
+ 		{
+-			FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-					" %9"UQUADFORMAT" ",
++			FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++					" %9" UQUADFORMAT" ",
+ 					(header->lhb_waits - prior.lhb_waits) / seconds,
+ 					(header->lhb_denies - prior.lhb_denies) / seconds,
+ 					(header->lhb_timeouts - prior.lhb_timeouts) / seconds,
+@@ -1048,8 +1048,8 @@ static void prt_lock_activity(OUTFILE outfile,
+ 	FPRINTF(outfile, "\nAverage: ");
+ 	if (flag & SW_I_ACQUIRE)
+ 	{
+-		FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-				" %9"UQUADFORMAT" %9"UQUADFORMAT" ",
++		FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++				" %9" UQUADFORMAT" %9" UQUADFORMAT" ",
+ 				(header->lhb_acquires - base.lhb_acquires) / (factor),
+ 				(header->lhb_acquire_blocks -
+ 				 base.lhb_acquire_blocks) / (factor),
+@@ -1062,8 +1062,8 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 	if (flag & SW_I_OPERATION)
+ 	{
+-		FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-				" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"
++		FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++				" %9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT" %9"
+ 				UQUADFORMAT" ",
+ 				(header->lhb_enqs - base.lhb_enqs) / (factor),
+ 				(header->lhb_converts - base.lhb_converts) / (factor),
+@@ -1076,9 +1076,9 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 	if (flag & SW_I_TYPE)
+ 	{
+-		FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-				" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-				" %9"UQUADFORMAT" ",
++		FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++				" %9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++				" %9" UQUADFORMAT" ",
+ 				(header->lhb_operations[Jrd::LCK_database] -
+ 				 	base.lhb_operations[Jrd::LCK_database]) / (factor),
+ 				(header->lhb_operations[Jrd::LCK_relation] -
+@@ -1096,9 +1096,9 @@ static void prt_lock_activity(OUTFILE outfile,
+ 
+ 	if (flag & SW_I_WAIT)
+ 	{
+-		FPRINTF(outfile, "%9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-				" %9"UQUADFORMAT" %9"UQUADFORMAT" %9"UQUADFORMAT
+-				" %9"UQUADFORMAT" ",
++		FPRINTF(outfile, "%9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++				" %9" UQUADFORMAT" %9" UQUADFORMAT" %9" UQUADFORMAT
++				" %9" UQUADFORMAT" ",
+ 				(header->lhb_waits - base.lhb_waits) / (factor),
+ 				(header->lhb_denies - base.lhb_denies) / (factor),
+ 				(header->lhb_timeouts - base.lhb_timeouts) / (factor),
+@@ -1177,15 +1177,15 @@ static void prt_lock(OUTFILE outfile, const lhb* LOCK_header, const lbl* lock, U
+ 		return;
+ 
+ 	if (!sw_html_format)
+-		FPRINTF(outfile, "LOCK BLOCK %6"SLONGFORMAT"\n", SRQ_REL_PTR(lock));
++		FPRINTF(outfile, "LOCK BLOCK %6" SLONGFORMAT"\n", SRQ_REL_PTR(lock));
+ 	else
+ 	{
+ 		const SLONG rel_lock = SRQ_REL_PTR(lock);
+-		FPRINTF(outfile, "<a name=\"%s%"SLONGFORMAT"\">LOCK BLOCK %6"SLONGFORMAT"</a>\n",
++		FPRINTF(outfile, "<a name=\"%s%" SLONGFORMAT"\">LOCK BLOCK %6" SLONGFORMAT"</a>\n",
+ 				preLock, rel_lock, rel_lock);
+ 	}
+ 	FPRINTF(outfile,
+-			"\tSeries: %d, Parent: %s, State: %d, size: %d length: %d data: %"ULONGFORMAT"\n",
++			"\tSeries: %d, Parent: %s, State: %d, size: %d length: %d data: %" ULONGFORMAT"\n",
+ 			lock->lbl_series, (const TEXT*)HtmlLink(preLock, lock->lbl_parent), lock->lbl_state,
+ 			lock->lbl_size, lock->lbl_length, lock->lbl_data);
+ 
+@@ -1204,14 +1204,14 @@ static void prt_lock(OUTFILE outfile, const lhb* LOCK_header, const lbl* lock, U
+ 		ULONG pg_space;
+ 		memcpy(&pg_space, q, sizeof(SLONG));
+ 
+-		FPRINTF(outfile, "\tKey: %04"ULONGFORMAT":%06"SLONGFORMAT",", pg_space, key);
++		FPRINTF(outfile, "\tKey: %04" ULONGFORMAT":%06" SLONGFORMAT",", pg_space, key);
+ 	}
+ 	else if (lock->lbl_length == 4)
+ 	{
+ 		SLONG key;
+ 		memcpy(&key, lock->lbl_key, 4);
+ 
+-		FPRINTF(outfile, "\tKey: %06"SLONGFORMAT",", key);
++		FPRINTF(outfile, "\tKey: %06" SLONGFORMAT",", key);
+ 	}
+ 	else
+ 	{
+@@ -1289,18 +1289,18 @@ static void prt_owner(OUTFILE outfile,
+ 	const prc* process = (prc*) SRQ_ABS_PTR(owner->own_process);
+ 
+ 	if (!sw_html_format)
+-		FPRINTF(outfile, "OWNER BLOCK %6"SLONGFORMAT"\n", SRQ_REL_PTR(owner));
++		FPRINTF(outfile, "OWNER BLOCK %6" SLONGFORMAT"\n", SRQ_REL_PTR(owner));
+ 	else
+ 	{
+ 		const SLONG rel_owner = SRQ_REL_PTR(owner);
+-		FPRINTF(outfile, "<a name=\"%s%"SLONGFORMAT"\">OWNER BLOCK %6"SLONGFORMAT"</a>\n",
++		FPRINTF(outfile, "<a name=\"%s%" SLONGFORMAT"\">OWNER BLOCK %6" SLONGFORMAT"</a>\n",
+ 				preOwn, rel_owner, rel_owner);
+ 	}
+-	FPRINTF(outfile, "\tOwner id: %6"QUADFORMAT"d, type: %1d, pending: %s\n",
++	FPRINTF(outfile, "\tOwner id: %6" QUADFORMAT"d, type: %1d, pending: %s\n",
+ 			owner->own_owner_id, owner->own_owner_type,
+ 			(const TEXT*)HtmlLink(preRequest, owner->own_pending_request));
+ 
+-	FPRINTF(outfile, "\tProcess id: %6d (%s), thread id: %6"SIZEFORMAT"\n",
++	FPRINTF(outfile, "\tProcess id: %6d (%s), thread id: %6" SIZEFORMAT"\n",
+ 			process->prc_process_id,
+ 			ISC_check_process_existence(process->prc_process_id) ? "Alive" : "Dead",
+ 			owner->own_thread_id);
+@@ -1454,11 +1454,11 @@ static void prt_request(OUTFILE outfile, const lhb* LOCK_header, const lrq* requ
+  **************************************/
+ 
+ 	if (!sw_html_format)
+-		FPRINTF(outfile, "REQUEST BLOCK %6"SLONGFORMAT"\n", SRQ_REL_PTR(request));
++		FPRINTF(outfile, "REQUEST BLOCK %6" SLONGFORMAT"\n", SRQ_REL_PTR(request));
+ 	else
+ 	{
+ 		const SLONG rel_request = SRQ_REL_PTR(request);
+-		FPRINTF(outfile, "<a name=\"%s%"SLONGFORMAT"\">REQUEST BLOCK %6"SLONGFORMAT"</a>\n",
++		FPRINTF(outfile, "<a name=\"%s%" SLONGFORMAT"\">REQUEST BLOCK %6" SLONGFORMAT"</a>\n",
+ 				preRequest, rel_request, rel_request);
+ 	}
+ 	FPRINTF(outfile, "\tOwner: %s, Lock: %s, State: %d, Mode: %d, Flags: 0x%02X\n",
+@@ -1505,7 +1505,7 @@ static void prt_que(OUTFILE outfile,
+ 	SRQ_LOOP((*que_inst), next)
+ 		++count;
+ 
+-	FPRINTF(outfile, "%s (%"SLONGFORMAT"):\tforward: %s, backward: %s\n", string, count,
++	FPRINTF(outfile, "%s (%" SLONGFORMAT"):\tforward: %s, backward: %s\n", string, count,
+ 			(const TEXT*) HtmlLink(prefix, que_inst->srq_forward - que_offset),
+ 			(const TEXT*) HtmlLink(prefix, que_inst->srq_backward - que_offset));
+ }
+diff --git a/src/misc/codes.epp b/src/misc/codes.epp
+index 8b0d69d..8c61d17 100644
+--- a/src/misc/codes.epp
++++ b/src/misc/codes.epp
+@@ -401,9 +401,9 @@ static void build_iberror_h()
+ 	fprintf(iberror,
+ 			   "const ISC_STATUS isc_facility	= %d;\n", isc_facility_local);
+ 	fprintf(iberror,
+-			   "const ISC_STATUS isc_base = %"SLONGFORMAT"L;\n", isc_base_local);
++			   "const ISC_STATUS isc_base = %" SLONGFORMAT"L;\n", isc_base_local);
+ 	fprintf(iberror,
+-			   "const ISC_STATUS isc_factor = %"SLONGFORMAT";\n", isc_factor_local);
++			   "const ISC_STATUS isc_factor = %" SLONGFORMAT";\n", isc_factor_local);
+ 
+ // Append the ISC C++ boiler plate
+ 
+@@ -445,8 +445,8 @@ static void build_iberror_h()
+ 	new_code = 0L;
+ 
+ 	fprintf(iberror, "#define isc_facility %d\n", isc_facility_local);
+-	fprintf(iberror, "#define isc_base %"SLONGFORMAT"L\n", isc_base_local);
+-	fprintf(iberror, "#define isc_factor %"SLONGFORMAT"\n", isc_factor_local);
++	fprintf(iberror, "#define isc_base %" SLONGFORMAT"L\n", isc_base_local);
++	fprintf(iberror, "#define isc_factor %" SLONGFORMAT"\n", isc_factor_local);
+ 	fprintf(iberror, "\n");
+ 
+ // Append the ISC C boiler plate
+diff --git a/src/msgs/build_file.epp b/src/msgs/build_file.epp
+index 2f1e7d3..d8f41e0 100644
+--- a/src/msgs/build_file.epp
++++ b/src/msgs/build_file.epp
+@@ -368,11 +368,11 @@ static USHORT do_msgs( const TEXT* filename, const TEXT* locale, bool sw_warning
+ 			END_FOR;
+ 			if (!found_one && sw_warning)
+ 				printf
+-					("build_file: Warning - no %s translation of msg# %"QUADFORMAT"d\n",
++					("build_file: Warning - no %s translation of msg# %" QUADFORMAT"d\n",
+ 					 locale, X.CODE);
+ 			if (found_one > 1 && sw_warning)
+ 				printf
+-					("build_file: Warning - multiple %s translations of msg# %"QUADFORMAT"d\n",
++					("build_file: Warning - multiple %s translations of msg# %" QUADFORMAT"d\n",
+ 					 locale, X.CODE);
+ 			if (found_one != 1)
+ 				warning_counter++;
+diff --git a/src/qli/dtr.cpp b/src/qli/dtr.cpp
+index 2b70139..28d36e7 100644
+--- a/src/qli/dtr.cpp
++++ b/src/qli/dtr.cpp
+@@ -262,7 +262,7 @@ int  CLIB_ROUTINE main( int argc, char **argv)
+ 	if (startup_file.length())
+ 		LEX_push_file(startup_file.c_str(), false);
+ 
+-#if defined(_MSC_VER) && _MSC_VER >= 1400
++#if defined(_MSC_VER) && _MSC_VER >= 1400  && _MSC_VER < 1900
+ 	_set_output_format(_TWO_DIGIT_EXPONENT);
+ #endif
+ 
+diff --git a/src/qli/exe.cpp b/src/qli/exe.cpp
+index 320547a..00ac6d9 100644
+--- a/src/qli/exe.cpp
++++ b/src/qli/exe.cpp
+@@ -1114,19 +1114,19 @@ static void print_counts( qli_req* request)
+ 			switch (item)
+ 			{
+ 			case isc_info_req_select_count:
+-				printf("\nrecords selected: %"ULONGFORMAT"\n", number);
++				printf("\nrecords selected: %" ULONGFORMAT"\n", number);
+ 				break;
+ 
+ 			case isc_info_req_insert_count:
+-				printf("records inserted: %"ULONGFORMAT"\n", number);
++				printf("records inserted: %" ULONGFORMAT"\n", number);
+ 				break;
+ 
+ 			case isc_info_req_update_count:
+-				printf("records updated: %"ULONGFORMAT"\n", number);
++				printf("records updated: %" ULONGFORMAT"\n", number);
+ 				break;
+ 
+ 			case isc_info_req_delete_count:
+-				printf("records deleted: %"ULONGFORMAT"\n", number);
++				printf("records deleted: %" ULONGFORMAT"\n", number);
+ 				break;
+ 
+ 			default:
+diff --git a/src/qli/format.cpp b/src/qli/format.cpp
+index 5427e77..005177e 100644
+--- a/src/qli/format.cpp
++++ b/src/qli/format.cpp
+@@ -826,7 +826,7 @@ static void format_index( qli_print_item* item, qli_nod* field, const bool print
+ 		switch (subscript->nod_type)
+ 		{
+ 		case nod_constant:
+-			sprintf(s, "%"SLONGFORMAT, MOVQ_get_long(&subscript->nod_desc, 0));
++			sprintf(s, "%" SLONGFORMAT, MOVQ_get_long(&subscript->nod_desc, 0));
+ 			q = s;
+ 			l = strlen(s);
+ 			break;
+diff --git a/src/qli/mov.cpp b/src/qli/mov.cpp
+index a95a4f1..4ecc2ad 100644
+--- a/src/qli/mov.cpp
++++ b/src/qli/mov.cpp
+@@ -1081,7 +1081,7 @@ static void sql_time_to_text( const ULONG date[1], DSC* to)
+ 	isc_decode_date((const ISC_QUAD*) date2, &times);
+ 
+ 	TEXT temp[35];
+-	sprintf(temp, " %2d:%.2d:%.2d.%.4"SLONGFORMAT, times.tm_hour, times.tm_min,
++	sprintf(temp, " %2d:%.2d:%.2d.%.4" SLONGFORMAT, times.tm_hour, times.tm_min,
+ 			times.tm_sec, date2[1] % PRECISION);
+ 
+ 	const TEXT* p = temp;
+@@ -1122,7 +1122,7 @@ static void timestamp_to_text( const SLONG date[2], DSC* to)
+ 	if (times.tm_hour || times.tm_min || times.tm_sec || date[1])
+ 	{
+ 		TEXT time[15];
+-		sprintf(time, " %2d:%.2d:%.2d.%.4"SLONGFORMAT, times.tm_hour, times.tm_min,
++		sprintf(time, " %2d:%.2d:%.2d.%.4" SLONGFORMAT, times.tm_hour, times.tm_min,
+ 				times.tm_sec, date[1] % PRECISION);
+ 		strcat(temp, time);
+ 	}
+diff --git a/src/qli/show.epp b/src/qli/show.epp
+index 9dd0c47..4bb6294 100644
+--- a/src/qli/show.epp
++++ b/src/qli/show.epp
+@@ -439,11 +439,11 @@ static void array_dimensions( qli_dbb* database, const TEXT* field_name)
+ 
+ 		if (D.RDB$LOWER_BOUND != 1)
+ 		{
+-			sprintf(p, "%"SLONGFORMAT":", D.RDB$LOWER_BOUND);
++			sprintf(p, "%" SLONGFORMAT":", D.RDB$LOWER_BOUND);
+ 			while (*++p);
+ 		}
+ 
+-		sprintf(p, "%"SLONGFORMAT", ", D.RDB$UPPER_BOUND);
++		sprintf(p, "%" SLONGFORMAT", ", D.RDB$UPPER_BOUND);
+ 		while (*++p);
+ 	END_FOR;
+ 
+diff --git a/src/remote/inet.cpp b/src/remote/inet.cpp
+index a92a5f6..7224c1a 100644
+--- a/src/remote/inet.cpp
++++ b/src/remote/inet.cpp
+@@ -1899,7 +1899,7 @@ static int fork(SOCKET old_handle, USHORT flag)
+ 	}
+ 
+ 	Firebird::string cmdLine;
+-	cmdLine.printf("%s -i -h %"HANDLEFORMAT"@%"ULONGFORMAT, name, new_handle, GetCurrentProcessId());
++	cmdLine.printf("%s -i -h %" HANDLEFORMAT"@%" ULONGFORMAT, name, new_handle, GetCurrentProcessId());
+ 
+ 	STARTUPINFO start_crud;
+ 	start_crud.cb = sizeof(STARTUPINFO);
+@@ -2396,7 +2396,7 @@ static bool select_wait( rem_port* main_port, Select* selct)
+ 							if (badSocket || INET_ERRNO == NOTASOCKET)
+ 							{
+ 								// not a socket, strange !
+-								gds__log("INET/select_wait: found \"not a socket\" socket : %"HANDLEFORMAT,
++								gds__log("INET/select_wait: found \"not a socket\" socket : %" HANDLEFORMAT,
+ 										 port->port_handle);
+ 
+ 								// this will lead to receive() which will break bad connection
+diff --git a/src/remote/os/win32/wnet.cpp b/src/remote/os/win32/wnet.cpp
+index 69f747d..2f9b903 100644
+--- a/src/remote/os/win32/wnet.cpp
++++ b/src/remote/os/win32/wnet.cpp
+@@ -419,7 +419,7 @@ rem_port* WNET_connect(const TEXT*		name,
+ 		GetModuleFileName(NULL, name, sizeof(name));
+ 
+ 		Firebird::string cmdLine;
+-		cmdLine.printf("%s -w -h %"HANDLEFORMAT"@%"ULONGFORMAT, name, port->port_pipe, GetCurrentProcessId());
++		cmdLine.printf("%s -w -h %" HANDLEFORMAT"@%" ULONGFORMAT, name, port->port_pipe, GetCurrentProcessId());
+ 
+ 		STARTUPINFO start_crud;
+ 		PROCESS_INFORMATION pi;
+diff --git a/src/remote/xnet.cpp b/src/remote/xnet.cpp
+index 96a4d1c..66c7ab0 100644
+--- a/src/remote/xnet.cpp
++++ b/src/remote/xnet.cpp
+@@ -2490,7 +2490,7 @@ static bool fork(ULONG client_pid, USHORT flag, ULONG* forked_pid)
+ 	GetModuleFileName(NULL, name, sizeof(name));
+ 
+ 	Firebird::string cmdLine;
+-	cmdLine.printf("%s -x -h %"ULONGFORMAT, name, client_pid);
++	cmdLine.printf("%s -x -h %" ULONGFORMAT, name, client_pid);
+ 
+ 	STARTUPINFO start_crud;
+ 	start_crud.cb = sizeof(STARTUPINFO);
+diff --git a/src/remote/xnet.h b/src/remote/xnet.h
+index 1f7893d..b962d0a 100644
+--- a/src/remote/xnet.h
++++ b/src/remote/xnet.h
+@@ -177,21 +177,21 @@ const size_t XNET_CONNECT_RESPONZE_SIZE	= sizeof(XNET_RESPONSE);
+ 
+ // Windows names used to identify various named objects
+ 
+-const char* const XNET_MAPPED_FILE_NAME			= "%s_MAP_%"ULONGFORMAT"_%"ULONGFORMAT;
++const char* const XNET_MAPPED_FILE_NAME			= "%s_MAP_%" ULONGFORMAT"_%" ULONGFORMAT;
+ 
+ const char* const XNET_CONNECT_MAP				= "%s_CONNECT_MAP";
+ const char* const XNET_CONNECT_MUTEX			= "%s_CONNECT_MUTEX";
+ const char* const XNET_CONNECT_EVENT			= "%s_CONNECT_EVENT";
+ const char* const XNET_RESPONSE_EVENT			= "%s_RESPONSE_EVENT";
+ 
+-const char* const XNET_E_C2S_DATA_CHAN_FILLED	= "%s_E_C2S_DATA_FILLED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
+-const char* const XNET_E_C2S_DATA_CHAN_EMPTED	= "%s_E_C2S_DATA_EMPTED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
+-const char* const XNET_E_S2C_DATA_CHAN_FILLED	= "%s_E_S2C_DATA_FILLED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
+-const char* const XNET_E_S2C_DATA_CHAN_EMPTED	= "%s_E_S2C_DATA_EMPTED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
++const char* const XNET_E_C2S_DATA_CHAN_FILLED	= "%s_E_C2S_DATA_FILLED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
++const char* const XNET_E_C2S_DATA_CHAN_EMPTED	= "%s_E_C2S_DATA_EMPTED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
++const char* const XNET_E_S2C_DATA_CHAN_FILLED	= "%s_E_S2C_DATA_FILLED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
++const char* const XNET_E_S2C_DATA_CHAN_EMPTED	= "%s_E_S2C_DATA_EMPTED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
+ 
+-const char* const XNET_E_C2S_EVNT_CHAN_FILLED	= "%s_E_C2S_EVNT_FILLED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
+-const char* const XNET_E_C2S_EVNT_CHAN_EMPTED	= "%s_E_C2S_EVNT_EMPTED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
+-const char* const XNET_E_S2C_EVNT_CHAN_FILLED	= "%s_E_S2C_EVNT_FILLED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
+-const char* const XNET_E_S2C_EVNT_CHAN_EMPTED	= "%s_E_S2C_EVNT_EMPTED_%"ULONGFORMAT"_%"ULONGFORMAT"_%"ULONGFORMAT;
++const char* const XNET_E_C2S_EVNT_CHAN_FILLED	= "%s_E_C2S_EVNT_FILLED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
++const char* const XNET_E_C2S_EVNT_CHAN_EMPTED	= "%s_E_C2S_EVNT_EMPTED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
++const char* const XNET_E_S2C_EVNT_CHAN_FILLED	= "%s_E_S2C_EVNT_FILLED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
++const char* const XNET_E_S2C_EVNT_CHAN_EMPTED	= "%s_E_S2C_EVNT_EMPTED_%" ULONGFORMAT"_%" ULONGFORMAT"_%" ULONGFORMAT;
+ 
+ #endif // REMOTE_XNET_H
+diff --git a/src/utilities/gstat/ppg.cpp b/src/utilities/gstat/ppg.cpp
+index 2a34c33..59f499e 100644
+--- a/src/utilities/gstat/ppg.cpp
++++ b/src/utilities/gstat/ppg.cpp
+@@ -63,24 +63,24 @@ void PPG_print_header(const header_page* header, SLONG page,
+ 	{
+ 		uSvc->printf(false, "\tFlags\t\t\t%d\n", header->hdr_header.pag_flags);
+ 		uSvc->printf(false, "\tChecksum\t\t%d\n", header->hdr_header.pag_checksum);
+-		uSvc->printf(false, "\tGeneration\t\t%"ULONGFORMAT"\n", header->hdr_header.pag_generation);
++		uSvc->printf(false, "\tGeneration\t\t%" ULONGFORMAT"\n", header->hdr_header.pag_generation);
+ 		uSvc->printf(false, "\tPage size\t\t%d\n", header->hdr_page_size);
+ 		uSvc->printf(false, "\tODS version\t\t%d.%d\n",
+ 				header->hdr_ods_version & ~ODS_FIREBIRD_FLAG, header->hdr_ods_minor);
+-		uSvc->printf(false, "\tOldest transaction\t%"SLONGFORMAT"\n", header->hdr_oldest_transaction);
+-		uSvc->printf(false, "\tOldest active\t\t%"SLONGFORMAT"\n", header->hdr_oldest_active);
+-		uSvc->printf(false, "\tOldest snapshot\t\t%"SLONGFORMAT"\n", header->hdr_oldest_snapshot);
+-		uSvc->printf(false, "\tNext transaction\t%"SLONGFORMAT"\n", header->hdr_next_transaction);
+-		uSvc->printf(false, "\tBumped transaction\t%"SLONGFORMAT"\n", header->hdr_bumped_transaction);
++		uSvc->printf(false, "\tOldest transaction\t%" SLONGFORMAT"\n", header->hdr_oldest_transaction);
++		uSvc->printf(false, "\tOldest active\t\t%" SLONGFORMAT"\n", header->hdr_oldest_active);
++		uSvc->printf(false, "\tOldest snapshot\t\t%" SLONGFORMAT"\n", header->hdr_oldest_snapshot);
++		uSvc->printf(false, "\tNext transaction\t%" SLONGFORMAT"\n", header->hdr_next_transaction);
++		uSvc->printf(false, "\tBumped transaction\t%" SLONGFORMAT"\n", header->hdr_bumped_transaction);
+ 		uSvc->printf(false, "\tSequence number\t\t%d\n", header->hdr_sequence);
+ 
+-		uSvc->printf(false, "\tNext attachment ID\t%"SLONGFORMAT"\n", header->hdr_attachment_id);
++		uSvc->printf(false, "\tNext attachment ID\t%" SLONGFORMAT"\n", header->hdr_attachment_id);
+ 		uSvc->printf(false, "\tImplementation ID\t%d\n", header->hdr_implementation);
+-		uSvc->printf(false, "\tShadow count\t\t%"SLONGFORMAT"\n", header->hdr_shadow_count);
+-		uSvc->printf(false, "\tPage buffers\t\t%"ULONGFORMAT"\n", header->hdr_page_buffers);
++		uSvc->printf(false, "\tShadow count\t\t%" SLONGFORMAT"\n", header->hdr_shadow_count);
++		uSvc->printf(false, "\tPage buffers\t\t%" ULONGFORMAT"\n", header->hdr_page_buffers);
+ 	}
+ 
+-	uSvc->printf(false, "\tNext header page\t%"ULONGFORMAT"\n", header->hdr_next_page);
++	uSvc->printf(false, "\tNext header page\t%" ULONGFORMAT"\n", header->hdr_next_page);
+ #ifdef DEV_BUILD
+ 	uSvc->printf(false, "\tClumplet End\t\t%d\n", header->hdr_end);
+ #endif
+diff --git a/src/utilities/install/install_client.cpp b/src/utilities/install/install_client.cpp
+index 0ac7071..b8eddbb 100644
+--- a/src/utilities/install/install_client.cpp
++++ b/src/utilities/install/install_client.cpp
+@@ -303,7 +303,7 @@ static USHORT inst_error(ULONG status, const TEXT* string)
+ 								sizeof(buffer),
+ 								NULL))
+ 		{
+-			printf("Windows NT error %"SLONGFORMAT"\n", status);
++			printf("Windows NT error %" SLONGFORMAT"\n", status);
+ 		}
+ 		else
+ 		{
+diff --git a/src/utilities/install/install_reg.cpp b/src/utilities/install/install_reg.cpp
+index 1ae940f..9d19cb7 100644
+--- a/src/utilities/install/install_reg.cpp
++++ b/src/utilities/install/install_reg.cpp
+@@ -192,7 +192,7 @@ static USHORT reg_error( SLONG status, const TEXT* string, HKEY hkey)
+ 								sizeof(buffer),
+ 								NULL);
+ 		if (!l) {
+-			printf("Windows NT error %"SLONGFORMAT"\n", status);
++			printf("Windows NT error %" SLONGFORMAT"\n", status);
+ 		}
+ 		else
+ 		{
+diff --git a/src/utilities/install/install_svc.cpp b/src/utilities/install/install_svc.cpp
+index 66d6455..363d6f0 100644
+--- a/src/utilities/install/install_svc.cpp
++++ b/src/utilities/install/install_svc.cpp
+@@ -739,7 +739,7 @@ static USHORT svc_error( SLONG status, const TEXT* string, SC_HANDLE service)
+ 							sizeof(buffer),
+ 							NULL))
+ 		{
+-			printf("Windows NT error %"SLONGFORMAT"\n", status);
++			printf("Windows NT error %" SLONGFORMAT"\n", status);
+ 		}
+ 		else
+ 		{
+diff --git a/src/utilities/nbackup.cpp b/src/utilities/nbackup.cpp
+index 2b0d2cb..d1db6dd 100644
+--- a/src/utilities/nbackup.cpp
++++ b/src/utilities/nbackup.cpp
+@@ -613,7 +613,7 @@ void NBackup::pr_error(const ISC_STATUS* status, const char* operation) const
+ 
+ 	isc_print_status(status);
+ 
+-	fprintf(stderr, "SQLCODE:%"SLONGFORMAT"\n", isc_sqlcode(status));
++	fprintf(stderr, "SQLCODE:%" SLONGFORMAT"\n", isc_sqlcode(status));
+ 
+ 	fprintf(stderr, "]\n");
+ 
+diff --git a/src/utilities/ntrace/TraceConfiguration.cpp b/src/utilities/ntrace/TraceConfiguration.cpp
+index 6f785da..74f781d 100644
+--- a/src/utilities/ntrace/TraceConfiguration.cpp
++++ b/src/utilities/ntrace/TraceConfiguration.cpp
+@@ -270,7 +270,7 @@ ULONG TraceCfgReader::parseUInteger(const Element* el) const
+ {
+ 	const char *value = el->getAttributeName(0);
+ 	ULONG result = 0;
+-	if (!sscanf(value, "%"ULONGFORMAT, &result)) {
++	if (!sscanf(value, "%" ULONGFORMAT, &result)) {
+ 		fatal_exception::raiseFmt(ERROR_PREFIX
+ 			"line %d, element \"%s\": \"%s\" is not a valid integer value",
+ 			el->lineNumber + 1, el->name.c_str(), value);
+diff --git a/src/utilities/ntrace/TracePluginImpl.cpp b/src/utilities/ntrace/TracePluginImpl.cpp
+index 7c6e672..83260f3 100644
+--- a/src/utilities/ntrace/TracePluginImpl.cpp
++++ b/src/utilities/ntrace/TracePluginImpl.cpp
+@@ -499,32 +499,32 @@ void TracePluginImpl::appendGlobalCounts(const PerformanceInfo* info)
+ {
+ 	string temp;
+ 
+-	temp.printf("%7"QUADFORMAT"d ms", info->pin_time);
++	temp.printf("%7" QUADFORMAT"d ms", info->pin_time);
+ 	record.append(temp);
+ 
+ 	ntrace_counter_t cnt;
+ 
+ 	if ((cnt = info->pin_counters[RuntimeStatistics::PAGE_READS]) != 0)
+ 	{
+-		temp.printf(", %"QUADFORMAT"d read(s)", cnt);
++		temp.printf(", %" QUADFORMAT"d read(s)", cnt);
+ 		record.append(temp);
+ 	}
+ 
+ 	if ((cnt = info->pin_counters[RuntimeStatistics::PAGE_WRITES]) != 0)
+ 	{
+-		temp.printf(", %"QUADFORMAT"d write(s)", cnt);
++		temp.printf(", %" QUADFORMAT"d write(s)", cnt);
+ 		record.append(temp);
+ 	}
+ 
+ 	if ((cnt = info->pin_counters[RuntimeStatistics::PAGE_FETCHES]) != 0)
+ 	{
+-		temp.printf(", %"QUADFORMAT"d fetch(es)", cnt);
++		temp.printf(", %" QUADFORMAT"d fetch(es)", cnt);
+ 		record.append(temp);
+ 	}
+ 
+ 	if ((cnt = info->pin_counters[RuntimeStatistics::PAGE_MARKS]) != 0)
+ 	{
+-		temp.printf(", %"QUADFORMAT"d mark(s)", cnt);
++		temp.printf(", %" QUADFORMAT"d mark(s)", cnt);
+ 		record.append(temp);
+ 	}
+ 
+@@ -558,7 +558,7 @@ void TracePluginImpl::appendTableCounts(const PerformanceInfo *info)
+ 			{
+ 				//fb_utils::exactNumericToStr(trc->trc_counters[j], 0, temp);
+ 				//record.append(' ', 10 - temp.length());
+-				temp.printf("%10"QUADFORMAT"d", trc->trc_counters[j]);
++				temp.printf("%10" QUADFORMAT"d", trc->trc_counters[j]);
+ 				record.append(temp);
+ 			}
+ 		}
+@@ -1256,7 +1256,7 @@ void TracePluginImpl::log_event_proc_execute(TraceDatabaseConnection* connection
+ 		if (info->pin_records_fetched)
+ 		{
+ 			string temp;
+-			temp.printf("%"QUADFORMAT"d records fetched" NEWLINE, info->pin_records_fetched);
++			temp.printf("%" QUADFORMAT"d records fetched" NEWLINE, info->pin_records_fetched);
+ 			record.append(temp);
+ 		}
+ 		appendGlobalCounts(info);
+@@ -1446,7 +1446,7 @@ void TracePluginImpl::log_event_dsql_execute(TraceDatabaseConnection* connection
+ 	if (info)
+ 	{
+ 		string temp;
+-		temp.printf("%"QUADFORMAT"d records fetched" NEWLINE, info->pin_records_fetched);
++		temp.printf("%" QUADFORMAT"d records fetched" NEWLINE, info->pin_records_fetched);
+ 		record.append(temp);
+ 
+ 		appendGlobalCounts(info);
