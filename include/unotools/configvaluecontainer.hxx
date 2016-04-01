@@ -167,7 +167,6 @@ namespace utl
         /// implements the ctors
         void implConstruct(
             const OUString& _rConfigLocation,
-            const CVCFlags _nAccessFlags,
             const sal_Int32 _nLevels
         );
 
