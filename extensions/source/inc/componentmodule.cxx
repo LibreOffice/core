@@ -253,7 +253,6 @@ namespace COMPMOD_NAMESPACE
                     return xReturn.get();
                 }
             }
-            return nullptr;
         }
 
         return nullptr;
