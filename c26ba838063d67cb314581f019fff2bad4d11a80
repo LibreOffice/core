@@ -16,6 +16,24 @@
       "revId": "c26ba838063d67cb314581f019fff2bad4d11a80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7f25e5c0",
+        "filename": "sw/qa/python/check_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001272
+      },
+      "writtenOn": "2016-04-01T00:12:32Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is it, but if you look here: \n\nhttps://github.com/LibreOffice/core/blob/1aa4df615fa5599d05e9dd5e925b5852676185fa/reportdesign/source/filter/xml/xmlExport.cxx#L1154\n\nit looks like both the OuterLineWidth and the LineWidth properties are given default values of 2 when creating a table.",
+      "parentUuid": "9ad45d7e_5c6aaf1b",
+      "revId": "c26ba838063d67cb314581f019fff2bad4d11a80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
