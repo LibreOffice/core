@@ -848,10 +848,10 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (IsFormulaMode() || !mpViewShell)
-        return uno::Sequence<sal_Int32>();
-
     uno::Sequence<sal_Int32> aSequence;
+    if (IsFormulaMode() || !mpViewShell)
+        return aSequence;
+
     aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
     sal_Int32* pSequence = aSequence.getArray();
     sal_Int32 nCount(0);
