@@ -511,7 +511,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.ReduceColors( nPosterCount, BMP_REDUCE_POPULAR ) )
+        if( aBmpEx.ReduceColors( nPosterCount ) )
             aRet = aBmpEx;
     }
 

@@ -218,7 +218,7 @@ void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
         case SaveRequest:
         {
             SalSessionSaveRequestEvent* pSEv = static_cast<SalSessionSaveRequestEvent*>(pEvent);
-            pThis->callSaveRequested( pSEv->m_bShutdown, pSEv->m_bCancelable );
+            pThis->callSaveRequested( pSEv->m_bShutdown, false );
         }
         break;
         case ShutdownCancel:

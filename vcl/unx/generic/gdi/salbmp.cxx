@@ -1083,7 +1083,7 @@ ImplSalBitmapCache::~ImplSalBitmapCache()
     ImplClear();
 }
 
-void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uLong nFlags )
+void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize )
 {
     ImplBmpObj* pObj = nullptr;
     bool        bFound = false;
@@ -1104,10 +1104,10 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uL
     {
         mnTotalSize -= pObj->mnMemSize;
         pObj->mnMemSize = nMemSize;
-        pObj->mnFlags = nFlags;
+        pObj->mnFlags = 0;
     }
     else
-        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, nFlags ) );
+        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, 0 ) );
 }
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )

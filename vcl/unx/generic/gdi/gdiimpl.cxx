@@ -916,7 +916,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // paint source * mask over destination picture
     rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,
-        rTR.mnSrcX, rTR.mnSrcY, 0, 0,
+        rTR.mnSrcX, rTR.mnSrcY,
         rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight );
 
     rPeer.FreePicture( aAlphaPic );
