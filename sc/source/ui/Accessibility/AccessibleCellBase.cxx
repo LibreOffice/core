@@ -49,6 +49,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
+#define DEFAULT_LINE_WIDTH 2
+
 //=====  internal  ============================================================
 
 ScAccessibleCellBase::ScAccessibleCellBase(
@@ -502,10 +504,10 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
         aBottomBorder.Color = aColor.GetColor();
         aLeftBorder.Color = aColor.GetColor();
         aRightBorder.Color = aColor.GetColor();
-        aTopBorder.OuterLineWidth =2;
-        aBottomBorder.OuterLineWidth =2;
-        aLeftBorder.OuterLineWidth =2;
-        aRightBorder.OuterLineWidth =2;
+        aTopBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;
+        aBottomBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;
+        aLeftBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;
+        aRightBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;
     }
 
     //construct border attributes string
