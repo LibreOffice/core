@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 
 #include "jni_base.h"
@@ -61,8 +60,11 @@ inline bool is_XInterface( typelib_TypeDescriptionReference * type )
             OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
 }
 
-struct JNI_type_info: private boost::noncopyable
+struct JNI_type_info
 {
+    JNI_type_info(const JNI_type_info&) = delete;
+    const JNI_type_info& operator=(const JNI_type_info&) = delete;
+
     ::com::sun::star::uno::TypeDescription      m_td;
     jclass                                      m_class;
 
@@ -106,18 +108,20 @@ private:
     virtual ~JNI_compound_type_info() {}
 };
 
-struct JNI_type_info_holder: private boost::noncopyable
+struct JNI_type_info_holder
 {
     JNI_type_info * m_info;
-    inline JNI_type_info_holder()
-        : m_info( NULL )
-        {}
+
+    JNI_type_info_holder(const JNI_type_info_holder&) = delete;
+    const JNI_type_info_holder& operator=(const JNI_type_info_holder&) = delete;
+
+    inline JNI_type_info_holder() : m_info( nullptr ) {}
 };
 
 typedef ::std::unordered_map<
     OUString, JNI_type_info_holder, OUStringHash > t_str2type;
 
-class JNI_info: private boost::noncopyable
+class JNI_info
 {
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
@@ -200,6 +204,10 @@ public:
     ::com::sun::star::uno::Type const & m_RuntimeException_type;
     ::com::sun::star::uno::Type const & m_void_type;
     JNI_interface_type_info const * m_XInterface_type_info;
+
+    // noncopyable
+    JNI_info(const JNI_info&) = delete;
+    const JNI_info& operator=(const JNI_info&) = delete;
 
     JNI_type_info const * get_type_info(
         JNI_context const & jni,

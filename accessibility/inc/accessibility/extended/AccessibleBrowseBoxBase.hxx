@@ -23,7 +23,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -349,7 +348,6 @@ typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
 class BrowseBoxAccessibleElement
             :public AccessibleBrowseBoxBase
             ,public BrowseBoxAccessibleElement_Base
-            ,private boost::noncopyable
 {
 protected:
     /** Constructor sets specified name and description. If the constant of a
@@ -387,6 +385,9 @@ protected:
         const OUString& rDescription );
 
 public:
+    // noncopyable
+    BrowseBoxAccessibleElement(const BrowseBoxAccessibleElement&) = delete;
+    const BrowseBoxAccessibleElement& operator=(const BrowseBoxAccessibleElement&) = delete;
     // XInterface
     DECLARE_XINTERFACE( )
     // XTypeProvider

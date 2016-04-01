@@ -184,8 +184,6 @@ endif
 
 endif
 
-$(eval $(call gb_Library_use_external,$(gb_CPPU_ENV)_uno,boost_headers))
-
 $(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
 	udkapi \
 ))
