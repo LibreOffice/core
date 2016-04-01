@@ -256,10 +256,10 @@ private:
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
-    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh, bool bDrag,
+    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const Rectangle& rItemRect, const Rectangle* pRect, DrawFlags nFlags);
-    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh = false,
-                                                 bool bDrag = false, const Rectangle* pRect = nullptr);
+    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+                                                 const Rectangle* pRect);
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
                                        bool bEnd = false );
     SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );

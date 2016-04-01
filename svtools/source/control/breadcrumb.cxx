@@ -41,7 +41,7 @@ protected:
     }
 };
 
-Breadcrumb::Breadcrumb( vcl::Window* pParent, WinBits nWinStyle ) : VclHBox( pParent, nWinStyle )
+Breadcrumb::Breadcrumb( vcl::Window* pParent ) : VclHBox( pParent )
 {
     m_eMode = SvtBreadcrumbMode::ONLY_CURRENT_PATH;
     set_spacing( SPACING );

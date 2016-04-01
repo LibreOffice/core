@@ -87,10 +87,9 @@ namespace svt { namespace table
 
 
     TableColumnGeometry::TableColumnGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
-            ColPos const _nCol, bool const i_allowVirtualColumns )
+            ColPos const _nCol )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nColPos( _nCol )
-        ,m_bAllowVirtualColumns( i_allowVirtualColumns )
     {
         if ( m_nColPos == COL_ROW_HEADERS )
         {
@@ -123,7 +122,7 @@ namespace svt { namespace table
 
     bool TableColumnGeometry::impl_isValidColumn( ColPos const i_column ) const
     {
-        return m_bAllowVirtualColumns || ( i_column < ColPos( m_rControl.m_aColumnWidths.size() ) );
+        return i_column < ColPos( m_rControl.m_aColumnWidths.size() );
     }
 
 

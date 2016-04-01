@@ -33,12 +33,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
 
 
-FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
+FileControl::FileControl( vcl::Window* pParent, WinBits nStyle ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
     maEdit( VclPtr<Edit>::Create(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
     maButton( VclPtr<PushButton>::Create( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ) ),
     maButtonText( SVT_RESSTR(STR_FILECTRL_BUTTONTEXT) ),
-    mnFlags( nFlags ),
     mnInternalFlags( FileControlMode_Internal::ORIGINALBUTTONTEXT )
 {
     maButton->SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
@@ -96,8 +95,6 @@ void FileControl::dispose()
 void FileControl::SetText( const OUString& rStr )
 {
     maEdit->SetText( rStr );
-    if ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN )
-        Resize();
 }
 
 
@@ -157,10 +154,7 @@ void FileControl::Resize()
     Size aOutSz = GetOutputSizePixel();
     long nButtonTextWidth = maButton->GetTextWidth( maButtonText );
     if ( !(mnInternalFlags & FileControlMode_Internal::ORIGINALBUTTONTEXT) ||
-         ( nButtonTextWidth < aOutSz.Width()/3 &&
-           ( !( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN ) ||
-             ( maEdit->GetTextWidth( maEdit->GetText() )
-               <= aOutSz.Width() - nButtonTextWidth - ButtonBorder ) ) ) )
+         ( nButtonTextWidth < aOutSz.Width()/3 ) )
     {
         maButton->SetText( maButtonText );
     }

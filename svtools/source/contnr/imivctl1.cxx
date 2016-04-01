@@ -232,7 +232,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     if( (nWinStyle & WB_DETAILS))
     {
         if (!m_pColumns)
-            SetColumn( 0, SvxIconChoiceCtrlColumnInfo( 0, 100, IcnViewAlignLeft ));
+            SetColumn( 0, SvxIconChoiceCtrlColumnInfo( 100 ));
     }
 }
 
@@ -1503,8 +1503,8 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
 }
 
 // priorities of the emphasis:  bDropTarget => bCursored => bSelected
-void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rectangle& rImageRect, bool bSelected,
-                                           bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted)
+void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, bool bSelected,
+                                           bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext)
 {
     static Color aTransparent(COL_TRANSPARENT);
 
@@ -1512,13 +1512,11 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rec
     Color aOldFillColor(rRenderContext.GetFillColor());
 
     bool bSolidTextRect = false;
-    bool bSolidImageRect = false;
 
     if(bDropTarget && (eSelectionMode != NO_SELECTION))
     {
         rRenderContext.SetFillColor(rSettings.GetHighlightColor());
         bSolidTextRect = true;
-        bSolidImageRect = true;
     }
     else
     {
@@ -1532,12 +1530,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rec
     }
 
     // draw text rectangle
-    if (!bSolidTextRect)
-    {
-        if (!bIsBackgroundPainted)
-            rRenderContext.Erase(rTextRect);
-    }
-    else
+    if (bSolidTextRect)
     {
         Color aOldLineColor;
         if (bCursored)
@@ -1548,13 +1541,6 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rec
         rRenderContext.DrawRect(rTextRect);
         if (bCursored)
             rRenderContext.SetLineColor(aOldLineColor);
-    }
-
-    // draw image rectangle
-    if (!bSolidImageRect)
-    {
-        if (!bIsBackgroundPainted)
-            rRenderContext.Erase(rImageRect);
     }
 
     rRenderContext.SetFillColor(aOldFillColor);
@@ -1669,7 +1655,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
     if( !bNoEmphasis )
-        PaintEmphasis(aTextRect, aBmpRect, bSelected, bDropTarget, bCursored, rRenderContext, true/*bIsBackgroundPainted*/);
+        PaintEmphasis(aTextRect, bSelected, bDropTarget, bCursored, rRenderContext);
 
     if ( bShowSelection )
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView.get(), CalcFocusRect(pEntry),

@@ -967,12 +967,6 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
 void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     const Selection& rSel )
 {
-    EditText( rStr, rRect, rSel, false );
-}
-
-void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
-    const Selection& rSel, bool bMulti )
-{
     delete pEdCtrl;
     nImpFlags |= SvTreeListBoxFlags::IN_EDT;
     nImpFlags &= ~SvTreeListBoxFlags::EDTEND_CALLED;
@@ -980,7 +974,7 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     pEdCtrl = new SvInplaceEdit2(
         this, rRect.TopLeft(), rRect.GetSize(), rStr,
         LINK( this, SvTreeListBox, TextEditEndedHdl_Impl ),
-        rSel, bMulti );
+        rSel, false/*bMulti*/ );
 }
 
 IMPL_LINK_NOARG_TYPED(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)

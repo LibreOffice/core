@@ -277,7 +277,7 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
     SetRasterOp( ROP_OVERPAINT );
 }
 
-void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh, bool bDrag,
+void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                              const Rectangle& rItemRect, const Rectangle* pRect, DrawFlags )
 {
     ImplControlValue aControlValue(0);
@@ -324,16 +324,9 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         aRect.Bottom()  -= mnBorderOff2;
 
         // delete background
-        if ( !pRect || bDrag )
+        if ( !pRect )
         {
-            if (bDrag)
-            {
-                rRenderContext.SetLineColor();
-                rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
-                rRenderContext.DrawRect(aRect);
-            }
-            else
-                rRenderContext.DrawWallpaper(aRect, rRenderContext.GetBackground());
+            rRenderContext.DrawWallpaper(aRect, rRenderContext.GetBackground());
         }
     }
 
@@ -616,10 +609,10 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 }
 
 void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos,
-                             bool bHigh, bool bDrag, const Rectangle* pRect )
+                             bool bHigh, const Rectangle* pRect )
 {
     Rectangle aRect = ImplGetItemRect(nPos);
-    ImplDrawItem(rRenderContext, nPos, bHigh, bDrag, aRect, pRect, DrawFlags::NONE );
+    ImplDrawItem(rRenderContext, nPos, bHigh, aRect, pRect, DrawFlags::NONE );
 }
 
 void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
@@ -943,7 +936,7 @@ void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
         nCurItemPos = HEADERBAR_ITEM_NOTFOUND;
     sal_uInt16 nItemCount = static_cast<sal_uInt16>(mpItemList->size());
     for (sal_uInt16 i = 0; i < nItemCount; i++)
-        ImplDrawItem(rRenderContext, i, (i == nCurItemPos), false, &rRect);
+        ImplDrawItem(rRenderContext, i, (i == nCurItemPos), &rRect);
 }
 
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -993,7 +986,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
             aItemRect.Right() = 16000;
         vcl::Region aRegion( aRect );
         pDev->SetClipRegion( aRegion );
-        ImplDrawItem(*pDev, i, false, false, aItemRect, &aRect, nFlags );
+        ImplDrawItem(*pDev, i, false, aItemRect, &aRect, nFlags );
         pDev->SetClipRegion();
     }
 
