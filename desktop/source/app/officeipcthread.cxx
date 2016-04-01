@@ -42,6 +42,8 @@
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include <tools/getprocessworkingdir.hxx>
+
+#include <cassert>
 #include <memory>
 
 using namespace desktop;
@@ -80,14 +82,6 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
 }
 
 }
-
-// Type of pipe we use
-enum PipeMode
-{
-    PIPEMODE_DONTKNOW,
-    PIPEMODE_CREATED,
-    PIPEMODE_CONNECTED
-};
 
 namespace desktop
 {
@@ -357,20 +351,38 @@ throw( RuntimeException, std::exception )
 {
 }
 
-class PipeReaderThread: public salhelper::Thread {
+class IpcThread: public salhelper::Thread {
 public:
-    PipeReaderThread(RequestHandler & handler, osl::Pipe const & pipe):
-        Thread("PipeReader"), handler_(handler), pipe_(pipe)
-    {}
+    void start(RequestHandler * handler) {
+        handler_ = handler;
+        launch();
+    }
 
-    void close() { pipe_.close(); }
+    virtual void close() = 0;
+
+protected:
+    explicit IpcThread(char const * name): Thread(name), handler_(nullptr) {}
+
+    virtual ~IpcThread() {}
+
+    RequestHandler * handler_;
+};
+
+class PipeIpcThread: public IpcThread {
+public:
+    static RequestHandler::Status enable(rtl::Reference<IpcThread> * thread);
 
 private:
-    virtual ~PipeReaderThread() {}
+    explicit PipeIpcThread(osl::Pipe const & pipe):
+        IpcThread("PipeIPC"), pipe_(pipe)
+    {}
+
+    virtual ~PipeIpcThread() {}
 
     void execute() override;
 
-    RequestHandler & handler_;
+    void close() override { pipe_.close(); }
+
     osl::Pipe pipe_;
 };
 
@@ -450,6 +462,21 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         return IPC_STATUS_OK;
     }
 
+    rtl::Reference<IpcThread> thread;
+    Status stat = PipeIpcThread::enable(&thread);
+    assert(thread.is() == (stat == IPC_STATUS_OK));
+    if (stat == IPC_STATUS_OK) {
+        pGlobal = new RequestHandler;
+        pGlobal->mIpcThread = thread;
+        pGlobal->mIpcThread->start(pGlobal.get());
+    }
+    return stat;
+}
+
+RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
+{
+    assert(thread != nullptr);
+
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
     OUString aUserInstallPath;
@@ -457,7 +484,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     if (aLocateResult != utl::Bootstrap::PATH_EXISTS
         && aLocateResult != utl::Bootstrap::PATH_VALID)
     {
-        return IPC_STATUS_BOOTSTRAP_ERROR;
+        return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
     }
 
     // Try to  determine if we are the first office or not! This should prevent multiple
@@ -469,9 +496,15 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
 
     // Check result to create a hash code from the user install path
     if ( aUserInstallPathHashCode.isEmpty() )
-        return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
+        return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
 
     osl::Pipe pipe;
+    enum PipeMode
+    {
+        PIPEMODE_DONTKNOW,
+        PIPEMODE_CREATED,
+        PIPEMODE_CONNECTED
+    };
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
 
     OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
@@ -506,7 +539,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         {
             oslPipeError eReason = pipe.getError();
             if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
-                return IPC_STATUS_PIPE_ERROR;
+                return RequestHandler::IPC_STATUS_PIPE_ERROR;
 
             // Wait for second office to be ready
             TimeValue aTimeValue;
@@ -519,11 +552,9 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
 
     if ( nPipeMode == PIPEMODE_CREATED )
     {
-        // Seems we are the one and only, so start listening thread
-        pGlobal = new RequestHandler;
-        pGlobal->mPipeReaderThread = new PipeReaderThread(*pGlobal, pipe);
-        pGlobal->mPipeReaderThread->launch();
-        return IPC_STATUS_OK;
+        // Seems we are the one and only, so create listening thread
+        *thread = new PipeIpcThread(pipe);
+        return RequestHandler::IPC_STATUS_OK;
     }
     else
     {
@@ -542,7 +573,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
         {
             rtl_getAppCommandArg( i, &aUserInstallPath.pData );
             if (!addArgument(aArguments, ',', aUserInstallPath)) {
-                return IPC_STATUS_BOOTSTRAP_ERROR;
+                return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
         aArguments.append('\0');
@@ -551,16 +582,16 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
             aArguments.getStr(), aArguments.getLength());
         if (n != aArguments.getLength()) {
             SAL_INFO("desktop", "short write: " << n);
-            return IPC_STATUS_BOOTSTRAP_ERROR;
+            return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
         }
 
         if (readStringFromPipe(aStreamPipe) != PROCESSING_DONE)
         {
             // something went wrong
-            return IPC_STATUS_BOOTSTRAP_ERROR;
+            return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
         }
 
-        return IPC_STATUS_2ND_OFFICE;
+        return RequestHandler::IPC_STATUS_2ND_OFFICE;
     }
 }
 
@@ -574,8 +605,8 @@ void RequestHandler::Disable(bool join)
         pGlobal.clear();
 
         handler->mState = State::Downing;
-        if (handler->mPipeReaderThread.is()) {
-            handler->mPipeReaderThread->close();
+        if (handler->mIpcThread.is()) {
+            handler->mIpcThread->close();
         }
 
         // release mutex to avoid deadlocks
@@ -584,10 +615,10 @@ void RequestHandler::Disable(bool join)
         handler->cReady.set();
 
         // exit gracefully and join
-        if (join && handler->mPipeReaderThread.is())
+        if (join && handler->mIpcThread.is())
         {
-            handler->mPipeReaderThread->join();
-            handler->mPipeReaderThread.clear();
+            handler->mIpcThread->join();
+            handler->mIpcThread.clear();
         }
     }
 }
@@ -600,7 +631,7 @@ RequestHandler::RequestHandler() :
 
 RequestHandler::~RequestHandler()
 {
-    assert(!mPipeReaderThread.is());
+    assert(!mIpcThread.is());
 }
 
 void RequestHandler::SetReady()
@@ -625,8 +656,9 @@ void RequestHandler::WaitForReady()
     }
 }
 
-void PipeReaderThread::execute()
+void PipeIpcThread::execute()
 {
+    assert(handler_ != nullptr);
     do
     {
         osl::StreamPipe aStreamPipe;
@@ -639,16 +671,16 @@ void PipeReaderThread::execute()
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
             // only requests that don't dispatch events may be processed before cReady is set.
-            handler_.cReady.wait();
+            handler_->cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!handler_.pGlobal.is()) return;
+            if (!handler_->pGlobal.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
             osl::ClearableMutexGuard aGuard( RequestHandler::GetMutex() );
 
-            if ( handler_.mState == RequestHandler::State::Downing )
+            if ( handler_->mState == RequestHandler::State::Downing )
             {
                 break;
             }
@@ -731,8 +763,8 @@ void PipeReaderThread::execute()
 
                 ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
                     aCmdLineArgs->getCwdUrl());
-                handler_.cProcessed.reset();
-                pRequest->pcProcessed = &handler_.cProcessed;
+                handler_->cProcessed.reset();
+                pRequest->pcProcessed = &handler_->cProcessed;
 
                 // Print requests are not dependent on the --invisible cmdline argument as they are
                 // loaded with the "hidden" flag! So they are always checked.
@@ -872,7 +904,7 @@ void PipeReaderThread::execute()
             aGuard.clear();
             // wait for processing to finish
             if (bDocRequestSent)
-                handler_.cProcessed.wait();
+                handler_->cProcessed.wait();
             // processing finished, inform the requesting end:
             n = aStreamPipe.write(
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
@@ -886,7 +918,7 @@ void PipeReaderThread::execute()
         {
             {
                 osl::MutexGuard aGuard( RequestHandler::GetMutex() );
-                if ( handler_.mState == RequestHandler::State::Downing )
+                if ( handler_->mState == RequestHandler::State::Downing )
                 {
                     break;
                 }

@@ -67,11 +67,12 @@ struct ProcessDocumentsRequest
 };
 
 class DispatchWatcher;
-class PipeReaderThread;
+class IpcThread;
+class PipeIpcThread;
 
 class RequestHandler: public salhelper::SimpleReferenceObject
 {
-    friend PipeReaderThread;
+    friend PipeIpcThread;
 
   private:
     static rtl::Reference< RequestHandler > pGlobal;
@@ -81,7 +82,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
     State                       mState;
     int                         mnPendingRequests;
     rtl::Reference<DispatchWatcher> mpDispatchWatcher;
-    rtl::Reference<PipeReaderThread> mPipeReaderThread;
+    rtl::Reference<IpcThread> mIpcThread;
 
     /* condition to be set when the request has been processed */
     ::osl::Condition cProcessed;
