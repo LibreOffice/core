@@ -560,7 +560,7 @@ void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr
     } else if (IsDraggingGluePoints()) {
         nOpt=ImpTakeDescriptionOptions::GLUEPOINTS;
     }
-    getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,0,nOpt);
+    getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,nOpt);
 }
 
 SdrObject* SdrDragMethod::GetDragObj() const

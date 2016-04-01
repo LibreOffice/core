@@ -468,7 +468,6 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
             uno::Reference< svx::OColumnTransferable > xColTransfer( new svx::OColumnTransferable(
                             sDBName,
                             OUString(),
-                            sdb::CommandType::TABLE,
                             sTableName,
                             sColumnName,
                             (ColumnTransferFormatFlags::FIELD_DESCRIPTOR|ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) ) );

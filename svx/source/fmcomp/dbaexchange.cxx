@@ -45,13 +45,12 @@ namespace svx
 
     OColumnTransferable::OColumnTransferable(const OUString& _rDatasource
                                             ,const OUString& _rConnectionResource
-                                            ,const sal_Int32        _nCommandType
                                             ,const OUString& _rCommand
                                             ,const OUString& _rFieldName
                                             ,ColumnTransferFormatFlags _nFormats)
         :m_nFormatFlags(_nFormats)
     {
-        implConstruct(_rDatasource,_rConnectionResource,_nCommandType, _rCommand, _rFieldName);
+        implConstruct(_rDatasource,_rConnectionResource, css::sdb::CommandType::TABLE, _rCommand, _rFieldName);
     }
 
 
