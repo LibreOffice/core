@@ -203,8 +203,6 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
         do
         {
             nRead = xInputStream->readBytes( aData, nBytesCount );
-            if ( nRead < nBytesCount )
-                aData.realloc( nRead );
 
             sal_Int32 nWritten = pNewStream->Write( aData.getArray(), nRead );
             if ( nWritten < nRead )
